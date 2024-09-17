@@ -9,7 +9,6 @@ return array (
     Tinebase_Config::VERSION_CHECK => false,
     'features' => array(
         Tinebase_Config::FEATURE_SHOW_ADVANCED_SEARCH => false,
-        Tinebase_Config::FEATURE_SHOW_ACCOUNT_EMAIL => false,
         Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE => true,
         Tinebase_Config::FEATURE_SEARCH_PATH => true,
         Tinebase_Config::FEATURE_AUTODISCOVER => true,
@@ -20,4 +19,7 @@ return array (
     Tinebase_Config::BRANDING_WEBURL => 'https://www.tine-groupware.de/',
     Tinebase_Config::USE_NOMINATIM_SERVICE => false,
     Tinebase_Config::USE_MAP_SERVICE => false,
+    Tinebase_Config::USER_PASSWORD_POLICY => [
+        Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER => 365
+    ]
 );

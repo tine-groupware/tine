@@ -154,8 +154,17 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
         $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_FROM, 'operator' => 'before_or_equals', 'value' => $date];
         $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_UNTIL, 'operator' => 'after_or_equals', 'value' => $date];
 
-        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' =>
-            $category ?: Sales_Config::DOCUMENT_CATEGORY_DEFAULT];
+        if ($category) {
+            $filter[] = [
+                'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                'filters'   => [
+                    ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => null],
+                    ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => $category],
+                ],
+            ];
+        } else {
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => null];
+        }
 
         if ($customerId) {
             $filter[] = [
@@ -168,6 +177,9 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
         } else {
             $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null];
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' filter: ' . print_r($filter, true));
 
         $result = new Tinebase_Record_RecordSet(Sales_Model_Boilerplate::class);
 
@@ -189,6 +201,11 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
                         $boilerplate->{Sales_Model_Boilerplate::FLD_CUSTOMER}) ||
                     ($boilerplate->{Sales_Model_Boilerplate::FLD_FROM} ||
                         $boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL})) {
+                    $result->removeRecord($current);
+                    break;
+                }
+                if ($category === $boilerplate->{Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY} &&
+                    $category !== $current->{Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY}) {
                     $result->removeRecord($current);
                     break;
                 }

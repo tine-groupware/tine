@@ -670,7 +670,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         return options.params.filter;
     },
     
-    getCustomfieldFilters: Tine.widgets.grid.GridPanel.prototype.getCustomfieldFilters,
+    getCustomfieldFilters: Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters,
     
     
     /**
@@ -1506,6 +1506,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         if (! event) {
             event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
+            event.phantom = true;
 
             if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
@@ -1517,7 +1518,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         Tine.Calendar.EventEditDialog.openWindow({
             plugins: Ext.isArray(plugins) ? Ext.encode(plugins) : null,
-            record: Ext.encode(event.data),
+            record: Ext.encode(event.getData()),
             recordId: event.data.id,
             copyRecord: (action == 'copy'),
             listeners: {

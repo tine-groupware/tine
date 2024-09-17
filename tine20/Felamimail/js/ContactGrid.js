@@ -38,7 +38,9 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     
     gridConfig: {
         autoExpandColumn: 'n_fileas',
-        enableDragDrop: false
+        enableDragDrop: false,
+        clicksToEdit: 'auto',
+        gridType: Ext.grid.EditorGridPanel,
     },
     
     /**
@@ -99,11 +101,19 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @return {Array}
      */
     getColumns: function() {
-        var columns = Tine.Felamimail.ContactGridPanel.superclass.getColumns.call(this);
+        const columns = Tine.Felamimail.ContactGridPanel.superclass.getColumns.call(this);
+        
+        columns.push({
+            id: 'selected_email',
+            header: this.felamimailApp.i18n._('Selected E-Mail'),
+            renderer: this.preferredEmailRenderer.createDelegate(this),
+            width: 400,
+            hidden: false
+        })
         
         // hide all columns except name/company/email/email_home (?)
-        Ext.each(columns, function(column) {
-            if (['n_fileas', 'org_name', 'email'].indexOf(column.dataIndex) === -1) {
+        Ext.each(columns, (column) => {
+            if (!['org_name', 'selected_email'].includes(column.id)) {
                 column.hidden = true;
             }
         });
@@ -127,13 +137,30 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             });
             
         }, this);
-            
+        
         return columns;
     },
     
     /**
      * render type radio buttons in grid
-     * 
+     *
+     * @param field
+     * @param cell
+     * @param contact
+     * @return {String}
+     */
+    preferredEmailRenderer: function(field, cell, contact) {
+        const token = this.getSelectedToken(contact).token;
+        if (!token) return '';
+        const block =  document.createElement('span');
+        block.className = 'tinebase-contact-link';
+        block.innerHTML = Tine.Felamimail.ContactSearchCombo.prototype.renderEmailAddressAndIcon(token);
+        return block.outerHTML;
+    },
+    
+    /**
+     * render type radio buttons in grid
+     *
      * @param {String} type
      * @param {String} value
      * @param {Object} metaData
@@ -144,17 +171,40 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @return {String}
      */
     typeRadioRenderer: function(type, value, metaData, record, rowIndex, colIndex, store) {
-        if (! record.hasEmail()) {
-            return '';
-        }
-        
-        var lowerType = Ext.util.Format.lowercase(type);
-        
+        if (! record.hasEmail()) return '';
+        const lowerType = Ext.util.Format.lowercase(type);
+
         return this.radioTpl.apply({
-            id: record.id, 
+            id: record.id,
             type: lowerType,
-            checked: lowerType === 'none' ? 'checked' : ''
+            checked:  this.getSelectedToken(record).type === lowerType ? 'checked' : '',
         });
+    },
+
+    getSelectedToken(contact) {
+        const defaultToken = Tine.Felamimail.GridPanelHook.prototype.getRecipientTokenFromContact(contact);
+        const result = {
+            token: null,
+            type: 'none',
+        };
+        ['to', 'cc', 'bcc'].forEach((type) => {
+            if (Ext.isArray(this.messageRecord.data[type])) {
+                const existToken = _.find(this.messageRecord.data[type], (token) => {
+                    return token.contact_record.id === contact.id;
+                });
+                if (existToken) {
+                    result.token = existToken;
+                    result.type = type;
+                }
+            }
+        });
+        if (!result.token) {
+            const existToken = _.find(this.updatedTokens,  (token) => {
+                return token.contact_record.id === contact.id;
+            });
+            result.token = existToken ?? defaultToken;
+        }
+        return result;
     },
     
     /**
@@ -169,14 +219,8 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     onContactStoreLoad: function(store, records, options) {
         if (Ext.isObject(this.messageRecord)) {
             _.each(records, (contact) => {
-                const token = Tine.Felamimail.GridPanelHook.prototype.getRecipientTokenFromContact(contact);
-                if (token) {
-                    ['to', 'cc', 'bcc'].forEach((type) => {
-                        if (Ext.isArray(this.messageRecord.data[type]) && _.find(this.messageRecord.data[type], {email: token.email})) {
-                            this.setTypeRadio(contact, type);
-                        }
-                    });
-                }
+                const existData = this.getSelectedToken(contact);
+                if (existData.token) this.setTypeRadio(contact, existData.type);
             })
         }
     },
@@ -192,12 +236,47 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     onCellClick: function (grid, row, col, e) {
         const contact = this.store.getAt(row);
         const typeToSet = this.grid.getColumnModel().getDataIndex(col);
-    
+        if (typeToSet === 'selected_email') {
+            let i = 0;
+            let target = e.target;
+            while (i < 7) {
+                if (target.className.includes('selected_email')) break;
+                target = target?.parentNode;
+                i++;
+            }
+            const position = Ext.fly(target).getXY();
+            position[1] = position[1] + Ext.fly(target).getHeight();
+            const emailFields = Tine.Addressbook.Model.EmailAddress.prototype.getEmailFields();
+            const items = [];
+            _.map(emailFields, (field) => {
+                const fieldName = field.fieldName;
+                if (!contact.data[fieldName]) return;
+                const token = Tine.Felamimail.GridPanelHook.prototype.getRecipientTokenFromContact(contact, fieldName);
+                if (!token) return;
+                items.push(new Ext.Action({
+                    text: Tine.Felamimail.ContactSearchCombo.prototype.renderEmailAddressAndIcon(token),
+                    iconCls: target.textContent.includes(token.email) ? 'action_enable' : '',
+                    handler: async (item) => {
+                        if (!this.updatedTokens) this.updatedTokens = [];
+                        const existToken = _.find(this.updatedTokens,  (token) => {
+                            return token.contact_record.id === contact.id;
+                        });
+                        if (existToken) this.updatedTokens.remove(existToken);
+                        this.updatedTokens.push(token);
+                        
+                        this.updateRecipients(contact, null, token);
+                        this.grid.getView().refresh();
+                    },
+                }));
+            });
+            const contextMenu = new Ext.menu.Menu({items: items});
+            contextMenu.showAt(position);
+        }
         if (['to', 'cc', 'bcc', 'none'].indexOf(typeToSet) === -1) {
             // some other column has been clicked
             return;
         }
-
+        
         if (!contact.hasEmail() && typeToSet !== 'none') {
             this.setTypeRadio(contact, 'none');
         } else {
@@ -208,33 +287,21 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     
     /**
      * update recipient
-     * 
+     *
      * @param {Tine.Addressbook.Model.Contact} contact
      * @param {String} typeToSet
+     * @param tokenToSet
      */
-    updateRecipients: function (contact, typeToSet) {
-        let found = false;
-        const token = Tine.Felamimail.GridPanelHook.prototype.getRecipientTokenFromContact(contact);
+    updateRecipients: function (contact, typeToSet = null, tokenToSet = null) {
+        const existData = this.getSelectedToken(contact);
+        if (!existData.token || existData.type === typeToSet) return;
+        if (!typeToSet) typeToSet = existData.type;
+        if (!tokenToSet) tokenToSet = existData.token;
         
-        if (!token) {
-            return;
-        }
+        if (existData.type !== 'none') this.messageRecord.data[existData.type].remove(existData.token);
+        if (typeToSet !== 'none') this.messageRecord.data[typeToSet].push(tokenToSet);
 
-        _.each(['to', 'cc', 'bcc'], async (type) => {
-            const existToken = _.find(this.messageRecord.data[type], {email: token.email});
-            if (Ext.isArray(this.messageRecord.data[type]) && existToken) {
-                if (type !== typeToSet) {
-                    this.messageRecord.data[type].remove(existToken);
-                } else {
-                    found = true;
-                }
-            }
-        });
-        
-        if (!found && typeToSet !== 'none') {
-            Tine.log.debug('Tine.Felamimail.ContactGridPanel::updateRecipients() - adding email ' + token.email + ' to ' + typeToSet);
-            this.messageRecord.data[typeToSet].push(token);
-        }
+        Tine.log.debug('Tine.Felamimail.ContactGridPanel::updateRecipients() - adding email ' + existData.token.email + ' to ' + typeToSet);
     },
     
     /**
@@ -381,16 +448,16 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         }
     },
     
-    /**
-     * row doubleclick handler
-     * 
-     * @param {} grid
-     * @param {} row
-     * @param {} e
-     */
-    onRowDblClick: function(grid, row, e) {
-        this.onAddContact('to');
-    }, 
+    // /**
+    //  * row doubleclick handler
+    //  * 
+    //  * @param {} grid
+    //  * @param {} row
+    //  * @param {} e
+    //  */
+    // onRowDblClick: function(grid, row, e) {
+    //     this.onAddContact('to');
+    // }, 
     
     /**
      * returns rows context menu

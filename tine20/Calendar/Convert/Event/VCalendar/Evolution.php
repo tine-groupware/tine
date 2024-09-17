@@ -19,27 +19,5 @@ class Calendar_Convert_Event_VCalendar_Evolution extends Calendar_Convert_Event_
 {
     // Evolution/3.18.5
     const HEADER_MATCH = '/Evolution\/(?P<version>.*)/';
-        
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        #'priority',
-        'summary',
-        #'url',
-        'alarms',
-        'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        # 'recurid',
-        'is_all_day_event',
-        'rrule_until',
-        'originator_tz'
-    );
 }
 

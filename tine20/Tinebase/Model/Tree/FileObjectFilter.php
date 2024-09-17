@@ -36,5 +36,7 @@ class Tinebase_Model_Tree_FileObjectFilter extends Tinebase_Model_Filter_FilterG
         'type'                  => ['filter' => Tinebase_Model_Filter_Text::class],
         'hash'                  => ['filter' => Tinebase_Model_Filter_Text::class, 'options' => ['tablename' => 'tree_filerevisions']],
         'size'                  => ['filter' => Tinebase_Model_Filter_Int::class, 'options' => ['tablename' => 'tree_filerevisions']],
+        'flysystem'             => ['filter' => Tinebase_Model_Filter_Id::class],
+        'flypath'               => ['filter' => Tinebase_Model_Filter_Text::class],
     ];
 }

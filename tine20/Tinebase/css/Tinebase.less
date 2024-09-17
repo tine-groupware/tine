@@ -7,6 +7,24 @@ html, body {
     height:100%;
 }
 
+.tine-gird-cell-date div,
+.tine-gird-cell-datetime div{
+    container-type: inline-size;
+    container-name: datetime;
+}
+
+@container datetime (width < 80px) {
+    .time-renderer-medium {
+      display: none;
+    }
+}
+
+@container datetime (width < 120px) {
+    .date-renderer-wkday {
+      display: none;
+    }
+}
+
 /* see ace-tm styles */
 .string { color: rgb(3, 106, 7); }
 .number { color: rgb(0, 0, 205); }
@@ -830,10 +848,11 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
 
 .tw-activities-grid .x-grid3-cell-inner {
     white-space: normal;
-    display: flex;
+    display: block;
     flex-wrap: wrap;
     align-items: flex-start;
     flex-direction: row;
+    text-align: left;
 }
 
 .tine-grid-row-nolongerinfilter td {
@@ -845,6 +864,7 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     background-repeat: no-repeat;
     background-position: center;
     height: 14px;
+    min-width: 16px;
 }
 
 .tine-grid-row-action-icon {
@@ -854,7 +874,12 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     width: 16px;
     margin: -2px;
 }
-
+span.tine-grid-row-action-icon {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 0px;
+    margin-bottom: -4px;
+}
 .tine-grid-cell-action-wrap {
     position: relative;
 }
@@ -1009,6 +1034,34 @@ span:hover.tinebase-download-link {
     margin-right: 2px;
 }
 
+.main-menu-upload-btn.x-btn{
+    width: 30px;
+    height: 30px;
+}
+
+.main-menu-upload-btn td{
+    background-color: inherit;
+}
+
+.main-menu-upload-btn.x-btn-icon .x-btn-small .x-btn-image{
+    width: 30px;
+    height: 30px;
+    background-size: 30px 30px !important;
+    filter: invert(1);
+}
+.dark-mode .main-menu-upload-btn.x-btn-icon .x-btn-small .x-btn-image {
+    filter: invert(0);
+}
+
+.main-menu-upload-btn.x-btn .x-btn-tl, .x-btn-tc, .x-btn-tr,
+.x-btn-ml, .x-btn-mr, .x-btn-bl, .x-btn-br, .x-btn-bc{
+    display: none !important;
+}
+
+.main-menu-upload-btn.x-btn.x-btn-over .x-btn-mc{
+    background-color: inherit;
+}
+
 .action_download {
     background-image:url(../../images/icon-set/icon_download.svg) !important;
 }
@@ -1061,6 +1114,18 @@ span:hover.tinebase-showheaders-link {
     vertical-align: text-bottom;
     padding-right: 4px;
     transform: scale(1.3);
+}
+
+.tine-textfield-icon {
+    background-size: 14px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 14px;
+    min-width: 16px;
+}
+
+.dark-mode .tine-textfield-icon {
+    filter: invert(1) hue-rotate(180deg);
 }
 
 .x-grid .tine-keyfield-icon {
@@ -1319,7 +1384,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit,
 }
 
 .x-cols-icon {
-    background: url(../../images/icon-set/icon_column_neg.svg) !important;
+    background: url(../../images/icon-set/icon_column.svg) !important;
 }
 
 

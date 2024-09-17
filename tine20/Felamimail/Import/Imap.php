@@ -204,6 +204,8 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
     protected function _afterImport()
     {
         // mark all imported + failed messages as seen, also mark failed messages with FLAGGED
+        Felamimail_Controller_Message_Flags::getInstance()->clearFlags(
+            $this->_importedMessages, [Zend_Mail_Storage::FLAG_FLAGGED]);
         Felamimail_Controller_Message_Flags::getInstance()->addFlags(
             $this->_importedMessages, [Zend_Mail_Storage::FLAG_SEEN]);
         Felamimail_Controller_Message_Flags::getInstance()->addFlags(

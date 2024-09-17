@@ -73,8 +73,6 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     protected $_userBaseFilter = 'objectclass=user';
 
-    protected $_isReadOnlyBackend = false;
-
     /**
      * the constructor
      *
@@ -121,11 +119,14 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($_user->getId())) {
             return NULL;
         }
         
         $ldapData = $this->_user2ldap($_user);
+        unset($ldapData[$this->_userUUIDAttribute]);
+
+        $ldapData = array_merge($ldapData, $this->getLdapPasswordData(Tinebase_Record_Abstract::generateUID(20)));
 
         // will be added later
         $primaryGroupId = $ldapData['primarygroupid'];
@@ -150,13 +151,15 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         // add user to primary group and set primary group
         /** @noinspection PhpUndefinedMethodInspection */
-        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_user->accountPrimaryGroup, $userId);
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID} ?: $_user->accountPrimaryGroup, $userId);
         
         // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
-        
 
-        $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
+        $user = clone $_user;
+        $user->setId($userId);
+        unset($user->xprops()[static::class]['syncId']);
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $user, 'Tinebase_Model_FullUser');
 
         return $user;
     }
@@ -169,7 +172,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             return;
         }
         
@@ -205,7 +208,32 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
 
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
-    
+
+    protected function getLdapPasswordData(string $password): array
+    {
+        $ldapData = [
+            'unicodePwd' => $this->_encodePassword($password),
+        ];
+        if ($this->_options['useRfc2307'] ?? false) {
+            $ldapData['shadowlastchange'] = floor(Tinebase_DateTime::now()->getTimestamp() / 86400);
+        }
+        return $ldapData;
+    }
+
+    public function setPasswordInSyncBackend(Tinebase_Model_FullUser $user, string $_password, bool $_encrypt = true, bool $_mustChange = false): void
+    {
+        $metaData = $this->_getMetaData($user);
+
+        $ldapData = $this->getLdapPasswordData($_password);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+
+        $this->_ldap->updateProperty($metaData['dn'], $ldapData);
+    }
+
     /**
      * set the password for given account
      *
@@ -217,9 +245,12 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false): void
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_userId))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP - let sql parent handle it');
+            parent::setPassword($_userId, $_password, $_encrypt, $_mustChange, $ignorePwPolicy);
             return;
         }
         
@@ -228,39 +259,28 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         if (! $ignorePwPolicy) {
             Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
         }
-        
-        $metaData = $this->_getMetaData($user);
 
-        $ldapData = array(
-            'unicodePwd' => $this->_encodePassword($_password),
-        );
-        
-        if ($this->_options['useRfc2307']) {
-            $ldapData = array_merge($ldapData, array(
-                'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)
-            ));
+        $this->setPasswordInSyncBackend($user, $_password, $_encrypt, (bool)$_mustChange);
+
+        if ($this->_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL]) {
+            $this->_updatePasswordProperties($user->getId(), $_password, $_encrypt, $_mustChange);
+        } else {
+            try {
+                // update last modify timestamp in sql backend too
+                $this->_setAccountPasswordProperties($user->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            }
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-
-        $this->_ldap->updateProperty($metaData['dn'], $ldapData);
-        
-        // update last modify timestamp in sql backend too
-        $values = array(
-            'last_password_change' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'password_must_change' => 0,
-        );
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId())
-        );
-        
-        $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
-        
         $this->_setPluginsPassword($user, $_password, $_encrypt);
+
+        $this->firePasswordEvent($user, $_password);
+
+        $accountData['id'] = $user->getId();
+        $oldPassword = new Tinebase_Model_UserPassword(array('id' => $user->getId()), true);
+        $newPassword = new Tinebase_Model_UserPassword($accountData, true);
+        $this->_writeModLog($newPassword, $oldPassword);
     }
     
     /**
@@ -271,7 +291,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function setStatusInSyncBackend($_accountId, $_status)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             return;
         }
         
@@ -320,7 +340,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($_account->getId())) {
             return null;
         }
 
@@ -569,6 +589,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     break;
                     
                 case 'accountPrimaryGroup':
+                    if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID}) {
+                        $value = $deviateGroupId;
+                    }
                     /** @noinspection PhpUndefinedMethodInspection */
                     $ldapData[$ldapProperty] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($value);
                     if ($this->_options['useRfc2307']) {

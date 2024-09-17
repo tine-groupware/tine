@@ -15,6 +15,7 @@
 /**
  * class to hold Account data
  * 
+ * @property  string $name
  * @property  string $trash_folder
  * @property  string $sent_folder
  * @property  string $drafts_folder
@@ -352,15 +353,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     ['InArray', [self::DISPLAY_HTML, self::DISPLAY_PLAIN]]
                 ],
                 self::NULLABLE                  => true,
-            ],
-            'preserve_format' => [
-                self::TYPE => self::TYPE_BOOLEAN,
-                self::LABEL => 'Preserve Format', // _('Preserve Format')
-                self::SHY => true,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => false,
-                ],
             ],
             'reply_to' => [
                 self::TYPE => self::TYPE_STRING,
@@ -702,6 +694,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class => self::MESSAGE_COPY_FOLDER_SENT,
                 ],
+            ],
+            'adb_list'  => [
+                self::LABEL                 => 'Addressbook list',
+                self::TYPE                  => self::TYPE_VIRTUAL,
             ],
         ]
     ];

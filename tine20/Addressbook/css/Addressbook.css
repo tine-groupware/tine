@@ -23,6 +23,10 @@
     background-image:url(../../images/icon-set/icon_user.svg) !important;
 }
 
+.renderer_typeEmailIcon {
+    background-image:url(../../images/icon-set/icon_email_account.svg) !important;
+}
+
 .renderer_typeEmailAccountIcon {
     background-image:url(../../images/icon-set/icon_email.svg) !important;
 }
@@ -45,6 +49,10 @@
 
 .renderer_typeGroupMemberIcon {
     background-image:url(../../images/icon-set/icon_groupmember.svg) !important;
+}
+
+.renderer_PreferredIcon {
+    background-image:url(../../images/icon-set/icon_flag_preferred_star_outline.svg) !important;
 }
 
 .renderer_displayNameRenderer_noName {

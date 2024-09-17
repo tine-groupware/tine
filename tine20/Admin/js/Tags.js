@@ -222,13 +222,13 @@ Tine.Admin.Tags.Main = {
                 resizable: true
             },
             columns: [
-                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', hidden: true, width: 40 },
-                { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function (color,meta,record) {
+                { id: 'id', header: this.translation.gettext('ID'), hidden: true, width: 40 },
+                { id: 'color', header: this.translation.gettext('Color'), renderer: function (color,meta,record) {
                     return '<div style="background-color:' + (color || '#fff') + ';" class="tb-grid-tags dark-reverse" title="' + record.get('name') + ' (' +  i18n._('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
                 }},
-                { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
-                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500},
-                { id: 'system_tag', header: this.translation.gettext('System Tag'), dataIndex: 'system_tag', width: 40, renderer: Tine.Tinebase.common.booleanRenderer}
+                { id: 'name', header: this.translation.gettext('Name') },
+                { id: 'description', header: this.translation.gettext('Description'),width: 500},
+                { id: 'system_tag', header: this.translation.gettext('System Tag'), width: 40, renderer: Tine.Tinebase.common.booleanRenderer}
 
             ]
         });

@@ -1,7 +1,5 @@
 <?php
 
-use Sabre\VObject;
-
 /**
  * Tine 2.0
  *
@@ -9,8 +7,10 @@ use Sabre\VObject;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Sabre\VObject;
 
 /**
  * class to handle a single event
@@ -47,27 +47,21 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     /**
      * Constructor 
      * 
-     * @param  string|Calendar_Model_Event  $_event  the id of a event or the event itself 
+     * @param Tinebase_Model_Container $_container
+     * @param null|string|Calendar_Model_Event  $_event  the id of a event or the event itself
      */
     public function __construct(Tinebase_Model_Container $_container, $_event = null) 
     {
         $this->_container = $_container;
         $this->_event     = $_event;
         
-        if (! $this->_event instanceof Calendar_Model_Event) {
+        if ($_event && ! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
         }
-        
-        if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        } else {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
-            $version = null;
-        }
-        
+
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
     }
-    
+
     /**
      * add attachment to event
      * 
@@ -109,7 +103,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param  stream|string             $vobjectData
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [])
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
@@ -121,6 +115,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        $converter->setOptions($converterOptions);
 
         try {
             /** @var Calendar_Model_Event $event */
@@ -142,7 +137,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (strlen((string)$id) > 40) {
             $id = sha1($id);
         }
-        $event->setId($id);
+        if ($converter->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
+            $event->external_id = $id;
+        } else {
+            $event->setId($id);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Event to create: " . print_r($event->toArray(), TRUE));
@@ -166,7 +165,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
 
             self::checkWriteAccess($converter);
             $retry = false;
+            $raii = null;
             try {
+                if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                    $oldSkipRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+                    $raii = new Tinebase_RAII(fn () => Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldSkipRollback));
+                }
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
                 
             } catch (Zend_Db_Statement_Exception $zdse) {
@@ -198,6 +202,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                     throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
                 }
             }
+            unset($raii);
             
             $vevent = new self($container, $event);
         } else {
@@ -236,6 +241,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
 
             $vevent = new self($container, $existingEvent);
+            $vevent->_getConverter()->setOptions($converterOptions);
             $event = static::_allowOnlyAttendeeProperties($existingEvent, $event, $container);
 
             $calCtrl = Calendar_Controller_Event::getInstance();
@@ -440,8 +446,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public function getACL() 
     {
-        return null;
-        
+        // TODO FIXME improve this!!! add event read acls for attendees
+        return (new Calendar_Frontend_WebDAV_Container($this->_container))->getACL();
+
         return array(
             array(
                 'privilege' => '{DAV:}read',
@@ -491,15 +498,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $record = $this->getRecord();
         return '"' . sha1($record->getId() . $record->seq) . '"';
     }
-    
-    /**
-     * Returns the last modification date as a unix timestamp
-     *
-     * @return time
-     */
+
     public function getLastModified() 
     {
-        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() : $this->getRecord()->creation_time->toString();
+        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->getTimestamp() :
+            (($this->getRecord()->creation_time instanceof Tinebase_DateTime) ? $this->getRecord()->creation_time->getTimestamp() : null);
     }
     
     /**
@@ -517,7 +520,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      *
      * @param string $cardData
      * @param bool $retry
-     * @return void
+     * @return string
      */
     public function put($cardData, $retry = true)
     {
@@ -560,6 +563,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $currentContainer->resolveGrantsAndPath();
 
         // no If-Match header -> no moves / displaycontainer changes
+
+        // TODO FIXME !!! this is server code, we need client here...
+
         if (!Tinebase_Core::getRequest()->getHeaders()->has('If-Match')) {
             $event = static::_allowOnlyAttendeeProperties($currentEvent, $event, $this->_container);
 
@@ -720,9 +726,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public function _getConverter()
     {
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
         if (!$this->_converter) {
+            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
             $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         }
         
@@ -766,5 +771,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     public function getSupportedPrivilegeSet()
     {
         return null;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->_event?->getId();
     }
 }

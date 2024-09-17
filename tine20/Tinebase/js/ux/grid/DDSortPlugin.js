@@ -109,7 +109,10 @@ Ext.extend(DDSortPlugin, Ext.util.Observable, {
 
                 me.applySorting(data.selections, ref, edge);
                 me.store.applySort();
-                _.defer(() => { me.grid.getView().refresh(); });
+                _.defer(() => {
+                    me.onAfterSort();
+                    me.grid.getView().refresh();
+                });
 
                 //
                 // if (store.proxy) {
@@ -165,7 +168,9 @@ Ext.extend(DDSortPlugin, Ext.util.Observable, {
         [].concat(records)[sign < 0 ? 'reverse' : 'unique']().forEach((record, idx) => {
             record.set(this.ddSortCol, refSortVal+(idx+1)*sign*sortdiff);
         });
-    }
+    },
+
+    onAfterSort: Ext.emptyFn
 
 });
 

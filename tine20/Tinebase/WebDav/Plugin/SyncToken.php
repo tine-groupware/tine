@@ -13,7 +13,7 @@
  *       
  * @package    Tinebase
  * @subpackage WebDav
- * @copyright  Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author     Paul Mehrer <p.mehrer@metaways.de>
  * @license    http://sabre.io/license/ Modified BSD License
  */
@@ -42,7 +42,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
      * Returns a plugin name.
      * 
      * Using this name other plugins will be able to access other plugins
-     * using \Sabre\DAV\Server::getPlugin 
+     * using \Sabre\DAV\Server::getPlugin
      * 
      * @return string 
      */
@@ -54,18 +54,18 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
     /**
      * Initializes the plugin 
      * 
-     * @param \Sabre\DAV\Server $server 
+     * @param \Sabre\DAV\Server $server
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server) 
+    public function initialize(\Sabre\DAV\Server $server)
     {
         $this->server = $server;
 
         $self = $this;
-        $server->subscribeEvent('report', function($reportName, $dom, $uri) use ($self, $server) {
+        $server->on('report', function($reportName, $requestData, $uri) use ($self, $server) {
             if ($reportName === '{DAV:}sync-collection') {
                 $server->transactionType = 'report-sync-collection';
-                $self->syncCollection($uri, $dom);
+                $self->syncCollection($uri, $requestData);
                 return false;
             }
         });
@@ -93,14 +93,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         return array();
     }
 
-    /**
-     * This method handles the {DAV:}sync-collection HTTP REPORT.
-     *
-     * @param string $uri
-     * @param \DOMDocument $report
-     * @return void
-     */
-    function syncCollection($uri, \DOMDocument $report)
+    function syncCollection($uri, array $requestData): void
     {
         // Getting the sync token of the data requested
         /**
@@ -112,11 +105,26 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         }
 
         // getting the sync token send with the request
-        $syncToken = '';
-        $syncTokenList = $report->getElementsByTagNameNS('urn:DAV', 'sync-token');
-        if ($syncTokenList->length == 1) {
-            $syncToken = (string)$syncTokenList->item(0)->textContent; //?!? //nodeValue;
+        $syncToken = null;
+        $properties = [];
+
+        foreach ($requestData as $elem) {
+            switch($elem['name'] ?? '') {
+                case '{DAV:}sync-token':
+                    $syncToken = $elem['value'] ?? null;
+                    break;
+                //case '{DAV:}sync-level':
+                case '{DAV:}prop':
+                    foreach ($elem['value'] ?? [] as $subElem) {
+                        if ($subElem['name'] ?? false) {
+                            $properties[] = $subElem['name'];
+                        }
+                    }
+                    break;
+            }
         }
+
+        $syncToken = (string)$syncToken;
         if (strlen($syncToken) > 0 ) {
             // Sync-token must start with our prefix
             if (substr($syncToken, 0, strlen(self::SYNCTOKEN_PREFIX)) !== self::SYNCTOKEN_PREFIX || strlen($syncToken) <= strlen(self::SYNCTOKEN_PREFIX)) {
@@ -126,9 +134,6 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         } else {
             $syncToken = 0;
         }
-
-        // get the list of properties the client requested
-        $properties = array_keys(Sabre\DAV\XMLUtil::parseProperties($report->documentElement));
 
         // get changes since client sync token
         $changeInfo = $node->getChanges($syncToken);
@@ -178,49 +183,28 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
 
         $data = $this->generateMultiStatus($resolvedProperties, $syncToken);
 
-        $this->server->httpResponse->sendStatus(207);
+        $this->server->httpResponse->setStatus(207);
         $this->server->httpResponse->setHeader('Content-Type', 'application/xml; charset=utf-8');
-        $this->server->httpResponse->sendBody($data);
+        $this->server->httpResponse->setBody($data);
     }
 
-    protected function generateMultiStatus($properties, $syncToken)
+    protected function generateMultiStatus($properties, $syncToken): string
     {
-        $dom = new \DOMDocument('1.0', 'utf-8');
-
-        //$dom->formatOutput = true;
-        $multiStatus = $dom->createElement('d:multistatus');
-
-        // Adding in default namespaces
-        foreach ($this->server->xmlNamespaces as $namespace => $prefix) {
-            $multiStatus->setAttribute('xmlns:' . $prefix, $namespace);
-        }
+        $responses = [];
 
         foreach ($properties as $href => $entries) {
-            if (count($entries) === 0) { //404
-                $response = $dom->createElement('d:response');
-                // Make sure the URI sent is equal to the one sent by a
-                // Sabre\DAV\Property\Response.
-                $href = Sabre\DAV\URLUtil::encodePath($href);
-                $href = $this->server->getBaseUri() . $href;
-                $href = $dom->createElement('d:href', $href);
-                $response->appendChild($href);
-                $status = $dom->createElement('d:status', $this->server->httpResponse->getStatusMessage(404));
-                $response->appendChild($status);
-                $multiStatus->appendChild($response);
+            if (count($entries) === 0) {
+                $responses[] = new \Sabre\DAV\Xml\Element\Response($href, [], '404');
             } else {
                 foreach($entries as $entry) {
                     $ehref = $entry['href'];
                     unset($entry['href']);
-
-                    $response = new Sabre\DAV\Property\Response($ehref, $entry);
-                    $response->serialize($this->server, $multiStatus);
+                    $responses[] = new \Sabre\DAV\Xml\Element\Response($ehref, $entry);
                 }
             }
         }
 
-        $multiStatus->appendChild($dom->createElement('d:sync-token', self::SYNCTOKEN_PREFIX . $syncToken));
-        $dom->appendChild($multiStatus);
-
-        return $dom->saveXML();
+        $multiStatus = new \Sabre\DAV\Xml\Response\MultiStatus($responses, self::SYNCTOKEN_PREFIX . $syncToken);
+        return $this->server->xml->write('{DAV:}multistatus', $multiStatus, $this->server->getBaseUri());
     }
 }

@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -56,7 +56,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
                 'principaluri'      => $principalUri,
                 '{DAV:}displayname' => $container->name,
                 '{http://apple.com/ns/ical/}calendar-color' => $container->color,
-                '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
+                '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VEVENT')),
             );
         }
         
@@ -118,7 +118,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
      * @param array $properties
      * @return bool|array 
      */
-    public function updateCalendar($calendarId, array $properties)
+    public function updateCalendar($calendarId, \Sabre\DAV\PropPatch $propPatch)
     {
         throw new Sabre\DAV\Exception\MethodNotAllowed('updateCalendar');
     }

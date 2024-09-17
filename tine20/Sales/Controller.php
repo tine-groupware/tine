@@ -145,7 +145,21 @@ class Sales_Controller extends Tinebase_Controller_Event
     {
         $result = parent::getCoreDataForApplication();
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'sales_division',
+            'application_id' => $application,
+            'model' => Sales_Model_Division::class,
+            'label' => 'Divisions' // _('Divisions')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'sales_category',
+            'application_id' => $application,
+            'model' => Sales_Model_Document_Category::class,
+            'label' => 'Categories' // _('Categories')
+        )));
+
         $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => 'cs_boilerplate',
             'application_id' => $application,
@@ -218,6 +232,57 @@ class Sales_Controller extends Tinebase_Controller_Event
         return $defaultLang;
     }
 
+    public function createCustomerContactRelation(Addressbook_Model_Contact $contact, ?Addressbook_Model_Contact $existingContact = null)
+    {
+        if ($existingContact && $contact->container_id === $existingContact->container_id) {
+            // do nothing
+            return;
+        }
+
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact);
+        $container = $contact->container_id instanceof Tinebase_Model_Container ? $contact->container_id :
+            Tinebase_Container::getInstance()->getContainerById($contact->container_id);
+        if (isset($container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]) &&
+            $container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
+        {
+            // check if contact / customer relation already exists, if not -> create customer & relation
+            $customer = $contact->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+
+            if (! $customer) {
+                $customer = new Sales_Model_Customer([
+                    'name' => $contact->n_fn,
+                    'cpextern_id' => $contact->getId(),
+                    'relations' => [[
+                        'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
+                        'related_model' => Addressbook_Model_Contact::class,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                        'related_id' => $contact->getId(),
+                        'type' => 'CONTACTCUSTOMER'
+                    ]],
+                    Sales_Model_Customer::FLD_DEBITORS => [
+                        self::createDebitorFromContact($contact)
+                    ],
+                ]);
+                Sales_Controller_Customer::getInstance()->create($customer);
+            }
+        }
+    }
+
+    public static function createDebitorFromContact(Addressbook_Model_Contact $contact): Sales_Model_Debitor
+    {
+        return new Sales_Model_Debitor([
+            Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION},
+            Sales_Model_Debitor::FLD_BILLING => [[
+                'street' => $contact->adr_one_street,
+                'postalcode' => $contact->adr_one_postalcode,
+                'locality' => $contact->adr_one_locality,
+                'region' => $contact->adr_one_region,
+                'countryname' => $contact->adr_one_countryname,
+                'type' => 'billing',
+            ]],
+        ], true);
+    }
+
     /**
      * event handler function
      *
@@ -230,10 +295,12 @@ class Sales_Controller extends Tinebase_Controller_Event
         switch (get_class($_eventObject)) {
             case Addressbook_Event_CreateContact::class:
                 $this->createUpdatePostalAddress($_eventObject->createdContact);
+                $this->createCustomerContactRelation($_eventObject->createdContact);
                 break;
             case Addressbook_Event_InspectContactAfterUpdate::class:
                 $this->createUpdatePostalAddress($_eventObject->updatedContact);
                 $this->updateBillingAddress($_eventObject->updatedContact);
+                $this->createCustomerContactRelation($_eventObject->updatedContact, $_eventObject->record);
                 break;
         }
     }

@@ -14,6 +14,7 @@
 
 import waitFor from 'util/waitFor.es6';
 import {init as initBroadcastClient} from './broadcastClient'
+import * as localforage from "localforage";
 
 var EventEmitter = require('events');
 
@@ -127,6 +128,18 @@ Tine.Tinebase.tineInit = {
     },
 
     initWindow: function () {
+        const initialDataRe = /initialData\/(.*)\/?/;
+        if (initialDataRe.test(window.location.hash)) {
+            let hashData = initialDataRe.exec(window.location.hash)[1];
+            window.location.href = location.href.replace(initialDataRe, '');
+            try {
+                window.initialData = window.initialData || {};
+                Object.assign(window.initialData, JSON.parse(decodeURIComponent(hashData)));
+            } catch (e) {
+                console.error("can't decode initialData", hashData, e);
+            }
+        }
+
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
                 // disable the native 'select all'
@@ -199,7 +212,7 @@ Tine.Tinebase.tineInit = {
 
         Ext.getBody().on('click', async function (e) {
 
-            var target = e.getTarget('a', 1, true),
+            var target = e.getTarget('a', 2, true),
                 href = target ? target.getAttribute('href') : '';
             const position = e.getXY();
 
@@ -224,7 +237,7 @@ Tine.Tinebase.tineInit = {
                 }
             }
             
-            if (target && href && href !== '#') {
+            if (target && href && href !== '#' && href !== Tine.Tinebase.common.getUrl()) {
                 target.set({
                     href: decodeURI(href),
                     rel: "noreferrer",
@@ -899,6 +912,18 @@ Tine.Tinebase.tineInit = {
             }
         });
     },
+    
+    getRegistryDB() {
+        if (!this.registryDB) {
+            this.registryDB = localforage.createInstance({
+                driver: localforage.INDEXEDDB, // or use localforage.WEBSQL or localforage.LOCALSTORAGE
+                name: Tine.Tinebase.tineInit.lsPrefix + '.registry', // optional
+                version: 1.0, // optional
+                storeName: 'registry', // optional
+            });
+        }
+        return this.registryDB;
+    },
 
     /**
      * init registry
@@ -908,19 +933,41 @@ Tine.Tinebase.tineInit = {
      * @param {Object} scope
      */
     initRegistry: async function (forceReload, cb, scope) {
-        Tine.Tinebase.registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + 'Tinebase.registry');
-
-        var version = Tine.Tinebase.registry.get('version'),
-            userApplications = Tine.Tinebase.registry.get('userApplications') || [];
-
-        var reloadNeeded =
-               !version
+        const registryDB = this.getRegistryDB();
+        const registryData =  await registryDB.getItem('data');
+        Tine.Tinebase.registry = new Ext.util.MixedCollection(false, false, true);
+        Tine.Tinebase.registry.addAll(registryData?.Tinebase || {});
+        
+        const version = Tine.Tinebase.registry.get('version');
+        const userApplications = Tine.Tinebase.registry.get('userApplications') || [];
+        const reloadNeeded = !version
             || !userApplications
             || userApplications.length < 2;
 
-        if (forceReload || reloadNeeded) {
-            await Tine.Tinebase.tineInit.clearRegistry();
+        const initAppRegistry = (app, registryData) => {
+            Ext.ns('Tine.' + app);
+            const setItems = async(collection, key, value) => {
+                const reference = collection === 'preferences' ? registryData[app]['preferences'] : registryData[app];
 
+                if (value instanceof Ext.util.MixedCollection) value = value.getAll();
+                reference[key] = value;
+                await registryDB.setItem('data', registryData);
+            };
+            ['registry', 'preferences'].forEach(((collection) => {
+                Tine[app][collection] = new Ext.util.MixedCollection(false, false, true);
+                Tine[app][collection].on('replace', async (key, oldValue, newValue) => {
+                    await setItems(collection, key, newValue);
+                });
+                Tine[app][collection].on('add', async (index, newValue, key) => {
+                    await setItems(collection, key, newValue);
+                });
+            }))
+            Tine[app].registry.addAll(registryData[app] || {}, true)
+            Tine[app].preferences.addAll(registryData[app].preferences || {}, true);
+            Tine[app].registry.set('preferences', Tine[app].preferences, true);
+        }
+        if (forceReload || reloadNeeded) {
+            await this.clearRegistry();
             Ext.Ajax.request({
                 timeout: 120000, // 2 minutes
                 params: {
@@ -933,47 +980,21 @@ Tine.Tinebase.tineInit = {
                             clearCache: true
                         });
                     }
-
                     // if registry could not be loaded, this is mostly due to misconfiguration
                     // don't send error reports for that!
                     Tine.Tinebase.ExceptionHandler.handleRequestException({
                         code: 503
                     });
                 },
-                success: async function (response, request) {
-                    var registryData = Ext.util.JSON.decode(response.responseText);
-                    if (Tine.Tinebase.tineInit.checkServerUpdateRequired(registryData)) {
-                        return;
-                    }
-                    for (var app in registryData) {
-                        if (registryData.hasOwnProperty(app)) {
-                            var appData = registryData[app];
-                            Ext.ns('Tine.' + app);
-                            Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
-
-                            for (var key in appData) {
-                                if (appData.hasOwnProperty(key)) {
-                                    if (key === 'preferences') {
-                                        Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
-                                        for (var pref in appData[key]) {
-                                            if (appData[key].hasOwnProperty(pref)) {
-                                                Tine[app].preferences.set(pref, appData[key][pref]);
-                                            }
-                                        }
-
-                                    } else {
-                                        Tine[app].registry.set(key, appData[key]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // TODO is this needed? is setting async, too?
-                    await waitFor(() => {
-                        return store.namespace(Tine.Tinebase.tineInit.lsPrefix).has('Tinebase.registry.version')
+                success: async (response, request) => {
+                    const registryData = Ext.util.JSON.decode(response.responseText);
+                    if (Tine.Tinebase.tineInit.checkServerUpdateRequired(registryData)) return;
+                    await registryDB.setItem('data', registryData);
+                    
+                    Object.keys(registryData).forEach((app) => {
+                        initAppRegistry(app, registryData);
                     });
-
+                    
                     Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                         Ext.util.CSS.refreshCache();
                         if (Ext.isFunction(cb)) {
@@ -981,9 +1002,8 @@ Tine.Tinebase.tineInit = {
                         }
                     });
                 }
-            });
+            })
         } else {
-
             if (window.isMainWindow) {
                 await new Promise((resolve) => {
                     Ext.Ajax.request({
@@ -1004,14 +1024,10 @@ Tine.Tinebase.tineInit = {
                     });
                 });
             }
-
-            for (var app,i=0;i<userApplications.length;i++) {
-                app = userApplications[i].name;
-                Ext.ns('Tine.' + app);
-                Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
-                Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
-            }
-
+            userApplications.forEach((app) => {
+                initAppRegistry(app.name, registryData);
+            })
+            
             Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                 Ext.util.CSS.refreshCache();
                 if (Ext.isFunction(cb)) {
@@ -1173,15 +1189,7 @@ Tine.Tinebase.tineInit = {
      */
     clearRegistry: async function() {
         Tine.log.info('tineInit::clearRegistry');
-        if (Ext.isFunction(store.namespace)) {
-            store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
-            // FIXME need to call this twice - as the first clearAll does not clear everything
-            //       we should remove/replace the store lib ...
-            store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
-            await waitFor(() => {
-                return ! store.namespace(Tine.Tinebase.tineInit.lsPrefix).has('Tinebase.registry.version')
-            });
-        }
+        await this.getRegistryDB().clear();
     },
 
     /**
@@ -1318,6 +1326,9 @@ Tine.Tinebase.tineInit = {
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
         });
+
+        Tine.Tinebase.vue = Tine.Tinebase.vue || {}
+        Tine.Tinebase.vue.focusTrapStack = Tine.Tinebase.vue.focusTrapStack || []
     },
     /**
      * initialise state provider

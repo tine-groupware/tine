@@ -1992,3 +1992,47 @@ msgstr "Ajouter des comptes messagerie"
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
 msgstr "Créer de nouveaux comptes messagerie"
+
+#: Controller/MessageExpectedAnswer.php:74
+msgid "still unanswered: "
+msgstr ""
+
+#: Controller/MessageExpectedAnswer.php:77
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:22
+msgid "Expected Answer"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:69
+msgid "Tomorrow"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:74
+msgid "In two days"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:79
+msgid "In a week"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:84
+msgid "In two weeks"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:89
+msgid "In a month"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:94
+msgid "Custom"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:109
+msgid "Information"
+msgstr ""
+
+#: js/MessageExpectedAnswerAction.js:109
+msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
+msgstr ""

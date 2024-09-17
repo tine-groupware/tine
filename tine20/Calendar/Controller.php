@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -145,12 +145,16 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         if ($_eventObject instanceof Tinebase_Event_User_DeleteAccount) {
             $attenderId = $_eventObject->account->contact_id;
             $type = Calendar_Model_Attender::USERTYPE_USER;
-        } else if ($_eventObject instanceof Calendar_Event_DeleteResource) {
+        } elseif ($_eventObject instanceof Calendar_Event_DeleteResource) {
             $attenderId = $_eventObject->resource->getId();
             $type = Calendar_Model_Attender::USERTYPE_RESOURCE;
         }  else if ($_eventObject instanceof Addressbook_Event_DeleteList) {
             $attenderId = $_eventObject->list->getId();
             $type = Calendar_Model_Attender::USERTYPE_GROUP;
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' unknown event type: ' .
+                get_class($_eventObject));
+            return;
         }
 
         $filter = new Calendar_Model_EventFilter(array(array(
@@ -513,14 +517,15 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                     Calendar_Controller_Poll::class, 'publicApiUpdateAttendeeStatus', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
-                $routeCollector->put('/poll/{pollId}', (new Tinebase_Expressive_RouteHandler(
+                $routeCollector->post('/poll/join/{pollId}', (new Tinebase_Expressive_RouteHandler(
                     Calendar_Controller_Poll::class, 'publicApiAddAttendee', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
             }
             $routeCollector->get('/view/floorplan[/{floorplan}]', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'floorplanMainScreen', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => false
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => false,
+                Tinebase_Expressive_RouteHandler::UNAUTHORIZED_REDIRECT_LOGIN => true,
             ]))->toArray());
         });
 

@@ -5,14 +5,13 @@
  * @package     Calendar
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Calendar_Frontend_CalDAV_ProxyTest
@@ -21,9 +20,13 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
 {
     /**
      * 
-     * @var Sabre\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
+
+    protected $sharedContainer;
+    protected $otherUsersContainer;
+    protected $response;
     
     /**
      * Sets up the fixture.
@@ -32,7 +35,7 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
         // create shared folder and other users folder
@@ -61,18 +64,18 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         // clear container caches (brute force)
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
         $this->server->debugExceptions = true;
-        $this->server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $this->server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // extends \Sabre\CalDAV\Plugin
+        $this->server->addPlugin(new \Sabre\DAV\Sharing\Plugin());
         $this->server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
-        
+
+        $this->server->addPlugin(new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth()));
         $aclPlugin = new \Sabre\DAVACL\Plugin();
-        $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
         $this->server->addPlugin($aclPlugin);
-        
-        $this->response = new Sabre\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
+
+        $this->server->httpResponse = $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
     }
 
     /**
@@ -94,17 +97,14 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
                 </A:property>
             </A:expand-property>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
 
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
@@ -148,17 +148,14 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
                 </A:property>
             </A:expand-property>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_WebDav_PrincipalBackend::SHARED
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_WebDav_PrincipalBackend::SHARED);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
         
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
@@ -200,19 +197,17 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
               </A:prop>
             </A:propfind>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_WebDav_PrincipalBackend::SHARED,
-            'HTTP_BRIEF'     => 't',
-            'HTTP_DEPTH'     => '0'
-        ));
+        $request = new Sabre\HTTP\Request('PROPFIND', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_WebDav_PrincipalBackend::SHARED, [
+            'BRIEF'     => 't',
+            'DEPTH'     => '0',
+        ]);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
         
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
@@ -259,17 +254,14 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
                 </A:property>
             </A:expand-property>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
 
-        //$this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
 
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
@@ -319,17 +311,14 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
                 </A:property>
             </A:expand-property>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
 
-        //$this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
 
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
@@ -381,17 +370,14 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
                 </A:property>
             </A:expand-property>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
 
-        //$this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
 
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);

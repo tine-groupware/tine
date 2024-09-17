@@ -452,10 +452,6 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeiche
 * menu:[Replikation] – Darf der Benutzer auf Replikationsdaten aller Anwendungen zugreifen?
 * menu:[Version prüfen] - Erhält der Benutzer Mitteilungen über Software-Updates?
 * menu:[Wartung] – Darf der Benutzer die {branch} Installation im Wartungsmodus verwenden?
-. menu:[Voipmanager]
-* menu:[Admin] – Darf der Benutzer sämtliche Einstellungen im Voipmanager bearbeiten?
-* menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] – Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[Zeiterfassung]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Zeiterfassung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?

@@ -37,7 +37,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * the costcenter of the contract which is handled by _createAutoInvoicesForContract
      * 
-     * @var Tinebase_Model_CostCenter
+     * @var Tinebase_Model_EvaluationDimensionItem
      */
     protected $_currentBillingCostCenter = NULL;
     
@@ -199,18 +199,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     
     /**
      * finds the costcenter of $this->_currentContract
-     * 
-     * @return Tinebase_Model_CostCenter|NULL
      */
-    protected function _findCurrentCostCenter()
+    protected function _findCurrentCostCenter(): ?Tinebase_Model_EvaluationDimensionItem
     {
-        $this->_currentBillingCostCenter = NULL;
-        
-        foreach ($this->_currentBillingContract->relations as $relation) {
-            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_CostCenter::class) {
-                $this->_currentBillingCostCenter = $relation->related_record;
-            }
+        if ($this->_currentBillingContract->eval_dim_cost_center && !$this->_currentBillingContract->eval_dim_cost_center instanceof Tinebase_Model_EvaluationDimensionItem) {
+            $this->_currentBillingContract->eval_dim_cost_center = Tinebase_Controller_EvaluationDimensionItem::getInstance()->get($this->_currentBillingContract->eval_dim_cost_center);
         }
+        $this->_currentBillingCostCenter = $this->_currentBillingContract->eval_dim_cost_center;
 
         return $this->_currentBillingCostCenter;
     }
@@ -1154,7 +1149,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'address_id'    => $this->_currentBillingContract->billing_address_id,
                     'credit_term'   => $this->_currentBillingCustomer['credit_term'],
                     'customer_id'   => $this->_currentBillingCustomer['id'],
-                    'costcenter_id' => $this->_currentBillingCostCenter->getId(),
+                    'eval_dim_cost_center' => $this->_currentBillingCostCenter->getId(),
                     'start_date'    => $earliestStartDate,
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),
@@ -1411,6 +1406,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         if (empty($record->address_id) && $foundCustomer) {
             $json = new Sales_Frontend_Json();
             $resolved = $json->getCustomer($foundCustomer->getId());
+            //TODO FIXME!!!
             if (! empty($resolved['billing'])) {
                 $record->address_id = $resolved['billing'][0]['id'];
             } else {
@@ -1420,7 +1416,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         // if the record hasn't been cleared before, clear billables
         if ($record->cleared == 'CLEARED' && (! $oldRecord || $oldRecord->cleared != 'CLEARED')) {
-            
+
+            if (!$oldRecord) {
+                throw new Tinebase_Exception_SystemGeneric('you cant create cleared invoices directly');
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Clearing Invoice ' . print_r($record->toArray(), 1), Zend_Log::INFO);
             }
@@ -1429,9 +1429,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $record->date = new Tinebase_DateTime();
             }
             
-            $this->_setNextNumber($record, isset($oldRecord));
+            $this->_setNextNumber($record, true /*isset($oldRecord)*/);
             
-            $address = Sales_Controller_Address::getInstance()->get(is_string($record->address_id) ? $record->address_id : $record->address_id.id);
+            $address = Sales_Controller_Address::getInstance()->get(is_string($record->address_id) ? $record->address_id : $record->address_id->id);
             
             $string = (isset($foundCustomer['name']) ? $foundCustomer['name'] : '') . PHP_EOL;
             $string .= $address->prefix1 ? $address->prefix1 . "\n" : '';
@@ -1469,6 +1469,84 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         }
                     }
                 }
+            }
+        }
+    }
+
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
+
+        // TODO FIXME storno?!
+        if ($updatedRecord->cleared === 'CLEARED' && $currentRecord->cleared !== 'CLEARED') {
+            try {
+                $customer = $this->_getCustomerFromInvoiceRelations($updatedRecord) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
+                /** @var Sales_Model_Contract $contract */
+                $contract = $updatedRecord->relations->find('type', 'CONTRACT');
+                Tinebase_Record_Expander::expandRecord($customer);
+
+                // type (invoice_type) => REVERSAL => storno gibt verknüpfung
+
+                $invoice = new Sales_Model_Document_Invoice([
+                    Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER => $updatedRecord->number,
+                    Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => $updatedRecord->date,
+                    Sales_Model_Document_Invoice::FLD_DEBITOR_ID => new Sales_Model_Document_Debitor([
+                        Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}),
+                    ], true),
+                    Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+                    Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
+                        $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
+                    ),
+                    // TODO FIXME do we have a FLD_CONTACT_ID?
+                    Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
+                    Sales_Model_Document_Invoice::FLD_CUSTOMER_REFERENCE => $customer->number,
+                    Sales_Model_Document_Invoice::FLD_POSITIONS => [
+                        new Sales_Model_DocumentPosition_Invoice([
+                            Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'Gesamtbetrag gem. Anlage',
+                            Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                            Sales_Model_DocumentPosition_Invoice::FLD_GROSS_PRICE => $updatedRecord->price_gross,
+                            Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $updatedRecord->sales_tax,
+                        ], true),
+                    ],
+                ]);
+
+                if ($contract) {
+                    $invoice->{Sales_Model_Document_Invoice::FLD_CONTRACT_ID} = $contract;
+                }
+
+                if (is_numeric($updatedRecord->credit_term)) {
+                    $invoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS} = $updatedRecord->credit_term;
+                }
+
+                if (!($stream = fopen('php://temp', 'r+'))) {
+                    throw new Tinebase_Exception('cant create temp stream');
+                }
+                fwrite($stream, (new \Einvoicing\Writers\UblWriter)->export($invoice->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+                rewind($stream);
+
+                if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                    try {
+                        (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
+                    } catch (Tinebase_Exception_Record_Validation $e) {
+                        throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
+                    }
+                    rewind($stream); // redundant, but cheap and good for readability
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
+                }
+
+                $baseName = 'xrechnung';
+                $extention = '.xml';
+                $attachmentName = $baseName . $extention;
+                $count = 0;
+                while (null !== $updatedRecord->attachments->find('name', $attachmentName)) {
+                    $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
+                }
+                Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($updatedRecord, $attachmentName, $stream);
+                Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($updatedRecord);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $updatedRecord->getId()]);
             }
         }
     }
@@ -1667,7 +1745,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $diff = $diff['diff'];
             
             $allowChange = array('relations', 'notes', 'tags', 'attachments', 'description', 'created_by', 'creation_time',
-                'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_by', 'deleted_time', 'date', 'start_date', 'end_date', 'seq'
+                'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_by', 'deleted_time', 'date', 'start_date', 'end_date', 'seq',
+                'last_datev_send_date'
             );
             
             foreach($allowChange as $field) {

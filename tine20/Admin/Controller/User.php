@@ -226,6 +226,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $currentGroups = ! isset($_user->groups)
                 ? Admin_Controller_Group::getInstance()->getGroupMemberships($user->getId())
                 : $_user->groups;
+            $currentGroups = $currentGroups === '' ? [] : $currentGroups;
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
 
@@ -249,7 +250,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         // do this before throwing event because we might have to create email systemaccount/folders for mail accounts
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($user, $_password, $_passwordRepeat, true);
+            $this->setAccountPassword($user, $_password, $_passwordRepeat, (bool)$_user->password_must_change);
         }
 
         // fire needed events

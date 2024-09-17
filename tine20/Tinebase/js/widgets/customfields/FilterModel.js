@@ -37,7 +37,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
         switch (this.cfDefinition.type) {
             case 'record':
             case 'keyField':
-                // Not used @see {Tine.Tinebase.widgets.grid.GridPanel.getCustomfieldFilters}
+                // Not used @see {Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass)}
                 break;
             case 'integer':
             case 'int':
@@ -93,6 +93,54 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                 filter.formFields.value.setValue(filter.formFields.value.value[0]);
             }
         }
+    },
+
+
+    /**
+     * get custom field filter for filter toolbar
+     *
+     * @return {Array}
+     */
+    getCustomfieldFilters: function(recordClass) {
+        var modelName = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName'),
+            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(recordClass.getMeta('appName'), modelName),
+            result = [];
+        Ext.each(cfConfigs, function(cfConfig) {
+            try {
+                var cfDefinition = cfConfig.get('definition');
+                switch (cfDefinition.type) {
+                    case 'record':
+                        if (_.get(window, cfDefinition.recordConfig.value.records)) {
+                            result.push({
+                                filtertype: 'foreignrecord',
+                                label: cfDefinition.label,
+                                app: this.app,
+                                ownRecordClass: this.recordClass,
+                                foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
+                                linkType: 'foreignId',
+                                ownField: 'customfield:' + cfConfig.id,
+                                pickerConfig: cfDefinition.recordConfig.additionalFilterSpec ? {
+                                    additionalFilterSpec: cfDefinition.recordConfig.additionalFilterSpec
+                                } : null
+                            });
+                        }
+                        break;
+                    case 'keyField':
+                        result.push({filtertype:'tine.widget.keyfield.filter',field:'customfield:' + cfConfig.id, app: this.app, keyfieldName: cfConfig.get('name') , label:cfDefinition.label});
+                        break;
+                    default:
+                        result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
+                        break;
+                }
+
+            } catch (e) {
+                Tine.log.warn('CustomfieldFilters ' + cfDefinition.label + ' doesnt create');
+
+            }
+        }, this);
+
+
+        return result;
     },
         
     /**

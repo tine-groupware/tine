@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,7 +20,10 @@
 class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
-    
+
+    protected static $_adminGrant = Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_ORDER;
+    protected static $_readGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_ORDER;
+
     /**
      * the constructor
      *
@@ -43,8 +46,8 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
         $this->_documentStatusField = Sales_Model_Document_Order::FLD_ORDER_STATUS;
         $this->_oldRecordBookWriteableFields = [
             Sales_Model_Document_Order::FLD_ORDER_STATUS,
-            Sales_Model_Document_Order::FLD_COST_CENTER_ID,
-            Sales_Model_Document_Order::FLD_COST_BEARER_ID,
+            Sales_Model_Document_Order::FLD_EVAL_DIM_COST_CENTER,
+            Sales_Model_Document_Order::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Order::FLD_CUSTOMER_REFERENCE,
             Sales_Model_Document_Order::FLD_CONTACT_ID,
             Sales_Model_Document_Order::FLD_DESCRIPTION,
@@ -74,17 +77,12 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        // the recipient address is not part of a customer, we enforce that here
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID})) {
-            $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-        }
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID})) {
-            $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-        }
-
         parent::_inspectBeforeCreate($_record);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
+        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID);
     }
 
     /**
@@ -93,39 +91,11 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID})) {
-            // the recipient address is not part of a customer, we enforce that here
-            $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-
-            // if the recipient address is a denormalized customer address, we denormalize it again from the original address
-            if ($address = Sales_Controller_Document_Address::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Address::class, [
-                    ['field' => 'id', 'operator' => 'equals', 'value' => $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}->getId()],
-                    ['field' => 'document_id', 'operator' => 'equals', 'value' => null],
-                    ['field' => 'customer_id', 'operator' => 'not', 'value' => null],
-                ]))->getFirstRecord()) {
-                $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}->setId($address->{Sales_Model_Address::FLD_ORIGINAL_ID});
-                $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}->{Sales_Model_Address::FLD_ORIGINAL_ID} = null;
-            }
-        }
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID})) {
-            // the recipient address is not part of a customer, we enforce that here
-            $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-
-            // if the recipient address is a denormalized customer address, we denormalize it again from the original address
-            if ($address = Sales_Controller_Document_Address::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Address::class, [
-                    ['field' => 'id', 'operator' => 'equals', 'value' => $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->getId()],
-                    ['field' => 'document_id', 'operator' => 'equals', 'value' => null],
-                    ['field' => 'customer_id', 'operator' => 'not', 'value' => null],
-                ]))->getFirstRecord()) {
-                $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->setId($address->{Sales_Model_Address::FLD_ORIGINAL_ID});
-                $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->{Sales_Model_Address::FLD_ORIGINAL_ID} = null;
-            }
-        }
-
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
+        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID);
     }
 }

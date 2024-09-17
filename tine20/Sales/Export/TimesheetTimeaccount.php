@@ -154,5 +154,18 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
         // @todo we need a more generic way of resolving tags! thats quite obscure for modelconfig applications! -> TRA->getTags() maybe?
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         parent::_resolveRecords($_records);
+
+        foreach ($_records as $record) {
+            if (!$record->tags || ($record->tags->filter('name', static::TAG_SUM)->count() === 0)) {
+                $record->start_time = null;
+                $record->end_time = null;
+            }
+            if (!empty($record->start_time)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . 'timesheet has start time : ' . print_r($record, true));
+            }
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' resolve records from Sales_Export_TimesheetTimeaccount');
     }
 }

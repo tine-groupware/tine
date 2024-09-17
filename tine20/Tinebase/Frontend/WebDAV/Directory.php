@@ -198,19 +198,32 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         return '"' . $etag . '"';
     }
 
+    /**
+     * estimate content length and check quota
+     *
+     * @param Tinebase_Model_Tree_Node $node
+     * @return void
+     * @throws \Sabre\DAV\Exception\InsufficientStorage
+     */
     static public function checkQuota(Tinebase_Model_Tree_Node $node): void
     {
-        // estimate content length and check quota
+        $length = 0;
         if (!isset($_SERVER['HTTP_CONTENT_LENGTH'])) {
-            throw new \Sabre\DAV\Exception\BadRequest('CONTENT_LENGTH header missing!');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' CONTENT_LENGTH header missing - cannot check quota before PUT!');
+        } else {
+            $length = $_SERVER['HTTP_CONTENT_LENGTH'];
         }
-        $length = $_SERVER['HTTP_CONTENT_LENGTH'];
-        if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && ($ocLen = $_SERVER['HTTP_OC_TOTAL_LENGTH'] ?? 0) && $ocLen > $length) {
+        if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && ($ocLen = $_SERVER['HTTP_OC_TOTAL_LENGTH'] ?? 0)
+            && $ocLen > $length
+        ) {
             $length = $ocLen;
         }
-        $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
-        if ($quotas['effectiveQuota'] > 0 && $quotas['effectiveFree'] < $length) {
-            throw new Sabre\DAV\Exception\InsufficientStorage();
+        if ($length > 0) {
+            $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
+            if ($quotas['effectiveQuota'] > 0 && $quotas['effectiveFree'] < $length) {
+                throw new Sabre\DAV\Exception\InsufficientStorage();
+            }
         }
     }
 

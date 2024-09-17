@@ -32,11 +32,18 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
         this.assertState()
         field.setValue = field.setValue.createSequence(_.bind(this.assertState, this))
         field.clearValue = field.clearValue.createSequence(_.bind(this.assertState, this))
+        field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
+        field.setDisabled = field.setDisabled.createSequence(_.bind(this.assertState, this))
     }
     
     assertState() {
-        this.setVisible((!!this.field.selectedRecord || this.allowCreateNew) && !this.field.readOnly && !this.field.disabled);
+        this.setVisible((!!this.field.selectedRecord || this.allowCreateNew));
         this.setTriggerClass(!!this.field.selectedRecord ? 'action_edit' : 'action_add');
+
+        if (this.field.readOnly || this.field.disabled) {
+            this.setVisible(!!this.field.selectedRecord);
+            this.setTriggerClass('action_preview');
+        }
     }
 
     // allow to configure defaults from outside
@@ -62,6 +69,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
             editDialogClass.openWindow(Object.assign({mode, record,
                 recordId: record.getId(),
                 needsUpdateEvent: true,
+                readOnly: mode.match(/local/) && (this.field.readOnly || this.field.disabled),
                 listeners: {
                     scope: this,
                     'update': (updatedRecord) => {

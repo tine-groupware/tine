@@ -64,12 +64,16 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.enableDragDrop = true;
         this.ddGroup = this.recordClass.getRecordName();
         this.plugins = [new DDSortPlugin({
-            ddSortCol: this.ddSortCol
+            ddSortCol: this.ddSortCol,
+            onAfterSort: this.onAfterManualSort.createDelegate(this)
         })];
 
         this.editDialogConfig = this.editDialogConfig || {};
-        this.editDialogConfig.mode = 'local';
-        
+        Object.assign(this.editDialogConfig, {
+            mode: 'local',
+            fieldsToExclude: ['document_id']
+        });
+
         return this.supr().initComponent.call(this);
     },
 
@@ -79,10 +83,10 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.store.suspendEvents();
             // copy product properties to position
             let productData = position.get('title');
-            const lang = this.editDialog.getForm().findField('document_language').getValue();
+            const lang = this.lang || this.editDialog.getForm().findField('document_language').getValue();
 
             if (! _.isString(productData)) { // manual position
-                position.setFromProduct(productData, lang, this.editDialog.record);
+                position.setFromProduct(productData, lang, this.editDialog.record.getData());
             }
 
             position.setId(Tine.Tinebase.data.Record.generateUID());
@@ -105,7 +109,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     const subposition = new this.recordClass({}, Tine.Tinebase.data.Record.generateUID());
                     // NOTE: need to create record to do conversions (string -> int) here!
                     const product = Tine.Tinebase.data.Record.setFromJson(subproductMapping.product_id, Tine.Sales.Model.Product);
-                    subposition.setFromProduct(product.data, lang, this.editDialog.record);
+                    subposition.setFromProduct(product.data, lang, this.editDialog.record.getData());
                     subposition.set('quantity', subproductMapping.quantity);
                     subposition.computePrice();
                     subposition.set('parent_id', position.id);
@@ -180,6 +184,10 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         return false;
     },
 
+    onAfterManualSort() {
+        this.applyNumbering();
+    },
+
     applySorting: DDSortPlugin.prototype.applySorting,
 
     applyNumbering() {
@@ -190,8 +198,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             const rangeKey = (pos.get('grouping') || '') + '_' + (pos.get('parent_id') || '');
             counters[rangeKey] = (counters[rangeKey] || 0) + 1;
 
-            // @TODO implement better groupPrefix
-            const groupPrefix = pos.get('grouping') ? pos.get('grouping')[0] : '';
+            const groupPrefix = pos.get('grouping') ? pos.get('grouping').match(/^([a-z-A-Z0-9\[\]_]){1,4}/)[0] : '';
             const parentPrefix = pos.get('parent_id') ? this.store.getById(pos.get('parent_id')).get('pos_number') : '';
 
             const posNumber = (parentPrefix ? parentPrefix + '.' : (groupPrefix ? groupPrefix + ' ' : '')) + counters[rangeKey];
@@ -265,7 +272,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         // init all columns
         this.columns = Object.keys(modelConfig.fields).reduce((columns, fieldName) => {
             const col = colMgr(fieldName, { sortable: false });
-            if (col) {
+            if (col && ['document_id'].indexOf(fieldName) < 0) {
                 if (['type', 'pos_number', 'gross_price'].indexOf(fieldName) < 0) {
                     col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName));
                 }
@@ -328,6 +335,14 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.quickaddRecord.set('sorting', last.get('sorting') + this.sortInc);
         }
         this.store.add(this.quickaddRecord);
+        // NOTE: might be out of order from DB
+        // @TODO rethink sort by sorting or numbering?
+        //    references will break when renumbering, wouldn't it be better so sort by pos first and rearange sorting numbers???
+        //    but headings etc. have no pos numbering!
+        //    so sorting by sorting should be the right thing to do - and this is done by loadData already! so out of order from db is already handled here!
+        //    pos numbering and sorting must be done right from importers and generators!
+
+        // this.applyNumbering();
     },
     getValue: function () {
         const data = [];

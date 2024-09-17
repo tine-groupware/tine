@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -29,43 +30,43 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @var Felamimail_Controller_Message_Send
      */
-    private static $_instance = NULL;
-    
+    private static $_instance = null;
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() 
+    private function __construct()
     {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
     }
-    
+
     /**
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() 
+    private function __clone()
     {
     }
-    
+
     /**
      * the singleton pattern
      *
      * @return Felamimail_Controller_Message_Send
      */
-    public static function getInstance() 
+    public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Felamimail_Controller_Message_Send();
         }
-        
+
         return self::$_instance;
     }
-    
+
     /**
      * send one message through smtp
-     * 
+     *
      * @param Felamimail_Model_Message $_message
      * @return Felamimail_Model_Message
      * @throws Tinebase_Exception_SystemGeneric
@@ -73,33 +74,39 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     public function sendMessage(Felamimail_Model_Message $_message)
     {
         if ($_message->massMailingFlag) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                 ' Sending mass mailing message with subject ' . $_message->subject);
+            }
 
             $this->_sendMassMailing($_message);
 
             return $_message;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-            ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+            ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, true));
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), true));
+        }
+
         // increase execution time (sending message with attachments can take a long time)
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
 
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
 
         // only check send grant for shared accounts
-        if ($account->type === Felamimail_Model_Account::TYPE_SHARED && !$account->account_grants
-                ->{Felamimail_Model_AccountGrants::GRANT_ADD}) {
+        if (($account->type === Felamimail_Model_Account::TYPE_SHARED || $account->type === Felamimail_Model_Account::TYPE_ADB_LIST)
+            && !$account->account_grants->{Felamimail_Model_AccountGrants::GRANT_ADD}) {
             throw new Tinebase_Exception_AccessDenied('User is not allowed to send a message with this account');
         }
 
         try {
             $this->_resolveOriginalMessage($_message);
             $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
-            
+
             $saveInSent = $account->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT
             || $account->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE
             || sizeof($_message->sent_copy_folder) > 0;
@@ -112,17 +119,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             //   because this might happen to notification mails, too
             if (preg_match('/^501 5\.1\.3/', $e->getMessage())) {
                 $messageText = $translation->_('Bad recipient address syntax');
-            } else if (preg_match('/^550 5\.1\.1 <(.*?)>/', $e->getMessage(), $match)) {
+            } elseif (preg_match('/^550 5\.1\.1 <(.*?)>/', $e->getMessage(), $match)) {
                 $messageText = '<' . $match[1] . '>: ' . $translation->_('Recipient address rejected');
             } else {
                 $messageText = $e->getMessage();
             }
             throw $this->_getErrorException($messageText);
         }
-        
+
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
+
         return $_message;
     }
 
@@ -137,37 +144,53 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $locale = Tinebase_Translation::getLocale(Tinebase_Core::getLocale());
         $translation = Tinebase_Translation::getTranslation('Felamimail');
         $twig = new Tinebase_Twig($locale, $translation);
-        
+
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         $from = $this->_getSenderName($_message, $account);
         $twig->getEnvironment()->addGlobal('sender', $from);
 
-        $contacts = Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($_message)->toArray();
-        $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
+        $contacts = Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($_message);
+
         foreach ($_message->bcc as $to) {
             $emailTo = $to['email'] ?? $to;
-            $contacts = array_values(array_filter($possibleAddresses, function($contact) use ($emailTo) { 
-                return $emailTo === $contact['email'] && $contact['email_type'] !== 'email_home';
-            }));
-            
-            if (sizeof($contacts) === 0) {
-                $contacts[] = [
+            $tokens = [];
+            $skip = false;
+            foreach ($contacts as $contact) {
+                foreach (array_keys(Addressbook_Model_Contact::getEmailFields()) as $emailField) {
+                    if ($contact->{$emailField} === $emailTo) {
+                        if ($contact->isPrivateEmail($emailTo)) {
+                            $skip = true;
+                            continue;
+                        }
+                        $tokens[] = [
+                            "n_fileas" => $contact["name"] ?? '',
+                            "name" => $contact["name"] ?? '',
+                            "type" => '',
+                            "email" => $emailTo,
+                            "email_type_field" =>  '',
+                            "contact_record" => null,
+                        ];
+                    }
+                }
+            }
+            if (sizeof($tokens) === 0 && !$skip) {
+                $tokens[] = [
                     "n_fileas" => $emailTo,
                     "name" => $emailTo,
                     "type" => '',
                     "email" => $emailTo,
-                    "email_type" =>  '',
+                    "email_type_field" =>  '',
                     "contact_record" => null,
                 ];
             }
-            foreach ($contacts as $contact) {
+            foreach ($tokens as $token) {
                 $clonedMessage = clone $_message;
-                $clonedMessage->to = [$contact];
+                $clonedMessage->to = [$token];
                 $clonedMessage->cc = [];
                 $clonedMessage->bcc = [];
                 $clonedMessage->massMailingFlag = false;
-                
-                $twig->getEnvironment()->addGlobal('recipient', $contact['n_fileas']);
+
+                $twig->getEnvironment()->addGlobal('recipient', $token['n_fileas']);
                 $this->_runMassMailingPlugins($clonedMessage, $twig);
                 $this->sendMessage($clonedMessage);
             }
@@ -184,7 +207,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (null === $this->_massMailingPlugins) {
             $this->_initMassMailingPlugins();
         }
-        
+
         /** @var Felamimail_Controller_MassMailingPluginInterface $plugin */
         foreach ($this->_massMailingPlugins as $plugin) {
             $plugin->prepareMassMailingMessage($_message, $_twig);
@@ -202,8 +225,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         foreach (Tinebase_Core::getUser()->getApplications() as $application) {
             $class = $application->name . '_Controller';
-            if (class_exists($class) && in_array(Felamimail_Controller_MassMailingPluginInterface::class,
-                    class_implements($class)) && method_exists($class, 'getInstance')) {
+            if (
+                class_exists($class) && in_array(
+                    Felamimail_Controller_MassMailingPluginInterface::class,
+                    class_implements($class)
+                ) && method_exists($class, 'getInstance')
+            ) {
                 $this->_massMailingPlugins[] = $class::getInstance();
             }
         }
@@ -211,7 +238,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
     /**
      * places a Felamimail_Model_Message in original_id field of given message (if it had an original_id set)
-     * 
+     *
      * @param Felamimail_Model_Message $_message
      */
     protected function _resolveOriginalMessage(Felamimail_Model_Message $_message)
@@ -219,43 +246,47 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (! $_message->original_id || $_message->original_id instanceof Felamimail_Model_Message) {
             return;
         }
-        
+
         $originalMessageId = $_message->original_id;
-        if (is_string($originalMessageId) && strpos($originalMessageId, '_') !== FALSE ) {
+        if (is_string($originalMessageId) && strpos($originalMessageId, '_') !== false) {
             list($originalMessageId, $partId) = explode('_', $originalMessageId);
-        } else if (is_array($originalMessageId)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+        } elseif (is_array($originalMessageId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Something strange happened. original_id is an array: ' . print_r($originalMessageId, true));
+            }
             return;
         } else {
-            $partId = NULL;
+            $partId = null;
         }
-        
+
         try {
-            $originalMessage = ($originalMessageId) ? $this->get($originalMessageId) : NULL;
+            $originalMessage = ($originalMessageId) ? $this->get($originalMessageId) : null;
         } catch (Tinebase_Exception_NotFound $tenf) {
             try {
                 // maybe original id was a tree node (sent from Filemanager)
                 $originalMessage = Felamimail_Controller_Message::getInstance()->getMessageFromNode($originalMessageId);
                 $partId = 1;
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Did not find original message (' . $originalMessageId . ')');
+                }
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
                 throw new Tinebase_Exception_NotFound($translation->_('Original message not found, email was moved or deleted'));
             }
         }
-        
+
         $_message->original_id      = $originalMessage;
         $_message->original_part_id = $partId;
     }
-    
+
     /**
      * save message in folder (target folder can be within a different account)
-     * 
+     *
      * @param string|Felamimail_Model_Folder $_folder globalname or folder record
      * @param Felamimail_Model_Message $_message
-     * @param array flags
+     * @param array $_flags
      * @return Felamimail_Model_Message
      */
     public function saveMessageInFolder($_folder, $_message, $_flags = [])
@@ -266,16 +297,16 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             // make sure that system folder exists
             $systemFolder = $_folder === $sourceAccount->templates_folder ? Felamimail_Model_Folder::FOLDER_TEMPLATES : Felamimail_Model_Folder::FOLDER_DRAFTS;
             $folder = Felamimail_Controller_Account::getInstance()->getSystemFolder($sourceAccount, $systemFolder);
-        } else if ($_folder instanceof Felamimail_Model_Folder) {
+        } elseif ($_folder instanceof Felamimail_Model_Folder) {
             $folder = $_folder;
         } else {
             $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
         }
-        
+
         $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-        
+
         $mailToAppend = $this->createMailForSending($_message, $sourceAccount);
-        
+
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend, $this->_getAdditionalHeaders($_message));
         if ($folder->globalname === $targetAccount->drafts_folder) {
@@ -284,10 +315,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $flags = $_flags;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
             ' ' . $mailAsString);
+        }
 
         $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
         try {
@@ -306,47 +341,48 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 throw $zmse;
             }
         }
-        
+
         return $_message;
     }
-    
+
     /**
      * Bcc recipients need to be added separately because they are removed by default
-     * 
+     *
      * @param Felamimail_Model_Message $message
      * @return array
      */
     protected function _getAdditionalHeaders($message)
     {
         $additionalHeaders = ($message && ! empty($message->bcc)) ? array('Bcc' => $message->bcc) : array();
-        
+
         if (isset($additionalHeaders['Bcc'])) {
-            foreach($additionalHeaders['Bcc'] as &$recipient) {
+            foreach ($additionalHeaders['Bcc'] as &$recipient) {
                 $recipient = $recipient['email'] ?? $recipient;
             }
         }
 
         return $additionalHeaders;
     }
-    
+
     /**
      * create new mail for sending via SMTP
-     * 
+     *
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
      * @param array $_nonPrivateRecipients
      * @param boolean $preserveHeaders
      * @return Tinebase_Mail
      */
-    public function createMailForSending(Felamimail_Model_Message $_message,
-                                         Felamimail_Model_Account $_account,
-                                         &$_nonPrivateRecipients = array(),
-                                         $preserveHeaders = false)
-    {
+    public function createMailForSending(
+        Felamimail_Model_Message $_message,
+        Felamimail_Model_Account $_account,
+        &$_nonPrivateRecipients = array(),
+        $preserveHeaders = false
+    ) {
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
         $mail->setSubject($_message->subject);
-        
+
         $this->_setMailFrom($mail, $_account, $_message);
         $_nonPrivateRecipients = $this->_setMailRecipients($mail, $_message);
 
@@ -356,7 +392,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         return $mail;
     }
-    
+
     /**
      * send mail via transport (smtp)
      *
@@ -368,11 +404,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @throws Felamimail_Exception_IMAPInvalidCredentials
      * @throws Zend_Mail_Transport_Exception
      */
-    protected function _sendMailViaTransport(Zend_Mail                $_mail,
-                                             Felamimail_Model_Account $_account,
-                                             ?Felamimail_Model_Message $_message = null,
-                                             bool                     $_saveInSent = false): void
-    {
+    protected function _sendMailViaTransport(
+        Zend_Mail $_mail,
+        Felamimail_Model_Account $_account,
+        ?Felamimail_Model_Message $_message = null,
+        bool $_saveInSent = false
+    ): void {
         $smtpConfig = $_account->getSmtpConfig();
         if (empty($smtpConfig) || ! isset($smtpConfig['hostname'])) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
@@ -382,49 +419,71 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $this->_logSendingConfig($smtpConfig);
 
         if (!empty($_message['attachments']) && count($_message['attachments']) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Attachments before send message : ' . print_r($_message['attachments'], true));
+            }
         }
-        
+
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Sending successful.');
-        
+        }
+
         if ($_saveInSent) {
             $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
 
             if ($_message) {
                 $messageSentCopyBehavior = $_account->message_sent_copy_behavior;
-                
+
                 if (empty($_message['sent_copy_folder']) || sizeof($_message['sent_copy_folder']) === 0 && $sentFolder) {
                     if ($messageSentCopyBehavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE) {
                         if (!empty($_message->folder_id)) {
                             $_message['sent_copy_folder'] = [$_message->folder_id];
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                                __METHOD__ . '::' . __LINE__ .
-                                ' Found source folder from original message, saving message copy in source folders ...');
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(
+                                    __METHOD__ . '::' . __LINE__ .
+                                    ' Found source folder from original message, saving message copy in source folders ...'
+                                );
+                            }
                         } else {
                             $_message['sent_copy_folder'] = [$sentFolder->getId()];
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                                __METHOD__ . '::' . __LINE__ .
-                                ' No source imap folder found, saving message copy in configured sent folders ...');
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(
+                                    __METHOD__ . '::' . __LINE__ .
+                                    ' No source imap folder found, saving message copy in configured sent folders ...'
+                                );
+                            }
                         }
                     }
                     if ($messageSentCopyBehavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT) {
                         $_message['sent_copy_folder'] = [$sentFolder->getId()];
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                            __METHOD__ . '::' . __LINE__ .
-                            ' Should save message copy in configured sent folders ...');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ .
+                                ' Should save message copy in configured sent folders ...'
+                            );
+                        }
                     }
                     if ($messageSentCopyBehavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SKIP) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                            __METHOD__ . '::' . __LINE__
-                            . ' Should skip saving message copy in configured sent folders ...');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__
+                                . ' Should skip saving message copy in configured sent folders ...'
+                            );
+                        }
                     }
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . ' No valid sent folder found.');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' No valid sent folder found.'
+                        );
+                    }
                 }
+
+                $this->_setExpectedAnswer($_message, $transport);
+
                 if (!empty($_message['sent_copy_folder']) && sizeof($_message['sent_copy_folder']) > 0) {
                     $this->_saveMessageCopyToImapFolders($transport, $_account, $this->_getAdditionalHeaders($_message), $_message['sent_copy_folder']);
                     $folder = Felamimail_Controller_Folder::getInstance()->get($_message['sent_copy_folder'][0]);
@@ -432,13 +491,16 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 }
             } else {
                 $this->_saveMessageCopyToImapFolders($transport, $_account, [], [$sentFolder->getId()]);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' original message is not found, saving message copy in configured sent folder ...');
+                }
             }
         }
 
         // add reply/forward flags if set
-        if ($_message && ! empty($_message->flags)
+        if (
+            $_message && ! empty($_message->flags)
             && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
             && $_message->original_id instanceof Felamimail_Model_Message
         ) {
@@ -462,11 +524,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _saveInSent(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, $_additionalHeaders = array())
     {
         try {
-            $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
+            $mailAsString = $_transport->getRawMessage(null, $_additionalHeaders);
             $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' About to save message in sent folder (' . $sentFolder->globalname . ') ...');
+            }
 
             Felamimail_Backend_ImapFactory::factory($_account)->appendMessage(
                 $mailAsString,
@@ -474,20 +538,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             );
 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Saved sent message in "' . $sentFolder->globalname . '".'
-            );
+                . ' Saved sent message in "' . $sentFolder->globalname . '".');
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not save sent message in "' . $sentFolder->globalname . '".'
                 . ' Please check if a folder with this name exists.'
-                . '(' . $zmpe->getMessage() . ')'
-            );
+                . '(' . $zmpe->getMessage() . ')');
         } catch (Zend_Mail_Storage_Exception $zmse) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not save sent message in "' . $sentFolder->globalname . '".'
                 . ' Please check if a folder with this name exists.'
-                . '(' . $zmse->getMessage() . ')'
-            );
+                . '(' . $zmse->getMessage() . ')');
         }
 
         return $sentFolder;
@@ -525,7 +586,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _fileSentMessage(?Felamimail_Model_Message $_message, Felamimail_Model_Folder $_sentFolder): void
+    protected function _fileSentMessage($_message, $_sentFolder)
     {
         if (! $_message || ! $_message->fileLocations || count($_message->fileLocations) === 0) {
             return;
@@ -574,93 +635,98 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @return Tinebase_Record_RecordSet
      * @throws Felamimail_Exception_IMAPInvalidCredentials
      */
-    protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport,
-                                                     Felamimail_Model_Account $_account,
-                                                     $_additionalHeaders,
-                                                     $_imapFolderIds): Tinebase_Record_RecordSet
-    {
-        $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
+    protected function _saveMessageCopyToImapFolders(
+        Felamimail_Transport_Interface $_transport,
+        Felamimail_Model_Account $_account,
+        $_additionalHeaders,
+        $_imapFolderIds
+    ): Tinebase_Record_RecordSet {
+        $mailAsString = $_transport->getRawMessage(null, $_additionalHeaders);
         $folders = Felamimail_Controller_Folder::getInstance()->getMultiple($_imapFolderIds);
         // sent folder should be allowed
         $blacklist =  ['inbox', 'drafts', 'templates', 'junk', 'trash', 'inbox.spam', 'inbox.ham'];
-        
+
         foreach ($folders as $targetFolder) {
             try {
                 if (in_array(strtolower((string)$targetFolder['globalname']), $blacklist)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         ' skip saving message to system folder (' . $targetFolder->globalname . ') ...');
+                    }
                     continue;
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' About to save message in folder (' . $targetFolder->globalname . ') ...');
-                
+                }
+
                 Felamimail_Backend_ImapFactory::factory($_account)->appendMessage(
                     $mailAsString,
                     Felamimail_Model_Folder::encodeFolderName($targetFolder->globalname)
                 );
-                
+
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Saved sent message in "' . $targetFolder->globalname . '".'
-                );
+                    . ' Saved sent message in "' . $targetFolder->globalname . '".');
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Could not save sent message in "' . $targetFolder->globalname . '".'
                     . ' Please check if a folder with this name exists.'
-                    . '(' . $zmpe->getMessage() . ')'
-                );
+                    . '(' . $zmpe->getMessage() . ')');
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Could not save sent message in "' . $targetFolder->globalname . '".'
                     . ' Please check if a folder with this name exists.'
-                    . '(' . $zmse->getMessage() . ')'
-                );
+                    . '(' . $zmse->getMessage() . ')');
             }
         }
-        
+
         return $folders;
     }
-    
+
     /**
      * send Zend_Mail message via smtp
-     * 
+     *
      * @param  mixed      $accountId
      * @param  Zend_Mail  $mail
      * @param  boolean    $saveInSent
      * @param  Felamimail_Model_Message $originalMessage
      * @return Zend_Mail
      */
-    public function sendZendMail($accountId, Zend_Mail $mail, $saveInSent = false, $originalMessage = NULL)
+    public function sendZendMail($accountId, Zend_Mail $mail, $saveInSent = false, $originalMessage = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-            ' Sending message with subject "' . $mail->getSubject() . '" to ' . print_r($mail->getRecipients(), TRUE));
-        if ($originalMessage !== NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                ' Original Message subject: ' . $originalMessage->subject . ' / Flag to set: ' . var_export($originalMessage->flags, TRUE)
-            );
-            
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+            ' Sending message with subject "' . $mail->getSubject() . '" to ' . print_r($mail->getRecipients(), true));
+        }
+        if ($originalMessage !== null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Original Message subject: ' . $originalMessage->subject . ' / Flag to set: ' . var_export($originalMessage->flags, true));
+            }
+
             // this is required for adding the reply/forward flag in _sendMailViaTransport()
             $originalMessage->original_id = $originalMessage;
         }
-        
+
         // increase execution time (sending message with attachments can take a long time)
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
-        
+
         // get account
         $account = ($accountId instanceof Felamimail_Model_Account) ? $accountId : Felamimail_Controller_Account::getInstance()->get($accountId);
 
         $this->_setMailFrom($mail, $account);
         $this->_setMailHeaders($mail, $account);
         $this->_sendMailViaTransport($mail, $account, $originalMessage, $saveInSent);
-        
+
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
+
         return $mail;
     }
-    
+
     /**
      * set mail body
-     * 
+     *
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
      */
@@ -671,39 +737,51 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Set mail body (content type: ' . $_message->content_type . ')');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Set mail body (content type: ' . $_message->content_type . ')'
+            );
+        }
 
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
             $_mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                __METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyHtml(TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyHtml(true)
+                );
+            }
         }
-        
+
         $plainBodyText = $_message->getPlainTextBody();
         $_mail->setBodyText($plainBodyText);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyText(TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyText(true)
+            );
+        }
     }
-    
+
     /**
      * set from in mail to be sent
-     * 
+     *
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
      */
-    protected function _setMailFrom(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    protected function _setMailFrom(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = null)
     {
         $_mail->clearFrom();
-        
+
         $from = $this->_getSenderName($_message, $_account);
-        
-        $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
-        
+
+        $email = ($_message !== null && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from
+            );
+        }
+
         $_mail->setFrom($email, $from);
     }
 
@@ -722,10 +800,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 ? $_account->from
                 : Tinebase_Core::getUser()->accountFullName);
     }
-    
+
     /**
      * set mail recipients
-     * 
+     *
      * @param Zend_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @return array
@@ -735,23 +813,25 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $nonPrivateRecipients = array();
         $invalidEmailAddresses = array();
-        
+
         foreach (array('to', 'cc', 'bcc') as $type) {
             if (isset($_message->{$type})) {
-                foreach((array) $_message->{$type} as $address) {
+                foreach ((array) $_message->{$type} as $address) {
                     $email = $address['email'] ?? $address;
                     $name = $address['n_fileas'] ?? '';
                     $punyCodedAddress = Tinebase_Helper::convertDomainToPunycode($email);
-                    
+
                     if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $punyCodedAddress)) {
                         $invalidEmailAddresses[] = $address;
                         continue;
                     }
 
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                         . __LINE__ . ' Add ' . $type . ' address: ' . $punyCodedAddress);
-                    
-                    switch($type) {
+                    }
+
+                    switch ($type) {
                         case 'to':
                             $_mail->addTo($punyCodedAddress, $name);
                             $nonPrivateRecipients[] = $punyCodedAddress;
@@ -770,13 +850,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         if (count($invalidEmailAddresses) > 0) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            $invalidEmails = array_map(function($address) {
+            $invalidEmails = array_map(function ($address) {
                 return $address['email'] ?? $address;
             }, $invalidEmailAddresses);
             $messageText = '<' . implode(',', $invalidEmails) . '>: ' . $translation->_('Invalid address format');
             throw new Tinebase_Exception_SystemGeneric($messageText);
         }
-        
+
         return $nonPrivateRecipients;
     }
 
@@ -789,22 +869,26 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         return $tesg;
     }
-    
+
     /**
      * set headers in mail to be sent
-     * 
+     *
      * @param Zend_Mail $_mail
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
      * @param boolean $preserveHeaders
      */
-    protected function _setMailHeaders(Zend_Mail $_mail,
-                                       Felamimail_Model_Account $_account,
-                                       Felamimail_Model_Message $_message = NULL,
-                                       $preserveHeaders = false)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Setting mail headers');
+    protected function _setMailHeaders(
+        Zend_Mail $_mail,
+        Felamimail_Model_Account $_account,
+        Felamimail_Model_Message $_message = null,
+        $preserveHeaders = false
+    ) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Setting mail headers'
+            );
+        }
 
         if (! $preserveHeaders) {
             // add user agent
@@ -824,14 +908,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             }
 
             // set message-id (we could use Zend_Mail::createMessageId() here)
-            if ($_mail->getMessageId() === NULL) {
+            if ($_mail->getMessageId() === null) {
                 $domainPart = substr($_account->email, strpos($_account->email, '@'));
                 $uid = Tinebase_Record_Abstract::generateUID();
                 $_mail->setMessageId($uid . $domainPart);
             }
         }
-        
-        if ($_message !== NULL) {
+
+        if ($_message !== null) {
             if (! $preserveHeaders) {
                 if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
                     $this->_addReplyHeaders($_message);
@@ -846,31 +930,37 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
     }
 
-    protected function _addCustomHeaders(Zend_Mail $_mail,
-                                         Felamimail_Model_Message $_message)
-    {
+    protected function _addCustomHeaders(
+        Zend_Mail $_mail,
+        Felamimail_Model_Message $_message
+    ) {
         if (empty($_message->headers) || ! is_array($_message->headers)) {
             return;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Adding custom headers: ' . print_r($_message->headers, true));
+        }
 
         foreach ($_message->headers as $key => $value) {
             $value = $this->_trimHeader($key, $value);
             try {
                 $_mail->addHeader($key, $value);
             } catch (Zend_Mail_Exception $zme) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__
-                    . ' Skipping header ' . $key . '(' . $zme->getMessage() . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Skipping header ' . $key . '(' . $zme->getMessage() . ')'
+                    );
+                }
             }
         }
     }
-    
+
     /**
      * trim message headers (Zend_Mail only supports < 998 chars)
-     * 
+     *
      * @param string|array $value
      * @return string
      */
@@ -881,23 +971,27 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         if (is_scalar($value) && strlen((string)$value) + strlen($key) >= 998) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Trimming header ' . $key);
-            
+            }
+
             $value = substr(trim((string)$value), 0, (995 - strlen((string)$key)));
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . $value);
+            }
         }
-        
+
         return $value;
     }
-    
+
     /**
      * set In-Reply-To and References headers
-     * 
+     *
      * @param Felamimail_Model_Message $message
-     * 
+     *
      * @see http://www.faqs.org/rfcs/rfc2822.html / Section 3.6.4.
      */
     protected function _addReplyHeaders(Felamimail_Model_Message $message)
@@ -905,8 +999,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         try {
             $originalHeaders = Felamimail_Controller_Message::getInstance()->getMessageHeaders($message->original_id);
         } catch (Tinebase_Exception_InvalidArgument $teia) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Message not available for reply headers / maybe it is a filed message ... (' .  $teia->getMessage() . ')');
+            }
             return;
         }
         if (!isset($originalHeaders['message-id'])) {
@@ -920,7 +1016,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $references = '';
         if (isset($originalHeaders['references']) && is_string($originalHeaders['references'])) {
             $references = $originalHeaders['references'] . ' ';
-        } else if (isset($originalHeaders['in-reply-to']) && is_string($originalHeaders['in-reply-to'])) {
+        } elseif (isset($originalHeaders['in-reply-to']) && is_string($originalHeaders['in-reply-to'])) {
             $references = $originalHeaders['in-reply-to'] . ' ';
         }
         $references .= $originalHeaders['message-id'];
@@ -949,41 +1045,53 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             try {
                 $part = $this->_getAttachmentPartByType($attachment, $_message);
             } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Skipping attachment ' . $feimnf->getMessage());
+                }
                 continue;
             } catch (Tinebase_Exception_InvalidArgument $teia) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' ' . $teia->getMessage()
                     . ' - Skipping attachment ' . print_r($attachment, true));
+                }
                 continue;
             }
 
             if (! $part || ! isset($attachment['type'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Skipping attachment ' . print_r($attachment, true));
+                }
                 continue;
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), TRUE) : print_r($attachment, TRUE)));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), true) : print_r($attachment, true)));
+            }
 
             $part->setTypeAndDispositionForAttachment($attachment['type'], $attachment['name']);
 
             if (! empty($attachment['size'])) {
                 $totalSize += $attachment['size'];
             }
-            
+
             if ($totalSize > $maxAttachmentSize) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Current attachment size: ' . Tinebase_Helper::convertToMegabytes($totalSize) . ' MB / allowed size: '
                     . Tinebase_Helper::convertToMegabytes($maxAttachmentSize) . ' MB');
+                }
                 throw new Felamimail_Exception_IMAP('Maximum attachment size exceeded. Please remove one or more attachments.');
             }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment ' . $part->type  . ' (total size: ' . $totalSize . ')');
-            
+            }
+
             $_mail->addAttachment($part);
         }
     }
@@ -1021,6 +1129,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             case 'tempfile':
                 $part = $this->_getTempFileAttachment($attachment);
                 break;
+            case 'stream':
+                $part = $this->_getStreamAttachment($attachment);
+                break;
             case 'messagepart':
             default:
                 $part = $this->_getMessagePartAttachment($attachment);
@@ -1036,7 +1147,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getAttachmentType($attachment, $_message)
     {
-        if (isset($attachment['type'])
+        if (
+            isset($attachment['type'])
             && $attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
             && $_message->original_id
         ) {
@@ -1045,7 +1157,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             if ($attachment['attachment_type'] === 'attachment') {
                 if (isset($attachment['tempFile'])) {
                     return 'tempfile';
-                } else if ($this->_isMessagePartAttachment($attachment)) {
+                } elseif ($this->_isMessagePartAttachment($attachment)) {
                     return 'messagepart';
                 } else {
                     return 'filenode';
@@ -1056,6 +1168,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         } elseif ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
             // tempfile last because we other attachment_types also have a tempfile
             return 'tempfile';
+        } elseif (isset($attachment['stream'])) {
+            return 'stream';
         }
 
         return null;
@@ -1070,12 +1184,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _getRfc822Attachment(&$attachment, $message)
     {
-        $part = $this->getMessagePart($message->original_id, ($message->original_part_id) ? $message->original_part_id : NULL);
+        $part = $this->getMessagePart($message->original_id, ($message->original_part_id) ? $message->original_part_id : null);
         $part->decodeContent();
 
         // replace some chars from attachment name
         $attachment['name'] = preg_replace("/[\s'\"]*/", "", $attachment['name']);
-        
+
         if (!str_ends_with($attachment['name'], '.eml')) {
             $attachment['name'] = $attachment['name'] . '.eml';
         }
@@ -1092,8 +1206,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _setDownloadLinkAttachment($_attachment, $_message, $_protected = false)
     {
         if (! Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' No right to run Filemanager');
+            }
             return false;
         }
 
@@ -1136,8 +1252,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _setSystemlinkAttachment($_attachment, $_message)
     {
         if (! Tinebase_Core::getUser()->hasRight('Filemanager', Tinebase_Acl_Rights::RUN)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' No right to run Filemanager');
+            }
             return false;
         }
 
@@ -1163,9 +1281,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         if ('text/html' === $_message->content_type) {
              $link = sprintf(
-                '<br /><a href="%s">%s</a><br /><br />',
-                $_link, urldecode($_link)
-            );
+                 '<br /><a href="%s">%s</a><br /><br />',
+                 $_link,
+                 urldecode($_link)
+             );
              $signaturePattern = '/(<span class="felamimail-body-signature">-- )/';
         } else {
             $link = "\n" . $_link . "\n\n";
@@ -1216,10 +1335,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $part->type = $node->contenttype;
             }
             $part->encoding = $encoding;
-
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not find file node attachment');
+            }
             $part = null;
         }
 
@@ -1241,9 +1361,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         if (! $tempFile->path || ! file_exists($tempFile->path)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . ' Could not find attachment - tempfile: '
-                . print_r($tempFile->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' Could not find attachment - tempfile: '
+                    . print_r($tempFile->toArray(), true)
+                );
+            }
             return null;
         }
 
@@ -1266,6 +1389,28 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         return $part;
     }
 
+    protected function _getStreamAttachment(&$attachment)
+    {
+        $part = new Zend_Mime_Part($attachment['stream']);
+        $encoding = Zend_Mime::ENCODING_BASE64;
+        if ($attachment['content-type']) {
+            $attachment['type'] = $attachment['content-type'];
+            $attachment['name'] = $attachment['filename'];
+
+            if ($attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                $encoding = Zend_Mime::ENCODING_8BIT;
+            }
+            if ($attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_OUTLOOK) {
+                $attachment['name'] = $attachment['name'] . '.msg';
+            }
+            // not relevant?
+            $part->type = $attachment['content-type'];
+        }
+        $part->encoding = $encoding;
+
+        return $part;
+    }
+
     /**
      * @param mixed $attachment
      * @return null|Tinebase_Model_TempFile|Tinebase_Record_Interface
@@ -1278,7 +1423,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             ? $attachment
             : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment)))
                 ? $tempFileBackend->get($attachment['tempFile']['id'])
-                : NULL);
+                : null);
 
         return $tempFile;
     }
@@ -1344,27 +1489,58 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         return isset($attachment['id']) && strpos($attachment['id'], '_') !== false;
     }
-    
+
     /**
      * get max attachment size for outgoing mails
-     * 
+     *
      * - returns size in Bytes
-     * 
+     *
      * @return integer
      */
     protected function _getMaxAttachmentSize()
     {
         $configuredMemoryLimit = ini_get('memory_limit');
-        
-        if ($configuredMemoryLimit === FALSE or $configuredMemoryLimit == -1) {
+
+        if ($configuredMemoryLimit === false or $configuredMemoryLimit == -1) {
             // set to a big default value
             $configuredMemoryLimit = '512M';
         }
 
         $result = round(Tinebase_Helper::convertToBytes($configuredMemoryLimit) / 10);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' memory_limit = ' . $configuredMemoryLimit . ' / max upload size: ' . $result);
+        }
 
         return $result;
+    }
+
+    protected function _setExpectedAnswer($_message, Felamimail_Transport_Interface $transport)
+    {
+        if ($_message->expected_answer) {
+            $messageId = $transport->getHeader('Message-Id')[0];
+
+            $expected_answer = new Felamimail_Model_MessageExpectedAnswer([
+                'account_id'=> $_message->account_id,
+                'message_id'=> $messageId,
+                'user_id'=> Tinebase_Core::getUser()->getId(),
+                'subject'=> $_message->subject,
+                'expected_answer'=> $_message->expected_answer,
+            ], true);
+
+            $path = Tinebase_TempFile::getTempPath();
+            // TODO maybe we should save only the mail body without attachments?
+            file_put_contents($path, $transport->getRawMessage());
+            $expected_answer->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
+                array(
+                    'name'      => $_message->subject . '.eml',
+                    'contenttype' => 'message/rfc822',
+                    'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+                )
+            ), true);
+
+            return Felamimail_Controller_MessageExpectedAnswer::getInstance()->create($expected_answer);
+        }
+        return null;
     }
 }

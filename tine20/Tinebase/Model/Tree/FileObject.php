@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+
 /**
  * class to hold data representing one object which can be inserted into the tree
  * 
@@ -32,6 +34,10 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
     public const TABLE_NAME = 'tree_fileobjects';
 
     public const DEFAULT_CONTENT_TYPE = 'application/octet-stream';
+
+    public const FLD_INDEX_FAIL_COUNT = 'index_fail_count';
+    public const FLD_INDEX_LAST_TRY = 'index_last_try';
+    public const FLD_INDEX_FAIL_HASH = 'index_fail_hash';
 
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -89,7 +95,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 7,
+        self::VERSION       => 10,
         'modlogActive'      => true,
 
         'appName'           => 'Tinebase',
@@ -107,8 +113,25 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                 'description'        => [
                     self::COLUMNS           => ['description'],
                     self::FLAGS             => ['fulltext'],
-                ]
+                ],
+                'flysystem'         => [
+                    self::COLUMNS       => ['flysystem', 'flypath'],
+                    self::OPTIONS       => [self::LENGTHS => [null, 255]],
+                ],
             ]
+        ],
+
+        self::ASSOCIATIONS => [
+            ClassMetadataInfo::MANY_TO_ONE  => [
+                'flysystem'           => [
+                    self::TARGET_ENTITY             => Tinebase_Model_Tree_FlySystem::class,
+                    self::FIELD_NAME                => 'flysystem',
+                    self::JOIN_COLUMNS              => [[
+                        self::NAME                      => 'flysystem',
+                        self::REFERENCED_COLUMN_NAME    => 'id',
+                    ]],
+                ],
+            ],
         ],
 
         'fields'            => [
@@ -127,6 +150,18 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                     ['InArray', [self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW, self::TYPE_LINK]]
                 ],
+            ],
+            'flysystem'                     => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => Tinebase_Model_Tree_FlySystem::MODEL_NAME_PART,
+                ],
+            ],
+            'flypath'                       => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::NULLABLE                  => true,
             ],
             'contenttype'                   => [
                 self::TYPE                      => self::TYPE_STRING,
@@ -165,7 +200,22 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 40,
                 self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::OMIT_MOD_LOG              => true,
+            ],
+            self::FLD_INDEX_FAIL_COUNT      => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DEFAULT_VAL               => 0,
+                self::OMIT_MOD_LOG              => true,
+            ],
+            self::FLD_INDEX_LAST_TRY        => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::NULLABLE                  => true,
+                self::OMIT_MOD_LOG              => true,
+            ],
+            self::FLD_INDEX_FAIL_HASH       => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
                 self::OMIT_MOD_LOG              => true,
             ],
 

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -271,7 +271,7 @@ class Tinebase_ApplicationTest extends TestCase
             }
 
             if (!empty($mc->table) && $mc->titleProperty && strpos($mc->titleProperty, '{{') !== false) {
-                $this->assertIsArray($mc->defaultSortInfo, $model);
+                $this->assertIsArray($mc->defaultSortInfo, 'default sort info missing: ' . $model);
                 $this->assertArrayHasKey('field', $mc->defaultSortInfo, $model);
             }
         }
@@ -358,7 +358,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Felamimail_Model_Sieve_ScriptPart::class,
                 Felamimail_Model_Sieve_Vacation::class,
                 Felamimail_Model_Signature::class,
-                Felamimail_Model_MailType::class
+                Felamimail_Model_MailType::class,
+                Felamimail_Model_MessageExpectedAnswer::class
             ),
             'Filemanager' => array(
                 Filemanager_Model_DownloadLink::class,
@@ -401,10 +402,7 @@ class Tinebase_ApplicationTest extends TestCase
             'Inventory' => array(
                 Inventory_Model_InventoryItem::class,
                 Inventory_Model_Status::class,
-            ),
-            'Phone' => array(
-                Phone_Model_Call::class,
-                Phone_Model_MyPhone::class,
+                Inventory_Model_Type::class,
             ),
             'Projects' => array(
                 Projects_Model_AttendeeRole::class,
@@ -416,6 +414,11 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Config::class,
                 Sales_Model_Contract::class,
                 Sales_Model_Customer::class,
+                Sales_Model_Debitor::class,
+                Sales_Model_Division::class,
+                Sales_Model_DivisionBankAccount::class,
+                Sales_Model_DivisionEvalDimensionItem::class,
+                Sales_Model_DivisionGrants::class,
                 Sales_Model_DocumentPosition_Delivery::class,
                 Sales_Model_DocumentPosition_Invoice::class,
                 Sales_Model_DocumentPosition_TransitionSource::class,
@@ -423,7 +426,9 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_DocumentPosition_Order::class,
                 Sales_Model_Document_Address::class,
                 Sales_Model_Document_Boilerplate::class,
+                Sales_Model_Document_Category::class,
                 Sales_Model_Document_Customer::class,
+                Sales_Model_Document_Debitor::class,
                 Sales_Model_Document_Delivery::class,
                 Sales_Model_Document_Invoice::class,
                 Sales_Model_Document_Transition::class,
@@ -431,6 +436,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Document_Status::class,
                 Sales_Model_Document_Offer::class,
                 Sales_Model_Document_Order::class,
+                Sales_Model_Einvoice_XRechnung::class,
                 Sales_Model_Invoice::class,
                 Sales_Model_InvoiceCleared::class,
                 Sales_Model_InvoicePosition::class,
@@ -454,6 +460,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             Tasks_Config::APP_NAME => array(
                 Tasks_Model_Attendee::class,
+                Tasks_Model_AttendeeStatus::class,
                 Tasks_Model_Pagination::class,
                 Tasks_Model_Priority::class,
                 Tasks_Model_Status::class,
@@ -480,8 +487,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_BankHoliday::class,
                 Tinebase_Model_BankHolidayCalendar::class,
                 Tinebase_Model_BLConfig::class,
-                Tinebase_Model_CostUnit::class,
-                Tinebase_Model_CostCenter::class,
                 Tinebase_Model_MunicipalityKey::class,
                 Tinebase_Model_Config::class,
                 Tinebase_Model_Container::class,
@@ -496,6 +501,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_EmailUser::class,
                 Tinebase_Model_EmailUser_Alias::class,
                 Tinebase_Model_EmailUser_Forward::class,
+                Tinebase_Model_EvaluationDimension::class,
+                Tinebase_Model_EvaluationDimensionItem::class,
                 Tinebase_Model_FilterSyncToken::class,
                 Tinebase_Model_FullUser::class,
                 Tinebase_Model_Grants::class,
@@ -521,6 +528,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ModificationLog::class,
                 Tinebase_Model_Note::class,
                 Tinebase_Model_NoteType::class,
+                Tinebase_Model_NumberableConfig::class,
                 Tinebase_Model_Pagination::class,
                 Tinebase_Model_Path::class,
                 Tinebase_Model_PersistentFilterGrant::class,
@@ -540,6 +548,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_TempFile::class,
                 Tinebase_Model_Tree_FileLocation::class,
                 Tinebase_Model_Tree_FileObject::class,
+                Tinebase_Model_Tree_FlySystem::class,
                 Tinebase_Model_Tree_Node::class,
                 Tinebase_Model_Tree_RefLog::class,
                 Tinebase_Model_UpdateMultipleException::class,
@@ -548,20 +557,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_WebauthnPublicKey::class,
                 Tinebase_Model_WebDavLock::class,
                 Tinebase_Model_BankAccount::class,
-            ),
-            'Voipmanager' => array(
-                Voipmanager_Model_Asterisk_Context::class,
-                Voipmanager_Model_Asterisk_Meetme::class,
-                Voipmanager_Model_Asterisk_SipPeer::class,
-                Voipmanager_Model_Asterisk_Voicemail::class,
-                Voipmanager_Model_Snom_Line::class,
-                Voipmanager_Model_Snom_Location::class,
-                Voipmanager_Model_Snom_Phone::class,
-                Voipmanager_Model_Snom_PhoneRight::class,
-                Voipmanager_Model_Snom_PhoneSettings::class,
-                Voipmanager_Model_Snom_Setting::class,
-                Voipmanager_Model_Snom_Software::class,
-                Voipmanager_Model_Snom_Template::class,
             ),
         );
 

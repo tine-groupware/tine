@@ -18,7 +18,7 @@
  * @property    string      $name
  * @property    string      $description
  * @property    array       $members
- * @property    array       $memberroles
+ * @property    array|Tinebase_Record_RecordSet $memberroles
  * @property    string      $email
  * @property    string      $type                 type of list
  * @property    string      $list_type
@@ -49,6 +49,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
     const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
     const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
+    const XPROP_SIEVE_REPLY_TO = 'sieveReplyTo';
 
     /**
      * external email user ids (for example in dovecot/postfix sql)
@@ -180,17 +181,20 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
                 ),
+                self::COPY_OMIT => true
             ),
             'list_type'         => array(
                 'label'             => 'List type', //_('List type')
                 'type'              => 'keyfield',
                 'name'              => Addressbook_Config::LIST_TYPE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::COPY_OMIT => true
             ),
             'group_id'          => array(
                 'label'             => null, // TODO fill this?
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::COPY_OMIT => true
             ),
             'account_only'          => array(
                 'label'             => null, // TODO fill this?
@@ -367,5 +371,55 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     public static function generatesPaths()
     {
         return true;
+    }
+
+    /**
+     * get lists recipient token
+     *
+     * @return array
+     */
+    public function getRecipientTokens(): array
+    {
+        $listMemberEmails = [];
+
+        // always get member contacts
+        if (isset($this->members) && count($this->members) > 0) {
+            try {
+                $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->members);
+                foreach ($contacts as $contact) {
+                    $listMemberEmails = array_merge($listMemberEmails, $contact->getRecipientTokens(true));
+                }
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' get members failed : ' . $e->getMessage());
+            }
+        }
+
+        if (count($listMemberEmails) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " List : " . $this->name . " has no member emails found");
+            }
+            if (empty($this->email)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Skipping, no email addresses found in list ...");
+                }
+                return [];
+            }
+        }
+
+        $useAsMailinglist = isset($this['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
+            && $this['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1;
+
+        return  [[
+            "n_fileas" => $this->name ?? '',
+            "name" => $this->name ?? '',
+            "type" =>  $useAsMailinglist ? 'mailingList' : $this->type,
+            "email" => $this->email ?? '',
+            "email_type_field" =>  '',
+            "contact_record" => $this->toArray(),
+            "emails" => $listMemberEmails
+        ]];
     }
 }

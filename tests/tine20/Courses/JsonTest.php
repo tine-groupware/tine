@@ -83,7 +83,7 @@ class Courses_JsonTest extends TestCase
     {
         $twigConf = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
         if ($twigConf->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} !==
-            '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}'
+            '{{ account.accountFirstName|transliterate|removeSpace|accountLoginChars|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|accountLoginChars|lower }}'
         ) {
             self::markTestSkipped('test only works with a certain ACCOUNT_TWIG_LOGIN config');
         }

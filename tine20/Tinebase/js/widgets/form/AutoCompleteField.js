@@ -56,6 +56,10 @@ Tine.Tinebase.widgets.form.AutoCompleteField = Ext.extend(Ext.form.ComboBox, {
         
         
         Tine.Tinebase.widgets.form.AutoCompleteField.superclass.initComponent.call(this);
+    },
+
+    getValue: function() {
+        return this.getRawValue();
     }
 });
 

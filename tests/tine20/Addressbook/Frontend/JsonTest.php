@@ -460,6 +460,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactData()
     {
+        Addressbook_Controller_Contact::destroyInstance();
+        
         $contact = $this->_addContact();
 
         $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
@@ -468,7 +470,18 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
         Tinebase_Core::setUser($this->_personas['sclever']);
         Tinebase_Container::getInstance()->resetClassCache();
+        Tinebase_Core::clearAppInstanceCache();
         $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_ADMIN));
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact['id']);
+        $this->assertFalse($contact->account_id && is_object(Tinebase_Core::getUser()) &&
+            $contact->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId(), print_r($contact->toArray(false), true));
+        $this->assertTrue($contact->has('container_id'));
+        $this->assertTrue(Addressbook_Controller_Contact::getInstance()->doContainerACLChecks());
+        $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
+            Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, false));
+        $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
+            Addressbook_Model_ContactGrants::GRANT_ADMIN, false));
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
@@ -696,6 +709,15 @@ class Addressbook_Frontend_JsonTest extends TestCase
         foreach ((array)$_expectedText as $text) {
             $this->assertStringContainsString($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
+    }
+
+    public function testTelNormalized()
+    {
+        $contact = $this->_addContact();
+        $contact['tel_work'] = '+49 (0)911 1234567';
+        $contact = $this->_uit->saveContact($contact);
+
+        $this->assertSame('+499111234567', $contact['tel_work_normalized']);
     }
 
     /**
@@ -2885,6 +2907,8 @@ Steuernummer 33/111/32212";
      * test Addressbook.searchEmailAddresss and check for "emails" property
      *
      * {"jsonrpc":"2.0","method":"Addressbook.searchEmailAddresss","params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"query","operator":"contains","value":""},{"field":"email_query","operator":"contains","value":"@"}]},{"field":"path","operator":"contains","value":""}]}],"paging":{"sort":"name","dir":"ASC","start":0,"limit":50}},"id":4}
+     * 
+     * @group nogitlabciad
      */
     public function testSearchEmailAddresss()
     {
@@ -2935,19 +2959,14 @@ Steuernummer 33/111/32212";
      * test Search Contacts By Recipient data
      *
      */
-    public function testSearchContactsByRecipientsToken()
+    public function testSearchRecipientTokensByEmailArrays()
     {
         Addressbook_Controller_List::destroyInstance();
-        $recipientData = [
-            [
-                "n_fileas" => '',
-                "name" => Tinebase_Core::getUser()->accountFullName,
-                "type" =>  '',
-                "email" => Tinebase_Core::getUser()->accountEmailAddress,
-                "email_type" =>  '',
-            ]
-        ];
-        $result = $this->_uit->searchContactsByRecipientsToken($recipientData);
+
+        $result = $this->_uit->searchRecipientTokensByEmailArrays(
+            [Tinebase_Core::getUser()->accountEmailAddress],
+            [Tinebase_Core::getUser()->accountFullName]
+        );
 
         static::assertEquals(1, $result['totalcount']);
     }
@@ -2969,13 +2988,13 @@ Steuernummer 33/111/32212";
         static::assertEquals(1, $result['totalcount'], 'no results found');
         static::assertEquals($list['email'], $result['results'][0]['email']);
 
-        // Felamimail searchAccounts should not return mailinglist
+        // Felamimail searchAccounts should return mailinglist too
         $ffj = new Felamimail_Frontend_Json();
         $result = $ffj->searchAccounts([], []);
         $listaccounts = array_filter($result['results'], function ($account) {
             return $account['type'] === Felamimail_Model_Account::TYPE_ADB_LIST;
         });
-        self::assertEquals(0, count($listaccounts), 'found adb list account(s): '
+        self::assertEquals(1, count($listaccounts), 'found adb list account(s): '
             . print_r($listaccounts, true));
     }
 

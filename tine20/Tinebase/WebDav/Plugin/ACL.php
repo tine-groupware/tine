@@ -21,7 +21,7 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
 
         $acl = $this->getACL($node);
 
-        if (is_null($acl)) return null;
+        if (is_null($acl)) return [];
 
         try {
             $oldValue = Tinebase_WebDav_PrincipalBackend::showHiddenGroups(true);
@@ -39,6 +39,7 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
             switch($principal) {
 
                 case '{DAV:}owner' :
+                    /** @var \Sabre\DAVACL\IACL $node */
                     $owner = $node->getOwner();
                     if ($owner && in_array($owner, $principals)) {
                         $collected[] = $ace;

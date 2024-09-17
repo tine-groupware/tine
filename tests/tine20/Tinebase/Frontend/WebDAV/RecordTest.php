@@ -57,7 +57,7 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
         $savedEvent = $this->testDownloadAttachment();
         
         $children = $this->_getWebDAVTree()->getChildren('/webdav/Calendar/records/Calendar_Model_Event/' . $savedEvent->getId() . '/');
-        $node = $children[0];
+        foreach ($children as $node) break;
         
         $this->assertEquals('text/plain', $node->getContentType());
         $this->assertEquals(17, $node->getSize());
@@ -65,12 +65,12 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
 
     /**
      * 
-     * @return \Sabre\DAV\ObjectTree
+     * @return \Sabre\DAV\Tree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
-            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        if (! $this->_webdavTree instanceof \Sabre\DAV\Tree) {
+            $this->_webdavTree = new \Sabre\DAV\Tree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;

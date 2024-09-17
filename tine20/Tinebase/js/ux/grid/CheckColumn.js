@@ -144,7 +144,8 @@ Ext.extend(Ext.ux.grid.CheckColumn, Ext.util.Observable, {
 
     renderer : function(v, p, record){
         p.css += ' x-grid3-check-col-td';
-        return String.format('<div class="x-grid3-check-col{0} {1}">&#160;</div>', +v ? '-on' : '', this.createId());
+        let tooltip = this.tooltip ? this.tooltip : ''
+        return String.format('<div ext:qtip="' + tooltip + '" class="x-grid3-check-col{0} {1}">&#160;</div>', +v ? '-on' : '', this.createId());
     },
     
     createId : function(){

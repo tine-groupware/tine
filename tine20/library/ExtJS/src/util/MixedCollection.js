@@ -17,7 +17,7 @@
  * were passed without an explicit key parameter to a MixedCollection method.  Passing this parameter is
  * equivalent to providing an implementation for the {@link #getKey} method.
  */
-Ext.util.MixedCollection = function(allowFunctions, keyFn){
+Ext.util.MixedCollection = function(allowFunctions, keyFn, returnClones){
     this.items = [];
     this.map = {};
     this.keys = [];
@@ -54,6 +54,7 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn){
         'sort'
     );
     this.allowFunctions = allowFunctions === true;
+    this.returnClones = returnClones === true;
     if(keyFn){
         this.getKey = keyFn;
     }
@@ -69,6 +70,20 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
      */
     allowFunctions : false,
 
+    // backward compatibility to store.js
+    /**
+     * @param key
+     * @param {Object} o The item to add.
+     * @param suppressEvent
+     */
+    set: function(key, o, suppressEvent) {
+        this.add(key, o, suppressEvent);
+    },
+    
+    getAll: function() {
+        return this.returnClones ? _.cloneDeep(this.map) : this.map;
+    },
+
     /**
      * Adds an item to the collection. Fires the {@link #add} event when complete.
      * @param {String} key <p>The key to associate with the item, or the new item.</p>
@@ -77,24 +92,28 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
      * the MixedCollection will be able to <i>derive</i> the key for the new item.
      * In this case just pass the new item in this parameter.</p>
      * @param {Object} o The item to add.
+     * @param suppressEvent
      * @return {Object} The item added.
      */
-    add : function(key, o){
-        if(arguments.length == 1){
+    add : function(key, o, suppressEvent){
+        if(arguments.length === 1){
             o = arguments[0];
             key = this.getKey(o);
         }
         if(typeof key != 'undefined' && key !== null){
             var old = this.map[key];
             if(typeof old != 'undefined'){
-                return this.replace(key, o);
+                return this.replace(key, o, suppressEvent);
             }
             this.map[key] = o;
         }
         this.length++;
         this.items.push(o);
         this.keys.push(key);
-        this.fireEvent('add', this.length-1, o, key);
+        
+        if (!suppressEvent) {
+            this.fireEvent('add', this.length-1, o, key);
+        }
         return o;
     },
 
@@ -141,19 +160,21 @@ mc.add(otherEl);
      * with that key.
      * @return {Object}  The new item.
      */
-    replace : function(key, o){
+    replace : function(key, o, suppressEvent){
         if(arguments.length == 1){
             o = arguments[0];
             key = this.getKey(o);
         }
         var old = this.map[key];
         if(typeof key == 'undefined' || key === null || typeof old == 'undefined'){
-             return this.add(key, o);
+             return this.add(key, o, suppressEvent);
         }
         var index = this.indexOfKey(key);
         this.items[index] = o;
         this.map[key] = o;
-        this.fireEvent('replace', key, old, o);
+        if (!suppressEvent) {
+            this.fireEvent('replace', key, old, o);
+        }
         return o;
     },
 
@@ -163,9 +184,10 @@ mc.add(otherEl);
      * to the collection, or an Array of values, each of which are added to the collection.
      * Functions references will be added to the collection if <code>{@link #allowFunctions}</code>
      * has been set to <tt>true</tt>.
+     * @param suppressEvent
      */
-    addAll : function(objs){
-        if(arguments.length > 1 || Ext.isArray(objs)){
+    addAll : function(objs, suppressEvent){
+        if(arguments.length > 2 || Ext.isArray(objs)){
             var args = arguments.length > 1 ? arguments : objs;
             for(var i = 0, len = args.length; i < len; i++){
                 this.add(args[i]);
@@ -173,7 +195,7 @@ mc.add(otherEl);
         }else{
             for(var key in objs){
                 if(this.allowFunctions || typeof objs[key] != 'function'){
-                    this.add(key, objs[key]);
+                    this.add(key, objs[key], suppressEvent);
                 }
             }
         }
@@ -333,6 +355,9 @@ mc.add(otherEl);
     item : function(key){
         var mk = this.map[key],
             item = mk !== undefined ? mk : (typeof key == 'number') ? this.items[key] : undefined;
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
         return !Ext.isFunction(item) || this.allowFunctions ? item : null; // for prototype!
     },
 
@@ -342,7 +367,11 @@ mc.add(otherEl);
      * @return {Object} The item at the specified index.
      */
     itemAt : function(index){
-        return this.items[index];
+        let item = this.items[index];
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
+        return item;
     },
 
     /**
@@ -388,7 +417,12 @@ mc.add(otherEl);
      * @return {Object} the first item in the collection..
      */
     first : function(){
-        return this.items[0];
+        let item = this.items[0];
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
+        return item;
+
     },
 
     /**
@@ -396,7 +430,11 @@ mc.add(otherEl);
      * @return {Object} the last item in the collection..
      */
     last : function(){
-        return this.items[this.length-1];
+        let item = this.items[this.length-1];
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
+        return item;
     },
 
     /**
@@ -478,6 +516,9 @@ mc.add(otherEl);
                 r[r.length] = items[i];
             }
         }
+        if (this.returnClones) {
+            r = _.cloneDeep(r);
+        }
         return r;
     },
 
@@ -517,6 +558,9 @@ mc.add(otherEl);
             if(fn.call(scope||this, it[i], k[i])){
                 r.add(k[i], it[i]);
             }
+        }
+        if (this.returnClones) {
+            r = _.cloneDeep(r);
         }
         return r;
     },

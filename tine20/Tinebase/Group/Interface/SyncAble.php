@@ -35,14 +35,7 @@ interface Tinebase_Group_Interface_SyncAble
      */
     public function getGroupByIdFromSyncBackend($_groupId);
 
-    /**
-     * create a new group in sync backend
-     *
-     * @param  Tinebase_Model_Group  $_group
-     * 
-     * @return Tinebase_Model_Group
-     */
-    public function addGroupInSyncBackend(Tinebase_Model_Group $_group);
+    public function addGroupInSyncBackend(Tinebase_Model_Group $_group): ?Tinebase_Model_Group;
      
     /**
      * get groupmemberships of user from sync backend
@@ -56,7 +49,7 @@ interface Tinebase_Group_Interface_SyncAble
     /**
      * get list of groups from syncbackend
      *
-     * @param  string  $_filter
+     * @param  Zend_Ldap_Filter  $_filter
      * @param  string  $_sort
      * @param  string  $_dir
      * @param  int     $_start
@@ -69,7 +62,7 @@ interface Tinebase_Group_Interface_SyncAble
     /**
      * return whether backend is read only
      */
-    public function isReadOnlyBackend();
+    public function getWriteableGroupIds(array $groupIds): array;
     
     /**
      * return whether backend is disabled
@@ -97,8 +90,9 @@ interface Tinebase_Group_Interface_SyncAble
      *
      * @param  mixed  $_groupId
      * @param  mixed  $_accountId
+     * @param bool $_checkWriteGroupIds
      */
-    public function removeGroupMemberInSyncBackend($_groupId, $_accountId);
+    public function removeGroupMemberInSyncBackend($_groupId, $_accountId, $_checkWriteGroupIds = true);
     
     /**
      * updates an existing group in sync backend

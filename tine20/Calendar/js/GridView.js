@@ -48,6 +48,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
+        this.recordClass = Tine.Calendar.Model.Event
         
         this.store.sort(this.defaultSortInfo.field, this.defaultSortInfo.direction);
         
@@ -193,70 +194,51 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
  *
  * @return Ext.grid.ColumnModel
  */
-Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
-    if (! additionalColumns) {
-        additionalColumns = [];
-    }
-
+Tine.Calendar.GridView.initCM = function(app) {
+    const additionalColumns = Tine.widgets.grid.GridPanel.prototype.getCustomfieldColumns.call({recordClass:Tine.Calendar.Model.Event, app}) || [];
     return new Ext.grid.ColumnModel({
         defaults: {
             sortable: true,
             resizable: true
         },
-        columns: additionalColumns.concat([{
+        columns: [{
             id: 'attachments',
-            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
-            tooltip: window.i18n._('Attachments'),
-            dataIndex: 'attachments',
-            width: 20,
             sortable: false,
-            resizable: false,
-            renderer: Tine.widgets.grid.attachmentRenderer,
             hidden: false
         }, {
             id: 'container_id',
             header: Tine.Calendar.Model.Event.getContainerName(),
             width: 150,
-            dataIndex: 'container_id',
             renderer: Tine.widgets.grid.RendererManager.get('Calendar', 'Event', 'container_id')
         }, {
             id: 'class',
             header: app.i18n._("Private"),
             width: 50,
-            dataIndex: 'class',
             renderer: function(transp) {
                 return Tine.Tinebase.common.booleanRenderer(transp == 'PRIVATE');
             }
         }, {
             id: 'tags',
             header: app.i18n._("Tags"),
-            width: 50,
-            dataIndex: 'tags',
             renderer: Tine.Tinebase.common.tagsRenderer
 
         }, {
             id: 'dtstart',
             header: app.i18n._("Start Time"),
-            width: 120,
-            dataIndex: 'dtstart',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
             id: 'dtend',
             header: app.i18n._("End Time"),
-            width: 120,
-            dataIndex: 'dtend',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
             id: 'is_all_day_event',
             header: app.i18n._("whole day"),
             width: 50,
-            dataIndex: 'is_all_day_event',
             renderer: Tine.Tinebase.common.booleanRenderer
         }, {
             id: 'transp',
             header: app.i18n._("Blocking"),
             width: 50,
-            dataIndex: 'transp',
             renderer: function(transp) {
                 return Tine.Tinebase.common.booleanRenderer(transp == 'OPAQUE');
             }
@@ -264,7 +246,6 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
             id: 'status',
             header: app.i18n._("Tentative"),
             width: 50,
-            dataIndex: 'status',
             renderer: function(transp) {
                 return Tine.Tinebase.common.booleanRenderer(transp == 'TENTATIVE');
             }
@@ -272,7 +253,6 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
             id: 'summary',
             header: app.i18n._("Summary"),
             width: 200,
-            dataIndex: 'summary',
             renderer: function(summary, metadata, event) {
                 return event.getTitle();
             }
@@ -281,26 +261,23 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
             header: app.i18n._("Location"),
             width: 200,
             hidden: true,
-            dataIndex: 'location'
         }, {
             id: 'organizer',
             header: app.i18n._("Organizer"),
             width: 200,
             hidden: true,
-            dataIndex: 'organizer',
-            renderer: Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName
+            renderer: Tine.Calendar.organizerRenderer
         }, {
             id: 'description',
             header: app.i18n._("Description"),
             width: 200,
             hidden: true,
-            dataIndex: 'description',
             renderer: function(description, metaData, record) {
                 if (metaData) {
                     metaData.attr = 'ext:qtip="' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(description))) + '"';
                 }
                 return Ext.util.Format.htmlEncode(description);
             }
-        }])
+        }].concat(additionalColumns)
     });
 };

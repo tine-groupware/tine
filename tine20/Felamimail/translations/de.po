@@ -1991,8 +1991,8 @@ msgstr "Sie müssen einen Zielordner für die Nachrichten auswählen."
 msgid "Wrong File Type"
 msgstr "Falscher Dateityp"
 
-msgid "Files of type eml allowed only."
-msgstr "Nur Dateien vom Typ eml sind erlaubt."
+msgid "Files of type eml and msg allowed only."
+msgstr "Nur Dateien vom Typ eml und msg sind erlaubt."
 
 msgid "Importing Messages..."
 msgstr "Importiere Nachrichten..."
@@ -2127,8 +2127,8 @@ msgid ""
 "I hereby agree that this mailbox may be converted to a shared mailbox or "
 "transferred to another user."
 msgstr ""
-"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen "
-"Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
+"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen Postfach "
+"umgewandelt oder einem anderen Benutzer übertragen werden darf."
 
 msgid "Forward and forwarded email as .eml in attachment"
 msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
@@ -2177,3 +2177,82 @@ msgstr "J : Nachricht als SPAM markieren"
 
 msgid "Shift+J : Mark message as HAM"
 msgstr "Shift+J : Nachricht als HAM markieren"
+
+msgid "All folders"
+msgstr "Alle Ordner"
+
+msgid "Depending on content format"
+msgstr "Abhängig vom Format"
+
+msgid ""
+"The recipients of this email distribution list are maintained in the "
+"list: {locationsHtml}"
+msgstr ""
+"Die Empfänger dieses Email-Verteilers werden in folgender Liste "
+"verwaltet: {locationsHtml}"
+
+msgid "still unanswered: "
+msgstr "noch unbeantwortet: "
+
+msgid ""
+"Here is the reminder you requested. Unfortunately, we were unable to "
+"locate a response to the email attached within your specified deadline "
+"of: "
+msgstr ""
+"Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht "
+"möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen "
+"angegebenen Frist zu finden: "
+
+msgid "Expected Answer"
+msgstr "Erwarte Antwort"
+
+msgid "Tomorrow"
+msgstr "Morgen"
+
+msgid "In two days"
+msgstr "In zwei Tagen"
+
+msgid "In a week"
+msgstr "In einer Woche"
+
+msgid "In two weeks"
+msgstr "In zwei Wochen"
+
+msgid "In a month"
+msgstr "In einem Monat"
+
+msgid "Custom"
+msgstr "Kalendar"
+
+msgid "Information"
+msgstr "Information"
+
+msgid ""
+"If you select one of these options, you will receive a notification if "
+"you have not received a reply to the mail after the configured deadline "
+"has expired"
+msgstr ""
+"Wenn Sie eine dieser Optionen wählen, erhalten Sie eine Benachrichtigung, "
+"falls Sie nach Ablauf der konfigurierten Frist keine Antwort auf die E-"
+"Mail erhalten haben"
+
+msgid "Selected E-Mail"
+msgstr "Ausgewählte E-Mail"
+
+msgid "Current Mailbox size"
+msgstr "Aktuelle Mailbox-Größe"
+
+msgid "Current Sieve size"
+msgstr "Aktuelle Sieve-Größe"
+
+msgid "Imap Quota"
+msgstr "Imap Kontingent"
+
+msgid "Sieve Quota"
+msgstr "Sieve Kontingent"
+
+msgid "no quota set"
+msgstr "keine Begrenzung"
+
+msgid "{0} {1} is not found"
+msgstr "{0} {1} wurde nicht gefunden."

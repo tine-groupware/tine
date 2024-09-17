@@ -502,7 +502,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         // check results
         $this->assertTrue(isset($results['results']));
-        $this->assertEquals(4, $results['totalcount']);
+        $this->assertEquals(5, $results['totalcount']);
 
         $this->assertEquals( 'user', $results['results'][0]['account_type']);
 
@@ -736,8 +736,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         self::assertArrayHasKey('Sales.createPaperSlip', $registryData['Tinebase']['serviceMap']['services']);
         self::assertSame(60, $registryData['Tinebase']['serviceMap']['services']['Sales.createPaperSlip']['apiTimeout']);
-
-        self::assertLessThan(2500000, strlen(json_encode($registryData)), 'registry size got too big');
+        
+        self::assertLessThan(2600000, strlen(json_encode($registryData)), 'registry size got too big');
     }
 
     protected function _assertImportExportDefinitions($registryData)
@@ -979,11 +979,13 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testUpdateUserProfile()
     {
+        \Tinebase_Frontend_JsonTest::testSetUserProfileConfig();
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $profileData = $profile['userProfile'];
         
         $this->assertFalse(array_search('n_prefix', $profileData));
-        
+
+        $profileData['n_family'] = $profileData['n_family'] . '_ut';
         $profileData['tel_home'] = 'mustnotchange';
         $profileData['email_home'] = 'email@userprofile.set';
 
@@ -995,8 +997,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $updatedProfile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $updatedProfileData = $updatedProfile['userProfile'];
-        $this->assertNotEquals('mustnotchange', $updatedProfileData['tel_home']);
-        $this->assertEquals('email@userprofile.set', $updatedProfileData['email_home']);
+        $this->assertNotSame('mustnotchange', $updatedProfileData['tel_home']);
+        $this->assertSame('email@userprofile.set', $updatedProfileData['email_home']);
+        $this->assertSame($profileData['n_family'] , $updatedProfileData['n_family']);
 
 
         $user = Tinebase_User::getInstance()->getUserById(Tinebase_Core::getUser()->getId());

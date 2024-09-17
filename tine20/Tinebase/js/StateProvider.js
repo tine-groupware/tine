@@ -45,18 +45,15 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
     set: async function (name, value) {
         if (typeof value == "undefined" || value === null) {
             await this.clear(name);
-            return;
         }
-        
         const encodedValue = this.encodeValue(value);
         const currentStateEncodedValue = this.encodeValue(this.state[name]);
-
+        
         if (!this.state[name] || (currentStateEncodedValue !== encodedValue)) {
             this.state[name] = value; // prevent further state calls during state is saved
             // persistent save
             await Tine.Tinebase.setState(name, encodedValue);
         }
-
         Tine.Tinebase.StateProvider.superclass.set.call(this, name, value);
     }
 });

@@ -259,7 +259,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      *
      * @return Tinebase_ModelConfiguration|NULL
      */
-    public static function getConfiguration()
+    public static function getConfiguration(): ?Tinebase_ModelConfiguration
     {
         if (! isset (static::$_modelConfiguration)) {
             return NULL;
@@ -316,23 +316,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
         }
     }
-    
-    /**
-     * sets identifier of record
-     * 
-     * @param int $_id
-     * @return void
-     */
-    public function setId($_id)
+
+    public function setId($_id): self
     {
-        // set internal state to "not validated"
-        $this->_isValidated = false;
-        
-        if ($this->bypassFilters === true) {
-            $this->_properties[$this->_identifier] = $_id;
-        } else {
-            $this->__set($this->_identifier, $_id);
-        }
+        $this->__set($this->_identifier, $_id);
+        return $this;
     }
     
     /**
@@ -428,7 +416,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
                     $config = $config['type'] === 'virtual' && isset($config['config']['type']) ? $config['config'] :
                         $config;
-                    if (in_array($config['type'], ['record', 'records']) && isset($config['config']['appName']) &&
+                    if (in_array($config['type'], ['record', 'records', 'relation']) && isset($config['config']['appName']) &&
                             isset($config['config']['modelName'])) {
                         $modelName = $config['config']['appName'] . '_Model_' . $config['config']['modelName'];
                         $this->{$fieldName} = $config['type'] == 'record' ?
@@ -632,16 +620,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     
     /**
      * sets record related properties
-     * 
+     *
      * @param string $_name of property
      * @param mixed $_value of property
-     * @throws Tinebase_Exception_UnexpectedValue
      * @return void
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function __set($_name, $_value)
     {
         if (! (isset($this->_validators[$_name]) || array_key_exists ($_name, $this->_validators))) {
-            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of '
+                . get_class($this) . ' properties');
         }
         
         if ($this->bypassFilters !== true) {
@@ -1367,7 +1357,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
             $templateString = $translation->translate($c->titleProperty);
             $template = $twig->getEnvironment()->createTemplate($templateString);
-            return $template->render(is_array($this->_properties) ? $this->_properties : []);
+            $data = is_array($this->_properties) ? $this->_properties : [];
+            $data['record'] = $this;
+            return $template->render($data);
         } else {
             return $this->{$c->titleProperty};
         }

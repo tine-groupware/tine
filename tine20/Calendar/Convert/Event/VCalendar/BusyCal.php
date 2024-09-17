@@ -20,35 +20,13 @@ class Calendar_Convert_Event_VCalendar_BusyCal extends Calendar_Convert_Event_VC
 	// BusyCal-2.6.6
     const HEADER_MATCH = '/^BusyCal-(?P<version>\S+)/';
     
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        'rrule_until',
-        'originator_tz',
-    );
-    
     /**
      * get attendee array for given contact
      * 
      * @param  \Sabre\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
      * @return array
      */
-    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
+    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress): ?array
     {
         
         $newAttendee = parent::_getAttendee($calAddress);
@@ -76,9 +54,9 @@ class Calendar_Convert_Event_VCalendar_BusyCal extends Calendar_Convert_Event_VC
         $return = parent::_findMainEvent($vcalendar);
 
         // NOTE 10.7 and 10.10 sometimes write access into calendar property
-        if (isset($vcalendar->{'X-CALENDARSERVER-ACCESS'})) {
-            foreach ($vcalendar->VEVENT as $vevent) {
-                $vevent->{'X-CALENDARSERVER-ACCESS'} = $vcalendar->{'X-CALENDARSERVER-ACCESS'};
+        if ($vcalendar->__isset('X-CALENDARSERVER-ACCESS')) {
+            foreach ($vcalendar->__get('VEVENT') as $vevent) {
+                $vevent->__set('X-CALENDARSERVER-ACCESS', $vcalendar->__get('X-CALENDARSERVER-ACCESS'));
             }
         }
 

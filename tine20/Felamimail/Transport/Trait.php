@@ -27,7 +27,7 @@ trait Felamimail_Transport_Trait
      */
     public function getBody(Zend_Mail $_mail = NULL)
     {
-        if (! isset($this->body)) {
+        if (!isset($this->body)) {
             $mime = $_mail->getMime();
             $message = new Zend_Mime_Message();
             $message->setMime($mime);
@@ -45,12 +45,12 @@ trait Felamimail_Transport_Trait
      */
     public function getHeaders($_additionalHeaders = array())
     {
-        if (! isset($this->header)) {
+        if (!isset($this->header)) {
             $this->_prepareHeaders($this->_headers);
         }
 
         $result = $this->header;
-        foreach($_additionalHeaders as $key => $value) {
+        foreach ($_additionalHeaders as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $single) {
                     $this->header .= $key . ': ' . $single . $this->EOL;
@@ -61,6 +61,22 @@ trait Felamimail_Transport_Trait
         }
 
         return $this->header;
+    }
+
+    /**
+     * get a mail header values
+     *
+     * @param string $header
+     * @return array
+     * @throws Tinebase_Exception
+     */
+    public function getHeader(string $header): array
+    {
+        if (isset($this->_headers[$header])) {
+            return $this->_headers[$header];
+        } else {
+            throw new Tinebase_Exception('header not found: ' . $header);
+        }
     }
 
     /**

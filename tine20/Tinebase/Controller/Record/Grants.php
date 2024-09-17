@@ -32,6 +32,11 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     protected $_aclIdProperty = 'id';
 
     /**
+     * @var bool allow empty grants (if false, default grants are added if empty)
+     */
+    protected bool $_allowEmptyGrants = false;
+
+    /**
      * get list of records
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -152,8 +157,8 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         $updatedRecord->grants = $record->grants;
-        $this->setGrants($updatedRecord);
-        
+        $this->setGrants(record: $updatedRecord, isCreate: $isCreate);
+
         return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
     }
 
@@ -162,13 +167,14 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      *
      * @param Tinebase_Record_Interface $record
      * @param bool $addDuringSetup -> let admin group have all rights instead of user
-     * @return Tinebase_Record_RecordSet of record grants
+     * @param bool $isCreate
+     * @return ?Tinebase_Record_RecordSet of record grants
      * @throws Timetracker_Exception_UnexpectedValue
      * @throws Tinebase_Exception_Backend
      *
      * @todo improve algorithm: only update/insert/delete changed grants
      */
-    public function setGrants(Tinebase_Record_Interface $record, $addDuringSetup = false)
+    public function setGrants(Tinebase_Record_Interface $record, bool $addDuringSetup = false, bool $isCreate = false)
     {
         $recordId = $record->getId();
         
@@ -177,46 +183,14 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         }
         
         if (! $this->_validateGrants($record)) {
-            $this->_setDefaultGrants($record, $addDuringSetup);
-        }
-        
-        try {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Setting grants for record ' . $recordId);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' Grants: ' . print_r($record->grants->toArray(), true));
-            
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            $this->_grantsBackend->deleteByProperty($recordId, 'record_id');
-
-            $uniqueGate = [];
-            /** @var Tinebase_Model_Grants $newGrant */
-            foreach ($record->grants as $newGrant) {
-                $uniqueKey = $newGrant->account_type . $newGrant->account_id;
-                if (isset($uniqueGate[$uniqueKey])) {
-                    continue;
-                }
-                $uniqueGate[$uniqueKey] = true;
-                
-                foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
-                    if ($newGrant->{$grant}) {
-                        $newGrant->id = null;
-                        $newGrant->account_grant = $grant;
-                        $newGrant->record_id = $recordId;
-                        $this->_grantsBackend->create($newGrant);
-                    }
-                }
+            if ($isCreate || ! $this->_allowEmptyGrants) {
+                $this->_setDefaultGrants($record, $addDuringSetup);
             }
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw new Tinebase_Exception_Backend($e->getMessage());
         }
-        
+        if ($record->grants) {
+            $this->_setRecordGrants($recordId, $record->grants);
+        }
+
         return $record->grants;
     }
     
@@ -269,6 +243,46 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         $record->grants->addRecord($grant);
     }
 
+    protected function _setRecordGrants(string $recordId, $grants): void
+    {
+        try {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Setting/removing grants for record ' . $recordId
+                );
+            }
+
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            $this->_grantsBackend->deleteByProperty($recordId, 'record_id');
+
+            $uniqueGate = [];
+            /** @var Tinebase_Model_Grants $newGrant */
+            foreach ($grants as $newGrant) {
+                $uniqueKey = $newGrant->account_type . $newGrant->account_id;
+                if (isset($uniqueGate[$uniqueKey])) {
+                    continue;
+                }
+                $uniqueGate[$uniqueKey] = true;
+
+                foreach (call_user_func($this->_grantsModel . '::getAllGrants') as $grant) {
+                    if ($newGrant->{$grant}) {
+                        $newGrant->id = null;
+                        $newGrant->account_grant = $grant;
+                        $newGrant->record_id = $recordId;
+                        $this->_grantsBackend->create($newGrant);
+                    }
+                }
+            }
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw new Tinebase_Exception_Backend($e->getMessage());
+        }
+    }
+
     /**
      * @param string $recordId
      */
@@ -291,7 +305,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     {
         $createdRecord = $this->_backend->create($record);
         $createdRecord->grants = $record->grants;
-        $this->setGrants($createdRecord, /* addDuringSetup = */ true);
+        $this->setGrants($createdRecord, true, true);
         return $createdRecord;
     }
     

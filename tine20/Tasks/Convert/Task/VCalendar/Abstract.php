@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -62,10 +62,6 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
     
     /**
      * convert calendar event to \Sabre\VObject\Component
-     * 
-     * @param Tasks_Model_Task $_vtodo
-     * @param Tasks_Model_Task $mainTask
-     * @return \Sabre\VObject\Component
      */
     protected function _convertTasksModelTask(Sabre\VObject\Component\VCalendar $vcalendar, Tasks_Model_Task $task, Tasks_Model_Task $mainTask = null)
     {
@@ -202,9 +198,9 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
      * converts vcalendar to Tasks_Model_Task
      * 
      * @param  mixed                 $_blob   the vcalendar to parse
-     * @param  Calendar_Model_Event  $_record  update existing event
+     * @param  Tasks_Model_Task  $_record  update existing event
      * @param  array                 $options
-     * @return Calendar_Model_Event
+     * @return Tasks_Model_Task
      */
     public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
@@ -249,9 +245,6 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
 
     /**
      * parse VTODO part of VCALENDAR
-     * 
-     * @param  \Sabre\VObject\Component\VTodo  $_vevent  the VTODO to parse
-     * @param  Tasks_Model_Task     $_vtodo   the Tine 2.0 event to update
      */
     protected function _convertVtodo(\Sabre\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task, $options)
     {
@@ -441,5 +434,21 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
         
         // convert all datetime fields to UTC
         $task->setTimezone('UTC');
+    }
+
+    /**
+     * converts Tinebase_Record_RecordSet to external format
+     *
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
+     *
+     * @return mixed
+     */
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
+    {
+        throw new Tinebase_Exception_NotImplemented();
     }
 }

@@ -536,30 +536,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     getColumns: function () {
-        var columns = [{
-            resizable: true,
-            id: 'name',
-            dataIndex: 'name',
-            width: 300,
-            header: i18n._('name'),
-            renderer: Ext.ux.PercentRendererWithName
-        }, {
-            resizable: true,
-            id: 'size',
-            dataIndex: 'size',
-            width: 70,
-            header: i18n._('size'),
-            renderer: Ext.util.Format.fileSize
-        }, {
-            resizable: true,
-            id: 'type',
-            dataIndex: 'type',
-            width: 70,
-            header: i18n._('type')
-            // TODO show type icon?
-            //renderer: Ext.util.Format.fileSize
-        }];
-
+        const columns = [
+            { resizable: true, id: 'name', width: 300, header: i18n._('name'), renderer: Ext.ux.PercentRendererWithName },
+            { resizable: true, id: 'size', header: i18n._('size'), renderer: Ext.util.Format.fileSize },
+            { resizable: true, id: 'type', width: 70, header: i18n._('type') }
+        ];
         return columns;
     },
 

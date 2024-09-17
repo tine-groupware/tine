@@ -127,28 +127,33 @@ msgid "Possible status."
 msgstr "Möglicher Status"
 
 #: Config.php:41
-msgid "ordered"
+msgid "Ordered"
 msgstr "Bestellt"
 
 #: Config.php:42
-msgid "available"
+msgid "Available"
 msgstr "Verfügbar"
 
 #: Config.php:43
-msgid "defect"
+msgid "Defect"
 msgstr "Defekt"
 
 #: Config.php:44
-msgid "missing"
+msgid "Missing"
 msgstr "Vermisst"
 
-#: Config.php:45
-msgid "removed"
-msgstr "Entfernt"
-
 #: Config.php:46
-msgid "unknown"
+msgid "Unknown"
 msgstr "Unbekannt"
+
+msgid "Stored"
+msgstr "Eingelagert"
+
+msgid "Sold"
+msgstr "Verkauft"
+
+msgid "Destroyed"
+msgstr "Vernichtet"
 
 #: Model/InventoryItem.php:38
 msgid "Inventory item"
@@ -193,3 +198,15 @@ msgid ""
 msgstr ""
 "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von "
 "###USERFULLNAME###"
+
+msgid "Employee"
+msgstr "Mitarbeiter"
+
+msgid "Purchase Invoice"
+msgstr "Eingangsrechnung"
+
+msgid "Serial Number"
+msgstr "Seriennummer"
+
+msgid "Inventory Type"
+msgstr "Inventartyp"

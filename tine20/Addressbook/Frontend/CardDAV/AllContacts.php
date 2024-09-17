@@ -9,7 +9,7 @@ use Sabre\VObject;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -60,12 +60,12 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
             'id'                                     => self::NAME,
             'uri'                                    => self::NAME,
             '{DAV:}resource-id'                      => 'urn:uuid:' . self::NAME,
-            '{DAV:}owner'                            => new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            '{DAV:}owner'                            => new Sabre\DAVACL\Xml\Property\Principal(Sabre\DAVACL\Xml\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
             '{DAV:}displayname'                      => $this->_containerName,
              
             #'principaluri'      => $principalUri,
             '{' . Sabre\CardDAV\Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $this->_containerName,
-            '{' . Sabre\CardDAV\Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre\CardDAV\Property\SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
+            '{' . Sabre\CardDAV\Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre\CardDAV\Xml\Property\SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
         );
 
         $response = array();
@@ -220,11 +220,6 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
         throw new Sabre\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
     }
 
-    public function updateProperties($mutations)
-    {
-        throw new Sabre\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
-    }
-
     /**
      * get id from name => strip of everything after last dot
      *
@@ -245,5 +240,10 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
     public function getSupportedPrivilegeSet()
     {
         return null;
+    }
+
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
+    {
+        throw new Sabre\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
     }
 }

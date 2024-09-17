@@ -624,16 +624,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         this.initTemplates();
         this.initActions();
-        
-        // init filters
-        this.filters = Ext.isArray(this.filters) ? this.filters : [];
-        if (this.filters.length < 1) {
-            this.filters = [{field: this.defaultFilter}];
-        }
-        this.filterStore = new Ext.data.JsonStore({
-            fields: this.record,
-            data: this.filters
-        });
 
         // init filter models
         this.filterModelMap = {};
@@ -648,6 +638,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (this.recordClass) {
             // concat registered filters
             this.filterModels = this.filterModels.concat(Tine.widgets.grid.FilterRegistry.get(this.recordClass));
+
+            this.filterModels = this.filterModels.concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters.call(this, this.recordClass));
 
             // auto add foreign record filter on demand
             var foreignRecordFilter = this.createFilterModel({filtertype: 'foreignrecord', ownRecordClass: this.recordClass, isGeneric: true});
@@ -716,6 +708,22 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 direction: 'ASC'
             }
         });
+
+
+        // make sure default filter exists
+        this.defaultFilter = _.find(this.filterModels, {field: this.defaultFilter}) ? this.defaultFilter : (
+            _.find(this.filterModels, {field: 'query'}) ? 'query' : this.filterModels[0].field
+        );
+
+        // init filters
+        this.filters = Ext.isArray(this.filters) ? this.filters : [];
+        if (this.filters.length < 1) {
+            this.filters = [{field: this.defaultFilter}];
+        }
+        this.filterStore = new Ext.data.JsonStore({
+            fields: this.record,
+            data: this.filters
+        });
     },
     
     /**
@@ -723,7 +731,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     onFilterRowsChange: function() {
-        if (! this.supressEvents && this.ownerCt.rendered && Ext.isFunction(this.ownerCt.layout.layout)) {
+        if (! this.supressEvents && this.ownerCt && this.ownerCt.rendered && Ext.isFunction(this.ownerCt.layout.layout)) {
             this.ownerCt.layout.layout();
         }
         this.doLayout();
@@ -741,10 +749,26 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             // filter from reg
             return new Tine.widgets.grid.FilterToolbar.FILTERS[config.filtertype](config);
         } else {
-            return new Tine.widgets.grid.FilterModel(config);
+            switch (config.valueType) {
+                // NOT YET, user filter does not support definedBy atm.
+                // case 'user':
+                //     return new Tine.widgets.grid.ForeignRecordFilter(Object.assign(config, {
+                //         app: Tine.Tinebase.appMgr.get(config.appName),
+                //         ownRecordClass: Tine.Tinebase.data.RecordMgr.get(config.appName, config.modelName),
+                //         foreignRecordClass: 'Addressbook.Contact',
+                //         linkType: 'foreignId',
+                //         ownField: config.field,
+                //         pickerConfig: {
+                //             userOnly: true,
+                //             useAccountRecord: true
+                //         }
+                //     }));
+                default:
+                    return new Tine.widgets.grid.FilterModel(config);
+            }
         }
     },
-    
+
     /**
      * returns filterModel
      * 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
 
@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,8 +15,10 @@
  * @package     HumanResources
  * @subpackage  Model
  */
-class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
+class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract implements Tinebase_Model_EvaluationDimensionCFHook
 {
+    public const TABLE_NAME = 'humanresources_costcenter';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -31,18 +33,16 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = array(
         'version'           => 2,
-        'recordName'        => 'Cost Center', // ngettext('Cost Center', 'Cost Centers', n)
-        'recordsName'       => 'Cost Centers',
-        'hasRelations'      => FALSE,
-        'hasCustomFields'   => FALSE,
-        'hasNotes'          => FALSE,
+        'recordName'        => 'Evaluation Dimension', // ngettext('Evaluation Dimension', 'Evaluation Dimensions', n)
+        'recordsName'       => 'Evaluation Dimensions',
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
     
         'createModule'      => FALSE,
         'containerProperty' => NULL,
         'isDependent'       => TRUE,
-        'titleProperty'     => 'cost_center_id.name',
+        'titleProperty'     => 'eval_dim_cost_center.name',
         'appName'           => 'HumanResources',
         'modelName'         => 'CostCenter',
 
@@ -60,7 +60,7 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
         ],
 
         'table'             => array(
-            'name'    => 'humanresources_costcenter',
+            'name'    => self::TABLE_NAME,
             'indexes' => array(
                 'employee_id' => array(
                     'columns' => array('employee_id'),
@@ -74,22 +74,12 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
                 'type'       => 'record',
                 'doctrineIgnore'        => true, // already defined as association
+                self::DISABLED => true,
                 'config' => array(
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',
                     'idProperty'  => 'id',
                     'isParent'    => TRUE
-                )
-            ),
-            'cost_center_id'       => array(
-                'label'      => 'Cost Center',    // _('Cost Center')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
-                'type'       => 'record',
-                'config' => array(
-                    'appName'     => Tinebase_Config::APP_NAME,
-                    'modelName'   => Tinebase_Model_CostCenter::MODEL_NAME_PART,
-                    'idProperty'  => 'id',
-                    'isParent'    => FALSE
                 )
             ),
             'start_date' => array(
@@ -98,4 +88,13 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract
             ),
         )
     );
+
+    public static function evalDimCFHook(string $fldName, array &$definition): void
+    {
+        unset($definition[Tinebase_Model_CustomField_Config::DEF_FIELD][self::NULLABLE]);
+        $definition[Tinebase_Model_CustomField_Config::DEF_FIELD][self::VALIDATORS] = [
+            Zend_Filter_Input::ALLOW_EMPTY  => false,
+            Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+        ];
+    }
 }

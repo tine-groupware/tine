@@ -134,13 +134,23 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             items: items,
             columnWidth: 1
         });
-
-        this.tbar = new Ext.Toolbar({
+        
+        this.descriptionField = new Ext.form.Label({
+            text: '',
+        });
+        
+        this.tbar = new Ext.Panel({
+            layout: 'fit',
             items: [
-                this.accountTypeSelector,
-                this.comboPanel
-            ],
-            layout: 'column'
+                this.descriptionField,
+                new Ext.Toolbar({
+                    items: [
+                        this.accountTypeSelector,
+                        this.comboPanel
+                    ],
+                    layout: 'column'
+                })
+            ]
         });
     },
 

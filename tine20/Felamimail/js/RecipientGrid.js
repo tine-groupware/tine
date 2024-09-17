@@ -165,8 +165,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             const token = {...existingToken};
             token.type = contactData.type;
             token.n_fileas = contactData.n_fileas;
-            token.email_type = existingToken.email_type.length ? existingToken.email_type : 'email';
-            token.email = contactData[token.email_type];
+            token.email_type_field = existingToken.email_type_field;
+            token.email = contactData[token.email_type_field];
             token.name = contactData.n_fn;
             token.contact_record = contactData;
             await this.updateRecipientsToken(record, [token], record.get('type'));
@@ -298,7 +298,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             {
                 resizable: true,
                 id: 'type',
-                dataIndex: 'type',
                 width: 104,
                 menuDisabled: true,
                 header: 'type',
@@ -320,19 +319,15 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 resizable: true,
                 menuDisabled: true,
                 id: 'address',
-                dataIndex: 'address',
                 header: 'address',
                 editor: this.searchCombo,
-                columnWidth: 1,
+                //columnWidth: 1,
                 renderer: (token) => {
                     if (! token?.email) return '';
-                    const renderEmail = this.searchCombo.renderEmailAddress(token);
-                    const iconCls = this.searchCombo.renderAddressIconCls(token);
-                    return iconCls + 
-                        '<span class="tinebase-contact-link">' 
-                            + renderEmail
-                        + '</span>'
-                        + '<div class="tinebase-contact-link-wait"></div>';
+                    const block =  document.createElement('span');
+                    block.className = 'tinebase-contact-link';
+                    block.innerHTML = this.searchCombo.renderEmailAddressAndIcon(token);
+                    return block.outerHTML;
                 },
             }
         ]);
@@ -461,12 +456,24 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param e
      */
     onContactClick : async function (e) {
-        const target = e.target;
+        let target = e.target;
         
         //skip non tinebase-contact-link target
-        if (! target.className.includes('tinebase-contact-link') && !target?.parentNode?.className.includes('tinebase-contact-link')) {
-            return;
+        // Traverse up the DOM hierarchy until reaching the top-level parent
+        let isContactLink = false;
+        let i = 0;
+        while (i < 7) {
+            if (target.className.includes('tinebase-contact-link') ||
+                target?.parentNode?.className.includes('tinebase-contact-link')) {
+                isContactLink = true;
+            }
+            target = target?.parentNode;
+            if (target.className.includes('x-grid3-col-address')) {
+                break;
+            }
+            i++;
         }
+        if (!isContactLink) return;
         
         const row = this.getView().findRowIndex(target);
         const col = this.getView().findCellIndex(target);
@@ -474,19 +481,19 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         const position = Ext.fly(target).getXY();
         position[1] = position[1] + Ext.fly(target).getHeight();
         const targetInput = e.getTarget('input[type=text]', 1, true);
-        const contact = record.get('address');
+        const existingToken = record.get('address');
         this.lastEditedRecord = record;
         
-        if (targetInput || ! record || record.get('address') === '' || col !== 1 || row === false || ! contact?.email) {
+        if (targetInput || ! record || record.get('address') === '' || col !== 1 || row === false || ! existingToken?.email) {
             return;
         }
         
-        const contactCtxMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, contact.email, contact.name, contact.type);
+        const contactCtxMenu = await Tine.Tinebase.tineInit.getEmailContextMenu(targetInput, existingToken.email, existingToken.name, existingToken.type);
 
         const adb = Tine.Tinebase.appMgr.get('Addressbook');
         if (adb) {
             let index = 0;
-            switch (contact.type) {
+            switch (existingToken.type) {
                 case 'mailingList':
                 case 'group':
                 case 'list':
@@ -502,29 +509,29 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     index ++;
                     break;
                 default :
-                    const {results : contacts} = await Tine.Addressbook.searchContactsByRecipientsToken([contact]);
+                    const {results : tokens} = await Tine.Addressbook.searchRecipientTokensByEmailArrays([existingToken.email], [existingToken.name]);
                     const options = [];
-                    _.each(contacts, (emailData) => {
-                        const selected = emailData.email === contact.email;
-                        const emailType = emailData?.email_type === 'email' ? adb.i18n._('E-Mail') : adb.i18n._('E-Mail (private)');
-                        const displayTitle = `${emailType} -- ${emailData.email}`;
-                        
-                        if (options.includes(displayTitle)) return;
-                        
+                    const emailFields = Tine.Addressbook.Model.EmailAddress.prototype.getEmailFields();
+                    _.each(tokens, (token) => {
+                        const selected = token.email === existingToken.email;
+                        const emailField = emailFields.find((f) => {return f.fieldName === token.email_type_field});
+
+                        if (options.includes(emailField.fieldName)) return;
                         const emailItem = new Ext.Action({
-                            text: displayTitle,
+                            text: Tine.Felamimail.ContactSearchCombo.prototype.renderEmailAddressAndIcon(token),
                             iconCls: selected ? 'action_enable' : '',
                             handler: async (item) => {
-                                if (! selected) {
-                                    const newSelectedContact = _.find(contacts, (contact) => {return item.text.includes(contact.email)});
-                                    await this.updateRecipientsToken(record, [newSelectedContact], record.get('type'));
-                                }
+                                if (selected) return;
+                                const newSelectedToken = _.find(tokens, (token) => {
+                                    return item.text.includes(token.email)
+                                });
+                                await this.updateRecipientsToken(record, [newSelectedToken], record.get('type'));
                             },
                         });
-                
+                        
                         contactCtxMenu.insert(index, emailItem);
-                        options.push(displayTitle);
-                        index ++;
+                        options.push(emailField.fieldName);
+                        index++;
                     });
                     break;
             }
@@ -880,7 +887,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             let skipUpdate = oldEmailData !== '';
 
             _.each(token, (value, key) => {
-                const keysToValidate = ['type', 'n_fileas', 'email_type', 'email', 'name', 'note'];
+                const keysToValidate = ['type', 'n_fileas', 'email_type_field', 'email', 'name', 'note'];
                 if (keysToValidate.includes(key) && oldEmailData[key] !== value) skipUpdate = false;
             })
             if (skipUpdate) return;
@@ -933,7 +940,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (addEmptyRow) this.addEmptyRowAndDoLayout(autoStartEdit);
     },
     
-    
     /**
      * adds row and adjusts layout
      *
@@ -979,13 +985,14 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 contactsToResolve.push({result: result, token: token, record: record});
             }
         })
-        
+
         const result = await this.showInvalidContactDialog(contactsToResolve);
         if (result && contactsToResolve.length > 0) {
             const records = _.map(contactsToResolve, 'record');
             await Promise.all(records.map((record) => {
-                const members = record?.data?.address?.emails ?? null;
-                return this.updateRecipientsToken(record, members, 'bcc', false, false);
+                const members = record?.data?.address?.emails;
+                const membersToUpdate = members && members?.length > 0 ? members : null;
+                return this.updateRecipientsToken(record, membersToUpdate, 'bcc', false, false);
             }));
             this.addEmptyRowAndDoLayout(true);
         }
@@ -1007,10 +1014,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             if (!this.massMailingMode) return resolve(false);
             if (contactsToResolve.length === 0) return resolve(true);
             const text = contactsToResolve.map((item) => {
-                const iconCls = this.searchCombo.renderAddressIconCls(item.token);
-                const renderEmail = this.searchCombo.renderEmailAddress(item.token);
-                const tip = Ext.util.Format.htmlEncode(item?.result?.tip ?? '');
-                return '<span>' + `${iconCls}<div ext:qtip="${tip}">${renderEmail}</div>` + '</span></br>';
+                item.token.qtip = Ext.util.Format.htmlEncode(item?.result?.tip ?? '');
+                const block =  document.createElement('div');
+                block.innerHTML = this.searchCombo.renderEmailAddressAndIcon(item.token);
+                return block.outerHTML;
             })
             const dialog = Tine.widgets.dialog.FileListDialog.openWindow({
                 modal: true,
@@ -1018,7 +1025,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 height: 180,
                 width: 500,
                 title: this.app.i18n._('The following recipients will be removed from this mass mail'),
-                text: text.join(''),
+                text: text.join('</br>'),
                 scope: this,
                 buttonOptions: buttonOptions,
                 handler: async (button) => {

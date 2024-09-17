@@ -238,6 +238,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _startGroup()
     {
+        parent::_startGroup();
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' starting group...');
 
         if (true === $this->_skip) {
@@ -276,6 +278,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _endGroup()
     {
+        parent::_endGroup();
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ending group...');
 
         if (true === $this->_skip) {
@@ -444,7 +448,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     }
                     $mergedRecords = array_merge($recordArray, $mergedRecords);
                 }
-                $validators = array_fill_keys(array_keys($mergedRecords), array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                $validators = array_fill_keys(array_keys($mergedRecords), []);
+                $validators['id'] = [];
                 unset($validators['customfields']);
                 foreach($recordSet as $key => $recordArray) {
                     if (null !== $disallowedKeys && in_array($key, $disallowedKeys)) {
@@ -886,6 +891,10 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected function _onAfterExportRecords(array $_result)
     {
+        if ($this->_groupOpen) {
+            $this->_endGroup();
+        }
+
         $this->_unwrapProcessors();
 
         parent::_onAfterExportRecords($_result);

@@ -143,13 +143,11 @@ class Tasks_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
         
         $container = new Tasks_Frontend_WebDAV_Container($this->objects['initialContainer']);
         
-        $result = $container->updateProperties($mutations);
+        $container->propPatch($propPath = new \Sabre\DAV\PropPatch($mutations));
+        $this->assertTrue($propPath->commit());
         
         $updatedContainer = Tinebase_Container::getInstance()->get($this->objects['initialContainer']);
-        
-        $this->assertEquals($result[200]["{http://apple.com/ns/ical/}calendar-color"],      null);
-        $this->assertEquals($result[200]["{DAV:}displayname"],                              null);
-        $this->assertEquals($result[403]["{http://calendarserver.org/ns/}invalidProperty"], null);
+
         $this->assertEquals($updatedContainer->color, substr($mutations['{http://apple.com/ns/ical/}calendar-color'], 0, 7));
         $this->assertEquals($updatedContainer->name,  $mutations['{DAV:}displayname']);
     }

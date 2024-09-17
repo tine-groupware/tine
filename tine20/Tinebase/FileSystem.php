@@ -10,6 +10,9 @@
  *
  */
 
+use League\Flysystem\UnableToRetrieveMetadata;
+use Tinebase_Model_Tree_FileObject as TMTFO;
+
 /**
  * filesystem controller
  *
@@ -397,7 +400,7 @@ class Tinebase_FileSystem implements
                 $node->grants = $grants;
             }
 
-            $this->_nodeAclController->setGrants($node);
+            $this->_nodeAclController->setGrants(record: $node, isCreate: true);
             $node->acl_node = $node->getId();
             $this->update($node);
 
@@ -600,6 +603,15 @@ class Tinebase_FileSystem implements
 
             if ($destinationNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
                 $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName, $destinationNode->type);
+                if ($createdNode->flysystem) {
+                    $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($createdNode->flysystem);
+                    $fh = $this->fopen($sourcePath, 'r');
+                    try {
+                        $flySystem->writeStream($createdNode->flypath, $fh);
+                    } finally {
+                        $this->fclose($fh);
+                    }
+                }
                 $this->_updateFileObject($parentNode, $createdNode, null, $destinationNode->hash);
                 $createdNode = $this->get($createdNode->getId());
             } else {
@@ -678,8 +690,18 @@ class Tinebase_FileSystem implements
             case 'x':
             case 'xb':
                 $parentPath = dirname($options['tine20']['path']);
+                $flysystem = $options['tine20']['node']->flysystem ?
+                    Tinebase_Controller_Tree_FlySystem::getFlySystem($options['tine20']['node']->getIdFromProperty('flysystem')) : null;
 
-                list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle);
+                if ($flysystem) {
+                    rewind($handle);
+                    $flysystem->writeStream($options['tine20']['node']->flypath, $handle);
+                    $hash = Tinebase_Controller_Tree_FlySystem::getHashForPath($options['tine20']['node']->flypath, $flysystem);
+                    $hashFile = 'flySystem'; // we need to set a true-ish string value here
+                    $avResult = null; // FIXME todo add avScanning for FlySystem
+                } else {
+                    list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle);
+                }
 
                 try {
                     $aquireWriteLock = !Tinebase_TransactionManager::getInstance()->hasOpenTransactions();
@@ -761,7 +783,17 @@ class Tinebase_FileSystem implements
             }
         }
 
-        if ($_hashFile && is_file($_hashFile)) {
+        if ($_node->flysystem) {
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_node->type) {
+                $flysystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($_node->getIdFromProperty('flysystem'));
+                $updatedFileObject->size = $flysystem->fileSize($_node->flypath);
+                try {
+                    $updatedFileObject->contenttype = $flysystem->mimeType($_node->flypath);
+                } catch (League\Flysystem\UnableToRetrieveMetadata $e) {
+                    $updatedFileObject->contenttype = null;
+                }
+            }
+        } elseif ($_hashFile && is_file($_hashFile)) {
             $updatedFileObject->size = filesize($_hashFile);
             if (null !== ($mimeType = $this->_getMimeType($_node->name, $_hashFile))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -1224,13 +1256,45 @@ class Tinebase_FileSystem implements
             // nothing to do
             return true;
         }
+        if ($fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} && $fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} !== $fileObject->hash) {
+            $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = 0;
+        }
+        if ($fileObject->{TMTFO::FLD_INDEX_LAST_TRY} && (int)$fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} > 3 &&
+                $fileObject->{TMTFO::FLD_INDEX_LAST_TRY}->isLater(Tinebase_DateTime::now()->subDay(1))) {
+            return true;
+        }
 
         // we clean up $tmpFile down there in finally
         if (false === ($tmpFile = Tinebase_Fulltext_TextExtract::getInstance()->fileObjectToTempFile($fileObject))) {
-            return false;
-        }
+            $work = function($fileObject) {
+                if ($fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} !== $fileObject->hash) {
+                    $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = 1;
+                } else {
+                    $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = (int)$fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} + 1;
+                }
+                $fileObject->{TMTFO::FLD_INDEX_LAST_TRY} = Tinebase_DateTime::now();
+                $fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} = $fileObject->hash;
 
-        $indexedHash = $fileObject->hash;
+                $this->_fileObjectBackend->update($fileObject);
+
+                return false;
+            };
+        } else {
+            $indexedHash = $fileObject->hash;
+            $work = function($fileObject) use($indexedHash, $tmpFile) {
+                if ($fileObject->hash === $fileObject->indexed_hash || $indexedHash === $fileObject->indexed_hash) {
+                    // nothing to do
+                    return true;
+                }
+
+                Tinebase_Fulltext_Indexer::getInstance()->addFileContentsToIndex($fileObject->getId(), $tmpFile);
+
+                $fileObject->indexed_hash = $indexedHash;
+                $this->_fileObjectBackend->update($fileObject);
+
+                return true;
+            };
+        }
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -1252,19 +1316,8 @@ class Tinebase_FileSystem implements
                     . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
                 return true;
             }
-            if ($fileObject->hash === $fileObject->indexed_hash || $indexedHash === $fileObject->indexed_hash) {
-                // nothing to do
-                return true;
-            }
 
-            Tinebase_Fulltext_Indexer::getInstance()->addFileContentsToIndex($fileObject->getId(), $tmpFile);
-
-            $fileObject->indexed_hash = $indexedHash;
-            $this->_fileObjectBackend->update($fileObject);
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-
+            return $work($fileObject);
         } catch (Exception $e) {
             $transactionId = null;
             Tinebase_Exception::log($e);
@@ -1273,15 +1326,16 @@ class Tinebase_FileSystem implements
             return false;
 
         } finally {
-            unlink($tmpFile);
+            if (false !== $tmpFile) {
+                unlink($tmpFile);
+            }
 
-            // in case of the return trues above
             if (null !== $transactionId) {
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
         }
 
-        return true;
+        return false;
     }
 
     public function acquireWriteLock()
@@ -1312,6 +1366,16 @@ class Tinebase_FileSystem implements
         $rollBack = true;
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
+            if (!$this->isDir($dirName)) {
+                $rollBack = false;
+                return false;
+            }
+            $parent = $this->stat($dirName);
+            $flysystem = null;
+            if ($parent->flysystem) {
+                $flysystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($parent->getIdFromProperty('flysystem'));
+            }
+
             switch ($_mode) {
                 // Create and open for writing only; place the file pointer at the beginning of the file.
                 // If the file already exists, the fopen() call will fail by returning false and generating
@@ -1322,30 +1386,28 @@ class Tinebase_FileSystem implements
                 // this would need some StreamWrapper tweaking for fseek
                 // StremWrapper needs optimization anyway, it should store the mode itself not ask the context...
                 case 'a+':
-                    if (!$this->isDir($dirName)) {
-                        $rollBack = false;
-                        return false;
-                    }
                     $handle = fopen('php://temp', 'a+');
 
-                    if (!$this->fileExists($_path)) {
-                        $parent = $this->stat($dirName);
+                    if ($flysystem ? !$flysystem->fileExists(rtrim($parent->flypath, '/') . '/' . $fileName) : !$this->fileExists($_path)) {
+                        $flysystem?->write(rtrim($parent->flypath, '/') . '/' . $fileName, '');
                         $node = $this->createFileTreeNode($parent, $fileName, $fileType);
                     } else {
                         $node = $this->stat($_path);
-                        $hashFile = $this->getRealPathForHash($node->hash);
-                        stream_copy_to_stream(($tmpFh = fopen($hashFile, 'r')), $handle);
+                        stream_copy_to_stream(
+                            ($tmpFh =
+                                $flysystem ? $flysystem->readStream($node->flypath) :
+                                    fopen($this->getRealPathForHash($node->hash), 'r')), $handle);
                         fclose($tmpFh);
                     }
                     break;
 
                 case 'x':
                 case 'xb':
-                    if (!$this->isDir($dirName) || $this->fileExists($_path)) {
+                    if ($flysystem ? $flysystem->fileExists(rtrim($parent->flypath, '/') . '/' . $fileName) : $this->fileExists($_path)) {
                         $rollBack = false;
                         return false;
                     }
-
+                    $flysystem?->write(rtrim($parent->flypath, '/') . '/' . $fileName, '');
                     $parent = $this->stat($dirName);
                     $node = $this->createFileTreeNode($parent, $fileName, $fileType);
 
@@ -1356,13 +1418,15 @@ class Tinebase_FileSystem implements
                 // Open for reading only; place the file pointer at the beginning of the file.
                 case 'r':
                 case 'rb':
-                    if ($this->isDir($_path) || !$this->fileExists($_path)) {
+                    if ($flysystem ? !$flysystem->fileExists(rtrim($parent->flypath, '/') . '/' . $fileName) : !$this->fileExists($_path)) {
                         $rollBack = false;
                         return false;
                     }
 
                     $node = $this->stat($_path, $_revision);
-                    if (0 === (int)$node->size) {
+                    if ($flysystem) {
+                        $handle = $flysystem->readStream($node->flypath);
+                    } elseif (0 === (int)$node->size) {
                         $handle = fopen('php://memory', 'r');
                     } else {
                         if (!$node->hash) {
@@ -1387,13 +1451,10 @@ class Tinebase_FileSystem implements
                 // file to zero length. If the file does not exist, attempt to create it.
                 case 'w':
                 case 'wb':
-                    if (!$this->isDir($dirName)) {
-                        $rollBack = false;
-                        return false;
+                    if ($flysystem && !$flysystem->fileExists(rtrim($parent->flypath, '/') . '/' . $fileName)) {
+                        $flysystem->write(rtrim($parent->flypath, '/') . '/' . $fileName, '');
                     }
-
                     if (!$this->fileExists($_path)) {
-                        $parent = $this->stat($dirName);
                         $node = $this->createFileTreeNode($parent, $fileName, $fileType);
                     } else {
                         $node = $this->stat($_path, $_revision);
@@ -1535,6 +1596,7 @@ class Tinebase_FileSystem implements
                 return false;
             }
 
+            $oldParent = null;
             if ($oldParentPath !== $newParentPath) {
                 try {
                     $oldParent = $this->stat($oldParentPath);
@@ -1611,8 +1673,49 @@ class Tinebase_FileSystem implements
             if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
                 $fObj->hash = Tinebase_Record_Abstract::generateUID();
             }
+            if ($oldParent && $oldParent->flysystem && !$newParent->flysystem) {
+                $node->flysystem = $fObj->flysystem = null;
+                $node->flypath = $fObj->flypath = null;
+            } elseif ($newParent->flypath) {
+                $node->flysystem = $fObj->flysystem = $newParent->flysystem;
+                $node->flypath = $fObj->flypath = rtrim($newParent->flypath, '/') . '/' . basename($newPath);
+            }
             Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($fObj, 'update', $fObj);
             $this->_fileObjectBackend->update($fObj);
+
+            if ($newParent->flysystem || ($oldParent && $oldParent->flysystem)) {
+                if (!$oldParent || ($newParent->flysystem === $oldParent->flysystem)) {
+                    $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($newParent->flysystem);
+                    $flySystem->move(rtrim(($oldParent ?: $newParent)->flypath, '/') . '/' . basename($oldPath),
+                        $node->flypath);
+                } else {
+                    if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                        throw new Tinebase_Exception_SystemGeneric('can\'t move folders between different filesystems');
+                    }
+                    if ($newParent->flysystem && $oldParent->flysystem) {
+                        $flySystemOld = Tinebase_Controller_Tree_FlySystem::getFlySystem($oldParent->flysystem);
+                        $flySystemNew = Tinebase_Controller_Tree_FlySystem::getFlySystem($newParent->flysystem);
+                        $flySystemNew->writeStream($node->flypath,
+                            $flySystemOld->readStream(rtrim($oldParent->flypath, '/') . '/' . basename($oldPath)));
+                        $flySystemOld->delete(rtrim($oldParent->flypath, '/') . '/' . basename($oldPath));
+                    } elseif ($newParent->flysystem) {
+                        $flySystemNew = Tinebase_Controller_Tree_FlySystem::getFlySystem($newParent->flysystem);
+                        $fh = fopen($node->getFilesystemPath(), 'r');
+                        try {
+                            $flySystemNew->writeStream($node->flypath, $fh);
+                        } finally {
+                            @fclose($fh);
+                        }
+                    } elseif ($oldParent->flysystem) {
+                        $flySystemOld = Tinebase_Controller_Tree_FlySystem::getFlySystem($oldParent->flysystem);
+                        $fh = $this->fopen($newPath, 'w');
+                        stream_copy_to_stream(
+                            $flySystemOld->readStream(rtrim($oldParent->flypath, '/') . '/' .basename($oldPath)), $fh);
+                        $this->fclose($fh);
+                        $flySystemOld->delete(rtrim($oldParent->flypath, '/') . '/' .basename($oldPath));
+                    }
+                }
+            }
 
             $transactionManager->commitTransaction($transactionId);
             $transactionId = null;
@@ -1704,7 +1807,7 @@ class Tinebase_FileSystem implements
      * @return bool
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function rmdir($path, $recursive = false, $recursion = false)
+    public function rmdir($path, $recursive = false, $recursion = false, $deleteFlySys = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Removing directory ' . $path);
@@ -1719,15 +1822,17 @@ class Tinebase_FileSystem implements
                 // if modlog is not active, we want to hard delete a soft deleted node
                 $node = $this->stat($path, null, !$this->_modLogActive);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                // we don't want a roll back here, we didn't do anything, nothing went really wrong
-                // if the TENF is catched outside gracefully, a roll back in here would kill it!
+                // we don't want a rollback here, we didn't do anything, nothing went really wrong
+                // if the TENF is catched outside gracefully, a rollback in here would kill it!
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
                 throw $tenf;
             }
 
+            $modLogActive = !$node->flysystem && $this->_modLogActive;
+
             // if modlog is not active, we want to hard delete all soft deleted childs if there are any
-            $children = $this->getTreeNodeChildren($node, !$this->_modLogActive);
+            $children = $this->getTreeNodeChildren($node, !$modLogActive);
 
             // check if child entries exists and delete if $_recursive is true
             if (count($children) > 0) {
@@ -1736,10 +1841,13 @@ class Tinebase_FileSystem implements
                 } else {
                     /** @var Tinebase_Model_Tree_Node $child */
                     foreach ($children as $child) {
+                        $pathParts = $this->_splitPath($path . '/' . $child->name);
+                        $cacheId = $this->_getCacheId($pathParts);
+                        $this->_statCache[$cacheId] = $child;
                         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
-                            $this->rmdir($path . '/' . $child->name, true, true);
+                            $this->rmdir($path . '/' . $child->name, true, true, $deleteFlySys);
                         } else {
-                            $this->unlink($path . '/' . $child->name, true);
+                            $this->unlink($path . '/' . $child->name, true, $deleteFlySys);
                         }
                     }
                 }
@@ -1748,17 +1856,36 @@ class Tinebase_FileSystem implements
             if (false === $recursion) {
                 $this->_checkQuotaAndRegisterRefLog($node, 0 - (int)$node->size, 0 - (int)$node->revision_size);
             }
-            $this->_getTreeNodeBackend()->softDelete($node->getId());
+            if ($modLogActive) {
+                $this->_getTreeNodeBackend()->softDelete($node->getId());
+            } else {
+                $this->_getTreeNodeBackend()->delete($node->getId());
+            }
             $this->clearStatCache($path);
 
             // delete object only, if no other tree node refers to it
             // we can use treeNodeBackend property because getTreeNodeBackend was called just above
             if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
-                $this->_fileObjectBackend->softDelete($node->object_id);
+                if ($modLogActive) {
+                    $this->_fileObjectBackend->softDelete($node->object_id);
+                } else {
+                    $this->_fileObjectBackend->delete($node->object_id);
+                }
             }
 
-            if ($this->_modLogActive) {
+            if ($modLogActive) {
                 $this->_treeNodeBackend->updated($this->_treeNodeBackend->get($node->getId(), true), $node);
+            } elseif ($node->flysystem) {
+                $deletedNode = clone $node;
+                $deletedNode->is_deleted = true;
+                $this->_treeNodeBackend->updated($deletedNode, $node);
+
+                if ($deleteFlySys) {
+                    $fs = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem);
+                    if ($fs->directoryExists($node->flypath)) {
+                        $fs->deleteDirectory($node->flypath);
+                    }
+                }
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1925,7 +2052,7 @@ class Tinebase_FileSystem implements
      * @param  boolean $recursion
      * @return boolean
      */
-    public function unlink($path, $recursion = false)
+    public function unlink($path, $recursion = false, $deleteFlySys = true)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         if (!$recursion) {
@@ -1935,13 +2062,16 @@ class Tinebase_FileSystem implements
         try {
             try {
                 // if modlog is not active, we want to hard delete a soft deleted node
-                $node = $this->stat($path, null, !$this->_modLogActive);
+                $node = $this->stat($path, null, true);
+                if (!$node->flysystem && $this->_modLogActive && $node->is_deleted) {
+                    throw new Tinebase_Exception_NotFound('');
+                }
             } catch (Tinebase_Exception_NotFound $tenf) {
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
                 return false;
             }
-            $this->deleteFileNode($node, false === $recursion);
+            $this->deleteFileNode($node, false === $recursion, $deleteFlySys);
 
             $this->clearStatCache($path);
 
@@ -1958,6 +2088,8 @@ class Tinebase_FileSystem implements
 
     /**
      * undelete file node
+     *
+     * do not add type check, it is used for folders too!
      *
      * @param string $id
      * @param bool $updateDirectoryNodesHash
@@ -2020,7 +2152,7 @@ class Tinebase_FileSystem implements
      * @param bool $updateDirectoryNodesHash
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function deleteFileNode(Tinebase_Model_Tree_Node $node, $updateDirectoryNodesHash = true)
+    public function deleteFileNode(Tinebase_Model_Tree_Node $node, $updateDirectoryNodesHash = true, $deleteFlySys = true)
     {
         if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
             throw new Tinebase_Exception_InvalidArgument('can not unlink directories');
@@ -2035,15 +2167,23 @@ class Tinebase_FileSystem implements
                 $this->_checkQuotaAndRegisterRefLog($node, 0 - (int)$node->size, 0 - (int)$node->revision_size);
             }
 
-            $this->_getTreeNodeBackend()->softDelete($node->getId());
+            if ($node->flysystem) {
+                $this->_getTreeNodeBackend()->delete($node->getId());
+            } else {
+                $this->_getTreeNodeBackend()->softDelete($node->getId());
+            }
 
             if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_PREVIEW && false === $this->_modLogActive && $this->isPreviewActive()) {
                 $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
             } else {
                 $hashes = array();
             }
-            $this->_fileObjectBackend->softDelete($node->object_id);
-            if (false === $this->_modLogActive ) {
+            if ($node->flysystem) {
+                $this->_fileObjectBackend->delete($node->object_id);
+            } else {
+                $this->_fileObjectBackend->softDelete($node->object_id);
+            }
+            if ($node->flysystem || false === $this->_modLogActive) {
                 if (true === $this->_indexingActive) {
                     Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($node->object_id);
                 }
@@ -2063,7 +2203,16 @@ class Tinebase_FileSystem implements
                 $deletedNode = $this->get($node->getId(), true);
             } catch (Tinebase_Exception_NotFound $tenf) {}
             $modLogs = $this->_treeNodeBackend->writeModLog($deletedNode, $node);
-            Tinebase_Notes::getInstance()->addSystemNote($deletedNode ?? $node, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modLogs);
+            if ($deletedNode) {
+                Tinebase_Notes::getInstance()->addSystemNote($deletedNode, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modLogs);
+            }
+
+            if ($node->flysystem && $deleteFlySys) {
+                $fs = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem);
+                if ($fs->fileExists($node->flypath)) {
+                    $fs->delete($node->flypath);
+                }
+            }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -2089,24 +2238,40 @@ class Tinebase_FileSystem implements
         try {
             $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
 
+            $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node
+                ? $_parentId
+                : ($_parentId ? $this->get($_parentId) : null);
+
+            if ($parentNode && $parentNode->flysystem) {
+                $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($parentNode->flysystem);
+            } else {
+                $flySystem = null;
+            }
+
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $name, true, false)) &&
                     $deletedNode->is_deleted) {
                 $deletedNode->is_deleted = 0;
                 $deletedNode->deleted_time = null;
                 $deletedNode->deleted_by = null;
                 $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
-                if ($object->is_deleted) {
+                if ($object->is_deleted || $object->deleted_time || $object->deleted_by) {
                     $object->is_deleted = 0;
                     $object->deleted_time = null;
                     $object->deleted_by = null;
+                }
+                if ($flySystem) {
+                    if ($object->flysystem !== $parentNode->flysystem) {
+                        $object->flysystem = $parentNode->flysystem;
+                    }
+                    if ($object->flypath !== rtrim($parentNode->flypath, '/') . '/' . $name) {
+                        $object->flypath = rtrim($parentNode->flypath, '/') . '/' . $name;
+                    }
+                }
+                if ($object->isDirty()) {
                     $this->_fileObjectBackend->update($object);
                 }
                 $treeNode = $this->_getTreeNodeBackend()->update($deletedNode);
             } else {
-
-                $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node
-                    ? $_parentId
-                    : ($_parentId ? $this->get($_parentId) : null);
 
                 if (null === $parentNode) {
                     try {
@@ -2127,6 +2292,10 @@ class Tinebase_FileSystem implements
                     'hash' => Tinebase_Record_Abstract::generateUID(),
                     'size' => 0
                 ));
+                if ($flySystem) {
+                    $directoryObject->flysystem = $parentNode->flysystem;
+                    $directoryObject->flypath = rtrim($parentNode->flypath, '/') . '/' . $name;
+                }
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($directoryObject, 'create');
                 $directoryObject = $this->_fileObjectBackend->create($directoryObject);
 
@@ -2144,6 +2313,10 @@ class Tinebase_FileSystem implements
                 $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
 
                 $this->_checkQuotaAndRegisterRefLog($treeNode, 0, 0);
+            }
+
+            if ($flySystem && !$flySystem->directoryExists($treeNode->flypath)) {
+                $flySystem->createDirectory($treeNode->flypath);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -2173,6 +2346,7 @@ class Tinebase_FileSystem implements
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
+            $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $_name, true, false)) &&
                     $deletedNode->is_deleted) {
@@ -2196,14 +2370,16 @@ class Tinebase_FileSystem implements
                     }
                 }
 
+                if ($parentNode->flypath) {
+                    $object->flypath = $deletedNode->flypath = rtrim($parentNode->flypath, '/') . '/' . $deletedNode->name;
+                    $object->flysystem = $parentNode->flysystem;
+                }
                 $this->_fileObjectBackend->update($object);
 
                 Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($deletedNode,
                     Tinebase_Controller_Record_Abstract::ACTION_UNDELETE, $deletedNode);
                 $treeNode = $this->_treeNodeBackend->update($deletedNode);
             } else {
-
-                $parentNode = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId : $this->get($parentId);
 
                 $fileObject = new Tinebase_Model_Tree_FileObject([
                     'type' => $_fileType,
@@ -2224,6 +2400,10 @@ class Tinebase_FileSystem implements
 
                 }
 
+                if ($parentNode->flypath) {
+                    $fileObject->flypath = rtrim($parentNode->flypath, '/') . '/' . $_name;
+                    $fileObject->flysystem = $parentNode->flysystem;
+                }
                 $fileObject = $this->_fileObjectBackend->create($fileObject);
 
                 $treeNode = new Tinebase_Model_Tree_Node(array(
@@ -2467,7 +2647,7 @@ class Tinebase_FileSystem implements
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Getting tree node ' . $parentId . '/'. $_name);
         
-        return$this->_getTreeNodeBackend()->getChild($_parentId, $_name);
+        return $this->_getTreeNodeBackend()->getChild($_parentId, $_name);
     }
     
     /**
@@ -2553,6 +2733,8 @@ class Tinebase_FileSystem implements
 
             // update file object
             $fileObject->description = $_node->description;
+            $fileObject->flysystem = $_node->flysystem;
+            $fileObject->flypath = $_node->flypath;
             $this->_updateFileObject($this->get($currentNodeObject->parent_id), $currentNodeObject, $fileObject, $_node->hash);
 
             if ($currentNodeObject->acl_node !== $_node->acl_node) {
@@ -2852,7 +3034,8 @@ class Tinebase_FileSystem implements
         // get all file objects (thus, no folders or links) from db and check filesystem existence
         $filter = new Tinebase_Model_Tree_FileObjectFilter([
             ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
-            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_LINK]
+            ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_LINK],
+            ['field' => 'flysystem', 'operator' => 'isnull', 'value' => true],
         ]);
         $start = 0;
         $limit = 500;
@@ -2962,8 +3145,13 @@ class Tinebase_FileSystem implements
             return $this->copyTempfile($tempFile, $path, $deleteTempFileAfterCopy);
         } else if ($tempFile instanceof Tinebase_Model_Tree_Node) {
             if (isset($tempFile->hash)) {
-                $hashFile = $this->getRealPathForHash($tempFile->hash);
-                $tempStream = fopen($hashFile, 'r');
+                if ($tempFile->flysystem) {
+                    $tempStream = Tinebase_Controller_Tree_FlySystem::getFlySystem($tempFile->flysystem)
+                        ->readStream($tempFile->flypath);
+                } else {
+                    $hashFile = $this->getRealPathForHash($tempFile->hash);
+                    $tempStream = fopen($hashFile, 'r');
+                }
             } else if (is_resource($tempFile->stream)) {
                 $tempStream = $tempFile->stream;
             } else {
@@ -3343,6 +3531,198 @@ class Tinebase_FileSystem implements
     {
         $result = $this->_getNodesOfType(self::FOLDER_TYPE_PERSONAL, $_accountId, $_recordClass, /* $_owner = */ null, $_grant, $_ignoreACL);
         return $result;
+    }
+
+    public function syncFlySystems(): bool
+    {
+        $flySystems = Tinebase_Controller_Tree_FlySystem::getInstance()->getAll();
+
+        while (($count = $flySystems->count()) > 0) {
+            /** @var Tinebase_Model_Tree_FlySystem $flySystem */
+            $flySystem = $flySystems->getByIndex(rand(0, $count -1));
+            $flySystems->removeById($flySystem->getId());
+
+            $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->get($flySystem->getId());
+            if ($flySystem->{Tinebase_Model_Tree_FlySystem::FLD_MOUNT_POINT}) {
+                $this->syncFlySystem($flySystem->{Tinebase_Model_Tree_FlySystem::FLD_MOUNT_POINT});
+            }
+
+            $flySystems = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_FlySystem::class, $flySystems->asArray());
+        }
+
+        return true;
+    }
+
+    static public $syncFlySystemRecursionCache = [];
+
+    public function syncFlySystem(Tinebase_Model_Tree_Node $node, int $depth = -1): void
+    {
+        if (isset(static::$syncFlySystemRecursionCache[$node->getId()])) return;
+        static::$syncFlySystemRecursionCache[$node->getId()] = true;
+
+        $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem);
+        $flyConf = Tinebase_Controller_Tree_FlySystem::getCurrentFlyConfiguration();
+        $oldModLogCurrentAccount = Tinebase_Timemachine_ModificationLog::setCurrentAccountId($flyConf->{Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT});
+        $raii = new Tinebase_RAII(fn() => Tinebase_Timemachine_ModificationLog::setCurrentAccountId($oldModLogCurrentAccount));
+
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+            try {
+                $dirExists = $flySystem->directoryExists($node->flypath);
+            } catch (Sabre\HTTP\ClientHttpException $shche) {
+                if ($shche->getMessage() === 'Gateway Timeout') {
+                    // just log and try again later
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Flysystem error on path "' . $node->flypath . '" : ' . $shche->getMessage());
+                    return;
+                }
+                throw $shche;
+            }
+
+            if (!$dirExists) {
+                $this->_syncFlySystemDeleteNode($node);
+                return;
+            }
+
+            $childNodes = $this->getTreeNodeChildren($node);
+            $flyChildren = $flySystem->listContents($node->flypath)->toArray();
+            shuffle($flyChildren);
+            /** @var \League\Flysystem\StorageAttributes $listing */
+            foreach ($flyChildren as $listing) {
+                $childName = basename(rtrim($listing->path(), '/'));
+                if ($childName === '.' || $childName === '..') continue;
+
+                if ($childNode = $childNodes->find('name', $childName)) {
+                    $childNodes->removeById($childNode->getId());
+                }
+
+                $transaction = Tinebase_RAII::getTransactionManagerRAII();
+                $forUpdateRAII = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_getTreeNodeBackend());
+                $childNode = $this->_getTreeNodeBackend()->getChild($node->getId(), $childName, true, false);
+                unset($forUpdateRAII);
+
+                try {
+                    if ($childNode) {
+                        if ($childNode->is_deleted) {
+                            // this actually works for file and folder nodes!
+                            $this->unDeleteFileNode($childNode->getId(), false);
+                            $childNode = $this->get($childNode->getId());
+                        }
+                        $childNode->unsetDirty();
+                        if ($childNode->flysystem !== $node->flysystem && $childNode->flypath !== '/') {
+                            $childNode->flysystem = $node->flysystem;
+                        }
+                        $flyPath = rtrim($node->flypath, '/') . '/' . $childName;
+                        if ($flyPath !== $childNode->flypath && $childNode->flysystem === $node->flysystem) {
+                            $childNode->flypath = $flyPath;
+                        }
+                        if ($childNode->isDirty()) {
+                            $childNode = $this->update($childNode);
+                        }
+                        $transaction->release();
+                        if (0 !== $depth) {
+                            $this->syncFlySystem($childNode, $depth - 1);
+                        }
+
+                    } else {
+                        // create node
+                        if ($listing->isFile()) {
+                            $createdNode = $this->createFileTreeNode($node, $childName);
+                            $flyPath = rtrim($node->flypath, '/') . '/' . $childName;
+                            $this->_updateFileObject($node, $createdNode, null,
+                                Tinebase_Controller_Tree_FlySystem::getHashForPath($flyPath, $flySystem), 'flySystem');
+
+                            $newNode = $this->_getTreeNodeBackend()->get($createdNode->getId());
+                            // write modlog and system notes
+                            $this->_getTreeNodeBackend()->updated($newNode, $createdNode);
+                            $transaction->release();
+
+                        } else {
+                            $createdNode = $this->mkdir($this->getPathOfNode($node, true) . '/' . $childName);
+                            $transaction->release();
+                            if (0 !== $depth) {
+                                $this->syncFlySystem($createdNode, $depth - 1);
+                            }
+                        }
+                    }
+                } catch(Throwable $t) {
+                    Tinebase_Exception::log($t);
+                }
+            }
+
+            // delete all childNodes that are left
+            foreach ($childNodes as $childNode) {
+                $transaction = Tinebase_RAII::getTransactionManagerRAII();
+                $forUpdateRAII = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_getTreeNodeBackend());
+                try {
+                    $childNode = $this->get($childNode->getId());
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    unset($forUpdateRAII);
+                    $transaction->release();
+                    continue;
+                }
+                unset($forUpdateRAII);
+
+                try {
+                    if (!$childNode->flysystem || !is_string($childNode->flypath) || (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $childNode->type &&
+                            !$flySystem->directoryExists($childNode->flypath)) ||
+                        (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $childNode->type &&
+                            !$flySystem->fileExists($childNode->flypath))) {
+                        $this->_syncFlySystemDeleteNode($childNode);
+                    }
+                } catch (Throwable) {
+                    $this->_syncFlySystemDeleteNode($childNode);
+                }
+
+                $transaction->release();
+            }
+        } else {
+            if (!$flySystem->fileExists($node->flypath)) {
+                $this->_syncFlySystemDeleteNode($node);
+                return;
+            }
+
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+            $forUpdateRAII = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_getTreeNodeBackend());
+            $node = $this->get($node->getId());
+            unset($forUpdateRAII);
+            $node->unsetDirty();
+
+            $size = $flySystem->fileSize($node->flypath);
+            $mime = null;
+            try {
+                $mime = $flySystem->mimeType($node->flypath);
+            } catch (UnableToRetrieveMetadata $e) {}
+            $hash = Tinebase_Controller_Tree_FlySystem::getHashForPath($node->flypath, $flySystem);
+
+            if((int)$node->size !== $size) {
+                $node->size = $size;
+            }
+            if ($node->contenttype !== $mime) {
+                $node->contenttype = $mime;
+            }
+            if ($node->hash !== $hash) {
+                $node->hash = $hash;
+            }
+
+            if ($node->isDirty()) {
+                $this->update($node);
+            }
+            $transaction->release();
+        }
+
+        unset($raii);
+    }
+
+    protected function _syncFlySystemDeleteNode(Tinebase_Model_Tree_Node $node): void
+    {
+        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+            $pathParts = $this->_splitPath($this->getPathOfNode($node, true));
+            $cacheId = $this->_getCacheId($pathParts);
+            $this->_statCache[$cacheId] = $node;
+            $this->rmdir('/' . implode('/', $pathParts), true, false, false);
+        } else {
+            $this->deleteFileNode($node, false, false);
+        }
     }
 
     /**
@@ -3828,7 +4208,16 @@ class Tinebase_FileSystem implements
                 continue;
             }
 
-            $mimeType = $this->_getMimeType($node->name, $this->getRealPathForHash($node->hash));
+            if ($node->flysystem) {
+                try {
+                    $mimeType = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem)->mimeType($node->flypath);
+                } catch (Throwable $t) {
+                    $raii->release();
+                    continue;
+                }
+            } else {
+                $mimeType = $this->_getMimeType($node->name, $this->getRealPathForHash($node->hash));
+            }
             if (null !== $mimeType && $node->contenttype !== $mimeType) {
                 try {
                     $fObj = $this->_fileObjectBackend->get($node->object_id);
@@ -4448,6 +4837,15 @@ class Tinebase_FileSystem implements
         }
         closedir($baseDir);
 
+        $fileObjectIds = $this->_fileObjectBackend->getQuarantinedFileObjectIds();
+        if (count($fileObjectIds) > 0) {
+            try {
+                $this->_sendAvScanNotification($fileObjectIds);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                
+            }
+        }
+
         // only for unused variable check
         unset($raii);
 
@@ -4643,10 +5041,83 @@ class Tinebase_FileSystem implements
                 $subject = 'filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification';
                 $translatedSubject = $translate->_($subject);
                 $messagePlain = $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota';
-
+                
                 $recipients = $this->getQuotaNotificationRecipients($sender, $softQuota);
                 Tinebase_Notification::getInstance()->send($sender, $recipients, $translatedSubject, $messagePlain, null, null, true);
             }
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+    }
+
+    protected function _sendAvScanNotification($fileObjectIds)
+    {
+        try {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found ' . count($fileObjectIds) . ' file objects.' );
+
+            $nodes = $this->_getTreeNodeBackend()->search(
+                new Tinebase_Model_Tree_Node_Filter(array(array(
+                    'field'     => 'object_id',
+                    'operator'  => 'in',
+                    'value'     => $fileObjectIds
+                )), /* $_condition = */ '',
+                    /* $_options */ array(
+                        'ignoreAcl' => true,
+                    )
+                ),
+            );
+
+            $expander = new Tinebase_Record_Expander(Tinebase_Model_Tree_FileObject::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                    Tinebase_Record_Expander::PROPERTY_CLASS_USER => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            'created_by' => [],
+                        ],
+                    ],
+                ],
+            ]);
+            $expander->expand($nodes);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found ' . count($nodes) . ' nodes.' );
+
+            $paths = [];
+            foreach ($nodes as $node) {
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true));
+                $filePath = $pathRecord->flatpath;
+                $pathParts = explode('/', trim($filePath, '/'));
+                if ($app = Tinebase_Application::getInstance()->getApplicationById($pathParts[0])) {
+                    $filePath = preg_replace('/'. $pathParts[0] . '/', $app->name, $filePath);
+                }
+                $createdBy = $node->created_by;
+                $paths[] = [
+                    'path' => $filePath,
+                    'statpath' => $pathRecord->statpath,
+                    'created_by' => $createdBy['accountEmailAddress'],
+                ];
+            }
+
+            $roleName = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE};
+            if (!$roleName) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL);
+                return;
+            }
+            $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
+            $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
+            $recipients = Tinebase_User::getInstance()->getMultiple(array_unique($recipientIds), Tinebase_Model_FullUser::class)
+                ->contact_id;
+            
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                Tinebase_Core::getUser()->accountId));
+            $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+            $subject = 'Filemanager avscan Result notification';
+            $translatedSubject = $translate->_($subject);
+            $messagePlain = 'Found virus-infected files on instnace: ' . Tinebase_Core::getUrl() . PHP_EOL . print_r($paths, true);
+            
+            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $translatedSubject, $messagePlain, null, null, true);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }
@@ -4694,6 +5165,7 @@ class Tinebase_FileSystem implements
         $accountIds = array_unique($accountIds);
         return Tinebase_User::getInstance()->getMultiple($accountIds) ?? [];
     }
+
 
     public function getQuotaNotificationRecipients(Tinebase_Model_User $sender = null, $softQuota = true): ?array
     {

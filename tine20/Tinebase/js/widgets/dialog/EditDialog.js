@@ -255,12 +255,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
          * @param {Funciton} fn check state function
          */
         registerCheckStateProvider: function(field, fn) {
-            this.registerCheckStateProvider.__providers = this.registerCheckStateProvider.__providers || {}
-            this.registerCheckStateProvider.__providers[field] = this.registerCheckStateProvider.__providers[field] || []
-            this.registerCheckStateProvider.__providers[field].push(fn)
+            this.statics.checkStateProviders = this.statics.checkStateProviders || {}
+            this.statics.checkStateProviders[field] = this.statics.checkStateProviders[field] || []
+            this.statics.checkStateProviders[field].push(fn)
         },
         getCheckStateProviders(field) {
-            return _.get(this, `registerCheckStateProvider.__providers.${field}`, []);
+            return _.get(this, `statics.checkStateProviders.${field}`, []);
         }
     },
 
@@ -454,6 +454,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         if (Ext.isFunction(this.window.relayEvents) && Tine.Tinebase.featureEnabled('featureRememberPopupSize')) {
             this.window.relayEvents(this, ['resize']);
+        }
+
+        if (this.readOnly) {
+            this.setReadOnly(this.readOnly);
         }
     },
 
@@ -828,6 +832,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 listeners: {
                     scope: this,
                     select: function() {
+                        if ( this.saveAndCloseActionUpdater ) return;
                         // enable or disable save button dependent to containers account grants
                         // on edit: check editGrant, on add: check addGrant
                         var grants = this.containerSelectCombo.selectedContainer
@@ -959,7 +964,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 ['id', 'notes' /*, 'attachments'*/]),
             fields = recordClass.getFieldNames(),
             fieldsToCopy = fields.diff(omitFields),
-            recordData = Ext.copyTo({}, record.data, fieldsToCopy),
+            recordData = Ext.copyTo({__meta: { phantom: true }}, record.data, fieldsToCopy),
             resetProperties = {
                 alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
                 relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
@@ -969,6 +974,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Ext.iterate(resetProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
                 var r = recordData[property];
+                if (!r) return;
                 for (var index = 0; index < r.length; index++) {
                     Ext.each(properties,
                         function(prop) {
@@ -982,6 +988,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Ext.iterate(setProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
                 var r = recordData[property];
+                if (!r) return;
                 for (var index = 0; index < r.length; index++) {
                     Ext.iterate(properties,
                         function(prop, value) {
@@ -1086,7 +1093,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     setReadOnly: function(readOnly) {
         this.readOnly = true;
-        this.action_saveAndClose.setHidden(readOnly);
+        if (! this.saveAndCloseActionUpdater) {
+            this.action_saveAndClose.setHidden(readOnly);
+        }
         if (! this.cancelButtonText) {
             this.action_cancel.setText(readOnly ? i18n._('Close') : i18n._('Cancel'));
         }
@@ -1107,6 +1116,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         }
 
+        this.actionUpdater.updateActions([this.record]);
+
         // add current timestamp as id, if this is a dependent record
         if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
             this.record.setId(Tine.Tinebase.data.Record.generateUID());
@@ -1116,6 +1127,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // apply grants to fields with requiredGrant prop
         if (this.evalGrants || this.readOnly) {
             this.getForm().items.each(function (f) {
+                if (f.initialConfig.disabled) return;
                 const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
                 let hasRequiredGrants = !this.readOnly && true;
 
@@ -1187,10 +1199,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         ]);
 
+        if (this.focusField) {
+            const focusField = this.getForm().findField(this.focusField);
+            if (focusField) {
+                focusField.focus(true, 500);
+            }
+        }
         this.showLoadMask();
 
         // init change event
-        var form = this.getForm().items.each(function(item) {
+        this.getForm().items.each(function(item) {
             this.relayEvents(item, ['change', 'select']);
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});

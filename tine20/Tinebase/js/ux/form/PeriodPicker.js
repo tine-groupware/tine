@@ -72,7 +72,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
         this.startDate = this.value.from;
 
         this.getRangeCombo().setValue(this.range);
-        var dateString;
+        let dateString;
 
         switch(this.range) {
             case 'day':
@@ -80,8 +80,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 break;
             case 'week':
                 // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
-                var wkStart = this.startDate.add(Date.DAY, this.startDate.getDay() < 1 ? 1 : 0);
-
+                const wkStart = this.startDate.add(Date.DAY, this.startDate.getDay() < 1 ? 1 : 0);
                 dateString = wkStart.getWeekOfYear() + ' - ' + this.startDate.format('Y');
                 break;
             case 'month':
@@ -96,7 +95,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
         }
         this.setPeriodText(dateString, new Date().between(this.value.from, this.value.until));
 
-        if (JSON.stringify(this.value) != JSON.stringify(this.startValue)) {
+        if (JSON.stringify(this.value) !== JSON.stringify(this.startValue)) {
             this.fireEvent('change', this, this.value, this.startValue);
         }
 

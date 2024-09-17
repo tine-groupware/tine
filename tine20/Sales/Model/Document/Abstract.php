@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -21,7 +21,9 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
-    //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
+    public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
+
+    public const STATUS_REVERSAL = 'REVERSAL';
 
     public const FLD_ID = 'id';
     public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
@@ -32,9 +34,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_BOILERPLATES = 'boilerplates';
 
     public const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
-    public const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
-    // TODO FIXME denormalized.... as json in the document or as copy in the db?
+    public const FLD_DEBITOR_ID = 'debitor_id';
     public const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
+    public const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
 
     public const FLD_DOCUMENT_TITLE = 'document_title';
     public const FLD_DOCUMENT_DATE = 'date'; // Belegdatum,  defaults empty, today when booked and not set differently
@@ -42,6 +44,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_POSITIONS = 'positions'; // virtuell recordSet
     public const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
+    public const FLD_POSITIONS_GROSS_SUM = 'positions_gross_sum';
     public const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
 
     public const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
@@ -57,11 +60,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_PAYMENT_TERMS = 'credit_term';
 
-    public const FLD_COST_CENTER_ID = 'cost_center_id';
-    public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
+    public const FLD_EVAL_DIM_COST_CENTER = 'eval_dim_cost_center';
+    public const FLD_EVAL_DIM_COST_BEARER = 'eval_dim_cost_bearer'; // ist auch ein cost center
+
     public const FLD_DESCRIPTION = 'description';
 
     public const FLD_REVERSAL_STATUS = 'reversal_status';
+
+    public const FLD_CONTRACT_ID = 'contract_id';
 
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
@@ -113,25 +119,53 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::HAS_NOTES => false,
         self::HAS_RELATIONS => true,
         self::HAS_TAGS => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
+
+        self::CONTAINER_PROPERTY        => null,
+        self::DELEGATED_ACL_FIELD       => self::FLD_DEBITOR_ID,
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_DOCUMENT_CATEGORY => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Category::FLD_DIVISION_ID => [],
+                    ],
+                ],
                 self::FLD_CUSTOMER_ID       => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'delivery'              => [],
-                        'billing'               => [],
-                        'postal'                => [],
                         'cpextern_id'           => [],
                         'cpintern_id'           => [],
                     ],
                 ],
-                self::FLD_RECIPIENT_ID      => [],
+                self::FLD_DEBITOR_ID        => [],
+                self::FLD_RECIPIENT_ID      => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Address::FLD_DEBITOR_ID => [],
+                    ],
+                ],
                 self::FLD_POSITIONS         => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
                     ],
                 ],
             ]
+        ],
+
+        self::FILTER_MODEL => [
+            Sales_Model_Debitor::FLD_DIVISION_ID => [
+                self::LABEL => 'Division', // _('Division')
+                self::FILTER => Sales_Model_Document_DivisionFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Division::MODEL_NAME_PART,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Division::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'equals'
+                ],
+            ],
         ],
 
         self::FIELDS                        => [
@@ -141,9 +175,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    //Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
+//                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
                     //Tinebase_Numberable_String::PREFIX     => 'XX-',
                     Tinebase_Numberable_String::ZEROFILL   => 7,
+                    Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
                     //Tinebase_Numberable::CONFIG_OVERRIDE   => '',
                     // these values will be set dynamically below in inheritModelConfigHook
                 ],
@@ -168,9 +203,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DOCUMENT_CATEGORY => [
                 self::LABEL                 => 'Category', // _('Category')
-                self::TYPE                  => self::TYPE_KEY_FIELD,
-                self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
+                self::TYPE                  => self::TYPE_RECORD,
                 self::SHY                   => true,
+                self::CONFIG                => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_Document_Category::MODEL_NAME_PART,
+                ],
+                // not null! mandatory property
             ],
             self::FLD_PRECURSOR_DOCUMENTS => [
                 self::TYPE                      => self::TYPE_RECORDS,
@@ -238,6 +277,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
+            self::FLD_DEBITOR_ID                => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::LABEL                         => 'Debitor', // _('Debitor')
+                self::SHY                           => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Document_Debitor::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_Debitor::FLD_DOCUMENT_ID,
+                ],
+                // not null! mandatory property
+            ],
             self::FLD_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Recipient', //_('Recipient')
@@ -248,6 +298,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
                 ],
                 self::SHY                   => true,
+                self::UI_CONFIG             => [
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => true,
+                    ],
+                ],
             ],
             self::FLD_CONTACT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
@@ -268,11 +323,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::REF_ID_FIELD                  => Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID,
                     self::DEPENDENT_RECORDS             => true,
-                    self::PAGING                        => ['sort' => Sales_Model_DocumentPosition_Abstract::FLD_SORTING],
+                    self::PAGING                        => ['sort' => [Sales_Model_DocumentPosition_Abstract::FLD_GROUPING, Sales_Model_DocumentPosition_Abstract::FLD_SORTING]],
                 ],
             ],
             self::FLD_POSITIONS_NET_SUM                   => [
                 self::LABEL                         => 'Positions Net Sum', //_('Positions Net Sum')
+                self::TYPE                          => self::TYPE_MONEY,
+                self::NULLABLE                      => true,
+                self::SHY                           => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_POSITIONS_GROSS_SUM                   => [
+                self::LABEL                         => 'Positions Gross Sum', //_('Positions Gross Sum')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::NULLABLE                      => true,
                 self::SHY                           => true,
@@ -328,9 +392,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL => 'VAT Procedure', // _('VAT Procedure')
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::NAME => Sales_Config::VAT_PROCEDURES,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                ],
             ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
@@ -366,33 +427,21 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::SHY                           => TRUE,
                 self::NULLABLE                      => true,
             ],
-
-            self::FLD_COST_CENTER_ID            => [
-                self::LABEL                         => 'Cost Center', //_('Cost Center')
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_CostCenter::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-                self::SHY                           => true,
-            ],
-            self::FLD_COST_BEARER_ID            => [
-                self::LABEL                         => 'Cost Bearer', //_('Cost Bearer')
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-                self::SHY                           => true,
-            ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
                 self::SHY                           => true,
+            ],
+            self::FLD_CONTRACT_ID               => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::LABEL                         => 'Contract', //_('Contract')
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Contract::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
             ],
         ]
     ];
@@ -414,17 +463,23 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         parent::inheritModelConfigHook($_definition);
 
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_CATEGORY][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] =
+            Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
+
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
-            static::class . '#' . self::FLD_DOCUMENT_NUMBER;
+            'Sales_Model_' . static::MODEL_NAME_PART . '#'. self::FLD_DOCUMENT_NUMBER;
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
-            Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-                new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
-            )->_(static::$_documentNumberPrefix);
+            Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME)->_(static::$_documentNumberPrefix);
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
+            'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
     }
 
     public function isBooked(): bool
     {
-        return (bool)(Sales_Config::getInstance()->{static::$_statusConfigKey}->records->getById($this->{static::$_statusField})
+        if (null === ($status = $this->{static::$_statusField})) {
+            return false;
+        }
+        return (bool)(Sales_Config::getInstance()->{static::$_statusConfigKey}->records->getById($status)
             ->{Sales_Model_Document_Status::FLD_BOOKED});
     }
 
@@ -466,8 +521,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             // if the positions for this document are not specified, we take all of them
             if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) ||
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
-                $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} =
-                    new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
+                //$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} = // why? remove those two lines?
+                    //new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
 
                 if ($record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL}) {
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
@@ -495,18 +550,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         ++$addedPositions;
                     } catch (Tinebase_Exception_Record_Validation $e) {
                     }
-                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
-                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                 }
 
             } else {
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
 
-                    if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                    if (!($sPosition = $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                             ->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($sourcePosition
-                            ->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getID())) {
+                            ->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getID()))) {
                         throw new Tinebase_Exception_UnexpectedValue('sourcePosition in transition not found in source document!');
                     }
+                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION} = $sPosition;
 
                     /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
                     $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
@@ -518,8 +572,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $position->transitionFrom($sourcePosition);
                     $this->{self::FLD_POSITIONS}->addRecord($position);
                     $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
-                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
-                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                     ++$addedPositions;
                     $isReversal = $isReversal || (bool)$sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
 
@@ -539,7 +591,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
                 Tinebase_Model_DynamicRecordWrapper::FLD_RECORD =>
-                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT},
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->getId(),
             ]));
         }
 
@@ -558,20 +610,18 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
             self::FLD_INVOICE_DISCOUNT_SUM,
             self::FLD_INVOICE_DISCOUNT_TYPE,
-            self::FLD_COST_BEARER_ID,
-            self::FLD_COST_CENTER_ID,
             self::FLD_DESCRIPTION,
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
             Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
         ];
 
-        $thisCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
-            ['field' => 'model', 'operator' => 'equals', 'value' => get_class($this)]
-        ], '', ['ignoreAcl' => true]))->name;
-        $sourceCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
-            ['field' => 'model', 'operator' => 'equals', 'value' => get_class($sourceDocument)]
-        ], '', ['ignoreAcl' => true]))->name;
-        $properties = array_merge($properties, array_intersect($thisCFs, $sourceCFs));
+        $cfc = new Tinebase_CustomField_Config();
+        $cfc->setAllCFs();
+        $properties = array_merge($properties, array_unique($cfc->search(new Tinebase_Model_CustomField_ConfigFilter([
+            ['field' => 'model', 'operator' => 'startswith', 'value' => 'Sales_Model_Document_'],
+            ['field' => 'name', 'operator' => 'startswith', 'value' => 'eval_dim_'],
+        ], '', ['ignoreAcl' => true]))->name));
+
 
         foreach ($properties as $property) {
             if ($this->has($property) && $sourceDocument->has($property)) {
@@ -582,7 +632,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         if ($isReversal) {
             $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
-            $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_DOCUMENT_TITLE};
+            $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ' ' .  implode(', ',
+                    array_reduce($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}, function($carry, $document) {
+                        array_push($carry, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER});
+                        return $carry;
+                    }, [])) .
+                ': ' . $this->{self::FLD_DOCUMENT_TITLE};
 
             /** @var Sales_Model_Document_TransitionSource $record */
             foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
@@ -591,9 +646,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     throw new Tinebase_Exception_UnexpectedValue('reversal transitions need to to have same source and target document class');
                 }
             }
+            $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->records->find(Sales_Model_Document_Status::FLD_REVERSAL, true)->getId();
+        } else {
+            $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         }
 
-        $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today(Tinebase_Core::getUserTimezone());
 
         $this->calculatePrices();
@@ -606,14 +663,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         foreach ($this->{self::FLD_PRECURSOR_DOCUMENTS} as $preDoc) {
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            $ctrl = Tinebase_Core::getApplicationInstance($preDoc->{Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME});
+            $preDoc = $ctrl->get($preDoc->getIdFromProperty(Tinebase_Model_DynamicRecordWrapper::FLD_RECORD));
             /** @var Sales_Model_DocumentPosition_Abstract $position */
-            foreach ($preDoc->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->{self::FLD_POSITIONS} as $position) {
+            foreach ($preDoc->{self::FLD_POSITIONS} as $position) {
                 if (!$position->isProduct()) continue;
                 if (null === ($pos = $this->{self::FLD_POSITIONS}->find(
                     function(Sales_Model_DocumentPosition_Abstract $val) use($position) {
                         return $position->getId() ===
                             $val->getIdFromProperty(Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION);
-                        }, null)) || $pos->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
+                        }, null)) || (float)$pos->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} !== (float)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
                     throw new Tinebase_Exception_Record_Validation('partial facturation not supported');
                 }
             }
@@ -647,17 +707,27 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         // Sales/js/Document/AbstractEditDialog.js
 
         $this->{self::FLD_POSITIONS_NET_SUM} = 0;
+        $this->{self::FLD_POSITIONS_GROSS_SUM} = 0;
         $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0;
         $this->{self::FLD_SALES_TAX_BY_RATE} = [];
         $this->{self::FLD_NET_SUM} = 0;
         $netSumByTaxRate = [];
+        $grossSumByTaxRate = [];
         $salesTaxByRate = [];
+        $documentPriceType = Sales_Config::PRICE_TYPE_GROSS;
+
         /** @var Sales_Model_DocumentPosition_Abstract $position */
         foreach ($this->{self::FLD_POSITIONS} as $position) {
             $this->{self::FLD_POSITIONS_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM}
                 + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+            $this->{self::FLD_POSITIONS_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM}
+                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_GROSS_PRICE});
             $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = $this->{self::FLD_POSITIONS_DISCOUNT_SUM}
                 + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM});
+
+            $documentPriceType = $documentPriceType === Sales_Config::PRICE_TYPE_GROSS &&
+                $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} === Sales_Config::PRICE_TYPE_GROSS ?
+                Sales_Config::PRICE_TYPE_GROSS : Sales_Config::PRICE_TYPE_NET;
 
             $taxRate = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} ?: 0;
             if (!isset($salesTaxByRate[$taxRate])) {
@@ -668,34 +738,57 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 $netSumByTaxRate[$taxRate] = 0;
             }
             $netSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
+            if (!isset($grossSumByTaxRate[$taxRate])) {
+                $grossSumByTaxRate[$taxRate] = 0;
+            }
+            $grossSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_PRICE});
         }
 
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
             $this->{self::FLD_INVOICE_DISCOUNT_SUM} = (float)$this->{self::FLD_INVOICE_DISCOUNT_SUM};
         } else {
-            $discount = ($this->{self::FLD_POSITIONS_NET_SUM} / 100) *
+            $posSumFld = $documentPriceType === Sales_Config::PRICE_TYPE_GROSS ?
+                self::FLD_POSITIONS_GROSS_SUM : self::FLD_POSITIONS_NET_SUM;
+            $discount = ($this->{$posSumFld} / 100) *
                 (float)$this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
             $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $discount;
         }
 
-        $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
-            array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
-                $tax =
-                    ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
-                        $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
-                    * $taxRate / 100;
-                if ($tax) {
-                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                        'tax_rate' => $taxRate,
-                        'tax_sum' => $tax,
-                    ];
-                }
-                return $carry + $tax;
-            }, 0) : 0;
+        if ($documentPriceType === Sales_Config::PRICE_TYPE_GROSS) {
+            $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ?
+                array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate) {
+                    $tax = $salesTaxByRate[$taxRate] * ( 1 -
+                            $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
+                            $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} );
+                    if ($tax) {
+                        $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                            'tax_rate' => $taxRate,
+                            'tax_sum' => $tax,
+                        ];
+                    }
+                    return $carry + $tax;
+                }, 0) : 0;
+            $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
+            $this->{self::FLD_NET_SUM} = $this->{self::FLD_GROSS_SUM} - $this->{self::FLD_SALES_TAX};
+        } else {
+            $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
+                array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
+                    $tax =
+                        ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
+                            $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
+                        * $taxRate / 100;
+                    if ($tax) {
+                        $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                            'tax_rate' => $taxRate,
+                            'tax_sum' => $tax,
+                        ];
+                    }
+                    return $carry + $tax;
+                }, 0) : 0;
 
-        $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM}
-            + $this->{self::FLD_SALES_TAX};
-        $this->{self::FLD_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
+            $this->{self::FLD_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
+            $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_NET_SUM} + $this->{self::FLD_SALES_TAX};
+        }
     }
 
     /**
@@ -775,7 +868,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                             continue;
                         }
                     }
-                    $quantity += (int)$qty;
+                    $quantity += (float)$qty;
                 }
                 if (null === $quantity) {
                     if (Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED === $status) {
@@ -783,11 +876,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     }
                     continue;
                 }
-                if ($quantity < (int)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
+                if ($quantity < (float)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
                     $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY;
                     break;
                 }
-                if ($quantity === (int)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} &&
+                if ($quantity === (float)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} &&
                         Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE === $status) {
                     $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY;
                     break;
@@ -809,5 +902,85 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $updated = $ownCtrl->update($this);
             $this->seq = $updated->seq;
         }
+    }
+
+    public function getDivisionId(): string
+    {
+        if (! $this->_data[self::FLD_DOCUMENT_CATEGORY] instanceof Sales_Model_Document_Category) {
+            $this->_data[self::FLD_DOCUMENT_CATEGORY] = Sales_Controller_Document_Category::getInstance()->get(
+                $this->getIdFromProperty(self::FLD_DOCUMENT_CATEGORY));
+        }
+        return $this->_data[self::FLD_DOCUMENT_CATEGORY]->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID);
+    }
+
+    public function setFromArray(array &$_data)
+    {
+        static $evalDimProperties = [];
+        if (!isset($evalDimProperties[static::class])) {
+            $evalDimProperties[static::class] = [];
+            foreach (static::getConfiguration()->recordFields as $prop => $conf) {
+                if (Tinebase_Model_EvaluationDimensionItem::class === ($conf[self::CONFIG][self::RECORD_CLASS_NAME] ?? null)) {
+                    $evalDimProperties[static::class][] = $prop;
+                }
+            }
+        }
+
+        if (isset($_data[self::FLD_DOCUMENT_CATEGORY])) {
+            if (is_string($_data[self::FLD_DOCUMENT_CATEGORY])) {
+                $_data[self::FLD_DOCUMENT_CATEGORY] = Sales_Controller_Document_Category::getInstance()->get($_data[self::FLD_DOCUMENT_CATEGORY]);
+            }
+            foreach ($evalDimProperties[static::class] as $evalDimProperty) {
+                if (!array_key_exists($evalDimProperty, $_data) && isset($_data[self::FLD_DOCUMENT_CATEGORY][$evalDimProperty])) {
+                    $_data[$evalDimProperty] = $_data[self::FLD_DOCUMENT_CATEGORY][$evalDimProperty];
+                }
+            }
+        }
+
+        parent::setFromArray($_data);
+    }
+
+    public function createPositionFromProduct(Sales_Model_Product $product, string $lang): Sales_Model_DocumentPosition_Abstract
+    {
+        /** @var Sales_Model_DocumentPosition_Abstract $positionClass */
+        $positionClass = str_replace('_Document_', '_DocumentPosition_', static::class);
+        $position = new $positionClass([], true);
+
+        $prodFlds = $product::getConfiguration()->fields;
+        foreach (array_diff(array_intersect($product::getConfiguration()->fieldKeys, $positionClass::getConfiguration()->fieldKeys), Tinebase_ModelConfiguration::$genericProperties) as $property) {
+            if (($prodFlds[$property][self::CONFIG][self::SPECIAL_TYPE] ?? null) === self::TYPE_LOCALIZED_STRING) {
+                $position->{$property} = ($product->{$property}?->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
+                    ?: $product->{$property}?->getFirstRecord())?->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
+            } else {
+                $position->{$property} = $product->{$property};
+            }
+        }
+
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_TYPE} = Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_TITLE} = ($product->{Sales_Model_Product::FLD_NAME}->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
+           ?: $product->{Sales_Model_Product::FLD_NAME}->getFirstRecord())->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_PRODUCT_ID} = $product;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} = 1;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM} = 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_PERCENTAGE} = 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = $product->{Sales_Model_Product::FLD_SALESPRICE_TYPE} ?: Sales_Config::PRICE_TYPE_NET;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE} = $product->{Sales_Model_Product::FLD_SALESPRICE} ?: 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = $product->{Sales_Model_Product::FLD_SALESTAXRATE} ?: 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} = $product->{Sales_Model_Product::FLD_DEFAULT_GROUPING};
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_SORTING} = $product->{Sales_Model_Product::FLD_DEFAULT_SORTING};
+
+        if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE && Sales_Config::PRICE_TYPE_GROSS ===
+                $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE}) {
+           $position->computePrice();
+           $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = Sales_Config::PRICE_TYPE_NET;
+           $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE} =
+               $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE} - $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX};
+           $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
+        }
+
+        $position->computePrice();
+
+        $this->{self::FLD_POSITIONS}->addRecord($position);
+        return $position;
     }
 }

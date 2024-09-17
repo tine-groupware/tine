@@ -8,7 +8,7 @@
  *
  * @package    Sabre
  * @subpackage CalDAV
- * @copyright  Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author     Cornelius Weiss <c.weiss@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */

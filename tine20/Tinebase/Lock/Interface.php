@@ -25,7 +25,7 @@ interface Tinebase_Lock_Interface
     /**
      * @return bool
      */
-    public function tryAcquire();
+    public function tryAcquire(int $timeout = -1);
 
     /**
      * @return bool

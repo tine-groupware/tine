@@ -75,6 +75,10 @@ interface Tinebase_User_Interface_SyncAble
      * @return Tinebase_Model_FullUser
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account);
+
+    public function isReadOnlyUser(string|int|null $userId): bool;
+
+    public function setPasswordInSyncBackend(Tinebase_Model_FullUser $user, string $_password, bool $_encrypt = true, bool $_mustChange = false): void;
     
     /**
      * delete an user in ldap backend
@@ -97,4 +101,6 @@ interface Tinebase_User_Interface_SyncAble
      * @param Addressbook_Model_Contact $_contact
      */
     public function updateContactInSyncBackend($_contact);
+
+    public function setUserAsWriteGroupMember(string $userId, bool $value = true): void;
 }

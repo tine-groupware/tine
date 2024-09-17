@@ -182,9 +182,12 @@ class Tinebase_Scheduler_Task
     {
         $startTime = time();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' starting .... ');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' starting .... ');
+        }
 
+        $sendNotification = ! empty($this->_emails);
         $aggResult = is_array($this->_callables) && count($this->_callables) > 0;
         foreach ($this->_callables as $callable) {
             try {
@@ -224,22 +227,7 @@ class Tinebase_Scheduler_Task
                     . ' Could not get callable for scheduler job');
                 $aggResult = false;
             } else {
-                // use a temp file for the writer
-                $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'schedular_task');
-                $writer = new Zend_Log_Writer_Stream($tmpPath);
-                $priority = $this->_config['loglevel'] ?? 6;
-                $writer->addFilter(new Zend_Log_Filter_Priority($priority));
-                Tinebase_Core::getLogger()->addWriter($writer);
-
-                try {
-                    $result = call_user_func_array($classMethod, $callable[self::ARGS] ?? []);
-                    $notificationBody = file_get_contents($tmpPath);
-                    // send the file contents as notification to configured email
-                    $this->_sendNotification($callable, $notificationBody);
-                } finally {
-                    Tinebase_Core::getLogger()->removeWriter($writer);
-                    unlink($tmpPath);
-                }
+                $result = $this->_executeTaskMethod($classMethod, $callable, $sendNotification);
                 $aggResult = $aggResult && $result;
             }
         }
@@ -250,6 +238,45 @@ class Tinebase_Scheduler_Task
         }
 
         return $aggResult;
+    }
+
+    protected function _executeTaskMethod(array $classMethod, array $callable, bool $sendNotification): bool
+    {
+        if ($sendNotification) {
+            // use a temp file for the writer
+            $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'schedular_task');
+            $writer = new Zend_Log_Writer_Stream($tmpPath);
+            $priority = $this->_config['loglevel'] ?? 6;
+            $writer->addFilter(new Zend_Log_Filter_Priority($priority));
+            Tinebase_Core::getLogger()->addWriter($writer);
+        } else {
+            $writer = null;
+            $tmpPath = null;
+        }
+
+        try {
+            $result = call_user_func_array($classMethod, $callable[self::ARGS] ?? []);
+            if ($sendNotification) {
+                $notificationBody = file_get_contents($tmpPath);
+                // send the file contents as notification to configured email
+                $this->_sendNotification($callable, $notificationBody);
+            }
+        } finally {
+            if ($sendNotification) {
+                Tinebase_Core::getLogger()->removeWriter($writer);
+                unlink($tmpPath);
+            }
+        }
+
+        if (! is_bool($result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Task method did not return a boolean: ' . print_r($classMethod, true));
+            };
+            return false;
+        }
+
+        return $result;
     }
 
     /**
@@ -267,14 +294,6 @@ class Tinebase_Scheduler_Task
         }
         
         try {
-            if (empty($this->_emails)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' No recipient address configured');
-                };
-                return;
-            }
-
             $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
             $emails = explode(',', $this->_emails);
             
@@ -725,6 +744,17 @@ class Tinebase_Scheduler_Task
             'removeObsoleteData',
             self::TASK_TYPE_MONTHLY,
             $scheduler
+        );
+    }
+
+    public static function addFlySystemSyncTask(Tinebase_Scheduler $scheduler): void
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'syncFlySystems',
+            self::TASK_TYPE_HOURLY,
+            $scheduler,
+            'sync all fly system filesystems'
         );
     }
 

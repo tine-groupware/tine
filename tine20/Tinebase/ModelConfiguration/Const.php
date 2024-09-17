@@ -39,7 +39,10 @@ class Tinebase_ModelConfiguration_Const {
     public const COLUMNS = 'columns';
     public const COPY_OMIT = 'copyOmit';
     public const COPY_RELATIONS = 'copyRelations';
+
+    public const CREATE = 'create';
     public const CREATE_MODULE = 'createModule';
+    public const CREDENTIAL_CACHE = 'credential_cache';
     public const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
 
     public const DB_COLUMNS = 'dbColumns';
@@ -156,6 +159,7 @@ class Tinebase_ModelConfiguration_Const {
     public const LABEL = 'label';
     public const LANGUAGES_AVAILABLE = 'languagesAvailable';
     public const LENGTH = 'length';
+    public const LENGTHS = 'lengths';
 
     public const MAPPED_BY = 'mappedBy';
     public const MODEL_NAME = 'modelName';
@@ -202,6 +206,7 @@ class Tinebase_ModelConfiguration_Const {
      */
     public const REQUIRED_RIGHT = 'requiredRight';
     public const RESOLVE_DELETED = 'resolveDeleted';
+    public const RESPONSIVE_LEVEL = 'responsiveLevel';
     public const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
     /**
@@ -228,6 +233,10 @@ class Tinebase_ModelConfiguration_Const {
     public const TITLE_PROPERTY = 'titleProperty';
     public const TOOLTIP = 'tooltip';
     public const TRACK_CHANGES = 'trackChanges';
+    /**
+     * uiconfig -> translate value in renderers and forms, useful for default data (e.g. coredata)
+     */
+    public const TRANSLATE = 'translate';
     public const TYPE = 'type';
     public const TYPE_ATTACHMENTS = 'attachments';
     public const TYPE_BIGINT = 'bigint';
@@ -260,6 +269,9 @@ class Tinebase_ModelConfiguration_Const {
     public const TYPE_NOTE = 'note';
     public const TYPE_NUMBERABLE_INT = 'numberableInt';
     public const TYPE_NUMBERABLE_STRING = 'numberableStr';
+    public const TYPE_PASSWORD = 'password';
+
+    public const TYPE_PRE_EXPANDED = 'preExpanded';
     public const TYPE_RECORD = 'record';
     public const TYPE_RECORDS = 'records';
     public const TYPE_RELATION = 'relation';
@@ -276,6 +288,10 @@ class Tinebase_ModelConfiguration_Const {
     public const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
     public const UNSIGNED = 'unsigned';
     public const UI_CONFIG = 'uiconfig';
+    public const UI_CONFIG_LAYOUT_SMALL = 'small';
+    public const UI_CONFIG_LAYOUT_MEDIUM = 'medium';
+    public const UI_CONFIG_LAYOUT_BIG = 'big';
+    public const UI_CONFIG_LAYOUT_LARGE = 'large';
 
     public const VALIDATORS = 'validators';
     public const VERSION = 'version';

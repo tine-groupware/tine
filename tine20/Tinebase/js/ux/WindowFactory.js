@@ -178,6 +178,7 @@ Ext.ux.WindowFactory.prototype = {
         if (config.contentPanelConstructorConfig._isAutoWrapped) {
             config.contentPanelConstructorConfig.items.listeners = null;
         }
+        config.contentPanelConstructed = true;
         
         return centerPanel;
     },

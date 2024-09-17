@@ -315,6 +315,8 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             'timeaccount_id' => $ta->getId(),
         ]));
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         // create report
         $start = new Tinebase_DateTime('2018-07-01 00:00:00');
         $end = new Tinebase_DateTime('2018-07-02 23:59:59');
@@ -343,6 +345,8 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
 
         $this->_createTimesheets();
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        
         // create report
         $start = new Tinebase_DateTime('2018-08-01 00:00:00');
         $end = new Tinebase_DateTime('2018-08-31 23:59:59');

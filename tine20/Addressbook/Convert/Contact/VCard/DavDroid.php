@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <kontakt@michaelspahn.de>
- * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -66,12 +66,14 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
     protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
     {
         $telField = null;
-        
-        if (isset($property['TYPE'])) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
             // CELL
-            if ($property['TYPE']->has('cell') && $property['TYPE']->has('work')) {
+            if ($typeParameter->has('cell') && $typeParameter->has('work')) {
                 $telField = 'tel_cell';
-            } elseif ($property['TYPE']->has('cell')) {
+            } elseif ($typeParameter->has('cell')) {
                 $telField = 'tel_cell_private';
             }
         }

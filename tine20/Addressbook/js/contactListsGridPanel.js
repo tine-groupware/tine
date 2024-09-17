@@ -58,10 +58,11 @@ Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
     },
 
     getColumns: function() {
-        return [
-            {id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 20, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer, hidden: false },
-            {id: 'name', header: this.app.i18n._('Name'), width: 100, sortable: true, dataIndex: 'name', renderer: this.nameRenderer}
+        const columns = [
+            { id: 'type', header: this.app.i18n._('Type'), width: 20, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer },
+            { id: 'name', header: this.app.i18n._('Name'), width: 100, renderer: this.nameRenderer}
         ];
+        return columns;
     },
 
     nameRenderer(value, metadata, record) {

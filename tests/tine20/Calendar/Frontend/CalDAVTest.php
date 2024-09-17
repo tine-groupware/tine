@@ -188,13 +188,13 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $collection->createExtendedCollection(
-            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', 
-            array('{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'),
+            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', new \Sabre\DAV\MkCol(
+                ['{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'],
             array(
                 '{DAV:}displayname' => $randomName,
                 '{http://apple.com/ns/ical/}calendar-color' => '#711A76FF',
-                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT'))
-            )
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VEVENT'))
+            ))
         );
         
         $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
@@ -217,13 +217,13 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $collection->createExtendedCollection(
-            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', 
+            'B1B3BEA0-F1F9-409F-B1A0-43E41119F851', new \Sabre\DAV\MkCol(
             array('{DAV:}collection', '{urn:ietf:params:xml:ns:caldav}calendar'),
             array(
                 '{DAV:}displayname' => $randomName,
                 '{http://apple.com/ns/ical/}calendar-color' => '#711A76FF',
-                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO'))
-            )
+                '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VTODO'))
+            ))
         );
         
         $container = Tinebase_Container::getInstance()->getContainerByName(Tasks_Model_Task::class, $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
@@ -279,13 +279,10 @@ END:VCALENDAR&#13;
   </A:set>
 </B:mkcalendar>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'MKCALENDAR',
-            'REQUEST_URI'    => '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/9708036E-674E-4067-A0E9-698066374C6B/'
-        ));
+        $request = new Sabre\HTTP\Request('MKCALENDAR', '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/9708036E-674E-4067-A0E9-698066374C6B/');
         $request->setBody($body);
 
-        $server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
         $server->addPlugin(new \Sabre\CalDAV\Plugin());
         $server->httpRequest = $request;
         $server->exec();
@@ -347,18 +344,15 @@ END:VCALENDAR&#13;
   </A:prop>
 </A:propfind>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI'    => '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/'
-        ));
+        $request = new Sabre\HTTP\Request('PROPFIND', '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/');
         $request->setBody($body);
 
 
 
-        $server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
         $server->addPlugin(new \Sabre\CalDAV\Plugin());
         $server->httpRequest = $request;
-        $response = new Sabre\HTTP\ResponseMock();
+        $response = new Tinebase_WebDav_Sabre_ResponseMock();
         $server->httpResponse = $response;
         $server->exec();
 
@@ -374,12 +368,12 @@ END:VCALENDAR&#13;
 
     /**
      * 
-     * @return \Sabre\DAV\ObjectTree
+     * @return \Sabre\DAV\Tree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
-            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        if (! $this->_webdavTree instanceof \Sabre\DAV\Tree) {
+            $this->_webdavTree = new \Sabre\DAV\Tree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;

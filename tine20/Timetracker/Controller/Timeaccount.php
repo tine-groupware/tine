@@ -120,14 +120,13 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                 $exception = new Tinebase_Exception_Confirmation(
                     $translation->_('Timeaccounts are still in use! Are you sure you want to delete them?'));
 
-                $timeAccountTitles = null;
-
-                foreach ($timeAccounts as $timeaccount) {
-                    $timeAccountTitles .= '<br />' . $timeaccount->number . ', ' . $timeaccount->title;
-                }
-
                 // todo: show more info about in used time accounts ?
-                //$exception->setInfo($timeAccountTitles);
+//                $timeAccountTitles = null;
+//                foreach ($timeAccounts as $timeaccount) {
+//                    $timeAccountTitles .= '<br />' . $timeaccount->number . ', ' . $timeaccount->title;
+//                }
+//                $exception->setInfo($timeAccountTitles);
+
                 throw $exception;
             }
         }
@@ -256,24 +255,25 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         }
     }
     /**
-     * 
-     * @param Tinebase_Model_CostCenter|string $costCenterId
+     *
+     * @param Tinebase_Model_EvaluationDimensionItem|string $costCenterId
      * @return Tinebase_Record_RecordSet
-     */
+     *
     public function getTimeaccountsByCostCenter($costCenterId)
     {
         $costCenterId = is_string($costCenterId) ? $costCenterId : $costCenterId->getId();
         
         $filter = new Tinebase_Model_RelationFilter(array(
-            array('field' => 'related_model', 'operator' => 'equals', 'value' => Tinebase_Model_CostCenter::class),
+            array('field' => 'related_model', 'operator' => 'equals',
+                'value' => Tinebase_Model_EvaluationDimensionItem::class),
             array('field' => 'related_id', 'operator' => 'equals', 'value' => $costCenterId),
             array('field' => 'own_model', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::class),
             array('field' => 'type', 'operator' => 'equals', 'value' => 'COST_CENTER'),
         ), 'AND');
         
         return Timetracker_Controller_Timeaccount::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
-    }
-    
+    }*/
+
     /**
      * @param Sales_Model_Contract $contractId
      * @return Tinebase_Record_RecordSet
@@ -314,8 +314,12 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     private function _resolveTimesheets($updatedRecord, $record, $currentRecord)
     {
         $tsBackend = new Timetracker_Backend_Timesheet();
-        
-        if ($currentRecord['status'] !== $updatedRecord['status'] && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED) {
+
+        if (
+            Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)
+            && $currentRecord['status'] !== $updatedRecord['status']
+            && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED
+        ) {
             $timesheets = $tsBackend->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                         ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],

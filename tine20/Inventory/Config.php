@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,6 +15,8 @@
  */
 class Inventory_Config extends Tinebase_Config_Abstract
 {
+    public const APP_NAME = 'Inventory';
+
     /**
      * Inventory Status
      * 
@@ -26,29 +28,31 @@ class Inventory_Config extends Tinebase_Config_Abstract
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
-    protected static $_properties = array(
-        self::INVENTORY_STATUS => array(
-                                   //_('Inventory Status Available')
-            'label'                 => 'Inventory Status Available',
-                                   //_('Possible status.')
-            'description'           => 'Possible status.',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => 'Inventory_Model_Status'),
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'ORDERED',    'value' => 'ordered'                       ), //_('ordered')
-                    array('id' => 'AVAILABLE',  'value' => 'available'                     ), //_('available')
-                    array('id' => 'DEFECT',     'value' => 'defect'                        ), //_('defect')
-                    array('id' => 'MISSING',    'value' => 'missing'                       ), //_('missing')
-                    array('id' => 'REMOVED',    'value' => 'removed'                       ), //_('removed')
-                    array('id' => 'UNKNOWN',    'value' => 'unknown'                       ), //_('unknown')
-                ),
-                'default' => 'AVAILABLE',
-            )
-        ),
-    );
+    protected static $_properties = [
+        self::INVENTORY_STATUS => [
+            //_('Inventory Status Available')
+            self::LABEL                 => 'Inventory Status Available',
+            self::DESCRIPTION           => 'Possible status.', //_('Possible status.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => [self::RECORD_MODEL => Inventory_Model_Status::class],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    ['id' => Inventory_Model_Status::ORDERED,       'value' => 'Ordered'        ], //_('Ordered')
+                    ['id' => Inventory_Model_Status::AVAILABLE,     'value' => 'Available'      ], //_('Available')
+                    ['id' => Inventory_Model_Status::DEFECT,        'value' => 'Defect'         ], //_('Defect')
+                    ['id' => Inventory_Model_Status::MISSING,       'value' => 'Missing'        ], //_('Missing')
+                    ['id' => Inventory_Model_Status::REMOVED,       'value' => 'Removed'        ], //_('Removed')
+                    ['id' => Inventory_Model_Status::UNKNOWN,       'value' => 'Unknown'        ], //_('Unknown')
+                    ['id' => Inventory_Model_Status::STORED,        'value' => 'Stored'         ], //_('Stored')
+                    ['id' => Inventory_Model_Status::SOLD,          'value' => 'Sold'           ], //_('Sold')
+                    ['id' => Inventory_Model_Status::DESTROYED,     'value' => 'Destroyed'      ], //_('Destroyed')
+                ],
+                self::DEFAULT_STR => Inventory_Model_Status::AVAILABLE,
+            ]
+        ],
+    ];
     
     /**
      * (non-PHPdoc)

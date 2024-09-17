@@ -10,6 +10,9 @@
  *
  */
 
+use Sabre\DAV\INode;
+use Sabre\DAV\PropFind;
+
 /**
  * ownCloud Integrator plugin
  *
@@ -18,7 +21,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
+class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
 {
 
     const NS_OWNCLOUD = 'http://owncloud.org/ns';
@@ -38,24 +41,24 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
     /**
      * Reference to server object
      *
-     * @var Sabre\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     private $server;
 
     /**
      * Initializes the plugin
      *
-     * @param Sabre\DAV\Server $server
+     * @param \Sabre\DAV\Server $server
      * @return void
      */
-    public function initialize(Sabre\DAV\Server $server)
+    public function initialize(\Sabre\DAV\Server $server)
     {
         $this->server = $server;
 
-        $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
+        $server->on('propFind', array($this, 'propFind'));
 
         /* Namespaces */
-        $server->xmlNamespaces[self::NS_OWNCLOUD] = 'owncloud';
+        $server->xml->namespaceMap[self::NS_OWNCLOUD] = 'owncloud';
 
         array_push($server->protectedProperties,
             '{' . self::NS_OWNCLOUD . '}id'
@@ -68,22 +71,8 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
         );
     }
 
-    /**
-     * Adds ownCloud specific properties
-     *
-     * @param string $path
-     * @param \Sabre\DAV\INode $node
-     * @param array $requestedProperties
-     * @param array $returnedProperties
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    public function beforeGetProperties(
-        $path,
-        Sabre\DAV\INode $node,
-        array &$requestedProperties,
-        array &$returnedProperties
-    ) {
+    public function propFind(PropFind $propFind, INode $node)
+    {
         $version = $this->getOwnCloudVersion();
         if ($version !== null && !$this->isValidOwnCloudVersion()) {
             $message = sprintf(
@@ -100,59 +89,41 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
             return;
         }
 
-        $id = '{' . self::NS_OWNCLOUD . '}id';
-
-        if (in_array($id, $requestedProperties)) {
-            unset($requestedProperties[array_search($id, $requestedProperties)]);
-            if ($node instanceof Tinebase_Frontend_WebDAV_Node) {
-                $returnedProperties[200][$id] = $node->getId();
-            } else {
+        $propFind->handle('{' . self::NS_OWNCLOUD . '}id',
+            $node instanceof Tinebase_Frontend_WebDAV_Node ? $node->getId() :
                 // the path does not change for the other nodes => hence the id is "static"
-                $returnedProperties[200][$id] = sha1($path);
-            }
-        }
+                sha1($propFind->getPath()));
 
-        $permission = '{' . self::NS_OWNCLOUD . '}permissions';
-        if (in_array($permission, $requestedProperties)) {
-            unset($requestedProperties[array_search($permission, $requestedProperties)]);
-            $returnedProperties[200][$permission] = 'S';
+        $propFind->handle('{' . self::NS_OWNCLOUD . '}permissions', function() use($node) {
+            $permission = 'S';
             if ($node instanceof Tinebase_Frontend_WebDAV_Node && ($fNode = $node->getNode())) {
                 $grants = Tinebase_FileSystem::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $fNode);
                 if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
-                    $returnedProperties[200][$permission] .= 'WCKDR';
+                    $permission .= 'WCKDR';
                 } else {
                     if ($grants->{Tinebase_Model_Grants::GRANT_DELETE}) {
-                        $returnedProperties[200][$permission] .= 'D';
+                        $permission .= 'D';
                     }
                     if ($grants->{Tinebase_Model_Grants::GRANT_EDIT}) {
-                        $returnedProperties[200][$permission] .= 'W';
+                        $permission .= 'W';
                     }
                     if ($grants->{Tinebase_Model_Grants::GRANT_ADD}) {
-                        $returnedProperties[200][$permission] .= 'CK';
+                        $permission .= 'CK';
                     }
                     if ($grants->{Tinebase_Model_Grants::GRANT_PUBLISH}) {
-                        $returnedProperties[200][$permission] .= 'R';
+                        $permission .= 'R';
                     }
                 }
             }
-        }
+            return $permission;
+        });
 
-        $fingerPrint = '{' . self::NS_OWNCLOUD . '}data-fingerprint';
-        if (in_array($fingerPrint, $requestedProperties)) {
-            unset($requestedProperties[array_search($fingerPrint, $requestedProperties)]);
-            $returnedProperties[200][$fingerPrint] = '';
-        }
+        $propFind->handle('{' . self::NS_OWNCLOUD . '}data-fingerprint', '');
+        $propFind->handle('{' . self::NS_OWNCLOUD . '}share-types', '');
 
-        $shareTypes = '{' . self::NS_OWNCLOUD . '}share-types';
-        if (in_array($shareTypes, $requestedProperties)) {
-            unset($requestedProperties[array_search($shareTypes, $requestedProperties)]);
-            $returnedProperties[200][$shareTypes] = '';
-        }
-        
-        $privateLink = '{' . self::NS_OWNCLOUD . '}privatelink';
-        if (in_array($privateLink, $requestedProperties)) {
-            if ($node instanceof Tinebase_Frontend_WebDAV_Node || $node instanceof Filemanager_Frontend_WebDAV) {
-                unset($requestedProperties[array_search($shareTypes, $requestedProperties)]);
+
+        if ($node instanceof Tinebase_Frontend_WebDAV_Node || $node instanceof Filemanager_Frontend_WebDAV) {
+            $propFind->handle('{' . self::NS_OWNCLOUD . '}privatelink', function() use ($node) {
                 $paths = $node->getPath();
                 $splitPath = explode('/', trim($paths, '/'));
                 $paths = array_slice($splitPath, 2);
@@ -161,8 +132,8 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
                     $paths[1] = $account->accountLoginName;
                 }
                 $path = join('/', $paths);
-                $returnedProperties[200][$privateLink] = Tinebase_Core::getUrl() . '/#/Filemanager/' . $path;
-            }
+                return Tinebase_Core::getUrl() . '/#/Filemanager/' . $path;
+            });
         }
     }
 

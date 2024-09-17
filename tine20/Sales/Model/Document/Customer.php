@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -49,14 +49,19 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
         ];
         $_definition[self::EXPOSE_JSON_API] = true;
 
-        $_definition[self::FIELDS]['delivery'][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Address::MODEL_NAME_PART;
-        //unset($_definition[self::FIELDS]['delivery'][self::CONFIG][self::DEPENDENT_RECORDS]);
-        $_definition[self::FIELDS]['billing'][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Address::MODEL_NAME_PART;
-        //unset($_definition[self::FIELDS]['billing'][self::CONFIG][self::DEPENDENT_RECORDS]);
-        $_definition[self::FIELDS]['postal'][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Address::MODEL_NAME_PART;
+        $_definition[self::DELEGATED_ACL_FIELD] = self::FLD_DOCUMENT_ID;
+
+        $_definition[self::HAS_RELATIONS] = false;
+
+        unset($_definition[self::FIELDS][self::FLD_DEBITORS]);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DEBITORS]);
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES] = null;
+        unset($_definition[self::FIELDS]['postal']);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES]['postal']);
+
+        unset($_definition[self::FIELDS]['number'][self::CONFIG]);
+        $_definition[self::FIELDS]['number'][self::TYPE] = self::TYPE_STRING;
+        $_definition[self::FIELDS]['number'][self::LENGTH] = 255;
 
         if (!isset($_definition[self::ASSOCIATIONS])) {
             $_definition[self::ASSOCIATIONS] = [];
@@ -92,4 +97,10 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function setFromArray(array &$_data)
+    {
+        unset($_data['relations']);
+        parent::setFromArray($_data);
+    }
 }

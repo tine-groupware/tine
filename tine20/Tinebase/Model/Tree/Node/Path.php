@@ -575,11 +575,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             $this->_parsePath();
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Validate statpath: ' . $this->statpath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Validate statpath: ' . $this->statpath);
         
         if (! Tinebase_FileSystem::getInstance()->fileExists($this->statpath)) {
-            throw new Tinebase_Exception_NotFound('Node not found');
+            throw new Tinebase_Exception_NotFound('Node not found: ' . $this->statpath);
         }
     }
 

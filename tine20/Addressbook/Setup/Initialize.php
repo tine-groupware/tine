@@ -419,7 +419,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['FAX', 'HOME']],
         ]));
-
+        
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'url',
@@ -451,6 +451,61 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 29,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_InstantMessenger::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_assistent',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Assistant', // _('Assistant')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 60,
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['X-EVOLUTION-ASSISTANT']],
+        ]));
+        
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_car',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Car', // _('Car')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 65,
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CAR']],
+        ]));
+        
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_pager',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Pager', // _(Pager')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 70,
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['PAGER']],
+        ]));
+        
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_other',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Other', // _('Other')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 75,
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['X-EVOLUTION-CALLBACK']],
+        ]));
+        
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_prefer',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Prefer', // _('Prefer')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 80,
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['PREF']],
         ]));
 
         unset($raii);

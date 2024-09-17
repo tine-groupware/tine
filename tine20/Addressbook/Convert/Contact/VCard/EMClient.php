@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Pawassarat <tomp@topanet.de>
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -140,9 +140,10 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
     {
         $type = null;
-        
-        if ($property['TYPE']) {
-            if ($property['TYPE']->has('pref')) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        if ($typeParameter = $property['TYPE']) {
+            if ($typeParameter->has('pref')) {
                 $type = 'work';
             }
         }
@@ -166,23 +167,25 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     {
         $telField = null;
 
-        if (isset($property['TYPE'])) {
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
             // CELL
-            if ($property['TYPE']->has('cell')) {
+            if ($typeParameter->has('cell')) {
                 $telField = 'tel_cell';
-            } elseif ($property['TYPE']->has('other')) {
+            } elseif ($typeParameter->has('other')) {
                 $telField = 'tel_cell_private';
      
             // TEL
-            } elseif ($property['TYPE']->has('work') && $property['TYPE']->has('voice')) {
+            } elseif ($typeParameter->has('work') && $typeParameter->has('voice')) {
                 $telField = 'tel_work';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('voice')) {
+            } elseif ($typeParameter->has('home') && $typeParameter->has('voice')) {
                 $telField = 'tel_home';
 
             // FAX
-            } elseif ($property['TYPE']->has('work') && $property['TYPE']->has('fax')) {
+            } elseif ($typeParameter->has('work') && $typeParameter->has('fax')) {
                 $telField = 'tel_fax';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('fax')) {
+            } elseif ($typeParameter->has('home') && $typeParameter->has('fax')) {
                 $telField = 'tel_fax_home';
             }
         }

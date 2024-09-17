@@ -226,7 +226,7 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
         var s = this.meta, Record = this.recordType,
             f = Record.prototype.fields, fi = f.items, fl = f.length, v;
 
-        var root = this.getRoot(o), c = root.length, totalRecords = c, success = true;
+        var root = this.getRoot(o) || [], c = root.length, totalRecords = c, success = true;
         if(s.totalProperty){
             v = parseInt(this.getTotal(o), 10);
             if(!isNaN(v)){
@@ -309,7 +309,8 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
                 return new Function('obj', 'return obj' + (i > 0 ? '.' : '') + expr);
             }
             return function(obj){
-                return obj[expr];
+                // support array as roots
+                return Ext.isArray(obj) && obj.length > 0 ? obj : obj[expr];
             };
 
         };

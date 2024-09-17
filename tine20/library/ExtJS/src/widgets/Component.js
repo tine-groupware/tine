@@ -1175,13 +1175,13 @@ var myGrid = new Ext.grid.EditorGridPanel({
     },
 
     // private
-    saveState : function(){
-        if(Ext.state.Manager && this.stateful !== false){
-            var id = this.getStateId();
-            if(id){
-                var state = this.getState();
-                if(this.fireEvent('beforestatesave', this, state) !== false){
-                    Ext.state.Manager.set(id, state);
+    saveState : async function () {
+        if (Ext.state.Manager && this.stateful !== false) {
+            const id = this.getStateId();
+            if (id) {
+                const state = this.getState();
+                if (this.fireEvent('beforestatesave', this, state) !== false) {
+                    await Ext.state.Manager.set(id, state);
                     this.fireEvent('statesave', this, state);
                 }
             }
@@ -1616,7 +1616,7 @@ alert(t.getXTypes());  // alerts 'component/box/field/textfield'
      * @return {Ext.Container} The first Container for which the custom function returns true
      */
     findParentBy : function(fn) {
-        for (var p = this.ownerCt; (p != null) && !fn(p, this); p = p.ownerCt);
+        for (var p = this.openerCt || this.ownerCt; (p != null) && !fn(p, this); p = p.openerCt || p.ownerCt);
         return p || null;
     },
 

@@ -286,8 +286,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 Tinebase_Exception::log($e);
             }
         }
-            
-        if ($this instanceof Tinebase_User_Interface_SyncAble) {
+
+        /** @phpstan-ignore-next-line  */
+        if ($this instanceof Tinebase_User_Interface_SyncAble && (null === $this->_writeGroupsIds || !$this->isReadOnlyUser(Tinebase_Model_User::convertId($user)))) {
             try {
                 $syncUser = $this->getUserByPropertyFromSyncBackend('accountId', $user, $_accountClass);
                 
@@ -496,6 +497,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $select;
     }
 
+    protected function firePasswordEvent(Tinebase_Model_FullUser $user, string $password): void
+    {
+        // fire needed events
+        $event = new Tinebase_Event_User_ChangePassword();
+        $event->userId = $user->getId();
+        $event->user = $user;
+        $event->password = $password;
+        Tinebase_Event::fireEvent($event);
+    }
+
     /**
      * set the password for given account
      *
@@ -517,11 +528,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = $this->_updatePasswordProperties($userId, $_password, $_encrypt, $_mustChange);
         $this->_setPluginsPassword($user, $_password, $_encrypt);
 
-        // fire needed events
-        $event = new Tinebase_Event_User_ChangePassword();
-        $event->userId = $userId;
-        $event->password = $_password;
-        Tinebase_Event::fireEvent($event);
+        $this->firePasswordEvent($user, $_password);
 
         $accountData['id'] = $userId;
         $oldPassword = new Tinebase_Model_UserPassword(array('id' => $userId), true);
@@ -543,6 +550,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array();
         $accountData['password'] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
         $accountData['password_must_change'] = $_mustChange ? 1 : 0;
+        $now = new Tinebase_DateTime();
+        $accountData['last_password_change'] = $now->toString();
         if (Tinebase_Auth_NtlmV2::isEnabled()) {
             $accountData['ntlmv2hash'] = Tinebase_Auth_CredentialCache::encryptData(
                 Tinebase_Auth_NtlmV2::getPwdHash($_password),
@@ -851,7 +860,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * updates an user
      * 
-     * this function updates an user 
+     * this function updates a user
      *
      * @param Tinebase_Model_FullUser $_user
      * @return Tinebase_Model_FullUser
@@ -863,7 +872,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $visibility = $_user->visibility;
 
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
-            $this->updateUserInSyncBackend($_user);
+            try {
+                $this->updateUserInSyncBackend($_user);
+            } catch (Tinebase_Exception_NotFound) {
+                $createdSyncUser = $this->addUserToSyncBackend($_user);
+                $_user->xprops()[static::class]['syncId'] = $createdSyncUser->getId();
+            }
         }
 
         $updatedUser = $this->updateUserInSqlBackend($_user);
@@ -947,16 +961,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             return;
         }
 
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail &&
+            !Tinebase_EmailUser::checkDomain($user->accountEmailAddress)
+        ) {
+            $externalDomain = true;
+        } else {
+            $externalDomain = false;
+        }
+
         $xprop = strpos(get_class($plugin), 'Imap') !== false
             ? Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP
             : Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP;
 
-        if ($method === 'inspectUpdateUser' && empty($user->accountEmailAddress)
+        if ($method === 'inspectUpdateUser' && (empty($user->accountEmailAddress) || $externalDomain)
             && isset($user->xprops()[$xprop]) && $user->xprops()[$xprop]
         ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Remove plugin user as email address has been removed');
             $this->_inspectEmailPluginCRUD($plugin, $user, $newUserProperties, 'inspectDeleteUser');
+            return;
+        }
+
+        if ($externalDomain && $method !== 'inspectDeleteUser') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Email address not managed by us. Skipping plugin handling.');
             return;
         }
 
@@ -1049,7 +1077,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_user->getValidationErrors(), TRUE));
         }
 
-        Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
+            && ! Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail) {
+            Tinebase_EmailUser::checkDomain($_user->accountEmailAddress,
+                true,
+                null,
+                true);
+        }
 
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
@@ -1167,7 +1201,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
-        Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
+        Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail
+            || Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
 
         $_user->isValid(TRUE);
         

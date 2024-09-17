@@ -22,6 +22,7 @@ class Felamimail_Setup_Uninitialize extends Setup_Uninitialize
      */
     protected function _uninitializeSchedulerTasks()
     {
+        Felamimail_Scheduler_Task::removeCheckExpectedAnswerTask(Tinebase_Core::getScheduler());
         Tinebase_Core::getScheduler()->removeTask('FelamimailPruneAttachmentCache');
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed task FelamimailPruneAttachmentCache from scheduler.');

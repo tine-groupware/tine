@@ -31,7 +31,10 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'adr_lat' },
     { name: 'location' },
     { name: 'location_record' },
+    { name: 'organizer_type' },
     { name: 'organizer' },
+    { name: 'organizer_email' },
+    { name: 'organizer_displayname' },
     { name: 'priority' },
     { name: 'status' },
     { name: 'summary' },
@@ -271,6 +274,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         editGrant: true,
         // needed for action updater / save and close in edit dialog
         readGrant: true,
+        organizer_type: 'contact',
         organizer: organizer,
         attendee: defaultAttendee,
         location: defaultLocationResource ? defaultLocationResource.name : null,
@@ -516,13 +520,11 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
 };
 
 Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
-    var app = Tine.Tinebase.appMgr.get('Calendar');
-
-    if (! dt) {
-        return app.i18n._('Unknown date');
-    }
-
-    return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+    const app = Tine.Tinebase.appMgr.get('Calendar');
+    if (! dt) return app.i18n._('Unknown date');
+    //TODO: return html element and get the format ?
+    const dateObj = dt instanceof Date ? dt : Date.parseDate(dt, Date.patterns.ISO8601Long);
+    return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium')), dt.format('H:i'));
 };
 
 // register calendar filters in addressbook
@@ -790,6 +792,9 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
                     return userData.list_id;
                 }
                 break;
+            case 'email':
+                return userData.user_email;
+                break;
             default:
                 return userData.id
                 break;
@@ -976,8 +981,8 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, 
 
     attendeeStore.each(function (attender) {
         var user_id = attender.get('user_id');
-        if (user_id/* && user_id.id*/) {
-            if (typeof user_id.get == 'function') {
+        if (user_id || attender.get('user_type') === 'email'/* && user_id.id*/) {
+            if (typeof user_id?.get == 'function') {
                 attender.data.user_id = user_id.data;
             }
 

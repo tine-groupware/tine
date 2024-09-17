@@ -545,6 +545,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $r = $this->_json->getEmployee($savedEmployee['id']);
         
         $this->assertTrue(is_array($r['contracts'][0]['feast_calendar_id']));
+        $this->assertIsArray($r['contracts'][0]['notes'] ?? null);
     }
     
     /**
@@ -1101,6 +1102,9 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employee->contracts = $rs;
     
         $employee = $employeeController->create($employee);
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $employee->contracts);
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $employee->contracts->getFirstRecord()?->notes);
+
         $accountController = Humanresources_Controller_Account::getInstance();
         $accountController->createMissingAccounts(2013, $employee);
         $accountsFilter = array(array('field' => "employee_id", 'operator' => "AND", 'value' => array(

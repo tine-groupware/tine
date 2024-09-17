@@ -100,6 +100,7 @@ class Tinebase_Model_LogEntry extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => True),
                 'label' => 'Loglevel', // _('Loglevel'),
                 'queryFilter'       => true,
+                self::ALLOW_CAMEL_CASE          => true,
             ),
             'message' => array(
                 'type' => 'text',

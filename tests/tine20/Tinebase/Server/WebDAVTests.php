@@ -44,16 +44,18 @@ EOS
         $body = fopen('php://temp', 'r+');
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
         rewind($body);
-        
-        ob_start();
-        
+
         $server = new Tinebase_Server_WebDAV();
-        
-        $server->handle($request, $body);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
 
         if (true === $noAssert) {
             return $result;
@@ -74,6 +76,10 @@ EOS
         static::assertTrue(empty($this->testServer(true)));
     }
 
+    /**
+     * @group nogitlabci
+     * gitlabci: PHP Deprecated:  Function mhash() is deprecated in /builds/tine20/tine20/tine20/Tinebase/Auth/NtlmV2.php on line 181
+     */
     public function testServerWithNtlmV2Client()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::PASSWORD_SUPPORT_NTLMV2, true);
@@ -106,11 +112,18 @@ EOS
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
         rewind($body);
 
-        ob_start();
+
         $server = new Tinebase_Server_WebDAV();
-        $server->handle($request, $body);
-        $result = ob_get_contents();
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
 
         static::assertTrue(empty($result), 'empty response body expected: ' . print_r($result, true));
         static::assertEquals(Tinebase_Auth_NtlmV2::AUTH_PHASE_NOT_STARTED, $server->getNtlmV2()->getLastAuthStatus());
@@ -121,11 +134,17 @@ EOS
             pack('vvv', strlen($domain), strlen($domain), 22) . $domain;
         $request->getHeaders()->addHeaderLine('Authorization', 'NTLM ' . base64_encode($msg));
 
-        ob_start();
         $server = new Tinebase_Server_WebDAV();
-        $server->handle($request, $body);
-        $result = ob_get_contents();
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
 
         static::assertTrue(empty($result), 'empty response body expected: ' . print_r($result, true));
         static::assertEquals(Tinebase_Auth_NtlmV2::AUTH_PHASE_ONE, $server->getNtlmV2()->getLastAuthStatus());
@@ -150,11 +169,17 @@ EOS
         $request->getHeaders()->removeHeader($request->getHeaders('Authorization'));
         $request->getHeaders()->addHeaderLine('Authorization', 'NTLM ' . base64_encode($msg));
 
-        ob_start();
         $server = new Tinebase_Server_WebDAV();
-        $server->handle($request, $body);
-        $result = ob_get_contents();
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
 
         static::assertEquals(Tinebase_Auth_NtlmV2::AUTH_SUCCESS, $server->getNtlmV2()->getLastAuthStatus());
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
@@ -187,16 +212,18 @@ EOS
         $body = fopen('php://temp', 'r+');
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
         rewind($body);
-        
-        ob_start();
-        
+
         $server = new Tinebase_Server_WebDAV();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
 
-        $server->handle($request, $body);
-
-        $result = ob_get_contents();
-
-        ob_end_clean();
+        $result = $webDavServer->httpResponse->getBody();
 
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
     }
@@ -229,16 +256,18 @@ EOS
         $body = fopen('php://temp', 'r+');
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
         rewind($body);
-        
-        ob_start();
-        
+
         $server = new Tinebase_Server_WebDAV();
-        
-        $server->handle($request, $body);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
         
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
     }
@@ -271,16 +300,18 @@ EOS
         $body = fopen('php://temp', 'r+');
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/"><D:prop><CS:getctag/></D:prop></D:propfind>');
         rewind($body);
-        
-        ob_start();
-        
+
         $server = new Tinebase_Server_WebDAV();
-        
-        $server->handle($request, $body);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
         
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
     }
@@ -315,21 +346,17 @@ EOS
         fwrite($body, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><D:current-user-principal/><D:principal-URL/><D:resourcetype/></D:prop></D:propfind>');
         rewind($body);
 
-        $bbody = fopen('php://temp', 'r+');
-        fwrite($bbody, '<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><C:calendar-home-set/><C:calendar-user-address-set/><C:schedule-inbox-URL/><C:schedule-outbox-URL/></D:prop></D:propfind>');
-        rewind($bbody);
-        
-        ob_start();
-        
         $server = new Tinebase_Server_WebDAV();
-        
-        $server->handle($request, $body);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
-        
-        #error_log($result);
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request, $body);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($result);
@@ -373,15 +400,17 @@ EOS
         $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
         $request->getServer()->set('REMOTE_ADDR',   'localhost');
         
-        ob_start();
-        
         $server = new Tinebase_Server_WebDAV();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
         
-        $server->handle($request);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
+        $result = $webDavServer->httpResponse->getBody();
         
         #error_log($result);
         
@@ -442,16 +471,18 @@ EOS
         $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
         $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
         $request->getServer()->set('REMOTE_ADDR',   'localhost');
-        
-        ob_start();
-        
+
         $server = new Tinebase_Server_WebDAV();
-        
-        $server->handle($request);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($result);
@@ -508,16 +539,18 @@ EOS
         $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
         $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
         $request->getServer()->set('REMOTE_ADDR',   'localhost');
-        
-        ob_start();
-        
+
         $server = new Tinebase_Server_WebDAV();
-        
-        $server->handle($request);
-        
-        $result = ob_get_contents();
-        
-        ob_end_clean();
+        $webDavServer = Tinebase_Server_WebDAV::getServer();
+        $webDavServer->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::$_recreateServer = false;
+        try {
+            $server->handle($request);
+        } finally {
+            Tinebase_Server_WebDAV::$_recreateServer = true;
+        }
+
+        $result = $webDavServer->httpResponse->getBody();
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($result);

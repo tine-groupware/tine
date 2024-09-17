@@ -185,7 +185,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends TestCase
         try {
             $this->testPutContactFromThunderbird();
             self::fail('config not working: Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS');
-        } catch (Sabre\DAV\Exception\Forbidden $sdef) {
+        } catch (\Sabre\DAV\Exception\Forbidden $sdef) {
             self::assertStringContainsString('Write access denied', $sdef->getMessage());
         } finally {
             Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
@@ -247,5 +247,12 @@ class Addressbook_Frontend_WebDAV_ContactTest extends TestCase
         $record = $contact->getRecord();
         
         $this->assertEquals($contact->getName(), $record->getId() . '.vcf');
+    }
+
+    public function testGetAcl()
+    {
+        $frontend = new Addressbook_Frontend_WebDAV_Contact($this->objects['initialContainer']);
+        $acl = $frontend->getAcl();
+        self::assertNotEmpty($acl);
     }
 }

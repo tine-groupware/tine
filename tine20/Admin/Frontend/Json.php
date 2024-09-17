@@ -1381,6 +1381,15 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
+        if ($result['type'] === Felamimail_Model_Account::TYPE_ADB_LIST) {
+            $listRecord = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter([
+                ['field' => 'id', 'operator' => 'equals', 'value' => $result['user_id']]
+            ]))->getFirstRecord();
+            if ($listRecord) {
+                $result['adb_list'] = $listRecord->toArray();
+            }
+        }
+
         return $result;
     }
 

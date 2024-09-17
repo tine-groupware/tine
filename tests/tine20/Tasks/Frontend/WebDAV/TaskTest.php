@@ -310,4 +310,11 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         return $vcalendar;
     }
+
+    public function testGetAcl()
+    {
+        $frontend = new Tasks_Frontend_WebDAV_Task($this->objects['initialContainer']);
+        $acl = $frontend->getAcl();
+        self::assertNotEmpty($acl);
+    }
 }

@@ -7,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,17 +37,11 @@ class SSO_Model_ExIdp_OIdConfig extends Tinebase_Record_NewAbstract implements S
         self::CREATE_MODULE => false,
         self::APP_NAME => SSO_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
-        self::TITLE_PROPERTY => self::FLD_NAME,
+        self::TITLE_PROPERTY => self::FLD_PROVIDER_URL,
+        self::RECORD_NAME => 'External Identity Provider Config',
+        self::RECORDS_NAME => 'External Identity Provider Configs', // ngettext('External Identity Provider Config', 'External Identity Provider Configs', n)
 
         self::FIELDS => [
-            self::FLD_NAME              => [
-                self::TYPE                  => self::TYPE_STRING,
-                self::LABEL                 => 'Name', // _('Name')
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
             self::FLD_PROVIDER_URL      => [
                 self::TYPE                  => self::TYPE_STRING,
                 self::LABEL                 => 'Provider URL', // _('Provider URL')

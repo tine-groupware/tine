@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -51,7 +51,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Order'; // gettext('GENDER_Order')
         $_definition[self::RECORDS_NAME] = 'Orders'; // ngettext('Order', 'Orders', n)
         
-        $_definition[self::VERSION] = 3;
+        $_definition[self::VERSION] = 4;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
@@ -104,9 +104,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ],
         ]);
 
-        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES] = [
-            Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_RECIPIENT_ID,
-        ];
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES][Sales_Model_Document_Address::FLD_DOCUMENT_FIELD] = self::FLD_RECIPIENT_ID;
 
         $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::ADD_FILTERS] = [
             ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_RECIPIENT_ID],
@@ -121,13 +119,16 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::SHY                   => true,
                 self::UI_CONFIG             => [
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING,
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => true,
+                    ],
                 ],
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::FORCE_VALUES          => [
-                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_INVOICE_RECIPIENT_ID,
+                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD    => self::FLD_INVOICE_RECIPIENT_ID,
                     ],
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_INVOICE_RECIPIENT_ID],
@@ -141,13 +142,16 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::SHY                   => true,
                 self::UI_CONFIG             => [
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_DELIVERY,
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => true,
+                    ],
                 ],
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::FORCE_VALUES          => [
-                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_DELIVERY_RECIPIENT_ID,
+                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD    => self::FLD_DELIVERY_RECIPIENT_ID,
                     ],
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_DELIVERY_RECIPIENT_ID],
@@ -170,10 +174,16 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ],
         ]);
 
-        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES]
-            [self::FLD_INVOICE_RECIPIENT_ID] = [];
-        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES]
-            [self::FLD_DELIVERY_RECIPIENT_ID] = [];
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_INVOICE_RECIPIENT_ID] = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Address::FLD_DEBITOR_ID => [],
+            ],
+        ];
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DELIVERY_RECIPIENT_ID] = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Address::FLD_DEBITOR_ID => [],
+            ],
+        ];
 
         // order positions
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =

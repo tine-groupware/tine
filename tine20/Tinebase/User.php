@@ -248,35 +248,43 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     . ' Could not add SMTP EmailUser plugin: ' . $e);
             }
         }
-        
-        switch ($backendType) {
-            case self::ACTIVEDIRECTORY:
-                $result  = new Tinebase_User_ActiveDirectory($options);
-                
-                break;
-                
-            case self::LDAP:
-                // manage samba sam?
-                if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
-                    $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
-                }
-                
-                $result  = new Tinebase_User_Ldap($options);
-                
-                break;
-                
-            case self::SQL:
-                $result = new Tinebase_User_Sql($options);
-                
-                break;
-            
-            case self::TYPO3:
-                $result = new Tinebase_User_Typo3();
-                
-                break;
-                
-            default:
-                throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
+
+        try {
+            switch ($backendType) {
+                case self::ACTIVEDIRECTORY:
+                    $result = new Tinebase_User_ActiveDirectory($options);
+
+                    break;
+
+                case self::LDAP:
+                    // manage samba sam?
+                    if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
+                        $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
+                    }
+
+                    $result = new Tinebase_User_Ldap($options);
+
+                    break;
+
+                case self::SQL:
+                    $result = new Tinebase_User_Sql($options);
+
+                    break;
+
+                case self::TYPO3:
+                    $result = new Tinebase_User_Typo3();
+
+                    break;
+
+                default:
+                    throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
+            }
+        } catch (Tinebase_Exception_Backend_Ldap $e) {
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
+                return self::factory(self::SQL);
+            } else {
+                throw $e;
+            }
         }
 
         if ($result instanceof Tinebase_User_Interface_SyncAble) {
@@ -492,6 +500,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function syncUser($username, $options = array())
     {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+            return null;
+        }
+
         if ($username instanceof Tinebase_Model_FullUser) {
             $username = $username->accountLoginName;
         }
@@ -916,6 +928,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
             return true;
         }
+        
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+            return true;
+        }
 
         $userIdsInSqlBackend = [];
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {
@@ -1230,6 +1246,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $oldGroupValue = $groupsBackend->modlogActive(false);
         $oldUserValue = $userBackend->modlogActive(false);
         $oldAdbValue = Addressbook_Controller_Contact::getInstance()->modlogActive(false);
+        $oldNoteAdbValue = Addressbook_Controller_Contact::getInstance()->useNotes(false);
         if (Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName) {
             $plugin = $userBackend->removePlugin(Addressbook_Controller_Contact::getInstance());
         } else {
@@ -1337,6 +1354,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $groupsBackend->modlogActive($oldGroupValue);
         $userBackend->modlogActive($oldUserValue);
         Addressbook_Controller_Contact::getInstance()->modlogActive($oldAdbValue);
+        Addressbook_Controller_Contact::getInstance()->useNotes($oldNoteAdbValue);
         if (null !== $plugin) {
             $userBackend->registerPlugin($plugin);
         }

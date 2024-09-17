@@ -13,106 +13,121 @@
  */
 
 use Hfig\MAPI\Mime\HeaderCollection;
-use Hfig\MAPI\Mime\Swiftmailer\Adapter\DependencySet;
-use Felamimail_MAPI_Attachment as Attachment;
-use Hfig\MAPI\Mime\Swiftmailer\Message as BaseMessage;
+use Hfig\MAPI\Message\Message as BaseMessage;
 
 class Felamimail_MAPI_Message extends BaseMessage
 {
-    public function toMime()
+    /**
+     * create Felamimail message from CompoundDocumentElement
+     *
+     * @return Felamimail_Model_Message
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function parseMessage($cacheId)
     {
-        DependencySet::register();
+        $data = null;
 
-        $message = new \Swift_Message();
-        $message->setEncoder(new \Swift_Mime_ContentEncoder_RawContentEncoder());
-
-
-        // get headers
-        $headers = $this->translatePropertyHeaders();
-
-        // add them to the message
-        $add = [$message, 'setTo']; // function
-        $this->addRecipientHeaders('To', $headers, $add);
-        $headers->unset('To');
-
-        $add = [$message, 'setCc']; // function
-        $this->addRecipientHeaders('Cc', $headers, $add);
-        $headers->unset('Cc');
-
-        $add = [$message, 'setBcc']; // function
-        $this->addRecipientHeaders('Bcc', $headers, $add);
-        $headers->unset('Bcc');
-
-        $add = [$message, 'setFrom']; // function
-        $this->addRecipientHeaders('From', $headers, $add);
-        $headers->unset('From');
-
-        // skip parsing invalid message id
-        $id = $headers->getValue('Message-ID');
-        if ($id) {
-            $message->setId(trim($id, '<>'));
+        if (Tinebase_Core::getCache()->test($cacheId) && ($messageData = Tinebase_Core::getCache()->load($cacheId) ?: null)) {
+            $data = $messageData;
         }
-        $message->setDate(new \DateTime($headers->getValue('Date')));
-        if ($boundary = $this->getMimeBoundary($headers)) {
-            $message->setBoundary($boundary);
-        }
+        if (!$data) {
+            $headers = $this->translatePropertyHeaders();
 
+            foreach ($headers as $headerKey => $headerValue) {
+                $headerValue = $headers->getValue($headerKey);
+                switch ($headerKey) {
+                    case 'date':
+                        $data['sent'] = new Tinebase_DateTime($headerValue);
+                        break;
+                    case 'to':
+                    case 'cc':
+                    case 'bcc':
+                        $recipients = $this->getRecipientsOfType(ucfirst($headerKey));
+                        foreach ($recipients as $recipient) {
+                            $email = $recipient->getEmail();
+                            if (!isset($data[$headerKey])) {
+                                $data[$headerKey] = [];
+                            };
+                            $data[$headerKey][] = $email;
+                        }
+                        break;
+                    case 'from':
+                        $senderName = $this->properties['sender_name'];
+                        $senderAddr = $this->properties['sender_email_address'];
+                        $senderType = $this->properties['sender_addrtype'];
 
-        $headers->unset('Message-ID');
-        $headers->unset('Date');
-        $headers->unset('Mime-Version');
-        $headers->unset('Content-Type');
+                        $from = $senderAddr;
+                        if ($senderType !== 'SMTP') {
+                            $from = $this->properties['sender_smtp_address'] ??
+                                $this->properties['sender_representing_smtp_address'] ??
+                                sprintf('%s:%s', $senderType, $senderAddr);
+                        }
+                        $data['from_email'] = $from;
+                        $data['from_name'] = $senderName ?? '';
 
-        $add = [$message->getHeaders(), 'addTextHeader'];
-        $this->addPlainHeaders($headers, $add);
-
-
-        // body
-        $hasHtml = false;
-        $bodyBoundary = '';
-        if ($boundary) {
-            if (preg_match('~^_(\d\d\d)_([^_]+)_~', $boundary, $matches)) {
-                $bodyBoundary = sprintf('_%03d_%s_', (int)$matches[1]+1, $matches[2]);
-            }
-        }
-        try {
-            $html = $this->getBodyHTML();
-            if ($html) {
-                $hasHtml = true;
-                // build multi-part
-                // (simple method is to just call addPart() on message but we can't control the ID
-                $multipart = new \Swift_Attachment();
-                $multipart->setContentType('multipart/alternative');
-                $multipart->setEncoder($message->getEncoder());
-                if ($bodyBoundary) {
-                    $multipart->setBoundary($bodyBoundary);
+                        break;
+                    //unset invalid fields for model message creation
+                    case 'received':
+                        $received = explode(';', $headerValue[0]);
+                        $data['received'] = isset($received[1]) ? date("d-M-Y H:i:s O", strtotime($received[1])) : $headerValue[0];
+                        break;
+                    default:
+                        $data[$headerKey] = $headerValue;
+                        break;
                 }
-                $multipart->setBody($this->getBody(), 'text/plain');
-
-                $part = new \Swift_MimePart($html, 'text/html', null);
-                $part->setEncoder($message->getEncoder());
-
-
-                $message->attach($multipart);
-                $multipart->setChildren(array_merge($multipart->getChildren(), [$part]));
-            } else {
-                $message->setBody($this->getBody(), 'text/plain');
             }
-        } catch (\Exception $e) {
-            // ignore invalid HTML body
-        }
-        
-        // attachments
-        foreach ($this->getAttachments() as $a) {
-            $wa = Attachment::wrap($a);
-            $attachment = $wa->toMime();
 
-            $message->attach($attachment);
+            $plainBody = $this->getBody();
+            $htmlBody = $this->getBodyHTML();
+
+            if ($plainBody) {
+                $data['body'] = $plainBody;
+                $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
+                $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_TEXT;
+            }
+            if ($htmlBody) {
+                $data['body'] = $htmlBody;
+                $data['body_content_type'] = Zend_Mime::TYPE_HTML;
+                $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+            }
+        }
+        $data['content_type'] = Zend_Mime::TYPE_HTML;
+        $data['attachments'] = [];
+        $data['id'] = Tinebase_Record_Abstract::generateUID();
+        $attachments = $this->getAttachments();
+        if (count($attachments) > 0) {
+            foreach ($attachments as $id => $attachment) {
+                $stream = fopen("php://temp", 'r+');
+                $attachment->copyToStream($stream);
+                $data['attachments'][$id] = [
+                    'content-type' => $attachment->getMimeType(),
+                    'filename' => $attachment->getFilename(),
+                    'partId' => $id,
+                    'stream' => $stream
+                ];
+            }
+            $data['has_attachment'] = true;
         }
 
-        return $message;
+        Tinebase_Core::getCache()->save($data, $cacheId);
+
+        if (count($attachments) > 0) {
+            $msg = new ZBateson\MailMimeParser\Message();
+            foreach ($data['attachments'] as $id => &$attachmentData) {
+                $msg->addAttachmentPart($attachmentData['stream'], $attachmentData['content-type'],$attachmentData['filename']);
+                $result = $msg->getAttachmentPart($id);
+                /** @var GuzzleHttp\Psr7\Stream $partStream */
+                $partStream = $result->getStream();
+                $attachmentData['size']           = $partStream->getSize();
+                $attachmentData['contentstream']  = $result->getContentStream();
+                $attachmentData['stream']         = $result->getBinaryContentResourceHandle();
+            }
+        }
+
+        return new Felamimail_Model_Message($data);
     }
-    
+
     protected function translatePropertyHeaders()
     {
         $rawHeaders = new HeaderCollection();
@@ -137,30 +152,19 @@ class Felamimail_MAPI_Message extends BaseMessage
         foreach ($transport as $header) {
             $rawHeaders->add($header);
         }
-        
-        // sender        
-        $senderType = $this->properties['sender_addrtype'];
-        if ($senderType == 'SMTP') {
-            $rawHeaders->set('From', $this->getSender());
-        }
-        elseif (!$rawHeaders->has('From')) {
-            if ($from = $this->getSender()) {
-                $rawHeaders->set('From', $from);
-            }
-        }
-        
+
         // recipients
         $recipients = $this->getRecipients();
-        
+
         // fix duplicated content
         foreach (['to', 'cc', 'bcc'] as $type) {
             $rawHeaders->unset($type);
         }
-        
+
         foreach ($recipients as $r) {
             $rawHeaders->add($r->getType(), (string)$r);
         }
-        
+
         // subject - preference to msg properties
         if ($this->properties['subject']) {
             $rawHeaders->set('Subject', $this->properties['subject']);
@@ -208,8 +212,6 @@ class Felamimail_MAPI_Message extends BaseMessage
                 $rawHeaders->set($do[1], $value);
             }
         }
-
         return $rawHeaders;
-
     }
 }

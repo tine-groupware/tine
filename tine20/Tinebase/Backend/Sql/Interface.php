@@ -80,4 +80,7 @@ interface Tinebase_Backend_Sql_Interface extends Tinebase_Backend_Interface
      * TODO maybe move to abstract interface?
      */
     public function has(array $_ids, $_getDeleted = false);
+
+    public function addSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void;
+    public function removeSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void;
 }

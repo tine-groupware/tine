@@ -14,6 +14,7 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
             this.searchComboConfig = {
                 mode: 'local',
+                listEmptyText: this.app.i18n._('Use show all button bellow to search for all tasks'),
                 recordEditPluginConfig: {
                     editDialogConfig: this.editDialogConfig,
                     getRecordDefaults: async () => {
@@ -44,7 +45,7 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
                                 this.store.load();
                             } else {
                                 this.onBeforeLoad(this.store, {});
-                                this.store.data = me.dependendTaskPanel.store.data.clone();
+                                this.store.loadData(me.dependendTaskPanel.store.getData());
                                 this.store.remove(this.store.getById(me.findParentBy(function(c) {return c instanceof Tine.widgets.dialog.EditDialog})?.recordId));
                                 this.store.clearFilter();
                                 this.store.fireEvent('datachanged', this.store);
@@ -65,7 +66,8 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
             const parantTaskId = this.findParentBy(function(c) {return c instanceof Tine.widgets.dialog.EditDialog})?.recordId;
             // use local store from dependendTaskPanel for task pickers
-            this.getSearchCombo().store.data = this.dependendTaskPanel.store.data.clone();
+            // grr cross window
+            this.getSearchCombo().store.loadData(this.dependendTaskPanel.store.getData());
             this.getSearchCombo().store.remove(this.getSearchCombo().store.getById(parantTaskId));
 
             // prevent recursion
@@ -104,16 +106,34 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
             });
         }
 
-        const summary = Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'summary', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
-        const status = Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus', 'icon');
-        const organizer = (account) => {
-            // resolved?
-            return account && account.accountLastName ? avatarRenderer('', {}, Tine.Tinebase.data.Record.setFromJson(account, Tine.Tinebase.Model.User)) : '';
-        };
-
-        this.colModel.config[0].renderer = function(value, row, record) {
-            const task = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tasks.Model.Task);
-            return `${summary(task.get('summary'), {}, task)} ${organizer(task.get('organizer'), {}, task)} ${status(task.get('status'), {}, task)}`;
-        };
+        this.colModel.config[0].renderer = Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'dependedTask', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL)
     }
 }));
+
+
+Tine.Tinebase.appMgr.isInitialised('Tasks').then(() => {
+    // const source = Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'source', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+    const summary = Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'summary', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+    const status = Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus', 'icon');
+    const organizer = (account) => {
+        // resolved?
+        return account && account.accountLastName ? avatarRenderer('', {}, Tine.Tinebase.data.Record.setFromJson(account, Tine.Tinebase.Model.User)) : '';
+    };
+
+    // single record
+    const task = value => {
+        const task = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tasks.Model.Task);
+        // <div class="tasks-dependency-source">${source(task.get('source'), {}, task)}</div>
+        return `${summary(task.get('summary'), {}, task)} ${organizer(task.get('organizer'), {}, task)} ${status(task.get('status'), {}, task)}`;
+    }
+    Tine.widgets.grid.RendererManager.register('Tasks', 'Task', 'dependedTask', task, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+
+    // TaskDependency
+    const tasks = vs => {
+        return _.join(_.map(_.map(vs, 'depends_on'), task), ', ' );
+    }
+    Tine.widgets.grid.RendererManager.register('Tasks', 'Task', 'dependens_on', tasks, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+});
+
+
+

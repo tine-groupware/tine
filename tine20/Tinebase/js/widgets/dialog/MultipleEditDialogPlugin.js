@@ -150,13 +150,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }, this);
 
         const keys = [];
-        
-        // disable container selector - just container_id
-        const field = this.editDialog.getForm().findField('container_id');
-        if (field) {
-            field.disable();
-        }
-        
+
         // get fields to handle
         Ext.each(this.editDialog.recordClass.getFieldDefinitions(), function(item) {
             const key = item.name;
@@ -232,6 +226,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             } else if (ff.isXType('checkbox')) {
                 ff.startEvents = ['check'];
                 ff.triggerEvents = ['check', 'blur'];
+            } else if (ff.isXType('tinewidgetscontainerselectcombo')) {
+                ff.startEvents = ['focus', 'expand'];
+                ff.triggerEvents = ['select', 'blur'];
             }
             // add field to handlefields array
             this.handleFields.push(field);
@@ -288,6 +285,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             } else if (ff.isXType('checkbox')) {
                 var startValue = (startValue == 1) ? true : false;
                 ff.setValue(startValue);
+            } else if (ff.isXType('tinewidgetscontainerselectcombo')) {
+                startValue = ff.getValue()
+                ff.on('blur', this.onTriggerField, ff)
+                ff.on('select', this.onTriggerField, ff)
             }
             ff.startingValue = (startValue == undefined || startValue == null) ? '' : startValue;
             
@@ -424,7 +425,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (this.store) {
                 this.store.removeAll();
             }
-            this.setValue('');
+            if (this.isXType('textarea')) {
+                this.setValue(null)
+            } else {
+                this.setValue('');
+            }
             if (this.multi) {
                 this.cleared = true;
                 this.allowBlank = this.origAllowBlank;
@@ -459,10 +464,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             currentValue = this.fullDateTime ? this.fullDateTime.format('Y-m-d H:i:s') : '';
         } else if (this.isXType('timefield')) {
             currentValue = this.fullDateTime;
+        } else if (this.isXType('textarea')) {
+            currentValue = this.getValue() || ''
         } else {
             currentValue = this.getValue();
         }
-        
+
         Tine.log.info('Start value: "' + originalValue + '", current: "' + currentValue + '"');
         if ((Ext.encode(originalValue) != Ext.encode(currentValue)) || (this.cleared === true)) {  // if edited or cleared
             // Create or set arrow
@@ -497,6 +504,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.edited = false;
             if (this.multi) {
                 this.addClass('tinebase-editmultipledialog-noneedit');
+                this.removeClass('x-form-invalid')
             }
             
             // Set button
@@ -535,7 +543,17 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             var multiData = {name: fieldDef.name};
             this.interRecord.multiData.push(multiData);
             Ext.each(records, function(record, index) {
-                if (field && field.type == 'relation') {
+                if (field && field.key === 'container_id') {
+                    if (!this.interRecord.get('container_id')) {
+                        this.interRecord.set('container_id', record.get('container_id'))
+                    }
+                    if (record.get('container_id').id !== this.interRecord.get('container_id').id) {
+                        this.interRecord.set('container_id', '')
+                        this.setFieldValue(field, false)
+                    } else {
+                        this.setFieldValue(field, true)
+                    }
+                } else if (field && field.type == 'relation') {
                     this.setFieldValue(field, false);
                 } else {
                     // the first record of the selected is the reference

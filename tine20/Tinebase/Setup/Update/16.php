@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2023.11 (ONLY!)
@@ -24,26 +24,26 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
-        self::PRIO_TINEBASE_STRUCTURE     => [
-            self::RELEASE016_UPDATE001          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update001',
+        self::PRIO_TINEBASE_STRUCTURE => [
+            self::RELEASE016_UPDATE001 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update001',
             ],
-            self::RELEASE016_UPDATE002          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update002',
+            self::RELEASE016_UPDATE002 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update002',
             ],
-            self::RELEASE016_UPDATE004          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update004',
+            self::RELEASE016_UPDATE004 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update004',
             ],
-            self::RELEASE016_UPDATE005          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update005',
+            self::RELEASE016_UPDATE005 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update005',
             ],
-            self::RELEASE016_UPDATE006          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update006',
+            self::RELEASE016_UPDATE006 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update006',
             ],
             self::RELEASE016_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
@@ -54,14 +54,14 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update008',
             ],
         ],
-        self::PRIO_TINEBASE_UPDATE        => [
-            self::RELEASE016_UPDATE000          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update000',
+        self::PRIO_TINEBASE_UPDATE => [
+            self::RELEASE016_UPDATE000 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update000',
             ],
-            self::RELEASE016_UPDATE003          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update003',
+            self::RELEASE016_UPDATE003 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update003',
             ]
         ],
     ];

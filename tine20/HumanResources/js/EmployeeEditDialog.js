@@ -25,7 +25,7 @@ Ext.ns('Tine.HumanResources');
 Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     windowWidth: 800,
-    windowHeight: 670,
+    windowHeight: 830,
 
     /**
      * show private Information (autoset due to rights)
@@ -489,9 +489,22 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             )
                         ]]
                     }]
+                }, {
+                    xtype: 'fieldset',
+                    layout: 'hfit',
+                    autoHeight: true,
+                    title: this.app.i18n._('Evaluation Dimensions'),
+                    items: [{
+                        xtype: 'columnform',
+                        formDefaults: { ...formFieldDefaults },
+                        items: [
+                            [
+                                this.fieldManager('costcenters', {hideLabel: true, title: false, columnWidth: 1})
+                            ],
+                        ]
+                    }]
                 }
-                
-                ]
+            ]
             }, {
                 // activities and tags
                 layout: 'ux.multiaccordion',
@@ -532,15 +545,41 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 ]
             }]
         }];
-        
-        if (this.useSales) {
-            this.costCenterGridPanel = new Tine.HumanResources.CostCenterGridPanel({
+
+        this.costCenterGridPanel = new Ext.Panel({
+            title: 'Evaluation Dimensions',
+            app: this.app,
+            editDialog: this,
+            items: [
+                {
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: { ...formFieldDefaults },
+                    items: [
+                        this.fieldManager('costcenters')
+                    ]}
+            ]
+        });
+        tabs.push(this.costCenterGridPanel);
+
+        if (Tine.Tinebase.appMgr.isEnabled('Inventory')) {
+            this.inventoryGridPanel = new Tine.Inventory.InventoryItemGridPanel({
+                title: 'Inventory',
                 app: this.app,
                 editDialog: this,
+                frame: false,
+                autoScroll: true,
+                onStoreBeforeload: function(store, options) {
+                    this.supr().onStoreBeforeload.call(this, store, options);
+                    options.params.filter.push({field: 'status', operator: 'in', value: ['ORDERED', 'AVAILABLE', 'DEFECT', 'UNKNOWN']});
+                    options.params.filter.push({field: 'employee', operator: 'definedBy', value: [
+                            {field: 'account_id', operator: 'equals', value: this.editDialog.record.get('account_id')}
+                        ]});
+                },
             });
-            tabs.push(this.costCenterGridPanel);
+            tabs.push(this.inventoryGridPanel);
         }
-        
+
         tabs = tabs.concat([
             this.contractGridPanel,
             this.vacationGridPanel,

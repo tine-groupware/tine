@@ -160,6 +160,9 @@ grid.on('validateedit', function(e) {
         
         this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [true]), this);
         this.on('columnresize', this.stopEditing, this, [true]);
+        this.mon(Ext.getDoc(), {
+            mousedown: this.stopEditingIf.createDelegate(this, [false], true)
+        });
 
         if(this.clicksToEdit === 1){
             this.on("cellclick", this.onCellDblClick, this);
@@ -195,11 +198,11 @@ grid.on('validateedit', function(e) {
     },
 
     // private
-    onCellDblClick : function(g, row, col){
+    onCellDblClick : function(g, row, col, e){
         if(this.clicksToEdit === 'auto') {
             this.denyEdit();
         } else {
-            this.startEditing(row, col);
+            this.startEditing(row, col, e);
         }
     },
 
@@ -287,7 +290,7 @@ grid.on('validateedit', function(e) {
      * @param {Number} rowIndex
      * @param {Number} colIndex
      */
-    startEditing : function(row, col){
+    startEditing : function(row, col, e){
         this.stopEditing();
         if(this.colModel.isCellEditable(col, row)){
             this.view.ensureVisible(row, col, true);
@@ -300,7 +303,8 @@ grid.on('validateedit', function(e) {
                     value: r.data[field],
                     row: row,
                     column: col,
-                    cancel:false
+                    cancel:false,
+                    e: e
                 };
             if(this.fireEvent("beforeedit", e) !== false && !e.cancel){
                 this.editing = true;
@@ -367,6 +371,14 @@ grid.on('validateedit', function(e) {
     // private
     postEditValue : function(value, originalValue, r, field){
         return this.autoEncode && Ext.isString(value) ? Ext.util.Format.htmlEncode(value) : value;
+    },
+
+    stopEditingIf : function(e, el, opt, cancel){
+        if(this.editing && this.activeEditor && !this.activeEditor.field.preventStopEditing){
+            if(!this.activeEditor.el.contains(e.target) && this.activeEditor.field.validateBlur && this.activeEditor.field.validateBlur(e,el,opt)) {
+                this.stopEditing(cancel)
+            }
+        }
     },
 
     /**

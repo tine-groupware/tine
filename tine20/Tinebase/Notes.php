@@ -1108,4 +1108,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         return $deletedCount;
     }
+
+    public function addSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__);
+    }
+
+    public function removeSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__);
+    }
 }

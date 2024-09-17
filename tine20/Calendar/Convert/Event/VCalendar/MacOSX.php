@@ -30,36 +30,20 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     '/';
 
     const INTELLIGROUP = 'INTELLIGROUP';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        #'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        #'rrule_until',
-        'originator_tz',
-    );
 
     /**
      * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
      *
-     * @param  Tinebase_Record_RecordSet  $_records
      * @return Sabre\VObject\Component
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
+     *
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
     {
         $oldGroupValue = static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP];
 
@@ -165,7 +149,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
 
         // NOTE 10.7 and 10.10 sometimes write access into calendar property
         if (isset($vcalendar->{'X-CALENDARSERVER-ACCESS'})) {
-            foreach ($vcalendar->VEVENT as $vevent) {
+            foreach ($vcalendar->__get('VEVENT') as $vevent) {
                 $vevent->{'X-CALENDARSERVER-ACCESS'} = $vcalendar->{'X-CALENDARSERVER-ACCESS'};
             }
         }
@@ -202,7 +186,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         ) {
             $event->rrule = preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) use ($vevent) {
                 // refetch UNTIL from vevent and drop timepart
-                preg_match('/UNTIL=([\dTZ]+)(?=;?)/', $vevent->RRULE, $matches);
+                preg_match('/UNTIL=([\dTZ]+)(?=;?)/', $vevent->__get('RRULE'), $matches);
                 $dtUntil = Calendar_Convert_Event_VCalendar_Abstract::getUTCDateFromStringInUsertime(substr($matches[1], 0, 8));
                 return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
             }, (string)$event->rrule);

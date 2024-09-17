@@ -89,7 +89,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             name: key,
             fieldDefinition: fieldDefinition
         };
-
+        
         if (fieldDefinition.type) {
             // add pre defined type
             field.type = this.types[fieldDefinition.type];
@@ -114,9 +114,15 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 || (fieldDefinition.nullable)) {
                 field.defaultValue = null;
             }
+            if (fieldDefinition.hasOwnProperty('validators')) {
+                if (fieldDefinition['validators']['default']) {
+                    field.defaultValue = fieldDefinition['validators']['default'];
+                }
+            }
             if (fieldDefinition.hasOwnProperty('default')) {
                 field.defaultValue = fieldDefinition['default'];
             }
+            
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
                 field.dateFormat = fieldDefinition.dateFormat;
@@ -286,8 +292,8 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         const appName = modelConfig.appName;
         const modelName = modelConfig.modelName;
         const owningAppName = _.get(fieldconfig, 'owningApp') || appName;
-        const app = Tine.Tinebase.appMgr.get(owningAppName);
-        if (! app) {
+
+        if (! Tine.Tinebase.appMgr.getInitialisedRecord(owningAppName)) {
             Tine.log.error('Application ' + owningAppName + ' not found!');
             return null;
         }
@@ -303,17 +309,18 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         
         var fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
-            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation'))),
-            i18n = globalI18n ? window.i18n : app.i18n;
-        
+            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
+
         if (! label || _.get(fieldconfig, 'disabled') || _.get(fieldconfig, 'uiconfig.disabled') || _.get(filterOptions, 'disabled')) {
             return null;
         }
         // prepare filter
         var filter = {
-            label: i18n._hidden(label),
+            label,
+            owningAppName,
+            globalI18n,
             field: fieldKey,
-            gender: i18n._hidden('GENDER_' + label),
+            gender: 'GENDER_' + label,
             specialType: fieldconfig ? fieldconfig.specialType : null
         };
         
@@ -555,7 +562,11 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                                 var window = Tine.WindowFactory.getWindow({
                                     width: edp.windowWidth ? edp.windowWidth : 600,
                                     height: edp.windowHeight ? edp.windowHeight :
-                                        Tine.widgets.form.RecordForm.getFormHeight(Tine[appName].Model[modelName]),
+                                        Tine.widgets.form.RecordForm.getFormHeight(
+                                            Tine[appName].Model[modelName],
+                                            cfg.showFields || edp.showFields,
+                                            cfg.hideFields || edp.hideFields
+                                        ),
                                     name: edp.windowNamePrefix + id,
                                     asIframe: cfg.asIframe,
                                     contentPanelConstructor: 'Tine.' + appName + '.' + editDialogName,
@@ -567,13 +578,13 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     }
                     // create Gridpanel
                     var gridPanelName = modelName + 'GridPanel', 
-                        gpConfig = {
+                        gpConfig = Object.assign({
                             modelConfig: modelConfig,
                             app: Tine.Tinebase.appMgr.get(appName),
                             recordProxy: Tine[appName][recordProxyName],
                             recordClass: Tine[appName].Model[modelName],
                             listenMessageBus: true
-                        };
+                        }, modelConfig.uiconfig);
                         
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {
                         Tine[appName][gridPanelName] = Ext.extend(Tine.widgets.grid.GridPanel, gpConfig);

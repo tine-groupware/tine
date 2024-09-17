@@ -28,6 +28,6 @@ class DFCom_AllTests
 
     public static function estimatedRunTime()
     {
-        return 12;
+        return 8;
     }
 }

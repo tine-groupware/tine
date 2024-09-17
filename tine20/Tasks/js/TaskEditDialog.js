@@ -62,6 +62,7 @@ import './DependencyPanel'
      */
     initComponent: function() {
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
+        this.sourceRenderer = Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'source', Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
         Tine.Tasks.TaskEditDialog.superclass.initComponent.call(this);
     },
     
@@ -85,6 +86,10 @@ import './DependencyPanel'
         if (! this.copyRecord && ! this.record.id) {
             this.window.setTitle(this.app.i18n._('Add New Task'));
         }
+
+        const source = this.record.get('source');
+        this.sourceHint.setVisible(!! source);
+        this.sourceHint.setText(source ? this.app.i18n._('This Task is part of:') + ' ' + this.sourceRenderer(source, {}, this.record) : '...');
     },
     
     /**
@@ -105,8 +110,9 @@ import './DependencyPanel'
         var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus'),
             status = this.getForm().findField('status').getValue(),
             statusRecord = statusStore.getById(status),
-            completedField = this.getForm().findField('completed');
-        
+            completedField = this.getForm().findField('completed'),
+            percentField = this.getForm().findField('percent');
+
         if (statusRecord) {
             if (statusRecord.get('is_open') !== 0) {
                 completedField.setValue(null);
@@ -115,6 +121,7 @@ import './DependencyPanel'
                 if (! Ext.isDate(completedField.getValue())){
                     completedField.setValue(new Date());
                 }
+                percentField.setValue(100);
                 completedField.setDisabled(false);
             }
         }
@@ -156,6 +163,9 @@ import './DependencyPanel'
             border: false,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tasks-Task-EditDialog-TabPanel'
             }],
             defaults: {
                 hideMode: 'offsets'
@@ -177,6 +187,12 @@ import './DependencyPanel'
                         columnWidth: .333
                     },
                     items: [[{
+                        xtype: 'v-alert',
+                        variant: 'info',
+                        columnWidth: 1,
+                        ref: '../../../../../sourceHint',
+                        label: '...'
+                    }],[{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Summary'),
                         name: 'summary',
@@ -188,20 +204,26 @@ import './DependencyPanel'
                             fieldLabel: this.app.i18n._('Due date'),
                             name: 'due',
                             listeners: {scope: this, change: this.validateDue},
-                        }), 
+                            columnWidth: 1/3,
+                        }),
+                        this.fieldManager('estimated_duration', {
+                            columnWidth: 1/6
+                        }),
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             fieldLabel: this.app.i18n._('Priority'),
                             name: 'priority',
                             app: 'Tasks',
                             keyFieldName: 'taskPriority',
+                            columnWidth: 1/6,
                         }),
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
-                            fieldLabel: this.app.i18n._('Organizer'),
+                            fieldLabel: this.app.i18n._('Organizer / Responsible'),
                             emptyText: i18n._('Add Responsible ...'),
                             useAccountRecord: true,
                             name: 'organizer',
-                            allowBlank: true
+                            allowBlank: true,
+                            columnWidth: 1/3,
                         })
                     ], [{
                         columnWidth: 1,
@@ -273,6 +295,47 @@ import './DependencyPanel'
          if (Ext.isDate(due) && due.getTime() - Date.now() <= 0) {
              dueField.markInvalid(this.app.i18n._('Attention: This due date is in the past!'));
          }
+     },
+
+     getCopyRecordData: function (record, recordClass, omitCopyTitle) {
+         const recordData = Tine.Tasks.TaskEditDialog.superclass.getCopyRecordData.apply(this, arguments);
+         recordData.id = Tine.Tinebase.data.Record.generateUID();
+         recordData.uid = Tine.Tinebase.data.Record.generateUID();
+
+         // @TODO get correct container (needs an option)
+         const templateContainer = Tine.Tinebase.configManager.get('templateContainer', 'Tasks')
+
+         if ((recordData.container_id?.id || recordData.container_id) === templateContainer) {
+             const defaultData = Tine.Tasks.Model.Task.getDefaultData();
+             recordData.container_id = defaultData.container_id;
+         }
+
+         recordData.attendees = _.map(record.get('attendees'), (attendee) => {
+             return Object.assign(attendee, {
+                 id: null,
+                 task_id: recordData.id
+             });
+         });
+
+         // @TODO copy? (needs an option)
+         recordData.dependens_on = null
+
+         // @TODO clear? (needs an option)
+         recordData.dependent_taks = _.map(record.get('dependent_taks'), (taskDependency) => {
+             // @TODO is dependent task fully resolved here?
+             const task = Tine.Tinebase.data.Record.setFromJson(taskDependency.task_id, recordClass);
+             return Object.assign({... taskDependency}, {
+                 id: null,
+                 depends_on: recordData.id,
+                 task_id: Tine.Tasks.TaskEditDialog.prototype.getCopyRecordData.call(this, task, recordClass, omitCopyTitle)
+             });
+         });
+
+         if (record.get('container_id')?.id === Tine.Tinebase.configManager.get('templateContainer', 'Tasks')) {
+             recordData.container_id = Tine.Tasks.Model.Task.getDefaultData().container_id;
+         }
+
+         return recordData;
      }
 });
 

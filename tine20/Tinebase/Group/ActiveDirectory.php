@@ -116,17 +116,10 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         parent::__construct($_options);
     }
 
-    /**
-     * create a new group in sync backend
-     *
-     * @param  Tinebase_Model_Group  $_group
-     * 
-     * @return Tinebase_Model_Group|NULL
-     */
-    public function addGroupInSyncBackend(Tinebase_Model_Group $_group) 
+    public function addGroupInSyncBackend(Tinebase_Model_Group $_group): ?Tinebase_Model_Group
     {
-        if ($this->_isReadOnlyBackend) {
-            return NULL;
+        if ($this->isDisabledBackend() || (!empty($groupNames = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS})) && !in_array($_group->name, $groupNames)) {
+            return null;
         }
         
         $dn = $this->_generateDn($_group);
@@ -174,12 +167,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     public function addGroupMemberInSyncBackend($_groupId, $_accountId) 
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isDisabledBackend() || !($groupId = $this->getWriteableGroupIds([Tinebase_Model_Group::convertGroupIdToInt($_groupId)]))) {
             return;
         }
-        
+        $groupId = $groupId[0];
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $memberships = $this->getGroupMembershipsFromSyncBackend($userId);
         if (in_array($groupId, $memberships)) {
@@ -210,6 +202,10 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     public function getGroupMembershipsFromSyncBackend($_userId)
     {
+        if ($this->isDisabledBackend()) {
+            return [];
+        }
+
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         
         // find user in AD and retrieve memberOf attribute
@@ -287,10 +283,10 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     public function updateGroupInSyncBackend(Tinebase_Model_Group $_group)
     {
-        if ($this->isDisabledBackend() || $this->isReadOnlyBackend()) {
+        if ($this->isDisabledBackend() || !$this->getWriteableGroupIds([$_group->getId()])) {
             return $_group;
         }
-        
+
         $metaData = $this->_getMetaData($_group->getId());
         $dn = $metaData['dn'];
         
@@ -322,7 +318,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         unset($ldapData['cn']);
 
         $this->getLdap()->update($dn, $ldapData);
-        
+
+        if (null !== $this->_writeGroupsIds) {
+            $this->setGroupMembersInSyncBackend($_group->getId(), $this->getGroupMembers($_group->getId()));
+        }
+
         $group = $this->getGroupByIdFromSyncBackend($_group);
         
         return $group;
@@ -334,14 +334,13 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      * @param  mixed  $_groupId
      * @param  mixed  $_accountId
      */
-    public function removeGroupMemberInSyncBackend($_groupId, $_accountId) 
+    public function removeGroupMemberInSyncBackend($_groupId, $_accountId, $_checkWriteGroupIds = true)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isDisabledBackend() || !($groupId = $this->getWriteableGroupIds([Tinebase_Model_Group::convertGroupIdToInt($_groupId)]))) {
             return;
         }
-        
+        $groupId = $groupId[0];
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
         $memberships = $this->getGroupMemberships($_accountId);
         if (!in_array($groupId, $memberships)) {
@@ -387,6 +386,15 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " Failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zle->getTraceAsString());
+        }
+
+        if ($this->_writeGroupsIds && $_checkWriteGroupIds) {
+            unset($memberships[array_search($groupId, $memberships, true)]);
+            if (!$this->getWriteableGroupIds($memberships)) {
+                /** @var Tinebase_User_Interface_SyncAble $syncable */
+                $syncable = Tinebase_User::getInstance();
+                $syncable->deleteUserInSyncBackend($userId);
+            }
         }
     }
     
@@ -478,11 +486,25 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     public function setGroupMembersInSyncBackend($_groupId, $_groupMembers) 
     {
-        if ($this->_isReadOnlyBackend) {
-            return $_groupMembers;
+        if ($this->isDisabledBackend() || !($_groupId = $this->getWriteableGroupIds([$_groupId]))) {
+            return;
         }
+        $_groupId = $_groupId[0];
 
         $groupMetaData = $this->_getMetaData($_groupId);
+
+        $removedAccounts = [];
+        if ($this->_writeGroupsIds) {
+            foreach ((array)$_groupMembers as $userId) {
+                // make sure the account exists in sync backend
+                /** @var Tinebase_User_Interface_SyncAble $syncCtrl */
+                $syncCtrl = Tinebase_User::getInstance();
+                $syncCtrl->setUserAsWriteGroupMember($userId);
+                Tinebase_User::getInstance()->updateUser(Tinebase_User::getInstance()->getFullUserById($userId));
+            }
+
+            $removedAccounts = array_diff($this->getGroupMembers($_groupId), $_groupMembers);
+        }
         
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers, FALSE);
         if (count($_groupMembers) !== count($membersMetaDatas)) {
@@ -520,6 +542,18 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
         $this->getLdap()->update($groupMetaData['dn'], $ldapData);
+
+        if ($this->_writeGroupsIds && $removedAccounts) {
+            foreach ($removedAccounts as $accountId) {
+                $memberships = $this->getGroupMemberships($accountId);
+                unset($memberships[array_search($_groupId, $memberships, true)]);
+                if (!$this->getWriteableGroupIds($memberships)) {
+                    /** @var Tinebase_User_Interface_SyncAble $syncable */
+                    $syncable = Tinebase_User::getInstance();
+                    $syncable->deleteUserInSyncBackend($accountId);
+                }
+            }
+        }
         
         return $_groupMembers;
     }

@@ -37,7 +37,7 @@
  * @property    array   $fileLocations      file locations of this message
  * @property    boolean $is_spam_suspicions true if is spam suspicions
  * @property    array   $sent_copy_folder   target folder ids when save copy message to source folder
-
+ * @property    Tinebase_DateTime  $expected_answer    the selected date option for an expected answer
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tinebase_BL_DataInterface
 {
@@ -46,6 +46,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      *
      */
     const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
+
+    const CONTENT_TYPE_MESSAGE_OUTLOOK = 'Microsoft Office Outlook Message';
 
     /**
      * content type html
@@ -184,6 +186,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'is_spam_suspicions'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), // originally categories handled by Tinebase_Tags
         'sent_copy_folder'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'expected_answer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -195,6 +198,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'timestamp',
         'received',
         'sent',
+        'expected_answer',
     );
 
     /**
@@ -205,7 +209,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      *
      * @todo move to converter?
      */
-    public static function createFromMime($_mimeContent)
+    public static function createFromMime($_mimeContent, $mimeType = null)
     {
         $message = \ZBateson\MailMimeParser\Message::from($_mimeContent, false);
 
@@ -236,12 +240,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                 $data[$headerKey][] = $address->getEmail();
             }
         }
-
-        $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_HTML);
+        $mimeType = $mimeType ?? Zend_Mime::TYPE_HTML;
+        $contentPart = $message->getPartByMimeType($mimeType);
         if (! $contentPart) {
             $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_TEXT);
         }
-
         if ($contentPart) {
             if ($contentPart->getContentType() == Zend_Mime::TYPE_TEXT) {
                 $data['body'] = $contentPart->getContent();
@@ -253,8 +256,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                     $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
                 } else {
                     $data['body'] = $contentPart->getContent();
+                    if (strip_tags($data['body']) !== $data['body']) {
+                        $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+                    }
                 }
-
                 $data['body_content_type'] = Zend_Mime::TYPE_HTML;
             }
         }

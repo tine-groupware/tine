@@ -74,12 +74,12 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         this.applyGrouping();
     },
 
-    groupRecords: function(rs, append) {
+    groupRecords: async function(rs, append) {
         // put data into groups
         var groups = [];
         var records = [];
-        Ext.each(rs, function(r) {
-            var groupNames = this.getGroupNames(r);
+        await [].concat(rs).asyncForEach(async (r) => {
+            var groupNames = await this.getGroupNames(r);
 
             Ext.each(groupNames, function(groupName) {
                 var idx = groups.indexOf(groupName);
@@ -118,8 +118,8 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         }, this);
     },
 
-    setFixedGroups: function(groupNames) {
-        groupNames = this.sanitizeGroupNames(groupNames);
+    setFixedGroups: async function(groupNames) {
+        groupNames = await this.sanitizeGroupNames(groupNames);
 
         this.fixedGroups = groupNames;
         if (groupNames.length) {
@@ -151,7 +151,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
      * @param {Ext.data.record} record
      * @returns {Array}
      */
-    getGroupNames: function(record) {
+    getGroupNames: async function(record) {
         var _ = window.lodash,
             groupNames = Ext.isFunction(this.group) ? this.group(record) : record.get(this.group);
 
@@ -159,7 +159,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             groupNames = [groupNames];
         }
 
-        groupNames = this.sanitizeGroupNames(groupNames);
+        groupNames = await this.sanitizeGroupNames(groupNames);
 
         if (this.fixedGroups.length) {
             groupNames = _.intersection(groupNames, this.fixedGroups);
@@ -168,16 +168,16 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         return groupNames;
     },
 
-    sanitizeGroupNames: function(groupNames) {
-        groupNames = groupNames.map((groupName) => {
+    sanitizeGroupNames: async function(groupNames) {
+        groupNames = await Promise.all(groupNames.map((groupName) => {
             if (! _.isObject(groupName)) return groupName;
-            if (_.isFunction(groupName.getTitle)) return groupName.getTitle();
+            if (_.isFunction(groupName.getTitle)) return groupName.getTitle().asString();
             if (_.isString(this.group) && this.store.recordClass) return Tine.widgets.grid.RendererManager.get(
                 this.store.recordClass.getMeta('appName'),
                 this.store.recordClass.getMeta('modelName'),
                 this.group
-            )(groupName);
-        });
+            )(groupName).asString();
+        }));
 
         if (_.remove(groupNames, (v) => {return [null, undefined, false, Infinity, NaN].indexOf(v) >= 0}).length) {
             groupNames.push('');
@@ -202,31 +202,34 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
         }
     },
 
-    onStoreAdd: function (store, records, index) {
+    onStoreAdd: async function (store, records, index) {
+        const suspendCloneStoreEvents = this.suspendCloneStoreEvents;
         this.suspendCloneStoreEvents = true;
 
-        Ext.each(records, function (record) {
-            Ext.each(this.getGroupNames(record), function (groupName) {
+        await [].concat(records).asyncForEach(async (record) => {
+            var groupNames = await this.getGroupNames(record);
+
+            Ext.each(groupNames, function (groupName) {
                 var store = this.get(groupName),
                     existingRecord = store && record.id != 0 ? store.getById(record.id) : null;
 
                 // NOTE: record might be existing as it was added to a cloneStore
                 if (existingRecord) {
-                    this.getCloneStore(groupName).replace(existingRecord, record.copy());
+                    this.getCloneStore(groupName).replaceRecord(existingRecord, record.copy());
                 } else {
                     this.getCloneStore(groupName).add([record.copy()]);
                 }
             }, this);
+        });
 
-        }, this);
-
-        this.suspendCloneStoreEvents = false;
+        this.suspendCloneStoreEvents = suspendCloneStoreEvents;
     },
 
-    onStoreUpdate: function(store, record, operation) {
+    onStoreUpdate: async function(store, record, operation) {
+        const suspendCloneStoreEvents = this.suspendCloneStoreEvents;
         this.suspendCloneStoreEvents = true;
 
-        var groupNames = this.getGroupNames(record);
+        var groupNames = await this.getGroupNames(record);
         this.eachKey(function(groupName) {
             var store = this.get(groupName),
                 existingRecord = store.getById(record.id);
@@ -249,10 +252,11 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             store.add(record.copy());
         }, this);
 
-        this.suspendCloneStoreEvents = false;
+        this.suspendCloneStoreEvents = suspendCloneStoreEvents;
     },
 
     onStoreRemove: function(store, record, index) {
+        const suspendCloneStoreEvents = this.suspendCloneStoreEvents;
         this.suspendCloneStoreEvents = true;
 
         this.eachKey(function(groupName) {
@@ -265,7 +269,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
 
         }, this);
 
-        this.suspendCloneStoreEvents = false;
+        this.suspendCloneStoreEvents = suspendCloneStoreEvents;
     },
 
     getCloneStore: function(groupName) {

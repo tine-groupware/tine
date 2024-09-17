@@ -67,6 +67,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                     
                     const isAppNode = nodeData.virtualPath.split('/').length === 2;
                     nodeData.i18n_name = isAppNode ? app.getTitle() : nodeData.name;
+                    nodeData.text = nodeData.i18n_name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
                 });
                 
@@ -86,13 +87,12 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         };
 
         this.columns = [{
-            id: 'i18n_name',
+            dataIndex: 'i18n_name',
             header: this.app.i18n._("Name"),
             width: 400,
             sortable: true,
-            dataIndex: 'i18n_name'
         },{
-            id: 'i18n_name',
+            id: 'quota',
             header: this.app.i18n._("Quota"),
             width: 400,
             sortable: true,
@@ -107,9 +107,8 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 this.columns.push({
                     id: 'size',
                     header: this.app.i18n._("Size"),
-                    width: 60,
                     sortable: true,
-                    dataIndex: 'size',
+                    width: 100,
                     tpl: new Ext.XTemplate('{size:this.byteRenderer}', {
                         byteRenderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
                     })
@@ -121,9 +120,8 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                     id: 'revision_size',
                     header: this.app.i18n._("Revision Size"),
                     tooltip: this.app.i18n._("Total size of all available revisions"),
-                    width: 60,
+                    width: 100,
                     sortable: true,
-                    dataIndex: 'revision_size',
                     tpl: new Ext.XTemplate('{revision_size:this.byteRenderer}', {
                         byteRenderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
                     })

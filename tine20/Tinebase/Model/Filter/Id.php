@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -236,6 +236,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         try {
             if (method_exists($controller, 'get')) {
                 $record = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ false);
+                Tinebase_Record_Expander::expandRecord($record);
                 if ($record) {
                     $recordArray = $record->toArray();
                 } else {

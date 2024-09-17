@@ -722,16 +722,16 @@ class Calendar_RruleTests extends \PHPUnit\Framework\TestCase
         // -> move to controller tests
     //}
     
-    public function testMultipleTimezonesOriginatingInSeatle()
+    public function testMultipleTimezonesOriginatingInLA()
     {
-        date_default_timezone_set('US/Pacific');
+        date_default_timezone_set('America/Los_Angeles');
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'conference',
             'dtstart'       => '2003-03-28 10:00:00',
             'dtend'         => '2003-03-28 12:00:00',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=FR',
-            'originator_tz' => 'US/Pacific',
+            'originator_tz' => 'America/Los_Angeles',
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         $event->setTimezone('UTC');
@@ -744,13 +744,13 @@ class Calendar_RruleTests extends \PHPUnit\Framework\TestCase
         $until = new Tinebase_DateTime('2003-04-11 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
         
-        $recurSet->setTimezone('US/Pacific');
+        $recurSet->setTimezone('America/Los_Angeles');
         $this->assertEquals(10, $recurSet[0]->dtstart->get('G'), 'for orginator dtstart should be stable...');
         $this->assertEquals(10, $recurSet[1]->dtstart->get('G'), 'for orginator dtstart should be stable...');
         
-        $recurSet->setTimezone('US/Arizona');
-        $this->assertEquals(11, $recurSet[0]->dtstart->get('G'), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(10, $recurSet[1]->dtstart->get('G'), 'for US/Arizona dtstart after DST shoud be 10');
+        $recurSet->setTimezone('America/Phoenix');
+        $this->assertEquals(11, $recurSet[0]->dtstart->get('G'), 'for America/Phoenix dtstart before DST should be 11');
+        $this->assertEquals(10, $recurSet[1]->dtstart->get('G'), 'for America/Phoenix dtstart after DST shoud be 10');
         
         $recurSet->setTimezone('America/New_York');
         $this->assertEquals(13, $recurSet[0]->dtstart->get('G'), 'for America/New_York dtstart before DST should be 13');
@@ -761,16 +761,16 @@ class Calendar_RruleTests extends \PHPUnit\Framework\TestCase
         $this->assertEquals(17, $recurSet[1]->dtstart->get('G'), 'for UTC dtstart after DST shoud be 17');
     }
     
-    public function testMultipleTimezonesOriginatingInArizona()
+    public function testMultipleTimezonesOriginatingInPhoenix()
     {
-        date_default_timezone_set('US/Arizona');
+        date_default_timezone_set('America/Phoenix');
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'conference',
             'dtstart'       => '2003-03-28 11:00:00',
             'dtend'         => '2003-03-28 13:00:00',
             'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=FR',
-            'originator_tz' => 'US/Arizona',
+            'originator_tz' => 'America/Phoenix',
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         $event->setTimezone('UTC');
@@ -783,17 +783,17 @@ class Calendar_RruleTests extends \PHPUnit\Framework\TestCase
         $until = new Tinebase_DateTime('2003-04-11 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($event, $exceptions, $from, $until);
         
-        $recurSet->setTimezone('US/Pacific');
-        $this->assertEquals(10, $recurSet[0]->dtstart->get('G'), 'for US/Pacific dtstart before DST should be 10');
-        $this->assertEquals(11, $recurSet[1]->dtstart->get('G'), 'for US/Pacific dtstart before DST should be 11');
+        $recurSet->setTimezone('America/Los_Angeles');
+        $this->assertEquals(10, $recurSet[0]->dtstart->get('G'), 'for America/Los_Angeles dtstart before DST should be 10');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get('G'), 'for America/Los_Angeles dtstart before DST should be 11');
         
-        $recurSet->setTimezone('US/Arizona');
+        $recurSet->setTimezone('America/Phoenix');
         $this->assertEquals(11, $recurSet[0]->dtstart->get('G'), 'for orginator dtstart should be stable...');
         $this->assertEquals(11, $recurSet[1]->dtstart->get('G'), 'for orginator dtstart should be stable...');
         
         $recurSet->setTimezone('America/New_York');
-        $this->assertEquals(13, $recurSet[0]->dtstart->get('G'), 'for US/Arizona dtstart before DST should be 13');
-        $this->assertEquals(14, $recurSet[1]->dtstart->get('G'), 'for US/Arizona dtstart after DST shoud be 14');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get('G'), 'for America/Phoenix dtstart before DST should be 13');
+        $this->assertEquals(14, $recurSet[1]->dtstart->get('G'), 'for America/Phoenix dtstart after DST shoud be 14');
         
         $recurSet->setTimezone('UTC');
         $this->assertEquals(18, $recurSet[0]->dtstart->get('G'), 'for UTC dtstart before DST should be 18');

@@ -114,9 +114,9 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends TestCase
         $this->assertStringContainsString('TEL;TYPE=HOME:+49 PRIVAT', $vcard, $vcard);
         $this->assertStringContainsString('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
         $this->assertStringContainsString('TITLE:Titel', $vcard, $vcard);
-        $this->assertStringContainsString('URL;TYPE=WORK:http://www.tine20.com', $vcard, $vcard);
-        $this->assertStringContainsString('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
-        $this->assertStringContainsString('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
+        $this->assertStringContainsString('URL;TYPE=WORK;VALUE=URI:http://www.tine20.com', $vcard, $vcard);
+        $this->assertStringContainsString('URL;TYPE=HOME;VALUE=URI:http://www.tine20.org', $vcard, $vcard);
+        $this->assertStringContainsString('URL;TYPE=HOME;VALUE=URI:http://www.tine20.org', $vcard, $vcard);
         $this->assertStringContainsString('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcard, $vcard);
     }
 }

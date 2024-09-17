@@ -196,14 +196,22 @@ class Tinebase_Translation
      *
      * @param   string $_localeString
      * @return  Zend_Locale
-     * @throws  Tinebase_Exception_NotFound
+     *
+     * @todo we could also default to system locale if Tinebase_Config::DEFAULT_LOCALE is set to "auto"
      */
-    public static function getLocale($_localeString = 'auto')
+    public static function getLocale(string $_localeString = Tinebase_Config::DEFAULT_LOCALE_AUTO): Zend_Locale
     {
         Zend_Locale::$compatibilityMode = false;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " given localeString '$_localeString'");
+        }
         try {
+            if ($_localeString === Tinebase_Config::DEFAULT_LOCALE_AUTO) {
+                $_localeString = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_LOCALE);
+            }
+
             $locale = new Zend_Locale($_localeString);
             
             // check if we support the locale
@@ -215,7 +223,10 @@ class Tinebase_Translation
             }
             
             if (! in_array($_localeString, $supportedLocales)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " '$locale' is not supported, checking fallback");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " '$locale' is not supported, checking fallback");
+                }
                 
                 // check if we find suitable fallback
                 $language = $locale->getLanguage();
@@ -227,21 +238,28 @@ class Tinebase_Translation
                         if (in_array($language, $supportedLocales)) {
                             $locale = new Zend_Locale($language);
                         } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no suiteable lang fallback found within this locales: " . print_r($supportedLocales, true) );
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . " no suiteable lang fallback found within this locales: "
+                                    . print_r($supportedLocales, true) );
+                            }
                             throw new Tinebase_Exception_NotFound('No suiteable lang fallback found.');
                         }
                         break;
                 }
             }
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
-                ' ' . $e->getMessage() . ', falling back to locale en.');
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
-                ' ' . $e->getTraceAsString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ .
+                    ' ' . $e->getMessage() . ', falling back to locale en.');
+            }
             $locale = new Zend_Locale('en');
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
+        }
         return $locale;
     }
 
@@ -253,7 +271,7 @@ class Tinebase_Translation
      */
     public static function getDefaultTranslation($_applicationName = 'Tinebase')
     {
-        return static::getTranslation($_applicationName, new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
+        return static::getTranslation($_applicationName, Tinebase_Translation::getLocale());
     }
 
     /**
@@ -267,7 +285,7 @@ class Tinebase_Translation
     {
         $locale = $_locale
             ?: Tinebase_Core::getLocale()
-            ?: (Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_LOCALE, 'en'));
+            ?: self::getDefaultTranslation($_applicationName);
         
         $cacheId = (string) $locale . $_applicationName;
         

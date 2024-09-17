@@ -332,6 +332,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
     public function testConvertRepeatingAllDayDailyEventFromTine20Model()
     {
         $event = $this->testConvertRepeatingAllDayDailyEventToTine20Model();
+        unset($event->xprops()['imipProperties']);
         foreach(array($event, $event->exdate[1]) as $raw) {
             $raw->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
             $raw->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');

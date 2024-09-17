@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -68,10 +68,11 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);
         }
         
-        $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic', $container->name);
+        $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic');
+        // TODO FIXME really? why? this is debug code...
         $this->_calDAVClient->setVerifyPeer(false);
         $this->_calDAVClient->getDecorator()->initCalendarImport();
-        $this->_calDAVClient->updateAllCalendarData();
+        $this->_calDAVClient->syncCalendarEvents($uri['path'], $container);
     }
 
     protected function _getImportEvents($_resource, $container)

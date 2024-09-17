@@ -158,7 +158,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @return Tinebase_NewModelConfiguration
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    public static function getConfiguration()
+    public static function getConfiguration(): ?Tinebase_NewModelConfiguration
     {
         if (null === static::$_configurationObject) {
             if (static::class !== (new ReflectionProperty(static::class, '_configurationObject'))->getDeclaringClass()
@@ -213,17 +213,28 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function __clone()
     {
-        foreach ($this->_data as $name => &$value)
-        {
-            if (is_object($value)) {
-                $this->_data[$name] = clone $value;
-            } else if (is_array($value)) {
-                foreach ($value as $arrKey => $arrValue) {
-                    if (is_object($arrValue)) {
-                        $value[$arrKey] = clone $arrValue;
+        static $idMap = [];
+        if ($id = $this->getId()) {
+            if (isset($idMap[$id])) {
+                return;
+            }
+            $idMap[$id] = true;
+        }
+
+        try {
+            foreach ($this->_data as $name => &$value) {
+                if (is_object($value)) {
+                    $this->_data[$name] = clone $value;
+                } else if (is_array($value)) {
+                    foreach ($value as $arrKey => $arrValue) {
+                        if (is_object($arrValue)) {
+                            $value[$arrKey] = clone $arrValue;
+                        }
                     }
                 }
             }
+        } finally {
+            unset($idMap[$id]);
         }
     }
 
@@ -311,15 +322,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         return self::$_inputFilters[$keyName];
     }
 
-    /**
-     * sets identifier of record
-     *
-     * @param string $_id
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    public function setId($_id)
+    public function setId($_id): self
     {
         $this->__set(static::$_configurationObject->getIdProperty(), $_id);
+        return $this;
     }
 
     /**
@@ -413,18 +419,20 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
                 $config = $config[self::TYPE] === self::TYPE_VIRTUAL && isset($config[self::CONFIG][self::TYPE]) ?
                     $config[self::CONFIG] : $config;
-                if (in_array($config[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS]) &&
+                if (in_array($config[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS, self::TYPE_RELATION]) &&
                         isset($config[self::CONFIG][self::APP_NAME]) && isset($config[self::CONFIG][self::MODEL_NAME]) &&
                         (!isset($config[self::CONFIG][self::STORAGE]) || self::TYPE_JSON_REFID !== $config[self::CONFIG][self::STORAGE])) {
-                    $modelName = $config[self::CONFIG]['appName'] . '_Model_' . $config[self::CONFIG][self::MODEL_NAME];
+                    $modelName = $config[self::CONFIG][self::APP_NAME] . '_Model_' . $config[self::CONFIG][self::MODEL_NAME];
                     $this->{$fieldName} = $config[self::TYPE] === self::TYPE_RECORD ?
                         new $modelName($_data[$fieldName], $this->bypassFilters, true) :
                         new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters, true);
                     $this->{$fieldName}->runConvertToRecord();
                 } elseif (self::TYPE_DYNAMIC_RECORD === $config[self::TYPE]) {
                     $modelName = $this->{$config[self::CONFIG][self::REF_MODEL_FIELD]};
-                    $this->{$fieldName} = new $modelName($_data[$fieldName], $this->bypassFilters, true);
-                    $this->{$fieldName}->runConvertToRecord();
+                    if (is_string($modelName) && is_a($modelName, Tinebase_Record_Interface::class, true)) {
+                        $this->{$fieldName} = new $modelName($_data[$fieldName], $this->bypassFilters, true);
+                        $this->{$fieldName}->runConvertToRecord();  
+                    }
                 }
             }
         }
@@ -502,18 +510,33 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function toArray($_recursive = TRUE)
     {
-        $recordArray = $this->_data;
-        $this->_convertDateTimeToString($recordArray, Tinebase_Record_Abstract::ISO8601LONG);
-
-        if ($_recursive) {
-            /** @var Tinebase_Record_Interface  $value */
-            foreach ($recordArray as $property => $value) {
-                if (is_object($value) && method_exists($value, 'toArray')) {
-                    $recordArray[$property] = $value->toArray();
-                }
-            }
+        static $splObjSet = null;
+        if (null === $splObjSet) {
+            $splObjSet = new SplObjectStorage();
+        }
+        if ($splObjSet->contains($this)) {
+            $_recursive = false;
+        } elseif ($_recursive) {
+            $splObjSet->attach($this);
         }
 
+        try {
+            $recordArray = $this->_data;
+            $this->_convertDateTimeToString($recordArray, Tinebase_Record_Abstract::ISO8601LONG);
+
+            if ($_recursive) {
+                /** @var Tinebase_Record_Interface $value */
+                foreach ($recordArray as $property => $value) {
+                    if (is_object($value) && method_exists($value, 'toArray')) {
+                        $recordArray[$property] = $value->toArray();
+                    }
+                }
+            }
+        } finally {
+            if ($_recursive) {
+                $splObjSet->detach($this);
+            }
+        }
         return $recordArray;
     }
 
@@ -952,7 +975,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
             $templateString = $translation->translate($titleProperty);
             $template = $twig->getEnvironment()->createTemplate($templateString);
-            return $template->render(is_array($this->_data) ? $this->_data : []);
+            $data = is_array($this->_data) ? $this->_data : [];
+            $data['record'] = $this;
+            return $template->render($data);
         } else {
             return $this->$titleProperty;
         }
@@ -1675,6 +1700,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         } else {
             $grantProtectedFields = $grantProtectedFields[$action];
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' Grant protected properties of class '
+            . static::class . ' ' . print_r($grantProtectedFields,true));
+
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
         $ctrl = Tinebase_Core::getApplicationInstance(static::class, '', true);
 
@@ -1690,6 +1720,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (empty($denyProperties = array_diff($deny, $access))) {
             return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Deny properties '
+            . print_r($denyProperties,true));
 
         if (null === $oldRecord) {
             $bypassFilters = $this->bypassFilters;

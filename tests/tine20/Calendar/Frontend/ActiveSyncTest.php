@@ -701,6 +701,28 @@ Zeile 3</AirSyncBase:Data>
         return array($serverId, $syncrotonEvent);
     }
 
+    public function testUpdateEntryConcurrentFail()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+
+        unset($syncrotonEvent->recurrence);
+        unset($syncrotonEvent->exceptions);
+        $syncrotonEvent->subject = 'conflict data';
+
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $event->summary = 'new data';
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        $syncTimestamp = $event->last_modified_time->getClone()->subMinute(2);
+        // need to create new controller to set new sync timestamp for concurrency handling
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+
+        $this->expectException(Syncroton_Exception_AccessDenied::class);
+        $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+    }
+
     /**
      * testUpdateExdate
      * 

@@ -90,7 +90,6 @@ Tine.Tinebase.CanonicalPath.activateAll = function() {
             });
         } else if (westPanel && Ext.isFunction(westPanel.getRootNode)) {
             Ext.each(westPanel.getRootNode().childNodes, function (node) {
-                // Admin, but not Voipmanager :)
                 if (! node.childNodes.length) {
                     node.fireEvent('click', node, {});
                 }

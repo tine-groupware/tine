@@ -25,19 +25,19 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
             ],
-            self::RELEASE015_UPDATE003          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update003',
-            ],
         ],
-        self::PRIO_NORMAL_APP_STRUCTURE        => [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE015_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
-            self::RELEASE015_UPDATE002 => [
-                self::CLASS_CONST => self::class,
-                self::FUNCTION_CONST => 'update002',
+            self::RELEASE015_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE015_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
             self::RELEASE015_UPDATE004 => [
                 self::CLASS_CONST => self::class,

@@ -56,14 +56,10 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
-            '{[this.getIcon(values)]}',
-            '<span style="padding-left: 5px;">',
             '{[this.encode(values)]}',
-            '</span>',
             '</div></tpl>',
             {
-                encode: this.renderEmailAddress.createDelegate(this),
-                getIcon: this.renderAddressIconCls.createDelegate(this)
+                encode: this.renderEmailAddressAndIcon.createDelegate(this),
             }
         );
         
@@ -134,8 +130,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         this.removeInvalidRecords(store);
     },
     
-    renderAddressIconCls: function(token) {
-        const i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
+    getAddressIconClass: function(token) {
         let data = {tip: 'E-Mail', iconClass: 'EmailAccount'};
         
         switch (token?.type) {
@@ -154,9 +149,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             case 'email_account':
                 data = {tip: 'E-Mail', iconClass: 'EmailAccount'};
                 break;
-            case 'email_home':
-                data = {tip: 'Email (private)', iconClass: 'Private'};
-                break;
             case 'group':
                 data = {tip: 'System Group', iconClass: 'Group'};
                 break;
@@ -174,19 +166,45 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                 if (token?.contact_record) data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
         }
-    
-        if (token?.email_type === 'email_home') data = {tip: 'Email (private)', iconClass: 'Private'};
-        
-        return '<div class="tine-combo-icon renderer AddressbookIconCls renderer_type' + data.iconClass + 'Icon" ext:qtip="' 
-            + Ext.util.Format.htmlEncode(i18n._(data.tip)) + '"/></div>';
+        if (token?.email_type_field) {
+            const emailFields = Tine.Addressbook.Model.EmailAddress.prototype.getEmailFields();
+            const emailField = emailFields.find((f) => { return f.fieldName === token?.email_type_field});
+            if (emailField?.requiredGrants && emailField.requiredGrants.includes('privateDataGrant')) {
+                data = {tip: 'Email (private)', iconClass: 'Private'};
+            }
+        }
+        return data;
     },
     
-    renderEmailAddress(token) {
+    renderEmailAddressAndIcon(token) {
+        const i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
+        // render icon
+        const iconEl =  document.createElement('div');
+        const iconData = this.getAddressIconClass(token);
+        iconEl.className = `tine-combo-icon renderer_type${iconData.iconClass}Icon`;
+        iconEl.setAttribute('ext:qtip', i18n._(iconData.tip));
+        
+        // render email
+        const emailEl =  document.createElement('div');
         const renderEmail = token.email !== '' && token.name !== '' ? ` < ${token.email} >` : token.email;
         const note = token?.note && token.note !== '' ? ` ( ${token.note} )` : '';
-        return Ext.util.Format.htmlEncode(token.name) 
+        if (token.qtip) emailEl.setAttribute('ext:qtip', token.qtip);
+        emailEl.className = 'responsive-grid-text-small';
+        emailEl.innerHTML = Ext.util.Format.htmlEncode(token.name)
             + '<b>' + Ext.util.Format.htmlEncode(renderEmail) + '</b>'
-            + Ext.util.Format.htmlEncode(note);
+            + note;
+        
+        const el =  document.createElement('div');
+        el.className = 'tinebase-property-field';
+        el.append(iconEl, emailEl);
+        
+        const isPreferred = Tine.Addressbook.Model.EmailAddress.prototype.isPreferred(token);
+        const preferredIconEl =  document.createElement('div');
+        preferredIconEl.className = `tine-combo-icon renderer_PreferredIcon`;
+        preferredIconEl.setAttribute('ext:qtip', i18n._('Preferred E-Mail'));
+        if (isPreferred) el.append(preferredIconEl);
+        
+        return el.outerHTML;
     },
     
     removeInvalidRecords(store) {

@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -28,33 +28,90 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
      */
     protected function _getUit()
     {
-        $testCredentials = TestServer::getInstance()->getTestCredentials();
         if ($this->_uit === null) {
-            $caldavClientOptions = array(
-                'baseUri' => 'localhost',
-                'userName' => Tinebase_Core::getUser()->accountLoginName,
-                'password' => $testCredentials['password'],
-            );
-            $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'MacOSX');
-            $this->_uit->setVerifyPeer(false);
+            $this->setUit();
         }
         
         return $this->_uit;
+    }
+
+    protected function setUit()
+    {
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
+        $caldavClientOptions = array(
+            'baseUri' => 'localhost',
+            'userName' => Tinebase_Core::getUser()->accountLoginName,
+            'password' => $testCredentials['password'],
+        );
+        $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic');
+        $this->_uit->setVerifyPeer(false);
     }
     
     /**
      * test import of a single container/calendar of current user
      */
-    public function testImportCalendars()
+    public function testImportCalendar($sharedContainer = true)
     {
-        $this->_getUit()->importAllCalendars();
-        
-        $importedCalendar = $this->_getImportCalendar();
-        
-        $this->assertEquals('calendar', $importedCalendar->name);
-        $this->assertEquals('#711A76', $importedCalendar->color);
-        $this->assertEquals('Calendar_Model_Event', $importedCalendar->model, print_r($importedCalendar->toArray(), true));
-        $this->assertEquals( Tinebase_Core::getUser()->getId(), $importedCalendar->owner_id, print_r($importedCalendar->toArray(), true));
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, $sharedContainer);
+
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
+        ]));
+        $this->assertSame(3, count($events));
+        $etags = $events->etag;
+        sort($etags);
+        $this->assertSame([
+                '"0b3621a20e9045d8679075db57e881dd"',
+                '"8b89914690ad7290fa9a2dc1da490489"',
+                '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+            ], $etags);
+        $event = $events->getFirstRecord();
+        $this->assertEmpty($event->organizer);
+        $this->assertNotEmpty($event->organizer_email);
+        $this->assertSame(1, $event->attendee->count());
+        $attendees = $event->attendee->filter('user_email', 'klaustu@test.net');
+        $this->assertSame(1, $attendees->count());
+        $this->assertEmpty($attendees->getFirstRecord()->user_id);
+        $this->assertSame(Calendar_Model_Attender::USERTYPE_EMAIL, $attendees->getFirstRecord()->user_type);
+
+        $this->_getUit()->updateServerEvents();
+
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+
+        $updatedEvents = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
+        ]));
+        $this->assertSame(3, count($updatedEvents));
+        $etags = $updatedEvents->etag;
+        sort($etags);
+        $this->assertSame([
+                '"-1030341843%40citrixonlinecom"',
+                '"aa3621a20e9045d8679075db57e881dd"',
+                '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+            ], $etags);
+
+        $oldIds = $events->getArrayOfIds();
+        sort($oldIds);
+        $newIds = $updatedEvents->getArrayOfIds();
+        sort($newIds);
+        $this->assertNotSame($oldIds, $newIds);
+
+        $this->assertSame('test update',
+            $updatedEvents->find('etag', '"aa3621a20e9045d8679075db57e881dd"')->summary);
+    }
+
+    public function testImportCalendarPersonal()
+    {
+        $this->testImportCalendar(sharedContainer: false);
+    }
+
+    public function testImportCalendarTwice()
+    {
+        $this->testImportCalendar();
+        $this->setUit();
+        $this->testImportCalendar(sharedContainer: false);
     }
     
     /**
@@ -66,72 +123,5 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     {
         $calendarUuid = sha1('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/');
         return Tinebase_Container::getInstance()->getByProperty($calendarUuid, 'uuid');
-    }
-    
-    /**
-     * test import of events
-     */
-    public function testImportEvents()
-    {
-        $this->testImportCalendars();
-        $this->_getUit()->importAllCalendarData();
-        
-        $importedCalendar = $this->_getImportCalendar();
-        
-        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => array($importedCalendar->getId()))
-        )));
-        $this->assertEquals(3, count($events));
-        $this->assertTrue(array(
-            '"bcc36c611f0b60bfee64b4d42e44aa1d"',
-            '"8b89914690ad7290fa9a2dc1da490489"',
-            '"0b3621a20e9045d8679075db57e881dd"'
-        ) == $events->etag);
-    }
-    
-    /**
-     * test update of events
-     */
-    public function testUpdateEvents()
-    {
-        $this->testImportEvents();
-        
-        $importedCalendar = $this->_getImportCalendar();
-        
-        $tine20Event = $this->_getEvent();
-        $tine20Event->container_id = $importedCalendar->getId();
-        Calendar_Controller_Event::getInstance()->create($tine20Event);
-        
-        $this->_getUit()->updateServerEvents();
-        
-        $this->_getUit()->updateAllCalendarData();
-
-        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'in', 'value' => array($importedCalendar->getId()))
-        )));
-        $this->assertEquals(4, count($events));
-        $expectedEtags = array(
-            '"bcc36c611f0b60bfee64b4d42e44aa1d"', // unchanged
-            '"-1030341843%40citrixonlinecom"',    // added on server
-            '"aa3621a20e9045d8679075db57e881dd"', // updated
-            null,                                 // added on client (tine20)
-        );
-        sort($expectedEtags);
-        $currentEtags = $events->etag;
-        sort($currentEtags);
-        $this->assertEquals($expectedEtags, $currentEtags, 'etag mismatch');
-        
-        $updatedEvent = $events->filter('etag', '"aa3621a20e9045d8679075db57e881dd"')->getFirstRecord();
-        $this->assertEquals('test update', $updatedEvent->summary);
-    }
-    
-    /**
-     * testBrokenXml
-     */
-    public function testBrokenXml()
-    {
-        $brokenBody = file_get_contents(dirname(__FILE__) . '/files/broken_ics.xml');
-        $result = $this->_getUit()->parseMultiStatus($brokenBody);
-        $this->assertTrue(is_array($result));
     }
 }

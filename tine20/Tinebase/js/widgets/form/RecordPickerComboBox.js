@@ -115,6 +115,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     denormalizationRecordClass: null,
 
     /**
+     * lasy load record if id is given only
+     */
+    lasyLoading: true,
+
+    /**
      * @cfg {Boolean} useEditPlugin
      */
     useEditPlugin: false,
@@ -140,12 +145,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.denormalizationRecordClass = this.recordClass;
             this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelConfig.denormalizationOf);
             this.recordProxy =  Tine[this.recordClass.getMeta('appName')][this.recordClass.getMeta('modelName').toLowerCase() + 'Backend'];
-            this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin({
+            this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin(Ext.applyIf(this.recordEditPluginConfig || {}, {
                 allowCreateNew: false,
                 preserveJsonProps: 'original_id',
                 qtip: window.i18n._('Edit copy'),
-                editDialogMode: 'local'
-            }));
+                editDialogConfig: {
+                    mode: 'local',
+                    denormalizationRecordClass: this.denormalizationRecordClass
+                }
+            })));
             this.useEditPlugin = false;
         }
 
@@ -154,7 +162,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
 
-        this.emptyText = this.emptyText ||
+        this.emptyText = _.isString(this.emptyText) ? this.emptyText :
             (this.readOnly || this.disabled ? '' : String.format(i18n._('Search for {0} ...'), this.recordClass.getRecordName() || _('Record')));
 
         this.loadingText = i18n._('Searching...');
@@ -344,7 +352,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     onSelect: function (record, index) {
         this.selectedRecord = record;
-        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.call(this, record, index);
+        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.apply(this, arguments);
     },
 
     /**
@@ -386,6 +394,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             } else if (Ext.isPrimitive(value) && value == this.getValue()) {
                 // value is the current id
                 return this.setValue(this.selectedRecord);
+            } else if (value && Ext.isString(value) && !value.match(/^{/) && !value.match(/^current/) && !value.match(/\s/) && !this.store.getById(value) && this.lasyLoading && this.selectedRecord?.getTitle?.() !== value) {
+                // value is an id
+                try {
+                    this.recordProxy.promiseLoadRecord(value).then(record => {
+                        this.suspendEvents();
+                        this.setValue(record);
+                        this.resumeEvents();
+                    }).catch()
+                } catch (e) {/* do nothing */}
             }
         }
 

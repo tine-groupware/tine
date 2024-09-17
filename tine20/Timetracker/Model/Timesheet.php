@@ -91,6 +91,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'source' => [],
                 'timeaccount_id' => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                         Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
@@ -293,6 +294,27 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 self::NAME                  => Timetracker_Config::TS_PROCESS_STATUS,
                 self::DEFAULT_VAL           => Timetracker_Config::TS_PROCESS_STATUS_ACCEPTED,
             ],
+            'source'    => [
+                self::LABEL         => 'Source', // _('Source')
+                self::TYPE          => self::TYPE_DYNAMIC_RECORD,
+                self::LENGTH        => 40,
+                self::NULLABLE      => true,
+                self::CONFIG        => [
+                    self::REF_MODEL_FIELD               => 'source_model',
+                    self::PERSISTENT                    => Tinebase_Model_Converter_DynamicRecord::REFID,
+                ],
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Tinebase_Model_Filter_Id::class,
+                ]
+            ],
+            'source_model' => [
+                self::TYPE          => self::TYPE_MODEL,
+                self::LENGTH        => 100,
+                self::NULLABLE      => true,
+                self::CONFIG        => [
+                    self::AVAILABLE_MODELS => [],
+                ]
+            ],
         )
     );
     
@@ -336,6 +358,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 
     public static function filterEmptyNonZero($data)
     {
-        return empty($data) && $data !== 0 && $data !== '0' ? 1 : $data; 
+        return $data === null || $data === false || $data === '' ? 1 : $data;
     }
 }

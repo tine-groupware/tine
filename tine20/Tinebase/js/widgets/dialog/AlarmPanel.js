@@ -56,7 +56,6 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
             cm: new Ext.grid.ColumnModel([{
                 id: 'minutes_before', 
                 header: i18n._('Alarm Time'),
-                dataIndex: 'minutes_before', 
                 width: 200, 
                 hideable: false, 
                 sortable: true,
@@ -99,7 +98,6 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                 renderer: this.minutesBeforeRenderer.createDelegate(this)
             }, {
                 id: 'alarm_time', 
-                dataIndex: 'alarm_time', 
                 hideable: false, 
                 sortable: false,
                 renderer: this.alarmTimeRenderer.createDelegate(this),
@@ -208,4 +206,3 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
         this.el[v ? 'mask' : 'unmask']();
     }
 });
-

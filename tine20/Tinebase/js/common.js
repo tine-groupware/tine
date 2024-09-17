@@ -110,42 +110,43 @@ Tine.Tinebase.common = {
      * Returns localised date and time string
      *
      * @param {mixed} $_iso8601
+     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised date and time
      */
     dateTimeRenderer: function ($_iso8601, metadata) {
-        if (metadata) {
-            metadata.css = 'tine-gird-cell-datetime';
-        }
-
-        const dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
-
-        return Tine.Tinebase.common.dateRenderer.call(this, $_iso8601) + ' '
-            + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601);
+        const data = Tine.Tinebase.common.dateRenderer.call(this, $_iso8601, metadata) + ' '
+            + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601, metadata);
+        if (metadata) metadata.css = 'tine-gird-cell-datetime';
+        return data;
     },
 
     /**
      * Returns localised date string
      *
      * @param {mixed} date
+     * @param metadata
+     * @param formatArray
      * @see Ext.util.Format.date
      * @return {String} localised date
      */
     dateRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
-
-        if (_.isObject(metadata)) {
+        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+        const formatDate = (key) => key === 'wkday'
+            ? dateObj.format('l').substr(0, 2)
+            : Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
+        
+        const isGridCell = _.isObject(metadata) && metadata.hasOwnProperty('cellAttr');
+        if (isGridCell) {
             metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
-
-        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-
+        
         return dateObj ? _.map(format, (key) => {
-            return key === 'wkday' ? dateObj.format('l').substr(0,2) :
-                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
-            }).join(' ') : '';
+            return isGridCell ? `<span class="date-renderer-${key}">${formatDate(key)}</span>` : formatDate(key);
+        }).join(' ') : '';
     },
-
+  
     /**
      * Returns localised number string with two digits if no format is given
      *
@@ -196,20 +197,22 @@ Tine.Tinebase.common = {
      * Returns localised time string
      *
      * @param {mixed} date
+     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised time
      */
     timeRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Time || this.format) : ['medium'];
-
-        if (metadata) {
-            metadata.css = 'tine-gird-cell-time';
+        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
+        const formatTime = (key) => Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
+        
+        const isGridCell = _.isObject(metadata) && metadata.hasOwnProperty('cellAttr');
+        if (isGridCell) {
+            metadata.css = (metadata.css || '') + ' tine-gird-cell-time';
         }
-
-        var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
-
+        
         return dateObj ? _.map(format, (key) => {
-            return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
+            return isGridCell ? `<span class="time-renderer-${key}">${formatTime(key)}</span>` : formatTime(key);
         }).join(' ') : '';
     },
 
@@ -493,23 +496,15 @@ Tine.Tinebase.common = {
         if (! accountObject) {
             return '';
         }
-        var _ = window.lodash,
-            type, iconCls, displayName, email;
+        let type, iconCls, displayName, email;
 
         if (accountObject.accountDisplayName) {
             type = _.get(record, 'data.account_type', 'user');
-            displayName = accountObject.accountDisplayName;
-
-            // need to create a "dummy" app to call featureEnabled()
-            // TODO: should be improved
-            var tinebaseApp = new Tine.Tinebase.Application({
-                appName: 'Tinebase'
-            });
-            if (tinebaseApp.featureEnabled('featureShowAccountEmail') && accountObject.accountEmailAddress) {
-                // add email address if available
-                email = accountObject.accountEmailAddress;
-                displayName += ' (' + email + ')';
-            }
+            const contactRecord = Tine.Tinebase.data.Record.setFromJson({
+                n_fileas: accountObject.accountDisplayName, 
+                email: accountObject?.accountEmailAddress
+            }, Tine.Addressbook.Model.Contact);
+            displayName = contactRecord.getTitle();
         } else if (accountObject.name && ! _.get(record, 'data.account_type')) {
             type = 'group';
             displayName = accountObject.name;
@@ -523,7 +518,7 @@ Tine.Tinebase.common = {
             displayName = _.get(record, 'data.account_name.name', record.data.account_name);
         }
 
-        if (displayName == 'Anyone') {
+        if (displayName === 'Anyone') {
             displayName = i18n._(displayName);
             type = 'group';
         }
@@ -903,33 +898,31 @@ Tine.Tinebase.common = {
             if (address) parsedList.push(address);
         })
 
-        let emailArray = _.map(parsedList, (parsed) => {
-            let contact = {
+        const emails = _.map(parsedList, (parsed) => {
+            return parsed.address ?? '';
+        });
+        const names = _.map(parsedList, (parsed) => {
+            return parsed?.name ?? '';
+        });
+
+        const {results: tokens} = await Tine.Addressbook.searchRecipientTokensByEmailArrays(emails, names);
+
+        _.each(parsedList, (parsed) => {
+            if (!parsed.address) return;
+            const existingToken = _.find(tokens, function (token) {
+                return parsed.address === token['email'];
+            });
+
+            const token = existingToken ?? {
                 'email': parsed.address ?? '',
-                'email_type': '',
+                'email_type_field': '',
                 'type': '',
                 'n_fileas': '',
                 'name': parsed?.name ?? '',
                 'contact_record': ''
             };
 
-            if (contact['email'] !== '') {
-                return contact;
-            }
-        });
-        emailArray = _.filter(emailArray);
-
-        const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken(emailArray);
-
-        _.each(emailArray, (address) => {
-            const existingAddress = _.find(contacts, function (contact) {
-                return address.email === contact['email'];
-            });
-
-            address = existingAddress ?? address;
-            if (address) {
-                result.push(address);
-            }
+            result.push(token);
         });
 
         return result;

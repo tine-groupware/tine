@@ -16,34 +16,34 @@ Tine.Addressbook.Model.ContactMixin = {
      * @return {Boolean}
      */
     hasEmail: function() {
-        return this.get('email') || this.get('email_home');
+        let result = false;
+        _.each(this.modelConfiguration.fields, (field) => { 
+            if (field?.specialType === 'Addressbook_Model_ContactProperties_Email' && this.get(field.fieldName)) {
+               result = true;
+            }
+        });
+        return result;
     },
     
     /**
      * returns true preferred email if available
      * @return {String}
      */
-    getPreferredEmail: function(preferred) {
-        preferred = preferred || 'email';
-        const other = preferred === 'email' ? 'email_home' : 'email';
-            
-        return (this.get(preferred) || this.get(other));
-    },
-    
-    getTitle: function() {
-        var result = this.get('n_fileas');
-
-        var tinebaseApp = new Tine.Tinebase.Application({
-            appName: 'Tinebase'
-        });
-        if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
-            var email = this.getPreferredEmail();
-            if (email) {
-                result += ' (' + email + ')';
-            }
+    getPreferredEmail: function() {
+        let preferredType = this.get('preferred_email') ?? 'email';
+        const email = this.get(preferredType);
+        if (!email || email === '') {
+            _.each(this.modelConfiguration.fields, (field) => {
+                if (field?.specialType === 'Addressbook_Model_ContactProperties_Email' && this.get(field.fieldName)) {
+                    preferredType = field.fieldName;
+                }
+            });
         }
-
-        return result;
+        
+        return {
+            email: this.get(preferredType),
+            type: preferredType
+        };
     },
 
     statics: {
@@ -56,7 +56,7 @@ Tine.Addressbook.Model.ContactMixin = {
 Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     {name: 'n_fileas'},
     {name: 'name'},
-    {name: 'email_type'},
+    {name: 'email_type_field'},
     {name: 'email'},
     {name: 'emails'},
     {name: 'type'},
@@ -74,16 +74,31 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     containersName: 'Addressbooks',
     copyOmitFields: ['group_id'],
 
-    getPreferredEmail: function(preferred) {
-        preferred = preferred || 'email';
-        const other = preferred === 'email' ? 'email_home' : 'email';
+    getPreferredEmail: function() {
+        let preferredType = this.get('preferred_email');
+        const email = this.get(preferredType);
+        if (!email || email === '') preferredType = 'email';
+        
+        return { 
+            email: this.get(preferredType),
+            type: preferredType
+        };
+    },
     
-        if (! this.get("email") && ! this.get("email_home")) {
-            return this.get("emails");
-        } else {
-            return (this.get(preferred) || this.get(other));
+    isPreferred: function(token) {
+        if (token?.contact_record?.['preferred_email'] && token?.email_type_field) {
+            const field = token.contact_record['preferred_email'];
+            return field === token.email_type_field && token.contact_record[field] === token.email;
         }
-    }
+        return false;
+    },
+    
+    getEmailFields() {
+        const fields = Tine.Addressbook.Model.Contact.getModelConfiguration().fields;
+        return _.filter(fields, (field) => {
+            return field?.specialType === 'Addressbook_Model_ContactProperties_Email';
+        });
+    },
 });
 
 /**

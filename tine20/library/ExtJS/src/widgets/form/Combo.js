@@ -504,6 +504,11 @@ var combo = new Ext.form.ComboBox({
                 }, 100)
             }, this);
         }
+
+        if (this.listMode) {
+            this.hidden= true;
+            this.hideTrigger = true;
+        }
     },
 
     // private
@@ -526,6 +531,28 @@ var combo = new Ext.form.ComboBox({
         }else{
             this.on('focus', this.initList, this, {single: true});
         }
+
+        if (this.listMode && !this.initialConfig.hidden) {
+            this.onTriggerClick();
+        }
+    },
+
+    show: function(onCmp) {
+        if (this.listMode && !onCmp) {
+            this.onTriggerClick();
+            this.hidden = false;
+            return this;
+        }
+        return Ext.form.ComboBox.superclass.show.call(this);
+    },
+    
+    hide: function() {
+        if (this.listMode) {
+            this.collapse();
+            this.hidden = true;
+            return this;
+        }
+        return Ext.form.ComboBox.superclass.hide.call(this);
     },
 
     // private
@@ -569,6 +596,15 @@ var combo = new Ext.form.ComboBox({
             if(this.title){
                 this.header = this.list.createChild({cls:cls+'-hd', html: this.title});
                 this.assetHeight += this.header.getHeight();
+            }
+
+            if (this.listMode) {
+                this.list.insertFirst(this.wrap);
+                this.show(true);
+                this.setWidth(this.list.getWidth());
+                this.el.set({'placeholder': this.emptyText});
+
+                this.assetHeight += this.wrap.getHeight();
             }
 
             this.innerList = this.list.createChild({cls:cls+'-inner'});
@@ -648,6 +684,9 @@ var combo = new Ext.form.ComboBox({
                     this.listWidth = w;
                     this.innerList.setWidth(w - this.list.getFrameWidth('lr'));
                     this.restrictHeight();
+                    if (this.listMode) {
+                        this.setWidth(this.list.getWidth());
+                    }
                 }, this);
 
                 this[this.pageSize?'footer':'innerList'].setStyle('margin-bottom', this.handleHeight+'px');
@@ -955,11 +994,12 @@ var menu = new Ext.menu.Menu({
     },
 
     // private
-    onSelect : async function(record, index){
+    onSelect : async function(record, index, noCollapse){
         this.fireAsyncEvent('beforeselect', this, record, index).then(() => {
-        // if(this.fireEvent('beforeselect', this, record, index) !== false){
             this.setValue(record.data[this.valueField || this.displayField]);
-            this.collapse();
+            if (!noCollapse) {
+                this.collapse();
+            }
             this.fireEvent('select', this, record, index);
         }).catch(e => {});
     },
@@ -1057,9 +1097,11 @@ var menu = new Ext.menu.Menu({
     onViewClick : async function(doFocus){
         var index = this.view.getSelectedIndexes()[0],
             s = this.store,
-            r = s.getAt(index);
+            r = s.getAt(index),
+            e = arguments[3] || {}
+
         if(r){
-            await this.onSelect(r, index);
+            await this.onSelect(r, index, e.ctrlKey || e.altKey || e.shiftKey);
         }else {
             this.collapse();
         }
@@ -1084,7 +1126,7 @@ var menu = new Ext.menu.Menu({
         this.innerList.setHeight(h);
         this.list.beginUpdate();
         this.list.setHeight(h+pad);
-        this.list.alignTo.apply(this.list, [this.el].concat(this.listAlign));
+        this.list.alignTo.apply(this.list, [this.listAlignEl || this.el].concat(this.listAlign));
         this.list.endUpdate();
     },
 
@@ -1278,7 +1320,7 @@ var menu = new Ext.menu.Menu({
             this.doResize(this.bufferSize);
             delete this.bufferSize;
         }
-        this.list.alignTo.apply(this.list, [this.el].concat(this.listAlign));
+        this.list.alignTo.apply(this.list, [this.listAlignEl || this.el].concat(this.listAlign));
         this.list.show();
         if(Ext.isGecko2){
             this.innerList.setOverflow('auto'); // necessary for FF 2.0/Mac

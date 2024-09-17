@@ -34,5 +34,8 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     gridConfig: {
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'
-    }
+    },
+    defaultFilters: [
+        {field: 'status', operator: 'in', value: ['ORDERED', 'AVAILABLE', 'DEFECT', 'UNKNOWN',]},
+    ],
 });

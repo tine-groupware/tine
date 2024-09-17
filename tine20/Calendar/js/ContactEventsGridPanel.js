@@ -113,13 +113,11 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 header: this.app.i18n._("Summary"),
                 width: 350,
                 sortable: true,
-                dataIndex: 'summary'
             } ,{
                 id: 'dtstart',
                 header: this.app.i18n._("Start Time"),
                 width: 150,
                 sortable: true,
-                dataIndex: 'dtstart',
                 renderer: Tine.Tinebase.common.dateTimeRenderer
             },{
                 id: 'attendee_status',
@@ -148,4 +146,3 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     }
 });
-

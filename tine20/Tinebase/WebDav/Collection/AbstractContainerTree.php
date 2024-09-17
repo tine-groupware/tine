@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -175,8 +175,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      * (non-PHPdoc)
      * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
      */
-    public function createExtendedCollection($name, array $resourceType, array $properties)
+    public function createExtendedCollection($name, \Sabre\DAV\MkCol $mkCol)
     {
+        $properties = $mkCol->getMutations();
         return $this->_createContainer(array(
             'name'  => isset($properties['{DAV:}displayname']) ? $properties['{DAV:}displayname'] : $name,
             'uuid'  => $name,
@@ -683,7 +684,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         $etags = array();
         
         foreach ($this->getChildren() as $child) {
-            $etags[] = $child->getETag();
+            if (method_exists($child, 'getETag')) {
+                $etags[] = $child->getETag();
+            }
         }
         
         return '"' . sha1(implode('', $etags)) . '"';
@@ -765,11 +768,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     $this->_name = $this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName;
 
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    list(, $this->_name) = Sabre\DAV\URLUtil::splitPath($this->_path);
+                    list(, $this->_name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
                 }
 
             } else {
-                list(, $this->_name) = Sabre\DAV\URLUtil::splitPath($this->_path);
+                list(, $this->_name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
             }
         }
         return $this->_name;
@@ -823,7 +826,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         } else*/if (count($pathParts) === 2) {
                             $size = 0;
                             foreach ($this->getChildren() as $node) {
-                                $size += $node->getSize();
+                                if (method_exists($node, 'getSize')) {
+                                    $size += $node->getSize();
+                                }
                             }
                             $response[$property] = $size;
                         }
@@ -876,8 +881,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     
                 case '{DAV:}owner':
                     if ($this->getOwner()) {
-                        $response[$property] = new \Sabre\DAVACL\Property\Principal(
-                            \Sabre\DAVACL\Property\Principal::HREF, $this->getOwner()
+                        $response[$property] = new \Sabre\DAVACL\Xml\Property\Principal(
+                            \Sabre\DAVACL\Xml\Property\Principal::HREF, $this->getOwner()
                         );
                     }
                     
@@ -908,69 +913,19 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
-    
-    /**
-     * Updates properties on this node,
-     *
-     * The properties array uses the propertyName in clark-notation as key,
-     * and the array value for the property value. In the case a property
-     * should be deleted, the property value will be null.
-     *
-     * This method must be atomic. If one property cannot be changed, the
-     * entire operation must fail.
-     *
-     * If the operation was successful, true can be returned.
-     * If the operation failed, false can be returned.
-     *
-     * Deletion of a non-existant property is always succesful.
-     *
-     * Lastly, it is optional to return detailed information about any
-     * failures. In this case an array should be returned with the following
-     * structure:
-     *
-     * array(
-     *   403 => array(
-     *      '{DAV:}displayname' => null,
-     *   ),
-     *   424 => array(
-     *      '{DAV:}owner' => null,
-     *   )
-     * )
-     *
-     * In this example it was forbidden to update {DAV:}displayname. 
-     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
-     * (424 Failed Dependency) because the request needs to be atomic.
-     *
-     * @param array $mutations 
-     * @return bool|array 
-     */
-    public function updateProperties($mutations) 
+
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
     {
-        $result = array(
-            200 => array(),
-            403 => array()
-        );
-
-        foreach ($mutations as $key => $value) {
-            switch ($key) {
-                // once iCal tried to set default-alarm config with a negative feedback
-                // it doesn't send default-alarms to the server any longer. So we fake
-                // success here as workaround to let the client send its default alarms
-                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime':
-                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date':
-                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime':
-                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date':
-                    // fake success
-                    $result['200'][$key] = null;
-                    break;
-
-                default:
-                    $result['403'][$key] = null;
-            }
-        }
-
-        return $result;
+        // once iCal tried to set default-alarm config with a negative feedback
+        // it doesn't send default-alarms to the server any longer. So we fake
+        // success here as workaround to let the client send its default alarms
+        /*case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime':
+          case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date':
+          case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime':
+          case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date': */
+        $propPatch->handleRemaining(fn() => true);
     }
+
     
     /**
      * 

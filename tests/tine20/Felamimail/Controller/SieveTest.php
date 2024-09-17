@@ -48,7 +48,7 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
 
         self::assertNotNull($script);
-        self::assertStringContainsString('require ["envelope","copy","reject"];', $script->getSieve());
+        self::assertStringContainsString('require ["envelope","copy","reject","editheader","variables"];', $script->getSieve());
         $domains = Tinebase_EmailUser::getAllowedDomains();
         self::assertStringContainsString('if address :is :domain "from" ' . json_encode($domains) . ' {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
@@ -79,6 +79,22 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         // TODO check sieve script functionality
     }
 
+    public function testAdbMailinglistSieveReplyTo()
+    {
+        $this->_testNeedsTransaction();
+
+        $mailinglist = $this->_createMailinglist([
+            Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY
+        ]);
+        $mailinglist->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO] = 'sender';
+        $mailinglist = Addressbook_Controller_List::getInstance()->update($mailinglist);
+
+        // check if sieve script is on sieve server
+        $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
+        $sieveScript = $script->getSieve();
+        self::assertStringContainsString('addheader "Reply-To"', $sieveScript);
+    }
+
     public function testAdbMailinglistSieveRuleForwardExternal()
     {
         $this->_testNeedsTransaction();
@@ -104,23 +120,51 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         ]);
 
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        
         $raii = new Tinebase_RAII(function() use($sclever) {
             $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
             Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
         });
         $sclever->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
         Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
-
         Addressbook_Controller_List::getInstance()->addListMember($mailinglist, [$sclever->contact_id]);
 
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertStringContainsString('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
         self::assertStringContainsString('reject "Your email has been rejected"', $script->getSieve());
+        
+        unset($raii);
+    }
 
-        // TODO check sieve script functionality
+    public function testAdbMailinglistSieveRuleForwardOnlyEnabledMembers()
+    {
+        Addressbook_Config::getInstance()->set(Addressbook_Config::CONTACT_HIDDEN_CRITERIA, 'never');
+        
+        $this->_setFeatureForTest(Addressbook_Config::getInstance(), Addressbook_Config::FEATURE_MAILINGLIST);
+        $this->_testNeedsTransaction();
 
-        // for unused variable check
+        $mailinglist = $this->_createMailinglist([
+            Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS
+        ]);
+
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $raii = new Tinebase_RAII(function() use($sclever) {
+            Addressbook_Config::getInstance()->set(Addressbook_Config::CONTACT_HIDDEN_CRITERIA, 'disabled');
+            $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
+            Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
+        });
+        
+        Addressbook_Controller_List::getInstance()->addListMember($mailinglist, [$sclever->contact_id]);
+        $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED;
+        Admin_Controller_User::getInstance()->update($sclever);
+
+        // check if sieve script is on sieve server
+        $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
+        $sieve = $script->getSieve();
+        self::assertStringContainsString('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $sieve);
+        self::assertStringContainsString('reject "Your email has been rejected"', $sieve);
+        
         unset($raii);
     }
 

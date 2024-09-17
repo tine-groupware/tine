@@ -11,6 +11,7 @@ class FieldTriggerPlugin {
     triggerClass = 'x-form-trigger'
     visible = true
     qtip = null
+    preserveElStyle = false
 
     #trigger
     
@@ -40,14 +41,16 @@ class FieldTriggerPlugin {
             this.#trigger.addClassOnClick('x-form-trigger-click');
 
             // preserve space for triggers
-            wrap.addClass('x-form-trigger-plugin-wrap')
-            const paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''));
-            field.el.setStyle({
-                'box-sizing': 'border-box',
-                'padding-right': paddingRight+17 + 'px',
-                'width' : '100%',
-                'height': field.getHeight() + 'px'
-            });
+            if (!this.preserveElStyle) {
+                wrap.addClass('x-form-trigger-plugin-wrap')
+                const paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''));
+                field.el.setStyle({
+                    'box-sizing': 'border-box',
+                    'padding-right': paddingRight+17 + 'px',
+                    'width' : '100%',
+                    'height': field.getHeight() + 'px'
+                });
+            }
             field.el.autoBoxAdjust = false;
             field.onResize(wrap.getWidth(), wrap.getHeight());
         }

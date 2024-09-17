@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -29,7 +29,7 @@ class Calendar_Frontend_CalDAV_Dropbox extends \Sabre\DAV\Collection
     
     public function __construct($_userId)
     {
-        $this->_user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : Tinebase_User::getInstance()->get($_userId);
+        $this->_user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
     }
     
     /**
@@ -45,9 +45,9 @@ class Calendar_Frontend_CalDAV_Dropbox extends \Sabre\DAV\Collection
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
      */
-    public function getChild($_name)
+    public function getChild($name)
     {
-        $eventId = $this->_getIdFromName($_name);
+        $eventId = $this->_getIdFromName($name);
         $path = 'Calendar/records/Calendar_Model_Event/' . $eventId;
         
         return new Tinebase_Frontend_WebDAV_Record($path);

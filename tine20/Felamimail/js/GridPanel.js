@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
+import {getLayoutClassByMode} from "../../Tinebase/js/util/responsiveLayout";
+
 Ext.namespace('Tine.Felamimail');
 
 require('./MessageFileAction');
@@ -139,7 +141,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Felamimail.messageBackend;
         this.gridConfig.cm = new Ext.grid.ColumnModel({
             defaults: {
-                resizable: true
+                resizable: true,
+                sortable: true,
             },
             columns: this.getColumns()
         });
@@ -224,7 +227,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     
                     for (var i = 0; i < filters.length; i++) {
                         if (filters[i].field == 'path' && filters[i].operator == 'in') {
-                            if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/allinboxes') !== -1 && record.isInbox())) {
+                            if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/*/INBOX') !== -1 && record.isInbox())) {
                                 refresh = true;
                                 break;
                             }
@@ -502,8 +505,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         const exts = _.uniq(_.map(fileSelector.files, file => {return file.name.split('.').pop()}));
-        if (exts.length !== 1 || exts[0] !== 'eml') {
-            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml allowed only.'));
+        if (exts.length !== 1 || !['eml', 'msg'].includes(exts[0])) {
+            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml and msg allowed only.'));
         }
         
         this.importMask = new Ext.LoadMask(this.grid.getEl(), { msg: i18n._('Importing Messages...') });
@@ -641,102 +644,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumns: function(){
-        return [{
-            id: 'id',
-            header: this.app.i18n._("Id"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'id',
-            hidden: true
-        }, {
-            id: 'content_type',
-            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
-            tooltip: this.app.i18n._("Attachments"),
-            width: 12,
-            sortable: true,
-            dataIndex: 'has_attachment',
-            renderer: this.attachmentRenderer
-        }, {
-            id: 'flags',
-            header: this.app.i18n._("Flags"),
-            width: 24,
-            sortable: true,
-            dataIndex: 'flags',
-            align: 'center',
-            renderer: this.flagRenderer
-        }, {
-            id: 'tags',
-            header: this.app.i18n._("Tags"),
-            width: 24,
-            sortable: false,
-            dataIndex: 'tags',
-            align: 'center',
-            renderer: Tine.Tinebase.common.tagsRenderer
-        },{
-            id: 'subject',
-            header: this.app.i18n._("Subject"),
-            width: 300,
-            sortable: true,
-            dataIndex: 'subject'
-        },{
-            id: 'from_email',
-            header: this.app.i18n._("From (Email)"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'from_email'
-        },{
-            id: 'from_name',
-            header: this.app.i18n._("From (Name)"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'from_name'
-        },{
-            id: 'sender',
-            header: this.app.i18n._("Sender"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'sender',
-            hidden: true
-        },{
-            id: 'to',
-            header: this.app.i18n._("To"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'to',
-            hidden: true,
-            renderer: Tine.Tinebase.common.emailRenderer,
-        },{
-            id: 'sent',
-            header: this.app.i18n._("Sent"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'sent',
-            renderer: Tine.Tinebase.common.dateTimeRenderer
-        },{
-            id: 'received',
-            header: this.app.i18n._("Received"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'received',
-            hidden: true,
-            renderer: Tine.Tinebase.common.dateTimeRenderer
-        },{
-            id: 'folder_id',
-            header: this.app.i18n._("Folder"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'folder_id',
-            hidden: true,
-            renderer: this.accountAndFolderRenderer.createDelegate(this)
-        },{
-            id: 'size',
-            header: this.app.i18n._("Size"),
-            width: 80,
-            sortable: true,
-            dataIndex: 'size',
-            hidden: true,
-            renderer: Ext.util.Format.fileSize
-        }];
+        const columns = [
+            { id: 'id', header: this.app.i18n._("Id"), hidden: true },
+            { id: 'content_type', dataIndex: 'has_attachment', renderer: this.attachmentRenderer },
+            { id: 'flags', header: this.app.i18n._("Flags"), align: 'center', renderer: this.flagRenderer },
+            { id: 'tags', header: this.app.i18n._("Tags"), align: 'center', renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
+            { id: 'subject', header: this.app.i18n._("Subject") },
+            { id: 'from_email', header: this.app.i18n._("From (Email)") },
+            { id: 'from_name', header: this.app.i18n._("From (Name)") },
+            { id: 'sender', header: this.app.i18n._("Sender"), hidden: true },
+            { id: 'to', header: this.app.i18n._("To"), hidden: true, renderer: Tine.Tinebase.common.emailRenderer },
+            { id: 'sent', header: this.app.i18n._("Sent"), renderer: Tine.Tinebase.common.dateTimeRenderer },
+            { id: 'received', header: this.app.i18n._("Received"), hidden: true, renderer: Tine.Tinebase.common.dateTimeRenderer },
+            { id: 'folder_id', header: this.app.i18n._("Folder"), hidden: true, renderer: this.accountAndFolderRenderer.createDelegate(this) },
+            { id: 'size', header: this.app.i18n._("Size"), hidden: true, renderer: Ext.util.Format.fileSize }
+        ];
+        return columns;
     },
     
     /**
@@ -800,15 +723,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     accountAndFolderRenderer: function(folderId, metadata, record) {
-        var folderStore = this.app.getFolderStore(),
-            account = this.app.getAccountStore().getById(record.get('account_id')),
-            result = (account) ? account.get('name') : record.get('account_id'),
-            folder = folderStore.getById(folderId);
+        const folderStore = this.app.getFolderStore();
+        const account = this.app.getAccountStore().getById(record.get('account_id'));
+        let result = (account) ? account.get('name') : record.get('account_id');
+        let folder = folderStore.getById(folderId);
         
         if (! folder) {
             folder = folderStore.getById(record.id);
             if (! folder) {
                 // only account
+                if (record.get('account_id') === '') {
+                    return record.get('path');
+                }
+                if (!account) {
+                    return folderId;
+                }
                 return (result) ? result : record.get('name');
             }
         }
@@ -829,7 +758,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Folder|Account} record
      * @return {String}
      */
-    responsiveRenderer: function(folderId, metadata, record) {
+    oneColumnRenderer: function(folderId, metadata, record) {
         const block = document.createElement('div');
         
         const flagIcons = record.getFlagIcons();
@@ -1655,7 +1584,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onStoreBeforeLoadFolderChange: function (store, options) {
-        this.updateGridState();
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
     },
     
@@ -1674,16 +1602,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     isSendFolderPath: function (pathFilterValue) {
         const pathParts = _.isString(pathFilterValue) ? pathFilterValue.split('/') : null;
-        if (! pathParts || pathParts.length < 3) {
-            return false;
-        }
-        const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
+        if (! pathParts || pathParts.length < 3) return false;
         
-        const sendFolderIds = composerAccount ? [
+        const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
+        if (!composerAccount) return false;
+        
+        const sendFolderIds = [
             composerAccount.getSendFolderId(),
             composerAccount.getSpecialFolderId('templates_folder'),
             composerAccount.getSpecialFolderId('drafts_folder')
-        ]: null;
+        ];
         
         return (-1 !== sendFolderIds.indexOf(pathParts[2]));
     },
@@ -1710,80 +1638,42 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         params.filter[0].filters[0].filters = targetFilters;
     },
+    
+    getStateIdSuffix() {
+        this.resolveSendFolderPath();
+        this.folderSuffix = this.sentFolderSelected ? '-SendFolder' : '';
+        return `${this.stateIdSuffix}${this.folderSuffix}`;
+    },
 
     /**
-     * // if send, draft, template folders are selected, do the following:
-     * // - hide from email + name columns from grid
-     * // - show to column in grid
-     * // - save this state
-     * // - if grid state is changed by user, do not change columns by user
-     *
-     * // if switched from send, draft, template to "normal" folder
-     * // - switch to default state
+     * if send, draft, template folders are selected, do the following:
+     * 
+     * - hide from email + name columns from grid
+     * - show to column in grid
      */
-    updateGridState: function () {
-        this.resolveSendFolderPath();
-        let stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
-        const isEastLayout = this.detailsPanelRegion === 'east';
-        if (isEastLayout && !stateId.includes('_DetailsPanel_East')) stateId = stateId + '_DetailsPanel_East';
-        const isStateIdChanged = this.grid.stateId !== stateId;
-        if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
-        this.grid.stateId = stateId;
+    updateGridState: async function () {
+        this.grid.stateId = this.getResolvedGridStateId();
         
-        const stateIdDefault = isEastLayout ? stateId : this.gridConfig.stateId;
-        const stateStored = Ext.state.Manager.get(stateIdDefault);
-        const stateCurrent = this.grid.getState();
-        let stateCloned = stateStored;
-        if (!isStateIdChanged || !stateStored) stateCloned = stateCurrent;
-        let stateClonedResolved = JSON.parse(JSON.stringify(stateCloned));
-        
-        if (stateClonedResolved?.columns && isEastLayout) {
-            const stateClonedResolvedVisibleColumns = stateClonedResolved.columns.filter((col) => { return !col.hidden;});
-            if (stateClonedResolvedVisibleColumns.length === 0) {
-                const restoreStateId = stateId.replace('_DetailsPanel_East', '');
-                const restoreState = Ext.state.Manager.get(restoreStateId);
-                const restoreStateVisibleColumns = restoreState.columns.filter((col) => { return !col.hidden;});
-                if (restoreStateVisibleColumns === 0) {
-                    stateClonedResolved.columns.forEach((c) => {c.hidden = c.id === 'responsive';})
-                } else {
-                    stateClonedResolved.columns.forEach((c, idx) => {c.hidden = restoreState.columns[idx].hidden ?? false;})
-                }
-            }
-        }
-        
-        if (stateId.includes(this.sendFolderGridStateId)) {
-            let refState = Ext.state.Manager.get(stateId);
-            if (refState) stateClonedResolved = JSON.parse(JSON.stringify(refState));
-            
-            // - hide from email + name columns from grid
-            // - show to column in grid
+        if (this.grid.stateId.includes(this.sendFolderGridStateId)) {
             const customHideCols = {
-                'from_email' : true,
-                'from_name' : true,
-                'to' : false,
+                'from_email': true,
+                'from_name': true,
+                'to': false,
             }
-            //overwrite custom states
             _.each(customHideCols, (isHidden, colId) => {
-                const idx = _.findIndex(stateClonedResolved.columns, {id: colId});
-                isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
-                
-                if (idx > -1 && isHidden !== _.get(stateClonedResolved.columns[idx], 'hidden', false)) {
-                    if (isHidden) {
-                        stateClonedResolved.columns[idx].hidden = true;
-                    } else {
-                        delete stateClonedResolved.columns[idx].hidden;
-                    }
+                const idx = _.findIndex(this.grid.colModel.config, {id: colId});
+                if (idx > -1 && isHidden !== _.get(this.grid.colModel.config[idx], 'hidden', false)) {
+                    this.grid.colModel.setHidden(idx, isHidden, true);
                 }
             })
         }
-
-        if (!isStateIdChanged) {
-            stateClonedResolved.sort = this.store.getSortState();
+        
+        if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
+            await this.grid.saveState();
         }
-        this.grid.applyState(stateClonedResolved);
-        // save state
-        this.grid.saveState();
-        if (isStateIdChanged) this.getView().refresh(true);
+        
+        this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
+        this.grid.view.layout();
     },
 
     /**
@@ -2078,14 +1968,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         let header = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
-                    (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
+                    (! onlyImportant || header === 'from' || header === 'to' || header === 'cc' || header === 'subject' || header === 'date')) 
             {
-                result += (plain ? (header + ': ') : ('<b>' + header + ':</b> '))
-                    + Ext.util.Format.htmlEncode(
-                        (ellipsis) 
-                            ? Ext.util.Format.ellipsis(headers[header], 40)
-                            : headers[header]
-                    ) + (plain ? '\n' : '<br/>');
+                const headerName = plain ? (header + ': ') : ('<b>' + header + ':</b> ');
+                let headerContent = ellipsis ? Ext.util.Format.ellipsis(headers[header], 40) : headers[header];
+                headerContent = plain ? headerContent : Ext.util.Format.htmlEncode(headerContent);
+                result += headerName + headerContent + (plain ? '\n' : '<br/>');
             }
         }
         return result;
@@ -2117,7 +2005,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         this.getStore().remove(msg);
                         this.deleteQueue.push(msg.id);
                         msgsIds.push(msg.id);
-    
+                        
                         //spam strategy will execute move message , ham will remain in current folder
                         const isSeen = msg.hasFlag('\\Seen');
                         const diff = isSeen ? 0 : 1;
@@ -2165,10 +2053,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             await Promise.allSettled(promises)
                 .then(() => {
-                    if ('spam' === option) {
-                        this.onAfterDelete(msgsIds);
-                    }
-                    
+                    this.onAfterDelete(msgsIds);
                     this.doRefresh();
             });
             

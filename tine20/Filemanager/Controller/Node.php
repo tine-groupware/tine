@@ -392,7 +392,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         } else {
             $path = $this->_checkFilterACL($_filter, $_action);
         }
-        
+
+        $parentNode = null;
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
         } elseif ($path->containerType === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL && ! $path->containerOwner) {
@@ -403,6 +404,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->resolvePath($result, $path);
         } else {
             try {
+                $parentNode = $this->_backend->stat($path->statpath);
+                if ($parentNode->flysystem) {
+                    $this->_backend->syncFlySystem($parentNode, 0);
+                }
                 $result = $this->_backend->searchNodes($_filter, $_pagination);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // create basic nodes like personal|shared|user root
@@ -428,7 +433,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $this->resolvePath($result, $path);
         }
 
-        $parentNode = $this->_backend->stat($path->statpath);
+        if (null === $parentNode) {
+            $parentNode = $this->_backend->stat($path->statpath);
+        }
         $quota = $this->_backend->getEffectiveAndLocalQuota($parentNode);
         $context = $this->getRequestContext();
         if (!is_array($context)) {
@@ -780,7 +787,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * create node(s)
      * 
      * @param array $_filenames
-     * @param array $_types directory or file
+     * @param array|string $_types directory or file
      * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node

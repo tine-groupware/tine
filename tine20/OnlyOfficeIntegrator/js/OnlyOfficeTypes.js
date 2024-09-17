@@ -10,8 +10,8 @@ let map = {
     // upstream supported actions
     actions: {
         view: [".pdf", ".djvu", ".xps"],
-        edit: [".docx", ".xlsx", ".csv", ".pptx", ".txt"],
-        convert: [".docm", ".doc", ".dotx", ".dotm", ".dot", ".odt", ".fodt", ".ott", ".xlsm", ".xls", ".xltx", ".xltm", ".xlt", ".ods", ".fods", ".ots", ".pptm", ".ppt", ".ppsx", ".ppsm", ".pps", ".potx", ".potm", ".pot", ".odp", ".fodp", ".otp", ".rtf", ".mht", ".html", ".htm", ".epub"]
+        edit: [".docx",".docxt", ".oform", ".xlsx", ".csv", ".pptx", ".txt"],
+        convert: [".docm", ".doc", ".docxt", ".oform", ".dotx", ".dotm", ".dot", ".odt", ".fodt", ".ott", ".xlsm", ".xls", ".xltx", ".xltm", ".xlt", ".ods", ".fods", ".ots", ".pptm", ".ppt", ".ppsx", ".ppsm", ".pps", ".potx", ".potm", ".pot", ".odp", ".fodp", ".otp", ".rtf", ".mht", ".html", ".htm", ".epub"]
     },
     // upstream supported types
     types: {
@@ -22,7 +22,7 @@ let map = {
             ".ppt", ".pptx", ".pptm",
             ".pot", ".potx", ".potm",
             ".odp", ".fodp", ".otp"],
-        text: [".doc", ".docx", ".docm",
+        text: [".doc", ".docx",".docxf", ".oform", ".docm",
             ".dot", ".dotx", ".dotm",
             ".odt", ".fodt", ".ott", ".rtf", ".txt",
             ".html", ".htm", ".mht",

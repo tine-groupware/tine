@@ -145,38 +145,17 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      * @return Array
      */
     getColumns: function() {
-        var columns = [{
-            resizable: true,
-            id: 'name',
-            dataIndex: 'name',
-            width: 150,
-            header: i18n._('Name'),
-            renderer: Ext.ux.PercentRendererWithName,
-            sortable: true
-        }, {
-            resizable: true,
-            id: 'size',
-            dataIndex: 'size',
-            width: 50,
-            header: i18n._('Size'),
-            renderer: Ext.util.Format.fileSize,
-            sortable: true
-        }, {
-            resizable: true,
-            id: 'contenttype',
-            dataIndex: 'contenttype',
-            width: 80,
-            header: i18n._('Content Type'),
-            sortable: true,
-            renderer: function(value, meta, record) {
-                return _.get(record, 'data.contenttype', _.get(record, 'data.type'));
-            }
-        },{ id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,     width: 80,
-            sortable: true },
-          { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer, width: 80,
-            sortable: true }
+        const columns = [
+            { resizable: true, id: 'name', width: 150, header: i18n._('Name'), renderer: Ext.ux.PercentRendererWithName },
+            { resizable: true, id: 'size', header: i18n._('Size'), renderer: Ext.util.Format.fileSize },
+            { id: 'contenttype', width: 80, header: i18n._('Content Type'), 
+                renderer: function(value, meta, record) { 
+                    return _.get(record, 'data.contenttype', _.get(record, 'data.type')); 
+                } 
+            },
+            { id: 'creation_time', header: i18n._('Creation Time'), dataIndex: 'creation_time', renderer: Tine.Tinebase.common.dateRenderer, width: 80 },
+            { id: 'created_by', header: i18n._('Created By'), dataIndex: 'created_by', renderer: Tine.Tinebase.common.usernameRenderer, width: 80 }
         ];
-        
         return columns;
     },
     
@@ -205,7 +184,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
         if (rowRecord.data.type === 'folder') {
             this.expandFolder(rowRecord);
-        } else if (!this.readOnly) {
+        } else {
             const dblClickHandlers = [{
                 prio: 100,
                 fn: _.bind(this.action_preview.execute, this.action_preview)

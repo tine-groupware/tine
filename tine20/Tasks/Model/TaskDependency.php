@@ -85,6 +85,7 @@ class Tasks_Model_TaskDependency extends Tinebase_Record_NewAbstract
                 self::CONFIG => [
                     self::APP_NAME              => Tasks_Config::APP_NAME,
                     self::MODEL_NAME            => Tasks_Model_Task::MODEL_NAME_PART,
+                    self::CREATE                => true,
                 ],
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,

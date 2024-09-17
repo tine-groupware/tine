@@ -1,4 +1,8 @@
 <?php
+
+use Sabre\DAV\Xml\Property\Href;
+use Sabre\DAVACL\IPrincipal;
+
 /**
  * CalDAV plugin for expanded-group-member-set
  *
@@ -62,40 +66,28 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
     {
         $this->server = $server;
 
-        $server->subscribeEvent('beforeGetProperties',array($this,'beforeGetProperties'));
+        $server->on('propFind',array($this,'propFind'));
     }
-    
-    /**
-     * beforeGetProperties
-     *
-     * This method handler is invoked before any after properties for a
-     * resource are fetched. This allows us to add in any CalDAV specific
-     * properties.
-     *
-     * @param string $path
-     * @param DAV\INode $node
-     * @param array $requestedProperties
-     * @param array $returnedProperties
-     * @return void
-     */
-    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+
+    public function propFind(\Sabre\DAV\PropFind $propFind, \Sabre\DAV\INode $node)
     {
-        if (in_array('{http://calendarserver.org/ns/}expanded-group-member-set', $requestedProperties)) {
-            $parentNode = $this->server->tree->getNodeForPath($path);
-            $groupMemberSet = $parentNode->getGroupMemberSet();
+        /* Adding principal properties */
+        if ($node instanceof IPrincipal) {
+            $propFind->handle('{http://calendarserver.org/ns/}expanded-group-member-set', function () use ($node, $propFind) {
+                $groupMemberSet = $node->getGroupMemberSet();
 
-            // iCal want's to have the group itself in the response set
-            $groupMemberSet[] = $path;
+                // iCal want's to have the group itself in the response set
+                $groupMemberSet[] = $propFind->getPath();
 
-            // have record for group itself
-            $groupMemberSet[] = str_replace(
-                Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
-                Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS,
-                $path
-            );
+                // have record for group itself
+                $groupMemberSet[] = str_replace(
+                    Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
+                    Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS,
+                    $propFind->getPath()
+                );
 
-            $returnedProperties[200]['{http://calendarserver.org/ns/}expanded-group-member-set'] = new Sabre\DAV\Property\HrefList($groupMemberSet);
+                return new Sabre\DAV\Xml\Property\Href($groupMemberSet);
+            });
         }
     }
-
 }

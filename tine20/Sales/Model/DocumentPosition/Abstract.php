@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,7 +17,7 @@
  */
 class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 {
-    //const MODEL_NAME_PART = 'AbstractPosition';
+    const MODEL_NAME_PART = 'DocumentPosition_Abstract';
 
     const FLD_DOCUMENT_ID = 'document_id';
     const FLD_PARENT_ID = 'parent_id';
@@ -52,8 +52,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_SALES_TAX = 'sales_tax'; // Mehrwertssteuer
     const FLD_GROSS_PRICE= 'gross_price'; // Bruttopreis - berechnen
 
-    const FLD_COST_CENTER_ID = 'payment_cost_center_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
-    const FLD_COST_BEARER_ID = 'payment_cost_bearer_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
+    const FLD_EVAL_DIM_COST_CENTER = 'eval_dim_cost_center'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
+    const FLD_EVAL_DIM_COST_BEARER = 'eval_dim_cost_bearer'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
     const FLD_REVERSAL = 'reversal';
     const FLD_IS_REVERSED = 'is_reversed';
 
@@ -156,6 +156,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE                 => true,
         self::HAS_XPROPS                    => true,
         self::EXPOSE_JSON_API               => true,
+        self::EXPOSE_HTTP_API               => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS      => true,
 
         self::TABLE                         => [
             self::INDEXES                       => [
@@ -170,6 +172,12 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER                 => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_DOCUMENT_ID                       => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY  => [],
+                        Sales_Model_Document_Abstract::FLD_CUSTOMER_ID        => [],
+                    ],
+                ],
                 self::FLD_PRODUCT_ID                        => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_Product::FLD_SUBPRODUCTS        => [],
@@ -178,11 +186,56 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             ],
         ],
 
+        self::FILTER_MODEL => [
+            'category'                  => [
+                self::LABEL => 'Category', // _('Category')
+                self::FILTER => Sales_Model_DocumentPosition_CategoryFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => null,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Category::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'customer'                  => [
+                self::LABEL => 'Customer', // _('Customer')
+                self::FILTER => Sales_Model_DocumentPosition_CustomerFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => null,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Customer::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'division'                  => [
+                self::LABEL => 'Division', // _('Division')
+                self::FILTER => Sales_Model_DocumentPosition_DivisionFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => null,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Division::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+        ],
+
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [
                 // needs to be set by concrete model
+                self::LABEL                         => 'Document', // _('Document)
                 self::TYPE                          => self::TYPE_RECORD,
-                self::DISABLED                      => true,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_NAME_PART,
@@ -191,6 +244,9 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_PARENT_ID                 => [
@@ -277,7 +333,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_QUANTITY                  => [
                 self::LABEL                         => 'Quantity', // _('Quantity')
-                self::TYPE                          => self::TYPE_INTEGER,
+                self::TYPE                          => self::TYPE_FLOAT,
                 self::NULLABLE                      => true,
             ],
             self::FLD_USE_ACTUAL_QUANTITY       => [
@@ -376,26 +432,6 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                     self::READ_ONLY                     => true,
                 ],
             ],
-            self::FLD_COST_BEARER_ID            => [
-                self::LABEL                         => 'Cost Bearer', // _('Cost Bearer')
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-                self::SHY                           => true,
-            ],
-            self::FLD_COST_CENTER_ID            => [
-                self::LABEL                         => 'Costcenter', // _('Costcenter')
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_CostCenter::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-                self::SHY                           => true,
-            ],
             self::FLD_REVERSAL                  => [
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL                   => false,
@@ -421,6 +457,25 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     protected static $_configurationObject = null;
 
     protected static $_exportContextLocale = null;
+
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+        parent::inheritModelConfigHook($_definition);
+
+        [, $suffix] = explode('_', static::MODEL_NAME_PART, 2);
+        $modelNamePart = 'Document_' . $suffix;
+        $_definition[self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] = $modelNamePart;
+
+        $_definition[self::FILTER_MODEL]['customer'][self::OPTIONS][self::MODEL_NAME] = $modelNamePart;
+        $_definition[self::FILTER_MODEL]['customer'][self::OPTIONS][self::RECORD_CLASS_NAME] = 'Sales_Model_' . $modelNamePart;
+        $_definition[self::FILTER_MODEL]['customer'][self::OPTIONS][self::CONTROLLER_CLASS_NAME] = 'Sales_Controller_' . $modelNamePart;
+
+        $_definition[self::FILTER_MODEL]['category'][self::OPTIONS][self::RECORD_CLASS_NAME] = 'Sales_Model_' . $modelNamePart;
+        $_definition[self::FILTER_MODEL]['category'][self::OPTIONS][self::CONTROLLER_CLASS_NAME] = 'Sales_Controller_' . $modelNamePart;
+
+        $_definition[self::FILTER_MODEL]['division'][self::OPTIONS][self::RECORD_CLASS_NAME] = 'Sales_Model_' . $modelNamePart;
+        $_definition[self::FILTER_MODEL]['division'][self::OPTIONS][self::CONTROLLER_CLASS_NAME] = 'Sales_Controller_' . $modelNamePart;
+    }
 
     public static function setExportContextLocale(?Zend_Locale $locale)
     {
@@ -484,22 +539,22 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
+        $this->{self::FLD_IS_REVERSED} = false;
         $this->{self::FLD_REVERSAL} =
             (bool)$transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
         $this->{self::FLD_PRECURSOR_POSITION_MODEL} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
         $this->{self::FLD_PRECURSOR_POSITION} =
-            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getId();
 
         if ($this->{self::FLD_REVERSAL}) {
             $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale($this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
             $this->{self::FLD_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_TITLE};
-            $positions = $this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_POSITIONS};
-            $positions->getById($this->getId())->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = true;
+            $source->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = true;
 
             // make document_id dirty
-            $this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $positions;
+            $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS};
         }
 
         $this->__unset($this->getIdProperty());
@@ -521,9 +576,10 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         $ctrl = Tinebase_Core::getApplicationInstance(static::class);
         foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(static::class, [
                     ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
-                        'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION}->getId()],
+                        'operator' => 'equals', 'value' => $this->getIdFromProperty(self::FLD_PRECURSOR_POSITION)],
                     ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
                         'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION_MODEL}],
+                    ['field' => Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED, 'operator' => 'equals', 'value' => false],
                 ])) as $existingFollowUp) {
             $existingQuantities += $existingFollowUp->{self::FLD_QUANTITY};
         }

@@ -14,17 +14,17 @@ describe('mainScreen', () => {
         for (let i = 0; i < Apps.length; i++) {
             try {
                 await page.waitForTimeout(1000);
-                await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+                await expect(page).toClick('.action_menu.application-menu-btn');
                 await page.waitForTimeout(1000);
-                await expect(page).toClick('span.x-menu-item-text', {text: Apps[i]});
+                await expect(page).toClick('.application-menu-item__text', {text: Apps[i]});
             } catch (e) {
                 //console.log('Application ' + Apps[i] + ' don´t install');
             }
         }
         await page.waitForTimeout(1000);
-        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+        await expect(page).toClick('.action_menu.application-menu-btn');
         await page.waitForTimeout(1000);
-        await expect(page).toClick('span', {text: 'Adressbuch'});
+        await expect(page).toClick('.application-menu-item__text', {text: 'Adressbuch'});
         await page.waitForTimeout(5000);
         await page.screenshot({path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
     })
@@ -34,10 +34,10 @@ describe('usersettings', () => {
     let newPage;
     let settings;
     test('open usersettings', async () => {
-        await page.click('.x-btn-image.tine-grid-row-action-icon.renderer_accountUserIcon');
+        await page.click('.account-user-avatar');
         await page.waitForTimeout(2000);
-        settings = await page.$$('.x-menu.x-menu-floating.x-layer .x-menu-item-icon.action_adminMode');
-        await settings[1].hover();
+        settings = await page.$$('.main-menu-item__icon.action_adminMode');
+        await settings[0].hover();
         await page.screenshot({
             path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}
@@ -45,7 +45,7 @@ describe('usersettings', () => {
     });
     test('usersettings', async () => {
         newPage = lib.getNewWindow();
-        await settings[1].click();
+        await settings[0].click();
         newPage = await newPage;
         await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});

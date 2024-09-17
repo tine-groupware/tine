@@ -69,6 +69,7 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
             self::FLD_REVISION_SIZE_DELTA   => [
                 self::TYPE                      => self::TYPE_BIGINT,
@@ -76,6 +77,7 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ],
     ];

@@ -19,8 +19,15 @@
  * @package     Tinebase
  * @subpackage  Filter
  */
-class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
+class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
 {
+    protected $_operators = [
+        'equals', //expects ID as value
+        'in', //expects IDs as value
+        'not', //expects ID as value
+        'notin', //expects IDs as value
+    ];
+
     protected $_userOperator = NULL;
     protected $_userValue = NULL;
     
@@ -38,6 +45,13 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
         
         parent::setOperator($_operator);
     }
+
+    protected function _setOptions(array $_options)
+    {
+        $_options['controller'] = $_options['filtergroup'] = '';
+
+        parent::_setOptions($_options);
+    }
     
     /**
      * sets value
@@ -47,24 +61,35 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
     public function setValue($_value)
     {
         // cope with resolved records
-        if (is_array($_value) && (isset($_value['accountId']) || array_key_exists('accountId', $_value))) {
-            $_value = $_value['accountId'];
+        if (is_array($_value)) {
+            if (isset($_value['accountId'])) {
+                $_value = $_value['accountId'];
+            } elseif (isset($_value[0]['accountId'])) {
+                foreach ($_value as &$val) {
+                    $val = $val['accountId'] ?? null;
+                }
+                $_value = array_filter($_value);
+            }
         }
-        
-        if ($this->_userOperator && $this->_userOperator == 'inGroup' && $this->_userValue) {
-            $this->_userValue = $_value;
-            $_value = Tinebase_Group::getInstance()->getGroupMembers($this->_userValue);
-        }
-        
+
         // transform current user
         if ($_value == Tinebase_Model_User::CURRENTACCOUNT && is_object(Tinebase_Core::getUser())) {
+            $this->_userValue = $_value;
             $_value = Tinebase_Core::getUser()->getId();
-            $this->_userValue = Tinebase_Model_User::CURRENTACCOUNT;
+        }
+
+        if ($this->_userOperator && $this->_userOperator == 'inGroup') {
+            $_value = Tinebase_Group::getInstance()->getGroupMembers($this->_userValue);
         }
         
         parent::setValue($_value);
     }
-    
+
+    protected function _resolveRecord($value)
+    {
+        return $value;
+    }
+
     /**
      * returns array with the filter settings of this filter
      *
@@ -78,33 +103,51 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
         if ($this->_userOperator && $this->_userOperator == 'inGroup') {
             $result['operator'] = $this->_userOperator;
             $result['value']    = $this->_userValue;
-        } else if ($this->_userValue === Tinebase_Model_User::CURRENTACCOUNT) {
+        } elseif ($this->_userValue === Tinebase_Model_User::CURRENTACCOUNT) {
             // switch back to CURRENTACCOUNT to make sure filter is saved and shown in client correctly
-            $result['value']    = $this->_userValue;
+            $result['value'] = $this->_userValue;
         }
-        
-        if ($_valueToJson == true ) {
-            if ($this->_userOperator && $this->_userOperator == 'inGroup' && $this->_userValue) {
-                $result['value'] = Tinebase_Group::getInstance()->getGroupById($this->_userValue)->toArray();
+
+        if ($_valueToJson === true ) {
+            if ($this->_userOperator) {
+                if ($this->_userOperator == 'inGroup' && $this->_userValue) {
+                    try {
+                        $result['value'] = Tinebase_Group::getInstance()->getGroupById($this->_userValue)->toArray();
+                    } catch (Tinebase_Exception_Record_NotDefined) {}
+                }
             } else {
                 switch ($this->_operator) {
                     case 'equals':
-                        $result['value'] = $result['value'] ? Tinebase_User::getInstance()->getUserById($this->_value)->toArray() : $result['value'];
+                    case 'not':
+                        if ($result['value'] && $result['value'] !== Tinebase_Model_User::CURRENTACCOUNT) {
+                            try {
+                                $result['value'] = Tinebase_User::getInstance()->getUserById($result['value'])->toArray();
+                            } catch (Tinebase_Exception_NotFound) {}
+                        }
                         break;
                     case 'in':
+                    case 'notin':
                         $result['value'] = array();
-                        if (! is_array($this->_value)) {
+                        if (! is_array($result['value'])) {
                             // somehow the client sent us a scalar - put this into the value array
-                            $result['value'][] = $this->_value;
+                            $result['value'][] = $result['value'];
                         } else {
-                            foreach ($this->_value as $userId) {
-                                $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                            foreach ($result['value'] as $userId) {
+                                try {
+                                    $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                                } catch(Tinebase_Exception_NotFound) {
+                                    $result['value'][] = $userId;
+                                }
                             }
                         }
                         break;
                     default:
                         break;
                 }
+            }
+        } else {
+            if ($this->_operator === 'equals' && is_array($result['value']) && count($result['value']) === 1 && isset($result['value'][0])) {
+                $result['value'] = $result['value'][0];
             }
         }
         return $result;

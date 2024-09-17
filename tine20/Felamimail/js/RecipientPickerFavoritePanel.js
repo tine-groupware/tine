@@ -97,18 +97,21 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
                 break;
         }
         
-        var filterValue = [], emailRegExp = /<([^>]*)/, filter = [{field: 'container_id', operator: 'in', value: []}];
+        const filterValue = [];
+        const emailRegExp = /<([^>]*)/; 
+        let filter = [{field: 'container_id', operator: 'in', value: []}];
+        
         Ext.each(emailRecipients, function(email) {
             emailRegExp.exec(email);
-            if (RegExp.$1 != '') {
+            if (RegExp.$1 !== '') {
                 filterValue.push(RegExp.$1)
             }
         }, this);
         if (filterValue.length > 0) {
-            filter = [{field: 'email_query', operator: 'in', value: filterValue}];
+            filter = [{field: 'email_query', operator: 'contains', value: filterValue}];
         }
 
-        var updatedPersistentFilter = new Tine.widgets.persistentfilter.model.PersistentFilter({
+        const updatedPersistentFilter = new Tine.widgets.persistentfilter.model.PersistentFilter({
             filters: filter,
             name: persistentFilter.get('name'),
             model: 'Addressbook_Model_Contact',

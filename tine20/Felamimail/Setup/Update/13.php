@@ -154,4 +154,5 @@ class Felamimail_Setup_Update_13 extends Setup_Update_Abstract
         }
         $this->addApplicationUpdate('Felamimail', '13.5', self::RELEASE013_UPDATE006);
     }
+
 }

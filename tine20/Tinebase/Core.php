@@ -1798,8 +1798,6 @@ class Tinebase_Core
 
         $registryData =  [
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
-            // sso
-            'sso'               => Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE},
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => [
                 'locale'   => $locale->toString(),
@@ -1817,6 +1815,7 @@ class Tinebase_Core
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
             'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
+            'allowPasswordLessLogin' => Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_LESS_LOGIN},
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
             'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),
@@ -2041,6 +2040,8 @@ class Tinebase_Core
     /**
      * returns requested url part
      *
+     * we expect Tinebase_Config::TINE20_URL to be set. We code as if it always would be. Failure is on the sys adm, not us (as always of course)
+     *
      * @param string $part
      * @param boolean $useConfig Tinebase_Config::TINE20_URL (if set)
      * @return string
@@ -2069,6 +2070,10 @@ class Tinebase_Core
             $port = parse_url($configUrl, PHP_URL_PORT);
         }
 
+        if (! in_array($part, [self::GET_URL_PATH, self::GET_URL_HOST, self::GET_URL_PROTOCOL]) && ! empty($port)) {
+            $hostname .= ':' . $port;
+        }
+
         switch ($part) {
             case self::GET_URL_PATH:
                 $url = '' === $pathname || null === $pathname ? '/' : $pathname;
@@ -2089,10 +2094,6 @@ class Tinebase_Core
             default:
                 $url = $protocol . '://' . $hostname . $pathname;
                 break;
-        }
-
-        if (! in_array($part, [self::GET_URL_PATH, self::GET_URL_HOST, self::GET_URL_PROTOCOL]) && ! empty($port)) {
-            $url .= ':' . $port;
         }
         return $url;
     }
@@ -2451,9 +2452,13 @@ class Tinebase_Core
      * @param string $id
      * @return bool
      */
-    public static function acquireMultiServerLock($id)
+    public static function acquireMultiServerLock($id, bool $try = true)
     {
-        return Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
+        if ($try) {
+            return Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
+        } else {
+            return Tinebase_Lock::acquireLock($id . '::' . static::getTinebaseId());
+        }
     }
 
     /**
@@ -2510,11 +2515,13 @@ class Tinebase_Core
     }
 
     /**
+     * attention, this will not be true on non replicating system! use if (!isReplica()) instead!
+     *
      * @return bool
      */
     public static function isReplicationPrimary()
     {
-        return static::isReplicationMaster();
+        return (bool)Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_MASTER}->{Tinebase_Config::REPLICATION_IS_PRIMARY};
     }
 
     /**

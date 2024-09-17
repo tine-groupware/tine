@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
 Ext.namespace('Tine.Sales');
 
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -36,7 +38,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             region: 'center',
             xtype: 'columnform',
             items: [
-                [fields.number, fields.gtin, fields.category],
+                [fields.number, fields.gtin/*, fields.category*/],
                 [fields.name, _.assign(fields.shortcut, {columnWidth: 1/3})],
                 // [fields.description],
                 [fields.manufacturer, _.assign(fields.purchaseprice, {columnWidth: 1/3})],
@@ -45,7 +47,11 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 [fields.unfold_type, fields.default_sorting, fields.default_grouping],
                 [fields.lifespan_start, fields.lifespan_end],
                 [fields.is_active, fields.is_salesproduct],
-                [_.assign(fields.accountable, {columnWidth: 1/3}), _.assign(fields.costcenter, {columnWidth: 1/3}), _.assign(fields.costbearer, {columnWidth: 1/3})]
+                [_.assign(fields.accountable, {columnWidth: 1/3})],
+                [ new EvaluationDimensionForm({
+                    maxItemsPerRow: 3,
+                    recordClass: this.recordClass
+                })]
             ]
         }];
     }

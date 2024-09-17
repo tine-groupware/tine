@@ -459,7 +459,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
 
     public function testSortInstallableApplications()
     {
-        $apps = ['Tinebase','Addressbook','Courses','CoreData','Voipmanager','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Phone','Timetracker','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
+        $apps = ['Tinebase','Addressbook','Courses','CoreData','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Timetracker','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
 
         $applications = array();
         foreach ($apps as $applicationName) {
@@ -477,16 +477,14 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             'Sales',
             'ExampleApplication',
             'Inventory',
-            'Timetracker',
             'ActiveSync',
             'Filemanager',
-            'Phone',
             'Crm',
             'Tasks',
             'Courses',
-            'Voipmanager',
             'HumanResources',
             'Projects',
+            'Timetracker',
             'SimpleFAQ',
         ];
         self::assertEquals($expected, array_keys($result));

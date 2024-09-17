@@ -207,15 +207,6 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             
             $args = $this->_parseArgs($opts);
             
-            // expecting cost center number here, creating contract from data
-            $costCenter = Tinebase_Controller_CostCenter::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class,
-                array(array(
-                    'field'    => 'number',
-                    'operator' => 'equals',
-                    'value'    => $employee->countryname,
-                ))))->getFirstRecord();
-            
             $contract = HumanResources_Controller_Employee::getInstance()->createContractDataForEmployee(array(
                 'feastCalendarId'     => isset($args['feast_calendar_id']) ? $args['feast_calendar_id'] : NULL,
                 'workingTimeModelId'  => isset($args['working_time_model_id']) ? $args['working_time_model_id'] : NULL,
@@ -225,15 +216,6 @@ class HumanResources_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             
             $employee->contracts = new Tinebase_Record_RecordSet('HumanResources_Model_Contract');
             $employee->contracts->addRecord(new HumanResources_Model_Contract($contract));
-            
-            if ($costCenter) {
-                $employee->costcenters  = new Tinebase_Record_RecordSet('HumanResources_Model_CostCenter');
-                $cc = new HumanResources_Model_CostCenter(array(
-                    'cost_center_id' => $costCenter->getId(),
-                    'start_date'     => $employee->employment_begin
-                ));
-                $employee->costcenters->addRecord($cc);
-            }
             
             unset($employee->countryname);
         }

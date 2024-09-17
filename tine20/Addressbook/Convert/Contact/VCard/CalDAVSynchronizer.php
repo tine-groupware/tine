@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Ingo Ratsdorf <ingo@envirology.co.nz>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -108,10 +108,12 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
 
 	$telfield = null;
 
-	if (isset($property['TYPE'])) {
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
             // CELL
-            if ($property['TYPE']->has('cell')) {
-                if ($property['TYPE']->has('work')) {
+            if ($typeParameter->has('cell')) {
+                if ($typeParameter->has('work')) {
                     $telField = 'tel_cell';
                 } else {
                     // this will map TEL;TYPE=CELL;TYPE=PREF: to private mobile; point of discussion whether this is private or work.
@@ -119,29 +121,29 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
                 }
 
             // PAGER
-            } elseif ($property['TYPE']->has('pager')) {
+            } elseif ($typeParameter->has('pager')) {
                 $telField = 'tel_pager';
 
             // FAX
-            } elseif ($property['TYPE']->has('fax')) {
-                if ($property['TYPE']->has('work')) {
+            } elseif ($typeParameter->has('fax')) {
+                if ($typeParameter->has('work')) {
                     $telField = 'tel_fax';
-                } elseif ($property['TYPE']->has('home')) {
+                } elseif ($typeParameter->has('home')) {
                     $telField = 'tel_fax_home';
                 }
 
             // HOME
-            } elseif ($property['TYPE']->has('home')) {
+            } elseif ($typeParameter->has('home')) {
                 $telField = 'tel_home';
             // WORK
-            } elseif ($property['TYPE']->has('work')) {
+            } elseif ($typeParameter->has('work')) {
                 $telField = 'tel_work';
             // CAR
-            } elseif ($property['TYPE']->has('car')) {
+            } elseif ($typeParameter->has('car')) {
 		// not yet supported by CalkDAVSynchronizer
                 $telField = 'tel_car';
             // ASSISTENT
-            } elseif ($property['TYPE']->has('assistant')) {
+            } elseif ($typeParameter->has('assistant')) {
                 // not yet supported by CalDAVSynchronizer
                 $telField = 'tel_assistent';
             } else {
@@ -166,7 +168,7 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
     protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
     {
         foreach ($property['TYPE'] as $typeProperty) {
-            if (strtolower($typeProperty) == 'internet') {
+            if (strtolower((string)$typeProperty) == 'internet') {
                 if (empty($data['email'])) {
                     // do not replace existing value; this will first get the primary email mapped to work
                     $data['email'] = $property->getValue();

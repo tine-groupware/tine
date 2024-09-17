@@ -31,7 +31,7 @@ Ext.extend(Ext.state.Provider, Ext.util.Observable, {
      */
     get : function(name, defaultValue){
         return typeof this.state[name] == "undefined" ?
-            defaultValue : this.state[name];
+            defaultValue : JSON.parse(JSON.stringify(this.state[name]));
     },
 
     /**

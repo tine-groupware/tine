@@ -5,15 +5,13 @@
  * @package     Tinebase
  * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
-
 
 /**
  * Abstract test class for Tinebase_WebDav_Plugin_*
@@ -22,13 +20,13 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
 {
     /**
      *
-     * @var Sabre\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
     /**
      *
-     * @var Sabre\HTTP\ResponseMock
+     * @var Tinebase_WebDav_Sabre_ResponseMock
      */
     protected $response;
 
@@ -49,10 +47,10 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
 {
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
         $this->server->debugExceptions = true;
 
-        $this->response = new Sabre\HTTP\ResponseMock();
+        $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
         $this->server->httpResponse = $this->response;
     }
 

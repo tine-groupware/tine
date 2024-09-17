@@ -25,12 +25,18 @@ Tine.SSO.AdminPanel = Ext.extend(Ext.TabPanel, {
             new Tine.SSO.RelyingPartyGridPanel({
                 title: this.app.i18n._('Relying Parties'),
                 disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
-                ownActionToolbar: true
+                ownActionToolbar: true,
+                gridConfig: {
+                    disableResponsiveLayout: true,
+                },
             }),
             new Tine.SSO.ExternalIdpGridPanel({
                 title: this.app.i18n._('External Identity Providers'),
                 disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
-                ownActionToolbar: true
+                ownActionToolbar: true,
+                gridConfig: {
+                    disableResponsiveLayout: true,
+                },
             }),
             new Tine.Admin.config.GridPanel({
                 configApp: this.app

@@ -69,6 +69,8 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
     relationType: null,
 
 
+    resizable: true,
+
     // private
     items: null,
     store: null,
@@ -84,7 +86,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
             this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }
 
-        this.combo = Tine.widgets.form.RecordPickerManager.get(this.app, this.recordClass, this.pickerConfig || Ext.applyIf({}, this));
+        this.combo = Tine.widgets.form.RecordPickerManager.get(this.app, this.recordClass, this.pickerConfig || Ext.applyIf({xtype: null}, this));
         this.items = [this.combo];
 
         this.deferredLoading();

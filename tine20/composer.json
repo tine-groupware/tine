@@ -34,7 +34,7 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/timezoneconvert.git"
+      "url": "https://github.com/tine-groupware/timezoneconvert.git"
     },
     {
       "type": "git",
@@ -42,11 +42,11 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/vobject.git"
+      "url": "https://github.com/tine20/sabrevobject.git"
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/dav.git"
+      "url": "https://github.com/tine20/sabredav.git"
     },
     {
       "type": "git",
@@ -55,10 +55,6 @@
     {
       "type": "git",
       "url": "https://github.com/tine-groupware/MAPI.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/oauth2-server.git"
     },
     {
       "type": "git",
@@ -71,14 +67,19 @@
     {
       "type": "git",
       "url": "https://github.com/tine20/PhpSpreadsheet.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/Kronos-IT-Support-Consulting/einvoicing.git"
     }
   ],
   "require": {
-    "php": "8.0.2 - 8.1",
+    "php": "8.1 - 8.2",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
     "ext-ctype": "*",
+    "ext-curl": "*",
     "ext-date": "*",
     "ext-dom": "*",
     "ext-gd": "*",
@@ -86,9 +87,12 @@
     "ext-iconv": "*",
     "ext-intl": "*",
     "ext-json": "*",
+    "ext-libxml": "*",
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "ext-xml": "*",
+    "ext-xmlreader": "*",
+    "ext-xmlwriter": "*",
     "ext-zip": "*",
     "benmorel/gsm-charset-converter": "^0.2",
     "clean/phpdoc-md": "^0.19.3",
@@ -100,6 +104,7 @@
     "giggsey/libphonenumber-for-php": "^8",
     "hansott/psr7-cookies": "*",
     "hfig/mapi": "^1.3",
+    "josemmo/einvoicing": "dev-master#16d6e46718985ed0c049b7f05f9177c2f09254a8",
     "jumbojett/openid-connect-php": "dev-master",
     "laminas/laminas-diactoros": "^2.7",
     "laminas/laminas-http": "^2.16",
@@ -107,31 +112,32 @@
     "laminas/laminas-stdlib": "^3.5",
     "laminas/laminas-stratigility": "^3.2",
     "laminas/laminas-zendframework-bridge": "^1.6",
-    "league/oauth2-server": "8.3.5pl1 as 8.3.5",
+    "league/flysystem": "^3.0",
+    "league/flysystem-webdav": "^3.16",
     "metaways/opendocument": "1.*",
     "metaways/timezoneconvert": "1.*",
+    "mlocati/ip-lib": "^1.18",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "0.*",
     "palepurple/rate-limit": "^2.0",
     "pear/ole": "^1.0.0RC9",
     "php-http/curl-client": "^2.1",
-    "phpoffice/phpexcel": "1.8.2pl6 as 1.8.2",
+    "phpoffice/phpexcel": "1.8.2pl8 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.24.1pl3 as 1.24.1",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
     "ramsey/collection": "^1.2",
     "ramsey/uuid": "^4.7",
-    "sabre/dav": "1.8.12pl1 as 1.8.12",
-    "sabre/vobject": "3.5.3pl6 as 2.1.0",
+    "sabre/dav": "^4.5",
+    "sabre/vobject": "^4.5",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.19.*",
     "spomky-labs/otphp": "^10.0",
-    "swiftmailer/swiftmailer": "^6.3",
     "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
-    "symfony/http-client": "^4",
+    "symfony/http-client": "5.2 - 7",
     "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
     "tine20/composerapploader": "1.0.*",
@@ -140,7 +146,7 @@
     "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
-    "zbateson/mail-mime-parser": "2.*",
+    "zbateson/mail-mime-parser": "3.*",
     "zendframework/zendframework1": "1.12.20.*"
   },
   "require-dev": {
@@ -175,13 +181,31 @@
   "config": {
     "secure-http": false,
     "platform": {
-      "php": "8.0.2",
-      "ext-filter": "8.0"
+      "php": "8.1",
+      "ext-spl": "8.1",
+      "ext-simplexml": "8.1",
+      "ext-bcmath": "8.1",
+      "ext-ctype": "8.1",
+      "ext-curl": "8.1",
+      "ext-date": "8.1",
+      "ext-dom": "8.1",
+      "ext-gd": "8.1",
+      "ext-hash": "8.1",
+      "ext-iconv": "8.1",
+      "ext-intl": "8.1",
+      "ext-json": "8.1",
+      "ext-libxml": "8.1",
+      "ext-mbstring": "8.1",
+      "ext-openssl": "8.1",
+      "ext-xml": "8.1",
+      "ext-xmlreader": "8.1",
+      "ext-xmlwriter": "8.1",
+      "ext-zip": "8.1"
     },
     "sort-packages": true,
     "allow-plugins": {
       "tine20/composerapploader": true,
-      "simplesamlphp/composer-module-installer": true,
+      "simplesamlphp/composer-module-installer": false,
       "digitalrevolution/php-codesniffer-baseline": true,
       "php-http/discovery": true
     },
@@ -191,7 +215,7 @@
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
     "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
     "build": "./vendor/bin/phing",
-    "phpcs": "bash -c 'php ./vendor/bin/phpcs -s --standard=PSR12 --report=full --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. ${1:-.}' --",
+    "phpcs": "bash -c 'php ./vendor/bin/phpcs -s --standard=PSR12 --report=full --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover,Tinebase/js,config.inc.php --basepath=. ${1:-.}' --",
     "phpcbf": "bash -c 'php ./vendor/bin/phpcbf -s --standard=PSR12 --report=full --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. ${1:-.}' --",
     "phpcs-baseline": "php ./vendor/bin/phpcs -s --standard=PSR12 --report=\\\\DR\\\\CodeSnifferBaseline\\\\Reports\\\\Baseline --report-file=phpcs.baseline.xml --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. ."
   },

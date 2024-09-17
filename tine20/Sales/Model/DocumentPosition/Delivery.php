@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -27,9 +27,11 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 3;
+        $_definition[self::VERSION] = 4;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
+        $_definition[self::RECORD_NAME] = 'Delivery Position'; // ngettext('Delivery Position', 'Delivery Positions', n)
+        $_definition[self::RECORDS_NAME] = 'Delivery Positions'; // gettext('GENDER_Delivery Position')
 
         $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = self::MODEL_NAME_PART;
 
@@ -47,8 +49,6 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX_RATE]);
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX]);
         unset($_definition[self::FIELDS][self::FLD_GROSS_PRICE]);
-        unset($_definition[self::FIELDS][self::FLD_COST_CENTER_ID]);
-        unset($_definition[self::FIELDS][self::FLD_COST_BEARER_ID]);
     }
 
     /**

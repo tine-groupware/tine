@@ -217,7 +217,7 @@ const priorities = {
         await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD, {delay: 50});
         await expect(page).toClick('button', {text: 'Anmelden'});
         try {
-            await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
+            await page.waitForSelector('.tine-dock', {timeout: 0});
             if(!!+process.env.MFA) {
                 await page.waitForSelector('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
                 const mfaDialog = await this.getEditDialog('OK');
@@ -230,9 +230,9 @@ const priorities = {
         }
 
         if (app) {
-            await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
-            await page.waitForSelector('.x-menu-list.x-column-layout-ct');
-            await expect(page).toClick('.x-menu-item-text', {text: app});
+            await expect(page).toClick('.action_menu.application-menu-btn');
+            await page.waitForSelector('.application-menu-item');
+            await expect(page).toClick('.application-menu-item__text', {text: app});
         }
         if (module) {
             await page.waitForSelector('span', {text: 'Module'});
@@ -333,7 +333,7 @@ const priorities = {
         await expect(page).toFill('input[name=password]', process.env.SETUP_PASSWORD, {delay: 50});
         await expect(page).toClick('button', {text: 'Anmelden'});
         try {
-            await page.waitForSelector('.renderer_accountUserIcon', {timeout: 0});
+            await page.waitForSelector('.account-user-avatar', {timeout: 0});
         } catch (e) {
             console.log('login failed!');
             console.error(e);

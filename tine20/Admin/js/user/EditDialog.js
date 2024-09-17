@@ -18,6 +18,7 @@ import XPropsPanel from "widgets/dialog/XPropsPanel";
 Ext.ns('Tine.Admin.user');
 
 import MFAPanel from 'MFA/UserConfigPanel';
+import FieldTriggerPlugin from "../../../Tinebase/js/ux/form/FieldTriggerPlugin";
 
 /**
  * @namespace   Tine.Admin.user
@@ -85,7 +86,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             responseText: Ext.util.JSON.encode(this.record.get('emailUser'))
         };
         this.emailRecord = Tine.Admin.emailUserBackend.recordReader(emailResponse);
-        
+
+        if (this.record.get('accountLastPasswordChange')) {
+            this.record.set('accountLastPasswordChangeRaw', this.record.get('accountLastPasswordChange'))
+        }
+
         // format dates
         var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet'];
         for (var i = 0; i < dateTimeDisplayFields.length; i += 1) {
@@ -182,7 +187,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('groups', newGroups);
         this.record.set('accountRoles', newRoles);
         
-        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
+        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin']);
+        if (this.record.get('accountLastPasswordChangeRaw')) {
+            this.record.set('accountLastPasswordChange', this.record.get('accountLastPasswordChangeRaw'))
+        }
+
+        if (this.record.get('password_must_change_actual')) {
+            this.record.set('password_must_change', this.record.get('password_must_change_actual'))
+        }
 
         var xprops = this.record.get('xprops');
         xprops = Ext.isObject(xprops) ? xprops : {};
@@ -211,7 +223,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return  Tine.Admin.UserEditDialog.superclass.isValid.call(this).then((result) => {
             let errorMessages = '';
             
-            if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
+            if (Tine.Tinebase.registry.get('manageSmtpEmailUser') && ! Tine.Tinebase.registry.get('allowExternalEmail')) {
                 const emailValue = this.getForm().findField('accountEmailAddress').getValue();
                 if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
                     let errorMessage = this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.") + '<br>';
@@ -355,7 +367,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             autoExpandColumn: 'name',
             store: this.storeRoles,
             recordClass: Tine.Tinebase.Model.Role,
-            columns: [{id: 'name', header: this.app.i18n.gettext('Name'), sortable: true, dataIndex: 'name'}],
+            columns: [{id: 'name', header: this.app.i18n.gettext('Name'), sortable: true}],
             initActionsAndToolbars: function () {
                 // for now removed abillity to edit role membership
 //                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
@@ -689,7 +701,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let cm = [{
             id: 'email',
             header: app.i18n.gettext('E-mail Alias'),
-            dataIndex: 'email',
             width: 260,
             hideable: false,
             sortable: true,
@@ -706,7 +717,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 id: 'dispatch_address',
                 header: '...',
                 tooltip: app.i18n.gettext('This alias can be used for sending e-mails.'),
-                dataIndex: 'dispatch_address',
                 width: 40,
                 hideable: false,
                 sortable: true
@@ -772,7 +782,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email',
                     header: app.i18n.gettext('E-mail Forward'),
-                    dataIndex: 'email',
                     width: 300,
                     hideable: false,
                     sortable: true,
@@ -884,7 +893,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             account: this.record,
             editDialog: this,
         });
-    
+
+        this.mustChangeTriggerPlugin = new FieldTriggerPlugin({
+            visible: false,
+            triggerConfig: {tag: "div", cls: "x-form-trigger-flat x-form-trigger-plugin x-form-localized-field tinebase-trigger-overlay"},
+            onTriggerClick:  Ext.emptyFn,
+            qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
+            preserveElStyle: true
+        })
         this.saveInaddressbookFields = this.getSaveInAddessbookFields(this);
         this.saveInaddressbookFields.push({
             hideLabel: true,
@@ -893,7 +909,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hidden: this.ldapBackend,
             ctCls: 'admin-checkbox',
             fieldClass: 'admin-checkbox-box',
-            name: 'password_must_change'
+            name: 'password_must_change',
+            plugins: [this.mustChangeTriggerPlugin]
         });
         
         var config = {
@@ -1111,7 +1128,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }, {
                             fieldLabel: this.app.i18n.gettext('Password set'),
                             name: 'accountLastPasswordChange',
-                            emptyText: this.app.i18n.gettext('never')
+                            emptyText: this.app.i18n.gettext('never'),
+                            plugins: [this.mustChangeTriggerPlugin]
                         }, {
                             fieldLabel: this.app.i18n.gettext('Account ID'),
                             name: 'accountId',
@@ -1166,6 +1184,28 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }].concat(this.app.featureEnabled('xpropsEditor') ? [new XPropsPanel({})] : [])
         };
         return config;
+    },
+
+    afterRender: function () {
+        Tine.Admin.UserEditDialog.superclass.afterRender.call(this);
+
+        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
+        if (!changeAfter || changeAfter === 0) return
+
+        let lastChangeDate = this.record.get('accountLastPasswordChange')
+
+        let maxDate = new Date(lastChangeDate).add('d', changeAfter)
+        if (maxDate > new Date()) return
+
+        let lastChangeField = this.getForm().findField('accountLastPasswordChange'),
+            mustChangeField = this.getForm().findField('password_must_change')
+
+        lastChangeField.addClass('tinebase-warning')
+        mustChangeField.disable()
+
+        this.record.set('password_must_change_actual', this.record.get('password_must_change'))
+        this.record.set('password_must_change', 1)
+        this.mustChangeTriggerPlugin.visible = true
     },
 
     suggestNameBasedProps: function(field, e) {

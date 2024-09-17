@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -19,6 +19,8 @@
 class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 {
     const MODEL_NAME_PART = 'Employee';
+
+    public const TABLE_NAME = 'humanresources_employee';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -58,7 +60,13 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                         Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
                     ]
-                ]
+                ],
+                'contracts' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME => [],
+                        'notes' => [],
+                    ],
+                ],
             ]
         ],
 
@@ -339,8 +347,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 )
             ),
             'division_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-                'nullable' => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, Zend_Filter_Input::PRESENCE_REQUIRED => true),
                 'label' => 'Division', //_('Division')
                 'type'  => 'record',
                 'config' => array(

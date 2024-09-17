@@ -395,16 +395,35 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function setMessageTags(Felamimail_Model_MessageFilter $filter, $_flags, $_mode)
     {
+        $iterator = new Tinebase_Record_Iterator([
+            'iteratable' => $this,
+            'controller' => $this,
+            'filter' => $filter,
+            'options'    => [
+                'limit' => 1000
+            ],
+            'function' => 'setMessageTagsIteration',
+        ]);
+        $result = $iterator->iterate($_flags, $_mode);
+    }
+
+    public function setMessageTagsIteration(Tinebase_Record_RecordSet $messages, $_flags, $_mode)
+    {
         $tagIds = array_filter($_flags, function ($flag) { return strlen((string)$flag)=== 40;});
         $tags = sizeof($tagIds) > 0 ? Tinebase_Tags::getInstance()->getTagsById($tagIds) : [];
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' About to ' . $_mode . ' tags for ' . count($messages) . ' messages.');
+
+        $filter =  new Felamimail_Model_MessageFilter([
+            ['field' => 'id', 'operator' => 'in', 'value' => $messages->getId()]
+        ]);
+
         if ($_mode === 'clear') {
             try {
-                $messages = $this->search($filter);
                 if (sizeof($tags) === 0) {
                     $tags = Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($messages);
                 }
-                
                 if ($tags) {
                     Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tags->getId());
                 }
@@ -412,7 +431,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 throw new Felamimail_Exception('failed to detach tags: ' . print_r($tags, TRUE));
             }
         }
-        
+
         if ($_mode === 'add') {
             foreach ($tags as $tag) {
                 try {
@@ -420,7 +439,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 } catch (Zend_Db_Statement_Exception $zdse) {
                     throw new Felamimail_Exception('failed to attach tags: ' . print_r($tag->getId(), TRUE));
                 }
-
             }
         }
     }

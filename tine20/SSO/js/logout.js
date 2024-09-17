@@ -10,6 +10,14 @@ const ssoLogout = async (config) => {
         config = JSON.parse(sessionStorage.getItem(`${keyPrefix}-config`))
     }
 
+    if (!config.confirmed) {
+        if (window.confirm('Do you want to logout and exit all SSO sessions?')) {
+            config.confirmed = true
+        } else {
+            config = {}
+        }
+    }
+
     // NOTE: binding GET can't be processed in background iframes
     //       @see 882ecda325 fix(SSO): cope with lax cookies in logout client
     if (config.logoutUrls?.get && config.logoutUrls.get.length) {

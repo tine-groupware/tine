@@ -4603,7 +4603,6 @@ body.ext-ie6.x-body-masked .x-window select {
 .x-list-body {
     overflow: auto;
     overflow-x: hidden;
-    overflow-y: auto;
     zoom: 1;
     float: left;
     width: 100%

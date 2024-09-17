@@ -101,6 +101,6 @@ class Tinebase_AllTests
 
     public static function estimatedRunTime()
     {
-        return 613;
+        return 636;
     }
 }

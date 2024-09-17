@@ -51,7 +51,7 @@ Ext.ux.PopupWindowGroup = function(config) {
                 doc = false;
                 
             }
-            if (! doc) {
+            if (! doc && (!list[id]?.asIframe || list[id]?.contentPanelConstructed)) {
                 list[id].destroy();
                 accessList.remove(list[id]);
                 list[id] = null;
@@ -117,6 +117,7 @@ Ext.ux.PopupWindowGroup = function(config) {
     return {
 
         register : function(win){
+
 
             win.registerTime = new Date().getTime();
             cleanupClosedWindows();

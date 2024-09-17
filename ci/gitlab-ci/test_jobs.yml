@@ -1,40 +1,3 @@
-# todo: should run ob build image and on test images after they are build
-# check-php-version:
-#   extends: .abstract_jobs.copy_source
-#   stage: test
-#   variables:
-#     ARG_IMAGE: test-source
-#   needs:
-#     - docker_build_source
-#   script:
-#     - echo "PHP version shoud be ${PHP_VERSION}."
-#     - php -r "echo 'PHP version is'.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;"
-#     - php -r "if (version_compare(PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION, '${PHP_VERSION}', '!=')) exit(1);"
-#   rules:
-#     - if: $RUN_NO_TESTS == "true"
-#       when: never
-#     - if: $CHECK_PHP_VERSION == "never"
-#       when: never
-#     - if: $RUN_ALL_TESTS == "true"
-#       when: on_success
-#     - if: $CHECK_PHP_VERSION == "true"
-#       when: on_success
-#     - when: never
-#   rules:
-#     - if: $RUN_NO_TESTS == "true"
-#       when: never
-#     - if: $CHECK_PHP_VERSION == "false"
-#       when: never
-#     - if: $CHECK_PHP_VERSION == "true"
-#     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CHECK_PHP_VERSION_MERGE_REQUEST == "true"
-#     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-with-health-check/
-#     - if: $PIPELINE_TYPE =~ /default-tests/
-#     - if: $PIPELINE_TYPE =~ /mr-tests/
-#     - if: $CI_COMMIT_TAG
-#   allow_failure: true
-#   timeout: 20m # time run: 4m
-#   interruptible: true
-
 phpstan-analysis:
   stage: test
   image: ${TEST_IMAGE}
@@ -143,7 +106,7 @@ parallel-lint-analysis:
     - if: $CI_COMMIT_TAG && $PARALLEL_LINT_ANALYSIS_STRICT == "true"
       allow_failure: false
     - if: $CI_COMMIT_TAG
-  timeout: 20m
+  timeout: 30m
   interruptible: true
 
 phpcs-analysis:

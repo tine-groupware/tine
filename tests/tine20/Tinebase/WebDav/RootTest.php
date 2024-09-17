@@ -137,12 +137,12 @@ class Tinebase_WebDav_RootTest extends TestCase
     
     /**
      * 
-     * @return \Sabre\DAV\ObjectTree
+     * @return \Sabre\DAV\Tree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
-            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        if (! $this->_webdavTree instanceof \Sabre\DAV\Tree) {
+            $this->_webdavTree = new \Sabre\DAV\Tree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;

@@ -40,6 +40,14 @@ class Felamimail_Setup_Initialize extends Setup_Initialize
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
             'model'             => 'Felamimail_Model_MessageFilter',
         );
+        
+        $allFoldersPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => 'All folders',
+            'description'       => 'All folders of my email accounts', // _("All folders of my email accounts")
+            'filters'           => array(
+                array('field' => 'path'    , 'operator' => 'in', 'value' => Felamimail_Model_MessageFilter::PATH_ALLFOLDERS),
+            )
+        ))));
 
         $myInboxPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Felamimail_Preference::DEFAULTPERSISTENTFILTER_NAME,
@@ -190,5 +198,13 @@ vacation_template_test
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task FelamimailPruneAttachmentCache in scheduler.');
+    }
+
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        Felamimail_Scheduler_Task::addCheckExpectedAnswerTask(Tinebase_Core::getScheduler());
     }
 }

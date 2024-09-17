@@ -127,6 +127,33 @@ const preferredAddressRender = function (v, metadata, record) {
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', addressRenderer, 'displayPanel');
 
 /**
+ * Render preferred addresss
+ *
+ * give the preferred address from contact. (street, postalcode and locality)
+ * @namespace   Tine.Addressbook
+ * @author      Christian Feitl <c.feitl@metaways.de>
+ */
+const preferredEmailRender = function (v, metadata, record) {
+    let preferredAddress = !!+_.get(record.data, 'preferred_address') || !!+_.get(record, 'preferred_address'),
+        adr_street = preferredAddress ? 'adr_two_street' : 'adr_one_street',
+        adr_postalcode = preferredAddress ? 'adr_two_postalcode' : 'adr_one_postalcode',
+        adr_locality = preferredAddress ? 'adr_two_locality' : 'adr_one_locality',
+        contact = record.data ? record.data : record,
+        result = ''
+    
+    _.each([adr_street, adr_postalcode, adr_locality], function(value) {
+        if (contact[value] !== null) {
+            result += Ext.util.Format.htmlEncode(_.get(contact, value, ' ')) + ' ';
+        }
+    });
+    
+    return result;
+}
+
+Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', preferredEmailRender, 'displayPanel');
+
+
+/**
  * Render given image
  *
  * @namespace   Tine.Addressbook
@@ -168,7 +195,7 @@ const urlRenderer = function (url) {
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', urlRenderer, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
 
 const avatarRenderer = function(n_short, metadata, record) {
-    const fullName = record ? record.get('n_fileas') : n_short;
+    let fullName = record ? record.get('n_fileas') : n_short;
     let shortName = record ? record.get('n_short') : n_short;
     if (! shortName && record) {
         let names = _.compact([record.get('n_family'), record.get('n_middle'), record.get('n_given')]);
@@ -177,23 +204,44 @@ const avatarRenderer = function(n_short, metadata, record) {
         }
         if (!names.length) {
             names = _.compact([record.get('accountLastName'), record.get('accountFirstName')]);
+            fullName = record.get('accountDisplayName');
         }
         if (names.length > 1) {
             shortName = _.map(names, (n) => { return n.substring(0, 1).toUpperCase() }).join('');
         } else {
-            shortName = String(names[0]).substring(0, 2);
+            shortName = String(names[0]).replaceAll(/[^A-Za-z0-9]/g, '').substring(0, 2).toUpperCase();
         }
     }
 
     const colorSchema = Tine.Calendar.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Calendar.ColorManager.stringToColour(shortName).substring(1,6));
     return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${fullName}" style="background-color: ${colorSchema.color}; color: ${colorSchema.text}">${shortName}</span>` : '';
 }
+
+
+/**
+ * list type renderer
+ *
+ * @private
+ * @return {String} HTML
+ */
+const listTypeRenderer = function(data, cell, record) {
+    var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n,
+        type = ((record.get && record.get('type')) || record.type),
+        cssClass = 'tine-grid-row-action-icon ' + (type == 'group' ? 'renderer_typeGroupIcon' : 'renderer_typeListIcon'),
+        qtipText = Tine.Tinebase.common.doubleEncode(type == 'group' ? i18n._('System Group') : i18n._('Group'));
+    
+    return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
+}
+Tine.widgets.grid.RendererManager.register('Addressbook', 'List', 'type', listTypeRenderer, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+
 export {
     mailAddressRenderer,
     countryRenderer,
     addressRenderer,
     imageRenderer,
     preferredAddressRender,
+    preferredEmailRender, 
     urlRenderer,
-    avatarRenderer
+    avatarRenderer,
+    listTypeRenderer,
 }

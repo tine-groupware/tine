@@ -382,7 +382,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function importMessage($targetFolderId, $tempFileId)
     {
         $tempFile = Tinebase_TempFile::getInstance()->get($tempFileId);
-        Felamimail_Controller_Message::getInstance()->appendMessage($targetFolderId, file_get_contents($tempFile->path));
+        Felamimail_Controller_Message::getInstance()->appendMessage($targetFolderId, $tempFile, null, $tempFile->name);
     }
     
     /**
@@ -596,6 +596,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     Felamimail_Model_Account::TYPE_SHARED,
                     Felamimail_Model_Account::TYPE_USER_INTERNAL,
                     Felamimail_Model_Account::TYPE_SYSTEM,
+                    Felamimail_Model_Account::TYPE_ADB_LIST,
                 ])) {
                 unset($accounts[$idx]);
                 continue;
@@ -606,6 +607,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Felamimail_Model_Account::TYPE_USER,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
+                Felamimail_Model_Account::TYPE_ADB_LIST,
             ])) {
                 // remove ADB list type from result set
                 unset($accounts[$idx]);
@@ -912,9 +914,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param $nodeId
      * @return array
      */
-    public function getMessageFromNode($nodeId)
+    public function getMessageFromNode($nodeId, $mimeType = null)
     {
-        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
+        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId, $mimeType);
         return $this->_recordToJson($message);
     }
 

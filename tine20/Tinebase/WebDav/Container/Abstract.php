@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -439,61 +439,16 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     {
         throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
-    
-    /**
-     * Updates properties on this node,
-     *
-     * The properties array uses the propertyName in clark-notation as key,
-     * and the array value for the property value. In the case a property
-     * should be deleted, the property value will be null.
-     *
-     * This method must be atomic. If one property cannot be changed, the
-     * entire operation must fail.
-     *
-     * If the operation was successful, true can be returned.
-     * If the operation failed, false can be returned.
-     *
-     * Deletion of a non-existant property is always succesful.
-     *
-     * Lastly, it is optional to return detailed information about any
-     * failures. In this case an array should be returned with the following
-     * structure:
-     *
-     * array(
-     *   403 => array(
-     *      '{DAV:}displayname' => null,
-     *   ),
-     *   424 => array(
-     *      '{DAV:}owner' => null,
-     *   )
-     * )
-     *
-     * In this example it was forbidden to update {DAV:}displayname. 
-     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
-     * (424 Failed Dependency) because the request needs to be atomic.
-     *
-     * @param array $mutations 
-     * @return bool|array 
-     */
-    public function updateProperties($mutations) 
+
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
     {
-        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            throw new \Sabre\DAV\Exception\Forbidden('permission to update container denied');
+        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN) ||
+                $this->_container instanceof Tinebase_Model_Tree_Node) {
+            // no write access, we don't do anything, the propPatch will fail with 403 automatically
+            return;
         }
 
-        $result = array(
-            200 => array(),
-            403 => array()
-        );
-
-        if ($this->_container instanceof Tinebase_Model_Tree_Node) {
-            foreach ($mutations as $key => $value) {
-                $result[403][$key] = null;
-            }
-            return $result;
-        }
-
-        foreach ($mutations as $key => $value) {
+        foreach ($propPatch->getMutations() as $key => $value) {
             switch ($key) {
                 case '{DAV:}displayname':
                     if ($value === $this->_container->uuid || $value === $this->_container->getId()) {
@@ -508,33 +463,25 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                     } else {
                         $this->_container->name = $value;
                     }
-                    $result[200][$key] = null;
                     break;
-                    
-                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
-                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
-                    // fake success
-                    $result[200][$key] = null;
-                    break;
-                    
+
                 case '{http://apple.com/ns/ical/}calendar-color':
                     $this->_container->color = substr($value, 0, 7);
-                    $result[200][$key] = null;
                     break;
 
                 case '{http://apple.com/ns/ical/}calendar-order':
                     $this->_container->order = (int) $value;
-                    $result[200][$key] = null;
                     break;
-
-                default:
-                    $result[403][$key] = null;
             }
         }
-        
-        Tinebase_Container::getInstance()->update($this->_container);
-        
-        return $result;
+
+        // bug in sabre dav leads to calling this function multiple times! we only want to run ever once...
+        $propPatch->handleRemaining(function () {
+            static $run = 0;
+            if ($run++ > 0) return true;
+            Tinebase_Container::getInstance()->update($this->_container);
+            return true;
+        });
     }
     
     /**

@@ -121,6 +121,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     protected $_ldapPlugins = array();
     
     protected $_isReadOnlyBackend = false;
+
+    protected ?array $_writeGroupsIds = null;
+    protected ?array $_writeGroupsMembers = null;
     
     /**
      * used to save the last user properties from ldap backend
@@ -169,6 +172,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         if (isset($_options['emailAttribute']) && !empty($_options['emailAttribute'])) {
             $this->_rowNameMapping['accountEmailAddress'] = $_options['emailAttribute'];
+        }
+
+        if ($groupNames = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
+            $this->_writeGroupsIds = [];
+            foreach ($groupNames as $groupName) {
+                try {
+                    $this->_writeGroupsIds[] = Tinebase_Group::getInstance()->getGroupByName($groupName)->getId();
+                } catch (Tinebase_Exception_Record_NotDefined) {}
+            }
         }
 
         $this->_options = $_options;
@@ -352,6 +364,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             throw new Tinebase_Exception_NotFound("can't get user by property $_property. property not supported by ldap backend.");
         }
 
+        if ('accountId' === $_property && ! $_accountId instanceof Tinebase_Model_FullUser) {
+            $_accountId = $this->getFullUserById($_accountId);
+        }
         $ldapEntry = $this->_getLdapEntry($_property, $_accountId);
         
         $user = $this->_ldap2User($ldapEntry, $_accountClass);
@@ -364,53 +379,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         return $user;
     }
 
-    /**
-     * set the password for given account
-     *
-     * @param   string  $_userId
-     * @param   string  $_password
-     * @param   bool    $_encrypt encrypt password
-     * @param   bool    $_mustChange
-     * @return  void
-     * @throws  Tinebase_Exception_InvalidArgument
-     */
-
-    /**
-     * set the password for given account
-     *
-     * @param string|Tinebase_Model_User|Tinebase_Model_FullUser $_userId
-     * @param   string  $_password
-     * @param   bool    $_encrypt encrypt password
-     * @param   bool    $_mustChange
-     * @param   bool $ignorePwPolicy
-     * @return void
-     * @throws Tinebase_Exception_Backend
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_PasswordPolicyViolation
-     * @throws Zend_Db_Adapter_Exception
-     * @throws Zend_Ldap_Exception
-     */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
+    public function setPasswordInSyncBackend(Tinebase_Model_FullUser $user, string $_password, bool $_encrypt = true, bool $_mustChange = false): void
     {
-        if ($this->_isReadOnlyBackend) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
-            return;
-        }
-        
-        $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
-
-        if (! $ignorePwPolicy) {
-            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
-        }
-        
         $metaData = $this->_getMetaData($user);
 
         $encryptionType = $this->_options['pwEncType'] ?? Tinebase_User_Abstract::ENCRYPT_SSHA;
         $userpassword = ($_encrypt && $encryptionType !== Tinebase_User_Abstract::ENCRYPT_PLAIN)
             ? Hash_Password::generate($encryptionType, $_password)
             : $_password;
-        
+
         $ldapData = array(
             'userpassword'     => $userpassword,
         );
@@ -429,6 +406,39 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             __METHOD__ . '::' . __LINE__ . ' $ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
+    }
+
+    /**
+     * set the password for given account
+     *
+     * @param string|Tinebase_Model_User|Tinebase_Model_FullUser $_userId
+     * @param   string  $_password
+     * @param   bool    $_encrypt encrypt password
+     * @param   bool    $_mustChange
+     * @param   bool $ignorePwPolicy
+     * @return void
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_PasswordPolicyViolation
+     * @throws Zend_Db_Adapter_Exception
+     * @throws Zend_Ldap_Exception
+     */
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
+    {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_userId))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP - let sql parent handle it');
+            parent::setPassword($_userId, $_password, $_encrypt, $_mustChange, $ignorePwPolicy);
+            return;
+        }
+        
+        $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
+
+        if (! $ignorePwPolicy) {
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        }
+
+        $this->setPasswordInSyncBackend($user, $_password, $_encrypt, (bool)$_mustChange);
         
         if ($this->_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL]) {
             $this->_updatePasswordProperties($user->getId(), $_password, $_encrypt, $_mustChange);
@@ -442,6 +452,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             }
         }
         $this->_setPluginsPassword($user, $_password, $_encrypt);
+
+        $this->firePasswordEvent($user, $_password);
+
+        $accountData['id'] = $user->getId();
+        $oldPassword = new Tinebase_Model_UserPassword(array('id' => $user->getId()), true);
+        $newPassword = new Tinebase_Model_UserPassword($accountData, true);
+        $this->_writeModLog($newPassword, $oldPassword);
     }
 
     /**
@@ -452,7 +469,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setStatusInSyncBackend($_accountId, $_status)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
@@ -508,7 +525,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
@@ -543,7 +560,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($_account->getId())) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return $_account;
@@ -580,7 +597,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             
             // remove the user from current groups, because the dn/uid has changed
             foreach ($memberships as $groupId) {
-                $groupsBackend->removeGroupMemberInSyncBackend($groupId, $_account);
+                $groupsBackend->removeGroupMemberInSyncBackend($groupId, $_account, false);
             }
             
             $newDN = $this->generateDn($_account);
@@ -607,13 +624,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $user)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($user->getId())) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return null;
         }
         
         $ldapData = $this->_user2ldap($user);
+        unset($ldapData[$this->_userUUIDAttribute]);
 
         $ldapData['uidnumber'] = $this->_generateUidNumber();
         $ldapData['objectclass'] = $this->_requiredObjectClass;
@@ -633,7 +651,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $userId = $userId[$this->_userUUIDAttribute][0];
 
-        $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
+        $user = clone $user;
+        $user->setId($userId);
+        unset($user->xprops()[static::class]['syncId']);
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $user, 'Tinebase_Model_FullUser');
 
         return $user;
     }
@@ -645,6 +666,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUserInSyncBackend($_userId)
     {
+        // we do not call isReadOnlyUser() here, because we always delete all users from sync backend (unless it's a readOnlyBackend)
         if ($this->_isReadOnlyBackend) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
@@ -676,6 +698,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUsersInSyncBackend(array $_accountIds)
     {
+        // we do not call isReadOnlyUser() here, because we always delete all users from sync backend (unless it's a readOnlyBackend)
         if ($this->_isReadOnlyBackend) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
@@ -699,14 +722,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         switch($_property) {
             case 'accountId':
-                $value = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+                if ($_userId instanceof Tinebase_Model_User && ($_userId->xprops()[static::class]['syncId'] ?? false)) {
+                    $value = $this->_encodeAccountId($_userId->xprops()[static::class]['syncId']);
+                } else {
+                    $value = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+                }
                 break;
             default:
                 /** @noinspection PhpDeprecationInspection */
                 $value = Zend_Ldap::filterEscape($_userId);
                 break;
         }
-        
+
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_userBaseFilter),
             Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], $value)
@@ -750,7 +777,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     protected function _getMetaData($_userId)
     {
-        $userId = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+
+        if (!$_userId instanceof Tinebase_Model_User) {
+            $_userId = $this->getFullUserById($_userId);
+        }
+
+        $userId = $this->_encodeAccountId($_userId->xprops()[static::class]['syncId'] ?? Tinebase_Model_User::convertUserIdToInt($_userId));
 
         $filter = Zend_Ldap_Filter::equals(
             $this->_rowNameMapping['accountId'], $userId
@@ -1130,6 +1162,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         $ldapData = array_merge($ldapData, $this->_getUserStatusValues($value));
                         break;
                     case 'accountPrimaryGroup':
+                        if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID}) {
+                            $value = $deviateGroupId;
+                        }
                         /** @var Tinebase_Group_Ldap $groupController */
                         $groupController = Tinebase_Group::getInstance();
                         $ldapData[$ldapProperty] = $groupController->resolveUUIdToGIdNumber($value);
@@ -1208,5 +1243,30 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         )->getFirst();
 
         return $groupId['uidnumber'][0];
+    }
+
+    public function isReadOnlyUser(string|int|null $userId): bool
+    {
+        if ($this->_isReadOnlyBackend) {
+            return true;
+        }
+        if (null !== $this->_writeGroupsIds) {
+            if (null === $this->_writeGroupsMembers) {
+                $members = [];
+                foreach ($this->_writeGroupsIds as $gid) {
+                    array_merge($members, Tinebase_Group::getInstance()->getGroupMembers($gid));
+                }
+                $this->_writeGroupsMembers = array_fill_keys(array_unique($members), false);
+            }
+            return $this->_writeGroupsMembers[$userId] ?? true;
+        }
+        return false;
+    }
+
+    public function setUserAsWriteGroupMember(string $userId, bool $value = true): void
+    {
+        // to make sure that the cache is initialized
+        $this->isReadOnlyUser($userId);
+        $this->_writeGroupsMembers[$userId] = !$value;
     }
 }

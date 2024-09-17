@@ -275,7 +275,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        $createRevision = $this->_keepOldRevisions || $_mode === 'create';
+        $createRevision = (!$_record->flysystem && $this->_keepOldRevisions) || $_mode === 'create';
         $updateRevision = false;
         $currentRecord = null;
 
@@ -718,6 +718,18 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             }
         }
 
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getQuarantinedFileObjectIds()
+    {
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_revisionsTableName, ['id'])
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_revisionsTableName . '.is_quarantined') . ' = 1')
+            ->query()
+            ->fetchAll(Zend_Db::FETCH_COLUMN);
         return $result;
     }
 

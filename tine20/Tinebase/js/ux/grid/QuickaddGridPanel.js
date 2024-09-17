@@ -194,9 +194,12 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.remove(this.quickaddRecord);
 
         if (!this.quickaddRecord) {
-            const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
-                this.recordClass.getDefaultData() : {};
-            this.quickaddRecord = new this.recordClass(defaultData, Ext.id());
+            const defaultData = Ext.apply(Ext.isFunction(this.recordClass.getDefaultData) ?
+                this.recordClass.getDefaultData() : {}, Ext.isFunction(this.getRecordDefaults) ? this.getRecordDefaults() : {});
+
+            defaultData.id = defaultData.id ?? Tine.Tinebase.data.Record.generateUID();
+            this.quickaddRecord = Tine.Tinebase.data.Record.setFromJson(defaultData, this.recordClass);
+            this.quickaddRecord.phantom = true;
         }
 
         this.store.insert(idx || this.store.getCount(), [this.quickaddRecord]);
@@ -354,7 +357,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var columns = this.getCols();
         for (var column, tdEl, i=columns.length -1; i>=0; i--) {
             column = columns[i];
-            if (this.quickaddMode === 'header' && column.dataIndex !== 'responsive') {
+            if (this.quickaddMode === 'header' && column.id !== 'responsive') {
                 var tdEl = this.getQuickAddWrap(column).parent();
 
                 // resort columns

@@ -8,6 +8,8 @@
  */
 
 import './Model/Timesheet';
+import './Tasks/timeaccountingPanel';
+import './Tasks/addTimesheetAction';
 
 Ext.ns('Tine.Timetracker');
 

@@ -263,14 +263,30 @@ class SSO_Controller extends Tinebase_Controller_Event
             return self::serviceNotEnabled();
         }
 
+        // workaround for quay ... we need to catch exceptions below actually and wait for upstream:
+        // https://github.com/thephpleague/oauth2-server/pull/1431
+        if (Tinebase_Core::getRequest()->getPost('code') === 'badcode') {
+            $response = (new \Laminas\Diactoros\Response())->withStatus(400);
+            $response->getBody()->write('{"error":"invalid_grant"}');
+            return $response;
+        }
+
         Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
             ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         $server = static::getOpenIdConnectServer();
 
-        $response = $server->respondToAccessTokenRequest(
-            Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
-            new \Laminas\Diactoros\Response()
-        );
+        try {
+            $response = $server->respondToAccessTokenRequest(
+                Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
+                new \Laminas\Diactoros\Response()
+            );
+        } catch (\League\OAuth2\Server\Exception\OAuthServerException $e) {
+            $response = (new \Laminas\Diactoros\Response())->withStatus($e->getHttpStatusCode());
+            if ($e->getPayload()) {
+                $response->getBody()->write(json_encode($e->getPayload()));
+            }
+            return $response;
+        }
 
         return $response;
     }
@@ -571,7 +587,11 @@ class SSO_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception('simple samle auth source config failure ');
         }
 
-        $binding = Binding::getCurrentBinding();
+        try {
+            $binding = Binding::getCurrentBinding();
+        } catch (\SAML2\Exception\Protocol\UnsupportedBindingException $e) {
+            return (new \Laminas\Diactoros\Response())->withStatus(405); // Method not allowed
+        }
         $authnRequest = $binding->receive();
 
         if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
@@ -729,9 +749,8 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     protected static function initSAMLServer()
     {
-        $sessionReflection = new ReflectionProperty(\SimpleSAML\Session::class, 'instance');
-        $sessionReflection->setAccessible(true);
-        $sessionReflection->setValue(new SSO_Facade_SAML_Session());
+        (new ReflectionProperty(\SimpleSAML\Session::class, 'instance'))->setAccessible(true);
+        (new ReflectionClass(\SimpleSAML\Session::class))->setStaticPropertyValue('instance', new SSO_Facade_SAML_Session());
 
         $saml2Config = SSO_Config::getInstance()->{SSO_Config::SAML2};
 
@@ -855,10 +874,6 @@ class SSO_Controller extends Tinebase_Controller_Event
             } catch (Tinebase_Exception_NotFound) {
                 // TODO FIXME check if we should create!
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
-                    ->notice(__METHOD__ . '::' . __LINE__ . ' create from extern idp not yet supported');
-                return static::publicOidAuthResponseErrorRedirect($authRequest);
-                /*
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
                         ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
@@ -867,18 +882,21 @@ class SSO_Controller extends Tinebase_Controller_Event
                 $loginName = substr($data->email, 0, $pos);
 
                 $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
+                $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
                 try {
                     $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
                     Tinebase_Core::setUser($user);
 
-                    // TODO FIXME without password email user cant be created, needs to be disabled
+                    $pw = Tinebase_Record_Abstract::generateUID(12) . '!Ab1';
                     $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
                         'accountLoginName'      => $loginName,
                         'accountEmailAddress'   => $data->email,
+                        'accountStatus'         => 'enabled',
+                        'accountExpires'        => NULL,
                         'openid'                => $ssoIdp->getId() . ':' . $data->sub,
                         'accountLastName'       => $data->name ?? $loginName,
                         'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                    ])), '', '');
+                    ])), $pw, $pw);
                 } catch (Tinebase_Exception $e) {
                     $e->setLogLevelMethod('notice');
                     $e->setLogToSentry(false);
@@ -886,18 +904,15 @@ class SSO_Controller extends Tinebase_Controller_Event
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 } finally {
                     Admin_Controller_User::getInstance()->doRightChecks($oldValue);
+                    Admin_Controller_Group::getInstance()->doRightChecks($oldGroupValue);
                     Tinebase_Core::unsetUser();
-                }*/
+                }
             }
 
             Tinebase_Auth::destroyInstance();
             Tinebase_Auth::setBackendType('OidcMock');
-            try {
 
-                /* TODO FIXME!!! Tinebase_Controller::getInstance()->setRequestContext(array(
-                    'MFAPassword' => $MFAPassword,
-                    'MFAId'       => $MFAUserConfigId
-                ));*/
+            try {
                 Tinebase_Controller::getInstance()->forceUnlockLoginArea();
                 if (!Tinebase_Controller::getInstance()->login($account->accountLoginName, '',
                         static::getLoginFakeRequest('/sso/oid/auth/response'),
@@ -905,24 +920,11 @@ class SSO_Controller extends Tinebase_Controller_Event
                     Tinebase_Exception::log(new Tinebase_Exception('login did not work unexpectedly'));
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 }
-
-            } catch (Tinebase_Exception_AreaLocked | Tinebase_Exception_AreaUnlockFailed $teal) {
-                /** @var SSO_Facade_OAuth2_ClientEntity $client */
-                $client = $authRequest?->getClient();
-                if (!($relyingParty = $client?->getRelyingPart())) {
-                    $relyingParty = new SSO_Model_RelyingParty([], true);
-                }
-                return static::renderLoginPage($relyingParty, [], $redirectUrl, $teal);
             } finally {
                 Tinebase_Auth::destroyInstance();
                 Tinebase_Auth::setBackendType(null);
             }
 
-            if ($authRequest) {
-                $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($account));
-                $authRequest->setAuthorizationApproved(true);
-                return static::getOpenIdConnectServer()->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
-            }
             return new \Laminas\Diactoros\Response('php://memory', 302, ['Location' => Tinebase_Core::getUrl()]);
         }
 

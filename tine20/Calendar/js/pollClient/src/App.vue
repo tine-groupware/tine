@@ -271,6 +271,8 @@ export default {
       }
 
       let needUpdate = false
+      let url = this.baseUrl + 'Calendar/poll/' + this.poll.id
+      let newAttendee = false
 
       let payload = { status: [] }
       if (this.activeAttendee.id === null || this.newAccountContact) {
@@ -288,7 +290,8 @@ export default {
           return
         }
 
-        action = 'put'
+        url = this.baseUrl + 'Calendar/poll/join/' + this.poll.id
+        newAttendee = true
         needUpdate = true
 
         payload.name = this.activeAttendee.name
@@ -326,12 +329,10 @@ export default {
         return
       }
 
-      let url = this.baseUrl + 'Calendar/poll/' + this.poll.id
-
       let options = { auth: { password: this.password } }
 
       axios[action](url, payload, options).then((response) => {
-        if (action === 'put' && this.activeAttendee.id === null) {
+        if (newAttendee === true && this.activeAttendee.id === null) {
           let first = _.head(response.data)
 
           if (typeof first === 'undefined') {

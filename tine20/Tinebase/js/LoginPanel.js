@@ -130,6 +130,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                             selectOnFocus: true,
                             value: this.defaultPassword,
                             disabled: modSsl ? true : false,
+                            hidden: Tine.Tinebase.registry.get('allowPasswordLessLogin'),
                             listeners: {
                                 render: this.setLastLoginUser.createDelegate(this)
                             }
@@ -530,25 +531,35 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }});
                 break;
             case 650: // Auth requires redirect
-                if (String(exception.method).toUpperCase() !== 'POST') {
-                    window.location.href = exception.url;
-                } else {
-                    window.document.body.innerHTML = exception.postFormHTML;
-                    document.getElementsByTagName("form")[0].submit();
-                }
+                this.redirect(exception);
                 break;
             case 651: // Password required
-                //@TODO
+                const pwdField = me.getLoginPanel().getForm().findField('password');
+                pwdField.setVisible(true);
+                pwdField.syncSize();
+                pwdField.focus(true);
                 break;
             default:
                 return Tine.Tinebase.ExceptionHandler.handleRequestException(response);
                 break;
         }
     },
-    
+
+    redirect: function(redirectTo) {
+        if (String(redirectTo.method).toUpperCase() !== 'POST') {
+            window.location.href = redirectTo.url;
+        } else {
+            window.document.body.innerHTML = redirectTo.postFormHTML;
+            document.getElementsByTagName("form")[0].submit();
+        }
+    },
+
     onLoginSuccess: function(response) {
         const responseData = Ext.util.JSON.decode(response.responseText);
         if (responseData.success === true) {
+            if (window.initialData?.afterLoginRedirect) {
+                return this.redirect(window.initialData.afterLoginRedirect);
+            }
             Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
             
             if (responseData?.assetHash && Tine.clientVersion.assetHash !== responseData.assetHash) {
@@ -620,19 +631,17 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         
         if (form.isValid()) {
             Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
-                .then((r) => {
-                    Ext.Ajax.request({
-                        scope: this,
-                        params: _.assign({
-                            method: this.loginMethod,
-                            username: values.username,
-                            password: values.password
-                        }, additionalParams),
-                        timeout: 60000, // 1 minute
-                        success: this.onLoginSuccess,
-                        failure: this.onLoginFail
-                    });
-                });
+            Ext.Ajax.request({
+                scope: this,
+                params: _.assign({
+                    method: this.loginMethod,
+                    username: values.username,
+                    password: form.findField('password').isVisible() ? values.password : null
+                }, additionalParams),
+                timeout: 60000, // 1 minute
+                success: this.onLoginSuccess,
+                failure: this.onLoginFail
+            });
         } else {
             
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));

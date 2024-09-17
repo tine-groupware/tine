@@ -93,14 +93,16 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'length' => 255,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label' => 'Type', // _('Type')
-                'queryFilter' => true
+                'queryFilter' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'serialNumber' => [
                 'type' => 'integer',
                 'length' => 4,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label' => 'Serial number', // _('Serial number')
-                'queryFilter' => true
+                'queryFilter' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'authKey' => [
                 'type' => 'string',
@@ -108,6 +110,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'Auth key', // _('Auth key')
                 'shy' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'name' => [
                 'type' => 'string',
@@ -145,24 +148,28 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'length' => 11,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label' => 'Firmware', // _('Firmware')
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'setupVersion' => [
                 'type' => 'string',
                 'length' => 20,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label' => 'Setup Version', // _('Setup Version')
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'setupStatus' => [
                 'type' => 'string',
                 'length' => 16,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'Setup Status', // _('Setup Status')
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'lastSeen' => [
                 'type' => 'datetime',
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'Last seen', // _('Last seen')
                 'nullable' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'cellularData' => [
                 'type' => 'string',
@@ -170,6 +177,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'Cellular data', // _('Cellular data')
                 'nullable' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'GPRSAliveCounter' => [
                 'type' => 'integer',
@@ -177,6 +185,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'GPRS alive counter', // _('GPRS alive counter')
                 'nullable' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'GPRSData' => [
                 'type' => 'string',
@@ -184,6 +193,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'GPRS data', // _('GPRS data')
                 'nullable' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'digitalStatus' => [
                 'type' => 'integer',
@@ -191,6 +201,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label' => 'Digital status', // _('Digital status')
                 'nullable' => true,
+                self::ALLOW_CAMEL_CASE => true,
             ],
             'lists' => [
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
@@ -215,6 +226,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
 beep(1);
 '
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ]
     ];

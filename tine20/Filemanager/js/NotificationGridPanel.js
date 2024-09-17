@@ -59,14 +59,12 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
                 id: 'active',
                 header: this.app.i18n._('Notification'),
                 tooltip: this.app.i18n._('Notification active'),
-                dataIndex: 'active',
                 width: 55,
                 onBeforeCheck: function (checkbox, record) {
                     return this.checkGrant(record);
                 }.createDelegate(me)
             }), {
                 id: 'summary',
-                dataIndex: 'summary',
                 width: 150,
                 sortable: true,
                 header: this.app.i18n._('Summary'),

@@ -9,6 +9,7 @@
 
 import waitFor from "../../Tinebase/js/util/waitFor.es6";
 import getFileAttachmentAction from './AttachmentFileAction';
+import {contrastColors} from "../../Tinebase/js/util/contrastColors";
 
 Ext.ns('Tine.Felamimail');
 
@@ -266,8 +267,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     body = body || '';
                     if (body) {
                         var account = this.app.getActiveAccount();
-                        if (account && (account.get('display_format') == 'plain' ||
-                                (account.get('display_format') == 'content_type' && messageData.body_content_type == 'text/plain'))
+                        if (account && (account.get('display_format') === 'plain' ||
+                                (account.get('display_format') === 'content_type' && messageData.body_content_type === 'text/plain'))
                         ) {
                             var width = this.panel.body.getWidth()-25,
                                 height = this.panel.body.getHeight()-90,
@@ -282,14 +283,19 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                                 'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
                                 body + '</textarea>';
-                        } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
+                        } else if (messageData.body_content_type !== 'text/html' || messageData.body_content_type_of_body_property_of_this_record === 'text/plain') {
                             // message content is text and account format non-text
                             body = Ext.util.Format.nl2br(Ext.util.Format.wrapEmojis(body));
                         } else {
                             Ext.util.Format.linkSaveHtmlEncodeStepOne(body);
                             Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
-                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified));
+                                const bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
+                                bodyEl.innerHTML = Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified);
+                                if (window.document.body.classList.contains('dark-mode')) {
+                                    contrastColors.darkMode = true
+                                    contrastColors.findBackground(bodyEl);
+                                }
+                                Ext.fly(bodyEl).update(bodyEl.innerHTML);
                             }, this.panel);
                         }
                     }
@@ -376,7 +382,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 const selectedAttachments = idx !== 'all' ? [attachments[idx]] : attachments;
                 // remove part id if set (that is the case in message/rfc822 attachments)
                 const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
-                
+
                 const menu = Ext.create({
                     xtype: 'menu',
                     plugins: [{
@@ -513,7 +519,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         _.each(attachments, (attachment) => {
             if (!attachment.promises) attachment.promises = [];
             if (this.isAttachmentDataValid(attachment)) return;
-            
+
             const promise = new Promise(async (resolve) => {
                 const start = Date.now();
                 const responses = await Promise.all(attachment.promises);
@@ -551,7 +557,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         record.set('attachments', attachments);
         return attachments;
     },
-    
+
     onNavigateAttachment: function(dir) {
         this.initialAttachmentIdx += dir;
         if (this.attachments?.[this.initialAttachmentIdx]) {
@@ -568,7 +574,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         const messageId = this.record.get('messageId') || ((String(this.record.id).match(/_/)) ? this.record.id.split('_')[0] : this.record.id);
         const sourceModel = this.record.get('from_node') ? 'Filemanager_Model_Node' : 'Felamimail_Model_Message';
         let promises  = this.record?.data?.promises ?? [];
-        
+
         if (this.record.constructor.hasField('attachments')) {
             await waitFor(() => {
                 return this.record.bodyIsFetched()
@@ -582,14 +588,14 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             this.attachments = _.map(this.record.get('attachments'), (attachment) => {
                 return new Tine.Tinebase.Model.Tree_Node(attachment);
             });
-            
+
             // make sure we get the attachment caches
             attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record, true);
             const initialAttachmentIdx = this.initialAttachmentIdx ?? 0;
             if (!attachments[initialAttachmentIdx].promises) return;
             promises = attachments[initialAttachmentIdx].promises;
         }
-        
+
         await Promise.all(promises).then((cachePromises) => {
             let resolvedAttachmentData = {};
             const validResponse = cachePromises.find((r) => {return r?.isPreviewReady && r?.cache;});
@@ -602,7 +608,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     resolvedAttachmentData = validPromise.cache.data;
                 } else {
                     const invalidResponse = cachePromises.find((cachePromise) => {return cachePromise?.cache});
-                    if (invalidResponse) resolvedAttachmentData = invalidResponse.cache.data; 
+                    if (invalidResponse) resolvedAttachmentData = invalidResponse.cache.data;
                 }
             }
             resolvedAttachmentData.messageId = this.record.id;
@@ -613,7 +619,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             this.record.isAttachmentCache = true;
         })
     },
-    
+
     isAttachmentDataValid(data) {
         return data?.isPreviewReady && data?.cache;
     },

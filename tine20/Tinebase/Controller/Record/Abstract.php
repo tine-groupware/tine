@@ -868,7 +868,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 continue;
             }
 
-            if (!($numberable = $this->_getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
+            if (!($numberable = Tinebase_Numberable::getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
                 if (null !== $_oldRecord) {
                     $_record->{$fieldDef['fieldName']} = $_oldRecord->{$fieldDef['fieldName']};
                 }
@@ -912,7 +912,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         $className = get_class($record);
         foreach ($autoincrementFields as $fieldDef) {
-            $numberable = $this->_getNumberable($record, $className, $fieldDef['fieldName'], $fieldDef);
+            $numberable = Tinebase_Numberable::getNumberable($record, $className, $fieldDef['fieldName'], $fieldDef);
             if ($numberable && !empty($record->{$fieldDef['fieldName']})) {
                 $numberable->free($record->{$fieldDef['fieldName']});
             }
@@ -932,30 +932,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)
     {
         return $createNewValue;
-    }
-
-    /**
-     * get record numberable value for given field
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param string $className
-     * @param string $fieldName
-     * @param array $fieldConfig
-     * @return ?Tinebase_Numberable_Abstract
-     */
-    protected function _getNumberable($_record, $className, $fieldName, $fieldConfig): ?Tinebase_Numberable_Abstract
-    {
-        if (isset($fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
-            list($objectClass, $method) = explode('::', $fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
-            $object = call_user_func($objectClass . '::getInstance');
-            if (method_exists($object, $method)) {
-                $configOverride = call_user_func_array([$object, $method], [$_record]);
-                $fieldConfig['config'] = array_merge($fieldConfig['config'], $configOverride);
-                $fieldName .= Tinebase_Helper::arrayHash($fieldConfig['config']);
-            }
-        }
-
-        return Tinebase_Numberable::getNumberable($className, $fieldName, $fieldConfig);
     }
 
     /**
@@ -993,6 +969,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_inspectDenormalization($_record);
+        $this->_handleCreateRecords($_record);
     }
 
     protected function _denormalizedDiff(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_otherRecord)
@@ -1115,16 +1092,16 @@ abstract class Tinebase_Controller_Record_Abstract
             try {
                 /** @var Tinebase_Controller_Record_Abstract $ctrl */
                 $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
-                $originalRecord = $ctrl->get($record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId());
+                $originalRecord = $ctrl->get(_id: $record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId(), _getRelatedData:  false, _getDeleted: true);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 $record->setId(null);
             }
         }
         if (!$record->{TMCC::FLD_ORIGINAL_ID}) {
+            // this may be null, if the denormalized record in fact is not denormalized! it may also be just a local instance
             $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
         }
 
-        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
         if ((isset($record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) &&
                 $record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES])) {
             if (null === $originalRecord || !$this->_denormalizedDiff($record, $originalRecord)->isEmpty()) {
@@ -1134,7 +1111,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        $record->setId(null);
+        $record->setId(Tinebase_Record_Abstract::generateUID());
     }
 
     /**
@@ -1487,8 +1464,10 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing ACL check ...');
         
         if (($_currentRecord->has('container_id') && Tinebase_Record_Abstract::convertId($_currentRecord->container_id) != Tinebase_Record_Abstract::convertId($_record->container_id)) ||
-            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) &&
-                $_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))) {
+            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) && (
+                $mc->getFields()[$daf][TMCC::TYPE] === TMCC::TYPE_RECORDS ?
+                    (($migration = $_currentRecord->{$daf}->getMigration($_record->{$daf}->getArrayOfIds())) && (count($migration['toDeleteIds']) > 0 || count($migration['toCreateIds']) > 0))
+                    : ($_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))))) {
             $this->_checkGrant($_record, self::ACTION_CREATE);
             $this->_checkRight(self::ACTION_CREATE);
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine
@@ -1579,37 +1558,9 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
             }
         }
-        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())) {
-            if (is_array($config->recordsFields)) {
-                foreach ($config->recordsFields as $property => $fieldDef) {
-                    if ($isCreate) {
-                        $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
-                    } else {
-                        $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
-                        $updatedRecord->{$property} = $record->{$property};
-                    }
-                }
-            }
-            if (is_array($config->recordFields)) {
-                foreach ($config->recordFields as $property => $fieldDef) {
-                    if ($isCreate) {
-                        $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
-                    } else {
-                        $this->_updateDependentRecord($record, $currentRecord, $property, $fieldDef['config']);
-                        $updatedRecord->{$property} = $record->{$property};
-                    }
-                }
-            }
-            // unset them all
-            $this->_delayedDepRecRaiis = [];
-            $ctrls = $this->_delyedDepRecCtrls;
-            $this->_delyedDepRecCtrls = [];
-            /** @var Tinebase_Controller_Record_Abstract $ctrl */
-            foreach ($ctrls as $ctrl) {
-                $ctrl->executeDelayedDependentRecords();
-            }
-        }
-        
+
+        $this->handleSetDependentRecords($updatedRecord, $record, $currentRecord, $isCreate);
+
         if ($returnUpdatedRelatedData) {
             $this->_getRelatedData($updatedRecord);
         }
@@ -1630,6 +1581,44 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         return $updatedRecord;
+    }
+
+    public function handleSetDependentRecords($updatedRecord, $record, $currentRecord, $isCreate): void
+    {
+        if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    if ($fieldDef[TMCC::CREATE] ?? false) {
+                        continue;
+                    } elseif ($isCreate) {
+                        $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
+                    } else {
+                        $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
+                        $updatedRecord->{$property} = $record->{$property};
+                    }
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    if ($fieldDef[TMCC::CREATE] ?? false) {
+                        continue;
+                    } elseif ($isCreate) {
+                        $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
+                    } else {
+                        $this->_updateDependentRecord($record, $currentRecord, $property, $fieldDef['config']);
+                        $updatedRecord->{$property} = $record->{$property};
+                    }
+                }
+            }
+            // unset them all
+            $this->_delayedDepRecRaiis = [];
+            $ctrls = $this->_delyedDepRecCtrls;
+            $this->_delyedDepRecCtrls = [];
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            foreach ($ctrls as $ctrl) {
+                $ctrl->executeDelayedDependentRecords();
+            }
+        }
     }
 
     /**
@@ -1824,6 +1813,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         $this->_inspectDenormalization($_record, $_oldRecord);
+        $this->_handleCreateRecords($_record);
     }
 
     /**
@@ -2423,6 +2413,12 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('alarms')) {
             $this->_deleteAlarmsForIds(array($_record->getId()));
         }
+
+        $this->handleDeleteDependentRecords($_record);
+    }
+
+    public function handleDeleteDependentRecords(Tinebase_Record_Interface $_record): void
+    {
         if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
             if (is_array($config->recordsFields)) {
                 foreach ($config->recordsFields as $property => $fieldDef) {
@@ -2560,35 +2556,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
-            if (empty($_record->{$mc->delegateAclField}) && isset($mc->recordsFields[$mc->delegateAclField])) {
-                (new Tinebase_Record_Expander(get_class($_record), [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$mc->delegateAclField => []]
-                ]))->expand(new Tinebase_Record_RecordSet(get_class($_record), [$_record]));
-            }
-            if (empty($_record->{$mc->delegateAclField})) {
-                throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
-                    ' must not be empty');
-            }
-            /** @var Tinebase_Controller_Record_Abstract $ctrl */
-            $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
-            $ctrl = $ctrl::getInstance();
-            if ($_record->{$mc->delegateAclField} instanceof Tinebase_Record_RecordSet) {
-                foreach ($_record->{$mc->delegateAclField} as $delegateRec) {
-                    if ($ctrl->checkGrant($delegateRec, $_action, false, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}->getById($delegateRec->getId()) ?: null)) {
-                        return true;
-                    }
-                }
-                if ($_throw) {
-                    throw new Tinebase_Exception_AccessDenied($_errorMessage);
-                }
-                return false;
-            }
-            return $ctrl->checkGrant(
-                $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
-                    $_record->{$mc->delegateAclField} :
-                    $ctrl->get($_record->{$mc->delegateAclField}),
-                $_action, $_throw, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
-            );
+            return $this->_checkDelegatedGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
         }
         
         if (! is_object(Tinebase_Core::getUser())) {
@@ -2635,6 +2603,50 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         return $hasGrant;
+    }
+
+    protected function _checkDelegatedGrant(Tinebase_Record_Interface $_record,
+                                            string $_action,
+                                            bool $_throw,
+                                            string $_errorMessage,
+                                            ?Tinebase_Record_Interface $_oldRecord): bool
+    {
+        $mc = $_record->getConfiguration();
+        if (empty($_record->{$mc->delegateAclField}) && isset($mc->recordsFields[$mc->delegateAclField])) {
+            (new Tinebase_Record_Expander(get_class($_record), [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$mc->delegateAclField => []]
+            ]))->expand(new Tinebase_Record_RecordSet(get_class($_record), [$_record]));
+        }
+        if (empty($_record->{$mc->delegateAclField})) {
+            throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
+                ' must not be empty');
+        }
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG]
+            [Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
+        $ctrl = $ctrl::getInstance();
+        if ($_record->{$mc->delegateAclField} instanceof Tinebase_Record_RecordSet) {
+            if (count($_record->{$mc->delegateAclField}) === 0) {
+                return true;
+            }
+            foreach ($_record->{$mc->delegateAclField} as $delegateRec) {
+                if ($ctrl->checkGrant($delegateRec, $_action, false, $_errorMessage, $_oldRecord?->
+                {$mc->delegateAclField}->getById($delegateRec->getId()) ?: null)) {
+                    return true;
+                }
+            }
+            if ($_throw) {
+                throw new Tinebase_Exception_AccessDenied($_errorMessage);
+            }
+            return false;
+        }
+
+        return $ctrl->checkGrant(
+            $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
+                $_record->{$mc->delegateAclField} :
+                $ctrl->get($_record->{$mc->delegateAclField}),
+            $_action, $_throw, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
+        );
     }
 
     /**
@@ -2961,11 +2973,11 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _createDependentRecord(Tinebase_Record_Interface $_createdRecord, Tinebase_Record_Interface $_record, $_property, $_fieldConfig)
     {
         // records stored e.g. in JSON are also 'dependend' / 'owned'
-        if (! isset($_fieldConfig[TMCC::DEPENDENT_RECORDS]) || ! $_fieldConfig[TMCC::DEPENDENT_RECORDS] || isset($_fieldConfig[TMCC::STORAGE])) {
+        if (!($_fieldConfig[TMCC::DEPENDENT_RECORDS] ?? false) || isset($_fieldConfig[TMCC::STORAGE])) {
             return;
         }
 
-        if (! isset ($_fieldConfig[TMCC::REF_ID_FIELD])) {
+        if (! isset($_fieldConfig[TMCC::REF_ID_FIELD])) {
             throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
         }
 
@@ -3142,6 +3154,65 @@ abstract class Tinebase_Controller_Record_Abstract
         } elseif ($existingDepRec) {
             $controller->delete($existingDepRec);
         }
+        unset($ctrlAclRaii);
+    }
+
+    protected function _handleCreateRecords(Tinebase_Record_Interface $_record): void
+    {
+        if ($config = $_record::getConfiguration()) {
+            if (is_array($config->recordsFields)) {
+                foreach ($config->recordsFields as $property => $fieldDef) {
+                    if ($fieldDef[TMCC::CONFIG][TMCC::CREATE] ?? false) {
+                        if ($_record->{$property} instanceof Tinebase_Record_RecordSet) {
+                            $this->_createCreateRecords($_record->{$property}, $_record, $property, $fieldDef);
+                        }
+                    }
+                }
+            }
+            if (is_array($config->recordFields)) {
+                foreach ($config->recordFields as $property => $fieldDef) {
+                    if ($fieldDef[TMCC::CONFIG][TMCC::CREATE] ?? false) {
+                        if ($_record->{$property} instanceof Tinebase_Record_Interface) {
+                            $this->_createCreateRecords(new Tinebase_Record_RecordSet(get_class($_record->{$property}), [$_record->{$property}]), $_record, $property, $fieldDef);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected function _createCreateRecords(Tinebase_Record_RecordSet $_records, Tinebase_Record_Interface $_record, string $property, $_fieldDef): void
+    {
+        /** @var Tinebase_Controller_Interface $ccn */
+        $ccn = $_fieldDef[TMCC::CONFIG][TMCC::CONTROLLER_CLASS_NAME];
+        /** @var Tinebase_Controller_Record_Abstract $controller */
+        $controller = $ccn::getInstance();
+
+        $ctrlAclRaii = null;
+        if ($_fieldDef[TMCC::CONFIG][TMCC::IGNORE_ACL] ?? false) {
+            if (true === $controller->doContainerACLChecks(false)) {
+                $ctrlAclRaii = new Tinebase_RAII(function () use ($controller) {
+                    $controller->doContainerACLChecks(true);
+                });
+            }
+        }
+
+        $records = new Tinebase_Record_RecordSet($_records->getRecordClassName());
+
+        if (!empty($ids = $_records->getArrayOfIds())) {
+            foreach ($controller->has($ids, true) as $id) {
+                $records->addRecord($_records->getById($id));
+                $_records->removeById($id);
+            }
+        }
+
+
+        foreach ($_records as $record) {
+            $records->addRecord($controller->create($record));
+        }
+
+        $_record->{$property} = $_fieldDef[TMCC::TYPE] === TMCC::TYPE_RECORDS ? $records : $records->getFirstRecord();
+
         unset($ctrlAclRaii);
     }
 

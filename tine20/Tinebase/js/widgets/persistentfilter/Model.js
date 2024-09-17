@@ -80,7 +80,10 @@ Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = functi
     var app = Tine.Tinebase.appMgr.get(appName),
         appPrefs = app.getRegistry().get('preferences'),
         defaultFavoriteId = appPrefs ? appPrefs.get('defaultpersistentfilter') : null;
-   
+
+    if (! defaultFavoriteId) {
+        return null;
+    }
     if (defaultFavoriteId === '_lastusedfilter_') {
         var filterData = Ext.state.Manager.get(appName + '-' + modelName + '-lastusedfilter');
         
@@ -90,7 +93,9 @@ Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = functi
         }) : null;
         
     }
-    return defaultFavoriteId ? Tine.widgets.persistentfilter.store.getPersistentFilterStore().getById(defaultFavoriteId) : null
+    // Check if favorite matches current model
+    const defaultFavorite = Tine.widgets.persistentfilter.store.getPersistentFilterStore().getById(defaultFavoriteId);
+    return defaultFavorite?.get('model').match(Tine.Tinebase.data.RecordMgr.get(appName, modelName).getPhpClassName()) ? defaultFavorite : null;
 };
 
 /**

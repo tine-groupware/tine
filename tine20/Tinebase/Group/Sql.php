@@ -194,9 +194,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             . ' Setting ' . count($_groupMembers) . ' new groupmembers for group ' . $_groupId);
         
         if ($this instanceof Tinebase_Group_Interface_SyncAble) {
-            $_groupMembers = $this->setGroupMembersInSyncBackend($_groupId, $_groupMembers);
+            $this->setGroupMembersInSyncBackend($_groupId, $_groupMembers);
         }
-        
+
         $this->setGroupMembersInSqlBackend($_groupId, $_groupMembers);
     }
      

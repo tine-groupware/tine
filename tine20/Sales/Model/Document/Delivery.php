@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -42,7 +42,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Delivery'; // gettext('GENDER_Delivery')
         $_definition[self::RECORDS_NAME] = 'Deliveries'; // ngettext('Delivery', 'Deliveries', n)
 
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
@@ -86,6 +86,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
                     Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_PROFORMA_NUMBER,
                     Tinebase_Numberable_String::PREFIX     => 'PD-', // _('PD-')
                     Tinebase_Numberable_String::ZEROFILL   => 7,
+                    Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
                     Tinebase_Numberable::CONFIG_OVERRIDE   =>
                         Sales_Controller_Document_Delivery::class . '::documentProformaNumberConfigOverride',
                 ],
@@ -102,6 +103,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         // remove all moneytary fields, this is a delivery document, no money here
         unset($_definition[self::FIELDS][self::FLD_POSITIONS_DISCOUNT_SUM]);
         unset($_definition[self::FIELDS][self::FLD_POSITIONS_NET_SUM]);
+        unset($_definition[self::FIELDS][self::FLD_POSITIONS_GROSS_SUM]);
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_TYPE]);
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_SUM]);
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_PERCENTAGE]);
@@ -111,8 +113,6 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE]);
         unset($_definition[self::FIELDS][self::FLD_GROSS_SUM]);
         unset($_definition[self::FIELDS][self::FLD_PAYMENT_TERMS]);
-        unset($_definition[self::FIELDS][self::FLD_COST_CENTER_ID]);
-        unset($_definition[self::FIELDS][self::FLD_COST_BEARER_ID]);
     }
 
     protected static string $_statusField = self::FLD_DELIVERY_STATUS;

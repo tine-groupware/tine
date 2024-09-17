@@ -842,7 +842,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * create/update email users with current account
      *  USAGE: php setup.php --updateAllAccountsWithAccountEmail \
-     *                       -- [fromInstance=master.mytine20.com createEmail=1 domain=mydomain.org]
+     *                       -- [fromInstance=master.mytine20.com createEmail=1 domain=mydomain.org overwrite=1]
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -852,57 +852,99 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $data = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         if (isset($data['fromInstance'])) {
             // fetch all accounts from fromInstance and write to configured instance
-            $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
-            $imap->copyFromInstance($data['fromInstance']);
-        }
-
-        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
-        $userController = Admin_Controller_User::getInstance();
-        $emailUser = Tinebase_EmailUser::getInstance();
-        /** @var Tinebase_Model_FullUser $user */
-        foreach ($userController->searchFullUsers('') as $user) {
-            $emailUser->inspectGetUserByProperty($user);
-
-            if (empty($user->accountEmailAddress) && isset($data['createEmail']) && $data['createEmail']) {
-                $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
-                // TODO allow to set other domains via args?
-                if (! empty($config['primarydomain'])) {
-                    $mail = $user->accountLoginName . '@' . $config['primarydomain'];
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Setting new email address for user: ' . $mail);
-                    }
-                    $user->accountEmailAddress = $mail;
-                }
-            }
-
-            if (! empty($user->accountEmailAddress)) {
-                list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
-                if (isset($data['domain']) && $domainPart !== $data['domain']) {
-                    // skip user because not in given domain
-                    continue;
-                }
-                // TODO allow to skip this?
-                if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
-                    $newEmailAddress = $userPart . '@' . $allowedDomains[0];
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
-                    }
-                    $user->accountEmailAddress = $newEmailAddress;
-                }
-                try {
-                    $userController->update($user);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' ' . $tenf);
-                    }
-                }
+            $imap = Tinebase_EmailUser::getInstance();
+            if (method_exists($imap, 'copyFromInstance')) {
+                $imap->copyFromInstance($data['fromInstance']);
+            } else {
+                echo "copyFromInstance is not supported in IMAP backend.\n";
             }
         }
+
+        $overwrite = isset($data['overwrite']) && $data['overwrite'] == 1;
+        if ($overwrite) {
+            $smtpconfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+            $oldsmtpconfig = clone($smtpconfig);
+            $imapconfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+            $oldimapconfig = clone($imapconfig);
+            $smtpconfig->allowOverwrite = true;
+            $imapconfig->allowOverwrite = true;
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpconfig);
+            Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapconfig);
+        }
+
+        $counter = 0;
+        try {
+            foreach (Admin_Controller_User::getInstance()->searchFullUsers('') as $user) {
+                $result = $this->_updateEmailUser($user,
+                    $data['domain'] ?? null,
+                    isset($data['createEmail']) && $data['createEmail']);
+                if ($result) {
+                    $counter++;
+                }
+            }
+        } finally {
+            if ($overwrite) {
+                Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $oldsmtpconfig);
+                Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $oldimapconfig);
+            }
+        }
+
+        echo "Updated $counter user mailaccounts.\n";
 
         return 0;
+    }
+
+    protected function _updateEmailUser(Tinebase_Model_FullUser $user,
+                                        ?string $domain = null,
+                                        bool $createEmail = false): bool
+    {
+        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
+        $emailUser = Tinebase_EmailUser::getInstance();
+
+        $emailUser->inspectGetUserByProperty($user);
+
+        if (empty($user->accountEmailAddress) && $createEmail) {
+            $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+            // TODO allow to set other domains via args?
+            if (!empty($config['primarydomain'])) {
+                $mail = $user->accountLoginName . '@' . $config['primarydomain'];
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user: ' . $mail);
+                }
+                $user->accountEmailAddress = $mail;
+            }
+        }
+
+        if (!empty($user->accountEmailAddress)) {
+            list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+            if ($domain && $domainPart !== $domain) {
+                // skip user because not in given domain
+                return false;
+            }
+            // TODO allow to skip this?
+            if (count($allowedDomains) > 0 && !in_array($domainPart, $allowedDomains)) {
+                $newEmailAddress = $userPart . '@' . $allowedDomains[0];
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
+                }
+                $user->accountEmailAddress = $newEmailAddress;
+            }
+            try {
+                Admin_Controller_User::getInstance()->update($user);
+                return true;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' ' . $tenf);
+                }
+            } catch (Exception $e) {
+                echo $user->accountLoginName . ': ' . $e->getMessage() . "\n";
+            }
+        }
+
+        return false;
     }
 
     /**

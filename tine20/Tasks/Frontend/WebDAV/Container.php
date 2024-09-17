@@ -106,11 +106,15 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
             }
         }
         
-        $httpRequest = new \Sabre\HTTP\Request();
+        $httpRequest = Tinebase_Core::getRequest();
         
-        // lie about existance of event of request is a PUT request from an ATTENDEE for an already existing event 
+        // lie about existence of event of request is a PUT request from an ATTENDEE for an already existing event
         // to prevent ugly (and not helpful) error messages on the client
-        if (isset($_SERVER['REQUEST_METHOD']) && $httpRequest->getMethod() == 'PUT' && $httpRequest->getHeader('If-None-Match') === '*') {
+        if (isset($_SERVER['REQUEST_METHOD'])
+            && $httpRequest
+            && $httpRequest->getMethod() == 'PUT'
+            && ($httpRequest->getHeader('If-None-Match') ?: null)?->getFieldValue() === '*'
+        ) {
             if (
                 $object->organizer != Tinebase_Core::getUser()->getId() && 
                 Calendar_Model_Attender::getOwnAttender($object->attendee) !== null
@@ -171,18 +175,18 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
-            '{DAV:}owner'       => new \Sabre\DAVACL\Property\Principal(\Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
+            '{DAV:}owner'       => new \Sabre\DAVACL\Xml\Property\Principal(\Sabre\DAVACL\Xml\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
             '{DAV:}displayname' => $this->_container->name,
             '{http://apple.com/ns/ical/}calendar-color' => (empty($this->_container->color)) ? '#000000' : $this->_container->color,
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO')),
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Sabre\CalDAV\Property\SupportedCalendarData(),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VTODO')),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Sabre\CalDAV\Xml\Property\SupportedCalendarData(),
             '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Tasks ' . $this->_container->name,
             '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone($this->_application)
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new \Sabre\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false); 
+            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new \Sabre\DAV\Xml\Property\Href(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 

@@ -28,19 +28,19 @@ variables:
   JS_E2E_TEST_FILTER: ""
 
   # "Database image used by tests."
-  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.4.1"
+  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
 
-  # "Rdis image to use druing tests."
-  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:5.0.5"
+  # "Redis image to use during tests."
+  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:6.0.16"
 
   # "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
   PHPUNIT_FILTER: ""
   
   # "Php version to use."
-  PHP_VERSION: "8.1"
+  PHP_VERSION: "8.2"
 
   # "Codename for build"
-  CODENAME: "Ellie"
+  CODENAME: "Pelle"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
@@ -79,6 +79,7 @@ variables:
   PHP_UNIT_ALL_TESTS_LDAP_SOURCE_TYPE: "parallel" #parallel, sequential
   PHP_UNIT_ALL_TESTS_LDAP_BUILD_TYPE: "parallel" #parallel, sequential
   JS_E2E_TESTS_SOURCE_TYPE: "sequential" #sequential, matrix
+  PHP_UNIT_ALL_TESTS_AD_SOURCE_TYPE: "parallel" #parallel, sequential
 
   # Deploy
   #
@@ -103,6 +104,6 @@ variables:
 
   PUSH_TO_VPACKAGES: "true"
   
-  TEST_IMAGE_VERSION: "1"
+  TEST_IMAGE_VERSION: "2"
   TEST_IMAGE_REGISTRY: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test
   TEST_IMAGE: ${TEST_IMAGE_REGISTRY}:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}-${TEST_IMAGE_VERSION}

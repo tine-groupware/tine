@@ -42,6 +42,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     updateToolbars: function(record) {
         this.onTimeaccountUpdate();
         Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
+        if(this.useMultiple && !this.getForm().findField('is_billable').checked) {
+            this.disableBillableFields(true)
+        }
     },
 
     onRecordLoad: function() {
@@ -206,13 +209,13 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             const factor = this.getForm().findField('accounting_time_factor').getValue();
             const duration = this.getForm().findField('duration').getValue();
             const accountingTime = Math[roundingMethod](factor * duration / roundingMinutes) * roundingMinutes;
-            
+
             if (factor !== this.factor) {
                 this.factor = factor;
                 this.factorChanged = true;
             }
             this.getForm().findField('accounting_time').setValue(accountingTime);
-    
+
             const isBillable = this.getForm().findField('is_billable').getValue();
             if (!isBillable) {
                 this.getForm().findField('accounting_time').setValue(0);
@@ -239,7 +242,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             if (!checked) {
                 this.getForm().findField('accounting_time_factor').setValue(0);
                 this.getForm().findField('accounting_time').setValue(0);
-                this.disableBillableFields(true);
                 this.disableClearedFields(true);
                 this.getForm().findField('is_cleared').setDisabled(true);
 
@@ -249,11 +251,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 }
                 this.getForm().findField('accounting_time_factor').setValue(this.factor);
                 this.calculateAccountingTime();
-                this.disableBillableFields(false);
                 this.disableClearedFields(false);
                 this.getForm().findField('is_cleared').setDisabled(false);
             }
         }
+        this.disableBillableFields(!checked)
     },
     
     disableBillableFields: function(disable) {
@@ -507,7 +509,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             check: this.onCheckBillable
                                         }}),
                                     fieldManager('accounting_time_factor', {
-                                        disabled: this.useMultiple,
+                                        disabled: false,
                                         columnWidth: .1,
                                         decimalSeparator: ',',
                                         fieldLabel: this.app.i18n._('Factor'),

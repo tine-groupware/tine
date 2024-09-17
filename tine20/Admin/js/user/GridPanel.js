@@ -183,27 +183,71 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return Array
      */
     getColumns: function(){
-        return [
-            { header: this.app.i18n._('ID'), id: 'accountId', dataIndex: 'accountId', width: 50},
-            { header: this.app.i18n._('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: this.isLdapBackend, width: 50, renderer: this.statusRenderer},
-            { header: this.app.i18n._('Display name'), id: 'accountDisplayName', dataIndex: 'accountDisplayName', hidden: false},
-            { header: this.app.i18n._('Login name'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 160, hidden: false},
-            { header: this.app.i18n._('Last name'), id: 'accountLastName', dataIndex: 'accountLastName'},
-            { header: this.app.i18n._('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName'},
-            { header: this.app.i18n._('E-mail'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200, hidden: false},
-            { header: this.app.i18n._('E-mail usage'), id: 'emailQuota', hidden: this.isEmailBackend, dataIndex: 'emailUser', renderer: this.emailQuotaRenderer, sortable: false},
+        const columns = [
+            { header: this.app.i18n._('ID'), id: 'accountId' },
+            { header: this.app.i18n._('Status'), id: 'accountStatus', hidden: this.isLdapBackend, width: 30, renderer: this.statusRenderer},
+            { header: this.app.i18n._('Display name'), id: 'accountDisplayName', hidden: false},
+            { header: this.app.i18n._('Login name'), id: 'accountLoginName', hidden: false},
+            { header: this.app.i18n._('Last name'), id: 'accountLastName'},
+            { header: this.app.i18n._('First name'), id: 'accountFirstName'},
+            { header: this.app.i18n._('E-mail'), id: 'accountEmailAddress', hidden: false},
+            { header: this.app.i18n._('E-mail usage'), id: 'emailQuota', dataIndex: 'emailUser', hidden: this.isEmailBackend, renderer: this.emailQuotaRenderer, sortable: false},
             { header: this.app.i18n._('Filesystem usage'), id: 'fileQuota', dataIndex: 'filesystemSize', renderer: this.fileQuotaRenderer, hidden: false, sortable: false},
-            { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200},
-            { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', hidden: this.isLdapBackend, dataIndex: 'accountLastLoginfrom'},
-            { header: this.app.i18n._('MFA Configured'), id: 'mfa_configs', dataIndex: 'mfa_configs', width: 100, renderer: this.mfaRenderer.createDelegate(this), hidden: false},
-            { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', dataIndex: 'password_must_change', width: 200, renderer: Tine.Tinebase.common.booleanRenderer, hidden: false},
-            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
-            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
-            { header: this.app.i18n._('Full Name'), id: 'accountFullName', dataIndex: 'accountFullName'}
-        ].concat(this.getModlogColumns());
+            { header: this.app.i18n._('OpenID'), id: 'openid' },
+            { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', hidden: this.isLdapBackend, renderer: Tine.Tinebase.common.dateTimeRenderer},
+            { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', width: 120, hidden: this.isLdapBackend},
+            { header: this.app.i18n._('MFA Configured'), id: 'mfa_configs', renderer: this.mfaRenderer.createDelegate(this), hidden: false},
+            { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', renderer: this.mustChangeRenderer, hidden: false},
+            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', renderer: this.dateTimeRenderer, hidden: false},
+            { header: this.app.i18n._('Expires'), id: 'accountExpires', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
+            { header: this.app.i18n._('Full Name'), id: 'accountFullName'}
+        ];
+        
+        return columns.concat(this.getModlogColumns());
     },
-    
+
+    dateTimeRenderer: function ($_iso8601, metadata, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        let rendered = Tine.Tinebase.common.dateTimeRenderer($_iso8601, metadata)
+        let hoverText = i18n._('Password is expired in accordance with the password policy and needs to be changed')
+
+        if (!$_iso8601) {
+            metadata.css += ' tinebase-warning'
+            metadata.cellAttr = 'title="'+hoverText+'"'
+            return rendered
+        }
+
+        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
+        if (!changeAfter || changeAfter === 0) return rendered
+
+        let maxDate = new Date($_iso8601).add('d', changeAfter)
+        if (maxDate < new Date()) {
+            metadata.css += ' tinebase-warning'
+            metadata.cellAttr = 'title="'+hoverText+'"'
+        }
+        return rendered
+    },
+
+    mustChangeRenderer: function (_value, metadata, _record) {
+        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
+        if (!changeAfter || changeAfter === 0) return Tine.Tinebase.common.booleanRenderer(_value)
+
+        let hoverText = i18n._('Password is expired in accordance with the password policy and needs to be changed')
+
+        let lastChangeDate = _record.get('accountLastPasswordChange')
+        if (!lastChangeDate) {
+            metadata.cellAttr = 'title="'+hoverText+'"'
+            return Tine.Tinebase.common.booleanRenderer('yes')
+        }
+
+        let maxDate = new Date(lastChangeDate).add('d', changeAfter)
+        if (maxDate < new Date()) {
+            metadata.cellAttr = 'title="'+hoverText+'"'
+            return Tine.Tinebase.common.booleanRenderer('yes')
+        }
+
+        return Tine.Tinebase.common.booleanRenderer(_value)
+    },
+
     enableDisableButtonHandler: function(status) {
         var accountIds = new Array();
         var selectedRows = this.grid.getSelectionModel().getSelections();
@@ -296,7 +340,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             expired: 'images/icon-set/icon_time.svg'
         };
 
-        return statusMap[_value] ? `<img class='tine-keyfield-icon' src='${statusMap[_value]}' width='16' height='16'/>` : Ext.htmlEncode(_value);
+        return statusMap[_value] ? `<img class='tine-keyfield-icon' src='${statusMap[_value]}' width='16' height='16'/>` : Ext.util.Format.htmlEncode(_value);
     },
 
     mfaRenderer: function (_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {

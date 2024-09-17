@@ -232,6 +232,7 @@
     getGrantsSum: function(records) {
 
         var _ = window.lodash,
+            modelNamePrefix = this.recordClass?.getMeta?.('modelName') ? this.recordClass?.getMeta('modelName') + '_' : '',
             defaultGrant = records.length == 0 ? false : true,
             grants = {
                 addGrant:       defaultGrant,
@@ -246,6 +247,7 @@
         if (! this.evalGrants) {
             return grants;
         }
+
         
         var recordGrants;
         for (var i=0; i<records.length; i++) {
@@ -256,7 +258,8 @@
             }
 
             for (var grant in grants) {
-                grants[grant] = _.get(grants, grant, false) && _.get(recordGrants, grant, false);
+                // e.g. readGrant || Document_Invoice_readGrant
+                grants[grant] = _.get(grants, grant, false) && (_.get(recordGrants, grant, false) || _.get(recordGrants, modelNamePrefix+grant, false));
             }
 
             // custom grants model
@@ -266,7 +269,7 @@
             }
         }
         // if calculated admin right is true, overwrite all grants with true
-        if(grants.adminGrant) {
+        if(grants.adminGrant || grants[modelNamePrefix + 'adminGrant']) {
             for (var grant in grants) {
                 grants[grant] = true;
             }

@@ -63,7 +63,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 };
 
                 const getMailAction = async (win, record) => {
-                    const recipientData = _.get(record, 'data.recipient_id.data', _.get(record, 'data.recipient_id'));
+                    const recipientData = _.get(record, 'data.recipient_id.data', _.get(record, 'data.recipient_id')) || {};
                     paperSlip.attachment_type = 'attachment';
 
                     return new Ext.Button({
@@ -91,7 +91,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                                     const mailRecord = new win.Tine.Felamimail.Model.Message(Object.assign(mailDefaults, {
                                         subject: `${record.constructor.getRecordName()} ${record.get('document_number')}: ${record.get('document_title')}`,
-                                        body: body + win.Tine.Felamimail.getSignature(),
+                                        body: body,
                                         to: [`${recipientData.name} < ${recipientData.email} >`],
                                         attachments: [paperSlip]
                                     }), 0);

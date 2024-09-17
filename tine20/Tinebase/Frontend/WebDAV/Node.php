@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -56,7 +56,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     
     public function getName() 
     {
-        list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        list(, $basename) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $basename);
@@ -94,7 +94,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     {
         self::checkForbiddenFile($name);
 
-        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        list($dirname,) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
                 , 'add', true, false, $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path)) ||
@@ -115,7 +115,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     public function rename(string $newPath)
     {
-        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        list($dirname,) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
                 , 'delete', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
@@ -260,9 +260,9 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
         return $response;
     }
 
-    public function updateProperties($mutations)
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
     {
-        return false;
+        // no write access, we don't do anything, the propPatch will fail with 403 automatically
     }
 
     public function getNode()

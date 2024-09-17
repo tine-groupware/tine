@@ -236,14 +236,14 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     }
 
     public function update005()
-    {
+    {/*
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_CostCenter::class,
             Tinebase_Model_CostUnit::class,
         ]);
 
         $pfInit = new Tinebase_Setup_Initialize();
-        $pfInit->_initializePF();
+        $pfInit->_initializePF();*/
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.5', self::RELEASE015_UPDATE005);
     }

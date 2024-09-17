@@ -210,20 +210,11 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testGetCountByAddressbookId()
     {
-        $contact = $this->_addContact();
-        
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            Addressbook_Model_Contact::class,
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        $container = $personalContainer[0];
+        $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id', 'operator' => 'equals',   'value' => '/all'),
         ));
-        $filter->container = array($container->getId());
         $count = $this->_instance->searchCount($filter);
         
         $this->assertGreaterThan(0, $count);
@@ -234,6 +225,7 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testGetCountOfAllContacts()
     {
+        $this->objects['initialContact']['n_family'] = 'testUser';
         $contact = $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
@@ -293,6 +285,60 @@ class Addressbook_ControllerTest extends TestCase
         
         $updatedContact = $this->_instance->update($contact);
         $this->assertTrue(48143 == $updatedContact->adr_two_postalcode || is_null($updatedContact->adr_two_postalcode));
+    }
+
+    public function testCreatedByFilter()
+    {
+        $filterCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()]
+        ]);
+        $filterInCUserSC = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'in', 'value' => [Tinebase_Core::getUser()->getId(), $this->_personas['sclever']->getId()]]
+        ]);
+        $filterNotInScPw = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [$this->_personas['sclever']->getId(), $this->_personas['pwulf']->getId()]]
+        ]);
+        $filterNotInCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [Tinebase_Core::getUser()->getId()]]
+        ]);
+        $oldSearchCountCUser = $this->_instance->searchCount($filterCUser);
+        $oldSearchCountInCUserSC = $this->_instance->searchCount($filterInCUserSC);
+        $oldSearchCountNotInScPw = $this->_instance->searchCount($filterNotInScPw);
+        $oldSearchCountNotInCUser = $this->_instance->searchCount($filterNotInCUser);
+
+        $this->_addContact();
+
+        $this->assertSame(1 + $oldSearchCountCUser, $this->_instance->searchCount($filterCUser), 'search for created_by with equals did not work');
+        $this->assertSame(1 + $oldSearchCountInCUserSC, $this->_instance->searchCount($filterInCUserSC), 'search for created_by with in did not work');
+        $this->assertSame(1 + $oldSearchCountNotInScPw, $this->_instance->searchCount($filterNotInScPw), 'search for created_by with not in did not work');
+        $this->assertSame($oldSearchCountNotInCUser, $this->_instance->searchCount($filterNotInCUser), 'search for created_by with not in did not work');
+    }
+
+    public function testCreatedByFilterWithRecordValues()
+    {
+        $filterCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()]
+        ]);
+        $filterInCUserSC = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'in', 'value' => [Tinebase_Core::getUser(), $this->_personas['sclever']]]
+        ]);
+        $filterNotInScPw = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [$this->_personas['sclever'], $this->_personas['pwulf']]]
+        ]);
+        $filterNotInCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [Tinebase_Core::getUser()]]
+        ]);
+        $oldSearchCountCUser = $this->_instance->searchCount($filterCUser);
+        $oldSearchCountInCUserSC = $this->_instance->searchCount($filterInCUserSC);
+        $oldSearchCountNotInScPw = $this->_instance->searchCount($filterNotInScPw);
+        $oldSearchCountNotInCUser = $this->_instance->searchCount($filterNotInCUser);
+
+        $this->_addContact();
+
+        $this->assertSame(1 + $oldSearchCountCUser, $this->_instance->searchCount($filterCUser), 'search for created_by with equals did not work');
+        $this->assertSame(1 + $oldSearchCountInCUserSC, $this->_instance->searchCount($filterInCUserSC), 'search for created_by with in did not work');
+        $this->assertSame(1 + $oldSearchCountNotInScPw, $this->_instance->searchCount($filterNotInScPw), 'search for created_by with not in did not work');
+        $this->assertSame($oldSearchCountNotInCUser, $this->_instance->searchCount($filterNotInCUser), 'search for created_by with not in did not work');
     }
 
     public function testSearchContactCS()

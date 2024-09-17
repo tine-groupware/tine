@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -83,12 +83,14 @@ class Addressbook_Convert_Contact_VCard_IOS extends Addressbook_Convert_Contact_
     protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
     {
         $telField = null;
-        
-        if (isset($property['TYPE'])) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
             // CELL
-            if ($property['TYPE']->has('cell') && $property['TYPE']->has('voice') && !$property['TYPE']->has('iphone')) {
+            if ($typeParameter->has('cell') && $typeParameter->has('voice') && !$typeParameter->has('iphone')) {
                 $telField = 'tel_cell';
-            } elseif ($property['TYPE']->has('cell') && $property['TYPE']->has('iphone')) {
+            } elseif ($typeParameter->has('cell') && $typeParameter->has('iphone')) {
                 $telField = 'tel_cell_private';
             }
         }

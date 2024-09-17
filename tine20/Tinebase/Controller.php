@@ -10,6 +10,7 @@
  * 
  */
 
+use \IPLib\Factory;
 use \Psr\Http\Message\RequestInterface;
 
 /**
@@ -149,6 +150,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
         }
 
+        $loginEvent = new Tinebase_Event_User_Login();
+        $loginEvent->password = $password;
+        $loginEvent->user = $user;
+        Tinebase_Event::fireEvent($loginEvent);
+
         return true;
     }
 
@@ -173,52 +179,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $e->setArea($config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
         $e->setMFAUserConfigs($feCfg);
         throw $e;
-    }
-
-    /**
-     * create new user session (via openID connect)
-     *
-     * @param   string                           $oidcResponse
-     * @param   \Zend\Http\PhpEnvironment\Request $request
-     *
-     * @return  bool
-     * @throws  Tinebase_Exception_MaintenanceMode
-     */
-    public function loginOIDC($oidcResponse, \Zend\Http\PhpEnvironment\Request $request)
-    {
-        if (Tinebase_Core::inMaintenanceModeAll()) {
-            throw new Tinebase_Exception_MaintenanceMode();
-        }
-
-        $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
-        if (! $ssoConfig->{Tinebase_Config::SSO_ACTIVE}) {
-            throw new Tinebase_Exception('sso client config inactive');
-        }
-
-        $adapterName = $ssoConfig->{Tinebase_Config::SSO_ADAPTER};
-        /** @var Tinebase_Auth_OpenIdConnect $authAdapter */
-        $authAdapter = Tinebase_Auth_Factory::factory($adapterName);
-        $authAdapter->setOICDResponse($oidcResponse);
-        $authResult = $authAdapter->authenticate();
-        $adapterUser = $authAdapter->getLoginUser();
-        if (! $adapterUser) {
-            return false;
-        }
-        $loginName = $adapterUser->accountLoginName;
-
-        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
-            $adapterName);
-
-        $user = $this->_validateAuthResult($authResult, $accessLog);
-
-        if (!($user instanceof Tinebase_Model_FullUser)) {
-            return false;
-        }
-
-        // TODO make credential cache work without PW
-        $this->_loginUser($user, $accessLog, Tinebase_Record_Abstract::generateUID(20));
-
-        return true;
     }
 
     /**
@@ -792,7 +752,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         switch (get_class($_eventObject)) {
-            case 'Admin_Event_DeleteGroup':
+            case Admin_Event_DeleteGroup::class:
                 foreach ($_eventObject->groupIds as $groupId) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Removing role memberships of group ' .$groupId );
@@ -804,6 +764,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                             'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                         ));
                     }
+                }
+                break;
+
+            case Tinebase_Event_User_Login::class:
+                if (($userCtrl = Tinebase_User::getInstance()) instanceof Tinebase_User_Interface_SyncAble
+                        && Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}
+                        && !$userCtrl->isReadOnlyUser($_eventObject->user->getId())) {
+                    $userCtrl->setPasswordInSyncBackend($_eventObject->user, $_eventObject->password);
                 }
                 break;
         }
@@ -908,6 +876,21 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $areaLock = Tinebase_AreaLock::getInstance();
         $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            // mfa free netmasks:
+            if (($_SERVER['HTTP_X_REAL_IP'] ?? false) &&
+                    !empty($byPassMasks = Tinebase_Config::getInstance()->{Tinebase_Config::MFA_BYPASS_NETMASKS}) &&
+                    ($ip = Factory::parseAddressString($_SERVER['HTTP_X_REAL_IP']))) {
+                foreach ($byPassMasks as $netmask) {
+                    if (Factory::parseRangeString($netmask)?->contains($ip)) {
+                        // bypassing
+                        if ($this->_forceUnlockLoginArea) {
+                            $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                        }
+                        return;
+                    }
+                }
+            }
+
             /** @var Tinebase_Model_AreaLockConfig $areaConfig */
             foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
                 if (Tinebase_Model_AreaLockConfig::POLICY_REQUIRED ===
@@ -927,8 +910,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         if (($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE &&
                 $accessLog->clienttype !== self::PAM_VALIDATE_REQUEST_TYPE &&
-                $accessLog->clienttype !== SSO_Controller::OIDC_AUTH_REQUEST_TYPE &&
-                $accessLog->clienttype !== SSO_Controller::OIDC_AUTH_CLIENT_REQUEST_TYPE
+                $accessLog->clienttype !== SSO_Controller::OIDC_AUTH_REQUEST_TYPE
             ) ||
                 ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
                 ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
@@ -2056,6 +2038,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
 
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_NumberableConfig::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_NumberableConfig::class,
+        )));
+
         if (Tinebase_Config::getInstance()->featureEnabled(
             Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
         ) {
@@ -2068,15 +2056,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => Tinebase_Model_CostCenter::class,
+            'id' => Tinebase_Model_EvaluationDimension::class,
             'application_id' => $application,
-            'model' => Tinebase_Model_CostCenter::class,
-        )));
-
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => Tinebase_Model_CostUnit::class,
-            'application_id' => $application,
-            'model' => Tinebase_Model_CostUnit::class,
+            'model' => Tinebase_Model_EvaluationDimension::class,
         )));
 
         $result->addRecord(new CoreData_Model_CoreData(array(

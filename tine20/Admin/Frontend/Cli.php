@@ -9,6 +9,8 @@
  * 
  */
 
+use Firebase\JWT\JWT;
+
 /**
  * cli server for Admin
  *
@@ -38,6 +40,50 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )
         ),
     );
+
+    public function createJwtAccessRoute(Zend_Console_Getopt $_opts): int
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts, ['account', 'route']);
+
+        try {
+            $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($args['account'])->getId();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            echo $tenf->getMessage() . "\n";
+            return 1;
+        }
+        $route = (array)$args['route'];
+
+        // create new private and public key
+        $new_key_pair = openssl_pkey_new(array(
+            "private_key_bits" => 2048,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        ));
+        openssl_pkey_export($new_key_pair, $private_key_pem);
+
+
+        $jwtAccessRoute = new Admin_Model_JWTAccessRoutes([
+            Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $accountId,
+            Admin_Model_JWTAccessRoutes::FLD_KEYID => Tinebase_Record_Abstract::generateUID(),
+            Admin_Model_JWTAccessRoutes::FLD_ISSUER => Tinebase_Record_Abstract::generateUID(),
+            Admin_Model_JWTAccessRoutes::FLD_KEY => $private_key_pem,
+            Admin_Model_JWTAccessRoutes::FLD_ROUTES => $route,
+        ]);
+
+        $token = JWT::encode(
+            payload: ['iss' => $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_ISSUER}],
+            key: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEY},
+            alg: 'RS512',
+            keyId: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEYID}
+        );
+
+        Admin_Controller_JWTAccessRoutes::getInstance()->create($jwtAccessRoute);
+
+        echo PHP_EOL . $token . PHP_EOL;
+
+        return 0;
+    }
 
     /**
      * create system groups for addressbook lists that don't have a system group
@@ -270,7 +316,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
-
     /**
      * shorten loginnmes to fit ad samaccountname
      *
@@ -349,7 +394,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             $aliases[] = is_array($alias) ? $alias['email'] : $alias;
                         }
                     }
-                    $aliases = implode($aliases, ',');
+                    $aliases = implode(',', $aliases);
                     $forwards = is_array($fullUser->emailUser->emailForwards) ? implode($fullUser->emailUser->emailForwards, ',') : '';
                     echo $fullUser->accountLoginName . ';' . $aliases . ';' . $forwards . "\n";
                 }
@@ -778,6 +823,30 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $updated = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts(null, $opts->d);
 
         echo "Updated notification script for " . count($updated) . " email accounts\n";
+        return 0;
+    }
+
+    /**
+     * update sieve Script for all mailinglist accounts
+     *
+     * usage: method=Admin.updateNotificationScripts [-d]
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function updateSieveScript(Zend_Console_Getopt $opts)
+    {
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+            $dryrun = true;
+        } else {
+            $dryrun = false;
+        }
+
+        $updated = Admin_Controller_EmailAccount::getInstance()->updateSieveScript(null, $dryrun);
+
+        echo "Updated sieve script for " . count($updated) . " email accounts\n";
         return 0;
     }
 

@@ -33,6 +33,6 @@ class OnlyOfficeIntegrator_AllTests
 
     public static function estimatedRunTime()
     {
-        return 179;
+        return 189;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-
+/** DEPRECATED remove this */
 /**
  * Tine 2.0
  * 
@@ -7,7 +7,8 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @deprecated
  */
 
 /**
@@ -15,6 +16,7 @@
  * 
  * @package     Tinebase
  * @subpackage  Import
+ * @deprecated
  * 
  */
 class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
@@ -32,6 +34,9 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     protected $principalGroups = array();
     
     protected $requestLogFH;
+
+    protected $userName;
+    protected $password;
     
     const findCurrentUserPrincipalRequest = 
 '<?xml version="1.0"?>
@@ -58,14 +63,16 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
   </d:prop>
 </d:propfind>';
     
-    public function __construct(array $a)
+    public function __construct(array $settings)
     {
-        parent::__construct($a);
+        parent::__construct($settings);
+        $this->password = $settings['password'] ?? null;
+        $this->userName = $settings['userName'] ?? null;
         
         //$this->requestLogFH = fopen('/var/log/tine20/requestLog', 'w');
         
-        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Sabre\CalDAV\Property\SupportedCalendarComponentSet';
-        $this->propertyMap['{DAV:}acl'] = 'Sabre\DAVACL\Property\Acl';
+        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet';
+        $this->propertyMap['{DAV:}acl'] = 'Sabre\DAVACL\Xml\Property\Acl';
         $this->propertyMap['{DAV:}group-member-set'] = 'Tinebase_Import_CalDav_GroupMemberSet';
     }
     
@@ -218,7 +225,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
      * 
      * @param string $method
      * @param string $uri
-     * @param strubg $body
+     * @param string $body
      * @param number $depth
      * @param number $tries
      * @param number $sleep

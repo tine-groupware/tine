@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Tine 2.0
  *
  * class to hold contact data
- * 
+ *
  * @package     Addressbook
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -88,6 +89,7 @@ use Addressbook_Model_ContactProperties_Definition as AMCPD;
  * @property    string $salutation                 Salutation
  * @property    string $url_home                   private url of the contact
  * @property    string $preferred_address          defines which is the preferred address of a contact
+ * @property    string $preferred_email            defines which is the preferred email of a contact
  */
 class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
@@ -95,21 +97,21 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     /**
      * const to describe contact of current account id independent
-     * 
+     *
      * @var string
      */
     const CURRENTCONTACT = 'currentContact';
-    
+
     /**
      * contact type: contact
-     * 
+     *
      * @var string
      */
     const CONTACTTYPE_CONTACT = 'contact';
-    
+
     /**
      * contact type: user
-     * 
+     *
      * @var string
      */
     const CONTACTTYPE_USER = 'user';
@@ -138,7 +140,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      *
      * @var Tinebase_ModelConfiguration
      */
-    protected static $_configurationObject = NULL;
+    protected static $_configurationObject = null;
 
     public static $doResolveAttenderCleanUp = true;
 
@@ -737,6 +739,21 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'omitDuplicateResolving'        => true,
                 ],
             ],
+            'preferred_email'             => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::DEFAULT_VAL               => 'email',
+                self::LABEL                     => 'Preferred Email', // _('Preferred Email')
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => 'email',
+                ],
+                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => 'email'],
+                self::UI_CONFIG                 => [
+                    'omitDuplicateResolving'        => true,
+                ],
+            ],
             'pubkey'                        => [
                 self::TYPE                      => self::TYPE_TEXT,
                 self::LENGTH                    => 2147483647, // mysql longtext, really?!?
@@ -786,6 +803,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS             => [],
                 self::SYSTEM                    => true,
                 self::DISABLED                  => true,
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'tel_assistent'                 => [ // not in UI atm.
                 self::TYPE                      => self::TYPE_STRING,
@@ -1048,12 +1066,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     /**
      * if foreign Id fields should be resolved on search and get from json
-     * should have this format: 
+     * should have this format:
      *     array('Calendar_Model_Contact' => 'contact_id', ...)
      * or for more fields:
      *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
      * (e.g. resolves contact_id with the corresponding Model)
-     * 
+     *
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
@@ -1076,13 +1094,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'n_family',
     );
 
-    protected static $_telFields = [
-        'tel_assistent' => 'tel_assistent',
-        'tel_car' => 'tel_car',
-        'tel_pager' => 'tel_pager',
-        'tel_other' => 'tel_other',
-        'tel_prefer' => 'tel_prefer',
-    ];
+    protected static $_telFields = [];
 
     protected static $_emailFields = [];
 
@@ -1121,13 +1133,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     public static function resetConfiguration()
     {
         static::$_emailFields = [];
-        static::$_telFields = [
-            'tel_assistent' => 'tel_assistent',
-            'tel_car' => 'tel_car',
-            'tel_pager' => 'tel_pager',
-            'tel_other' => 'tel_other',
-            'tel_prefer' => 'tel_prefer',
-        ];
+        static::$_telFields = [];
         static::$_additionalAdrFields = [];
 
         parent::resetConfiguration();
@@ -1143,15 +1149,49 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     /**
      * returns preferred email address of given contact
-     * 
-     * @return string
+     *
+     * - if preferred email is null , use the first none empty email field
+     *
+     * @return string|null
      */
-    public function getPreferredEmailAddress()
+    public function getPreferredEmailAddress(): ?string
     {
         // prefer work mail over private mail till we have prefs for this
-        return $this->email ?: $this->email_home;
+        $fields = array_keys(self::getEmailFields());
+        $preferredEmail = null;
+
+        if ($this->preferred_email && in_array($this->preferred_email, $fields)) {
+            $preferredEmail = $this->{$this->preferred_email};
+        }
+        if (empty($preferredEmail)) {
+            foreach ($fields as $field) {
+                if (!empty($this->{$field})) {
+                    $preferredEmail = $this->{$field};
+                    break;
+                }
+            }
+        }
+        return $preferredEmail;
     }
-    
+
+    /**
+     * check if the email require private grant in addressbook contact property
+     *
+     * @param $email
+     */
+    public function isPrivateEmail($email): bool
+    {
+        $fields = self::getEmailFields();
+        $result = false;
+        foreach ($fields as $field => $data) {
+            $match = !empty($this->{$field}) && $email === $this->{$field};
+            if ($match && is_array($data['grant_matrix']) && in_array(Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, $data['grant_matrix'])) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
     /**
      * @see Tinebase_Record_Abstract::setFromArray
      *
@@ -1182,7 +1222,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         // try to guess name from n_fileas
         if (empty($_data['org_name']) && empty($_data['n_family']) && empty($_data['n_given'])) {
             if (! empty($_data['n_fn'])) {
-                $names = preg_split('/\s* \s*/', $_data['n_fn'],2);
+                $names = preg_split('/\s* \s*/', $_data['n_fn'], 2);
                 if (isset($names[0])) {
                     $_data['n_given'] = $names[0];
                 }
@@ -1190,7 +1230,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     $_data['n_family'] = $names[1];
                 }
             } elseif (! empty($_data['n_fileas'])) {
-                $names = preg_split('/\s*,\s*/', $_data['n_fileas'],2);
+                $names = preg_split('/\s*,\s*/', $_data['n_fileas'], 2);
                 if (isset($names[0])) {
                     $_data['n_family'] = $names[0];
                 }
@@ -1199,19 +1239,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 }
             }
         }
-        
-        // always update fileas and fn
-        $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family']
-            : ((! empty($_data['org_name'])) ? $_data['org_name']
-            : ((isset($_data['n_fileas'])) ? $_data['n_fileas'] : ''));
 
-        if (!empty($_data['n_given']) && $_data['n_given'] !== $_data['n_fileas']) {
-            if (!empty($_data['n_fileas'])) {
-                $_data['n_fileas'] .= ', ';
+        if (empty($_data['n_fileas'])) {
+            $name = 'n_fileas';
+            $template = Addressbook_Config::getInstance()->{Addressbook_Config::FILE_AS_TEMPLATE};
+
+            $locale = Tinebase_Core::getLocale();
+            if (! $locale) {
+                $locale = Tinebase_Translation::getLocale();
             }
-            $_data['n_fileas'] .= $_data['n_given'];
+            $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
+                Tinebase_Twig::TWIG_LOADER =>
+                    new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function () use ($template) {
+                        return $template;
+                    })
+            ]);
+            $_data['n_fileas'] = $twig->load(__METHOD__ . $name)->render($_data);
         }
 
+        // always update fn
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . (!empty($_data['n_family']) ? ' ' . $_data['n_family'] : '');
         } else {
@@ -1222,7 +1268,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         // truncate some values if too long
         // TODO add generic code for this? maybe it should be configurable
-        foreach ([
+        foreach (
+            [
             'n_fn' => 255,
             'n_family' => 255,
             'n_fileas' => 255,
@@ -1232,16 +1279,18 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'n_prefix' => 86,
             'n_suffix' => 86,
             'n_short' => 86,
-         ] as $field => $allowedLength) {
+            ] as $field => $allowedLength
+        ) {
             if (isset($_data[$field]) && mb_strlen((string)$_data[$field]) > $allowedLength) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Field has been truncated: '
                         . $field . ' original data: ' . $_data[$field]);
+                }
                 $_data[$field] = mb_substr($_data[$field], 0, $allowedLength);
             }
         }
     }
-    
+
     /**
      * Overwrites the __set Method from Tinebase_Record_Abstract
      * Also sets n_fn and n_fileas when org_name, n_given or n_family should be set
@@ -1249,35 +1298,33 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @param string $_name of property
      * @param mixed $_value of property
      */
-    public function __set($_name, $_value) {
-        
+    public function __set($_name, $_value)
+    {
+
         switch ($_name) {
             case 'n_given':
                 $resolved = array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name'));
                 $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
-                parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'n_family':
                 $resolved = array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name'));
                 $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
-                parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'org_name':
                 $resolved = array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family'));
                 $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
-                parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             default:
                 // normalize telephone numbers
                 if (isset(static::$_telFields[$_name])) {
-                    parent::__set($_name . '_normalized', (empty($_value)? $_value : static::normalizeTelephoneNum($_value)));
+                    parent::__set($_name . '_normalized', (empty($_value) ? $_value : static::normalizeTelephoneNum($_value)));
                 }
                 break;
         }
-        
+
         parent::__set($_name, $_value);
     }
 
@@ -1297,7 +1344,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             $numberFormat = $phoneUtil->parse($telNumber, Addressbook_Config::getInstance()
                 ->{Addressbook_Config::DEFAULT_TEL_COUNTRY_CODE});
             return $phoneUtil->format($numberFormat, \libphonenumber\PhoneNumberFormat::E164);
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         return null;
     }
@@ -1311,9 +1359,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             return $this->{$this->preferred_address};
         }
 
-        if (($fieldDef = static::getConfiguration()->getJsonFacadeFields()[$this->preferred_address] ?? null) &&
-            Addressbook_Model_ContactProperties_Address::class === $fieldDef[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME]) {
-
+        if (
+            ($fieldDef = static::getConfiguration()->getJsonFacadeFields()[$this->preferred_address] ?? null) &&
+            Addressbook_Model_ContactProperties_Address::class === $fieldDef[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME]
+        ) {
             Addressbook_Model_ContactProperties_Address::jsonFacadeToJson($this, $this->preferred_address, $fieldDef);
             return $this->{$this->preferred_address};
         }
@@ -1334,7 +1383,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      *
      * @param array $_data record data
      * @return void
-     * 
+     *
      * @todo timezone conversion for birthdays?
      * @todo move this to Addressbook_Convert_Contact_Json
      */
@@ -1346,10 +1395,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             unset($_data[$field . '_normalized']);
         }
     }
-    
+
     /**
      * set contact image
-     * 
+     *
      * @param array $_data
      */
     protected function _setContactImage(&$_data)
@@ -1357,12 +1406,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         if (! isset($_data['jpegphoto']) || $_data['jpegphoto'] === '') {
             return;
         }
-        
+
         $imageParams = Tinebase_ImageHelper::parseImageLink($_data['jpegphoto']);
         if ($imageParams['isNewImage']) {
             try {
                 $_data['jpegphoto'] = Tinebase_ImageHelper::getImageData($imageParams);
-            } catch(Tinebase_Exception_UnexpectedValue $teuv) {
+            } catch (Tinebase_Exception_UnexpectedValue $teuv) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add contact image: ' . $teuv->getMessage());
                 unset($_data['jpegphoto']);
             }
@@ -1388,11 +1437,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         }
 
         if (isset($currentPhoto) && $currentPhoto == $newPhotoBlob) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
                 . " Photo did not change -> preserving current photo");
+            }
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
                 . " Setting new contact photo (" . strlen((string)$newPhotoBlob) . "KB)");
+            }
             $this->jpegphoto = $newPhotoBlob;
         }
     }
@@ -1442,7 +1495,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         )));
 
         /** @var Addressbook_Model_ListMemberRole $listMemberRole */
-        foreach($listMemberRoles as $listMemberRole) {
+        foreach ($listMemberRoles as $listMemberRole) {
             $lists->removeById($listMemberRole->list_id);
         }
 
@@ -1495,12 +1548,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'note'        => true,
             'email'       => true,
             'email_home'  => true,
+            'salutation'  => true,
             'n_family'    => true,
             'n_given'     => true,
             'n_fileas'    => true,
             'n_fn'        => true,
             'n_short'     => true,
             'account_id'  => true,
+            'org_name'    => true,
         ]);
     }
 
@@ -1509,5 +1564,54 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         parent::unsetFieldsBeforeConvertingToJson();
 
         unset($this->jpegphoto);
+    }
+
+
+    /**
+     * get contacts recipient token
+     **
+     * @param bool $preferredEmailOnly
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getRecipientTokens(bool $preferredEmailOnly = false): array
+    {
+        $possibleAddresses = [];
+
+        if (class_exists('GDPR_Controller_DataIntendedPurposeRecord')
+            && Tinebase_Application::getInstance()->isInstalled('GDPR', checkEnabled: true)
+        ) {
+            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
+                                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                    GDPR_Model_DataIntendedPurpose::FLD_NAME => [],
+                                    GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [],
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [$this]));
+        }
+        $emailFields = array_keys(self::getEmailFields());
+        foreach ($emailFields as $emailField) {
+            if (empty($this[$emailField]) || ($preferredEmailOnly && $emailField !== $this->preferred_email)) {
+                continue;
+            }
+            $possibleAddresses[] = [
+                "n_fileas" => $this->n_fileas ?? '',
+                "name" => $this->n_fn ?? '',
+                "type" =>  $this->type ?? '',
+                "email" => $this[$emailField],
+                "email_type_field" => $emailField,
+                "contact_record" => $this->toArray()
+            ];
+        }
+
+        return  $possibleAddresses;
     }
 }

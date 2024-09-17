@@ -9,6 +9,8 @@
  * @author      Michael Spahn <m.spahn@metaways.de>
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Test class for Inventory_JsonTest
  */
@@ -73,11 +75,9 @@ class Inventory_JsonTest extends Inventory_TestCase
         $searchDefaultFilter = $this->_getFilter();
         unset($searchDefaultFilter[2]);
         $mergedSearchFilter = array_merge($searchIDFilter, $searchDefaultFilter);
-        
         $returned = $this->_json->searchInventoryItems($searchDefaultFilter, $this->_getPaging());
-        
         $this->assertEquals($returned['totalcount'], 1);
-        
+
         $count = 0;
         foreach ($returned as $value => $key) {
             if (is_array($key)) {
@@ -91,6 +91,20 @@ class Inventory_JsonTest extends Inventory_TestCase
             }
         }
         $this->assertEquals($count, 1);
+        
+        //test search invoice record
+        $pit = new Sales_PurchaseInvoiceTest();
+        $pit->setUp();
+        $invoice = $pit->createPurchaseInvoice();
+        $this->assertNotEmpty($invoice['supplier']);
+        
+        $inventoryRecord['invoice'] = $invoice['id'];
+        $this->_json->saveInventoryItem($inventoryRecord);
+        $result = $this->_json->searchInventoryItems($searchDefaultFilter, $this->_getPaging());
+        
+        $this->assertEquals($result['totalcount'], 1);
+        $invoiceData = $result['results'][0]['invoice'];
+        $this->assertNotEmpty($invoiceData['supplier']);
     }
     
     /**
@@ -200,19 +214,26 @@ class Inventory_JsonTest extends Inventory_TestCase
      */
     public function testCostCenterFilter()
     {
-        $cc = Tinebase_Controller_CostCenter::getInstance()->create(new Tinebase_Model_CostCenter(
-            array('name' => 'test123qwe', 'number' => 123)
-        ));
+        $dimension = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]))->getFirstRecord();
+        $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class,
+            [new Tinebase_Model_EvaluationDimensionItem([
+                Tinebase_Model_EvaluationDimensionItem::FLD_NAME => 'test123qwe',
+                Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER  => 123,
+            ], true)]);
+        $dimension = Tinebase_Controller_EvaluationDimension::getInstance()->update($dimension);
+        $ccId = $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->getFirstRecord()->getId();
         
         $inventoryItem = $this->_getInventoryItem();
-        $inventoryItem->costcenter = $cc->getId();
+        $inventoryItem->eval_dim_cost_center = $ccId;
         
         $this->_json->saveInventoryItem($inventoryItem->toArray());
     
         $inventoryItem = $this->_getInventoryItem();
         $this->_json->saveInventoryItem($inventoryItem->toArray());
         
-        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"costcenter","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$cc->getId().'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
+        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"eval_dim_cost_center","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$ccId.'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
         
         $result = $this->_json->searchInventoryItems($filter, array());
     

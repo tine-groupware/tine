@@ -5,14 +5,13 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -21,7 +20,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
 {
     /**
      *
-     * @var Sabre\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -34,6 +33,8 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
      * @var Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin
      */
     protected $plugin;
+
+    protected $response;
 
     /**
      * Sets up the fixture.
@@ -48,14 +49,14 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
 
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
 
         $this->plugin = new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin();
 
         $this->server->addPlugin($this->plugin);
+        $this->server->addPlugin(new \Sabre\CalDAV\Plugin());
 
-        $this->response = new Sabre\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
+        $this->server->httpResponse = $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
     }
 
     /**
@@ -83,17 +84,15 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
                     </prop>
                  </propfind>';
 
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $event->getRecord()->container_id,
-            'HTTP_DEPTH'     => '1',
-        ));
+        $request = new Sabre\HTTP\Request('PROPFIND', '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $event->getRecord()->container_id, [
+            'DEPTH'     => '1',
+        ]);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
 
         /*$responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
@@ -154,17 +153,51 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
                  </propfind>';
 
         $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->_personasDefaultCals['jmcblack']->getId();
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI'    => $uri,
-            'HTTP_DEPTH'     => '1',
-        ));
+        $request = new Sabre\HTTP\Request('PROPFIND', $uri, [
+            'DEPTH'     => '1',
+        ]);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
 
-        static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
+        static::assertSame(207, $this->response->status);
         static::assertStringContainsString($uri . '/' . $recurException->getId(), $this->response->body);
     }
+
+    /*public function testCalendarQuery()
+    {
+        $cctrl = Calendar_Controller_Event::getInstance();
+        $event = $this->_getEvent(true);
+        $createdEvent = $cctrl->create($event);
+
+        $body = '<?xml version="1.0" encoding="utf-8" ?>
+   <C:calendar-query xmlns:D="DAV:"
+                 xmlns:C="urn:ietf:params:xml:ns:caldav">
+     <D:prop>
+       <D:getetag/>
+       <D:getcontenttype/>
+     </D:prop>
+     <C:filter>
+       <C:comp-filter name="VCALENDAR">
+         <C:comp-filter name="VEVENT">
+           <C:time-range start="20060104T000000Z"
+                         end="20060105T000000Z"/>
+         </C:comp-filter>
+       </C:comp-filter>
+     </C:filter>
+   </C:calendar-query>';
+
+        $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->_personasDefaultCals['jmcblack']->getId();
+        $request = new Sabre\HTTP\Request('REPORT', $uri, [
+            'DEPTH'     => '1',
+        ]);
+        $request->setBody($body);
+
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        static::assertSame(207, $this->response->status);
+        static::assertStringContainsString($uri . '/' . $createdEvent->getId(), $this->response->body);
+    }*/
 }

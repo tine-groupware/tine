@@ -2144,23 +2144,52 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param Tinebase_Model_Application|string $application app record, app id or app name
      * @param string $model the model the container contains
      * @param string $name
-     * @param string $idConfig save id in config if given
-     * @param Tinebase_Record_RecordSet $grants use this to overwrite default grants
+     * @param ?string $configId get/save id from/in config if given
+     * @param ?Tinebase_Record_RecordSet $grants use this to overwrite default grants
+     * @param ?Tinebase_Config_Abstract $config
      * @return Tinebase_Model_Container
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    public function createSystemContainer($application, $model, $name, $configId = NULL, Tinebase_Record_RecordSet $grants = NULL)
+    public function createSystemContainer($application,
+                                          string $model,
+                                          string $name,
+                                          ?string $configId = null,
+                                          ?Tinebase_Record_RecordSet $grants = null,
+                                          ?Tinebase_Config_Abstract $config = null): Tinebase_Model_Container
     {
-        $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
+        $application = ($application instanceof Tinebase_Model_Application)
+            ? $application
+            : Tinebase_Application::getInstance()->getApplicationById($application);
+        $configContainerId = null;
+
+        if ($configId !== null) {
+            $configClass = $application->name . '_Config';
+            if (! $config && @class_exists($configClass)) {
+                $config = call_user_func(array($configClass, 'getInstance'));
+            }
+            if ($config) {
+                $configContainerId = $config->get($configId);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not find config class ' . $configClass);
+            }
+        }
 
         $systemContainer = $this->_getExistingContainer([
             'application_id' => $application->getId(),
             'model' => $model,
             'name' => $name,
-        ]);
-        if ($systemContainer) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Found existing system container for model ' . $model);
-        } else {
+        ], $configContainerId);
+
+        if (! $systemContainer) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Creating system container for model ' . $model);
 
@@ -2177,28 +2206,38 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Created new system container ' . $name . ' for application ' . $application->name);
-        }
 
-        if ($configId !== NULL) {
-            $configClass = $application->name . '_Config';
-            if (@class_exists($configClass)) {
-                $config = call_user_func(array($configClass, 'getInstance'));
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Setting system container config "' . $configId . '" = ' . $systemContainer->getId());
+            if ($configId !== null && $config) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Setting system container config "' . $configId . '" = '
+                    . $systemContainer->getId());
                 $config->set($configId, $systemContainer->getId());
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Could not find config class ' . $configClass);
             }
-        }
 
-        $this->resetClassCache();
+            $this->resetClassCache();
+        }
 
         return $systemContainer;
     }
 
-    protected function _getExistingContainer(array $props): ?Tinebase_Model_Container
+    /**
+     * @param array $props
+     * @param string|null $configId
+     * @return Tinebase_Model_Container|null
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getExistingContainer(array $props, ?string $configId = null): ?Tinebase_Model_Container
     {
+        if ($configId) {
+            try {
+                /* @var Tinebase_Model_Container $container */
+                $container = Tinebase_Container::getInstance()->get($configId);
+                return $container;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                return null;
+            }
+        }
+
         $aclFilter = $this->doSearchAclFilter(false);
         $filter = [];
         foreach ($props as $field => $value) {

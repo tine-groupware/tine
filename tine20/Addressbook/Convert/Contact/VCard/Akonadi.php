@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @author      Ingo Ratsdorf <ingo@envirology.co.nz>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -165,9 +165,11 @@ class Addressbook_Convert_Contact_VCard_Akonadi extends Addressbook_Convert_Cont
     protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
     {
         $type = null;
-        
-        if ($property['TYPE']) {
-            if ($property['TYPE']->has('pref')) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
+            if ($typeParameter->has('pref')) {
                 $type = 'work';
             }
         }

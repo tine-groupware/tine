@@ -17,7 +17,9 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onProductSelect(combo, record, idx) {
-        this.record.setFromProduct(record, this.localizedLangPicker.getValue(), this.documentEditDialog);
+        const lang = this.localizedLangPicker?.getValue() ||_.get(this.app.getRegistry().get('config'), 'languagesAvailable.definition.default.default')
+
+        this.record.setFromProduct(record, lang, this.documentEditDialog.record.getData());
         this.onRecordLoad();
     },
 
@@ -30,6 +32,7 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const type = this.record.get('type');
         const isProductType = this.record.isProductType();
         const productId = this.record.get('product_id');
+        const isEmptyProduct = isProductType && !productId && !this.record.get('title') && !this.record.get('description');
         
         this.getForm().findField('product_id').allowBlank = !isProductType;
         this.getForm().items.items.forEach((field) => {
@@ -45,7 +48,7 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             // disable fields unless product is chosen
             field.setDisabled(this.fixedFields.get(field.name) ||
-                (isProductType && !productId && ['type', 'product_id'].indexOf(field.name) < 0));
+                (isEmptyProduct && ['type', 'product_id'].indexOf(field.name) < 0));
         });
         if (isProductType) {
             this.record.computePrice();

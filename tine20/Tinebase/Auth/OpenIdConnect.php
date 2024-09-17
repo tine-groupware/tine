@@ -80,12 +80,7 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
     {
         $oidc = $this->_getClient();
 
-        $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
-
-        $redirectUrl = $ssoConfig->{Tinebase_Config::SSO_REDIRECT_URL};
-        if (empty($redirectUrl)) {
-            $redirectUrl = rtrim(Tinebase_Core::getUrl(), '/') . '/sso/oid/auth/response';
-        }
+        $redirectUrl = rtrim(Tinebase_Core::getUrl(), '/') . '/sso/oid/auth/response';
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Set provider redirect url: ' . $redirectUrl);
         $oidc->setRedirectURL($redirectUrl);
@@ -140,16 +135,9 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
     public function _getClient(): SSO_Facade_OpenIdConnect_Client
     {
         if ($this->_client === null) {
-            $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
-            if (! $ssoConfig->{Tinebase_Config::SSO_ACTIVE}) {
-                throw new Tinebase_Exception('sso client config inactive');
-            }
-
             if (null === $this->_idpConfig) {
-                $provider_url = $ssoConfig->{Tinebase_Config::SSO_PROVIDER_URL};
-                $client_id = $ssoConfig->{Tinebase_Config::SSO_CLIENT_ID};
-                $client_secret = $ssoConfig->{Tinebase_Config::SSO_CLIENT_SECRET};
-                $issuer = null;
+                // legacy
+                throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' legacy path, should not be reachable anymore');
             } else {
                 $provider_url = $this->_idpConfig->{SSO_Model_ExIdp_OIdConfig::FLD_PROVIDER_URL};
                 $client_id = $this->_idpConfig->{SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_ID};

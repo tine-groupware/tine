@@ -22,7 +22,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     protected static $_fileExtensions = [
         'text' => [
-        '.doc', '.docm', '.docx', '.dot', '.dotm', '.dotx', '.epub', '.fodt', '.htm', '.html', '.mht', '.odt', '.ott',
+        '.doc', '.docm', '.docx','.docxf', '.oform', '.dot', '.dotm', '.dotx', '.epub', '.fodt', '.htm', '.html', '.mht', '.odt', '.ott',
         '.pdf', '.rtf', '.txt', '.djvu', '.xps'],
         'spreadsheet' => ['.csv', '.fods', '.ods', '.ots', '.xls', '.xlsm', '.xlsx', '.xlt', '.xltm', '.xltx'],
         'presentation' => ['.fodp', '.odp', '.otp', '.pot', '.potm', '.potx', '.pps', '.ppsm', '.ppsx', '.ppt', '.pptm', '.pptx'],

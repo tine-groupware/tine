@@ -6,10 +6,8 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
-use Sabre\DAV\URLUtil;
 
 /**
  * object tree for the sabre server to work with
@@ -17,7 +15,7 @@ use Sabre\DAV\URLUtil;
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
+class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\Tree
 {
     /**
      * Moves a file from one location to another
@@ -28,8 +26,8 @@ class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
      */
     public function move($sourcePath, $destinationPath) {
 
-        list($sourceDir,) = URLUtil::splitPath($sourcePath);
-        list($destinationDir, $destinationName) = URLUtil::splitPath($destinationPath);
+        list($sourceDir,) = Tinebase_WebDav_XMLUtil::splitPath($sourcePath);
+        list($destinationDir, $destinationName) = Tinebase_WebDav_XMLUtil::splitPath($destinationPath);
         $sourceNode = $this->getNodeForPath($sourcePath);
 
         if ($sourceDir===$destinationDir) {

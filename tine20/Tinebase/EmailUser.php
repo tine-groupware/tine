@@ -496,7 +496,7 @@ class Tinebase_EmailUser
         $_includeAdditional = false
     ) {
         $result = true;
-        $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains(null, $_includeAdditional);
+        $allowedDomains = $_allowedDomains ?: self::getAllowedDomains(null, $_includeAdditional);
 
         if (! empty($_email) && ! empty($allowedDomains)) {
             if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
@@ -507,7 +507,7 @@ class Tinebase_EmailUser
                 }
                 $domain = null;
             } else {
-                list($user, $domain) = explode('@', $_email, 2);
+                list(, $domain) = explode('@', $_email, 2);
             }
 
             if (! in_array($domain, $allowedDomains)) {

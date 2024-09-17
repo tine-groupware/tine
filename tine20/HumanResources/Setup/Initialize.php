@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -415,6 +415,22 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     protected function _initializeHolidayImports()
     {
         static::addHolidayImports();
+    }
+
+    protected function _initializeCostCenter()
+    {
+        static::initializeCostCenterCostBearer();
+    }
+
+    public static function initializeCostCenterCostBearer()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            HumanResources_Model_CostCenter::class,
+        ]);
     }
 
     public static function addHolidayImports()

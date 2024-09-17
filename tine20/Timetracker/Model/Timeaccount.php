@@ -50,7 +50,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 14,
+        'version'           => 15,
         'containerName'     => 'Timeaccount',
         'containersName'    => 'Timeaccounts',
         'recordName'        => 'Timeaccount',
@@ -58,6 +58,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         'hasRelations'      => TRUE,
         'copyRelations'     => FALSE,
         'hasCustomFields'   => TRUE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
@@ -318,10 +319,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @see Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
-        array('relatedApp' => 'Tinebase', 'relatedModel' => 'CostCenter', 'config' => array(
-            array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Cost Center', 'max' => '1:0'), // _('Cost Center')
-            )
-        ),
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
             array('type' => 'RESPONSIBLE', 'degree' => 'sibling', 'text' => 'Responsible Person', 'max' => '1:0'), // _('Responsible Person')
         )

@@ -822,8 +822,27 @@ class Setup_Controller
                 throw new Setup_Exception_NotFound($setupXML . ' not found. If application got renamed or deleted, re-run setup.php.');
             }
         }
-        
-        $xml = simplexml_load_file($setupXML);
+
+        // update tests have some wired issue here... valid xml cant be loaded...
+        libxml_clear_errors();
+        if (false === ($xml = simplexml_load_file($setupXML))) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
+
+            $xmlString = file_get_contents($setupXML);
+            if (str_starts_with($xmlString, '<?xml')) {
+                libxml_clear_errors();
+                if (false === ($xml = simplexml_load_string($xmlString))) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                        . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                        . ' failed to load xml: "' . $xmlString . '"');
+                }
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                    . ' failed to load xml: "' . $xmlString . '"');
+            }
+        }
 
         return $xml;
     }
@@ -2224,6 +2243,10 @@ class Setup_Controller
             }
 
             if (Tinebase_Config::APP_NAME !== $application->name) {
+                if (Tinebase_Core::isReplicationPrimary()) {
+                    $this->_createPersonalFoldersOnPrimary($application);
+                }
+
                 foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
                     if ($app->name === $application->name) continue;
 
@@ -2237,6 +2260,64 @@ class Setup_Controller
         } catch (Exception $e) {
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
+        }
+    }
+
+    /**
+     * create personal folders for all users to replicate them to the replicas
+     *
+     * @param Tinebase_Model_Application $application
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _createPersonalFoldersOnPrimary(Tinebase_Model_Application $application): void
+    {
+        $allUsers = null;
+        $createdModels = [];
+        try {
+            $appCtrl = Tinebase_Core::getApplicationInstance($application->name, '', true);
+        } catch (Tinebase_Exception $te) {
+            if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Setup_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+            }
+            return;
+        }
+        if ($appCtrl instanceof  Tinebase_Application_Container_Interface) {
+            $allUsers = Tinebase_User::getInstance()->getFullUsers();
+            foreach ($allUsers as $user) {
+                /** @var Tinebase_Model_Container $container */
+                foreach($appCtrl->createPersonalFolder($user) as $container) {
+                    $createdModels[$container->model] = true;
+                }
+            }
+        }
+        foreach ($appCtrl->getModels() as $model) {
+            if (isset($createdModels[$model])) {
+                continue;
+            }
+            /** @var Tinebase_Record_Interface $model */
+            try {
+                $modelCtrl = Tinebase_Core::getApplicationInstance($application->name, $model, true);
+            } catch (Tinebase_Exception $te) {
+                if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Setup_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+                }
+                $modelCtrl = null;
+            }
+            if ($modelCtrl instanceof Tinebase_Controller_Record_Interface) {
+                if (($mc = $model::getConfiguration()) && $mc->hasPersonalContainer) {
+                    if (null === $allUsers) {
+                        $allUsers = Tinebase_User::getInstance()->getFullUsers();
+                    }
+                    foreach ($allUsers as $user) {
+                        Tinebase_Container::getInstance()->createDefaultContainer($model, $application->name, $user);
+                    }
+                }
+            }
         }
     }
 
@@ -2850,12 +2931,14 @@ class Setup_Controller
      *      'db'         => bool   // backup database
      *      'files'      => bool   // backup files
      *      'novalidate' => bool   // do not validate sql backup
+     *      'structTables' => array // additional struct only tables (data backup is omitted)
      *    )
      */
     public function backup($options)
     {
         if (! $this->isInstalled('Tinebase')) {
-            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tine 2.0 is not installed');
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) . ' is not installed');
             return;
         }
 
@@ -2895,11 +2978,14 @@ class Setup_Controller
                 throw new Exception('db not configured, cannot backup');
             }
 
+            $structTables = $this->getBackupStructureOnlyTables($options['structTables'] ?? null);
             $backupOptions = array(
                 'backupDir'         => $backupDir,
-                'structTables'      => $this->getBackupStructureOnlyTables(),
+                'structTables'      => $structTables,
                 'novalidate'        => isset($options['novalidate']) && $options['novalidate'],
             );
+
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using options: ' . print_r($backupOptions, true));
 
             $this->_backend->backup($backupOptions);
 
@@ -2938,14 +3024,21 @@ class Setup_Controller
     /**
      * returns an array of all tables of all applications that should only backup the structure
      *
+     * @param ?string $structTablesString
      * @return array
      * @throws Setup_Exception_NotFound
      *
      * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table definition in setup.xml
      */
-    public function getBackupStructureOnlyTables()
+    public function getBackupStructureOnlyTables(?string $structTablesString = null): array
     {
-        $tables = array();
+        $tables = [];
+
+        if ($structTablesString) {
+            foreach (explode(',', $structTablesString) as $table) {
+                $tables[] = SQL_TABLE_PREFIX . $table;
+            }
+        }
 
         // find tables that only backup structure
         $applications = Tinebase_Application::getInstance()->getApplications();
@@ -2958,10 +3051,10 @@ class Setup_Controller
             if (! $tableDef) {
                 continue;
             }
-            $structOnlys = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
+            $structOnly = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
 
-            foreach ($structOnlys as $structOnly) {
-                $tableName = $structOnly->xpath('./../name/text()');
+            foreach ($structOnly as $structOnlyTable) {
+                $tableName = $structOnlyTable->xpath('./../name/text()');
                 $tables[] = SQL_TABLE_PREFIX . $tableName[0];
             }
         }

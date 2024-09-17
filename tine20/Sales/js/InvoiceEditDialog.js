@@ -5,6 +5,8 @@
  * Alexander Stintzing <a.stintzing@metaways.de> @copyright Copyright (c) 2013
  * Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
 Ext.ns('Tine.Sales');
 
 /**
@@ -79,47 +81,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Sales');
         }
-
-        this.createTimesheetAction = new Ext.Action({
-            requiredGrant: 'exportGrant',
-            text: this.app.i18n._('Create timesheet'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onCreateTimesheet,
-            actionUpdater: function (action, grants, records, isFilterSelect) {
-                if (action.initialConfig.requiredGrant) {
-                    if (grants[action.initialConfig.requiredGrant] === false) {
-                        action.setDisabled(true);
-                        return;
-                    }
-                }
-
-                // only persistent records can do this
-                action.setDisabled(!this.record.id);
-            },
-            iconCls: 'action_next'
-        });
-
+        
         this.tbarItems = this.tbarItems || [];
-        this.tbarItems.push(this.createTimesheetAction);
 
         Tine.Sales.InvoiceEditDialog.superclass.initComponent.call(this);
-    },
-
-    onCreateTimesheet: function () {
-        var me = this;
-
-        me.loadMask.show();
-
-        Tine.Sales.createTimesheetForInvoice(me.record.id).then(function (res) {
-            me.recordFromJson = true;
-            me.record = JSON.stringify(res);
-            me.initRecord();
-        }).then(function () {
-            me.hideLoadMask();
-        }).catch(function () {
-            me.hideLoadMask();
-        });
     },
 
     /**
@@ -152,7 +117,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             var relations = this.record.get('relations');
             var newRelations = [];
-            var allowedRelations = ['Sales_Model_Customer', 'Tinebase_Model_CostCenter', 'Sales_Model_Contract'];
+            var allowedRelations = ['Sales_Model_Customer', 'Sales_Model_Contract'];
             Ext.each(relations, function(relation, index) {
                 if (allowedRelations.indexOf(relation.related_model) > -1) {
                     relation.id = null;
@@ -214,7 +179,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         if (this.record.get('cleared') == 'CLEARED') {
-            var ar = ['credit_term', 'costcenter_id', 'cleared', 'type'];
+            var ar = ['credit_term', 'eval_dim_cost_center', 'cleared', 'type'];
             for (var index = 0; index < ar.length; index++) {
                 form.findField(ar[index]).setReadOnly(1);
             }
@@ -281,20 +246,18 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Sales.Model.Contract}
      *            record
      */
-    onAfterContractLoad: function(record, customer) {
+    onAfterContractLoad: async function(record, customer) {
         var record = record ? record : this.record;
-        var relations = record.get('relations'), foundCostCenter = false;
+        var relations = record.get('relations');
         var foundCustomer = customer ? customer : null;
 
         if (Ext.isArray(relations)) {
             for (var index = 0; index < relations.length; index++) {
-                if (foundCostCenter && foundCustomer) {
+                if (foundCustomer) {
                     break;
                 }
                 if (! foundCustomer && relations[index].related_model == 'Sales_Model_Customer' && relations[index].type == 'CUSTOMER') {
                     foundCustomer = relations[index].related_record;
-                } else if (! foundCostCenter && relations[index].related_model == 'Tinebase_Model_CostCenter' && relations[index].type == 'LEAD_COST_CENTER') {
-                    foundCostCenter = relations[index].related_record;
                 }
             }
         }
@@ -306,6 +269,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         if (foundCustomer) {
+            foundCustomer = await Tine.Sales.getCustomer(foundCustomer.id);
             this.customerPicker.setValue(foundCustomer);
             this.customerPicker.combo.fireEvent('select');
 
@@ -334,10 +298,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }
 
-        if (foundCostCenter) {
-            this.getForm().findField('costcenter_id').setValue(foundCostCenter);
+        if (record.get('eval_dim_cost_center')) {
+            this.getForm().findField('eval_dim_cost_center').setValue(record.get('eval_dim_cost_center'));
         } else {
-            if (! this.record.get('costcenter_id')) {
+            if (! this.record.get('eval_dim_cost_center')) {
                 Ext.MessageBox.show({
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING,
@@ -638,13 +602,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     maxValue: 1024,
                                 }),
                                 allowDecimals: false
-                            }, Tine.widgets.form.RecordPickerManager.get('Tinebase', 'CostCenter', {
-                                    columnWidth: 1/2,
-                                    blurOnSelect: true,
-                                    allowBlank: false,
-                                    fieldLabel: this.app.i18n.n_('Cost Center', 'Cost Centers', 1),
-                                    name: 'costcenter_id'
-                            })], [
+                            }], [
                                 new Tine.Tinebase.widgets.keyfield.ComboBox({
                                     app: 'Sales',
                                     keyFieldName: 'invoiceCleared',
@@ -673,7 +631,12 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             ],
                             [
                                 this.inventoryChange
-                            ]
+                            ],
+                            [ new EvaluationDimensionForm({
+                                columnWidth: 1,
+                                maxItemsPerRow: 4,
+                                recordClass: this.recordClass
+                            })]
                         ]
                     }]
                 }]

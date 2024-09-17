@@ -184,6 +184,9 @@ class Tinebase_NotesTest extends TestCase
             'operator' => 'contains',
             'value'    => 'phpunit'
         )));
+
+        $this->_instance->deleteNotes($this->_instance->searchNotes($filter));
+
         $notes      = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
         $notesCount = $this->_instance->searchNotesCount($filter);
         

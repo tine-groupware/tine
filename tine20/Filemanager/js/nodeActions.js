@@ -193,7 +193,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                     Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
                     return;
                 }
-                
+
                 return await Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`)
                     .then((result) => {
                         if (result.data.path === `/shared/${text}/`) {
@@ -202,6 +202,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                                 activeTabName: 'Grants'
                             });
                         }
+                        return result;
                     })
                     .catch((e) => {
                         window.postal.publish({
@@ -213,6 +214,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         if (e.message === "file exists") {
                             Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));
                         }
+                        return false;
                     }).finally(() => {
                         this.editing = false;
                     });
@@ -574,7 +576,7 @@ Tine.Filemanager.nodeActions.Publish = {
         });
         
         passwordDialog.openWindow();
-        passwordDialog.on('apply', function (password) {
+        passwordDialog.on('apply',  (password)=> {
             const record = new Tine.Filemanager.Model.DownloadLink({
                 node_id: selected.id,
                 expiry_time: this.validDateField.value,

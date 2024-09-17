@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -28,7 +28,6 @@ class Admin_Controller_ImportExportDefinition extends Tinebase_Controller_Record
     {
         $this->_applicationName       = 'Admin';
         $this->_modelName             = 'Tinebase_Model_ImportExportDefinition';
-        $this->_doImportExportDefinitionACLChecks = false;
         $this->_purgeRecords          = false;
 
 

@@ -236,6 +236,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _startGroup()
     {
+        parent::_startGroup();
+
         if (null === $this->_cloneGroupStartRow) {
             return;
         }
@@ -273,6 +275,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _endGroup()
     {
+        parent::_endGroup();
+
         if (null === $this->_cloneGroupEndRow) {
             return;
         }

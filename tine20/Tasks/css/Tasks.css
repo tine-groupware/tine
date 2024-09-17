@@ -18,6 +18,9 @@
     height: 12px;
 }
 
+.tasks-action_create_from_template {
+    background-image:url(../../images/icon-set/icon_template.svg) !important;
+}
 /***** tasks grid panel classes ******/
 
 .tasks-grid-overdue {
@@ -42,4 +45,11 @@
 
 .t-contenttype-task .action_delete {
     background-image: url(../../images/icon-set/icon_task_clear.svg) !important;
+}
+
+.tasks-dependency-source {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 50px;
+    display: inline-grid;
 }

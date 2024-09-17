@@ -630,21 +630,17 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
     getColumnModel: function () {
         var columns = [Object.assign(_.find(this.gridPanel.customColumnData, {id: 'name'}), {
             header: this.app.i18n._("Name"),
-            dataIndex: 'name',
             width: 70,
         }), {
             id: 'size',
             header: this.app.i18n._("Size"),
-            width: 40,
             sortable: true,
-            dataIndex: 'size',
             renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, true], 3)
         }, {
             id: 'contenttype',
             header: this.app.i18n._("Content type"),
             width: 50,
             sortable: true,
-            dataIndex: 'contenttype',
             renderer: function (value, metadata, record) {
 
                 var app = Tine.Tinebase.appMgr.get('Filemanager');
@@ -660,7 +656,6 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             header: this.app.i18n._("Creation Time"),
             width: 100,
             sortable: true,
-            dataIndex: 'creation_time',
             renderer: Tine.Tinebase.common.dateTimeRenderer,
             hidden: true
         },{
@@ -668,7 +663,6 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             header: this.app.i18n._("Last Modified Time"),
             width: 100,
             sortable: true,
-            dataIndex: 'last_modified_time',
             hidden: false,
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }];

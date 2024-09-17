@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -81,9 +81,9 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaborator extends Addressbook_C
      */
     protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
     {
-        if ($vcard->{'X-OUTLOOK-EMAIL-2'} && $vcard->{'X-OUTLOOK-EMAIL-2'}->getValue() == $property->getValue()) {
+        if ($vcard->__get('X-OUTLOOK-EMAIL-2') && $vcard->__get('X-OUTLOOK-EMAIL-2')->getValue() == $property->getValue()) {
             $data['email_home'] = $property->getValue();
-        } elseif ($vcard->{'X-OUTLOOK-EMAIL-3'} && $vcard->{'X-OUTLOOK-EMAIL-3'}->getValue() == $property->getValue()) {
+        } elseif ($vcard->__get('X-OUTLOOK-EMAIL-3') && $vcard->__get('X-OUTLOOK-EMAIL-3')->getValue() == $property->getValue()) {
             // we don't map email3
         } else {
             $data['email'] = $property->getValue();

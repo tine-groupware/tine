@@ -5,14 +5,13 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -21,7 +20,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
 {
     /**
      *
-     * @var Sabre\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -34,6 +33,8 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
      * @var Calendar_Frontend_CalDAV_FixMultiGet404Plugin
      */
     protected $plugin;
+
+    protected $response;
 
     /**
      * Sets up the fixture.
@@ -48,14 +49,14 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
 
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
 
         $this->plugin = new Calendar_Frontend_CalDAV_FixMultiGet404Plugin();
 
+        $this->server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin());
         $this->server->addPlugin($this->plugin);
 
-        $this->response = new Sabre\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
+        $this->server->httpResponse = $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
     }
 
     public function testInvitationToExceptionOnly()
@@ -98,16 +99,13 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
                     </B:calendar-multiget>';
 
         $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->_personasDefaultCals['jmcblack']->getId();
-        $request = new Sabre\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => $uri,
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', $uri);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
 
-        static::assertSame('HTTP/1.1 207 Multi-Status', $this->response->status);
+        static::assertSame(207, $this->response->status, $this->response->body);
         static::assertStringContainsString('SUMMARY:' . $jmcblacksEvent->summary, $this->response->body);
     }
 }

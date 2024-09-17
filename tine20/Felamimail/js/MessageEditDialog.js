@@ -160,7 +160,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     updateToolbars: Ext.emptyFn,
-    
+
     massMailingPlugins: ['all'],
 
     // private
@@ -249,6 +249,20 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             tooltip: this.app.i18n._('Activate this toggle button to receive a reading confirmation.')
         });
 
+        this.action_expectedAnswer = new Tine.Felamimail.MessageExpectedAnswerAction({
+            mode: 'selectOnly',
+            composeDialog: this,
+            originalMessage: this.replyTo,
+            listeners: {
+                scope: this,
+                selectionchange: this.onFileMessageSelectionChange
+            }
+        });
+
+        this.button_ExpectedAnswer = Ext.apply(new Ext.Button(this.action_expectedAnswer), {
+            tooltip: this.app.i18n._('If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired')
+        });
+
         this.action_toggleEncrypt = new Ext.Action({
             text: this.app.i18n._('Encrypt Email'),
             toggleHandler: this.onToggleEncrypt,
@@ -279,7 +293,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             defaults: {height: 43},
             items: [{
                 xtype: 'buttongroup',
-                columns: 7,
+                columns: 8,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
                         scale: 'medium',
@@ -298,11 +312,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
                     }),
                     this.action_saveAsDraft,
-                    this.action_saveAsTemplate,
-                    this.button_fileMessage,
                     this.button_toggleReadingConfirmation,
+                    this.button_massMailing,
+                    this.button_fileMessage,
+                    this.action_saveAsTemplate,
                     this.button_toggleEncrypt,
-                    this.button_massMailing
+                    this.button_ExpectedAnswer,
                 ]
             }]
         });
@@ -314,7 +329,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initRecord: function () {
         this.decodeMsgs();
-        
+
         this.recordDefaults = Tine.Felamimail.Model.Message.getDefaultData();
 
         if (this.mailAddresses) {
@@ -420,57 +435,60 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initContent: function (message) {
         const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+        if (!message) message = this.getMessageFromConfig();
+
         // we follow the account compose_format when fetch msg failed
-        const accountFormat = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : null;
-        const format =  accountFormat ?? message?.getBodyType?.() ?? 'text/html';
+        const composeFormat =  this.recordProxy.getFormatConfig('compose_format', message, account);
         
         if (!this.record.get('body')) {
-            if (!this.msgBody) {
-                message = this.getMessageFromConfig();
-                if (message) {
-                    // fixme : how to deal with preserve_format = true && format = text/html && message.get('body_content_type') = text/plain ?
-                    // the conflict case : we want to show text/html but we also want to preserve format as text/plain
-                    let fetchType = format;
-                    const bodyContentType = message.getBodyType();
-                    if (message.bodyIsFetched()) {
-                        // format of the received message. this is the format to preserve
-                        if (fetchType !== bodyContentType) fetchType = bodyContentType;
-                        if (account.get('preserve_format')) fetchType = message.get('body_content_type');
-                    }
-                    if (!message.bodyIsFetched() || fetchType !== bodyContentType) {
-                        // self callback when body needs to be (re) fetched
-                        return this.recordProxy.fetchBody(message, fetchType, {
-                            success: this.initContent.createDelegate(this),
-                            // set format to message body format if fetch fails
-                            failure: message.bodyIsFetched()
-                                ? this.initContent.createDelegate(this, [message])
-                                : null
-                        });
-                    }
-
-                    this.setMessageBody(message, account, format);
-                    this.handleAttachmentsOfExistingMessage(message);
-
-                    let folder = this.app.getFolderStore().getById(message.get('folder_id'));
-                    if (folder) {
-                        this.isDraft = folder.get('globalname') === account.get('drafts_folder');
-                        this.isTemplate = folder.get('globalname') === account.get('templates_folder');
-
-                        if (this.isDraft) {
-                            this.record.set('messageuid', message.get('messageuid'));
-                            this.draftUid = message.get('messageuid');
+            if (!this.msgBody && message) {
+                if (!message.bodyIsFetched() || composeFormat !== message.getBodyType()) {
+                    // self callback when body needs to be (re) fetched
+                    if (!this.fetchRequestCount) this.fetchRequestCount = 0;
+                    return this.recordProxy.fetchBody(message, composeFormat, {
+                        success: (result) => {
+                            this.initContent(result);
+                            this.fetchRequestCount = 0;
+                        },
+                        // set format to message body format if fetch fails
+                        failure: async (e) => {
+                            this.fetchRequestCount++;
+                            if (this.fetchRequestCount === 3 || !message.bodyIsFetched()) return null;
+                            
+                            if (e?.code === 404) {
+                                await Tine.Felamimail.getMessageFromNode(message.data.id, composeFormat)
+                                    .then(async (response) => {
+                                        message = Tine.Felamimail.messageBackend.recordReader({responseText: Ext.util.JSON.encode(response)});
+                                    }).catch((exception) => {
+                                        console.error(exception);
+                                    });
+                            }
+                            this.initContent(message);
                         }
+                    });
+                }
+                this.setMessageBody(message, account, composeFormat);
+                this.handleAttachmentsOfExistingMessage(message);
+                
+                const folder = this.app.getFolderStore().getById(message.get('folder_id'));
+                if (folder) {
+                    this.isDraft = folder.get('globalname') === account.get('drafts_folder');
+                    this.isTemplate = folder.get('globalname') === account.get('templates_folder');
 
-                        if (this.isTemplate) {
-                            this.templateId = message.get('id');
-                        }
+                    if (this.isDraft) {
+                        this.record.set('messageuid', message.get('messageuid'));
+                        this.draftUid = message.get('messageuid');
+                    }
+
+                    if (this.isTemplate) {
+                        this.templateId = message.get('id');
                     }
                 }
             }
             this.record.set('body', this.msgBody);
         }
-        this.record.set('content_type', format);
-        
+        this.record.set('content_type', composeFormat);
+
         if (this.attachments) {
             this.handleExternalAttachments();
         }
@@ -517,7 +535,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.msgBody = message.get('body');
 
         if (preparedParts && preparedParts.length > 0) {
-            if (preparedParts[0].contentType == 'application/pgp-encrypted') {
+            if (preparedParts[0].contentType === 'application/pgp-encrypted') {
                 this.quotedPGPMessage = preparedParts[0].preparedData;
 
                 this.msgBody = this.msgBody + this.app.i18n._('Encrypted Content');
@@ -541,6 +559,21 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     blockquote.innerHTML = this.msgBody;
                 }
                 this.msgBody = '<br/>' + blockquote.outerHTML;
+            }
+        }
+
+        if (this.isForwardedMessage()) {
+            if (format === 'text/plain') {
+                this.msgBody = String('> ' + this.msgBody).replace(/\r?\n/g, '\n> ');
+            } else {
+                const forwardEl = document.createElement('div');
+                forwardEl.className = 'felamimail-body-forwarded';
+                if (message.getBodyType() === 'text/plain') {
+                    forwardEl.innerText = this.msgBody;
+                } else {
+                    forwardEl.innerHTML = this.msgBody;
+                }
+                this.msgBody = '<br/>' + forwardEl.outerHTML;
             }
         }
 
@@ -828,7 +861,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initReplyRecipients: async function () {
         // should resolve recipients here , save data
         this.to = this.getReplyToEmail();
-        
+
         if (this.replyToAll) {
             if (!Ext.isArray(this.to)) {
                 this.to = [this.to];
@@ -848,28 +881,30 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
         }
     },
-    
+
     getReplyToEmail() {
         // should resolve recipients here , save data
         const replyToHeader = this.replyTo.get('headers')['reply-to'];
         const replyToEmail = this.replyTo.get('from_email');
         const replyToName = this.replyTo.get('from_name');
         const replyToToken = this.replyTo.get('from')?.[0];
-        
+
         // we might get the recipient token from server
         if (replyToToken && replyToToken?.email) return this.replyTo.get('from');
         if (replyToEmail) {
             return [{
                 'email': replyToEmail,
-                'email_type': '',
+                'email_type_field': '',
                 'type': '',
                 'n_fileas': '',
                 'name': replyToName ?? '',
                 'contact_record': ''
             }];
         }
-        if (replyToHeader) return [replyToHeader];
-        
+        if (replyToHeader) {
+            return [replyToHeader];
+        }
+
         return [];
     },
 
@@ -1189,10 +1224,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             if (forwardMode !== 'onlyAsAttachment') {
                 header = String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
-                        format == 'text/plain' ? '' : '<br /><b>',
-                        format == 'text/plain' ? '\n' : '</b><br />')
+                        format === 'text/plain' ? '' : '<br /><b>',
+                        format === 'text/plain' ? '\n' : '</b><br />')
                     + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format == 'text/plain')
-                    + (format == 'text/plain' ? '' : '<br /><br />');
+                    + (format === 'text/plain' ? '\n' : '<br /><br />');
             }
         }
         if (format === 'text/html' && header !== '') {
@@ -1231,26 +1266,26 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
+
         let title = this.app.i18n._('Compose email:');
         const editor = this.record.get('content_type') === 'text/plain' ? this.textEditor : this.htmlEditor;
-        
+
         if (this.record.get('subject')) {
             title = title + ' ' + this.record.get('subject');
         }
         this.window.setTitle(title);
-        
+
         if (!this.button_toggleEncrypt.pressed) {
             editor.setValue(this.record.get('body'));
             this.bodyCards.layout.setActiveItem(editor);
         }
-        
+
         // to make sure we have all recipients (for example when composing from addressbook with "all pages" filter)
         var ticketFn = this.onAfterRecordLoad.deferByTickets(this),
             wrapTicket = ticketFn();
         this.fireEvent('load', this, this.record, ticketFn);
         wrapTicket();
-        
+
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
         if (this.from) {
@@ -1260,12 +1295,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.addDefaultSignature();
         this.updateFileLocations();
         this.onFileMessageSelectionChange('', this.action_fileRecord.getSelected());
-        
+
         if (this.record.get('massMailingFlag')) {
             this.button_massMailing.toggle();
             await this.switchMassMailingMode(this.record.get('massMailingFlag'));
         }
-        
+
         this.onAfterRecordLoad();
     },
 
@@ -1336,7 +1371,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('from_name', account.get('from'));
 
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
-
+        this.record.set('expected_answer', this.action_expectedAnswer?.answer);
         this.record.set('account_id', account.get('original_id'));
         this.updateFileLocations();
 

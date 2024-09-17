@@ -108,10 +108,11 @@ class Felamimail_Model_AttachmentCache extends Tinebase_Record_NewAbstract
         }
     }
 
-    public function setId($_id)
+    public function setId($_id): self
     {
         parent::setId($_id);
         $this->fillFromId($_id);
+        return $this;
     }
 
     protected function fillFromId(string $id)

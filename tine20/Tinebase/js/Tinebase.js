@@ -48,14 +48,22 @@ require('../css/darkmode.less');
 // other libs
 var lodash = require('lodash');
 var director = require('director');
+const vue = require('vue');
+const mitt = require('mitt')
+
+// custom bootstrap styles
+require('../css/bootstrap-vue/custom_vue_styles.scss')
 
 require('./ux/util/screenshot');
 require('./ux/file/UploadManagerUI');
 require ('./UploadmanagerStatusButton');
+require ('BankHoliday/FractionField');
 
 module.exports = {
     director: director,
     postal: postal,
     lodash: lodash,
-    _: lodash
+    _: lodash,
+    vue: vue,
+    mitt: mitt
 };

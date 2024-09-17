@@ -85,10 +85,10 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
-            { resizable: true, id: 'note_type_id', header: this.translation.gettext('Type'), dataIndex: 'note_type_id', width: 25, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')},
-            { resizable: true, id: 'note', header: this.translation.gettext('Note'), dataIndex: 'note', renderer: this.noteRenderer.createDelegate(this)},
-            { resizable: true, id: 'created_by', header: this.translation.gettext('Created By'), dataIndex: 'created_by', width: 70},
-            { resizable: true, id: 'creation_time', header: this.translation.gettext('Timestamp'), dataIndex: 'creation_time', width: 50, 
+            { resizable: true, id: 'note_type_id', header: this.translation.gettext('Type'), width: 25, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')},
+            { resizable: true, id: 'note', header: this.translation.gettext('Note'), renderer: this.noteRenderer.createDelegate(this)},
+            { resizable: true, id: 'created_by', header: this.translation.gettext('Created By'), width: 70},
+            { resizable: true, id: 'creation_time', header: this.translation.gettext('Timestamp'), width: 50, 
                 renderer: Tine.Tinebase.common.dateTimeRenderer }
         ]);
 

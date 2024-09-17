@@ -23,21 +23,23 @@ class Felamimail_Sieve_AdbList
     protected $_keepCopy = false;
     protected $_forwardOnlySystem = false;
     protected $_receiverList = [];
+    protected $_replyTo = null;
+    protected $_listEmail = null;
     public static $adbListSieveAuthFailure = false;
 
     public function __toString()
     {
-        $result = 'require ["envelope", "copy", "reject"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy", "reject", "editheader", "variables"];' . PHP_EOL;
         $rejectMsg = Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_MAILINGLIST_REJECT_REASON};
         $translation = Tinebase_Translation::getTranslation('Felamimail');
         $rejectMsg = $translation->_($rejectMsg);
+        $this->_addReplyTo($result);
 
         if ($this->_allowExternal) {
             $this->_addReceiverList($result);
             if (!$this->_keepCopy) {
                 $result .= 'discard;' . PHP_EOL;
             }
-
         } else {
             if ($this->_allowOnlyGroupMembers && !empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
@@ -97,6 +99,38 @@ class Felamimail_Sieve_AdbList
     }
 
     /**
+     * @param string $result
+     * @return void
+     */
+    protected function _addReplyTo(string &$result): void
+    {
+        if (empty($this->_replyTo)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . 'reply to option is null , skip resoling reply-to header');
+            return;
+        }
+
+        if ($this->_replyTo === 'mailingList' && !empty($this->_listEmail)) {
+            $result .= 'deleteheader "Reply-To";
+    addheader "Reply-To" "' . $this->_listEmail . '";';
+        } elseif ($this->_replyTo === 'sender') {
+            $result .= 'if address :matches "from" "*" {
+    deleteheader "Reply-To";
+    addheader "Reply-To" "${1}";
+}';
+        } elseif ($this->_replyTo === 'both') {
+            $mailingList = $this->_listEmail ? ', ' . $this->_listEmail : '';
+            $result .= 'if address :matches "from" "*" {
+    deleteheader "Reply-To";
+    addheader "Reply-To" "${1}' . $mailingList. '";
+}';
+        } else {
+            return;
+        }
+        $result .= PHP_EOL . PHP_EOL;
+    }
+
+    /**
      * @param Addressbook_Model_List $_list
      * @return Felamimail_Sieve_AdbList
      */
@@ -115,11 +149,20 @@ class Felamimail_Sieve_AdbList
                 ['field' => 'showDisabled', 'operator' => 'equals', 'value' => false],
             ]));
         $sieveRule->_receiverList = [];
+        $sieveRule->_listEmail = $_list->email;
         foreach ($receivers as $receiver) {
             /** @var Addressbook_Model_Contact $receiver */
             $email = $receiver->getPreferredEmailAddress();
+
             if ($email) {
-                $sieveRule->_receiverList[] = $email;
+                if ($receiver->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
+                    $accountStatus = Tinebase_User::getInstance()->getFullUserById($receiver->account_id)->accountStatus;
+                    if ($accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_ENABLED) {
+                        $sieveRule->_receiverList[] = $email;
+                    }
+                } else {
+                    $sieveRule->_receiverList[] = $email;
+                }
             }
         }
 
@@ -150,6 +193,10 @@ class Felamimail_Sieve_AdbList
             $sieveRule->_forwardOnlySystem = true;
         }
 
+        if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]) && $_list
+                ->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]) {
+            $sieveRule->_replyTo = $_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO];
+        }
         return $sieveRule;
     }
 
@@ -182,16 +229,17 @@ class Felamimail_Sieve_AdbList
                 Felamimail_Model_Sieve_ScriptPart::createFromString(
                     Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
         } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                __LINE__ . ' ' . $fesic);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $fesic);
+            }
             self::$adbListSieveAuthFailure = true;
             throw $fesic;
+        } finally {
+            if ($sieveAdminAccessActivated) {
+                Tinebase_EmailUser::removeAdminAccess();
+            }
+            unset($raii);
         }
-
-        if ($sieveAdminAccessActivated) {
-            Tinebase_EmailUser::removeAdminAccess();
-        }
-        unset($raii);
 
         return true;
     }

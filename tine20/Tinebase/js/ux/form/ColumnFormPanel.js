@@ -87,10 +87,13 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                 nw.forEach(c => {c.columnWidth = (1-tcw)/nw.length});
             }
 
-            // each row consits n column objects
+            // each row consists of n column objects
+            rowConfig.hidden = true;
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
                 const column = initialRowConfig[n];
                 if (column) {
+                    // @TODO register show/hide listeners to manage col show/hide state
+                    rowConfig.hidden = rowConfig.hidden && column.hidden;
                     const cell = this.wrapFormItem(column);
                     rowConfig.items.push(cell);
                 }

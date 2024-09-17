@@ -24,6 +24,16 @@ class Inventory_Model_Status extends Tinebase_Config_KeyFieldRecord
      * @var string
      */
     protected $_application = 'Inventory';
+
+    public const ORDERED = 'ORDERED';
+    public const AVAILABLE = 'AVAILABLE';
+    public const DEFECT = 'DEFECT';
+    public const MISSING = 'MISSING';
+    public const REMOVED = 'REMOVED';
+    public const UNKNOWN = 'UNKNOWN';
+    public const STORED = 'STORED';
+    public const SOLD = 'SOLD';
+    public const DESTROYED = 'DESTROYED';
     
     /**
      * (non-PHPdoc)

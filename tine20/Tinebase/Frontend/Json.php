@@ -39,6 +39,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'ImportExportDefinition',
         'LogEntry',
         'Tree_Node',
+        Tinebase_Model_NumberableConfig::MODEL_NAME_PART,
         Tinebase_Model_User::MODEL_NAME_PART,
         Tinebase_Model_MFA_HOTPUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_TOTPUserConfig::MODEL_NAME_PART,
@@ -50,11 +51,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_MunicipalityKey::MODEL_NAME_PART,
         Tinebase_Model_AuthToken::MODEL_NAME_PART,
         Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
-        Tinebase_Model_CostCenter::MODEL_NAME_PART,
-        Tinebase_Model_CostUnit::MODEL_NAME_PART,
         Tinebase_Model_BankAccount::MODEL_NAME_PART,
         Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
         Tinebase_Model_BankHoliday::MODEL_NAME_PART,
+        Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
+        Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
+        Tinebase_Model_Tree_FlySystem::MODEL_NAME_PART,
+        Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::MODEL_NAME_PART,
+        Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::MODEL_NAME_PART,
     ];
     
     public function __construct()
@@ -625,27 +629,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
     }
-
-    /**
-     * @param string $oidcResponse
-     * @return array
-     */
-    public function openIDCLogin(string $oidcResponse)
-    {
-        Tinebase_Core::startCoreSession();
-
-        // try to login user
-        $success = Tinebase_Controller::getInstance()->loginOIDC(
-            $oidcResponse,
-            Tinebase_Core::get(Tinebase_Core::REQUEST)
-        );
-
-        if ($success === true) {
-            return $this->_getLoginSuccessResponse(Tinebase_Core::getUser()->accountLoginName);
-        } else {
-            return $this->_getLoginFailedResponse();
-        }
-    }
     
     /**
      * create login response
@@ -851,9 +834,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
+        $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
         $smtpConfig = $manageSmtpEmailUser
             ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
-            : $smtpConfig = array();
+            : [];
 
         // be license class for setting some license registry data
         $license = Tinebase_License::getInstance();
@@ -866,7 +850,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'userContact' => $userContactArray,
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'userApplications' => $user->getApplications()->toArray(),
-            'manageImapEmailUser' => Tinebase_EmailUser::manages(Tinebase_Config::IMAP),
+            'manageImapEmailUser' => $manageImapEmailUser,
             'manageSmtpEmailUser' => $manageSmtpEmailUser,
             'mustchangepw' => $user->mustChangePassword(),
             'confirmLogout' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
@@ -879,6 +863,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
+            'allowExternalEmail' => ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail,
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
         );
 

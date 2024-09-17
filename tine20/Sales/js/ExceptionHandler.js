@@ -87,12 +87,10 @@ Tine.Sales.handleRequestException = function(exception, callback, callbackScope)
                     title: null,
                     columns: [{
                         id: 'number',
-                        dataIndex: 'number',
                         header: app.i18n._('Number'),
                         sortable: true
                     }, {
                         id: 'title',
-                        dataIndex: 'title',
                         header: app.i18n._('Title'),
                         sortable: true
                     }]

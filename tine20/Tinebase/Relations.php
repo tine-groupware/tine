@@ -64,7 +64,7 @@ class Tinebase_Relations
      */
     public function undeleteRelations($_relationData)
     {
-        foreach((array) $_relationData as $relationData) {
+        foreach($_relationData instanceof Tinebase_Record_RecordSet ? $_relationData : (array)$_relationData as $relationData) {
             if ($relationData instanceof Tinebase_Model_Relation) {
                 $relation = $relationData;
             } else {

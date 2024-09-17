@@ -168,7 +168,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
             'summary'              => 'phpunit: crm test task',        
         ));
         
-        $this->objects['note'] = new Tinebase_Model_Note(array(
+        $this->_objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             'note'              => 'phpunit test note',    
         ));
@@ -193,7 +193,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         $lead = $this->_objects['initialLead'];
-        $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
+        $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->_objects['note']));
         $lead = Crm_Controller_Lead::getInstance()->create($lead);
         // TODO remove this nonsense
         $GLOBALS['Addressbook_ControllerTest']['leadId'] = $lead->getId();
@@ -209,7 +209,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
                 $translatedMessage = $translate->_('created') . ' ' . $translate->_('by') . ' ';
                 $this->assertEquals($translatedMessage.Zend_Registry::get('currentAccount')->accountDisplayName, $note->note);
             } else {
-                $this->assertEquals($this->objects['note']->note, $note->note);
+                $this->assertEquals($this->_objects['note']->note, $note->note);
             }
         }
     }

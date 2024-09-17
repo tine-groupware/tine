@@ -8,6 +8,7 @@
 Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
+import EvaluationDimensionForm from "../../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1240,
@@ -32,6 +33,21 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         ) !== 'yes') {
             return false;
         }
+
+        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+            icon: Ext.MessageBox.QUESTION,
+            buttons: Ext.MessageBox.YESNO,
+            title: this.app.formatMessage('Change Document Date?'),
+            msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
+        }) === 'yes') {
+            this.record.set('date', new Date().clearTime());
+        }
+
+        if (this.record.phantom) {
+            // new documents need to be saved first to get a proforma number
+            await this.applyChanges()
+        }
+
         _.delay(async () => {
             try {
                 await this.applyChanges()
@@ -48,17 +64,29 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return _.delay(_.bind(this.checkStates, this), 250)
         }
 
+        // default category
+        const categoryField = this.getForm().findField('document_category');
+        if (!categoryField.selectedRecord) {
+            const category = Tine.Tinebase.data.Record.setFromJson(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'), 'Sales.Document_Category');
+            categoryField.setValue(category);
+            categoryField.onSelect(category, 0);
+        }
+
+        let document_price_type = 'gross';
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
         const sums = positions.reduce((a, pos) => {
+            document_price_type = document_price_type === 'gross' && pos.unit_price_type === 'gross' ? 'gross' : 'net';
             a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)
+            a['positions_gross_sum'] = (a['positions_gross_sum'] || 0) + (pos['gross_price'] || 0)
             a['positions_discount_sum'] = (a['positions_discount_sum'] || 0) + (pos['position_discount_sum'] || 0)
 
             const rate = pos['sales_tax_rate'] || 0
             a['sales_tax_by_rate'][rate] = (a['sales_tax_by_rate'].hasOwnProperty(rate) ? a['sales_tax_by_rate'][rate] : 0) + (pos['sales_tax'] || 0)
             a['net_sum_by_tax_rate'][rate] = (a['net_sum_by_tax_rate'].hasOwnProperty(rate) ? a['net_sum_by_tax_rate'][rate] : 0) + (pos['net_price'] || 0)
+            a['gross_sum_by_tax_rate'][rate] = (a['gross_sum_by_tax_rate'].hasOwnProperty(rate) ? a['gross_sum_by_tax_rate'][rate] : 0) + (pos['position_price'] || 0)
 
             return a;
-        }, {positions_net_sum:0, positions_discount_sum: 0, sales_tax_by_rate: {}, net_sum_by_tax_rate: {}})
+        }, {positions_net_sum:0, positions_gross_sum:0, positions_discount_sum: 0, sales_tax_by_rate: {}, net_sum_by_tax_rate: {}, gross_sum_by_tax_rate: {}})
 
         Object.keys(sums).forEach((fld) => {
             if (this.recordClass.hasField(fld)) {
@@ -68,40 +96,113 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         })
 
         // make sure discount calculations run
+        if (this.getForm().findField('invoice_discount_sum')) {
+            this.getForm().findField('invoice_discount_sum').price_field = document_price_type === 'gross' ? 'positions_gross_sum' : 'positions_net_sum';
+            this.getForm().findField('invoice_discount_sum').net_field = document_price_type === 'gross' ? 'gross_sum' : 'net_sum';
+        }
         Tine.Sales.Document_AbstractEditDialog.superclass.checkStates.apply(this, arguments)
 
-        this.record.set('sales_tax', Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
-            sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum'))||0)) * rate / 100
-            return a + sums['sales_tax_by_rate'][rate]
-        }, 0))
+        this.getForm().findField('positions_net_sum')?.setVisible(document_price_type !== 'gross');
+        this.getForm().findField('positions_gross_sum')?.setVisible(document_price_type === 'gross');
+
+        if (document_price_type === 'gross') {
+            // sales_tax & sales_tax_by_rate
+            // ok discount is already applied -> lower sales_tax_by_rate by discount rate
+            this.record.set('sales_tax', Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
+                sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum')/this.record.get('positions_gross_sum'))
+                return a + sums['sales_tax_by_rate'][rate]
+            }, 0))
+            this.record.set('net_sum', this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax'))
+            this.getForm().findField('net_sum')?.setValue(this.record.get('net_sum'))
+        } else {
+            this.record.set('sales_tax', Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
+                sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum'))||0)) * rate / 100
+                return a + sums['sales_tax_by_rate'][rate]
+            }, 0))
+
+            this.record.set('gross_sum', this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))
+            this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
+        }
+
+        // reformat sales_tax_by_rate
         this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
             return a.concat(Number(rate) ? [{'tax_rate': Number(rate), 'tax_sum': sums['sales_tax_by_rate'][rate]}] : [])
         }, Tine.Tinebase.common.assertComparable([])))
+
         this.getForm().findField('sales_tax_by_rate')?.setValue(this.record.get('sales_tax_by_rate'))
         this.getForm().findField('sales_tax')?.setValue(this.record.get('sales_tax'))
-
-        this.record.set('gross_sum', this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))
-        this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
 
         // handle booked state
         const statusField = this.fields[this.statusFieldName]
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         this.getForm().items.each((field) => {
             if (_.get(field, 'initialConfig.readOnly')) return;
-            if ([this.statusFieldName, 'cost_center_id', 'cost_bearer_id', 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
-            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)/)) {
+            if ([this.statusFieldName, 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                 field.setReadOnly(booked);
             }
         });
+
+        // handle eval_dim division subfilter
+        this.getForm().items.each((field) => {
+            if (field.name?.match(/(^eval_dim_.*)/) && !field._documentEditDialogEvalDimBeforeLoadApplied) {
+                field.store.on('beforeload', (store, options) => {
+                    const category = this.getForm().findField('document_category').selectedRecord;
+                    const division = _.get(category, 'data.division_id.id');
+                    store.baseParams.filter = store.baseParams.filter.concat([
+                        { condition: 'OR', filters: [
+                            { field: 'divisions', operator: 'definedBy', value: null },
+                            { field: 'divisions', operator: 'definedBy', value: [
+                                { field: 'division_id', operator: 'equals', value: division }
+                            ]}
+                        ] }
+                    ])
+
+                })
+                field._documentEditDialogEvalDimBeforeLoadApplied = true;
+            }
+        })
+
     },
 
     getRecordFormItems: function() {
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
-                case 'customer_id':
-                    config.listeners = config.listeners || {}
+                case 'document_category':
+                    config.listeners = config.listeners || {};
+                    config.listeners.beforeselect = async (combo, category, index) => {
+                        const division = _.get(category, 'data.division_id');
+                        const customer = this.getForm().findField('customer_id').selectedRecord;
+                        if (_.uniq(_.map(customer.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
+                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category.", {category: await category.getTitle(), customer: await customer.getTitle(), division}));
+                            return false;
+                        }
+                    }
                     config.listeners.select = (combo, record, index) => {
-                        fields['credit_term'].setValue(record.get('credit_term'))
+                        this.getForm().items.each((field) => {
+                            if (field.name?.match(/(^eval_dim_.*)/)) {
+                                field.lastQuery = Tine.Tinebase.data.Record.generateUID();
+                            }
+                        });
+                        _.forEach(record?.data, (val, key) => {
+                            if (key.match(/^eval_dim_(.*)/) && this.getForm().findField(key) && val) {
+                                this.getForm().findField(key).setValue(val);
+                            }
+                        });
+                    }
+                    break;
+                case 'customer_id':
+                    config.listeners = config.listeners || {};
+                    config.listeners.beforeselect = async (combo, record, index) => {
+                        const category = this.getForm().findField('document_category').selectedRecord;
+                        const division = _.get(category, 'data.division_id');
+                        if (_.uniq(_.map(record.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
+                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>.", {customer: await record.getTitle(), division, category: category.getTitle()}));
+                            return false;
+                        }
+                    }
+                    config.listeners.select = (combo, record, index) => {
+                        fields['credit_term']?.setValue(record.get('credit_term'))
                         fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
                         if (record.get('discount')) {
                             fields['invoice_discount_type'].setValue('PERCENTAGE')
@@ -120,6 +221,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fields['document_language'].setValue(record?.get('language'))
                         }
                     }
+                    // more logic in Tine.Sales.AddressSearchCombo
                     break;
                 case 'vat_procedure':
                     config.listeners = config.listeners || {}
@@ -152,16 +254,16 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             xtype: 'columnform',
             items: [
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
-                _.assign([fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})], {line: 'recipient'}),
+                _.assign([fields.customer_id, _.assign(fields.recipient_id, {columnWidth: 2/5}), fields.contact_id, fields.customer_reference], {line: 'recipient'}),
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],
-                [_.assign({ ...placeholder } , {columnWidth: 3/5}), fields.positions_discount_sum, fields.positions_net_sum],
+                [_.assign({ ...placeholder } , {columnWidth: 3/5}), _.assign(fields.positions_discount_sum, {columnWidth: 1/5}), _.assign(fields.positions_net_sum, {columnWidth: 1/5}), _.assign(fields.positions_gross_sum, {columnWidth: 1/5})],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax, fields.gross_sum],
                 [fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 4/5})],
                 [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
-                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]
+                [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]
         }]
     }

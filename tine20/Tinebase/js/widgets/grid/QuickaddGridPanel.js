@@ -72,7 +72,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      */
     clicksToEdit:'auto',
     frame: true,
-
+    itemRegistryCmpKey: 'QuickAddGridPanel',
     /**
      * @private
      */
@@ -195,10 +195,11 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Boolean}
      */
     onNewentry: function(recordData) {
-        const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
-                this.recordClass.getDefaultData() : {};
+        const defaultData = Ext.apply(Ext.isFunction(this.recordClass.getDefaultData) ?
+                this.recordClass.getDefaultData() : {}, this.getRecordDefaults());
 
-        const newRecord = new this.recordClass(defaultData, recordData.id ?? defaultData.id ?? Tine.Tinebase.data.Record.generateUID());
+        defaultData.id = recordData.id ?? defaultData.id ?? Tine.Tinebase.data.Record.generateUID();
+        const newRecord = Tine.Tinebase.data.Record.setFromJson(defaultData, this.recordClass);
         newRecord.phantom = true;
 
         _.each(recordData, function(val, key) {
@@ -243,6 +244,8 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             const record = Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             this.store.addSorted(record);
         });
+
+        this.actionUpdater.updateActions(this.getSelectionModel());
     },
 
     /**
@@ -251,8 +254,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Array}
      */
     getFromStoreAsArray: function(deleteAutoIds) {
-        var result = Tine.Tinebase.common.assertComparable([]);
-        this.store.each(function(record) {
+        const result = Tine.Tinebase.common.assertComparable([]);
+        const data = this.store.snapshot || this.store;
+        data.each(function(record) {
             var data = record.data;
             if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
                 delete data.id;

@@ -10,7 +10,7 @@ use Sabre\DAVACL;
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -192,14 +192,8 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                 $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
                 
                 return new $objectClass($container);
-                
-            default:
-                throw new Sabre\DAV\Exception\NotFound('Child not found');
-            
-                break;
         }
-    
-        
+        throw new Sabre\DAV\Exception\NotFound('Child not found');
     }
     
     /**
@@ -269,7 +263,9 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         $etags = array();
         
         foreach ($this->getChildren() as $child) {
-            $etags[] = $child->getETag();
+            if (method_exists($child, 'getETag')) {
+                $etags[] = $child->getETag();
+            }
         }
         
         return '"' . sha1(implode('', $etags)) . '"';
@@ -341,7 +337,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
      */
     public function getName()
     {
-        list(,$name) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        list(,$name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         return $name;
     }
@@ -374,7 +370,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         
         $children = array();
         
-        list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        list(, $basename) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         switch (count($pathParts)) {
             # path == /accountLoginName
@@ -398,7 +394,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         foreach ($requestedProperties as $prop) {
             switch($prop) {
                 case '{DAV:}owner' :
-                    $response[$prop] = new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
+                    $response[$prop] = new Sabre\DAVACL\Xml\Property\Principal(Sabre\DAVACL\Xml\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id);
                     break;
                 
                 case '{DAV:}getetag':
@@ -430,46 +426,6 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
-    /**
-     * Updates properties on this node,
-     *
-     * The properties array uses the propertyName in clark-notation as key,
-     * and the array value for the property value. In the case a property
-     * should be deleted, the property value will be null.
-     *
-     * This method must be atomic. If one property cannot be changed, the
-     * entire operation must fail.
-     *
-     * If the operation was successful, true can be returned.
-     * If the operation failed, false can be returned.
-     *
-     * Deletion of a non-existant property is always succesful.
-     *
-     * Lastly, it is optional to return detailed information about any
-     * failures. In this case an array should be returned with the following
-     * structure:
-     *
-     * array(
-     *   403 => array(
-     *      '{DAV:}displayname' => null,
-     *   ),
-     *   424 => array(
-     *      '{DAV:}owner' => null,
-     *   )
-     * )
-     *
-     * In this example it was forbidden to update {DAV:}displayname. 
-     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
-     * (424 Failed Dependency) because the request needs to be atomic.
-     *
-     * @param array $mutations 
-     * @return bool|array 
-     */
-    public function updateProperties($mutations) 
-    {
-        return $this->carddavBackend->updateAddressBook($this->addressBookInfo['id'], $mutations);
-    }
-    
     protected function _getApplication()
     {
         if ($this->_application == null) {
@@ -492,5 +448,14 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     public function getSupportedPrivilegeSet()
     {
         return null;
+    }
+
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
+    {
+        foreach ($this->getChildren() as $child) {
+            if ($child instanceof DAV\IProperties) {
+                $child->propPatch($propPatch);
+            }
+        }
     }
 }

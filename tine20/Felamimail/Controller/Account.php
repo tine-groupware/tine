@@ -50,6 +50,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected $_backend;
 
+    /**
+     * @var bool accounts can have empty grants
+     */
+    protected bool $_allowEmptyGrants = true;
+
     const ACCOUNT_CAPABILITIES_CACHEID = 'Felamimail_Account_Capabilities';
 
     /**
@@ -541,9 +546,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         parent::_deleteLinkedObjects($_record);
 
-        if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST || $_record->type ===
-                Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
-                Felamimail_Model_Account::TYPE_USER_INTERNAL) {
+        if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST 
+            || $_record->type === Felamimail_Model_Account::TYPE_SHARED 
+            || $_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL
+        ) {
             $_record->resolveCredentials(false);
             Tinebase_EmailUser_XpropsFacade::deleteEmailUsers($_record);
         }
@@ -1032,7 +1038,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'signature_position',
             'display_format',
             'compose_format',
-            'preserve_format',
             'reply_to',
             'has_children_support',
             'delimiter',
@@ -1057,6 +1062,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'message_sent_copy_behavior',
             'email_imap_user',
             'email_smtp_user',
+            'adb_list'
         );
         $diff = $_record->diff($_oldRecord)->diff;
         foreach ($diff as $key => $value) {
@@ -1268,6 +1274,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         switch ($updatedRecord->type) {
             case Felamimail_Model_Account::TYPE_SYSTEM:
             case Felamimail_Model_Account::TYPE_SHARED:
+            case Felamimail_Model_Account::TYPE_ADB_LIST:
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
                 try {
                     $this->_afterUpdateSetSieve($updatedRecord, $record, $currentRecord);
@@ -1278,7 +1285,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 break;
         }
 
-        if ($updatedRecord->type === Felamimail_Model_Account::TYPE_SHARED) {
+        if ($updatedRecord->type === Felamimail_Model_Account::TYPE_SHARED || $updatedRecord->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
             $this->_autoCreateSystemAccountFolders($updatedRecord);
         }
     }
@@ -1292,6 +1299,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     {
         if (empty($updatedRecord->sieve_hostname)) {
             return;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Updating SIEVE script for account: ' . $updatedRecord->name);
         }
 
         try {
@@ -1308,7 +1320,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
             }
 
-            // update sieve script too
             if (is_array($record->sieve_vacation) && is_array($record->sieve_rules)) {
                 $sieveRecord = new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE);
                 $ruleRecords = new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_Rule::class, array_values($record->sieve_rules));
@@ -1376,7 +1387,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             return true;
         }
 
-        if ($action === 'delete' && $record->type === Felamimail_Model_Account::TYPE_SHARED
+        if ($action === 'delete' && ($record->type === Felamimail_Model_Account::TYPE_SHARED || $record->type === Felamimail_Model_Account::TYPE_ADB_LIST)
             && ! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_EMAILACCOUNTS)
         ) {
             throw new Tinebase_Exception_AccessDenied('Shared accounts can only be deleted by email admins with MANAGE_EMAILACCOUNTS right');
@@ -2316,7 +2327,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class);
         $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
-            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED],
+            ['field' => 'type', 'operator' => 'in', 'value' => [
+                Felamimail_Model_Account::TYPE_SHARED, 
+                Felamimail_Model_Account::TYPE_ADB_LIST
+            ]],
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $user->getId()],
         ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
 
@@ -2407,7 +2421,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     __LINE__ . ' user_id not set ... skipping account');
                 continue;
             }
-            if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+            if ($account->type === Felamimail_Model_Account::TYPE_SHARED || $account->type === Felamimail_Model_Account::TYPE_ADB_LIST) {
                 $account->user_id = null;
             }
 
@@ -2474,7 +2488,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (! $account instanceof Felamimail_Model_Account) {
             $account = Felamimail_Controller_Account::getInstance()->get($account);
         }
-        if ($account->type !== Felamimail_Model_Account::TYPE_SHARED && $account->user_id !== Tinebase_Core::getUser()->getId()) {
+        if ($account->type !== Felamimail_Model_Account::TYPE_SHARED 
+            && $account->type !== Felamimail_Model_Account::TYPE_ADB_LIST 
+            && $account->user_id !== Tinebase_Core::getUser()->getId()
+        ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()
                 . ' has no right to access account: ' . print_r($account->toArray(), true));

@@ -190,10 +190,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
         $beforeSeq = $args['instanceseq'] ?? null;
 
+        $additionalFilter = [];
+        if (isset($args['app_id'])) {
+            $additionalFilter['application_id'] = $args['app_id'];
+        }
+        if (isset($args['model'])) {
+            $additionalFilter['record_type'] = $args['model'];
+        }
+        if (isset($args['change_type'])) {
+            $additionalFilter['change_type'] = $args['change_type'];
+        }
+
         if ($beforeSeq || $before) {
-            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($before, $beforeSeq);
+            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($before, $beforeSeq, $additionalFilter);
         } else {
-            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
+            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean($additionalFilter);
         }
 
         echo "\nDeleted $deleted modlogs records\n";
@@ -2245,6 +2256,35 @@ fi';
         return 0;
     }
 
+    public function importGroupFromSyncBackend(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['group']) || empty($data['group'])) {
+            echo 'mandatory argument "group" missing' . PHP_EOL;
+            return 1;
+        }
+
+        $groupCtrl = Tinebase_Group::getInstance();
+        if (!$groupCtrl instanceof Tinebase_Group_Interface_SyncAble) {
+            echo 'no group syncable backend configured' . PHP_EOL;
+            return 1;
+        }
+        $group = $groupCtrl->getGroupsFromSyncBackend(
+            Zend_Ldap_Filter::equals('cn', $data['group'])
+        )->getFirstRecord();
+
+        if ($group) {
+            $groupCtrl->addGroup($group);
+            echo 'created group: ' . $group->name . PHP_EOL;
+        } else {
+            echo 'group ' . $data['name'] . ' not found in sync backend' . PHP_EOL;
+        }
+
+        return 0;
+    }
+
     public function syncFileTreeFromBackupDB(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();
@@ -2520,6 +2560,27 @@ fi';
 
         $translations = new Tinebase_Translation();
         $translations->generateTranslationLists($locale, $path);
+    }
+
+    public function removeAllAvScanNotes($opts)
+    {
+        $this->_checkAdminRight();
+        $db = Tinebase_Core::getDb();
+        $args = $this->_parseArgs($opts);
+        $start = isset($args['start']) ? (int)$args['start'] : 0;
+        $limit = 10000;
+
+        echo 'starting at ' . $start . PHP_EOL;
+
+        do {
+            $run = false;
+            foreach ($db->query('select id from ' . SQL_TABLE_PREFIX . 'tree_nodes ORDER BY id ASC LIMIT ' . $start . ', ' . $limit)->fetchAll(PDO::FETCH_COLUMN) as $id) {
+                $run = true;
+                $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'notes where record_id = ' . $db->quote($id) . ' AND note_type_id = "avscan"');
+            }
+            $start += $limit;
+            echo 'finished ' . $start . PHP_EOL;
+        } while ($run);
     }
 }
 

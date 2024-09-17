@@ -145,16 +145,11 @@ describe('context menu', () => {
         await page.waitForTimeout(2000);
         await expect(page).toClick('button', {text: 'Woche'});
         await page.waitForTimeout(2000);
-        try {
-            await expect(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
-            await page.waitForTimeout(1000);
-            await page.screenshot({path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
-        } catch (e) {
-            await expect(page).toClick('button', {text: 'Heute'});
-            await expect(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
-            await page.waitForTimeout(1000);
-            await page.screenshot({path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
-        }
+        await expect(page).toClick('button', {text: 'Heute'});
+        await page.waitForTimeout(2000);
+        await expect(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
+        await page.waitForTimeout(1000);
+        await page.screenshot({path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
     });
 
     test('set answer', async () => {

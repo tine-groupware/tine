@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -66,5 +66,16 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
     {
         Tinebase_Record_PersistentObserver::getInstance()->removeObserverByIdentifier('wtreport');
         Tinebase_Record_PersistentObserver::getInstance()->removeObserverByIdentifier('wtreportFT');
+    }
+
+    protected function _uninitializeCostCenterCostBearer()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        Tinebase_Controller_EvaluationDimension::removeModelsFromDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            HumanResources_Model_CostCenter::class,
+        ]);
     }
 }

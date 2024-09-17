@@ -17,15 +17,16 @@
  */
 class Setup_Update_Abstract
 {
-    const CLASS_CONST = 'class';
-    const FUNCTION_CONST = 'function';
+    public const CLASS_CONST = 'class';
+    public const FUNCTION_CONST = 'function';
 
-    const PRIO_TINEBASE_BEFORE_STRUCT = 90;
-    const PRIO_TINEBASE_STRUCTURE = 100;
-    const PRIO_TINEBASE_AFTER_STRUCTURE = 150;
-    const PRIO_TINEBASE_UPDATE = 300;
-    const PRIO_NORMAL_APP_STRUCTURE = 500;
-    const PRIO_NORMAL_APP_UPDATE = 1000;
+    public const PRIO_TINEBASE_BEFORE_EVERYTHING = 1;
+    public const PRIO_TINEBASE_BEFORE_STRUCT = 90;
+    public const PRIO_TINEBASE_STRUCTURE = 100;
+    public const PRIO_TINEBASE_AFTER_STRUCTURE = 150;
+    public const PRIO_TINEBASE_UPDATE = 300;
+    public const PRIO_NORMAL_APP_STRUCTURE = 500;
+    public const PRIO_NORMAL_APP_UPDATE = 1000;
 
     /**
      * backend for databse handling and extended database queries

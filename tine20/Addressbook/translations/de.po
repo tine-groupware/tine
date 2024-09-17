@@ -562,9 +562,6 @@ msgstr[1] "Branchen"
 msgid "Note"
 msgstr "Notizen"
 
-msgid "Enter Note"
-msgstr "Notiz eingeben"
-
 #: Model/Contact.php:479 js/ContactEditDialog.js:158 js/ContactGrid.js:214
 #: js/Model.js:19 js/Model.js:165
 msgid "Last Name"
@@ -744,6 +741,7 @@ msgstr ""
 
 msgid "Contact Properties"
 msgstr "Kontakt-Felder"
+
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alle Kontakte für die ich Lese-Rechte habe"
@@ -1354,3 +1352,48 @@ msgstr "female"
 
 msgid "Mailing Group Member"
 msgstr "E-Mail-Verteiler Mitglieder"
+
+msgid "Enter Note"
+msgstr "Notiz eingeben"
+
+msgid "Tine 2.0 contact CSV import"
+msgstr "Tine 2.0 Kontakt CSV Import"
+
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr "Importiere CSV formatierte Kontakte aus einem Tine 2.0 Adressbuch"
+
+msgid "Preferred E-Mail"
+msgstr "Bevorzugte E-Mail"
+
+msgid "Reply to"
+msgstr "Antwortmails an"
+
+msgid "Sender"
+msgstr "Absender"
+
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+msgid "Sender and Distributor"
+msgstr "Absender und Verteiler"
+
+msgid "Contact Title Template"
+msgstr "Kontakt Titel Template"
+
+msgid "How to build contact titles."
+msgstr "Wie Kontakte betitelt werden."
+
+msgid "Display Name (email)"
+msgstr "Angezeigter Name (E-Mail)"
+
+msgid "Display Name - Company / Organisation"
+msgstr "Angezeigter Name - Firma / Organisation"
+
+msgid "Salutation Title Last Name (Company / Organisation)"
+msgstr "Anrede Titel Nachname (Firma / Organisation)"
+
+msgid "Preferred"
+msgstr "Bevorzugt"
+
+msgid "Set as preferred E-Mail"
+msgstr "Als bevorzugte E-Mail setzen"

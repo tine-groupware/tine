@@ -114,7 +114,7 @@ Ext.ux.form.ClearableComboBox = Ext.extend(Ext.form.ComboBox, {
         if (this.triggers && this.disableClearer !== true) {
             this.triggers[0].show();
         }
-        Ext.ux.form.ClearableComboBox.superclass.onSelect.call(this, combo, record, index);
+        Ext.ux.form.ClearableComboBox.superclass.onSelect.apply(this, arguments);
         this.startValue = this.getValue();
     },
     

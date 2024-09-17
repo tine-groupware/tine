@@ -39,21 +39,11 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * returns cm
      */
     getColumns: function(){
-        return [{
-            id: 'name',
-            header: this.app.i18n._("Name"),
-            width: 200,
-            sortable: true,
-            dataIndex: 'name'
-        },{
-            id: 'type',
-            header: this.app.i18n._("Type"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'type',
-            renderer: this.courseTypeRenderer
-        }
+        const columns = [
+            { id: 'name', header: this.app.i18n._("Name") },
+            { id: 'type', header: this.app.i18n._("Type"), width: 150, renderer: this.courseTypeRenderer }
         ];
+        return columns;
     },
     
     /**

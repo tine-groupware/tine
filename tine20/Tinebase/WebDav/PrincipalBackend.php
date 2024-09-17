@@ -102,7 +102,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
         $principal = null;
         
-        list($prefix, $id) = \Sabre\DAV\URLUtil::splitPath($path);
+        list($prefix, $id) = \Tinebase_WebDav_XMLUtil::splitPath($path);
         
         // special handling for calendar proxy principals
         // they are groups in the user namespace
@@ -112,7 +112,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             // set prefix to calendar-proxy-read or calendar-proxy-write
             $prefix = $id;
             
-            list(, $id) = \Sabre\DAV\URLUtil::splitPath($path);
+            list(, $id) = \Tinebase_WebDav_XMLUtil::splitPath($path);
         }
         
         switch ($prefix) {
@@ -242,7 +242,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     {
         $result = array();
         
-        list($prefix, $id) = \Sabre\DAV\URLUtil::splitPath($principal);
+        list($prefix, $id) = \Tinebase_WebDav_XMLUtil::splitPath($principal);
         
         // special handling for calendar proxy principals
         // they are groups in the user namespace
@@ -252,7 +252,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             // set prefix to calendar-proxy-read or calendar-proxy-write
             $prefix = $id;
             
-            list(, $id) = \Sabre\DAV\URLUtil::splitPath($path);
+            list(, $id) = \Tinebase_WebDav_XMLUtil::splitPath($path);
         }
         
         switch ($prefix) {
@@ -405,7 +405,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     {
         $result = array();
         
-        list($prefix, $contactId) = \Sabre\DAV\URLUtil::splitPath($principal);
+        list($prefix, $contactId) = \Tinebase_WebDav_XMLUtil::splitPath($principal);
         
         switch ($prefix) {
             case self::PREFIX_GROUPS:
@@ -524,10 +524,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
      *
      * @param string $prefixPath
      * @param array $searchProperties
-     * @todo implement handling for shared pseudo user
+     * @param string $test
      * @return array
+     *@todo implement handling for shared pseudo user
      */
-    public function searchPrincipals($prefixPath, array $searchProperties)
+    public function searchPrincipals($prefixPath, array $searchProperties, $test = 'allof')
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' path: ' . $prefixPath . ' properties: ' . print_r($searchProperties, true));
@@ -849,5 +850,10 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         }
 
         return $principal;
+    }
+
+    public function findByUri($uri, $principalPrefix)
+    {
+        return null;
     }
 }

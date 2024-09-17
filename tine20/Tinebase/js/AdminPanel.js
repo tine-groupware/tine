@@ -44,6 +44,11 @@ Tine.Tinebase.AdminPanel = Ext.extend(Ext.TabPanel, {
             new Tine.Admin.config.GridPanel({
                 configApp: Tine.Tinebase.appMgr.get('Tinebase')
             }),
+            new Tine.Tinebase.Tree_FlySystemGridPanel({
+                title: i18n._('Filesystem Mounts'),
+                // disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+                ownActionToolbar: true
+            }),
             new Tine.Tinebase.Admin.UserProfileConfigPanel({})
         ];
         

@@ -1270,7 +1270,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_DECLINED);
         $messages = Calendar_Controller_EventNotificationsTests::getMessages();
         $this->assertEquals(1, count($messages), 'exactly one mail should be send');
-        $this->assertStringContainsString('Clever, Susan declined event', $messages[0]->getSubject(), 'wrong subject');
+        $this->assertStringContainsString('Susan Clever declined event', $messages[0]->getSubject(), 'wrong subject');
         $this->assertStringContainsString('SEQUENCE:4', var_export($messages[0], TRUE), 'external sequence has not been keepted');
 
         // try outdated imip

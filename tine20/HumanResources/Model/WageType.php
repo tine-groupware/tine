@@ -88,12 +88,18 @@ class HumanResources_Model_WageType extends Tinebase_Record_Abstract
                 self::LENGTH            => 255,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Name', // _('Name')
+                self::UI_CONFIG         => [
+                    self::TRANSLATE         => true,
+                ],
             ],
             'description' => [
                 self::TYPE              => self::TYPE_FULLTEXT,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::LABEL             => 'Description', // _('Description')
                 self::NULLABLE          => true,
+                self::UI_CONFIG         => [
+                    self::TRANSLATE         => true,
+                ],
             ],
             'system' => [
                 self::TYPE              => self::TYPE_BOOLEAN,

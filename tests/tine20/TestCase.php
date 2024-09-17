@@ -119,6 +119,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected $_containerToDelete = [];
 
+    protected $_smtpConfig = [];
+
     /**
      * set up tests
      */
@@ -132,9 +134,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        $refProp = new ReflectionProperty(Felamimail_Controller_Account::class, '_instance');
-        $refProp->setAccessible(true);
-        $refProp->setValue(Felamimail_Controller_AccountMock::getInstance());
+        (new ReflectionProperty(Felamimail_Controller_Account::class, '_instance'))->setAccessible(true);
+        (new ReflectionClass(Felamimail_Controller_Account::class))
+            ->setStaticPropertyValue('_instance', Felamimail_Controller_AccountMock::getInstance());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
 
@@ -744,6 +746,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param bool $delete
      * @param array $recordData
      * @param bool $description
+     * @param bool $testQueryFilter
      * @return array
      * @throws Exception
      */
@@ -753,7 +756,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $descriptionField = 'description',
         $delete = true,
         $recordData = [],
-        $description = true
+        $description = true,
+        $testQueryFilter = false,
     ) {
         $uit = $this->_getUit();
         if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
@@ -815,6 +819,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
         self::assertEquals(1, $result['totalcount'], print_r($result['results'], true));
 
+        if ($testQueryFilter) {
+            $filter = array(array('field' => 'query', 'operator' => 'contains', 'value' => $savedRecord[$nameField]));
+            $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
+            self::assertEquals(1, $result['totalcount'], print_r($result['results'], true));
+        }
+
         if (null !== $configuration && $configuration->modlogActive && $recordWasUpdated) {
             self::assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
                 'last_modified_by not present: ' . print_r($result, true));
@@ -844,6 +854,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $db = Tinebase_Core::getDb();
         return ($db instanceof Zend_Db_Adapter_Pdo_Pgsql);
+    }
+
+    protected function getDivision(array $data): Sales_Model_Division
+    {
+        return new Sales_Model_Division(array_merge([
+            Sales_Model_Division::FLD_TITLE         => 'unittest',
+            Sales_Model_Division::FLD_NAME          => 'unittest',
+            Sales_Model_Division::FLD_ADDR_PREFIX1  => 'unittest',
+            Sales_Model_Division::FLD_ADDR_POSTAL   => 'unittest',
+            Sales_Model_Division::FLD_ADDR_LOCALITY => 'unittest',
+            Sales_Model_Division::FLD_ADDR_COUNTRY  => 'unittest',
+            Sales_Model_Division::FLD_CONTACT_NAME  => 'unittest',
+            Sales_Model_Division::FLD_CONTACT_EMAIL => 'unittest',
+            Sales_Model_Division::FLD_CONTACT_PHONE => 'unittest',
+            Sales_Model_Division::FLD_VAT_NUMBER    => 'unittest',
+        ], $data));
     }
 
     /**

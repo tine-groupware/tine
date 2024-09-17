@@ -20,7 +20,7 @@ tinedockercompose_createdirs: true
 
 tinedockercompose_db_service: true
 tinedockercompose_db_host: "db"
-tinedockercompose_db_image: "mariadb:10.6"
+tinedockercompose_db_image: "mariadb:10.9.8"
 tinedockercompose_db_command: "--max-allowed-packet=209715210"
 tinedockercompose_db_path: "/srv/tine/db"
 tinedockercompose_db_name: "tine"
@@ -36,7 +36,7 @@ tinedockercompose_documentserver_version: "latest"
 tinedockercompose_documentserver_secret: "change_me_also_define_in_tine_cfg"
 tinedockercompose_documentserver_publicurl: "http://localhost:4020/"
 
-tinedockercompose_redis_version: "5.0.5"
+tinedockercompose_redis_version: "6.0.16"
 
 tinedockercompose_broadcasthub: false
 tinedockercompose_broadcasthub_url: "ws://localhost:5001"

@@ -6,8 +6,10 @@
  * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
- Ext.ns('Tine', 'Tine.Tinebase');
+
+ import {PersonaContainer, Personas} from "./ux/vue/PersonaContainer";
+
+Ext.ns('Tine', 'Tine.Tinebase');
  
  /**
   * @namespace  Tine.Tinebase
@@ -19,11 +21,11 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
     id: 'changePassword_window',
     closeAction: 'close',
     modal: true,
-    width: 350,
-    height: 350,
-    minWidth: 350,
-    minHeight: 230,
-    layout: 'fit',
+    width: 500,
+    height: 300,
+    minWidth: 500,
+    minHeight: 300,
+    layout: 'column',
     plain: true,
     title: null,
     // password or pin
@@ -38,9 +40,13 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             this.passwordLabel,
             this.currentAccount.accountDisplayName
         );
-        
-        this.items = new Ext.FormPanel({
-            bodyStyle: 'padding:5px;',
+        this.items = []
+        const persona = new PersonaContainer({persona: Personas.QUESTION_CONFIRM, columnWidth: .2})
+        this.items.push(persona)
+        this.items.push(new Ext.FormPanel({
+            columnWidth: .8,
+            autoHeight: true,
+            bodyStyle: 'padding:5px;padding-bottom:30px',
             buttonAlign: 'right',
             labelAlign: 'top',
             anchor:'100%',
@@ -53,7 +59,6 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 xtype: 'textarea',
                 readOnly: true,
                 hideLabel: true,
-                style: 'padding-bottom: 10px;',
                 hidden: !this.dialogText,
                 value: this.dialogText
             }, {
@@ -142,7 +147,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 },
                 scope: this
             }]
-        });
+        }));
         
         Tine.Tinebase.PasswordChangeDialog.superclass.initComponent.call(this);
     }

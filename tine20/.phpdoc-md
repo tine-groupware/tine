@@ -24,7 +24,6 @@ $list = [
     'HumanResources',
     'Inventory',
     'OnlyOfficeIntegrator',
-    'Phone',
     'Projects',
     'Sales',
     'Setup',
@@ -32,8 +31,7 @@ $list = [
     'Tasks',
     'Timetracker',
     'Tinebase',
-    'UserManual',
-    'Voipmanager'
+    'UserManual'
 ];
 
 $frontends = [

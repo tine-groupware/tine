@@ -21,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    const TINEBASE_VERSION = 16;
+    const TINEBASE_VERSION = 17;
 
     /**
      * access log rotation in days
@@ -50,6 +50,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MFA_ENCOURAGE = 'mfa_encourage';
+
+    const MFA_BYPASS_NETMASKS = 'mfa_bypass_netmasks';
 
     /**
      * authentication backend config
@@ -129,6 +131,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DEFAULT_LOCALE = 'defaultLocale';
 
     /**
+     * DEFAULT_LOCALE_AUTO
+     *
+     * @var string
+     */
+    const DEFAULT_LOCALE_AUTO = 'auto';
+
+    /**
      * default user role
      */
     const DEFAULT_USER_ROLE_NAME = 'defaultUserRoleName';
@@ -161,6 +170,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
 
     /**
+     * database
+     *
+     * @var string
+     */
+    public const DATABASE = 'database';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -180,6 +196,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+
+    /**
+     * logger
+     *
+     * @var string
+     */
+    public const LOGGER = 'logger';
 
     /**
      * RATE_LIMITS
@@ -284,13 +307,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @const string
      */
     const FEATURE_CREATE_PREVIEWS = 'featureCreatePreviews';
-
-    /**
-     * FEATURE_SHOW_ACCOUNT_EMAIL
-     *
-     * @var string
-     */
-    const FEATURE_SHOW_ACCOUNT_EMAIL = 'featureShowAccountEmail';
 
     /**
      * FEATURE_REMEMBER_POPUP_SIZE
@@ -444,7 +460,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
-    
+
+    const SYNC_USER_DISABLED = 'syncUserDisabled';
+
+    const SYNC_USER_OF_GROUPS = 'syncUserOfGroups';
+    const SYNC_DEVIATED_PRIMARY_GROUP_UUID = 'syncDeviatedPrimaryGroupUUID';
+
     /**
      * configure if user contact data should be synced from sync backend, default yes
      *
@@ -812,6 +833,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
 
+    const REPLICATION_IS_PRIMARY = 'replicationIsPrimary';
+
     /**
      * @var string
      */
@@ -876,7 +899,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
+    const FILESYSTEM_AVSCAN_NOTIFICATION_ROLE = 'avscanNotificationRole';
     const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
+    const FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS = 'flySystemLocalBasePaths';
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
@@ -899,6 +924,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
     const ACTIONQUEUE_QUEUES = 'queues';
 
+    const PASSWORD_LESS_LOGIN = 'passwordLessLogin';
+
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
     const QUOTA_INCLUDE_REVISION = 'includeRevision';
@@ -909,14 +936,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_FILESYSTEM_TOTALINMB = 'filesystemTotalInMB';
     const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
     const QUOTA_NOTIFICATION_ADDRESSES = 'quotaNotificationAddresses';
-
-    const SSO = 'sso';
-    const SSO_ACTIVE = 'active';
-    const SSO_PROVIDER_URL = 'providerUrl';
-    const SSO_CLIENT_ID = 'clientId';
-    const SSO_CLIENT_SECRET = 'clientSecret';
-    const SSO_REDIRECT_URL = 'redirectUrl';
-    const SSO_ADAPTER = 'adapter';
 
     const TINE20_URL = 'tine20URL';
     const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
@@ -964,28 +983,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     protected static $_properties = array(
         self::ACCESS_LOG_ROTATION_DAYS => [
             //_('Accesslog rotation in days')
-            'label'                 => 'Accesslog rotation in days',
+            self::LABEL => 'Accesslog rotation in days',
             //_('Accesslog rotation in days')
-            'description'           => 'Accesslog rotation in days',
-            'type'                  => self::TYPE_INT,
-            'default'               => 7,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Accesslog rotation in days',
+            self::TYPE => self::TYPE_INT,
+            self::DEFAULT_STR => 7,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => TRUE,
+            self::SETBYSETUPMODULE => TRUE,
         ],
         /**
          * TODO add more options (like move to another container)
          */
         self::ACCOUNT_DELETION_EVENTCONFIGURATION => array(
             //_('Account Deletion Event')
-            'label'                 => 'Account Deletion Event',
+            self::LABEL => 'Account Deletion Event',
             //_('Configure what should happen to data of deleted users')
-            'description'           => 'Configure what should happen to data of deleted users',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Configure what should happen to data of deleted users',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => TRUE,
+            self::SETBYSETUPMODULE => TRUE,
             self::CONTENT               => [
                 self::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER  => [
                     //_('Delete personal containers')
@@ -1043,15 +1062,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          */
         self::AREA_LOCKS => array(
             //_('Area Locks')
-            'label'                 => 'Area Locks',
+            self::LABEL => 'Area Locks',
             //_('Configured Area Locks')
-            'description'           => 'Configured Area Locks',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => Tinebase_Model_AreaLockConfig::class),
-            'clientRegistryInclude' => true, // this will be cleaned in getClientRegistryConfig()! // TODO make this as a hook or something
-            'setBySetupModule'      => false,
-            'setByAdminModule'      => false,
-            'default'               => [
+            self::DESCRIPTION => 'Configured Area Locks',
+            self::TYPE => 'keyFieldConfig',
+            self::OPTIONS => array('recordModel' => Tinebase_Model_AreaLockConfig::class),
+            self::CLIENTREGISTRYINCLUDE => true, // this will be cleaned in getClientRegistryConfig()! // TODO make this as a hook or something
+            self::SETBYSETUPMODULE => false,
+            self::SETBYADMINMODULE => false,
+            self::DEFAULT_STR => [
                 'records' => [[
                     'area_name'         => 'login',
                     'areas'             => ['Tinebase_login'],
@@ -1060,17 +1079,46 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ]]
             ],
         ),
+        self::DATABASE => [
+            //_('Database Configuration')
+            self::LABEL => 'Database Configuration',
+            self::DESCRIPTION => 'Database Configuration',
+            self::TYPE => self::TYPE_OBJECT,
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+        ],
+        self::LOGGER => [
+            //_('Logger Configuration')
+            self::LABEL => 'Logger Configuration',
+            self::DESCRIPTION => 'Logger Configuration',
+            self::TYPE => self::TYPE_OBJECT,
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+        ],
+        self::MFA_BYPASS_NETMASKS => [
+            self::LABEL             => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
+            self::DESCRIPTION       => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
+            self::TYPE              => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE  => true,
+            self::SETBYADMINMODULE  => true,
+            self::DEFAULT_STR       => [],
+        ],
         self::MFA => array(
             //_('MFA')
-            'label'                 => 'MFA',
+            self::LABEL => 'MFA',
             //_('Configured MFAs')
-            'description'           => 'Configured MFAs',
-            'type'                  => 'keyFieldConfig',
-            'options'               => array('recordModel' => Tinebase_Model_MFA_Config::class),
-            'clientRegistryInclude' => false,
-            'setBySetupModule'      => false,
-            'setByAdminModule'      => false,
-            'default'               => [
+            self::DESCRIPTION => 'Configured MFAs',
+            self::TYPE => 'keyFieldConfig',
+            self::OPTIONS => array('recordModel' => Tinebase_Model_MFA_Config::class),
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE => false,
+            self::SETBYADMINMODULE => false,
+            self::DEFAULT_STR => [
                 'records' => [[
                     'id'                    => 'Authenticator App',
                     'allow_self_service'    => true,
@@ -1099,88 +1147,88 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          */
         self::AVAILABLE_LANGUAGES => array(
             //_('Available Languages')
-            'label'                 => 'Available Languages',
+            self::LABEL => 'Available Languages',
             //_('Whitelist available languages that can be chosen in the GUI')
-            'description'           => 'Whitelist available languages that can be chosen in the GUI',
-            'type'                  => 'array',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Whitelist available languages that can be chosen in the GUI',
+            self::TYPE => 'array',
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => TRUE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         /**
          * encourage MFA at login
          */
         self::MFA_ENCOURAGE => [
             //_('Encourage MFA at login')
-            'label'                 => 'Encourage MFA at login',
+            self::LABEL => 'Encourage MFA at login',
             //_('Encourage user at login to configure a mfa device')
-            'description'           => 'Encourage user at login to configure a mfa device',
-            'type'                  => 'bool',
+            self::DESCRIPTION => 'Encourage user at login to configure a mfa device',
+            self::TYPE => 'bool',
             // we need this to disable any convert actions in the GUI
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => false,
             // TODO add a checkbox/preference for users to allow to hide the dlg and switch to true again
-            'default'               => false,
+            self::DEFAULT_STR => false,
         ],
         /**
          * One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE
          */
         self::BUILD_TYPE => array(
             //_('Build Type')
-            'label' => 'Build Type',
+            self::LABEL => 'Build Type',
             //_('One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE')
-            'description' => 'One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE',
-            'type' => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule' => false,
-            'setBySetupModule' => false,
-            'default' => 'DEVELOPMENT',
+            self::DESCRIPTION => 'One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+            self::DEFAULT_STR => 'DEVELOPMENT',
         ),
         self::DBLOGGER => [
             //_('DB logger configuration')
-            'label'                 => 'DB logger configuration',
-            'description'           => 'DB logger configuration',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'content'               => [
+            self::LABEL => 'DB logger configuration',
+            self::DESCRIPTION => 'DB logger configuration',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::CONTENT => [
                 'active' => [
-                    'type' => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ],
                 // values from '0' to '7' are supported - see Tinebase_Log
                 'priority' => [
-                    'type' => Tinebase_Config::TYPE_STRING,
-                    'default' => '5',
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => '5',
                 ],
             ]
         ],
         self::DEFAULT_APP => array(
             //_('Default application')
-            'label'                 => 'Default application',
+            self::LABEL => 'Default application',
             //_('Default application for this installation.')
-            'description'           => 'Default application for this installation.',
-            'type'                  => 'string',
-            'default'               => 'Addressbook',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Default application for this installation.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => 'Addressbook',
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         /**
-         * for example: 'de'
+         * for example: 'de' / 'auto' uses fallback from Zend_Locale
          */
         self::DEFAULT_LOCALE => array(
             //_('Default Locale')
-            'label'                 => 'Default Locale',
+            self::LABEL => 'Default Locale',
             //_('Default locale for this installation.')
-            'description'           => 'Default locale for this installation.',
-            'type'                  => 'string',
-            'default'               => 'en',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Default locale for this installation.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => self::DEFAULT_LOCALE_AUTO,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
         ),
         /**
          * config keys (see Zend_Http_Client_Adapter_Proxy):
@@ -1192,13 +1240,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          */
         self::INTERNET_PROXY => array(
             //_('Internet proxy config')
-            'label'                 => 'Internet proxy config',
-            'description'           => 'Internet proxy config',
-            'type'                  => 'array',
-            'default'               => array(),
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
+            self::LABEL => 'Internet proxy config',
+            self::DESCRIPTION => 'Internet proxy config',
+            self::TYPE => 'array',
+            self::DEFAULT_STR => array(),
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
         ),
         /**
          * config keys:
@@ -1214,17 +1262,20 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * backend (string) - see Tinebase_EmailUser::$_supportedBackends
          * verifyPeer (bool)
          * "allowOverwrite": false (bool)
+         * "allowExternalEmail": false (bool)
+         *
+         * TODO make this a structured config with subconfig keys
          */
         self::IMAP => array(
                                    //_('System IMAP')
-            'label'                 => 'System IMAP',
+            self::LABEL => 'System IMAP',
                                    //_('System IMAP server configuration.')
-            'description'           => 'System IMAP server configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'System IMAP server configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         /**
          * config keys:
@@ -1244,69 +1295,69 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          */
         self::SMTP => array(
                                    //_('System SMTP')
-            'label'                 => 'System SMTP',
+            self::LABEL => 'System SMTP',
                                    //_('System SMTP server configuration.')
-            'description'           => 'System SMTP server configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'System SMTP server configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::SIEVE => array(
                                    //_('System SIEVE')
-            'label'                 => 'System SIEVE',
+            self::LABEL => 'System SIEVE',
                                    //_('System SIEVE server configuration.')
-            'description'           => 'System SIEVE server configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'System SIEVE server configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         // TODO remove this config and all old code in 2021.11
         self::EMAIL_USER_ID_IN_XPROPS => [
             //_('Use record XPROPS to save email user id')
-            'label'                 => 'Use record XPROPS to save email user id',
+            self::LABEL => 'Use record XPROPS to save email user id',
             //_('Use record XPROPS to save email user id')
-            'description'           => 'Use record XPROPS to save email user id',
-            'type'                  => 'bool',
+            self::DESCRIPTION => 'Use record XPROPS to save email user id',
+            self::TYPE => 'bool',
             // we need this to disable any convert actions in the GUI
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'default'               => true,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => true,
         ],
         self::TRUSTED_PROXIES => array(
             //_('Trusted Proxies')
-            'label'                 => 'Trusted Proxies',
+            self::LABEL => 'Trusted Proxies',
             //_('If this is set, the HTTP_X_FORWARDED_FOR header is used.')
-            'description'           => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
-            'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'If this is set, the HTTP_X_FORWARDED_FOR header is used.',
+            self::TYPE => 'array',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::AUTHENTICATIONBACKENDTYPE => array(
                                    //_('Authentication Backend')
-            'label'                 => 'Authentication Backend',
+            self::LABEL => 'Authentication Backend',
                                    //_('Backend adapter for user authentication.')
-            'description'           => 'Backend adapter for user authentication.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Backend adapter for user authentication.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::AUTHENTICATIONBACKEND => array(
                                    //_('Authentication Configuration')
-            'label'                 => 'Authentication Configuration',
+            self::LABEL => 'Authentication Configuration',
                                    //_('Authentication backend configuration.')
-            'description'           => 'Authentication backend configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Authentication backend configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::AUTHENTICATION_BY_EMAIL => [
             self::LABEL                 => 'Authentication by Email',
@@ -1337,170 +1388,173 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::USERBACKENDTYPE => array(
                                    //_('User Backend')
-            'label'                 => 'User Backend',
+            self::LABEL => 'User Backend',
                                    //_('Backend adapter for user data.')
-            'description'           => 'Backend adapter for user data.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Backend adapter for user data.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::REPLICATION_MASTER => array(
             //_('Replication master configuration')
-            'label'                 => 'Replication master configuration',
+            self::LABEL => 'Replication master configuration',
             //_('Replication master configuration.')
-            'description'           => 'Replication master configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'content'               => array(
+            self::DESCRIPTION => 'Replication master configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::CONTENT => array(
                 self::REPLICATION_USER_PASSWORD     => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING
-                )
+                    self::TYPE => Tinebase_Config::TYPE_STRING
+                ),
+                self::REPLICATION_IS_PRIMARY        => [
+                    self::TYPE                          => self::TYPE_BOOL
+                ],
             ),
         ),
         self::REPLICATION_SLAVE => array(
             //_('Replication slave configuration')
-            'label'                 => 'Replication slave configuration',
+            self::LABEL => 'Replication slave configuration',
             //_('Replication slave configuration.')
-            'description'           => 'Replication slave configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'content'               => array(
+            self::DESCRIPTION => 'Replication slave configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::CONTENT => array(
                 self::MASTER_URL                => array(
-                    'type'                          => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 self::MASTER_USERNAME           => array(
-                    'type'                          => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 self::MASTER_PASSWORD           => array(
-                    'type'                          => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 self::ERROR_NOTIFICATION_LIST   => array(
-                    'type'                          => Tinebase_Config::TYPE_ARRAY,
+                    self::TYPE => Tinebase_Config::TYPE_ARRAY,
                 )
             )
         ),
         self::FULLTEXT => array(
             //_('Full text configuration')
-            'label'                 => 'Full text configuration',
+            self::LABEL => 'Full text configuration',
             //_('Full text configuration.')
-            'description'           => 'Full text configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'content'               => array(
+            self::DESCRIPTION => 'Full text configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::CONTENT => array(
                 self::FULLTEXT_BACKEND          => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'Sql'
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => 'Sql'
                 ),
                 self::FULLTEXT_JAVABIN          => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'java'
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => 'java'
                 ),
                 self::FULLTEXT_TIKAJAR          => array(
-                    'type'                              => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 // shall we include fulltext fields in the query filter?
                 self::FULLTEXT_QUERY_FILTER     => array(
-                    'type'                              => Tinebase_Config::TYPE_BOOL,
-                    'default'                           => false
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
+                    self::DEFAULT_STR => true
                 ),
             ),
-            'default'                           => array()
+            self::DEFAULT_STR => array()
         ),
         self::ACTIONQUEUE => [
             //_('Action queue configuration')
-            'label'                 => 'Action queue configuration',
+            self::LABEL => 'Action queue configuration',
             //_('Action queue configuration.')
-            'description'           => 'Action queue configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'content'               => [
+            self::DESCRIPTION => 'Action queue configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::CONTENT => [
                 self::ACTIONQUEUE_ACTIVE        => [
-                    'type'                              => Tinebase_Config::TYPE_BOOL,
-                    'default'                           => false,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
+                    self::DEFAULT_STR => false,
                 ],
                 self::ACTIONQUEUE_BACKEND       => [
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'Direct',
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => 'Direct',
                 ],
                 self::ACTIONQUEUE_CLEAN_DS_LONG_RUNNING => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 5 * 60 * 60, // 5 hours
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 5 * 60 * 60, // 5 hours
                 ],
                 self::ACTIONQUEUE_HOST          => [
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'localhost',
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => 'localhost',
                 ],
                 self::ACTIONQUEUE_LONG_RUNNING  => [
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => '',
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => '',
                 ],
                 self::ACTIONQUEUE_PORT          => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 6379,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 6379,
                 ],
                 self::ACTIONQUEUE_NAME          => [
-                    'type'                              => Tinebase_Config::TYPE_STRING,
-                    'default'                           => 'TinebaseQueue',
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => 'TinebaseQueue',
                 ],
                 self::ACTIONQUEUE_MONITORING_DURATION_WARN       => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 60,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 60,
                 ],
                 self::ACTIONQUEUE_MONITORING_LASTUPDATE_WARN     => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 180,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 180,
                 ],
                 self::ACTIONQUEUE_MONITORING_DURATION_CRIT       => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3600,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 3600,
                 ],
                 self::ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT     => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3600,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 3600,
                 ],
                 self::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT   => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 30,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 30,
                 ],
                 self::ACTIONQUEUE_LR_MONITORING_DURATION_WARN       => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 360,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 360,
                 ],
                 self::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN     => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 1000,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 1000,
                 ],
                 self::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT       => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3600,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 3600,
                 ],
                 self::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT     => [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3600,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 3600,
                 ],
                 self::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT=> [
-                    'type'                              => Tinebase_Config::TYPE_INT,
-                    'default'                           => 3,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 3,
                 ],
                 self::ACTIONQUEUE_QUEUES            => [
-                    'type'                              => Tinebase_Config::TYPE_ARRAY,
-                    'default'                           => [],
+                    self::TYPE => Tinebase_Config::TYPE_ARRAY,
+                    self::DEFAULT_STR => [],
                 ],
             ],
-            'default'                           => [],
+            self::DEFAULT_STR => [],
         ],
         self::ACCOUNT_TWIG                 => [
             self::TYPE                      => self::TYPE_OBJECT,
@@ -1528,172 +1582,205 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::USERBACKEND => array(
                                    //_('User Configuration')
-            'label'                 => 'User Configuration',
+            self::LABEL => 'User Configuration',
                                    //_('User backend configuration.')
-            'description'           => 'User backend configuration.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'content'               => array(
+            self::DESCRIPTION => 'User backend configuration.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::CONTENT => array(
                 Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'host'                      => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'port'                      => array(
-                    'type'                      => Tinebase_Config::TYPE_INT,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
                 ),
                 'useSsl'                    => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'username'                  => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'password'                  => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'bindRequiresDn'            => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'baseDn'                    => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'accountCanonicalForm'      => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'accountDomainName'         => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'accountDomainNameShort'    => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'accountFilterFormat'       => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'allowEmptyPassword'        => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'useStartTls'               => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'optReferrals'              => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'tryUsernameSplit'          => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'groupUUIDAttribute'        => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'groupsDn'                  => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'useRfc2307bis'             => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'userDn'                    => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'userFilter'                => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'userSearchScope'           => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'groupFilter'               => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'groupSearchScope'          => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'pwEncType'                 => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'minUserId'                 => array(
-                    'type'                      => Tinebase_Config::TYPE_INT,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
                 ),
                 'maxUserId'                 => array(
-                    'type'                      => Tinebase_Config::TYPE_INT,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
                 ),
                 'minGroupId'                => array(
-                    'type'                      => Tinebase_Config::TYPE_INT,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
                 ),
                 'maxGroupId'                => array(
-                    'type'                      => Tinebase_Config::TYPE_INT,
+                    self::TYPE => Tinebase_Config::TYPE_INT,
                 ),
                 'userUUIDAttribute'         => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
                 ),
                 'readonly'                  => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'useRfc2307'                => array(
-                    'type'                      => Tinebase_Config::TYPE_BOOL,
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
                 ),
                 'emailAttribute'            => array(
-                    'type'                      => Tinebase_Config::TYPE_STRING,
-                    'default'                   => 'mail',
+                    self::TYPE => Tinebase_Config::TYPE_STRING,
+                    self::DEFAULT_STR => 'mail',
                 ),
                 self::USERBACKEND_WRITE_PW_TO_SQL => [
                     self::TYPE                  => Tinebase_Config::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
                 self::SYNCOPTIONS           => array(
-                    'type'                      => 'object',
-                    'class'                     => 'Tinebase_Config_Struct',
-                    'content'                   => array(
+                    self::TYPE => 'object',
+                    self::CLASSNAME => Tinebase_Config_Struct::class,
+                    self::CONTENT => array(
                         self::SYNC_USER_CONTACT_DATA => array(
                             //_('Sync contact data from sync backend')
-                            'label'                 => 'Sync contact data from sync backend',
+                            self::LABEL => 'Sync contact data from sync backend',
                             //_('Sync user contact data from sync backend')
-                            'description'           => 'Sync user contact data from sync backend',
-                            'type'                  => 'bool',
-                            'clientRegistryInclude' => FALSE,
-                            'setByAdminModule'      => FALSE,
-                            'setBySetupModule'      => FALSE,
-                            'default'               => TRUE
+                            self::DESCRIPTION => 'Sync user contact data from sync backend',
+                            self::TYPE => 'bool',
+                            self::CLIENTREGISTRYINCLUDE => FALSE,
+                            self::SETBYADMINMODULE => FALSE,
+                            self::SETBYSETUPMODULE => FALSE,
+                            self::DEFAULT_STR => TRUE
                         ),
                         self::SYNC_USER_CONTACT_PHOTO => array(
                             //_('Sync contact photo from sync backend')
-                            'label'                 => 'Sync contact photo from sync backend',
+                            self::LABEL => 'Sync contact photo from sync backend',
                             //_('Sync user contact photo from sync backend')
-                            'description'           => 'Sync user contact photo from sync backend',
-                            'type'                  => 'bool',
-                            'clientRegistryInclude' => FALSE,
-                            'setByAdminModule'      => FALSE,
-                            'setBySetupModule'      => FALSE,
-                            'default'               => TRUE
+                            self::DESCRIPTION => 'Sync user contact photo from sync backend',
+                            self::TYPE => 'bool',
+                            self::CLIENTREGISTRYINCLUDE => FALSE,
+                            self::SETBYADMINMODULE => FALSE,
+                            self::SETBYSETUPMODULE => FALSE,
+                            self::DEFAULT_STR => TRUE
                         ),
                         self::SYNC_DELETED_USER => array(
                             //_('Sync deleted users from sync backend')
-                            'label'                 => 'Sync deleted users from sync backend',
+                            self::LABEL => 'Sync deleted users from sync backend',
                             //_('Sync deleted users from sync backend')
-                            'description'           => 'Sync deleted users from sync backend',
-                            'type'                  => 'bool',
-                            'clientRegistryInclude' => FALSE,
-                            'setByAdminModule'      => FALSE,
-                            'setBySetupModule'      => FALSE,
-                            'default'               => TRUE
+                            self::DESCRIPTION => 'Sync deleted users from sync backend',
+                            self::TYPE => 'bool',
+                            self::CLIENTREGISTRYINCLUDE => FALSE,
+                            self::SETBYADMINMODULE => FALSE,
+                            self::SETBYSETUPMODULE => FALSE,
+                            self::DEFAULT_STR => TRUE
                         ),
                         self::SYNC_USER_ACCOUNT_STATUS => array(
                             //_('Sync user account status from sync backend')
-                            'label'                 => 'Sync user account status from sync backend',
+                            self::LABEL => 'Sync user account status from sync backend',
                             //_('Sync user account status from sync backend')
-                            'description'           => 'Sync user account status from sync backend',
-                            'type'                  => 'bool',
-                            'clientRegistryInclude' => FALSE,
-                            'setByAdminModule'      => FALSE,
-                            'setBySetupModule'      => FALSE,
-                            'default'               => FALSE
+                            self::DESCRIPTION => 'Sync user account status from sync backend',
+                            self::TYPE => 'bool',
+                            self::CLIENTREGISTRYINCLUDE => FALSE,
+                            self::SETBYADMINMODULE => FALSE,
+                            self::SETBYSETUPMODULE => FALSE,
+                            self::DEFAULT_STR => FALSE
                         ),
+                        self::SYNC_USER_DISABLED => [
+                            //_('Sync user accounts / groups disabled')
+                            self::LABEL => 'Sync user accounts / groups disabled',
+                            //_('Sync user accounts / groups disabled')
+                            self::DESCRIPTION => 'Sync user accounts / groups disabled',
+                            self::TYPE => 'bool',
+                            self::CLIENTREGISTRYINCLUDE => false,
+                            self::SETBYADMINMODULE => false,
+                            self::SETBYSETUPMODULE => false,
+                            self::DEFAULT_STR => false,
+                        ],
+                        self::SYNC_USER_OF_GROUPS => [
+                            //_('Sync user accounts to sync backend if member of one of these groups')
+                            self::LABEL => 'Sync user accounts to sync backend if member of one of these groups',
+                            //_('Sync user accounts to sync backend if member of one of these groups')
+                            self::DESCRIPTION => 'Sync user accounts to sync backend if member of one of these groups',
+                            self::TYPE => self::TYPE_ARRAY,
+                            self::CLIENTREGISTRYINCLUDE => false,
+                            self::SETBYADMINMODULE => false,
+                            self::SETBYSETUPMODULE => false,
+                            self::DEFAULT_STR => [],
+                        ],
+                        self::SYNC_DEVIATED_PRIMARY_GROUP_UUID => [
+                            //_('Sync deviated user accounts default group')
+                            self::LABEL => 'Sync deviated user accounts default group',
+                            //_('Sync deviated user accounts default group')
+                            self::DESCRIPTION => 'Sync deviated user accounts default group',
+                            self::TYPE => self::TYPE_STRING,
+                            self::CLIENTREGISTRYINCLUDE => false,
+                            self::SETBYADMINMODULE => false,
+                            self::SETBYSETUPMODULE => false,
+                            self::DEFAULT_STR => '',
+                        ],
                     ),
-                    'default'                   => array(),
+                    self::DEFAULT_STR => array(),
                 ),
             ),
         ),
@@ -1710,14 +1797,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION                   =>
                         'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
-                    self::TYPE                          => self::TYPE_BOOL,
-                    self::DEFAULT_STR                   => true,
-                ),
-                self::FEATURE_SHOW_ACCOUNT_EMAIL    => array(
-                    self::LABEL                         => 'Show Account Email Address',
-                    //_('Show Account Email Address')
-                    self::DESCRIPTION                   => 'Show email address in account picker and attendee grids',
-                    //_('Show email address in account picker and attendee grids')
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),
@@ -1775,23 +1854,23 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::DEFAULT_ADMIN_ROLE_NAME => array(
             //_('Default Admin Role Name')
-            'label'                 => 'Default Admin Role Name',
-            'description'           => 'Default Admin Role Name',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'default'               => 'admin role'
+            self::LABEL => 'Default Admin Role Name',
+            self::DESCRIPTION => 'Default Admin Role Name',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => 'admin role'
         ),
         self::DEFAULT_USER_ROLE_NAME => array(
             //_('Default User Role Name')
-            'label'                 => 'Default User Role Name',
-            'description'           => 'Default User Role Name',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'default'               => 'user role'
+            self::LABEL => 'Default User Role Name',
+            self::DESCRIPTION => 'Default User Role Name',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => 'user role'
         ),
         self::DELETED_DATA_RETENTION_TIME => [
             self::LABEL                 => 'Deleted Data Retention Time', // _('Deleted Data Retention Time')
@@ -1804,24 +1883,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::CRON_DISABLED => [
             //_('Cronjob Disabled')
-            'label'                 => 'Cronjob Disabled',
+            self::LABEL => 'Cronjob Disabled',
             //_('triggerAsyncEvents does not do anything and monitoringCheckCron does not alert')
-            'description'           => 'triggerAsyncEvents does not do anything and monitoringCheckCron does not alert',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'default'               => false,
+            self::DESCRIPTION => 'triggerAsyncEvents does not do anything and monitoringCheckCron does not alert',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false,
         ],
         self::CRONUSERID => array(
                                    //_('Cronuser ID')
-            'label'                 => 'Cronuser ID',
+            self::LABEL => 'Cronuser ID',
                                    //_('User ID of the cron user.')
-            'description'           => 'User ID of the cron user.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'User ID of the cron user.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => TRUE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::IMPORT_EXPORT_DEFAULT_CONTAINER => [
             self::LABEL                 => 'Import/Export Default Container', // _('Import/Export Default Container')
@@ -1833,43 +1912,43 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::PAGETITLEPOSTFIX => array(
                                    //_('Title Postfix')
-            'label'                 => 'Title Postfix',
+            self::LABEL => 'Title Postfix',
                                    //_('Postfix string appended to the title of this installation.')
-            'description'           => 'Postfix string appended to the title of this installation.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Postfix string appended to the title of this installation.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => TRUE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::REDIRECTURL => array(
                                    //_('Redirect URL')
-            'label'                 => 'Redirect URL',
+            self::LABEL => 'Redirect URL',
                                    //_('Redirect to this URL after logout.')
-            'description'           => 'Redirect to this URL after logout.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Redirect to this URL after logout.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::REDIRECTTOREFERRER => array(
                                    //_('Redirect to Referrer')
-            'label'                 => 'Redirect to Referrer',
+            self::LABEL => 'Redirect to Referrer',
                                    //_('Redirect to referrer after logout.')
-            'description'           => 'Redirect to referrer after logout.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Redirect to referrer after logout.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::REDIRECTALWAYS => array(
                                    //_('Redirect Always')
-            'label'                 => 'Redirect Always',
+            self::LABEL => 'Redirect Always',
                                    //_('Redirect to configured redirect URL also for login.')
-            'description'           => 'Redirect to configured redirect URL also for login.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Redirect to configured redirect URL also for login.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::BROADCASTHUB  => [
             self::TYPE                  => self::TYPE_OBJECT,
@@ -1913,113 +1992,113 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::STATUS_INFO => array(
             //_('Status Info')
-            'label'                 => 'Status Info',
+            self::LABEL => 'Status Info',
             //_('If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status')
-            'description'           => 'If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status',
-            'type'                  => 'bool',
-            'default'               => false,
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status',
+            self::TYPE => 'bool',
+            self::DEFAULT_STR => false,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::ALLOWEDJSONORIGINS => array(
                                    //_('Allowed Origins')
-            'label'                 => 'Allowed Origins',
+            self::LABEL => 'Allowed Origins',
                                    //_('Allowed Origins for the JSON API.')
-            'description'           => 'Allowed Origins for the JSON API.',
-            'type'                  => 'array',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            self::DESCRIPTION => 'Allowed Origins for the JSON API.',
+            self::TYPE => 'array',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
         ),
         self::ALLOWEDHEALTHCHECKIPS => array(
             //_('Allowed Health Check IPs')
-            'label'                 => 'Allowed Health Check IPs',
+            self::LABEL => 'Allowed Health Check IPs',
             //_('Hosts that are allowed to access the TINEURL/health API')
-            'description'           => 'Hosts that are allowed to access the TINEURL/health API',
-            'type'                  => 'array',
-            'default'               => ['127.0.0.1'],
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            self::DESCRIPTION => 'Hosts that are allowed to access the TINEURL/health API',
+            self::TYPE => 'array',
+            self::DEFAULT_STR => ['127.0.0.1'],
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
         ),
         self::ACCEPTEDTERMSVERSION => array(
                                    //_('Accepted Terms Version')
-            'label'                 => 'Accepted Terms Version',
+            self::LABEL => 'Accepted Terms Version',
                                    //_('Accepted version number of the terms and conditions document.')
-            'description'           => 'Accepted version number of the terms and conditions document.',
-            'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Accepted version number of the terms and conditions document.',
+            self::TYPE => 'int',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::USE_NOMINATIM_SERVICE => [
             //_('Use Nominatim Geocoding Services')
-            'label'                 => 'Use Nominatim Geocoding Services',
+            self::LABEL => 'Use Nominatim Geocoding Services',
             //_('Use of external Nominatim Geocoding service is allowed.')
-            'description'           => 'Use of external Nominatim Geocoding service is allowed.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => false,
+            self::DESCRIPTION => 'Use of external Nominatim Geocoding service is allowed.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false,
         ],
         self::USE_MAP_SERVICE => [
             //_('Use map service')
-            'label'                 => 'Use map service',
+            self::LABEL => 'Use map service',
             //_('Use map service')
-            'description'           => 'Use of external map services is allowed',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => false,
+            self::DESCRIPTION => 'Use of external map services is allowed',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false,
         ],
         self::NOMINATIM_SERVICE_URL => [
             //_('Nominatim Service URL')
-            'label'                 => 'Nominatim Service URL',
+            self::LABEL => 'Nominatim Service URL',
             //_('Nominatim Service URL')
-            'description'           => 'Nominatim Service URL',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => 'https://nominatim.openstreetmap.org/',
+            self::DESCRIPTION => 'Nominatim Service URL',
+            self::TYPE => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => 'https://nominatim.openstreetmap.org/',
         ],self::MAP_SERVICE_URL => [
             //_('Map Service URL')
-            'label'                 => 'Map Service URL',
+            self::LABEL => 'Map Service URL',
             //_('Map Service URL')
-            'description'           => 'Map Service URL',
-            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => 'https://tile.openstreetmap.org/',
+            self::DESCRIPTION => 'Map Service URL',
+            self::TYPE => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => 'https://tile.openstreetmap.org/',
         ],
         // TODO should this be added to LDAP config array/struct?
         self::LDAP_DISABLE_TLSREQCERT => array(
                                    //_('Disable LDAP TLS Certificate Check')
-            'label'                 => 'Disable LDAP TLS Certificate Check',
+            self::LABEL => 'Disable LDAP TLS Certificate Check',
                                    //_('LDAP TLS Certificate should not be checked')
-            'description'           => 'LDAP TLS Certificate should not be checked',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'default'               => false
+            self::DESCRIPTION => 'LDAP TLS Certificate should not be checked',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false
         ),
         // TODO should this be added to LDAP config array/struct?
         // TODO does this depend on LDAP readonly option?
         self::LDAP_OVERWRITE_CONTACT_FIELDS => array(
             //_('Contact fields overwritten by LDAP')
-            'label'                 => 'Contact fields overwritten by LDAP',
+            self::LABEL => 'Contact fields overwritten by LDAP',
             //_('These fields are overwritten during LDAP sync if empty')
-            'description'           => 'These fields are overwritten during LDAP sync if empty',
-            'type'                  => 'array',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
-            'default'               => array()
+            self::DESCRIPTION => 'These fields are overwritten during LDAP sync if empty',
+            self::TYPE => 'array',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => array()
         ),
         /**
          * Configure rate limits by user and method
@@ -2043,24 +2122,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::SALES_TAX => array(
             //_('Sales Tax Default')
-            'label'                 => 'Sales Tax Default',
+            self::LABEL => 'Sales Tax Default',
             //_('Sales tax that is used as default value in Tine 2.0 apps like Sales.')
-            'description'           => 'Sales tax that is used as default value in Tine 2.0 apps like Sales.',
-            'type'                  => Tinebase_Config_Abstract::TYPE_FLOAT,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION => 'Sales tax that is used as default value in Tine 2.0 apps like Sales.',
+            self::TYPE => Tinebase_Config_Abstract::TYPE_FLOAT,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
             Tinebase_Config_Abstract::DEFAULT_STR => 19.0,
         ),
         self::SENTRY_URI => array(
             //_('Sentry service URI')
-            'label'                 => 'Sentry service URI',
+            self::LABEL => 'Sentry service URI',
             //_('URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>')
-            'description'           => 'URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION => 'URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
         ),
         self::SENTRY_LOGLEVL => [
             //_('Sentry Loglevel Bitmask')
@@ -2075,23 +2154,23 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::STATUS_API_KEY => array(
             //_('API key to access status URI')
-            'label'                 => 'API key to access status URI',
+            self::LABEL => 'API key to access status URI',
             //_('API key to access status URI')
-            'description'           => 'API key to access status URIs',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION => 'API key to access status URIs',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
         ),
         self::METRICS_API_KEY => array(
             //_('API key to access status metrics URI')
-            'label'                 => 'API key to access status metrics URI',
+            self::LABEL => 'API key to access status metrics URI',
             //_('API key to access status metrics URI')
-            'description'           => 'API key to access status metrics URIs',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION => 'API key to access status metrics URIs',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
         ),
         self::EVENT_HOOK_CLASS => array(
             //_('Custom event handling hook')
@@ -2115,132 +2194,132 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ),
         self::SYNC_USER_CONTACT_DATA => array(
             //_('Sync contact data from sync backend')
-            'label'                 => 'Sync contact data from sync backend',
+            self::LABEL => 'Sync contact data from sync backend',
             //_('Sync user contact data from sync backend')
-            'description'           => 'Sync user contact data from sync backend',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => TRUE
+            self::DESCRIPTION => 'Sync user contact data from sync backend',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::DEFAULT_STR => TRUE
         ),
         self::SYNC_USER_DELETE_AFTER => array(
             //_('Sync user: delete after X months)
-            'label'                 => 'Sync user: delete after X months',
+            self::LABEL => 'Sync user: delete after X months',
             //_('Removed users should be deleted after X months')
-            'description'           => 'Removed users should be deleted after X months',
-            'type'                  => self::TYPE_INT,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => 12,
+            self::DESCRIPTION => 'Removed users should be deleted after X months',
+            self::TYPE => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::DEFAULT_STR => 12,
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')
-            'label'                 => 'IP Session Validator',
+            self::LABEL => 'IP Session Validator',
                                    //_('Destroy session if the users IP changes.')
-            'description'           => 'Destroy session if the users IP changes.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Destroy session if the users IP changes.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::SESSIONUSERAGENTVALIDATION => array(
                                    //_('UA Session Validator')
-            'label'                 => 'UA Session Validator',
+            self::LABEL => 'UA Session Validator',
                                    //_('Destroy session if the users user agent string changes.')
-            'description'           => 'Destroy session if the users user agent string changes.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Destroy session if the users user agent string changes.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         // TODO move to FILESYSTEM
         self::FILESDIR => array(
                                    //_('Files Directory')
-            'label'                 => 'Files Directory',
+            self::LABEL => 'Files Directory',
                                    //_('Directory with web server write access for user files.')
-            'description'           => 'Directory with web server write access for user files.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Directory with web server write access for user files.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::REUSEUSERNAME_SAVEUSERNAME => array(
             //_('Reuse last username logged')
-            'label'                 => 'Reuse last username logged',
+            self::LABEL => 'Reuse last username logged',
             //_('Reuse last username logged')            
-            'description'           => 'Reuse last username logged',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Reuse last username logged',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::PASSWORD_CHANGE => array(
         //_('User may change password')
-            'label'                 => 'User may change password',
+            self::LABEL => 'User may change password',
         //_('User may change password')
-            'description'           => 'User may change password',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => TRUE
+            self::DESCRIPTION => 'User may change password',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::DEFAULT_STR => TRUE
         ),
         self::ALLOW_BROWSER_PASSWORD_MANAGER => array(
             //_('Browser password manager can be used')
-            'label'                 => 'Browser password manager can be used',
-            'description'           => 'Browser password manager can be used',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => true
+            self::LABEL => 'Browser password manager can be used',
+            self::DESCRIPTION => 'Browser password manager can be used',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => true
         ),
         self::PASSWORD_SUPPORT_NTLMV2 => array(
             //_('Support NTLM V2 authentication')
-            'label'                 => 'Support NTLM V2 authentication',
+            self::LABEL => 'Support NTLM V2 authentication',
             //_('Support NTLM V2 authentication and store account password as ntlm v2 hash')
-            'description'           => 'Support NTLM V2 authentication and store account password as ntlm v2 hash',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => false
+            self::DESCRIPTION => 'Support NTLM V2 authentication and store account password as ntlm v2 hash',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false
         ),
         self::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN => array(
             //_('Update NTLM V2 password has on login')
-            'label'                 => 'Update NTLM V2 password has on login',
+            self::LABEL => 'Update NTLM V2 password has on login',
             //_('Update NTLM V2 password has on login')
-            'description'           => 'Update NTLM V2 password has on login',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => false
+            self::DESCRIPTION => 'Update NTLM V2 password has on login',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false
         ),
         self::PASSWORD_NTLMV2_ENCRYPTION_KEY => array(
             //_('NTLM V2 password hash encryption key')
-            'label'                 => 'NTLM V2 password hash encryption key',
+            self::LABEL => 'NTLM V2 password hash encryption key',
             //_('Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database.')
-            'description'           => 'Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database.',
-            'type'                  => 'string',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => true,
-            'default'               => null
+            self::DESCRIPTION => 'Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database.',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => null
         ),
         self::USER_PASSWORD_POLICY => array(
             //_('User password policy')
-            'label'                 => 'User password policy',
+            self::LABEL => 'User password policy',
             //_('User password policy settings.')
-            'description'           => 'User password policy settings.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => true,
-            'content'               => [
+            self::DESCRIPTION => 'User password policy settings.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => true,
+            self::CONTENT => [
                 self::CHECK_AT_LOGIN    => [
                     // _('Check password policies at login')
                     self::LABEL             => 'Check password policies at login',
@@ -2252,104 +2331,104 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::PASSWORD_MANDATORY => array(
                     //_('A password must be set')
-                    'label'                 => 'A password must be set',
+                    self::LABEL => 'A password must be set',
                     //_('A password must be set')
-                    'description'           => 'A password must be set',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'A password must be set',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_ACTIVE => array(
                     //_('Enable password policy')
-                    'label'                 => 'Enable password policy',
+                    self::LABEL => 'Enable password policy',
                     //_('Enable password policy')
-                    'description'           => 'Enable password policy',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Enable password policy',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_ONLYASCII => array(
                     //_('Only ASCII')
-                    'label'                 => 'Only ASCII',
+                    self::LABEL => 'Only ASCII',
                     //_('Only ASCII characters are allowed in passwords.')
-                    'description'           => 'Only ASCII characters are allowed in passwords.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Only ASCII characters are allowed in passwords.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_LENGTH => array(
                     //_('Minimum length')
-                    'label'                 => 'Minimum length',
+                    self::LABEL => 'Minimum length',
                     //_('Minimum password length')
-                    'description'           => 'Minimum password length',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum password length',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_WORD_CHARS => array(
                     //_('Minimum word chars')
-                    'label'                 => 'Minimum word chars',
+                    self::LABEL => 'Minimum word chars',
                     //_('Minimum word chars in password')
-                    'description'           => 'Minimum word chars in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum word chars in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => array(
                     //_('Minimum uppercase chars')
-                    'label'                 => 'Minimum uppercase chars',
+                    self::LABEL => 'Minimum uppercase chars',
                     //_('Minimum uppercase chars in password')
-                    'description'           => 'Minimum uppercase chars in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum uppercase chars in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_SPECIAL_CHARS => array(
                     //_('Minimum special chars')
-                    'label'                 => 'Minimum special chars',
+                    self::LABEL => 'Minimum special chars',
                     //_('Minimum special chars in password')
-                    'description'           => 'Minimum special chars in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum special chars in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_NUMBERS => array(
                     //_('Minimum numbers')
-                    'label'                 => 'Minimum numbers',
+                    self::LABEL => 'Minimum numbers',
                     //_('Minimum numbers in password')
-                    'description'           => 'Minimum numbers in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum numbers in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_FORBID_USERNAME => array(
                     //_('Forbid part of username')
-                    'label'                 => 'Forbid part of username',
+                    self::LABEL => 'Forbid part of username',
                     //_('Forbid part of username in password')
-                    'description'           => 'Forbid part of username in password',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Forbid part of username in password',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_CHANGE_AFTER => array(
                     //_('Change Password After ... Days')
-                    'label'                 => 'Change Password After ... Days',
+                    self::LABEL => 'Change Password After ... Days',
                     //_('Users need to change their passwords after defined number of days')
-                    'description'           => 'Users need to change their passwords after defined number of days',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
-                    'default'               => 0,
+                    self::DESCRIPTION => 'Users need to change their passwords after defined number of days',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
+                    self::DEFAULT_STR => 0,
                 ),
             ],
         ),
@@ -2363,475 +2442,486 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ],
         self::DOWNLOAD_PASSWORD_POLICY => array(
             //_('Download password policy')
-            'label'                 => 'Download password policy',
+            self::LABEL => 'Download password policy',
             //_('Download password policy settings.')
-            'description'           => 'Download password policy settings.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => true,
+            self::DESCRIPTION => 'Download password policy settings.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => true,
             // TODO move to class constant when we no longer need to support php 5.5
-            'content'               => [
+            self::CONTENT => [
                 self::PASSWORD_MANDATORY => array(
                     //_('A password must be set')
-                    'label'                 => 'A password must be set',
+                    self::LABEL => 'A password must be set',
                     //_('A password must be set')
-                    'description'           => 'A password must be set',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'A password must be set',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_ACTIVE => array(
                     //_('Enable password policy')
-                    'label'                 => 'Enable password policy',
+                    self::LABEL => 'Enable password policy',
                     //_('Enable password policy')
-                    'description'           => 'Enable password policy',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Enable password policy',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_ONLYASCII => array(
                     //_('Only ASCII')
-                    'label'                 => 'Only ASCII',
+                    self::LABEL => 'Only ASCII',
                     //_('Only ASCII characters are allowed in passwords.')
-                    'description'           => 'Only ASCII characters are allowed in passwords.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Only ASCII characters are allowed in passwords.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_LENGTH => array(
                     //_('Minimum length')
-                    'label'                 => 'Minimum length',
+                    self::LABEL => 'Minimum length',
                     //_('Minimum password length')
-                    'description'           => 'Minimum password length.',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum password length.',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_WORD_CHARS => array(
                     //_('Minimum word chars')
-                    'label'                 => 'Minimum word chars',
+                    self::LABEL => 'Minimum word chars',
                     //_('Minimum word chars in password')
-                    'description'           => 'Minimum word chars in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum word chars in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_UPPERCASE_CHARS => array(
                     //_('Minimum uppercase chars')
-                    'label'                 => 'Minimum uppercase chars',
+                    self::LABEL => 'Minimum uppercase chars',
                     //_('Minimum uppercase chars in password')
-                    'description'           => 'Minimum uppercase chars in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum uppercase chars in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_SPECIAL_CHARS => array(
                     //_('Minimum special chars')
-                    'label'                 => 'Minimum special chars',
+                    self::LABEL => 'Minimum special chars',
                     //_('Minimum special chars in password')
-                    'description'           => 'Minimum special chars in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum special chars in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_MIN_NUMBERS => array(
                     //_('Minimum numbers')
-                    'label'                 => 'Minimum numbers',
+                    self::LABEL => 'Minimum numbers',
                     //_('Minimum numbers in password')
-                    'description'           => 'Minimum numbers in password',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Minimum numbers in password',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_FORBID_USERNAME => array(
                     //_('Forbid part of username')
-                    'label'                 => 'Forbid part of username',
+                    self::LABEL => 'Forbid part of username',
                     //_('Forbid part of username in password')
-                    'description'           => 'Forbid part of username in password',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
+                    self::DESCRIPTION => 'Forbid part of username in password',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
                 ),
                 self::PASSWORD_POLICY_CHANGE_AFTER => array(
                     //_('Change Password After ... Days')
-                    'label'                 => 'Change Password After ... Days',
+                    self::LABEL => 'Change Password After ... Days',
                     //_('Users need to change their passwords after defined number of days')
-                    'description'           => 'Users need to change their passwords after defined number of days',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => TRUE,
-                    'default'               => 0,
+                    self::DESCRIPTION => 'Users need to change their passwords after defined number of days',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => TRUE,
+                    self::DEFAULT_STR => 0,
                 ),
             ],
         ),
         self::AUTOMATIC_BUGREPORTS => array(
             //_('Automatic bugreports')
-            'label'                 => 'Automatic bugreports',
+            self::LABEL => 'Automatic bugreports',
             //_('Always send bugreports, even on timeouts and other exceptions / failures.')
-            'description'           => 'Always send bugreports, even on timeouts and other exceptions / failures.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Always send bugreports, even on timeouts and other exceptions / failures.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::LICENSE_TYPE => array(
                                    //_('License Type')
-            'label'                 => 'License Type',
+            self::LABEL => 'License Type',
                                    //_('License Type')
-            'description'           => 'License Type',
-            'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => 'BusinessEdition'
+            self::DESCRIPTION => 'License Type',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::DEFAULT_STR => 'BusinessEdition'
         ),
         self::LAST_SESSIONS_CLEANUP_RUN => array(
             //_('Last sessions cleanup run')
-            'label'                 => 'Last sessions cleanup run',
+            self::LABEL => 'Last sessions cleanup run',
             //_('Stores the timestamp of the last sessions cleanup task run.')
-            'description'           => 'Stores the timestamp of the last sessions cleanup task run.',
-            'type'                  => self::TYPE_DATETIME,
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Stores the timestamp of the last sessions cleanup task run.',
+            self::TYPE => self::TYPE_DATETIME,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::WARN_LOGIN_FAILURES => array(
             //_('Warn after X login failures')
-            'label'                 => 'Warn after X login failures',
+            self::LABEL => 'Warn after X login failures',
             //_('Maximum allowed login failures before writing warn log messages')
-            'description'           => 'Maximum allowed login failures before writing warn log messages',
-            'type'                  => 'int',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
-            'default'               => 4
+            self::DESCRIPTION => 'Maximum allowed login failures before writing warn log messages',
+            self::TYPE => 'int',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
+            self::DEFAULT_STR => 4
         ),
         self::ANYONE_ACCOUNT_DISABLED => array(
                                    //_('Disable Anyone Account')
-            'label'                 => 'Disable Anyone Account',
+            self::LABEL => 'Disable Anyone Account',
                                    //_('Disallow anyone account in grant configurations')
-            'description'           => 'Disallow anyone account in grant configurations',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Disallow anyone account in grant configurations',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::ALARMS_EACH_JOB => array(
                                    //_('Alarms sent each job')
-            'label'                 => 'Alarms sent each job',
+            self::LABEL => 'Alarms sent each job',
                                    //_('Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)')
-            'description'           => 'Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)',
-            'type'                  => 'integer',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)',
+            self::TYPE => 'integer',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::ACCOUNT_DEACTIVATION_NOTIFICATION => array(
             //_('Account deactivation notfication')
-            'label'                 => 'Account deactivation notfication',
+            self::LABEL => 'Account deactivation notfication',
             //_('Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account')
-            'description'           => 'Send E-Mail to User if the account is deactivated or the user tries to login with deactivated account',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Send E-Mail to User if the account is deactivated or the user tries to login with deactivated account',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::ROLE_CHANGE_ALLOWED => array(
                                    //_('Role change allowed')
-            'label'                 => 'Role change allowed',
+            self::LABEL => 'Role change allowed',
                                    //_('Allows to configure which user is allowed to switch to another users account')
-            'description'           => 'Allows to configure which user is allowed to switch to another users account',
-            'type'                  => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Allows to configure which user is allowed to switch to another users account',
+            self::TYPE => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::MAX_USERNAME_LENGTH => array(
             //_('Max username length')
-            'label'                 => 'Max username length',
+            self::LABEL => 'Max username length',
             //_('Max username length')
-            'description'           => 'Max username length',
-            'type'                  => 'int',
-            'default'               => NULL,
-            'clientRegistryInclude' => FALSE,
+            self::DESCRIPTION => 'Max username length',
+            self::TYPE => 'int',
+            self::DEFAULT_STR => NULL,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
         ),
         self::USER_PIN => array(
             //_('User PIN')
-            'label'                 => 'User PIN',
+            self::LABEL => 'User PIN',
             //_('Users can have a PIN')
-            'description'           => 'Users can have a PIN',
-            'type'                  => 'boolean',
-            'default'               => false,
-            'clientRegistryInclude' => true,
+            self::DESCRIPTION => 'Users can have a PIN',
+            self::TYPE => 'boolean',
+            self::DEFAULT_STR => false,
+            self::CLIENTREGISTRYINCLUDE => true,
         ),
         self::USER_PIN_MIN_LENGTH => array(
             //_('User PIN minimum length')
-            'label'                 => 'User PIN minimum length',
+            self::LABEL => 'User PIN minimum length',
             //_('User PIN minimum length')
-            'description'           => 'User PIN minimum length',
-            'type'                  => 'integer',
-            'default'               => 4,
-            'clientRegistryInclude' => true,
+            self::DESCRIPTION => 'User PIN minimum length',
+            self::TYPE => 'integer',
+            self::DEFAULT_STR => 4,
+            self::CLIENTREGISTRYINCLUDE => true,
         ),
         self::CONFD_FOLDER => array(
             //_('conf.d folder name')
-            'label'                 => 'conf.d folder name',
+            self::LABEL => 'conf.d folder name',
             //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
-            'description'           => 'Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!',
-            'type'                  => 'string',
-            'default'               => '',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::MAINTENANCE_MODE => array(
             //_('Maintenance mode enabled')
-            'label'                 => 'Maintenance mode enabled',
+            self::LABEL => 'Maintenance mode enabled',
             //_('Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"')
-            'description'           => 'Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"',
-            'type'                  => 'string',
-            'default'               => '',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
+            self::DESCRIPTION => 'Set Tine 2.0 maintenance mode. Possible values: "off", "on" (only users having the maintenance right can login) and "all"',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => TRUE,
+            self::SETBYSETUPMODULE => TRUE,
         ),
         self::VERSION_CHECK => array(
             //_('Version check enabled')
-            'label'                 => 'Version check enabled',
-            'description'           => 'Version check enabled',
-            'type'                  => 'bool',
-            'default'               => true,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
+            self::LABEL => 'Version check enabled',
+            self::DESCRIPTION => 'Version check enabled',
+            self::TYPE => 'bool',
+            self::DEFAULT_STR => true,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
         ),
         self::FAT_CLIENT_CUSTOM_JS => array(
             // NOTE: it's possible to deliver customjs vom vfs by using the tine20:// streamwrapper
             //       tine20://<applicationid>/folders/shared/<containerid>/custom.js
             //_('Custom Javascript includes for Fat-Client')
-            'label'                 => 'Custom Javascript includes for Fat-Client',
+            self::LABEL => 'Custom Javascript includes for Fat-Client',
             //_('An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.')
-            'description'           => "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.",
-            'type'                  => 'array',
-            'default'               => array(),
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.",
+            self::TYPE => 'array',
+            self::DEFAULT_STR => array(),
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_TITLE => array(
             //_('custom title')
-            'label'                 => 'custom title',
+            self::LABEL => 'custom title',
             //_('Custom title for branding.')
-            'description'           => 'Custom title for branding.',
-            'type'                  => 'string',
-            'default'               => "tine ®",
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Custom title for branding.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => "tine ®",
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_LOGO => array(
             //_('custom logo path')
-            'label'                 => 'custom logo path',
+            self::LABEL => 'custom logo path',
             //_('Path to custom logo.')
-            'description'           => 'Path to custom logo.',
-            'type'                  => 'string',
-            'default'               => './images/tine_logo.png',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Path to custom logo.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => './images/tine_logo.png',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_DESCRIPTION => array(
             //_('custom description')
-            'label'                 => 'custom description',
+            self::LABEL => 'custom description',
             //_('Custom description for branding.')
-            'description'           => 'Custom description for branding.',
-            'type'                  => 'string',
-            'default'               => '',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Custom description for branding.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_WEBURL => array(
             //_('custom weburl')
-            'label'                 => 'custom weburl',
+            self::LABEL => 'custom weburl',
             //_('Custom weburl for branding.')
-            'description'           => 'Custom weburl for branding.',
-            'type'                  => 'string',
-            'default'               => 'https://github.com/tine20/tine20',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE
+            self::DESCRIPTION => 'Custom weburl for branding.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => 'https://github.com/tine20/tine20',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_HELPURL => array(
             //_('custom help url')
-            'label'                 => 'custom help url',
+            self::LABEL => 'custom help url',
             //_('Custom url for help.')
-            'description'           => 'Custom url for help.',
-            'type'                  => 'string',
-            'default'               => 'https://tine-docu.s3web.rz1.metaways.net/',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE
+            self::DESCRIPTION => 'Custom url for help.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => 'https://tine-docu.s3web.rz1.metaways.net/',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_SHOPURL => array(
             //_('custom shop url')
-            'label'                 => 'custom shop url',
+            self::LABEL => 'custom shop url',
             //_('Custom url for the shop.')
-            'description'           => 'Custom url for the shop.',
-            'type'                  => 'string',
-            'default'               => 'https://www.tine-groupware.de',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE
+            self::DESCRIPTION => 'Custom url for the shop.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => 'https://www.tine-groupware.de',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_BUGSURL => array(
             //_('custom bugreport url')
-            'label'                 => 'custom bugreport url',
+            self::LABEL => 'custom bugreport url',
             //_('Custom bugreport url.')
-            'description'           => 'Custom bugreport url.',
-            'type'                  => 'string',
-            'default'               => 'https://api.tine20.net/bugreport.php',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE
+            self::DESCRIPTION => 'Custom bugreport url.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => 'https://api.tine20.net/bugreport.php',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_FAVICON => array(
             //_('custom favicon paths')
-            'label'                 => 'custom favicon paths',
+            self::LABEL => 'custom favicon paths',
             //_('Paths to custom favicons.')
-            'description'           => 'Paths to custom favicons.',
-            'type'                  => 'array',
-            'default'               => [
+            self::DESCRIPTION => 'Paths to custom favicons.',
+            self::TYPE => 'array',
+            self::DEFAULT_STR => [
                  16 => './images/favicon.png',
                  30 => './images/favicon30.png',
                 300 => './images/favicon300.png',
             ],
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_FAVICON_SVG => array(
             //_('custom svg favicon paths')
-            'label'                 => 'custom svg favicon paths',
+            self::LABEL => 'custom svg favicon paths',
             //_('Paths to custom svg favicon.')
-            'description'           => 'Paths to custom svg favicon.',
-            'type'                  => 'string',
-            'default'               => './images/favicon.svg',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Paths to custom svg favicon.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => './images/favicon.svg',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_MASKICON_COLOR => array(
             //_('Mask Icon Color')
-            'label'                 => 'Mask Icon Color',
+            self::LABEL => 'Mask Icon Color',
             //_('Background color of mask icon (safari pinned tab).')
-            'description'           => 'Background color of mask icon (safari pinned tab).',
-            'type'                  => 'string',
-            'default'               => '#0082ca',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Background color of mask icon (safari pinned tab).',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '#0082ca',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
         self::INSTALL_LOGO => array(
             //_('Installation logo')
-            'label'                 => 'Installation logo',
+            self::LABEL => 'Installation logo',
             //_('Path to custom installation logo.')
-            'description'           => 'Path to custom installation logo.',
-            'type'                  => 'string',
-            'default'               => false,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Path to custom installation logo.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => false,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::WEBSITE_URL => array(
             //_('custom website url')
-            'label'                 => 'custom website url',
+            self::LABEL => 'custom website url',
             //_('Custom url used for logo on login page.')
-            'description'           => 'Custom url used for logo on login page.',
-            'type'                  => 'string',
-            'default'               => '',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
+            self::DESCRIPTION => 'Custom url used for logo on login page.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
         ),
         self::USE_LOGINNAME_AS_FOLDERNAME => array(
         //_('Use login name instead of full name')
-            'label'                 => 'Use login name instead of full name',
+            self::LABEL => 'Use login name instead of full name',
         //_('Use login name instead of full name for webdav.')
-            'description'           => 'Use login name instead of full name for webdav.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => FALSE,
+            self::DESCRIPTION => 'Use login name instead of full name for webdav.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::DEFAULT_STR => FALSE,
         ),
         self::DENY_WEBDAV_CLIENT_LIST  => array(
             //_('List of WebDav agent strings that will be denied')
-            'label'                 => 'List of WebDav agent strings that will be denied',
+            self::LABEL => 'List of WebDav agent strings that will be denied',
             //_('List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]')
-            'description'           => 'List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]',
-            'type'                  => 'array',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => NULL,
+            self::DESCRIPTION => 'List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]',
+            self::TYPE => 'array',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::DEFAULT_STR => NULL,
         ),
         self::WEBDAV_SYNCTOKEN_ENABLED => array(
         //_('Enable SyncToken plugin')
-            'label'                 => 'Enable SyncToken plugin',
+            self::LABEL => 'Enable SyncToken plugin',
         //_('Enable the use of the SyncToken plugin.')
-            'description'           => 'Enable the use of the SyncToken plugin.',
-            'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'default'               => TRUE,
+            self::DESCRIPTION => 'Enable the use of the SyncToken plugin.',
+            self::TYPE => 'bool',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::DEFAULT_STR => TRUE,
         ),
         self::CURRENCY_SYMBOL => array(
             //_('currency symbol')
-            'label' => 'urrency symbol',
+            self::LABEL => 'urrency symbol',
             //_('Path to custom favicon.')
-            'description' => 'Define currency symbol to be used.',
-            'type' => 'string',
-            'default' => '€',
-            'clientRegistryInclude' => true,
-            'setByAdminModule' => false,
-            'setBySetupModule' => false,
+            self::DESCRIPTION => 'Define currency symbol to be used.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '€',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
         ),
         self::FILESYSTEM => array(
             //_('Filesystem settings')
-            'label'                 => 'Filesystem settings',
+            self::LABEL => 'Filesystem settings',
             //_('Filesystem settings.')
-            'description'           => 'Filesystem settings.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => FALSE,
-            'content'               => array(
+            self::DESCRIPTION => 'Filesystem settings.',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+            self::CONTENT => array(
+                self::FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS => [
+                    //_('FlySystems Local Adapter Base Paths')
+                    self::LABEL => 'FlySystems Local Adapter Base Paths',
+                    //_('FlySystems Local Adapter Base Paths')
+                    self::DESCRIPTION => 'FlySystems Local Adapter Base Paths',
+                    self::TYPE => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => true,
+                    self::DEFAULT_STR => [],
+                ],
                 self::FILESYSTEM_MODLOGACTIVE => array(
                     //_('Filesystem history')
-                    'label'                 => 'Filesystem history',
+                    self::LABEL => 'Filesystem history',
                     //_('Filesystem keeps history, default is false.')
-                    'description'           => 'Filesystem keeps history, default is false.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => FALSE,
+                    self::DESCRIPTION => 'Filesystem keeps history, default is false.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => FALSE,
                 ),
                 self::FILESYSTEM_DEFAULT_GRANTS => [
                     self::LABEL                     => 'Filesystem default grants', // _('Filesystem default grants')
@@ -2845,190 +2935,190 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::FILESYSTEM_NUMKEEPREVISIONS => array(
                     //_('Filesystem number of revisions')
-                    'label'                 => 'Filesystem number of revisions',
+                    self::LABEL => 'Filesystem number of revisions',
                     //_('Filesystem number of revisions being kept before they are automatically deleted.')
-                    'description'           => 'Filesystem number of revisions being kept before they are automatically deleted.',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 100,
+                    self::DESCRIPTION => 'Filesystem number of revisions being kept before they are automatically deleted.',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 100,
                 ),
                 self::FILESYSTEM_MONTHKEEPREVISIONS => array(
                     //_('Filesystem months of revisions')
-                    'label'                 => 'Filesystem months of revisions',
+                    self::LABEL => 'Filesystem months of revisions',
                     //_('Filesystem number of months revisions being kept before they are automatically deleted.')
-                    'description'           => 'Filesystem number of months revisions being kept before they are automatically deleted.',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 60,
+                    self::DESCRIPTION => 'Filesystem number of months revisions being kept before they are automatically deleted.',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 60,
                 ),
                 self::FILESYSTEM_INDEX_CONTENT => array(
                     //_('Filesystem index content')
-                    'label'                 => 'Filesystem index content',
+                    self::LABEL => 'Filesystem index content',
                     //_('Filesystem index content.')
-                    'description'           => 'Filesystem index content.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => FALSE,
+                    self::DESCRIPTION => 'Filesystem index content.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => FALSE,
                 ),
                 self::FILESYSTEM_ENABLE_NOTIFICATIONS => array(
                     //_('Filesystem enable notifications')
-                    'label'                 => 'Filesystem enable notifications',
+                    self::LABEL => 'Filesystem enable notifications',
                     //_('Filesystem enable notifications.')
-                    'description'           => 'Filesystem enable notifications.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => FALSE,
+                    self::DESCRIPTION => 'Filesystem enable notifications.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => FALSE,
                 ),
                 self::FILESYSTEM_CREATE_PREVIEWS => array(
                     //_('Filesystem create previews')
-                    'label'                 => 'Filesystem create previews',
+                    self::LABEL => 'Filesystem create previews',
                     //_('Filesystem create previews.')
-                    'description'           => 'Filesystem create previews.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => TRUE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => FALSE,
+                    self::DESCRIPTION => 'Filesystem create previews.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => FALSE,
                 ),
                 self::FILESYSTEM_PREVIEW_SERVICE_URL => array(
                     //_('URL of preview service')
-                    'label'                 => 'URL of preview service',
+                    self::LABEL => 'URL of preview service',
                     //_('URL of preview service.')
-                    'description'           => 'URL of preview service.',
-                    'type'                  => 'string',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => NULL,
+                    self::DESCRIPTION => 'URL of preview service.',
+                    self::TYPE => 'string',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => NULL,
                 ),
                 self::FILESYSTEM_PREVIEW_SERVICE_VERSION => array(
                     //_('Class for preview service')
-                    'label'                 => 'Version for preview service',
+                    self::LABEL => 'Version for preview service',
                     //_('Class to use, to connect to preview service.')
-                    'description'           => 'Version of preview service api.',
-                    'type'                  => 'int',
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 1,
+                    self::DESCRIPTION => 'Version of preview service api.',
+                    self::TYPE => 'int',
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 1,
                 ),
                 self::FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL => array(
                     //_('Class for preview service')
-                    'label'                 => 'Verify ssl cert',
+                    self::LABEL => 'Verify ssl cert',
                     //_('Class to use, to connect to preview service.')
-                    'description'           => 'Verify preview service servers ssl cert',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => false,
-                    'setByAdminModule'      => false,
-                    'setBySetupModule'      => false,
-                    'default'               => false,
+                    self::DESCRIPTION => 'Verify preview service servers ssl cert',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE => false,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => false,
                 ),
                 self::FILESYSTEM_PREVIEW_MAX_FILE_SIZE => array(
                     //_('Max file size for preview service')
-                    'label'                 => 'Max file size for preview service',
+                    self::LABEL => 'Max file size for preview service',
                     //_('Max file size for preview service.')
-                    'description'           => 'Max file size for preview service.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 51904512, // == 49.5 * 1024 * 1024,
+                    self::DESCRIPTION => 'Max file size for preview service.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 51904512, // == 49.5 * 1024 * 1024,
                 ),
                 self::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT => array(
                     //_('Max per preview preview service error count, for trying to generate preview.')
-                    'label'                 => 'Max perp review preview service error count, for trying to generate preview.',
+                    self::LABEL => 'Max perp review preview service error count, for trying to generate preview.',
                     //_('Max per preview preview service error count, for trying to generate preview.')
-                    'description'           => 'Max per preview preview service error count, for trying to generate preview.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 5,
+                    self::DESCRIPTION => 'Max per preview preview service error count, for trying to generate preview.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 5,
                 ),
                 self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X => array(
                     //_('X size of thumbnail images.')
-                    'label'                 => 'X size of thumbnail images.',
+                    self::LABEL => 'X size of thumbnail images.',
                     //_('X size of thumbnail images.')
-                    'description'           => 'X size of thumbnail images.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 142,
+                    self::DESCRIPTION => 'X size of thumbnail images.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 142,
                 ),
                 self::FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y => array(
                     //_('Y size of thumbnail images.')
-                    'label'                 => 'Y size of thumbnail images.',
+                    self::LABEL => 'Y size of thumbnail images.',
                     //_('Y size of thumbnail images.')
-                    'description'           => 'Y size of thumbnail images.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 200,
+                    self::DESCRIPTION => 'Y size of thumbnail images.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 200,
                 ),
                 self::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X => array(
                     //_('X size of preview images.')
-                    'label'                 => 'X size of preview images for documents.',
+                    self::LABEL => 'X size of preview images for documents.',
                     //_('X size of preview images.')
-                    'description'           => 'X size of preview images for documents.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 1416,
+                    self::DESCRIPTION => 'X size of preview images for documents.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 1416,
                 ),
                 self::FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y => array(
                     //_('Y size of preview images.')
-                    'label'                 => 'Y size of preview images for documents.',
+                    self::LABEL => 'Y size of preview images for documents.',
                     //_('Y size of preview images.')
-                    'description'           => 'Y size of preview images for documents.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 2000,
+                    self::DESCRIPTION => 'Y size of preview images for documents.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 2000,
                 ),
                 self::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X => array(
                     //_('X size of preview images.')
-                    'label'                 => 'X size of preview images for images.',
+                    self::LABEL => 'X size of preview images for images.',
                     //_('X size of preview images.')
-                    'description'           => 'X size of preview images for images.',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 708,
+                    self::DESCRIPTION => 'X size of preview images for images.',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 708,
                 ),
                 self::FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y => array(
                     //_('Y size of preview images.')
-                    'label'                 => 'Y size of preview images for images..',
+                    self::LABEL => 'Y size of preview images for images..',
                     //_('Y size of preview images.')
-                    'description'           => 'Y size of preview images for images..',
-                    'type'                  => self::TYPE_INT,
-                    'clientRegistryInclude' => FALSE,
-                    'setByAdminModule'      => FALSE,
-                    'setBySetupModule'      => FALSE,
-                    'default'               => 1000,
+                    self::DESCRIPTION => 'Y size of preview images for images..',
+                    self::TYPE => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => FALSE,
+                    self::SETBYADMINMODULE => FALSE,
+                    self::SETBYSETUPMODULE => FALSE,
+                    self::DEFAULT_STR => 1000,
                 ),
                 self::FILESYSTEM_PREVIEW_IGNORE_PROXY => array(
                     //_('Ignore Proxy config for preview service')
-                    'label'                 => 'Ignore Proxy config for preview service',
+                    self::LABEL => 'Ignore Proxy config for preview service',
                     //_('Ignore Proxy config for preview service')
-                    'description'           => 'Ignore Proxy config for preview service',
-                    'type'                  => self::TYPE_BOOL,
-                    'clientRegistryInclude' => false,
-                    'setByAdminModule'      => false,
-                    'setBySetupModule'      => false,
-                    'default'               => false,
+                    self::DESCRIPTION => 'Ignore Proxy config for preview service',
+                    self::TYPE => self::TYPE_BOOL,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE => false,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => false,
                 ),
                 self::FILESYSTEM_AVSCAN_MAXFSIZE => [
                     //_('Antivirus Scan Max File Size')
@@ -3064,6 +3154,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::SETBYADMINMODULE      => true,
                     self::SETBYSETUPMODULE      => true,
                 ],
+                self::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE => [
+                    //_('Antivirus Scan Notification Role')
+                    self::LABEL                 => 'Antivirus Scan Notification Role',
+                    //_('Antivirus Scan Notification Role')
+                    self::DESCRIPTION           => 'Antivirus Scan Notification Role',
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                ],
                 self::FILESYSTEM_SHOW_CURRENT_USAGE => [
                     //_('Filesystem show current usage')
                     self::LABEL                 => 'Filesystem show current usage',
@@ -3076,7 +3176,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR           => ['size', 'revision_size']
                 ]
             ),
-            'default'               => array(),
+            self::DEFAULT_STR => array(),
         ),
         self::FILTER_SYNC_TOKEN => [
             //_('Filter sync token settings')
@@ -3125,104 +3225,113 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ],
             self::DEFAULT_STR           => [],
         ],
+        self::PASSWORD_LESS_LOGIN => [
+            self::LABEL => 'Enable Password Less Login', //_('Enable Password Less Login')
+            self::DESCRIPTION => 'Enable Password Less Login',
+            self::TYPE => self::TYPE_BOOL,
+            self::DEFAULT_STR       => false,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+        ],
         self::QUOTA => array(
             //_('Quota settings')
-            'label'                 => 'Quota settings',
+            self::LABEL => 'Quota settings',
             //_('Quota settings')
-            'description'           => 'Quota settings',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
-            'setBySetupModule'      => false,
-            'content'               => array(
+            self::DESCRIPTION => 'Quota settings',
+            self::TYPE => 'object',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+            self::CONTENT => array(
                 self::QUOTA_SHOW_UI => array(
                     //_('Show UI')
-                    'label'                 => 'Show UI',
+                    self::LABEL => 'Show UI',
                     //_('Should the quota UI elements be rendered or not.')
-                    'description'           => 'Should the quota UI elements be rendered or not.',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => true,
-                    'default'               => true,
+                    self::DESCRIPTION => 'Should the quota UI elements be rendered or not.',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => true,
+                    self::DEFAULT_STR => true,
                 ),
                 self::QUOTA_INCLUDE_REVISION => array(
                     //_('Include revisions')
-                    'label'                 => 'Include revisions',
+                    self::LABEL => 'Include revisions',
                     //_('Should all revisions be used to calculate total usage?')
-                    'description'           => 'Should all revisions be used to calculate total usage?',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => false,
+                    self::DESCRIPTION => 'Should all revisions be used to calculate total usage?',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => false,
                 ),
                 self::QUOTA_TOTALINMB => array(
                     //_('Total quota in MB')
-                    'label'                 => 'Total quota in MB',
+                    self::LABEL => 'Total quota in MB',
                     //_('Total quota in MB (0 for unlimited)')
-                    'description'           => 'Total quota in MB (0 for unlimited)',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => 0,
+                    self::DESCRIPTION => 'Total quota in MB (0 for unlimited)',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => 0,
                 ),
                 self::QUOTA_FILESYSTEM_TOTALINMB => array(
                     //_('Filesystem total quota in MB')
-                    'label'                 => 'Filesystem total quota in MB',
+                    self::LABEL => 'Filesystem total quota in MB',
                     //_('Filesystem total quota in MB (0 for unlimited)')
-                    'description'           => 'Filesystem total quota in MB (0 for unlimited)',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => 0,
+                    self::DESCRIPTION => 'Filesystem total quota in MB (0 for unlimited)',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => 0,
                 ),
                 self::QUOTA_TOTALBYUSERINMB => array(
                     //_('Total quota by user in MB')
-                    'label'                 => 'Total quota by user in MB',
+                    self::LABEL => 'Total quota by user in MB',
                     //_('Total quota by user in MB (0 for unlimited)')
-                    'description'           => 'Total quota by user in MB (0 for unlimited)',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => 0,
+                    self::DESCRIPTION => 'Total quota by user in MB (0 for unlimited)',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => 0,
                 ),
                 self::QUOTA_SOFT_QUOTA => array(
                     //_('Soft quota in %')
-                    'label'                 => 'Soft quota in %',
+                    self::LABEL => 'Soft quota in %',
                     //_('Soft quota in % (0-100, 0 means off)')
-                    'description'           => 'Soft quota in % (0-100, 0 means off)',
-                    'type'                  => 'integer',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => 90,
+                    self::DESCRIPTION => 'Soft quota in % (0-100, 0 means off)',
+                    self::TYPE => 'integer',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => 90,
                 ),
                 self::QUOTA_SQ_NOTIFICATION_ROLE => array(
                     //_('Soft quota notification role')
-                    'label'                 => 'Soft quota notification role',
+                    self::LABEL => 'Soft quota notification role',
                     //_('Name of the role to notify if soft quota is exceeded')
-                    'description'           => 'Name of the role to notify if soft quota is exceeded',
-                    'type'                  => 'string',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => 'soft quota notification',
+                    self::DESCRIPTION => 'Name of the role to notify if soft quota is exceeded',
+                    self::TYPE => 'string',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => 'soft quota notification',
                 ),
                 self::QUOTA_SKIP_IMAP_QUOTA => array(
                     //_('Skip Imap Quota Notfication')
-                    'label'                 => 'Skip Imap Quota Notfication',
+                    self::LABEL => 'Skip Imap Quota Notfication',
                     //_('Skip Imap Quota Notfication')
-                    'description'           => 'Skip Imap Quota Notfication',
-                    'type'                  => 'bool',
-                    'clientRegistryInclude' => true,
-                    'setByAdminModule'      => true,
-                    'setBySetupModule'      => false,
-                    'default'               => false,
+                    self::DESCRIPTION => 'Skip Imap Quota Notfication',
+                    self::TYPE => 'bool',
+                    self::CLIENTREGISTRYINCLUDE => true,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => false,
                 ),
                 self::QUOTA_NOTIFICATION_ADDRESSES => [
                     //_('Quota notification addresses')
@@ -3236,57 +3345,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::SETBYSETUPMODULE      => true
                 ]
             ),
-            'default'               => array(),
-        ),
-        self::SSO => array(
-            //_('SSO client settings')
-            'label'                 => 'SSO client settings',
-            //_('SSO client settings')
-            'description'           => 'SSO client settings',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Config_Struct',
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'setBySetupModule'      => false,
-            'content'               => array(
-                self::SSO_ACTIVE => array(
-                    'type' => Tinebase_Config::TYPE_BOOL,
-                    'default' => false
-                ),
-                self::SSO_ADAPTER => array(
-                    'type' => Tinebase_Config::TYPE_STRING,
-                    'default' => 'OpenIdConnect'
-                ),
-                // for example 'https://accounts.google.com/'
-                self::SSO_PROVIDER_URL => array(
-                    'type' => Tinebase_Config::TYPE_STRING,
-                    'default' => ''
-                ),
-                self::SSO_CLIENT_ID => array(
-                    'type' => Tinebase_Config::TYPE_STRING,
-                    'default' => ''
-                ),
-                self::SSO_CLIENT_SECRET => array(
-                    'type' => Tinebase_Config::TYPE_STRING,
-                    'default' => ''
-                ),
-                self::SSO_REDIRECT_URL => array(
-                    'type' => Tinebase_Config::TYPE_STRING,
-                    'default' => ''
-                ),
-            ),
-            'default'               => array(),
+            self::DEFAULT_STR => array(),
         ),
         self::TINE20_URL => [
             //_('Tine20 URL')
-            'label' => 'Tine20 URL',
+            self::LABEL => 'Tine20 URL',
             //_('The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.')
-            'description' => 'The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.',
-            'type' => 'string',
-            'default' => null,
-            'clientRegistryInclude' => true,
-            'setByAdminModule' => true,
-            'setBySetupModule' => true,
+            self::DESCRIPTION => 'The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => null,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
         ],
         self::TINE20_URL_USEFORJSCLIENT => [
             //_('Tine20 URL Used For JS Client')
@@ -3355,13 +3425,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ),
         self::MUNICIPALITYKEY_DUP_FIELDS => array(
             //_('Municipality Key duplicate check fields')
-            'label'                 => 'Municipality Key duplicate check fields',
+            self::LABEL => 'Municipality Key duplicate check fields',
             //_('These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
-            'description'           => 'These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
-            'type'                  => 'array',
+            self::DESCRIPTION => 'These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+            self::TYPE => 'array',
             'contents'              => 'array',
-            'clientRegistryInclude' => TRUE,
-            'default'               => array('arsCombined'),
+            self::CLIENTREGISTRYINCLUDE => TRUE,
+            self::DEFAULT_STR => array('arsCombined'),
         ),
         self::NOTE_TYPE => [
             self::LABEL                 => 'Note Type', //_('Note Type')
@@ -3567,8 +3637,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                     'value' => $val,
                                     'definition' => new Tinebase_Config_Struct($definition),
                                 ), null, null, array(
-                                    'value' => array('type' => $definition['type']),
-                                    'definition' => array('type' => Tinebase_Config_Abstract::TYPE_ARRAY, 'class' => 'Tinebase_Config_Struct')
+                                    'value' => array(self::TYPE => $definition['type']),
+                                    'definition' => array(self::TYPE => Tinebase_Config_Abstract::TYPE_ARRAY, self::CLASSNAME => Tinebase_Config_Struct::class)
                                 ));
                                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                                     . ' ' . print_r($configRegistryItem->toArray(), true));
@@ -3599,10 +3669,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         // TODO replace this with a hook in the config itself or something
         if (isset($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']) &&
                 $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records) {
-            $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records = clone
-                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records;
+            $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value'] = clone
+                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value'];
             /** @var Tinebase_Model_AreaLockConfig $record */
-            foreach($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records as $idx => $record) {
+            foreach($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records as $record) {
                 $result = [];
                 /** @var Tinebase_Model_MFA_UserConfig $usrCfg */
                 foreach ($record->getUserMFAIntersection(Tinebase_Core::getUser()) as $usrCfg) {

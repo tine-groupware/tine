@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -214,6 +214,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_groupByProperty = null;
 
     protected $_groupByProcessor = null;
+
+    protected $_groupByRecordProcessor = null;
+
+    protected $_groupOpen = false;
+
+    protected $_groupByContext = [];
 
     protected $_currentRowType = null;
 
@@ -476,39 +482,37 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected function _findOverwriteTemplate(string $path, array $matchingData): ?string
     {
-        if (strpos($path, 'tine20://') === 0) {
-            $prefix = 'tine20://';
-            $path = substr($path, 9);
-            $isdir = function(string $str) { return Tinebase_FileSystem::getInstance()->isDir($str); };
-            $isfile = function(string $str) { return Tinebase_FileSystem::getInstance()->isFile($str); };
-        } else {
-            $prefix = '';
-            $isdir = function(string $str) { return is_dir($str); };
-            $isfile = function(string $str) { return is_file($str); };
-        }
-
         $filename = basename($path);
         $dir = dirname($path);
 
-        $func = function(string $dir, array $matchingData, callable $func) use($filename, $isdir, $isfile): ?string {
-            $match = null;
-            foreach ($matchingData as $pathPart => $childData) {
-                if (null === $match && $isfile($dir . '/' . $pathPart . '/' . $filename)) {
-                    $match = $dir . '/' . $pathPart . '/' . $filename;
-                }
+        if (strpos($path, 'tine20://') === 0) {
+            $prefix = 'tine20://';
+            $dir = dirname(substr($path, 9));
 
-                if (is_array($childData) && $isdir($dir . '/' . $pathPart)) {
-                    if (null !== ($result = $func($dir . '/' . $pathPart, $childData, $func)) &&
-                            (null === $match || count(explode('/', $result)) > count(explode('/', $match)))) {
-                        $match = $result;
-                    }
+            $files = Tinebase_FileSystem::getInstance()->getTreeNodeChildren(Tinebase_FileSystem::getInstance()
+                ->stat($dir))->filter(fn ($node) => str_ends_with($node->name, $filename))->name;
+        } else {
+            $prefix = '';
+            $files = glob($dir . '/*' . $filename);
+            array_walk($files, fn(&$val) => $val = basename($val));
+        }
+
+        $maxMatches = 0;
+        $maxMatchesIndex = -1;
+        foreach ($files as $key => $file) {
+            $matches = 0;
+            foreach ($matchingData as $needle) {
+                if (strpos($file, $needle) !== false) {
+                    ++$matches;
                 }
             }
-            return $match;
-        };
+            if ($matches > $maxMatches) {
+                $maxMatches = $matches;
+                $maxMatchesIndex = $key;
+            }
+        }
 
-        $result = $func($dir, $matchingData, $func);
-        return $result ? $prefix . $result : $result;
+        return $maxMatchesIndex === -1 ? null : ($prefix . $dir . '/' . $files[$maxMatchesIndex]);
     }
 
     protected function _parseTemplatePath($_path)
@@ -558,7 +562,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         if (null === $match) {
-            throw new Tinebase_Exception('could not find template for path: ' . $_path);
+            return $_path; // we ignore this here, eventually file overwrite will find a file later, if not, we can always fail later...
         }
         return Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode(
             $match, true))->streamwrapperpath;
@@ -901,13 +905,16 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             '_writeGenericHeader'   => $this->_writeGenericHeader,
             '_groupByProperty'      => $this->_groupByProperty,
             '_groupByProcessor'     => $this->_groupByProcessor,
+            '_groupByRecordProcessor' => $this->_groupByRecordProcessor,
+            '_groupByContext'       => $this->_groupByContext,
+            '_groupOpen'            => $this->_groupOpen,
             '_lastGroupValue'       => $this->_lastGroupValue,
             '_currentRecord'        => $this->_currentRecord,
             '_currentRowType'       => $this->_currentRowType,
             '_twigTemplate'         => $this->_twigTemplate,
             '_twigMapping'          => $this->_twigMapping,
             '_keyFields'            => $this->_keyFields,
-            '_virtualField'         => $this->_virtualFields,
+            '_virtualFields'        => $this->_virtualFields,
         );
     }
 
@@ -941,6 +948,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
                 $this->processIteration($value, false);
 
+                if ($this->_groupOpen) {
+                    $this->_endGroup();
+                }
                 $this->_endDataSource($key);
             }
 
@@ -966,15 +976,18 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $fn($propertyValue);
                 }
                 if (true === $first || $this->_lastGroupValue !== $propertyValue) {
-                    if (false === $first) {
+                    if ($this->_groupOpen) {
                         $this->_endGroup();
                     }
                     $this->_lastGroupValue = $propertyValue;
                     $this->_currentRecord = $record;
                     $this->_startGroup();
                 }
-                // TODO fix this?
-                //$this->_writeGroupHeading($record);
+                if (null !== $this->_groupByRecordProcessor) {
+                    /** @var closure $fn */
+                    $fn = $this->_groupByRecordProcessor;
+                    $fn($record, $this->_groupByContext);
+                }
             }
             $this->_currentRecord = $record;
 
@@ -989,10 +1002,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (true === $first) {
                 $first = false;
             }
-        }
-
-        if ($_records->count() > 0 && null !== $this->_groupByProperty) {
-            $this->_endGroup();
         }
 
         $this->_firstIteration = false;
@@ -1014,10 +1023,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected function _startGroup()
     {
+        $this->_groupOpen = true;
     }
 
     protected function _endGroup()
     {
+        $this->_groupOpen = false;
     }
 
     protected function _writeGroupHeading(Tinebase_Record_Interface $_record)
@@ -1602,12 +1613,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     'timestamp' => $this->_exportTimeStamp,
                     'account' => Tinebase_Core::getUser(),
                     'contact' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
-                    'groupdata' => $this->_lastGroupValue,
                 ],
                 'additionalRecords' => $this->_additionalRecords,
             ];
         }
         $this->_baseContext['export']['groupdata'] = $this->_lastGroupValue;
+        $this->_baseContext['export']['groupcontext'] = $this->_groupByContext;
 
         return array_merge($this->_baseContext, $context);
     }
@@ -1741,6 +1752,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _onAfterExportRecords(/** @noinspection PhpUnusedParameterInspection */ array $result)
     {
+        if ($this->_groupOpen) {
+            $this->_endGroup();
+        }
+
         $this->_iterationDone = true;
 
         if (null !== $this->_twigTemplate) {

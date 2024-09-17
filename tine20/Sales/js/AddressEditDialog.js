@@ -62,19 +62,6 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         ].join(Tine.Tinebase.CanonicalPath.separator);
     },
 
-    
-    /**
-     * executed when record gets updated from form
-     * 
-     * @private
-     */
-    onRecordUpdate: function() {
-        Tine.Sales.AddressEditDialog.superclass.onRecordUpdate.call(this);
-        
-        this.record.set('type',        String(this.fixedFields.get('type')).toLowerCase());
-        this.record.set('customer_id', this.fixedFields.get('customer_id'));
-    },
-    
     /**
      * returns dialog
      * 
@@ -129,23 +116,15 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }, this);
                     }
                }
-            }, {
-                columnWidth: .95,
-                name: 'name',
-                fieldLabel: this.app.i18n._('Name')
-            }], [{
-                columnWidth: 1,
-                name: 'prefix1',
-                fieldLabel: this.app.i18n._('Prefix 1')
-            }], [{
-                columnWidth: 1,
-                name: 'prefix2',
-                fieldLabel: this.app.i18n._('Prefix 2')
-            }], [{
-                columnWidth: 1,
-                name: 'prefix3',
-                fieldLabel: this.app.i18n._('Prefix 3')
-            }], [{
+            },
+                this.fieldManager('name', {columnWidth: .95})
+            ], [
+                this.fieldManager('prefix1', {columnWidth: 1})
+            ], [
+                this.fieldManager('prefix2', {columnWidth: 1})
+            ], [
+                this.fieldManager('prefix3', {columnWidth: 1})
+            ], [{
                 name: 'street',
                 fieldLabel: this.app.i18n._('Street')
             }, {

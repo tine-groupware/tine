@@ -89,6 +89,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected $_keepAttenderStatus = false;
 
+    protected $_moveExternalOrganizerToContainer = true;
+
     /**
      * @var Calendar_Controller_Event
      */
@@ -143,6 +145,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         self::$_instance = null;
     }
 
+    public function useExternalOrganizerContainer(?bool $value = null): bool
+    {
+        $oldValue = $this->_moveExternalOrganizerToContainer;
+        if (null !== $value) {
+            $this->_moveExternalOrganizerToContainer = $value;
+        }
+        return $oldValue;
+    }
     /**
      * sets current calendar user
      *
@@ -1583,7 +1593,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $origRrule = (string)$_event->rrule;
                 $ruleChanged = false;
                 // adopt count
-                if (isset($rrule->count)) {
+                if (isset($_event->rrule->count)) {
                     $newRrule = Calendar_Model_Rrule::getRruleFromString($_event->rrule);
                     $newRrule->count = $newRrule->count - $rrule->count;
                     $_event->rrule = (string)$newRrule;
@@ -2351,12 +2361,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+        if (Calendar_Model_Attender::USERTYPE_EMAIL !== $_record->organizer_type) {
+            $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+        }
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
 
         $this->_inspectOriginatorTZ($_record);
 
-        if ($_record->hasExternalOrganizer()) {
+        if ($_record->hasExternalOrganizer() && $this->_moveExternalOrganizerToContainer) {
             // assert calendarUser as attendee. This is important to keep the event in the loop via its displaycontianer(s)
             try {
                 $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
@@ -2378,9 +2390,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if (! $container instanceof Tinebase_Model_Container || $container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
                 // move into special (external users) container
-                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->resolveOrganizer());
+                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->organizer_email ? null : $_record->resolveOrganizer(), $_record->organizer_email);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . $_record->organizer->email);
+                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . ($_record->organizer_email ?: $_record->organizer?->email));
                 $_record->container_id = $container->getId();
             }
             
@@ -2807,6 +2819,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $attenderDisplayContainerId = $_attender->displaycontainer_id instanceof Tinebase_Model_Container ? 
                 $_attender->displaycontainer_id->getId() : 
                 $_attender->displaycontainer_id;
+
+            Calendar_Controller_Attender::getInstance()->handleSetDependentRecords($updatedAttender, $_attender, $currentAttender, false);
             
             // check if something what can be set as user has changed
             if ($currentAttender->status == $_attender->status &&
@@ -3140,8 +3154,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
 
         Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($attender, 'update', $currentAttender);
+
+        $updatedAttender = $this->_backend->updateAttendee($attender);
+        Calendar_Controller_Attender::getInstance()->handleSetDependentRecords($updatedAttender, $attender, $currentAttender, false);
+
         Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($attender, $currentAttender, get_class($attender), $this->_getBackendType(), $attender->getId());
-        $this->_backend->updateAttendee($attender);
         
         if ($attender->displaycontainer_id !== $currentAttender->displaycontainer_id) {
             $this->_increaseDisplayContainerContentSequence($currentAttender, $event, Tinebase_Model_ContainerContent::ACTION_DELETE);

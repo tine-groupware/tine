@@ -134,7 +134,10 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
             }
         }
 
-        if (isset($_data['emailAddress'])) {
+        if (isset($_data['emailAddress']) && ! empty($_data['emailAddress'])) {
+            if (is_array($_data['emailAddress'])) {
+                throw new Tinebase_Exception_InvalidArgument('emailAddress should not be an array');
+            }
             $_data['emailAddress'] = Tinebase_Helper::convertDomainToPunycode($_data['emailAddress']);
         }
         

@@ -40,6 +40,9 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         // filter replace space and - with %
         10 => 'equalsspecial',
         11 => 'notcontains',
+
+        12 => 'greater',
+        13 => 'less',
     );
     
     /**
@@ -109,6 +112,8 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             'notnull'           => array('sqlop' => ' IS NOT NULL',                                 ),
             'group'             => array('sqlop' => ' NOT LIKE \'\'',                               ),
             'equalsspecial'     => array('sqlop' => ' LIKE (?) ESCAPE "|"',                         ),
+            'greater'           => array('sqlop' => ' > (?)',                                       ),
+            'less'              => array('sqlop' => ' < (?)',                                       ),
         );
     }
 

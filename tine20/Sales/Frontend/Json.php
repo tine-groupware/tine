@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
  * @todo        check if we can add these functions to the reflection without implementing them here
@@ -51,6 +51,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Product::MODEL_NAME_PART,
         Sales_Model_ProductLocalization::MODEL_NAME_PART,
         Sales_Model_SubProductMapping::MODEL_NAME_PART,
+        Sales_Model_Document_Offer::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
         Sales_Model_Document_Order::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
@@ -58,11 +59,22 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART,
         Sales_Model_Document_Invoice::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
+        Sales_Model_Debitor::MODEL_NAME_PART,
+        Sales_Model_Document_Debitor::MODEL_NAME_PART,
+        Sales_Model_Division::MODEL_NAME_PART,
+        Sales_Model_DivisionGrants::MODEL_NAME_PART,
+        Sales_Model_Document_Category::MODEL_NAME_PART,
+        Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
+//        'OrderConfirmation',
+//        'PurchaseInvoice',
+//        'Offer',
+//        'Supplier',
         'Contract',
         'Customer',
         'Address',
         'ProductAggregate',
-        'Boilerplate'
+        'Boilerplate',
+        'Invoice',
     );
     
     /**
@@ -166,7 +178,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchContracts($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_Contract::getInstance(), 'Sales_Model_ContractFilter',
-            /* $_getRelations */ array('Sales_Model_Customer', 'Addressbook_Model_Contact', 'Tinebase_Model_CostCenter'));
+            /* $_getRelations */ array('Sales_Model_Customer', 'Addressbook_Model_Contact', Tinebase_Model_EvaluationDimensionItem::class,));
     }
 
     /**
@@ -183,11 +195,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         // TODO: resolve this in controller
         if (! empty($contract['products']) && is_array($contract['products'])) {
-            $cc = Sales_Controller_Product::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array()));
+            $prds = Sales_Controller_Product::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array()));
             for ($i = 0; $i < count($contract['products']); $i++) {
-                $costCenter = $cc->filter('id', $contract['products'][$i]['product_id'])->getFirstRecord();
-                if ($costCenter) {
-                    $contract['products'][$i]['product_id'] = $costCenter->toArray();
+                $prd = $prds->filter('id', $contract['products'][$i]['product_id'])->getFirstRecord();
+                if ($prd) {
+                    $contract['products'][$i]['product_id'] = $prd->toArray();
                 }
                 if (Tinebase_Application::getInstance()->isInstalled('WebAccounting')) {
                     if (isset($contract['products'][$i]['json_attributes']['assignedAccountables'])) {
@@ -576,8 +588,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset($recordData['address_id']) && is_array($recordData["address_id"])) {
             $recordData["address_id"] = $recordData["address_id"]['id'];
         }
-        if (isset($recordData['costcenter_id']) && is_array($recordData["costcenter_id"])) {
-            $recordData["costcenter_id"] = $recordData["costcenter_id"]['id'];
+        if (isset($recordData['eval_dim_cost_center']) && is_array($recordData["eval_dim_cost_center"])) {
+            $recordData["eval_dim_cost_center"] = $recordData["eval_dim_cost_center"]['id'];
         }
         // sanitize product_id
         if (isset($recordData['positions']) && is_array($recordData['positions'])) {
@@ -631,7 +643,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Sales_Controller_PurchaseInvoice::getInstance(),
             'Sales_Model_PurchaseInvoiceFilter',
-            ['Sales_Model_Supplier', 'Tinebase_Model_CostCenter', 'Addressbook_Model_Contact']);
+            ['Sales_Model_Supplier', Tinebase_Model_EvaluationDimensionItem::class, 'Addressbook_Model_Contact']);
     }
     
     /**
@@ -713,21 +725,36 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function exportInvoicesToDatevEmail(string $modelName, $invoiceData)
     {
-        $controller = $modelName === 'PurchaseInvoice' ? Sales_Controller_PurchaseInvoice::getInstance() 
-            : Sales_Controller_Document_Invoice::getInstance();
-        $senderConfig = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE
-            : Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
+        $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
+        $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
+        $controller = null;
+        switch ($modelName) {
+            case 'PurchaseInvoice':
+                $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE;
+                $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE;
+                $controller = Sales_Controller_PurchaseInvoice::getInstance();
+                break;
+            case 'Document_Invoice':
+                $controller = Sales_Controller_Document_Invoice::getInstance();
+                break;
+            case 'Invoice':
+                $controller = Sales_Controller_Invoice::getInstance();
+                break;
+            default:
+                break;
+        }
         
         $invalidInvoiceIds = [];
         $validInvoiceIds = [];
         $errorMessage = null;
 
+        if (empty($controller)) {
+            throw new Tinebase_Exception_SystemGeneric('missing datev export controller');
+        }
+        
         $senderEmail = Sales_Config::getInstance()->get($senderConfig);
         $sender = !empty($senderEmail) ? Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $senderEmail) 
             : Tinebase_Core::getUser();
-
-        $recipientConfig = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE
-            : Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
         $recipientEmails = Sales_Config::getInstance()->get($recipientConfig);
         
         if (sizeof($recipientEmails) === 0) {
@@ -757,9 +784,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         foreach ($records as $invoice) {
             $attachments = $invoice->attachments;
-            
+            $attachmentIds = $invoiceData[$invoice->id];
             if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
                 $attachments->count() . ' attachments for ' . $modelName . ' : ' . $invoice['name']);
+            
+            $selectedAttachments =  $attachments->filter(function(Tinebase_Model_Tree_Node $node) use ($attachmentIds) {
+                return in_array($node->id, $attachmentIds);
+            });
             
             $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
             $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
@@ -767,7 +798,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
             
             Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
-                $attachments->asArray(), false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
+                $selectedAttachments->asArray(), false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
         }
 
         $model = Sales_Config::APP_NAME . '_Model_' . $modelName;
@@ -779,8 +810,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $result = $controller->updateMultiple($filter, ['last_datev_send_date' => $lastDatevSendTime->getIso()]);
             $result = $result['results'];
         }
-        if ($model === Sales_Model_Document_Invoice::class) {
-            $expander = new Tinebase_Record_Expander($model, Sales_Model_Document_Invoice::getConfiguration()->jsonExpander);
+        if ($model === Sales_Model_Document_Invoice::class || $model === Sales_Model_Invoice::class) {
+            $expander = new Tinebase_Record_Expander($model, $model::getConfiguration()->jsonExpander);
             $expander->expand($records);
             foreach ($records as $validInvoice) {
                 $validInvoice['last_datev_send_date'] = $lastDatevSendTime;
@@ -850,8 +881,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
             ['field' => 'id', 'operator' => 'equals', 'value' => $documentId]
         ]);
-        $doc = new Sales_Export_DocumentPdf($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName(
-            'document_' . strtolower(preg_replace('/^Sales_Model_Document_/', '', $model) .'_pdf'))->getId()]);
+
+        $exportDef = Tinebase_ImportExportDefinition::getInstance()->getByName(
+            'document_' . strtolower(preg_replace('/^Sales_Model_Document_/', '', $model) .'_pdf'));
+
+        $doc = new ($exportDef->plugin)($filter, null, ['definitionId' => $exportDef->getId()]);
         $doc->generate();
         $doc->write($stream);
         rewind($stream);
@@ -894,7 +928,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
 
-    public function getSharedOrderDocumentTransition(string $recipientId, string $category, string $targetDocument): array
+    public function getMatchingSharedOrderDocumentTransition(string $orderId, string $targetDocument): array
     {
         switch ($targetDocument) {
             case Sales_Model_Document_Invoice::class:
@@ -911,16 +945,23 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 throw new Tinebase_Exception_InvalidArgument('target document needs to be either invoice or delivery');
         }
 
+        $order = Sales_Controller_Document_Order::getInstance()->get($orderId);
+        $ft = $order->{$recipientField}?->{Sales_Model_Address::FLD_FULLTEXT};
+        $contractId = $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_CONTRACT_ID);
+
         $orders = Sales_Controller_Document_Order::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
                 [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $recipientId]
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}?->getIdFromProperty(Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID)]
                 ]],
-                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $category],
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY)],
                 [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_CONTRACT_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $contractId],
                 [TMFA::FIELD => $followUpStatusFld, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED],
                 [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
-            ]));
+            ]), null, new Tinebase_Record_Expander(Sales_Model_Document_Order::class, [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$recipientField => []],
+            ]))->filter(fn ($rec) => $rec->{$recipientField}?->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
 
         if ($orders->count() === 0) {
             return [];

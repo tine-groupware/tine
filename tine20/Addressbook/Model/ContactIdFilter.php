@@ -49,7 +49,9 @@ class Addressbook_Model_ContactIdFilter extends Tinebase_Model_Filter_Id
     protected function _resolveRecord($value)
     {
         if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
-            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
+            // NOTE: UI can cope with constant now
+            //$contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
+            $contact = $value;
         } else {
             $contact = parent::_resolveRecord($value);
         }

@@ -8,6 +8,7 @@
  */
 
 /*global Ext, Tine*/
+import getTwingEnv from "twingEnv";
 import { getAddressPanels } from "./AddressPanel";
 import contactPropertiesGrid from "./ContactPropertiesGrid";
 
@@ -202,22 +203,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 ]
             }, {
                 xtype: 'columnform',
-                items: [[
-                    !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
-                        {
+                items: [[{
                             columnWidth: 0.64,
-                            xtype: 'combo',
+                            xtype: 'textfield',
                             fieldLabel: this.app.i18n._('Display Name'),
-                            name: 'n_fn',
-                            disabled: true
-                        } :
-                        (
-                            new Tine.Addressbook.IndustrySearchCombo({
-                                fieldLabel: this.app.i18n._('Industry'),
-                                columnWidth: 0.64,
-                                name: 'industry'
-                            })
-                        ), {
+                            name: 'n_fileas'
+                        }, {
                         columnWidth: 0.36,
                         fieldLabel: this.app.i18n._('Job Title'),
                         name: 'title',
@@ -231,7 +222,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         name: 'bday',
                         requiredGrant: 'privateDataGrant'
                     }
-                ]]
+                ]].concat(Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ? [[
+                    new Tine.Addressbook.IndustrySearchCombo({
+                        fieldLabel: this.app.i18n._('Industry'),
+                        name: 'industry'
+                    })
+                ]] : [])
             }]
         };
 
@@ -261,7 +257,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields,field => {
                         return field.specialType?.match(/^Addressbook_Model_ContactProperties_(Url|InstantMessenger)/) && !field.disabled;
-
                     }).concat(
                         _.find(this.recordClass.getModelConfiguration().fields, {fieldName: 'language'})
                     ), ['uiconfig.order'])
@@ -397,6 +392,33 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             frame: false
         });
         Tine.Addressbook.ContactEditDialog.superclass.initComponent.apply(this, arguments);
+
+        // init suggestions
+        this.twingEnv = getTwingEnv();
+        const loader = this.twingEnv.getLoader();
+        loader.setTemplate('n_fileas', Tine.Tinebase.configManager.get('fileAsTemplate', 'Addressbook'));
+        this.getForm().items.each((field) => {
+            if (field.initKeyEvents) {
+                field.initKeyEvents();
+            }
+            field.on('keyup', this.suggestFields, this);
+        });
+    },
+
+    suggestFields: async function() {
+        const fieldName = 'n_fileas';
+        const field = this.getForm().findField(fieldName);
+        const value = field?.getValue();
+        if (field && (!value || value === field.suggestedValue)) {
+            this.onRecordUpdate();
+            // @FIXME twing can't cope with null values yet, remove this once twing fixed it
+            const data = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
+            const suggestion = await this.twingEnv.render(fieldName, data);
+
+            field.setValue(suggestion);
+            this.record.set(fieldName, suggestion);
+            field.suggestedValue = suggestion;
+        }
     },
 
     /**
@@ -509,15 +531,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     onRecordLoad: function () {
         // NOTE: it comes again and again till
         if (this.rendered) {
-            var container = this.record.get('container_id');
-
-            // handle default container
-            // TODO should be generalized
-            if (! this.record.id && ! Ext.isObject(container)) {
-                container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'));
-                this.record.set('container_id', container);
-            }
-
             if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
                 this.mapPanel.onRecordLoad(this.record);
             }
@@ -533,9 +546,24 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         
         this.supr().onRecordLoad.apply(this, arguments);
         
-        if(Tine.Tinebase.registry.get('currentAccount').contact_id == this.record.id) {
+        if(Tine.Tinebase.registry.get('currentAccount').contact_id === this.record.id) {
             this.enableOwnPrivateFields();
         }
+    },
+
+    /**
+     * onAfterRecordLoad
+     */
+    onAfterRecordLoad: function () {
+        let container = this.record.get('container_id')
+
+        if ( !this.record.id && ( !Ext.isObject(container) || !container.id ) ) {
+            container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'))
+            this.record.set('container_id', container)
+        }
+
+        this.supr().onAfterRecordLoad.apply(this, arguments);
+        this.suggestFields();
     },
 
     /**

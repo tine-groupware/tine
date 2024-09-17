@@ -288,6 +288,10 @@ class Tinebase_Group
                 __METHOD__ . '::' . __LINE__ . ' No syncable group backend found - skipping syncGroups.');
             return true;
         }
+
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+            return true;
+        }
         
         if (!$groupBackend->isDisabledBackend()) {
             $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL);

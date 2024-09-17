@@ -283,7 +283,8 @@ Tine.widgets.form.FieldManager = function() {
                             field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
                         }
                     } else {
-                        var picker = Tine.widgets.form.RecordsPickerManager.get(
+                        config.allowMultiple = true;
+                        var picker = Tine.widgets.form.RecordPickerManager.get(
                             fieldDefinition.config.appName,
                             fieldDefinition.config.modelName,
                             Ext.apply(field, config)
@@ -326,10 +327,11 @@ Tine.widgets.form.FieldManager = function() {
                 case 'numberableStr':
                 case 'numberableInt':
                     field.xtype = 'textfield';
-                    field.disabled = true;
+                    field.disabled = ! _.get(field, 'config.editable');
+                    field.emptyText = window.i18n._('Gets assigned automatically');
                     break;
                 case 'json':
-                    field.xtype = 'tw-acefield';
+                    field.xtype = field.xtype || 'tw-acefield';
                     field.mode = 'json';
                     field.height = 150; // 12 lines
                     break;
@@ -368,8 +370,13 @@ Tine.widgets.form.FieldManager = function() {
                 case 'url':
                     field.xtype = 'urlfield';
                     break;
+                case 'password':
+                    field.xtype = field.xtype || 'tw-passwordTriggerField';
+                    break;
                 default:
-                    field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
+                    field.xtype = field.xtype || this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
+                    field.emptyValue = field.emptyValue || (fieldDefinition.nullable ? null : '');
+
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }

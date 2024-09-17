@@ -234,7 +234,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $testUserTimezone = Tinebase_Core::getUserTimezone();
-        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $testUserTimezone !== 'US/Pacific' ? 'US/Pacific' : 'UTC');
+        Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $testUserTimezone !== 'America/Los_Angeles' ? 'America/Los_Angeles' : 'UTC');
         
         $originalDueDateFilter = $this->_getFilter('due', $exampleFilterData);
         $convertedDueDataFilter = $this->_getFilter('due', $this->_uit->getPersistentFilter($savedFilterData['id']));
@@ -444,11 +444,11 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                     $this->assertEquals($requestFilter['value'], $responseFilter['value']['id'], 'wrong containerId');
                     break;
                 case 'organizer':
-                    $this->assertTrue(is_array($responseFilter['value']), 'user is not resolved');
                     if ($requestFilter['value'] !== 'currentAccount') {
+                        $this->assertTrue(is_array($responseFilter['value']), 'user is not resolved');
                         $this->assertEquals($requestFilter['value'], $responseFilter['value']['accountId'], 'wrong accountId');
                     } else {
-                        $this->assertEquals(Tinebase_Core::getUser()->getId(), $responseFilter['value']['accountId'], 'wrong accountId');
+                        $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong accountId');
                     }
                     break;
                 case 'due':

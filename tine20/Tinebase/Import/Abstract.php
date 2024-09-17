@@ -179,14 +179,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             require_once 'StreamFilter/ConvertMbstring.php';
             $filter = 'convert.mbstring';
         } else if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
-            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'] . '//IGNORE';
+            if (preg_match('/^MAC-?CENTRALEUROPE$/', $this->_options['encoding'])) {
+                $encoding = $this->_getSupportedMacCharset();
+            } else {
+                $encoding = $this->_options['encoding'];
+            }
+            $filter = 'convert.iconv.' . $encoding . '/' . $this->_options['encodingTo'] . '//IGNORE';
         } else {
             $filter = NULL;
         }
             
         if ($filter !== NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Add convert stream filter: ' . $filter);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Add convert stream filter: ' . $filter);
+            }
             stream_filter_append($resource, $filter);
         }
         
@@ -952,7 +959,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 'name' => $name,
             );
             /** @var Tinebase_Model_Tag $tag */
-            $tag = Tinebase_Tags::getInstance()->createSharedTags([$tagData])->getFirstRecord();
+            try {
+                $tag = Tinebase_Tags::getInstance()->createSharedTags([$tagData])->getFirstRecord();
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' User has no grants to create Tags: ' . $e);
+            }
         }
         
         return $tag;
@@ -1309,5 +1321,24 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _setController()
     {
         $this->_controller = Tinebase_Core::getApplicationInstance($this->_options['model']);
+    }
+
+    /**
+     * note: the encoding has different names on different distributions!
+     *  - ubuntu: MAC-CENTRALEUROPE
+     *  - alpine: MACCENTRALEUROPE
+     *
+     * @return string
+     */
+    protected function _getSupportedMacCharset(): string    {
+        $stream = fopen('php://memory', 'r+');
+        try {
+            stream_filter_append($stream, 'convert.iconv.MAC-CENTRALEUROPE/UTF-8//IGNORE');
+        } catch (Throwable $e) {
+            return 'MACCENTRALEUROPE';
+        } finally {
+            fclose($stream);
+        }
+        return 'MAC-CENTRALEUROPE';
     }
 }

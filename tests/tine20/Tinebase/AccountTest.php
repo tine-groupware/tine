@@ -46,16 +46,18 @@ class Tinebase_AccountTest extends TestCase
      */
     public function testGetAccounts()
     {
+        $count = Tinebase_User::getInstance()->getUsers('phpunit', 'accountStatus')->count();
+
         $this->testAddAccount();
         
         $accounts = Tinebase_User::getInstance()->getUsers('phpunit', 'accountStatus');
         
-        $this->assertEquals(1, count($accounts));
+        $this->assertEquals($count + 1, count($accounts));
 
         // test with sort dir
         $accounts = Tinebase_User::getInstance()->getFullUsers('phpunit', 'accountStatus', 'DESC');
         
-        $this->assertEquals(1, count($accounts));
+        $this->assertEquals($count + 1, count($accounts));
     }
 
     /**
@@ -64,16 +66,18 @@ class Tinebase_AccountTest extends TestCase
      */
     public function testGetFullAccounts()
     {
+        $count = Tinebase_User::getInstance()->getUsers('phpunit', 'accountStatus')->count();
+
         $this->testAddAccount();
         
         $accounts = Tinebase_User::getInstance()->getFullUsers('phpunit', 'accountStatus');
         
-        $this->assertEquals(1, count($accounts));
+        $this->assertEquals($count + 1, count($accounts));
         
         // test with sort dir
         $accounts = Tinebase_User::getInstance()->getFullUsers('phpunit', 'accountStatus', 'ASC');
         
-        $this->assertEquals(1, count($accounts));
+        $this->assertEquals($count + 1, count($accounts));
     }
  
     /**

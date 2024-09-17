@@ -95,6 +95,9 @@ SUMMARY:TEST06
 DTSTART;TZID=Europe/Berlin:20140604T161500
 DTSTAMP:20140602T131935Z
 SEQUENCE:3
+ORGANIZER;CN="Organizer, Hans":MAILTO:h.organizer@test.net
+ATTENDEE;CN="TestUser, Klaus";CUTYPE=INDIVIDUAL;EMAIL="klaustu@test.net"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:klaustu@test.net
 END:VEVENT
 END:VCALENDAR',
                     '{DAV:}getetag' => '"bcc36c611f0b60bfee64b4d42e44aa1d"',
@@ -131,6 +134,9 @@ SUMMARY:TEST05
 DTSTART;TZID=Europe/Berlin:20140604T143000
 DTSTAMP:20140602T131725Z
 SEQUENCE:3
+ORGANIZER;CN="Organizer, Hans":MAILTO:h.organizer@test.net
+ATTENDEE;CN="TestUser, Klaus";CUTYPE=INDIVIDUAL;EMAIL="klaustu@test.net"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:klaustu@test.net
 END:VEVENT
 END:VCALENDAR',
                     '{DAV:}getetag' => '"8b89914690ad7290fa9a2dc1da490489"',
@@ -167,6 +173,9 @@ SUMMARY:test
 DTSTART;TZID=Europe/Berlin:20111207T160000
 DTSTAMP:20111207T143502Z
 SEQUENCE:2
+ORGANIZER;CN="Organizer, Hans":MAILTO:h.organizer@test.net
+ATTENDEE;CN="TestUser, Klaus";CUTYPE=INDIVIDUAL;EMAIL="klaustu@test.net"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:klaustu@test.net
 END:VEVENT
 END:VCALENDAR
 ',
@@ -180,8 +189,8 @@ END:VCALENDAR
         return array (
           '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/' => 
                array(
-                  '{DAV:}resourcetype' => new Sabre\DAV\Property\ResourceType(array('{DAV:}collection')),
-                  '{DAV:}acl' => new Sabre\DAVACL\Property\Acl(array(
+                  '{DAV:}resourcetype' => new Sabre\DAV\Xml\Property\ResourceType(array('{DAV:}collection')),
+                  '{DAV:}acl' => new Sabre\DAVACL\Xml\Property\Acl(array(
                     array (
                       'principal' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/',
                       'protected' => true,
@@ -220,7 +229,7 @@ END:VCALENDAR
                 )),
                 '{DAV:}displayname' => 'User1 Test',
                 '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new
-                    Sabre\CalDAV\Property\SupportedCalendarComponentSet(array(
+                    Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array(
                         0 => 'VEVENT',
                         1 => 'VTODO',
                         2 => 'VTIMEZONE',
@@ -231,12 +240,12 @@ END:VCALENDAR
             '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/' =>
             array (
                 '{DAV:}resourcetype' =>
-                new Sabre\DAV\Property\ResourceType(array(
+                new Sabre\DAV\Xml\Property\ResourceType(array(
                     0 => '{DAV:}collection',
                     1 => '{urn:ietf:params:xml:ns:caldav}calendar',
                 )),
                 '{DAV:}acl' =>
-                new Sabre\DAVACL\Property\Acl(array(
+                new Sabre\DAVACL\Xml\Property\Acl(array(
                     array (
                         'principal' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/',
                         'protected' => true,
@@ -275,7 +284,7 @@ END:VCALENDAR
                 )),
                 '{DAV:}displayname' => 'calendar',
                 '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' =>
-                new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array(
+                new Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array(
                     0 => 'VEVENT',
                     1 => 'VTODO',
                     2 => 'VTIMEZONE',
@@ -373,6 +382,9 @@ SUMMARY:new event
 DTSTART;TZID=Europe/Berlin:20140804T143000
 DTSTAMP:20140602T131725Z
 SEQUENCE:1
+ORGANIZER;CN="Organizer, Hans":MAILTO:h.organizer@test.net
+ATTENDEE;CN="TestUser, Klaus";CUTYPE=INDIVIDUAL;EMAIL="klaustu@test.net"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:klaustu@test.net
 END:VEVENT
 END:VCALENDAR',
             '{DAV:}getetag' => '"-1030341843%40citrixonlinecom"',
@@ -384,13 +396,14 @@ END:VCALENDAR',
      *
      * @param string $method
      * @param string $uri
-     * @param strubg $body
-     * @param number $depth
-     * @param number $tries
-     * @param number $sleep
+     * @param string $body
+     * @param int $depth
+     * @param int $tries
+     * @param int $sleep
+     * @return array
      * @throws Tinebase_Exception
      */
-    public function calDavRequest($method, $uri, $body, $depth = 0, $tries = 10, $sleep = 30)
+    public function calDavRequest(string $method, string $uri, string $body, int $depth = 0, int $tries = 10, int $sleep = 30): array
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                  . ' Sending ' . $method . ' request for uri ' . $uri . ': ' . $body);

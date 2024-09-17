@@ -50,6 +50,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         $contact = new Addressbook_Model_Contact([
             'n_given' => 'unittest',
             'email' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
+            'email_home' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
                 new GDPR_Model_DataIntendedPurposeRecord([
                     'intendedPurpose' => $this->_dataIntendedPurpose1->getId(),

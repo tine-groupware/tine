@@ -294,8 +294,7 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
             items = [];
 
         this.initSelectionWidget();
-        
-        this.pickerGridPanel = new Tine.widgets.grid.PickerGridPanel({
+        const configs = Ext.apply({
             height: this.layerHeight || 'auto',
             recordClass: this.recordClass,
             store: this.store,
@@ -308,7 +307,9 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
                     items: [ me.selectionWidget ]
                 });
             }
-        });
+        }, (this.pickerGridPanelConfigs ?? {}))
+        
+        this.pickerGridPanel = new Tine.widgets.grid.PickerGridPanel(configs);
         
         items.push(this.pickerGridPanel);
         

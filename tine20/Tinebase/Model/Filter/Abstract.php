@@ -253,9 +253,11 @@ abstract class Tinebase_Model_Filter_Abstract
         }
         
         if (! in_array($_operator, $this->_operators)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' '
                 . ' Allowed operators: ' . print_r($this->_operators, TRUE));
-            throw new Tinebase_Exception_UnexpectedValue("operator $_operator is not defined");
+            throw new Tinebase_Exception_UnexpectedValue("operator $_operator is not defined in "
+                . get_class($this));
         }
         
         $this->_operator = $_operator;

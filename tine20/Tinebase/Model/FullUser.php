@@ -429,7 +429,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     }
 
     /**
-     * return the public informations of this user only
+     * return the public information of this user only
      *
      * @return Tinebase_Model_User
      */

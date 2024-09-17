@@ -4,6 +4,9 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+import {getLayoutClassByWidth, getLayoutClassByMode} from "../../../../../Tinebase/js/util/responsiveLayout";
+
+/**
 /**
  * @class Ext.grid.GridView
  * @extends Ext.util.Observable
@@ -189,7 +192,7 @@ viewConfig: {
     firstRowCls: 'x-grid3-row-first',
     lastRowCls: 'x-grid3-row-last',
     rowClsRe: /(?:^|\s+)x-grid3-row-(first|last|alt)(?:\s+|$)/g,
-    
+
     constructor : function(config){
         Ext.apply(this, config);
 	    // These events are only used internally by the grid components
@@ -347,7 +350,7 @@ viewConfig: {
         this.innerHd = this.mainHd.dom.firstChild;
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         if(this.forceFit){
-            this.scroller.setStyle('overflow-x', 'hidden');
+            this.scroller.setStyle('overflow-x', 'auto');
         }
         /**
          * <i>Read-only</i>. The GridView's body Element which encapsulates all rows in the Grid.
@@ -590,9 +593,8 @@ viewConfig: {
         this.innerHd.firstChild.style.width = this.getOffsetWidth();
         this.innerHd.firstChild.firstChild.style.width = tw;
         this.mainBody.dom.style.width = tw;
-        const display = hidden ? 'none' : '';
         
-        this.updateColumnStyle(col, {'display': display});
+        this.updateColumnStyle(col, {'display': hidden ? 'none' : ''});
         this.onColumnHiddenUpdated(col, hidden, tw);
         delete this.lastViewWidth; // force recalc
         this.layout();
@@ -773,12 +775,15 @@ viewConfig: {
         if(!this.mainBody){
             return; // not rendered
         }
-        var g = this.grid;
-        var c = g.getGridEl();
-        var csize = c.getSize(true);
-        var vw = csize.width;
+        const g = this.grid;
+        const c = g.getGridEl();
+        const csize = c.getSize(true);
+        const vw = csize.width;
         
-        if (this.mainHd) this.mainHd.setDisplayed(!g.hideHeaders);
+        if (this.mainHd) {
+            const mode = this.getResponsiveMode();
+            this.mainHd.setDisplayed(mode.name !== 'oneColumn' && !g.hideHeaders);
+        }
         if(!g.hideHeaders && (vw < 20 || csize.height < 20)){ // display: none?
             return;
         }
@@ -799,12 +804,11 @@ viewConfig: {
                 this.innerHd.style.width = (vw)+'px';
             }
         }
-        this.handleResponsive();
+        
         if(this.forceFit){
-            if(this.lastViewWidth !== vw) {
-                this.fitColumns(false, false);
-                this.lastViewWidth = vw;
-            }
+            this.fitColumns(false, false);
+            
+            this.lastViewWidth = vw;
         }else {
             this.autoExpand();
             this.syncHeaderScroll();
@@ -812,29 +816,50 @@ viewConfig: {
         this.onLayout(vw, vh);
     },
     
-    handleResponsive() {
-        if (!this.grid.hideHeaders) {
-            if (this.mainHd) this.mainHd.setDisplayed(!this.isResponsive());
+    resolveStateIdResponsiveMode(stateId) {
+        if (!stateId) return null;
+        const modeName = this.getResponsiveMode().name;
+        if (modeName) {
+            if (!this.latestMode) {
+                stateId = `${stateId}_${modeName}`;
+            } else {
+                if (this.latestMode !== modeName) {
+                    stateId = stateId.replace(`_${this.latestMode}`, `_${modeName}`);
+                }
+                if (!stateId.includes(`_${modeName}`)) {
+                    stateId = `${stateId}_${modeName}`;
+                }
+            }
+            this.latestMode = modeName;
         }
-        this.cm.config.forEach((col, idx) => {
-            const hidden = this.isResponsive() ? col.id !== 'responsive' : (col?.hidden || col.id === 'responsive');
-            const display = hidden ? 'none' : '';
-            this.updateColumnStyle(idx, {
-                'display': display,
-                'width': this.getColumnWidth(idx),
-            });
-        });
+        return stateId;
     },
     
-    isResponsive() {
-        if (this.disableResponsiveLayout) return false;
-        if (this.grid?.colModel?.config?.length <= 4) return false;
-        
+    getResponsiveMode() {
+        let result = {
+            level: -1, 
+            name: null
+        };
+        if (this.disableResponsiveLayout) return result;
         let width = this.grid?.getWidth?.() ?? 0;
         if (width === 0 && this.grid?.lastSize) {
             width = this.grid.lastSize.width;
         }
-        return width > 0 && (width < 576 || this.cm.config.length === 1);
+        if (width === 0) return result;
+        if (this.cm.config.length === 1) this.responsiveMode = 'oneColumn';
+        if (!this.responsiveMode) this.responsiveMode = 'auto';
+        
+        if (this.responsiveMode === 'auto') {
+            result = getLayoutClassByWidth(width, this.cm.config);
+        } else {
+            result = getLayoutClassByMode(this.responsiveMode, this.cm.config);
+        }
+        return result;
+    },
+    
+    setResponsiveMode(mode) {
+        if (this.disableResponsiveLayout) return;
+        this.responsiveMode = mode;
     },
     
     updateColumnStyle(col, styles) {
@@ -1118,9 +1143,12 @@ viewConfig: {
 
     // private
     getColumnStyle : function(col, isHeader){
-        var style = !isHeader ? (this.cm.config[col].css || '') : '';
+        let style = !isHeader ? (this.cm.config[col].css || '') : '';
         style += 'width:'+this.getColumnWidth(col)+';';
-        const hidden = this.isResponsive() ? this.cm.config[col].id !== 'responsive' : (this.cm.config[col]?.hidden || this.cm.config[col].id === 'responsive');
+        let hidden = this.cm.config[col]?.hidden || this.cm.config[col].id === 'responsive';
+        if (this.getResponsiveMode().name === 'oneColumn') {
+            hidden = this.cm.config[col].id !== 'responsive';
+        }
         if (hidden){
             style += 'display:none;';
         }
@@ -1147,7 +1175,7 @@ viewConfig: {
     },
     
     fitColumns : function(preventRefresh, onlyExpand, omitColumn){
-        if (!this.mainBody) return;
+        if (!this.mainBody || !this.grid.viewReady) return;
         const cm = this.cm;
         const widthCurrentVisibleTotal = cm.getTotalWidth(false);
         if (!widthCurrentVisibleTotal) return;
@@ -1158,7 +1186,6 @@ viewConfig: {
         // not initialized, so don't screw up the default widths
         const colCountVisible = cm.getColumnCount(true);
         if (widthResizedGrid < 20 * colCountVisible) return;
-        if (widthExtra === 0) return false;
         // handle neighbours resizing first
         if (this.resizingStrategy === 'neighbours' && isOmitColumnValid) {
             const next = cm.config.indexOf(_.find(cm.config, (c, i) => { return i > colIdxOmitColumn && !c.hidden; }));
@@ -1167,64 +1194,125 @@ viewConfig: {
                 widthExtra = 0; 
             }
         }
-        
-        const currentGridStateId = this.grid.stateId;
+        const currentGridStateId = this.resolveStateIdResponsiveMode(this.grid?.stateId);
         const currentGridState = Ext.state.Manager.get(currentGridStateId);
-        const isStateIdChanged = this.latestGridStateId !== currentGridStateId;
-        // collect all visible columns from existing config
-        const colsToResolve = [];
-        let colIdxLastVisible = colIdxOmitColumn;
-        cm.config.forEach((col, idx) => {
-            col.initialConfig = col.initialConfig || {... col};
-            col.index = idx;
-            // reset grid state if stateId changed, make sure column config is based on current stateId
-            if (isStateIdChanged && currentGridState?.columns?.[idx]) {
-                cm.setColumnWidth(col.index, currentGridState.columns[idx].width ?? this.grid.minColumnWidth, true);
-                cm.setHidden(idx, currentGridState.columns[idx].hidden ?? false, true);
-            }
-            if (!cm.isHidden(idx)) {
-                if (idx > colIdxOmitColumn) colsToResolve.push(col);
-                if (!cm.isFixed(col.index)) colIdxLastVisible = idx;
-            }
-        });
+        const isStateIdChanged = !!(!this.latestGridStateId && currentGridStateId)
+            || !!((this.latestGridStateId && currentGridStateId) && (this.latestGridStateId !== currentGridStateId));
         this.latestGridStateId = currentGridStateId;
-        if (!colsToResolve.length) return;
+        
         if (isStateIdChanged) {
+            if (this.grid) {
+                this.grid.stateId = this.latestGridStateId;
+                if (currentGridState) {
+                    this.grid.applyState(currentGridState, true);
+                }
+            }
+            const mode = this.getResponsiveMode();
+            cm.config.forEach((col, idx) => {
+                col.initialConfig = col.initialConfig || {... col};
+                col.index = idx;
+                const refConfig = currentGridState?.columns?.[idx] ?? col.initialConfig;
+                // set custom field
+                col.useManualWidth = refConfig.useManualWidth ?? false;
+                
+                // reset grid state if stateId changed, make sure column config is based on current stateId
+                cm.setColumnWidth(col.index, refConfig?.width ?? this.grid.minColumnWidth, true);
+                let hidden = refConfig?.hidden ?? false;
+                if (mode.level > -1) {
+                    if (mode.name === 'oneColumn') {
+                        hidden = col.id !== 'responsive';
+                    } else {
+                        //handle auto mode and strict mode
+                        if (!refConfig) {
+                            const responsiveLevel = col?.responsiveLevel ?? 'big';
+                            const colModeClass = getLayoutClassByMode(responsiveLevel, this.cm.config);
+                            if (col?.responsiveLevel || !hidden) hidden = colModeClass.level > mode.level;
+                        }
+                        if (col.id === 'responsive') hidden = true;
+                    }
+                    this.updateColumnStyle(col.index, {'display': hidden ? 'none' : ''});
+                }
+                cm.setHidden(col.index, hidden, true);
+
+            });
+            // handle sorting too
+            const sortInfo = currentGridState?.sort;
+            if (sortInfo && JSON.stringify(this.grid.store.sortInfo) !== JSON.stringify(sortInfo)) {
+                this.grid.store.sort(sortInfo.field, sortInfo.direction);
+            }
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
         }
+
+        // collect all visible columns from existing config
+        const colsToResolve = [];
+        
+        cm.config.forEach((col, idx) => {
+            if (!cm.isHidden(idx)) {
+                if (idx > colIdxOmitColumn) colsToResolve.push(col);
+            }
+        });
+        if (!colsToResolve.length) return;
         
         // handle columns fractional resizing
         const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
         const colIdxDefaultAutoExpand = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
-        const fraction = isOmitColumnValid 
+        const fraction = isOmitColumnValid
             ? (widthToResolve - widthExtra) / widthToResolve
             : widthResizedGrid / widthToResolve;
-
+        
         colsToResolve.forEach((col) => {
-            const width = !cm.isFitable(col.index) ? col.width : col.width * fraction;
+            const idx = _.findIndex(cm.config, (c) => { return col.id === c.id; })
+            const width = !cm.isFitable(idx) ? col.width : col.width * fraction;
             let widthResolved = Math.max(this.grid.minColumnWidth, Math.floor(width));
             if (colIdxDefaultAutoExpand < 0 && !isOmitColumnValid && col.width && widthToResolve <= widthResizedGrid) {
                 widthResolved = Math.max(col.width, width);
             }
-            cm.setColumnWidth(col.index, widthResolved, true);
+            if (col.useManualWidth && col.width !== col.minWidth) {
+                widthResolved = col.width;
+            }
+
+            cm.setColumnWidth(idx, Math.floor(widthResolved), true);
         });
         
         // resolve auto expand column index, it should not be on the left hand side
         const widthUpdatedTotalVisibleCols = cm.getTotalWidth(false);
+        const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
         let colIdxResolvedAutoExpand = colIdxDefaultAutoExpand;
-        if (isOmitColumnValid || colIdxDefaultAutoExpand <= colIdxOmitColumn) colIdxResolvedAutoExpand = colIdxLastVisible;
+        let colAutoExpand = null;
+        let isDefaultAutoExpandColReachLimit = false;
+        if (colIdxResolvedAutoExpand > -1) {
+            colAutoExpand = cm.config[colIdxResolvedAutoExpand];
+            isDefaultAutoExpandColReachLimit = (diff > 0 && colAutoExpand.maxWidth === colAutoExpand.width)
+                || (diff < 0 && colAutoExpand.width === colAutoExpand.minWidth);
+        }
+        if (isOmitColumnValid 
+            || colIdxDefaultAutoExpand <= colIdxOmitColumn 
+            || colAutoExpand?.useManualWidth
+            || (colAutoExpand && cm.isHidden(colIdxResolvedAutoExpand))
+            || isDefaultAutoExpandColReachLimit
+        ) {
+            let colIdxLastResizeable =  -1;
+            cm.config.forEach((col, idx) => {
+                if (!cm.isHidden(idx) && !cm.isFixed(idx) && idx > colIdxOmitColumn) {
+                    colIdxLastResizeable = idx;
+                }
+            });
+            colIdxResolvedAutoExpand = colIdxLastResizeable;
+        }
         // resized columns might not fit the total width , we should make sure they are equal
         if (colIdxResolvedAutoExpand >= 0 && fraction !== 1) {
-            const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
             const width = cm.getColumnWidth(colIdxResolvedAutoExpand);
-            if (!cm.isHidden(colIdxResolvedAutoExpand)) {
-                cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
-            }
+            cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
         }
-
-        this.grid.saveState();
+        
+        if (this.grid?.stateId && this.grid.stateId === this.latestGridStateId) {
+            this.grid.saveState();
+        }
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
+        
+        // browser might draw x-scrollbars when y-scrollbars where shown
+        this.scroller.setStyle('overflow-x', diff < 0 ? 'auto' : 'hidden');
         return true;
     },
 
@@ -1536,11 +1624,10 @@ viewConfig: {
                     id: 'responsive',
                     header: " Title ",
                     sortable: false,
-                    dataIndex: 'responsive',
                     hidden: true,
-                    renderer: source && Ext.isFunction(source.responsiveRenderer) ?
-                        source.responsiveRenderer.createDelegate(this) :
-                        this.responsiveRenderer.createDelegate(this)
+                    renderer: source && Ext.isFunction(source.oneColumnRenderer) ?
+                        source.oneColumnRenderer.createDelegate(this) :
+                        this.oneColumnRenderer.createDelegate(this)
                 });
                 cm.setConfig(cm.config, true);
             }
@@ -1555,7 +1642,7 @@ viewConfig: {
      * @param {Folder|Account} record
      * @return {String}
      */
-    responsiveRenderer: function(recordId, metadata, record, rowIndex, colIndex, store) {
+    oneColumnRenderer: function(recordId, metadata, record, rowIndex, colIndex, store) {
         if (this?.grid?.stateId) {
             const stateIdDefault = this.grid.stateId;
             if (!Ext.state.Manager.get(stateIdDefault)) this.grid.saveState();
@@ -1754,9 +1841,13 @@ viewConfig: {
     // private
     onColumnSplitterMoved : function(i, w){
         this.userResized = true;
-        var cm = this.grid.colModel;
-        cm.setColumnWidth(i, w, true);
+        const cm = this.grid.colModel;
+        const oldWidth = cm.getColumnWidth(i);
+        cm.setColumnWidth(i, w, true, true);
+        const newWidth = cm.getColumnWidth(i);
 
+        if (oldWidth === newWidth) return;
+        
         if(this.forceFit){
             this.fitColumns(true, false, i);
             this.updateAllColumnWidths();
@@ -1783,7 +1874,7 @@ viewConfig: {
                 break;
             default:
                 index = cm.getIndexById(id.substr(4));
-                if(index != -1){
+                if(index !== -1){
                     if(item.checked && cm.getColumnsBy(this.isHideableColumn, this).length <= 1){
                         this.onDenyColumnHide();
                         return false;

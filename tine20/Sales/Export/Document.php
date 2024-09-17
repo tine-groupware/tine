@@ -4,7 +4,7 @@
  *
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Paul Mehrer <p.mehrer@metaways.de>
- * @copyright    Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,42 +25,48 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'delivery'      => [],
-                        'billing'       => [],
-                        'postal'        => [],
                         'cpextern_id'   => [],
                         'cpintern_id'   => [],
                     ],
                 ],
                 Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => [],
+                Sales_Model_Document_Abstract::FLD_DEBITOR_ID => [],
                 Sales_Model_Document_Abstract::FLD_POSITIONS => [],
                 Sales_Model_Document_Abstract::FLD_BOILERPLATES => [],
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Category::FLD_DIVISION_ID => [],
+                    ],
+                ],
             ]
         ]))->expand($this->_records);
 
         /** @var Sales_Model_Document_Abstract $record */
         $record = $this->_records->getFirstRecord();
-        $cat = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY};
-        $lang = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE};
-        $this->_locale = new Zend_Locale($lang);
+        $cats = explode('/', $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_NAME});
+        $division = str_replace('/', '', $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_DIVISION_ID}->{Sales_Model_Division::FLD_TITLE});
+        $lang = str_replace('/', '', $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+        $this->_locale = new Zend_Locale($record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
         Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);
         $this->_translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $this->_locale);
         $config = Sales_Config::getInstance();
 
-        if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, [
-                    $lang => null,
-                    $cat => [
-                        $lang => null,
-                    ],
-                ]))) {
+        $matchData = [
+            'DIVISION-' . $division . '--',
+            'LANG-' . $lang . '--',
+        ];
+        foreach ($cats as $cat) {
+            $matchData[] = 'CATEGORY-' . $cat . '--';
+        }
+
+        if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, $matchData))) {
             $this->_templateFileName = $overwriteTemplate;
             $this->_createDocument();
         }
 
         // do this after any _createDocument calls! otherwise we lose the watermark
         if (!$record->isBooked()) {
-            $this->_docTemplate->addWaterMark('PROFORMA', 1);
-            $this->_docTemplate->addWaterMark('PROFORMA', 2);
+            $this->_docTemplate->addWaterMark('PROFORMA', null);
         }
 
         $vats = new Tinebase_Record_RecordSet(Tinebase_Config_KeyFieldRecord::class, []);
@@ -80,7 +86,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
 
 
         if ($record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) &&
-            $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} === Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE) {
+                $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} === Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE) {
             $templates = $config->{Sales_Config::REVERSE_CHANGE_TEMPLATE};
             $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} = $templates[$lang] ?? $templates[$config->{Sales_Config::LANGUAGES_AVAILABLE}->default];
         }
@@ -97,5 +103,81 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             $_record = $this->_records['PREPOSITIONS']->getFirstRecord();
         }
         parent::_renderTwigTemplate($_record);
+    }
+
+    protected function _startDataSource($_name)
+    {
+        parent::_startDataSource($_name);
+
+        if ('POSITIONS' === $_name) {
+            $this->_groupByProperty = Sales_Model_DocumentPosition_Abstract::FLD_GROUPING;
+            $this->_groupByProcessor = function(?string &$grouping) {
+                static $lastGrouping = null;
+                static $groupCount = 0;
+
+                if (null === $grouping) {
+                    $grouping = '';
+                }
+                if (null === $lastGrouping) {
+                    $lastGrouping = $grouping;
+                } elseif ($lastGrouping !== $grouping) {
+                    $lastGrouping = $grouping;
+                    ++$groupCount;
+                }
+
+                if (preg_match('/^\[_[a-zA-Z0-9]+\]/', $grouping, $m)) {
+                    $prefix = '';
+                    if (preg_match('/^\[_[a-z]/', $grouping)) {
+                        $i = $groupCount;
+                        do {
+                            $prefix .= chr(ord('a') + $i % 26);
+                            $i -= 26;
+                        } while($i >= 0);
+                    } elseif (preg_match('/^\[_[A-Z]/', $grouping)) {
+                        $i = $groupCount;
+                        do {
+                            $prefix .= chr(ord('A') + $i % 26);
+                            $i -= 26;
+                        } while($i >= 0);
+                    } else {
+                        if (($digits = strlen($m[0]) - 3) > 1) {
+                            $prefix = sprintf('%0' . $digits . 'd', $groupCount);
+                        } else {
+                            $prefix = $groupCount;
+                        }
+                    }
+
+                    $grouping = $prefix . substr($grouping, strlen($m[0]));
+                }
+            };
+            $this->_groupByRecordProcessor = function (Sales_Model_DocumentPosition_Abstract $position, array &$context): void {
+                $context['sum_net_price'] = ($context['sum_net_price'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE};
+                $context['sum_gross_price'] = ($context['sum_gross_price'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROSS_PRICE};
+                $context['sum_sales_tax'] = ($context['sum_sales_tax'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX};
+                if (preg_match('/^\[_[a-zA-Z0-9]+\]/', $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} ?? '', $m)) {
+                    $context['sum_text'] = substr($position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING}, strlen($m[0]));
+                } else {
+                    $context['sum_text'] = $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING};
+                }
+            };
+        }
+    }
+
+    protected function _startGroup()
+    {
+        $this->_groupByContext = [];
+        parent::_startGroup();
+    }
+
+
+    protected function _endDataSource($_name)
+    {
+        parent::_endDataSource($_name);
+
+        if ('POSITIONS' === $_name) {
+            $this->_groupByProperty = null;
+            $this->_groupByRecordProcessor = null;
+            $this->_groupByProcessor = null;
+        }
     }
 }

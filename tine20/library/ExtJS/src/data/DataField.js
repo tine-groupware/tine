@@ -77,6 +77,12 @@ Ext.data.Field = function(config){
                     if(!v){
                         return '';
                     }
+                    if (v === 'CURRENT_DATE') {
+                        return new Date().clearTime();
+                    }
+                    if (v === 'CURRENT_TIME') {
+                        return new Date().clearTime();
+                    }
                     if(Ext.isDate(v)){
                         return v;
                     }

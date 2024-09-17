@@ -212,7 +212,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendar events from a CalDav source
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function importCalDavData(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
@@ -227,7 +227,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendars and calendar events from a CalDav source using multiple parallel processes
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function importCalDavMultiProc(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
@@ -242,7 +242,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update calendar events from a CalDav source using multiple parallel processes
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function updateCalDavMultiProc(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
@@ -257,7 +257,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendar events from a CalDav source for one user
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function importCalDavDataForUser(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
@@ -272,7 +272,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update calendar/events from a CalDav source using etags for one user
      * 
      * @param Zend_Console_Getopt $_opts
-     */
+     *
     public function updateCalDavDataForUser(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
@@ -287,7 +287,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update calendar/events from a CalDav source using etags
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function updateCalDavData(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
@@ -296,7 +296,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
         $caldavCli->updateAllCalendarDataForUsers();
-    }
+    }*/
 
     /**
      * print alarm acknowledgement report (when, ip, client, user, ...)
@@ -914,5 +914,57 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         fclose($csvhandle);
         echo "exported csv data to file " . $tempFileName . "\n";
+    }
+
+    /**
+     *
+     *  set resource grants
+     *
+     *  example usages:
+     *  (1) $ php tine20.php --method=Calendar.setResourcesGrants accountId=15 accountType=group grants=readGrant [-d]
+     *  (2) $ php tine20.php --method=Calendar.setResourcesGrants id=3339 accountId=15 accountType=group grants=readGrant overwrite=1
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function setResourcesGrants(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+
+        $resourcesFilterData = [];
+        foreach (['id', 'name', 'type'] as $field) {
+            if (isset($data[$field])) {
+                $resourcesFilterData[] = [
+                    'field' => $field,
+                    'operator' => $field === 'name' ? 'contains' : 'equals',
+                    'value' => $data[$field]
+                ];
+            }
+        }
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            'Calendar_Model_Resource',$resourcesFilterData);
+
+        $container_ids = Calendar_Controller_Resource::getInstance()->search($filter)->container_id;
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $containerFilterData = [
+            ['field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()]
+        ];
+        $containerFilterData[] = [
+            'field' => 'id',
+            'operator' => 'in',
+            'value' => $container_ids
+        ];
+        $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
+
+        $cli = new Tinebase_Frontend_Cli_Abstract();
+        $cli->setContainerGrantsHelper($containers, $data, $_opts->d);
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(true);
+
+        return 0;
     }
 }

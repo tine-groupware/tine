@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
-import { getCls } from "../../util/responsiveLayout"
+import {getDefaultLayoutClasses} from "../../util/responsiveLayout";
 
 Ext.ns('Tine.widgets.grid');
 
@@ -37,15 +37,7 @@ Tine.widgets.grid.GridPanel = function(config) {
         start: 0,
         limit: 50
     };
-
-    // screen is of widthClass if width <= px
-    this.widthClasses = {
-        small: 300,
-        medium: 800,
-        big: 1600,
-        large: Infinity
-    };
-
+    
     // allow to initialize with string
     this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
 
@@ -410,12 +402,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initialLoadAfterRender: true,
 
     /**
-     * add "create new record" button
-     * 
-     * @type Boolean
-     * @property addButton
+     * @cfg {Bool} allowCreateNew
+     * allow to create new records (local mode only atm.!)
      */
-    addButton: true,
+    allowCreateNew: true,
+
+    /**
+     * @cfg {Bool} allowDelete
+     * allow to delete records
+     */
+    allowDelete: true,
     
     layout: 'border',
     border: false,
@@ -521,6 +517,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 callback: this.onAreaLockChange.createDelegate(this)
             }));
         });
+    },
+    
+    onClick: function(e, target) {
+        debugger
     },
     
     getRecordByData(data) {
@@ -661,9 +661,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
-                filterModels = this.getCustomfieldFilters();
+                //filterModels = Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters.call(this, this.recordClass);
             } else if (Ext.isFunction(this.recordClass.getFilterModel)) {
-                filterModels = this.recordClass.getFilterModel().concat(this.getCustomfieldFilters());
+                filterModels = this.recordClass.getFilterModel();
             }
             this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
                 app: this.app,
@@ -728,12 +728,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 columns.unshift(tagsCol);
             }
             
+            if (_.find(columns, {dataIndex: 'type'})) {
+                const typeCol = _.find(columns, {dataIndex: 'type'});
+                _.remove(columns, typeCol);
+                columns.unshift(typeCol);
+            }
+            
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
                 columns.unshift(attachCol);
             }
-
+            
             _.forEachRight(_.filter(this.modelConfig.fields, {type: 'image'}), function(field) {
                 var imgCol = _.find(columns, {dataIndex: field.key});
                 if (imgCol) {
@@ -781,13 +787,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     customizeColumns: function(columns) {
         if (this.customColumnData) {
-            var _ = window.lodash;
-
-            _.forEach(this.customColumnData, function(value) {
-                var column = _.find(columns, { id: value.id });
-                if (column) {
+            this.customColumnData.forEach((column) => {
+                const col = _.find(columns, { id: column.id });
+                if (col) {
                     // apply custom cfg
-                    column = Ext.apply(column, value);
+                    column = Ext.apply(col, column);
                 }
             });
 
@@ -991,7 +995,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
 
-        this.action_addInNewWindow = (this.addButton) ? new Ext.Action({
+        this.action_addInNewWindow = (this.allowCreateNew) ? new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
@@ -1010,7 +1014,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             allowMultiple: true
         });
 
-        this.initDeleteAction(services);
+        if (this.allowDelete) {
+            this.initDeleteAction(services);
+        }
 
         this.action_move = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -1156,6 +1162,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         Tine.widgets.dialog.ImportDialog.openWindow({
+            openerCt: this,
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: container,
@@ -1354,22 +1361,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.pagingToolbar.refresh.disable();
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
-            this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
+            const selectedIdx = this.store.indexOf(localRecord);
+            
             await proxyFn(localRecord)
                 .then((result) => {
-                    if (result?.data) {
-                        window.postal.publish({
-                            channel: "recordchange",
-                            topic: 'Filemanager.Node.delete',
-                            data: localRecord.data
-                        });
-    
-                        window.postal.publish({
-                            channel: "recordchange",
-                            topic: (result.data.path === 'tempFile' ? 'Tinebase.TempFile' : 'Filemanager.Node') + '.create',
-                            data: result.data
-                        });
-                    }
+                    this.grid.getSelectionModel().selectRow(selectedIdx);
                 })
                 .catch((e) => {
                     window.postal.publish({
@@ -1396,7 +1392,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         Ext.apply(this.store.lastOptions, {
             preserveCursor:     true,
-            preserveSelection:  true, 
+            preserveSelection:  true,
             preserveScroller:   true, 
             removeStrategy:     'default'
         });
@@ -1490,17 +1486,28 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Ext.applyIf(options.params, this.defaultPaging);
     },
     
-    updateGridState() {
+    async updateGridState() {
         if (!this.stateful) return;
-        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
-        if (!Ext.state.Manager.get(this.grid.stateId)) {
-            this.grid.saveState();
+        this.grid.stateId = this.getResolvedGridStateId();
+        
+        if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
+            await this.grid.saveState();
         }
-        const defaultState = Ext.state.Manager.get(this.grid.stateId) ?? this.grid.getState();
-        if (defaultState) {
-            this.grid.applyState(defaultState);
-            this.grid.saveState();
-        }
+        this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
+        this.grid.view.layout();
+    },
+    
+    getResolvedGridStateId() {
+        const stateIdSuffix = this.getStateIdSuffix();
+        const suffixEast = this.detailsPanelRegion === 'east' ? '_DetailsPanel_East' : '';
+        let stateId = `${this.gridConfig.stateId}${stateIdSuffix}${suffixEast}`;
+        if (this.grid?.getView?.()) stateId = this.grid.getView().resolveStateIdResponsiveMode(stateId);
+
+        return stateId;
+    },
+    
+    getStateIdSuffix() {
+        return this.stateIdSuffix;
     },
 
     /**
@@ -1532,6 +1539,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
+        if (!options.preserveSelection) {
+            this.grid.getSelectionModel().clearSelections(true)
+        }
+
         this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
 
         // restore scroller
@@ -1699,9 +1710,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * init ext grid panel
      * @private
      */
-    initGrid: function() {
+    initGrid: async function () {
         var preferences = Tine.Tinebase.registry.get('preferences');
-
+        
         if (preferences) {
             this.gridConfig = Ext.applyIf(this.gridConfig || {}, {
                 stripeRows: preferences.get('gridStripeRows') ? preferences.get('gridStripeRows') : false,
@@ -1716,20 +1727,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 };
             }
         }
-
+        
         // generic empty text
         this.i18nEmptyText = i18n.gettext('No data to display');
         
         // init sel model
-        if (! this.selectionModel) {
+        if (!this.selectionModel) {
             this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
                 moveEditorOnEnter: false,
                 store: this.store,
                 gridPanel: this
             });
         }
-
-        this.selectionModel.on('selectionchange', function(sm) {
+        
+        this.selectionModel.on('selectionchange', function (sm) {
             this.actionUpdater.updateActions(sm, this.getFilteredContainers());
             this.latestSelection = sm;
             this.ctxNode = this.selectionModel.getSelections();
@@ -1737,7 +1748,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.detailsPanel.onDetailsUpdate(sm);
             }
         }, this);
-
+        
         if (this.usePagingToolbar) {
             this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
                 pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
@@ -1748,7 +1759,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 displaySelectionHelper: this.displaySelectionHelper,
                 sm: this.selectionModel,
                 disableSelectAllPages: this.disableSelectAllPages,
-                nested: this.editDialog ? true : false
+                nested: !!this.editDialog
             }, this.pagingConfig));
             const columns = this.gridConfig?.cm?.columns ?? this.gridConfig?.columns;
             const sortActions = columns
@@ -1758,7 +1769,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         text: column.header,
                         dataIndex: column.dataIndex,
                         scope: this,
-                        handler: (action)=> {
+                        handler: (action) => {
                             this.store.sort(action.dataIndex);
                         }
                     });
@@ -1766,10 +1777,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.sortingMenu = new Ext.Action({
                 xtype: 'tbsplit',
                 iconCls: 'action_sort',
-                menu: new Ext.menu.Menu({ items: sortActions}),
+                menu: new Ext.menu.Menu({items: sortActions}),
                 hidden: true,
                 displayPriority: 0,
-                handler: (action)=> {
+                handler: (action) => {
                     const sortState = this.store.getSortState();
                     sortActions.forEach((action) => {
                         if (sortState.field === action.initialConfig.dataIndex) {
@@ -1781,10 +1792,50 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 }
             });
+            // todo : hide the layout action if disableResponsiveLayout ?
+            const levels = [...new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean))];
+            this.widthClasses = ['auto', 'oneColumn', 'big'].concat(levels);
+            
+            const layoutActions = this.widthClasses.map((level) => {
+                const text = level === 'oneColumn' ? 'one column' : level;
+                return new Ext.Action({
+                    text: Ext.util.Format.capitalize(i18n._(text)),
+                    dataIndex: level,
+                    handler: (action) => {
+                        this.grid.getView().setResponsiveMode(action.dataIndex);
+                        this.regionConfig[this.detailsPanelRegion].responsiveLevel = action.dataIndex;
+                        Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+
+                        this.grid.view.layout();
+                    }
+                });
+            });
+            this.layoutMenu = new Ext.Action({
+                xtype: 'tbsplit',
+                menu: new Ext.menu.Menu({items: layoutActions}),
+                hidden: true,
+                displayPriority: 80,
+                iconCls: 'x-cols-icon',
+                tooltip: 'Layout',
+                handler: (action) => {
+                    const mode = this.grid.getView().getResponsiveMode().name;
+                    layoutActions.forEach((action) => {
+                        if (action.initialConfig.dataIndex !== 'auto') {
+                            const item = action.items[0];
+                            const isModeMatched = mode === action.initialConfig.dataIndex;
+                            item.container[isModeMatched ? "addClass" : "removeClass"]("x-menu-item-checked");
+                            item[isModeMatched ? "addClass" : "removeClass"]('x-menu-check-item x-menu-group-item');
+                        }
+                        const level = this.regionConfig[this.detailsPanelRegion]?.responsiveLevel;
+                        action.setIconClass(action.initialConfig.dataIndex === level ? 'action_enable' : '');
+                    });
+                },
+            });
             this.pagingToolbar.insert(11, this.sortingMenu);
+            this.pagingToolbar.insert(12, this.layoutMenu);
             
             // mark next grid refresh as paging-refresh
-            this.pagingToolbar.on('beforechange', function() {
+            this.pagingToolbar.on('beforechange', function () {
                 this.grid.getView().isPagingRefresh = true;
             }, this);
             
@@ -1800,7 +1851,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }
         }
-
+        
         // which grid to use?
         // TODO find a better way to configure quickadd grid
         var Grid = null;
@@ -1810,22 +1861,54 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
-
+        //we need the state configs before initial Grid
+        if (this.stateful) {
+            this.gridConfig.stateful = true;
+            this.gridConfig.stateId = this.stateId + '-Grid';
+            const gridStateId = this.getResolvedGridStateId();
+            let gridState = Ext.state.Manager.get(gridStateId);
+            if (gridState) this.defaultSortInfo = gridState.sort;
+            
+            const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
+            this.regionStateId = `${stateId}_detailspanelregion`;
+            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+            
+            this.regionConfigStateId = `${stateId}_region_config`;
+            this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
+                'south': {},
+                'east': {},
+            });
+            
+            //update script , it should be removed after we make sure customer has the updateed state
+            const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+            const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
+            if (oldDetailsPanelRegion) {
+                this.detailsPanelRegion = oldDetailsPanelRegion;
+                Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
+                Ext.state.Manager.clear(oldRegionStateId);
+            }
+            const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
+            const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
+            if (oldRegionConfig) {
+                this.regionConfig = oldRegionConfig;
+                Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+                Ext.state.Manager.clear(oldRegionConfigStateId);
+            }
+        }
+        
         this.gridConfig.store = this.store;
-
+        
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        if (this.stateful) {
-            this.gridConfig.stateful = true;
-            this.gridConfig.stateId  = this.stateId + '-Grid' + this.stateIdSuffix;
-            
-            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-            this.stateIdDetailPanelEast = !this.gridConfig.stateId.includes('_DetailsPanel_East') ? this.gridConfig.stateId + '_DetailsPanel_East' : this.gridConfig.stateId;
-            const StoredStateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
-            const state = Ext.state.Manager.get(StoredStateId);
-            if (state) this.defaultSortInfo = state.sort;
+
+        const configs = Tine.widgets.grid.ColumnManager.getResolvedColumnsConfig(
+            this.gridConfig?.cm?.config ?? this.gridConfig?.columns, 
+            this.recordClass.getMeta('appName'), 
+            this.recordClass.getMeta('modelName')
+        );
+        if (this.gridConfig?.cm) {
+            this.gridConfig.cm.setConfig(configs, true);
         }
         
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
@@ -1835,17 +1918,53 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             parentScope: this,
             view: this.createView(),
             recordClass: this.recordClass,
-            getDragDropText: this.getDragDropText.createDelegate(this)
+            getDragDropText: this.getDragDropText.createDelegate(this),
+            getState : ()=> {
+                const o = {columns: []};
+                const store = this.store;
+                let ss;
+                let gs;
+                
+                let i = 0, c;
+                for(; (c = this.grid.colModel.config[i]); i++){
+                    o.columns[i] = {
+                        id: c.id,
+                        width: c.width,
+                    };
+                    if(c.useManualWidth){
+                        o.columns[i].useManualWidth = true;
+                    }
+                    if(c.hidden){
+                        o.columns[i].hidden = true;
+                    }
+                }
+                if(store){
+                    ss = store.getSortState();
+                    if(ss){
+                        o.sort = ss;
+                    }
+                    if(store.getGroupState){
+                        gs = store.getGroupState();
+                        if(gs){
+                            o.group = gs;
+                        }
+                    }
+                }
+                return o;
+            },
         }));
+        
+
+        
         this.grid.store.sortInfo = this.defaultSortInfo;
         
         // init various grid / sm listeners
-        this.grid.on('keydown',     this.onKeyDown,         this);
-        this.grid.on('rowclick',    this.onRowClick,        this);
-        this.grid.on('rowdblclick', this.onRowDblClick,     this);
-        this.grid.on('newentry',    this.onStoreNewEntry,   this);
-        this.grid.on('headerclick', this.onHeaderClick,   this);
-
+        this.grid.on('keydown', this.onKeyDown, this);
+        this.grid.on('rowclick', this.onRowClick, this);
+        this.grid.on('rowdblclick', this.onRowDblClick, this);
+        this.grid.on('newentry', this.onStoreNewEntry, this);
+        this.grid.on('headerclick', this.onHeaderClick, this);
+        
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
     },
 
@@ -1918,7 +2037,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
             Tine.Tinebase.areaLocks.manageMask(areaLock);
         });
-
+        
         if (this.initialLoadAfterRender) {
             this.initialLoad();
             this.afterIsRendered().then(() => {
@@ -2270,53 +2389,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
-     * get custom field filter for filter toolbar
-     * 
-     * @return {Array}
-     */
-    getCustomfieldFilters: function() {
-        var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
-            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
-            result = [];
-        Ext.each(cfConfigs, function(cfConfig) {
-            try {
-                var cfDefinition = cfConfig.get('definition');
-                switch (cfDefinition.type) {
-                    case 'record':
-                        if (_.get(window, cfDefinition.recordConfig.value.records)) {
-                            result.push({
-                                filtertype: 'foreignrecord',
-                                label: cfDefinition.label,
-                                app: this.app,
-                                ownRecordClass: this.recordClass,
-                                foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
-                                linkType: 'foreignId',
-                                ownField: 'customfield:' + cfConfig.id,
-                                pickerConfig: cfDefinition.recordConfig.additionalFilterSpec ? {
-                                    additionalFilterSpec: cfDefinition.recordConfig.additionalFilterSpec
-                                } : null
-                            });
-                        }
-                        break;
-                    case 'keyField':
-                        result.push({filtertype:'tine.widget.keyfield.filter',field:'customfield:' + cfConfig.id, app: this.app, keyfieldName: cfConfig.get('name') , label:cfDefinition.label});
-                        break;
-                    default:
-                        result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
-                        break;
-                }
-
-            } catch (e) {
-                Tine.log.warn('CustomfieldFilters ' + cfDefinition.label + ' doesnt create');
-
-            }
-        }, this);
-
-
-        return result;
-    },
-
-    /**
      * returns filter toolbar
      * @private
      * @deprecated
@@ -2330,11 +2402,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         return new Tine.widgets.grid.FilterPanel(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
-            filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
+            filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
             filters: this.defaultFilters || []
         }));
     },
+    
 
     /**
      * return store from grid
@@ -2519,6 +2592,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     setFullScreen(fullScreen = true) {
         if (!this.detailsPanel) return;
         this.detailsPanel.isInFullScreenMode = fullScreen;
+        this.detailsPanel.onToolbarResize();
         if (!fullScreen) {
             Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this.detailsPanel, false);
             const latestActive = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem;
@@ -2601,7 +2675,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
-            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
+            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) :
+                (this.editDialogConfig.fixedFields ?? Ext.encode(button.fixedFields)),
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass),
             additionalConfig = additionalConfig ? additionalConfig : {};
         
@@ -2625,6 +2700,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
+                openerCt: this,
                 plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
@@ -2647,7 +2723,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @returns {Tine.Tinebase.data.Record}
      */
     createNewRecord: function() {
-        return new this.recordClass(this.recordClass.getDefaultData(), 0);
+        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+        record.phantom = true;
+
+        // legacy should be removed some day
+        record.setId(0);
+
+        return record;
+    },
+
+    getRecordDefaults: function() {
+        const defaults = {...this.recordDefaults || {} };
+
+        return defaults;
     },
 
     /**

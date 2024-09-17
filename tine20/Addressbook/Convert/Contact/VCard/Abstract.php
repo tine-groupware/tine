@@ -7,7 +7,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -196,14 +196,17 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
 
                 case 'PHOTO':
                     $jpegphoto = null;
+                    /** @var \Sabre\VObject\Property $encoding */
+                    $encoding = $property['ENCODING'];
+                    $encoding = (string)$encoding;
+                    /** @var \Sabre\VObject\Property $type */
+                    $type = $property['TYPE'];
+                    $type = (string)$type;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                            ' Photo: ' . $property['ENCODING'] . ":" . $property['TYPE']);
+                            ' Photo: ' . $encoding . ":" . $type);
                     }
-                    if (
-                        ( $property['ENCODING'] != "b" )
-                         && ( $property['ENCODING'] != "B" )
-                    ) {
+                    if ($encoding !== "b"  &&  $encoding !== "B" ) {
                         // pass on for now as is if image is not binary encoding, sabre or whoever would in this case
                         // decode any base 64 or hex string into binary blob
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -213,14 +216,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                         $jpegphoto = $property->getValue();
                         break;
                     }
-                    switch (strtolower($property['TYPE'])) {
+                    switch (strtolower($type)) {
                         case 'jpg':
                         case 'jpeg':
                         case 'png':
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . ' Photo: passing ' . strtolower($property['TYPE'])
-                                    . ' image as is (' . strlen((string)$property->getValue()) . ')');
+                                    . ' Photo: passing ' . strtolower($type)
+                                    . ' image as is (' . strlen($property->getValue()) . ')');
                             }
                             $jpegphoto = $property->getValue();
                             break;
@@ -399,7 +402,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
             $typeParameter = $property['TYPE'];
             // comvert all TYPE's to lowercase and ignore voice and pref
             $typeParameter->setParts(array_diff(
-                array_map('strtolower', $property['TYPE']->getParts()),
+                array_map('strtolower', $typeParameter->getParts()),
                 array('voice', 'pref')
             ));
 
@@ -618,5 +621,23 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
         $tineTitle = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
         return "-//$tineTitle//Addressbook V$version//EN";
+    }
+
+    /**
+     * converts Tinebase_Record_RecordSet to external format
+     *
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
+     *
+     * @return mixed
+     *
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
+    {
+        throw new Tinebase_Exception_NotImplemented();
     }
 }

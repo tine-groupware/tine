@@ -54,10 +54,6 @@
           "path": "js/widgets/form/"
         },
         {
-          "text": "FieldManager.js",
-          "path": "js/widgets/form/"
-        },
-        {
           "text": "AddToRecordPanel.js",
           "path": "js/widgets/dialog/"
         },
@@ -75,6 +71,10 @@
         },
         {
           "text": "FieldLabeler.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "String.js",
           "path": "js/ux/"
         },
         {
@@ -250,8 +250,8 @@
           "path": "js/ux/form/"
         },
         {
-          "text": "RecordsComboBox.js",
-          "path": "js/ux/form/"
+          "text": "index.js",
+          "path": "js/widgets/form/VMultiPicker"
         },
         {
           "text": "DateTimeField.js",
@@ -630,8 +630,16 @@
           "path": "js/widgets/dialog/"
         },
         {
-          "text": "MultiOptionsDialog.js",
-          "path": "js/widgets/dialog/"
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/ModalDialog/"
+        },
+        {
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/MultiOptionsDialog/"
+        },
+        {
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/ModalDialog/"
         },
         {
           "text": "FileListDialog.js",
@@ -728,6 +736,10 @@
         {
           "text": "PickerGridPanel.js",
           "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FieldManager.js",
+          "path": "js/widgets/form/"
         },
         {
           "text": "MappingPickerGridPanel.js",
@@ -938,10 +950,6 @@
           "path": "js/widgets/relation/"
         },
         {
-          "text": "RecordsPickerCombo.js",
-          "path": "js/widgets/form/"
-        },
-        {
           "text": "PickerGridLayerCombo.js",
           "path": "js/widgets/grid/"
         },
@@ -974,8 +982,8 @@
           "path": "js/widgets/file/"
         },
         {
-          "text": "PasswordDialog.js",
-          "path": "js/widgets/dialog/"
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/PasswordDialog/"
         },
         {
           "text": "SecondFactorDialog.js",
@@ -1006,8 +1014,8 @@
           "path": "js/widgets/path/"
         },
         {
-          "text": "PasswordChangeDialog.js",
-          "path": "js/"
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/PasswordChangeDialog/"
         },
         {
           "text": "AboutDialog.js",
@@ -1016,6 +1024,14 @@
         {
           "text": "AppPile.js",
           "path": "js/"
+        },
+        {
+          "text": "index.js",
+          "path": "js/TineBar/"
+        },
+        {
+          "text": "index.js",
+          "path": "js/TineDock/"
         },
         {
           "text": "AppTabsPanel.js",

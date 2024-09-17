@@ -216,6 +216,18 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
 
         for(i = 0, len = config.length; i < len; i++){
             c = Ext.applyIf(config[i], this.defaults);
+            if (!config[i]?.dataIndex) config[i].dataIndex = config[i]?.id;
+            if (config[i]?.dataIndex && initial) {
+                const fieldConfig = {
+                    name: config[i]?.dataIndex,
+                    type: 'auto',
+                };
+                const uiConfig = Tine.widgets.grid.ColumnManager.getColumnUIConfig(fieldConfig, null, config[i]);
+                const resolvedConfig = Tine.widgets.grid.ColumnManager.resolveUIConfigWidth(config[i], uiConfig);
+
+                c = Ext.applyIf(config[i], resolvedConfig);
+            }
+
             // if no id, create one using column's ordinal position
             if(Ext.isEmpty(c.id)){
                 c.id = i;
@@ -226,6 +238,7 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
                 config[i] = c;
             }
             this.lookup[c.id] = c;
+
         }
         if(!initial){
             this.fireEvent('configchange', this);
@@ -259,13 +272,16 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
      * Moves a column from one position to another.
      * @param {Number} oldIndex The index of the column to move.
      * @param {Number} newIndex The position at which to reinsert the coolumn.
+     * @param suppressEvent
      */
-    moveColumn : function(oldIndex, newIndex){
+    moveColumn : function(oldIndex, newIndex, suppressEvent){
         var c = this.config[oldIndex];
         this.config.splice(oldIndex, 1);
         this.config.splice(newIndex, 0, c);
         this.dataMap = null;
-        this.fireEvent("columnmoved", this, oldIndex, newIndex);
+        if (!suppressEvent) {
+            this.fireEvent("columnmoved", this, oldIndex, newIndex);
+        }
     },
 
     /**
@@ -382,9 +398,23 @@ var columns = grid.getColumnModel().getColumnsBy(function(c){
      * @param {Number} width The new width
      * @param {Boolean} suppressEvent True to suppress firing the <code>{@link #widthchange}</code>
      * event. Defaults to false.
+     * @param isManualAction
      */
-    setColumnWidth : function(col, width, suppressEvent){
-        this.config[col].width = width;
+    setColumnWidth : function(col, width, suppressEvent, isManualAction = false){
+        const { maxWidth, minWidth } = this.config[col] || {};
+        
+        this.config[col].width = Math.max(minWidth || 30, Math.min(maxWidth || width, width));
+        
+        const colIdxLastVisible = this.config.reduce((lastIdx, col, idx) => {
+            return this.isHidden(idx) ? lastIdx : idx;
+        }, -1);
+        
+        if (col === colIdxLastVisible) {
+            this.config[col].width = Math.max(minWidth || 30, Math.min(2000, width));
+        }
+        
+        if (isManualAction) this.config[col].useManualWidth = true;
+        
         this.totalWidth = null;
         if(!suppressEvent){
              this.fireEvent("widthchange", this, col, width);

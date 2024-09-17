@@ -191,3 +191,9 @@ msgstr "weil der Kontakt diesem Verwendungszweck nicht zugestimmt hat"
 
 msgid "as consent date has expired"
 msgstr "weil das Zustimmung wiederrufen wurde"
+
+msgid "Add all contacts having agreed to this purpose"
+msgstr "Alle Kontakte, die diesem Verwendungszweck zugestimmt haben, als Empfänger hinzufügen"
+
+msgid "Compose mass mail without recipients"
+msgstr "Keine Empfänger der Massenmail hinzufügen"

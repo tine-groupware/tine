@@ -1005,4 +1005,25 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         $result = $this->_json->revealEmailAccountPassword('');
         self::assertEmpty($result);
     }
+
+
+    public function testListAsMailinglistUpdateXprops()
+    {
+        $adbJson = new Addressbook_Controller_ListTest();
+        $adbJson->setUp();
+        $list = $adbJson->createAdbMailingList();
+        $account = $adbJson->searchMailinglistAccount($list);
+        
+        $account->grants->addRecord(new Felamimail_Model_AccountGrants(array(
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'account_id' => $account->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+        )));
+
+        $account = $this->_json->saveEmailAccount($account->toArray());
+        static::assertEquals(1, $account['adb_list']['xprops'][Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY], 'additional add_grant  from other user should enable the keep kopy config');
+        $account['adb_list']['xprops'][Addressbook_Model_List::XPROP_SIEVE_REPLY_TO] = 'both';
+        $account = $this->_json->saveEmailAccount($account);
+        static::assertEquals('both', $account['adb_list']['xprops'][Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]);
+    }
 }

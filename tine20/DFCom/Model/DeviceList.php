@@ -132,6 +132,7 @@ class DFCom_Model_DeviceList extends Tinebase_Record_Abstract
 triggerEventChain('projectTime');
 "
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ]
     ];

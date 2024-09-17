@@ -670,7 +670,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (!empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
         } else {
-            $result = $this->_db->fetchOne($countSelect);
+            $result = (int)$this->_db->fetchOne($countSelect);
         }
         
         return $result;
@@ -1722,27 +1722,23 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return boolean
      * @throws Tinebase_Exception_NotFound
      */
-    public function checkETag($id, $etag)
+    public function checkETag($id, $etag, $containerId)
     {
         $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_identifier);
-        $select->where($this->_db->quoteIdentifier($this->_identifier) . ' = ?', $id);
-        $select->orWhere($this->_db->quoteIdentifier('uid') . ' = ?', $id);
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), 'etag');
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId) . ' AND ('
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('external_id') . ' = ? OR ', $id)
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('external_uid') . ' = ?', $id) . ')');
     
         $stmt = $select->query();
-        $queryResult = $stmt->fetch();
+        $queryResult = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         $stmt->closeCursor();
     
         if ($queryResult === false) {
             throw new Tinebase_Exception_NotFound('no record with id ' . $id .' found');
         }
     
-        $select->where($this->_db->quoteIdentifier('etag') . ' = ?', $etag);
-        $stmt = $select->query();
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-    
-        return ($queryResult !== false);
+        return isset($queryResult['etag']) && $queryResult['etag'] === $etag;
     }
     
     /**
@@ -1754,7 +1750,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function getEtagsForContainerId($containerId)
     {
         $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array($this->_identifier, 'etag', 'uid'));
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array('id', 'external_id', 'etag', 'external_uid'));
         $select->where($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
         $select->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
     
@@ -1763,7 +1759,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     
         $result = array();
         foreach ($queryResult as $row) {
-            $result[$row['id']] = $row;
+            $result[$row['external_id']] = $row;
         }
         return $result;
     }

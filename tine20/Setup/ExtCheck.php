@@ -322,6 +322,8 @@ class ExtensionList
  */
 class Setup_ExtCheck
 {
+    protected ExtensionList $list;
+
     /**
      * the constructor
      *

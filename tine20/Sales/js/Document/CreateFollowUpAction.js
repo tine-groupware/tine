@@ -12,7 +12,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     // from -> to
     const allowedTransitions = {
         Offer: {
-            Offer: {isReversal: true},
+            Offer: {isReversal: false},
             Order: {}
         },
         Order: {
@@ -67,10 +67,17 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 const statusFieldName = `${sourceType.toLowerCase()}_status`
                 const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
                 const unbooked = selections.reduce((unbooked, record) => {
+                    record.noProxy = true // kill grid autoSave
                     const status = record.get(statusFieldName)
                     return unbooked.concat(statusDef.records.find((r) => { return r.id === status })?.booked ? [] : [record])
                 }, [])
 
+                if (_.filter(selections, (document) => { return document.get('reversal_status') !== 'notReversed' }).length) {
+                    if (await Ext.MessageBox.confirm(
+                        app.formatMessage('Create new { targetRecordName }?', { targetRecordName: targetRecordClass.getRecordName() }),
+                        app.formatMessage('Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document.', { sourceRecordsName, targetRecordName: targetRecordClass.getRecordName() })
+                    ) !== 'yes') { return false }
+                }
                 if (unbooked.length) {
                     if (await Ext.MessageBox.confirm(
                         app.formatMessage('Book unbooked { sourceRecordsName }', { sourceRecordsName }),
@@ -80,8 +87,26 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     // @TODO: maybe we should define default booked state somehow? e.g. offer should be accepted (not only send) or let the user select?
                     const bookedState = statusDef.records.find((r) => { return r.booked })
                     mask.show()
+
+                    try {
+                        // check if date is set and ask if user want's to change it to today
+                        const notToday = _.reduce(unbooked, (acc, record) => {
+                            return _.concat(acc, record.get('date') && record.get('date').format('Ymd') !== new Date().format('Ymd') ? record : []);
+                        }, [])
+                        _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                            title: app.formatMessage('Change Document Date?'),
+                            questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
+                            allowMultiple: true,
+                            allowEmpty: true,
+                            allowCancel: false,
+                            height: notToday.length * 30 + 100,
+                            options: notToday.map((source) => {
+                                return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
+                            })
+                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()); debugger});
+                    } catch (e) {/* USERABORT -> continue */ }
+
                     await unbooked.asyncForEach(async (record) => {
-                        record.noProxy = true // kill grid autoSave
                         record.set(statusFieldName, bookedState.id)
                         let updatedRecord
                         try {
@@ -108,7 +133,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 let processedSourceIds = [];
                 // @TODO: have all docs into one followUp vs. each doc gets an individual followUp
                 // allow 'ad-hoc' shared followups? -> no :-)
-                // check if document is 'shared' -> getSharedOrderDocumentTransition
+                // check if document is 'shared' -> getMatchingSharedOrderDocumentTransition
                 // NOTE: the selection might contain other documents which are part of the shared followup
                 //       those docs must not be processed individually
                 //       unbooked documents are not included -> inform user about this?
@@ -125,10 +150,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             }
 
                             if (supportsSharedTransition && !!+record.get(sharedTransitionFlag)) {
-                                // group by address?
-                                const recipientId = _.get(record, `data.${recipientField}.original_id`)
-                                const category = record.get('document_category')
-                                transition = await Tine.Sales.getSharedOrderDocumentTransition(recipientId, category, transition.targetDocumentType)
+                                transition = await Tine.Sales.getMatchingSharedOrderDocumentTransition(record.get('id'), transition.targetDocumentType)
 
                                 if (! transition?.sourceDocuments?.length) {
                                     return await Ext.MessageBox.show({
@@ -141,17 +163,19 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             }
 
                             if (transition.sourceDocuments.length > 1) {
-                                transition.sourceDocuments = _.map(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
-                                    title: app.formatMessage('Choose { sourceRecordsName }', { sourceRecordsName }),
-                                    questionText: app.formatMessage('Please choose which { sourceRecordsName } should be included in shared { targetRecordName }', { sourceRecordsName, targetRecordName}),
-                                    allowMultiple: true,
-                                    allowCancel: false,
-                                    height: transition.sourceDocuments.length * 30 + 100,
-                                    options: transition.sourceDocuments.map((source) => {
-                                        const sourceDocument = Tine.Tinebase.data.Record.setFromJson(source.sourceDocument, sourceRecordClass)
-                                        return { text: sourceDocument.getTitle(), name: sourceDocument.id, checked: true, source }
-                                    })
-                                }), 'source');
+                                try {
+                                    transition.sourceDocuments = _.map(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                                        title: app.formatMessage('Choose { sourceRecordsName }', { sourceRecordsName }),
+                                        questionText: app.formatMessage('Please choose which { sourceRecordsName } should be included in shared { targetRecordName }', { sourceRecordsName, targetRecordName}),
+                                        allowMultiple: true,
+                                        allowCancel: true,
+                                        height: transition.sourceDocuments.length * 30 + 100,
+                                        options: transition.sourceDocuments.map((source) => {
+                                            const sourceDocument = Tine.Tinebase.data.Record.setFromJson(source.sourceDocument, sourceRecordClass)
+                                            return { text: sourceDocument.getTitle(), name: sourceDocument.id, checked: true, source }
+                                        })
+                                    }), 'source');
+                                } catch (e) {/* USERABORT */ return; }
                             }
 
                             const followUpDocumentData = await Tine.Sales.createFollowupDocument(transition)

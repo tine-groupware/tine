@@ -71,6 +71,10 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                 ],
             ],
         ],
+        
+        self::UI_CONFIG => [
+            'copyEditAction'    => true,
+        ],
 
         self::FIELDS => [
             self::FLD_MODEL => [
@@ -127,10 +131,17 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_DOCUMENT_CATEGORY => [
-                self::TYPE => self::TYPE_KEY_FIELD,
-                self::LABEL => 'Document Category', // _('Document Category')
-                self::NAME => Sales_Config::DOCUMENT_CATEGORY,
-                self::NULLABLE => true,
+                self::LABEL                 => 'Category', // _('Category')
+                self::TYPE                  => self::TYPE_RECORD,
+                self::CONFIG                => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_Document_Category::MODEL_NAME_PART,
+                ],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+                self::NULLABLE              => true,
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_CUSTOMER => [
                 self::TYPE => self::TYPE_RECORD,

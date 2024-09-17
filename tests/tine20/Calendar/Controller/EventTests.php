@@ -2781,8 +2781,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_controller->create($event);
 
         $event->event_types = new Tinebase_Record_RecordSet('Calendar_Model_EventTypes', array(
-            array('record' => $event->getId(), 'eventType' => $eventType1->getId()),
-            array('record' => $event->getId(), 'eventType' => $eventType2->getId()),
+            array('record' => $event->getId(), Calendar_Model_EventTypes::FLD_EVENT_TYPE => $eventType1->getId()),
+            array('record' => $event->getId(), Calendar_Model_EventTypes::FLD_EVENT_TYPE => $eventType2->getId()),
         ));
 
         $event = $this->_controller->update($event);

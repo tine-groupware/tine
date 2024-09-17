@@ -227,6 +227,7 @@ require('./src/widgets/form/FieldSet');
 require('./src/widgets/form/HtmlEditor');
 require('./src/widgets/form/TimeField');
 require('./src/widgets/form/Label');
+require('./src/widgets/form/VueAlert');
 require('./src/widgets/form/Action');
 require('./src/widgets/form/VTypes');
 

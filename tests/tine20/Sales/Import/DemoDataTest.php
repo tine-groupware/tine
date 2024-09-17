@@ -24,7 +24,6 @@ class Sales_Import_DemoDataTest
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales All Import Tests');
-        $suite->addTestSuite('Sales_Import_CostCenter');
         $suite->addTestSuite('Sales_Import_ProductTest'); 
         $suite->addTestSuite('Sales_Import_ContractTest'); 
         $suite->addTestSuite('Sales_Import_SupplierTest'); 

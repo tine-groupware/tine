@@ -130,8 +130,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         }
 
-        $request = new Sabre\HTTP\Request();
-        $redirectUrl = str_replace('index.php', '', $request->getAbsoluteUri());
+        $redirectUrl = str_replace('index.php', '', Tinebase_Core::getUrl());
 
         // authentication failed
         if ($success !== TRUE) {
@@ -149,7 +148,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * display Tine 2.0 main screen
      */
-    public function mainScreen()
+    public function mainScreen(array $additionalData = [])
     {
         $locale = Tinebase_Core::getLocale();
 
@@ -161,9 +160,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
         }
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig', [
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig', array_merge([
             'lang' => $locale
-        ]);
+        ], $additionalData));
     }
 
     /**

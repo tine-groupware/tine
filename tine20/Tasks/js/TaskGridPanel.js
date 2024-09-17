@@ -80,8 +80,8 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getColumnModel: function(){
         const colMgr = _.bind(Tine.widgets.grid.ColumnManager.get, Tine.widgets.grid.ColumnManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _, Tine.widgets.grid.ColumnManager.CATEGORY_PROPERTYGRID, _);
         let columns = [
-            {id: 'attachments', header: '<div class="action_attach tine-grid-row-action-icon"></div>', tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false},
-            {id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer}
+            {id: 'attachments', sortable: false, hidden: false},
+            {id: 'tags', header: this.app.i18n._('Tags'), renderer: Tine.Tinebase.common.tagsRenderer}
         ];
 
         columns.push(colMgr('source'));
@@ -89,21 +89,19 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         columns = columns.concat([{
             id: 'summary',
             header: this.app.i18n._("Summary"),
-            width: 400,
-            dataIndex: 'summary',
             editor: new Ext.form.TextField({
                 allowBlank: false,
                 maxLength: 255
             }),
-            quickaddField: new Ext.form.TextField({
+            quickaddField: new Ext.form.TriggerField({
                 emptyText: this.app.i18n._('Add a task...'),
-                maxLength: 255
+                maxLength: 255,
+                hideTrigger: true,
+                plugins: [{ ptype: 'tasks.createFromTempalte' }]
             })
         }, {
             id: 'due',
             header: this.app.i18n._("Due Date"),
-            width: 145,
-            dataIndex: 'due',
             renderer: Tine.Tinebase.common.dateTimeRenderer,
             editor: new Ext.ux.form.DateTimeField({
                 defaultTime: '12:00',
@@ -113,11 +111,9 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaultTime: '12:00',
                 allowBlank: true
             })
-        }, {
+        }, colMgr('estimated_duration'), {
             id: 'priority',
             header: this.app.i18n._("Priority"),
-            width: 65,
-            dataIndex: 'priority',
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
             editor: {
                 xtype: 'widget-keyfieldcombo',
@@ -129,10 +125,22 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 keyFieldName: 'taskPriority',
             })
         }, {
+            id: 'dependens_on',
+            header: this.app.i18n._("Depends on"),
+            width: 150,
+            renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'dependens_on', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL),
+            editor: {
+                xtype:'tinerecordspickercombobox',
+                name: 'dependens_on',
+                recordClass: 'Tasks.TaskDependency',
+                refIdField: 'task_id',
+                searchComboConfig: {useEditPlugin: false},
+                editDialogConfig: {mode:  'local'},
+                isMetadataModelFor: 'Tasks.Task'
+            }
+        }, {
             id: 'percent',
             header: this.app.i18n._("Percent"),
-            width: 50,
-            dataIndex: 'percent',
             renderer: Ext.ux.PercentRenderer,
             editor: new Ext.ux.PercentCombo({
                 autoExpand: true,
@@ -144,8 +152,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'status',
             header: this.app.i18n._("Status"),
-            width: 85,
-            dataIndex: 'status',
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
             editor: {
                 xtype: 'widget-keyfieldcombo',
@@ -164,14 +170,10 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             id: 'completed',
             header: this.app.i18n._("Completed"),
             hidden: true,
-            width: 70,
-            dataIndex: 'completed',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
             id: 'organizer',
-            header: this.app.i18n._('Responsible'),
-            width: 200,
-            dataIndex: 'organizer',
+            header: this.app.i18n._('Organizer / Responsible'),
             renderer: Tine.Tinebase.common.accountRenderer,
             quickaddField: Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                 userOnly: true,

@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-
-use Hfig\MAPI;
 use Hfig\MAPI\OLE\Pear;
 
 /**
@@ -117,13 +115,63 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * append a new message to given folder
      *
      * @param string|Felamimail_Model_Folder $_folder id of target folder
-     * @param string|resource $_message full message content
+     * @param string|resource|Tinebase_Model_TempFile $_message full message content
      * @param array $_flags flags for new message
      */
-    public function appendMessage($_folder, $_message, $_flags = null)
+    public function appendMessage($_folder, $_message, $_flags = null, $_fileName = '')
     {
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
-        $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
+
+        if (str_contains($_fileName, '.msg')) {
+            $stream = $_message;
+            if ($_message instanceof Tinebase_Model_TempFile) {
+                $stream = fopen($_message->path, 'r');
+            }
+            try {
+                $documentFactory = new Pear\DocumentFactory();
+                $ole = $documentFactory->createFromStream($stream);
+                $mapiMessage = new Felamimail_MAPI_Message($ole);
+                $cacheId = sha1(self::class . $_fileName);
+                $message = $mapiMessage->parseMessage($cacheId);
+            } catch (Throwable $t) {
+                $message = 'Could not parse message: ' . $t->getMessage();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $message);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $t->getTraceAsString());
+                throw new Tinebase_Exception_SystemGeneric($message);
+            } finally {
+                fclose($stream);
+            }
+            if ($message['body_content_type'] === 'text/html') {
+                $encoding = mb_detect_encoding($message['body']);
+                if (! $encoding) {
+                    $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
+                }
+                $message->body = str_replace("\r", '', $message['body']);
+            }
+            $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+            $message->account_id = $folder->account_id;
+
+            $mail = Felamimail_Controller_Message_Send::getInstance()->createMailForSending($message, $account);
+
+            if ($message->sent instanceof Tinebase_DateTime) {
+                $dateTime  = new Zend_Date($message->sent);
+                $mail->setDate($dateTime);
+            }
+
+            $transport = new Felamimail_Transport();
+            $message = $transport->getRawMessage($mail);
+        } else {
+            $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
+
+            if (!$_fileName || str_contains($_fileName, '.eml')) {
+                if ($_message instanceof Tinebase_Model_TempFile) {
+                    $message = file_get_contents($_message->path);
+                }
+            }
+        }
+
         $flags = ($_flags !== null) ? (array)$_flags : null;
 
         $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
@@ -1112,8 +1160,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         'filename' => $filename,
                         'partId' => $part['partId'],
                         'size' => isset($part['size']) ? $part['size'] : 0,
-                        'description' => isset($part['description']) ? Tinebase_Helper::mbConvertTo($part['description']) : '',
-                        'cid' => (!empty($part['id'])) ? $part['id'] : NULL,
+                        'description' => isset($part['description'])
+                            ? Tinebase_Helper::mbConvertTo($part['description'])
+                            : '',
+                        'cid' => (!empty($part['id'])) ? $part['id'] : null,
                     );
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1419,7 +1469,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function getMessageFromNode($nodeId): Felamimail_Model_Message
+    public function getMessageFromNode($nodeId, $mimeType = null): Felamimail_Model_Message
     {
         // @todo simplify this / create Tinebase_Model_Tree_Node_Path::createFromNode()?
 
@@ -1430,15 +1480,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // @todo check if it's an email (.eml?)
         if ($node['contenttype'] === 'application/vnd.ms-outlook') {
-            // message parsing and file IO are kept separate
-            $messageFactory = new MAPI\MapiMessageFactory(new Felamimail_MAPI_Factory());
-            $documentFactory = new Pear\DocumentFactory();
-            
-            $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+            $stream = Tinebase_FileSystem::getInstance()->fopen($nodePath, 'r');
             try {
-                $ole = $documentFactory->createFromFile($hashFile);
-                $parsedMessage = $messageFactory->parseMessage($ole);
-                $content = $parsedMessage->toMimeString();
+                $documentFactory = new Pear\DocumentFactory();
+                $ole = $documentFactory->createFromStream($stream);
+                $mapiMessage = new Felamimail_MAPI_Message($ole);
+                $cacheId = sha1(self::class . $node['id']); 
+                $message = $mapiMessage->parseMessage($cacheId);
             } catch (Throwable $t) {
                 $message = 'Could not parse message: ' . $t->getMessage();
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
@@ -1446,34 +1494,30 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' ' . $t->getTraceAsString());
                 throw new Tinebase_Exception_SystemGeneric($message);
+            } finally {
+                Tinebase_FileSystem::getInstance()->fclose($stream);
             }
-
-            // write it to cache
-            $cacheId = sha1(self::class . $node['name']);
-            Tinebase_Core::getCache()->save($content, $cacheId);
-            $message = Felamimail_Model_Message::createFromMime($content);
             
             if ($message['body_content_type'] === 'text/html') {
-                $body = $parsedMessage->getBodyHTML();
-                $encoding = mb_detect_encoding($body);
+                $encoding = mb_detect_encoding($message['body']);
                 if (! $encoding) {
-                    $body = utf8_encode($body);
+                    $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
                 }
-                $message->body = str_replace("\r", '', $body);
+                $message->body = str_replace("\r", '', $message['body']);
                 $message->body = $this->_purifyBodyContent($message->body);
-                $message['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
             }
         } else {
             $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
-            // @todo allow to configure body mime type to fetch?
-            $message = Felamimail_Model_Message::createFromMime($content);
+            $message = Felamimail_Model_Message::createFromMime($content,  $mimeType);
             $message->body = $this->_purifyBodyContent($message->body);
         }
 
         $message->setId($node->getId());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Got Message: ' . print_r($message->toArray(), true));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Got Message with subject "' . $message->subject . '"');
+        }
 
         return $message;
     }
@@ -1510,18 +1554,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
-        $emailAddressesFiltered = array_map(function ($address) {
-            return $address['email'];
-        }, $emailAddresses);
-
+        $emailAddressesFilters = array_map(function($address) {return ['field' => 'email_query', 'operator' => 'contains', 'value' => $address['email']];}, $emailAddresses);
         $contactFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Addressbook_Model_Contact::class, [
             [
                 'condition' => 'OR',
-                'filters' => [
-                    ['field' => 'email', 'operator' => 'in', 'value' => $emailAddressesFiltered],
-                    ['field' => 'email_home', 'operator' => 'in', 'value' => $emailAddressesFiltered],
-                ]
+                'filters' => $emailAddressesFilters
             ]
         ]);
         return Addressbook_Controller_Contact::getInstance()->search($contactFilter);
@@ -1720,10 +1758,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             //append flags from original message to updated message
             foreach ($updatedMessage->flags as $flag) {
-               $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
-                
-              if (in_array($flag, $supportedFlags)) {
-                   $imap->addFlags($updatedMessage->messageuid, [$flag]);
+                $supportedFlags = array_keys(
+                    Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(false)
+                );
+
+                if (in_array($flag, $supportedFlags)) {
+                     $imap->addFlags($updatedMessage->messageuid, [$flag]);
                 }
             }
         } else {
@@ -1736,6 +1776,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $updatedMessage->subject = $newSubject;
+
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder);
         return $updatedMessage;
     }
 

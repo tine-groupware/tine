@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Expressive
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -26,6 +26,7 @@ class Tinebase_Expressive_RouteHandler
     const IGNORE_MAINTENANCE_MODE = 'ignoreMaintenanceMode';
     const IS_PUBLIC = 'isPublic';
     const PUBLIC_USER_ROLES = 'publicUserRoles';
+    const UNAUTHORIZED_REDIRECT_LOGIN = 'unauthRedirectLogin';
     const CLASS_NAME = 'class';
     const METHOD = 'method';
     const NAME = 'name';
@@ -45,6 +46,7 @@ class Tinebase_Expressive_RouteHandler
     protected $_isPublic = false;
     protected $_publicUserRoles = null;
     protected $_publicUserRolesIds = null;
+    protected bool $_unauthRedirectLogin = false;
 
     protected $_class = null;
     protected $_method = null;
@@ -71,6 +73,7 @@ class Tinebase_Expressive_RouteHandler
                 $this->_publicUserRoles = $_options[self::PUBLIC_USER_ROLES];
             }
         }
+        $this->_unauthRedirectLogin = (bool)($_options[self::UNAUTHORIZED_REDIRECT_LOGIN] ?? false);
         if (isset($_options[self::PIPE_INJECT])) {
             $this->_pipeInjectData = $_options[self::PIPE_INJECT];
         }
@@ -116,6 +119,9 @@ class Tinebase_Expressive_RouteHandler
         if (!empty($this->_pipeInjectData)) {
             $result[self::PIPE_INJECT] = $this->_pipeInjectData;
         }
+        if ($this->_unauthRedirectLogin) {
+            $result[self::UNAUTHORIZED_REDIRECT_LOGIN] = $this->_unauthRedirectLogin;
+        }
 
         return $result;
     }
@@ -129,6 +135,11 @@ class Tinebase_Expressive_RouteHandler
         $className = static::class;
         $instance = new $className($data[self::CLASS_NAME], $data[self::METHOD], $data);
         return $instance;
+    }
+
+    public function unauthorizedRedirectLogin(): bool
+    {
+        return $this->_unauthRedirectLogin;
     }
 
     /**

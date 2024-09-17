@@ -20,7 +20,7 @@ abstract class Tinebase_Backend_Sql_SelectHook
     abstract public function getKey(): string;
     abstract public function manipulateSelect(Zend_Db_Select $select): void;
 
-    public static function getRAII(Tinebase_Backend_Sql_Abstract $backend): Tinebase_RAII
+    public static function getRAII(Tinebase_Backend_Sql_Interface $backend): Tinebase_RAII
     {
         $instance = new static();
         $backend->addSelectHook($instance);

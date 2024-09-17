@@ -179,8 +179,8 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListAsMailinglist()
     {
-        $list = $this->_createAdbMailingList();
-        $account = $this->_searchMailinglistAccount($list);
+        $list = $this->createAdbMailingList();
+        $account = $this->searchMailinglistAccount($list);
         $accountCtrl = Felamimail_Controller_Account::getInstance();
 
         // assert email user
@@ -192,6 +192,8 @@ class Addressbook_Controller_ListTest extends TestCase
         // test change email
         $list->email = 'shoo' . Tinebase_Record_Abstract::generateUID(8) .  '@' . TestServer::getPrimaryMailDomain();
         $this->_instance->update($list);
+        
+        // test account add grant and update keep_copy in list
 
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
@@ -226,15 +228,15 @@ class Addressbook_Controller_ListTest extends TestCase
      */
     public function testDeleteMailingList()
     {
-        $list = $this->_createAdbMailingList();
-        $mailAccount = $this->_searchMailinglistAccount($list);
+        $list = $this->createAdbMailingList();
+        $mailAccount = $this->searchMailinglistAccount($list);
         Admin_Controller_EmailAccount::getInstance()->delete($mailAccount);
         $list = Addressbook_Controller_List::getInstance()->get($list->getId());
         self::assertNull($list->email, 'email not remove');
         self::assertEquals($list->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST], false, 'xpros doesn´t change to false');
     }
 
-    protected function _createAdbMailingList(): Addressbook_Model_List
+    public function createAdbMailingList(): Addressbook_Model_List
     {
         $this->_testNeedsTransaction();
 
@@ -246,7 +248,7 @@ class Addressbook_Controller_ListTest extends TestCase
         return $list;
     }
 
-    protected function _searchMailinglistAccount(Addressbook_Model_List $list): Felamimail_Model_Account
+    public function searchMailinglistAccount(Addressbook_Model_List $list): Felamimail_Model_Account
     {
         $accountCtrl = Felamimail_Controller_Account::getInstance();
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -418,8 +420,8 @@ class Addressbook_Controller_ListTest extends TestCase
             self::markTestSkipped('test is only working with sieve master pw support');
         }
 
-        $list = $this->_createAdbMailingList();
-        $account = $this->_searchMailinglistAccount($list);
+        $list = $this->createAdbMailingList();
+        $account = $this->searchMailinglistAccount($list);
 
         Felamimail_Backend_SieveFactory::reset();
 
@@ -565,6 +567,9 @@ class Addressbook_Controller_ListTest extends TestCase
         return $list;
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testAddNonSystemContactAndUpdategroupCheckModlog()
     {
         // create system list

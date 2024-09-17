@@ -13,6 +13,7 @@
  * 
  * @package     Tinebase
  * @subpackage  Config
+ * @deprecated  use Tinebase_Config_MCKeyFieldRecord instead
  *
  * @property    string  $value
  * @property    string  $id

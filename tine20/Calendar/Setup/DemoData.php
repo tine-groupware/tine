@@ -56,6 +56,10 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected ?Tinebase_Model_Container $sharedCalendar = null;
 
+    protected $_ressources = [];
+
+    protected $sharedEventsData = [];
+
     /**
      * the constructor
      *

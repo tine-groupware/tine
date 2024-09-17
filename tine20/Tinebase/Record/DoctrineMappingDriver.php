@@ -96,7 +96,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         }
 
         $this->_mapAssociations($modelConfig, $metadata);
-        $this->_mapFields($modelConfig, $metadata);
+        $this->_mapFields($className, $modelConfig, $metadata);
     }
 
     /**
@@ -129,13 +129,17 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      * @param Tinebase_ModelConfiguration $modelConfig
      * @param ClassMetadata $metadata
      */
-    protected function _mapFields(Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
+    protected function _mapFields(string $className, Tinebase_ModelConfiguration $modelConfig, ClassMetadata $metadata)
     {
         $virtualFields = array_keys($modelConfig->getVirtualFields());
         $mappedFields = [];
         foreach ($modelConfig->getFields() + $modelConfig->getDbColumns() as $fieldName => $config) {
             if (in_array($fieldName, $virtualFields, true)) {
                 continue;
+            }
+
+            if (MCC::TYPE_NUMBERABLE_INT === $config[MCC::TYPE] || MCC::TYPE_NUMBERABLE_STRING === $config[MCC::TYPE]) {
+                Tinebase_Numberable::getCreateUpdateNumberableConfig($className, $fieldName, $config);
             }
 
             self::mapTypes($config);
@@ -152,6 +156,10 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                 if (isset($mappedFields[$config['fieldName']])) {
                     throw new Tinebase_Exception_Record_DefinitionFailure('field ' . $config['fieldName'] .
                         ' already mapped');
+                }
+
+                if (!preg_match('/^[a-z_0-9]+$/', $config['columnName']) && !isset($config[Tinebase_ModelConfiguration_Const::ALLOW_CAMEL_CASE]) && !str_starts_with($config['columnName'], 'GDPR_')) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure($className . '::' . $config['columnName'] . ' contains illegal characters');
                 }
 
                 if ($metadata->hasAssociation($config['fieldName'])) {
@@ -223,7 +231,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                 $config[self::OPTIONS][self::AUTOINCREMENT] = $config[self::AUTOINCREMENT];
             }
         } elseif (self::TYPE_RECORDS === $config[self::TYPE] && isset($config[self::CONFIG][self::STORAGE]) &&
-                self::TYPE_JSON === $config[self::CONFIG][self::STORAGE]) {
+                (self::TYPE_JSON === $config[self::CONFIG][self::STORAGE] || self::TYPE_JSON_REFID === $config[self::CONFIG][self::STORAGE])) {
             $config[self::TYPE] = self::$_typeMap[self::TYPE_JSON];
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
         }

@@ -5,6 +5,8 @@
  * Alexander Stintzing <a.stintzing@metaways.de> @copyright Copyright (c) 2013
  * Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
 Ext.ns('Tine.Sales');
 
 /**
@@ -74,14 +76,6 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         /*if (this.record.id) {
             var form = this.getForm();
             var ar = ['type', 'contract'];
-            for (var index = 0; index < ar.length; index++) {
-                form.findField(ar[index]).setReadOnly(1);
-            }
-        }*/
-        
-        // mark some more fields as read only
-        /*if (this.record.get('cleared') == 'CLEARED') {
-            var ar = ['credit_term', 'costcenter_id', 'cleared', 'type'];
             for (var index = 0; index < ar.length; index++) {
                 form.findField(ar[index]).setReadOnly(1);
             }
@@ -507,17 +501,6 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     relationType: 'APPROVER',
                                     relationDegree: 'sibling',
                                     modelUnique: true
-                                }, {
-                                    columnWidth: 1/4,
-                                    editDialog: this,
-                                    xtype: 'tinerelationpickercombo',
-                                    fieldLabel: this.app.i18n._('Lead Cost Center'),
-                                    allowBlank: true,
-                                    app: 'Tinebase',
-                                    recordClass: Tine.Tinebase.Model.CostCenter,
-                                    relationType: 'COST_CENTER',
-                                    relationDegree: 'sibling',
-                                    modelUnique: true
                                 }
                                 /*new Tine.Tinebase.widgets.keyfield.ComboBox({
                                     app: 'Sales',
@@ -527,7 +510,11 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     allowBlank: false,
                                     columnWidth: 1/3
                                 })*/
-                            ]
+                            ], [ new EvaluationDimensionForm({
+                                columnWidth: 1,
+                                maxItemsPerRow: 2,
+                                recordClass: this.recordClass
+                            })]
                         ]
                     }]
                 }]

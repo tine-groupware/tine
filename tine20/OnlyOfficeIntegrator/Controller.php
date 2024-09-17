@@ -6,7 +6,7 @@
  * @subpackage   Controller
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Cornelius Weiß <c.weiss@metaways.de>
- * @copyright    Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -97,7 +97,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Tinebase_Exception_Expressive_HttpStatus('changes not found', 404);
         }
-        $stream = new \Zend\Diactoros\Stream(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash));
+        $stream = new \Laminas\Diactoros\Stream(Tinebase_FileSystem::getInstance()->fopen(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true), 'r', $node->revision));
         $name = $node->name;
         $contentType = $node->contenttype;
 
@@ -156,13 +156,20 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             } catch (Tinebase_Exception_NotFound $tenf) {
                 throw new Tinebase_Exception_Expressive_HttpStatus('node not found', 404);
             }
-            $stream = new \Zend\Diactoros\Stream(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash));
+            try {
+                $stream = new \Laminas\Diactoros\Stream(Tinebase_FileSystem::getInstance()->fopen(
+                    Tinebase_FileSystem::getInstance()->getPathOfNode($node, true),
+                    'r', $node->revision));
+            } catch (Laminas\Diactoros\Exception\InvalidArgumentException $ldeiae) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' '. $ldeiae->getMessage());
+                throw new Tinebase_Exception_Expressive_HttpStatus('could not open stream', 404);
+            }
             $name = $node->name;
             $contentType = $node->contenttype;
         }
 
         $raii->release();
-
 
         return new \Zend\Diactoros\Response($stream, 200, [
             'Content-Disposition'   => 'attachment; filename*=UTF-8\'\'' . urlencode($name),
@@ -478,12 +485,16 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     protected function processStatus4($token)
     {
+        $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII(
+            OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->getBackend()
+        );
         $raii = Tinebase_RAII::getTransactionManagerRAII();
         $allTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
             ]));
+        unset($forUpdateRaii);
 
         foreach ($allTokens as $tokenRecord) {
             $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED} = 1;
@@ -883,7 +894,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     protected function _getCmdServiceHttpClient($url)
     {
-        $client = new Zend_Http_Client($url);
+        $client = new Zend_Http_Client($url, [
+            'timeout' => 60,
+        ]);
         if ($this->_cmdServiceClientAdapter) {
             $client->setAdapter($this->_cmdServiceClientAdapter);
         }

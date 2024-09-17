@@ -64,11 +64,13 @@ class Tinebase_Model_FilterSyncToken extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'length'            => 40,
                 'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'filterSyncToken'   => [
                 'type'              => 'string',
                 'length'            => 40,
                 'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'idLastModifiedMap' => [
                 'type'              => 'json',
@@ -77,6 +79,7 @@ class Tinebase_Model_FilterSyncToken extends Tinebase_Record_Abstract
                     Zend_Filter_Input::DEFAULT_VALUE => [],
                     Tinebase_Record_Validator_Json::class,
                 ],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'created'           => [
                 'type'              => 'datetime',

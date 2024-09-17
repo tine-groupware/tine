@@ -220,8 +220,8 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 resizable: true,
             },
             columns: [            
-                {id:'id', header: "id", dataIndex: 'id', width: 25, hidden: true },
-                {id:'n_fileas', header: this.app.i18n._('Name'), dataIndex: 'n_fileas', width: 200, sortable: true, renderer: 
+                {id:'id', header: "id", width: 25, hidden: true },
+                {id:'n_fileas', header: this.app.i18n._('Name'), width: 200, sortable: true, renderer: 
                     function(val, meta, record) {
                         var org_name           = Ext.isEmpty(record.data.org_name) === false ? record.data.org_name : ' ';
                         var n_fileas           = Ext.isEmpty(record.data.n_fileas) === false ? record.data.n_fileas : ' ';
@@ -231,7 +231,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 },
                 {id:'contact_one', header: this.app.i18n._("Address"), dataIndex: 'adr_one_locality', width: 140, sortable: false, renderer: preferredAddressRender},
-                {id:'tel_work', header: this.app.i18n._("Data"), dataIndex: 'tel_work', width: 140, sortable: false, renderer: function(val, meta, record) {
+                {id:'tel_work', header: this.app.i18n._("Data"), width: 140, sortable: false, renderer: function(val, meta, record) {
                         var translation = new Locale.Gettext();
                         translation.textdomain('Crm');
                         var tel_work           = Ext.isEmpty(record.data.tel_work) === false ? translation._('Phone') + ': ' + record.data.tel_work : ' ';
@@ -242,7 +242,6 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }, {
                     id:'relation_type', 
                     header: this.app.i18n._("Role"), 
-                    dataIndex: 'relation_type', 
                     width: 150,
                     sortable: true,
                     renderer: Tine.Crm.Contact.typeRenderer,

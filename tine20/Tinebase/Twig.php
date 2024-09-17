@@ -241,6 +241,15 @@ class Tinebase_Twig
             
             return implode(', ', $tags->getTitle());
         }));
+        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderModel', function ($modelName) {
+            return $modelName::getConfiguration()->recordName;
+        }));
+        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderTitle', function ($record, $modelName) {
+            if (! $record instanceof Tinebase_Record_Abstract) {
+                $record = new $modelName($record);
+            }
+            return $record->getTitle();
+        }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('findBySubProperty',
             function ($records, $property, $subProperty, $value) {
                 return $records instanceof Tinebase_Record_RecordSet ?

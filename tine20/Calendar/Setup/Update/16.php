@@ -17,8 +17,6 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
 
-
-
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE016_UPDATE000          => [
