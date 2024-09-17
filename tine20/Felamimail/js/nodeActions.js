@@ -113,7 +113,7 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
                     }
                     break;
                 case 'delete':
-                    action.setDisabled(account.get('type') === 'system' || account.get('type') === 'shared');
+                    action.setDisabled(account.get('type') === 'system' || account.get('type') === 'shared' || account.get('type') === 'adblist');
                     break;
             }
         }
