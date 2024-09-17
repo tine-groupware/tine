@@ -146,6 +146,9 @@ release-packages-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
       when: manual
+    - if: $PIPELINE_TYPE =~ /release-saas-beta/
+      variables:
+        CUSTOMER_VERSION_POSTFIX: beta
     - if: $PIPELINE_TYPE =~ /release-be/
     - if: $PIPELINE_TYPE =~ /release-customer/
   timeout: 20m
