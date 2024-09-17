@@ -1350,11 +1350,16 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $enable = Tinebase_Config::MAINTENANCE_MODE_ON === $options['mode'];
             foreach ($enabledApplications as $application) {
-                $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
-                if (true === $enable) {
-                    $app->goIntoMaintenanceMode(/*$flags*/);
-                } else {
-                    $app->leaveMaintenanceMode(/*$flags*/);
+                try {
+                    $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
+                    if (true === $enable) {
+                        $app->goIntoMaintenanceMode(/*$flags*/);
+                    } else {
+                        $app->leaveMaintenanceMode(/*$flags*/);
+                    }
+                } catch (Exception $e) {
+                    $enabledApplications->removeById($application->id);
+                    echo PHP_EOL . 'App ' . $application->name . ' error: ' . $e->getMessage() . PHP_EOL;
                 }
             }
 
@@ -1362,9 +1367,13 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             do {
                 foreach ($enabledApplications as $application) {
-                    $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
-                    if ($app->isInMaintenanceMode() === $enable) {
-                        $enabledApplications->removeById($application->id);
+                    try {
+                        $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
+                        if ($app->isInMaintenanceMode() === $enable) {
+                            $enabledApplications->removeById($application->id);
+                        }
+                    } catch (Exception $e) {
+                        echo PHP_EOL . 'App ' . $application->name . ' error: ' . $e->getMessage() . PHP_EOL;
                     }
                 }
                 if ($enabledApplications->count() > 0) {
