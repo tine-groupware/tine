@@ -197,19 +197,13 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
      * @return {Boolean}
      */
     isValid: function() {
-        var isValid = true;
-        
-        if (this.items && this.items.items) {
-            var field;
-            for (var i=0; i < this.items.items.length; i++) {
-                field = this.items.items[i];
-                if (! field.isValid()) {
-                    field.markInvalid();
-                    isValid = false;
-                }
-            }
+        if (this.items?.items) {
+            return this.items.items.every(field => {
+                const valid = field.isValid();
+                if (!valid) field.markInvalid();
+                return valid;
+            });
         }
-        
-        return isValid;
+        return true;
     }
 });
