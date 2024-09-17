@@ -290,7 +290,7 @@ FROM ${BUILD_IMAGE} as build-copy
 
 FROM ${BASE_IMAGE} as built
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
-COPY etc/crontabs/tine20 /etc/crontabs/tine20
+RUN echo '*/1 * * * * sh -c "cd /usr/share/tine20; php tine20.php --method Tinebase.triggerAsyncEvents"' | /bin/crontab -u tine20 -
 RUN apt-get update \
  && apt-get install -y \
     vim \
