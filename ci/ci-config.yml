@@ -37,7 +37,8 @@ variables:
   PHPUNIT_FILTER: ""
   
   # "Php version to use."
-  PHP_VERSION: "8.2"
+  # TODO switch to 8.2 soon
+  PHP_VERSION: "8.1"
 
   # "Codename for build"
   CODENAME: "Pelle"
