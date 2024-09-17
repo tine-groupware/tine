@@ -158,8 +158,6 @@ EOS
      */
     public function testAccountBlocking()
     {
-        self::markTestSkipped('FIXME account should be blocked? or test can be removed');
-
         // NOTE: end transaction here as NOW() returns the start of the current transaction in pgsql
         //  and is used in user status statement (think about using statement_timestamp() instead of NOW() with pgsql)
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
