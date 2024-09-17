@@ -155,11 +155,10 @@ class Tinebase_User_SqlTest extends TestCase
     
     /**
      * try to enable an account
+     *
      */
     public function testUserIsBlocked()
     {
-        self::markTestSkipped('FIXME account should be blocked? or test can be removed');
-
         // add a test user (enabled by default)
         $testUser = $this->testAddUser();
         
