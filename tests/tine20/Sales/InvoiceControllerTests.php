@@ -1902,6 +1902,12 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $doc = $reader->load($xlsx);
             $arrayData = $doc->getActiveSheet()->rangeToArray('A1:H10');
 
+            // search invoice positions
+            $filter = new Sales_Model_InvoicePositionFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'title', 'operator' => 'contains', 'value' => 'TA-for-Customer3')));
+            $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
+            static::assertEquals(2, count($invoicePositions));
+
             static::assertEquals($customer3Timeaccount['title'], $arrayData[0][2]);
             static::assertEquals($billableTimesheet['description'], $arrayData[4][1]);
             // only export start time when tag Bereitschaft is set
