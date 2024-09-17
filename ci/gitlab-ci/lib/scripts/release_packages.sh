@@ -79,6 +79,10 @@ release_packages_gitlab_set_current_link() {
     customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
 
+    if [ -n "${CUSTOMER_VERSION_POSTFIX}" ]; then
+        customer=${customer}-${CUSTOMER_VERSION_POSTFIX}
+    fi
+
     curl \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         -XPUT --data "${version}" \
