@@ -123,8 +123,9 @@ class Setup_Update_Abstract
     public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
-        if (!($state = json_decode(Tinebase_Application::getInstance()->getApplicationState($application->getId(),
-                Tinebase_Application::STATE_UPDATES, true), true))) {
+        $appState = Tinebase_Application::getInstance()->getApplicationState($application->getId(),
+            Tinebase_Application::STATE_UPDATES, true);
+        if ($appState === null || !($state = json_decode($appState, true))) {
             $state = [];
         }
         $state[$_updateKey] = Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG);
