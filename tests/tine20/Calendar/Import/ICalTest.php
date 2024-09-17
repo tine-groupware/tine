@@ -330,7 +330,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         ));
         $uebungen = 0;
         foreach ($importEvents as $event) {
-            if (preg_match('/^[Ü?]+bung/', $event->summary)) {
+            if (preg_match('/^Übung/', $event->summary)) {
                 $uebungen++;
             }
         }
