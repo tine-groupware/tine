@@ -19,7 +19,7 @@ merge_saas:
   stage: merge3
   extends: .abstract.merge
   variables:
-    BASEVERSION: "2023.11"
+    BASEVERSION: "2024.11"
     CUSTOMER: saas
   script:
     - merge_merge_upwards $BASEVERSION $CUSTOMER/$BASEVERSION-custom
