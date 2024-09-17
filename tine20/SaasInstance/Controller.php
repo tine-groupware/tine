@@ -206,7 +206,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $noneSystemUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
         $currentUserCount = Tinebase_User::getInstance()->getUsersCount();
         
-        if ($noneSystemUserCount + 1 > $userLimit) {
+        if ($noneSystemUserCount + 1 > $userLimit && $pricePerUser > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice
             (__METHOD__ . '::' . __LINE__ . 'Current total user count : "' . $currentUserCount . 
                 ' , User limit : ' . $userLimit . PHP_EOL);
