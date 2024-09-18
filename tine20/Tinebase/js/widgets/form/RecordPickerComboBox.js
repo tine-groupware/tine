@@ -132,6 +132,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     // NOTE: minWidth gets not evaluated by ext - it's just a hint for consumers!
     minWidth: 180,
 
+    getLineTitle: null,
+
     initComponent: function () {
         // allow to initialize with string
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
@@ -228,6 +230,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                     const options = {}
                     if (this.ownLangPicker) {
                         options.language = this.ownLangPicker.getValue()
+                    }
+
+                    if (typeof this.getLineTitle === 'function') {
+                        let customTitle = this.getLineTitle(record)
+                        if (customTitle !== false) {
+                            return (Ext.util.Format.htmlEncode(customTitle))
+                        }
                     }
 
                     let title = record ? record.getTitle(options) : ' ';
