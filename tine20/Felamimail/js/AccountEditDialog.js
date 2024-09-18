@@ -794,7 +794,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }], [new Ext.Button({
                     text: this.app.i18n._('Explore Sieve script'),
                     handler: async () => {
-                        await this.editSieveScriptWindow.showEditSieveScriptWindow()
+                        await this.showSieveScriptWindow();
                     },
                     hidden: !this.asAdminModule
                 }), new Ext.Button({
