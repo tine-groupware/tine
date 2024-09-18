@@ -109,10 +109,20 @@ release-to-gitlab:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-gitlab/
       when: manual
     - if: $PIPELINE_TYPE =~ /release-be/
+      variables:
+        RELEASE_TYPE: be
     - if: $PIPELINE_TYPE =~ /release-lts/
+      variables:
+        RELEASE_TYPE: lts
     - if: $PIPELINE_TYPE =~ /release-weekly/
+      variables:
+        RELEASE_TYPE: weekly
     - if: $PIPELINE_TYPE =~ /release-monthly/
+      variables:
+        RELEASE_TYPE: monthly
     - if: $PIPELINE_TYPE =~ /release-customer/
+      variables:
+        RELEASE_TYPE: customer
   timeout: 20m
   interruptible: true
 
@@ -133,8 +143,13 @@ release-packages-to-vpackages:
     - if: $PIPELINE_TYPE =~ /release-be/
       variables:
         CREATE_CURRENT_LINK: "true"
+        RELEASE_TYPE: be
     - if: $PIPELINE_TYPE =~ /release-lts/
+      variables:
+        RELEASE_TYPE: lts
     - if: $PIPELINE_TYPE =~ /release-customer/ && $PUSH_TO_VPACKAGES == "true"
+      variables:
+        RELEASE_TYPE: customer
   timeout: 20m
   interruptible: false
 
@@ -148,11 +163,12 @@ release-packages-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-saas-beta/
-      variables:
-        CUSTOMER_VERSION_POSTFIX: beta
     - if: $PIPELINE_TYPE =~ /release-be/
+      variables:
+        RELEASE_TYPE: be
     - if: $PIPELINE_TYPE =~ /release-customer/
+      variables:
+        RELEASE_TYPE: customer
   timeout: 20m
   interruptible: false
 

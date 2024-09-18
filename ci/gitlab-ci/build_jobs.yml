@@ -128,11 +128,12 @@ docker_build_packages:
     - !reference [.lib, script]
     - packaging
   rules:
-    - if: $CI_COMMIT_TAG
-    - if: $PIPELINE_TYPE =~ /build-nightly/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
+    # !references should come first, they may include variables to be set
     - !reference [release-packages-to-gitlab, rules]
     - !reference [release-packages-to-github, rules]
     - !reference [release-packages-to-vpackages, rules]
+    - if: $PIPELINE_TYPE =~ /build-nightly/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
+    - if: $CI_COMMIT_TAG
   timeout: 120m
   interruptible: true
