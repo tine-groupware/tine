@@ -19,6 +19,7 @@ abstract class Tinebase_Import_Db_Abstract
     protected Zend_Db_Adapter_Abstract $_importDb;
     protected ?string $_mainTableName = null;
     protected bool $_duplicateCheck = true;
+    protected bool $_mergeExistingRecords = true;
     protected array $_descriptionFields = [];
     protected ?string $_importFilter = null;
     protected ?string $_importOrder = null;
@@ -41,7 +42,7 @@ abstract class Tinebase_Import_Db_Abstract
         $pageCount = 100;
         $importedIds = [];
         do {
-            $select = $this->_getSelect($pageNumber, $pageCount);
+            $select = $this->_getSelect(++$pageNumber, $pageCount);
             $stmt = $select->query();
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -76,7 +77,7 @@ abstract class Tinebase_Import_Db_Abstract
 
     protected function _getSelect(int $pageNumber, int $pageCount): Zend_Db_Select
     {
-        $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount);
+        $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage($pageNumber, $pageCount);
         if ($this->_importFilter) {
             $select->where($this->_importFilter);
         }
@@ -88,21 +89,32 @@ abstract class Tinebase_Import_Db_Abstract
 
     protected function _importRecord($row)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Importing data ' . print_r($row, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Importing data from table ' . $this->_mainTableName . ': ' . print_r($row, true));
+        }
 
         $recordToImport = $this->_getRecord($row);
 
         $controller = $this->_getController();
         try {
             $record = $controller->get($recordToImport->getId());
-            $record->merge($recordToImport);
-            $record = $controller->update($record);
+            if ($this->_mergeExistingRecords) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Merge with existing record');
+                }
+                $record->merge($recordToImport);
+                $record = $controller->update($record);
+                $this->_onAfterImportRecord($record, $row);
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Ignore existing record');
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             $record = $controller->create($recordToImport, $this->_duplicateCheck);
+            $this->_onAfterImportRecord($record, $row);
         }
-
-        $this->_onAfterImportRecord($record, $row);
 
         return $record;
     }
