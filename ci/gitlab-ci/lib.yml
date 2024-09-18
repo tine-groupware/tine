@@ -445,14 +445,14 @@
       packaging_push_packages_to_gitlab() {
           version=$1
       
-          customer=$(release_determin_customer)
+          package_repo=$(release_packages_determin_package_repo_name)
       
           curl -S -s \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
               --upload-file "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
       
-          echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+          echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
       
           cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
       
@@ -460,36 +460,33 @@
               curl -S -s \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
               --upload-file "$f" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/$f"
           done
       
           echo ""
-          echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+          echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
           echo ""
       }
       
       packaging_gitlab_set_ci_id_link() {
           version=$1
-          customer=$(release_determin_customer)
       
-          echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+          echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
       
           if ! curl -S -s \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
               -XPUT --data "${version}" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
           then
               return 1
           fi
       }
       
       packaging_gitlab_get_version_for_pipeline_id() {
-          customer=$(release_determin_customer)
-      
           if ! curl \
               --fail \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
           then
               return 1
           fi
@@ -628,10 +625,10 @@
       
       release_to_gitlab() {
           tag="${CI_COMMIT_TAG}"
-          customer="$(release_determin_customer)"
+          package_repo="$(release_packages_determin_package_repo_name)"
       
           release-cli create --description "$(repo_release_notes "$tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
-              --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
+              --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${tag}/all.tar\"}"
       }
       
       # possible values tine20.org tine20.com <customer> ""
@@ -669,13 +666,13 @@
 
       # lib/scripts/release_packages.sh
       release_packages_github_create_release() {
-          customer=$(release_determin_customer)
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          package_repo=$(release_packages_determin_package_repo_name)
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
       
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
       
-          echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
-          curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+          echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+          curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
       
           release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
           if [ "$?" != "0" ]; then
@@ -683,13 +680,13 @@
               return 1
           fi
       
-          echo "customer: $customer version: $version release_json: $release_json"
+          echo "package_repo: $package_repo version: $version release_json: $release_json"
       
           github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
       }
       
       release_packages_notify_matrix() {
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
       
           matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
       
@@ -714,12 +711,13 @@
       
       release_packages_vpackages_push() {
           customer=$(release_determin_customer)
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          package_repo=$(release_packages_determin_package_repo_name)
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
           release=$(echo ${version} | sed sI-I~Ig)
       
-          echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+          echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
       
-          if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
+          if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
               echo "Failed to download packages to vpackages"
               return 1
           fi
@@ -746,19 +744,45 @@
       }
       
       release_packages_gitlab_set_current_link() {
-          customer=$(release_determin_customer)
+          package_repo=$(release_packages_determin_package_repo_name)
           version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-      
-          if [ -n "${CUSTOMER_VERSION_POSTFIX}" ]; then
-              customer=${customer}-${CUSTOMER_VERSION_POSTFIX}
-          fi
       
           curl \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
               -XPUT --data "${version}" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/links/current"
       
           matrix_send_message $MATRIX_ROOM "🟢 Package for ${version} is ready."
+      }
+      
+      release_packages_determin_package_repo_name () {
+          if [ "$RELEASE_TYPE" == "weekly" ]; then
+              echo "weekly"
+              return
+          fi
+      
+          if [ "$RELEASE_TYPE" == "monthly" ]; then
+              echo "monthly"
+              return
+          fi
+      
+          if [ "$RELEASE_TYPE" == "be" ]; then
+              echo "tine20.com"
+              return
+          fi
+      
+          if [ "$RELEASE_TYPE" == "customer" ]; then
+              if [ -n "$PACKAGE_REPO_NAME_OVERWRITE" ]; then
+                  echo "$PACKAGE_REPO_NAME_OVERWRITE"
+                  return
+              fi
+      
+              release_determin_customer # basicly `echo "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" | sed 's:/*$::'` as all other case cant match
+              return $?
+          fi
+      
+          echo "ci"
+          return
       }
 
       # lib/scripts/repo.sh
@@ -1416,14 +1440,14 @@
         packaging_push_packages_to_gitlab() {
             version=$1
         
-            customer=$(release_determin_customer)
+            package_repo=$(release_packages_determin_package_repo_name)
         
             curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 --upload-file "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
         
-            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
         
             cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
         
@@ -1431,36 +1455,33 @@
                 curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 --upload-file "$f" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/$f"
             done
         
             echo ""
-            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
             echo ""
         }
         
         packaging_gitlab_set_ci_id_link() {
             version=$1
-            customer=$(release_determin_customer)
         
-            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 -XPUT --data "${version}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
         }
         
         packaging_gitlab_get_version_for_pipeline_id() {
-            customer=$(release_determin_customer)
-        
             if ! curl \
                 --fail \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
@@ -1599,10 +1620,10 @@
         
         release_to_gitlab() {
             tag="${CI_COMMIT_TAG}"
-            customer="$(release_determin_customer)"
+            package_repo="$(release_packages_determin_package_repo_name)"
         
             release-cli create --description "$(repo_release_notes "$tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
-                --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
+                --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${tag}/all.tar\"}"
         }
         
         # possible values tine20.org tine20.com <customer> ""
@@ -1640,13 +1661,13 @@
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
-            customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
         
-            echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
-            curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+            echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+            curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
         
             release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
             if [ "$?" != "0" ]; then
@@ -1654,13 +1675,13 @@
                 return 1
             fi
         
-            echo "customer: $customer version: $version release_json: $release_json"
+            echo "package_repo: $package_repo version: $version release_json: $release_json"
         
             github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
         }
         
         release_packages_notify_matrix() {
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
@@ -1685,12 +1706,13 @@
         
         release_packages_vpackages_push() {
             customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
             release=$(echo ${version} | sed sI-I~Ig)
         
-            echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+            echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
         
-            if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
+            if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
                 echo "Failed to download packages to vpackages"
                 return 1
             fi
@@ -1717,19 +1739,45 @@
         }
         
         release_packages_gitlab_set_current_link() {
-            customer=$(release_determin_customer)
+            package_repo=$(release_packages_determin_package_repo_name)
             version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-        
-            if [ -n "${CUSTOMER_VERSION_POSTFIX}" ]; then
-                customer=${customer}-${CUSTOMER_VERSION_POSTFIX}
-            fi
         
             curl \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 -XPUT --data "${version}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/links/current"
         
             matrix_send_message $MATRIX_ROOM "🟢 Package for ${version} is ready."
+        }
+        
+        release_packages_determin_package_repo_name () {
+            if [ "$RELEASE_TYPE" == "weekly" ]; then
+                echo "weekly"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "monthly" ]; then
+                echo "monthly"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "be" ]; then
+                echo "tine20.com"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "customer" ]; then
+                if [ -n "$PACKAGE_REPO_NAME_OVERWRITE" ]; then
+                    echo "$PACKAGE_REPO_NAME_OVERWRITE"
+                    return
+                fi
+        
+                release_determin_customer # basicly `echo "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" | sed 's:/*$::'` as all other case cant match
+                return $?
+            fi
+        
+            echo "ci"
+            return
         }
 
         # lib/scripts/repo.sh
@@ -2001,8 +2049,8 @@
         
             dirs=$(find . -type d -path './*' -prune -print)
         
-            threshold_used=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_USED_CACHE ))
-            threshold=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_CACHE ))
+            threshold_used=$(( $(date +%s) -  60 * 60  * $MAX_AGE_USED_CACHE ))
+            threshold=$(( $(date +%s) -  60 * 60 * $MAX_AGE_CACHE ))
         
             for dir in $dirs; do
                 if [ -f $dir-lastused ]; then
@@ -2025,8 +2073,8 @@
         }
         
         function cache_cleanup_vendor_dir_cache () {
-            MAX_AGE_USED_CACHE=14
-            MAX_AGE_CACHE=2
+            MAX_AGE_USED_CACHE=48
+            MAX_AGE_CACHE=10
         
             cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
         
@@ -2034,8 +2082,8 @@
         }
         
         function cache_cleanup_npm_dir_cache () {
-            MAX_AGE_USED_CACHE=14
-            MAX_AGE_CACHE=2
+            MAX_AGE_USED_CACHE=336
+            MAX_AGE_CACHE=48
         
             cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
         
@@ -2043,8 +2091,8 @@
         }
         
         function cache_cleanup_phpstan_cache () {
-            MAX_AGE_USED_CACHE=31
-            MAX_AGE_CACHE=7
+            MAX_AGE_USED_CACHE=744
+            MAX_AGE_CACHE=168
         
             dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
             for dir in $dirs; do
@@ -2433,14 +2481,14 @@
         packaging_push_packages_to_gitlab() {
             version=$1
         
-            customer=$(release_determin_customer)
+            package_repo=$(release_packages_determin_package_repo_name)
         
             curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 --upload-file "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
         
-            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
         
             cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
         
@@ -2448,36 +2496,33 @@
                 curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 --upload-file "$f" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/$f"
             done
         
             echo ""
-            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+            echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
             echo ""
         }
         
         packaging_gitlab_set_ci_id_link() {
             version=$1
-            customer=$(release_determin_customer)
         
-            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 -XPUT --data "${version}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
         }
         
         packaging_gitlab_get_version_for_pipeline_id() {
-            customer=$(release_determin_customer)
-        
             if ! curl \
                 --fail \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
@@ -2616,10 +2661,10 @@
         
         release_to_gitlab() {
             tag="${CI_COMMIT_TAG}"
-            customer="$(release_determin_customer)"
+            package_repo="$(release_packages_determin_package_repo_name)"
         
             release-cli create --description "$(repo_release_notes "$tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
-                --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
+                --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${tag}/all.tar\"}"
         }
         
         # possible values tine20.org tine20.com <customer> ""
@@ -2657,13 +2702,13 @@
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
-            customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
         
-            echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
-            curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+            echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+            curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
         
             release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
             if [ "$?" != "0" ]; then
@@ -2671,13 +2716,13 @@
                 return 1
             fi
         
-            echo "customer: $customer version: $version release_json: $release_json"
+            echo "package_repo: $package_repo version: $version release_json: $release_json"
         
             github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
         }
         
         release_packages_notify_matrix() {
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
@@ -2702,12 +2747,13 @@
         
         release_packages_vpackages_push() {
             customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
             release=$(echo ${version} | sed sI-I~Ig)
         
-            echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+            echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
         
-            if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
+            if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
                 echo "Failed to download packages to vpackages"
                 return 1
             fi
@@ -2734,15 +2780,45 @@
         }
         
         release_packages_gitlab_set_current_link() {
-            customer=$(release_determin_customer)
+            package_repo=$(release_packages_determin_package_repo_name)
             version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
         
             curl \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 -XPUT --data "${version}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/links/current"
         
             matrix_send_message $MATRIX_ROOM "🟢 Package for ${version} is ready."
+        }
+        
+        release_packages_determin_package_repo_name () {
+            if [ "$RELEASE_TYPE" == "weekly" ]; then
+                echo "weekly"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "monthly" ]; then
+                echo "monthly"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "be" ]; then
+                echo "tine20.com"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "customer" ]; then
+                if [ -n "$PACKAGE_REPO_NAME_OVERWRITE" ]; then
+                    echo "$PACKAGE_REPO_NAME_OVERWRITE"
+                    return
+                fi
+        
+                release_determin_customer # basicly `echo "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" | sed 's:/*$::'` as all other case cant match
+                return $?
+            fi
+        
+            echo "ci"
+            return
         }
 
         # lib/scripts/repo.sh

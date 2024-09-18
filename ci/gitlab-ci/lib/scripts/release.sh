@@ -27,10 +27,10 @@ release_weekly_tag() {
 
 release_to_gitlab() {
     tag="${CI_COMMIT_TAG}"
-    customer="$(release_determin_customer)"
+    package_repo="$(release_packages_determin_package_repo_name)"
 
     release-cli create --description "$(repo_release_notes "$tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
-        --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
+        --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${tag}/all.tar\"}"
 }
 
 # possible values tine20.org tine20.com <customer> ""
