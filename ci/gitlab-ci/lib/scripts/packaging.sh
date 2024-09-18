@@ -70,26 +70,23 @@ packaging_push_packages_to_gitlab() {
 
 packaging_gitlab_set_ci_id_link() {
     version=$1
-    customer=$(release_determin_customer)
 
-    echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+    echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
     if ! curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         -XPUT --data "${version}" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
     then
         return 1
     fi
 }
 
 packaging_gitlab_get_version_for_pipeline_id() {
-    customer=$(release_determin_customer)
-
     if ! curl \
         --fail \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
     then
         return 1
     fi

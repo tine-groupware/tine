@@ -1,6 +1,6 @@
 release_packages_github_create_release() {
-    customer=$(release_determin_customer)
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+    package_repo=$(release_packages_determin_package_repo_name)
+    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
 
@@ -19,7 +19,7 @@ release_packages_github_create_release() {
 }
 
 release_packages_notify_matrix() {
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
 
     matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 
@@ -44,7 +44,8 @@ release_push_release_tag_to_github() {
 
 release_packages_vpackages_push() {
     customer=$(release_determin_customer)
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+    package_repo=$(release_packages_determin_package_repo_name)
+    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
     release=$(echo ${version} | sed sI-I~Ig)
 
     echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"

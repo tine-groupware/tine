@@ -567,26 +567,23 @@
       
       packaging_gitlab_set_ci_id_link() {
           version=$1
-          customer=$(release_determin_customer)
       
-          echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+          echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
       
           if ! curl -S -s \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
               -XPUT --data "${version}" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
           then
               return 1
           fi
       }
       
       packaging_gitlab_get_version_for_pipeline_id() {
-          customer=$(release_determin_customer)
-      
           if ! curl \
               --fail \
               --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+              "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
           then
               return 1
           fi
@@ -748,8 +745,8 @@
 
       # lib/scripts/release_packages.sh
       release_packages_github_create_release() {
-          customer=$(release_determin_customer)
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          package_repo=$(release_packages_determin_package_repo_name)
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
       
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
       
@@ -768,7 +765,7 @@
       }
       
       release_packages_notify_matrix() {
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
       
           matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
       
@@ -793,7 +790,8 @@
       
       release_packages_vpackages_push() {
           customer=$(release_determin_customer)
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          package_repo=$(release_packages_determin_package_repo_name)
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
           release=$(echo ${version} | sed sI-I~Ig)
       
           echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
@@ -1617,26 +1615,23 @@
         
         packaging_gitlab_set_ci_id_link() {
             version=$1
-            customer=$(release_determin_customer)
         
-            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 -XPUT --data "${version}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
         }
         
         packaging_gitlab_get_version_for_pipeline_id() {
-            customer=$(release_determin_customer)
-        
             if ! curl \
                 --fail \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
@@ -1798,8 +1793,8 @@
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
-            customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
         
@@ -1818,7 +1813,7 @@
         }
         
         release_packages_notify_matrix() {
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
@@ -1843,7 +1838,8 @@
         
         release_packages_vpackages_push() {
             customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
             release=$(echo ${version} | sed sI-I~Ig)
         
             echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
@@ -2159,8 +2155,8 @@
         
             dirs=$(find . -type d -path './*' -prune -print)
         
-            threshold_used=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_USED_CACHE ))
-            threshold=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_CACHE ))
+            threshold_used=$(( $(date +%s) -  60 * 60  * $MAX_AGE_USED_CACHE ))
+            threshold=$(( $(date +%s) -  60 * 60 * $MAX_AGE_CACHE ))
         
             for dir in $dirs; do
                 if [ -f $dir-lastused ]; then
@@ -2183,8 +2179,8 @@
         }
         
         function cache_cleanup_vendor_dir_cache () {
-            MAX_AGE_USED_CACHE=14
-            MAX_AGE_CACHE=2
+            MAX_AGE_USED_CACHE=48
+            MAX_AGE_CACHE=10
         
             cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
         
@@ -2192,8 +2188,8 @@
         }
         
         function cache_cleanup_npm_dir_cache () {
-            MAX_AGE_USED_CACHE=14
-            MAX_AGE_CACHE=2
+            MAX_AGE_USED_CACHE=336
+            MAX_AGE_CACHE=48
         
             cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
         
@@ -2201,8 +2197,8 @@
         }
         
         function cache_cleanup_phpstan_cache () {
-            MAX_AGE_USED_CACHE=31
-            MAX_AGE_CACHE=7
+            MAX_AGE_USED_CACHE=744
+            MAX_AGE_CACHE=168
         
             dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
             for dir in $dirs; do
@@ -2713,26 +2709,23 @@
         
         packaging_gitlab_set_ci_id_link() {
             version=$1
-            customer=$(release_determin_customer)
         
-            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! curl -S -s \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
                 -XPUT --data "${version}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
         }
         
         packaging_gitlab_get_version_for_pipeline_id() {
-            customer=$(release_determin_customer)
-        
             if ! curl \
                 --fail \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/${CI_PIPELINE_ID}"
+                "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ci/links/${CI_PIPELINE_ID}"
             then
                 return 1
             fi
@@ -2894,8 +2887,8 @@
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
-            customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
         
@@ -2914,7 +2907,7 @@
         }
         
         release_packages_notify_matrix() {
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
         
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
@@ -2939,7 +2932,8 @@
         
         release_packages_vpackages_push() {
             customer=$(release_determin_customer)
-            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+            package_repo=$(release_packages_determin_package_repo_name)
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
             release=$(echo ${version} | sed sI-I~Ig)
         
             echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
@@ -2973,6 +2967,10 @@
         release_packages_gitlab_set_current_link() {
             customer=$(release_determin_customer)
             version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+        
+            if [ -n "${CUSTOMER_VERSION_POSTFIX}" ]; then
+                customer=${customer}-${CUSTOMER_VERSION_POSTFIX}
+            fi
         
             curl \
                 --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
