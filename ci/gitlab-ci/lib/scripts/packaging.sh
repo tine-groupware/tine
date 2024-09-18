@@ -45,14 +45,14 @@ packaging_push_packages_to_gitlab() {
     version=$1
     release=$2
 
-    customer=$(release_determin_customer)
+    package_repo=$(release_packages_determin_package_repo_name)
 
     curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         --upload-file "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
 
-    echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+    echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
 
     cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
 
@@ -60,11 +60,11 @@ packaging_push_packages_to_gitlab() {
         curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         --upload-file "$f" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/$f"
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/$f"
     done
 
     echo ""
-    echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+    echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${package_repo}/${version}/all.tar"
     echo ""
 }
 
