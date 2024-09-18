@@ -2256,3 +2256,6 @@ msgstr "keine Begrenzung"
 
 msgid "{0} {1} is not found"
 msgstr "{0} {1} wurde nicht gefunden."
+
+msgid "Do you really want to delete all the messages in this folder?"
+msgstr "Möchten Sie alle Nachrichten in diesem Ordner wirklich löschen?"
