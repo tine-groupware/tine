@@ -4725,13 +4725,12 @@ class Tinebase_FileSystem implements
 
     /**
      * @return bool
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function avScan()
+    public function avScan(): bool
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Starting... ');
-
-        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF ===
+        if (
+            Tinebase_FileSystem_AVScan_Factory::MODE_OFF ===
                 Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
                     ->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
             return true;
@@ -4753,18 +4752,26 @@ class Tinebase_FileSystem implements
             return false;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Starting AVSCan with basedir ' . $this->_basePath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Starting AVSCan with basedir ' . $this->_basePath . ' using scanner at '
+                . Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                    ->{Tinebase_Config::FILESYSTEM_AVSCAN_URL});
+        }
 
         $errorCount = 0;
         while (false !== ($hashDir = readdir($baseDir))) {
             $hashDirPath = $this->_basePath . DIRECTORY_SEPARATOR . $hashDir;
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Scanning ' . $hashDirPath . ' ...');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Scanning ' . $hashDirPath . ' ...');
+            }
 
             if (strlen($hashDir) !== 3 || !is_dir($hashDirPath)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Skipping, no dir or length != 3');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Skipping, no dir or length != 3');
+                }
                 continue;
             }
             if (!($fileDir = opendir($hashDirPath))) {
@@ -4782,8 +4789,10 @@ class Tinebase_FileSystem implements
                 if (!is_file($path)) {
                     continue;
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Scanning file ' . $path . ' ...');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Scanning file ' . $path . ' ...');
+                }
 
                 if (false === ($fileSize = filesize($path))) {
                     Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('failed to get hash file size (skipping): ' .
@@ -4791,10 +4800,14 @@ class Tinebase_FileSystem implements
                     $errorCount++;
                     continue;
                 }
-                if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE} || 0 === $fileSize) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Skipping, file too big or 0 size');
+                if (
+                    $fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE} || 0 === $fileSize
+                ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Skipping, file too big or 0 size');
+                    }
                     continue;
                 }
 
@@ -4802,10 +4815,14 @@ class Tinebase_FileSystem implements
                 $scanResult = null;
                 try {
                     $lastScan = $this->_fileObjectBackend->getLastAvScanTimeForHash($hashDir . $file);
-                    if ($lastScan && Tinebase_DateTime::now()->subHour(12)
-                            ->isEarlier(new Tinebase_DateTime($lastScan))) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Skipping, last scan less than 12 hours old');
+                    if (
+                        $lastScan && Tinebase_DateTime::now()->subHour(12)
+                            ->isEarlier(new Tinebase_DateTime($lastScan))
+                    ) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Skipping, last scan less than 12 hours old');
+                        }
                         continue;
                     }
 
@@ -4842,7 +4859,6 @@ class Tinebase_FileSystem implements
             try {
                 $this->_sendAvScanNotification($fileObjectIds);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                
             }
         }
 
@@ -5053,15 +5069,20 @@ class Tinebase_FileSystem implements
     protected function _sendAvScanNotification($fileObjectIds)
     {
         try {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Found ' . count($fileObjectIds) . ' file objects.' );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Found ' . count($fileObjectIds) . ' file objects.'
+                );
+            }
 
             $nodes = $this->_getTreeNodeBackend()->search(
-                new Tinebase_Model_Tree_Node_Filter(array(array(
+                new Tinebase_Model_Tree_Node_Filter(
+                    array(array(
                     'field'     => 'object_id',
                     'operator'  => 'in',
                     'value'     => $fileObjectIds
-                )), /* $_condition = */ '',
+                    )), /* $_condition = */
+                    '',
                     /* $_options */ array(
                         'ignoreAcl' => true,
                     )
@@ -5079,12 +5100,17 @@ class Tinebase_FileSystem implements
             ]);
             $expander->expand($nodes);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Found ' . count($nodes) . ' nodes.' );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Found ' . count($nodes) . ' nodes.'
+                );
+            }
 
             $paths = [];
             foreach ($nodes as $node) {
-                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true));
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(
+                    Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)
+                );
                 $filePath = $pathRecord->flatpath;
                 $pathParts = explode('/', trim($filePath, '/'));
                 if ($app = Tinebase_Application::getInstance()->getApplicationById($pathParts[0])) {
@@ -5101,8 +5127,12 @@ class Tinebase_FileSystem implements
             $roleName = Tinebase_Config::getInstance()
                 ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE};
             if (!$roleName) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL
+                    );
+                }
                 return;
             }
             $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
