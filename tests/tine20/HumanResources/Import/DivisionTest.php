@@ -26,7 +26,12 @@ class HumanResources_Import_DivisionTest extends TestCase
 
     public function testImportDemoData()
     {
-        $this->clear(HumanResources_Config::APP_NAME, HumanResources_Model_Division::MODEL_NAME_PART);
+        try {
+            $this->clear(HumanResources_Config::APP_NAME, HumanResources_Model_Division::MODEL_NAME_PART);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Exception::log($tead);
+            self::markTestSkipped('could not clear existing data');
+        }
         $now = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import(HumanResources_Model_Division::class, [
             'definition' => 'hr_import_division_csv',
