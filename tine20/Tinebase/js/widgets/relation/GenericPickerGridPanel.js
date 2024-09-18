@@ -126,6 +126,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     stateful: true,
     stateId: 'widgets-relation-genereic-picker-grid',
     canonicalName: 'RelationsGrid',
+    getLineTitle: null,
 
     /**
      * initializes the component
@@ -566,7 +567,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 listeners: {
                     scope: this,
                     select: this.onAddRecordFromCombo
-                }
+                },
+                getLineTitle: this.getLineTitle
             });
             sc.push(this.searchCombos[key]);
             this.searchCombos[key].hide();
