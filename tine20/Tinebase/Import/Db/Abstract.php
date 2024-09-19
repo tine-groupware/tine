@@ -45,6 +45,7 @@ abstract class Tinebase_Import_Db_Abstract
             $select = $this->_getSelect(++$pageNumber, $pageCount);
             $stmt = $select->query();
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            $stmt->closeCursor();
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' fetched ' . count($rows) . ' rows  / pagenumber: ' . $pageNumber);
 
