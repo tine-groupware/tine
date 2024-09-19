@@ -29,7 +29,7 @@
         <column>
             <identifier>is_billable_combined</identifier>
             <header>Billable</header>
-            <type>int(11)</type>
+            <type>boolean</type>
         </column>
         <column>
             <identifier>billed_in</identifier>
@@ -39,7 +39,7 @@
         <column>
             <identifier>is_cleared</identifier>
             <header>Project time is cleared</header>
-            <type>int(11)</type>
+            <type>boolean</type>
         </column>
         <column>
             <identifier>start_date</identifier>
@@ -58,12 +58,12 @@
         </column>
         <column>
             <identifier>duration</identifier>
-            <header>Duration</header>
+            <header>Duration in Minutes</header>
             <type>int(11)</type>
         </column>
         <column>
             <identifier>accounting_time</identifier>
-            <header>Accounting time</header>
+            <header>Accounting time in Minutes</header>
             <type>int(11)</type>
         </column>
         <column>
@@ -79,7 +79,7 @@
         <column>
             <identifier>need_for_clarification</identifier>
             <header>Need for Clarification</header>
-            <type>int(11)</type>
+            <type>boolean</type>
         </column>
         <column>
             <identifier>created_by</identifier>
