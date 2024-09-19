@@ -2088,3 +2088,6 @@ msgstr ""
 #: js/MessageExpectedAnswerAction.js:109
 msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
 msgstr ""
+
+msgid "Only custom scripts can be modified."
+msgstr ""
