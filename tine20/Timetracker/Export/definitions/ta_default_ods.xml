@@ -68,5 +68,11 @@
             <type>float</type>
             <width>3cm</width>
         </column>
+        <column>
+            <identifier>budget</identifier>
+            <header>Budget in hours</header>
+            <type>float</type>
+            <width>3cm</width>
+        </column>
     </columns>
 </config>
