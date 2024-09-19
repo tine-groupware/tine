@@ -29,13 +29,20 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
   /**
    * Show custom sieve script window
    */
-  showEditSieveScriptWindow: async function () {
-    let result = this.asAdminModule ? await Tine.Admin.getSieveCustomScript(this.accountId)
-      : await Tine.Felamimail.getSieveCustomScript(this.accountId);
+  showEditSieveCustomScriptWindow: async function (custom = true) {
+    let result
+    if (this.asAdminModule) {
+      result = custom ? await Tine.Admin.getSieveCustomScript(this.accountId)
+        : await Tine.Admin.getSieveScript(this.accountId)
+    } else {
+      result = await Tine.Felamimail.getSieveCustomScript(this.accountId)
+    }
+
     this.script = result?.script;
 
     const accountId = this.accountId
     const windowTitle =  this.app.i18n._('Edit Sieve custom script');
+    const notCustomError = this.app.i18n._('Only custom scripts can be modified.');
     let dialog = new Tine.Tinebase.dialog.Dialog({
       items: [{
         xtype: 'tw-acefield',
@@ -46,7 +53,7 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
         height: 200,
         value: this.script,
       }],
-
+      isCustom: custom,
       initComponent: function() {
         this.fbar = [
           '->',
@@ -67,6 +74,9 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
             scope: this,
             handler: async () => {
               try {
+                if (!this.isCustom) {
+                  throw new Ext.Error(notCustomError);
+                }
                 let script = dialog.getForm().findField('sieve_custom_script').getValue();
                 const sieveCustomScript = this.asAdminModule ? await Tine.Admin.saveSieveCustomScript(accountId, script)
                   : await Tine.Felamimail.saveSieveCustomScript(accountId, script);
@@ -83,6 +93,72 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
 
       openWindow: function (config) {
         if (this.window) return this.window;
+
+        config = config || {};
+        this.window = Tine.WindowFactory.getWindow(Ext.apply({
+          resizable:false,
+          title: windowTitle,
+          closeAction: 'close',
+          modal: true,
+          width: 550 ,
+          height: 400,
+          items: [this],
+          fbar: ['->']
+        }, config));
+
+        return this.window;
+      },
+    });
+
+    dialog.openWindow();
+  },
+
+
+  /**
+   * Show window for script reading
+   */
+  showSieveScriptWindow: async function () {
+    const script = this.asAdminModule ? await Tine.Admin.getSieveScript(this.accountId)
+        : await Tine.Felamimail.getSieveScript(this.accountId);
+    const windowTitle = this.app.i18n._('Explore Sieve script');
+    const dialog = new Tine.Tinebase.dialog.Dialog({
+      items: [{
+        cls: 'x-ux-display-background-border',
+        xtype: 'ux.displaytextarea',
+        type: 'code/folding/mixed',
+        height: 300,
+        value: script,
+        listeners: {
+          render: async (cmp) => {
+            // wait ace editor
+            await waitFor(() => {
+              return cmp.el.child('.ace_content');
+            });
+
+            cmp.el.setStyle({'overflow': null});
+          }
+        },
+      }],
+
+      initComponent: function() {
+        this.fbar = [
+          '->',
+          {
+            text: i18n._('Ok'),
+            minWidth: 70,
+            ref: '../buttonApply',
+            scope: this,
+            handler: this.onButtonApply,
+            iconCls: 'action_saveAndClose'
+          }
+        ];
+        Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
+      },
+
+      openWindow: function (config) {
+        if (this.window) {
+          return this.window;
+        }
 
         config = config || {};
         this.window = Tine.WindowFactory.getWindow(Ext.apply({
