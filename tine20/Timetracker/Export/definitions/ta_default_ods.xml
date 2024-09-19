@@ -53,7 +53,7 @@
         <column>
             <identifier>is_billable</identifier>
             <header>Billable</header>
-            <type>float</type>
+            <type>boolean</type>
             <width>3cm</width>
         </column>
         <column>
@@ -65,6 +65,12 @@
         <column>
             <identifier>is_open</identifier>
             <header>open</header>
+            <type>boolean</type>
+            <width>3cm</width>
+        </column>
+        <column>
+            <identifier>budget</identifier>
+            <header>Budget in hours</header>
             <type>float</type>
             <width>3cm</width>
         </column>

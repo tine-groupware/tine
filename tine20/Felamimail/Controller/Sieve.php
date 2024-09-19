@@ -813,8 +813,22 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $adminBounceEmail)) {
             $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
             $members = Tinebase_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId());
-            $firstAdminUser = Tinebase_User::getInstance()->getFullUserById($members[0]);
-            $adminBounceEmail = $firstAdminUser->accountEmailAddress;
+            foreach ($members as $memberId) {
+                $adminUser = Tinebase_User::getInstance()->getFullUserById($memberId);
+                if (! empty($adminUser->accountEmailAddress)) {
+                    $adminBounceEmail = $adminUser->accountEmailAddress;
+                    break;
+                }
+            }
+        }
+
+        if (empty($adminBounceEmail)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                    . ' No valid $adminBounceEmail found - could not set notification script');
+            }
+            $this->setNotificationScripts($_accountId, $scriptParts);
+            return;
         }
 
         $notificationEmailAddress = Tinebase_Notification_Backend_Smtp::getNotificationAddress();
