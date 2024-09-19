@@ -1212,16 +1212,22 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit,
     color: white;
 }
 
+.dark-mode .tinebase-tokenedit-textfield,
+.dark-mode .tinebase-tokenedit-tokenbox.x-form-text {
+    color: black;
+}
+
 .tinebase-tokenedit-tokenbox {
     position: absolute;
-    background-color: white;
     z-index: 100;
     overflow: hidden;
 }
 
 .tinebase-tokenedit-token {
     border: 1px solid gray;
+    background-color: white;
     margin-right: 3px;
+    padding: 0 1px 0 1px;
 }
 
 .tinebase-tokenedit-tokenbox-area .tinebase-tokenedit-token {
@@ -1229,8 +1235,17 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit,
     line-height: 13px;
 }
 
+.tinebase-tokenedit-tokenbox-area ~ div.x-form-element textarea,
+.tinebase-tokenedit-tokenbox ~ div.x-form-element input {
+    color: rgba(0,0,0,0);
+}
+
 .tinebase-tokenedit-token-selected {
     background-color: #FFFFAE;
+}
+
+.tinebase-tokenedit-token-selected {
+    background-color: white;
 }
 
 .tinebase-tokenedit-position {
