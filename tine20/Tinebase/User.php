@@ -1276,6 +1276,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountLastName' => $accountLoginName,
             'accountDisplayName' => $accountLoginName,
             'accountExpires' => NULL,
+            'accountEmailAddress' => NULL,
             'type' => Tinebase_Model_FullUser::USER_TYPE_SYSTEM,
         ));
 
