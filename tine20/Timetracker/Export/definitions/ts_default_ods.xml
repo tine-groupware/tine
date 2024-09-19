@@ -73,7 +73,7 @@
         </column>
         <column>
             <identifier>invoice_id</identifier>
-            <header>invoice_id</header>
+            <header>Invoice</header>
             <type>varchar(255)</type>
         </column>
         <column>
