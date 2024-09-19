@@ -671,5 +671,11 @@ msgstr "Mitarbeiter"
 msgid "Timeaccount Number"
 msgstr "Zeitkonto Nummer"
 
+msgid "Accounting time in Minutes"
+msgstr "Abrechenbare Zeit in Minuten"
+
+msgid "Duration in Minutes"
+msgstr "Dauer in Minuten"
+
 msgid "Add Timesheet"
 msgstr "Stundenzettel hinzufügen"
