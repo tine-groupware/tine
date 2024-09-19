@@ -259,7 +259,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             items: new Ext.Button({
                 text: this.app.i18n._('Edit Sieve custom script'),
                 handler: async () => {
-                    await this.editSieveScriptWindow.showEditSieveScriptWindow()
+                    await this.editSieveScriptWindow.showEditSieveCustomScriptWindow()
                 },
                 hidden: !this.editSieveScriptWindow.checkAccountEditRight(this.account)
             })

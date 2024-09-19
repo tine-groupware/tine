@@ -2259,3 +2259,6 @@ msgstr "{0} {1} wurde nicht gefunden."
 
 msgid "Do you really want to delete all the messages in this folder?"
 msgstr "Möchten Sie alle Nachrichten in diesem Ordner wirklich löschen?"
+
+msgid "Only custom scripts can be modified."
+msgstr "Nur benutzerdefinierte Skripte können bearbeitet werden."
