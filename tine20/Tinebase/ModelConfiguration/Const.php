@@ -17,12 +17,13 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
-    const ADD_FILTERS = 'addFilters';
-    const APPLICATION = 'application';
-    const APP_NAME = 'appName';
-    const ASSOCIATIONS = 'associations';
-    const AUTOINCREMENT = 'autoincrement';
-    const AVAILABLE_MODELS = 'availableModels';
+    public const ADD_FILTERS = 'addFilters';
+    public const ALLOW_CAMEL_CASE = 'allowCamelCase';
+    public const APPLICATION = 'application';
+    public const APP_NAME = 'appName';
+    public const ASSOCIATIONS = 'associations';
+    public const AUTOINCREMENT = 'autoincrement';
+    public const AVAILABLE_MODELS = 'availableModels';
 
     /**
      * additional boxLabel for checkboxes
