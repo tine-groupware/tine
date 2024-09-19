@@ -853,6 +853,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ]);
             $mailAccount = $backend->search($filter)->getFirstRecord();
             if (! $mailAccount) {
+                // TODO maybe we also need to check if there is still a valid/enabled user account before deleting?
+                //      maybe make this configurable?
                 // remove mailaccount (fmail + dovecot + smtp)
                 $message = "mail account " . $result['email']
                     . " / user id " . $result['userid']
