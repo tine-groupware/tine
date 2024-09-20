@@ -793,14 +793,19 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }], [new Ext.Button({
                     text: this.app.i18n._('Explore Sieve script'),
+                    height: 30,
+                    style: 'margin: 5px 0 0 0',
                     handler: async () => {
-                        await this.showSieveScriptWindow();
+                        await this.editSieveScriptWindow.showSieveScriptWindow()
                     },
+
                     hidden: !this.asAdminModule
-                }), new Ext.Button({
+                }), ],[new Ext.Button({
                     text: this.app.i18n._('Edit Sieve custom script'),
+                    height: 30,
+                    style: 'margin: 5px 0 0 0',
                     handler: async () => {
-                        await this.editSieveScriptWindow.showEditSieveScriptWindow()
+                        await this.editSieveScriptWindow.showEditSieveCustomScriptWindow(true)
                     },
                     hidden: !this.checkAccountEditRight(this.record)
                 })]
@@ -997,71 +1002,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 me.onApplyChanges(true);
             }
         });
-    },
-
-    /**
-     * Show window for script reading
-     */
-    showSieveScriptWindow: async function () {
-        const script = this.asAdminModule ? await Tine.Admin.getSieveScript(this.record.data.id) 
-            : await Tine.Felamimail.getSieveScript(this.record.data.id);
-        const windowTitle = this.app.i18n._('Explore Sieve script');
-        const dialog = new Tine.Tinebase.dialog.Dialog({
-            items: [{
-                cls: 'x-ux-display-background-border',
-                xtype: 'ux.displaytextarea',
-                type: 'code/folding/mixed',
-                height: 300,
-                value: script,
-                listeners: {
-                    render: async (cmp) => {
-                        // wait ace editor
-                        await waitFor(() => {
-                            return cmp.el.child('.ace_content');
-                        });
-
-                        cmp.el.setStyle({'overflow': null});
-                    }
-                },
-            }],
-
-            initComponent: function() {
-                this.fbar = [
-                    '->',
-                    {
-                        text: i18n._('Ok'),
-                        minWidth: 70,
-                        ref: '../buttonApply',
-                        scope: this,
-                        handler: this.onButtonApply,
-                        iconCls: 'action_saveAndClose'
-                    }
-                ];
-                Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
-            },
-
-            openWindow: function (config) {
-                if (this.window) {
-                    return this.window;
-                }
-
-                config = config || {};
-                this.window = Tine.WindowFactory.getWindow(Ext.apply({
-                    resizable:false,
-                    title: windowTitle,
-                    closeAction: 'close',
-                    modal: true,
-                    width: 550 ,
-                    height: 400,
-                    items: [this],
-                    fbar: ['->']
-                }, config));
-
-                return this.window;
-            },
-        });
-
-        dialog.openWindow();
     },
 
     getGrantsColumns: function() {

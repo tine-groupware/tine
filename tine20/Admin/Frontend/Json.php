@@ -2026,7 +2026,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         // for unused variable check
         unset($raii);
-        return  $this->_recordToJson($result);;
+        return  $this->_recordToJson($result);
     }
 
     /**
