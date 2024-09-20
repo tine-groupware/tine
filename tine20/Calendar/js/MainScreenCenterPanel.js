@@ -959,10 +959,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * bus notified about record changes
      */
     onRecordChanges: async function(data, e) {
-        var panel = this.getCalendarPanel(this.activeView),
+        const panel = this.getCalendarPanel(this.activeView),
             store = this.getStore(),
             existingRecord = store.getById(data.id),
-            isSelected = existingRecord ? panel.getSelectionModel().isSelected(existingRecord): false;
+            isSelected = existingRecord ? panel.getSelectionModel().isSelected(existingRecord) : false;
 
         if (existingRecord && e.topic.match(/\.update/)) {
             const updatedRecord = Tine.Tinebase.data.Record.setFromJson(data, Tine.Calendar.Model.Event);
@@ -1184,13 +1184,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onDeleteRecords: function () {
-        var panel = this.getCalendarPanel(this.activeView);
-        var selection = panel.getSelectionModel().getSelectedEvents();
-        
-        var containsRecurBase = false,
+        const panel = this.getCalendarPanel(this.activeView);
+        const selection = panel.getSelectionModel().getSelectedEvents();
+
+        let containsRecurBase = false,
             containsRecurInstance = false,
             containsRecurException = false;
-        
+
         Ext.each(selection, function (event) {
             if(event.ui) event.ui.markDirty();
             if (event.isRecurInstance()) {
