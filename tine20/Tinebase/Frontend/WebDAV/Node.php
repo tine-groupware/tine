@@ -1,73 +1,78 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
+ *
  */
 
 /**
  * class to handle webdav requests for Tinebase
- * 
+ *
  * @package     Tinebase
- * 
+ *
  * @todo extend Tinebase_Frontend_WebDAV_Record? or maybe add a common ancestor
  */
 abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\DAV\IProperties,
     Tinebase_Frontend_WebDAV_IRenamable
 {
     protected $_path;
-    
+
     /**
      * @var Tinebase_Model_Tree_Node
      */
     protected $_node;
-    
+
     protected $_container;
-    
+
     /**
      * @var array list of forbidden file names
      */
     protected static $_forbiddenNames = array('.DS_Store', 'Thumbs.db');
-    
-    public function __construct($_path) 
+
+    protected static $_CONTENT_LENGTH;
+
+    public function __construct($_path)
     {
         $this->_path      = $_path;
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $_path);
-        
+
         try {
             $this->_node = Tinebase_FileSystem::getInstance()->stat($_path);
         } catch (Tinebase_Exception_NotFound $tenf) {}
-        
+
         if (! $this->_node) {
             throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
         }
+
+        // You cannot rely on HTTP_* in some cases, see https://www.php.net/reserved.variables.server comment #15
+        self::$_CONTENT_LENGTH = $_SERVER['HTTP_CONTENT_LENGTH'] ?? $_SERVER['CONTENT_LENGTH'] ?? false;
     }
-    
+
     public function getId()
     {
         return $this->_node->getId();
     }
-    
-    public function getName() 
+
+    public function getName()
     {
         list(, $basename) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $basename);
-        
+
         return $basename;
     }
 
     /**
-     * Returns the last modification time 
+     * Returns the last modification time
      *
-     * @return int 
+     * @return int
      */
     public function getLastModified()
     {
@@ -84,13 +89,13 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     /**
      * Renames the node
-     * 
+     *
      * @throws Sabre\DAV\Exception\Forbidden
      * @throws Sabre\DAV\Exception\NotFound
      * @param string $name The new name
      * @return void
      */
-    public function setName($name) 
+    public function setName($name)
     {
         self::checkForbiddenFile($name);
 
@@ -138,10 +143,10 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
         $this->_node = $result;
         $this->_path = $result->path;
     }
-    
+
     /**
      * return container for given path
-     * 
+     *
      * @return Tinebase_Model_Tree_Node
      */
     protected function _getContainer()
@@ -149,10 +154,10 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
         if (null === $this->_container) {
             $this->_container = Tinebase_FileSystem::getInstance()->get($this->_node->parent_id);
         }
-        
+
         return $this->_container;
     }
-    
+
    /**
     * checks if filename is acceptable
     *

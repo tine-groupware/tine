@@ -1,17 +1,17 @@
 <?php
 /**
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
+ *
  */
 
 /**
  * class to handle webdav requests for Tinebase
- * 
+ *
  * @package     Tinebase
  */
 class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\ICollection
@@ -22,7 +22,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     * @var string
     */
     protected $_fileClass = 'Tinebase_Frontend_WebDAV_File';
-    
+
     /**
      * webdav directory class
      *
@@ -34,17 +34,17 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * return list of children
      * @return array list of children
      */
-    public function getChildren() 
+    public function getChildren()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path);
-        
+
         $children = array();
-            
+
         // Loop through the directory, and create objects for each node
         try {
             foreach (Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
-                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ) 
+                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)
                     && Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_SYNC)) {
                     $children[] = $this->getChild($node->name);
                 }
@@ -52,20 +52,20 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre\DAV\Exception\NotFound('path not found: ' . $this->_path);
         }
-        
+
         return $children;
     }
-    
+
     /**
      * get child by name
-     * 
+     *
      * @param  string $name
      * @throws Sabre\DAV\Exception\NotFound
      * @return Tinebase_Frontend_WebDAV_Directory|Tinebase_Frontend_WebDAV_File
      */
-    public function getChild($name) 
+    public function getChild($name)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
 
         // OwnCloud chunked file upload
@@ -75,44 +75,44 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 $name = $chunkInfo['name'];
             }
         }
-        
+
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
-        
+
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
         }
-        
+
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
             return new $this->_directoryClass($this->_path . '/' . $name);
         } else {
             return new $this->_fileClass($this->_path . '/' . $name);
         }
     }
-    
-    public function childExists($name) 
+
+    public function childExists($name)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $this->_path . '/' . $name);
-        
+
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
-        
+
         return Tinebase_FileSystem::getInstance()->fileExists($this->_path . '/' . $name);
     }
 
     /**
-     * Creates a new file in the directory 
-     * 
-     * @param string $name Name of the file 
-     * @param resource $data Initial payload, passed as a readable stream resource. 
+     * Creates a new file in the directory
+     *
+     * @param string $name Name of the file
+     * @param resource $data Initial payload, passed as a readable stream resource.
      * @throws Sabre\DAV\Exception\Forbidden
      * @throws Sabre\DAV\Exception\NotFound
      * @throws Sabre\DAV\Exception\InsufficientStorage
      * @throws Sabre\DAV\Exception
      * @return string
      */
-    public function createFile($name, $data = null) 
+    public function createFile($name, $data = null)
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
 
@@ -208,11 +208,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     static public function checkQuota(Tinebase_Model_Tree_Node $node): void
     {
         $length = 0;
-        if (!isset($_SERVER['HTTP_CONTENT_LENGTH'])) {
+        if (parent::$_CONTENT_LENGTH === false) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' CONTENT_LENGTH header missing - cannot check quota before PUT!');
         } else {
-            $length = $_SERVER['HTTP_CONTENT_LENGTH'];
+            $length = parent::$_CONTENT_LENGTH;
         }
         if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && ($ocLen = $_SERVER['HTTP_OC_TOTAL_LENGTH'] ?? 0)
             && $ocLen > $length
@@ -228,13 +228,13 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     }
 
     /**
-     * Creates a new subdirectory 
-     * 
-     * @param string $name 
+     * Creates a new subdirectory
+     *
+     * @param string $name
      * @throws Sabre\DAV\Exception\Forbidden
      * @return void
      */
-    public function createDirectory($name) 
+    public function createDirectory($name)
     {
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
 
@@ -246,10 +246,10 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create folder: ' . $name);
         }
-        
+
         $path = $this->_path . '/' . $name;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
 
         $statpath = Tinebase_Model_Tree_Node_Path::createFromStatPath($path);
@@ -271,15 +271,15 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             }
         }
     }
-    
+
     /**
      * Deleted the current node
-     * 
+     *
      * @todo   use filesystem controller to delete directories recursive
      * @throws Sabre\DAV\Exception\Forbidden
-     * @return void 
+     * @return void
      */
-    public function delete() 
+    public function delete()
     {
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
         if (! Tinebase_FileSystem::getInstance()->checkPathACL(
@@ -289,10 +289,10 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         )) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete directory: ' . $this->_path);
-        
+
         foreach ($this->getChildren() as $child) {
             try {
                 $child->delete();
@@ -322,7 +322,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
     /**
      * handle chunked upload
-     * 
+     *
      * @param string $name Name of the file
      * @param resource $data payload, passed as a readable stream resource.
      * @throws \Sabre\DAV\Exception\BadRequest
@@ -330,7 +330,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      */
     public static function handleOwnCloudChunkedFileUpload($name, $data)
     {
-        if (!isset($_SERVER['CONTENT_LENGTH'])) {
+        if (parent::$_CONTENT_LENGTH === false) {
             throw new \Sabre\DAV\Exception\BadRequest('CONTENT_LENGTH header missing!');
         }
 
@@ -338,12 +338,12 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if (!static::getOwnCloudChunkInfo($name, $chunkInfo)) {
             throw new \Sabre\DAV\Exception\BadRequest('bad filename provided: ' . $name);
         }
-        
+
         // copy chunk to temp file
         $path = Tinebase_TempFile::getTempPath();
-        
+
         $tempfileHandle = fopen($path, "w");
-        
+
         if (! $tempfileHandle) {
             throw new Tinebase_Exception_Backend('Could not open tempfile while uploading! ');
         }
@@ -351,33 +351,33 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if (false === stream_copy_to_stream($data, $tempfileHandle)) {
             throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
         }
-        
+
         $stat = fstat($tempfileHandle);
-        
-        if ($_SERVER['CONTENT_LENGTH'] != $stat['size']) {
-            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . $_SERVER['CONTENT_LENGTH'] . ' got: ' . $stat['size']);
+
+        if ($this->_CONTENT_LENGTH != $stat['size']) {
+            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . parent::$_CONTENT_LENGTH . ' got: ' . $stat['size']);
         }
-        
+
         fclose($tempfileHandle);
-        
+
         $tempFileName = sha1(Tinebase_Core::getUser()->accountId . $chunkInfo['name'] . $chunkInfo['tempId']);
-        
+
         $number = $chunkInfo['chunkId'] + 1;
         $index = str_pad($number, strlen((string)$chunkInfo['totalCount']), '0', STR_PAD_LEFT);
         Tinebase_TempFile::getInstance()->createTempFile($path, $tempFileName, $index);
-        
+
         // check if the client sent all chunks
         $uploadedChunks = Tinebase_TempFile::getInstance()->search(
             new Tinebase_Model_TempFileFilter(array(
                 array('field' => 'name', 'operator' => 'equals', 'value' => $tempFileName)
-            )), 
+            )),
             new Tinebase_Model_Pagination(array('sort' => 'type', 'dir' => 'ASC'))
         );
-        
+
         if ($uploadedChunks->count() != $chunkInfo['totalCount']) {
             return false;
         }
-        
+
         // combine all chunks to one file
         $joinedFile = Tinebase_TempFile::getInstance()->joinTempFiles($uploadedChunks);
         $joinedFile->name = $chunkInfo['name'];
