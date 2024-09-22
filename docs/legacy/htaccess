@@ -32,10 +32,25 @@ DirectoryIndex index.php
     # OpenID
     RewriteRule ^users/(.*)                  index.php?frontend=openid&username=$1 [L,QSA]
 
-    # WebDAV / CalDAV / CardDAV
-    RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
-    RewriteRule ^$                           index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    # *DAV well known
+    RewriteRule ^\.well-known/caldav  calendars    [R]
+    RewriteRule ^\.well-known/carddav addressbooks [R]
 
+    # Tine's nginx config mentiones: see #177979: [VS] rewrite rule für webdav auf / (root folder)
+    # iPhone + only office + other broken clients
+    RewriteCond "%{HTTP_USER_AGENT}" "^Documents/" [OR]
+    RewriteCond "%{HTTP_USER_AGENT}" "^Dokumente/.*CFNetwork/" [OR]
+    RewriteCond "%{HTTP_USER_AGENT}" "^okhttp/" [OR]
+    # FIX: Force webdav for Gnome Virtual File System
+    RewriteCond "%{HTTP_USER_AGENT}" "^gvfs/" [OR]
+    # FIX: Force webdav for Windows Clients and those pretending (therefore without '^')
+    RewriteCond "%{HTTP_USER_AGENT}" "Microsoft-WebDAV-MiniRedir/" [OR]
+    RewriteCond "%{HTTP_USER_AGENT}" "^Dalvik/"
+    RewriteRule ^.*$                         index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+
+    # WebDAV / CalDAV / CardDAV
+    RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD)$
+    RewriteRule ^.*$                         index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^addressbooks                index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^calendars                   index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
     RewriteRule ^webdav                      index.php?frontend=webdav             [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
