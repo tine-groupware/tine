@@ -74,23 +74,45 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
             }
             try {
                 if (!$not) {
-                    $_select->join(
-                        [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
-                        $this->_getQuotedFieldName($_backend) . ' = ' .
-                        $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
-                        []
-                    );
-                    $groupSelect->appendWhere();
+                    if ($this->_valueIsNull) {
+                        $_select->joinLeft(
+                            [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                            $this->_getQuotedFieldName($_backend) . ' = ' .
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                            []
+                        );
+                        $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
+                    } else {
+                        // what about ors? maybe better left join and where is not null?
+                        $_select->join(
+                            [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                            $this->_getQuotedFieldName($_backend) . ' = ' .
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                            []
+                        );
+                        $groupSelect->appendWhere();
+                    }
                 } else {
-                    $_select->joinLeft(
-                        [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
-                        $this->_getQuotedFieldName($_backend) . ' = ' .
-                        $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField'])
-                        . ' AND (' . $groupSelect->getSQL() . ')',
-                        []
-                    );
-
-                    $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
+                    $groupSql = $groupSelect->getSQL();
+                    if ($this->_valueIsNull) {
+                        // what about ors? maybe better left join and where is not null?
+                        $_select->join(
+                            [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                            $this->_getQuotedFieldName($_backend) . ' = ' .
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField'])
+                            . ($groupSql ? ' AND (' . $groupSql . ')' : ''),
+                            []
+                        );
+                    } else {
+                        $_select->joinLeft(
+                            [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                            $this->_getQuotedFieldName($_backend) . ' = ' .
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField'])
+                            . ($groupSql ? ' AND (' . $groupSql . ')' : ''),
+                            []
+                        );
+                        $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
+                    }
                 }
             } finally {
                 $this->_field = $orgField;
