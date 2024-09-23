@@ -66,10 +66,10 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         TestServer::getInstance()->setLicense();
     }
 
-    public function testIsValidWithValidLicense()
+    public function testIsValidWithLicenseNoLongerMatchingCA()
     {
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-12345.pem');
-        $this->assertTrue($this->_uit->isValid());
+        $this->assertFalse($this->_uit->isValid());
     }
 
     public function testIsValidWithOutdatedLicense()
@@ -282,7 +282,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_LICENSE_INVALID, $registry['licenseStatus']);
 
-        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/license_contract_MW-TEST-3.0.0.pem'));
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_LICENSE_OK, $registry['licenseStatus']);
 
@@ -351,7 +351,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
         $tempfileName = 'testupload' . Tinebase_Record_Abstract::generateUID(10);
         $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
-        file_put_contents($tempfilePath, file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
+        file_put_contents($tempfilePath, file_get_contents(dirname(__FILE__) . '/license_contract_MW-TEST-3.0.0.pem'));
 
         $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName, 'application/x-x509-ca-cert');
 
@@ -361,7 +361,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         Tinebase_TempFile::getInstance()->delete($tempFile->getId());
 
         $this->assertTrue(isset($licenseData['serialNumber']), 'serialNumber not set: ' . print_r($licenseData, true));
-        $this->assertEquals(38, $licenseData['serialNumber']);
+        $this->assertEquals(84, $licenseData['serialNumber']);
     }
 
     public function testGetInstallationData()
@@ -388,12 +388,12 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     {
         self::assertFalse($this->_uit->isPermitted('Tinebase.featureCreatePreviews'));
 
-        $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-12345.pem');
+        $this->_uit->setLicenseFile(dirname(__FILE__) . '/license_contract_MW-TEST-3.0.0.pem');
 
         self::assertTrue($this->_uit->isPermitted('UserManual'));
         self::assertTrue($this->_uit->isPermitted('HumanResources.workingTimeAccounting'));
 
-        $this->_uit->setLicenseFile(dirname(__FILE__) . '/license_contract_MW-TEST-2.0.pem');
+        $this->_uit->setLicenseFile(dirname(__FILE__) . '/license_contract_MW-TEST-3.0.0.pem');
 
         self::assertTrue($this->_uit->isPermitted('OnlyOfficeIntegrator'));
         self::assertTrue($this->_uit->isPermitted('UserManual'));

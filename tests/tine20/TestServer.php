@@ -112,7 +112,7 @@ class TestServer
     {
         if (Tinebase_License::getInstance()->getStatus() !== Tinebase_License::STATUS_LICENSE_OK) {
             $licenseFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Tinebase' . DIRECTORY_SEPARATOR . 'License'
-                . '/license_contract_MW-TEST-2.0.pem';
+                . '/license_contract_MW-TEST-3.0.0.pem';
             Tinebase_License::getInstance()->storeLicense(file_get_contents($licenseFile));
         }
     }

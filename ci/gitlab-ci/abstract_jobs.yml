@@ -57,7 +57,7 @@
     NODE_TOTAL: $CI_NODE_TOTAL
     NODE_INDEX: $CI_NODE_INDEX
     TINE20_ACCEPTED_TERMS_VERSION: 1000
-    TINE20_LICENSE_PATH: "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem" # be default use test license from cloned tine repo
+    TINE20_LICENSE_PATH: "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem" # be default use test license from cloned tine repo
     ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci
     ARG_TEST: AllTests
     ARG_FILTER: $PHPUNIT_FILTER
@@ -92,7 +92,7 @@
     - custom-cache
   variables:
     TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
-    TINE20_LICENSE_PATH: "${TINE20ROOT}/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
+    TINE20_LICENSE_PATH: "${TINE20ROOT}/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem"
   needs: []
   before_script:
     - !reference [.lib, script]
