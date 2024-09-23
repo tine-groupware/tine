@@ -16,8 +16,11 @@ CREATE TABLE IF NOT EXISTS `smtp_destinations` (
     `users_id` int(11) NOT NULL,
     `source` varchar(80) NOT NULL,
     `destination` varchar(80) NOT NULL,
+    `dispatch_address` tinyint(1) NOT NULL DEFAULT 1,
+    UNIQUE KEY `force_unique` (`source`,`destination`),
     KEY `users_id` (`users_id`),
-    KEY `source` (`source`)
+    KEY `source` (`source`),
+    CONSTRAINT `smtp_destinations_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `smtp_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `smtp_destinations`
