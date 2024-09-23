@@ -35,15 +35,29 @@ class Admin_Backend_SchedulerTask extends Tinebase_Backend_Sql
      */
     protected function _recordToRawData(Tinebase_Record_Interface $_record): array
     {
-        $_record->{Admin_Model_SchedulerTask::FLD_CONFIG}->{Admin_Model_SchedulerTask_Abstract::FLD_PARENT_ID} =
-            $_record->getId();
+        $config = $_record->{Admin_Model_SchedulerTask::FLD_CONFIG};
+        $callables = [];
+
+        if (is_array($config)) {
+            if (isset($config['callables'])) {
+                $callables = $config['callables'];
+            }
+            //let Tinebase_Scheduler_Task construct the value
+            $config = null;
+        } else {
+            if ($config instanceof Admin_Model_SchedulerTask_Abstract) {
+                $config->{Admin_Model_SchedulerTask_Abstract::FLD_PARENT_ID} = $_record->getId();
+                $callables = $config->getCallables();
+                $config = $config->toArray();
+            }
+        }
 
         $raw = parent::_recordToRawData($_record);
 
         $raw[Admin_Model_SchedulerTask::FLD_CONFIG] = json_encode((new Tinebase_Scheduler_Task([
             'cron'          => $_record->{Admin_Model_SchedulerTask::FLD_CRON},
-            'callables'     => $_record->{Admin_Model_SchedulerTask::FLD_CONFIG}->getCallables(),
-            'config'        => $_record->{Admin_Model_SchedulerTask::FLD_CONFIG}->toArray(),
+            'callables'     => $callables,
+            'config'        => $config,
             'config_class'  => $_record->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS},
             'emails'        => $_record->{Admin_Model_SchedulerTask::FLD_EMAILS},
             'name'          => $_record->{Admin_Model_SchedulerTask::FLD_NAME},

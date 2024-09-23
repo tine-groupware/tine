@@ -155,7 +155,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
             ],
             self::FLD_IS_SYSTEM => [
                 self::TYPE          => self::TYPE_BOOLEAN,
-                self::DEFAULT_VAL   => true,
+                self::DEFAULT_VAL   => false,
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
