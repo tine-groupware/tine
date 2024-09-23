@@ -989,3 +989,6 @@ msgstr "Gemeinsame Dateimanager-Favoriten erstellen oder bearbeiten"
 
 msgid "Attachments: Anyone who has access to the record can see the data"
 msgstr "Anhänge: Jeder der Zugriff auf Datensatz hat kann daten sehen"
+
+msgid "Failed to download this file!"
+msgstr "Das Herunterladen dieser Datei ist fehlgeschlagen!"
