@@ -53,6 +53,9 @@ services:
 {% if tinedockercompose_tineurl is defined %}
       TINE20_URL: {{ tinedockercompose_tineurl }}
 {% endif %}
+{% if tinedockercompose_broadcasthub is defined and tinedockercompose_broadcasthub|bool %}
+      BROADCASTHUB_URL: http://broadcasthub
+{% endif %}
 {% if tinedockercompose_auto_installupdate is defined and tinedockercompose_auto_installupdate|bool %}
       ### install+update tine automatically
       TINE20_INSTALL: "true"
@@ -120,15 +123,16 @@ services:
   broadcasthub:
     image: tinegroupware/broadcasthub:0.7
     restart: always
+    # todo: drop external network and port, in favor of proxy on web container
+    ports:
+      - "5001:80"
     networks:
       - external_network
       - internal_network
-    ports:
-      - "5001:80"
     environment:
       REDIS_URL: redis://cache:6379
       REDIS_CHANNEL: broadcasthub
-      TINE20_JSON_API_URL: {{ tinedockercompose_broadcasthub_tine_url }}
+      TINE20_JSON_API_URL: http://web
       AUTH_TIMEOUT: 5000
       WS_PORT: 80
       ENABLE_MULTITENANCY_MODE: false
