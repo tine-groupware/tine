@@ -235,7 +235,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
             }
             $this->assertEquals(2, count($foundDestinations), 'source: ' . $source
                 . ' / queryResult:' . print_r($queryResult, true));
-            $this->assertTrue($foundDestinations == $destinations, print_r($destinations, TRUE));
+            $this->assertEquals(sort($destinations), sort($foundDestinations));
         }
     }
 
