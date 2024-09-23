@@ -118,6 +118,13 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         return $this->_foreignIds;
     }
 
+    protected function isValueNull($_value): bool
+    {
+        return empty($_value) || (is_array($_value) && count($_value) === 1 && isset($_value[0]) &&
+                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']) &&
+                'query' !== $_value[0]['field']);
+    }
+
     /**
      * creates corresponding filtergroup
      *
@@ -129,14 +136,12 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             $_value = $_value->getId();
         }
         $this->_foreignIds = NULL;
-        $this->_valueIsNull = empty($_value) || (is_array($_value) && count($_value) === 1 && isset($_value[0]) &&
-                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']) &&
-                'query' !== $_value[0]['field']);
+        $this->_valueIsNull = $this->isValueNull($_value);
 
         // id(s) is/are to be provided directly as value
         if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
                 $this->_operator === 'notin') {
-            if (is_array($_value)) {
+            if (!$this->_valueIsNull && is_array($_value)) {
                 if (isset($_value['id'])) {
                     $_value = [$_value['id']];
                 } elseif (isset($_value[0]) && is_array($_value[0]) && isset($_value[0]['id'])) {
