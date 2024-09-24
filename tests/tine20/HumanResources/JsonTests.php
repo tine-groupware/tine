@@ -1769,6 +1769,39 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         static::assertFalse((bool) $saved_report['is_cleared'], 'is_cleared should not be set');
     }
 
+    public function testClientExpander(): void
+    {
+        $e = $this->_getEmployee();
+        $c = $this->_getContract(Tinebase_DateTime::now());
+
+        $employeeJson = $e->toArray();
+        $employeeJson['contracts'] = array($c->toArray());
+
+
+        $expander = HumanResources_Model_Employee::getConfiguration()->jsonExpander;
+        $expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES]['contracts'][Tinebase_Record_Expander::EXPANDER_PROPERTIES]['employee_id'] = [];
+
+        $oldRequest = Tinebase_Core::getRequest();
+        $raii = new Tinebase_RAII(fn() => Tinebase_Core::set(Tinebase_Core::REQUEST, $oldRequest));
+        Tinebase_Core::set(Tinebase_Core::REQUEST, Tinebase_Http_Request::fromString(
+            "GET / HTTP/1.1\r\n" .
+            'X-TINE20-REQUEST-CONTEXT-' . Tinebase_Frontend_Json_Abstract::REQUEST_CONTEXT_EXPANDER . ': ' . json_encode($expander)
+        ));
+
+        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        $this->assertIsArray($employeeJson['contracts'][0]['employee_id']);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $employeeJson = $this->_json->getEmployee($employeeJson['id']);
+        $this->assertIsArray($employeeJson['contracts'][0]['employee_id']);
+
+        unset($raii);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
+        $employeeJson = $this->_json->getemployee($employeeJson['id']);
+        $this->assertSame($employeeJson['id'], $employeeJson['contracts'][0]['employee_id']);
+    }
+
     /**
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10176
      */

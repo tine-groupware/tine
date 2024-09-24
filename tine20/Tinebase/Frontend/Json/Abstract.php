@@ -29,6 +29,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     const TOTALCOUNT_COUNTRESULT = 'countresult';
 
+    const REQUEST_CONTEXT_EXPANDER = 'expander';
+
     /**
      * default model (needed for application starter -> defaultContentType)
      * @var string
@@ -54,6 +56,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @var string
      */
     protected $_paginationModel = null;
+
+    protected $_currentRequestContext = [];
 
     /**
      * Configured plugins for filter model
@@ -162,6 +166,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 }
             }
         }
+        $this->_currentRequestContext = $clientData;
         return $clientData;
     }
 
@@ -571,9 +576,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _recordToJson($_record)
     {
+        $raii = $this->_setRequestContextExpander($_record);
+
         $converter = Tinebase_Convert_Factory::factory($_record);
         $result = $converter->fromTine20Model($_record);
 
+        unset($raii);
         return $result;
     }
 
@@ -604,12 +612,29 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $result = array();
 
-        if ($_records->getFirstRecord()) {
+        if ($_record = $_records->getFirstRecord()) {
+            $raii = $this->_setRequestContextExpander($_record);
+
             $converter = Tinebase_Convert_Factory::factory($_records->getFirstRecord());
             $result = $converter->fromTine20RecordSet($_records, $_filter, $_pagination);
+
+            unset($raii);
         }
 
         return $result;
+    }
+
+    protected function _setRequestContextExpander(Tinebase_Record_Interface $_record): ?Tinebase_RAII
+    {
+        $raii = null;
+        if (isset($this->_currentRequestContext[self::REQUEST_CONTEXT_EXPANDER])
+                && is_array($clientExpander = json_decode($this->_currentRequestContext[self::REQUEST_CONTEXT_EXPANDER], true))
+                && $mc = $_record::getConfiguration()) {
+            $oldExpander = $mc->jsonExpander;
+            $mc->setJsonExpander($clientExpander);
+            $raii = new Tinebase_RAII(fn () => $mc->setJsonExpander($oldExpander));
+        }
+        return $raii;
     }
 
     /**
