@@ -412,15 +412,13 @@ Tine.Tinebase.common = {
      * Returns prettyfied minutes
      *
      * @param  {Number} minutes
-     * @param  {String} format -> {0} will be replaced by Hours, {1} with minutes
+     * @param  format -> {0} will be replaced by Hours, {1} with minutes
      * @param  {String} leadingZeros add leading zeros for given item {i|H}
      * @return {String}
      */
     minutesRenderer: function (minutes, format, leadingZeros) {
-        var s,
-            i = minutes % 60,
-            H = Math.floor(minutes / 60),
-            Hs;
+        let i = minutes % 60,
+            H = Math.floor(minutes / 60);
 
         if (leadingZeros && (Ext.isString(leadingZeros) || leadingZeros === true)) {
             if (leadingZeros === true || (leadingZeros.match(/i/) && String(i).length === 1)) {
@@ -432,18 +430,16 @@ Tine.Tinebase.common = {
         }
 
         if (! format || ! Ext.isString(format)) {
-            s = String.format(i18n.ngettext('{0} minute', '{0} minutes', i), i);
-            Hs = String.format(i18n.ngettext('{0} hour', '{0} hours', H), H);
-            //var ds = String.format(i18n.ngettext('{0} workday', '{0} workdays', d), d);
-
-            if (i === 0) {
-                s = Hs;
-            } else {
-                s = H ? Hs + ', ' + s : s;
+            const mediumRenderer = (i, H) => {
+                const minutes = String.format(i18n.ngettext(`{0} minute`, `{0} minutes`, i), i);
+                const hours = String.format(i18n.ngettext(`{0} hour`, `{0} hours`, H), H);
+                const duration = hours && i !== 0 ? `${hours}, ${minutes}` : hours || minutes;
+                return `<span class="duration-renderer-medium">${duration}</span>`;
             }
-            //s = d ? ds + ', ' + s : s;
-
-            return s;
+            const smallRenderer = (i, H) => {
+                return `<span class="duration-renderer-small">${H || '0'} : ${i || '00'}</span>`;
+            }
+            return `${mediumRenderer(i, H)}${smallRenderer(i, H)}`;
         }
 
         return String.format(format, H, i);
