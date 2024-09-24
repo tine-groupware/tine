@@ -12,10 +12,11 @@
 
 abstract class Tinebase_Record_Expander_Abstract
 {
-    const EXPANDER_USE_JSON_EXPANDER = 'useJsonExpander';
     const EXPANDER_PROPERTIES = 'properties';
     const EXPANDER_PROPERTY_CLASSES = 'propertyClasses';
     const EXPANDER_REPLACE_GET_TITLE = 'replaceGetTitle';
+    const EXPANDER_USE_FILTER = 'userFilter';
+    const EXPANDER_USE_JSON_EXPANDER = 'useJsonExpander';
     const GET_DELETED = 'getDeleted';
 
     const PROPERTY_CLASS_USER = 'user';
@@ -37,6 +38,8 @@ abstract class Tinebase_Record_Expander_Abstract
      * @var Tinebase_Record_Expander
      */
     protected $_rootExpander;
+
+    protected ?array $_definitionFilter = null;
 
     public function __construct($_model, $_expanderDefinition, Tinebase_Record_Expander $_rootExpander)
     {
@@ -64,6 +67,9 @@ abstract class Tinebase_Record_Expander_Abstract
                 $this->_subExpanders[] = Tinebase_Record_Expander_Factory::createPropClass($_model, $definition,
                     $propClass, $this->_rootExpander);
             }
+        }
+        if (is_array($_expanderDefinition[self::EXPANDER_USE_FILTER] ?? null)) {
+            $this->_definitionFilter = $_expanderDefinition[self::EXPANDER_USE_FILTER];
         }
     }
 

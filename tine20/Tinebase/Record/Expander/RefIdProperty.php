@@ -39,7 +39,7 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
                     $this->_mccCfg[MCC::REF_ID_FIELD], $ids,
                     // workaround: [$this, '_setData'] doesn't work, even so it should!
                     function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted))
-                    ->setAdditionalFilter(isset($this->_mccCfg[MCC::ADD_FILTERS]) ? $this->_mccCfg[MCC::ADD_FILTERS] : null)
+                    ->setAdditionalFilter(array_merge($this->_mccCfg[MCC::ADD_FILTERS] ?? [], $this->_definitionFilter ?? []) ?: null)
                     ->setPaging(isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) : null)
                     ->setFilterOptions(isset($this->_mccCfg[MCC::FILTER_OPTIONS]) ? $this->_mccCfg[MCC::FILTER_OPTIONS] : null)
                 );
