@@ -103,6 +103,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property bool       $runConvertToRecordFromJson
  * @property bool       $hasPerspectives
  * @property bool       $hasSystemCustomFields
+ * @property bool       $skipLegacyJsonConvert
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
@@ -255,6 +256,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * @var boolean
      */
     protected $_exposeHttpApi = NULL;
+
+    /**
+     * skip legacy expanding in json converter _resolveBeforeToArray
+     */
+    protected bool $_skipLegacyJsonConvert = false;
 
     /**
      * Human readable name of the container
