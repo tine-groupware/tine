@@ -106,8 +106,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             requiredGrant: 'editGrant',
                             maxLength: 1024
                         }]
-                    },
-                        {
+                    }, {
                         layout: 'hbox',
                             hidden: !this.app.featureEnabled('featureEventType'),
                         items: [{
@@ -127,6 +126,31 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             isMetadataModelFor: 'event_type',
                             requiredGrant: 'editGrant',
                         }]
+                    }, {
+                                layout: 'hbox',
+                                hidden: !Tine.Tinebase.featureEnabled('featureSite'),
+                                items: [{
+                                    margins: '5',
+                                    width: 100,
+                                    // height: 30,
+                                    xtype: 'label',
+                                    text: this.app.i18n._('Site')
+                                }, {
+                                    flex: 1,
+                                    xtype:'addressbookcontactpicker',
+                                    name: 'site',
+                                    userOnly: false,
+                                    useAccountRecord: false,
+                                    searchComboConfig: {useEditPlugin: false},
+                                    requiredGrant: 'editGrant',
+                                    recordEditPluginConfig: {allowCreateNew: false,},
+                                    additionalFilterSpec: {
+                                        config: {
+                                            name: 'siteFilter',
+                                            appName: 'Tinebase'
+                                        }
+                                    }
+                                }]
                     }, {
                         layout: 'hbox',
                         items: [{

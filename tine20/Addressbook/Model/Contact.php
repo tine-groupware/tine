@@ -218,6 +218,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'container_id' => [],
             ],
+            'sites'      => [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    Addressbook_Model_Sites::FLD_SITE => [],
+                ],
+            ],
         ],
 
         'filterModel'       => [
@@ -320,6 +325,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'adr_two_countryname' => [
                 'filter'            => Tinebase_Model_Filter_Country::class,
+            ],
+            'sites'              => [
+                'filter'            => Tinebase_Model_Filter_ForeignRecords::class,
+                'label'             => 'Sites', // _('Sites')
+                'options'           => [
+                    'controller' => Addressbook_Controller_Sites::class,
+                    'recordClassName' => Addressbook_Model_Sites::class,
+                    'refIdField' => 'record',
+                ]
             ],
         ],
 
@@ -1040,6 +1054,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
+                ],
+            ],
+            'sites' => [
+                self::TYPE                  => self::TYPE_RECORDS,
+                self::LABEL                 => 'Sites', // _('Sites')
+                self::CONFIG                => [
+                    self::DEPENDENT_RECORDS     => true,
+                    self::APP_NAME              => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_Sites::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Addressbook_Model_Sites::FLD_RECORD,
                 ],
             ],
 

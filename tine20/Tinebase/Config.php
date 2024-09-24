@@ -980,6 +980,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const USER_TYPES = 'userTypes';
 
     /**
+     * Filter configuration for site record pickers
+     * @var string
+     */
+    const SITE_FILTER = 'siteFilter';
+    const FEATURE_SITE = 'featureSite';
+
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -1863,6 +1871,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
+                self::FEATURE_SITE => array(
+                    self::LABEL             => 'Activate Sites for modules',
+                    //_('Activate Sites for Events')
+                    self::DESCRIPTION       => 'Activate Sites for modules.',
+                    //_('Activate Sites for Events.')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => true,
+                ),
             ],
             self::DEFAULT_STR => [],
         ],
@@ -3522,6 +3538,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ]
             ],
         ],
+        self::SITE_FILTER => array(
+            // _('Site Filter')
+            self::LABEL                 => 'Site Filter',
+            // _('Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter.')
+            self::DESCRIPTION           => 'Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter.',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+        ),
     );
 
     /**

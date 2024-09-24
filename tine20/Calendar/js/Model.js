@@ -31,6 +31,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'adr_lat' },
     { name: 'location' },
     { name: 'location_record' },
+    { name: 'site' },
     { name: 'organizer_type' },
     { name: 'organizer' },
     { name: 'organizer_email' },
@@ -515,7 +516,10 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     if (app.featureEnabled('featureEventType')) {
         filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Calendar.Model.EventTypes, ownField: 'event_types', foreignRefIdField: 'eventType'});
     }
-    
+    if (Tine.Tinebase.featureEnabled('featureSite')) {
+        filter.push({filtertype: 'tinebase.site', app: app});
+    }
+
     return filter;
 };
 
