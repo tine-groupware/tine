@@ -97,10 +97,6 @@ Ext.extend(Tine.widgets.grid.FilterPlugin, Ext.util.Observable, {
             this.getGridPanel().getView().isPagingRefresh = true;
         }
 
-        if (this.store?.proxy?.isLoading()) {
-            this.store?.proxy?.abort();
-        }
-
         if (this.store) {
             this.store.load({});
         }

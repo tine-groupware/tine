@@ -398,18 +398,25 @@ Tine.Filemanager.nodeBackendMixin = {
             timeout: 300000, // 5 minutes
             scope: this,
             success: function(result, request){
-
                 Ext.MessageBox.hide();
 
-                // send updates
-                var _ = window.lodash,
-                    me = this,
-                    recordsData = Ext.util.JSON.decode(result.responseText);
+                const recordsData = Ext.util.JSON.decode(result.responseText);
+                const grid = app.getMainScreen().getCenterPanel();
 
-                _.each(recordsData, function(recordData) {
-                    me.postMessage('update', recordData);
+                if (grid?.filterToolbar && recordsData.length === 1) {
+                    const filters = grid.filterToolbar.getValue();
+                    filters.forEach((filter) => {
+                        if (filter.field === 'path') {
+                            const path = Tine.Filemanager.Model.Node.dirname(recordsData[0].path);
+                            filter.value = `${path}${recordsData[0].name}`;
+                        }
+                    })
+                    grid.filterToolbar.setValue(filters);
+                }
+
+                _.each(recordsData, (recordData) => {
+                    this.postMessage('update', recordData);
                 });
-
 
                 // var nodeData = Ext.util.JSON.decode(result.responseText),
                 //     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
