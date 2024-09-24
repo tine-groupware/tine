@@ -771,13 +771,15 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         // use modern record resolving, if the model was configured using Tinebase_ModelConfiguration
         // at first, resolve all single record fields
         if ($modelConfiguration) {
-            $this->_resolveSingleRecordFields($records, $modelConfiguration);
-        
-            // resolve all multiple records fields
-            $this->_resolveMultipleRecordFields($records, $modelConfiguration, $multiple);
+            if (!$modelConfiguration->{Tinebase_ModelConfiguration::SKIP_LEGACY_JSON_CONVERT}) {
+                $this->_resolveSingleRecordFields($records, $modelConfiguration);
 
-            $this->_recursiveResolvingProtection = [];
-            $this->_resolveRecursive($records, $modelConfiguration, $multiple);
+                // resolve all multiple records fields
+                $this->_resolveMultipleRecordFields($records, $modelConfiguration, $multiple);
+
+                $this->_recursiveResolvingProtection = [];
+                $this->_resolveRecursive($records, $modelConfiguration, $multiple);
+            }
 
             if ($expanderDef = $modelConfiguration->jsonExpander) {
                 $modelName = $records->getRecordClassName();
