@@ -252,6 +252,7 @@ Ext.Element.addMethods(function(){
          * @return {Ext.Element} this
          */
         setStyle : function(prop, value){
+            if (! this.dom) return this;
             var tmp,
                 style,
                 camel;
