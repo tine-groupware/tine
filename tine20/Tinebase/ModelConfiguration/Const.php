@@ -216,6 +216,7 @@ class Tinebase_ModelConfiguration_Const {
      */
     public const SHY = 'shy';
     public const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
+    public const SKIP_LEGACY_JSON_CONVERT = 'skipLegacyJsonConvert';
     public const SPECIAL_TYPE = 'specialType';
     public const SPECIAL_TYPE_DISCOUNT = 'discount';
     public const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
