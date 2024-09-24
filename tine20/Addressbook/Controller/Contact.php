@@ -358,8 +358,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     array('field' => $updatedRecord->getIdProperty(), 'operator' => 'equals', 'value' => $updatedRecord->getId())
                 ));
 
-                // record does not match the filter, attention searchCount returns a STRING! "1"...
-                if ($this->searchCount($filter) != 1) {
+                if ($this->searchCount($filter) !== 1) {
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' record did not match filter of syncBackend "' . $backendId . '"');
@@ -503,8 +502,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     array('field' => $_createdRecord->getIdProperty(), 'operator' => 'equals', 'value' => $_createdRecord->getId())
                 ));
 
-                // record does not match the filter, attention searchCount returns a STRING! "1"...
-                if ($this->searchCount($filter) != 1) {
+                if ($this->searchCount($filter) !== 1) {
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' record did not match filter of syncBackend "' . $backendId . '"');

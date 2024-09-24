@@ -132,6 +132,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
         $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
 
+        /** @phpstan-ignore-next-line */
         if ($ftCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 HumanResources_Model_FreeTime::class, array_merge([
                     ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $contract->start_date],
@@ -143,6 +144,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             return false;
         }
 
+        /** @phpstan-ignore-next-line */
         if ($dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 HumanResources_Model_DailyWTReport::class, array_merge([
                     ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $contract->start_date],
@@ -257,6 +259,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             ['field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $_record->end_date],
         ]));
 
+        /** @phpstan-ignore-next-line */
         if ($this->searchCount($filter) > 0) {
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
             throw new Tinebase_Exception_SystemGeneric($translation->_('Contracts may not overlap'));

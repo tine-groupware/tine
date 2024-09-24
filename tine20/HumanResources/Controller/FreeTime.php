@@ -224,6 +224,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
         $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
 
+        /** @phpstan-ignore-next-line */
         if (($oldRecord && $dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     HumanResources_Model_DailyWTReport::class,[
                     ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $oldRecord->firstday_date],
@@ -231,6 +232,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                     ['field' => 'is_cleared', 'operator' => 'equals', 'value' => true],
                     ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $oldRecord->lastday_date],
                 ])) > 0) ||
+            /** @phpstan-ignore-next-line */
                 $dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     HumanResources_Model_DailyWTReport::class,[
                     ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $record->firstday_date],
@@ -270,6 +272,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
         /** @var HumanResources_Model_FreeTime $freeTime */
         foreach ($this->getMultiple($_ids, true) as $freeTime) {
+            /** @phpstan-ignore-next-line */
             if ($dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     HumanResources_Model_DailyWTReport::class,[
                         ['field' => 'date', 'operator' => 'after_or_equals', 'value' => $freeTime->firstday_date],

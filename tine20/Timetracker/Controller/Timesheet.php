@@ -6,8 +6,10 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Timesheet controller class for Timetracker application
@@ -259,7 +261,79 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     }
     
     /****************************** overwritten functions ************************/    
-    
+
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
+    {
+        $result = parent::searchCount($_filter, $_action);
+
+        if (class_exists('HumanResources_Config') && Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME, true)
+                    && ($periodFilter = $_filter->findFilterWithoutOr('start_date'))
+                    && ($aFilter = $_filter->findFilterWithoutOr('account_id')) && $aFilter->getOperator() === TMFA::OP_EQUALS
+                    && ($accountId = $aFilter->toArray()['value'] ?? null)) {
+            $oldEmployeeAcl = HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(false);
+            try {
+                $employee = HumanResources_Controller_Employee::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                        [TMFA::FIELD => 'account_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accountId]
+                    ]))->getFirstRecord();
+            } finally {
+                HumanResources_Controller_Employee::getInstance()->doContainerACLChecks($oldEmployeeAcl);
+            }
+
+            // ATTENTION employee has been retrieved without ACL check, this code here only used the employee id. Do not use employee data unless checking ACL first!
+            if ($employee) {
+                /** @var Tinebase_Model_Filter_Date $periodFilter */
+                try {
+                    $fromUntil = ['from' => $periodFilter->getStartOfPeriod(), 'until' => $periodFilter->getEndOfPeriod()];
+                } catch (Tinebase_Exception_UnexpectedValue) {
+                    return $result;
+                }
+                $from = $fromUntil['from'];
+                $from->hasTime(false);
+                $until = $fromUntil['until'];
+                $until->hasTime(false);
+
+                // get contracts
+                $contracts = HumanResources_Controller_Contract::getInstance()->getValidContracts($fromUntil, $employee->getId());
+                $turnOverGoal = 0;
+                /** @var HumanResources_Model_Contract $contract */
+                foreach ($contracts as $contract) {
+                    if (0 === ($yGoal = (int)$contract->{HumanResources_Model_Contract::FLD_YEARLY_TURNOVER_GOAL})) {
+                        continue;
+                    }
+                    $f = ($from->isLater($contract->start_date) ? $from : $contract->start_date)->getClone();
+                    $u = (!$contract->end_date || $until->isEarlier($contract->end_date) ? $until : $contract->end_date)
+                        ->getClone();
+
+                    $multiplier = 0.0;
+                    for (;(int)$f->format('Y') < (int)$u->format('Y'); $f->addYear(1)) {
+                        $daysOfYear = $f->format('L') === '1' ? 366 : 365;
+                        $multiplier += ($daysOfYear - (int)$f->format('z')) / $daysOfYear;
+                        $f->setDate((int)$f->format('Y'), 1, 1);
+                    }
+                    $daysOfYear = $u->format('L') === '1' ? 366 : 365;
+                    $multiplier += ((int)$u->format('z') - (int)$f->format('z') + 1) / $daysOfYear;
+
+                    $turnOverGoal += round($yGoal * $multiplier, 2);
+                }
+                $result['turnOverGoal'] = $turnOverGoal;
+
+                // get dailyWTRs
+                $workingTarget = 0;
+                /** @var HumanResources_Model_DailyWTReport $dailyWTR */
+                foreach (HumanResources_Controller_DailyWTReport::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_DailyWTReport::class, [
+                            [TMFA::FIELD => 'employee_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $employee->getId()],
+                            [TMFA::FIELD => 'date', TMFA::OPERATOR => 'within', TMFA::VALUE => ['from' => $from, 'until' => $until]],
+                        ])) as $dailyWTR) {
+                    $workingTarget += $dailyWTR->getShouldWorkingTime();
+                }
+                $result['workingTimeTarget'] = $workingTarget;
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * inspect creation of one record
      * 
@@ -273,6 +347,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
+        $this->_calcClearedAmount($_record);
     }
 
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -297,7 +372,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-
+        $this->_calcClearedAmount($_record, $_oldRecord);
     }
 
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
@@ -310,6 +385,29 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 $updatedRecord->stat_time != $currentRecord->start_time) {
             $this->_tsChanged($updatedRecord, $currentRecord);
         }
+    }
+
+    protected function _calcClearedAmount(Timetracker_Model_Timesheet $ts, ?Timetracker_Model_Timesheet $oldTs = null): void
+    {
+        if (!$ts->is_cleared) {
+            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = null;
+            return;
+        }
+        if ($oldTs?->is_cleared) {
+            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = $oldTs?->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT};
+            return;
+        }
+
+        $taCtrl = Timetracker_Controller_Timeaccount::getInstance();
+        $oldAcl = $taCtrl->doContainerACLChecks(false);
+        try {
+            /** @var Timetracker_Model_Timeaccount $ta */
+            $ta = Timetracker_Controller_Timeaccount::getInstance()->get($ts->getIdFromProperty('timeaccount_id'));
+        } finally {
+            $taCtrl->doContainerACLChecks($oldAcl);
+        }
+
+        $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = round(($ts->accounting_time / 60) * (int)$ta->price, 2);
     }
 
     protected function _tsChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null)

@@ -69,6 +69,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
 
         if (!$result && (self::ACTION_GET === $_action || ($_oldRecord && self::ACTION_UPDATE === $_action))) {
             // check attendees for Tinebase_Core::getUser()->contact_id
+            /** @phpstan-ignore-next-line */
             $result = Tasks_Controller_Attendee::getInstance()->searchCount(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Attendee::class, [
                         [TMFA::FIELD => Tasks_Model_Attendee::FLD_TASK_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->getId()],
