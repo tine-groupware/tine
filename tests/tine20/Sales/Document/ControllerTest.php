@@ -15,6 +15,55 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Document_ControllerTest extends Sales_Document_Abstract
 {
+    public function testExpanderFilter()
+    {
+        $customer = $this->_createCustomer();
+        $product1 = $this->_createProduct();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_SHARED_INVOICE => true,
+            Sales_Model_Document_Order::FLD_POSITIONS => [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                ], true),
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 2',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                ], true),
+            ],
+        ]));
+
+        $order = Sales_Controller_Document_Order::getInstance()->search($filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $order->getId()],
+            ]), _getRelations: new Tinebase_Record_Expander(Sales_Model_Document_Order::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    Sales_Model_Document_Order::FLD_POSITIONS => [
+                        Tinebase_Record_Expander::EXPANDER_USE_FILTER => [
+                            [TMFA::FIELD => Sales_Model_DocumentPosition_Order::FLD_TITLE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'pos 2'],
+                        ],
+                    ],
+                ],
+            ]))->getFirstRecord();
+
+        $this->assertNotNull($order);
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $order->{Sales_Model_Document_Order::FLD_POSITIONS});
+        $this->assertSame(1, $order->{Sales_Model_Document_Order::FLD_POSITIONS}->count());
+        $this->assertSame('pos 2', $order->{Sales_Model_Document_Order::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Order::FLD_TITLE});
+
+        $order = Sales_Controller_Document_Order::getInstance()->search($filter)->getFirstRecord();
+        $this->assertNotNull($order);
+        $this->assertNull($order->{Sales_Model_Document_Order::FLD_POSITIONS});
+    }
+
     public function testReInvoiceAfterDelete()
     {
         $customer = $this->_createCustomer();
