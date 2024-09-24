@@ -877,6 +877,45 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     {
         return $this->_findFilter($_field, $_getAll, $_recursive);
     }
+
+    public function findFilterWithoutOr(string $field): Tinebase_Model_Filter_Abstract|false|null
+    {
+        $isOr = self::CONDITION_OR === $this->_concatenationCondition;
+        $result = null;
+        $filterCount = 0;
+
+        foreach ($this->_filterObjects as $filterObject) {
+            if ($filterObject instanceof Tinebase_Model_Filter_FilterGroup) {
+                if (!$filterObject->isEmptyRecursive()) {
+                    ++$filterCount;
+                    if (false === ($subResult = $filterObject->findFilterWithoutOr($field))) {
+                        return false;
+                    }
+                    if (null !== $subResult) {
+                        if (null !== $result) {
+                            return false;
+                        }
+                        $result = $subResult;
+                    }
+                }
+            } else {
+                ++$filterCount;
+                /** @var Tinebase_Model_Filter_Abstract $filterObject */
+                if ($filterObject->getField() === $field) {
+                    if ($result instanceof Tinebase_Model_Filter_Abstract) {
+                        return false;
+                    }
+                    $result = $filterObject;
+                }
+            }
+        }
+
+        if ($isOr && $filterCount > 1 && $result instanceof Tinebase_Model_Filter_Abstract) {
+            $result = false;
+        }
+
+        return $result;
+    }
     
     /**
      * returns filter objects
@@ -1002,6 +1041,22 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function isEmpty()
     {
         return empty($this->_filterObjects);
+    }
+
+    public function isEmptyRecursive(): bool
+    {
+        $isEmpty = true;
+        foreach ($this->_filterObjects as $filterObject) {
+            if ($filterObject instanceof Tinebase_Model_Filter_FilterGroup) {
+                $isEmpty = $filterObject->isEmptyRecursive();
+            } else {
+                $isEmpty = false;
+            }
+            if (!$isEmpty) {
+                break;
+            }
+        }
+        return $isEmpty;
     }
     
     /**

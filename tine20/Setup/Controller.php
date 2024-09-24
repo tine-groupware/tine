@@ -229,6 +229,7 @@ class Setup_Controller
                 Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' Stored new license: ' . print_r($return, true));
             }
+            $this->clearCache();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(

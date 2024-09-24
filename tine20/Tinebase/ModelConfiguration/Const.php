@@ -165,6 +165,8 @@ class Tinebase_ModelConfiguration_Const {
     public const MODEL_NAME = 'modelName';
     public const MODLOG_ACTIVE = 'modlogActive';
 
+    public const MULTIPLE_EDIT = 'multipleEdit';
+
     public const NAME = 'name';
     public const NORESOLVE = 'noResolve';
     public const NULLABLE = 'nullable';
@@ -214,11 +216,13 @@ class Tinebase_ModelConfiguration_Const {
      */
     public const SHY = 'shy';
     public const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
+    public const SKIP_LEGACY_JSON_CONVERT = 'skipLegacyJsonConvert';
     public const SPECIAL_TYPE = 'specialType';
     public const SPECIAL_TYPE_DISCOUNT = 'discount';
     public const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
     public const SPECIAL_TYPE_PASSWORD = 'password';
     public const SPECIAL_TYPE_PERCENT = 'percent';
+    public const SPECIAL_TYPE_URL = 'url';
     public const STORAGE = 'storage';
     public const SUPPORTED_FORMATS = 'supportedFormats';
     /**

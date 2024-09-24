@@ -191,6 +191,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 iconCls: 'action_startFilter',
                 scope: this,
                 handler: function() {
+                    if (this.recordClass?.getProxy?.()?.isLoading?.()) {
+                        this.recordClass?.getProxy?.()?.abort();
+                    }
                     this.onFiltertrigger();
                 }
             }),

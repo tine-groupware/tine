@@ -671,6 +671,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             }
 
             // if there was no token created in the meantime, we allow the save anyway, otherwise we save a conflict
+            /** @phpstan-ignore-next-line */
             if (OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->searchCount(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                         ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'not',

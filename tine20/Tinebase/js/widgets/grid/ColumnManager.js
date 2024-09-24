@@ -223,7 +223,8 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.maxWidth = 100;
                 
                 if (fieldDefinition?.specialType === 'minutes') {
-                    config.minWidth = config.defaultWidth = config.maxWidth = 130;
+                    config.defaultWidth = config.maxWidth = 130;
+                    config.minWidth = 50;
                 }
             }
             
@@ -257,7 +258,7 @@ Tine.widgets.grid.ColumnManager = function() {
             }
 
             if (['user', 'record', 'relation', 'virtual', 'custom', 'foo', 'dynamicrecord', 'model', 'records'].includes(type)) {
-                config.minWidth = 150;
+                config.minWidth = 100;
                 config.defaultWidth = 150;
                 config.maxWidth = 1000;
                 

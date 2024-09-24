@@ -94,7 +94,8 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
         $this->_additionalSearchCountCols = array(
             'is_billable_combined' => null, // taken from _foreignTables
             'duration' => 'duration',
-            'accounting_time_billable' => null  // taken from _foreignTables
+            'accounting_time_billable' => null,  // taken from _foreignTables
+            Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT => Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT,
         );
         
         $this->_foreignTables['is_billable_combined']['select'] = array(

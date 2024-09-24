@@ -140,10 +140,12 @@ Tine.Filemanager.Model.NodeMixin = {
         getDownloadUrl: function(record, revision) {
             if (_.isString(record)) record = {path: record, revision: revision, type: 'file'};
             record = record.data ? record : Tine.Tinebase.data.Record.setFromJson(record, Tine.Filemanager.Model.Node);
-            
+
+            const app = Tine.Tinebase.appMgr.get(this.prototype.appName);
             const path = record.get('path');
             const type = record.get('type');
             const [,root,modelName, recordId ] = String(path).split('/');
+
             const httpRequest = {
                 frontend: 'http',
                 revision: revision ?? record.get('revision')
@@ -154,6 +156,9 @@ Tine.Filemanager.Model.NodeMixin = {
                 httpRequest.recordId = recordId;
                 httpRequest.modelName = modelName;
             } else {
+                if (!path) {
+                    Ext.Msg.alert(i18n._('Errors'), app.i18n._('Failed to download this file!'));
+                }
                 httpRequest.path = path;
                 if (type === 'file') {
                     httpRequest.method = 'Filemanager.downloadFile';
@@ -398,18 +403,25 @@ Tine.Filemanager.nodeBackendMixin = {
             timeout: 300000, // 5 minutes
             scope: this,
             success: function(result, request){
-
                 Ext.MessageBox.hide();
 
-                // send updates
-                var _ = window.lodash,
-                    me = this,
-                    recordsData = Ext.util.JSON.decode(result.responseText);
+                const recordsData = Ext.util.JSON.decode(result.responseText);
+                const grid = app.getMainScreen().getCenterPanel();
 
-                _.each(recordsData, function(recordData) {
-                    me.postMessage('update', recordData);
+                if (grid?.filterToolbar && recordsData.length === 1) {
+                    const filters = grid.filterToolbar.getValue();
+                    filters.forEach((filter) => {
+                        if (filter.field === 'path') {
+                            const path = Tine.Filemanager.Model.Node.dirname(recordsData[0].path);
+                            filter.value = `${path}${recordsData[0].name}`;
+                        }
+                    })
+                    grid.filterToolbar.setValue(filters);
+                }
+
+                _.each(recordsData, (recordData) => {
+                    this.postMessage('update', recordData);
                 });
-
 
                 // var nodeData = Ext.util.JSON.decode(result.responseText),
                 //     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),

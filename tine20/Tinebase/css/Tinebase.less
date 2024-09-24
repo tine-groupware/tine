@@ -25,6 +25,22 @@ html, body {
     }
 }
 
+.tine-gird-cell-number div {
+    container-type: inline-size;
+    container-name: duration;
+}
+
+@container duration (width < 120px) {
+    .duration-renderer-medium {
+        display: none;
+    }
+}
+@container duration (width > 120px) {
+    .duration-renderer-small {
+        display: none;
+    }
+}
+
 /* see ace-tm styles */
 .string { color: rgb(3, 106, 7); }
 .number { color: rgb(0, 0, 205); }
