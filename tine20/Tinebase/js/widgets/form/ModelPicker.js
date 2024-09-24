@@ -54,6 +54,7 @@ Ext.reg('tw-modelpicker', Tine.Tinebase.widgets.form.ModelPicker);
 const modelPicker = Ext.extend(Tine.Tinebase.widgets.form.ModelPicker, {
     emptyText: 'Built in configs',
     fieldLabel: 'Task Type',
+    allowBlank: true,
     checkState(editDialog, record) {
         this.setDisabled(record && !!+record.get('is_system'));
         editDialog.getForm().findField('config').setDisabled(record && !!+record.get('is_system'));
