@@ -140,10 +140,12 @@ Tine.Filemanager.Model.NodeMixin = {
         getDownloadUrl: function(record, revision) {
             if (_.isString(record)) record = {path: record, revision: revision, type: 'file'};
             record = record.data ? record : Tine.Tinebase.data.Record.setFromJson(record, Tine.Filemanager.Model.Node);
-            
+
+            const app = Tine.Tinebase.appMgr.get(this.prototype.appName);
             const path = record.get('path');
             const type = record.get('type');
             const [,root,modelName, recordId ] = String(path).split('/');
+
             const httpRequest = {
                 frontend: 'http',
                 revision: revision ?? record.get('revision')
@@ -154,6 +156,9 @@ Tine.Filemanager.Model.NodeMixin = {
                 httpRequest.recordId = recordId;
                 httpRequest.modelName = modelName;
             } else {
+                if (!path) {
+                    Ext.Msg.alert(i18n._('Errors'), app.i18n._('Failed to download this file!'));
+                }
                 httpRequest.path = path;
                 if (type === 'file') {
                     httpRequest.method = 'Filemanager.downloadFile';
