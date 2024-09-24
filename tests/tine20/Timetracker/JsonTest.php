@@ -202,6 +202,35 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals($timeaccountData['id'], $searchResult['filter'][0]['value']['id']);
     }
 
+    public function testExtendedTSSearchCountData()
+    {
+        $dailyWTRTest = new HumanResources_Controller_DailyWTReportTests();
+        $dailyWTRTest->setUp();
+
+        $dailyWTRTest->testCalculateReportsForEmployeeTimesheetsWithStartAndEnd();
+
+        $employee = HumanResources_Controller_Employee::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                [Tinebase_Model_Filter_Abstract::FIELD => 'account_id', Tinebase_Model_Filter_Abstract::OPERATOR => Tinebase_Model_Filter_Abstract::OP_EQUALS, Tinebase_Model_Filter_Abstract::VALUE => Tinebase_Core::getUser()->getId()]
+            ]))->getFirstRecord();
+
+        $fromUntil = ['from' => new Tinebase_DateTime('2018-08-01 00:00:00'), 'until' => new Tinebase_DateTime('2018-08-31 00:00:00')];
+        $contract = HumanResources_Controller_Contract::getInstance()->getValidContracts($fromUntil, $employee->getId())->getFirstRecord();
+        $contract->{HumanResources_Model_Contract::FLD_YEARLY_TURNOVER_GOAL} = 100;
+        HumanResources_Controller_Contract::getInstance()->update($contract);
+
+        $result = $this->_json->searchTimesheets([
+            ['field' => 'start_date', 'operator' => 'within', 'value' => $fromUntil], //['from' => '2018-08-01 00:00:00', 'until' => '2018-08-31 00:00:00']],
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+        ], []);
+
+        // 31 days out of 365
+        $this->assertSame(round(100 * 31 / 365, 2), $result['turnOverGoal']);
+        // 23 working days in august 2018
+        $this->assertSame(23 * 8 * 3600, $result['workingTimeTarget']);
+        $this->assertSame(0, $result['clearedAmount']);
+    }
+
     /**
      * try to get a Timesheet with a timeaccount_id filter
      */

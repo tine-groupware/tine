@@ -17,8 +17,7 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
     public const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     public const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
     public const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
-
-
+    public const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -29,6 +28,10 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE017_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -103,5 +106,14 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
         $method->invoke($initalize);
 
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            Timetracker_Model_Timesheet::class,
+        ]);
+
+        $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
     }
 }

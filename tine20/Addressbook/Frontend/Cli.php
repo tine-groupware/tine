@@ -100,8 +100,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         array('field' => $contact->getIdProperty(), 'operator' => 'equals', 'value' => $contact->getId())
                     ));
 
-                    // record does not match the filter, attention searchCount returns a STRING! "1"...
-                    if ($controller->searchCount($filter) != 1) {
+                    if ($controller->searchCount($filter) !== 1) {
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' record did not match filter of syncBackend "' . $backendId . '"');

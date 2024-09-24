@@ -119,6 +119,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         if (null !== $_record->getId()) {
             $filter[] = [TMFA::FIELD => TMCC::ID, TMFA::OPERATOR => 'not', TMFA::VALUE => $_record->getId()];
         }
+        /** @phpstan-ignore-next-line */
         if ($this->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filter)) > 0) {
             throw new Tinebase_Exception_Record_Validation('agreeDate and withdrawDate must not overlap');
         }
