@@ -31,6 +31,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
     protected const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
     protected const RELEASE017_UPDATE012 = __CLASS__ . '::update012';
+    protected const RELEASE017_UPDATE013 = __CLASS__ . '::update013';
 
 
     static protected $_allUpdates = [
@@ -74,6 +75,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE012 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update012',
+            ],
+            self::RELEASE017_UPDATE013 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update013',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
@@ -331,5 +336,14 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.12', self::RELEASE017_UPDATE012);
+    }
+
+    public function update013(): void
+    {
+        $this->updateSchema(Tinebase_Config::APP_NAME, [
+            Tinebase_Model_SchedulerTask::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.13', self::RELEASE017_UPDATE013);
     }
 }
