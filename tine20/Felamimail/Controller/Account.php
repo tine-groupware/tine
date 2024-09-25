@@ -2146,9 +2146,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         foreach ($configs as $configKey => $values) {
             try {
                 $this->_addConfigValuesToAccount($_account, $configKey, $values['keys'], $values['defaults']);
-            } catch (Felamimail_Exception $fe) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Could not get system account config values: ' . $fe->getMessage());
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $fe->getTraceAsString());
+            } catch (Tinebase_Exception $te) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not get system account config values: ' . $te->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $te->getTraceAsString());
+                }
             }
         }
 
