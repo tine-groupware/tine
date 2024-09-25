@@ -10,7 +10,10 @@ nbproject
 tine20/config.inc.php
 tests/tine20/phpunitconfig.inc.php
 tests/setup/phpunitconfig.inc.php
+tine20/Tinebase/js/coverage
+tine20/Tinebase/js/log
 tests/js/unit/artefacts/
+tests/js/jest/coverage
 tine20/*/*/*[F][A][T]*
 tine20/*/*/*/*/*FAT*
 tine20/*/*/*FAT*
