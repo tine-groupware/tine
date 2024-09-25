@@ -75,7 +75,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      * @type array
      */
-    positionTypes: ['total', 'inclusive', 'exceeding'], // _('total') _('inclusive') _('exceeding')
+    positionTypes: ['total'],
 
     initComponent: function() {
         if (!this.app) {

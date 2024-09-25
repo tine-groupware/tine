@@ -429,6 +429,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             delete params.limit;
             
             this.searchRecords(params.filter, params.paging, {
+                headers: arg.headers,
                 params: params,
                 scope: this,
                 success: function(records) {

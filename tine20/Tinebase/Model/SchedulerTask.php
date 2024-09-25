@@ -40,7 +40,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version'           => 2,
+        'version'           => 3,
         'recordName'        => 'Scheduler task',
         'recordsName'       => 'Scheduler tasks', // ngettext('Scheduler task', 'Scheduler tasks', n)
         //'containerProperty' => 'container_id',
