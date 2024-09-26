@@ -202,13 +202,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $usersWithPref = $pref->getUsersWithPref(Felamimail_Preference::DEFAULTACCOUNT, $account->getId());
             foreach ($usersWithPref as $userId) {
                 $defaultAccountId = '';
-                if (Tinebase_Core::getUser()->getId() === $userId) {
-                    // try to find fallback default account
-                    $accounts = $this->search();
-                    if (count($accounts) > 0) {
-                        $systemAccount = $accounts->filter('type', Tinebase_EmailUser_Model_Account::TYPE_SYSTEM);
-                        $defaultAccountId = count($systemAccount) > 0 ? $systemAccount->getFirstRecord()->getId() : $accounts->getFirstRecord()->getId();
-                    }
+                // try to find fallback default account
+                $accounts = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Felamimail_Model_Account::class, [
+                        ['field' => 'user_id', 'operator' => 'equals', 'value' => $userId]
+                    ], _options: ['ignoreAcl' => true]
+                ));
+                if (count($accounts) > 0) {
+                    $systemAccount = $accounts->filter('type', Tinebase_EmailUser_Model_Account::TYPE_SYSTEM);
+                    $defaultAccountId = count($systemAccount) > 0
+                        ? $systemAccount->getFirstRecord()->getId()
+                        : $accounts->getFirstRecord()->getId();
                 }
 
                 $pref->setValueForUser(Felamimail_Preference::DEFAULTACCOUNT, $defaultAccountId, $userId);
