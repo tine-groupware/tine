@@ -398,6 +398,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             return;
         }
 
+        if (!empty($delegator = Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR})) {
+            call_user_func($delegator, $ts, $oldTs);
+            return;
+        }
+
         $taCtrl = Timetracker_Controller_Timeaccount::getInstance();
         $oldAcl = $taCtrl->doContainerACLChecks(false);
         try {
@@ -407,7 +412,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $taCtrl->doContainerACLChecks($oldAcl);
         }
 
-        $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = round(($ts->accounting_time / 60) * (int)$ta->price, 2);
+        $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
     }
 
     protected function _tsChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null)

@@ -532,7 +532,45 @@ class Timetracker_ControllerTest extends TestCase
         
         $this->_grantTestHelper($grants, 'searchTSExport', 1, $ts);
     }
-    
+
+    public function testTsClearedAmountTest(): void
+    {
+        $price = 85.5;
+        $this->_objects['timeaccount']->price = $price;
+
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $this->_roleRights);
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        Timetracker_Controller_Timeaccount::getInstance()->update($this->_objects['timeaccount']);
+
+        $orgDelegator = Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR};
+        $raii = new Tinebase_RAII(fn() => Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR} = $orgDelegator);
+        Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR} = [];
+
+        $this->_objects['timesheet']->is_cleared = true;
+        $ts = Timetracker_Controller_Timesheet::getInstance()->create($this->_objects['timesheet']);
+
+        $this->assertSame(round(($ts->accounting_time / 60) * $price, 2), $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT});
+
+        $this->_objects['timesheet']->is_cleared = false;
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($this->_objects['timesheet']);
+        $this->assertNull($ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT});
+
+        Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR} = [self::class, 'tsDelegatorTestFunc'];
+        $this->_objects['timesheet']->is_cleared = true;
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($this->_objects['timesheet']);
+        $this->assertSame(42.43, $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT});
+
+        unset($raii);
+    }
+
+    public static function tsDelegatorTestFunc(Timetracker_Model_Timesheet $record, Timetracker_Model_Timesheet $oldRecord): void
+    {
+        $record->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = 42.43;
+    }
+
     /**
      * try to add a Timesheet exceeding deadline
      *
