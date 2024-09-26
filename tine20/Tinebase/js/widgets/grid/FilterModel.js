@@ -295,7 +295,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     break;
                 case 'string':
                     this.operators.push('contains', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
-                    if (this.fieldConfig?.type === "numberableStr") {
+                    if (this.fieldConfig?.type === "numberableStr" || _.get(this, 'fieldConfig.uiconfig.showOrderOperators')) {
                         this.operators.push('greater', 'less');
                     }
                     break;

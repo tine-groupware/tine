@@ -1288,3 +1288,6 @@ msgstr ""
 #: Acl/Rights.php:335 Acl/Rights.php:336
 msgid "view ImportExportDefinitions"
 msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""

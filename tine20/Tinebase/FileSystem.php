@@ -5145,7 +5145,7 @@ class Tinebase_FileSystem implements
             $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
             $subject = 'Filemanager avscan Result notification';
             $translatedSubject = $translate->_($subject);
-            $messagePlain = 'Found virus-infected files on instnace: ' . Tinebase_Core::getUrl() . PHP_EOL . print_r($paths, true);
+            $messagePlain = 'Found virus-infected files: ' . Tinebase_Core::getUrl() . PHP_EOL . print_r($paths, true);
             
             Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $translatedSubject, $messagePlain, null, null, true);
         } catch (Exception $e) {

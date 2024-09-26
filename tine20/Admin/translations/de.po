@@ -1595,3 +1595,6 @@ msgid ""
 msgstr ""
 "Bitte kontaktieren Sie Metaways Infosystems GmbH um eine Lizenz mit "
 "entsprechend höherer Nutzeranzahl zu erwerben."
+
+msgid "A group with this name already exists"
+msgstr "Es gibt bereits eine Gruppe mit diesem Namen"
