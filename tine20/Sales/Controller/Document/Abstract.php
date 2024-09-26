@@ -275,6 +275,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         parent::_inspectAfterSetRelatedDataCreate($createdRecord, $record);
         $this->_inspectFollowUpStati($createdRecord);
+
+        Tinebase_Event::fireEvent(new Sales_Event_DocumentStatusChange($createdRecord));
     }
 
     /**
@@ -289,6 +291,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
         $this->_inspectFollowUpStati($updatedRecord, $currentRecord);
+
+        if ($updatedRecord->{$this->_documentStatusField} !== $currentRecord->{$this->_documentStatusField}) {
+            Tinebase_Event::fireEvent(new Sales_Event_DocumentStatusChange($updatedRecord, $currentRecord));
+        }
     }
 
     /**
