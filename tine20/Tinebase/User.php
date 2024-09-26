@@ -251,6 +251,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         }
 
+        if ((self::ACTIVEDIRECTORY === $backendType || self::LDAP === $backendType)
+                && Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}
+                && ($unavailableSince = Tinebase_Config::getInstance()->USERBACKEND_UNAVAILABLE_SINCE)) {
+            if (time() - $unavailableSince < 60) {
+                $backendType = self::SQL;
+            }
+        }
+
         try {
             switch ($backendType) {
                 case self::ACTIVEDIRECTORY:
@@ -283,6 +291,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         } catch (Tinebase_Exception_Backend_Ldap $e) {
             if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
+                Tinebase_Config::getInstance()->USERBACKEND_UNAVAILABLE_SINCE = time();
                 return self::factory(self::SQL);
             } else {
                 throw $e;
