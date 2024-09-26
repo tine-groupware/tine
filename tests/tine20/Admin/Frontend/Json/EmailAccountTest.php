@@ -243,11 +243,11 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testEmailAccountSaveAsContact()
     {
         $this->_testNeedsTransaction();
-        
+
         $account = $this->_createExternalAccount(Felamimail_Model_Account::VISIBILITY_DISPLAYED);
 
         try {
-            
+
             $contact = Addressbook_Controller_Contact::getInstance()->get($account['contact_id']);
 
             self::assertEquals($account['user_id']['accountDisplayName'], $contact['n_fileas']);
@@ -341,7 +341,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             'type' => Felamimail_Model_Account::TYPE_USER,
             'user' => Tinebase_Core::getUser()->accountEmailAddress,
             'password' => $credentials['password'],
-            'user_id' => Tinebase_Core::getUser()->getId(),
+            'user_id' => $this->_personas['sclever']->toArray(),
             'visibility' => $visibility
         ];
         return $this->_json->saveEmailAccount($accountdata);
@@ -350,22 +350,15 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testMoveExternalAccountToAnotherUser()
     {
         $account = $this->_createExternalAccount();
-        $account['user_id'] = $this->_personas['sclever']['accountId'];
-        try {
-            $movedaccount = $this->_json->saveEmailAccount($account);
-            self::fail('it should not be possible to change external accounts to another user');
-        } catch (Tinebase_Exception_SystemGeneric $ted) {
-            $translate = Tinebase_Translation::getTranslation('Tinebase');
-            self::assertEquals($translate->_('Can´t add additional personal external account for another user account.'), $ted->getMessage());
-        }
-        /*$json = new Felamimail_Frontend_Json();
+        $account['user_id'] = Tinebase_Core::getUser()->toArray();
+        $movedaccount = $this->_json->saveEmailAccount($account);
+
+        $json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);
         $scleverExtraAccounts = array_filter($result['results'], function($account) use ($movedaccount) {
             return ($account['id'] === $movedaccount['id']);
         });
         self::assertEquals(1, count($scleverExtraAccounts), 'sclever account is missing');
-        @todo fix me to add external accounts
-        */
     }
 
     public function testUpdateSystemAccountWithDuplicateEmailAddress()
@@ -430,7 +423,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $vacationData = Felamimail_Frontend_JsonTest::getVacationData($account);
         $vacationData['start_date'] = '2012-04-18';
         $vacationData['end_date'] = '2012-04-20';
-        
+
         $result = $this->_json->saveSieveVacation($vacationData);
         $script = $this->_json->getSieveScript($account->getId());
         self::assertEquals($vacationData['subject'], $result['subject']);
@@ -441,15 +434,15 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     {
         $this->_checkMasterUserTable();
         $account = $this->testEmailAccountApiSharedAccount(false);
-        
+
         // set vacation and rule for account via admin fe
         $vacationData = Felamimail_Frontend_JsonTest::getVacationData($account);
         $vacationData['start_date'] = '2012-04-18';
         $vacationData['end_date'] = '2012-04-20';
-        
+
         $account->sieve_rules = [];
         $account->sieve_vacation = $vacationData;
-        
+
         $this->_json->saveEmailAccount($account->toArray());
         $script = $this->_json->getSieveScript($account->getId());
         $this->assertStringContainsString('currentdate', $script);
@@ -476,7 +469,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $script = $this->_json->getSieveScript($account->getId());
         $this->assertStringNotContainsString('{test};', $script, 'invalid custom sieve script should not be saved.');
     }
-    
+
     public function testSaveEmailAccountWithCustomSieveScript()
     {
         $this->_checkMasterUserTable();
@@ -912,7 +905,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         self::assertFalse(isset($updatedUser->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]),
             'email user xprops still set: ' . print_r($updatedUser->xprops(), true));
     }
-    
+
     public function testResolveAccountEmailUsers()
     {
         $systemaccount = TestServer::getInstance()->getTestEmailAccount();
@@ -937,7 +930,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
     {
         // change email address and check if email user is updated, too
         $this->_testNeedsTransaction();
-  
+
         $sharedAccount = $this->testEmailAccountApiSharedAccount(false);
 
         // test imap user
@@ -948,7 +941,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         ];
 
         Admin_Controller_EmailAccount::getInstance()->updateAccountEmailUsers($sharedAccount);
-        
+
         $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         $pseudoFullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($sharedAccount);
         $userInBackend = $emailUserBackend->getRawUserById($pseudoFullUser);
@@ -961,7 +954,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
             'emailForwards'    => array(Tinebase_Core::getUser()->accountEmailAddress, 'test@tine20.org'),
             'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')
         ];
-        
+
         Admin_Controller_EmailAccount::getInstance()->updateAccountEmailUsers($sharedAccount);
         $pseudoFullUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($sharedAccount);
 
