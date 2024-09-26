@@ -364,6 +364,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             Tinebase_Record_Expander::expandRecord($precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD});
             $precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->updateFollowupStati(true);
         }
+
+        Tinebase_Event::fireEvent(new Sales_Event_DocumentDeleted($record));
     }
 
     /**
