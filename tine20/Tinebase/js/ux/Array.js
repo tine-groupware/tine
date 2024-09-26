@@ -1,4 +1,4 @@
-Ext.applyIf(Array.prototype, {
+Object.assign(Array.prototype, {
     /**
      * Returns an object with ids of records to delete, to create or to update
      *
@@ -30,11 +30,11 @@ Ext.applyIf(Array.prototype, {
         }
         
         // check which item is not present in all args
-        Ext.each(this, function(item) {
+        this.forEach((item) => {
             if (allItems.indexOf(item) < 0) {
                 diffs.push(item);
             }
-        }, this);
+        });
         
         
         return diffs;
@@ -47,9 +47,9 @@ Ext.applyIf(Array.prototype, {
      */
     map: function(fn) {
         var map = [];
-        Ext.each(this, function(v, i) {
+        this.forEach((v, i) => {
             map.push(fn.call(this, v, i));
-        }, this);
+        });
         
         return map;
     },
@@ -71,11 +71,11 @@ Ext.applyIf(Array.prototype, {
         }
         
         // check which item is not present in all args
-        Ext.each(this, function(item) {
+        this.forEach((item) => {
             if (allItems.indexOf(item) >= 0) {
                 intersect.push(item);
             }
-        }, this);
+        });
         
         
         return intersect;
@@ -100,13 +100,3 @@ Ext.applyIf(Array.prototype, {
         }
     }
 });
-
-/*
-var testArr = ["green", "red", "blue", "red"],
-    diff1 = testArr.diff(["green", "yellow", "red"]),
-    diff2 = testArr.diff(["green"], "yellow", "red", "blue");
-
-if (diff1.length !== 1) console.error('Failed asserting that diff contains one entry');
-if (diff1[0] !== "blue") console.error('Failed asserting that diff is "blue"');
-if (diff2.length !== 0) console.error('Failed asserting that diff is empty');
-*/
