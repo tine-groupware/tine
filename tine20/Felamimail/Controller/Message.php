@@ -1620,7 +1620,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $account = Felamimail_Controller_Account::getInstance()->get($accountId);
                 $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account,
                     Felamimail_Model_Folder::FOLDER_DRAFTS);
-                $draftFolderIds[] = $draftFolder->getId();
+                if ($draftFolder) {
+                    $draftFolderIds[] = $draftFolder->getId();
+                }
             } catch (Exception $e) {
                 if (($e instanceof Felamimail_Exception_IMAPServiceUnavailable
                         || $e instanceof Felamimail_Exception_IMAPInvalidCredentials)
