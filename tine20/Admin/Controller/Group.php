@@ -191,13 +191,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
                 $this->createOrUpdateList($_group);
             }
 
-            try {
-                $groupController->getGroupByName($_group->name);
-                $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-                throw new Tinebase_Exception_SystemGeneric($translation->_('A group with this name already exists'));
-            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                // no problem, go on creating the group
-            }
+            $this->checkDuplicateName($_group->name);
 
             $group = $groupController->addGroup($_group);
 
@@ -220,7 +214,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         return $group;
     }  
 
-   /**
+    /**
      * update existing group
      *
      * @param Tinebase_Model_Group $_group
@@ -236,13 +230,17 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             // update default user group if name has changed
             $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
 
-            if ($oldGroup->name !== $_group->name &&
-                    false !== ($confKey = Tinebase_Group::getDefaultGroupConfigKey($oldGroup->name))) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
-                );
-                Tinebase_User::setBackendConfiguration($_group->name, $confKey);
-                Tinebase_User::saveBackendConfiguration();
+            if ($oldGroup->name !== $_group->name)
+            {
+                $this->checkDuplicateName($_group->name);
+
+                if (false !== ($confKey = Tinebase_Group::getDefaultGroupConfigKey($oldGroup->name))) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Updated default group name: ' . $oldGroup->name . ' -> ' . $_group->name
+                    );
+                    Tinebase_User::setBackendConfiguration($_group->name, $confKey);
+                    Tinebase_User::saveBackendConfiguration();
+                }
             }
 
             if (true === $_updateList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -643,5 +641,17 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         }
 
         return $groupUpdateCount;
+    }
+
+    private function checkDuplicateName(string $name)
+    {
+        $groupController = Tinebase_Group::getInstance();
+        try {
+            $groupController->getGroupByName($name);
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+            throw new Tinebase_Exception_SystemGeneric($translation->_('A group with this name already exists'));
+        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            // no problem, go on
+        }
     }
 }
