@@ -333,7 +333,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
                 ))) {
                 $persistAgain = true;
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__ . ' decryption failed');
                 throw new Tinebase_Exception_NotFound('decryption failed: ' . openssl_error_string());
             }
