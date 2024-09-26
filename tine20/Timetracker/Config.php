@@ -39,6 +39,8 @@ class Timetracker_Config extends Tinebase_Config_Abstract
      */
     const STATUS ='status';
 
+    const TS_CLEARED_AMOUNT_DELEGATOR = 'tsClearedAmountDelegator';
+
     const TS_PROCESS_STATUS = 'tsProcessStatus';
     const TS_PROCESS_STATUS_REQUESTED = 'REQUESTED';
     const TS_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
@@ -54,6 +56,13 @@ class Timetracker_Config extends Tinebase_Config_Abstract
      * @var array
      */
     protected static $_properties = [
+        self::TS_CLEARED_AMOUNT_DELEGATOR => [
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
+        ],
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
