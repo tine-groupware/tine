@@ -246,6 +246,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const USERBACKEND = 'Tinebase_User_BackendConfiguration';
 
+    const USERBACKEND_UNAVAILABLE_SINCE = 'userBackendUnavailableSince';
     const ACCOUNT_TWIG = 'accountTwig';
     const ACCOUNT_TWIG_DISPLAYNAME = 'accountDisplayName';
     const ACCOUNT_TWIG_FULLNAME = 'accountFullName';
@@ -1579,6 +1580,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
             ],
             self::DEFAULT_STR               => [],
+        ],
+        self::USERBACKEND_UNAVAILABLE_SINCE => [
+            self::TYPE => self::TYPE_INT,
+            self::DEFAULT_STR => 0,
         ],
         self::USERBACKEND => array(
                                    //_('User Configuration')
