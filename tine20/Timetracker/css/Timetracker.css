@@ -63,3 +63,6 @@
     flex-direction: row;
     padding-right: 16px;
 }
+.preview-panel-timesheet-right .duration-renderer-small {
+    display: none;
+}
