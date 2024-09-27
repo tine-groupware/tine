@@ -161,18 +161,19 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 xtype:'tinerecordspickercombobox',
                                 name: 'Sites',
                                 recordClass: 'Addressbook.Sites',
-                                refIdField: 'record',
-                                searchComboConfig: {useEditPlugin: false},
+                                refIdField: 'contact',
+                                searchComboConfig: {
+                                    useEditPlugin: false,
+                                    additionalFilterSpec: {
+                                        config: {
+                                            name: 'siteFilter',
+                                            appName: 'Tinebase'
+                                        }
+                                    }
+                                },
                                 editDialogConfig: {mode: 'local'},
                                 isMetadataModelFor: 'Addressbook.Contact',
                                 requiredGrant: 'editGrant',
-                                /*
-                                additionalFilterSpec: {
-                                    config: {
-                                        name: 'siteFilter',
-                                        appName: 'Tinebase'
-                                    }
-                                }*/
                             }
                         ]
                     ]

@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
 {
     const FLD_SITE = 'site';
-    const FLD_RECORD = 'record';
+    const FLD_CONTACT = 'contact';
 
     const MODEL_NAME_PART = 'Sites';
     const TABLE_NAME = 'adb_sites';
@@ -56,10 +56,10 @@ class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
             self::NAME      => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS   => [
                 self::FLD_SITE       => [
-                    self::COLUMNS           => [self::FLD_SITE, self::FLD_RECORD],
+                    self::COLUMNS           => [self::FLD_SITE, self::FLD_CONTACT],
                 ],
-                self::FLD_RECORD                => [
-                    self::COLUMNS           => [self::FLD_RECORD, self::FLD_SITE],
+                self::FLD_CONTACT                => [
+                    self::COLUMNS           => [self::FLD_CONTACT, self::FLD_SITE],
                 ],
             ]
         ],
@@ -80,7 +80,7 @@ class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Addressbook_Model_Sites::FLD_SITE      => [],
-                Addressbook_Model_Sites::FLD_RECORD          => []
+                Addressbook_Model_Sites::FLD_CONTACT          => []
             ],
         ],
 
@@ -96,7 +96,7 @@ class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
                 self::LABEL             => 'Site', // _('Site')
                 self::QUERY_FILTER      => true,
             ],
-            self::FLD_RECORD            => [
+            self::FLD_CONTACT            => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::CONFIG            => [

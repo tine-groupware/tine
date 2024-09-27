@@ -1063,7 +1063,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     self::DEPENDENT_RECORDS     => true,
                     self::APP_NAME              => Addressbook_Config::APP_NAME,
                     self::MODEL_NAME            => Addressbook_Model_Sites::MODEL_NAME_PART,
-                    self::REF_ID_FIELD          => Addressbook_Model_Sites::FLD_RECORD,
+                    self::REF_ID_FIELD          => Addressbook_Model_Sites::FLD_CONTACT,
                 ],
             ],
 
