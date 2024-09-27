@@ -67,6 +67,11 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      */
     hasPaging: true,
 
+    /**
+     * need this, because we use setValue from Tine.Tinebase.widgets.form.RecordPickerComboBox
+     */
+    lasyLoading: true,
+
     initComponent: function() {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
