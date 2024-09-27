@@ -172,7 +172,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     }
                                 },
                                 editDialogConfig: {mode: 'local'},
-                                isMetadataModelFor: 'Addressbook.Contact',
+                                isMetadataModelFor: 'site',
                                 requiredGrant: 'editGrant',
                             }
                         ]

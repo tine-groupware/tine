@@ -34,7 +34,7 @@ class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
         self::VERSION => 1,
         self::RECORD_NAME               => 'Site',
         self::RECORDS_NAME              => 'Sites', // ngettext('Site', 'Sites', n)
-        self::TITLE_PROPERTY            => '{{ site.fileas }}',
+        self::TITLE_PROPERTY            => "{{ renderTitle(site, 'Addressbook_Model_Contact') }}",
         self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_SITE],
         self::HAS_RELATIONS             => false,
         self::HAS_CUSTOM_FIELDS         => false,

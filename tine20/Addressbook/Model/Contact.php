@@ -217,10 +217,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'container_id' => [],
-            ],
-            'sites'      => [
-                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                    Addressbook_Model_Sites::FLD_SITE => [],
+                'sites'      => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Addressbook_Model_Sites::FLD_SITE => [],
+                    ],
                 ],
             ],
         ],
