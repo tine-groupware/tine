@@ -430,16 +430,17 @@ Tine.Tinebase.common = {
         }
 
         if (! format || ! Ext.isString(format)) {
+            const isGridCell = _.isObject(format) && format.hasOwnProperty('cellAttr');
             const mediumRenderer = (i, H) => {
-                const minutes = String.format(i18n.ngettext(`{0} minute`, `{0} minutes`, i), i);
-                const hours = String.format(i18n.ngettext(`{0} hour`, `{0} hours`, H), H);
-                const duration = hours && i !== 0 ? `${hours}, ${minutes}` : hours || minutes;
+                const minutes = i> 0 ? String.format(i18n.ngettext(`{0} minute`, `{0} minutes`, i), i) : '';
+                const hours = H > 0 ? String.format(i18n.ngettext(`{0} hour`, `{0} hours`, H), H) : '';
+                const duration = hours && minutes ? `${hours}, ${minutes}` : hours || minutes;
                 return `<span class="duration-renderer-medium">${duration}</span>`;
             }
             const smallRenderer = (i, H) => {
-                return `<span class="duration-renderer-small">${H || '0'} : ${i || '00'}</span>`;
+                return `<span class="duration-renderer-small">${H || '0'}:${i || '00'}</span>`;
             }
-            return `${mediumRenderer(i, H)}${smallRenderer(i, H)}`;
+            return isGridCell ? `${mediumRenderer(i, H)}${smallRenderer(i, H)}` : mediumRenderer(i, H);
         }
 
         return String.format(format, H, i);
