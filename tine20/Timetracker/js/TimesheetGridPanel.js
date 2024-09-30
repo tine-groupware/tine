@@ -67,6 +67,57 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * initLayout: we add the title bar here
+     */
+    initLayout: function() {
+        Tine.Timetracker.TimesheetGridPanel.superclass.initLayout.call(this);
+        
+        this.pagingToolbar.insert(this.pagingToolbar.items.length -3,
+            Ext.create({ id: 'wt-label', xtype: 'tbtext', text: this.app.i18n._('Workingtime:'), displayPriority: 40}),
+            new Ext.Component({ id: 'wt-bar', displayPriority: 50, style: { margin: '3px 10px', width: '100px', height: '16px' } }),
+            Ext.create({ id: 'to-label', xtype: 'tbtext', text: this.app.i18n._('Turnover:'), displayPriority: 40 }),
+            new Ext.Component({ id: 'to-bar', displayPriority: 50, style: { margin: '3px 10px', width: '100px', height: '16px' } })
+        );
+    },
+
+    onStoreLoad: function(store, records, options) {
+        const data = store.reader.jsonData;
+
+        Tine.Timetracker.TimesheetGridPanel.superclass.onStoreLoad.apply(this, arguments);
+        if (data.workingTimeTarget) {
+            this.pagingToolbar.items.get('wt-bar').update(Ext.ux.PercentRenderer({
+                qtitle: this.app.i18n._('Working Time Statistics'),
+                qtip:
+                    this.app.formatMessage(`Working Time Target: { target }`, {
+                        target: Ext.ux.form.DurationSpinner.durationRenderer(data.workingTimeTarget, {
+                            baseUnit: 'seconds'
+                        })
+                    }) + "<br>" +
+                    this.app.formatMessage(`Working Time Recorded: { recorded }`, {
+                        recorded: Ext.ux.form.DurationSpinner.durationRenderer(data.totalsum || 0, {
+                            baseUnit: 'minutes'
+                        })
+                    }),
+                percent: Math.round(100 * (data.totalsum || 0) / (data.workingTimeTarget / 60))
+            }));
+        }
+        this.pagingToolbar.items.get('wt-label')[!! data.workingTimeTarget ? 'show' : 'hide']();
+        this.pagingToolbar.items.get('wt-bar')[!! data.workingTimeTarget ? 'show' : 'hide']();
+
+        if(data.turnOverGoal) {
+            this.pagingToolbar.items.get('to-bar').update(Ext.ux.PercentRenderer({
+                qtitle: this.app.i18n._('Turnover Statistics'),
+                qtip:
+                    this.app.formatMessage(`Turnover Target: { target }`, {target: Ext.util.Format.money(data.turnOverGoal)}) + "<br>" +
+                    this.app.formatMessage(`Turnover Recorded: { recorded }`, {recorded: Ext.util.Format.money(data.clearedAmount || 0)}),
+                percent: Math.round(100 * (data.clearedAmount || 0) / data.turnOverGoal)
+            }));
+        }
+        this.pagingToolbar.items.get('to-label')[!! data.turnOverGoal ? 'show' : 'hide']();
+        this.pagingToolbar.items.get('to-bar')[!! data.turnOverGoal ? 'show' : 'hide']();
+    },
+
+    /**
      * @private
      */
     initDetailsPanel: function() {
