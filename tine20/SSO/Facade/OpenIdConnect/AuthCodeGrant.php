@@ -10,12 +10,44 @@
  *
  */
 
+use Idaas\OpenID\Entities\IdToken;
 use Idaas\OpenID\Grant\AuthCodeGrant;
+use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
 {
+    public function respondToAccessTokenRequest(
+        ServerRequestInterface $request,
+        ResponseTypeInterface $responseType,
+        \DateInterval $accessTokenTTL
+    ): ResponseTypeInterface {
+        /** @var \Idaas\OpenID\ResponseTypes\BearerTokenResponse $result */
+        $result = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
+
+        /** @var \League\OAuth2\Server\Entities\TokenInterface $accessToken */
+        $accessToken = $result->getAccessToken();
+        $result->getIdToken()->setIdentifier($accessToken->getIdentifier());
+
+        return $result;
+    }
+
     protected function makeIdTokenInstance()
     {
         return new SSO_Facade_OpenIdConnect_IdToken();
+    }
+
+    protected function addMoreClaimsToIdToken(IdToken $idToken)
+    {
+        //if (in_array('groups', $this->accessTokenRepository->getStoredClaims())) {
+            $userRepo = new SSO_Facade_OpenIdConnect_UserRepository();
+            $userEntity = $userRepo->getUserByIdentifier($idToken->getSubject());
+            $result = $userRepo->getAttributes($userEntity, ['groups'], []);
+            if ($result['groups'] ?? false) {
+                $idToken->addExtra('groups', $result['groups']);
+            }
+        //}
+
+        return $idToken;
     }
 }
