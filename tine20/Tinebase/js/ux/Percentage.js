@@ -134,9 +134,9 @@ Ext.reg('extuxpercentcombo', Ext.ux.PercentCombo);
 Ext.ux.PercentRenderer = function(percent) {
     if (! Ext.ux.PercentRenderer.template) {
         Ext.ux.PercentRenderer.template = new Ext.XTemplate(
-            '<div class="x-progress-wrap PercentRenderer">',
+            '<div class="x-progress-wrap PercentRenderer"<tpl if="qtitle">ext:qtitle="{qtitle}"</tpl><tpl if "qtip">ext:qtip="{qtip}"></tpl>',
             '<div class="x-progress-inner PercentRenderer">',
-                '<div class="x-progress-bar PercentRenderer {colorclass}" style="width:{percent}%">',
+                '<div class="x-progress-bar PercentRenderer {colorClass}" style="width:{percent}%">',
                     '<div class="PercentRendererText PercentRenderer">',
                         '<div>{percent}%</div>',
                     '</div>',
@@ -148,11 +148,16 @@ Ext.ux.PercentRenderer = function(percent) {
         '</div>'
         ).compile();
     }
-    // this will enable a color scheme for each percentage on the progress bar
-    var colorClass = "PercentRenderer-progress-bar"; 
-    colorClass += Math.round(percent/10)+"0";
 
-    return Ext.ux.PercentRenderer.template.apply({percent: percent, colorclass: colorClass});
+    const data = _.isObject(percent) ? percent : { percent };
+    data.qtitle = data.qtitle ?? null;
+    data.qtip = data.qtip ?? null;
+    if (! data.colorClass) {
+        // this will enable a color scheme for each percentage on the progress bar
+        data.colorClass = `PercentRenderer-progress-bar${Math.round(Math.min(Math.max(data.percent,0),100)/10)}0`
+    }
+
+    return Ext.ux.PercentRenderer.template.apply(data);
 };
 
 /**
