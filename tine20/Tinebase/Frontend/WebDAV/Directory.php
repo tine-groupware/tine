@@ -354,7 +354,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         $stat = fstat($tempfileHandle);
 
-        if ($this->_CONTENT_LENGTH != $stat['size']) {
+        if (parent::$_CONTENT_LENGTH != $stat['size']) {
             throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . parent::$_CONTENT_LENGTH . ' got: ' . $stat['size']);
         }
 
