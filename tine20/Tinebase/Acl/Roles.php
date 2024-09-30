@@ -1050,4 +1050,10 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
 
         return $result;
     }
+
+    public function getDefaultAdminRole(): Tinebase_Model_Role
+    {
+        $adminRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_ADMIN_ROLE_NAME);
+        return $this->getRoleByName($adminRoleName);
+    }
 }
