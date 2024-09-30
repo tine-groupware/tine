@@ -94,6 +94,30 @@ msgstr "Als CSV exportieren"
 msgid "Export as ..."
 msgstr "Als ... exportieren"
 
+msgid "Workingtime:"
+msgstr "Arbeitszeit:"
+
+msgid "Working Time Statistics"
+msgstr "Arbeitszeit Statistik"
+
+msgid "Working Time Target: { target }"
+msgstr "Arbeitszeit Ziel { target }"
+
+msgid "Working Time Recorded: { recorded }"
+msgstr "Arbeitszeit erfasst: { recorded }"
+
+msgid "Turnover:"
+msgstr "Umsatz:"
+
+msgid "Turnover Statistics"
+msgstr "Umsatz Statistik"
+
+msgid "Turnover Target: { target }"
+msgstr "Umsatz Ziel: { target }"
+
+msgid "Turnover Recorded: { recorded }"
+msgstr "Umsatz erfasst: { recorded }"
+
 #: js/TimesheetEditDialog.js:225 Model/Timesheet.php:35
 msgid "Timesheet"
 msgid_plural "Timesheets"
