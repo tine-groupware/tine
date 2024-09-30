@@ -192,13 +192,14 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     public static function setGrantsForInternalAddressbook($internalAddressbook)
     {
-        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
-        $adminGroup = $groupsBackend->getDefaultAdminGroup();
+        $adminRole = Tinebase_Acl_Roles::getInstance()->getDefaultAdminRole();
 
-        Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
+        Tinebase_Container::getInstance()->addGrants($internalAddressbook,
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
+        Tinebase_Container::getInstance()->addGrants($internalAddressbook,
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE, $adminRole->getId(), array(
             Tinebase_Model_Grants::GRANT_READ,
             Tinebase_Model_Grants::GRANT_EDIT,
             Tinebase_Model_Grants::GRANT_ADMIN
