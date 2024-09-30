@@ -514,22 +514,25 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _createStandardFilterFromArray($_filterData)
     {
-        $fieldModel = (isset($_filterData[TMFA::FIELD]) && isset($this->_filterModel[$_filterData[TMFA::FIELD]])) ? $this->_filterModel[$_filterData[TMFA::FIELD]] : '';
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . '[' . static::class . '] Debug: ' . print_r($this->_filterModel, true));
+        $fieldModel = (isset($_filterData[TMFA::FIELD]) && isset($this->_filterModel[$_filterData[TMFA::FIELD]]))
+            ? $this->_filterModel[$_filterData[TMFA::FIELD]] : '';
         
         if (empty($fieldModel)) {
             if (isset($_filterData[TMFA::FIELD]) && strpos($_filterData[TMFA::FIELD], '#') === 0) {
                 $this->_addCustomFieldFilter($_filterData);
             } else {
                 if (self::$beStrict) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure('no model found for ' . print_r($_filterData, true));
+                    throw new Tinebase_Exception_Record_DefinitionFailure(
+                        'no model found for ' . print_r($_filterData, true));
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . '[' . static::class . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . '[' . static::class . '] Skipping filter (no filter model defined) '
+                        . print_r($_filterData, true));
+                }
             }
-        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData[TMFA::VALUE]) || array_key_exists(TMFA::VALUE, $_filterData))) {
+        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel))
+            && (isset($_filterData[TMFA::VALUE]) || array_key_exists(TMFA::VALUE, $_filterData))) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData);
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
@@ -542,8 +545,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             // silently skip data, as they will be evaluated by the concrete filtergroup
             $this->_customData[] = $_filterData;
         
-        } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (filter syntax problem) -> ' 
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Skipping filter (filter syntax problem) -> '
                 . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
         }
     }
@@ -655,9 +659,6 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
-                . ' Using deprecated function syntax. Please pass all filter data in one array (field: ' . $_fieldOrData . ')');
-            
             $data = array(
                 TMFA::FIELD     => $_fieldOrData,
                 TMFA::OPERATOR  => $_operator,
@@ -667,7 +668,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 
         foreach (array(TMFA::FIELD, TMFA::OPERATOR, TMFA::VALUE) as $requiredKey) {
             if (! (isset($data[$requiredKey]) || array_key_exists($requiredKey, $data))) {
-                throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
+                if ($requiredKey === TMFA::OPERATOR) {
+                    // default operator => equals
+                    $data[TMFA::OPERATOR] = 'equals';
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument('Filter object needs ' . $requiredKey);
+                }
             }
         }
         
@@ -686,9 +692,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $filter = NULL;
         } else {
             $self = $this;
-            $data[TMFA::OPTIONS] = array_merge($this->_options, isset($definition[TMFA::OPTIONS]) ? (array)$definition[TMFA::OPTIONS] : [], array('parentFilter' => $self));
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
+            $data[TMFA::OPTIONS] = array_merge($this->_options,
+                isset($definition[TMFA::OPTIONS]) ? (array)$definition[TMFA::OPTIONS] : [], array('parentFilter' => $self));
 
             if (isset($definition['filter'])
                 && (

@@ -107,9 +107,8 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
-                'text'          => $translate->_('manage shared folders'),
-                'description'   => $translate->_('Create new shared folders'),
-                // only create / move to. not deleting, not renaming, both require admin on the node itself
+                'text'          => $translate->_('Manage shared folders'),
+                'description'   => $translate->_('Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself.'),
             ),
             self::MANAGE_DOWNLOADLINKS  => array(
                 'text'          => $translate->_('Manage anonymous download links'),

@@ -54,7 +54,10 @@ class SSO_PublicAPITest extends TestCase
             $keys[0]['kid'] = 'unittestkey';
         }
         if (!isset($keys[0]['publickey']) || !is_file($keys[0]['publickey'])) {
-            $keys[0]['publickey'] = __DIR__ . '/keys/public.key';
+            $path = Tinebase_TempFile::getTempPath();
+            copy(__DIR__ . '/keys/public.key', $path);
+            chmod($path, 0600);
+            $keys[0]['publickey'] = $path;
         }
         $config->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $keys;
     }
@@ -273,6 +276,7 @@ class SSO_PublicAPITest extends TestCase
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
+                    //'claims' => json_encode(['groups']),
                     'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
@@ -294,21 +298,30 @@ class SSO_PublicAPITest extends TestCase
                 ->withParsedBody([
                     'grant_type' => 'authorization_code',
                     'scope' => 'openid profile email',
+                    //'claims' => ['groups'],
                     'code' => $m[1],
                     'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                     'client_secret' => 'unittest',
                     'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0],
                 ])
         );
-/*
+
         $response = SSO_Controller::publicToken();
         $this->assertSame(200, $response->getStatusCode());
         $stream = $response->getBody();
         $stream->rewind();
         $this->assertIsArray($response = json_decode($stream->getContents(), true));
         $this->assertArrayHasKey('id_token', $response);
-        //$components = explode('.', $response['id_token']);
-        //$claims = json_decode(base64_decode($components[1]), true);
+        $components = explode('.', $response['id_token']);
+        $claims = json_decode(base64_decode($components[1]), true);
+
+        $this->assertArrayHasKey('groups', $claims);
+        $claimGroups = $claims['groups'];
+        sort($claimGroups);
+        $groups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Group::getInstance()->getGroupMemberships($this->_originalTestUser->getId()))->name;
+        sort($groups);
+        $this->assertSame($groups, $claimGroups);
+
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala', 'GET'))
@@ -316,9 +329,11 @@ class SSO_PublicAPITest extends TestCase
         );
 
         $response = SSO_Controller::publicOIUserInfo();
-        $this->assertSame(200, $response->getStatusCode());*/
-        /*$stream = $response->getBody();
+        $this->assertSame(200, $response->getStatusCode());
+        $stream = $response->getBody();
         $stream->rewind();
-        $this->assertSame('foo', $stream->getContents());*/
+        $response = $stream->getContents();
+        $this->assertStringContainsString('"sub":"' . $this->_originalTestUser->getId() . '"', $response);
+        $this->assertStringContainsString('"groups":["', $response);
     }
 }

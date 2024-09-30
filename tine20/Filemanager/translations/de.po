@@ -782,12 +782,12 @@ msgid "File not found!"
 msgstr "Datei nicht gefunden!"
 
 #: Acl/Rights.php:104
-msgid "manage shared folders"
+msgid "Manage shared folders"
 msgstr "Gemeinsame Ordner verwalten"
 
 #: Acl/Rights.php:105
-msgid "Create new shared folders"
-msgstr "Neue gemeinsame Ordner anlegen und verwalten"
+msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
+msgstr "Erlaube das Erstellen und Verschieben neuer Unterordner im Gemeinsamen Ordner. Sowohl das Löschen als auch das Umbenennen von Ordnern erfordert Admin-Recht."
 
 #: Acl/Rights.php:108
 msgid "Manage anonymous download links"
