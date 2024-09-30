@@ -286,6 +286,57 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     }
 
     /**
+     * test testGetProperties method
+     */
+    public function testGetPropertiesForSharedDirectoryRights()
+    {
+        $fileManagerId = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
+        $requestBody = '<?xml version="1.0" encoding="utf-8"?>
+        <propfind xmlns="DAV:">
+            <prop>
+                <getlastmodified xmlns="http://owncloud.org/ns"/>
+                <getcontentlength xmlns="http://owncloud.org/ns"/>
+                <resourcetype xmlns="http://owncloud.org/ns"/>
+                <permissions xmlns="http://owncloud.org/ns"/>
+                <checksums xmlns="http://owncloud.org/ns"/>
+                <share-types xmlns="http://owncloud.org/ns"/>
+                <data-fingerprint xmlns="http://owncloud.org/ns"/>
+                <getetag xmlns="http://owncloud.org/ns"/>
+                <id xmlns="http://owncloud.org/ns"/>
+            </prop>
+        </propfind>';
+        try {
+            $request = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV3_DAV_FILES_USERNAME , ['DEPTH' => '1']);
+            $responseDoc = $this->_execPropfindRequest($requestBody, $request);
+            $this->assertStringContainsString('<owncloud:permissions>SCK</owncloud:permissions>', $responseDoc->saveXML());
+
+            /** @var Tinebase_Model_Role $role */
+            foreach (Tinebase_Acl_Roles::getInstance()->getAll() as $role) {
+                $altered = false;
+                $rights = array_filter(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()),
+                    function($val) use($fileManagerId, &$altered) {
+                        if ($fileManagerId === $val['application_id'] && $val['right'] ===
+                            Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS) {
+                            $altered = true;
+                            return false;
+                        }
+                        return true;
+                    });
+                if ($altered) {
+                    Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $rights);
+                }
+            }
+            Tinebase_Acl_Roles::unsetInstance();
+
+            $request = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV3_DAV_FILES_USERNAME , ['DEPTH' => '1']);
+            $responseDoc = $this->_execPropfindRequest($requestBody, $request);
+            $this->assertStringContainsString('<owncloud:permissions>S</owncloud:permissions>', $responseDoc->saveXML());
+        } finally {
+            Tinebase_Acl_Roles::unsetInstance();
+        }
+    }
+
+    /**
      * test testGetProperties method with an invalid client
      */
     public function testInvalidOwnCloudVersion()
