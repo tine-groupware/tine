@@ -1249,7 +1249,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // load sieve notification emails
         const data = this.record.data.sieve_notification_email.split(',');
         this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
-        this.sieveForwardsGrid.store.loadData( this.record.data.sieve_forwardings);
+        if (this.asAdminModule) {
+            this.sieveForwardsGrid.store.loadData( this.record.data.sieve_forwardings);
+        }
     },
 
     /**
@@ -1340,7 +1342,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.set('sieve_rules', rules);
         this.record.set('sieve_vacation', this.vacationRecord);
-        this.record.set('sieve_forwardings', this.sieveForwardsGrid.getFromStoreAsArray());
+        if (this.asAdminModule) {
+            this.record.set('sieve_forwardings', this.sieveForwardsGrid.getFromStoreAsArray());
+        }
 
         // update sieve notification emails
         const notifyEmails = this.sieveNotifyGrid.getFromStoreAsArray();
