@@ -995,7 +995,7 @@ var menu = new Ext.menu.Menu({
 
     // private
     onSelect : async function(record, index, noCollapse){
-        this.fireAsyncEvent('beforeselect', this, record, index).then(() => {
+        await this.fireAsyncEvent('beforeselect', this, record, index).then(() => {
             this.setValue(record.data[this.valueField || this.displayField]);
             if (!noCollapse) {
                 this.collapse();
