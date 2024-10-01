@@ -20,7 +20,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     // TODO move more duplicated (in User/Group AD controllers) code into traits
     use Tinebase_ActiveDirectory_DomainConfigurationTrait;
 
+    // see http://www.selfadsi.de/ads-attributes/user-userAccountControl.htm for more constants
     const ACCOUNTDISABLE = 2;
+    const PASSWD_CANT_CHANGE = 64;
     const NORMAL_ACCOUNT = 512;
 
     /**
