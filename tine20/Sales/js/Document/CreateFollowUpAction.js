@@ -50,7 +50,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     const statusFieldName = `${sourceType.toLowerCase()}_status`
                     const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
                     enabled = records.reduce((enabled, record) => {
-                        return enabled && _.find(statusDef.records, {id: record.get(statusFieldName) }).booked
+                        return enabled && _.find(statusDef.records, {id: record.get(statusFieldName) })?.booked
                     }, enabled)
                 }
 
