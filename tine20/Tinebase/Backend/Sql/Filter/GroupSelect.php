@@ -155,7 +155,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
      */
     public function getSQL()
     {
-        return implode(' ', $this->_parts[Zend_Db_Select::WHERE]);
+        return implode(' ', $this->_parts[Zend_Db_Select::WHERE] ?? []);
     }
 
     public function __toString()
