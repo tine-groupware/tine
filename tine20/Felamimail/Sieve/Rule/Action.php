@@ -73,12 +73,11 @@ class Felamimail_Sieve_Rule_Action
      * 
      * @return string
      */
-    public function __toString() 
+    public function __toString(): string
     {
         switch ($this->_type) {
             case self::DISCARD:
                 return "    $this->_type;";
-                break;
 
             case self::REDIRECT:
                 if (! is_array($this->_argument)) {
@@ -93,12 +92,22 @@ class Felamimail_Sieve_Rule_Action
                     $argument = $this->_quoteString($this->_argument['emails']);
                     return "    $this->_type $argument;";
                 }
-                break;
+
+            case self::VACATION:
+                // TODO get address from mailaccount / add to arguments?
+                $email = Tinebase_Core::getUser()->accountEmailAddress;
+                $vacation = new Felamimail_Model_Sieve_Vacation([
+                    'addresses' => [$email],
+                    'from' => $email,
+                    'days' => 0,
+                    'reason' => $this->_argument,
+                    // TODO add signature?
+                ]);
+                return (string) $vacation->getFSV();
 
             default:
                 $argument = $this->_quoteString($this->_argument);
                 return "    $this->_type $argument;";
-                break;
         }
     }
     
@@ -110,11 +119,13 @@ class Felamimail_Sieve_Rule_Action
      * 
      * @todo generalize this
      */
-    protected function _quoteString($string)
+    protected function _quoteString($string): string
     {
-        if(is_array($string)) {
+        if (is_array($string)) {
             $string = array_map(array($this, '_quoteString'), $string);
             return '[' . implode(',', $string) . ']';
+        } else if ($string === null) {
+            return '';
         } else {
             return '"' . str_replace('"', '\"', $string) . '"';
         }
