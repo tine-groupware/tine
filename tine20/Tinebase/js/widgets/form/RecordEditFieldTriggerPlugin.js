@@ -59,10 +59,12 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
             const record = this.field.selectedRecord || Object.assign(Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.field.recordClass.getDefaultData(), await this.getRecordDefaults()), this.field.recordClass), {phantom: true});
             const mode = this.editDialogMode ?? this.editDialogConfig?.mode ?? editDialogClass.prototype.mode;
 
-            if (!this.field.selectedRecord && mode === 'remote') {
-                // prevent loading non existing remote record
-                record.setId(0);
-            }
+            // 2024-10-01 do net set id to 0 any longer, solved by phantom: true
+            //            otherwise we can't open multiple dialogs with new records
+            // if (!this.field.selectedRecord && mode === 'remote') {
+            //     // prevent loading non existing remote record
+            //     record.setId(0);
+            // }
             if (this.attachments) {
                 record.set('attachments', this.attachments);
             }
