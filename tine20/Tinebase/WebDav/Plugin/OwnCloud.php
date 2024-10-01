@@ -66,7 +66,9 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
     public function initialize(\Sabre\DAV\Server $server)
     {
         $this->server = $server;
-        $this->useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
+        // Although parent class heavily uses $_SERVER, the test suite requires $request...
+        $request = Tinebase_Core::get(Tinebase_Core::REQUEST); 
+        $this->useragent = isset($request) ? $request->getHeader('user-agent')->toString() : $_SERVER['HTTP_USER_AGENT'] ?? null;
         $server->on('propFind', array($this, 'propFind'));
 
         /* Namespaces | new iOS ownCloudApp uses 'oc' hardcoded */
@@ -85,14 +87,13 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
     public function propFind(PropFind $propFind, INode $node)
     {
         $version = $this->getOwnCloudVersion();
-        if ($version !== null && !$this->isValidOwnCloudVersion()) {
+        if ($version !== null && !$this->isValidOwnCloudVersion($version)) {
             $message = sprintf(
                 '%s::%s OwnCloud client min version is "%s"!',
                 __METHOD__,
                 __LINE__,
                 static::OWNCLOUD_MIN_VERSION
             );
-
             Tinebase_Core::getLogger()->debug($message);
             throw new InvalidArgumentException($message);
         } elseif (!$version) {
@@ -170,10 +171,8 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
      * Return the actuall owncloud version number
      * @throws \InvalidArgumentException
      */
-    protected function isValidOwnCloudVersion()
+    protected function isValidOwnCloudVersion($version)
     {
-        $version  = $this->getOwnCloudVersion();
-
         return version_compare($version, static::OWNCLOUD_MIN_VERSION, 'ge')
             && version_compare($version, static::OWNCLOUD_MAX_VERSION, 'le');
     }

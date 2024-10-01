@@ -60,11 +60,15 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $this->plugin = new Tinebase_WebDav_Plugin_OwnCloud();
 
         // Create request, there is no in tinebase while running unittests, but the owncloud plugin needs an user agent
+        $useragent = 'Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)';
+        if ('testInvalidOwnCloudVersion' == $this->getName()) {
+            $useragent = 'Mozilla/5.0 (Macintosh) mirall/1.5.0 (build 1234)';
+        }
         $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n" .
             "Host: localhost\r\n" .
             "Content-Type: application/json\r\n" .
-            "User-Agent: Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)\r\n"
+            "User-Agent: {$useragent}\r\n"
         );
         Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
 
@@ -341,14 +345,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public function testInvalidOwnCloudVersion()
     {
-        // use old owncloud user agent!
-        $request = Tinebase_Http_Request::fromString(
-            "POST /index.php HTTP/1.1\r\n" .
-            "Host: localhost\r\n" .
-            "Content-Type: application/json\r\n" .
-            "User-Agent: Mozilla/5.0 (Macintosh) mirall/1.5.0 (build 3709)\r\n"
-        );
-        Tinebase_Core::set('request', $request);
+        // use old owncloud user agent! --> self::setUp() above
         $response = $this->_execPropfindRequest(expectedStatus: 500)->saveXML();
         $this->assertStringContainsString(InvalidArgumentException::class, $response);
         $this->assertStringContainsString(sprintf(
