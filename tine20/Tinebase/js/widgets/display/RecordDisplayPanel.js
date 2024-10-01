@@ -158,7 +158,6 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             if (typesToExclude.indexOf(fieldDefinition.type) >= 0 ||
                 fieldsToExclude.indexOf(fieldDefinition.fieldName) >=0 ||
                 !fieldDefinition.label ||
-                fieldDefinition.shy ||
                 fieldDefinition.disabled)
             {
                 return;
