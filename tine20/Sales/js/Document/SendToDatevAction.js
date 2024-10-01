@@ -14,12 +14,14 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         return new Ext.Action(Object.assign({
             text: app.i18n._('Send as Email to Datev'),
             iconCls: `action_export`,
+            allowMultiple: true,
             actionUpdater(action, grants, records, isFilterSelect, filteredContainers) {
-                let enabled = records.length === 1
+                const enabled = records.length > 0;
                 action.setDisabled(!enabled)
                 action.baseAction.setDisabled(!enabled) // WTF?
             },
             async handler(cmp) {
+                const editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
                 const selections = this.initialConfig.selections ?? [];
                 if (selections.length === 0) return; 
                 const method =  `search${modelName}s`;
@@ -107,7 +109,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 root.eachChild(async (invoiceNode) => {
                                     const attachments = invoiceNode.childNodes.filter((node) => node?.attributes?.checked);
                                     allAttachments[invoiceNode.id] = attachments.map((a) => a.id);
-                                    await Tine.Sales.exportInvoicesToDatevEmail(modelName, allAttachments);
+                                    await Tine.Sales.exportInvoicesToDatevEmail(modelName, allAttachments)
+                                        .then((result) => {
+                                            if (editDialog && result.results.length > 0) {
+                                                editDialog.loadRecord('remote');
+                                            }
+                                        });
                                 });
                             }
                         },
@@ -144,10 +151,10 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const configName = modelName === 'PurchaseInvoice' ? 'datevRecipientEmailsPurchaseInvoice' : 'datevRecipientEmailsInvoice';
         const datevRecipients = Tine.Tinebase.configManager.get(configName, 'Sales');
         if (!datevRecipients || datevRecipients.length === 0) return;
-        const action = getAction(modelName, {})
-        const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ContextMenu`, action, 2)
-        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 30)
-        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10)
+        const action = getAction(modelName, {});
+        const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'};
+        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ContextMenu`, action, 2);
+        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 30);
+        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10);
     })
 })
