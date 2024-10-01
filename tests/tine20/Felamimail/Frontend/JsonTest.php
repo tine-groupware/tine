@@ -1989,7 +1989,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      */
     public function testGetSetRules()
     {
-        $ruleData = $this->_getRuleData();
+        $ruleData = $this->_getRulesData();
 
         $this->_sieveTestHelper($ruleData);
 
@@ -2027,7 +2027,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      *
      * @return array
      */
-    protected function _getRuleData()
+    protected function _getRulesData()
     {
         return array(array(
             'id' => 1,
@@ -2074,10 +2074,12 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      */
     public function testSetForwardRuleToSelf()
     {
-        $ruleData = $this->_getRedirectRuleData(array(
-            'emails' => $this->_account->email,
-            'copy' => 0,
-        ));
+        $ruleData = $this->_getRuleData([
+            'action_argument' => [
+                'emails' => $this->_account->email,
+                'copy' => 0,
+            ]
+        ]);
 
         try {
             $this->_sieveTestHelper($ruleData);
@@ -2091,15 +2093,38 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->_sieveTestHelper($ruleData);
     }
 
+    public function testSieveAutoReplyWithAddresses()
+    {
+        $ruleData = $this->_getRuleData([
+            'action_argument' => 'some reply text',
+            'action_type' => Felamimail_Sieve_Rule_Action::VACATION,
+            'conditions' => array(array(
+                'test' => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator' => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header' => 'From',
+                'key' => '@',
+            )),
+        ]);
+        $this->_sieveTestHelper($ruleData);
+        $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        $sieveScriptRules = $sieveBackend->getScript($this->_testSieveScriptName);
+
+        $this->assertStringContainsString(':from', $sieveScriptRules);
+        $this->assertStringContainsString(':addresses', $sieveScriptRules);
+        $this->assertStringContainsString('text:', $sieveScriptRules);
+        $this->assertStringNotContainsString(':days', $sieveScriptRules);
+    }
+
     /**
      * @see 0006222: Keep a copy from mails forwarded to another emailaddress
      */
     public function testSetForwardRuleWithCopy()
     {
-        $ruleData = $this->_getRedirectRuleData(array(
-            'emails' => 'someaccount@' . $this->_mailDomain,
-            'copy' => 1,
-        ));
+        $ruleData = $this->_getRuleData([
+            'action_argument' => [
+                'emails' => 'someaccount@' . $this->_mailDomain,
+                'copy' => 1,
+        ]]);
         $this->_sieveTestHelper($ruleData);
     }
 
@@ -2107,10 +2132,11 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
     {
         $this->expectException(Tinebase_Exception_Record_Validation::class);
         $this->expectExceptionMessage('Some fields action_argument have invalid content');
-        $this->_json->saveRules($this->_account->getId(), $this->_getRedirectRuleData(array(
-            'emails' => join('', array_fill(0, 255, 'a')) . '@' . $this->_mailDomain,
-            'copy' => 0,
-        )));
+        $this->_json->saveRules($this->_account->getId(), $this->_getRuleData([
+            'action_argument' => [
+                'emails' => join('', array_fill(0, 255, 'a')) . '@' . $this->_mailDomain,
+                'copy' => 0,
+        ]]));
     }
 
     /**
@@ -2118,10 +2144,11 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      */
     public function testSetForwardRuleWithoutCopy()
     {
-        $ruleData = $this->_getRedirectRuleData(array(
-            'emails' => 'someaccount@' . $this->_mailDomain,
-            'copy' => 0,
-        ));
+        $ruleData = $this->_getRuleData([
+            'action_argument' => [
+                'emails' => 'someaccount@' . $this->_mailDomain,
+                'copy' => 0,
+        ]]);
         $this->_sieveTestHelper($ruleData);
     }
 
@@ -2132,10 +2159,11 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
     {
         Felamimail_Config::getInstance()->set(Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL, true);
 
-        $ruleData = $this->_getRedirectRuleData(array(
-            'emails' => 'someaddress@external.com',
-            'copy' => 0,
-        ));
+        $ruleData = $this->_getRuleData([
+            'action_argument' => [
+                'emails' => 'someaddress@external.com',
+                'copy' => 0,
+        ]]);
         try {
             $this->_sieveTestHelper($ruleData);
             $this->assertTrue(FALSE,
@@ -2147,12 +2175,11 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         }
     }
 
-    protected function _getRedirectRuleData($actionArgument)
+    protected function _getRuleData(array $ruleData): array
     {
-        return array(array(
+        return [array_merge([
             'id' => '1',
             'action_type' => Felamimail_Sieve_Rule_Action::REDIRECT,
-            'action_argument' => $actionArgument,
             'conjunction' => 'allof',
             'conditions' => array(array(
                 'test' => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
@@ -2161,7 +2188,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
                 'key' => 'info@example.org',
             )),
             'enabled' => 1,
-        ));
+        ], $ruleData)];
     }
 
     /**
@@ -2325,7 +2352,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
 
         $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
 
-        $ruleData = $this->_getRuleData();
+        $ruleData = $this->_getRulesData();
         $ruleData[0]['id'] = $ruleData[2]['id'];
         $ruleData[2]['id'] = 11;
         $this->_json->saveRules($this->_account->getId(), $ruleData);
