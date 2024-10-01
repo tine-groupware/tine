@@ -96,7 +96,7 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         $fsv = new Felamimail_Sieve_Vacation();
         
         $fsv->setEnabled($this->enabled)
-            ->setDays(($this->days && (int) $this->days > 0) ? (int) $this->days : 7)
+            ->setDays(is_int($this->days) ? $this->days : 7)
             ->setSubject($this->subject)
             ->setFrom($this->from)
             ->setMime($this->mime)

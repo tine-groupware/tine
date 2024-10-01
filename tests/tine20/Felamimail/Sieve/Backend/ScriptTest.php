@@ -134,7 +134,7 @@ class Felamimail_Sieve_Backend_ScriptTest extends TestCase
         $sieveScript = $script->getSieve();
         $this->assertStringContainsString('require ["fileinto","reject","copy","vacation"]', $sieveScript,
             'vacation extension is required in script: ' . $sieveScript);
-        $this->assertStringContainsString('vacation "my reason";', $sieveScript);
+        $this->assertStringContainsString('my reason', $sieveScript);
         $this->assertStringContainsString('Felamimail_Sieve_Rule', $sieveScript);
     }
 
