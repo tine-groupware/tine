@@ -254,7 +254,7 @@ class Felamimail_Sieve_Vacation
      */
     public function __toString(): string
     {
-        $days      = ":days $this->_days ";
+        $days      = !empty($this->_days) ? ":days $this->_days " : null;
         $from      = !empty($this->_from) ? ":from {$this->_quoteString($this->_from)} " : null;
         $addresses = count($this->_addresses) > 0 ? ":addresses {$this->_quoteString($this->_addresses)} " : null;
         
