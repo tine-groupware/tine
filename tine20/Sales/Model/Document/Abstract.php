@@ -257,7 +257,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_BUYER_REFERENCE        => [
-                self::LABEL                         => 'Customer Reference', //_('Customer Reference')
+                self::LABEL                         => 'Buyer Reference', //_('Buyer Reference')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,

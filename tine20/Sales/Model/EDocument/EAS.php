@@ -18,6 +18,7 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
 
     public const FLD_NAME = 'name';
     public const FLD_CODE = 'code';
+    public const FLD_REMARK = 'remark';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -27,8 +28,9 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
     protected static $_modelConfiguration = [
         self::VERSION                       => 1,
         self::APP_NAME                      => Sales_Config::APP_NAME,
-        self::RECORD_NAME                   => 'EAS', // ngettext('Electronic Address Schema', 'Electronic Address Schemas', n)
-        self::RECORDS_NAME                  => 'EAS', // gettext('GENDER_Electronic Address Schema')
+        self::MODEL_NAME                    => self::MODEL_NAME_PART,
+        self::RECORD_NAME                   => 'Electronic Address Schema', // ngettext('Electronic Address Schema', 'Electronic Address Schemas', n)
+        self::RECORDS_NAME                  => 'Electronic Address Schemas', // gettext('GENDER_Electronic Address Schema')
         self::TITLE_PROPERTY                => self::FLD_NAME,
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
@@ -44,18 +46,25 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                        => [
-            self::FLD_NAME                      => [
-                self::LABEL                         => 'Name', // _('Name')
-                self::TYPE                          => self::TYPE_STRING,
-                self::LENGTH                        => 255,
-                self::QUERY_FILTER                  => true,
-            ],
             self::FLD_CODE                      => [
                 self::LABEL                         => 'Code', // _('Code')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::QUERY_FILTER                  => true,
             ],
+            self::FLD_NAME                      => [
+                self::LABEL                         => 'Name', // _('Name')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_REMARK                      => [
+                self::LABEL                         => 'Remark', // _('Remark')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::QUERY_FILTER                  => true,
+            ],
+
         ],
     ];
 

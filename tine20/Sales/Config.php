@@ -296,7 +296,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true,
                     ], [
                         'id' => self::EDOCUMENT_TRANSPORT_EMAIL,
-                        'value' => 'EMail', //_('EMail')
+                        'value' => 'E-Mail', //_('E-Mail')
                         'icon' => null,
                         'system' => true,
                     ]

@@ -181,7 +181,14 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     ],
                 ],
             ],
+            self::FLD_BUYER_REFERENCE       => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Buyer Reference', // _('Buyer Reference')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
             self::FLD_EINVOICE_TYPE         => [
+                self::LABEL                     => 'Electronic Invoice Type', // _('Electronic Invoice Type')
                 self::TYPE                      => self::TYPE_MODEL,
                 self::DEFAULT_VAL               => Sales_Model_Einvoice_XRechnung::class,
                 self::CONFIG                    => [
@@ -196,9 +203,10 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     [Zend_Validate_InArray::class, [
                         Sales_Model_Einvoice_XRechnung::class,
                     ]],
-                ],
+                ]
             ],
             self::FLD_EINVOICE_CONFIG       => [
+                self::LABEL                     => 'Electronic Invoice Config', // _('Electronic Invoice Config')
                 self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
                 self::DEFAULT_VAL               => '[]',
                 self::CONFIG                    => [
@@ -211,12 +219,6 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::DEFAULT_VALUE => [0 => []], // zend anybody?!
                     [Tinebase_Record_Validator_SubValidate::class, [Tinebase_Record_Validator_SubValidate::IGNORE_VALUE => []]],
                 ],
-            ],
-            self::FLD_BUYER_REFERENCE       => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LABEL                     => 'Buyer Reference', // _('Buyer Reference')
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
             ],
             self::FLD_EAS_ID                => [
                 self::TYPE                      => self::TYPE_RECORD,
@@ -235,7 +237,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             ],
             self::FLD_EDOCUMENT_TRANSPORT   => [
                 self::TYPE                      => self::TYPE_KEY_FIELD,
-                self::LABEL                     => 'EDocument transport method',
+                self::LABEL                     => 'Electronic Document Transport Method', // _('Electronic Document Transport Method')
                 self::NAME                      => Sales_Config::EDOCUMENT_TRANSPORT,
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
