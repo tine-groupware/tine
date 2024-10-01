@@ -331,10 +331,6 @@ import './DependencyPanel'
              });
          });
 
-         if (record.get('container_id')?.id === Tine.Tinebase.configManager.get('templateContainer', 'Tasks')) {
-             recordData.container_id = Tine.Tasks.Model.Task.getDefaultData().container_id;
-         }
-
          return recordData;
      }
 });

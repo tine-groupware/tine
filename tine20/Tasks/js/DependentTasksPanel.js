@@ -44,7 +44,14 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                         editDialogConfig: this.editDialogConfig,
                         onTemplateSelect: (taskData) => {
                             const e = window.event;
-                            const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(taskData || {}, this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+                            const defaults = Object.assign( {}, this.recordClass.getDefaultData(), this.getRecordDefaults())
+
+                            taskData.dependent_taks = _.map(taskData.dependent_taks, (taskDependency) => {
+                                taskDependency.task_id = Object.assign(taskDependency.task_id, defaults);
+                                return taskDependency
+                            });
+
+                            const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(taskData || {}, defaults), this.recordClass);
                             record.phantom = true;
 
                             this.store.add(record);
