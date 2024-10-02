@@ -122,11 +122,13 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
     {
         if ($this->isReadOnlyUser($_user->getId())) {
-            return NULL;
+            return null;
         }
         
         $ldapData = $this->_user2ldap($_user);
-        unset($ldapData[$this->_userUUIDAttribute]);
+        if ($this->_writeGroupsIds) {
+            unset($ldapData[$this->_userUUIDAttribute]);
+        }
 
         $ldapData = array_merge($ldapData, $this->getLdapPasswordData(Tinebase_Record_Abstract::generateUID(20)));
 
@@ -143,25 +145,25 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
 
         $dn = $this->generateDn($_user);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->add($dn, $ldapData);
                 
         $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
         $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
-        
+        if ($this->_writeGroupsIds) {
+            $_user->xprops()[static::class]['syncId'] = $userId;
+        }
+
         // add user to primary group and set primary group
         /** @noinspection PhpUndefinedMethodInspection */
-        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID} ?: $_user->accountPrimaryGroup, $userId);
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID} ?: $_user->accountPrimaryGroup, $_user, false);
         
         // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
 
-        $user = clone $_user;
-        $user->setId($userId);
-        unset($user->xprops()[static::class]['syncId']);
-        $user = $this->getUserByPropertyFromSyncBackend('accountId', $user, 'Tinebase_Model_FullUser');
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
 
         return $user;
     }
@@ -347,7 +349,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
 
         /** @noinspection PhpUndefinedMethodInspection */
-        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_account->accountPrimaryGroup, $_account->getId());
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_account->accountPrimaryGroup, $_account->getId(), false);
         
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
 
@@ -442,7 +444,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function generateDn(Tinebase_Model_FullUser $_account)
     {
-        $newDn = "cn={$_account->accountFullName},{$this->_baseDn}";
+        $newDn = 'cn=' . Zend_Ldap_Filter_Abstract::escapeValue($_account->accountFullName) . ",{$this->_baseDn}";
 
         return $newDn;
     }
@@ -555,6 +557,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $ldapData = array(
             'useraccountcontrol' => isset($_ldapEntry['useraccountcontrol']) ? $_ldapEntry['useraccountcontrol'][0] : self::NORMAL_ACCOUNT
         );
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}) {
+            $ldapData['useraccountcontrol'] &= self::PASSWD_CANT_CHANGE;
+        }
 
         if (isset($_user->xprops()['uidnumber'])) {
             $_ldapEntry['uidnumber'] = $_user->xprops()['uidnumber'];

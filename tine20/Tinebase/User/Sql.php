@@ -875,6 +875,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             try {
                 $this->updateUserInSyncBackend($_user);
             } catch (Tinebase_Exception_NotFound) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' backend user not found, creating instead of updating');
                 $createdSyncUser = $this->addUserToSyncBackend($_user);
                 $_user->xprops()[static::class]['syncId'] = $createdSyncUser->getId();
             }

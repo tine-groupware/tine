@@ -83,7 +83,7 @@ interface Tinebase_Group_Interface_SyncAble
      * @param  mixed  $_groupId
      * @param  mixed  $_accountId string or user object
      */
-    public function addGroupMemberInSyncBackend($_groupId, $_accountId);
+    public function addGroupMemberInSyncBackend($_groupId, $_accountId, $_checkExistance = true);
 
     /**
      * remove one member from the group in sync backend
