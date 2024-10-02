@@ -102,14 +102,14 @@ class Sales_Setup_Initialize extends Setup_Initialize
 
     public static function initializeEDocumentEAS(): void
     {
-        Sales_Controller_EDocument_EAS::getInstance()->create(new Sales_Model_EDocument_EAS([
-            Sales_Model_EDocument_EAS::FLD_NAME => 'Electronic mail',
-            Sales_Model_EDocument_EAS::FLD_CODE => 'EM',
-        ]));
-        Sales_Controller_EDocument_EAS::getInstance()->create(new Sales_Model_EDocument_EAS([
-            Sales_Model_EDocument_EAS::FLD_NAME => 'Leitweg-ID',
-            Sales_Model_EDocument_EAS::FLD_CODE => '0204',
-        ]));
+        $easData = json_decode(file_get_contents(__DIR__ . '/EAS_5.json'), true);
+        foreach ($easData['daten'] as $eas) {
+            Sales_Controller_EDocument_EAS::getInstance()->create(new Sales_Model_EDocument_EAS([
+                Sales_Model_EDocument_EAS::FLD_NAME => $eas[1],
+                Sales_Model_EDocument_EAS::FLD_CODE => $eas[0],
+                Sales_Model_EDocument_EAS::FLD_REMARK => $eas[2],
+            ]));
+        }
     }
 
     /**

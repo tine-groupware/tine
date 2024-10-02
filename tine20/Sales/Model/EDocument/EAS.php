@@ -63,6 +63,7 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::QUERY_FILTER                  => true,
+                self::NULLABLE                      => true,
             ],
 
         ],
