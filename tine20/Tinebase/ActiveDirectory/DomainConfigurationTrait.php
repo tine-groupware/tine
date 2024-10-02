@@ -6,7 +6,7 @@
  * @subpackage  ActiveDirectory
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -52,7 +52,7 @@ trait Tinebase_ActiveDirectory_DomainConfigurationTrait
 
             $domainNameParts = array();
             $keys = null; // not really needed
-            Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $keys, $domanNameParts);
+            Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $keys, $domainNameParts);
             $this->_domainConfig['domainName'] = implode('.', $domainNameParts);
         }
 
