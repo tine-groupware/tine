@@ -165,15 +165,23 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      * @param  mixed  $_groupId
      * @param  mixed  $_accountId string or user object
      */
-    public function addGroupMemberInSyncBackend($_groupId, $_accountId) 
+    public function addGroupMemberInSyncBackend($_groupId, $_accountId, $_checkExistance = true)
     {
         if ($this->isDisabledBackend() || !($groupId = $this->getWriteableGroupIds([Tinebase_Model_Group::convertGroupIdToInt($_groupId)]))) {
             return;
         }
         $groupId = $groupId[0];
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
+
+        if ($this->_writeGroupsIds && $_checkExistance) {
+            // make sure the account exists in sync backend
+            /** @var Tinebase_User_Interface_SyncAble $syncCtrl */
+            $syncCtrl = Tinebase_User::getInstance();
+            $syncCtrl->setUserAsWriteGroupMember($userId);
+            Tinebase_User::getInstance()->updateUser(Tinebase_User::getInstance()->getFullUserById($userId));
+        }
         
-        $memberships = $this->getGroupMembershipsFromSyncBackend($userId);
+        $memberships = $this->getGroupMembershipsFromSyncBackend($_accountId);
         if (in_array($groupId, $memberships)) {
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                  Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skip adding group member, as $userId is already in group $groupId");
@@ -182,7 +190,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         }
         
         $groupDn         = $this->_getDn($groupId);
-        $accountMetaData = $this->_getAccountMetaData($userId);
+        $accountMetaData = $this->_getAccountMetaData($_accountId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
@@ -206,7 +214,10 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             return [];
         }
 
-        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        if ($this->_writeGroupsIds && !$_userId instanceof Tinebase_Model_FullUser) {
+            $_userId = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_userId, Tinebase_Model_FullUser::class);
+        }
+        $userId = $_userId instanceof Tinebase_Model_User ? ($_userId->xprops()[Tinebase_User::getInstance()::class]['syncId'] ?? $_userId->geTId()) : $_userId;
         
         // find user in AD and retrieve memberOf attribute
         $filter = Zend_Ldap_Filter::andFilter(
@@ -631,7 +642,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     {
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
-            $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
+            if ($this->_writeGroupsIds && !$accountId instanceof Tinebase_Model_FullUser) {
+                $accountId = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId, Tinebase_Model_FullUser::class);
+            }
+            $accountId = $accountId instanceof Tinebase_Model_User ? ($accountId->xprops()[Tinebase_User::getInstance()::class]['syncId'] ?? $accountId->getId()) : Tinebase_Model_User::convertUserIdToInt($accountId);
+
             $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, $this->_encodeAccountId($accountId));
         }
         $filter = new Zend_Ldap_Filter_Or($filterArray);

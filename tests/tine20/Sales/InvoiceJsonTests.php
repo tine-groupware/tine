@@ -191,10 +191,6 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      */
     public function testClearing()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
-        }
-
         $this->_createFullFixtures();
         
         // the whole year, 12 months
@@ -226,15 +222,21 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $invoice['cleared'] = 'CLEARED';
             $this->_uit->saveInvoice($invoice);
         }
-        
+
+        $this->assertEquals(0,$invoice['price_net']);
+
         $tsController = Timetracker_Controller_Timesheet::getInstance();
-        $timesheets = $tsController->getAll();
-        
+        $timesheets = $tsController->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                ['field' => 'invoice_id', 'operator' => 'in', 'value' => $invoiceIds],
+            ]
+        ));
+
         foreach($timesheets as $timesheet) {
             $this->assertTrue(in_array($timesheet->invoice_id, $invoiceIds), 'the invoice id must be set!');
             $this->assertEquals(1, $timesheet->is_cleared);
         }
-        
+
         // test if timeaccounts get cleared
         $invoices = $this->_uit->searchInvoices(array(
             array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
@@ -267,7 +269,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $this->assertEquals(0,$invoice['price_gross']);
             $this->assertEquals(0,$invoice['price_net']);
         }
-        
+
         $taController = Timetracker_Controller_Timeaccount::getInstance();
         $filter = new Timetracker_Model_TimeaccountFilter(array(
             array('field' => 'budget', 'operator' => 'greater', 'value' => 0),
@@ -281,6 +283,65 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         foreach($timeaccounts as $ta) {
             $this->assertTrue(in_array($ta->invoice_id, $invoiceIds), 'the invoice id id must be set!');
             $this->assertEquals('billed', $ta->status);
+        }
+
+        //test update ts date after status set to is_cleared
+        try {
+            $timesheets[0]->start_time = '10:00:00';
+            $tsController->update($timesheets[0]);
+            self::fail('should throw Sales_Exception_InvoiceAlreadyClearedEdit!');
+        } catch (Sales_Exception_InvoiceAlreadyClearedEdit $seiace) {
+            self::assertEquals('The Invoice you tried to edit is cleared already, so no editing is possible anymore!', $seiace->getMessage());
+        }
+    }
+
+    /**
+     * tests if delete timesheet throw exception when timesheet is cleared with invoice id
+     */
+    public function testClearingDeleteTS()
+    {
+        $this->_createFullFixtures();
+        // the whole year, 12 months
+        $date = clone $this->_referenceDate;
+        $date->addMonth(12);
+        $this->_invoiceController->createAutoInvoices($date);
+
+        // test if timesheets get cleared
+        $invoices = $this->_uit->searchInvoices(array(
+            array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
+                'appName' => 'Sales',
+                'linkType' => 'relation',
+                'modelName' => 'Customer',
+                'filters' => array(
+                    array('field' => 'name', 'operator' => 'equals', 'value' => 'Customer3')
+                )
+            ))
+
+        ), array());
+
+        $invoiceIds = array();
+
+        foreach($invoices['results'] as $invoice) {
+            $invoiceIds[] = $invoice['id'];
+            // fetch invoice by get to have all relations set
+            $invoice = $this->_uit->getInvoice($invoice['id']);
+            $invoice['cleared'] = 'CLEARED';
+            $this->_uit->saveInvoice($invoice);
+        }
+
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $timesheets = $tsController->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'invoice_id', 'operator' => 'in', 'value' => $invoiceIds],
+                ]
+            ));
+
+        //test delete ts after status set to is_cleared
+        try {
+            $tsController->delete($timesheets[0]);
+            self::fail('should throw Sales_Exception_InvoiceAlreadyClearedDelete');
+        } catch (Sales_Exception_InvoiceAlreadyClearedDelete $seiacd) {
+            self::assertEquals('The Invoice you tried to delete is cleared already, so deleting is not possible anymore!', $seiacd->getMessage());
         }
     }
     

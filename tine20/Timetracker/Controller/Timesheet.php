@@ -373,6 +373,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
         $this->_calcClearedAmount($_record, $_oldRecord);
+
+        if ($this->_isTSDateChanged($_record, $_oldRecord)) {
+            if ($_record->is_cleared === 1 && !empty($_record->invoice_id)) {
+                throw new Sales_Exception_InvoiceAlreadyClearedEdit();
+            }
+        }
     }
 
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
@@ -380,11 +386,30 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
         /** @var Timetracker_Model_Timesheet $updatedRecord */
-        if ($updatedRecord->duration != $currentRecord->duration ||
-                $updatedRecord->start_date != $currentRecord->start_date ||
-                $updatedRecord->stat_time != $currentRecord->start_time) {
+        if ($this->_isTSDateChanged($updatedRecord, $currentRecord)) {
             $this->_tsChanged($updatedRecord, $currentRecord);
         }
+    }
+
+    protected function _inspectDelete(array $_ids)
+    {
+        $invalidTS = [];
+        $records = $this->getMultiple($_ids);
+        foreach ($records as $record) {
+            if ($record->is_cleared === 1 && !empty($record->invoice_id)) {
+                $invalidTS[] = $record;
+            }
+        }
+        if (count($invalidTS) > 0) {
+            throw new Sales_Exception_InvoiceAlreadyClearedDelete();
+        }
+        $_ids = parent::_inspectDelete($_ids);
+        return $_ids;
+    }
+
+    protected function _isTSDateChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null): bool
+    {
+        return $record->duration != $oldRecord->duration || $record->start_date != $oldRecord->start_date || $record->start_time != $oldRecord->start_time;
     }
 
     protected function _calcClearedAmount(Timetracker_Model_Timesheet $ts, ?Timetracker_Model_Timesheet $oldTs = null): void

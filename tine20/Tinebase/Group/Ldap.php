@@ -399,6 +399,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             // make sure the account exists in sync backend
             /** @var Tinebase_User_Interface_SyncAble $syncAble */
             $syncAble = Tinebase_User::getInstance();
+            $syncAble->setUserAsWriteGroupMember($userId);
             $syncAble->updateUserInSyncBackend(Tinebase_User::getInstance()->getFullUserById($userId));
         }
         
@@ -413,7 +414,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' removed groupmemberships: ' . print_r($removeGroupMemberships, true));
         
         foreach ($addGroupMemberships as $groupId) {
-            $this->addGroupMemberInSyncBackend($groupId, $userId);
+            $this->addGroupMemberInSyncBackend($groupId, $userId, false);
         }
         
         foreach ($removeGroupMemberships as $groupId) {
@@ -426,10 +427,11 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     /**
      * add a new groupmember to group in sync backend
      *
-     * @param  mixed  $_groupId
-     * @param  mixed  $_accountId string or user object
+     * @param mixed $_groupId
+     * @param mixed $_accountId
+     * @param true $_checkExistance
      */
-    public function addGroupMemberInSyncBackend($_groupId, $_accountId) 
+    public function addGroupMemberInSyncBackend($_groupId, $_accountId, $_checkExistance = true)
     {
         if ($this->isDisabledBackend() || !($groupId = $this->getWriteableGroupIds([Tinebase_Model_Group::convertGroupIdToInt($_groupId)]))) {
             return;
@@ -437,11 +439,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $groupId = $groupId[0];
         $userId  = Tinebase_Model_User::convertUserIdToInt($_accountId);
 
-        if ($this->_writeGroupsIds) {
+        if ($this->_writeGroupsIds && $_checkExistance) {
             // make sure the account exists in sync backend
-            /** @var Tinebase_User_Interface_SyncAble $syncable */
-            $syncable = Tinebase_User::getInstance();
-            $syncable->updateUserInSyncBackend(Tinebase_User::getInstance()->getFullUserById($userId));
+            /** @var Tinebase_User_Interface_SyncAble $syncCtrl */
+            $syncCtrl = Tinebase_User::getInstance();
+            $syncCtrl->setUserAsWriteGroupMember($userId);
+            $syncCtrl->updateUserInSyncBackend(Tinebase_User::getInstance()->getFullUserById($userId));
         }
         
         $memberships = $this->getGroupMembershipsFromSyncBackend($_accountId);
@@ -781,7 +784,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     protected function _getUserMetaData($_userId)
     {
-        $userId = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+        if ($this->_writeGroupsIds && !$_userId instanceof Tinebase_Model_FullUser) {
+            $_userId = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_userId, Tinebase_Model_FullUser::class);
+        }
+        $userId = $_userId instanceof Tinebase_Model_User ? ($_userId->xprops()[Tinebase_User::getInstance()::class]['syncId'] ?? $_userId->getId()) : Tinebase_Model_User::convertUserIdToInt($_userId);
 
         $filter = Zend_Ldap_Filter::equals(
             $this->_userUUIDAttribute, $userId
@@ -812,7 +818,10 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     {
         $filterArray = array();
         foreach ($_accountIds as $accountId) {
-            $accountId = Tinebase_Model_User::convertUserIdToInt($accountId);
+            if ($this->_writeGroupsIds && !$accountId instanceof Tinebase_Model_FullUser) {
+                $accountId = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId, Tinebase_Model_FullUser::class);
+            }
+            $accountId = $accountId instanceof Tinebase_Model_User ? ($accountId->xprops()[Tinebase_User::getInstance()::class]['syncId'] ?? $accountId->getId()) : Tinebase_Model_User::convertUserIdToInt($accountId);
             $filterArray[] = Zend_Ldap_Filter::equals($this->_userUUIDAttribute, Zend_Ldap::filterEscape($accountId));
         }
         $filter = new Zend_Ldap_Filter_Or($filterArray);

@@ -260,6 +260,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const SYNCOPTIONS = 'syncOptions';
 
+    const PWD_CANT_CHANGE = 'pwdCantChange';
+
     /**
      * user backend writes user pw to sql
      *
@@ -1707,6 +1709,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE => 'object',
                     self::CLASSNAME => Tinebase_Config_Struct::class,
                     self::CONTENT => array(
+                        self::PWD_CANT_CHANGE => [
+                            self::TYPE => self::TYPE_BOOL,
+                            self::CLIENTREGISTRYINCLUDE => false,
+                            self::SETBYADMINMODULE => false,
+                            self::SETBYSETUPMODULE => false,
+                            self::DEFAULT_STR => false
+                        ],
                         self::SYNC_USER_CONTACT_DATA => array(
                             //_('Sync contact data from sync backend')
                             self::LABEL => 'Sync contact data from sync backend',
