@@ -247,7 +247,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 if (this.fileSize > 5 * chunkMax) {
                     actualChunkSize = chunkMax;
                 } else {
-                    actualChunkSize = Math.max(chunkMin, this.fileSize / 5);
+                    actualChunkSize = Math.max(chunkMin, Math.floor(this.fileSize / 5));
                 }       
                 this.maxChunkSize = actualChunkSize;
                 
@@ -355,18 +355,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     prepareChunk: function() {
         
         if(this.lastChunkUploadFailed) {
-            this.currentChunkPosition = Math.max(0
-                    , this.currentChunkPosition - this.currentChunkSize);
-
-            this.currentChunkSize = Math.max(this.minChunkSize, this.currentChunkSize / 2);
-        }
-        else {
+            this.currentChunkPosition = Math.max(0, this.currentChunkPosition - this.currentChunkSize);
+            this.currentChunkSize = Math.floor(Math.max(this.minChunkSize, this.currentChunkSize / 2));
+        } else {
             this.currentChunkSize = Math.min(this.maxChunkSize, this.currentChunkSize * 2);
         }
         this.lastChunkUploadFailed = false;
-        
-        var nextChunkPosition = Math.min(this.fileSize, this.currentChunkPosition 
-                +  this.currentChunkSize);
+
+        var nextChunkPosition = Math.min(this.fileSize, this.currentChunkPosition + this.currentChunkSize);
         var newChunk = this.sliceFile(this.file, this.currentChunkPosition, nextChunkPosition);
         
         if(nextChunkPosition/1 == this.fileSize/1) {
