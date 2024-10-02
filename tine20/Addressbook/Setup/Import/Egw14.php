@@ -341,6 +341,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         // also add info_startdate from infologs
         // TODO add config for this
         // TODO handle multiple occurrences?
+        // TODO fix TZ (egw data is in UTC, tine expects date/00:00:00)
         $infologs = $this->_fetchInfoLogs($recordId, 'addressbook');
         foreach ($infologs as $infolog) {
             if (! empty($infolog['info_startdate']) && $infolog['info_status'] === 'ongoing') {
