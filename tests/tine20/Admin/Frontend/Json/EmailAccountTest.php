@@ -5,7 +5,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -762,7 +762,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
      * @throws Tinebase_Exception_Record_Validation
      * @throws Tinebase_Exception_SystemGeneric
      */
-    protected function _convertAccount(Felamimail_Model_Account $emailAccount, $user, $convertTo)
+    protected function _convertAccount(Felamimail_Model_Account $emailAccount, $user, $convertTo, $checkUserMail = true): array
     {
         if ($emailAccount->type !== Felamimail_Model_Account::TYPE_SHARED) {
             $emailAccount->migration_approved = 1;
@@ -798,7 +798,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
             $testUserAccount = false;
         }
 
-        if ($convertFrom === Felamimail_Model_Account::TYPE_SYSTEM) {
+        if ($convertFrom === Felamimail_Model_Account::TYPE_SYSTEM && $checkUserMail) {
             $updatedUser = Tinebase_User::getInstance()->getUserById($user->getId());
             self::assertEmpty($updatedUser->accountEmailAddress, 'user email address should be empty after account conversion');
         }
@@ -918,6 +918,25 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         $updatedUser = Admin_Controller_User::getInstance()->get($user->getId());
         self::assertFalse(isset($updatedUser->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]),
             'email user xprops still set: ' . print_r($updatedUser->xprops(), true));
+    }
+
+    public function testConvertSystemToAnotherUserInternalEmailAccount()
+    {
+        $this->_testNeedsTransaction();
+
+        $user = $this->_createUserWithEmailAccount();
+
+        $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $this->_emailAccounts[] = $emailAccount;
+        $converted = $this->_convertAccount(
+            $emailAccount,
+            Tinebase_Core::getUser(),
+            Felamimail_Model_Account::TYPE_USER_INTERNAL,
+            checkUserMail: false);
+        // try to access account
+        $fmailJson = new Felamimail_Frontend_Json();
+        $folders = $fmailJson->updateFolderCache($converted['id'], '');
+        self::assertCount(5, $folders);
     }
 
     public function testResolveAccountEmailUsers()
