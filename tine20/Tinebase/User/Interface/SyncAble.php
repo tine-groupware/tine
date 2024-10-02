@@ -66,6 +66,8 @@ interface Tinebase_User_Interface_SyncAble
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user);
 
+    public function generateDn(Tinebase_Model_FullUser $_account);
+
     /**
      * updates an existing user
      *

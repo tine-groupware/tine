@@ -606,7 +606,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             
             // add the user to current groups again
             foreach ($memberships as $groupId) {
-                $groupsBackend->addGroupMemberInSyncBackend($groupId, $_account);
+                $groupsBackend->addGroupMemberInSyncBackend($groupId, $_account, false);
             }
         }
         
@@ -778,11 +778,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     protected function _getMetaData($_userId)
     {
 
-        if (!$_userId instanceof Tinebase_Model_User) {
+        if ($this->_writeGroupsIds && !$_userId instanceof Tinebase_Model_FullUser) {
             $_userId = $this->getFullUserById($_userId);
         }
 
-        $userId = $this->_encodeAccountId($_userId->xprops()[static::class]['syncId'] ?? Tinebase_Model_User::convertUserIdToInt($_userId));
+        $userId = $this->_encodeAccountId($_userId instanceof Tinebase_Model_FullUser ? ($_userId->xprops()[static::class]['syncId'] ?? $_userId->getId()) : Tinebase_Model_User::convertUserIdToInt($_userId));
 
         $filter = Zend_Ldap_Filter::equals(
             $this->_rowNameMapping['accountId'], $userId
@@ -819,7 +819,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         $baseDn = $this->_baseDn;
         $uidProperty = array_search('uid', $this->_rowNameMapping);
-        $newDn = "uid={$_account->$uidProperty},{$baseDn}";
+        $newDn = 'uid=' . Zend_Ldap_Filter_Abstract::escapeValue($_account->$uidProperty) . ",{$baseDn}";
 
         return $newDn;
     }
