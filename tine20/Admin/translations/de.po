@@ -1598,3 +1598,10 @@ msgstr ""
 
 msgid "A group with this name already exists"
 msgstr "Es gibt bereits eine Gruppe mit diesem Namen"
+
+msgid "Scheduler task failed"
+msgstr "Scheduler-Task fehlgeschlagen"
+
+#, python-format
+msgid "Your scheduler task %s has failed %d times."
+msgstr "Ihr Scheduler-Task %s ist %d mal fehlgeschlagen."
