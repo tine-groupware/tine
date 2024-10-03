@@ -159,6 +159,17 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     }
                     updatedNode.bufferedReload();
                 }
+            } else {
+                const parentPath = Tine.Filemanager.Model.Node.dirname(path);
+                const parentNode = parentPath ? this.getNodeByPath(parentPath) : null;
+                if (parentNode) {
+                    const isNodeSelected = parentNode.isSelected();
+                    parentNode.reload(() => {
+                        if (isNodeSelected) {
+                            this.selectPath(parentPath);
+                        }
+                    });
+                }
             }
         }
     },
