@@ -4038,15 +4038,32 @@ class Tinebase_FileSystem implements
 
         return true;
     }
+
+    public function walkNodeTree(?string $startParentId, callable $visitor): void
+    {
+        $nodeIdsToWalk = [];
+        foreach ($this->_getTreeNodeBackend()->search(
+                new Tinebase_Model_Tree_Node_Filter([
+                    ['field' => 'parent_id', 'operator' => null === $startParentId ? 'isnull' : 'equals', 'value' => $startParentId],
+                    ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                ], Tinebase_Model_Filter_FilterGroup::CONDITION_AND, ['ignoreAcl' => true])) as $node) {
+            if ($visitor($node) && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                $nodeIdsToWalk[] = $node->getId();
+            }
+        }
+
+        foreach ($nodeIdsToWalk as $id) {
+            $this->walkNodeTree($id, $visitor);
+        }
+    }
+
     /**
      * remove file revisions based on settings:
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS
      * Tinebase_Config::FILESYSTEM -> Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS
      * or folder specific settings
-     *
-     * @return bool
      */
-    public function clearFileRevisions()
+    public function clearFileRevisions(): bool
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' starting to clear file revisions');
@@ -4054,41 +4071,41 @@ class Tinebase_FileSystem implements
         $config = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
         $numRevisions = (int)$config->{Tinebase_Config::FILESYSTEM_NUMKEEPREVISIONS};
         $monthRevisions = (int)$config->{Tinebase_Config::FILESYSTEM_MONTHKEEPREVISIONS};
-        $treeNodeBackend = $this->_getTreeNodeBackend();
-        $parents = array();
+        $parents = [];
         $count = 0;
 
-        foreach ($treeNodeBackend->search(
-                new Tinebase_Model_Tree_Node_Filter(array(
-                    array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE)
-                ), '', array('ignoreAcl' => true))
-                , null, true) as $id) {
+        $this->walkNodeTree(null, function(Tinebase_Model_Tree_Node $fileNode) use(
+                    $numRevisions,
+                    $monthRevisions,
+                    &$parents,
+                    &$count
+                ) {
+            if ($fileNode->flysystem) {
+                return false;
+            }
+            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $fileNode->type) {
+                return true;
+            }
+            if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileNode->type) {
+                return false;
+            }
+
             try {
-                /** @var Tinebase_Model_Tree_Node $fileNode */
-                $fileNode = $treeNodeBackend->get($id, true);
                 if (isset($parents[$fileNode->parent_id])) {
                     $parentXProps = $parents[$fileNode->parent_id];
                 } else {
-                    $parentNode = $treeNodeBackend->get($fileNode->parent_id, true);
+                    $parentNode = $this->_getTreeNodeBackend()->get($fileNode->parent_id, true);
                     $parentXProps = $parents[$fileNode->parent_id] = $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
                 }
 
                 if (!empty($parentXProps)) {
                     if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON])
-                        && false === $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON]) {
+                            && false === $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON]) {
                         $numRev = 1;
                         $monthRev = 0;
                     } else {
-                        if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM])) {
-                            $numRev = $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM];
-                        } else {
-                            $numRev = $numRevisions;
-                        }
-                        if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH])) {
-                            $monthRev = $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH];
-                        } else {
-                            $monthRev = $monthRevisions;
-                        }
+                        $numRev = $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_NUM] ?? $numRevisions;
+                        $monthRev = $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_MONTH] ?? $monthRevisions;
                     }
                 } else {
                     $numRev = $numRevisions;
@@ -4107,10 +4124,14 @@ class Tinebase_FileSystem implements
                     $count += $this->_fileObjectBackend->clearOldRevisions($fileNode->object_id, $monthRev);
                 }
 
-            } catch(Tinebase_Exception_NotFound $tenf) {}
+            } catch(Tinebase_Exception_NotFound) {}
 
+            // current implementation needs less of a keep alive as we do mysql queries and keep the connection alive ourselves
+            // this is more to check that we still hold the lock and if not throw an exception and stop processing
             Tinebase_Lock::keepLocksAlive();
-        }
+
+            return false;
+        });
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' cleared ' . $count . ' file revisions');
