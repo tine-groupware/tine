@@ -459,7 +459,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         } elseif ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $this->user_id;
             if (! $resource instanceof Calendar_Model_Resource) {
+                $oldAcl = Calendar_Controller_Resource::getInstance()->doContainerACLChecks(false);
+                $raii = new Tinebase_RAII(fn() => Calendar_Controller_Resource::getInstance()->doContainerACLChecks($oldAcl));
                 $resource = Calendar_Controller_Resource::getInstance()->get($resource, _aclProtect: false);
+                unset($raii);
             }
             // return pseudo contact with resource data
             $result = new Addressbook_Model_Contact(array(
