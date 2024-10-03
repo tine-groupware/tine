@@ -731,6 +731,25 @@ class Timetracker_ControllerTest extends TestCase
             ),
         ));
     }
+
+    public function testBillTA(): void
+    {
+        $role = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($role->getId(), $this->_roleRights);
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
+        $this->assertNotSame(Timetracker_Model_Timeaccount::STATUS_BILLED, $this->_objects['timeaccount']->status);
+
+        $ts = $this->_timesheetController->create($this->_objects['timesheet']);
+        $this->assertFalse((bool)$ts->is_cleared);
+
+        $this->_objects['timeaccount']->status = Timetracker_Model_Timeaccount::STATUS_BILLED;
+        $ta = $this->_timeaccountController->update($this->_objects['timeaccount']);
+        $this->assertSame(Timetracker_Model_Timeaccount::STATUS_BILLED, $ta->status);
+
+        $ts = $this->_timesheetController->get($ts->getId());
+        $this->assertTrue((bool)$ts->is_cleared);
+    }
     
     /**
      * tests the findTimesheetsByTimeaccountAndPeriod method of the timesheet controller

@@ -147,16 +147,15 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         if (! $this->_doRightChecks) {
             return;
         }
-        
-        $hasRight = $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
-        
-        switch ($_action) {
-            case 'create':
+
+        // if get, right = true
+        // else if manage_timeaccounts, right = true
+        // else if create and add_timeaccounts, right = true
+        if (!($hasRight = (self::ACTION_GET === $_action)) &&
+                !($hasRight = $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE))) {
+            if (self::ACTION_CREATE === $_action) {
                 $hasRight = $this->checkRight(Timetracker_Acl_Rights::ADD_TIMEACCOUNTS, FALSE);
-            case 'get':
-                // is allowed for everybody
-                $hasRight = TRUE;
-                break;
+            }
         }
         
         if (! $hasRight) {
@@ -316,30 +315,28 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         $tsBackend = new Timetracker_Backend_Timesheet();
         
         if ($currentRecord['status'] !== $updatedRecord['status'] && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED) {
-            $timesheets = $tsBackend->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
-                        ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
-                        ['condition' => 'OR', 
-                            'filters' => [
-                                [
-                                    'field'    => 'is_cleared',
-                                    'operator' => 'equals',
-                                    'value'    => false
-                                ], [
-                                    'field'    => 'invoice_id',
-                                    'operator' => 'equals',
-                                    'value'    => null
-                                ]
-                            ]
-                        ]
-                    ]
+
+            $invoiceIdPresent = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
+
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
+                ]);
+            $innerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field'    => 'is_cleared', 'operator' => 'equals', 'value'    => false],
+                ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+            if ($invoiceIdPresent) {
+                $innerFilter->addFilter($innerFilter->createFilter(
+                    ['field' => 'invoice_id', 'operator' => 'equals', 'value' => null]
                 ));
-            
-            if (sizeof($timesheets) > 0) {
-                $tsBackend->updateMultiple($timesheets->getId(), array(
-                    'invoice_id'    => $updatedRecord['invoice_id'],
-                    'is_cleared'    => true,
-                ));
+            }
+            $filter->addFilterGroup($innerFilter);
+            $timesheets = $tsBackend->search($filter);
+            if ($timesheets->count() > 0) {
+                $tsBackend->updateMultiple($timesheets->getId(), array_merge($invoiceIdPresent ? [
+                        'invoice_id' => $updatedRecord['invoice_id'],
+                    ] : [], [
+                        'is_cleared' => true,
+                    ]));
             }
         }
     }
