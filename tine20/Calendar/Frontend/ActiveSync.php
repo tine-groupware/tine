@@ -445,6 +445,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     // required fields
                     switch ($rrule->freq) {
                         case Calendar_Model_Rrule::FREQ_DAILY:
+                        case Calendar_Model_Rrule::FREQ_INDIVIDUAL:
                             $recurrence->type = Syncroton_Model_EventRecurrence::TYPE_DAILY;
                             
                             break;

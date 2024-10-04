@@ -35,6 +35,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     const FREQ_WEEKLY    = 'WEEKLY';
     const FREQ_MONTHLY   = 'MONTHLY';
     const FREQ_YEARLY    = 'YEARLY';
+    const FREQ_INDIVIDUAL = 'INDIVIDUAL';
 
     /**
      * weekdays
@@ -108,7 +109,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         'id'                   => array('allowEmpty' => true,  /*'Alnum'*/),
         'freq'                 => array(
             'allowEmpty' => true,
-            array('InArray', array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY)),
+            array('InArray', array(self::FREQ_DAILY, self::FREQ_MONTHLY, self::FREQ_WEEKLY, self::FREQ_YEARLY, self::FREQ_INDIVIDUAL)),
         ),
         'interval'             => array('allowEmpty' => true, 'Int'   ),
         'byday'                => array('allowEmpty' => true, 'Regex' => '/^[\-0-9A_Z,]{2,}$/'),
@@ -362,12 +363,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $weekDays = Zend_Locale::getTranslationList('day', $locale);
         
         switch ($this->freq) {
+            case self::FREQ_INDIVIDUAL:
             case self::FREQ_DAILY:
+                $freq = $this->freq === self::FREQ_INDIVIDUAL ? 'Individually' : 'Daily';
                 $rule .= $this->interval > 1 ?
                     sprintf($translation->_('Every %s day'), $this->_formatInterval($this->interval, $translation, $numberFormatter)) :
-                    $translation->_('Daily');
+                    $translation->_($freq);
                 break;
-                
             case self::FREQ_WEEKLY:
                 $rule .= $this->interval > 1 ?
                     sprintf($translation->_('Every %s week on') . ' ', $this->_formatInterval($this->interval, $translation, $numberFormatter)) :
@@ -615,9 +617,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             self::FREQ_DAILY   => Tinebase_DateTime::MODIFIER_DAY,
             self::FREQ_WEEKLY  => Tinebase_DateTime::MODIFIER_WEEK,
             self::FREQ_MONTHLY => Tinebase_DateTime::MODIFIER_MONTH,
-            self::FREQ_YEARLY  => Tinebase_DateTime::MODIFIER_YEAR
+            self::FREQ_YEARLY  => Tinebase_DateTime::MODIFIER_YEAR,
+            self::FREQ_INDIVIDUAL  => Tinebase_DateTime::MODIFIER_DAY,
         );
-        
+
         $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_event->rrule);
         
@@ -728,10 +731,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
 
         switch ($rrule->freq) {
             case self::FREQ_DAILY:
-                
-                self::_computeRecurDaily($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
+            case self::FREQ_INDIVIDUAL:
+            self::_computeRecurDaily($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 break;
-                
             case self::FREQ_WEEKLY:
                 // default BYDAY clause
                 if (! $rrule->byday) {

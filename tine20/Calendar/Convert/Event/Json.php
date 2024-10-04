@@ -55,8 +55,10 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
     */
     static public function resolveRrule($_events)
     {
-        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events : array($_events);
-    
+        $events = $_events instanceof Tinebase_Record_RecordSet ? $_events
+            : new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$_events]);
+        $candidates = $events->filter('rrule', "/^FREQ.*/", TRUE);
+        $candidate = null;
         foreach ($events as $event) {
             if ($event->rrule) {
                 $event->rrule = Calendar_Model_Rrule::getRruleFromString($event->rrule);
@@ -64,6 +66,15 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
                 if ($event->rrule_constraints instanceof Calendar_Model_EventFilter) {
                     $event->rrule_constraints = $event->rrule_constraints->toArray(true);
                 }
+            }
+            if (count($candidates) > 0) {
+                $candidate = $candidates->filter('id', $event->base_event_id)->getFirstRecord();
+            } else if (!empty($event->base_event_id)) {
+                $candidate = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
+            }
+            // exceptions need freq on FE to show/hide elements
+            if ($candidate && isset($candidate->rrule->count)) {
+                $event->rrule = $candidate->rrule;
             }
         }
     }
