@@ -433,6 +433,12 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         this.layer.beginUpdate();
         this.layer.setHeight(height+pad);
         this.layer.alignTo.apply(this.layer, [this.el].concat(this.layerAlign));
+        const maxHeight = Ext.getBody().getBox().height-this.layer.getBox().y;
+        const mustScroll = height+pad > maxHeight;
+        if (mustScroll) {
+            this.layer.setHeight(maxHeight);
+        }
+        this.layer.setStyle('overflow-y',mustScroll ? 'scroll' : 'hidden');
         this.layer.endUpdate();
     },
     
