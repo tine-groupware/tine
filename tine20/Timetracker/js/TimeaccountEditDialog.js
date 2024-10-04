@@ -251,7 +251,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * is called is billed field changes
      */
     onBilledChange: function(combo, record, index) {
-        if (combo.getValue() === 'billed') {
+        if (this.useInvoice && combo.getValue() === 'billed') {
             const dialog = new Tine.Tinebase.dialog.Dialog({
                 windowTitle: this.app.i18n._('Select invoice'),
                 items: [{
