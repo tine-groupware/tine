@@ -1417,12 +1417,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (! $baseEvent) {
             throw new Tinebase_Exception_NotFound('base event of a recurring series not found');
         }
-        
-        if ($baseEvent->last_modified_time != $_event->last_modified_time) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . " It is not allowed to create recur instance if it is not a clone of base event");
-            throw new Tinebase_Exception_ConcurrencyConflict('concurrency conflict!');
-        }
 
 //        // Maybe Later
 //        // exdates needs to stay in baseEvents container
@@ -1462,12 +1456,48 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             return $this->get($exceptionAttender->cal_event_id);
         }
-        
+
         // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
         if (empty($_event->recurid)) {
-            throw new Exception('recurid must be present to create exceptions!');
+            //calculate recurid
+            if (!empty($_event->rrule) && $_event->rrule->freq === Calendar_Model_Rrule::FREQ_INDIVIDUAL) {
+                $baseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($_event);
+                $count = $_event->rrule->count;
+                if (empty($baseEvent->rrule)) {
+                    $baseEvent->rrule = $_event->rrule;
+                } else {
+                    $baseEvent->rrule->count = strval($baseEvent->rrule->count + 1);
+                    $count = $baseEvent->rrule->count;
+                }
+                $baseEvent = Calendar_Controller_Event::getInstance()->update($baseEvent);
+
+
+                $from = clone $baseEvent->dtstart;
+                $until = clone $baseEvent->dtstart;
+                $until->addDay($count);
+
+                $result = Calendar_Model_Rrule::computeRecurrenceSet(
+                    $baseEvent,
+                    new Tinebase_Record_RecordSet('Calendar_Model_Event'),
+                    $from,
+                    $until
+                );
+                $count = count($result);
+                $lastRecord = $result[$count -1];
+                $_event->recurid = $lastRecord->recurid;
+                $_event->last_modified_time = $baseEvent->last_modified_time;
+                $_event->rrule = '';
+            } else {
+                throw new Exception('recurid must be present to create exceptions!');
+            }
         }
-        
+
+        if ($baseEvent->last_modified_time != $_event->last_modified_time) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " It is not allowed to create recur instance if it is not a clone of base event");
+            throw new Tinebase_Exception_ConcurrencyConflict('concurrency conflict!');
+        }
+
         // we do notifications ourselves
         $sendNotifications = $this->sendNotifications(FALSE);
         
@@ -2121,6 +2151,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         switch($rrule->freq)
         {
             case Calendar_Model_Rrule::FREQ_DAILY:
+            case Calendar_Model_Rrule::FREQ_INDIVIDUAL:
                 // nothing to do, it's a success case
                 $success = true;
                 break;
