@@ -271,6 +271,9 @@ Ext.DatePicker = Ext.extend(Ext.BoxComponent, {
      * @param {Date} value The date to set
      */
     setValue : function(value){
+        if (Ext.isString(value) && value === 'dayThis') {
+            value = new Date();
+        }
         this.value = value.clearTime(true);
         this.update(this.value);
     },
