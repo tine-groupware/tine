@@ -70,12 +70,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
 
         this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app, this.keyFieldName);
-        
-        // filter for userType if records contain is_user_type (NOTE: keyFieldRecord Models are not announce yet)
-        if(this.store.getAt(0)?.json.hasOwnProperty('is_user_type')) {
-            this.store.filterBy((r) => {return !!+r.json.is_user_type});
-        }
-        
+
         if (this.sortBy) {
             this.store.sort(this.sortBy);
         }
@@ -157,7 +152,14 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
     },
 
-    doQuery: function() {
+    doQuery: function(q, forceAll) {
+
+        // filter for userType if records contain is_user_type (NOTE: keyFieldRecord Models are not announce yet)
+        this.store.filterBy((r) => {
+            return ! (r.json.hasOwnProperty('is_user_type') && +r.json.is_user_type === 0) &&
+            (forceAll || !q) ? true : String(r.get(this.displayField)).match(q);
+        });
+
         this.onLoad();
     }
 });
