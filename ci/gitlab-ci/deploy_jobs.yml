@@ -223,7 +223,7 @@ trigger-weekly-release:
     - !reference [.lib, script]
     - release_weekly_tag
   rules:
-    - if: $BASE_MAJOR_COMMIT_REF_NAME != "2024.11" || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
+    - if: $BASE_MAJOR_COMMIT_REF_NAME != "main" || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /trigger-weekly-release/
     - if: $TRIGGER_WEEKLY_RELEASE == "false"
