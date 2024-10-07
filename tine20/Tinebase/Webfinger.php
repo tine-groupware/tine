@@ -11,6 +11,9 @@ class Tinebase_Webfinger
     {
         /** @var \Laminas\Diactoros\ServerRequest $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        if (self::badUserAgent($request)) {
+            return static::notFound();
+        }
         $params = $request->getQueryParams();
         if (!isset($params['resource']) || !isset($params['rel'])) {
             return static::badRequest();
@@ -43,5 +46,30 @@ class Tinebase_Webfinger
     protected static function badRequest(): \Laminas\Diactoros\Response
     {
         return new \Laminas\Diactoros\Response('php://memory', 400);
+    }
+
+    protected static function notFound(): \Laminas\Diactoros\Response
+    {
+        return new \Laminas\Diactoros\Response('php://memory', 404);
+    }
+
+    /*
+     * Some clients may have strange results if webfinger is present. 
+     */
+    protected static function badUserAgent(\Laminas\Diactoros\ServerRequest $request): bool
+    {
+        // OwnCloud client asks for SSO, Tine publishes webfinger regardless if SSO is enabled.
+        // Tested with Android App 4.3.0. 
+        //
+        // Better not ask for SSO > Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED); <,
+        // even if there is no extra value if ownCloud instances are not listed; But there might be valid cases. 
+        $user_agent = $request->getHeader('User-Agent');
+        if(!empty($user_agent)) {
+            if (preg_match('/('. implode('|', Tinebase_WebDav_Plugin_OwnCloud::USER_AGENTS) .')\/(\d+\.\d+\.\d+)/', $user_agent[0])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
