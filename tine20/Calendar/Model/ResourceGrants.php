@@ -116,6 +116,57 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
         );
     }
 
+    public function setFromArray(array &$_data)
+    {
+        // unset all default grants
+        foreach (Tinebase_Model_Grants::getAllGrants() as $key) {
+            $_data[$key] = false;
+        }
+
+        // enforce implicit resource grants
+        if ($_data[Calendar_Model_ResourceGrants::RESOURCE_ADMIN] ?? false) {
+            $_data[Calendar_Model_ResourceGrants::RESOURCE_EDIT]      = true;
+            $_data[Calendar_Model_ResourceGrants::RESOURCE_EXPORT]    = true;
+            $_data[Calendar_Model_ResourceGrants::RESOURCE_INVITE]    = true;
+            $_data[Calendar_Model_ResourceGrants::RESOURCE_READ]      = true;
+            $_data[Calendar_Model_ResourceGrants::RESOURCE_SYNC]      = true;
+        } else {
+            if ($_data[Calendar_Model_ResourceGrants::RESOURCE_EDIT] ?? false) {
+                $_data[Calendar_Model_ResourceGrants::RESOURCE_READ]      = true;
+            }
+            if ($_data[Calendar_Model_ResourceGrants::RESOURCE_STATUS] ?? false) {
+                $_data[Calendar_Model_ResourceGrants::RESOURCE_INVITE]    = true;
+                $_data[Calendar_Model_ResourceGrants::EVENTS_FREEBUSY]    = true;
+            }
+        }
+
+
+        // apply event grants
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_ADD] ?? false) {
+            $_data[Tinebase_Model_Grants::GRANT_ADD] = true;
+        }
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_DELETE] ?? false) {
+            $_data[Tinebase_Model_Grants::GRANT_DELETE] = true;
+        }
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_EDIT] ?? false) {
+            $_data[Tinebase_Model_Grants::GRANT_EDIT] = true;
+        }
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_EXPORT] ?? false) {
+            $_data[Tinebase_Model_Grants::GRANT_EXPORT] = true;
+        }
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_FREEBUSY] ?? false) {
+            $_data[Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY] = true;
+        }
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_READ] ?? false) {
+            $_data[Tinebase_Model_Grants::GRANT_READ] = true;
+        }
+        if ($_data[Calendar_Model_ResourceGrants::EVENTS_SYNC] ?? false) {
+            $_data[Tinebase_Model_Grants::GRANT_SYNC] = true;
+        }
+
+        parent::setFromArray($_data);
+    }
+
     protected static $_modelConfiguration = null;
 
     /**
