@@ -124,7 +124,7 @@ COPY --from=gomplate /bin/gomplate /usr/bin/gomplate
 RUN mkdir /usr/local/busybox \
  && busybox --install /usr/local/busybox
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/busybox
-RUN wget -O /usr/local/bin/tika.jar https://packages.tine20.com/maintenance/tika/tika-app-2.6.0.jar
+RUN wget -O /usr/local/bin/tika.jar https://packages.tine20.com/maintenance/tika/tika-app-2.9.2.jar
 RUN addgroup --system -gid 150 tine20 && \
     adduser --system --no-create-home --disabled-password --shell /bin/bash --gecos "tine20 user" --ingroup tine20 --uid 150 tine20 && \
     mkdir -p /etc/tine20/conf.d && \
