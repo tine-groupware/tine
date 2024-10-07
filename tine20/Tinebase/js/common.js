@@ -438,6 +438,7 @@ Tine.Tinebase.common = {
                 return `<span class="duration-renderer-medium">${duration}</span>`;
             }
             const smallRenderer = (i, H) => {
+                if (i && i < 10) i = `0${i}`;
                 return `<span class="duration-renderer-small">${H || '0'}:${i || '00'}</span>`;
             }
             return isGridCell ? `${mediumRenderer(i, H)}${smallRenderer(i, H)}` : mediumRenderer(i, H);

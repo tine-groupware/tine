@@ -158,7 +158,7 @@ grid.on('validateedit', function(e) {
 
         this.on('beforeedit', this.onBeforeEdit, this);
         
-        this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [true]), this);
+        // this.getGridEl().on('mousewheel', this.stopEditing.createDelegate(this, [false]), this);
         this.on('columnresize', this.stopEditing, this, [true]);
         this.mon(Ext.getDoc(), {
             mousedown: this.stopEditingIf.createDelegate(this, [false], true)
