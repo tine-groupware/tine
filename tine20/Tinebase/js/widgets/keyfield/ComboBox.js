@@ -152,11 +152,12 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         }
     },
 
-    doQuery: function() {
+    doQuery: function(q, forceAll) {
 
         // filter for userType if records contain is_user_type (NOTE: keyFieldRecord Models are not announce yet)
         this.store.filterBy((r) => {
-            return ! (r.json.hasOwnProperty('is_user_type') && +r.json.is_user_type === 0)
+            return ! (r.json.hasOwnProperty('is_user_type') && +r.json.is_user_type === 0) &&
+            (forceAll || !q) ? true : String(r.get(this.displayField)).match(q);
         });
 
         this.onLoad();
