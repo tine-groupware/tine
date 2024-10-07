@@ -102,7 +102,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 }
                 break;
             case Admin_Event_AddAccount::class:
-                /** @var Tinebase_Event_User_CreatedAccount $_eventObject */
+                /** @var Admin_Event_AddAccount $_eventObject */
                 Felamimail_Controller_Account::getInstance()->createSystemAccount($_eventObject->account,
                     $_eventObject->pwd);
                 break;
