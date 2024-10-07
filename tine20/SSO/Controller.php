@@ -265,7 +265,9 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         // workaround for quay ... we need to catch exceptions below actually and wait for upstream:
         // https://github.com/thephpleague/oauth2-server/pull/1431
-        if (Tinebase_Core::getRequest()->getPost('code') === 'badcode') {
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        if ('badcode' === ($request->getParsedBody()['code'] ?? null)) {
             $response = (new \Laminas\Diactoros\Response())->withStatus(400);
             $response->getBody()->write('{"error":"invalid_grant"}');
             return $response;
