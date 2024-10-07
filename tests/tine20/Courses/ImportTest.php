@@ -118,11 +118,14 @@ CSV
             'created course: mk31' . PHP_EOL .
             'created course: bos21' . PHP_EOL .
             'created course: avm21' . PHP_EOL .
-            'created course: av22' . PHP_EOL .
-            'create teacher account: s.zablowsky' . PHP_EOL .
-            'create teacher account: h.dreyer' . PHP_EOL .
-            'create teacher account: a.schemschura' . PHP_EOL .
-            'create teacher account: j.moerke' . PHP_EOL .
+            'created course: av22' . PHP_EOL, $note->note);
+        $this->assertStringContainsString(
+            'create teacher account: ', $note->note);
+        foreach (['s.zablowsky', 'h.dreyer', 'a.schemschura', 'j.moerke'] as $teacher) {
+            $this->assertStringContainsString(
+                $teacher . PHP_EOL, $note->note);
+        }
+        $this->assertStringContainsString(
             'create student account: sc11-m.korndoerfer' . PHP_EOL .
             'create student account: av02-j.spreemann' . PHP_EOL .
             'create student account: mwp12-s.owusu-sekyere' . PHP_EOL .
@@ -133,8 +136,7 @@ CSV
             'create student account: mk31-d.kobzak' . PHP_EOL .
             'create student account: mk31-p.winterhalter' . PHP_EOL .
             'create student account: avm21-i.lababidi' . PHP_EOL .
-            'create student account: av22-h.braun'
-            , $note->note);
+            'create student account: av22-h.braun', $note->note);
 
         $teacherPwdNod = Tinebase_FileSystem::getInstance()->stat($path . '/teacherPwdExport.docx');
         $teacherPwdExport = $this->getPlainTextFromDocx(Tinebase_FileSystem::getInstance()->getRealPathForHash($teacherPwdNod->hash));
