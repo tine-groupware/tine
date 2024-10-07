@@ -39,11 +39,18 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
     const OWNCLOUD_MAX_VERSION = '100.0.0';
 
     /**
-     * Reference to server object
-     *
-     * @var \Sabre\DAV\Server
+     * Client apps
      */
-    private $server;
+    public const USER_AGENTS = [
+        'mirall',                   // Windows: Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)
+        'ownCloud-android',         // Android: Mozilla/5.0 (Android) ownCloud-android/3.0.4
+        'Owncloud\siOs\sClient',    // iOs: <old app>
+        'ownCloudApp',              // iOS/iPad new: ownCloudApp/12.2.1 (App/291; iOS/17.5.1; iPhone)
+    ];
+
+    protected string $useragent;
+
+    protected \Sabre\DAV\Server $server;
 
     /**
      * Initializes the plugin
@@ -55,11 +62,12 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
     {
         $this->server = $server;
 
+        $this->useragent = $server->httpRequest->getHeader('user-agent') ?? '';
+
         $server->on('propFind', array($this, 'propFind'));
 
-        /* Namespaces */
-        $server->xml->namespaceMap[self::NS_OWNCLOUD] = 'owncloud';
-
+        /* Namespaces | new iOS ownCloudApp uses 'oc' hardcoded */
+        $server->xml->namespaceMap[self::NS_OWNCLOUD] = ($this->getOwnCloudClientPlatform() == 'iOS') ? 'oc' : 'owncloud';
         array_push($server->protectedProperties,
             '{' . self::NS_OWNCLOUD . '}id'
         );
@@ -74,14 +82,13 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
     public function propFind(PropFind $propFind, INode $node)
     {
         $version = $this->getOwnCloudVersion();
-        if ($version !== null && !$this->isValidOwnCloudVersion()) {
+        if ($version !== null && !$this->isValidOwnCloudVersion($version)) {
             $message = sprintf(
                 '%s::%s OwnCloud client min version is "%s"!',
                 __METHOD__,
                 __LINE__,
                 static::OWNCLOUD_MIN_VERSION
             );
-
             Tinebase_Core::getLogger()->debug($message);
             throw new InvalidArgumentException($message);
         } elseif (!$version) {
@@ -93,6 +100,12 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
             $node instanceof Tinebase_Frontend_WebDAV_Node ? $node->getId() :
                 // the path does not change for the other nodes => hence the id is "static"
                 sha1($propFind->getPath()));
+
+        // new iPhone/iPad ownCloudApp relays on OC-CHECKSUM header hardcoded (without: download-loop!!)
+        // Even if '{' . self::NS_OWNCLOUD . '}checksums' is not requested...
+        if (($node instanceof Tinebase_Frontend_WebDAV_Node) && ($fNode = $node->getNode())) {
+            $this->server->httpResponse->setHeader('OC-CHECKSUM', 'sha1:' . $fNode->hash);
+        }
 
         $propFind->handle('{' . self::NS_OWNCLOUD . '}permissions', function() use($node) {
             $permission = 'S';
@@ -153,12 +166,31 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
      * Return the actuall owncloud version number
      * @throws \InvalidArgumentException
      */
-    protected function isValidOwnCloudVersion()
+    protected function isValidOwnCloudVersion($version)
     {
-        $version  = $this->getOwnCloudVersion();
-
         return version_compare($version, static::OWNCLOUD_MIN_VERSION, 'ge')
             && version_compare($version, static::OWNCLOUD_MAX_VERSION, 'le');
+    }
+
+    /**
+     * Get owncloud client platform
+     */
+    protected function getOwnCloudClientPlatform(): ?string
+    {
+        $match = [];
+        if (!preg_match('/('. implode('|', static::USER_AGENTS) .')\/(\d+\.\d+\.\d+)/', $this->useragent, $match)) {
+            return null;
+        }
+
+        $platform = 'mirall'; // Desktop app is default
+        if ($match[1] == 'ownCloud-android') {
+            $platform = 'Android';
+        }
+        else if (($match[1] == 'ownCloudApp') && ((strpos($this->useragent, 'iPad') > 0) || (strpos($this->useragent, 'iPhone') > 0))) {
+            $platform = 'iOS';
+        }
+
+        return $platform;
     }
 
     /**
@@ -166,29 +198,16 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
      *
      * @return mixed|null
      */
-    protected function getOwnCloudVersion() {
-        // Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)
-        /* @var $request \Zend\Http\PhpEnvironment\Request */
-        $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
-
-        // In some cases this is called not out of an request, for example some tests, therefore we should require it here
-        // If it's not an owncloud server, we don't need to determine the version!
-        if (!$request) {
-            return null;
-        }
-
-        $useragentHeader = $request->getHeader('user-agent');
-
-        $useragent = $useragentHeader ? $useragentHeader->getFieldValue() : null;
-
+    protected function getOwnCloudVersion()
+    {
         // If no valid header, this is not an owncloud client
-        if ($useragent === null) {
+        if ($this->useragent === null) {
             return null;
         }
 
         $match = [];
 
-        if (!preg_match('/mirall\/(\d+\.\d+\.\d+)/', $useragent, $match)) {
+        if (!preg_match('/('. implode('|', static::USER_AGENTS) .')\/(\d+\.\d+\.\d+)/', $this->useragent, $match)) {
             return null;
         }
 
