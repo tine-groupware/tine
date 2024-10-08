@@ -1,5 +1,5 @@
-Configure tine as Single Sign On provider
-=
+# Configure tine as Single Sign On identity provider (SSO IdP)
+
 tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) identity provider for [oidc](https://openid.net/connect/) and [SAML2](https://en.wikipedia.org/wiki/SAML_2.0)
 
 ## 1) Install SSO application
@@ -42,7 +42,7 @@ sudo chmod 660 ./conf.d/sso_cert.* ./conf.d/sso_key.*
 SSO Relaying parties can be configured per UI in the admin module or via cli using curl
 
 ### - UI
-Go to `Admin` > `Applications` > `SSO` and open the SSO configuration dialog.
+Go to `Admin` > `Applications` > `SSO` and open the tab `RELYING PARTIES` in the SSO configuration dialog.
 
 ### - CLI
 ``` sh title="Login"
@@ -76,7 +76,19 @@ The oicd provider url of the tine idp (needed in the config of the rp) is <https
 --8<-- "scripts/curl/admin_SSOAddRP_oidc"
 ```
 
-## Tine as RP, foreign IDP
+# Configure tine as Single Sign On relaying party (SSO RP)
+
+tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) relaying party for [oidc](https://openid.net/connect/)
+
+## 1) Install SSO application
+* Go to `setup.php` and make sure SSO is installed
+* In the UI go to `Admin` > `Applications` > `SSO` and make sure SSO is activated
+
+## 2) Configure identity providers (IdP)
+SSO identity providers can be configured per UI in the admin module or via cli using curl
+
+### - UI
+Go to `Admin` > `Applications` > `SSO` and open the tab `EXTERNAL IDENTITY PROVIDERS` in the SSO configuration dialog.
 
 ### - CLI
 ``` sh title="Login"
