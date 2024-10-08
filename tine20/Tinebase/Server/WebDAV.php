@@ -316,6 +316,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
+        } finally {
+            Tinebase_Session::destroyAndRemoveCookie();
         }
     }
 
