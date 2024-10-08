@@ -18,6 +18,7 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -28,6 +29,10 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE015_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE        => [
@@ -117,5 +122,18 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
     {
         $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Calendar_Model_Event::TABLE_NAME . ' SET `status` = "CANCELLED" WHERE `status` = "CANCELED"');
         $this->addApplicationUpdate('Calendar', '15.4', self::RELEASE015_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
+        foreach (Tinebase_Container::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Container::class, [
+                    ['field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()],
+                    ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Resource::class],
+                ]), null, false, ['id']) as $id) {
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($id, true);
+            Tinebase_Container::getInstance()->setGrants($id, $grants, true, false);
+        }
+        $this->addApplicationUpdate('Calendar', '15.5', self::RELEASE015_UPDATE005);
     }
 }

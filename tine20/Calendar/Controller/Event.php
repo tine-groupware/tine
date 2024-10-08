@@ -1583,7 +1583,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $origRrule = (string)$_event->rrule;
                 $ruleChanged = false;
                 // adopt count
-                if (isset($rrule->count)) {
+                if (isset($_event->rrule->count)) {
                     $newRrule = Calendar_Model_Rrule::getRruleFromString($_event->rrule);
                     $newRrule->count = $newRrule->count - $rrule->count;
                     $_event->rrule = (string)$newRrule;

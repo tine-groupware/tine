@@ -3515,6 +3515,9 @@ abstract class Tinebase_Controller_Record_Abstract
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
+        if (!$controller->modlogActive()) {
+            return;
+        }
 
         $ctrlAclRaii = null;
         if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
