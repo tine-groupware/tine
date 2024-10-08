@@ -93,66 +93,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * we don't want the normal admin grant to be set ever
-     *
-     * @param Tinebase_Record_RecordSet $_grants
-     * @return Tinebase_Record_RecordSet
-     */
-    protected function convertToEventGrants(Tinebase_Record_RecordSet $_grants)
-    {
-        /** @var Calendar_Model_ResourceGrants $grant */
-        foreach ($_grants as $grant) {
-            // unset all default grants
-            foreach (Tinebase_Model_Grants::getAllGrants() as $key) {
-                $grant->{$key} = false;
-            }
-
-            // enforce implicit resource grants
-            if ($grant->{Calendar_Model_ResourceGrants::RESOURCE_ADMIN}) {
-                $grant->{Calendar_Model_ResourceGrants::RESOURCE_EDIT}      = true;
-                $grant->{Calendar_Model_ResourceGrants::RESOURCE_EXPORT}    = true;
-                $grant->{Calendar_Model_ResourceGrants::RESOURCE_INVITE}    = true;
-                $grant->{Calendar_Model_ResourceGrants::RESOURCE_READ}      = true;
-                $grant->{Calendar_Model_ResourceGrants::RESOURCE_SYNC}      = true;
-            } else {
-                if ($grant->{Calendar_Model_ResourceGrants::RESOURCE_EDIT}) {
-                    $grant->{Calendar_Model_ResourceGrants::RESOURCE_READ}      = true;
-                }
-                if ($grant->{Calendar_Model_ResourceGrants::RESOURCE_STATUS}) {
-                    $grant->{Calendar_Model_ResourceGrants::RESOURCE_INVITE}    = true;
-                    $grant->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY}    = true;
-                }
-            }
-
-
-            // apply event grants
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_ADD}) {
-                $grant->{Tinebase_Model_Grants::GRANT_ADD} = true;
-            }
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_DELETE}) {
-                $grant->{Tinebase_Model_Grants::GRANT_DELETE} = true;
-            }
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_EDIT}) {
-                $grant->{Tinebase_Model_Grants::GRANT_EDIT} = true;
-            }
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_EXPORT}) {
-                $grant->{Tinebase_Model_Grants::GRANT_EXPORT} = true;
-            }
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_FREEBUSY}) {
-                $grant->{Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY} = true;
-            }
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_READ}) {
-                $grant->{Tinebase_Model_Grants::GRANT_READ} = true;
-            }
-            if ($grant->{Calendar_Model_ResourceGrants::EVENTS_SYNC}) {
-                $grant->{Tinebase_Model_Grants::GRANT_SYNC} = true;
-            }
-        }
-
-        return $_grants;
-    }
-
-    /**
      * add one record
      *
      * @param   Tinebase_Record_Interface $_record
@@ -172,17 +112,13 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-            $grants = null;
-            if (is_array($_record->grants) && !empty($_record->grants)) {
-                $grants = $this->convertToEventGrants(
-                    new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants));
-            } else {
-                $grants = new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class,
-                    [new Calendar_Model_ResourceGrants([
+            if (!is_array($_record->grants) || empty($_record->grants)) {
+                $_record->grants = [[
                         'account_id' => '0',
                         'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                    ])]);
+                    ]];
             }
+            $grants = new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants);
             unset($_record->grants);
 
             $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId();
@@ -283,17 +219,14 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $_record->container_id = $currentRecord->container_id;
 
             // get container
+            /** @var Tinebase_Model_Container $container */
             $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-            /** @var Tinebase_Model_Container $eventContainer */
-
-            if (is_array($_record->grants) && Tinebase_Core::getUser()
-                    ->hasGrant($container, Calendar_Model_ResourceGrants::RESOURCE_ADMIN)) {
-                $grants = $this->convertToEventGrants(
-                    new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants));
-
-                Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
-            }
+            $grants = $_record->grants;
             unset($_record->grants);
+            if (is_array($grants) && Tinebase_Core::getUser()
+                    ->hasGrant($container, Calendar_Model_ResourceGrants::RESOURCE_ADMIN)) {
+                Tinebase_Container::getInstance()->setGrants($container, new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $grants), true, false);
+            }
 
             $result = parent::update($_record, true, $_updateDeleted);
 
