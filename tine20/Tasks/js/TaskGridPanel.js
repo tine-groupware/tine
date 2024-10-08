@@ -136,7 +136,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 refIdField: 'task_id',
                 searchComboConfig: {useEditPlugin: false},
                 editDialogConfig: {mode:  'local'},
-                isMetadataModelFor: 'Tasks.Task'
+                isMetadataModelFor: 'task_id'
             }
         }, {
             id: 'percent',
