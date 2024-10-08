@@ -17,13 +17,13 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  * @package     Addressbook
  * @subpackage  Model
  */
-class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
+class Addressbook_Model_ContactSite extends Tinebase_Record_NewAbstract
 {
     const FLD_SITE = 'site';
     const FLD_CONTACT = 'contact';
 
-    const MODEL_NAME_PART = 'Sites';
-    const TABLE_NAME = 'adb_sites';
+    const MODEL_NAME_PART = 'ContactSite';
+    const TABLE_NAME = 'adb_contact_sites';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -41,7 +41,7 @@ class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
         self::HAS_SYSTEM_CUSTOM_FIELDS  => false,
         self::HAS_NOTES                 => false,
         self::HAS_TAGS                  => false,
-        self::MODLOG_ACTIVE             => false,
+        self::MODLOG_ACTIVE             => true,
         self::HAS_ATTACHMENTS           => false,
 
         self::CREATE_MODULE             => false,
@@ -79,8 +79,8 @@ class Addressbook_Model_Sites extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                Addressbook_Model_Sites::FLD_SITE      => [],
-                Addressbook_Model_Sites::FLD_CONTACT          => []
+                Addressbook_Model_ContactSite::FLD_SITE      => [],
+                Addressbook_Model_ContactSite::FLD_CONTACT          => []
             ],
         ],
 

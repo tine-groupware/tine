@@ -306,7 +306,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Addressbook_Model_ListRole::class,
                 Addressbook_Model_Salutation::class,
                 Addressbook_Model_ContactGrants::class,
-                Addressbook_Model_Sites::class
+                Addressbook_Model_ContactSite::class
             ),
             'Admin' => array(
                 Admin_Model_Config::class,

@@ -219,7 +219,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'container_id' => [],
                 'sites'      => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Addressbook_Model_Sites::FLD_SITE => [],
+                        Addressbook_Model_ContactSite::FLD_SITE => [],
                     ],
                 ],
             ],
@@ -330,8 +330,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'filter'            => Tinebase_Model_Filter_ForeignRecords::class,
                 'label'             => 'Sites', // _('Sites')
                 'options'           => [
-                    'controller' => Addressbook_Controller_Sites::class,
-                    'recordClassName' => Addressbook_Model_Sites::class,
+                    'controller' => Addressbook_Controller_ContactSite::class,
+                    'recordClassName' => Addressbook_Model_ContactSite::class,
                     'refIdField' => 'record',
                 ]
             ],
@@ -1062,8 +1062,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::CONFIG                => [
                     self::DEPENDENT_RECORDS     => true,
                     self::APP_NAME              => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME            => Addressbook_Model_Sites::MODEL_NAME_PART,
-                    self::REF_ID_FIELD          => Addressbook_Model_Sites::FLD_CONTACT,
+                    self::MODEL_NAME            => Addressbook_Model_ContactSite::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Addressbook_Model_ContactSite::FLD_CONTACT,
                 ],
             ],
 

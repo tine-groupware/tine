@@ -16,7 +16,7 @@
  * @package     Addressbook
  * @subpackage  Controller
  */
-class Addressbook_Controller_Sites extends Tinebase_Controller_Record_Abstract
+class Addressbook_Controller_ContactSite extends Tinebase_Controller_Record_Abstract
 {
     /**
      * the constructor
@@ -26,12 +26,12 @@ class Addressbook_Controller_Sites extends Tinebase_Controller_Record_Abstract
     private function __construct()
     {
         $this->_doContainerACLChecks = false;
-        $this->_applicationName = 'Addressbook';
-        $this->_modelName = 'Addressbook_Model_Sites';
+        $this->_applicationName = Addressbook_Config::APP_NAME;
+        $this->_modelName = Addressbook_Model_ContactSite::class;
         $this->_backend = new Tinebase_Backend_Sql(array(
-            'modelName'     => 'Addressbook_Model_Sites',
-            'tableName'     => 'adb_sites',
-            'modlogActive'  => false
+            'modelName'     => Addressbook_Model_ContactSite::class,
+            'tableName'     => Addressbook_Model_ContactSite::TABLE_NAME,
+            'modlogActive'  => true
         ));
 
     }
@@ -59,7 +59,7 @@ class Addressbook_Controller_Sites extends Tinebase_Controller_Record_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Addressbook_Controller_Sites();
+            self::$_instance = new Addressbook_Controller_ContactSite();
         }
         
         return self::$_instance;

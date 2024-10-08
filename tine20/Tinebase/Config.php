@@ -1872,12 +1872,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR           => false,
                 ],
                 self::FEATURE_SITE => array(
-                    self::LABEL             => 'Activate Sites for modules',
-                    //_('Activate Sites for Events')
-                    self::DESCRIPTION       => 'Activate Sites for modules.',
-                    //_('Activate Sites for Events.')
+                    self::LABEL             => 'Activate Sites',
+                    //_('Activate Sites')
+                    self::DESCRIPTION       => 'Sites are addressbook contacts matching the siteFilter config.',
+                    //_('Sites are addressbook contacts matching the siteFilter config.')
                     self::TYPE              => self::TYPE_BOOL,
-                    self::DEFAULT_STR       => true,
+                    self::DEFAULT_STR       => false,
                 ),
             ],
             self::DEFAULT_STR => [],
