@@ -34,7 +34,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         if (this.refIdField) {
             const dataFields = _.difference(this.recordClass.getDataFields(), [this.refIdField]);
 
-            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null;
+            this.isMetadataModelFor = this.isMetadataModelFor || (dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null);
             this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
             this.mappingRecordClass = this.isMetadataModelFor ? this.recordClass.getField(this.isMetadataModelFor).getRecordClass() : null;
             if (! this.recordRenderer) {
@@ -103,9 +103,10 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         // if the current mode of pickerCombo is same as arg(listMode), there is no need to reinit the combo
         // if (this.listMode === listMode ) return
         this.pickerCombo?.destroy()
-        const recordClass = this.mappingRecordClass || this.recordClass;
 
-        const  {allowMultiple, renderTo, filter, listeners, value, ... searchComboConfig} = this.initialConfig;
+        let  {allowMultiple, renderTo, filter, listeners, value, recordClass, ... searchComboConfig} = this.initialConfig;
+        recordClass = this.mappingRecordClass || this.recordClass;
+
         if(searchComboConfig.xtype === 'tinerecordspickercombobox'){
             // prevent recursive recordsPicker
             delete searchComboConfig.xtype;
