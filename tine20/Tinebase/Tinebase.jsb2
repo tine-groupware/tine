@@ -982,6 +982,14 @@
           "path": "js/widgets/file/"
         },
         {
+          "text": "MountpointPicker.js",
+          "path": "js/widgets/file/"
+        },
+        {
+          "text": "mountpointRenderer.js",
+          "path": "js/widgets/file/"
+        },
+        {
           "text": "index.js",
           "path": "js/widgets/dialog/vue/PasswordDialog/"
         },
