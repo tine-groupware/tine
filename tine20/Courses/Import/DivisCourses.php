@@ -676,7 +676,9 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     $account->accountHomeDirectory = $cfg['accountHomeDirectoryPrefix'] . $account->accountLoginName;
                 }
 
-                $this->userCtrl->updateUser($account);
+                // use admin controller here to make sure all events are handled (see \Felamimail_Controller::_handleEvent)
+                Admin_Controller_User::getInstance()->update($account);
+
                 // touch importer to regenerate pwd export
                 $this->_getStudentImporter($course);
             }

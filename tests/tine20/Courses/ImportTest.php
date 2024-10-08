@@ -4,7 +4,7 @@
  *
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -22,6 +22,15 @@ class Courses_ImportTest extends TestCase
         Courses_Config::getInstance()->internet_group = null;
         Courses_Config::getInstance()->internet_group_filtered = null;
         Courses_Controller_Course::destroyInstance();
+    }
+
+    public function tearDown(): void
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_TWIG, [
+            Tinebase_Config::ACCOUNT_TWIG_LOGIN => '{{ account.accountFirstName|transliterate|removeSpace|accountLoginChars|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|accountLoginChars|lower }}',
+        ]);
+
+        parent::tearDown();
     }
 
     protected function _setupDepartments()
@@ -42,9 +51,13 @@ class Courses_ImportTest extends TestCase
 
     public function testDivisImport()
     {
-        $this->_skipIfLDAPBackend(); // TODO FIXME email user sql connection timeout...
+        $this->_skipIfLDAPBackend('FIXME email user sql connection timeout...');
 
         $this->_setupDepartments();
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_TWIG, [
+            Tinebase_Config::ACCOUNT_TWIG_LOGIN => '{% if course.name %}{{ course.name }}-{% endif %}{{ account.accountFirstName|transliterate|removeSpace|accountLoginChars|trim[0:1]|lower }}.{{ account.accountLastName|transliterate|removeSpace|accountLoginChars|lower }}',
+        ]);
 
         $fileManager = Filemanager_Controller_Node::getInstance();
         $node = $fileManager->createNodes(['/shared/unittest'], [Tinebase_Model_Tree_FileObject::TYPE_FOLDER])->getFirstRecord();
@@ -105,32 +118,34 @@ CSV
             'created course: mk31' . PHP_EOL .
             'created course: bos21' . PHP_EOL .
             'created course: avm21' . PHP_EOL .
-            'created course: av22' . PHP_EOL .
-            'create teacher account: szablowsky' . PHP_EOL .
-            'create teacher account: hdreyer' . PHP_EOL .
-            'create teacher account: aschemschura' . PHP_EOL .
-            'create teacher account: jmoerke' . PHP_EOL .
-            'create student account: mkorndoerfer' . PHP_EOL .
-            'create student account: jspreemann' . PHP_EOL .
-            'create student account: sowusu-sekyere' . PHP_EOL .
-            'create student account: mhabtomkiflay' . PHP_EOL .
-            'create student account: vgoertzen' . PHP_EOL .
-            'create student account: mmagnus' . PHP_EOL .
-            'create student account: aasmaakhalfibrahimnoureldin' . PHP_EOL .
-            'create student account: dkobzak' . PHP_EOL .
-            'create student account: pwinterhalter' . PHP_EOL .
-            'create student account: ilababidi' . PHP_EOL .
-            'create student account: hbraun'
-            , $note->note);
+            'created course: av22' . PHP_EOL, $note->note);
+        $this->assertStringContainsString(
+            'create teacher account: ', $note->note);
+        foreach (['s.zablowsky', 'h.dreyer', 'a.schemschura', 'j.moerke'] as $teacher) {
+            $this->assertStringContainsString(
+                $teacher . PHP_EOL, $note->note);
+        }
+        $this->assertStringContainsString(
+            'create student account: sc11-m.korndoerfer' . PHP_EOL .
+            'create student account: av02-j.spreemann' . PHP_EOL .
+            'create student account: mwp12-s.owusu-sekyere' . PHP_EOL .
+            'create student account: avm22-m.habtomkiflay' . PHP_EOL .
+            'create student account: meg22-v.goertzen' . PHP_EOL .
+            'create student account: mk31-m.magnus' . PHP_EOL .
+            'create student account: bos21-a.asmaakhalfibrahimnoureldin' . PHP_EOL .
+            'create student account: mk31-d.kobzak' . PHP_EOL .
+            'create student account: mk31-p.winterhalter' . PHP_EOL .
+            'create student account: avm21-i.lababidi' . PHP_EOL .
+            'create student account: av22-h.braun', $note->note);
 
         $teacherPwdNod = Tinebase_FileSystem::getInstance()->stat($path . '/teacherPwdExport.docx');
         $teacherPwdExport = $this->getPlainTextFromDocx(Tinebase_FileSystem::getInstance()->getRealPathForHash($teacherPwdNod->hash));
-        $this->assertStringContainsString('szablowsky', $teacherPwdExport);
-        $sz = Tinebase_User::getInstance()->getUserByLoginName('szablowsky', Tinebase_Model_FullUser::class);
+        $this->assertStringContainsString('s.zablowsky', $teacherPwdExport);
+        $sz = Tinebase_User::getInstance()->getUserByLoginName('s.zablowsky', Tinebase_Model_FullUser::class);
         $this->assertStringContainsString($sz->xprops()['autoGenPwd'], $teacherPwdExport);
-        $this->assertStringContainsString('hdreyer', $teacherPwdExport);
-        $this->assertStringContainsString('aschemschura', $teacherPwdExport);
-        $this->assertStringContainsString('jmoerke', $teacherPwdExport);
+        $this->assertStringContainsString('h.dreyer', $teacherPwdExport);
+        $this->assertStringContainsString('a.schemschura', $teacherPwdExport);
+        $this->assertStringContainsString('j.moerke', $teacherPwdExport);
 
         $av22 = Courses_Controller_Course::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Courses_Model_Course::class, [
@@ -140,13 +155,13 @@ CSV
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($av22);
         $this->assertSame(1, $attachments->count());
         $studentPwdExport = $this->getPlainTextFromDocx(Tinebase_FileSystem::getInstance()->getRealPathForHash($attachments->getFirstRecord()->hash));
-        $this->assertSame(1, preg_match('/HannahBraunBenutzer: hbraunPasswort: (.*)E-Mail:hbraun/', $studentPwdExport, $m));
+        $this->assertSame(1, preg_match('/HannahBraunBenutzer: av22-h.braunPasswort: (.*)E-Mail:av22-h.braun/', $studentPwdExport, $m), $studentPwdExport);
         $hbraunPwd = $m[1];
 
-        $student = Tinebase_User::getInstance()->getUserByLoginName('mkorndoerfer');
+        $student = Tinebase_User::getInstance()->getUserByLoginName('sc11-m.korndoerfer');
         $this->assertSame('K\'Orndörfer, Maja', $student->accountDisplayName);
 
-        $student = Tinebase_User::getInstance()->getUserByLoginName('hbraun');
+        $student = Tinebase_User::getInstance()->getUserByLoginName('av22-h.braun');
         file_put_contents('tine20://' . $path . '/import.csv',
             <<<CSV
 Benutzername;Nachname;Vorname;Primäre E-Mail-Adresse;Weitere E-Mail-Adressen;Rolle;Schulzugehörigkeit (Stammschule);Quelle;Klassen;Eindeutige ID;Eineindeutige ID;Kontoablaufdatum;Geplantes Löschdatum;Geburtsdatum
@@ -179,7 +194,7 @@ CSV
             'no new courses to create' . PHP_EOL .
             'rename student Hannah Braun to Hannah Brun' . PHP_EOL .
             'expiring student ', $note->note);
-        $updatedStudent = Tinebase_User::getInstance()->getUserByLoginName('hbrun');
+        $updatedStudent = Tinebase_User::getInstance()->getUserByLoginName('av22-h.brun');
         $this->assertSame($student->getId(), $updatedStudent->getId());
 
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($av22);
@@ -189,9 +204,8 @@ CSV
         })->getFirstRecord();
         $this->assertNotNull($attachment);
         $studentPwdExport = $this->getPlainTextFromDocx(Tinebase_FileSystem::getInstance()->getRealPathForHash($attachment->hash));
-        $this->assertSame(1, preg_match('/HannahBrunBenutzer: hbrunPasswort: (.*)E-Mail:hbrun/', $studentPwdExport, $m));
+        $this->assertSame(1, preg_match('/HannahBrunBenutzer: av22-h.brunPasswort: (.*)E-Mail:av22-h.brun/', $studentPwdExport, $m));
         $this->assertSame($hbraunPwd, $m[1]);
-
 
         file_put_contents('tine20://' . $path . '/import.csv',
             <<<CSV
@@ -220,8 +234,17 @@ CSV
         $this->assertStringContainsString(
             'import succeeded' . PHP_EOL .
             'no new courses to create' . PHP_EOL .
-            'remove student: hbrun from course: av22' . PHP_EOL .
-            'add student: hbrun to course: avm22', $note->note);
+            'remove student: av22-h.brun from course: av22' . PHP_EOL .
+            'add student: av22-h.brun to course: avm22', $note->note);
+
+        $student = Tinebase_User::getInstance()->getUserByLoginName('avm22-h.brun');
+        self::assertEquals('avm22-h.brun@mail.test', $student->accountEmailAddress);
+        $mailAccount = Admin_Controller_EmailAccount::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $student->getId()],
+            ]))->getFirstRecord();
+        self::assertNotNull($mailAccount);
+        self::assertEquals('avm22-h.brun@mail.test', $mailAccount->name);
 
         unset($raii);
     }

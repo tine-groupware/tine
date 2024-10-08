@@ -756,10 +756,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             listeners: {
                 'specialkey': function(field, e) {
                      if(e.getKey() == e.ENTER){
+                         serverValue = null;
                          this.onFiltertrigger();
                      }
                 },
-                'select': this.onFiltertrigger,
+                'select': () => {
+                    serverValue = null;
+                    this.onFiltertrigger();
+                },
                 scope: this
             }
         });
