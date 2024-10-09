@@ -268,7 +268,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 continue;
             }
             $ublInvoice->addLine(($line = new \Einvoicing\InvoiceLine())
-                ->setPrice($position->{Sales_Model_DocumentPosition_Invoice::FLD_GROSS_PRICE} ?: 0)
+                ->setPrice($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}, $position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY})
                 ->setVatRate($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})
                 ->setQuantity($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY})
             );
