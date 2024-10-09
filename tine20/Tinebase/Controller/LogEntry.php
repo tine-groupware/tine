@@ -64,27 +64,25 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
 
-    public function cleanUp(Tinebase_DateTime $before = null)
+    /**
+     * @param Tinebase_DateTime|null $before
+     * @return bool
+     */
+    public function cleanUp(?Tinebase_DateTime $before = null): bool
     {
         if (! $before) {
             $before = Tinebase_DateTime::now()->subWeek(3);
         }
 
-        $deleteFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Tinebase_Model_LogEntry::class, [
-                ['field' => 'timestamp', 'operator' => 'before', 'value' => $before]
-            ]
-        );
-        $pagination = new Tinebase_Model_Pagination([
-            'limit' => 1000,
-            'sort' => 'timestamp',
-            'dir' => 'ASC',
-            'start' => 0,
-        ]);
-        $this->deleteByFilter($deleteFilter, $pagination);
+        $db = Tinebase_Core::getDb();
+        $db->query('DELETE FROM ' . $this->_backend->getTablePrefix() . $this->_backend->getTableName()
+            . ' where timestamp < "' . $before->format('Y-m-d') . '"'
+            . ' ORDER BY timestamp ASC LIMIT 50000');
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-            ' Cleaned up log entries before ' . $before->toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                ' Cleaned up log entries before ' . $before->toString());
+        }
 
         return true;
     }
