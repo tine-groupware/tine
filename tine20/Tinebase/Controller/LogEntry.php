@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,7 +33,7 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
             'modelName' => 'Tinebase_Model_LogEntry',
             'tableName' => 'logentries'
         ));
-        $this->_purgeRecords = FALSE;
+        $this->_purgeRecords = false;
     }
 
     /**
@@ -48,7 +49,7 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
      *
      * @var Tinebase_Controller_LogEntry
      */
-    private static $_instance = NULL;
+    private static $_instance = null;
 
     /**
      * the singleton pattern
@@ -57,34 +58,32 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Tinebase_Controller_LogEntry();
         }
 
         return self::$_instance;
     }
 
-    public function cleanUp(Tinebase_DateTime $before = null)
+    /**
+     * @param Tinebase_DateTime|null $before
+     * @return bool
+     */
+    public function cleanUp(?Tinebase_DateTime $before = null): bool
     {
         if (! $before) {
             $before = Tinebase_DateTime::now()->subWeek(3);
         }
 
-        $deleteFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Tinebase_Model_LogEntry::class, [
-                ['field' => 'timestamp', 'operator' => 'before', 'value' => $before]
-            ]
-        );
-        $pagination = new Tinebase_Model_Pagination([
-            'limit' => 1000,
-            'sort' => 'timestamp',
-            'dir' => 'ASC',
-            'start' => 0,
-        ]);
-        $this->deleteByFilter($deleteFilter, $pagination);
+        $db = Tinebase_Core::getDb();
+        $db->query('DELETE FROM ' . $this->_backend->getTablePrefix() . $this->_backend->getTableName()
+            . ' where timestamp < "' . $before->format('Y-m-d') . '"'
+            . ' ORDER BY timestamp ASC LIMIT 50000');
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-            ' Cleaned up log entries before ' . $before->toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                ' Cleaned up log entries before ' . $before->toString());
+        }
 
         return true;
     }
