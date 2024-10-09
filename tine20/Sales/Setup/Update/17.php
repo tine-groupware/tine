@@ -659,7 +659,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         Sales_Model_Division::resetConfiguration();
     }
 
-    protected function update021()
+    public function update021()
     {
         Setup_SchemaTool::updateSchema([
             Sales_Model_Debitor::class,
@@ -675,7 +675,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.21', self::RELEASE017_UPDATE021);
     }
 
-    protected function update022()
+    public function update022()
     {
         Sales_Setup_Initialize::initializeEDocumentEAS();
 
