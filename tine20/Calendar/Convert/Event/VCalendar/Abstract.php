@@ -337,7 +337,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         // repeating event properties
         if ($event->rrule) {
-            $event->rrule = $event->rrule instanceof Calendar_Model_Rrule ? $event->rrule : Calendar_Model_Rrule::getRruleFromString($event->rrule);
+            $rrule = $event->rrule instanceof Calendar_Model_Rrule ? $event->rrule : Calendar_Model_Rrule::getRruleFromString($event->rrule);
+            if ($rrule['freq'] === Calendar_Model_Rrule::FREQ_INDIVIDUAL) {
+                $rrule['freq'] = Calendar_Model_Rrule::FREQ_DAILY;
+            }
+            $event->rrule = $rrule;
             $event->rrule->setTimezone('UTC');
             if ($event->is_all_day_event == true) {
                 $vevent->add('RRULE', preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) {

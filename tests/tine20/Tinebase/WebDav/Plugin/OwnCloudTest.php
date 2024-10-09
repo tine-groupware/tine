@@ -36,38 +36,21 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     const BASE_URIV3_DAV_FILES_USERNAME = '/remote.php/dav/files/tine20admin';
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Plugin OwnCloud Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
+        $this->server->httpRequest = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV2_WEBDAV, [
+            'User-Agent' => 'Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)',
+            'DEPTH' => '1',
+        ]);
+
         $this->plugin = new Tinebase_WebDav_Plugin_OwnCloud();
-
-        // Create request, there is no in tinebase while running unittests, but the owncloud plugin needs an user agent
-        $request = Tinebase_Http_Request::fromString(
-            "POST /index.php HTTP/1.1\r\n" .
-            "Host: localhost\r\n" .
-            "Content-Type: application/json\r\n" .
-            "User-Agent: Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)\r\n"
-        );
-        Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
-
         $this->server->addPlugin($this->plugin);
     }
 
@@ -341,15 +324,16 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public function testInvalidOwnCloudVersion()
     {
-        // use old owncloud user agent!
-        $request = Tinebase_Http_Request::fromString(
-            "POST /index.php HTTP/1.1\r\n" .
-            "Host: localhost\r\n" .
-            "Content-Type: application/json\r\n" .
-            "User-Agent: Mozilla/5.0 (Macintosh) mirall/1.5.0 (build 3709)\r\n"
-        );
-        Tinebase_Core::set('request', $request);
-        $response = $this->_execPropfindRequest(expectedStatus: 500)->saveXML();
+        $request = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName, [
+            'User-Agent' => 'Mozilla/5.0 (Macintosh) mirall/1.5.0 (build 1234)',
+        ]);
+        $this->server->httpRequest = $request;
+        
+        // re-init plugin, as header will be read in init
+        $this->plugin = new Tinebase_WebDav_Plugin_OwnCloud();
+        $this->server->addPlugin($this->plugin);
+
+        $response = $this->_execPropfindRequest(request: $request, expectedStatus: 500)->saveXML();
         $this->assertStringContainsString(InvalidArgumentException::class, $response);
         $this->assertStringContainsString(sprintf(
             'OwnCloud client min version is "%s"!',

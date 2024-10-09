@@ -101,6 +101,35 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
 
     /**
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_ConcurrencyConflict
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     */
+    public function testExportIndividualEventWithException()
+    {
+        $this->_testNeedsTransaction();
+
+        $event = $this->_getRecurEvent();
+        $event->rrule = 'FREQ=INDIVIDUAL;INTERVAL=1;COUNT=3';
+
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, $event->dtstart);
+        $nextOccurance->summary = 'hard working woman needs some silence';
+        Calendar_Controller_Event::getInstance()->createRecurException($nextOccurance);
+
+        $result = $this->_export('stdout=1');
+
+        self::assertStringContainsString('hard working man needs some silence', $result);
+        self::assertStringContainsString('hard working woman needs some silence', $result);
+        self::assertStringContainsString('RRULE:FREQ=DAILY', $result);
+        self::assertStringContainsString('RECURRENCE-ID', $result);
+    }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation

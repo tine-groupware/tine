@@ -139,7 +139,7 @@ class AreaLocks extends Ext.util.Observable {
       this.providerInstances[key] = new providerClass(_.assign({
         areaName: areaName,
         mfaDevice: selectedDevice
-      }, opts))
+      }, opts, _.get(selectedDevice, 'config', {})))
     }
     if (this.providerInstances[key].mfaDevice !== selectedDevice) {
       this.providerInstances[key].mfaDevice=selectedDevice;

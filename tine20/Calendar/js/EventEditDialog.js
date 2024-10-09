@@ -124,7 +124,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             refIdField: 'record',
                             searchComboConfig: {useEditPlugin: false},
                             editDialogConfig: {mode: 'local'},
-                            isMetadataModelFor: 'Calendar.EventType',
+                            isMetadataModelFor: 'event_type',
                             requiredGrant: 'editGrant',
                         }]
                     }, {
@@ -550,11 +550,31 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.perspectiveCombo = new Tine.Calendar.PerspectiveCombo({
             editDialog: this
         });
-        
+
+        this.initMessageBus();
+
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
         this.addAttendee();
         // Start with unmodified Record
         this.record.commit();
+    },
+
+    initMessageBus: function() {
+        this.postalSubscriptions = [];
+        this.postalSubscriptions.push(postal.subscribe({
+            channel: "recordchange",
+            topic: 'Calendar.Event.*',
+            callback: this.onRecordChanges.createDelegate(this)
+        }));
+    },
+
+    /**
+     * bus notified about record changes
+     */
+    onRecordChanges: async function(data, e) {
+        if (data?.[0] && this.recordId === data[0].recordId && data[0].verb === 'delete') {
+            this.window.close(true);
+        }
     },
 
     setLocationRecord: function(resource, overwrite = false) {

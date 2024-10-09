@@ -522,13 +522,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $this->_addCustomFieldFilter($_filterData);
             } else {
                 if (self::$beStrict) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure(
-                        'no model found for ' . print_r($_filterData, true));
+                    throw new Tinebase_Exception_Record_DefinitionFailure('no model found for ' . print_r($_filterData, true) . ' ' . print_r($this->_filterModel, true) . ' ' . static::class . ' ' . $this->_configuredModel .  ' ' . $this->_modelName);
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . '[' . static::class . '] Skipping filter (no filter model defined) '
-                        . print_r($_filterData, true));
+                        . print_r($_filterData, true) . ' ' . print_r($this->_filterModel, true) . ' ' . static::class . ' ' . $this->_configuredModel .  ' ' . $this->_modelName);
                 }
             }
         } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel))

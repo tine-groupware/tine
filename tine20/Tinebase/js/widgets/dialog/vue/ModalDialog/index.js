@@ -63,9 +63,11 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
         this.vueEventBus.on('*', this.onEvent.bind(this))
         this.vueEventBus.on('apply', this.destroy.bind(this))
         this.vueEventBus.on('cancel', this.destroy.bind(this))
+        this.vueEventBus.on('close', this.destroy.bind(this))
     },
 
     onEvent: function(eventName, data){
+        if(eventName === 'close') eventName = 'cancel'
         const ext_event = `${EXT_WIN_EVENT_PREFIX}_${eventName}`
         if(this.vueEventBus.all.has(ext_event)) this.vueEventBus.emit(ext_event, data)
     },

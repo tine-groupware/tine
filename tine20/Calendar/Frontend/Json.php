@@ -70,7 +70,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         /** @noinspection PhpDeprecationInspection */
         $returnEvent = Calendar_Controller_Event::getInstance()->createRecurException($event, $deleteInstance, $deleteAllFollowing, $checkBusyConflicts);
-        
         return $this->getEvent($returnEvent->getId());
     }
     
@@ -922,6 +921,17 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getPollEvents($pollId)
     {
         $alternativeEvents = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
+
+        return [
+            'results' => $this->_multipleRecordsToJson($alternativeEvents),
+            'totalcount' => count($alternativeEvents),
+        ];
+    }
+    
+    public function getEventExceptions($eventId)
+    {
+        $event = Calendar_Controller_Event::getInstance()->get($eventId);
+        $alternativeEvents = Calendar_Controller_Event::getInstance()->getRecurExceptions($event);
 
         return [
             'results' => $this->_multipleRecordsToJson($alternativeEvents),
