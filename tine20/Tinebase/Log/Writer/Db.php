@@ -27,7 +27,18 @@ class Tinebase_Log_Writer_Db extends Zend_Log_Writer_Db
     protected function _write($event)
     {
         $eventData = $this->_formatter->format($event);
-        parent::_write($eventData);
+        try {
+            parent::_write($eventData);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not write event: '
+                    . $zdse->getMessage());
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                    . print_r($eventData, true));
+            }
+        }
     }
 
     /**
