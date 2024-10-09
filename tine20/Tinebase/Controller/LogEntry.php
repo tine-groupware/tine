@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,7 +33,7 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
             'modelName' => 'Tinebase_Model_LogEntry',
             'tableName' => 'logentries'
         ));
-        $this->_purgeRecords = FALSE;
+        $this->_purgeRecords = false;
     }
 
     /**
@@ -48,7 +49,7 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
      *
      * @var Tinebase_Controller_LogEntry
      */
-    private static $_instance = NULL;
+    private static $_instance = null;
 
     /**
      * the singleton pattern
@@ -57,7 +58,7 @@ class Tinebase_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Tinebase_Controller_LogEntry();
         }
 
