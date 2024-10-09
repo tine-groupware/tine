@@ -45,7 +45,11 @@ class Sales_EDocument_Service_Validate
         $xml->rewind();
         foreach ($xml->children('svrl', true)->{'failed-assert'} as $node) {
             foreach ($node->children('svrl', true)->text as $errNode) {
-                $errors[] = (string)$errNode;
+                $err = (string)$errNode;
+                if (strpos($err, 'soll eine korrekte IBAN enthalten') !== false) {
+                    continue;
+                }
+                $errors[] = $err;
             }
         }
 

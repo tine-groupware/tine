@@ -325,6 +325,32 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(4, $result->count());
     }
 
+    public function testInvoiceModelPriceCalcultionGrossPrice(): void
+    {
+        $invoice = new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
+            Sales_Model_Document_Invoice::FLD_POSITIONS => [
+                $position = new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 11.9,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
+                ], true),
+            ],
+        ], true);
+
+        $invoice->calculatePricesIncludingPositions();
+
+        $this->assertSame(10.0, $position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE});
+        $this->assertSame(11.9, $position->{Sales_Model_DocumentPosition_Invoice::FLD_GROSS_PRICE});
+        $this->assertSame(1.9, round($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX}, 2));
+
+        $this->assertSame(10.0, $invoice->{Sales_Model_Document_Invoice::FLD_NET_SUM});
+        $this->assertSame(11.9, $invoice->{Sales_Model_Document_Invoice::FLD_GROSS_SUM});
+        $this->assertSame(1.9, round($invoice->{Sales_Model_Document_Invoice::FLD_SALES_TAX}, 2));
+    }
+    
     public function testCategoryEvalDimensionCopy()
     {
         $customer = $this->_createCustomer();
