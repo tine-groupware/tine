@@ -38,6 +38,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE017_UPDATE019 = __CLASS__ . '::update019';
     const RELEASE017_UPDATE020 = __CLASS__ . '::update020';
+    const RELEASE017_UPDATE021 = __CLASS__ . '::update021';
+    const RELEASE017_UPDATE022 = __CLASS__ . '::update022';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -115,6 +117,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update020',
             ],
+            self::RELEASE017_UPDATE021 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update021',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
             self::RELEASE017_UPDATE000 => [
@@ -132,6 +138,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE010 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update010',
+            ],
+            self::RELEASE017_UPDATE022 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update022',
             ],
         ],
     ];
@@ -647,5 +657,28 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         Sales_Model_Division::resetConfiguration();
+    }
+
+    protected function update021()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Division::class,
+            Sales_Model_Document_Debitor::class,
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_EDocument_EAS::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.21', self::RELEASE017_UPDATE021);
+    }
+
+    protected function update022()
+    {
+        Sales_Setup_Initialize::initializeEDocumentEAS();
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.22', self::RELEASE017_UPDATE022);
     }
 }

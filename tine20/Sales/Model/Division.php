@@ -33,6 +33,8 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
     public const FLD_TAX_REGISTRATION_ID = 'tax_registration_id';
     public const FLD_VAT_NUMBER     = 'vat_number';
     public const FLD_BANK_ACCOUNTS  = 'bank_accounts';
+    public const FLD_EAS_ID = 'eas_id';
+    public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,7 +42,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Division', // gettext('GENDER_Division')
@@ -63,6 +65,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                         Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => [],
                     ],
                 ],
+                self::FLD_EAS_ID => [],
             ],
             Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                 Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS         => [],
@@ -203,6 +206,21 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                     self::DEPENDENT_RECORDS         => true,
                     self::REF_ID_FIELD              => \Sales_Model_DivisionBankAccount::FLD_DIVISION,
                 ],
+            ],
+            self::FLD_EAS_ID                => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                => Sales_Model_EDocument_EAS::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_ELECTRONIC_ADDRESS    => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Electronic Address', // _('Electronic Address')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
             ],
         ],
     ];

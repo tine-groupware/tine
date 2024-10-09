@@ -137,7 +137,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         this.getForm().items.each((field) => {
             if (_.get(field, 'initialConfig.readOnly')) return;
-            if ([this.statusFieldName, 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+            if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
             && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                 field.setReadOnly(booked);
             }
@@ -220,6 +220,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         if (record?.get && record?.get('language')) {
                             fields['document_language'].setValue(record?.get('language'))
                         }
+                        fields['buyer_reference'].setValue(_.get(record, 'data.debitor_id.buyer_reference', ''))
                     }
                     // more logic in Tine.Sales.AddressSearchCombo
                     break;
@@ -254,7 +255,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             xtype: 'columnform',
             items: [
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
-                _.assign([fields.customer_id, _.assign(fields.recipient_id, {columnWidth: 2/5}), fields.contact_id, fields.customer_reference], {line: 'recipient'}),
+                // NOTE: contract_id waits for contract rewrite
+                [/*fields.contract_id, */ _.assign(fields.customer_id, {columnWidth: 2/5}), _.assign(fields.recipient_id, {columnWidth: 3/5})],
+                _.assign([ _.assign(fields.buyer_reference, {columnWidth: 2/5}), fields.purchase_order_reference, fields.project_reference, fields.contact_id], {line: 'references'}),
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],

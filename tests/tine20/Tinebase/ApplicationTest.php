@@ -437,6 +437,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Document_Status::class,
                 Sales_Model_Document_Offer::class,
                 Sales_Model_Document_Order::class,
+                Sales_Model_EDocument_EAS::class,
                 Sales_Model_Einvoice_XRechnung::class,
                 Sales_Model_Invoice::class,
                 Sales_Model_InvoiceCleared::class,
