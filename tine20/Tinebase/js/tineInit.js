@@ -527,9 +527,10 @@ Tine.Tinebase.tineInit = {
         email = Array.isArray(email) && email.length > 0 ? email[0] : Ext.isString(email) ? email : '';
 
         Tine.Addressbook.ContactEditDialog.openWindow({
-            record: record ?? new Tine.Addressbook.Model.Contact({
-                email: email
-            }),
+            record: record ?? Tine.Tinebase.data.Record.setFromJson({
+                email: email,
+                id: 0
+            }, Tine.Addressbook.Model.Contact),
             listeners: {
                 scope: this,
                 'load': function(editdlg) {
