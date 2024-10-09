@@ -147,6 +147,13 @@ class Sales_Controller extends Tinebase_Controller_Event
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
 
         $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'sales_edocument_eas',
+            'application_id' => $application,
+            'model' => Sales_Model_EDocument_EAS::class,
+            'label' => 'Electronic Address Schema' // _('Electronic Address Schema')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => 'sales_division',
             'application_id' => $application,
             'model' => Sales_Model_Division::class,

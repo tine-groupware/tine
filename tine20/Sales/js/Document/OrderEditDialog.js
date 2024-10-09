@@ -27,7 +27,7 @@ Tine.Sales.Document_OrderEditDialog = Ext.extend(Tine.Sales.Document_AbstractEdi
         items.splice(0, 0, statusLine)
 
         const followUpLine = [{... placeholder}, this.fields.delivery_recipient_id, this.fields.shared_delivery, this.fields.invoice_recipient_id, this.fields.shared_invoice]
-        const rIdx = _.indexOf(items, _.find(items, {line: 'recipient'}))
+        const rIdx = _.indexOf(items, _.find(items, {line: 'references'}))
         items.splice(rIdx+1, 0, followUpLine)
 
         return rtnVal

@@ -29,6 +29,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     public const FLD_IS_SHARED = 'is_shared';
 
     public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
+    public const FLD_INVOICE_PERIOD_START = 'invoice_period_start';
+    public const FLD_INVOICE_PERIOD_END = 'invoice_period_end';
 
     /**
      * invoice status
@@ -115,6 +117,17 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::DEFAULT_VAL           => false,
             self::SHY                   => true,
         ];
+
+        $_definition[self::FIELDS][self::FLD_INVOICE_PERIOD_START] = [
+            self::TYPE                  => self::TYPE_DATE,
+            self::LABEL                 => 'Invoice Period Start', //_('SInvoice Period Start')
+            self::NULLABLE              => true,
+        ];
+        $_definition[self::FIELDS][self::FLD_INVOICE_PERIOD_END] = [
+            self::TYPE                  => self::TYPE_DATE,
+            self::LABEL                 => 'Invoice Period End', //_('SInvoice Period End')
+            self::NULLABLE              => true,
+        ];
     }
 
     /**
@@ -150,13 +163,15 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $this->{self::FLD_IS_SHARED} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->count() > 1;
     }
 
-    //(new \Einvoicing\Writers\UblWriter)->export($ublInvoice);
     // TODO FIXME all usage of email: validate valid email format before using? as we do not enforce a valid email but xrechnung etc. probably enforce!
     // TODO FIXME check usage of all model properties, either they need to be mandatory and/or a empty/format check needs to be performed before using
-    public function toEinvoice(?Sales_Model_Einvoice_PresetInterface $einvoiceConfig = null): \Einvoicing\Invoice
+    public function toEinvoice(?Sales_Model_Einvoice_PresetInterface $einvoiceConfig = null): Sales_EDocument_Einvoicing_Invoice
     {
         if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Document_Debitor) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_DEBITOR_ID . ' not set or resolved');
+        }
+        if (null !== $debitor->{Sales_Model_Debitor::FLD_EAS_ID} && !$debitor->{Sales_Model_Debitor::FLD_EAS_ID} instanceof Sales_Model_EDocument_EAS) {
+            throw new Tinebase_Exception_UnexpectedValue('debitors eas not resolved');
         }
         if (! $this->{self::FLD_DOCUMENT_CATEGORY} instanceof Sales_Model_Document_Category) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_DOCUMENT_CATEGORY . ' not set or resolved');
@@ -181,20 +196,22 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
         $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
 
-        $ublInvoice = (new \Einvoicing\Invoice($einvoiceConfig->getPresetClassName()))
+        $ublInvoice = (new Sales_EDocument_Einvoicing_Invoice($einvoiceConfig->getPresetClassName()))
+            ->setInvoicePeriodStart($this->{self::FLD_INVOICE_PERIOD_START})
+            ->setInvoicePeriodEnd($this->{self::FLD_INVOICE_PERIOD_END})
             ->setNumber($this->{self::FLD_DOCUMENT_NUMBER})
             ->setIssueDate($this->{self::FLD_DOCUMENT_DATE})
 
-            // Abbrechnungszeitruam BT-73 (von) und BT-74 (bis) kann die lib nicht!
+            ->setBuyerReference($this->{self::FLD_BUYER_REFERENCE} ?: ($debitor->{Sales_Model_Debitor::FLD_BUYER_REFERENCE} ?: null))
+            ->setContractReference($this->{self::FLD_CONTRACT_ID} instanceof Sales_Model_Contract ? $this->{self::FLD_CONTRACT_ID}->number : null)
+            ->setProjectReference($this->{self::FLD_PROJECT_REFERENCE} ?: null)
+            ->setPurchaseOrderReference($this->{self::FLD_PURCHASE_ORDER_REFERENCE} ?: null)
 
             ->setSeller((new \Einvoicing\Party())
                 ->setName($division->{Sales_Model_Division::FLD_NAME})
-                //    ->setTradingName('Metaways')
                 ->setVatNumber($division->{Sales_Model_Division::FLD_VAT_NUMBER})
                 ->setTaxRegistrationId($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} ? new \Einvoicing\Identifier($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}, 'FC') : null) // BT-32 // 'FC' aus validen xrechnungen rausgesucht, ist nicht in codeliste, unklar wo das herkommt
-                ->setElectronicAddress(new \Einvoicing\Identifier($division->{Sales_Model_Division::FLD_CONTACT_EMAIL}, 'EM'))
-                //    ->setElectronicAddress(new Identifier('DE217232623', '9930')) // 9930 German VAT number // division->vat_number
-//    ->setCompanyId(new Identifier('buchhaltung@metaways.de', 'EM')) // nicht klar was wir hier nehmen können/müssen
+                ->setElectronicAddress($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} && $division->{Sales_Model_Division::FLD_EAS_ID} ? new \Einvoicing\Identifier($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS}, $division->{Sales_Model_Division::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE}) : null)
                 ->setAddress(array_merge(
                     [$division->{Sales_Model_Division::FLD_ADDR_PREFIX1}],
                     $division->{Sales_Model_Division::FLD_ADDR_PREFIX2} ? [$division->{Sales_Model_Division::FLD_ADDR_PREFIX2}] : [],
@@ -208,23 +225,14 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 ->setContactEmail($division->{Sales_Model_Division::FLD_CONTACT_EMAIL})
             )
 
-
             ->setBuyer(($buyer = new \Einvoicing\Party())
-                // TODO FIXME ?! where from? ->setElectronicAddress(new \Einvoicing\Identifier('rechnung@erzbistum-hamburg.de', 'EM')) // BT-49* EM = electronic mail
-//$buyer ->setElectronicAddress(new Identifier('992-90009-96', '0204')) // 0204 Leitweg-ID
-//$buyer ->setElectronicAddress(new Identifier('DE217232623', '9930')) // 9930 German VAT number
+                ->setElectronicAddress($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS} && $debitor->{Sales_Model_Debitor::FLD_EAS_ID} ? new \Einvoicing\Identifier($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}, $debitor->{Sales_Model_Debitor::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE}) : null)
                 ->setName($billingAddress->{Sales_Model_Address::FLD_NAME} ?: $this->{self::FLD_CUSTOMER_ID}->name)
                 ->setAddress([$billingAddress->{Sales_Model_Address::FLD_STREET}])
                 ->setPostalCode($billingAddress->{Sales_Model_Address::FLD_POSTALCODE} ?: null)
                 ->setCity($billingAddress->{Sales_Model_Address::FLD_LOCALITY} ?: null)
                 ->setCountry($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME} ?: null)
             )
-
-            ->setBuyerReference($this->{self::FLD_CUSTOMER_REFERENCE})
-            ->setContractReference($this->{self::FLD_CONTRACT_ID} instanceof Sales_Model_Contract ? $this->{self::FLD_CONTRACT_ID}->number : null)
-
-            // Projektkennung (BT-11) kann die lib nicht, dass haben die leute beim fork von kronos zugefügt
-            //->addNote('bla bla'); // BT-22 FLD_DESCRIPTION (wirlich aufnehmen?)
 
             ->addPayment(($payment = new \Einvoicing\Payments\Payment())
                 ->setMeansCode('58') // BT-81 Zahlungsart 58 SEPA Überweisung 59 SEPA Einzug
