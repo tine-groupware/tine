@@ -323,6 +323,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } catch (Exception $e) {
             }
         }
+        if ($this->_templateFileName && !in_array($templateFileExtension = pathinfo($this->_templateFileName, PATHINFO_EXTENSION), [
+                    'doc', 'docx', 'xls', 'xlsx', 'ods', 'odt'
+                ])) {
+            throw new Tinebase_Exception_UnexpectedValue('File extension: "' . $templateFileExtension . '" in ' . $this->_templateFileName . ' is not supported');
+        }
         if (!$this->_modelName && !empty($this->_config->model)) {
             $this->_modelName = $this->_config->model;
         }
