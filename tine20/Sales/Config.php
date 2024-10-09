@@ -57,6 +57,10 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const PRODUCT_NUMBER_GENERATION_AUTO = 'auto';
     public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
 
+    public const EDOCUMENT_TRANSPORT = 'EDOCUMENT_TRANSPORT';
+    public const EDOCUMENT_TRANSPORT_EMAIL = 'email';
+    public const EDOCUMENT_TRANSPORT_DOWNLOAD = 'download';
+
     public const EDOCUMENT = 'edocument';
     public const VALIDATION_SVC = 'validation_svc';
 
@@ -278,6 +282,28 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
+        self::EDOCUMENT_TRANSPORT   => [
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => self::EDOCUMENT_TRANSPORT_DOWNLOAD,
+                        'value' => 'Download', //_('Download')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::EDOCUMENT_TRANSPORT_EMAIL,
+                        'value' => 'EMail', //_('EMail')
+                        'icon' => null,
+                        'system' => true,
+                    ]
+                ],
+                self::DEFAULT_STR => self::EDOCUMENT_TRANSPORT_DOWNLOAD,
+            ],
+        ],
         self::DOCUMENT_FOLLOWUP_STATUS => [
             //_('Followup Status')
             self::LABEL              => 'Followup Status',

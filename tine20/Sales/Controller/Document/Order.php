@@ -48,7 +48,7 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Order::FLD_ORDER_STATUS,
             Sales_Model_Document_Order::FLD_EVAL_DIM_COST_CENTER,
             Sales_Model_Document_Order::FLD_EVAL_DIM_COST_BEARER,
-            Sales_Model_Document_Order::FLD_CUSTOMER_REFERENCE,
+            Sales_Model_Document_Order::FLD_BUYER_REFERENCE,
             Sales_Model_Document_Order::FLD_CONTACT_ID,
             Sales_Model_Document_Order::FLD_DESCRIPTION,
             Sales_Model_Document_Order::FLD_SHARED_INVOICE,

@@ -21,6 +21,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
     public const TABLE_NAME         = 'sales_debitor';
 
     public const FLD_BILLING        = 'billing';
+    public const FLD_BUYER_REFERENCE = 'buyer_reference';
     public const FLD_CUSTOMER_ID    = 'customer_id';
     public const FLD_DELIVERY       = 'delivery';
     public const FLD_DIVISION_ID    = 'division_id';
@@ -28,6 +29,9 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
     public const FLD_NAME           = 'name';
     public const FLD_EINVOICE_TYPE  = 'einvoice_type';
     public const FLD_EINVOICE_CONFIG= 'einvoice_config';
+    public const FLD_EAS_ID = 'eas_id';
+    public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
+    public const FLD_EDOCUMENT_TRANSPORT = 'edocument_transport';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -35,7 +39,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 2,
+        self::VERSION                   => 3,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Debitor', // gettext('GENDER_Debitor')
@@ -206,6 +210,36 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     Zend_Filter_Empty::class => [],
                     Zend_Filter_Input::DEFAULT_VALUE => [0 => []], // zend anybody?!
                     [Tinebase_Record_Validator_SubValidate::class, [Tinebase_Record_Validator_SubValidate::IGNORE_VALUE => []]],
+                ],
+            ],
+            self::FLD_BUYER_REFERENCE       => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Buyer Reference', // _('Buyer Reference')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_EAS_ID                => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                => Sales_Model_EDocument_EAS::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_ELECTRONIC_ADDRESS    => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Electronic Address', // _('Electronic Address')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_EDOCUMENT_TRANSPORT   => [
+                self::TYPE                      => self::TYPE_KEY_FIELD,
+                self::LABEL                     => 'EDocument transport method',
+                self::NAME                      => Sales_Config::EDOCUMENT_TRANSPORT,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
                 ],
             ],
         ],

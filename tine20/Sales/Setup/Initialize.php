@@ -94,7 +94,24 @@ class Sales_Setup_Initialize extends Setup_Initialize
 
         static::createDefaultFavoritesForContracts();
     }
-    
+
+    protected function _initializeEDocumentEAS(): void
+    {
+        self::initializeEDocumentEAS();
+    }
+
+    public static function initializeEDocumentEAS(): void
+    {
+        Sales_Controller_EDocument_EAS::getInstance()->create(new Sales_Model_EDocument_EAS([
+            Sales_Model_EDocument_EAS::FLD_NAME => 'Electronic mail',
+            Sales_Model_EDocument_EAS::FLD_CODE => 'EM',
+        ]));
+        Sales_Controller_EDocument_EAS::getInstance()->create(new Sales_Model_EDocument_EAS([
+            Sales_Model_EDocument_EAS::FLD_NAME => 'Leitweg-ID',
+            Sales_Model_EDocument_EAS::FLD_CODE => '0204',
+        ]));
+    }
+
     /**
      * init scheduler tasks
      */

@@ -40,12 +40,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_DOCUMENT_TITLE = 'document_title';
     public const FLD_DOCUMENT_DATE = 'date'; // Belegdatum,  defaults empty, today when booked and not set differently
-    public const FLD_CUSTOMER_REFERENCE = 'customer_reference'; // varchar 255
+    public const FLD_BUYER_REFERENCE = 'buyer_reference'; // varchar 255
 
     public const FLD_POSITIONS = 'positions'; // virtuell recordSet
     public const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
     public const FLD_POSITIONS_GROSS_SUM = 'positions_gross_sum';
     public const FLD_POSITIONS_DISCOUNT_SUM = 'positions_discount_sum';
+    public const FLD_PROJECT_REFERENCE = 'project_reference';
+    public const FLD_PURCHASE_ORDER_REFERENCE = 'purchase_order_reference';
 
     public const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
     public const FLD_INVOICE_DISCOUNT_PERCENTAGE = 'invoice_discount_percentage'; // automatische Berechnung je nach tupe
@@ -254,7 +256,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     'format' => ['medium'],
                 ],
             ],
-            self::FLD_CUSTOMER_REFERENCE        => [
+            self::FLD_BUYER_REFERENCE        => [
                 self::LABEL                         => 'Customer Reference', //_('Customer Reference')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
@@ -443,6 +445,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::NULLABLE                      => true,
             ],
+            self::FLD_PROJECT_REFERENCE         => [
+                self::LABEL                         => 'Project Reference', // _('Project Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_PURCHASE_ORDER_REFERENCE  => [
+                self::LABEL                         => 'Purchase Order Reference', // _('Purchase Order Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+            ],
         ]
     ];
 
@@ -605,7 +621,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_CONTACT_ID,
             self::FLD_RECIPIENT_ID,
             self::FLD_DOCUMENT_TITLE,
-            self::FLD_CUSTOMER_REFERENCE,
+            self::FLD_BUYER_REFERENCE,
             self::FLD_VAT_PROCEDURE,
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
             self::FLD_INVOICE_DISCOUNT_SUM,
