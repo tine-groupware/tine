@@ -6,10 +6,6 @@ merge_be:
     ### 2022.11
     - merge_merge_upwards 2022.11 tine20.com/2022.11-custom
     - merge_merge_upwards tine20.com/2022.11-custom tine20.com/2022.11
-    ### saas
-    - merge_merge_upwards 2023.11 saas/2023.11
-    - merge_merge_upwards saas/2023.11 saas/2024.11
-    - merge_merge_upwards 2024.11 saas/2024.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE_BE == "true"
@@ -20,10 +16,11 @@ merge_saas:
   stage: merge3
   extends: .abstract.merge
   variables:
-    BASEVERSION: "2023.11"
     CUSTOMER: saas
   script:
-    - merge_merge_upwards $BASEVERSION $CUSTOMER/$BASEVERSION-custom
+    - merge_merge_upwards 2023.11 saas/2023.11
+    - merge_merge_upwards 2024.11 saas/2024.11
+    - merge_merge_upwards saas/2023.11 saas/2024.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE_CUSTOMER == "true"
