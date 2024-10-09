@@ -187,7 +187,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
                 $this->_setDefaultGrants($record, $addDuringSetup);
             }
         }
-        if ($record->grants) {
+        if ($record->grants !== null) {
             $this->_setRecordGrants($recordId, $record->grants);
         }
 
@@ -230,9 +230,11 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      */
     protected function _setDefaultGrants(Tinebase_Record_Interface $record, $addDuringSetup = false)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Setting default grants ...');
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Setting default grants ...');
+        }
+
         $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
         /** @var Tinebase_Model_Grants $grant */
         $grant = new $this->_grantsModel(array(

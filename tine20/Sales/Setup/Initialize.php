@@ -94,7 +94,24 @@ class Sales_Setup_Initialize extends Setup_Initialize
 
         static::createDefaultFavoritesForContracts();
     }
-    
+
+    protected function _initializeEDocumentEAS(): void
+    {
+        self::initializeEDocumentEAS();
+    }
+
+    public static function initializeEDocumentEAS(): void
+    {
+        $easData = json_decode(file_get_contents(__DIR__ . '/EAS_5.json'), true);
+        foreach ($easData['daten'] as $eas) {
+            Sales_Controller_EDocument_EAS::getInstance()->create(new Sales_Model_EDocument_EAS([
+                Sales_Model_EDocument_EAS::FLD_NAME => $eas[1],
+                Sales_Model_EDocument_EAS::FLD_CODE => $eas[0],
+                Sales_Model_EDocument_EAS::FLD_REMARK => $eas[2],
+            ]));
+        }
+    }
+
     /**
      * init scheduler tasks
      */

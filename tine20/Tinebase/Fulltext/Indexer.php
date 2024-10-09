@@ -71,9 +71,9 @@ class Tinebase_Fulltext_Indexer
     }
 
     /**
-     * @return float|int
+     * @return int
      */
-    public static function getMaxBlobSize()
+    public static function getMaxBlobSize(): int
     {
         $maxBlobSize = 0;
 
@@ -87,8 +87,9 @@ class Tinebase_Fulltext_Indexer
             if ($maxPacketSize > 0 && ($maxBlobSize === 0 || $maxPacketSize < $maxBlobSize)) {
                 $maxBlobSize = $maxPacketSize;
             }
+            // reduce by more chars because we send more than just the blob (ID, ...)
             if ($maxBlobSize > 0) {
-                $maxBlobSize -= 64*1024;
+                $maxBlobSize = round($maxBlobSize * 0.8);
             }
         }
 
@@ -116,7 +117,11 @@ class Tinebase_Fulltext_Indexer
             if (Tinebase_Core::isLogLevel(Tinebase_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Truncating full text blob for id '
                 . $_id . ' to max blob size');
-            $blob = mb_substr($blob, 0, $this->_maxBlobSize);
+            $blob = substr($blob, 0, $this->_maxBlobSize);
+            if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Blobsize after reduction: '
+                    . strlen($blob));
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -128,7 +133,15 @@ class Tinebase_Fulltext_Indexer
 
         $db = Tinebase_Core::getDb();
         $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id));
-        $db->insert(SQL_TABLE_PREFIX . 'external_fulltext', array('id' => $_id, 'text_data' => $blob));
+        try {
+            $db->insert(SQL_TABLE_PREFIX . 'external_fulltext', array('id' => $_id, 'text_data' => $blob));
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not index file '
+                    . $_fileName
+                    . ' error: ' . $zdse->getMessage());
+            }
+        }
     }
 
     /**

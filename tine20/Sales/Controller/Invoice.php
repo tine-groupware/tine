@@ -1500,12 +1500,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     ),
                     // TODO FIXME do we have a FLD_CONTACT_ID?
                     Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
-                    Sales_Model_Document_Invoice::FLD_CUSTOMER_REFERENCE => $customer->number,
+                    Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                    Sales_Model_Document_Invoice::FLD_BUYER_REFERENCE => $customer->number,
                     Sales_Model_Document_Invoice::FLD_POSITIONS => [
                         new Sales_Model_DocumentPosition_Invoice([
                             Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'Gesamtbetrag gem. Anlage',
+                            Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
                             Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
-                            Sales_Model_DocumentPosition_Invoice::FLD_GROSS_PRICE => $updatedRecord->price_gross,
+                            Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => $updatedRecord->price_gross,
+                            Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                             Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $updatedRecord->sales_tax,
                         ], true),
                     ],
@@ -1519,10 +1522,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     $invoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS} = $updatedRecord->credit_term;
                 }
 
+                $invoice->calculatePricesIncludingPositions();
+
                 if (!($stream = fopen('php://temp', 'r+'))) {
                     throw new Tinebase_Exception('cant create temp stream');
                 }
-                fwrite($stream, (new \Einvoicing\Writers\UblWriter)->export($invoice->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+                fwrite($stream, (new Sales_EDocument_Einvoicing_UblWriter())->export($invoice->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
                 rewind($stream);
 
                 if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {

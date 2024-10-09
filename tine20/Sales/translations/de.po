@@ -195,6 +195,12 @@ msgstr "Gesamtpreis"
 msgid "Add New Order Confirmation"
 msgstr "Neue Auftragsbestätigung hinzufügen"
 
+msgid "Invoice Period Start"
+msgstr "Abrechnungszeitraum Start"
+
+msgid "Invoice Period End"
+msgstr "Abrechnungszeitraum Ende"
+
 #: js/OrderConfirmationEditDialog.js:111 js/InvoiceDetailsPanel.js:105
 #: js/ContractFilterModel.js:30 js/InvoiceEditDialog.js:567
 #: Model/OrderConfirmation.php:51 Model/OrderConfirmation.php:83
@@ -204,6 +210,13 @@ msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Vertrag"
 msgstr[1] "Verträge"
+
+msgid "Project Reference"
+msgstr "Projektkennung"
+
+msgid "Purchase Order Reference"
+msgstr "Bestellnummer"
+
 
 #: js/OrderConfirmationEditDialog.js:122 Model/Offer.php:33
 #: Model/Document/Offer.php:45
@@ -1869,8 +1882,8 @@ msgid "Document Date"
 msgstr "Belegdatum"
 
 #: Model/Document/Abstract.php:253
-msgid "Customer Reference"
-msgstr "Kundenreferenz"
+msgid "Buyer Reference"
+msgstr "Kundenreferenz / Leitweg-ID"
 
 #: Model/Document/Abstract.php:277 Model/Debitor.php:40
 msgid "Debitor"
@@ -2015,6 +2028,21 @@ msgstr "Lieferanschriften"
 #: Model/Debitor.php:152
 msgid "Billing Addresses"
 msgstr "Rechnungsanschriften"
+
+msgid "Electronic Invoice Type"
+msgstr "Elektronischer Rechnungstyp"
+
+msgid "Electronic Invoice Config"
+msgstr "Elektronische Rechnungskonfiguration"
+
+msgid "Electronic Address Schema"
+msgstr "Elektronisches Adressierungsschema"
+
+msgid "Electronic Address"
+msgstr "Elektronische Adresse"
+
+msgid "Electronic Document Transport Method"
+msgstr "Elektronische Dokumenten Übertragungsmethode"
 
 #: Model/Boilerplate.php:79
 msgid "Model"
