@@ -193,8 +193,6 @@ class Addressbook_Controller_ListTest extends TestCase
         $list->email = 'shoo' . Tinebase_Record_Abstract::generateUID(8) .  '@' . TestServer::getPrimaryMailDomain();
         $this->_instance->update($list);
         
-        // test account add grant and update keep_copy in list
-
         $account = $accountCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $list->getId()],
@@ -202,6 +200,11 @@ class Addressbook_Controller_ListTest extends TestCase
         ]))->getFirstRecord();
         static::assertNotNull($account, 'could not get account');
         static::assertSame($list->email, $account->name);
+
+        // try to remove grants from account
+        $account->grants = [];
+        $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+        static::assertNull($account->grants);
 
         // test delete account
         $list->email = '';
@@ -215,7 +218,7 @@ class Addressbook_Controller_ListTest extends TestCase
         static::assertNull($deletedAccount, 'account was not deleted');
 
         // check if email user is removed, too
-        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $emailUserBackend = Tinebase_EmailUser::getInstance();
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         $userInBackend = $emailUserBackend->getRawUserById($emailUser);
         self::assertFalse($userInBackend, print_r($userInBackend, true));
