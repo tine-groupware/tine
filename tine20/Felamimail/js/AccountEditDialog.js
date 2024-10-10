@@ -1086,8 +1086,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (this.isSystemAccount()) {
                 await this.updateSieve();
             }
-            if (this.record.get('type') === 'adblist') {
-                this.record.set('adb_list', this.mailingListPanel.listRecord);
+            if (this.record.get('type') === 'adblist' && this.mailingListPanel?.listRecord?.data) {
+                this.record.set('adb_list', this.mailingListPanel.listRecord.data);
             }
             Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
         }
