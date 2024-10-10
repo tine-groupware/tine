@@ -59,7 +59,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'
     },
-
+    copyEditAction: true,
 
     /**
      * returns view row class (scope is this.grid.view)
