@@ -96,7 +96,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         // lie about existence of event if request is a PUT request from an ATTENDEE for an already existing event
         // to prevent ugly (and not helpful) error messages on the client
-        if (isset($_SERVER['REQUEST_METHOD']) && $httpRequest->getMethod() == 'PUT' && ($httpRequest->getHeader('If-None-Match') ?: null)?->getFieldValue() === '*') {
+        if (isset($_SERVER['REQUEST_METHOD']) && $httpRequest && $httpRequest->getMethod() === 'PUT'
+            && ($httpRequest->getHeader('If-None-Match') ?: null)?->getFieldValue() === '*'
+        ) {
             if (
                 $object->organizer != Tinebase_Core::getUser()->contact_id && 
                 Calendar_Model_Attender::getOwnAttender($object->attendee) !== null
