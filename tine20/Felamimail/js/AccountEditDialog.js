@@ -1129,8 +1129,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (this.isSystemAccount()) {
                 await this.updateSieve();
             }
-            if (this.record.get('type') === 'adblist') {
-                this.record.set('adb_list', this.mailingListPanel.listRecord);
+            if (this.record.get('type') === 'adblist' && this.mailingListPanel?.listRecord?.data) {
+                this.record.set('adb_list', this.mailingListPanel.listRecord.data);
             }
             Tine.Felamimail.AccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
         }
@@ -1250,7 +1250,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const data = this.record.data.sieve_notification_email.split(',');
         this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
         if (this.asAdminModule) {
-            this.sieveForwardsGrid.store.loadData( this.record.data.sieve_forwardings);
+            this.sieveForwardsGrid.store.loadData( this.record.data.sieve_forwardings ?? '');
         }
     },
 
