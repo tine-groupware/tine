@@ -2140,6 +2140,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
 
         $this->assertStringContainsString(':from', $sieveScriptRules);
         $this->assertStringContainsString(':addresses', $sieveScriptRules);
+        $this->assertStringContainsString('["' . $this->_account->email . '"]', $sieveScriptRules);
         $this->assertStringContainsString('text:', $sieveScriptRules);
         $this->assertStringNotContainsString(':days', $sieveScriptRules);
     }

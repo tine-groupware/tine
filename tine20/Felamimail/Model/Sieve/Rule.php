@@ -86,10 +86,11 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
     
     /**
      * get sieve rule object
-     * 
+     *
+     * @param Felamimail_Model_Account|null $account
      * @return Felamimail_Sieve_Rule
      */
-    public function getFSR()
+    public function getFSR(?Felamimail_Model_Account $account = null)
     {
         $fsr = new Felamimail_Sieve_Rule();
         $fsr->setEnabled($this->enabled)
@@ -99,6 +100,9 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
         $fsra = new Felamimail_Sieve_Rule_Action();
         $fsra->setType($this->action_type)
              ->setArgument($this->action_argument);
+        if ($account) {
+            $fsra->setAccount($account);
+        }
         $fsr->setAction($fsra);
         
         foreach ($this->conditions as $condition) {
