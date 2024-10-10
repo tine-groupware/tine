@@ -565,15 +565,18 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
 
         if ($_rules) {
+            /** @var Felamimail_Model_Sieve_Rule $rule */
             foreach ($_rules as $rule) {
                 $this->_checkRule($rule, $_accountId);
-                $fsr = $rule->getFSR();
+                $fsr = $rule->getFSR($account);
                 $script->addRule($fsr);
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . ' Put updated SIEVE script ' . $this->_scriptName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Put updated SIEVE script ' . $this->_scriptName);
+        }
 
         $this->_putScript($account, $script);
         $this->_addSystemNotes($account, $_vacation, $_rules);
