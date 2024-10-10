@@ -240,15 +240,22 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 /** @var Tinebase_Record_Interface $record */
                 $record = new $model(null, true);
+                try {
+                    /** @var Tinebase_Model_Filter_FilterGroup $idFilter */
+                    $modelIdFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        $model,
+                        _options: [Tinebase_Model_Filter_FilterGroup::IGNORE_ACL => true]
+                    );
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Skipping model: ' . $model . ' (' . $teia->getMessage() . ')');
+                    }
+                    continue;
+                }
 
                 foreach ($ids as $key => &$ids2) {
-                    /** @var Tinebase_Model_Filter_FilterGroup $idFilter */
-                    $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                        $model,
-                        array(),
-                        '',
-                        array('ignoreAcl' => true)
-                    );
+                    $idFilter = clone($modelIdFilter);
                     $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
                         'field' => $record->getIdProperty(),
                         'operator' => 'in',

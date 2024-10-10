@@ -1,0 +1,31 @@
+Date: Thu, 6 Oct 2022 12:27:13 +0200 (GMT+02:00)
+From: Me <me@mydomain.de>
+To: Me <me@mydomain.de>
+Message-ID: <0b3d3e0f-30f8-4415-a7d4-deb60b34c5ee@mydomain.de>
+Subject: Test
+MIME-Version: 1.0
+X-Tine20TestMessage: nonrfcdate.eml
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_34_168658520.1665052054868"
+X-Correlation-ID: <0b3d3e0f-30f8-4415-a7d4-deb60b34c5ee@mydomain.de>
+
+------=_Part_34_168658520.1665052054868
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Kein Text
+
+------=_Part_34_168658520.1665052054868
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html>
+ <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ </head>
+ <body>
+  <div style="font-family:sans-serif"><span dir="ltr" style="margin-top:0; margin-bottom:0;">Kein Text</span> <br>
+  </div>
+ </body>
+</html>
+------=_Part_34_168658520.1665052054868--
