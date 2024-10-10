@@ -602,6 +602,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (null !== $_pagination) {
             // clone pagination to prevent accidental change of original object
             $pagination = clone($_pagination);
+            if (!$pagination->model) {
+                $pagination->model = $this->_modelName;
+            }
         }
         $pagination->appendModelConfig($select);
         $pagination->appendSort($select, [$this->_tableName => $this->_schema]);

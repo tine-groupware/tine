@@ -42,23 +42,24 @@ Tine.widgets.customfields.Renderer = function(){
                     // NOTE existingkeyfields might come from an other app!
                     var app = cfDefinition.options && Ext.isString(cfDefinition.options.app) ? cfDefinition.options.app : app;
                     var keyFieldName = cfDefinition.options && Ext.isString(cfDefinition.options.keyFieldName) ? cfDefinition.options.keyFieldName : cfName;
-                    renderers[key] = function(customfields) {
-                        customfields = customfields || {}
+                    renderers[key] = function(value, metaData, record) {
+                        var customfields = _.get(record, 'data.customfields', {});
                         return Tine.Tinebase.widgets.keyfield.Renderer.render(app, keyFieldName, customfields[cfName]);
                     };
                     
                 } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1 &&
                     _.get(window, cfDefinition.recordConfig.value.records)) {
-                    renderers[key] = function(customfields) {
-                        var recordClass = eval(cfDefinition.recordConfig.value.records),
+                    renderers[key] = function(value, metaData, record) {
+                        var customfields = _.get(record, 'data.customfields', {}),
+                            recordClass = eval(cfDefinition.recordConfig.value.records),
                             cfData = _.get(customfields, cfName, customfields),
                             record = Tine.Tinebase.data.Record.setFromJson(cfData, recordClass);
 
                         return record.getTitle();
                     };
                 } else {
-                    renderers[key] = function(customfields) {
-                        customfields = customfields || {}
+                    renderers[key] = function(value, metaData, record) {
+                        var customfields = _.get(record, 'data.customfields', {});
                         switch (cfDefinition.type)
                         {
                             case 'date':
