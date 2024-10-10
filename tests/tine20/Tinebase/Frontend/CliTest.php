@@ -144,17 +144,17 @@ class Tinebase_Frontend_CliTest extends TestCase
         // test deleted contact is still there
         $contactBackend = new Addressbook_Backend_Sql();
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
-        $this->assertEquals(1, count($contacts));
+        static::assertEquals(1, count($contacts));
 
         // delete tag too
         Tinebase_Tags::getInstance()->deleteTags($deletedContact->tags->getFirstRecord()->getId());
         
         ob_start();
         $result = $this->_cli->purgeDeletedRecords($opts);
-        // TODO check $out?
         $out = ob_get_clean();
+        static::assertStringContainsString('Purging obsolete data from tables...', $out);
 
-        self::assertEquals(0, $result);
+        static::assertEquals(0, $result);
 
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             static::assertSame(0, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(
@@ -165,11 +165,11 @@ class Tinebase_Frontend_CliTest extends TestCase
 
         // test deleted contact is gone
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
-        $this->assertEquals(0, count($contacts));
+        static::assertEquals(0, count($contacts));
 
         $leadsBackend = new Crm_Backend_Lead();
         $leads = $leadsBackend->getMultipleByProperty($deletedLead->getId(), 'id', TRUE);
-        $this->assertEquals(0, count($leads));
+        static::assertEquals(0, count($leads));
     }
 
     protected function _addAndDeleteFile()
