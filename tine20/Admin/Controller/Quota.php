@@ -52,8 +52,9 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
             $this->validateQuota($application, $recordData, $additionalData);
 
             $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+            $quotaInMB = $additionalData['totalInByte'] / 1024 / 1024;
             if (Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET}) {
-                $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $additionalData['totalInMB'] / 1024 / 1024;
+                $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = $quotaInMB;
 
                 $imapBackend = Tinebase_EmailUser::getInstance();
                 if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
@@ -64,7 +65,7 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
                 }
                 return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}];
             } else {
-                $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} =  $additionalData['totalInMB'] / 1024 / 1024;
+                $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} = $quotaInMB;
                 return [Tinebase_Config::QUOTA_TOTALINMB => $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB}];
             }
         }
