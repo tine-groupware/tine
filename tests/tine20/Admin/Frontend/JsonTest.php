@@ -1280,39 +1280,37 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         )));
 
         static::assertEquals($filterNullResult['totalcount'], $filterRootResult['totalcount']);
-        static::assertGreaterThan(0, $filterNullResult['totalcount']);
-        foreach ($filterNullResult['results'] as $node) {
+        static::assertEquals(2, $filterRootResult['totalcount']);
+        
+        $filterAppResult = $this->_json->searchQuotaNodes(array(array(
+            'field'     => 'path',
+            'operator'  => 'equals',
+            'value'     => '/Filesystem'
+        )));
+
+        foreach ($filterAppResult['results'] as $node) {
             Tinebase_Application::getInstance()->getApplicationById($node['name']);
         }
+        static::assertEquals(5, $filterAppResult['totalcount']);
 
-        $filterAppResult = $this->_json->searchQuotaNodes(array(array(
+        $filterAppFolderResult = $this->_json->searchQuotaNodes(array(array(
             'field'     => 'path',
             'operator'  => 'equals',
-            'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()
+            'value'     => '/Filesystem/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()
         )));
-
-        static::assertEquals(1, $filterAppResult['totalcount']);
-        static::assertEquals('folders', $filterAppResult['results'][0]['name']);
-
-        $filterAppResult = $this->_json->searchQuotaNodes(array(array(
-            'field'     => 'path',
-            'operator'  => 'equals',
-            'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId()
-        )));
-
+        
+        static::assertEquals(1, $filterAppFolderResult['totalcount']);
+        static::assertEquals('folders', $filterAppFolderResult['results'][0]['name']);
+        
         $imapBackend = null;
         try {
             $imapBackend = Tinebase_EmailUser::getInstance();
         } catch (Tinebase_Exception_NotFound $tenf) {}
         if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-            static::assertEquals(2, $filterAppResult['totalcount']);
-            static::assertEquals('Emails', $filterAppResult['results'][1]['name']);
-
             $dovecotResult = $this->_json->searchQuotaNodes(array(array(
                 'field'     => 'path',
                 'operator'  => 'equals',
-                'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
-                    '/Emails'
+                'value'     => '/Emails'
             )));
             static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
@@ -1328,15 +1326,14 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
             $dovecotResult = $this->_json->searchQuotaNodes(array(array(
                 'field'     => 'path',
                 'operator'  => 'equals',
-                'value'     => '/' . Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId() .
-                    '/Emails/' . $dovecotResult['results'][0]['name']
+                'value'     => '/Emails/' . $dovecotResult['results'][0]['name']
             )));
             static::assertGreaterThanOrEqual(1, $dovecotResult['totalcount']);
 
         } else {
-            static::assertEquals(1, $filterAppResult['totalcount']);
+            static::assertEquals(1, $filterAppFolderResult['totalcount']);
         }
-        static::assertEquals('folders', $filterAppResult['results'][0]['name']);
+        static::assertEquals('folders', $filterAppFolderResult['results'][0]['name']);
     }
 
     public function testResourceContainerGet()

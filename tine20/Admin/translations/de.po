@@ -1025,8 +1025,8 @@ msgstr "{0} Kontingent bearbeiten"
 msgid "Manage Total Quota"
 msgstr "Gesamte Quota verwalten"
 
-msgid "Total quota"
-msgstr "Gesamte Quota"
+msgid "Total"
+msgstr "Gesamte"
 
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
