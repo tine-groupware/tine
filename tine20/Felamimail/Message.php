@@ -83,33 +83,40 @@ class Felamimail_Message extends Zend_Mail_Message
      * convert date from sent/received
      *
      * @param  string $_dateString
-     * @return Zend_Date
+     * @return DateTime
      */
     public static function convertDate($_dateString)
     {
         try {
-            $date = new Tinebase_DateTime($_dateString ? $_dateString : '@0');
-            $date->setTimezone('UTC');
-
+            $date = new Tinebase_DateTime($_dateString ?: '@0');
         } catch (Exception $e) {
-            // try to fix missing timezone char
-            if (preg_match('/UT$/', $_dateString)) {
-                $_dateString .= 'C';
+            $date = null;
+            if (str_contains($e->getMessage(), 'Double timezone specification')) {
+                // remove duplicate tz in brackets - like this: Thu, 6 Oct 2022 12:27:13 +0200 (GMT+02:00)
+                if ($pos = strpos($_dateString, '(')) {
+                    $dateString = substr($_dateString, 0, $pos);
+                    return self::convertDate($dateString);
+                }
+            } else {
+                // try to fix missing timezone char
+                if (str_ends_with($_dateString, 'UT')) {
+                    $_dateString .= 'C';
+                }
+                // try some explicit formats
+                foreach (self::$dateFormats as $format) {
+                    $date = Tinebase_DateTime::createFromFormat($format, $_dateString);
+                    if ($date) {
+                        break;
+                    }
+                }
             }
-            
-            // try some explicit formats
-            foreach (self::$dateFormats as $format) {
-                $date = DateTime::createFromFormat($format, $_dateString);
-                if ($date) break;
-            }
-            
             if (! $date) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . " Date $_dateString could  not be converted to DateTime -> using 1970-01-01 00:00:00.");
                 $date = new Tinebase_DateTime('@0');
             }
         }
-        
+        $date->setTimezone('UTC');
         return $date;
     }
     
