@@ -110,6 +110,45 @@ class Tinebase_CustomFieldTest extends TestCase
         }
     }
 
+    public function testCustomFieldOrderBy(): void
+    {
+        $cf = self::getCustomField([
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+        ]);
+        $cf = $this->_instance->addCustomField($cf);
+
+        $c = Addressbook_Controller_Contact::getInstance();
+        $record1 = $c->create(new Addressbook_Model_Contact([
+            'n_family' => 'Friendly',
+            'n_given' => 'One',
+            'customfields' => [
+                $cf->name => 'a',
+            ],
+        ]), false);
+        $record2 = $c->create(new Addressbook_Model_Contact([
+            'n_family' => 'Friendly',
+            'n_given' => 'Two',
+            'customfields' => [
+                $cf->name => 'b',
+            ],
+        ]), false);
+
+        $result = $c->search($filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Friendly')
+        ), 'AND'), new Tinebase_Model_Pagination(['sort' => '#' . $cf->name, 'dir' => 'ASC']));
+
+        $this->assertSame(2, $result->count());
+        $this->assertSame($record1->getId(), $result->getFirstRecord()->getId());
+        $this->assertSame($record2->getId(), $result->getLastRecord()->getId());
+
+        $result = $c->search($filter, new Tinebase_Model_Pagination(['sort' => '#' . $cf->name, 'dir' => 'DESC']));
+
+        $this->assertSame(2, $result->count());
+        $this->assertSame($record2->getId(), $result->getFirstRecord()->getId());
+        $this->assertSame($record1->getId(), $result->getLastRecord()->getId());
+    }
+
     public function testCustomFieldRecordsResolving()
     {
         $cf1 = self::getCustomField([

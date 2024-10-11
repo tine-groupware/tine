@@ -662,7 +662,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         // sort by customfield
         $paging = $this->objects['paging'];
-        $paging['sort'] = $cf->name;
+        $paging['sort'] = '#' . $cf->name;
         $paging['dir'] = 'DESC';
 
         $searchResult = $this->_uit->searchContacts(
