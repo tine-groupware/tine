@@ -128,7 +128,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
             list($application,) = explode('_', $this->model, 2);
             $this->_customFields = Tinebase_CustomField::getInstance()
-                ->getCustomFieldsForApplication($application, $this->model);
+                ->getCustomFieldsForApplication($application, $this->model)->getClone()
+                ->filter(fn($rec) => $rec->name = '#' . $rec->name);
             /** @var Tinebase_Record_Interface $model */
             $model = $this->model;
             $this->_externalSortMapping = $model::getSortExternalMapping();
@@ -547,7 +548,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 $_data['sort'] = [$_data['sort']];
             }
             foreach ($_data['sort'] as &$val) {
-                if (!preg_match('/^[\w\.\-]+$/', $val)) {
+                if (!preg_match('/^[#\w\.\-]+$/', $val)) {
                     $val = '';
                 }
             }
