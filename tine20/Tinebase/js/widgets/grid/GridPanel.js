@@ -2378,9 +2378,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             result.push({
                 id: cfConfig.id,
                 header: cfConfig.get('definition').label,
-                dataIndex: 'customfields',
+                dataIndex: '#' + cfConfig.get('name'),
                 renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
-                sortable: false,
+                sortable: !!this.recordClass.getModelConfiguration(),
                 hidden: true
             });
         }, this);
