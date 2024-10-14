@@ -15,7 +15,8 @@ class Inventory_Setup_Update_16 extends Setup_Update_Abstract
 {
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE016_UPDATE002 = __CLASS__ . '::update001';
+    const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -32,6 +33,10 @@ class Inventory_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE016_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -58,5 +63,15 @@ class Inventory_Setup_Update_16 extends Setup_Update_Abstract
         ]);
         Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
         $this->addApplicationUpdate('Inventory', '16.2', self::RELEASE016_UPDATE002);
+    }
+
+    public function update003()
+    {
+        try {
+            $this->_backend->dropIndex('inventory_item', 'inventory_id');
+        } catch  (Zend_Db_Statement_Exception $zdse) {
+            // already removed
+        }
+        $this->addApplicationUpdate('Inventory', '16.3', self::RELEASE016_UPDATE003);
     }
 }
