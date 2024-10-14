@@ -34,6 +34,9 @@ Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel
     initComponent: function() {
         this.operators = ['in', 'notin'];
 
+        if (!this.app?.name) {
+            this.app = Tine.Tinebase.appMgr.get(this.app);
+        }
         if (Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName).getCount() > 15) {
             this.operators = ['equals', 'not'];
             this.defaultOperator = 'equals';
