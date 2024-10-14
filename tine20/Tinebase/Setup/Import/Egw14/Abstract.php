@@ -628,13 +628,22 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         return $createdAlarms;
     }
 
-    protected function _getInfoLogData(int $recordId, string $recordApp): string
+    protected function _getInfoLogData(int $recordId, string $recordApp, $allButTheLastOne = false): string
     {
         $egwInfologs = $this->_fetchInfoLogs($recordId, $recordApp);
+
+        echo "Found " . count($egwInfologs) . " infologs for " . $recordApp . ' / ' . $recordId . "\n";
+
+        if (count($egwInfologs) > 1 && $allButTheLastOne) {
+            array_pop($egwInfologs);
+        }
+
         $result = '';
         foreach ($egwInfologs as $infolog) {
-            $result .= '[' . $infolog['info_type'] . '] ' . $infolog['info_subject'] . ": \n" . $infolog['info_from']
-                ." \n" . $infolog['info_des'] . "\n\n";
+            $subject = !empty($infolog['info_subject']) && $infolog['info_subject'] !== '-' ? $infolog['info_subject'] . ": \n" : '';
+            $from = !empty($infolog['info_from']) ? $infolog['info_from'] . "\n" : '';
+            $result .= '[' . $infolog['info_type'] . '] ' .  "\n"  . $subject . $from
+               . $infolog['info_des'] . "\n\n";
         }
         return $result;
     }
