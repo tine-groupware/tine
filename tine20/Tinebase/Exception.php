@@ -132,8 +132,15 @@ class Tinebase_Exception extends Exception
         $logMethod = $exception instanceof Tinebase_Exception ? $exception->getLogLevelMethod() : 'err';
         $logLevel = strtoupper($logMethod);
 
-        Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception)
+        Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $exception->getFile() . ':' . $exception->getLine() . ' ' . get_class($exception)
             . ' -> ' . $exception->getMessage());
+
+        $previous = $exception->getPrevious();
+        while ($previous) {
+            Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $previous->getFile() . ':' . $previous->getLine() . ' ' . get_class($previous)
+                . ' -> ' . $previous->getMessage());
+            $previous = $previous->getPrevious();
+        }
 
         if ($additionalData) {
             Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' Data: ' . print_r($additionalData, true));
