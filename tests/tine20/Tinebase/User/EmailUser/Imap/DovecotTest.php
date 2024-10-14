@@ -350,6 +350,18 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         self::assertEquals($expectedUsername, $rawDovecotUser['username']);
     }
 
+    public function testAddUserWithSecondaryDomainWithoutInstanceNamePrevent2ndDomainUsername()
+    {
+        $this->_configRemoveInstanceName([
+            'preventSecondaryDomainUsername' => true
+        ]);
+
+        // username needs to be: loginname@DOMAIN!
+        $rawDovecotUser = $this->testAddUserWithSecondaryDomain();
+        $expectedUsername = str_replace('@secondary.test', '', $rawDovecotUser['loginname']) . '@' . $rawDovecotUser['domain'];
+        self::assertEquals($expectedUsername, $rawDovecotUser['username']);
+    }
+
     public function testUpdateUserWithSecondaryDomainWithoutInstanceName()
     {
         $this->_testNeedsTransaction();
@@ -378,14 +390,18 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
     /**
      * remove instanceName from imap config
      *
+     * @param array $additionalConfig
      * @return void
      */
-    protected function _configRemoveInstanceName(): void
+    protected function _configRemoveInstanceName(array $additionalConfig = []): void
     {
         Tinebase_User::destroyInstance();
         $this->_oldImapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         $conf = clone $this->_oldImapConf;
         $conf->instanceName = null;
+        foreach ($additionalConfig as $key => $value) {
+            $conf->{$key} = $value;
+        }
         Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $conf);
     }
 }

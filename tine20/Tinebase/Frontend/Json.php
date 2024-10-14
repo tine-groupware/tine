@@ -1514,19 +1514,19 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param ?string $accountLoginName
-     * @param ?string $mfaId
+     * @param string $accountLoginName
+     * @param string $mfaId
      * @return array
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_NotFound
      */
-    public function getWebAuthnAuthenticateOptionsForMFA(?string $accountLoginName = null, ?string $mfaId = null): array
+    public function getWebAuthnAuthenticateOptionsForMFA(string $accountLoginName, string $mfaId): array
     {
         $account = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
         
         /** @var Tinebase_Model_MFA_UserConfig $userCfg */
-        $userCfg = $account->mfa_configs->getById($mfaId);
-        $configId = $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID};
+        $userCfg = $account->mfa_configs?->getById($mfaId);
+        $configId = $userCfg?->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID};
         if (! $configId) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' Account ' . $accountLoginName . ' has no valid MFA config'
