@@ -1242,6 +1242,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
+         * "preventSecondaryDomainUsername": true
          */
         self::SMTP => array(
                                    //_('System SMTP')
