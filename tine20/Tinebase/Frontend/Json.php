@@ -1525,8 +1525,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $account = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
         
         /** @var Tinebase_Model_MFA_UserConfig $userCfg */
-        $userCfg = $account->mfa_configs->getById($mfaId);
-        $configId = $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID};
+        $userCfg = $account->mfa_configs?->getById($mfaId);
+        $configId = $userCfg?->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID};
         if (! $configId) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' Account ' . $accountLoginName . ' has no valid MFA config'
