@@ -78,9 +78,8 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
         }
     }
 
-    public function toFEArray(): array
+    public function toFEArray(?Tinebase_Model_FullUser $user = null): array
     {
-        $user = Tinebase_Core::getUser();
         return [
             'username'  => $user ? $user->accountLoginName : '',
         ];
