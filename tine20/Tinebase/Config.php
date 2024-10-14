@@ -1206,7 +1206,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * useSystemAccount (bool)
          * domain (string)
          * instanceName (string)
-         * useEmailAsUsername (bool)
+         * useEmailAsUsername (bool) - default: false
+         * preventSecondaryDomainUsername (bool) - default: false
          * host (string)
          * port (integer)
          * ssl (bool)
