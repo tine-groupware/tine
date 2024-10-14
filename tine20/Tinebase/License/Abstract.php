@@ -49,7 +49,7 @@ abstract class Tinebase_License_Abstract
      *
      * @var array
      */
-    protected $_permittedFeatures = [];
+    static protected $_permittedFeatures = [];
 
     /**
      * set new license file
@@ -133,26 +133,20 @@ abstract class Tinebase_License_Abstract
     /**
      * @param string $feature
      * @return boolean
-     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function isPermitted($feature)
+    public function isPermitted(string $feature): bool
     {
-        if (! is_string($feature)) {
-            throw new Tinebase_Exception_InvalidArgument('Feature/application name should be a string');
-        }
-
         if (! self::isLicenseCheckable()) {
             // too early for license check
             return true;
         }
 
-        if (isset($this->_permittedFeatures[$feature])) {
+        if (isset(static::$_permittedFeatures[$feature])) {
             // use class cache
-            return true;
+            return static::$_permittedFeatures[$feature];
         }
 
         if (! isset($this->_featureNeedsPermission[$feature])) {
-            // feature does not need permission
             return true;
         }
 
@@ -166,12 +160,14 @@ abstract class Tinebase_License_Abstract
         if (Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature])) {
             $hasFeature = $this->hasFeature($feature);
             if (! $hasFeature) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                    __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
-                    . ' Feature/application not permitted by license: ' . $feature);
-            } else {
-                $this->_permittedFeatures[] = $feature;
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(
+                        __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
+                        . ' Feature/application not permitted by license: ' . $feature
+                    );
+                }
             }
+            static::$_permittedFeatures[$feature] = $hasFeature;
             return $hasFeature;
         }
 
@@ -268,7 +264,7 @@ abstract class Tinebase_License_Abstract
         $this->_certData = null;
         $this->_license = null;
         $this->_status = null;
-        $this->_permittedFeatures = [];
+        static::$_permittedFeatures = [];
     }
 
     abstract public function getMaxUsers();
