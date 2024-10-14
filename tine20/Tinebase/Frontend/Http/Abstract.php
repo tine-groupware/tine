@@ -277,20 +277,29 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $additionalHeader = [];
         }
 
-        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $previewNode->size, $additionalHeader);
+        $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $additionalHeader);
+        $this->_passthrough($fileSystem->getRealPathForHash($previewNode->hash));
+    }
 
-        $handle = fopen($fileSystem->getRealPathForHash($previewNode->hash), 'r');
+    protected function _passthrough(string $filename, $streamContext = null): void
+    {
+        if ($streamContext === null) {
+            $handle = @fopen($filename, 'r', context: $streamContext);
+        } else {
+            $handle = @fopen($filename, 'r');
+        }
 
         if (false === $handle) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' could not open preview by real path for hash');
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' could not open file: ' . $filename);
+            }
             $this->_handleFailure();
         }
 
         fpassthru($handle);
         fclose($handle);
     }
-
 
     /**
      * download (fpassthru) tempfile
@@ -302,15 +311,13 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     {
         Tinebase_Core::setExecutionLifeTime(0);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Download tempfile' . print_r($tempFile->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Download tempfile' . print_r($tempFile->toArray(), TRUE));
+        }
 
-        $this->_prepareHeader($tempFile->name, $tempFile->contenttype, /* $disposition */ 'attachment', $tempFile->size);
-
-        $handle = fopen($filesystemPath, 'r');
-
-        fpassthru($handle);
-        fclose($handle);
+        $this->_prepareHeader($tempFile->name, $tempFile->contenttype);
+        $this->_passthrough($filesystemPath);
     }
 
     /**
@@ -331,10 +338,12 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         Tinebase_Core::setExecutionLifeTime(0);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Download file node ' . print_r($node->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Download file node ' . print_r($node->toArray(), TRUE));
+        }
 
-        $this->_prepareHeader($node->name, $node->contenttype, /* $disposition */ 'attachment', $node->size);
+        $this->_prepareHeader($node->name, $node->contenttype);
 
         if (null !== $revision) {
             $streamContext = stream_context_create(array(
@@ -342,19 +351,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                     'revision' => $revision
                 )
             ));
-            $handle = @fopen($filesystemPath, 'r', false, $streamContext);
         } else {
-            $handle = @fopen($filesystemPath, 'r');
+            $streamContext = null;
         }
-
-        if ($handle) {
-            fpassthru($handle);
-            fclose($handle);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not open file: ' . $filesystemPath);
-            $this->_handleFailure();
-        }
+        $this->_passthrough($filesystemPath, $streamContext);
     }
 
     /**
@@ -363,13 +363,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filename
      * @param string $contentType
      * @param string $disposition
-     * @param string $length WILL BE IGNORED! webserver might apply compression -> content length might change
      * @param array $additionalHeaders
      *
-     * TODO make length param work
-     * @see 0010522: Anonymous download link - no or wrong filesize in header
      */
-    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment', $length = null, $additionalHeaders = [])
+    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment', $additionalHeaders = [])
     {
         if (headers_sent()) {
             return;
