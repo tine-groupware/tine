@@ -633,7 +633,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         $egwInfologs = $this->_fetchInfoLogs($recordId, $recordApp);
         $result = '';
         foreach ($egwInfologs as $infolog) {
-            $result = '[' . $infolog['info_type'] . '] ' . $infolog['info_subject'] . ": \n" . $infolog['info_from']
+            $result .= '[' . $infolog['info_type'] . '] ' . $infolog['info_subject'] . ": \n" . $infolog['info_from']
                 ." \n" . $infolog['info_des'] . "\n\n";
         }
         return $result;
