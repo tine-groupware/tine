@@ -772,14 +772,22 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get sieve custom script for account
      *
-     * @param $id
+     * @param string $id
      * @return array
      */
-    public function getSieveCustomScript($id)
+    public function getSieveCustomScript($id): array
     {
-        $record = Felamimail_Controller_Sieve::getInstance()->getSieveCustomScript($id);
-        return $this->_recordToJson($record);
-
+        try {
+            $record = Felamimail_Controller_Sieve::getInstance()->getSieveCustomScript($id);
+            return $this->_recordToJson($record);
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $teb->getMessage()
+                );
+            }
+            return [];
+        }
     }
 
     /**
@@ -823,7 +831,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $records = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
         
         return array(
-            'results'       => $this->_multipleRecordsToJson($records),
+            '
+}results'       => $this->_multipleRecordsToJson($records),
             'totalcount'    => count($records),
         );
     }
