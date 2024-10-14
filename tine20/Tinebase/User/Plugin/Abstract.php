@@ -56,8 +56,11 @@ abstract class Tinebase_User_Plugin_Abstract
      */
     public function getLoginName($accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . " $accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName");
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__
+                . " $accountId, $accountLoginName, $accountEmailAddress, $alternativeLoginName");
+        }
 
         $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
         if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
@@ -66,8 +69,11 @@ abstract class Tinebase_User_Plugin_Abstract
             $emailUsername = $accountId . '@' . $this->_config['instanceName'];
         } else if (isset($this->_config[$domainConfigKey]) && ! empty($this->_config[$domainConfigKey])) {
             $emailAddressDomain = substr($accountEmailAddress, strpos($accountEmailAddress, '@') + 1);
-            if ($emailAddressDomain !== $this->_config[$domainConfigKey]) {
-                // secondary domains still need the primary domain in username!
+            if ((!isset($this->_config['preventSecondaryDomainUsername'])
+                    || !$this->_config['preventSecondaryDomainUsername'])
+                && $emailAddressDomain !== $this->_config[$domainConfigKey]) {
+                // secondary domains still need the primary domain in username
+                // (if preventSecondaryDomainUsername is not set)!
                 $emailUsername = preg_replace('/[@\.]+/', '-', $accountEmailAddress)
                     . '@' . $this->_config[$domainConfigKey];
             } else if (strpos($accountLoginName, '@') === false) {
