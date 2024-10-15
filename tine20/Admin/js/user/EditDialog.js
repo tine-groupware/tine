@@ -134,9 +134,34 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.getForm().findField('personalFSQuota').setValue(xprops.personalFSQuota);
         }
 
+        this.mustChangePasswordCheck()
+
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
-    
+
+    /**
+     * @private
+     */
+    mustChangePasswordCheck: function () {
+        const changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
+        if (!changeAfter || changeAfter === 0) return
+
+        const lastChangeDate = this.record.get('accountLastPasswordChangeRaw')
+
+        const maxDate = new Date(lastChangeDate).add('d', changeAfter)
+        if (maxDate > new Date()) return
+
+        const lastChangeField = this.getForm().findField('accountLastPasswordChange')
+        const mustChangeField = this.getForm().findField('password_must_change')
+
+        lastChangeField.addClass('tinebase-warning')
+        mustChangeField.disable()
+
+        this.record.set('password_must_change_actual', this.record.get('password_must_change'))
+        this.record.set('password_must_change', 1)
+        this.mustChangeTriggerPlugin.setVisible(true)
+    },
+
     /**
      * @private
      */
@@ -1184,28 +1209,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }].concat(this.app.featureEnabled('xpropsEditor') ? [new XPropsPanel({})] : [])
         };
         return config;
-    },
-
-    afterRender: function () {
-        Tine.Admin.UserEditDialog.superclass.afterRender.call(this);
-
-        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
-        if (!changeAfter || changeAfter === 0) return
-
-        let lastChangeDate = this.record.get('accountLastPasswordChange')
-
-        let maxDate = new Date(lastChangeDate).add('d', changeAfter)
-        if (maxDate > new Date()) return
-
-        let lastChangeField = this.getForm().findField('accountLastPasswordChange'),
-            mustChangeField = this.getForm().findField('password_must_change')
-
-        lastChangeField.addClass('tinebase-warning')
-        mustChangeField.disable()
-
-        this.record.set('password_must_change_actual', this.record.get('password_must_change'))
-        this.record.set('password_must_change', 1)
-        this.mustChangeTriggerPlugin.visible = true
     },
 
     suggestNameBasedProps: function(field, e) {
