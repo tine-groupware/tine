@@ -197,6 +197,29 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )));
         }
     }
+
+    public function legacyInvoiceXRechnung(Zend_Console_Getopt $_opts): void
+    {
+        $args = $this->_parseArgs($_opts, array('month'));
+
+        if (!preg_match('/^\d\d\d\d-\d\d$/', $args['month'])) {
+            exit('month needs to be of form YYYY-mm');
+        }
+
+        $from = new Tinebase_DateTime($args['month'] . '-01');
+        $until = new Tinebase_DateTime($args['month'] . $from->format('-t'));
+
+        foreach (Sales_Controller_Invoice::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Invoice::class, [
+            ['field' => 'date', 'operator' => 'within', 'value' => ['from' => $from, 'until' => $until]],
+            ['field' => 'cleared', 'operator' => 'equals', 'value' => 'CLEARED'],
+        ])) as $invoice) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
+            if (null !== $invoice->attachments->find(fn($rec) => str_ends_with($rec->name, '-xrechnung.xml'))) {
+                continue;
+            }
+            Sales_Controller_Invoice::getInstance()->createXRechnungsAttachment($invoice);
+        }
+    }
     
     /**
      * merge contracts into one contract and removes the old ones
