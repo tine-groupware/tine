@@ -1490,6 +1490,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $invoice = new Sales_Model_Document_Invoice([
                     Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER => $updatedRecord->number,
                     Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => $updatedRecord->date,
+                    Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_START => $updatedRecord->start_date,
+                    Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_END => $updatedRecord->end_date,
                     Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
                     Sales_Model_Document_Invoice::FLD_DEBITOR_ID => new Sales_Model_Document_Debitor([
                         Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}),
@@ -1542,12 +1544,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
                 }
 
-                $baseName = 'xrechnung';
-                $extention = '.xml';
-                $attachmentName = $baseName . $extention;
-                $count = 0;
-                while (null !== $updatedRecord->attachments->find('name', $attachmentName)) {
-                    $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
+                $attachmentName = $customer->getTitle() . '_' . $updatedRecord->number . '-xrechnung.xml';
+                if (null !== ($remove = $updatedRecord->attachments->find('name', $attachmentName))) {
+                    $updatedRecord->attachments->removeRecord($remove);
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
                 }
                 Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($updatedRecord, $attachmentName, $stream);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($updatedRecord);

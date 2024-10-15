@@ -23,7 +23,14 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @var string
      */
     protected $_applicationName = 'Sales';
-    
+
+    public function getXRechnungView(string $fileNodeId): void
+    {
+        echo (new Sales_EDocument_Service_View())->getXRechnungView(
+            Filemanager_Controller_Node::getInstance()->get($fileNodeId)
+        );
+    }
+
     /**
      * export invoice positions by invoice id and accountable (php class name)
      * 
