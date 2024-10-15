@@ -410,4 +410,70 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             $this->_log->notice(__METHOD__ . '::' . __LINE__ . ' Added new customfield: "' . $name . '"');
         }
     }
+
+    public function importMissingInfologs($dryRun = false)
+    {
+        $query = "select link_id2 as contact_id from egw_links where link_app2='addressbook' and link_app1='infolog' group by link_id2 having count(link_id2) > 1";
+        $result1 = $this->_egwDb->fetchAll($query);
+        echo "Found: " . count($result1) ." adb links with multiple infologs\n";
+
+        $query = "select link_id1 as contact_id from egw_links where link_app1='addressbook' and link_app2='infolog'";
+        $result2 = $this->_egwDb->fetchAll($query);
+        echo "Found: " . count($result2) ." reversed adb links\n";
+
+        $result = array_merge($result1, $result2);
+
+        $updateCount = 0;
+        $noteChangedCount = 0;
+        $missingCount = 0;
+        foreach ($result as $record) {
+            $contactId = $record['contact_id'];
+            // print_r($record);
+
+            try {
+                // check contact
+                // add all infologs to contact if note not changed
+                // only add missing infologs to existing note
+                $contact = Addressbook_Controller_Contact::getInstance()->getBackend()->get($contactId);
+                // print_r($contact->toArray());
+
+                // find out if note has changed since the import
+                $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Addressbook_Model_Contact::class, $contactId, _onlyNonSystemNotes: false);
+                $changed = false;
+
+                if (count($notes) > 0) {
+                    // check for changed notes & set $changed
+                    foreach ($notes->filter('note_type_id', 'changed') as $note) {
+                        if (str_contains($note->note, 'Notiz')) {
+                            $changed = true;
+                            $noteChangedCount++;
+                            break;
+                        }
+                    }
+                }
+
+                $infoLog = $this->_getInfoLogData($contactId, 'addressbook', $changed);
+
+                if (! $dryRun) {
+                    if ($changed) {
+                        $contact->note = $contact->note . "\n" . $infoLog;
+                    } else {
+                        $contact->note = $infoLog;
+                    }
+                    Addressbook_Controller_Contact::getInstance()->getBackend()->update($contact);
+                }
+                // echo $infoLog;
+                $updateCount++;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if ($dryRun) {
+                    echo "Contact not found: " . $contactId ."\n";
+                }
+                $missingCount++;
+            }
+        }
+
+        echo "Updated $updateCount contacts\n";
+        echo "Note already updated in $noteChangedCount contacts\n";
+        echo "Did not find $missingCount contacts\n";
+    }
 }
