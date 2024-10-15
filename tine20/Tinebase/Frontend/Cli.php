@@ -386,25 +386,36 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * trigger async events (for example via cronjob)
      *
+     * - respects maintenance mode
+     * - can be deactivated via Tinebase_Config::CRON_DISABLED
+     *
      * @param Zend_Console_Getopt $_opts
-     * @return integer
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Statement_Exception
      */
-    public function triggerAsyncEvents($_opts)
+    public function triggerAsyncEvents(Zend_Console_Getopt $_opts): int
     {
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::CRON_DISABLED)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                __LINE__ . ' Cronjob is disabled.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' Cronjob is disabled.');
+            }
             return 1;
         }
 
         if (Tinebase_Core::inMaintenanceModeAll()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-                __LINE__ . ' Maintenance mode prevents trigger async events.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' Maintenance mode prevents trigger async events.');
+            }
             return 1;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Triggering async events from CLI.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Triggering async events from CLI.');
+        }
 
         $cronuser = null;
         try {
@@ -413,12 +424,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         } catch (Zend_Db_Statement_Exception $zdse) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' .
-                __LINE__ . ' Maybe Addressbook is not ready or tine not installed yet: ' . $zdse->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' .
+                    __LINE__ . ' Maybe Addressbook is not ready or tine not installed yet: ' . $zdse->getMessage());
+            }
         }
         if (! $cronuser) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                __LINE__ . ' No valid cronuser found.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
+                    __LINE__ . ' No valid cronuser found.');
+            }
             return 1;
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
@@ -431,14 +446,27 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * process given queue job
-     *  --jobId the queue job id to execute
+     *   --jobId the queue job id to execute
+     *
+     * - respects maintenance mode
      *
      * @param Zend_Console_Getopt $_opts
      * @return bool success
+     * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Db_Statement_Exception
      */
-    public function executeQueueJob(Zend_Console_Getopt $_opts)
+    public function executeQueueJob(Zend_Console_Getopt $_opts): bool
     {
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                    __LINE__ . ' Maintenance mode prevents execution of queue jobs');
+            }
+            return false;
+        }
+
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
