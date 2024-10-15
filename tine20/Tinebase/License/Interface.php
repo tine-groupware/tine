@@ -31,7 +31,7 @@ interface Tinebase_License_Interface
      * @param String $feature   e.g. Calendar or Calendar.someFeature
      * @return boolean
      */
-    public function isPermitted($feature);
+    public function isPermitted(string $feature): bool;
 
     /**
      * get version of license

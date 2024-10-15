@@ -12,28 +12,23 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
     border: false,
 
     initComponent: function() {
-        var _ = window.lodash,
-            comp = this;
+        const comp = this;
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         this.app = Tine.Tinebase.appMgr.get('Admin');
         const appsToShow = Tine.Tinebase.configManager.get('appsToShow', 'Admin');
         const showCurrentFSUsageConfig = Tine.Tinebase.configManager.get('filesystem.showCurrentUsage', 'Tinebase');
         this.allowManageTotalQuota = Tine.Tinebase.configManager.get('quotaAllowTotalInMBManagement', 'Admin');
-        this.topNode = this.allowManageTotalQuota ? '/Total Quota' : '';
+        this.topNode = this.allowManageTotalQuota ? '/Total' : '';
         
         this.loader = {
             directFn: Tine.Admin.searchQuotaNodes,
             getParams : function(node, callback, scope) {
                 let path = node.getPath('name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/');
-                
-                if (comp.allowManageTotalQuota) {
-                    if (path === '/') {
-                        path = '';
-                    }
-                }
-                
+
+                if (comp.allowManageTotalQuota && path === '/') path = '';
                 path = path.replace(comp.topNode, '/').replace(/\/+/, '/');
+
                 const filter = [
                     {field: 'path', operator: 'equals', value: path}
                 ];
@@ -59,14 +54,19 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 _.map(response.responseData, async (nodeData) => {
                     nodeData.virtualPath = `${attr.path === '/' ? '' : attr.virtualPath}/${nodeData.name}`;
                     nodeData.virtualPath = nodeData.virtualPath.replace(comp.topNode,'');
+                    let app = null;
+                    if (nodeData.virtualPath.includes('Filesystem')) {
+                        if (nodeData.virtualPath.split('/').length === 3) {
+                            const applicationId = nodeData.virtualPath.split('/').filter(Boolean)?.[1];
+                            app = Tine.Tinebase.appMgr.getById(applicationId);
+                            nodeData.appName = app ? app.appName : '';
+                            nodeData.translateAppName = app ? app.getTitle() : '';
+                        }
+                    }
                     
-                    const applicationId = nodeData.virtualPath.split('/').filter(Boolean)?.[0];
-                    const app = Tine.Tinebase.appMgr.getById(applicationId) ?? null;
-                    nodeData.appName = app ? app.appName : '';
-                    nodeData.translateAppName = app ? app.getTitle() : '';
-                    
-                    const isAppNode = nodeData.virtualPath.split('/').length === 2;
-                    nodeData.i18n_name = isAppNode ? app.getTitle() : nodeData.name;
+                    nodeData.i18n_name = app ? app.getTitle() : nodeData.name;
+                    if (nodeData.name === 'Total') nodeData.i18n_name = comp.app.i18n._(nodeData.name);
+
                     nodeData.text = nodeData.i18n_name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
                 });
@@ -232,7 +232,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
             `${this.topNode}`
         ];
         
-        if (node.attributes.appName !== '') {
+        if (node?.attributes?.appName) {
             const appName = node.attributes.appName;
             const translateApp = node.attributes.translateAppName;
             
@@ -268,8 +268,8 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
        
        const dialog = new Tine.Tinebase.dialog.Dialog({
            listeners: {
-               apply: async (quota) => {
-                   await Tine.Admin.saveQuota('Tinebase', null, {totalInMB: quota}).then((result) => {
+               apply: async (quotaInByte) => {
+                   await Tine.Admin.saveQuota('Tinebase', null, {totalInByte: quotaInByte}).then((result) => {
                        if (result.totalInMB) {
                            Tine.Tinebase.common.confirmApplicationRestart(true);
                        }

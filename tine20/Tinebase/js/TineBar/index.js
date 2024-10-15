@@ -95,6 +95,7 @@ Tine.Tinebase.TineBar = Ext.extend(Ext.BoxComponent, {
                 this.action_changePassword,
                 this.action_manageMFADevices,
                 this.action_unstuck,
+                this.action_aboutTine,
                 this.action_logout
             ];
 

@@ -173,9 +173,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
     }
 
-    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg)
+    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg, ?Tinebase_Model_FullUser $user)
     {
         $e = new Tinebase_Exception_AreaLocked('mfa required');
+        $e->setUser($user);
         $e->setArea($config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
         $e->setMFAUserConfigs($feCfg);
         throw $e;
@@ -953,12 +954,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 } else {
                     // success, FE to render input field
                     $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
-                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]));
+                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]), $user);
                 }
             }
         } else {
             // FE to render selection which 2FA to use
-            $this->_throwMFAException($areaConfig, $areaConfig->getUserMFAIntersection($user));
+            $this->_throwMFAException($areaConfig, $areaConfig->getUserMFAIntersection($user), $user);
         }
 
         // must never reach this

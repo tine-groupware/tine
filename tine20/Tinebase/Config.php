@@ -1257,7 +1257,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * useSystemAccount (bool)
          * domain (string)
          * instanceName (string)
-         * useEmailAsUsername (bool)
+         * useEmailAsUsername (bool) - default: false
+         * preventSecondaryDomainUsername (bool) - default: false
          * host (string)
          * port (integer)
          * ssl (bool)
@@ -1295,6 +1296,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
+         * "preventSecondaryDomainUsername": true
          */
         self::SMTP => array(
                                    //_('System SMTP')

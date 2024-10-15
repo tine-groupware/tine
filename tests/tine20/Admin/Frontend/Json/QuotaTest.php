@@ -84,7 +84,8 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
     {
         // save total quota
         $app = 'Tinebase';
-        $additionalData['totalInMB'] = 1234 * 1024 * 1024;
+        $additionalData['totalInByte'] = 1234 * 1024 * 1024;
+
         Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET} = false;
 
         try {
@@ -105,7 +106,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         static::assertEquals($result[Tinebase_Config::QUOTA_TOTALINMB], $totalQuotaConfig , true);
         static::assertEquals($totalQuotaConfig,  1234 , true);
 
-        $additionalData['totalInMB'] = 5678 * 1024 * 1024;
+        $additionalData['totalInByte'] = 5678 * 1024 * 1024;
         Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET} = true;
         $result = $this->_json->saveQuota($app, null, $additionalData);
 

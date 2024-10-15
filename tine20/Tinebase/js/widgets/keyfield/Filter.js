@@ -34,6 +34,14 @@ Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel
     initComponent: function() {
         this.operators = ['in', 'notin'];
 
+        if (!this.app?.name) {
+            this.app = Tine.Tinebase.appMgr.get(this.app);
+        }
+        if (Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName).getCount() > 15) {
+            this.operators = ['equals', 'not'];
+            this.defaultOperator = 'equals';
+        }
+
         if (this.defaultAll) {
             this.defaultValue = [];
             Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.name, this.keyfieldName).each(function(keyFieldRecord) {
@@ -50,13 +58,17 @@ Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.Tinebase.widgets.keyfield.FilterValueField({
-            app: this.app,
-            filter: filter,
-            value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
-            keyfieldName: this.keyfieldName
-        });
+        var operator = filter.formFields.operator.getValue(),
+            valueClass = ['equals', 'not'].indexOf(operator) >= 0 ? Tine.Tinebase.widgets.keyfield.ComboBox
+                : Tine.Tinebase.widgets.keyfield.FilterValueField,
+            value = new valueClass({
+                app: this.app,
+                filter: filter,
+                value: filter.data.value ? filter.data.value : this.defaultValue,
+                renderTo: el,
+                keyFieldName: this.keyfieldName,
+                keyfieldName: this.keyfieldName
+            });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
                  this.onFiltertrigger();

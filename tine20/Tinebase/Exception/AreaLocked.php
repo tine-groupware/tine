@@ -32,6 +32,8 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
 
     protected $_mfaUserConfigs = null;
 
+    protected $_user = null;
+
     /**
      * Tinebase_Exception_AreaLocked constructor.
      * @param null $_message
@@ -40,6 +42,14 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
     public function __construct($_message, $_code = 630)
     {
         parent::__construct($_message, $_code);
+        if (($user = Tinebase_Core::getUser()) instanceof Tinebase_Model_FullUser) {
+            $this->_user = $user;
+        }
+    }
+
+    public function setUser(Tinebase_Model_FullUser $user): void
+    {
+        $this->_user = $user;
     }
 
     /**
@@ -72,11 +82,8 @@ class Tinebase_Exception_AreaLocked extends Tinebase_Exception_SystemGeneric
     {
         $result = parent::toArray();
         $result['area'] = $this->getArea();
-        if (!$this->_mfaUserConfigs && ($user = Tinebase_Core::getUser()) && $user->mfa_configs) {
-            $this->_mfaUserConfigs = $user->mfa_configs;
-        }
         if ($this->_mfaUserConfigs) {
-            $result['mfaUserConfigs'] = $this->_mfaUserConfigs->toFEArray();
+            $result['mfaUserConfigs'] = $this->_mfaUserConfigs->toFEArray($this->_user);
         }
         return $result;
     }

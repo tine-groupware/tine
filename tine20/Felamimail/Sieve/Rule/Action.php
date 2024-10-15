@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Sieve
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -35,10 +36,12 @@ class Felamimail_Sieve_Rule_Action
     /**
      * argument for action
      * 
-     * @var string
+     * @var string|array
      */
     protected $_argument;
-    
+
+    protected ?Felamimail_Model_Account $_account = null;
+
     /**
      * set type of action
      * 
@@ -54,7 +57,17 @@ class Felamimail_Sieve_Rule_Action
         
         return $this;
     }
-    
+
+    /**
+     * @param Felamimail_Model_Account $account
+     * @return Felamimail_Sieve_Rule_Action
+     */
+    public function setAccount(Felamimail_Model_Account $account): Felamimail_Sieve_Rule_Action
+    {
+        $this->_account = $account;
+        return $this;
+    }
+
     /**
      * set argument for action
      * 
@@ -94,8 +107,7 @@ class Felamimail_Sieve_Rule_Action
                 }
 
             case self::VACATION:
-                // TODO get address from mailaccount / add to arguments?
-                $email = Tinebase_Core::getUser()->accountEmailAddress;
+                $email = $this->_account ? $this->_account->email : Tinebase_Core::getUser()->accountEmailAddress;
                 $vacation = new Felamimail_Model_Sieve_Vacation([
                     'addresses' => [$email],
                     'from' => $email,
