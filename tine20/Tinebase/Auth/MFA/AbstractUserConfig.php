@@ -18,7 +18,7 @@
 class Tinebase_Auth_MFA_AbstractUserConfig extends Tinebase_Record_NewAbstract
     implements Tinebase_Auth_MFA_UserConfigInterface
 {
-    public function toFEArray(): array
+    public function toFEArray(?Tinebase_Model_FullUser $user = null): array
     {
         return [];
     }

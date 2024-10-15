@@ -288,6 +288,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             fieldconfig = fieldconfig.config || {};
         }
         const filterOptions = _.get(fieldconfig, 'config.filterOptions', {});
+        Object.assign(filterconfig, _.get(fieldconfig, 'uiconfig.filterOptions', {}));
 
         const appName = modelConfig.appName;
         const modelName = modelConfig.modelName;

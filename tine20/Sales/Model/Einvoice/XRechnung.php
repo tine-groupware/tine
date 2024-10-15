@@ -22,6 +22,8 @@ class Sales_Model_Einvoice_XRechnung extends Tinebase_Record_NewAbstract impleme
     protected static $_modelConfiguration = [
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::RECORD_NAME                   => 'XRechnung', // ngettext('XRechnung', 'XRechnungen', n)
+        self::RECORDS_NAME                  => 'XRechnungen', // gettext('GENDER_XRechnung')
 
         self::FIELDS                    => [],
     ];

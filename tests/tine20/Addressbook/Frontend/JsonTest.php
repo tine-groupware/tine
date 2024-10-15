@@ -662,7 +662,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         // sort by customfield
         $paging = $this->objects['paging'];
-        $paging['sort'] = $cf->name;
+        $paging['sort'] = '#' . $cf->name;
         $paging['dir'] = 'DESC';
 
         $searchResult = $this->_uit->searchContacts(
@@ -3015,6 +3015,127 @@ Steuernummer 33/111/32212";
 
         static::assertEquals(1, $result['totalcount'], 'no results found');
         static::assertEquals($list['email'], $result['results'][0]['email']);
+    }
+
+    /**
+     * test list with contact without email and preferred_email set email
+     */
+    public function testSearchEmailAddresssList()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+            Zend_Registry::get('currentAccount'),
+            Addressbook_Model_Contact::class,
+            Zend_Registry::get('currentAccount'),
+            Tinebase_Model_Grants::GRANT_EDIT
+        );
+
+        $container = $personalContainer[0];
+
+        $this->objects['contact1'] = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'email'                 => '',
+            'email_home'            => 'unittests01home@tine20.org',
+            'note'                  => 'Bla Bla Bla',
+            'container_id'          => $container->getId(),
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Contact1',
+            'n_fileas'              => 'Contact1, List',
+            'n_given'               => 'List',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+            'preferred_email'       => 'email'
+        ));
+
+        $this->objects['contact2'] = new Addressbook_Model_Contact(array(
+            'adr_one_countryname'   => 'DE',
+            'adr_one_locality'      => 'Hamburg',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+            'adr_one_street2'       => 'no second street',
+            'adr_two_countryname'   => 'DE',
+            'adr_two_locality'      => 'Hamburg',
+            'adr_two_postalcode'    => '24xxx',
+            'adr_two_region'        => 'Hamburg',
+            'adr_two_street'        => 'Pickhuben 4',
+            'adr_two_street2'       => 'no second street2',
+            'assistent'             => 'Cornelius Weiß',
+            'email'                 => 'abc@mail.test',
+            'email_home'            => 'unittests02home@tine20.org',
+            'note'                  => 'Bla Bla Bla',
+            'container_id'          => $container->getId(),
+            'role'                  => 'Role',
+            'title'                 => 'Title',
+            'url'                   => 'http://www.tine20.org',
+            'url_home'              => 'http://www.tine20.com',
+            'n_family'              => 'Contact1',
+            'n_fileas'              => 'Contact1, List',
+            'n_given'               => 'List',
+            'n_middle'              => 'no middle name',
+            'n_prefix'              => 'no prefix',
+            'n_suffix'              => 'no suffix',
+            'org_name'              => 'Metaways Infosystems GmbH',
+            'org_unit'              => 'Tine 2.0',
+            'tel_assistent'         => '+49TELASSISTENT',
+            'tel_car'               => '+49TELCAR',
+            'tel_cell'              => '+49TELCELL',
+            'tel_cell_private'      => '+49TELCELLPRIVATE',
+            'tel_fax'               => '+49TELFAX',
+            'tel_fax_home'          => '+49TELFAXHOME',
+            'tel_home'              => '+49TELHOME',
+            'tel_pager'             => '+49TELPAGER',
+            'tel_work'              => '+49TELWORK',
+        ));
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact1'], FALSE);
+        $contact2 = Addressbook_Controller_Contact::getInstance()->create($this->objects['contact2'], FALSE);
+
+        $name = 'testList' . Tinebase_Record_Abstract::generateUID(5);
+        $list = new Addressbook_Model_List([
+            'name' => $name,
+            'container_id' => $this->_getTestContainer('Addressbook', 'Addressbook_Model_List'),
+            'members'      => [$contact1,$contact2],
+        ]);
+
+        $list = Addressbook_Controller_List::getInstance()->create($list);
+
+        $result = $this->_uit->searchEmailAddresss([
+            ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
+            ]],]]
+        ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
+
+        static::assertEquals(1, $result['totalcount'], 'no results found');
+        //should be 2 emails (unittests01home@tine20.org and abc@mail.test)
+        static::assertEquals('2', count($result['results'][0]['emails']));
     }
 
     /**

@@ -211,7 +211,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $accounts = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     Felamimail_Model_Account::class, [
                         ['field' => 'user_id', 'operator' => 'equals', 'value' => $userId]
-                    ], _options: ['ignoreAcl' => true]
+                    ], _options: [Tinebase_Model_Filter_FilterGroup::IGNORE_ACL => true]
                 ));
                 if (count($accounts) > 0) {
                     $systemAccount = $accounts->filter('type', Tinebase_EmailUser_Model_Account::TYPE_SYSTEM);

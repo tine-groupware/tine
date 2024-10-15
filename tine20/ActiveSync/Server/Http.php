@@ -104,6 +104,8 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Controller::getInstance()->logout();
         } catch (Throwable $e) {
             $this->_handleException($e);
+        } finally {
+            Tinebase_Session::destroyAndRemoveCookie();
         }
     }
 

@@ -352,6 +352,17 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     p.fields = new Ext.util.MixedCollection(false, function(field) {
         return field.name;
     });
+    p.fields.get = function(name) {
+        const cfName = String(name).match(p.cfExp);
+        if (cfName) {
+            return {
+                name,
+                sortDir: 'DESC'
+            };
+        } else {
+            return Ext.util.MixedCollection.prototype.get.apply(this, arguments);
+        }
+    };
     for(var i = 0, len = o.length; i < len; i++) {
         if (o[i]['name'] == meta.containerProperty && meta.allowBlankContainer === false) {
             o[i]['allowBlank'] = false;

@@ -78,6 +78,13 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
         }
     }
 
+    public function toFEArray(?Tinebase_Model_FullUser $user = null): array
+    {
+        return [
+            'username'  => $user ? $user->accountLoginName : '',
+        ];
+    }
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

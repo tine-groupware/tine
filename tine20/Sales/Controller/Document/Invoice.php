@@ -144,7 +144,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 throw new Tinebase_Exception('cant create temp stream');
             }
             try {
-                fwrite($stream, (new \Einvoicing\Writers\UblWriter)->export($record->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+                fwrite($stream, (new Sales_EDocument_Einvoicing_UblWriter())->export($record->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
             } catch (Throwable $t) {
                 Tinebase_Exception::log($t);
                 if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
@@ -166,12 +166,17 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                     . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
             }
 
-            $baseName = 'xrechnung';
+            /*$baseName = 'xrechnung';
             $extention = '.xml';
             $attachmentName = $baseName . $extention;
             $count = 0;
             while (null !== $record->attachments->find('name', $attachmentName)) {
                 $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
+            }*/
+            $attachmentName = $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml';
+            if (null !== ($remove = $record->attachments->find('name', $attachmentName))) {
+                $record->attachments->removeRecord($remove);
+                Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
             }
             Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $attachmentName, $stream);
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);

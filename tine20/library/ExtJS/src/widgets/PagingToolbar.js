@@ -321,6 +321,7 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
         this.items.each((item) => {
             const priority = item.displayPriority ?? 0;
             if (!items[priority]) items[priority] = [];
+            if (item?.hidden) return;
             items[priority].push(item);
             item.setVisible(true);
             const width = item?.el?.dom?.offsetWidth ?? 0;

@@ -598,7 +598,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param Addressbook_Model_List $_list
      * @return NULL|Felamimail_Model_Account
      */
-    protected function _getMailAccount($_list)
+    protected function _getMailAccount($_list): ?Felamimail_Model_Account
     {
         // if user has right for list, he/she is also allowed to see/change the mail account
         $backend = new Felamimail_Backend_Account();
@@ -606,7 +606,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $_list->getId()],
             ['field' => 'type',    'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_ADB_LIST],
-        ]))->getFirstRecord();
+        ], _options: [Tinebase_Model_Filter_FilterGroup::IGNORE_ACL => true]))->getFirstRecord();
     }
 
     /**

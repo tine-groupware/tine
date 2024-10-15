@@ -504,10 +504,12 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $list = new Addressbook_Model_List($list, true);
         }
         if (!$list) return null;
-        
-        foreach ($account->grants as $grant) {
-            if ($grant['account_id'] !== Tinebase_Core::getUser()->getId() && $grant['readGrant']) {
-                $list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY] = true;
+
+        if ($account->grants) {
+            foreach ($account->grants as $grant) {
+                if ($grant['account_id'] !== Tinebase_Core::getUser()->getId() && $grant['readGrant']) {
+                    $list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY] = true;
+                }
             }
         }
         return Addressbook_Controller_List::getInstance()->update($list);

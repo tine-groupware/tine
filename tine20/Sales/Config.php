@@ -57,8 +57,13 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const PRODUCT_NUMBER_GENERATION_AUTO = 'auto';
     public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
 
+    public const EDOCUMENT_TRANSPORT = 'EDOCUMENT_TRANSPORT';
+    public const EDOCUMENT_TRANSPORT_EMAIL = 'email';
+    public const EDOCUMENT_TRANSPORT_DOWNLOAD = 'download';
+
     public const EDOCUMENT = 'edocument';
     public const VALIDATION_SVC = 'validation_svc';
+    public const VIEW_SVC = 'view_svc';
 
     /**
      * How should the contract number be validated
@@ -278,6 +283,28 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
+        self::EDOCUMENT_TRANSPORT   => [
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => self::EDOCUMENT_TRANSPORT_DOWNLOAD,
+                        'value' => 'Download', //_('Download')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::EDOCUMENT_TRANSPORT_EMAIL,
+                        'value' => 'E-Mail', //_('E-Mail')
+                        'icon' => null,
+                        'system' => true,
+                    ]
+                ],
+                self::DEFAULT_STR => self::EDOCUMENT_TRANSPORT_DOWNLOAD,
+            ],
+        ],
         self::DOCUMENT_FOLLOWUP_STATUS => [
             //_('Followup Status')
             self::LABEL              => 'Followup Status',
@@ -603,6 +630,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                     self::LABEL                 => 'Validation Service URL',
                     //_('Validation Service URL')
                     self::DESCRIPTION           => 'Validation Service URL',
+                    //_('Validation Service URL')
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::DEFAULT_STR           => '',
+                ],
+                self::VIEW_SVC => [
+                    self::LABEL                 => 'View Service URL',
+                    //_('Validation Service URL')
+                    self::DESCRIPTION           => 'View Service URL',
                     //_('Validation Service URL')
                     self::TYPE                  => self::TYPE_STRING,
                     self::DEFAULT_STR           => '',
