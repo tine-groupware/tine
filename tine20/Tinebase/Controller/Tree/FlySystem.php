@@ -64,7 +64,7 @@ class Tinebase_Controller_Tree_FlySystem extends Tinebase_Controller_Record_Abst
         return $flySystem;
     }
 
-    protected function getFlySystemMountPoint(Tinebase_Model_Tree_FlySystem $flySystem): ?Tinebase_Model_Tree_Node
+    public function getFlySystemMountPoint(Tinebase_Model_Tree_FlySystem $flySystem): ?Tinebase_Model_Tree_Node
     {
         $fileObject = Tinebase_FileSystem::getInstance()->getFileObjectBackend()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class, [

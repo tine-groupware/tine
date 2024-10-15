@@ -93,11 +93,10 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
             self::FLD_MOUNT_POINT => [
                 self::LABEL             => 'Mount Point',
                 self::DOCTRINE_IGNORE   => true,
-                self::TYPE              => self::TYPE_STRING, /*self::TYPE_RECORD,
-                self::CONFIG            => [
-                    self::APP_NAME          => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME        => Tinebase_Model_Tree_Node::MODEL_NAME_PART,
-                ],*/
+                self::TYPE              => self::TYPE_STRING,
+                self::UI_CONFIG => [
+                    'xtype' => 'tinebase.mountpointpicker'
+                ]
             ],
         ],
     ];

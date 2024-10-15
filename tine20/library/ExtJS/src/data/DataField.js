@@ -55,7 +55,7 @@ Ext.data.Field = function(config){
                 cv = function(v){ return v; };
                 break;
             case "string":
-                cv = function(v){ return (v === undefined || v === null) ? '' : String(v); };
+                cv = function(v){ return (v === undefined || v === null) ? '' : (_.isObject(v) ? JSON.stringify(v) : String(v)); };
                 break;
             case "int":
                 cv = function(v){

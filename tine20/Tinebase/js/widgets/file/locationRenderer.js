@@ -34,5 +34,5 @@ Tine.Tinebase.widgets.file.locationRenderer.getLocationHtml = async function(loc
 Tine.Tinebase.widgets.file.locationRenderer.getLocationName = async function(location, pluginConfig) {
     const plugin = await Tine.Tinebase.widgets.file.locationRenderer.getLocationPlugin(location, pluginConfig);
 
-    return plugin.getLocationName(location)
+    return plugin ? plugin.getLocationName(location) : '';
 }
