@@ -1479,81 +1479,87 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         // TODO FIXME storno?!
         if ($updatedRecord->cleared === 'CLEARED' && $currentRecord->cleared !== 'CLEARED') {
-            try {
-                $customer = $this->_getCustomerFromInvoiceRelations($updatedRecord) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
-                /** @var Sales_Model_Contract $contract */
-                $contract = $updatedRecord->relations->find('type', 'CONTRACT');
-                Tinebase_Record_Expander::expandRecord($customer);
+            /** @var Sales_Model_Invoice $updatedRecord */
+            $this->createXRechnungsAttachment($updatedRecord);
+        }
+    }
 
-                // type (invoice_type) => REVERSAL => storno gibt verknüpfung
+    public function createXRechnungsAttachment(Sales_Model_Invoice $invoice): void
+    {
+        try {
+            $customer = $this->_getCustomerFromInvoiceRelations($invoice) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
+            /** @var Sales_Model_Contract $contract */
+            $contract = $invoice->relations->find('type', 'CONTRACT');
+            Tinebase_Record_Expander::expandRecord($customer);
 
-                $invoice = new Sales_Model_Document_Invoice([
-                    Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER => $updatedRecord->number,
-                    Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => $updatedRecord->date,
-                    Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_START => $updatedRecord->start_date,
-                    Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_END => $updatedRecord->end_date,
-                    Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
-                    Sales_Model_Document_Invoice::FLD_DEBITOR_ID => new Sales_Model_Document_Debitor([
-                        Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}),
+            // type (invoice_type) => REVERSAL => storno gibt verknüpfung
+
+            $invoice = new Sales_Model_Document_Invoice([
+                Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER => $invoice->number,
+                Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => $invoice->date,
+                Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_START => $invoice->start_date,
+                Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_END => $invoice->end_date,
+                Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
+                Sales_Model_Document_Invoice::FLD_DEBITOR_ID => new Sales_Model_Document_Debitor([
+                    Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}),
+                ], true),
+                Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+                Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
+                    $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
+                ),
+                // TODO FIXME do we have a FLD_CONTACT_ID?
+                Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
+                Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                Sales_Model_Document_Invoice::FLD_BUYER_REFERENCE => $customer->number,
+                Sales_Model_Document_Invoice::FLD_POSITIONS => [
+                    new Sales_Model_DocumentPosition_Invoice([
+                        Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'Gesamtbetrag gem. Anlage',
+                        Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
+                        Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                        Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => $invoice->price_gross,
+                        Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
+                        Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $invoice->sales_tax,
                     ], true),
-                    Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
-                    Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
-                        $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
-                    ),
-                    // TODO FIXME do we have a FLD_CONTACT_ID?
-                    Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
-                    Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
-                    Sales_Model_Document_Invoice::FLD_BUYER_REFERENCE => $customer->number,
-                    Sales_Model_Document_Invoice::FLD_POSITIONS => [
-                        new Sales_Model_DocumentPosition_Invoice([
-                            Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'Gesamtbetrag gem. Anlage',
-                            Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
-                            Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
-                            Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => $updatedRecord->price_gross,
-                            Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
-                            Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $updatedRecord->sales_tax,
-                        ], true),
-                    ],
-                ]);
+                ],
+            ]);
 
-                if ($contract) {
-                    $invoice->{Sales_Model_Document_Invoice::FLD_CONTRACT_ID} = $contract;
-                }
-
-                if (is_numeric($updatedRecord->credit_term)) {
-                    $invoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS} = $updatedRecord->credit_term;
-                }
-
-                $invoice->calculatePricesIncludingPositions();
-
-                if (!($stream = fopen('php://temp', 'r+'))) {
-                    throw new Tinebase_Exception('cant create temp stream');
-                }
-                fwrite($stream, (new Sales_EDocument_Einvoicing_UblWriter())->export($invoice->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
-                rewind($stream);
-
-                if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
-                    try {
-                        (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
-                    } catch (Tinebase_Exception_Record_Validation $e) {
-                        throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
-                    }
-                    rewind($stream); // redundant, but cheap and good for readability
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
-                }
-
-                $attachmentName = $customer->getTitle() . '_' . $updatedRecord->number . '-xrechnung.xml';
-                if (null !== ($remove = $updatedRecord->attachments->find('name', $attachmentName))) {
-                    $updatedRecord->attachments->removeRecord($remove);
-                    Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
-                }
-                Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($updatedRecord, $attachmentName, $stream);
-                Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($updatedRecord);
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $updatedRecord->getId()]);
+            if ($contract) {
+                $invoice->{Sales_Model_Document_Invoice::FLD_CONTRACT_ID} = $contract;
             }
+
+            if (is_numeric($invoice->credit_term)) {
+                $invoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS} = $invoice->credit_term;
+            }
+
+            $invoice->calculatePricesIncludingPositions();
+
+            if (!($stream = fopen('php://temp', 'r+'))) {
+                throw new Tinebase_Exception('cant create temp stream');
+            }
+            fwrite($stream, (new Sales_EDocument_Einvoicing_UblWriter())->export($invoice->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+            rewind($stream);
+
+            if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                try {
+                    (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
+                } catch (Tinebase_Exception_Record_Validation $e) {
+                    throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
+                }
+                rewind($stream); // redundant, but cheap and good for readability
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
+            }
+
+            $attachmentName = $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml';
+            if (null !== ($remove = $invoice->attachments->find('name', $attachmentName))) {
+                $invoice->attachments->removeRecord($remove);
+                Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($invoice);
+            }
+            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($invoice, $attachmentName, $stream);
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $invoice->getId()]);
         }
     }
 
