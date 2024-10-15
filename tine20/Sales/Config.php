@@ -63,6 +63,7 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     public const EDOCUMENT = 'edocument';
     public const VALIDATION_SVC = 'validation_svc';
+    public const VIEW_SVC = 'view_svc';
 
     /**
      * How should the contract number be validated
@@ -629,6 +630,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                     self::LABEL                 => 'Validation Service URL',
                     //_('Validation Service URL')
                     self::DESCRIPTION           => 'Validation Service URL',
+                    //_('Validation Service URL')
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::DEFAULT_STR           => '',
+                ],
+                self::VIEW_SVC => [
+                    self::LABEL                 => 'View Service URL',
+                    //_('Validation Service URL')
+                    self::DESCRIPTION           => 'View Service URL',
                     //_('Validation Service URL')
                     self::TYPE                  => self::TYPE_STRING,
                     self::DEFAULT_STR           => '',

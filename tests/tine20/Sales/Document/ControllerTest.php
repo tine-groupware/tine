@@ -283,7 +283,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
-        $this->assertNotNull($invoice->attachments->find('name', 'xrechnung.xml'));
+        $this->assertNotNull($invoice->attachments->find('name', $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
 
         Tinebase_Record_Expander_DataRequest::clearCache();
 
@@ -301,7 +301,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ]));
 
-        $this->assertNotNull($storno->attachments->find('name', 'xrechnung.xml'));
+        $this->assertNotNull($storno->attachments->find('name', $storno->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
