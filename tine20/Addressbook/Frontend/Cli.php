@@ -605,6 +605,35 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
+    public function importMissingInfologs(Zend_Console_Getopt $opts): int
+    {
+        $args = $opts->getRemainingArgs();
+
+        if (count($args) < 1 || ! is_readable($args[0])) {
+            echo "can not open config file \n";
+            return 1;
+        }
+
+        try {
+            $config = new Zend_Config_Ini($args[0]);
+            if ($config->{strtolower($this->_applicationName)}) {
+                $config = $config->{strtolower($this->_applicationName)};
+            }
+        } catch (Zend_Config_Exception $e) {
+            fwrite(STDERR, "Error while parsing config file($args[0]) " .  $e->getMessage() . PHP_EOL);
+            return 1;
+        }
+
+        try {
+            $importer = new Addressbook_Setup_Import_Egw14($config, Tinebase_Core::getLogger());
+            $importer->importMissingInfologs($opts->d);
+        } catch (Exception $e) {
+            echo "Import for {$this->_applicationName} failed: ". $e->getMessage() . "\n";
+            return 1;
+        }
+        return 0;
+    }
+
     /**
      *    -d (dry run)
      *    e.g. php tine20.php --method=Addressbook.clearUserContactsWithoutUser -d
