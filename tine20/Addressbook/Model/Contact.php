@@ -1569,7 +1569,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     /**
      * get contacts recipient token
-     **
+     *
+     * - if preferred email is not set , return the first none empty email field
+     *
+     * @todo: which email field to return if we have multiple custom emails?
      * @param bool $preferredEmailOnly
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
@@ -1599,7 +1602,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         }
         $emailFields = array_keys(self::getEmailFields());
         foreach ($emailFields as $emailField) {
-            if (empty($this[$emailField]) || ($preferredEmailOnly && $emailField !== $this->preferred_email)) {
+            if (empty($this[$emailField]) || ($preferredEmailOnly && $emailField !== $this->preferred_email && count($possibleAddresses) > 0)) {
                 continue;
             }
             $possibleAddresses[] = [
