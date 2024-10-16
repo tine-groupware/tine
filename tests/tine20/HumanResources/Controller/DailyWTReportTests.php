@@ -24,6 +24,29 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         HumanResources_Controller_DailyWTReport::destroyInstance();
     }
 
+    public function testContractGap(): void
+    {
+        $this->_createBasicData();
+
+        $endDate = Tinebase_DateTime::today()->subDay(7);
+        /** @var HumanResources_Model_Contract $contract */
+        $contract = $this->employee->contracts->getFirstRecord();
+        $contract->end_date = $endDate;
+        $contract = HumanResources_Controller_Contract::getInstance()->update($contract);
+        /** @var HumanResources_Model_Contract $newContract */
+        $newContract = clone $contract;
+        $newContract->setId(null);
+        $newContract->start_date = $contract->end_date->getClone()->addDay(4);
+        $newContract->end_date = null;
+        $newContract = HumanResources_Controller_Contract::getInstance()->create($newContract);
+
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $contract->end_date->getClone());
+        $result = $this->_getReportsForEmployee($this->employee, new Tinebase_Model_Pagination(['sort' => 'date']));
+
+        $this->assertTrue($result->getFirstRecord()->date->equals($contract->end_date));
+        $this->assertTrue($result->getByIndex(1)->date->equals($newContract->start_date));
+    }
+
     public function testCorrectionFilter()
     {
         $this->_createBasicData();
@@ -457,12 +480,12 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         return $this->employee;
     }
 
-    protected function _getReportsForEmployee($employee)
+    protected function _getReportsForEmployee(HumanResources_Model_Employee $employee, ?Tinebase_Model_Pagination $pagination = null): Tinebase_Record_RecordSet
     {
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_DailyWTReport::class, [
             ['field' => 'employee_id', 'operator' => 'in', 'value' => [$employee->getId()]]
         ]);
-        return HumanResources_Controller_DailyWTReport::getInstance()->search($filter);
+        return HumanResources_Controller_DailyWTReport::getInstance()->search($filter, $pagination);
     }
 
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEndUpdate()
