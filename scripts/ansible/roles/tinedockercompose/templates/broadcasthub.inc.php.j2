@@ -2,11 +2,11 @@
 return [
     'broadcasthub' => [
         'active' => true,
-{% if tinedockercompose_broadcasthub_url is defined %}
+        {% if tinedockercompose_broadcasthub_url is defined -%}
         'url' => '{{ tinedockercompose_broadcasthub_url }}',
-{% else %}
+        {% else -%}
         'url' => '{{ [tinedockercompose_tineurl, 'broadcasthub'] | path_join }}',
-{% endif %}
+        {% endif -%}
         # should not be required in single TENANCY MODE
         #'pubsubname' => 'redis://cache:6379:broadcasthub',
         'redis' => [
