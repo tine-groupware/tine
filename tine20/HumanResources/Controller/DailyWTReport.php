@@ -338,6 +338,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                             $this->_currentDate->toString());
 
                     if (isset($existingReports[$dateStr])) {
+                        /** @var HumanResources_Model_DailyWTReport $oldReport */
                         $oldReport = $existingReports[$dateStr]->getCleanClone();
                         $oldReport->calculation_failure = 1;
                         $oldReport->system_remark =
