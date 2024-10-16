@@ -2575,11 +2575,11 @@ fi';
      * Generates new js Translation List files for given locale and path
      * If no locales is given all available locales are generated
      *
-     * @param $opts
-     * @return void
+     * @param Zend_Console_Getopt $opts
+     * @return int
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function generateTranslationLists($opts)
+    public function generateTranslationLists($opts): int
     {
         $this->_checkAdminRight();
         $args = $this->_parseArgs($opts);
@@ -2588,9 +2588,18 @@ fi';
 
         $translations = new Tinebase_Translation();
         $translations->generateTranslationLists($locale, $path);
+
+        return 0;
     }
 
-    public function removeAllAvScanNotes($opts)
+    /**
+     * @deprecated no longer needed in 2025.11+ (we no longer create avscan notes)
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function removeAllAvScanNotes(Zend_Console_Getopt $opts): int
     {
         $this->_checkAdminRight();
         $db = Tinebase_Core::getDb();
@@ -2609,8 +2618,7 @@ fi';
             $start += $limit;
             echo 'finished ' . $start . PHP_EOL;
         } while ($run);
+
+        return 0;
     }
 }
-
-
-
