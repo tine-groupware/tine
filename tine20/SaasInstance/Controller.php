@@ -135,7 +135,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
             $totalQuota = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB};
 
-            if (($additionalData['totalInMB'] / 1024 / 1024) > $totalQuota) {
+            if (($additionalData['totalInByte'] / 1024 / 1024) > $totalQuota) {
                 $totalQuota = $totalQuota / 1024;
                 $quota = $totalQuota;
                 $throwException = true;

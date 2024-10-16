@@ -28,6 +28,8 @@ class SaasInstance_ControllerTest extends TestCase
     protected $_emailAccounts = array();
 
     protected $_originalRoleRights = null;
+    protected $_oldFileSystemConfig = null;
+    protected $_oldQuota = null;
 
     /**
      * Sets up the fixture.
@@ -86,7 +88,7 @@ class SaasInstance_ControllerTest extends TestCase
     {
         // save total quota
         $app = 'Tinebase';
-        $additionalData['totalInMB'] = 1234 * 1024 * 1024;
+        $additionalData['totalInByte'] = 1234 * 1024 * 1024;
 
         try {
             Admin_Controller_Quota::getInstance()->setRequestContext([]);
@@ -105,7 +107,7 @@ class SaasInstance_ControllerTest extends TestCase
         $result = $this->_json->saveQuota($app, null, $additionalData);
 
         self::assertIsArray($result);
-        self::assertEquals(1234, $result['totalInMB']);
+        self::assertEquals(1234, $result[Tinebase_Config::QUOTA_TOTALINMB]);
 
         Tinebase_ControllerTest::assertActionLogEntry();
     }
