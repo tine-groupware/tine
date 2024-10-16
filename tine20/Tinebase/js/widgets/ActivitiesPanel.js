@@ -298,7 +298,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             defaultFilter: 'query',
             filters: [
                 {field: 'query',        operator: 'contains',   value: ''},
-                {field: 'note_type_id', operator: 'notin',      value: ['avscan']}
             ],
         });
         
