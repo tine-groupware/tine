@@ -74,6 +74,8 @@ class Addressbook_Setup_Update_17 extends Setup_Update_Abstract
             Addressbook_Model_Contact::class,
         ]);
 
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SITE_FILTER, Addressbook_Config::getInstance()->get(Addressbook_Config::SITE_FILTER));
+        
         $this->addApplicationUpdate(Addressbook_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }

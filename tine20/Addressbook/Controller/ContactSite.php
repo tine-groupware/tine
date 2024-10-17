@@ -11,7 +11,7 @@
  */
 
 /**
- * EventType controller for Addressbook
+ * ContactSite controller for Addressbook
  *
  * @package     Addressbook
  * @subpackage  Controller
@@ -47,14 +47,14 @@ class Addressbook_Controller_ContactSite extends Tinebase_Controller_Record_Abst
     /**
      * holds the instance of the singleton
      *
-     * @var Addressbook_Controller_EventType
+     * @var Addressbook_Controller_ContactSite
      */
     private static $_instance = NULL;
     
     /**
      * the singleton pattern
      *
-     * @return Addressbook_Controller_EventType
+     * @return Addressbook_Controller_ContactSite
      */
     public static function getInstance() 
     {

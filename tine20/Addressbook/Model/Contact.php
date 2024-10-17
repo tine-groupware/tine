@@ -1065,6 +1065,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Addressbook_Model_ContactSite::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Addressbook_Model_ContactSite::FLD_CONTACT,
                 ],
+                self::UI_CONFIG             => [
+                    'filterOptions' => [
+                        'jsConfig' => ['filtertype' => 'tinebase.site']
+                    ]
+                ]
             ],
 
         ],
