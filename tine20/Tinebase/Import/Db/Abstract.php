@@ -168,4 +168,21 @@ abstract class Tinebase_Import_Db_Abstract
 
         return (float) preg_replace(['/[\.a-z ]*/i', '/,/'],['','.'], $value);
     }
+
+    /**
+     * get data from a table
+     *
+     * @param string $table
+     * @param string $fk
+     * @param string $id
+     * @return array
+     * @throws Zend_Db_Statement_Exception
+     */
+    protected function _getAdditionalData(string $table, string $fk, string $id): array
+    {
+        $stmt = $this->_importDb->select()->from($table)->where($fk . ' = ?', $id)->query();
+        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $result;
+    }
 }
