@@ -302,7 +302,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true,
                     ]
                 ],
-                self::DEFAULT_STR => self::EDOCUMENT_TRANSPORT_DOWNLOAD,
+                self::DEFAULT_STR => self::EDOCUMENT_TRANSPORT_EMAIL,
             ],
         ],
         self::DOCUMENT_FOLLOWUP_STATUS => [
