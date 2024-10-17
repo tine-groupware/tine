@@ -13,7 +13,7 @@ const getAddressPanels = () => {
 
     const adrFields = _.sortBy(_.filter(recordClass.getModelConfiguration().fields, (field) => {
         return field.type === 'record' && _.get(field, 'config.recordClassName') == 'Addressbook_Model_ContactProperties_Address'
-    }), (field) => {return _.get(field, 'uiconfig.sort')});
+    }), (field) => {return _.get(field, 'uiconfig.order')});
 
     return adrFields.map((field) => {
         const preferredCheckbox = new Ext.form.Checkbox({
