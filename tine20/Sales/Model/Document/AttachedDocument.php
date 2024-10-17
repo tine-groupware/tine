@@ -47,6 +47,8 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
 
+        self::EXPOSE_JSON_API               => true,
+
         self::TABLE                         => [
             self::NAME                      => self::TABLE_NAME,
             self::INDEXES                   => [
@@ -123,6 +125,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
             self::FLD_DISPATCH_HISTORY          => [
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_ATTACHED_DOCUMENT_ID,

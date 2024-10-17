@@ -26,9 +26,18 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
     public function getXRechnungView(string $fileNodeId): void
     {
-        echo (new Sales_EDocument_Service_View())->getXRechnungView(
-            Filemanager_Controller_Node::getInstance()->get($fileNodeId)
-        );
+        try {
+            echo (new Sales_EDocument_Service_View())->getXRechnungView(
+                Filemanager_Controller_Node::getInstance()->get($fileNodeId)
+            );
+        } catch (Exception $e) {
+            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation('Sales'));
+
+            $template = $twig->load('Sales/views/EDocumentViewError.html.twig');
+
+            $renderContext = [];
+            echo $template->render($renderContext);
+        }
     }
 
     /**
