@@ -3323,6 +3323,9 @@ class Tinebase_FileSystem implements
             && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
             && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
         ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' The area is locked for this node : ' . $node->path);
+
             return false;
         }
         $this->_areaLockCache[$node->getId()] = true;
