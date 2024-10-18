@@ -152,6 +152,29 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             name: 'org_unit',
                             maxLength: 64
                         }
+                        ],
+                        [
+                            {
+                                columnWidth: 1,
+                                hidden: !Tine.Tinebase.featureEnabled('featureSite'),
+                                fieldLabel: this.app.i18n._('Sites'),
+                                xtype:'tinerecordspickercombobox',
+                                name: 'sites',
+                                recordClass: 'Addressbook.ContactSite',
+                                refIdField: 'contact',
+                                searchComboConfig: {
+                                    useEditPlugin: false,
+                                    additionalFilterSpec: {
+                                        config: {
+                                            name: 'siteFilter',
+                                            appName: 'Tinebase'
+                                        }
+                                    }
+                                },
+                                editDialogConfig: {mode: 'local'},
+                                isMetadataModelFor: 'site',
+                                requiredGrant: 'editGrant',
+                            }
                         ]
                     ]
                 },
