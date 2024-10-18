@@ -38,6 +38,8 @@ require('./MunicipalityKey/editDialog');
 require('./Model/ImportExportDefinition');
 
 require('./widgets/CountryFilter');
+require('./widgets/SiteFilter');
+
 
 // UI style >= 2019
 require('node-waves');

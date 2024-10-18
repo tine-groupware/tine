@@ -93,7 +93,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 20,
+        self::VERSION       => 21,
         'containerName'     => 'Calendar',
         'containersName'    => 'Calendars', // ngettext('Calendar', 'Calendars', n)
         'recordName'        => self::MODEL_NAME_PART, // gettext('GENDER_Event')
@@ -131,6 +131,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 ],
                 'location_record'           => [
                     self::COLUMNS               => ['location_record'],
+                ],
+                'site'           => [
+                    self::COLUMNS               => ['site'],
                 ],
                 'uid'                       => [
                     self::COLUMNS               => ['uid'],
@@ -243,6 +246,20 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::LENGTH        => 40,
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
+            ],
+            'site' => [
+                self::LABEL      => 'Site',    // _('Site')
+                self::TYPE       => self::TYPE_RECORD,
+                self::CONFIG => [
+                    self::APP_NAME     => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME   => 'Addressbook_Model_Contact',
+                ],
+                self::NULLABLE => true,
+                self::UI_CONFIG         => [
+                    'searchComboConfig'     => [
+                        'useEditPlugin'         => false,
+                    ],
+                ],
             ],
             'organizer'      => [
                 self::TYPE          => self::TYPE_STRING, // type record?
@@ -683,6 +700,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'class':             return $t->_('Classification');
             case 'description':       return $t->_('Description');
             case 'location':          return $t->_('Location');
+            case 'site':              return $t->_('Site');
             case 'organizer':         return $t->_('Organizer');
             case 'priority':          return $t->_('Priority');
             case 'status':            return $t->_('Status');
@@ -960,6 +978,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         if (isset($_data['location_record']) && is_array($_data['location_record'])) {
             $_data['location_record'] = $_data['location_record']['id'];
+        }
+
+        if (isset($_data['site']) && is_array($_data['site'])) {
+            $_data['site'] = $_data['site']['id'];
         }
         
         if (empty($_data['class'])) {
