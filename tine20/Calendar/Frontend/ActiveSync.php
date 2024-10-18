@@ -192,7 +192,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     protected $_contentController;
 
     protected $_defaultContainerPreferenceName = Calendar_Preference::DEFAULTCALENDAR;
-    
+
     /**
      * list of devicetypes with wrong busy status default (0 = FREE)
      * 
@@ -428,7 +428,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             
                             $exceptions[] = $exception;
                         }
-                        
+
                         $syncrotonEvent->$syncrotonProperty = $exceptions;
                     }
                     
@@ -468,10 +468,14 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                                 $recurrence->type        = Syncroton_Model_EventRecurrence::TYPE_MONTHLY_DAYN;
                                 $recurrence->weekOfMonth = $weekOfMonth;
                                 $recurrence->dayOfWeek   = $this->_convertDayToBitMask($dayOfWeek);
+
+                                $exceptions = $this->_getExceptionsByRrule($entry);
+                                if (count($exceptions) > 0) {
+                                    $syncrotonEvent->exceptions = $exceptions;
+                                }
                             }
-                            
                             break;
-                    
+
                         case Calendar_Model_Rrule::FREQ_YEARLY:
                             if (!empty($rrule->bymonthday)) {
                                 $recurrence->type        = Syncroton_Model_EventRecurrence::TYPE_YEARLY;
@@ -528,6 +532,46 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         $this->_addOrganizer($syncrotonEvent, $entry);
         
         return $syncrotonEvent;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * compute exceptions by rrule for 2 years
+     */
+    public function _getExceptionsByRrule($entry)
+    {
+        /** @var Calendar_Model_Event $entry */
+        $exceptions = [];
+
+        if (!empty($entry->rrule->byday)) {
+            $byDayInterval = (int) substr($entry->rrule->byday, 0, -2);
+            $fifthWeek = $byDayInterval === 5;
+
+            if ($fifthWeek && $entry->rrule->freq === Calendar_Model_Rrule::FREQ_MONTHLY) {
+                $entry->rrule->byday = -1 . substr($entry->rrule->byday, -2);
+                $refDate = clone($entry->dtstart);
+                $until = $entry->rrule_until ?? $refDate->addYear(2);
+                $recurSet = Calendar_Model_Rrule::computeRecurrenceSet(
+                    $entry,
+                    new Tinebase_Record_RecordSet('Calendar_Model_Event'),
+                    $entry->dtstart,
+                    $until
+                );
+
+                foreach ($recurSet as $record) {
+                    if (!Calendar_Model_Rrule::isFifthWeekOfMonth($record->dtstart)) {
+                        $exception = new Syncroton_Model_EventException();
+                        $exception->deleted        = 1;
+                        // None. The user's response to the meeting has not yet been received.
+                        $exception->responseType = 0;
+                        $exception->exceptionStartTime = $record->dtstart;
+                        $exceptions[] = $exception;
+                    }
+                }
+            }
+        }
+        return $exceptions;
     }
 
     /**
@@ -750,13 +794,37 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     // handle exceptions from recurrence
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
                     $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
-                    
+
+                    $fifthWeekday = isset($data->recurrence) && $data->recurrence->type === Syncroton_Model_EventRecurrence::TYPE_MONTHLY_DAYN && $data->recurrence->weekOfMonth === 5;
+                    $recurSet = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+
+                    if ($fifthWeekday && isset($data->uID)) {
+                        $until = clone $event->dtstart;
+                        $event->uid = $data->uID;
+                        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet(
+                            $event,
+                            new Tinebase_Record_RecordSet('Calendar_Model_Event'),
+                            $event->dtstart,
+                            $event->rrule_until ?? $until->addYear(2)
+                        );
+                    }
+
                     foreach ($data->$syncrotonProperty as $exception) {
                         $eventException = $this->_getRecurException($oldExdates, $exception, $entry);
 
                         if ($exception->deleted == 0) {
                             $eventException = $this->toTineModel($exception, $eventException);
                             $eventException->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
+                        }
+
+                        if ($fifthWeekday) {
+                            $foundMatchedException = $recurSet->filter(function($recurrence) use ($exception) {
+                                return $exception->exceptionStartTime->get(Tinebase_Record_Abstract::ISO8601LONG) === $recurrence->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+                            });
+
+                            if (count($foundMatchedException) > 0) {
+                                continue;
+                            }
                         }
 
                         $eventException->is_deleted = (bool) $exception->deleted;

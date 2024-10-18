@@ -1565,6 +1565,23 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
             ->count(), 'expected both attendees have accepted');
     }
 
+    public function testUpdate5thWeekMonthlyEvent()
+    {
+        $event = $this->_createEvent();
+        $event->rrule = new Calendar_Model_Rrule('FREQ=MONTHLY;INTERVAL=1;BYDAY=5TU');
+        $event->dtstart = new Tinebase_DateTime('2013-04-22 16:00:00');
+        $event->dtend = new Tinebase_DateTime('2013-04-22 17:00:00');
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $syncrotonEvent = $controller->toSyncrotonModel($event);
+        static::assertEquals(15, count($syncrotonEvent->exceptions), 'exception count is wrong');
+        static::assertEquals('2013-05-28 16:00:00', $syncrotonEvent->exceptions[0]->exceptionStartTime->get(Tinebase_Record_Abstract::ISO8601LONG), 'exception time is wrong');
+
+        $tine20Event = $controller->toTineModel($syncrotonEvent);
+        static::assertEquals(0, count($tine20Event->exdate), 'should not have exceptions');
+    }
+
     public function testPreserveDataOnCreateRecurException()
     {
         $cfCfg = $this->_createCustomField(Tinebase_Record_Abstract::generateUID(), Calendar_Model_Event::class);

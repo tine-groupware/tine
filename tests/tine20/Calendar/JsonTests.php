@@ -599,6 +599,26 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->createRecurException($newEvent, false, true, false);
     }
 
+    public function testUpdateRecurEventFifthWeekDayRule()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        $eventData['rrule']['interval'] = 1;
+        $eventData['rrule']['freq'] = 'MONTHLY';
+        $eventData['rrule']['byday'] = '5TU';
+        $from = $eventData['dtstart'];
+        $until = new Tinebase_DateTime($from);
+        $until->addYear(1);
+        $eventData['rrule_until'] = $until;
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+
+        $searchResultData = $this->_uit->searchEvents([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()],
+            ['field' => 'period',       'operator' => 'within', 'value' => ['from' => $from, 'until' => $until]],
+        ], []);
+
+        static::assertCount(4, $searchResultData['results']);
+    }
+
     /**
      * testCreateRecurEventYearly
      * 

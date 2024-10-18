@@ -201,6 +201,14 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         return $rrule;
     }
+
+    public static function isFifthWeekOfMonth($date): bool
+    {
+        $date = new DateTime($date);
+        $dayOfMonth = (int) $date->format('j');
+        $weekOfMonth = ceil($dayOfMonth / 7);
+        return $weekOfMonth === 5.0;
+    }
     
     /**
      * returns a ical rrule string
@@ -1059,7 +1067,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         $computationStartDateArray = self::date2array($eventInOrganizerTZ->dtstart);
         
-        // if period contains base events dtstart, we let computation start one intervall to early to catch
+        // if period contains base events dtstart, we let computation start one interval to early to catch
         // the cases when dtstart of base event not equals the first instance. If it fits, we filter the additional 
         // instance out later
         if ($eventInOrganizerTZ->dtstart->isLater($_from) && $eventInOrganizerTZ->dtstart->isEarlier($_until)) {
@@ -1082,6 +1090,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         $byDayInterval = (int) substr($_rrule->byday, 0, -2);
         $byDayWeekday  = substr($_rrule->byday, -2);
+        $fifthWeekday = $byDayInterval === 5;
+        if ($fifthWeekday) {
+            $byDayInterval = -1;
+        }
         
         if ($byDayInterval === 0 || ! (isset(self::$WEEKDAY_DIGIT_MAP[$byDayWeekday]) || array_key_exists($byDayWeekday, self::$WEEKDAY_DIGIT_MAP))) {
             throw new Exception('mal formated rrule byday part: "' . $_rrule->byday . '"');
@@ -1100,12 +1112,16 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             }
             
             self::skipWday($recurEvent->dtstart, $byDayWeekday, $byDayInterval, TRUE);
-            
+
             // we calculate dtend from the event length, as events during a dst boundary could get dtend less than dtstart otherwise 
             $recurEvent->dtend = clone $recurEvent->dtstart;
             $recurEvent->dtend->add($eventLength);
             
             $recurEvent->setTimezone('UTC');
+
+            if ($fifthWeekday && !Calendar_Model_Rrule::isFifthWeekOfMonth($recurEvent->dtstart)) {
+                continue;
+            }
             
             if ($computationEndDate->isEarlier($recurEvent->dtstart)) {
                 break;

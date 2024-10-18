@@ -132,7 +132,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         ];
 
         this.eventEditDialog.on('dtStartChange', function(jsonData) {
-            var data = Ext.decode(jsonData),
+            const data = Ext.decode(jsonData),
                 dtstart = Date.parseDate(data.newValue, Date.patterns.ISO8601Long);
 
             this.initRrule(dtstart);
@@ -142,9 +142,9 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
 
     initRrule: function(dtstart) {
         if (Ext.isDate(dtstart)) {
-            var byday      = Tine.Calendar.RrulePanel.prototype.wkdays[dtstart.format('w')];
-            var bymonthday = dtstart.format('j');
-            var bymonth    = dtstart.format('n');
+            const byday = Tine.Calendar.RrulePanel.prototype.wkdays[dtstart.format('w')];
+            const bymonthday = dtstart.format('j');
+            const bymonth = dtstart.format('n');
 
             this.WEEKLYcard.setRule({
                 interval: 1,
@@ -172,7 +172,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.ruleCards.layout.layout();
         this.activeRuleCard = this[freq + 'card'];
     },
-    
+
     /**
      * disable contents not panel
      */
@@ -529,7 +529,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             this.onLimitRadioCheck(this.untilRadio, false);
             this.onLimitRadioCheck(this.countRadio, true);
         }
-    }
+    },
 });
 
 Tine.Calendar.RrulePanel.DAILYcard = Ext.extend(Tine.Calendar.RrulePanel.AbstractCard, {
@@ -668,6 +668,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
                 [2,  this.app.i18n._('second') ],
                 [3,  this.app.i18n._('third')  ],
                 [4,  this.app.i18n._('fourth') ],
+                [5,  this.app.i18n._('fifth')  ],
                 [-1, this.app.i18n._('last')   ]
             ]
         });
@@ -689,7 +690,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
             value         : Tine.Calendar.RrulePanel.prototype.wkdays[Ext.DatePicker.prototype.startDay],
             editable      : false,
             mode          : 'local',
-            store         : wkdayItems
+            store         : wkdayItems,
         });
         
         this.bymonthdayRadio = new Ext.form.Radio({
@@ -737,7 +738,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
         
         Tine.Calendar.RrulePanel.MONTHLYcard.superclass.initComponent.call(this);
     },
-    
+
     onByRadioCheck: function(radio, checked) {
         switch(radio.inputValue) {
             case 'BYDAY':
