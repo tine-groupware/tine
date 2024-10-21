@@ -72,6 +72,7 @@ class Addressbook_Setup_Update_17 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Addressbook_Model_Contact::class,
+            Addressbook_Model_ContactSite::class
         ]);
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::SITE_FILTER, Addressbook_Config::getInstance()->get(Addressbook_Config::SITE_FILTER));
