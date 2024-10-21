@@ -26,6 +26,14 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/ubl-invoice.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine-groupware/ubl-common.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/OpenDocument.git"
     },
     {
@@ -102,8 +110,10 @@
     "ezyang/htmlpurifier": "^4",
     "firebase/php-jwt": "^6",
     "giggsey/libphonenumber-for-php": "^8",
+    "goetas-webservices/xsd2php-runtime": "^0.2.17",
     "hansott/psr7-cookies": "*",
     "hfig/mapi": "^1.3",
+    "jms/serializer": "^3.30",
     "josemmo/einvoicing": "dev-master#16d6e46718985ed0c049b7f05f9177c2f09254a8",
     "jumbojett/openid-connect-php": "dev-master",
     "laminas/laminas-diactoros": "^2.7",
@@ -140,6 +150,7 @@
     "symfony/http-client": "5.2 - 7",
     "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
+    "tine-groupware/ubl-invoice": "^0.1.0",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
     "twig/twig": "v2.15.5",
@@ -160,6 +171,9 @@
   },
   "autoload": {
     "files": [],
+    "psr-4": {
+      "UBL21\\": "ubl/php"
+    },
     "psr-0": {
       "": [
         "",
