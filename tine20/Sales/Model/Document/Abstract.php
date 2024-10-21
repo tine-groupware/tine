@@ -25,6 +25,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const STATUS_REVERSAL = 'REVERSAL';
 
+    public const TAX_RATE = 'tax_rate';
+    public const TAX_SUM = 'tax_sum';
+    public const NET_SUM = 'net_sum';
+
     public const FLD_ID = 'id';
     public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     public const FLD_DOCUMENT_LANGUAGE = 'document_language';
@@ -698,12 +702,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public function calculatePricesIncludingPositions()
     {
-        if (!$this->{self::FLD_POSITIONS}) {
-            return;
-        }
-        
         /** @var Sales_Model_DocumentPosition_Abstract $position */
-        foreach ($this->{self::FLD_POSITIONS} as $position) {
+        foreach ($this->{self::FLD_POSITIONS} ?? [] as $position) {
             if ($this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE
                 && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
@@ -733,7 +733,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $documentPriceType = Sales_Config::PRICE_TYPE_GROSS;
 
         /** @var Sales_Model_DocumentPosition_Abstract $position */
-        foreach ($this->{self::FLD_POSITIONS} as $position) {
+        foreach ($this->{self::FLD_POSITIONS} ?? [] as $position) {
             $this->{self::FLD_POSITIONS_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM}
                 + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
             $this->{self::FLD_POSITIONS_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM}
@@ -772,14 +772,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         if ($documentPriceType === Sales_Config::PRICE_TYPE_GROSS) {
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ?
-                array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate) {
-                    $tax = $salesTaxByRate[$taxRate] * ( 1 -
+                array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate, $netSumByTaxRate) {
+                    $tax = $salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
                             $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
-                            $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} );
+                            $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ));
                     if ($tax) {
                         $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                            'tax_rate' => $taxRate,
-                            'tax_sum' => $tax,
+                            self::TAX_RATE => $taxRate,
+                            self::TAX_SUM => $tax,
+                            self::NET_SUM => $netSumByTaxRate[$taxRate] * $discountModifier,
                         ];
                     }
                     return $carry + $tax;
@@ -790,13 +791,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
                 array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
                     $tax =
-                        ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
-                            $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM})
+                        ($netSum = ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
+                            $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}))
                         * $taxRate / 100;
                     if ($tax) {
                         $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                            'tax_rate' => $taxRate,
-                            'tax_sum' => $tax,
+                            self::TAX_RATE => $taxRate,
+                            self::TAX_SUM => $tax,
+                            self::NET_SUM => $netSum,
                         ];
                     }
                     return $carry + $tax;

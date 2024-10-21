@@ -1536,7 +1536,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (!($stream = fopen('php://temp', 'r+'))) {
                 throw new Tinebase_Exception('cant create temp stream');
             }
-            fwrite($stream, (new Sales_EDocument_Einvoicing_UblWriter())->export($invoice->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+            fwrite($stream, $invoice->toUbl());
             rewind($stream);
 
             if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
