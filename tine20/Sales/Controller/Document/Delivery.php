@@ -45,6 +45,7 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS_TRANSITIONS;
         $this->_documentStatusField = Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS;
         $this->_oldRecordBookWriteableFields = [
+            Sales_Model_Document_Delivery::FLD_ATTACHED_DOCUMENTS,
             Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
             Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_CENTER,
             Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_BEARER,
