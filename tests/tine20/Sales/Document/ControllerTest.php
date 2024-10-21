@@ -275,12 +275,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
                     Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
                 ], true),
                 new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 2',
                     Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product2->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
                 ], true),

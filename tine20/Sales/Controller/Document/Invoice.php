@@ -144,7 +144,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 throw new Tinebase_Exception('cant create temp stream');
             }
             try {
-                fwrite($stream, (new Sales_EDocument_Einvoicing_UblWriter())->export($record->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+                fwrite($stream, $record->toUbl());
             } catch (Throwable $t) {
                 Tinebase_Exception::log($t);
                 if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
