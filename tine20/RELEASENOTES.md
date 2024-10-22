@@ -20,16 +20,16 @@ TINE RELEASENOTES
 
 ## Modal Windows rework / VueJS
 ## Application-Dock / Picker
-## Multipicker (i.e. "one of" filter)
+## Multipicker (used for example in "one of" filter and in group functions)
 ## support colorized number fields
 ## responsive layout improvements (grid panel)
 ## Password reveal field
 
-eigener notiztyp, wird in historie angezeigt
+- special note type, is shown in history panel
 
 # ADMIN / OPERATION
 
-## numberable configuration
+## number range configuration (for example for Sales product numbers)
 ## Send Password via SMS
 ## Show Mailaccount Sieve-Script
 
@@ -47,19 +47,17 @@ eigener notiztyp, wird in historie angezeigt
 ## New "Floorplan" feature for booking resources (rooms / tables / ...)
 ## series events with individual dates
 ## Resources-Node in tree
-## Terminarten
-## sync from remote caldav source
-
-via admin scheduler
+## configurable event types
+## sync from remote caldav source (via admin scheduler)
 
 # EMAIL
 
 ## Mass-Mailing
 
-- mit gdrp-integration / consent-link / ...
+- with GDPR-integration & consent-link creation
 
 ## expected answer
-## Sieve-Customscripts
+## Sieve custom scripts
 
 # CRM
 
@@ -83,10 +81,10 @@ i.e. connect multiple tine instances / shared filesystem
 
 ## Divisions / multi-tenancy
 ## E-Invoice
-## Sammelrechnungen
-## "Storno-Rechnungen" workflow improvements
+## collective billing / "Sammelrechnung"
+## reverse billing / "Storno-Rechnungen" workflow improvements
 ## Reverse-Charge
-## Brutto-Rechnungen
+## gross prices in products and invoices
 ## Evaluation-Dimensions
 
 # TASKS
