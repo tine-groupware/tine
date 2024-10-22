@@ -294,7 +294,7 @@
               draft="true"
           fi
       
-          if [ "${RELEASE_TYPE}" != "weekly" ]; then
+          if [ "${RELEASE_TYPE}" == "be" ]; then
               prerelease="false"
           else
               prerelease="true"
@@ -763,6 +763,11 @@
       
           if [ "$RELEASE_TYPE" == "monthly" ]; then
               echo "monthly"
+              return
+          fi
+      
+          if [ "$RELEASE_TYPE" == "beta" ]; then
+              echo "beta"
               return
           fi
       
@@ -1289,7 +1294,7 @@
                 draft="true"
             fi
         
-            if [ "${RELEASE_TYPE}" != "weekly" ]; then
+            if [ "${RELEASE_TYPE}" == "be" ]; then
                 prerelease="false"
             else
                 prerelease="true"
@@ -1758,6 +1763,11 @@
         
             if [ "$RELEASE_TYPE" == "monthly" ]; then
                 echo "monthly"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "beta" ]; then
+                echo "beta"
                 return
             fi
         
@@ -2330,7 +2340,7 @@
                 draft="true"
             fi
         
-            if [ "${RELEASE_TYPE}" != "weekly" ]; then
+            if [ "${RELEASE_TYPE}" == "be" ]; then
                 prerelease="false"
             else
                 prerelease="true"
@@ -2799,6 +2809,11 @@
         
             if [ "$RELEASE_TYPE" == "monthly" ]; then
                 echo "monthly"
+                return
+            fi
+        
+            if [ "$RELEASE_TYPE" == "beta" ]; then
+                echo "beta"
                 return
             fi
         
