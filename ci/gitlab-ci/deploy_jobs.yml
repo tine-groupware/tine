@@ -167,6 +167,12 @@ release-packages-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
       when: manual
+    - if: $PIPELINE_TYPE =~ /release-weekly/
+      variables:
+        RELEASE_TYPE: weekly
+    - if: $PIPELINE_TYPE =~ /release-monthly/
+      variables:
+        RELEASE_TYPE: monthly
     - if: $PIPELINE_TYPE =~ /release-beta/
       variables:
         RELEASE_TYPE: beta
