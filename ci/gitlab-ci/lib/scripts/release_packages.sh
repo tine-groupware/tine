@@ -99,6 +99,11 @@ release_packages_determin_package_repo_name () {
         return
     fi
 
+    if [ "$RELEASE_TYPE" == "beta" ]; then
+        echo "beta"
+        return
+    fi
+
     if [ "$RELEASE_TYPE" == "be" ]; then
         echo "tine20.com"
         return

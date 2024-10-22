@@ -12,7 +12,7 @@ github_create_release() {
         draft="true"
     fi
 
-    if [ "${RELEASE_TYPE}" != "weekly" ]; then
+    if [ "${RELEASE_TYPE}" == "be" ]; then
         prerelease="false"
     else
         prerelease="true"
