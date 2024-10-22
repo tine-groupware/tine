@@ -243,7 +243,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             interceptor = ticketFn(),
             attachments = record.get('attachments'),
             evalGrants = editDialog.evalGrants,
-            hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
+            hasRequiredGrant = !evalGrants
+                || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant)
+                || _.get(record, record.constructor.getMeta('grantsPath') + '.adminGrant');
 
         this.store.removeAll();
 
