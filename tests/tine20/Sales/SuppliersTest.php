@@ -117,8 +117,7 @@ class Sales_SuppliersTest extends TestCase
         // delete record (set deleted=1) of customer and assigned addresses
         $this->_json->deleteSuppliers(array($retVal['id']));
         
-        $customerBackend = new Sales_Backend_Supplier();
-        $deletedSupplier = $customerBackend->get($retVal['id'], TRUE);
+        $deletedSupplier = Sales_Controller_Supplier::getInstance()->getBackend()->get($retVal['id'], TRUE);
         $this->assertEquals(1, $deletedSupplier->is_deleted);
         
         $addressBackend = new Sales_Backend_Address();

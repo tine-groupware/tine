@@ -16,8 +16,10 @@
  * @subpackage  Model
  */
 
-class Sales_Model_Supplier extends Tinebase_Record_Abstract
+class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
 {
+    public const TABLE_NAME = 'sales_suppliers';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -31,6 +33,7 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        self::VERSION       => 4,
         'recordName'        => 'Supplier', // gettext('GENDER_Supplier')
         'recordsName'       => 'Suppliers', // ngettext('Supplier', 'Suppliers', n)
         'hasRelations'      => TRUE,
@@ -64,23 +67,30 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 'duplicateCheckGroup' => 'name',
                 'group'       => 'core',
                 'queryFilter' => TRUE,
+                'nullable'   => false,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
             ),
             'url' => array(
                 'label'       => 'Web', // _('Web')
                 'type'        => 'text',
                 'group'       => 'misc',
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                'nullable'   => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
             'description' => array(
                 'label'       => 'Description', // _('Description')
                 'group'       => 'core',
                 'type'        => 'fulltext',
                 'queryFilter' => TRUE,
-                'shy'         => TRUE
+                'shy'         => TRUE,
+                'nullable'   => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
             'cpextern_id'       => array(
                 'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE => true,
                 'type'    => 'record',
                 'group'   => 'core',
                 'config'  => array(
@@ -92,6 +102,7 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
             'cpintern_id'    => array(
                 'label'      => 'Contact Person (internal)',    // _('Contact Person (internal)')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE => true,
                 'type'       => 'record',
                 'group'      => 'core',
                 'config' => array(
@@ -104,36 +115,51 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 'label'   => 'VAT ID', // _('VAT ID')
                 'type'    => 'text',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE => true,
             ),
+            'vat_procedure' => [
+                'label' => 'VAT Procedure', // _('VAT Procedure')
+                'type' => 'keyfield',
+                'name' => 'vatProcedures',
+            ],
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
                 'group'   => 'accounting',
                 'default' => 10,
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
                 'type'    => 'text',
-                'group'   => 'accounting'
+                'group'   => 'accounting',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE => true,
             ),
             'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')
                 'type'    => 'float',
                 'group'   => 'accounting',
                 'default' => 1,
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
             'iban' => array (
                 'label'   => 'IBAN',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE => true,
             ),
             'bic' => array (
                 'label'   => 'BIC',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => TRUE,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                self::NULLABLE => true,
             ),
             #'discount' => array(
             #    'label'   => 'Discount (%)', // _('Discount (%)')

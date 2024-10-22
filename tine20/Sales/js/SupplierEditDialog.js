@@ -231,6 +231,12 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('Currency'),
                                 value: currency,
                                 allowBlank: false
+                            },  {
+                                name: 'vat_procedure',
+                                xtype: 'widget-keyfieldcombo',
+                                fieldLabel: this.app.i18n._('VAT Procedure'),
+                                app: 'Sales',
+                                keyFieldName: 'vatProcedures',
                             }, {
                                 name: 'currency_trans_rate',
                                 fieldLabel: this.app.i18n._('Currency Translation Rate'),

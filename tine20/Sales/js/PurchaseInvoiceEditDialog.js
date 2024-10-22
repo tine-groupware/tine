@@ -106,11 +106,11 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     onUpdateDateOfInvoice: function() {
-        var dateOfInvoice = this.dateOfInvoiceField.getValue();
-        var dueInDays     = parseInt(this.dueInDaysField.getValue());
-        
-        var dueDate =  dateOfInvoice.clone().add(Date.DAY, dueInDays);
-        
+        const dateOfInvoice = this.dateOfInvoiceField.getValue();
+        const dueInDays = parseInt(this.dueInDaysField.getValue());
+
+        const dueDate = dateOfInvoice.clone().add(Date.DAY, dueInDays);
+
         this.dueAtField.setValue(dueDate);
     },
     
@@ -119,15 +119,15 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     onUpdateDueAt: function() {
-        var dateOfInvoice = this.dateOfInvoiceField.getValue();
-        var dueAt         = this.dueAtField.getValue();
-        
+        const dateOfInvoice = this.dateOfInvoiceField.getValue();
+        const dueAt = this.dueAtField.getValue();
+
         // @todo needs improvement 
         // result is incorrect when dueAt is before dateOfInvoice
         // Math.round is used mitigate timeshift changes
-        var timeDiff = Math.abs(dueAt.getTime() - dateOfInvoice.getTime());
-        var diffDays = Math.round(timeDiff / (1000 * 3600 * 24));
-        
+        const timeDiff = Math.abs(dueAt.getTime() - dateOfInvoice.getTime());
+        const diffDays = Math.round(timeDiff / (1000 * 3600 * 24));
+
         this.dueInDaysField.setValue(diffDays);
     },
 
@@ -135,12 +135,12 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * calculates total prices by price gross, additional price gross, discount
      */
     calcTotal: function() {
-        var priceGross      = parseFloat(this.priceGrossField.getValue());
-        var priceGross2     = parseFloat(this.priceGross2Field.getValue());
-        var discount        = parseFloat(this.discountField.getValue());
+        const priceGross      = parseFloat(this.priceGrossField.getValue());
+        const priceGross2     = parseFloat(this.priceGross2Field.getValue());
+        const discount        = parseFloat(this.discountField.getValue());
 
-        var total = (priceGross + priceGross2) * (1 - discount/100) * 100;
-        var negative = false;
+        let total = (priceGross + priceGross2) * (1 - discount / 100) * 100;
+        let negative = false;
         if (total < 0) {
             negative = true;
             total = Math.abs(total);
@@ -157,8 +157,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * calculates price gross by price net and tax
      */
     calcGross: function() {
-        var netPrice = parseFloat(this.priceNetField.getValue());
-        var tax      = parseFloat(this.priceTaxField.getValue());
+        const netPrice = parseFloat(this.priceNetField.getValue());
+        const tax      = parseFloat(this.priceTaxField.getValue());
         
         this.priceGrossField.setValue(netPrice + tax);
     },
@@ -167,18 +167,18 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * calculates price gross by price net and tax
      */
     calcTax: function() {
-        var netPrice   = parseFloat(this.priceNetField.getValue());
-        var taxPercent = parseFloat(this.salesTaxField.getValue());
+        const netPrice = parseFloat(this.priceNetField.getValue());
+        const taxPercent = parseFloat(this.salesTaxField.getValue());
 
         if (_.isNaN(taxPercent)) return;
-        
-        var tax        = netPrice * (taxPercent / 100);
-        var negative = false;
+
+        let tax = netPrice * (taxPercent / 100);
+        let negative = false;
         if (tax < 0) {
             tax = Math.abs(tax);
             negative = true;
         }
-        var roundedTax = Math.round(tax * 100) / 100;
+        let roundedTax = Math.round(tax * 100) / 100;
         if ( negative ) {
             roundedTax = 0 - roundedTax;
         }
@@ -190,14 +190,12 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * Calculate Tax and Tax percent from Gross and Net
      */
     calcTaxFromGross: function() {
-        var grossPrice = parseFloat(this.priceGrossField.getValue());
-        var netPrice   = parseFloat(this.priceNetField.getValue());
-        if (!netPrice) {
-            return;
-        }
-        var tax = grossPrice - netPrice;
-        var taxPercent =  tax * 100 / netPrice;
-        
+        const grossPrice = parseFloat(this.priceGrossField.getValue());
+        const netPrice = parseFloat(this.priceNetField.getValue());
+        if (!netPrice) return;
+        const tax = grossPrice - netPrice;
+        const taxPercent = tax * 100 / netPrice;
+
         this.priceTaxField.setValue(tax);
         this.salesTaxField.setValue(_.isFinite(taxPercent) && this.salesTaxField.getValue() !== null ? taxPercent.toFixed(2) : null);
     },
@@ -206,12 +204,10 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * calculates price gross by price net and tax
      */
     calcTaxPercent: function() {
-        var netPrice = parseFloat(this.priceNetField.getValue());
-        var tax      = parseFloat(this.priceTaxField.getValue());
-        
-        var taxPercent = tax / netPrice * 100;
-
-        var roundedPercent = Math.round(Math.abs(taxPercent) * 100) / 100;
+        const netPrice = parseFloat(this.priceNetField.getValue());
+        const tax = parseFloat(this.priceTaxField.getValue());
+        const taxPercent = tax / netPrice * 100;
+        const roundedPercent = Math.round(Math.abs(taxPercent) * 100) / 100;
 
         this.salesTaxField.setValue(_.isFinite(roundedPercent) && this.salesTaxField.getValue() !== null ? roundedPercent : null);
     },
@@ -220,8 +216,13 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         if (newValue.get('credit_term') > 0) {
             this.dueInDaysField.setValue(newValue.get('credit_term'));
         }
+        const vatProcedure = newValue.get('vat_procedure');
+        const defaultSalesTaxValue = this.salesTaxField.getValue();
+        if (defaultSalesTaxValue > 0) this.defaultSalesTaxValue = defaultSalesTaxValue;
+        this.salesTaxField.setValue(vatProcedure !== 'taxable' ? 0 : (this.defaultSalesTaxValue || 0));
+        this.calcTax();
     },
-    
+
     /**
      * returns dialog
      * 
@@ -231,13 +232,13 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @private
      */
     getFormItems: function() {
-        var formFieldDefaults = {
+        const formFieldDefaults = {
             xtype: 'textfield',
             anchor: '100%',
             labelSeparator: '',
             columnWidth: .5
         };
-        
+
         this.dateOfInvoiceField = Ext.create({
             xtype: 'datefield',
             name: 'date',
@@ -380,8 +381,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 blur: this.calcTotal.createDelegate(this)
             }
         });
-        
-        var items = [{
+
+        const items = [{
             title: this.app.i18n._('Purchase Invoice'),
             autoScroll: true,
             border: false,
@@ -404,13 +405,13 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             [{
                                 name: 'number',
                                 fieldLabel: this.app.i18n._('Invoice Number'),
-                                columnWidth: 1/4,
+                                columnWidth: 1 / 4,
                                 allowBlank: false
                                 //readOnly: ! Tine.Tinebase.common.hasRight('set_invoice_number', 'Sales'),
                                 //emptyText: this.app.i18n._('automatically set...')
                             }, {
                                 fieldLabel: this.app.i18n._('Supplier'),
-                                columnWidth: 3/4,
+                                columnWidth: 2 / 4,
                                 editDialog: this,
                                 xtype: 'tinerelationpickercombo',
                                 allowBlank: false,
@@ -426,6 +427,19 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     scope: this,
                                     select: this.onSelectSupplier
                                 }
+                            }, {
+                                name: 'vat_procedure',
+                                xtype: 'widget-keyfieldcombo',
+                                fieldLabel: this.app.i18n._('VAT Procedure'),
+                                app: 'Sales',
+                                keyFieldName: 'vatProcedures',
+                                columnWidth: 1 / 4,
+                                readOnly: true,
+                                ref: '../../../../../../../vatProcedureCombo',
+                                checkState: function (editDialog, record) {
+                                    const supplierRelation = record.data.relations.find(r => r.related_model === 'Sales_Model_Supplier');
+                                    this.setValue(supplierRelation?.related_record?.vat_procedure ?? 'nonTaxable');
+                                },
                             }], [
                                 this.dateOfInvoiceField,
                                 this.dueInDaysField,
@@ -449,7 +463,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     name: 'discount_until',
                                     //allowBlank: false,
                                     fieldLabel: this.app.i18n._('Discount until'),
-                                    columnWidth: 1/4
+                                    columnWidth: 1 / 4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                                 }
                             ], [
@@ -472,26 +486,26 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     xtype: 'extuxclearabledatefield',
                                     name: 'dunned_at',
                                     fieldLabel: this.app.i18n._('Dun date'),
-                                    columnWidth: 1/4
+                                    columnWidth: 1 / 4
                                 }, {
-                                    xtype: 'extuxclearabledatefield',
-                                    name: 'payed_at',
-                                    //allowBlank: false,
-                                    fieldLabel: this.app.i18n._('Payed at'),
-                                    columnWidth: 1/4
-                                    //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
-                                },
+                                xtype: 'extuxclearabledatefield',
+                                name: 'payed_at',
+                                //allowBlank: false,
+                                fieldLabel: this.app.i18n._('Payed at'),
+                                columnWidth: 1 / 4
+                                //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
+                            },
                                 // is_payed
                                 new Tine.Tinebase.widgets.keyfield.ComboBox({
                                     app: 'Sales',
                                     keyFieldName: 'paymentMethods',
                                     fieldLabel: this.app.i18n._('Method of payment'),
                                     name: 'payment_method',
-                                    columnWidth: 1/4
+                                    columnWidth: 1 / 4
                                 })
                             ], [
                                 {
-                                    columnWidth: 2/4,
+                                    columnWidth: 2 / 4,
                                     editDialog: this,
                                     xtype: 'tinerelationpickercombo',
                                     fieldLabel: this.app.i18n._('Approver'),
@@ -510,7 +524,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     allowBlank: false,
                                     columnWidth: 1/3
                                 })*/
-                            ], [ new EvaluationDimensionForm({
+                            ], [new EvaluationDimensionForm({
                                 columnWidth: 1,
                                 maxItemsPerRow: 2,
                                 recordClass: this.recordClass
@@ -558,7 +572,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 ]
             }]
         }];
-        
+
         items.push(new Tine.widgets.activities.ActivitiesTabPanel({
             app:           this.appName,
             record_id:     this.record.id,

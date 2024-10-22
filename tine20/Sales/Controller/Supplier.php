@@ -44,8 +44,13 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     private function __construct()
     {
-        $this->_backend = new Sales_Backend_Supplier();
-        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName'     => Sales_Model_Supplier::class,
+            'tableName'     => Sales_Model_Supplier::TABLE_NAME,
+            'modlogActive'  => true
+        ));
+        $this->_modelName = Sales_Model_Supplier::class;
+        $this->_purgeRecords = false;        // TODO this should be done automatically if model has customfields (hasCustomFields)
         $this->_resolveCustomFields = true;
     }
     
