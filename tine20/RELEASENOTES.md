@@ -3,7 +3,7 @@ TINE RELEASENOTES
 =====================
                     
   Release:     Pelle (2024.11)
-  Last change: 2024-10-17
+  Last change: 2024-10-22
 
 # GENERAL CHANGES (Administrative/Operative)
 
@@ -18,12 +18,14 @@ TINE RELEASENOTES
 
 # GENERAL CHANGES (User Interface)
 
-## Modal Windows rework
+## Modal Windows rework / VueJS
 ## Application-Dock / Picker
 ## Multipicker (i.e. "one of" filter)
 ## support colorized number fields
 ## responsive layout improvements (grid panel)
 ## Password reveal field
+
+eigener notiztyp, wird in historie angezeigt
 
 # ADMIN / OPERATION
 
@@ -38,7 +40,7 @@ TINE RELEASENOTES
 # ADDRESSBOOK
 
 ## preferred contact properties (primary mail address, ...)
-## GDPR Consent Client
+## GDPR Consent Client / newsletter
 
 # CALENDAR
 
@@ -46,11 +48,16 @@ TINE RELEASENOTES
 ## series events with individual dates
 ## Resources-Node in tree
 ## Terminarten
-## TBD: sync from remote caldav source?? ui missing?
+## sync from remote caldav source
+
+via admin scheduler
 
 # EMAIL
 
 ## Mass-Mailing
+
+- mit gdrp-integration / consent-link / ...
+
 ## expected answer
 ## Sieve-Customscripts
 
@@ -61,11 +68,14 @@ TINE RELEASENOTES
 # FILEMANAGER / FILESYSTEM
 
 ## mount local or remote WebDAV-folders (flysystem)
+
+i.e. connect multiple tine instances / shared filesystem
+
 ## avscan
 
 ### notify avscan positive result to admin role
 
-### notes
+### notes have been removed
 
 - are no longer created + shown and can be removed via CLI Tinebase.removeAllAvScanNotes
 
@@ -74,7 +84,7 @@ TINE RELEASENOTES
 ## Divisions / multi-tenancy
 ## E-Invoice
 ## Sammelrechnungen
-## Storno-Rechnungen workflow improvements
+## "Storno-Rechnungen" workflow improvements
 ## Reverse-Charge
 ## Brutto-Rechnungen
 ## Evaluation-Dimensions
@@ -99,7 +109,3 @@ TINE RELEASENOTES
 # PHONE & VOIPMANAGER
 
 - Both applications are discontinued and have been removed. Latest versions are in 2023.11 branch / releases.
-
-# EVENTMANAGER
-
-## new App
