@@ -6,7 +6,7 @@ deploy-dev-image-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images/
+    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
   timeout: 20m
   interruptible: false
 deploy-dev-image-to-gitlab-arm64:
@@ -23,7 +23,7 @@ deploy-dev-image-to-gitlab-arm64:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images/
+    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
 
 deploy-dev-image-to-dockerhub:
   extends: .abstract_jobs.docker
@@ -34,7 +34,7 @@ deploy-dev-image-to-dockerhub:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
     - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images/
+    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
   timeout: 20m
   interruptible: false
 deploy-dev-image-to-dockerhub-arm64:
@@ -51,7 +51,7 @@ deploy-dev-image-to-dockerhub-arm64:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
     - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images/
+    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
 
 
 
@@ -66,11 +66,11 @@ deploy-built-image-to-dockerhub:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-dockerhub/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         LATEST: "true"
-    - if: $PIPELINE_TYPE =~ /release-beta/
-    - if: $PIPELINE_TYPE =~ /release-weekly/
+    - if: $PIPELINE_TYPE =~ /release-beta(,|$)/
+    - if: $PIPELINE_TYPE =~ /release-weekly(,|$)/
   timeout: 20m
   interruptible: false
 
@@ -86,7 +86,7 @@ deploy-customer-image-to-registry:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-customer/ &&  $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY == "true"
+    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ &&  $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY == "true"
   timeout: 20m
   interruptible: false
 
@@ -109,22 +109,22 @@ release-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-gitlab/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         RELEASE_TYPE: be
-    - if: $PIPELINE_TYPE =~ /release-lts/
+    - if: $PIPELINE_TYPE =~ /release-lts(,|$)/
       variables:
         RELEASE_TYPE: lts
-    - if: $PIPELINE_TYPE =~ /release-beta/
+    - if: $PIPELINE_TYPE =~ /release-beta(,|$)/
       variables:
         RELEASE_TYPE: beta
-    - if: $PIPELINE_TYPE =~ /release-weekly/
+    - if: $PIPELINE_TYPE =~ /release-weekly(,|$)/
       variables:
         RELEASE_TYPE: weekly
-    - if: $PIPELINE_TYPE =~ /release-monthly/
+    - if: $PIPELINE_TYPE =~ /release-monthly(,|$)/
       variables:
         RELEASE_TYPE: monthly
-    - if: $PIPELINE_TYPE =~ /release-customer/
+    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/
       variables:
         RELEASE_TYPE: customer
   timeout: 20m
@@ -144,14 +144,14 @@ release-packages-to-vpackages:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-vpackages/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         CREATE_CURRENT_LINK: "true"
         RELEASE_TYPE: be
-    - if: $PIPELINE_TYPE =~ /release-lts/
+    - if: $PIPELINE_TYPE =~ /release-lts(,|$)/
       variables:
         RELEASE_TYPE: lts
-    - if: $PIPELINE_TYPE =~ /release-customer/ && $PUSH_TO_VPACKAGES == "true"
+    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ && $PUSH_TO_VPACKAGES == "true"
       variables:
         RELEASE_TYPE: customer
   timeout: 20m
@@ -167,19 +167,19 @@ release-packages-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-weekly/
+    - if: $PIPELINE_TYPE =~ /release-weekly(,|$)/
       variables:
         RELEASE_TYPE: weekly
-    - if: $PIPELINE_TYPE =~ /release-monthly/
+    - if: $PIPELINE_TYPE =~ /release-monthly(,|$)/
       variables:
         RELEASE_TYPE: monthly
-    - if: $PIPELINE_TYPE =~ /release-beta/
+    - if: $PIPELINE_TYPE =~ /release-beta(,|$)/
       variables:
         RELEASE_TYPE: beta
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         RELEASE_TYPE: be
-    - if: $PIPELINE_TYPE =~ /release-customer/
+    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/
       variables:
         RELEASE_TYPE: customer
   timeout: 20m
@@ -199,13 +199,13 @@ release-packages-to-github:
       when: manual
       variables:
         RELEASE_TYPE: nightly
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         RELEASE_TYPE: be
-    - if: $PIPELINE_TYPE =~ /release-weekly/ # should/is only be pushed as pre release
+    - if: $PIPELINE_TYPE =~ /release-weekly(,|$)/ # should/is only be pushed as pre release
       variables:
         RELEASE_TYPE: weekly
-    - if: $PIPELINE_TYPE =~ /release-beta/ # should/is only be pushed as pre release
+    - if: $PIPELINE_TYPE =~ /release-beta(,|$)/ # should/is only be pushed as pre release
       variables:
         RELEASE_TYPE: beta
   timeout: 20m
@@ -225,7 +225,7 @@ trigger-release:
     - if: $TRIGGER_RELEASE == "false"
       when: never
     - if: $TRIGGER_RELEASE == "true"
-    - if: $PIPELINE_TYPE =~ /trigger-release/
+    - if: $PIPELINE_TYPE =~ /trigger-release(,|$)/
   timeout: 20m
   interruptible: false
 
@@ -265,7 +265,7 @@ mkdocs-deploy:
       when: never
     - if: $MKDOCS_DEPLOY == "true"
     # mkdocs-deploy is triggered by a nightly pipeline and if docs changes. Maybe we only need one of them?
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/ && $CI_COMMIT_REF_NAME == "2024.11"
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $CI_COMMIT_REF_NAME == "2024.11"
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "2024.11"
       changes:
         - docs/**/*
@@ -283,4 +283,4 @@ update-version-check:
     - !reference [.lib, script]
     - version_check_update
   rules:
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/

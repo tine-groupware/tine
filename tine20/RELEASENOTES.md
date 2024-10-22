@@ -3,7 +3,7 @@ TINE RELEASENOTES
 =====================
                     
   Release:     Pelle (2024.11)
-  Last change: 2024-10-17
+  Last change: 2024-10-22
 
 # GENERAL CHANGES (Administrative/Operative)
 
@@ -23,16 +23,18 @@ TINE RELEASENOTES
 
 # GENERAL CHANGES (User Interface)
 
-## Modal Windows rework
+## Modal Windows rework / VueJS
 ## Application-Dock / Picker
-## Multipicker (i.e. "one of" filter)
+## Multipicker (used for example in "one of" filter and in group functions)
 ## support colorized number fields
 ## responsive layout improvements (grid panel)
 ## Password reveal field
 
+- special note type, is shown in history panel
+
 # ADMIN / OPERATION
 
-## numberable configuration
+## number range configuration (for example for Sales product numbers)
 ## Send Password via SMS
 ## Show Mailaccount Sieve-Script
 
@@ -43,21 +45,24 @@ TINE RELEASENOTES
 # ADDRESSBOOK
 
 ## preferred contact properties (primary mail address, ...)
-## GDPR Consent Client
+## GDPR Consent Client / newsletter
 
 # CALENDAR
 
 ## New "Floorplan" feature for booking resources (rooms / tables / ...)
 ## series events with individual dates
 ## Resources-Node in tree
-## Terminarten
-## TBD: sync from remote caldav source?? ui missing?
+## configurable event types
+## sync from remote caldav source (via admin scheduler)
 
 # EMAIL
 
 ## Mass-Mailing
+
+- with GDPR-integration & consent-link creation
+
 ## expected answer
-## Sieve-Customscripts
+## Sieve custom scripts
 
 # CRM
 
@@ -66,11 +71,14 @@ TINE RELEASENOTES
 # FILEMANAGER / FILESYSTEM
 
 ## mount local or remote WebDAV-folders (flysystem)
+
+i.e. connect multiple tine instances / shared filesystem
+
 ## avscan
 
 ### notify avscan positive result to admin role
 
-### notes
+### notes have been removed
 
 - are no longer created + shown and can be removed via CLI Tinebase.removeAllAvScanNotes
 
@@ -78,10 +86,10 @@ TINE RELEASENOTES
 
 ## Divisions / multi-tenancy
 ## E-Invoice
-## Sammelrechnungen
-## Storno-Rechnungen workflow improvements
+## collective billing / "Sammelrechnung"
+## reverse billing / "Storno-Rechnungen" workflow improvements
 ## Reverse-Charge
-## Brutto-Rechnungen
+## gross prices in products and invoices
 ## Evaluation-Dimensions
 
 # TASKS
@@ -104,7 +112,3 @@ TINE RELEASENOTES
 # PHONE & VOIPMANAGER
 
 - Both applications are discontinued and have been removed. Latest versions are in 2023.11 branch / releases.
-
-# EVENTMANAGER
-
-## new App
