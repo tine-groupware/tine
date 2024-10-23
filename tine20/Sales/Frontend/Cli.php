@@ -214,10 +214,10 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ['field' => 'cleared', 'operator' => 'equals', 'value' => 'CLEARED'],
         ])) as $invoice) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
-            if (null !== $invoice->attachments->find(fn($rec) => str_ends_with($rec->name, '-xrechnung.xml'))) {
+            if (null !== $invoice->attachments->find(fn($rec) => str_ends_with($rec->name, '-xrechnung.xml'), null)) {
                 continue;
             }
-            Sales_Controller_Invoice::getInstance()->createXRechnungsAttachment($invoice);
+            Sales_Controller_Invoice::getInstance()->createXRechnungsAttachment(Sales_Controller_Invoice::getInstance()->get($invoice->getId()));
         }
     }
     
