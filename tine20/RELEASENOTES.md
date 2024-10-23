@@ -45,6 +45,9 @@ TINE RELEASENOTES
 # CALENDAR
 
 ## New "Floorplan" feature for booking resources (rooms / tables / ...)
+
+see https://tine-docu.s3web.rz1.metaways.net/admins/floorplans/
+
 ## series events with individual dates
 ## Resources-Node in tree
 ## configurable event types
