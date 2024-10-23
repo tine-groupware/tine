@@ -124,7 +124,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             enableToggle: true,
             text: this.app.i18n._('Individual'),
             handler: this.onFreqChange.createDelegate(this, ['INDIVIDUAL']),
-            toggleGroup: this.idPrefix + 'freqtglgroup'
+            toggleGroup: this.idPrefix + 'freqtglgroup',
         }];
 
         this.items = [
@@ -167,7 +167,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         return this.activeRuleCard.isValid(this.record);
     },
     
-    onFreqChange: function(freq) {
+    onFreqChange: async function (freq) {
         this.ruleCards.layout.setActiveItem(this[freq + 'card']);
         this.ruleCards.layout.layout();
         this.activeRuleCard = this[freq + 'card'];
@@ -186,7 +186,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.record = record;
         this.rrule = this.record.get('rrule');
         this.initRrule(this.record.get('dtstart'));
-        
+
         const freq = this.rrule && this.rrule.freq ? this.rrule.freq : 'NONE';
 
         if (freq !== 'INDIVIDUAL' && !this.record.get('editGrant') || this.record.isRecurException() || this.record.hasPoll()) {
@@ -198,9 +198,9 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
 
         this.activeRuleCard = this[freq + 'card'];
         this.ruleCards.activeItem = this.activeRuleCard;
-        
+
         this.activeRuleCard.setRule(this.rrule);
-        
+
         this.constrains = this.record.get('rrule_constraints');
         if (this.constrains) {
             const constrainsValue = this.constrains[0].value;
@@ -208,20 +208,25 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
                 this.activeRuleCard.constrains.setValue(constrainsValue);
             }
         }
-        
+
         if (this.record.isRecurException()) {
             this.items.each(function (item) {
                 item.setDisabled(freq !== 'INDIVIDUAL');
             }, this);
             this.ruleCards.collapsed = false;
-            
+
             this.NONEcard.html = this.app.i18n._("Exceptions of reccuring events can't have recurrences themselves.");
         }
-        if (this.activeRuleCard.freq === 'INDIVIDUAL') {
-            await Tine.Calendar.getEventExceptions(this.record.get('id'))
-                .then((response) => {
-                    this.INDIVIDUALcard.exceptionGrid.store.loadData(response.results);
-                });
+
+        if (!this.record.get('id')) {
+            this.INDIVIDUALcard.setDisabled(true);
+        } else {
+            if (this.activeRuleCard.freq === 'INDIVIDUAL') {
+                await Tine.Calendar.getEventExceptions(this.record.get('id'))
+                    .then((response) => {
+                        this.INDIVIDUALcard.exceptionGrid.store.loadData(response.results);
+                    });
+            }
         }
     },
     
@@ -1079,7 +1084,7 @@ Tine.Calendar.RrulePanel.INDIVIDUALcard = Ext.extend(Tine.Calendar.RrulePanel.Ab
             const exception = Tine.Tinebase.data.Record.setFromJson(this.rrulePanel.record.data, Tine.Calendar.Model.Event);
             const duration = (exception.get('dtend').getTime() - exception.get('dtstart').getTime()) / 60000;
 
-            exception.set('base_event_id', exception.get('base_event_id') ?? exception.get('id'));
+            exception.set('base_event_id', exception.get('base_event_id') || exception.get('id'));
             exception.set('id', '');
             exception.set('recurid', '');
             exception.set('dtstart', event.get('dtstart'));
