@@ -563,8 +563,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
                     if (isset($options['deleteUsers']) && $options['deleteUsers']) {
                         // handle removed users differently with "sync deleted users" config
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                            . " Skipping user: " . $username . '. Do not remove as it might be the same user as before with different ID.');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . " Skipping user: " . $username
+                                . '. Do not remove as it might be the same user as before with different ID.');
+                        }
                         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                         $transactionId = null;
                         return null;
