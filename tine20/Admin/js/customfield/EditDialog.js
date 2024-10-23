@@ -492,7 +492,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Name'), 
                     name: 'name',
                     allowBlank: false,
-                    maxLength: 50
+                    maxLength: 40
                 }, {
                     xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Label'), 
