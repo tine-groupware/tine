@@ -514,7 +514,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     protected function _createCachedConfig()
     {
         $filename = $this->_getCachedConfigFilename();
-        $confdFolder = self::$_configFileData['confdfolder'];
+        $confdFolder = self::$_configFileData[Tinebase_Config::CONFD_FOLDER];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Creating new cached config file: ' . $filename);
@@ -533,13 +533,18 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
+        // dir should be read in sorted order
         while (false !== ($direntry = readdir($dh))) {
-            if (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
+            $tmpArray = false;
+            if (strpos($direntry, '.inc.json') === (strlen($direntry) - 9)) {
+                $tmpArray = $this->_getConfdFileDataJson($confdFolder . DIRECTORY_SEPARATOR . $direntry);
+            } elseif (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
                 $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $direntry);
-                if (false !== $tmpArray && is_array($tmpArray)) {
-                    foreach ($tmpArray as $key => $value) {
-                        self::$_configFileData[$key] = $value;
-                    }
+            }
+
+            if (false !== $tmpArray && is_array($tmpArray)) {
+                foreach ($tmpArray as $key => $value) {
+                    self::$_configFileData[$key] = $value;
                 }
             }
         }
@@ -630,6 +635,34 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         /** @noinspection PhpIncludeInspection */
         return include($filename);
+    }
+
+    /**
+     * returns conf.d json file data
+     *
+     * @param $filename
+     * @return array|boolean
+     */
+    protected function _getConfdFileDataJson($filename)
+    {
+        if (!(file_exists($filename) && is_readable($filename))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' File not readable: ' . $filename);
+            return false;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Including config file ' . $filename);
+
+        $content = file_get_contents($filename, false);
+        try {
+            return Zend_Json::decode($content);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Failed json decodeing: ' . $filename);
+        }
+
+        return false;
     }
 
     /**
