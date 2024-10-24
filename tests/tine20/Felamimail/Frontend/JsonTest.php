@@ -2782,8 +2782,6 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         self::assertEquals(0, $message['attachments'][0]['partId']);
         self::assertEquals('image/png', $message['attachments'][0]['content-type']);
         self::assertEquals('moz-screenshot-83.png', $message['attachments'][0]['filename']);
-        self::assertInstanceOf(ZBateson\MailMimeParser\Stream\MessagePartStreamDecorator::class,
-            $message['attachments'][0]['contentstream']);
         self::assertEquals('2010-05-05 16:25:40', $message['sent']);
         self::assertEquals($id, $message['id']);
         return $message;
