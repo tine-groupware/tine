@@ -845,7 +845,7 @@ Tine.Tinebase.common = {
 
         // find record from deeplink
         const urlRegex = '^' + _.escapeRegExp(Tine.Tinebase.common.getUrl());
-        const recordRegex = '#\/(?<appName>[a-zA-Z]+)\/(?<modelName>[a-zA-Z]+)\/(?<recordId>[a-z0-9]+)';
+        const recordRegex = '#\/(?<appName>[a-zA-Z]+)\/(?<modelName>[a-zA-Z]+)\/(?<recordId>[a-f0-9]{40,})';
         const regex = new RegExp(`${urlRegex}${recordRegex}`);
         const matches = target?.dom?.href.match(regex);
         if (matches?.groups?.appName && matches?.groups?.modelName && matches?.groups?.recordId) {
