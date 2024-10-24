@@ -323,7 +323,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 }
             }
             if (! $this->owner_id) {
-                throw new Tinebase_Exception_NotFound('Could not find container admin');
+                throw new Tinebase_Exception_NotFound('Could not find container owner of container ' . $this->getId());
             }
         }
         
