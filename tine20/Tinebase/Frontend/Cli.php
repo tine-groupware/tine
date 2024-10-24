@@ -1813,7 +1813,8 @@ fi';
             }
         }
         unset($applications);
-        
+
+        $this->_createDemoDataRecursive(null, null, null);
         foreach ($this->_applicationsToWorkOn as $app => $cfg) {
             $this->_createDemoDataRecursive($app, $cfg, $_opts);
         }
@@ -1830,6 +1831,17 @@ fi';
      */
     protected function _createDemoDataRecursive($app, $cfg, $opts)
     {
+        static $recursiveApps = [];
+        if (null === $app) {
+            $recursiveApps = [];
+            return;
+        }
+
+        if (isset($recursiveApps[$app])) {
+            return;
+        }
+        $recursiveApps[$app] = true;
+
         if (isset($cfg['required']) && is_array($cfg['required'])) {
             foreach($cfg['required'] as $requiredApp) {
                 $this->_createDemoDataRecursive($requiredApp, $this->_applicationsToWorkOn[$requiredApp], $opts);

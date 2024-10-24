@@ -35,7 +35,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      *
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Addressbook');
+    protected static $_requiredApplications = array('Admin', 'Addressbook', Tinebase_Config::APP_NAME);
 
     /**
      * The product controller
@@ -66,7 +66,14 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $this->_productController     = Sales_Controller_Product::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
-        $this->_division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord();
+        $this->_division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+
+        if ($this->_division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
+            $this->_division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
+                Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => Tinebase_Controller_BankAccount::getInstance()->getAll()->getFirstRecord()->getId(),
+            ], true));
+            $this->_division = Sales_Controller_Division::getInstance()->update($this->_division);
+        }
 
         $this->_loadCostCentersAndDivisions();
     }
