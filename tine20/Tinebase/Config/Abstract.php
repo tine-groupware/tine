@@ -507,7 +507,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $cachedConfigData['ttlstamp'] < time() ||
             (defined('TINE20_BUILDTYPE') && (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG'));
     }
-    
+
     /**
      * composes config files from conf.d and saves array to tmp file
      */
@@ -542,9 +542,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             }
 
             if (false !== $tmpArray && is_array($tmpArray)) {
-                foreach ($tmpArray as $key => $value) {
-                    self::$_configFileData[$key] = $value;
-                }
+                self::$_configFileData = self::_array_merge_recursive_distinct(self::$_configFileData, $tmpArray);
             }
         }
 
@@ -661,6 +659,26 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
 
         return false;
+    }
+
+    /**
+     *  Merges arrays recursively. Overwrites non-array keys, unlike array_merge_recursive. Array2 takes precedence.
+     * @param $array1
+     * @param $array2
+     * @return array
+     */
+    static function _array_merge_recursive_distinct(&$array1, &$array2) {
+        $merged = $array1;
+
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = self::_array_merge_recursive_distinct($merged[$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+
+        return $merged;
     }
 
     /**
