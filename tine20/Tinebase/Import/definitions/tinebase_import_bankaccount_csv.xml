@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>tinebase_import_bankaccount_csv</name>
+    <model>Tinebase_Model_BankAccount</model>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>name</source>
+            <destination>name</destination>
+        </field>
+        <field>
+            <source>iban</source>
+            <destination>iban</destination>
+        </field>
+        <field>
+            <source>bic</source>
+            <destination>bic</destination>
+        </field>
+    </mapping>
+</config>
+
