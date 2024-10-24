@@ -151,8 +151,9 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     protected function _inspectBeforeForBookedOldRecord(Sales_Model_Document_Abstract $_record, Sales_Model_Document_Abstract $_oldRecord)
     {
         // when oldRecord is booked, enforce read only
+        $changableFlds = array_merge($this->_oldRecordBookWriteableFields, Tinebase_Timemachine_ModificationLog::getModLogFields());
         foreach ($_record->getConfiguration()->fields as $field => $fConf) {
-            if (in_array($field, $this->_oldRecordBookWriteableFields)) {
+            if (in_array($field, $changableFlds)) {
                 continue;
             }
             $_record->{$field} = $_oldRecord->{$field};

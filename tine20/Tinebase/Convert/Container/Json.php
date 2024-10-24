@@ -50,21 +50,28 @@ class Tinebase_Convert_Container_Json extends Tinebase_Convert_Json
             $containerArray = $container->toArray();
 
             if ($container instanceof Tinebase_Model_Container) {
-                $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container)->toArray();
+                $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
+                    Tinebase_Core::getUser(), $container)->toArray();
                 $containerArray['path'] = $container->getPath();
-                $ownerId = $container->getOwner();
+                try {
+                    $ownerId = $container->getOwner();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Exception::log($tenf);
+                    $ownerId = null;
+                }
             } else {
                 $containerArray['path'] = "personal/{$container->getId()}";
                 $ownerId = $container->getId();
             }
             if (! empty($ownerId)) {
                 try {
-                    $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId, true)->toArray();
+                    $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+                        $ownerId, true)->toArray();
                 } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " can't resolve ownerContact: " . $e);
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . " can't resolve ownerContact: " . $e);
                 }
             }
-
             $response[] = $containerArray;
         }
 

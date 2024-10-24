@@ -509,27 +509,49 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     
     /**
      * create standard filter (from array)
-     * 
+     *
      * @param array $_filterData
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _createStandardFilterFromArray($_filterData)
+    protected function _createStandardFilterFromArray(array $_filterData)
     {
-        $fieldModel = (isset($_filterData[TMFA::FIELD]) && isset($this->_filterModel[$_filterData[TMFA::FIELD]])) ? $this->_filterModel[$_filterData[TMFA::FIELD]] : '';
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . '[' . static::class . '] Debug: ' . print_r($this->_filterModel, true));
+        if ($_filterData[TMFA::FIELD] && is_array($_filterData[TMFA::FIELD])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . print_r($_filterData, true));
+            }
+            throw new Tinebase_Exception_InvalidArgument('Filter field cannot be an array');
+        }
+        $fieldModel = (isset($_filterData[TMFA::FIELD]) && isset($this->_filterModel[$_filterData[TMFA::FIELD]]))
+            ? $this->_filterModel[$_filterData[TMFA::FIELD]] : '';
         
         if (empty($fieldModel)) {
             if (isset($_filterData[TMFA::FIELD]) && strpos($_filterData[TMFA::FIELD], '#') === 0) {
                 $this->_addCustomFieldFilter($_filterData);
             } else {
-                if (self::$beStrict) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure('no model found for ' . print_r($_filterData, true) . ' ' . print_r($this->_filterModel, true) . ' ' . static::class . ' ' . $this->_configuredModel .  ' ' . $this->_modelName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . print_r($_filterData, true)
+                        . ' ' . print_r($this->_filterModel, true)
+                        . ' ' . static::class);
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . '[' . static::class . '] Skipping filter (no filter model defined) ' . print_r($_filterData, true));
+                if (self::$beStrict) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure(
+                        'No filter model found for field' . $_filterData[TMFA::FIELD] . ' ('
+                        . $this->_configuredModel .  ' ' . $this->_modelName . ')');
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . '[' . static::class . '] Skipping filter (no filter model defined) '
+                        . $_filterData[TMFA::FIELD]);
+                }
             }
-        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel)) && (isset($_filterData[TMFA::VALUE]) || array_key_exists(TMFA::VALUE, $_filterData))) {
+        } elseif ((isset($fieldModel['filter']) || array_key_exists('filter', $fieldModel))
+            && (isset($_filterData[TMFA::VALUE]) || array_key_exists(TMFA::VALUE, $_filterData))
+        ) {
             // create a 'single' filter
             $filter = $this->createFilter($_filterData);
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
@@ -543,7 +565,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $this->_customData[] = $_filterData;
         
         } else {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Skipping filter (filter syntax problem) -> ' 
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Skipping filter (filter syntax problem) -> '
                 . static::class . ' with filter data: ' . print_r($_filterData, TRUE));
         }
     }
