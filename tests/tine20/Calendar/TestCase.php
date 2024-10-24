@@ -112,6 +112,8 @@ abstract class Calendar_TestCase extends TestCase
         $this->_personasContacts = array();
         $this->_personasDefaultCals = array();
 
+        Tinebase_Core::getDb()->query('ROLLBACK');
+        Tinebase_Core::getDb()->query('SET autocommit=1');
         Tinebase_Core::getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'cal_events WHERE container_id IN (SELECT id FROM '
             . SQL_TABLE_PREFIX . 'container WHERE is_deleted = 1)');
         Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'container', 'is_deleted = 1');
