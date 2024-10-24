@@ -525,21 +525,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        $dh = opendir($confdFolder);
+        $dirEntries = scandir($confdFolder, SCANDIR_SORT_ASCENDING);
 
-        if ($dh === false) {
+        if ($dirEntries === false) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' opendir() failed on folder "' . $confdFolder . '"');
+                . ' scandir() failed on folder "' . $confdFolder . '"');
             return;
         }
 
-        // dir should be read in sorted order
-        while (false !== ($direntry = readdir($dh))) {
+        foreach ($dirEntries as $dirEntry) {
             $tmpArray = false;
-            if (strpos($direntry, '.inc.json') === (strlen($direntry) - 9)) {
-                $tmpArray = $this->_getConfdFileDataJson($confdFolder . DIRECTORY_SEPARATOR . $direntry);
-            } elseif (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
-                $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $direntry);
+            if (strpos($dirEntry, '.inc.json') === (strlen($dirEntry) - 9)) {
+                $tmpArray = $this->_getConfdFileDataJson($confdFolder . DIRECTORY_SEPARATOR . $dirEntry);
+            } elseif (strpos($dirEntry, '.inc.php') === (strlen($dirEntry) - 8)) {
+                $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $dirEntry);
             }
 
             if (false !== $tmpArray && is_array($tmpArray)) {
@@ -548,7 +547,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 }
             }
         }
-        closedir($dh);
 
         $this->_mergedConfigCache = [];
         // reset logger as the new available config from conf.d mail contain different logger configuration
