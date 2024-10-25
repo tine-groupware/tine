@@ -46,66 +46,49 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
 
         $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->isValid();
 
-        $client = Tinebase_Core::getHttpClient($this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_URL},
-            $this->_httpClientConfig);
-        $client->setMethod($this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_METHOD});
-        foreach ($this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_HEADERS} as $header => $value) {
-            $client->setHeaders($header, $value);
+        if (!$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_SYSTEM_SMS_NAME} ||
+                !($genericHttpAdapter = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}?->{Tinebase_Config::SMS_ADAPTERS}
+                    ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS}
+                    ?->find(Tinebase_Model_Sms_AdapterConfig::FLD_NAME, $this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_SYSTEM_SMS_NAME})
+                    ?->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG}) || !$genericHttpAdapter instanceof Tinebase_Model_Sms_GenericHttpAdapter) {
+            $genericHttpAdapter = new Tinebase_Model_Sms_GenericHttpAdapter([
+                Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL => $this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_URL},
+                Tinebase_Model_Sms_GenericHttpAdapter::FLD_METHOD => $this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_METHOD},
+                Tinebase_Model_Sms_GenericHttpAdapter::FLD_BODY => $this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_BODY},
+                Tinebase_Model_Sms_GenericHttpAdapter::FLD_HEADERS => $this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_HEADERS},
+            ]);
         }
 
         $message = Tinebase_Translation::getTranslation()->_('{{ code }} is your {{ app.branding.title }} security code.');
         $message .= '\n\n@{{ app.websiteUrl }} {{ code }}';
 
-        $tbConfig = Tinebase_Config::getInstance();
-        $twig = new Twig_Environment(new Twig_Loader_Array());
-        $twig->addFilter(new Twig_SimpleFilter('alnum', function($data) {
+        $twig = new \Twig\Environment(new \Twig\Loader\ArrayLoader());
+        $twig->addFilter(new \Twig\TwigFilter('alnum', function($data) {
             return preg_replace('/[^0-9a-zA-Z]+/', '', $data);
         }));
-        $twig->addFilter(new Twig_SimpleFilter('gsm7', function(string $data) {
+        $twig->addFilter(new \Twig\TwigFilter('gsm7', function(string $data) {
             static $converter = null;
             if (null === $converter) $converter = new BenMorel\GsmCharsetConverter\Converter();
             return $converter->cleanUpUtf8String($data, true);
         }));
-        $twig->addFilter(new Twig_SimpleFilter('ucs2', function(string $data) {
+        $twig->addFilter(new \Twig\TwigFilter('ucs2', function(string $data) {
             return iconv('ucs-2', 'utf-8', iconv('utf-8', 'ucs-2//TRANSLIT', $data));
         }));
 
-        $message = $twig->createTemplate($message)->render([
-            'app' => [
-                'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL),
-                'branding'          => [
-                    'logo'              => Tinebase_Core::getInstallLogo(),
-                    'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
-                    'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
-                    'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
-                ],
-            ],
+        $message = $twig->createTemplate($message)->render(array_merge($genericHttpAdapter->getTwigContext(), [
             'code' => $pin
-        ]);
-        $client->setRawData($twig->createTemplate($this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_BODY})
-            ->render([
-                'app' => [
-                    'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL),
-                    'branding'          => [
-                        'logo'              => Tinebase_Core::getInstallLogo(),
-                        'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
-                        'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
-                        'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
-                    ],
-                ],
-                'message' => $message,
-                'cellphonenumber' => $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
-                    ->{Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER},
-            ]));
+        ]));
 
-        try {
-            $response = $client->request();
-        } catch (Zend_Http_Client_Adapter_Exception $e) {
-            Tinebase_Exception::log($e);
-            return false;
-        }
-        
-        if (200 === $response->getStatus()) {
+        $smsSendConfig = new Tinebase_Model_Sms_SendConfig([
+            Tinebase_Model_Sms_SendConfig::FLD_MESSAGE => $message,
+            Tinebase_Model_Sms_SendConfig::FLD_RECIPIENT_NUMBER => $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}
+                ->{Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER},
+            Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+            Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG => $genericHttpAdapter,
+        ]);
+        $genericHttpAdapter->setHttpClientConfig($this->_httpClientConfig);
+
+        if (Tinebase_Sms::send($smsSendConfig)) {
             try {
                 Tinebase_Session::getSessionNamespace()->{static::class} = [
                     'pin' => $pin,
@@ -116,14 +99,8 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage()) ;
                 return false;
             }
-
             return true;
         }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' failed with status ' .
-                $response->getStatus() . ' body: '. $response->getBody());
-
         return false;
     }
 
