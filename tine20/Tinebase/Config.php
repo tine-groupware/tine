@@ -732,6 +732,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ROLE_CHANGE_ALLOWED = 'roleChangeAllowed';
+
+    public const SMS = 'sms';
+
+    public const SMS_ADAPTERS = 'sms_adapters';
     
     /**
      * max username length
@@ -3490,6 +3494,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR           => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             ],
+        ],
+        self::SMS => [
+            self::LABEL                 => 'SMS Config', //_('SMS Config')
+            self::DESCRIPTION           => 'SMS Config',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::CONTENT               => [
+                self::SMS_ADAPTERS          => [
+                    self::LABEL                 => 'SMS Adapter Configs', //_('SMS Adapter Configs')
+                    self::DESCRIPTION           => 'SMS Adapter Configs',
+                    self::TYPE                  => self::TYPE_OBJECT,
+                    self::CLASSNAME             => Tinebase_Config_Struct::class,
+                    self::CONTENT_CLASS         => Tinebase_Model_Sms_AdapterConfigs::class,
+                    self::DEFAULT_STR           => [],
+                ],
+            ],
+            self::DEFAULT_STR           => [],
         ],
         self::USER_TYPES => [
             //_('User type')
