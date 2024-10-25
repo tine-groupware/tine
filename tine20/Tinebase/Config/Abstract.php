@@ -3,9 +3,11 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * base for config classes
@@ -23,6 +25,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     const CLASSNAME             = 'class';
     const CLIENTREGISTRYINCLUDE = 'clientRegistryInclude';
     const CONTENT               = 'content';
+    const CONTENT_CLASS         = 'contentClass';
     const DEFAULT_STR           = 'default';
     const DESCRIPTION           = 'description';
     const LABEL                 = 'label';
@@ -75,6 +78,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @var string
      */
     const TYPE_RECORD = 'record';
+    const TYPE_RECORD_SET = 'recordSet';
 
     const APPLICATION_NAME = 'appName';
     const MODEL_NAME = 'modelName';
@@ -919,6 +923,62 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             if (is_object($_rawData) && $_rawData instanceof $definition['class']) {
                 return $_rawData;
             }
+            if (($contentClass = $definition[self::CONTENT_CLASS] ?? null) && is_a($contentClass, Tinebase_Record_Interface::class, true)
+                    && ($mc = $contentClass::getConfiguration())) {
+                if (!isset($definition[self::CONTENT])) {
+                    $definition[self::CONTENT] = [];
+                }
+                foreach ($mc->fields as $field => $fieldDef) {
+                    if (TMCC::ID === $field) continue;
+                    if (isset($definition[self::CONTENT][$field])) continue;
+                    $configDef = [];
+                    switch ($fieldDef[TMCC::TYPE]) {
+                        case TMCC::TYPE_INTEGER:
+                            $configDef[self::TYPE] = self::TYPE_INT;
+                            break;
+                        case TMCC::TYPE_BOOLEAN:
+                            $configDef[self::TYPE] = self::TYPE_BOOL;
+                            break;
+                        case TMCC::TYPE_RECORD:
+                            $configDef[self::TYPE] = self::TYPE_RECORD;
+                            break;
+                        case TMCC::TYPE_RECORDS:
+                            if (($fieldDef[TMCC::CONFIG][TMCC::STORAGE] ?? null) !== TMCC::TYPE_JSON || !isset($fieldDef[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME])) {
+                                Tinebase_Exception::log(new Tinebase_Exception_NotImplemented($contentClass . '::' . $field . ' of type ' . $fieldDef[TMCC::TYPE] . ' not supported'));
+                                continue 2;
+                            }
+                            $configDef[self::TYPE] = self::TYPE_RECORD_SET;
+                            $configDef[self::CLASSNAME] = $fieldDef[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME];
+                            break;
+                        case TMCC::TYPE_MODEL:
+                        case TMCC::TYPE_TEXT:
+                        case TMCC::TYPE_STRING:
+                            $configDef[self::TYPE] = self::TYPE_STRING;
+                            break;
+                        case TMCC::TYPE_FLOAT:
+                            $configDef[self::TYPE] = self::TYPE_FLOAT;
+                            break;
+                        case TMCC::TYPE_DATETIME:
+                            $configDef[self::TYPE] = self::TYPE_DATETIME;
+                            break;
+
+                        case TMCC::TYPE_DYNAMIC_RECORD:
+                            if (($refModelFld = $fieldDef[TMCC::CONFIG][TMCC::REF_MODEL_FIELD] ?? false)) {
+                                if ($_rawData[$refModelFld] ?? false) {
+                                    $configDef[self::TYPE] = self::TYPE_OBJECT;
+                                    $configDef[self::CLASSNAME] = Tinebase_Config_Struct::class;
+                                    $configDef[self::CONTENT_CLASS] = $_rawData[$refModelFld];
+                                }
+                                break;
+                            }
+                            // fall through to default!
+                        default:
+                            Tinebase_Exception::log(new Tinebase_Exception_NotImplemented($contentClass . '::' . $field . ' of type ' . $fieldDef[TMCC::TYPE] . ' not supported'));
+                            continue 2; // we continue with the next field -> foreach
+                    }
+                    $definition['content'][$field] = $configDef;
+                }
+            }
             if (isset($definition['content']) && isset($definition['default']) && is_array($definition['default'])) {
                 foreach ($definition['default'] as $key => $default) {
                     if (isset($definition['content'][$key]) && !isset($definition['content'][$key]['default'])) {
@@ -933,6 +993,9 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
             case self::TYPE_BOOL:       return $_rawData === "true" || (bool) (int) $_rawData;
+            case self::TYPE_RECORD_SET: return new Tinebase_Record_RecordSet(
+                $definition[self::CLASSNAME] ?? throw new Tinebase_Exception('configuration definition error: ' . $parentKey . ' ' . print_r($definition, true)),
+                is_array($_rawData) ? $_rawData : []);
             case self::TYPE_RECORD:
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;

@@ -329,6 +329,77 @@ class Tinebase_Auth_MFATest extends TestCase
             [Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER]);
     }
 
+    public function testGenericSmsAdapterWithSystemCfg()
+    {
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'userunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_SmsUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_SmsUserConfig([
+                    Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER => '1234567890',
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_SmsUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_GenericSmsConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_GenericSmsAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => [
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_SYSTEM_SMS_NAME => 'sms1',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL => 600,
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH => 6,
+            ]
+        ]);
+
+        Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS} = [
+            Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS => [
+                [
+                    Tinebase_Model_Sms_AdapterConfig::FLD_NAME => 'sms1',
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG => [
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL => 'https://shoo.tld/restapi/message',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_BODY => '{"encoding":"auto","body":"{{ message }}","originator":"{{ app.branding.title }}","recipients":["{{ cellphonenumber }}"],"route":"2345"}',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_METHOD => 'POST',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_HEADERS => [
+                            'Auth-Bearer' => 'unittesttokenshaaaaalalala'
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $mfa = Tinebase_Auth_MFA::getInstance('unittest');
+        $mfa->getAdapter()->setHttpClientConfig([
+            'adapter' => ($httpClientTestAdapter = new Tinebase_ZendHttpClientAdapter())
+        ]);
+        $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
+
+        $this->assertTrue($mfa->sendOut($this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'sendOut didn\'t succeed');
+        $sessionData = Tinebase_Session::getSessionNamespace()->{Tinebase_Auth_MFA_GenericSmsAdapter::class};
+        $this->assertIsArray($sessionData, 'session data not set properly');
+        $this->assertArrayHasKey('ttl', $sessionData, 'session data not set properly');
+        $this->assertArrayHasKey('pin', $sessionData, 'session data not set properly');
+        $this->assertStringContainsString($sessionData['pin'],
+            $httpClientTestAdapter->lastRequestBody);
+        $this->assertStringContainsString('"recipients":["+491234567890"],"route":"2345"',
+            $httpClientTestAdapter->lastRequestBody);
+
+        $this->assertFalse($mfa->validate('shaaaaaaaaaalala', $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected');
+        $this->assertTrue($mfa->validate($sessionData['pin'], $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t succeed');
+        $this->assertFalse($mfa->validate($sessionData['pin'], $this->_originalTestUser->mfa_configs->getFirstRecord()),
+            'validate didn\'t fail as expected on second call');
+    }
+
     public function testGenericSmsAdapter()
     {
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
