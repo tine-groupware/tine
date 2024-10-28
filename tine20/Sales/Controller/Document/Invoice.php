@@ -173,7 +173,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             while (null !== $record->attachments->find('name', $attachmentName)) {
                 $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
             }*/
-            $attachmentName = $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml';
+            $attachmentName = str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml');
             if (null !== ($remove = $record->attachments?->find('name', $attachmentName))) {
                 $record->attachments->removeRecord($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
