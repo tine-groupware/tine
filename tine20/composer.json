@@ -150,7 +150,7 @@
     "symfony/http-client": "5.2 - 7",
     "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
-    "tine-groupware/ubl-invoice": "^0.1.0",
+    "tine-groupware/ubl-invoice": "^0.1",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
     "twig/twig": "v2.15.5",
