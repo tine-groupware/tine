@@ -224,8 +224,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 },
                 showInfo(values) {
                     const app = Tine.Tinebase.appMgr.get('Felamimail');
-                    const items = ['subject', 'date', 'from', 'to', 'cc', 'bcc', 'extra'];
+                    const items = ['subject', 'date', 'from', 'to', 'reply-to', 'cc', 'bcc', 'extra'];
                     const headerBlock =  document.createElement('div');
+
                     headerBlock.className = 'preview-panel-felamimail-headers';
                     items.forEach((header) => {
                         let value = '';
@@ -235,9 +236,12 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         if (header === 'date') value = this.showDate(values.sent, values);
                         if (header === 'extra') headerValue = this.panel.showExtraHeaderButton();
 
-                        if (['to', 'cc', 'bcc'].includes(header)) {
+                        if (['to', 'reply-to', 'cc', 'bcc'].includes(header)) {
                             if (!values.headers.hasOwnProperty(header)) return;
-                            const emails = this.panel.record.get(header);
+                            let emails = this.panel.record.get(header) || values.headers[header];
+                            if (typeof emails === 'string') {
+                                emails = emails.split(/[,;]\s*/).map((email) => {return {email: email};});
+                            }
                             if (emails.length === 0) return;
                             //TODO: bcc only store email in \Zend_Mail::addBcc($email), do we want to change it ?
                             emails.forEach((emailData, idx) => {
@@ -653,17 +657,18 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     renderHeaderRaw(header, value) {
         const row =  document.createElement('div');
         row.style.display = 'flex';
-        row.style.margin = '5px';
+        row.style.flexDirection = 'row';
+        row.style.margin = '5px 0';
         row.style.textAlign = 'left';
         const rowLeft = document.createElement('div');
         rowLeft.textContent = header;
-        rowLeft.style.minWidth = '60px';
+        rowLeft.style.minWidth = '100px';
         const rowRight =  document.createElement('div');
         rowRight.innerHTML = value;
 
-        if (header.length > 10 || value.length > 50) {
+        if (header.length > 15) {
             row.style.flexDirection = 'column';
-            rowRight.style.paddingLeft = '55px';
+            rowRight.style.paddingLeft = '100px';
         }
         row.appendChild(rowLeft);
         row.appendChild(rowRight);
