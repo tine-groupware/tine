@@ -1551,7 +1551,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
             }
 
-            $attachmentName = $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml';
+            $attachmentName = str_replace('/', '-', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml');
             if (null !== ($remove = $invoice->attachments?->find('name', $attachmentName))) {
                 $invoice->attachments->removeRecord($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($invoice);
