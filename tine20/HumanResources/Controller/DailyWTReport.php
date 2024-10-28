@@ -347,6 +347,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
                         $this->update($oldReport);
                         $this->_reportResult['errors'] += 1;
+                        // need to make sure monthly WTR gets recalculated, fill cache here:
+                        $this->_getOrCreateMonthlyWTR();
                     }
 
                     $dailyTransaction->commit();
