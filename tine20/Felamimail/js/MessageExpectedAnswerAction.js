@@ -63,36 +63,48 @@ Ext.extend(Tine.Felamimail.MessageExpectedAnswerAction, Ext.Action, {
     },
 
 
-    addStaticMenuItems: function() {
+    addStaticMenuItems: function () {
         this.menu.addItem({
             id:'tomorrow',
             text: this.app.i18n._('Tomorrow'),
-            handler: this.selectTimeOption.createDelegate(this)
+            handler: this.selectTimeOption.createDelegate(this),
+            checked: false,
+            group: 'expected_answer'
         });
         this.menu.addItem({
             id:'in_two_days',
             text: this.app.i18n._('In two days'),
-            handler: this.selectTimeOption.createDelegate(this)
+            handler: this.selectTimeOption.createDelegate(this),
+            checked: false,
+            group: 'expected_answer'
         });
         this.menu.addItem({
             id:'in_a_week',
             text: this.app.i18n._('In a week'),
-            handler: this.selectTimeOption.createDelegate(this)
+            handler: this.selectTimeOption.createDelegate(this),
+            checked: false,
+            group: 'expected_answer'
         });
         this.menu.addItem({
             id:'in_two_weeks',
             text: this.app.i18n._('In two weeks'),
-            handler: this.selectTimeOption.createDelegate(this)
+            handler: this.selectTimeOption.createDelegate(this),
+            checked: false,
+            group: 'expected_answer'
         });
         this.menu.addItem({
             id:'in_a_month',
             text: this.app.i18n._('In a month'),
-            handler: this.selectTimeOption.createDelegate(this)
+            handler: this.selectTimeOption.createDelegate(this),
+            checked: false,
+            group: 'expected_answer'
         });
         this.menu.addItem({
             id:'custom',
             text: this.app.i18n._('Custom'),
             iconCls: 'cal-sheet-view-type',
+            checked: false,
+            group: 'expected_answer',
             menu: this.dateMenu = new Ext.menu.DateMenu({
                 hideOnClick: true,
                 minDate: new Date(),
