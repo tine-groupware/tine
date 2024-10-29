@@ -19,7 +19,7 @@ class Sales_Export_DocumentPdf extends Sales_Export_Document
     protected function _loadTwig()
     {
         if (class_exists('OnlyOfficeIntegrator_Config') &&
-            Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME)) {
+                Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true)) {
             $this->_useOO = true;
         }
 

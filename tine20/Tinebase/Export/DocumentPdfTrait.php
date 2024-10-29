@@ -48,7 +48,7 @@ trait Tinebase_Export_DocumentPdfTrait
         $this->_format = 'pdf';
 
         if ($this->_useOO && (!class_exists('OnlyOfficeIntegrator_Config') ||
-                !Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME))) {
+                !Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true))) {
             $this->_useOO = false;
         }
 

@@ -75,6 +75,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_CONTRACT_ID = 'contract_id';
 
+    public const FLD_ATTACHED_DOCUMENTS = 'attached_documents';
+
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
     //  - INVOICE_CONTACT_ID // abweichender Rechnungskontakt, CONTACT_ID wenn leer
@@ -154,6 +156,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
                     ],
                 ],
+                self::FLD_ATTACHED_DOCUMENTS => [],
             ]
         ],
 
@@ -463,6 +466,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
             ],
+            self::FLD_ATTACHED_DOCUMENTS        => [
+                self::LABEL                         => 'Attached Documents', // _('Attached Documents')
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS             => true,
+                ],
+            ],
         ]
     ];
 
@@ -492,6 +504,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME)->_(static::$_documentNumberPrefix);
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
+
+        $type = strtolower(str_replace('Document_', '', static::MODEL_NAME_PART));
+        $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::REF_ID_FIELD] = $type . '_id';
     }
 
     public function isBooked(): bool

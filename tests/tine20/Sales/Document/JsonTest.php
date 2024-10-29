@@ -122,6 +122,42 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         }
     }
 
+    public function testOfferPaperSlip(): void
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+
+        $document = new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $customerData,
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray(true));
+
+        try {
+            if ((!$oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+                Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+            }
+            Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+            $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+            $app->status = Tinebase_Application::DISABLED;
+            Tinebase_Application::getInstance()->updateApplication($app);
+            $document = $this->_instance->createPaperSlip(SMDOffer::class, $document['id']);
+            $this->assertSame($document['seq'], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $document = $this->_instance->getDocument_Offer($document['id']);
+            $this->assertSame($document['seq'], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+
+            $newDocument = $this->_instance->createPaperSlip(SMDOffer::class, $document['id']);
+            $this->assertNotSame($newDocument['seq'], $document['seq']);
+            $this->assertSame($newDocument['seq'], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $newDocument = $this->_instance->getDocument_Offer($document['id']);
+            $this->assertSame($newDocument['seq'], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+
+        } finally {
+            Sales_Export_DocumentPdf::$previewService = null;
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc;
+        }
+    }
+
     public function testOfferBoilerplates()
     {
         $customer = $this->_createCustomer();

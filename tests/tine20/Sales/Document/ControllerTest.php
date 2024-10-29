@@ -285,7 +285,12 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
-        $this->assertNotNull($invoice->attachments->find('name', $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
+        $this->assertNotNull($attachment = $invoice->attachments->find('name', $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
+        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertSame($attachment->getId(), $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
+            ->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+        $this->assertSame($invoice->seq, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
+            ->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
 
