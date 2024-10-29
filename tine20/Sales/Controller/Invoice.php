@@ -1491,6 +1491,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             /** @var Sales_Model_Contract $contract */
             $contract = $invoice->relations->find('type', 'CONTRACT');
             Tinebase_Record_Expander::expandRecord($customer);
+            $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
 
             // type (invoice_type) => REVERSAL => storno gibt verknüpfung
 
@@ -1500,12 +1501,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_START => $invoice->start_date,
                 Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_END => $invoice->end_date,
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
-                Sales_Model_Document_Invoice::FLD_DEBITOR_ID => new Sales_Model_Document_Debitor([
-                    Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}),
-                ], true),
+                Sales_Model_Document_Invoice::FLD_DEBITOR_ID => $debitor,
                 Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
                 Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
-                    $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
+                    $debitor->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
                 ),
                 // TODO FIXME do we have a FLD_CONTACT_ID?
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',

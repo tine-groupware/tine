@@ -780,22 +780,22 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         } else {
             $posSumFld = $documentPriceType === Sales_Config::PRICE_TYPE_GROSS ?
                 self::FLD_POSITIONS_GROSS_SUM : self::FLD_POSITIONS_NET_SUM;
-            $discount = ($this->{$posSumFld} / 100) *
-                (float)$this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE};
+            $discount = round(($this->{$posSumFld} / 100) *
+                (float)$this->{self::FLD_INVOICE_DISCOUNT_PERCENTAGE}, 2);
             $this->{self::FLD_INVOICE_DISCOUNT_SUM} = $discount;
         }
 
         if ($documentPriceType === Sales_Config::PRICE_TYPE_GROSS) {
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ?
                 array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate, $netSumByTaxRate) {
-                    $tax = $salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
+                    $tax = round($salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
                             $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
-                            $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ));
+                            $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} )), 2);
                     if ($tax) {
                         $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
                             self::TAX_RATE => $taxRate,
                             self::TAX_SUM => $tax,
-                            self::NET_SUM => $netSumByTaxRate[$taxRate] * $discountModifier,
+                            self::NET_SUM => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
                         ];
                     }
                     return $carry + $tax;
@@ -806,9 +806,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
                 array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
                     $tax =
-                        ($netSum = ($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
-                            $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}))
-                        * $taxRate / 100;
+                        round(($netSum = round(($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
+                            $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}), 2))
+                        * $taxRate / 100, 2);
                     if ($tax) {
                         $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
                             self::TAX_RATE => $taxRate,
