@@ -613,14 +613,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     /**
      * show error if request fails
      * 
-     * @param {} response
-     * @param {} request
+     * @param response
+     * @param request
      * @private
      */
     onRequestFailed: function(response, request) {
         this.saving = false;
         
-        if (response.code && response.code == 902) {
+        if (response.code && response.code === 902) {
             // deadline exception
             Ext.MessageBox.alert(
                 this.app.i18n._('Failed'), 
@@ -637,6 +637,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     String.format(this.app.i18n._('The selected Time Account is already closed.'))
                 );
             }
+        } if (response.code === 650) {
+            Tine.Tinebase.ExceptionHandler.handleRequestException(response, function () {
+                this.onAfterApplyChanges(true);
+            }, this);
         } else {
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);

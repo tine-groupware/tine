@@ -375,8 +375,25 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_calcClearedAmount($_record, $_oldRecord);
 
         if ($this->_isTSDateChanged($_record, $_oldRecord)) {
-            if ($_record->is_cleared === 1 && !empty($_record->invoice_id)) {
-                throw new Sales_Exception_InvoiceAlreadyClearedEdit();
+            if ($_record->is_cleared && !empty($_record->invoice_id)) {
+                $context = $this->getRequestContext();
+
+                if ($context && is_array($context) &&
+                    (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
+                        || array_key_exists('confirm', $context))) {
+
+                    $relation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $_record->invoice_id, 'sibling', array('CONTRACT'), 'Sales_Model_Contract')->getFirstRecord();
+                    $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
+
+                    //Sales_Controller_Invoice::getInstance()->delete(array($_record->invoice_id));
+                    Sales_Controller_Invoice::getInstance()->createAutoInvoices(null, $contract, true);
+                } else {
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    $exception = new Tinebase_Exception_Confirmation(
+                        $translation->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?')
+                    );
+                    throw $exception;
+                }
             }
         }
     }
