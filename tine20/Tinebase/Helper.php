@@ -261,12 +261,12 @@ class Tinebase_Helper
      * @param string $encodingTo (default: utf-8)
      * @return string
      */
-    public static function mbConvertTo($string, $encodingTo = 'utf-8')
+    public static function mbConvertTo($string, $encodingTo = 'UTF-8')
     {
         // try to fix bad encodings
         $encoding = mb_detect_encoding((string)$string, 'UTF-8', true);
         if ($encoding !== 'UTF-8') {
-            $encoding = mb_detect_encoding((string)$string, array('UTF-8', 'iso-8859-1', 'iso-8859-15'));
+            $encoding = mb_detect_encoding((string)$string, array('UTF-8', 'ISO-8859-1', 'ISO-8859-15'));
         }
         if ($encoding !== FALSE) {
             $string = @mb_convert_encoding((string)$string, $encodingTo, $encoding);
