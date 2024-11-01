@@ -188,11 +188,15 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
             } else {
                 $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
-                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP,
+                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
                     Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
                     Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->seq + 1,
                 ]));
             }
+            $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
+                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->seq)
+                ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} !== Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT)
+                ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
 
             $updatedRecord = $this->update($record);
             $record->attachments = $updatedRecord->attachments;
