@@ -21,7 +21,20 @@ class Sales_EDocument_Service_Validate
             throw new TypeError(__METHOD__ . ' expects data to be a resource');
         }
 
-        $client = new Zend_Http_Client(Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC});
+        $errors = $this->callSvc('', $data);
+        rewind($data);
+        $errors = array_merge($errors, $this->callSvc('1', $data));
+
+
+        if (!empty($errors)) {
+            throw new Tinebase_Exception_Record_Validation(join(PHP_EOL, $errors));
+        }
+    }
+
+    protected function callSvc(string $postfix, $data): array
+    {
+        $client = new Zend_Http_Client(Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} . $postfix,
+            $postfix ? ['timeout' => 60] : null);
         if (null !== static::$zendHttpClientAdapter) {
             $client->setAdapter(static::$zendHttpClientAdapter);
             if(!static::$zendHttpClientAdapter instanceof Zend_Http_Client_Adapter_Stream) {
@@ -53,9 +66,7 @@ class Sales_EDocument_Service_Validate
             }
         }
 
-        if (!empty($errors)) {
-            throw new Tinebase_Exception_Record_Validation(join(PHP_EOL, $errors));
-        }
+        return $errors;
     }
 
     public static $zendHttpClientAdapter = null;

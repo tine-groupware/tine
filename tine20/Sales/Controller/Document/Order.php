@@ -45,6 +45,7 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_ORDER_STATUS_TRANSITIONS;
         $this->_documentStatusField = Sales_Model_Document_Order::FLD_ORDER_STATUS;
         $this->_oldRecordBookWriteableFields = [
+            Sales_Model_Document_Order::FLD_ATTACHED_DOCUMENTS,
             Sales_Model_Document_Order::FLD_ORDER_STATUS,
             Sales_Model_Document_Order::FLD_EVAL_DIM_COST_CENTER,
             Sales_Model_Document_Order::FLD_EVAL_DIM_COST_BEARER,

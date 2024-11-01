@@ -45,6 +45,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_INVOICE_STATUS_TRANSITIONS;
         $this->_documentStatusField = Sales_Model_Document_Invoice::FLD_INVOICE_STATUS;
         $this->_oldRecordBookWriteableFields = [
+            Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS,
             Sales_Model_Document_Invoice::FLD_INVOICE_STATUS,
             Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_CENTER,
             Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_BEARER,
@@ -132,6 +133,11 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         $this->createEInvoiceAttachment($updatedRecord, $currentRecord);
     }
 
+    public function createEDocument(Tinebase_Record_Interface $record): void
+    {
+        $this->createEInvoiceAttachment($record);
+    }
+
     protected function createEInvoiceAttachment(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
     {
         if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
@@ -165,21 +171,39 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
             }
-
-            /*$baseName = 'xrechnung';
-            $extention = '.xml';
-            $attachmentName = $baseName . $extention;
-            $count = 0;
-            while (null !== $record->attachments->find('name', $attachmentName)) {
-                $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
-            }*/
+            
             $attachmentName = str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml');
             if (null !== ($remove = $record->attachments?->find('name', $attachmentName))) {
                 $record->attachments->removeRecord($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
             }
-            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $attachmentName, $stream);
+            $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $attachmentName, $stream);
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+
+            $attachmentId = $node->getId();
+            if (!$record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}) {
+                $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, []);
+            }
+            if (($attachedDocument = $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $attachmentId))) {
+                $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
+            } else {
+                $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
+                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
+                    Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
+                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->seq + 1,
+                ]));
+            }
+            $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
+                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->seq)
+                ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} !== Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT)
+                ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
+
+            $updatedRecord = $this->update($record);
+            $record->attachments = $updatedRecord->attachments;
+            $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = $updatedRecord->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS};
+            $record->seq = $updatedRecord->seq;
+            $record->last_modified_time = $updatedRecord->last_modified_time;
+
         } finally {
             if ($stream) {
                 @fclose($stream);

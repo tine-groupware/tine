@@ -273,7 +273,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setPostalZone(new \UBL21\Common\CommonBasicComponents\PostalZone($division->{Sales_Model_Division::FLD_ADDR_POSTAL}))
                         ->setCityName(new \UBL21\Common\CommonBasicComponents\CityName($division->{Sales_Model_Division::FLD_ADDR_LOCALITY}))
                         ->setCountry((new \UBL21\Common\CommonAggregateComponents\Country())
-                            ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode($division->{Sales_Model_Division::FLD_ADDR_COUNTRY}))
+                            ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode(strtoupper($division->{Sales_Model_Division::FLD_ADDR_COUNTRY})))
                         )
                     )
                     ->setContact((new \UBL21\Common\CommonAggregateComponents\Contact())
@@ -299,7 +299,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setPostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE} ? new \UBL21\Common\CommonBasicComponents\PostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE}) : null)
                         ->setCityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY} ? new \UBL21\Common\CommonBasicComponents\CityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY}) : null)
                         ->setCountry($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME} ? (new \UBL21\Common\CommonAggregateComponents\Country())
-                            ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME}))
+                            ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode(strtoupper($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME})))
                             : null
                         )
                     )
@@ -402,22 +402,22 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
         if ($division->{Sales_Model_Division::FLD_VAT_NUMBER}) {
             $supplierParty
-                ->setPartyTaxScheme([(new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
+                ->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
                     ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($division->{Sales_Model_Division::FLD_VAT_NUMBER}))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                     )
-                ]);
+                );
         }
         // BT-32 // 'FC' aus validen xrechnungen rausgesucht, ist nicht in codeliste, unklar wo das herkommt
         if ($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}) {
             $supplierParty
-                ->setPartyTaxScheme([(new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
+                ->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
                     ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('FC'))
                     )
-                ]);
+                );
         }
 
         if ($isStorno) {
@@ -439,25 +439,25 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             }
             $ublInvoice->addToInvoiceLine((new \UBL21\Common\CommonAggregateComponents\InvoiceLine)
                 ->setID(new \UBL21\Common\CommonBasicComponents\ID(++$lineCounter))
-                ->setUUID(new \UBL21\Common\CommonBasicComponents\UUID($position->getId()))
+                ->setUUID($position->getId() ? new \UBL21\Common\CommonBasicComponents\UUID($position->getId()) : null)
                 ->setInvoicedQuantity((new \UBL21\Common\CommonBasicComponents\InvoicedQuantity($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY}))
                     ->setUnitCode('C62')
                 )
                 ->setLineExtensionAmount((new \UBL21\Common\CommonBasicComponents\LineExtensionAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}))
                     ->setCurrencyID('EUR')
                 )
-                ->addToTaxTotal((new \UBL21\Common\CommonAggregateComponents\TaxTotal)
+                /*->addToTaxTotal((new \UBL21\Common\CommonAggregateComponents\TaxTotal)
                     ->setTaxAmount((new \UBL21\Common\CommonBasicComponents\TaxAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX}))
                         ->setCurrencyID('EUR')
                     )
-                )
+                )*/
                 ->setItem((new \UBL21\Common\CommonAggregateComponents\Item)
                     ->setName($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE} ?
                         new \UBL21\Common\CommonBasicComponents\Name($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE})
                         : null
                     )
                     ->addToClassifiedTaxCategory((new \UBL21\Common\CommonAggregateComponents\ClassifiedTaxCategory)
-                        ->setID(new \UBL21\Common\CommonBasicComponents\ID('IDVAT'))
+                        ->setID(new \UBL21\Common\CommonBasicComponents\ID('S'))
                         ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
@@ -504,7 +504,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     ->setCurrencyID('EUR')
                 )
                 ->setTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT' . $taxRate[self::TAX_RATE]))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID('S'))
                     ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))

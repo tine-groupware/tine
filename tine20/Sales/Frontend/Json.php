@@ -68,6 +68,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
         Sales_Model_EDocument_EAS::MODEL_NAME_PART,
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
+        Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
 //        'OrderConfirmation',
 //        'PurchaseInvoice',
 //        'Offer',
@@ -864,6 +865,26 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /*************************** offer functions *****************************/
 
+    public function createEDocument(string $model, string $documentId): array
+    {
+        /** @var Tinebase_Record_Interface $model */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+        if (!method_exists($docCtrl, 'createEDocument')) {
+            throw new Tinebase_Exception_NotImplemented($model . ' does not support createEDocument yet');
+        }
+
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+        $document = $docCtrl->get($documentId);
+        $docCtrl->createEDocument($document);
+
+        $result = $this->_recordToJson($docCtrl->get($documentId));
+
+        $transaction->release();
+
+        return $result;
+    }
+
     /**
      * @apiTimeout 60
      * @param string $model
@@ -915,6 +936,24 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $document->attachments->removeRecord($node);
         }
         $document->attachments->addRecord(new Tinebase_Model_Tree_Node(['name' => $name, 'tempFile' => $stream], true));
+        $document = $docCtrl->update($document);
+        $attachmentId = $document->attachments->find('name', $name)->getId();
+        if (!$document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}) {
+            $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, []);
+        }
+        if (($attachedDocument = $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $attachmentId))) {
+            $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->seq + 1;
+        } else {
+            $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
+                Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP,
+                Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
+                Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $document->seq + 1,
+            ]));
+        }
+        $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
+            ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->seq)
+            ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} !== Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT)
+            ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->seq + 1;
         $result = $this->_recordToJson($docCtrl->update($document));
 
         $transaction->release();

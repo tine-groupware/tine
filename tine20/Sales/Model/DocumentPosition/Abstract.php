@@ -621,8 +621,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
                 $discount = (float)$this->{self::FLD_POSITION_DISCOUNT_SUM};
             } else {
-                $discount = ($this->{self::FLD_POSITION_PRICE} / 100) *
-                    (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE};
+                $discount = round(($this->{self::FLD_POSITION_PRICE} / 100) *
+                    (float)$this->{self::FLD_POSITION_DISCOUNT_PERCENTAGE}, 2);
                 $this->{self::FLD_POSITION_DISCOUNT_SUM} = $discount;
             }
         } else {
@@ -636,12 +636,12 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_GROSS_PRICE} = $total;
             // tax = total - total * 100/(100+taxRate);
             $this->{self::FLD_SALES_TAX} = is_null($this->{self::FLD_SALES_TAX_RATE}) ? null
-                : $this->{self::FLD_GROSS_PRICE} - ($this->{self::FLD_GROSS_PRICE} * 100) / (100 + (float)$this->{self::FLD_SALES_TAX_RATE});
+                : $this->{self::FLD_GROSS_PRICE} - round(($this->{self::FLD_GROSS_PRICE} * 100) / (100 + (float)$this->{self::FLD_SALES_TAX_RATE}), 2);
             $this->{self::FLD_NET_PRICE} = $this->{self::FLD_GROSS_PRICE} - $this->{self::FLD_SALES_TAX};
         } else {
             $this->{self::FLD_NET_PRICE} = $total;
             $this->{self::FLD_SALES_TAX} = is_null($this->{self::FLD_SALES_TAX_RATE}) ? null
-                : ($this->{self::FLD_NET_PRICE} / 100) * (float)$this->{self::FLD_SALES_TAX_RATE};
+                : round(($this->{self::FLD_NET_PRICE} / 100) * (float)$this->{self::FLD_SALES_TAX_RATE}, 2);
             $this->{self::FLD_GROSS_PRICE} = is_null($this->{self::FLD_NET_PRICE}) ? null
                 : $this->{self::FLD_NET_PRICE} + $this->{self::FLD_SALES_TAX};
         }
