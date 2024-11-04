@@ -24,7 +24,7 @@ release_packages_notify_matrix() {
     matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 
     if [ "${RELEASE_TYPE}" == "be" ]; then
-        matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+        matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" "We just released the new version \"${CODENAME}\" ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
     fi
 }
 
