@@ -831,8 +831,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $records = Felamimail_Controller_Sieve::getInstance()->getRules($accountId);
         
         return array(
-            '
-}results'       => $this->_multipleRecordsToJson($records),
+            'results'       => $this->_multipleRecordsToJson($records),
             'totalcount'    => count($records),
         );
     }
