@@ -323,6 +323,13 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 ],
             ]))->expand(new Tinebase_Record_RecordSet(static::class, [$this]));
         }
+        if (!$this->name) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Record "name" null / cannot be expanded: ' . print_r($this->toArray(), true));
+            }
+            return '';
+        }
         return $this->name->getFirstRecord()->text;
     }
 }
