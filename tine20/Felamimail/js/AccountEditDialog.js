@@ -338,7 +338,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.rulesGridPanel = new Tine.Felamimail.sieve.RulesGridPanel({
             title: this.app.i18n._('Filter Rules'),
             account: this.record ? this.record : null,
-            recordProxy: this.ruleRecordProxy,
+            recordProxy: this.asAdminModule ? new Tine.Felamimail.RulesBackend({
+                appName: 'Admin',
+                modelName: 'SieveRule'
+            }) : Tine.Felamimail.rulesBackend,
             initialLoadAfterRender: false,
             disabled: !this.isSystemAccount()
         });
