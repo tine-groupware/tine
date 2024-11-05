@@ -100,10 +100,10 @@ class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
      */
     protected static $_configurationObject = NULL;
 
-    public function toFEArray(): array
+    public function toFEArray(?Tinebase_Model_FullUser $user = null): array
     {
         $result = $this->toArray();
-        $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray();
+        $result[self::FLD_CONFIG] = $this->{self::FLD_CONFIG}->toFEArray($user);
 
         return $result;
     }
