@@ -358,6 +358,29 @@ class Tinebase_Frontend_CliTest extends TestCase
     }
 
     /**
+     * Test for monitoringCheckQuota
+     */
+    public function testMonitoringCheckQuota()
+    {
+
+
+        $config = Tinebase_Config::getInstance();
+        $config->set(Tinebase_Config::QUOTA_MONITORING, true);
+        // Capture the output
+        ob_start();
+        $result = $this->_cli->monitoringCheckQuota();
+        $out = ob_get_clean();
+
+        // Assertions
+        self::assertStringContainsString('QUOTA', $out);
+
+        // Assert that $result is one of the expected values (0, 1, or 2)
+        self::assertContains($result, [0, 1, 2]);
+        $config->set(Tinebase_Config::QUOTA_MONITORING, false);
+    }
+
+
+    /**
      * testMonitoringActiveUsers
      *
      * TODO generalize monitoring tests

@@ -1035,6 +1035,39 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function monitoringCheckQuota(): int
+    {
+        $result = 0;
+        $config = Tinebase_Config::getInstance();
+        $quotaConfig = $config->get(Tinebase_Config::QUOTA_MONITORING);
+
+        if ($quotaConfig && Tinebase_FileSystem_Quota::getTotalQuotaBytes() > 0) {
+            $totalUsage = Tinebase_FileSystem_Quota::getRootUsedBytes();
+            $usagePercentage = ($totalUsage / $quotaConfig) * 100;
+
+            if ($usagePercentage >= 99) {
+                $message = 'QUOTA LIMIT REACHED | usage=' . $totalUsage. ';;;;';
+                $result = 2;
+            } elseif ($usagePercentage >= 80) {
+                $message = 'QUOTA LIMIT WARN | usage=' . $totalUsage. ';;;;';
+                $result = 1;
+            } else {
+                $message = 'QUOTA LIMIT OK | usage=' . $totalUsage. ';;;;';
+            }
+
+            $this->_logMonitoringResult($result, $message);
+        } else {
+            $message = 'QUOTA INACTIVE';
+        }
+
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
      * nagios monitoring for tine 2.0 active users
      *
      * @return number
