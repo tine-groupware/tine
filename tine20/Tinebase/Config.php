@@ -943,6 +943,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const QUOTA_FILESYSTEM_TOTALINMB = 'filesystemTotalInMB';
     const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
     const QUOTA_NOTIFICATION_ADDRESSES = 'quotaNotificationAddresses';
+    const QUOTA_MONITORING = 'quotaMonitoring';
 
     const TINE20_URL = 'tine20URL';
     const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
@@ -3379,7 +3380,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::CLIENTREGISTRYINCLUDE => false,
                     self::SETBYADMINMODULE      => true,
                     self::SETBYSETUPMODULE      => true
-                ]
+                ],
+                self::QUOTA_MONITORING => [
+                    //_('Quota Monitoring')
+                    'label'                 => 'Quota Monitoring',
+                    //_('Quota Monitoring')
+                    'description'           => 'Quota Monitoring',
+                    'type'                  => self::TYPE_BOOL,
+                    'clientRegistryInclude' => false,
+                    'setByAdminModule'      => false,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
+                    ]
             ),
             self::DEFAULT_STR => array(),
         ),
