@@ -4961,16 +4961,8 @@ class Tinebase_FileSystem implements
         }
 
         if ($total > 0) {
-            /** @var Tinebase_Model_Application $tinebaseApplication */
-            $tinebaseApplication = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
 
-            if ($quotaIncludesRevisions) {
-                $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
-                    Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE));
-            } else {
-                $totalUsage = intval(Tinebase_Application::getInstance()->getApplicationState($tinebaseApplication,
-                    Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE));
-            }
+            $totalUsage = Tinebase_FileSystem_Quota::getRootUsedBytes();
 
             if ($totalUsage >= ($total * 0.99)) {
                 $this->_sendQuotaNotification(null, false);
