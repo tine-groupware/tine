@@ -3511,8 +3511,10 @@ class Tinebase_FileSystem implements
             && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
             && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
         ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' The area is locked for this node : ' . $node->path);
+            }
 
             return false;
         }
@@ -3563,6 +3565,7 @@ class Tinebase_FileSystem implements
         if (isset(static::$syncFlySystemRecursionCache[$node->getId()])) return;
         static::$syncFlySystemRecursionCache[$node->getId()] = true;
 
+        /** @var \League\Flysystem\Filesystem $flySystem */
         $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem);
         $flyConf = Tinebase_Controller_Tree_FlySystem::getCurrentFlyConfiguration();
         $oldModLogCurrentAccount = Tinebase_Timemachine_ModificationLog::setCurrentAccountId($flyConf->{Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT});
@@ -3570,7 +3573,7 @@ class Tinebase_FileSystem implements
 
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
             try {
-                $dirExists = $flySystem->directoryExists($node->flypath);
+                $dirExists = ! empty($node->flypath) && $flySystem->directoryExists($node->flypath);
             } catch (Sabre\HTTP\ClientHttpException $shche) {
                 if ($shche->getMessage() === 'Gateway Timeout') {
                     // just log and try again later
@@ -3718,6 +3721,11 @@ class Tinebase_FileSystem implements
 
     protected function _syncFlySystemDeleteNode(Tinebase_Model_Tree_Node $node): void
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Deleting flysystem node/path: ' . $node->name . ' (' . $node->getId() . ')');
+        }
+
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
             $pathParts = $this->_splitPath($this->getPathOfNode($node, true));
             $cacheId = $this->_getCacheId($pathParts);
@@ -4045,11 +4053,24 @@ class Tinebase_FileSystem implements
     public function walkNodeTree(?string $startParentId, callable $visitor): void
     {
         $nodeIdsToWalk = [];
-        foreach ($this->_getTreeNodeBackend()->search(
-                new Tinebase_Model_Tree_Node_Filter([
-                    ['field' => 'parent_id', 'operator' => null === $startParentId ? 'isnull' : 'equals', 'value' => $startParentId],
-                    ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
-                ], Tinebase_Model_Filter_FilterGroup::CONDITION_AND, ['ignoreAcl' => true])) as $node) {
+        foreach (
+            $this->_getTreeNodeBackend()->search(
+                new Tinebase_Model_Tree_Node_Filter(
+                    [
+                    [
+                        'field' => 'parent_id',
+                        'operator' => null === $startParentId ? 'isnull' : 'equals',
+                        'value' => $startParentId],
+                    [
+                        'field' => 'is_deleted',
+                        'operator' => 'equals',
+                        'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                    ],
+                    Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
+                    ['ignoreAcl' => true]
+                )
+            ) as $node
+        ) {
             if ($visitor($node) && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
                 $nodeIdsToWalk[] = $node->getId();
             }
@@ -4077,12 +4098,12 @@ class Tinebase_FileSystem implements
         $parents = [];
         $count = 0;
 
-        $this->walkNodeTree(null, function(Tinebase_Model_Tree_Node $fileNode) use(
-                    $numRevisions,
-                    $monthRevisions,
-                    &$parents,
-                    &$count
-                ) {
+        $this->walkNodeTree(null, function (Tinebase_Model_Tree_Node $fileNode) use (
+            $numRevisions,
+            $monthRevisions,
+            &$parents,
+            &$count
+        ) {
             if ($fileNode->flysystem) {
                 return false;
             }
@@ -4098,12 +4119,15 @@ class Tinebase_FileSystem implements
                     $parentXProps = $parents[$fileNode->parent_id];
                 } else {
                     $parentNode = $this->_getTreeNodeBackend()->get($fileNode->parent_id, true);
-                    $parentXProps = $parents[$fileNode->parent_id] = $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
+                    $parentXProps = $parents[$fileNode->parent_id] =
+                        $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION};
                 }
 
                 if (!empty($parentXProps)) {
-                    if (isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON])
-                            && false === $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON]) {
+                    if (
+                        isset($parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON])
+                            && false === $parentXProps[Tinebase_Model_Tree_Node::XPROPS_REVISION_ON]
+                    ) {
                         $numRev = 1;
                         $monthRev = 0;
                     } else {
@@ -4119,17 +4143,21 @@ class Tinebase_FileSystem implements
                     if (is_array($fileNode->available_revisions) && count($fileNode->available_revisions) > $numRev) {
                         $revisions = $fileNode->available_revisions;
                         sort($revisions, SORT_NUMERIC);
-                        $count += $this->_fileObjectBackend->deleteRevisions($fileNode->object_id, array_slice($revisions, 0, count($revisions) - $numRev));
+                        $count += $this->_fileObjectBackend->deleteRevisions(
+                            $fileNode->object_id,
+                            array_slice($revisions, 0, count($revisions) - $numRev)
+                        );
                     }
                 }
 
                 if (1 !== $numRev && $monthRev > 0) {
                     $count += $this->_fileObjectBackend->clearOldRevisions($fileNode->object_id, $monthRev);
                 }
+            } catch (Tinebase_Exception_NotFound) {
+            }
 
-            } catch(Tinebase_Exception_NotFound) {}
-
-            // current implementation needs less of a keep alive as we do mysql queries and keep the connection alive ourselves
+            // current implementation needs less of a keep alive as we do mysql queries
+            // and keep the connection alive ourselves.
             // this is more to check that we still hold the lock and if not throw an exception and stop processing
             Tinebase_Lock::keepLocksAlive();
 
@@ -5170,8 +5198,16 @@ class Tinebase_FileSystem implements
             $subject = 'Filemanager avscan Result notification';
             $translatedSubject = $translate->_($subject);
             $messagePlain = 'Found virus-infected files: ' . Tinebase_Core::getUrl() . PHP_EOL . print_r($paths, true);
-            
-            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $translatedSubject, $messagePlain, null, null, true);
+
+            Tinebase_Notification::getInstance()->send(
+                Tinebase_Core::getUser(),
+                $recipients,
+                $translatedSubject,
+                $messagePlain,
+                null,
+                null,
+                true
+            );
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }
