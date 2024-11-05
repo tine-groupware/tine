@@ -157,11 +157,12 @@ phpcs-analysis:
     - composer require digitalrevolution/php-codesniffer-baseline --no-interaction
   script:
     - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=./tine20; else dir=./lib; fi
-    - cp tine20/phpcs.baseline.xml phpcs.baseline.xml
+    # Only copy baseline, if it exists. Some/All custom apps do not have a baseline.
+    - if test -f tine20/phpcs.baseline.xml; then cp tine20/phpcs.baseline.xml phpcs.baseline.xml; fi
     - >
       php vendor/bin/phpcs -s --standard=PSR12 --report=full --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json
       --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
-      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=./tine20 $dir
+      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=$dir $dir
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/phpcs-report.json
