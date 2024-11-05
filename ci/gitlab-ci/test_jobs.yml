@@ -125,7 +125,7 @@ phpcs-analysis:
     - >
       php vendor/bin/phpcs -s --standard=PSR12 --report=full --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json
       --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
-      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=./tine20 $dir
+      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=$dir $dir
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/phpcs-report.json
