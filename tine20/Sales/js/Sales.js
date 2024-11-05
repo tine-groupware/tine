@@ -24,6 +24,7 @@ import './Document/CreatePaperSlipAction';
 import './Document/TracAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';
+import './numberableStateProvider';
 
 /**
  * address renderer, not a default renderer
