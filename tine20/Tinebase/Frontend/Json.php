@@ -780,6 +780,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $e = new Tinebase_Exception_AreaLocked('mfa required');
                 $e->setArea($areaConfig->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
                 $e->setMFAUserConfigs($areaConfig->getUserMFAIntersection(Tinebase_Core::getUser()));
+                $e->setUser(Tinebase_Core::getUser());
                 $registryData['areaLockedException'] = $e->toArray();
             } else {
                 $userRegistryData = $this->_getUserRegistryData();
