@@ -41,6 +41,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE021 = __CLASS__ . '::update021';
     const RELEASE017_UPDATE022 = __CLASS__ . '::update022';
     const RELEASE017_UPDATE023 = __CLASS__ . '::update023';
+    const RELEASE017_UPDATE024 = __CLASS__ . '::update024';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -125,6 +126,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE023 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update023',
+            ],
+            self::RELEASE017_UPDATE024 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update024',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -700,4 +705,16 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.23', self::RELEASE017_UPDATE023);
     }
+
+    public function update024()
+    {
+        if ($this->_backend->tableExists('document_attached_document')) {
+            $this->renameTable('document_attached_document', Sales_Model_Document_AttachedDocument::TABLE_NAME);
+        }
+        if ($this->_backend->tableExists('document_dispatch_history')) {
+            $this->renameTable('document_dispatch_history', Sales_Model_Document_DispatchHistory::TABLE_NAME);
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.24', self::RELEASE017_UPDATE024);
+    }
+
 }

@@ -18,7 +18,7 @@
 class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Document_DispatchHistory';
-    public const TABLE_NAME = 'document_dispatch_history';
+    public const TABLE_NAME = 'sales_document_dispatch_history';
 
 
     public const FLD_ATTACHED_DOCUMENT_ID = 'attached_document_id';
