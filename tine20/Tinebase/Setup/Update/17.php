@@ -32,6 +32,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
     protected const RELEASE017_UPDATE012 = __CLASS__ . '::update012';
     protected const RELEASE017_UPDATE013 = __CLASS__ . '::update013';
+    protected const RELEASE017_UPDATE014 = __CLASS__ . '::update014';
 
 
     static protected $_allUpdates = [
@@ -79,6 +80,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE013 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update013',
+            ],
+            self::RELEASE017_UPDATE014 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update014',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
@@ -345,5 +350,21 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.13', self::RELEASE017_UPDATE013);
+    }
+
+    public function update014()
+    {
+        if ($this->getTableVersion('customfield_config') < 9) {
+            $this->_backend->alterCol('customfield_config', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>'));
+            $this->setTableVersion('customfield_config', 9);
+        }
+
+        $this->addApplicationUpdate('Tinebase', '17.14', self::RELEASE017_UPDATE014);
     }
 }
