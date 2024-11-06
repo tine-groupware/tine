@@ -283,7 +283,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
     protected function _passthrough(string $filename, $streamContext = null): void
     {
-        if ($streamContext === null) {
+        if ($streamContext !== null) {
             $handle = @fopen($filename, 'r', context: $streamContext);
         } else {
             $handle = @fopen($filename, 'r');
