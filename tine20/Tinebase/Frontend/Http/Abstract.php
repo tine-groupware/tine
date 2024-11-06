@@ -279,15 +279,27 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $additionalHeader);
-        $this->_passthrough($fileSystem->getPathOfNode($previewNode, true), use_include_path: $previewNode->revision);
+        $filename = $fileSystem->getPathOfNode($previewNode, true);
+        $handle = $fileSystem->fopen($filename, 'r', $previewNode->revision);
+
+        if (false === $handle) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not open preview by real path for file path ' . $filename);
+            }
+            $this->_handleFailure();
+        }
+
+        fpassthru($handle);
+        fclose($handle);
     }
 
-    protected function _passthrough(string $filename, $use_include_path = false, $streamContext = null): void
+    protected function _passthrough(string $filename, $streamContext = null): void
     {
         if ($streamContext !== null) {
-            $handle = @fopen($filename, 'r', $use_include_path, context: $streamContext);
+            $handle = @fopen($filename, 'r', context: $streamContext);
         } else {
-            $handle = @fopen($filename, 'r', $use_include_path);
+            $handle = @fopen($filename, 'r');
         }
 
         if (false === $handle) {
