@@ -11,6 +11,61 @@
 import getTwingEnv from "twingEnv";
 // #endif
 
+/**
+ * create paper slip of given document
+ * @param config
+ *  maskEl
+ *  record
+ *  recordClass
+ *  editDialog
+ *
+ * @returns {Promise<void>}
+ */
+const createAttachedDocument = async (config) => {
+    const app = Tine.Tinebase.appMgr.get('Sales')
+    const win = config.win || window
+    const recordClass = config.recordClass || config.record.constructor
+    const recordName = recordClass.getRecordName()
+    const typeName = config.type === 'paperslip' ? app.formatMessage('Paper Slip') : app.formatMessage('eDocument')
+    const api = config.type === 'paperslip' ? Tine.Sales.createPaperSlip : Tine.Sales.createEDocument
+    let record
+    let attachedDocument
+
+    const maskMsg = app.formatMessage('Creating { recordName } { typeName }', { recordName, typeName })
+    const mask = new win.Ext.LoadMask(config.maskEl, { msg: maskMsg })
+    mask.show()
+
+    try {
+        record = !config.editDialog ? config.record :
+            (config.editDialog.record.isModified() ? Tine.Tinebase.data.Record.setFromJson(await config.editDialog.applyChanges(), recordClass) : config.editDialog.record)
+        attachedDocument = record.getAttachedDocument(config.type)
+        if (!attachedDocument || config.force) {
+            record = Tine.Tinebase.data.Record.setFromJson(await api(recordClass.getPhpClassName(), config.record.id), recordClass)
+            config.editDialog ? await config.editDialog.loadRecord(record) : null
+            window.postal.publish({
+                channel: "recordchange",
+                topic: [app.appName, recordClass.getMeta('modelName'), 'update'].join('.'),
+                data: {...record.data}
+            });
+            attachedDocument = record.getAttachedDocument(config.type)
+        }
+
+
+    } catch (e) {
+
+        await win.Ext.MessageBox.show({
+            buttons: Ext.Msg.OK,
+            icon: Ext.MessageBox.WARNING,
+            title: app.formatMessage('There where Errors:'),
+            msg: app.formatMessage('Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }', { recordName, typeName, title: config.record.getTitle(), e })
+        });
+    }
+
+    mask.hide()
+
+    return { record, attachedDocument }
+};
+
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
     const app = Tine.Tinebase.appMgr.get('Sales')
@@ -25,12 +80,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 action.setDisabled(!enabled)
                 action.baseAction.setDisabled(!enabled) // WTF?
             },
-            async handler(cmp) {
+            async handler(cmp, e) {
                 let record = this.initialConfig.selections[0];
-                let paperSlip; // @see contentPanelConstructorInterceptor
-
                 const editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
-                const maskMsg = app.formatMessage('Creating {type} Paper Slip', { type: recordClass.getRecordName() })
 
                 if (editDialog) {
                     try {
@@ -40,29 +92,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     }
                 }
 
-                const createPaperSlip = async (mask) => {
-                    try {
-                        mask.show()
-                        record = editDialog ? Tine.Tinebase.data.Record.setFromJson(await editDialog.applyChanges(), recordClass) : record
-                        record = Tine.Tinebase.data.Record.setFromJson(await Tine.Sales.createPaperSlip(recordClass.getPhpClassName(), record.id), recordClass)
-                        editDialog ? await editDialog.loadRecord(record) : null
-                        window.postal.publish({
-                            channel: "recordchange",
-                            topic: [app.appName, recordClass.getMeta('modelName'), 'update'].join('.'),
-                            data: {...record.data}
-                        });
-                    } catch (e) {
-                        await Ext.MessageBox.show({
-                            buttons: Ext.Msg.OK,
-                            icon: Ext.MessageBox.WARNING,
-                            title: app.formatMessage('There where Errors:'),
-                            msg: app.formatMessage('Cannot create { type } paper slip: ({e.code}) { e.message }', { type: record.getTitle(), e })
-                        });
-                    }
-                    mask.hide()
-                };
-
-                const getMailAction = async (win, record) => {
+                const getMailAction = async (win, record, paperSlip) => {
                     const recipientData = _.get(record, 'data.recipient_id.data', _.get(record, 'data.recipient_id')) || {};
                     paperSlip.attachment_type = 'attachment';
 
@@ -122,6 +152,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     });
                 };
 
+                const paperSlipConfig = { record, recordClass, editDialog, type: 'paperslip' }
+                paperSlipConfig.force = e.ctrlKey || e.altKey
                 if (Tine.OnlyOfficeIntegrator) {
                     Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
                         id: record.id,
@@ -131,22 +163,17 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await config.window.afterIsRendered()
                             isPopupWindow ? mainCardPanel.get(0).hide() : null;
 
-                            const mask = new win.Ext.LoadMask(mainCardPanel.el, { msg: maskMsg })
-                            await createPaperSlip(mask)
-                            const attachments = record.get('attachments')
-                            const mdates = _.map(attachments, (attachment) => {return _.compact([attachment.last_modified_time, attachment.creation_time]).sort().pop()})
-                            paperSlip = attachments[mdates.indexOf([...mdates].sort().pop())]
+                            const {record, attachedDocument } = await createAttachedDocument(Object.assign(paperSlipConfig, { win, maskEl: mainCardPanel.el }))
                             Object.assign(config, {
-                                recordData: paperSlip,
-                                id: paperSlip.id,
-                                tbarItems: [await getMailAction(win, record)]
+                                recordData: attachedDocument,
+                                id: attachedDocument.id,
+                                // tbarItems: [await getMailAction(win, record, paperSlip)]
                             });
                         }
                     })
                 } else {
                     const maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen }).getEl()
-                    const mask = new Ext.LoadMask(maskEl, { msg: maskMsg })
-                    await createPaperSlip(mask)
+                    await createAttachedDocument(Object.assign(paperSlipConfig, { maskEl }))
                     alert('OnlyOfficeIntegrator missing -> find paperSlip in attachments')
                 }
             }
@@ -160,3 +187,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10)
     })
 })
+
+export {
+    createAttachedDocument
+}

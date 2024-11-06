@@ -133,7 +133,7 @@
             // action updater opt-in fn has precedence over generic action updater!
             var actionUpdater = action.actionUpdater || action.initialConfig.actionUpdater;
             if (typeof(actionUpdater) == 'function') {
-                var scope = action.scope || action.initialConfig.scope || window;
+                var scope = action.scope || action.initialConfig.scope || action || window;
                 actionUpdater.call(scope, action, grants, records, isFilterSelect, container);
             } else {
                 this.defaultUpdater(action, grants, records, isFilterSelect, container);

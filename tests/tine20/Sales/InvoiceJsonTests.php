@@ -289,9 +289,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         try {
             $timesheets[0]->start_time = '10:00:00';
             $tsController->update($timesheets[0]);
-            self::fail('should throw Sales_Exception_InvoiceAlreadyClearedEdit!');
-        } catch (Sales_Exception_InvoiceAlreadyClearedEdit $seiace) {
-            self::assertEquals('The Invoice you tried to edit is cleared already, so no editing is possible anymore!', $seiace->getMessage());
+            self::fail('should throw Tinebase_Exception_Confirmation!');
+        } catch (Tinebase_Exception_Confirmation $seiace) {
+            self::assertEquals('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?', $seiace->getMessage());
         }
     }
 
@@ -344,7 +344,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             self::assertEquals('The Invoice you tried to delete is cleared already, so deleting is not possible anymore!', $seiacd->getMessage());
         }
     }
-    
+
     /**
      * tests if product_id gets converted to string
      */

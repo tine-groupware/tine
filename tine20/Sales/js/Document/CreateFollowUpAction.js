@@ -103,7 +103,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             options: notToday.map((source) => {
                                 return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
                             })
-                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()); debugger});
+                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) });
                     } catch (e) {/* USERABORT -> continue */ }
 
                     await unbooked.asyncForEach(async (record) => {

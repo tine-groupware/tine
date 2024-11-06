@@ -145,7 +145,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         'cpintern_id'           => [],
                     ],
                 ],
-                self::FLD_DEBITOR_ID        => [],
+                self::FLD_DEBITOR_ID        => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Debitor::FLD_EAS_ID => [],
+                    ],
+                ],
                 self::FLD_RECIPIENT_ID      => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_Address::FLD_DEBITOR_ID => [],
@@ -156,7 +160,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
                     ],
                 ],
-                self::FLD_ATTACHED_DOCUMENTS => [],
+                self::FLD_ATTACHED_DOCUMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_AttachedDocument::FLD_DISPATCH_HISTORY => [],
+                    ],
+                ],
+                self::FLD_CONTACT_ID => [],
             ]
         ],
 

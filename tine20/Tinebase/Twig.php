@@ -10,6 +10,8 @@
  *
  */
 
+use Twig\Extra\CssInliner\CssInlinerExtension;
+
 /**
  * Tinebase Twig class
  *
@@ -80,6 +82,7 @@ class Tinebase_Twig
         });
 
         $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
+        $this->_twigEnvironment->addExtension(new CssInlinerExtension());
 
         $this->_addTwigFunctions();
 
