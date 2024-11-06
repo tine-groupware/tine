@@ -378,22 +378,25 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
      * handler for the 'beforeshow' event does not return false cancelling the operation.
      * @param {Array} xyPosition Contains X & Y [x, y] values for the position at which to show the menu (coordinates are page-based)
      * @param {Ext.menu.Menu} parentMenu (optional) This menu's parent menu, if applicable (defaults to undefined)
+     * @param {boolean} forcePosition (optional) Don't adjust xy position values
      */
-    showAt : function(xy, parentMenu){
+    showAt : function(xy, parentMenu, forcePosition){
         if(this.fireEvent('beforeshow', this) !== false){
             this.parentMenu = parentMenu;
             if(!this.el){
                 this.render();
             }
-            if(this.enableScrolling){
-                // set the position so we can figure out the constrain value.
-                this.el.setXY(xy);
-                //constrain the value, keep the y coordinate the same
-                xy[1] = this.constrainScroll(xy[1]);
-                xy = [this.el.adjustForConstraints(xy)[0], xy[1]];
-            }else{
-                //constrain to the viewport.
-                xy = this.el.adjustForConstraints(xy);
+            if (!forcePosition) {
+                if(this.enableScrolling){
+                    // set the position so we can figure out the constrain value.
+                    this.el.setXY(xy);
+                    //constrain the value, keep the y coordinate the same
+                    xy[1] = this.constrainScroll(xy[1]);
+                    xy = [this.el.adjustForConstraints(xy)[0], xy[1]];
+                }else{
+                    //constrain to the viewport.
+                    xy = this.el.adjustForConstraints(xy);
+                }
             }
             this.el.setXY(xy);
             this.el.show();
