@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-MediaPanel = Ext.extend(Ext.Panel, {
+const MediaPanel = Ext.extend(Ext.Panel, {
     border: false,
 
     initComponent: function() {

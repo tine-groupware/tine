@@ -19,11 +19,14 @@ import './Document/OfferEditDialog';
 import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
+import './Document/BookDocumentAction';
 import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
+import './Document/DispatchDocumentAction';
 import './Document/TracAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';
+import './EDocument/QuickLookPanel';
 import './numberableStateProvider';
 
 /**

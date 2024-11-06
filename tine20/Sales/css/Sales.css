@@ -44,6 +44,14 @@
     background-image:url(../../images/icon-set/icon_invoice_cancle.svg) !important;
 }
 
+.action_dispatch_document {
+    background-image:url(../../images/icon-set/icon_email_out.svg) !important;
+}
+
+.action_book_document {
+    background-image:url(../../images/icon-set/icon_booked.svg) !important;
+}
+
 .action_rebill {
     background-image:url(../../images/icon-set/icon_return.svg) !important;
 }

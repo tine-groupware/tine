@@ -22,6 +22,9 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
 
 
     public const FLD_ATTACHED_DOCUMENT_ID = 'attached_document_id';
+    public const FLD_DISPATCH_DATE = 'dispatch_date';
+    public const FLD_DISPATCH_TRANSPORT = 'dispatch_transport';
+    public const FLD_DISPATCH_REPORT = 'dispatch_report';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -32,6 +35,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         self::VERSION                       => 1,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
+        self::HAS_ATTACHMENTS               => true,
 
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
@@ -46,6 +50,29 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                        => [
+            self::FLD_DISPATCH_DATE             => [
+                self::LABEL                         => 'Dispatch Date', //_('Dispatch Date')
+                self::TYPE                          => self::TYPE_DATE,
+                self::NULLABLE                      => false,
+                self::UI_CONFIG => [
+                    'format' => ['medium'],
+                ],
+            ],
+            self::FLD_DISPATCH_TRANSPORT        => [
+                self::TYPE                      => self::TYPE_KEY_FIELD,
+                self::LABEL                     => 'Dispatch Transport Method', // _('Dispatch Transport Method')
+                self::NAME                      => Sales_Config::EDOCUMENT_TRANSPORT,
+                self::NULLABLE                  => false,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                ],
+            ],
+            self::FLD_DISPATCH_REPORT           => [
+                self::LABEL                         => 'Dispatch Report', //_('Dispatch Report')
+                self::TYPE                          => self::TYPE_TEXT,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+            ],
             self::FLD_ATTACHED_DOCUMENT_ID      => [
                 self::TYPE                          => self::TYPE_RECORD,
                 self::NULLABLE                      => true,

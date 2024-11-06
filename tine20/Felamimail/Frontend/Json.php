@@ -477,14 +477,13 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
 
             if (is_array($_record->attachments)) {
-                $_record->attachments = array_map(function($attachment) {
-                    if (!empty($attachment['stream'])){
-                        unset($attachment['stream']);
-                    }
-                    return $attachment;
-                }, $_record->attachments);;
+                $_record->attachments = $this->_removeAttachmentStreams($_record->attachments);
             }
-            
+
+            if (!empty($_record->original_id) && $_record->original_id instanceof Felamimail_Model_Message) {
+                $_record->original_id->attachments = $this->_removeAttachmentStreams($_record->original_id->attachments);
+            }
+
             if ($_record->preparedParts instanceof Tinebase_Record_RecordSet) {
                 foreach ($_record->preparedParts as $preparedPart) {
                     if ($preparedPart->preparedData instanceof Calendar_Model_iMIP) {
@@ -509,7 +508,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return parent::_recordToJson($_record);
     }
-    
+
+    function _removeAttachmentStreams($attachments) {
+        foreach ($attachments as $key => $attachment) {
+            foreach (['stream', 'contentstream'] as $stream) {
+                if (isset($attachments[$key][$stream])) {
+                    unset($attachments[$key][$stream]);
+                }
+            }
+        }
+        return $attachments;
+    }
+
     /**
      * update flags
      * - use session/writeClose to allow following requests
