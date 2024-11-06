@@ -129,6 +129,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
                 'type'    => 'integer',
                 'group'   => 'accounting',
                 'default' => 10,
+                'nullable'   => true,
                 'shy'     => TRUE,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
