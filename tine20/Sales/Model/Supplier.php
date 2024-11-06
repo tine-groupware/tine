@@ -46,7 +46,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         'containerProperty' => NULL,
         'resolveVFGlobally' => TRUE,
         
-        'titleProperty'     => 'fulltext',
+        'titleProperty'     => '{{number}} - {{name}}',
         'appName'           => 'Sales',
         'modelName'         => 'Supplier',
 
@@ -81,7 +81,9 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
             'description' => array(
                 'label'       => 'Description', // _('Description')
                 'group'       => 'core',
-                'type'        => 'fulltext',
+                // TODO need to add fulltext index
+                // 'type'        => 'fulltext',
+                'type'        => 'text',
                 'queryFilter' => TRUE,
                 'shy'         => TRUE,
                 'nullable'   => true,
