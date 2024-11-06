@@ -1,0 +1,23 @@
+{% apply inline_css(source("Tinebase/js/node_modules/bootstrap/dist/css/bootstrap.min.css")) %}
+{#    <div class="jumbotron">#}
+{#        <h1 class="display-4">{{ _("Error") }}</h1>#}
+{#        <p class="lead">{{ _("Can't create eDocument (XRechnungs) view. Possible reasons:") }}</p>#}
+{#        <hr class="my-4">#}
+{#        <ul>#}
+{#            <li>{{ _('Xml file does not contain an eDocument') }}</li>#}
+{#            <li>{{ _('eDocument type is not supported') }}</li>#}
+{#            <li>{{ _('Service disruption of view service') }}</li>#}
+{#        </ul>#}
+{#    </div>#}
+
+    <div class="jumbotron">
+        <div class="alert alert-warning" role="alert">
+            <h3>{{ _("Can't create eDocument (XRechnungs) view. Possible reasons:") }}</h3>
+            <ul>
+                <li>{{ _('Xml file does not contain an eDocument') }}</li>
+                <li>{{ _('eDocument type is not supported') }}</li>
+                <li>{{ _('Service disruption of view service') }}</li>
+            </ul>
+        </div>
+    </div>
+{% endapply %}

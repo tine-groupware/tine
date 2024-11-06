@@ -7,6 +7,12 @@
  */
 
 const AbstractMixin = {
+    getAttachedDocument: function(type) {
+        let latest = _.last(_.sortBy(_.filter(this.get('attached_documents'), {type: type}), 'created_for_seq'))
+        if (!latest || latest.created_for_seq < this.get('seq')) return
+        return _.find(this.get('attachments'), {id: latest.node_id})
+    },
+
     statics: {
         getDefaultData() {
             return {

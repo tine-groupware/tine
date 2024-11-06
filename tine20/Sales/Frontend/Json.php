@@ -69,6 +69,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_EDocument_EAS::MODEL_NAME_PART,
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
         Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
+        Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
 //        'OrderConfirmation',
 //        'PurchaseInvoice',
 //        'Offer',
