@@ -739,6 +739,10 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
 
     //docs inherit from Field
     getValue : function() {
+        if (this.selectedImage) {
+            this.selectedImage.style = 'outline: none'
+            this.selectedImage = false
+        }
         this[this.sourceEditMode ? 'pushValue' : 'syncValue']();
         return Ext.form.HtmlEditor.superclass.getValue.call(this);
     },
@@ -993,15 +997,19 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         Ext.menu.MenuMgr.hideAll();
 
         if(this.selectedImage) {
-            const menu = new Ext.menu.Menu({
-                items: [
+            let menuItems = []
+            if (this.fileCache && this.fileCache[this.selectedImage.alt]) {
+                menuItems = [
                     `<b>${window.i18n._('Image size')}</b>`,
                     {text: window.i18n._('small'), checked: (this.selectedImage.dataset.size === '300'), group: 'image-size', handler: this.setImageSize, scope: this, size: 300},
                     {text: window.i18n._('medium'), checked: (this.selectedImage.dataset.size === '500'), group: 'image-size', handler: this.setImageSize, scope: this, size: 500},
                     {text: window.i18n._('large'), checked: (this.selectedImage.dataset.size === '800'), group: 'image-size', handler: this.setImageSize, scope: this, size: 800},
-                    new Ext.menu.Separator(),
-                    {text: window.i18n._('delete'), handler: this.deleteImage, scope: this}
-                ],
+                    new Ext.menu.Separator()
+                ]
+            }
+            menuItems.push({text: window.i18n._('delete'), handler: this.deleteImage, scope: this})
+            const menu = new Ext.menu.Menu({
+                items: menuItems,
                 renderTo: this.wrap,
                 plugins: [{
                     ptype: 'ux.itemregistry',
@@ -1011,7 +1019,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             const offset = this.wrap.getXY()
             const pos = e.getXY()
 
-            menu.showAt([pos[0] + offset[0], pos[1] + offset[1]])
+            menu.showAt([pos[0] + offset[0], pos[1] + offset[1]], undefined, true)
         }
 
         this.syncValue();
