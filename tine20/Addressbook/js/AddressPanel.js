@@ -11,11 +11,11 @@ const getAddressPanels = () => {
     const app = Tine.Tinebase.appMgr.get('Addressbook');
     const recordClass = Tine.Tinebase.data.RecordMgr.get('Addressbook', 'Contact');
 
-    const adrFields = _.sortBy(_.filter(recordClass.getModelConfiguration().fields, (field) => {
+    const adrPanelFields = _.sortBy(_.filter(recordClass.getModelConfiguration().fields, (field) => {
         return field.type === 'record' && _.get(field, 'config.recordClassName') == 'Addressbook_Model_ContactProperties_Address'
     }), (field) => {return _.get(field, 'uiconfig.order')});
 
-    return adrFields.map((field) => {
+    return adrPanelFields.map((field) => {
         const preferredCheckbox = new Ext.form.Checkbox({
             hideLabel: false,
             fieldLabel: app.i18n._('Preferred Address'),
