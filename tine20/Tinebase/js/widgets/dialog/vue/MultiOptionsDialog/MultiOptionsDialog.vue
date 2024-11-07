@@ -37,7 +37,7 @@ const props = defineProps({
   allowEmpty: Boolean
 })
 
-const selectedOption = ref(props.options[props.allowMultiple ? 'filter' : 'find'](el => el.checked)?.inputValue)
+const selectedOption = ref(props.allowMultiple ? props.options.filter(el => el.checked)?.map(el => el.inputValue) : props.options.find(el => el.checked)?.inputValue)
 
 const _options = computed(() => {
   return props.options.map(el => {
