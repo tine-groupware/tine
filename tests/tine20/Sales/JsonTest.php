@@ -417,7 +417,22 @@ class Sales_JsonTest extends TestCase
                 || is_array($firstcustomer['cpextern_id']['created_by']),
             'cpextern_id creator not resolved: ' . print_r($firstcustomer, true));
     }
-    
+
+    /**
+     * testSearchCustomers
+     *
+     * search and resolve
+     */
+    public function testSearchSuppliers()
+    {
+        $record = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier(array('name' => 'auto1')));
+        $result = $this->_instance->searchSuppliers($this->_getFilter('auto1'), array('limit' => 50));
+
+        $this->assertEquals('1 - auto1', $record->getTitle());
+        $this->assertEquals(1, count($result['results']));
+    }
+
+
     /**
      * test product json api
      *
