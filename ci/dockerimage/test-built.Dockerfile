@@ -53,4 +53,4 @@ COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20R
 RUN if [ "COMPOSER_LOCK_REWRITE" == "true" ]; then \
         php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local; \
     fi
-RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
+RUN cd ${TINE20ROOT}/tine20 && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
