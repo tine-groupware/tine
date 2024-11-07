@@ -213,7 +213,7 @@ COPY ci/dockerimage/utility/.gitconfig /root/.gitconfig
 COPY tine20/library ${TINE20ROOT}/tine20/library
 COPY tine20/composer.json ${TINE20ROOT}/tine20/composer.json
 COPY tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
-RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-ansi --no-progress --no-suggest -d ${TINE20ROOT}/tine20
 
 
 
@@ -241,7 +241,7 @@ COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
 COPY .git ${TINE20ROOT}/.git
-RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest -d ${TINE20ROOT}/tine20
 COPY --from=icon-set-provider ${TINE20ROOT}/tine20/images/icon-set/ ${TINE20ROOT}/tine20/images/icon-set
 
 FROM ${SOURCE_IMAGE} AS source-copy
@@ -277,7 +277,8 @@ RUN bash -c "source /build_script.sh && activateReleaseMode"
 RUN bash -c "source /build_script.sh && buildLangStats"
 RUN bash -c "source /build_script.sh && cleanupJs"
 RUN bash -c "source /build_script.sh && buildTranslations"
-RUN bash -c "source /build_script.sh && removeComposerDevDependencies"
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-ansi --no-progress --no-suggest --no-scripts -d ${TINE20ROOT}/tine20 \
+ && COMPOSER_ALLOW_SUPERUSER=1 composer dumpautoload -d ${TINE20ROOT}/tine20
 RUN bash -c "source /build_script.sh && moveCustomapps"
 COPY --from=jsbuild-copy /out/ ${TINE20ROOT}/
 RUN bash -c "source /build_script.sh && cleanup"
@@ -320,7 +321,7 @@ COPY --from=source-copy ${TINE20ROOT}/tine20/library/ExtJS/src/locale ${TINE20RO
 COPY --from=source-copy ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/composer.json
 COPY --from=source-copy ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
 COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
-RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest -d ${TINE20ROOT}/tine20
 
 
 
