@@ -46,14 +46,24 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         'containerProperty' => NULL,
         'resolveVFGlobally' => TRUE,
         
-        'titleProperty'     => 'fulltext',
+        'titleProperty'     => '{{number}} - {{name}}',
         'appName'           => 'Sales',
         'modelName'         => 'Supplier',
 
         'exposeHttpApi'     => true,
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
-        
+
+        self::TABLE             => [
+            self::NAME    => self::TABLE_NAME,
+            self::INDEXES => [
+                'description' => [
+                    self::COLUMNS       => ['description'],
+                    self::FLAGS         => [self::TYPE_FULLTEXT],
+                ],
+            ]
+        ],
+
         'fields'            => array(
             'number' => array(
                 'label'       => 'Supplier Number', //_('Supplier Number')
@@ -80,12 +90,12 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
             ),
             'description' => array(
                 'label'       => 'Description', // _('Description')
+                self::TYPE                      => self::TYPE_FULLTEXT,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
+                self::QUERY_FILTER              => true,
                 'group'       => 'core',
-                'type'        => 'fulltext',
-                'queryFilter' => TRUE,
                 'shy'         => TRUE,
-                'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
             'cpextern_id'       => array(
                 'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
