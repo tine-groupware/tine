@@ -185,6 +185,8 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                 if (value === 'currentAccount') {
                     this.serverValue = value;
                     value = Tine.Tinebase.registry.get('currentAccount');
+                } else {
+                    this.serverValue = null;
                 }
                 if(value.accountId) {
                     // account object
@@ -198,13 +200,16 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                     value = value.get('name');
                 }
             } else {
-                if (value === 'currentContact') {
-                    this.serverValue = value;
-                    value = Tine.Tinebase.registry.get('userContact');
-                }
-
                 this.accountId = null;
                 this.selectedRecord = null;
+                this.serverValue = null;
+            }
+        } else {
+            if (value && value === 'currentContact') {
+                this.serverValue = value;
+                value = Tine.Tinebase.registry.get('userContact');
+            } else {
+                this.serverValue = null;
             }
         }
         return Tine.Addressbook.SearchCombo.superclass.setValue.call(this, value);
