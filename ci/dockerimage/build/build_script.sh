@@ -47,10 +47,6 @@ function buildTranslations()
     cd ${TINE20ROOT}/tine20/ && ls vendor/bin && vendor/bin/phing build
 }
 
-function removeComposerDevDependencies() {
-    cd ${TINE20ROOT}/tine20 && composer install --no-dev --no-ansi --no-progress --no-suggest --no-scripts
-}
-
 function cleanup() {
     cleanupTinebase
     cleanupCss
@@ -141,9 +137,6 @@ function cleanupTinebase() {
   # save langStats
   (mv ${TINE20ROOT}/tine20/langstatistics.json ${TINE20ROOT}/tine20/Tinebase/translations/langstatistics.json)
 
-  # remove composer dev requires (--no-scripts to prevent post-install-cmds like "git submodule --init")
-  composer install --ignore-platform-reqs --no-dev --no-scripts -d ${TINE20ROOT}/tine20
-
   rm -rf ${TINE20ROOT}/tine20/Tinebase/js/node_modules
   rm -rf ${TINE20ROOT}/tine20/vendor/phpdocumentor
   rm -rf ${TINE20ROOT}/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
@@ -153,8 +146,6 @@ function cleanupTinebase() {
   find ${TINE20ROOT}/tine20/vendor -name docs       -type d -print0 | xargs -0 rm -rf
   find ${TINE20ROOT}/tine20/vendor -name examples   -type d -print0 | xargs -0 rm -rf
   find ${TINE20ROOT}/tine20/vendor -name tests      -type d -print0 | xargs -0 rm -rf
-
-  composer dumpautoload -d ${TINE20ROOT}/tine20
 
   rm -rf ${TINE20ROOT}/tine20/composer.*
 }

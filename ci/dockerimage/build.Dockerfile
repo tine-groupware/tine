@@ -36,7 +36,8 @@ RUN bash -c "source /build_script.sh && activateReleaseMode"
 RUN bash -c "source /build_script.sh && buildLangStats"
 RUN bash -c "source /build_script.sh && cleanupJs"
 RUN bash -c "source /build_script.sh && buildTranslations"
-RUN bash -c "source /build_script.sh && removeComposerDevDependencies"
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --no-ansi --no-progress --no-suggest --no-scripts -d ${TINE20ROOT}/tine20 \
+ && COMPOSER_ALLOW_SUPERUSER=1 composer dumpautoload -d ${TINE20ROOT}/tine20
 RUN bash -c "source /build_script.sh && moveCustomapps"
 COPY --from=jsbuild-copy /out/ ${TINE20ROOT}/
 RUN bash -c "source /build_script.sh && cleanup"
