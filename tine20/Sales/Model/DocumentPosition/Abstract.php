@@ -248,6 +248,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+                // to prevent circular loop in (sub)diff
+                self::OMIT_MOD_LOG                  => true,
             ],
             self::FLD_PARENT_ID                 => [
                 // needs to be set by concrete model (but will actually be done here in abstract static inherit hook)
