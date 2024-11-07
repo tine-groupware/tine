@@ -110,8 +110,18 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 form.findField('adr_' + ar[index]).setValue(record.get('adr_one_' + ar[index]));
             }
         }
+        this.onSelectContact(combo, record)
     },
-    
+
+    onSelectContact: function (combo, record) {
+        const type = record.get('container_id').type
+        if (type === 'personal') {
+            combo.markInvalid(this.app.i18n._('Must not be a personal contact'))
+        } else {
+            combo.clearInvalid()
+        }
+    },
+
     /**
      * returns dialog
      * 
@@ -198,14 +208,20 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     listeners: {
                                         scope: this,
                                         select: this.onSelectContactPerson
-                                    }
+                                    },
+                                    validate: Ext.emptyFn
                             }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                     columnWidth: .5,
                                     blurOnSelect: true,
                                     name: 'cpintern_id',
                                     allowBlank: true,
-                                    fieldLabel: this.app.i18n._('Contact Person (internal)')
-                                })
+                                    fieldLabel: this.app.i18n._('Contact Person (internal)'),
+                                    listeners: {
+                                        scope: this,
+                                        select: this.onSelectContact
+                                    },
+                                    validate: Ext.emptyFn
+                            })
                         ]]
                     }]
                 }, {

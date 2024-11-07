@@ -2464,3 +2464,6 @@ msgstr "Hinzufügen, bearbeiten und löschen von Geschäftsbereichen"
 
 #~ msgid "Possible Delivery Note Status Transitions"
 #~ msgstr "Mögliche Lieferscheinstatus-Übergänge"
+
+msgid "Must not be a personal contact"
+msgstr "Darf kein persönlicher Kontakt sein"

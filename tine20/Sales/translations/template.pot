@@ -2323,3 +2323,6 @@ msgstr ""
 #: Acl/Rights.php:240
 msgid "Add, edit and delete divisions"
 msgstr ""
+
+msgid "Must not be a personal contact"
+msgstr ""
