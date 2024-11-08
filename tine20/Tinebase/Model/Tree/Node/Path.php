@@ -442,7 +442,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             return false !== $this->defaultAcls;
         }
 
-        $cfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS}->toArray();
+        $cfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS};
 
         foreach ($cfg as $glob => $grants) {
             list($app, $appendix) = explode('/', $glob, 2);
