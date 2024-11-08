@@ -2391,7 +2391,7 @@ msgstr "vorletzten"
 
 #: Model/Rrule.php:473
 msgid "fifth"
-msgstr "fünfte"
+msgstr "fünften"
 
 #: Model/Rrule.php:478
 msgid "st"
