@@ -712,6 +712,15 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+        if (empty($_record->{$_record->preferred_email})) {
+            $emailFields = Addressbook_Model_Contact::getEmailFields();
+            foreach ($emailFields as $emailFieldRecord) {
+                if (!empty($_record->{$emailFieldRecord['name']})) {
+                    $_record->preferred_email = $emailFieldRecord['name'];
+                    break;
+                }
+            }
+        }
 
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);

@@ -1010,6 +1010,23 @@ class Addressbook_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * test updating of a contact (including geodata)
+     *
+     * @group longrunning
+     */
+    public function testUpdateContactWithoutPreferredEmail()
+    {
+        $contact = $this->_addContact();
+
+        $contact['preferred_email'] = 'email';
+        $contact['email'] = '';
+        $contact['email_home'] = 'home@mail.test';
+        $updatedContact = $this->_uit->saveContact($contact);
+
+        $this->assertEquals('email_home', $updatedContact['preferred_email'], 'updated produced a new contact');
+    }
+
+    /**
      * test deleting contact
      *
      */
