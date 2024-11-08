@@ -186,6 +186,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                             }
                             return save;
                         }, false)) {
+                            // console.error(this.getState())
                             this.saveState();
                         }
                     }, 2000);
@@ -221,20 +222,11 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     openWindow: function (windowName, url, width, height) {
         windowName = Ext.isString(windowName) ? windowName.replace(/[^a-zA-Z0-9_]/g, '') : windowName;
 
-        // thanks to http://www.nigraphic.com/blog/java-script/how-open-new-window-popup-center-screen
+        // Window should be opened on mid of tine window https://developer.mozilla.org/en-US/docs/Web/API/Window/screenLeft https://developer.mozilla.org/en-US/docs/Web/API/Window_Management_API/Multi-screen_origin
+        this.screenX = _.isNumber(this.screenX) ? this.screenX : ((window.innerWidth / 2) - (width / 2) + window.screenLeft);
+        this.screenY = _.isNumber(this.screenY) ? this.screenY : ((window.innerHeight / 2) - (height / 2) + window.screenTop);
 
-        // Determine offsets in case of dualscreen
-        const dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-        const dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
-
-        // Window should be opened on mid of tine window
-        const w = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-        const h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
-
-        // Determine correct left and top values including dual screen setup
-        this.screenX = _.isNumber(this.screenX) ? this.screenX : ((w / 2) - (width / 2)) + dualScreenLeft;
-        this.screenY = _.isNumber(this.screenY) ? this.screenY : ((h / 2) - (height / 2)) + dualScreenTop;
-
+        // console.error('width=' + width + ',height=' + height + ',screenY=' + this.screenY + ',screenX=' + this.screenX)
         const popup = window.open(url, windowName,
             'width=' + width + ',height=' + height + ',screenY=' + this.screenY + ',screenX=' + this.screenX +
             ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
