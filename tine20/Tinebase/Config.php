@@ -2963,12 +2963,72 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FILESYSTEM_DEFAULT_GRANTS => [
                     self::LABEL                     => 'Filesystem default grants', // _('Filesystem default grants')
                     self::DESCRIPTION               => 'Filesystem default grants', // _('Filesystem default grants')
-                    self::TYPE                      => self::TYPE_OBJECT,
-                    self::CLASSNAME                 => Tinebase_FileSystem_DefaultGrantsCfg::class,
+                    self::TYPE                      => self::TYPE_ARRAY,
                     self::CLIENTREGISTRYINCLUDE     => false,
                     self::SETBYADMINMODULE          => false,
                     self::SETBYSETUPMODULE          => false,
-                    self::DEFAULT_STR               => [],
+                    self::DEFAULT_STR               => [
+                        '[^/]+/folders/shared/[^/]+' => [
+                            [
+                                'account_id' => [
+                                    ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT],
+                                ],
+                                'account_type' => 'user',
+                                Tinebase_Model_Grants::GRANT_READ                   => true,
+                                Tinebase_Model_Grants::GRANT_ADD                    => true,
+                                Tinebase_Model_Grants::GRANT_EDIT                   => true,
+                                Tinebase_Model_Grants::GRANT_DELETE                 => true,
+                                Calendar_Model_EventPersonalGrants::GRANT_PRIVATE   => true,
+                                Tinebase_Model_Grants::GRANT_EXPORT                 => true,
+                                Tinebase_Model_Grants::GRANT_SYNC                   => true,
+                                Tinebase_Model_Grants::GRANT_ADMIN                  => true,
+                                Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY  => true,
+                                Tinebase_Model_Grants::GRANT_DOWNLOAD               => true,
+                                Tinebase_Model_Grants::GRANT_PUBLISH                => true,
+                            ], [
+                                'account_id' => [
+                                    ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Group::DEFAULT_ADMIN_GROUP],
+                                ],
+                                'account_type' => 'group',
+                                Tinebase_Model_Grants::GRANT_READ                   => true,
+                                Tinebase_Model_Grants::GRANT_ADD                    => true,
+                                Tinebase_Model_Grants::GRANT_EDIT                   => true,
+                                Tinebase_Model_Grants::GRANT_DELETE                 => true,
+                                Calendar_Model_EventPersonalGrants::GRANT_PRIVATE   => true,
+                                Tinebase_Model_Grants::GRANT_EXPORT                 => true,
+                                Tinebase_Model_Grants::GRANT_SYNC                   => true,
+                                Tinebase_Model_Grants::GRANT_ADMIN                  => true,
+                                Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY  => true,
+                                Tinebase_Model_Grants::GRANT_DOWNLOAD               => true,
+                                Tinebase_Model_Grants::GRANT_PUBLISH                => true,
+                            ],
+                            /*, [
+                                'account_id' => [
+                                    ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Group::DEFAULT_USER_GROUP],
+                                ],
+                                'account_type' => 'group',
+                                Tinebase_Model_Grants::GRANT_READ   => true,
+                                Tinebase_Model_Grants::GRANT_SYNC   => true,
+                            ]*/
+                        ],
+                        '[^/]+/folders/personal/([^/]+)/[^/]+' => [
+                            [
+                                'account_id' => '$1',
+                                'account_type' => 'user',
+                                Tinebase_Model_Grants::GRANT_READ                   => true,
+                                Tinebase_Model_Grants::GRANT_ADD                    => true,
+                                Tinebase_Model_Grants::GRANT_EDIT                   => true,
+                                Tinebase_Model_Grants::GRANT_DELETE                 => true,
+                                Calendar_Model_EventPersonalGrants::GRANT_PRIVATE   => true,
+                                Tinebase_Model_Grants::GRANT_EXPORT                 => true,
+                                Tinebase_Model_Grants::GRANT_SYNC                   => true,
+                                Tinebase_Model_Grants::GRANT_ADMIN                  => true,
+                                Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY  => true,
+                                Tinebase_Model_Grants::GRANT_DOWNLOAD               => true,
+                                Tinebase_Model_Grants::GRANT_PUBLISH                => true,
+                            ]
+                        ]
+                    ],
                 ],
                 self::FILESYSTEM_NUMKEEPREVISIONS => array(
                     //_('Filesystem number of revisions')

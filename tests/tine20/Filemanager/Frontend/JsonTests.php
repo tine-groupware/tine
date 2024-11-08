@@ -1153,6 +1153,53 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         return $dirpaths;
     }
+
+    /**
+     * testCreateDirectoryNodesInPersonal
+     *
+     * @return array dir paths
+     */
+    public function testCreateDirectoryNodesWithDefaultGrants()
+    {
+        $cfg = [
+            'Filemanager/folders/shared/[^/]+' => [
+                [
+                    'account_id' => [
+                        ['field' => 'id', 'operator' => 'equals', 'value' => Tinebase_Group::DEFAULT_USER_GROUP]
+                    ],
+                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                    'addGrant' => true,
+                    'editGrant' => true,
+                ],
+            ],
+        ];
+        $oldCfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS};
+        $cfgRaii = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS} = $oldCfg);
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+            ->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS} = $cfg;
+
+        $personas = Zend_Registry::get('personas');
+        Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
+
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
+        $this->assertSame(1, count($sharedContainerNode['grants']), 'it should have default user group grant');
+        $this->assertSame(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $sharedContainerNode['grants'][0]['account_type']);
+        $this->assertSame(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $sharedContainerNode['grants'][0]['account_id']);
+
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
+
+        $result = $this->_getUit()->createNodes([$sharedContainerNode['path'] . 'dir1'], Tinebase_Model_Tree_FileObject::TYPE_FOLDER, array(), false);
+
+        $this->assertTrue($result[0]['account_grants']['addGrant']);
+        $this->assertTrue($result[0]['account_grants']['editGrant']);
+        $this->assertFalse($result[0]['account_grants']['readGrant']);
+        $this->assertFalse($result[0]['account_grants']['deleteGrant']);
+        $this->assertFalse($result[0]['account_grants']['adminGrant']);
+
+        unset($cfgRaii);
+    }
     
     /**
      * testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir
@@ -1162,7 +1209,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir()
     {
         $this->testCreateContainerNodeInPersonalFolder();
-        
+
         $personas = Zend_Registry::get('personas');
         Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
         $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
