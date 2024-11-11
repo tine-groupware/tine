@@ -1269,12 +1269,16 @@ myStore.reload(lastOptions);
         if (this.isDestroyed === true) {
             return;
         }
-        if (options && options.add !== true && ((options.transactionId && this.lastTransactionId !== options.transactionId) || this.fireEvent('beforeloadrecords', o, options, success, this) === false)) {
+        this.options = options;
+
+        if (options && options.add !== true
+            && ((options.transactionId && this.lastTransactionId !== options.transactionId) || this.fireEvent('beforeloadrecords', o, options, success, this) === false)
+        ) {
             // fire load event so loading indicator stops
             this.fireEvent('load', this, this.data.items, this.options);
             return;
         }
-        this.options = options;
+
         if(!o || success === false){
             if(success !== false){
                 this.fireEvent('load', this, [], options);
