@@ -44,6 +44,10 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDial
      * @cfg {Boolean} allowCancel
      */
     allowCancel: false,
+    /**
+     * @cfg {"primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | null | undefined} alertVariant
+     */
+    alertVariant: null,
 
     initComponent: async function() {
         // console.log(this)
@@ -64,7 +68,8 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDial
             questionText: this.questionText,
             options: this.getItems(),
             allowMultiple: this.allowMultiple,
-            allowEmpty: this.allowEmpty
+            allowEmpty: this.allowEmpty,
+            alertVariant: this.alertVariant
         })
         this.postInit()
         this.showModal()
