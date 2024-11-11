@@ -112,9 +112,14 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Admin.customfield.GridPanel.superclass.onUpdateRecord.apply(this, arguments);
 
         // reload app if current user changed
+        const oldRecord = Tine.Tinebase.registry.get('currentAccount');
         const updatedRecord = Ext.util.JSON.decode(record);
-        if (Tine.Tinebase.registry.get('currentAccount').accountId === updatedRecord.accountId) {
-            Tine.Tinebase.common.confirmApplicationRestart();
+
+        if (oldRecord.accountId === updatedRecord.accountId) {
+            const needsRestart = ['accountEmailAddress', 'accountDisplayName', 'mfa_configs'].some(key =>
+                JSON.stringify(oldRecord[key]) !== JSON.stringify(updatedRecord[key])
+            );
+            if (needsRestart) Tine.Tinebase.common.confirmApplicationRestart();
         }
     },
 
