@@ -315,16 +315,19 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
     onResize() {
         const toolbarWidth = this.getWidth();
         if (toolbarWidth < 25) return;
+
         let totalVisibleWidth = 0;
         const spacing = 50;
         const items = [];
+
         this.items.each((item) => {
             const priority = item.displayPriority ?? 0;
             if (!items[priority]) items[priority] = [];
             if (item?.hidden) return;
             items[priority].push(item);
-            item.setVisible(true);
-            const width = item?.el?.dom?.offsetWidth ?? 0;
+            if (!item?.el?.dom) return;
+            item.el.dom.style.display = '';
+            const width = item.el.dom.offsetWidth ?? 0;
             totalVisibleWidth += width;
         })
         const sortedItems = Object.keys(items).sort(function(a,b){return b-a});
@@ -333,8 +336,9 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
         sortedItems.forEach((priority) => {
             if (toolbarWidth >= totalVisibleWidth + spacing) return;
             items[priority].forEach((item) => {
-                const width = item?.el?.dom?.offsetWidth ?? 0;
-                item.setVisible(false);
+                if (!item?.el?.dom) return;
+                const width = item.el.dom.offsetWidth ?? 0;
+                item.el.dom.style.display = 'none';
                 totalVisibleWidth -= width;
             })
         })
