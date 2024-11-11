@@ -130,7 +130,14 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
             'agreeDate' => [
                 self::TYPE              => self::TYPE_DATETIME,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                self::LABEL             => 'Agreement date', // _('Agreement date')
+                self::LABEL             => 'Agreement date', // _('Agreement date'),
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Tinebase_Model_Filter_DateTime::class,
+                    self::OPTIONS           => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ],
                 self::ALLOW_CAMEL_CASE  => true,
             ],
             'agreeComment' => [
@@ -147,7 +154,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Withdraw date', // _('Withdraw date')
                 self::FILTER_DEFINITION => [
-                    self::FILTER            => Tinebase_Model_Filter_Date::class,
+                    self::FILTER            => Tinebase_Model_Filter_DateTime::class,
                     self::OPTIONS           => [
                         Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
                         Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
