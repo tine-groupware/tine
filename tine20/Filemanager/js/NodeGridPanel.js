@@ -840,23 +840,24 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Object} options
      */
     onStoreLoadException: function(proxy, type, error, options) {
-        if (error.code === 404) {
-            const pathFilter = options.params.filter.find((f) => f.field === 'path');
-            if (pathFilter) {
-                if (!this.redirectToParent) {
-                    Ext.MessageBox.show({
-                        title:  i18n._hidden('Not Found'),
-                        msg:  i18n._hidden('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.ERROR,
-                        fn: (btn) => {
-                            this.redirectToParent = true;
-                            this.loadParentNodeByFilter(pathFilter);
-                        }
-                    });
-                } else {
-                    this.loadParentNodeByFilter(pathFilter);
-                }
+        const pathFilter = options.params.filter.find((f) => f.field === 'path');
+
+        if (pathFilter) {
+            if (this.redirectToParent) {
+                this.loadParentNodeByFilter(pathFilter);
+                return;
+            }
+            if (error.code === 404) {
+                Ext.MessageBox.show({
+                    title: i18n._hidden('Not Found'),
+                    msg: i18n._hidden('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR,
+                    fn: (btn) => {
+                        this.redirectToParent = true;
+                        this.loadParentNodeByFilter(pathFilter);
+                    }
+                });
                 return;
             }
         }
