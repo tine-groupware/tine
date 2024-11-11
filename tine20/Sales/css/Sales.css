@@ -48,6 +48,10 @@
     background-image:url(../../images/icon-set/icon_email_out.svg) !important;
 }
 
+.action_dispatch_history {
+    background-image:url(../../images/icon-set/icon_timesheet.svg) !important;
+}
+
 .action_book_document {
     background-image:url(../../images/icon-set/icon_booked.svg) !important;
 }

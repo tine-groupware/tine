@@ -351,6 +351,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         contextActions = contextActions.concat(this.additionalContextActions || []);
 
         this.contextMenu = new Ext.menu.Menu({
+            openerCt: this,
             plugins: [{
                 ptype: 'ux.itemregistry',
                 key: 'Tinebase-MainContextMenu'
