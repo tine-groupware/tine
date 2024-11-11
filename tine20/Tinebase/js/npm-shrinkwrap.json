@@ -11,7 +11,7 @@
         "ace-builds": "^1.14.0",
         "async": "^3.2.4",
         "axios": "^1.2.2",
-        "bootstrap": "^5.2.3",
+        "bootstrap": "^5.3.3",
         "bootstrap-vue-next": "^0.8.4",
         "broadcastchannel-polyfill": "^1.0.1",
         "ciena-dagre": "^1.0.10",
@@ -2346,9 +2346,9 @@
       "integrity": "sha512-g7w35q4bt7MoM3nZKrk5COiIO+qevZjjS7bJO5pYrB0ZKABUXFBOgr2VBY66LmeI3FzkH5AZ+1uNmNHYjeuUjQ=="
     },
     "node_modules/@popperjs/core": {
-      "version": "2.11.6",
-      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz",
-      "integrity": "sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==",
+      "version": "2.11.8",
+      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
+      "integrity": "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==",
       "funding": {
         "type": "opencollective",
         "url": "https://opencollective.com/popperjs"
@@ -3586,9 +3586,9 @@
       "dev": true
     },
     "node_modules/bootstrap": {
-      "version": "5.2.3",
-      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.2.3.tgz",
-      "integrity": "sha512-cEKPM+fwb3cT8NzQZYEu4HilJ3anCrWqh3CHAok1p9jXqMPsPTBhU25fBckEJHJ/p+tTxTFTsFQGM+gaHpi3QQ==",
+      "version": "5.3.3",
+      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.3.tgz",
+      "integrity": "sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==",
       "funding": [
         {
           "type": "github",
@@ -3600,7 +3600,7 @@
         }
       ],
       "peerDependencies": {
-        "@popperjs/core": "^2.11.6"
+        "@popperjs/core": "^2.11.8"
       }
     },
     "node_modules/bootstrap-vue-next": {
@@ -17746,9 +17746,9 @@
       "integrity": "sha512-g7w35q4bt7MoM3nZKrk5COiIO+qevZjjS7bJO5pYrB0ZKABUXFBOgr2VBY66LmeI3FzkH5AZ+1uNmNHYjeuUjQ=="
     },
     "@popperjs/core": {
-      "version": "2.11.6",
-      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz",
-      "integrity": "sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw=="
+      "version": "2.11.8",
+      "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
+      "integrity": "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A=="
     },
     "@sinonjs/commons": {
       "version": "2.0.0",
@@ -18769,9 +18769,9 @@
       "dev": true
     },
     "bootstrap": {
-      "version": "5.2.3",
-      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.2.3.tgz",
-      "integrity": "sha512-cEKPM+fwb3cT8NzQZYEu4HilJ3anCrWqh3CHAok1p9jXqMPsPTBhU25fBckEJHJ/p+tTxTFTsFQGM+gaHpi3QQ==",
+      "version": "5.3.3",
+      "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.3.tgz",
+      "integrity": "sha512-8HLCdWgyoMguSO9o+aH+iuZ+aht+mzW0u3HIMzVu7Srrpv7EBBxTnrFlSCskwdY1+EOFQSm7uMJhNQHkdPcmjg==",
       "requires": {}
     },
     "bootstrap-vue-next": {
