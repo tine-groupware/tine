@@ -29,7 +29,10 @@ Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
 
     setText: function(t){
         // in case the props or vueHandle is not initialized
-        if(!this.props || !this.vueHandle) return;
+        if(!this.props || !this.vueHandle) {
+            this.label = t
+            return
+        }
         this.props.label = t
     }
 })
