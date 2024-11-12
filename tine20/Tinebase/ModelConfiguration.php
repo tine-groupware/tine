@@ -1199,7 +1199,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                         self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],*/
                     ];
                 }
-                // you can null everything below here to prevent it from being writte to
+                // you can null everything below here to prevent it from being written to
                 if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
                     $this->_jsonExpander = [];
                 }
@@ -1401,6 +1401,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 $fieldDef[self::TYPE] = 'string';
                 $fieldDef['label'] = NULL;
                 unset($this->_filterModel[$fieldKey]);
+                if (isset($this->_jsonExpander['properties'][$fieldKey])) {
+                    unset($this->_jsonExpander['properties'][$fieldKey]);
+                }
                 continue;
             }
             // the property name

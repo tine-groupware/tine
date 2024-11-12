@@ -6,13 +6,15 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 class Tinebase_ModelConfigurationTest extends TestCase
 {
     protected function tearDown(): void
-{
+    {
+        Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::ENABLED);
+
         parent::tearDown();
 
         // reset mc config to prevent problems with following tests
@@ -139,5 +141,15 @@ class Tinebase_ModelConfigurationTest extends TestCase
         $fields = $cObj->getFields();
         self::assertTrue(isset($fields['sales_tax']['default']), print_r($fields['sales_tax'], true));
         self::assertEquals(19.0, $fields['sales_tax']['default'], print_r($fields['sales_tax'], true));
+    }
+
+    public function testModelExpanderWithoutRecordApp()
+    {
+        // disable Sales
+        Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::DISABLED);
+        $inventoryMC = Inventory_Model_InventoryItem::getConfiguration();
+        if ($inventoryMC->jsonExpander) {
+            self::assertArrayNotHasKey('invoice', $inventoryMC->jsonExpander['properties'], print_r($inventoryMC->jsonExpander, true));
+        }
     }
 }
