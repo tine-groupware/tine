@@ -538,9 +538,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                         . ' ' . print_r($this->_filterModel, true)
                         . ' ' . static::class);
                 }
-                if (self::$beStrict) {
+                if (self::$beStrict && !str_starts_with($_filterData[TMFA::FIELD], 'customfield:')) {
                     throw new Tinebase_Exception_Record_DefinitionFailure(
-                        'No filter model found for field' . $_filterData[TMFA::FIELD] . ' ('
+                        'No filter model found for field ' . $_filterData[TMFA::FIELD] . ' ('
                         . $this->_configuredModel .  ' ' . $this->_modelName . ')');
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
