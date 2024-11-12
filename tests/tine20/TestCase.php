@@ -1253,7 +1253,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $data = $this->_getUserData();
         }
         $pw = $data['password'] ?? Tinebase_Record_Abstract::generateUID(16);
-        $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
+        try {
+            $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (preg_match('/deadlock/i', $zdse->getMessage())) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Deadlock when creating test user/contact: ' . $zdse);
+                }
+                self::markTestSkipped('deadlock when creating test user/contact');
+            }
+            throw $zdse;
+        }
         $this->_usernamesToDelete[] = $account->accountLoginName;
 
         return $account;

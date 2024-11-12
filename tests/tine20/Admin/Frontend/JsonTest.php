@@ -43,8 +43,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $data = $this->_createGroup();
         $data['description'] = 'updated group';
 
-        // add group members array
         $userArray = $this->_createTestUser();
+        // add group members array
         $groupMembers = array($userArray['accountId']);
         $data['members'] = $groupMembers;
 
