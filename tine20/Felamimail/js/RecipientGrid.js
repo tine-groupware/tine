@@ -724,6 +724,17 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         ['to', 'cc', 'bcc'].forEach((type) => {
             const promise = new Promise(async (resolve) => {
                 let contacts = this.record.data[type];
+
+                await Promise.all(contacts.map(async (contact) => {
+                    if (_.isString(contact) && (contact.includes(',') || contact.includes(';'))) {
+                        return await Tine.Tinebase.common.findContactsByEmailString(contact);
+                    } else {
+                        return contact;
+                    }
+                })).then((result) => {
+                    contacts = result.flat();
+                });
+
                 let emails = _.filter(contacts, (addressData) => {return _.isString(addressData)});
                 if (emails.length > 0) {
                     emails = _.join(emails, ', ');
