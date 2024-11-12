@@ -58,7 +58,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-        if (Tine.Sales.Model?.PurchaseInvoice) {
+        if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales') && Tine.Sales.Model?.PurchaseInvoice) {
             const app = Tine.Tinebase.appMgr.get('Sales')
             this.invoiceRecordPicker = Tine.widgets.form.RecordPickerManager.get('Sales', 'PurchaseInvoice', {
                 fieldLabel: app.i18n._('Purchase Invoice'),
@@ -77,7 +77,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 hideMode: 'offsets'
             },
             items: [{
-                //Start first tab
+                // Start first tab
                 title: this.app.i18n._('General'),
                 border: false,
                 frame: true,
