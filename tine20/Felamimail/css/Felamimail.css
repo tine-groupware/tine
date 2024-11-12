@@ -152,7 +152,7 @@
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
     overflow: auto;
-    padding: 5px;
+    padding: 10px;
 }
 
 .preview-panel-felamimail-header-row {
@@ -162,7 +162,7 @@
 
 .preview-panel-felamimail-header-row-left {
     font-weight: bold;
-    min-width: 50px;
+    min-width: 60px;
     text-align: right;
 }
 
