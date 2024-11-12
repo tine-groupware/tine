@@ -261,6 +261,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             listeners: {
                                 scope: this,
                                 'select': (combo, invoiceRecord, index) => {
+                                    this.updateTimeaccount = true;
                                     this.record.set('invoice_id', invoiceRecord.get('id'));
                                     this.invoiceRecordPicker.setValue(invoiceRecord);
                                 }
@@ -305,32 +306,32 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     onApplyChanges: async function (closeWindow) {
-        let notAccountedTimesheets = [];
-        if (this.record.get('status') === 'billed') {
+        await new Promise(async (resolve) => {
+            if (this.record.get('status') !== 'billed' || !this.updateTimeaccount) return resolve();
             const filter = [
                 {field: 'timeaccount_id', operator: 'equals', value: this.record.get('id')},
+                {field: 'is_billable', operator: 'equals', value: true},
+                {
+                    condition: "OR", filters: [
+                        {field: 'is_cleared', operator: 'equals', value: false},
+                        {field: 'invoice_id', operator: 'equals', value: null},
+                    ]
+                }
             ];
-            await Tine.Timetracker.searchTimesheets(filter)
-                .then((result) => {
-                    notAccountedTimesheets = _.filter(result.results, (timesheet) => {
-                        return timesheet?.is_cleared === '0' || !timesheet?.invoice_id;
-                    });
-                })
-        }                    
-        
-        if (notAccountedTimesheets.length > 0) {
+            const {results: notAccountedTimesheets} = await Tine.Timetracker.searchTimesheets(filter);
+            if (notAccountedTimesheets.length === 0) return resolve();
             Ext.MessageBox.confirm(
                 this.app.i18n._('Update Timesheets?'),
                 this.app.i18n._('Attention: There are timesheets that have not yet been accounted. ' +
                     'If you continue, they will be set to accounted. ' +
                     'This action cannot be undone. Continue anyway?'),
-                function (button) {
-                    if (button === 'yes') {
-                        Tine.Timetracker.TimeaccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
-                    }
-                }, this);
-        } else {
+            function (button) {
+                if (button === 'yes') {
+                    return resolve();
+                }
+            }, this);
+        }).then(() => {
             Tine.Timetracker.TimeaccountEditDialog.superclass.onApplyChanges.call(this, closeWindow);
-        }
+        })
     }
 });
