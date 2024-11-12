@@ -319,8 +319,9 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
             $invoiceIdPresent = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
 
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
-                    ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
-                ]);
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
+                ['field' => 'is_billable', 'operator' => 'equals', 'value' => true],
+            ]);
             $innerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                     ['field'    => 'is_cleared', 'operator' => 'equals', 'value'    => false],
                 ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);

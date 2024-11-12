@@ -889,6 +889,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const replyToName = this.replyTo.get('from_name');
         const replyToToken = this.replyTo.get('from')?.[0];
 
+        // reply-to header has the highest priority
+        if (replyToHeader) return replyToHeader;
         // we might get the recipient token from server
         if (replyToToken && replyToToken?.email) return this.replyTo.get('from');
         if (replyToEmail) {
@@ -901,9 +903,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 'contact_record': ''
             }];
         }
-        if (replyToHeader) {
-            return [replyToHeader];
-        }
+
 
         return [];
     },

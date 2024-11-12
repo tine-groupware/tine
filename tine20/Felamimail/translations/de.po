@@ -392,6 +392,9 @@ msgstr "Format beibehalten"
 msgid "Reply-To"
 msgstr "Antwortadresse"
 
+msgid "Reply-to"
+msgstr "Antwort an"
+
 #: Model/Account.php:312
 msgid "E-Mail"
 msgstr "E-Mail"
