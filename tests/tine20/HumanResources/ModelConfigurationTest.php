@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013 - 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013 - 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
@@ -15,9 +15,9 @@
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Tinebase_ModelConfiguration, using the test class from hr
+ * Test class for HumanResources_ModelConfigurationTest
  */
-class HumanResources_ModelConfigurationTest extends \PHPUnit\Framework\TestCase
+class HumanResources_ModelConfigurationTest extends TestCase
 {
     /**
      * tests if the modelconfiguration gets created using the static call
