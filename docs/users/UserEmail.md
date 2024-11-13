@@ -6,6 +6,16 @@ Version: 2024.11
 Problemlösungen im Felamimail-Modul von tine
 
 HowTo: Suchen aller Nachrichten suchen, die dem Glob Filter entsprechen
+
+### Wo man den Glob Filter einstellt:
+
+1. klicken Sie unter dem Schnellsuchfilter auf "Details anzeigen"
+2. Erstellen Sie einen Ordner-Filter im Filter panel
+3. Klicken Sie auf das Suchsymbol
+4. Öffnen Sie den Ordnerbaum und wählen Sie einen Ordner aus.
+5. Klicken Sie auf den vorhandenen Ordnerpfad und bearbeiten Sie ihn zum Glob Filter
+6. klicken Sie auf OK
+
 =================
 
 ### Hier ist ein Beispiel für die IMAP Ordnerstruktur
