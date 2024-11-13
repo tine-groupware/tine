@@ -2360,23 +2360,29 @@
         },
         {
             "name": "hfig/mapi",
-            "version": "1.3.1",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tine-groupware/MAPI.git",
-                "reference": "02ce92cf1f536396c72d8d4d8ebd793183abd48f"
+                "url": "https://github.com/hfig/MAPI.git",
+                "reference": "f5aa9e2bd0034b9ef220cd3f62feb048733c45ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hfig/MAPI/zipball/f5aa9e2bd0034b9ef220cd3f62feb048733c45ce",
+                "reference": "f5aa9e2bd0034b9ef220cd3f62feb048733c45ce",
+                "shasum": ""
             },
             "require": {
                 "ext-bcmath": "*",
                 "ext-mbstring": "*",
-                "pear/ole": "^1.0.0RC9",
-                "pear/pear-core-minimal": "^1.10",
+                "pear/ole": "^1.0",
                 "php": "^7.1||^8.0",
                 "psr/log": "^1.0||^2.0||^3.0",
-                "ramsey/uuid": "^3.8||^4.7",
-                "symfony/yaml": "^4.1||^5.0||^6.0"
+                "ramsey/uuid": "^3.8||^4.0",
+                "symfony/yaml": "^4.1||^5.0||^6.0||^7.0"
             },
             "require-dev": {
+                "pear/pear-core-minimal": "^1.10",
                 "phpunit/phpunit": "^8.3",
                 "swiftmailer/swiftmailer": "^6.1"
             },
@@ -2389,16 +2395,16 @@
                     "Hfig\\MAPI\\": "src/MAPI"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Hfig\\MAPI\\Tests\\": "tests/MAPI"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Pure PHP library for reading and manipulating Microsoft Outlook .msg messages (MAPI documents)",
-            "time": "2023-08-07T10:42:10+00:00"
+            "support": {
+                "issues": "https://github.com/hfig/MAPI/issues",
+                "source": "https://github.com/hfig/MAPI/tree/v1.4.1"
+            },
+            "time": "2024-10-26T10:52:06+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -15643,7 +15649,6 @@
     "stability-flags": {
         "josemmo/einvoicing": 20,
         "jumbojett/openid-connect-php": 20,
-        "pear/ole": 5,
         "validator/livr": 20
     },
     "prefer-stable": false,
