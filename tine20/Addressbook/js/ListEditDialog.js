@@ -103,6 +103,9 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     }
                                 },
                                 validator: function (value) {
+                                    if(!value) {
+                                        return false;
+                                    }
                                     return Tine.Tinebase.common.checkEmailDomain(value);
                                 },
                                 disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
