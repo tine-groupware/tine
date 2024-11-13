@@ -28,7 +28,7 @@ class Felamimail_MAPI_Attachment extends BaseAttachment
         return new self($attachment->obj, $attachment->parent);
     }
 
-    public function toMime()
+    public function toMime(): Swift_Attachment
     {
         DependencySet::register();
 
