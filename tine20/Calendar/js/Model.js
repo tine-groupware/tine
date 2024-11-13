@@ -764,12 +764,13 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
      */
     getUserId: function() {
         var user_id = this.get('user_id');
-        if (! user_id) {
-            return null;
-        }
-        
-        var userData = (typeof user_id.get == 'function') ? user_id.data : user_id;
+        var user_type = this.get('user_type');
 
+        if (user_type == 'email') {
+            return this.get('user_email');
+        }
+
+        var userData = (typeof user_id?.get == 'function') ? user_id.data : user_id;
         if (!userData) {
             return null;
         }
@@ -778,7 +779,7 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
             return userData;
         }
         
-        switch (this.get('user_type')) {
+        switch (user_type) {
             case 'user':
             case 'groupmember':
             case 'memberOf':
@@ -795,9 +796,6 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
                     // userData contains group
                     return userData.list_id;
                 }
-                break;
-            case 'email':
-                return userData.user_email;
                 break;
             default:
                 return userData.id
