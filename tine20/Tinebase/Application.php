@@ -346,7 +346,11 @@ class Tinebase_Application
         ) {
             $applicationIds = (array)$_applicationIds->getId();
         } else {
-            $applicationIds = (array)$_applicationIds;
+            $idsOrAppNames = (array)$_applicationIds;
+            $applicationIds = [];
+            foreach ($idsOrAppNames as $id) {
+                $applicationIds[] = Tinebase_Model_Application::convertApplicationIdToInt($id);
+            }
         }
         
         $data = array(
