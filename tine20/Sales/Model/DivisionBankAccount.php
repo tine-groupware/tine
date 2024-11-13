@@ -63,6 +63,7 @@ class Sales_Model_DivisionBankAccount extends Tinebase_Record_NewAbstract
 
         self::FIELDS                    => [
             self::FLD_BANK_ACCOUNT          => [
+                self::LABEL                     => 'Bank Account', // _('Bank Account')
                 self::TYPE                      => self::TYPE_RECORD,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
