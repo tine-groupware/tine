@@ -19,7 +19,7 @@ use Hfig\MAPI\Mime\Swiftmailer\Message as BaseMessage;
 
 class Felamimail_MAPI_Message extends BaseMessage
 {
-    public function toMime()
+    public function toMime(): Swift_Message
     {
         DependencySet::register();
 
@@ -65,7 +65,6 @@ class Felamimail_MAPI_Message extends BaseMessage
 
         $add = [$message->getHeaders(), 'addTextHeader'];
         $this->addPlainHeaders($headers, $add);
-
 
         // body
         $hasHtml = false;
@@ -210,6 +209,5 @@ class Felamimail_MAPI_Message extends BaseMessage
         }
 
         return $rawHeaders;
-
     }
 }
