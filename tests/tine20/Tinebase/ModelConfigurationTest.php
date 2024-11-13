@@ -13,7 +13,10 @@ class Tinebase_ModelConfigurationTest extends TestCase
 {
     protected function tearDown(): void
     {
-        Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::ENABLED);
+        if (Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::DISABLED)
+                ->filter('name', 'Sales')->count() === 1) {
+            Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::ENABLED);
+        }
 
         parent::tearDown();
 
