@@ -40,6 +40,12 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
 
+        self::TITLE_PROPERTY                => "{{ dispatch_date |localizeddate('short', 'none', app.request.locale) }} - {{ dispatch_transport }}",
+        self::DEFAULT_SORT_INFO             => [self::FIELD => self::FLD_DISPATCH_DATE],
+
+        self::RECORD_NAME => 'Dispatch Report', // gettext('GENDER_Dispatch Report')
+        self::RECORDS_NAME => 'Dispatch Reports', // ngettext('Dispatch Report', 'Dispatch Reports', n)
+
         self::TABLE                         => [
             self::NAME                      => self::TABLE_NAME,
             self::INDEXES                   => [
@@ -80,6 +86,9 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
                     self::IS_PARENT                     => true,
+                ],
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
                 ],
             ],
         ],

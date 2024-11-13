@@ -47,6 +47,11 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
 
+        self::RECORD_NAME => 'Attached Document', // gettext('GENDER_Attached Document')
+        self::RECORDS_NAME => 'Attached Documents', // ngettext('Attached Document', 'Attached Documents', n)
+
+        self::TITLE_PROPERTY                => self::FLD_TYPE,
+
         self::EXPOSE_JSON_API               => true,
 
         self::TABLE                         => [
@@ -72,6 +77,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
 
         self::FIELDS                        => [
             self::FLD_TYPE                      => [
+                self::LABEL                         => 'Type', // _('Type')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
             ],
@@ -82,8 +88,12 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                    => Tinebase_Model_Tree_Node::MODEL_NAME_PART,
                 ],*/
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
+                ],
             ],
             self::FLD_CREATED_FOR_SEQ           => [
+                self::LABEL                         => 'Created for Version', // _('Created for Version')
                 self::TYPE                          => self::TYPE_INTEGER,
             ],
             self::FLD_DELIVERY_ID               => [
@@ -94,6 +104,9 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_Delivery::MODEL_NAME_PART,
                     self::IS_PARENT                     => true,
                 ],
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
+                ],
             ],
             self::FLD_INVOICE_ID                => [
                 self::TYPE                          => self::TYPE_RECORD,
@@ -102,6 +115,9 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_Invoice::MODEL_NAME_PART,
                     self::IS_PARENT                     => true,
+                ],
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
                 ],
             ],
             self::FLD_OFFER_ID                  => [
@@ -112,6 +128,9 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_Offer::MODEL_NAME_PART,
                     self::IS_PARENT                     => true,
                 ],
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
+                ],
             ],
             self::FLD_ORDER_ID                  => [
                 self::TYPE                          => self::TYPE_RECORD,
@@ -121,8 +140,12 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_Order::MODEL_NAME_PART,
                     self::IS_PARENT                     => true,
                 ],
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
+                ],
             ],
             self::FLD_DISPATCH_HISTORY          => [
+                self::LABEL                         => 'Dispatch History', // _('Dispatch History')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
                     self::DEPENDENT_RECORDS             => true,
