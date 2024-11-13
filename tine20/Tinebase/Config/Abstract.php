@@ -511,14 +511,14 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $cachedConfigData['ttlstamp'] < time() ||
             (defined('TINE20_BUILDTYPE') && (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG'));
     }
-    
+
     /**
      * composes config files from conf.d and saves array to tmp file
      */
     protected function _createCachedConfig()
     {
         $filename = $this->_getCachedConfigFilename();
-        $confdFolder = self::$_configFileData['confdfolder'];
+        $confdFolder = self::$_configFileData[Tinebase_Config::CONFD_FOLDER];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Creating new cached config file: ' . $filename);
@@ -529,25 +529,26 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        $dh = opendir($confdFolder);
+        $dirEntries = scandir($confdFolder, SCANDIR_SORT_ASCENDING);
 
-        if ($dh === false) {
+        if ($dirEntries === false) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' opendir() failed on folder "' . $confdFolder . '"');
+                . ' scandir() failed on folder "' . $confdFolder . '"');
             return;
         }
 
-        while (false !== ($direntry = readdir($dh))) {
-            if (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
-                $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $direntry);
-                if (false !== $tmpArray && is_array($tmpArray)) {
-                    foreach ($tmpArray as $key => $value) {
-                        self::$_configFileData[$key] = $value;
-                    }
-                }
+        foreach ($dirEntries as $dirEntry) {
+            $tmpArray = false;
+            if (strpos($dirEntry, '.inc.json') === (strlen($dirEntry) - 9)) {
+                $tmpArray = $this->_getConfdFileDataJson($confdFolder . DIRECTORY_SEPARATOR . $dirEntry);
+            } elseif (strpos($dirEntry, '.inc.php') === (strlen($dirEntry) - 8)) {
+                $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $dirEntry);
+            }
+
+            if (false !== $tmpArray && is_array($tmpArray)) {
+                self::$_configFileData = self::_array_merge_recursive_distinct(self::$_configFileData, $tmpArray);
             }
         }
-        closedir($dh);
 
         $this->_mergedConfigCache = [];
         // reset logger as the new available config from conf.d mail contain different logger configuration
@@ -634,6 +635,54 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         /** @noinspection PhpIncludeInspection */
         return include($filename);
+    }
+
+    /**
+     * returns conf.d json file data
+     *
+     * @param $filename
+     * @return array|boolean
+     */
+    protected function _getConfdFileDataJson($filename)
+    {
+        if (!(file_exists($filename) && is_readable($filename))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' File not readable: ' . $filename);
+            return false;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Including config file ' . $filename);
+
+        $content = file_get_contents($filename, false);
+        try {
+            return Zend_Json::decode($content);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Failed json decodeing: ' . $filename);
+        }
+
+        return false;
+    }
+
+    /**
+     *  Merges arrays recursively. Overwrites non-array keys, unlike array_merge_recursive. Array2 takes precedence.
+     * @param $array1
+     * @param $array2
+     * @return array
+     */
+    static function _array_merge_recursive_distinct(&$array1, &$array2) {
+        $merged = $array1;
+
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = self::_array_merge_recursive_distinct($merged[$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+
+        return $merged;
     }
 
     /**
