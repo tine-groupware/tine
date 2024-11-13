@@ -92,7 +92,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('E-Mail'),
                                 name: 'email',
                                 maxLength: 255,
-                                allowBlank: true,
+                                allowBlank: false,
                                 checkState: function (editDialog, field) {
                                     if (editDialog?.mailingListPanel) {
                                         const checked = editDialog.mailingListPanel.isMailinglistCheckbox.checked;
