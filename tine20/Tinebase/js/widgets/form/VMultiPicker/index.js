@@ -58,6 +58,9 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         const { reactive } = window.vue
         this.vueEventBus = window.mitt()
         this.injectKey = 'injectKey'+this.id
+        if (_.isArray(this.value)) {
+            this.setValue(this.value)
+        }
         this.props = reactive({
             injectKey: this.injectKey,
             records: this.records,

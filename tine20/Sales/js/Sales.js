@@ -23,6 +23,8 @@ import './Document/BookDocumentAction';
 import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
 import './Document/DispatchDocumentAction';
+import './Document/AttachedDocument/ShowDispatchHistory';
+import './Document/AttachedDocument/ManageAttachmentAction';
 import './Document/TracAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';
