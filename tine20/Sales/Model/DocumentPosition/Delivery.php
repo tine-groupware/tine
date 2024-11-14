@@ -58,9 +58,13 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
      */
     protected static $_configurationObject = NULL;
 
-    // no moneytary fields, no calc to do
-    public function computePrice()
+    /**
+     * no monetary fields, no calc to do
+     *
+     * @param bool $onlyProductType
+     * @return void
+     */
+    public function computePrice(bool $onlyProductType = true): void
     {
     }
 }
-
