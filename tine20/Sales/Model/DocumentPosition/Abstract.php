@@ -612,9 +612,17 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     {
     }
 
-    public function computePrice()
-    { // AbstractMixin.computePrice Zeile 62ff
-        if (self::POS_TYPE_PRODUCT !== $this->{self::FLD_TYPE}) {
+    /**
+     * AbstractMixin.computePrice Zeile 62ff
+     *
+     * @param bool $onlyProductType
+     * @return void
+     *
+     * TODO not sure if we need the param & the "only product" check ...
+     */
+    public function computePrice(bool $onlyProductType = true): void
+    {
+        if ($onlyProductType && self::POS_TYPE_PRODUCT !== $this->{self::FLD_TYPE}) {
             return;
         }
         $this->{self::FLD_POSITION_PRICE} = is_null($this->{self::FLD_UNIT_PRICE}) || is_null($this->{self::FLD_QUANTITY}) ? null
