@@ -516,7 +516,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Button} btn 
      */
     onImport: function(btn) {
-        var popupWindow = Tine.Calendar.ImportDialog.openWindow({
+
+        Tine.Calendar.ImportDialog.openWindow({
             appName: 'Calendar',
             modelName: 'Event',
             defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultContainer'),

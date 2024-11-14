@@ -31,6 +31,8 @@ class Admin_Model_SchedulerTask_Import extends Admin_Model_SchedulerTask_Abstrac
         $_definition[self::RECORD_NAME]       = 'Scheduled Import Task config'; // gettext('GENDER_Scheduled Import Task config')
         $_definition[self::RECORDS_NAME]      = 'Scheduled Import Task configs'; // ngettext('Scheduled Import Task config', 'Scheduled Import Task configs', n)
 
+        $_definition[self::TITLE_PROPERTY]    = '{{ plugin_class }} {{ import_name }}';
+
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::FIELDS][self::FLD_IMPORT_NAME] = [
             self::TYPE          => self::TYPE_STRING,

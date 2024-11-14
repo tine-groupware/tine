@@ -775,16 +775,16 @@ msgid "Download example file"
 msgstr "Beispieldatei herunterladen"
 
 #: js/ImportDialog.js:366
-msgid "Remote / ICS"
-msgstr "Entfernt / ICS"
+msgid "Remote ICS File"
+msgstr "Entfernte ICS Datei"
 
 #: js/ImportDialog.js:367
-msgid "Remote / CalDAV (BETA)"
-msgstr "Entfernt / CalDAV (BETA)"
+msgid "Remote CalDAV Server"
+msgstr "Entfernter CalDAV Server"
 
 #: js/ImportDialog.js:368
-msgid "Upload"
-msgstr "Hochladen"
+msgid "Upload Local File"
+msgstr "Lokale Datei hochladen"
 
 #: js/ImportDialog.js:381
 msgid "Choose File and Format"
@@ -793,12 +793,6 @@ msgstr "Wähle Datei und Format"
 #: js/ImportDialog.js:390
 msgid "Select type of source"
 msgstr "Wählen Sie den Typ der Quelle aus"
-
-#: js/ImportDialog.js:394
-msgid "Please select the type of source you want to add to Tine 2.0"
-msgstr ""
-"Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Tine 2.0 "
-"hinzufügen wollen"
 
 #: js/ImportDialog.js:458
 #, python-brace-format
