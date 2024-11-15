@@ -51,25 +51,6 @@ Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
 
 Ext.reg('tw-modelpicker', Tine.Tinebase.widgets.form.ModelPicker);
 
-const modelPicker = Ext.extend(Tine.Tinebase.widgets.form.ModelPicker, {
-    emptyText: 'Built in configs',
-    fieldLabel: 'Task Type',
-    allowBlank: true,
-    checkState(editDialog, record) {
-        this.setDisabled(record && !!+record.get('is_system'));
-        editDialog.getForm().findField('config').setDisabled(record && !!+record.get('is_system'));
-    }
-})
-
-Ext.reg('admin-schedulertask-modelpicker', modelPicker);
-window.setTimeout(() => {
-    Tine.widgets.form.FieldManager.register('Admin', 'SchedulerTask', 'config_class', {
-        xtype: 'admin-schedulertask-modelpicker'
-    }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
-}, 500);
-
-
-
 Ext.reg('tw-modelspickers', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
     searchComboConfig: {
         xtype: 'tw-modelpicker',

@@ -130,6 +130,10 @@
         {
           "text": "SchedulerPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "SchedulerModelPicker.js",
+          "path": "js/"
         }
       ]
     },
