@@ -252,7 +252,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::TYPE       => self::TYPE_RECORD,
                 self::CONFIG => [
                     self::APP_NAME     => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME   => 'Addressbook_Model_Contact',
+                    self::MODEL_NAME   => 'Contact',
                 ],
                 self::NULLABLE => true,
                 self::UI_CONFIG         => [

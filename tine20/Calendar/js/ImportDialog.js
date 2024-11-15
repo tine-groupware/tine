@@ -34,7 +34,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
     },
 
     getItems: function() {
-        return [this.getPanel()];
+        return [
+            this.getPanel(),
+            this.getEventOptionsPanel()
+        ];
     },
     
     /**
@@ -76,7 +79,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 interval: this.ttlCombo.getValue()
             });
         }
-       
+
+        // finally apend generic options from Calendar_Import_Abstract
+        Object.assign(params.importOptions, this.eventOptionsForm.getForm().getFieldValues())
+
         Ext.Ajax.request({
             scope: this,
             timeout: 1800000, // 30 minutes
@@ -102,16 +108,22 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         this.lastImportResponse = decoded;
 
         var that = this;
-        
+
         if (success) {
-            Ext.MessageBox.show({
-                buttons: Ext.Msg.OK,
-                icon: Ext.MessageBox.INFO,
-                fn: callback,
-                scope: that,
-                title: that.app.i18n._('Import Definition Success!'),
-                msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob.')
-            });
+            const type = this.typeCombo.getValue()
+
+            if (type !== 'upload' && this.ttlCombo.getValue() !== 'once') {
+                Ext.MessageBox.show({
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO,
+                    fn: callback,
+                    scope: that,
+                    title: that.app.i18n._('Import Definition Success!'),
+                    msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob.')
+                });
+            } else {
+                _.defer(_.bind(callback, that))
+            }
             
             var wp = this.app.mainScreen.getWestPanel(),
                 tp = wp.getContainerTreePanel(),
@@ -363,8 +375,9 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             example = options && options.example ? options.example : '';
         
         var types = [
-            ['remote_ics', this.app.i18n._('Remote / ICS')],
-            ['upload', this.app.i18n._('Upload')]
+            ['remote_ics', this.app.i18n._('Remote ICS File')],
+            ['remote_caldav', i18n._('Remote CalDAV Server')],
+            ['upload', this.app.i18n._('Upload Local File')]
         ]
         
         var typeStore = new Ext.data.ArrayStore({
@@ -387,11 +400,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
                 title: this.app.i18n._('Select type of source'),
-                height: 100,
+                height: 60,
                 items: [{
-                        xtype: 'label',
-                        html: '<p>' + this.app.i18n._('Please select the type of source you want to add to Tine 2.0') + '</p><br />'
-                }, {
                     xtype: 'combo',
                     mode: 'local',
                     ref: '../../typeCombo',
@@ -449,34 +459,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             this.getImportOptionsPanel(),
             this.getDefinitionPanel()],
 
-            /**
-            * finish button handler for this panel
-            */
-            onFinishButton: (function() {
-                if (! this.importMask) {
-                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Importing {0}'), this.recordClass.getRecordsName())});
-                }
-                this.importMask.show();
-
-                // collect client data
-                var clientRecordData = [];
-                var importOptions = {};
-
-                this.doImport(function(request, success, response) {
-                    this.importMask.hide();
-
-                    this.fireEvent('finish', this, this.layout.activeItem);
-
-                    if (Ext.isArray(response.exceptions) && response.exceptions.length > 0) {
-                        this.backButton.setDisabled(true);
-                        this.finishButton.setHandler(function() {this.window.close()}, this);
-                    } else {
-                        this.window.close();
-                    }
-                }, importOptions, clientRecordData);
-            }).createDelegate(this),
-
-            finishIsAllowed: (function() {
+            nextIsAllowed: (function() {
                 var credentialsCheck = false;
 
                 if (this.typeCombo.getValue() == 'remote_caldav') {
@@ -500,6 +483,72 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
 
             }).createDelegate(this)
         };
+    },
+
+    getEventOptionsPanel: function () {
+        return {
+            title: this.app.i18n._('Event Import Options'),
+            border: false,
+            layout: 'fit',
+            frame: true,
+            items: [{
+                xtype: 'form',
+                ref: '../eventOptionsForm',
+                labelAlign: 'top',
+                bodyStyle: 'padding: 5px;',
+                defaults: { anchor: '100%' },
+                items: [{
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Update Existing Events'),
+                    boxLabel: this.app.i18n._('Force update of existing events'),
+                    name: 'updateExisting'
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Force Update Existing Events'),
+                    boxLabel: this.app.i18n._("Update exiting events even if imported sequence number isn't higher"),
+                    name: 'forceUpdateExisting'
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Keep Existing Attendee'),
+                    boxLabel: this.app.i18n._('Do not remove attendee of existing events which are not in the import data'),
+                    name: 'keepExistingAttendee'
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Delete Missing Events'),
+                    boxLabel: this.app.i18n._('Delete events missing in import data (future only)'),
+                    name: 'deleteMissing'
+                }/*, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Basic Data Only'),
+                    boxLabel: this.app.i18n._('Import basic data only (i.e. without attendee, alarms, uid, ...)'),
+                    name: 'onlyBasicData'
+                }*/
+                ]
+            }],
+            onFinishButton: (function() {
+                if (! this.importMask) {
+                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Importing {0}'), this.recordClass.getRecordsName())});
+                }
+                this.importMask.show();
+
+                // collect client data
+                var clientRecordData = [];
+                var importOptions = {};
+
+                this.doImport(function(request, success, response) {
+                    this.importMask.hide();
+
+                    this.fireEvent('finish', this, this.layout.activeItem);
+
+                    if (Ext.isArray(response?.exceptions) && response.exceptions.length > 0) {
+                        this.backButton.setDisabled(true);
+                        this.finishButton.setHandler(function() {this.window.close()}, this);
+                    } else {
+                        this.window.close();
+                    }
+                }, importOptions, clientRecordData);
+            }).createDelegate(this)
+        }
     }
 });
 

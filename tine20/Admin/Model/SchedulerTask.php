@@ -68,16 +68,6 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
             ]
         ]);
 
-        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_CONFIG_CLASS, [
-            self::FLD_EMAILS => [
-                self::TYPE      => self::TYPE_STRING,
-                self::LABEL     => 'Emails', // _('Emails')
-                self::VALIDATORS    => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                ],
-            ]
-        ]);
-
         $_definition[self::FIELDS][self::FLD_CONFIG] = [
             self::TYPE      => self::TYPE_DYNAMIC_RECORD,
             self::LABEL     => 'Task config', // _('Task config')
@@ -89,6 +79,16 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
                 Zend_Filter_Input::ALLOW_EMPTY => true,
             ],
         ];
+
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_CONFIG, [
+            self::FLD_EMAILS => [
+                self::TYPE      => self::TYPE_STRING,
+                self::LABEL     => 'Emails', // _('Emails')
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ]
+        ]);
 
         $_definition[self::FIELDS][self::FLD_NEXT_RUN][self::VALIDATORS][Zend_Filter_Input::ALLOW_EMPTY] = true;
         $_definition[self::FIELDS][self::FLD_NEXT_RUN][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] = '1970-01-01 00:00:00';
