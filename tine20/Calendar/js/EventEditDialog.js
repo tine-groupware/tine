@@ -8,6 +8,8 @@
  *
  */
  
+import OrganizerCombo from "./OrganizerCombo";
+
 Ext.ns('Tine.Calendar');
 
 import FieldTriggerPlugin from "Tinebase/js/ux/form/FieldTriggerPlugin"
@@ -486,41 +488,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             bbar: [{
                 xtype: 'label',
                 html: Tine.Tinebase.appMgr.get('Calendar').i18n._('Organizer') + "&nbsp;"
-            }, organizerCombo = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+            }, organizerCombo = new OrganizerCombo({
                 width: 300,
-                name: 'organizer',
-                userOnly: true,
-                noEditPlugin: true,
-                getValue: function() {
-                    var id = Tine.Addressbook.SearchCombo.prototype.getValue.apply(this, arguments),
-                        record = this.store.getById(id);
-                        
-                    return record ? record.data : id;
-                },
-                setValue(value, record) {
-                    record = record ?? this.selectedRecord;
-                    if (record) {
-                        const orgaType = record.get('organizer_type') ?? 'contact';
-                        if (orgaType === 'email') {
-                            value = {
-                                "email": record.get('organizer_email'),
-                                "n_fileas": record.get('organizer_displayname'),
-                                "n_fn": record.get('organizer_displayname')
-                            };
-                        }
-                        const plugin = _.find(this.plugins, {id: 'orga-type'});
-                        plugin.setTriggerClass(`cal-organizer-type-${orgaType}`);
-                        plugin.setQtip(orgaType === 'email' ?
-                            this.app.i18n._('External organizer') :
-                            this.app.i18n._('Internal organizer')
-                        );
-                    }
-                    this.supr().setValue.call(this, value, record);
-                },
-                plugins: [new FieldTriggerPlugin({
-                    id: 'orga-type',
-                    triggerClass: 'cal-organizer-type-email'
-                })]
+                forceSelection: true, // no selection of external organizers here yet
+                onOrganizerSelect: (data) => {
+                    _.each(data, (val, key) => { this.record.set(key, val) })
+                }
             })]
         });
         
