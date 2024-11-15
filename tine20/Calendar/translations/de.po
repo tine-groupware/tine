@@ -2391,7 +2391,7 @@ msgstr "vorletzten"
 
 #: Model/Rrule.php:473
 msgid "fifth"
-msgstr "fünften"
+msgstr "fünfte"
 
 #: Model/Rrule.php:478
 msgid "st"
@@ -2911,13 +2911,12 @@ msgid "The container already exists"
 msgstr "Der Container existiert bereits"
 
 msgid ""
-"You are about to change the status of the event itself and not just your "
-"own status. Do you really want to change the event status?"
+"You are about to change the status of the event itself and not just your own "
+"status. Do you really want to change the event status?"
 msgstr ""
 "Sie sind dabei, den Termin-Status und nicht nur Ihren eigenen Teilnehmer-"
 "Status am Termin zu ändern. Wollen Sie wirklich den Termin-Status ändern? "
-"Die Teilnahme von Ihnen und der der anderen Teilnehmenden bleibt "
-"unverändert."
+"Die Teilnahme von Ihnen und der der anderen Teilnehmenden bleibt unverändert."
 
 msgid "Save in calendar without response"
 msgstr "Termin ohne Rückmeldung im Kalender speichern"
@@ -2925,3 +2924,15 @@ msgstr "Termin ohne Rückmeldung im Kalender speichern"
 #: views/eventNotification.php:12
 msgid "Updates from"
 msgstr "Änderungen von"
+
+#: js/ImportDialog.js:366
+msgid "Remote ICS File"
+msgstr "Entfernte ICS Datei"
+
+#: js/ImportDialog.js:367
+msgid "Remote CalDAV Server"
+msgstr "Entfernter CalDAV Server"
+
+#: js/ImportDialog.js:368
+msgid "Upload Local File"
+msgstr "Lokale Datei hochladen"
