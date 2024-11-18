@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -41,7 +41,9 @@ class Tasks_ControllerTest extends TestCase
     protected Tasks_Controller_Task $_controller;
 
     protected $_minimalDatas = [];
-    
+
+    protected Tinebase_Model_Container $_container;
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -53,13 +55,14 @@ class Tasks_ControllerTest extends TestCase
         parent::setUp();
         
         $this->_controller = Tasks_Controller_Task::getInstance();
+        $this->_container = $this->_getTestContainer('Tasks', Tasks_Model_Task::class);
         $this->_minimalDatas = array('Task' => array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
         ));
         
         $this->_testTask1 = new Tasks_Model_Task(array(
             // tine record fields
-            'container_id'         => NULL,
+            'container_id'         => $this->_container->getId(),
             'created_by'           => 6,
             'creation_time'        => Tinebase_DateTime::now(),
             'is_deleted'           => 0,
@@ -328,6 +331,7 @@ class Tasks_ControllerTest extends TestCase
         $this->_controller->create(new Tasks_Model_Task([
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
             'due'           => Tinebase_DateTime::now(),
+            'container_id'  => $this->_container->getId(),
             'organizer'     => Tinebase_Core::getUser()->getId(),
             Tasks_Model_Task::FLD_DEPENDENS_ON => new Tinebase_Record_RecordSet(Tasks_Model_TaskDependency::class, [[
                 Tasks_Model_TaskDependency::FLD_DEPENDS_ON => $this->_persistantTestTask1->getId(),
@@ -340,6 +344,7 @@ class Tasks_ControllerTest extends TestCase
                     ['field' => 'summary', 'operator' => 'equals', 'value' => $this->_persistantTestTask1->summary],
                 ]],
             ]],
+            ['field' => Tasks_Model_Task::FLD_CONTAINER_ID, 'value' => $this->_container->getId()],
         ]));
 
         $this->assertSame(1, $searchResult->count());
@@ -351,15 +356,18 @@ class Tasks_ControllerTest extends TestCase
         $this->_controller->create(new Tasks_Model_Task([
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
             'due'           => Tinebase_DateTime::now()->subDay(1),
+            'container_id'  => $this->_container->getId(),
             'organizer'     => Tinebase_Core::getUser()->getId(),
             Tasks_Model_Task::FLD_DEPENDENS_ON => new Tinebase_Record_RecordSet(Tasks_Model_TaskDependency::class, [[
                 Tasks_Model_TaskDependency::FLD_DEPENDS_ON => $this->_persistantTestTask1->getId(),
             ]], true),
         ]));
 
-        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
             ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
-        ]));
+            ['field' => Tasks_Model_Task::FLD_CONTAINER_ID, 'value' => $this->_container->getId()],
+        ]);
+        $searchResult = $this->_controller->search($filter);
 
         // persistant *sic* test task has no attendees, so we as organizer are responsible for it
         $this->assertSame(1, $searchResult->count());
@@ -372,9 +380,7 @@ class Tasks_ControllerTest extends TestCase
             ]], true);
         $this->_persistantTestTask1 = $this->_controller->update($this->_persistantTestTask1);
 
-        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
-            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
-        ]));
+        $searchResult = $this->_controller->search($filter);
         $this->assertSame(0, $searchResult->count());
 
         $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES}->getFirstRecord()
@@ -383,9 +389,7 @@ class Tasks_ControllerTest extends TestCase
         $this->assertSame('DECLINED', $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES}->getFirstRecord()
             ->{Tasks_Model_Attendee::FLD_STATUS});
 
-        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
-            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
-        ]));
+        $searchResult = $this->_controller->search($filter);
         $this->assertSame(1, $searchResult->count());
         $this->assertSame($this->_persistantTestTask1->getId(), $searchResult->getFirstRecord()->getId());
     }
