@@ -203,6 +203,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 if (!empty($request->getParsedBody()['password'] ?? null)) {
                     Tinebase_Controller::getInstance()->forceUnlockLoginArea();
                     try {
+                        Tinebase_Controller::getInstance()->setRequestContext(array(
+                            'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
+                            'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
+                        ));
                         Tinebase_Controller::getInstance()->login($request->getParsedBody()['username'],
                             $request->getParsedBody()['password'],
                             static::getLoginFakeRequest('/sso/oauth2/authorize'),
