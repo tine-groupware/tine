@@ -145,7 +145,7 @@ class Tinebase_FileSystem implements
         // FIXME why is this check needed (setup tests fail without)?
         if ($fsConfig) {
             $this->_modLogActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
-            $this->_indexingActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+            $this->_indexingActive = $this->_isFileIndexingActive($fsConfig);
             $this->_notificationActive = true === $fsConfig->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
         }
 
@@ -161,6 +161,30 @@ class Tinebase_FileSystem implements
                 Tinebase_Backend_Sql_Abstract::TABLE_NAME => Tinebase_Model_Tree_RefLog::TABLE_NAME,
             ]);
         }
+    }
+
+    protected function _isFileIndexingActive(?Object $fsConfig = null): bool
+    {
+        if (!$fsConfig) {
+            $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        }
+
+        $result = true === $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+        if (!$result) {
+            return false;
+        }
+
+        $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
+        foreach ([Tinebase_Config::FULLTEXT_TIKAJAR, Tinebase_Config::FULLTEXT_JAVABIN] as $config) {
+            if (empty($fulltextConfig->{$config})) {
+                $result = false;
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
+                        . __LINE__ . ' Indexing active but ' . $config . ' config is not set');
+                }
+            }
+        }
+        return $result;
     }
     
     /**
@@ -181,7 +205,7 @@ class Tinebase_FileSystem implements
     {
         $config = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
         $this->_modLogActive = true === $config->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE};
-        $this->_indexingActive = true === $config->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT};
+        $this->_indexingActive = $this->_isFileIndexingActive($config);
         $this->_notificationActive = true === $config->{Tinebase_Config::FILESYSTEM_ENABLE_NOTIFICATIONS};
         $this->_previewActive = null;
 
@@ -841,8 +865,9 @@ class Tinebase_FileSystem implements
             $this->_checkQuotaAndRegisterRefLog($_node, $sizeDiff, $revisionSizeDiff);
         }
 
-        if (true === Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT}) {
-            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
+        if (true === $this->_isFileIndexingActive()) {
+            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)
+                ->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
         }
 
         return $newFileObject;
