@@ -396,4 +396,19 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             $this->fail('update agreeDate to overlap second intended purpose should not be possible and throw exception');
         } catch (Tinebase_Exception_Record_Validation) {}
     }
+
+    public function testPublicApiGetManageConsent()
+    {
+        $contact = new Addressbook_Model_Contact([
+            'n_given' => Tinebase_Record_Abstract::generateUID() . 'unittest',
+            'email' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
+            'email_home' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
+        ], true);
+
+        /** @var Addressbook_Model_Contact $createdContact */
+        $createdContact = Addressbook_Controller_Contact::getInstance()->create($contact);
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsent($createdContact->getId());
+        $responseData = json_decode($response->getBody(), true);
+        static::assertEquals(2, sizeof($responseData['allDataIntendedPurposes']), 'expect to find 2 data intended purpose records for this contact');
+    }
 }

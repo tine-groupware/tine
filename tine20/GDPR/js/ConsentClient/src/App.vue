@@ -87,6 +87,9 @@ const _DEF_VAL = Object.freeze({
     withdrawDate: null
 })
 const extendedDataIntendedPurposes = computed(() => {
+    const isExpired = function (withdrawDate) {
+      return withdrawDate && new Date(withdrawDate).getTime() < new Date().getTime();
+    }
     const val = _.get(consentConfig.value, _ALL_DATA_INTENDED_PURPOSES)?.map(purpose => {
         // const purposeRecord = _.find(consentConfig.value.dataIntendedPurposeRecords, (record) => {
         //     return record.id === purpose.id
@@ -98,13 +101,14 @@ const extendedDataIntendedPurposes = computed(() => {
                 ..._DEF_VAL
             }
         }
+
         const getStatus = function( record ) {
             if(!(record.withdrawDate || record.agreeDate)) return {
                 status: 'Manage',
                 statusText: formatMessage('Not decided'),
                 cellClass: 'table-warning',
             };
-            if(record.withdrawDate && new Date(record.withdrawDate).getTime() < new Date().getTime()) {
+            if(isExpired(record.withdrawDate)) {
                 return {
                     status: 'Agree',
                     statusText: formatMessage('Withdraw date') + ' ' + new Date(record.withdrawDate).toLocaleString("de"),
@@ -121,6 +125,7 @@ const extendedDataIntendedPurposes = computed(() => {
         const _GDPR_DEFAULT_LANG = "GDPR_default_lang"
         const def_lang = consentConfig.value?.locale.locale || _.get(consentConfig.value, _GDPR_DEFAULT_LANG)
         const getItem = (array, locale) => _.find(array, (item) => item.language === locale) || null
+
         _purposeRecord.__record = {
             name: getItem(_purposeRecord.intendedPurpose.name, def_lang)?.text,
             desc: getItem(_purposeRecord.intendedPurpose.description, def_lang)?.text,
@@ -129,7 +134,10 @@ const extendedDataIntendedPurposes = computed(() => {
         };
         return _purposeRecord;
     }) || []
-    return val
+    const validPurposes = val.filter((purpose) => {
+       return purpose.intendedPurpose.is_self_registration ? !isExpired(purpose.withdrawDate) : true
+    })
+    return validPurposes
 })
 
 const logoLink = computed(() => {
