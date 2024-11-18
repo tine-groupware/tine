@@ -265,7 +265,9 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
                         $member_Model->n_fileas = $member;
                         $member_Model->n_family = $member_name['0'];
                         $member_Model->n_given = $member_name['1'];
-                        $user_id = Addressbook_Controller_Contact::getInstance()->create($member_Model)->getId();
+                        // TODO check for existing contact?
+                        $user_id = Addressbook_Controller_Contact::getInstance()->create(
+                            $member_Model, false)->getId();
                     }
                 }
             }
