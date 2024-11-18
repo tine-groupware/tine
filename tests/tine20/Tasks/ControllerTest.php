@@ -43,7 +43,7 @@ class Tasks_ControllerTest extends TestCase
     protected $_minimalDatas = [];
 
     protected Tinebase_Model_Container $_container;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -363,10 +363,11 @@ class Tasks_ControllerTest extends TestCase
             ]], true),
         ]));
 
-        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
             ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
             ['field' => Tasks_Model_Task::FLD_CONTAINER_ID, 'value' => $this->_container->getId()],
-        ]));
+        ]);
+        $searchResult = $this->_controller->search($filter);
 
         // persistant *sic* test task has no attendees, so we as organizer are responsible for it
         $this->assertSame(1, $searchResult->count());
@@ -379,9 +380,7 @@ class Tasks_ControllerTest extends TestCase
             ]], true);
         $this->_persistantTestTask1 = $this->_controller->update($this->_persistantTestTask1);
 
-        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
-            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
-        ]));
+        $searchResult = $this->_controller->search($filter);
         $this->assertSame(0, $searchResult->count());
 
         $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES}->getFirstRecord()
@@ -390,9 +389,7 @@ class Tasks_ControllerTest extends TestCase
         $this->assertSame('DECLINED', $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES}->getFirstRecord()
             ->{Tasks_Model_Attendee::FLD_STATUS});
 
-        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
-            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
-        ]));
+        $searchResult = $this->_controller->search($filter);
         $this->assertSame(1, $searchResult->count());
         $this->assertSame($this->_persistantTestTask1->getId(), $searchResult->getFirstRecord()->getId());
     }
