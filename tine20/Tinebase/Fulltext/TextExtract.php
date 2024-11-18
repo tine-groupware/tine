@@ -67,7 +67,6 @@ class Tinebase_Fulltext_TextExtract
     private function __construct()
     {
         $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
-
         $this->_javaBin = escapeshellcmd($fulltextConfig->{Tinebase_Config::FULLTEXT_JAVABIN});
         $this->_tikaJar = escapeshellarg($fulltextConfig->{Tinebase_Config::FULLTEXT_TIKAJAR});
     }
