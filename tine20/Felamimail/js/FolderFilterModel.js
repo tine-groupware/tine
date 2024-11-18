@@ -105,7 +105,7 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.PickerFilter, {
             },
             
             pickerGridPanelConfigs: {
-                clicksToEdit: 2,
+                clicksToEdit: 1,
                 forceValidation: true,
                 app: this.app,
                 preEditValue : (record, field) => {
