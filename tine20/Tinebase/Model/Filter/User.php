@@ -127,19 +127,19 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
                         break;
                     case 'in':
                     case 'notin':
-                        $result['value'] = array();
                         if (! is_array($result['value'])) {
                             // somehow the client sent us a scalar - put this into the value array
-                            $result['value'][] = $result['value'];
-                        } else {
-                            foreach ($result['value'] as $userId) {
-                                try {
-                                    $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
-                                } catch(Tinebase_Exception_NotFound) {
-                                    $result['value'][] = $userId;
-                                }
+                            $result['value'] = [$result['value']];
+                        }
+                        $value = [];
+                        foreach ($result['value'] as $userId) {
+                            try {
+                                $value[] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                            } catch (Tinebase_Exception_NotFound) {
+                                $value = $userId;
                             }
                         }
+                        $result['value'] = $value;
                         break;
                     default:
                         break;
