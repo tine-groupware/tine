@@ -1626,11 +1626,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             } catch (Exception $e) {
                 if (($e instanceof Felamimail_Exception_IMAPServiceUnavailable
                         || $e instanceof Felamimail_Exception_IMAPInvalidCredentials)
-                    && Tinebase_Core::isLogLevel(Zend_Log::INFO)
                 ) {
-                    Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $e
-                    );
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                    }
                 } else {
                     Tinebase_Exception::log($e);
                 }
