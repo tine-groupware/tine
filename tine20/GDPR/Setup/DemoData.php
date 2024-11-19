@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -21,7 +22,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      *
      * @var GDPR_Setup_DemoData
      */
-    private static $_instance = NULL;
+    private static $_instance = null;
 
     /**
      * the application name to work on
@@ -42,7 +43,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * @var array
      */
     protected $_models = array(GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART);
-    
+
     /**
      * the constructor
      *
@@ -54,7 +55,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     /**
      * this is required for other applications needing demo data of this application
      * if this returns true, this demodata has been run already
-     * 
+     *
      * @return boolean
      */
     public static function hasBeenRun()
@@ -70,7 +71,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new self();
         }
 
@@ -83,7 +84,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     public function unsetInstance()
     {
-        if (self::$_instance !== NULL) {
+        if (self::$_instance !== null) {
             self::$_instance = null;
         }
     }
@@ -109,10 +110,14 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ],
             GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'The E-Mail provided will be used exclusively for the purpose of sending the newsletter to subscribers.',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT
+                    => 'The E-Mail provided will be used exclusively for the ' .
+                    'purpose of sending the newsletter to subscribers.',
                 ], [
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Die angegebenen E-Mail-Adresse werden ausschließlich für den Versand des Newsletters an die Abonnenten verwendet.',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT
+                    => 'Die angegebenen E-Mail-Adresse werden ausschließlich ' .
+                        'für den Versand des Newsletters an die Abonnenten verwendet.',
                 ]
             ],
         ]));
@@ -128,15 +133,18 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ],
             GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'The telephone number provided will be used solely to conduct telephone marketing activities for Dummy Company',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'The telephone number provided will be used ' .
+                        'solely to conduct telephone marketing activities for Dummy Company',
                 ],[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Die angegebene Telefonnummer wird ausschließlich für Telefonmarketingaktivitäten für Dummy Firma verwendet.',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Die angegebene Telefonnummer wird ' .
+                        'ausschließlich für Telefonmarketingaktivitäten für Dummy Firma verwendet.',
                 ]
             ],
         ]));
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 2 test ' . GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART);
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 2 test '
+            . GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART);
         $user = Tinebase_Core::getUser();
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'n_fileas',      'operator' => 'equals', 'value' => $user->accountDisplayName),
@@ -154,7 +162,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'agreeDate' => Tinebase_DateTime::now(),
             ], true)
         ];
-        
+
         Addressbook_Controller_Contact::getInstance()->update($contact);
     }
 }
