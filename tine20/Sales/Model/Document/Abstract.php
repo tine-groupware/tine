@@ -997,9 +997,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
+        if (! $product->{Sales_Model_Product::FLD_NAME}) {
+            throw new Tinebase_Exception_Record_Validation('Name cannot be empty - we need an expanded product');
+        }
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_TITLE} = ($product->{Sales_Model_Product::FLD_NAME}
+            ->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
+            ?: $product->{Sales_Model_Product::FLD_NAME}->getFirstRecord())->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_TYPE} = Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT;
-        $position->{Sales_Model_DocumentPosition_Abstract::FLD_TITLE} = ($product->{Sales_Model_Product::FLD_NAME}->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
-           ?: $product->{Sales_Model_Product::FLD_NAME}->getFirstRecord())->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_PRODUCT_ID} = $product;
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} = 1;
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
