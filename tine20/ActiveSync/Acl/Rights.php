@@ -98,7 +98,7 @@ class ActiveSync_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 
     /**
      * get translated right descriptions
-     * 
+     *
      * @return  array with translated descriptions for this applications rights
      */
     public static function getTranslatedRightDescriptions()

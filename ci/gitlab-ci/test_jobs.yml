@@ -140,6 +140,7 @@ phpcs-analysis:
       changes:
         paths:
           - "**/*.php"
+          - "tine20/phpcs.baseline.xml"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpcs-analysis/
     - if: $PIPELINE_TYPE =~ /default-tests/
     - if: $PIPELINE_TYPE =~ /mr-tests/
