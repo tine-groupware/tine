@@ -37,6 +37,7 @@ app.config.globalProperties.formatMessage = function (template) {
 
 _.assign(app.config.globalProperties.formatMessage, FormatMessage)
 app.config.globalProperties.fmHidden = app.config.globalProperties.formatMessage
+app.config.globalProperties.window = window
 
 const injectKey = Symbol('formatMessage');
 app.provide(injectKey, {formatMessage: app.config.globalProperties.formatMessage, fmHidden: app.config.globalProperties.formatMessage});

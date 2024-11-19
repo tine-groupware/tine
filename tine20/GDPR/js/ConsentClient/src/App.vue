@@ -2,20 +2,21 @@
     <div class="container" v-if="!loading || !consentConfig">
         <BNavbar class="my-3">
             <BNavbarBrand>
-                <TineLogo class="logo"/> 
+                <img v-if="logoLink" class="logo" :src="logoLink" />
+                <TineLogo v-else class="logo"/>
             </BNavbarBrand>
             <!-- <BButton variant="primary" @click="handleNotSomeone">{{ formatMessage('I am not {email}', {email: email}) }}</BButton> -->
         </BNavbar>
         <div>
             <div class="ps-3 my-4">
-                <h3>{{ formatMessage('Manage consent')}}: <span>{{email}}</span></h3>
+                <h3>{{ formatMessage('Consent management for')}}: <span>{{email}}</span></h3>
                 <p>{{ consentPageExplaination }}</p>
             </div>
             <div class="mt-2 container px-auto table-container">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>{{ formatMessage('Purpose') }}</th>
+                            <th>{{ formatMessage('Data intended purpose') }}</th>
                             <th class="status table-light text-center">{{ formatMessage('Status') }}</th>
                             <th class="button table-light"></th>
                         </tr>
@@ -24,7 +25,7 @@
                         <tr v-for="purpose in extendedDataIntendedPurposes" :key="purpose.__record.key">
                             <td class="highlight"><strong>{{ purpose.__record.name }}</strong></td>
                             <td class="status text-center" :class=purpose.__record.cellClass>{{ purpose.__record.statusText}}</td>
-                            <td class="table-light text-center"><BButton variant="primary py-0 px-5" @click="openDialog(purpose)" class="mt-auto">{{ purpose.__record.status }}</BButton></td>
+                            <td class="table-light text-center"><BButton variant="primary py-0 px-5" @click="openDialog(purpose)" class="mt-auto">{{ formatMessage(purpose.__record.status) }}</BButton></td>
                         </tr>
                     </tbody>
                 </table>
@@ -59,7 +60,11 @@ const email = computed(() => _.get(consentConfig.value, _CONTACT_EMAIL) || "__")
 
 const _CONSENT_PAGE_EXPALIN_TEXT = "manageConsentPageExplainText"
 const consentPageExplaination = computed(() => {
-    return '' ; // _.get( _.get(consentConfig.value, _CONSENT_PAGE_EXPALIN_TEXT), "en", null)
+  // explain texts under `manageConsentPageExplainText` as obj with locale [under `locale.locale`] as key
+  return  _.get(
+    _.get(consentConfig.value, _CONSENT_PAGE_EXPALIN_TEXT),
+    _.get(consentConfig.value, 'locale.locale')
+  )
 })
 
 
@@ -102,19 +107,19 @@ const extendedDataIntendedPurposes = computed(() => {
             if(record.withdrawDate && new Date(record.withdrawDate).getTime() < new Date().getTime()) {
                 return {
                     status: 'Agree',
-                    statusText: formatMessage('Withdrawn on {date}', {date: new Date(record.withdrawDate).toLocaleString("de")}),
+                    statusText: formatMessage('Withdraw date') + ' ' + new Date(record.withdrawDate).toLocaleString("de"),
                     cellClass: 'table-danger'
                 };
             } else {
                 return {
                     status: 'Withdraw',
-                    statusText: formatMessage('Agreed on {date}', {date: new Date(record.agreeDate).toLocaleString("de")}),
+                    statusText: formatMessage('Agreement date') + ' ' + new Date(record.agreeDate).toLocaleString("de"),
                     cellClass: 'table-success'
                 };
             }
         };
         const _GDPR_DEFAULT_LANG = "GDPR_default_lang"
-        const def_lang = _.get(consentConfig.value, _GDPR_DEFAULT_LANG)
+        const def_lang = consentConfig.value?.locale.locale || _.get(consentConfig.value, _GDPR_DEFAULT_LANG)
         const getItem = (array, locale) => _.find(array, (item) => item.language === locale) || null
         _purposeRecord.__record = {
             name: getItem(_purposeRecord.intendedPurpose.name, def_lang)?.text,
@@ -125,6 +130,15 @@ const extendedDataIntendedPurposes = computed(() => {
         return _purposeRecord;
     }) || []
     return val
+})
+
+const logoLink = computed(() => {
+  const link = consentConfig.value
+    ? consentConfig.value.installLogo
+      ? consentConfig.value.installLogo
+      : consentConfig.value.brandingLogo
+    : null
+  return link ? `${window.location.origin}/${link}` : null
 })
 
 const handleNotSomeone = () => {
@@ -149,7 +163,7 @@ const closeConsentDialog = async () => {
 const fetchData = async () => {
     const _t = window.location.href.split('/').pop();
     if(_t == "manageConsent") throw new Error("Invalid Link");
-    fetchURL = `/GDPR/manageConsent/${_t}` 
+    fetchURL = `/GDPR/manageConsent/${_t}`
     const response = await fetch(fetchURL)
     if(!response.ok) throw new Error(response)
     consentConfig.value = await response.json();
@@ -165,7 +179,7 @@ onBeforeMount(async () => {
     }
     document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
     loading.value = false;
-}) 
+})
 </script>
 
 <style lang="scss">
