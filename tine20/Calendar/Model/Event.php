@@ -132,8 +132,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 'location_record'           => [
                     self::COLUMNS               => ['location_record'],
                 ],
-                'site'           => [
-                    self::COLUMNS               => ['site'],
+                'event_site'           => [
+                    self::COLUMNS               => ['event_site'],
                 ],
                 'uid'                       => [
                     self::COLUMNS               => ['uid'],
@@ -247,7 +247,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
             ],
-            'site' => [
+            'event_site' => [
                 self::LABEL      => 'Site',    // _('Site')
                 self::TYPE       => self::TYPE_RECORD,
                 self::CONFIG => [
@@ -700,7 +700,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'class':             return $t->_('Classification');
             case 'description':       return $t->_('Description');
             case 'location':          return $t->_('Location');
-            case 'site':              return $t->_('Site');
+            case 'event_site':              return $t->_('event_site');
             case 'organizer':         return $t->_('Organizer');
             case 'priority':          return $t->_('Priority');
             case 'status':            return $t->_('Status');
@@ -980,8 +980,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['location_record'] = $_data['location_record']['id'];
         }
 
-        if (isset($_data['site']) && is_array($_data['site'])) {
-            $_data['site'] = $_data['site']['id'];
+        if (isset($_data['event_site']) && is_array($_data['event_site'])) {
+            $_data['event_site'] = $_data['event_site']['id'];
         }
         
         if (empty($_data['class'])) {
