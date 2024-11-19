@@ -197,3 +197,22 @@ msgstr "Alle Kontakte, die diesem Verwendungszweck zugestimmt haben, als Empfän
 
 msgid "Compose mass mail without recipients"
 msgstr "Keine Empfänger der Massenmail hinzufügen"
+
+msgid "Agree"
+msgstr "Zustimmen"
+
+msgid "Withdraw"
+msgstr "Widerrufen"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Confirm"
+msgstr "Bestätigen"
+
+msgid "I hereby withdraw the following data intended purpose"
+msgstr "Hiermit widerrufe ich die Verarbeitung meiner Daten zum folgenden Zweck"
+
+msgid "I hereby accept the following data intended purpose"
+msgstr "Hiermit akzeptiere ich die Verarbeitung meiner Daten zum folgenden Zweck"
+

@@ -109,10 +109,10 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ],
             GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'I consent to receive newsletter with my email',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'The E-Mail provided will be used exclusively for the purpose of sending the newsletter to subscribers.',
                 ], [
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Ich möchte den Newsletter mit meiner E-Mail erhalten',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Die angegebenen E-Mail-Adresse werden ausschließlich für den Versand des Newsletters an die Abonnenten verwendet.',
                 ]
             ],
         ]));
@@ -128,10 +128,10 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ],
             GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'I consent to receive newsletter with my phone number, you can call me anytime',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'The telephone number provided will be used solely to conduct telephone marketing activities for Dummy Company',
                 ],[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Ich möchte den Newsletter mit meiner Telefonnummer erhalten, Sie können mich jederzeit anrufen',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Die angegebene Telefonnummer wird ausschließlich für Telefonmarketingaktivitäten für Dummy Firma verwendet.',
                 ]
             ],
         ]));

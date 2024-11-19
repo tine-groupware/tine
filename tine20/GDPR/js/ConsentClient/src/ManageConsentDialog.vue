@@ -1,20 +1,20 @@
 <template>
-    <BModal v-model="modalTrigger" :title="record?.__record.name"
+    <BModal v-model="modalTrigger" :title="dialogTitle"
         :noCloseOnBackdrop="true"
         :noCloseOnEsc="true"
     >
         <!-- :footerClass="consentStatus === 'UNDECIDED' ? 'justify-content-end': 'justify-content-between'" -->
         <template #default v-if="record">
-            <p v-if="record.__record.desc">{{ record.__record.desc }}</p>
-            <div>
-                <h5>{{ formatMessage('Status') }}:</h5>
-                <BFormSelect
-                    v-model="consentStatus"
-                    :options="consentOptions"
-                />
-            </div>
+          <p> {{ consentStatus !== 'Agree'
+            ? formatMessage('I hereby withdraw the following data intended purpose')
+            : formatMessage('I hereby accept the following data intended purpose')}}:
+          </p>
+          <div v-if="record.__record.desc" class="fs-6 ps-1">
+            <p class="fw-bold mb-1"> {{record?.__record.name}}:</p>
+            <p>{{ record.__record.desc }}</p>
+          </div>
             <div class="mt-3">
-                <h5>{{ formatMessage('Comment') }}:</h5>
+                <h5>{{ consentStatus !== 'Agree' ? formatMessage('Withdraw comment') : formatMessage('Agreement comment') }}:</h5>
                 <BFormTextarea
                     no-resize
                     :rows="5"
@@ -56,6 +56,10 @@ const consentOptions = computed(() => {
   ]
 })
 
+const dialogTitle = computed(() => {
+  return formatMessage(props.record?.__record.status || '') + ': ' + formatMessage(props.record?.__record.name || '')
+})
+
 const comment = ref();
 watch(()=> props.modelValue, (newVal) => {
     if(newVal){
@@ -72,9 +76,11 @@ const postConsent = async () => {
     switch(consentStatus.value){
         case 'Withdraw':
             body.withdrawComment = comment.value;
+            body.withdrawDate = new Date().toISOString().replace('T', ' ').split('.')[0];
             break;
         case 'Agree':
             body.agreeComment = comment.value;
+            body.agreeDate = new Date().toISOString().replace('T', ' ').split('.')[0];
             break;
         default:
             // add nothing to the body
@@ -89,7 +95,7 @@ const postConsent = async () => {
     }).then(resp => resp.json())
     .then(data => {
         console.debug(data);
-    }) 
+    })
     modalTrigger.value = false
     emits('confirm');
 }
