@@ -5,7 +5,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  */
@@ -2840,6 +2840,19 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertEquals(1, $result['totalcount']);
+    }
+
+    public function testSearchContactByCreatedByOneOf()
+    {
+        $this->_addContact();
+        $filter = [
+            ['field' => 'created_by', 'operator' => 'in', 'value' => [Tinebase_Core::getUser()->getId()]]
+        ];
+        $result = $this->_uit->searchContacts($filter, []);
+
+        self::assertGreaterThan(0, $result['totalcount']);
+        self::assertNotEmpty($result['filter'][0]['value'], 'filter value is empty: '
+            . print_r($result['filter'][0], true));
     }
 
     public function testSearchContactByCountryFilter()
