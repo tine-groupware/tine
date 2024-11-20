@@ -65,6 +65,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const VALIDATION_SVC = 'validation_svc';
     public const VIEW_SVC = 'view_svc';
 
+    const CUSTOMER_CONTACT_PERSON_FILTER = 'customerContactPersonFilter';
+
     /**
      * How should the contract number be validated
      * 
@@ -1270,6 +1272,17 @@ VAT ID of the service recipient: { vatid }',
                 ],
             ],
             self::DEFAULT_STR => [],
+        ],
+        self::CUSTOMER_CONTACT_PERSON_FILTER => [
+            //_('Contact person filter')
+            self::LABEL                 => 'Contact person filter',
+            //_('Configure filter for customer contacts via container path filter')
+            self::DESCRIPTION           => 'Contact person filter',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR               => '/all',
         ],
     );
     
