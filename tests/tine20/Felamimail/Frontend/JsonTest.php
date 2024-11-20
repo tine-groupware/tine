@@ -3009,7 +3009,6 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      * @throws Addressbook_Exception_NotFound
      * @throws Tinebase_Exception_InvalidArgument
      *
-     * @group nogitlabci
      */
     public function testFileMessageOnSend()
     {
@@ -3033,7 +3032,6 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      * @throws Addressbook_Exception_NotFound
      * @throws Tinebase_Exception_InvalidArgument
      *
-     * @group nogitlabci
      */
     public function testFileMessageOnSendWithEmail()
     {

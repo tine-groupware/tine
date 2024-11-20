@@ -1720,15 +1720,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $filterData =  [
             ['field' => 'received', 'operator' => 'within', 'value' => Tinebase_Model_Filter_Date::DAY_THIS],
         ];
-        if ($_message) {
-            $filterData[] = ['field' => 'subject', 'operator' => 'equals', 'value' => $_message->subject];
-        }
+
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, $filterData);
         $result = $this->search($filter, new Tinebase_Model_Pagination([
             'sort' => 'received',
             'dir' => 'DESC',
             'limit' => 1,
         ]));
+        if ($_message) {
+            $result = $result->filter('subject', $_message->subject);
+        }
         return $result->getFirstRecord();
     }
 
