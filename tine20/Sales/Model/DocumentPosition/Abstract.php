@@ -167,6 +167,10 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::FLD_PARENT_ID                 => [
                     self::COLUMNS                       => [self::FLD_PARENT_ID],
                 ],
+                self::DESCRIPTION => [
+                    self::COLUMNS       => [self::DESCRIPTION],
+                    self::FLAGS         => [self::TYPE_FULLTEXT],
+                ],
             ],
         ],
 
