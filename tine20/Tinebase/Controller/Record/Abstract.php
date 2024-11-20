@@ -3841,9 +3841,15 @@ HumanResources_CliTests.testSetContractsEndDate */
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
-        $recordId = is_array($location['record_id']) ? $location['record_id']['id'] : $location['record_id'];
+        $recordId = (is_string($location['record_id']) ? $location['record_id'] : !empty($location['record_id']['id'])) ? $location['record_id']['id'] : null;
         try {
-            $record = $this->get($recordId);
+            if (is_array($location['record_id']) && !$recordId) {
+                $recordData = new $location['model']($location['record_id']);
+                $record = $this->create($recordData);
+            } else {
+                $record = $this->get($recordId);
+            }
+
             if (! $record->getId()) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Record has no ID: ' . print_r($record->toArray(), true));
@@ -3854,7 +3860,7 @@ HumanResources_CliTests.testSetContractsEndDate */
                 . ' Record not found');
             return null;
         }
-        
+
         $this->checkGrant($record, self::ACTION_UPDATE, TRUE, 'No permission to update record.');
         
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
