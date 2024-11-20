@@ -1291,3 +1291,10 @@ msgstr ""
 
 msgid "A group with this name already exists"
 msgstr ""
+
+msgid "Scheduler task failed"
+msgstr ""
+
+#, python-format
+msgid "Your scheduler task %s has failed %d times."
+msgstr ""
