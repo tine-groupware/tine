@@ -195,6 +195,14 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
 
+    onAfterRecordLoad: function () {
+        this.supr().onAfterRecordLoad.apply(this, arguments);
+
+        if (!this.record.id) {
+            this.getForm().findField('type').setValue('INVOICE');
+        }
+    },
+
     /**
      * loads the address to the plaintext field
      */

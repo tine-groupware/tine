@@ -991,6 +991,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SITE_FILTER = 'siteFilter';
     const FEATURE_SITE = 'featureSite';
 
+    /**
+     * scheduler max fails
+     */
+    const SCHEDULER_MAX_FAILS = 'maxFails';
 
     /**
      * (non-PHPdoc)
@@ -3645,6 +3649,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
         ),
+        self::SCHEDULER_MAX_FAILS => [
+            self::LABEL                 => 'Max scheduler fails',
+            self::DESCRIPTION           => 'Max scheduler fails',
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 3,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true
+        ]
     );
 
     /**

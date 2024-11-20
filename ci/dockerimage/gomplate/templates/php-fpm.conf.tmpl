@@ -12,10 +12,10 @@ listen = 127.0.0.1:9000
 ;listen.allowed_clients = 127.0.0.1
 
 pm = {{ getenv "PHPFPM_DYNAMIC" "dynamic" }}
-pm.max_children = {{ getenv "PHPFPM_PM_MAX_CHILDREN" "5" }}
-pm.start_servers = {{ getenv "PHPFPM_PM_START_SERVER" "2" }}
-pm.min_spare_servers = {{ getenv "PHPFPM_PM_MIN_SPARE_SERVER" "1" }}
-pm.max_spare_servers = {{ getenv "PHPFPM_PM_MAX_SPARE_SERVER" "3" }}
+pm.max_children = {{ getenv "PHPFPM_PM_MAX_CHILDREN" "10" }}
+pm.start_servers = {{ getenv "PHPFPM_PM_START_SERVER" "4" }}
+pm.min_spare_servers = {{ getenv "PHPFPM_PM_MIN_SPARE_SERVER" "2" }}
+pm.max_spare_servers = {{ getenv "PHPFPM_PM_MAX_SPARE_SERVER" "6" }}
 ;pm.process_idle_timeout = 10s;
 pm.max_requests = {{ getenv "PHPFPM_PM_MAX_REQUESTS" "500" }}
 
