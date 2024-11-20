@@ -2465,5 +2465,8 @@ msgstr "Hinzufügen, bearbeiten und löschen von Geschäftsbereichen"
 #~ msgid "Possible Delivery Note Status Transitions"
 #~ msgstr "Mögliche Lieferscheinstatus-Übergänge"
 
-msgid "Must not be a personal contact"
-msgstr "Darf kein persönlicher Kontakt sein"
+msgid "Contact person filter"
+msgstr "Kontaktperson Filter"
+
+msgid "Configure filter for customer contacts via container path filter"
+msgstr "Filter für Kundenkontakte über den Contianer Path Filter"

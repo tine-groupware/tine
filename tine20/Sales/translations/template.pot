@@ -2324,5 +2324,8 @@ msgstr ""
 msgid "Add, edit and delete divisions"
 msgstr ""
 
-msgid "Must not be a personal contact"
+msgid "Contact person filter"
+msgstr ""
+
+msgid "Configure filter for customer contacts via container path filter"
 msgstr ""
