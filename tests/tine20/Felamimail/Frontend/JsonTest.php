@@ -2988,6 +2988,35 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         Tinebase_Core::setUser($this->_originalTestUser);
     }
 
+    public function testFileMessageWithoutLocationRecordId()
+    {
+        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(['name' => 'Test Customer',
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        ]));
+        $invoice = new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+        ]);
+        $subject = 'test file message  ' . Tinebase_Record_Abstract::generateUID(16);
+        $messageToSend = $this->_getMessageData('test@mail.test', $subject);
+        $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
+        $tempFile = $this->_getTempFile(null, $tempfileName);
+        $messageToSend['attachments'] = array(
+            array('tempFile' => array('id' => $tempFile->getId(), 'type' => $tempFile->type))
+        );
+        $messageToSend['fileLocations'] = [
+            [
+                'model' => Sales_Model_Document_Invoice::class,
+                'record_id' => $invoice->toArray(),
+                'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
+            ]
+        ];
+        $message = $this->_sendMessage('INBOX', array(), '', $subject, $messageToSend);
+        $this->assertTrue(count($message['fileLocations']) === 1);
+    }
+
     public function testFileMessageInvalid()
     {
         $message = $this->_sendMessage();
