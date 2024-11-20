@@ -196,6 +196,18 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
                 $this->_backend->update($task);
             } finally {
                 Tinebase_Core::releaseMultiServerLock($lockId);
+
+                $maxFails = Tinebase_Config::getInstance()->get(Tinebase_Config::SCHEDULER_MAX_FAILS, 3);
+                $accountId = $task->{Tinebase_Model_SchedulerTask::FLD_ACCOUNT_ID};
+                if ($accountId !== null && !$task->{Tinebase_Model_SchedulerTask::FLD_IS_SYSTEM} && $task->failure_count >= $maxFails) {
+                    $translation = Tinebase_Translation::getTranslation('Admin', Tinebase_Core::getLocale());
+                    $subject =  $translation->_('Scheduler task failed');
+                    $messageBody = sprintf($translation->_('Your scheduler task %s has failed %d times.'), $task->name, $task->failure_count);
+
+                    $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+                    $contact = [$user->contact_id];
+                    Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $contact, $subject, $messageBody);
+                }
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' running task ' . $task->name . ' finished');
