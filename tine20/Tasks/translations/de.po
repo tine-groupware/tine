@@ -318,8 +318,8 @@ msgstr[1] "Abhängigkeiten"
 
 msgid "Collaborator"
 msgid_plural "Collaborators"
-msgstr[0] "Mitarbeiter*in"
-msgstr[1] "Mitarbeitende"
+msgstr[0] "Teammitglied"
+msgstr[1] "Teammitglieder"
 
 msgid "Collaborators"
 msgstr "Mitarbeitende"
