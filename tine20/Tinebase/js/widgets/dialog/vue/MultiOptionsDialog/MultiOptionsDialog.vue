@@ -11,7 +11,7 @@
 <template>
   <div>
     <div v-if="questionText?.trim?.().startsWith('<')" v-html="questionText" class="mb-3"></div>
-    <BAlert :data-bs-theme="darkmode ? 'dark' : 'light'" :class="darkmode ? 'dark-reverse' : ''" :variant="props.alertVariant ?? 'info'" :model-value="true" v-else>{{questionText}}</BAlert>
+    <BAlert v-else-if="questionText != ''" :variant="props.alertVariant ?? 'info'" :model-value="true">{{questionText}}</BAlert>
     <BFormRadioGroup v-if="!props.allowMultiple" v-model="selectedOption" stacked>
       <BFormRadio v-for="option in _options" :value="option.value" :key="option.value" :disabled="option.disabled">
         <span v-if="option.text.trim().startsWith('<')" v-html="option.text"/>
@@ -30,18 +30,15 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-const darkmode = ref(document.body.classList.contains('dark-mode'))
-
 const props = defineProps({
   questionText: String,
   options: Object,
   allowMultiple: Boolean,
   allowEmpty: Boolean,
-  alertVariant: String, // 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark',
-  colorScheme: String
+  alertVariant: String // 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark',
 })
 
-const selectedOption = ref(props.allowMultiple ? props.options.filter(el => el.checked)?.map(el => el.inputValue) : props.options.find(el => el.checked)?.inputValue)
+const selectedOption = ref(props.options[props.allowMultiple ? 'filter' : 'find'](el => el.checked)?.inputValue)
 
 const _options = computed(() => {
   return props.options.map(el => {
