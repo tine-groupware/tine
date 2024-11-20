@@ -12,7 +12,7 @@
   <BModal v-model="showModal"
           :title="modalProps.title"
           :title-class="'title'"
-          :modal-class="'bootstrap-scope'"
+          :modal-class="'bootstrap-scope dark-reverse'"
           :hide-header-close="!modalProps.closable"
           :hide-footer="!modalProps.buttons"
           :centered="true"
@@ -20,6 +20,7 @@
           :lazy="true"
           :noCloseOnBackdrop="true"
           :noCloseOnEsc="true"
+          class="no-dark-invert"
           @close="handleModalClose" :style="{'z-index': modalProps.zIndex}"
           :id="modalProps.injectKey"
   >
