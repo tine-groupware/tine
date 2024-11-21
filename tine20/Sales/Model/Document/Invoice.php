@@ -32,8 +32,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     public const FLD_IS_SHARED = 'is_shared';
 
     public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
-    public const FLD_INVOICE_PERIOD_START = 'invoice_period_start';
-    public const FLD_INVOICE_PERIOD_END = 'invoice_period_end';
 
     /**
      * invoice status
@@ -119,17 +117,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::LABEL                 => 'Shared Document', //_('Shared Document')
             self::DEFAULT_VAL           => false,
             self::SHY                   => true,
-        ];
-
-        $_definition[self::FIELDS][self::FLD_INVOICE_PERIOD_START] = [
-            self::TYPE                  => self::TYPE_DATE,
-            self::LABEL                 => 'Invoice Period Start', //_('SInvoice Period Start')
-            self::NULLABLE              => true,
-        ];
-        $_definition[self::FIELDS][self::FLD_INVOICE_PERIOD_END] = [
-            self::TYPE                  => self::TYPE_DATE,
-            self::LABEL                 => 'Invoice Period End', //_('SInvoice Period End')
-            self::NULLABLE              => true,
         ];
     }
 
@@ -230,10 +217,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             // BT-2: Issue date
             ->setIssueDate($this->{self::FLD_DOCUMENT_DATE})
             // BG-14: Invoice period cac:InvoicePeriod' 'cbc:StartDate' 'cbc:EndDate',
-            ->setInvoicePeriod($this->{self::FLD_INVOICE_PERIOD_START} && $this->{self::FLD_INVOICE_PERIOD_END} ?
+            ->setInvoicePeriod($this->{self::FLD_SERVICE_PERIOD_START} && $this->{self::FLD_SERVICE_PERIOD_END} ?
                 [(new \UBL21\Common\CommonAggregateComponents\InvoicePeriod())
-                    ->setStartDate($this->{self::FLD_INVOICE_PERIOD_START})
-                    ->setEndDate($this->{self::FLD_INVOICE_PERIOD_END})
+                    ->setStartDate($this->{self::FLD_SERVICE_PERIOD_START})
+                    ->setEndDate($this->{self::FLD_SERVICE_PERIOD_END})
                 ] : []
             )
 
@@ -560,8 +547,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
 
         $ublInvoice = (new Sales_EDocument_Einvoicing_Invoice($einvoiceConfig->getPresetClassName()))
-            ->setInvoicePeriodStart($this->{self::FLD_INVOICE_PERIOD_START})
-            ->setInvoicePeriodEnd($this->{self::FLD_INVOICE_PERIOD_END})
+            ->setInvoicePeriodStart($this->{self::FLD_SERVICE_PERIOD_START})
+            ->setInvoicePeriodEnd($this->{self::FLD_SERVICE_PERIOD_END})
             ->setNumber($this->{self::FLD_DOCUMENT_NUMBER})
             ->setIssueDate($this->{self::FLD_DOCUMENT_DATE})
 

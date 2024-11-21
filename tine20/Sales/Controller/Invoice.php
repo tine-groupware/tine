@@ -1498,8 +1498,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $ublInvoice = new Sales_Model_Document_Invoice([
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER => $invoice->number,
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => $invoice->date,
-                Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_START => $invoice->start_date,
-                Sales_Model_Document_Invoice::FLD_INVOICE_PERIOD_END => $invoice->end_date,
+                Sales_Model_Document_Invoice::FLD_SERVICE_PERIOD_START => $invoice->start_date,
+                Sales_Model_Document_Invoice::FLD_SERVICE_PERIOD_END => $invoice->end_date,
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
                 Sales_Model_Document_Invoice::FLD_DEBITOR_ID => $debitor,
                 Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
