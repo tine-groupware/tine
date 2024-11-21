@@ -2202,7 +2202,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ));
 
             $grants = ($grants) ?: Tinebase_Model_Grants::getDefaultGrants();
-            $systemContainer = $this->addContainer($newContainer, $grants, TRUE);
+            $systemContainer = $this->addContainer($newContainer, $grants, true);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Created new system container ' . $name . ' for application ' . $application->name);
@@ -2234,7 +2234,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $container = Tinebase_Container::getInstance()->get($configId);
                 return $container;
             } catch (Tinebase_Exception_NotFound $tenf) {
-                return null;
             }
         }
 
