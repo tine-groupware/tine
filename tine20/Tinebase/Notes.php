@@ -60,8 +60,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @var Tinebase_Notes
      */
-    private static $_instance = NULL;
-        
+    private static $_instance = null;
+
     /**
      * the singleton pattern
      *
@@ -69,8 +69,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public static function getInstance() 
     {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Notes;
+        if (self::$_instance === null) {
+            self::$_instance = new Tinebase_Notes();
         }
         
         return self::$_instance;
@@ -143,8 +143,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param boolean $ignoreACL
      * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
      */
-    public function searchNotes(Tinebase_Model_NoteFilter $_filter, Tinebase_Model_Pagination $_pagination = NULL, $ignoreACL = true)
-    {
+    public function searchNotes(
+        Tinebase_Model_NoteFilter $_filter,
+        Tinebase_Model_Pagination $_pagination = null,
+        $ignoreACL = true
+    ) {
         $select = $this->_db->select()
             ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'))
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
@@ -154,7 +157,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
-        if ($_pagination !== NULL) {
+        if ($_pagination !== null) {
             $_pagination->appendPaginationSql($select);
         }
         
@@ -445,27 +448,38 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @todo attach modlog record (id) to note instead of saving an ugly string
      * @todo get field translations from application?
      */
-    public function addSystemNote($_record, $_userId = NULL, string $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_mods = NULL, $_backend = 'Sql', $_modelName = NULL)
-    {
-        if ((empty($_mods) || $_mods instanceof Tinebase_Record_RecordSet && count($_mods) === 0)
+    public function addSystemNote(
+        $_record,
+        $_userId = null,
+        string $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,
+        $_mods = null,
+        $_backend = 'Sql',
+        $_modelName = null
+    ) {
+        if (
+            (empty($_mods) || $_mods instanceof Tinebase_Record_RecordSet && count($_mods) === 0)
             && $_type === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
         ) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Nothing changed -> do not add "changed" note.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Nothing changed -> do not add "changed" note.');
+            }
             return false;
         }
         
         $id = $_record instanceof Tinebase_Record_Interface ? $_record->getId() : $_record;
         $seq = $_record instanceof Tinebase_Record_Interface && $_record->has('seq') ? $_record->seq : 0;
-        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
-        if (($_userId === NULL)) {
+        $modelName = ($_modelName !== null) ? $_modelName : (($_record instanceof Tinebase_Record_Interface)
+            ? get_class($_record) : 'unknown');
+        if (($_userId === null)) {
             $_userId = Tinebase_Core::getUser();
         }
         $user = ($_userId instanceof Tinebase_Model_User) ? $_userId : Tinebase_User::getInstance()->getUserById($_userId);
         
         $translate = Tinebase_Translation::getTranslation();
         $noteText = $translate->_($_type) . ' ' . $translate->_('by') . ' ' . $user->accountDisplayName;
-        
-        if ($_mods !== NULL) {
+
+        if ($_mods !== null) {
             if ($_mods instanceof Tinebase_Record_RecordSet && count($_mods) > 0) {
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
@@ -481,9 +495,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            .' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Adding "' . $_type . '" system note note to record (id ' . $id . ')');
+        }
+
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => $_type,
             'note'              => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
@@ -738,8 +754,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
-    {
+    public function search(
+        Tinebase_Model_Filter_FilterGroup $_filter = null,
+        Tinebase_Model_Pagination $_pagination = null,
+        $_cols = '*'
+    ) {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
 
@@ -776,7 +795,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getMultiple($_ids, $_containerIds = NULL)
+    public function getMultiple($_ids, $_containerIds = null)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -811,7 +830,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * Upates an existing persistent record
      *
      * @param  Tinebase_Record_Interface $_record
-     * @return Tinebase_Record_Interface|NULL
+     * @return Tinebase_Record_Interface|null
      * @throws Tinebase_Exception_NotImplemented
      */
     public function update(Tinebase_Record_Interface $_record)

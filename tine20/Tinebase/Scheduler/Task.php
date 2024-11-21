@@ -295,7 +295,7 @@ class Tinebase_Scheduler_Task
         
         try {
             $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
-            $emails = explode(',', $this->_emails);
+            $emails = is_array($this->_emails) ? $this->_emails : explode(',', $this->_emails);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
