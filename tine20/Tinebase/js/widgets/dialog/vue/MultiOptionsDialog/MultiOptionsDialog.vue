@@ -38,7 +38,7 @@ const props = defineProps({
   alertVariant: String // 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark',
 })
 
-const selectedOption = ref(props.options[props.allowMultiple ? 'filter' : 'find'](el => el.checked)?.inputValue)
+const selectedOption = ref(props.allowMultiple ? props.options.filter(e => e.checked).map(e => e.inputValue) : props.options.find(el => el.checked)?.inputValue)
 
 const _options = computed(() => {
   return props.options.map(el => {
