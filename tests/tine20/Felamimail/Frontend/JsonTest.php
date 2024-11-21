@@ -2990,15 +2990,6 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
 
     public function testFileMessageWithoutLocationRecordId()
     {
-        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(['name' => 'Test Customer',
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
-        ]));
-        $invoice = new Sales_Model_Document_Invoice([
-            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer->toArray(),
-            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
-        ]);
         $subject = 'test file message  ' . Tinebase_Record_Abstract::generateUID(16);
         $messageToSend = $this->_getMessageData('test@mail.test', $subject);
         $tempfileName = 'jsontest' . Tinebase_Record_Abstract::generateUID(10);
@@ -3006,10 +2997,14 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $messageToSend['attachments'] = array(
             array('tempFile' => array('id' => $tempFile->getId(), 'type' => $tempFile->type))
         );
+        $contactData = new Addressbook_Model_Contact([
+            'n_fileas' => 'new contact',
+            'email' => 'new@mail.test',
+        ]);
         $messageToSend['fileLocations'] = [
             [
-                'model' => Sales_Model_Document_Invoice::class,
-                'record_id' => $invoice->toArray(),
+                'model' => Addressbook_Model_Contact::class,
+                'record_id' => $contactData->toArray(),
                 'type' => Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT
             ]
         ];
