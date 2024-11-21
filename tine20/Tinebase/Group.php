@@ -87,6 +87,11 @@ class Tinebase_Group
         
         return self::$_instance;
     }
+
+    public static function destroyInstance(): void
+    {
+        self::$_instance = null;
+    }
     
     /**
      * return an instance of the current groups backend
