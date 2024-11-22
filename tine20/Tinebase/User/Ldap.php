@@ -1254,7 +1254,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             if (null === $this->_writeGroupsMembers) {
                 $members = [];
                 foreach ($this->_writeGroupsIds as $gid) {
-                    array_merge($members, Tinebase_Group::getInstance()->getGroupMembers($gid));
+                    $members = array_merge($members, Tinebase_Group::getInstance()->getGroupMembers($gid));
                 }
                 $this->_writeGroupsMembers = array_fill_keys(array_unique($members), false);
             }

@@ -558,7 +558,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             'useraccountcontrol' => isset($_ldapEntry['useraccountcontrol']) ? $_ldapEntry['useraccountcontrol'][0] : self::NORMAL_ACCOUNT
         );
         if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}) {
-            $ldapData['useraccountcontrol'] &= self::PASSWD_CANT_CHANGE;
+            $ldapData['useraccountcontrol'] |= self::PASSWD_CANT_CHANGE;
         }
 
         if (isset($_user->xprops()['uidnumber'])) {
