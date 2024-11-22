@@ -1037,7 +1037,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         let img = new Image()
         img.src = result
         img.onload = () => {
-            this.imgOnload(img, target, max)
+            this.imgOnload(img, target, max, type)
         }
     },
 
@@ -1080,7 +1080,17 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         let reader = new FileReader()
         reader.readAsDataURL(fileBlob)
         reader.onload = () => {
-            this.getImageBase64(reader.result, button.size, this.selectedImage).then (() => {
+            let type = 'image/jpeg'
+            switch (this.selectedImage.alt.slice(-3)) {
+                case 'png':
+                    type = 'image/png'
+                    break;
+                case  'gif':
+                    type = 'image/gif'
+                    break;
+            }
+
+            this.getImageBase64(reader.result, button.size, this.selectedImage, type).then (() => {
                 this.selectedImage.dataset.size = button.size
             })
         }
