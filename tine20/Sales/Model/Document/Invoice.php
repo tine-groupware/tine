@@ -168,7 +168,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     public function toUbl(): string
     {
-        if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Document_Debitor) {
+        if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Debitor) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_DEBITOR_ID . ' not set or resolved');
         }
         if (null !== $debitor->{Sales_Model_Debitor::FLD_EAS_ID} && !$debitor->{Sales_Model_Debitor::FLD_EAS_ID} instanceof Sales_Model_EDocument_EAS) {
@@ -382,11 +382,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
         // BT-13: Purchase order reference
         if ($this->{self::FLD_PURCHASE_ORDER_REFERENCE}) {
-            $ublInvoice->setOrderReference([(new \UBL21\Common\CommonAggregateComponents\OrderReference)
+            $ublInvoice->setOrderReference((new \UBL21\Common\CommonAggregateComponents\OrderReference)
                 ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PURCHASE_ORDER_REFERENCE}))
                 // BT-14: Sales order reference
                 //->setSalesOrderID()
-            ]);
+            );
         }
 
         if ($buyerContact) {
