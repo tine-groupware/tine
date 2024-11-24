@@ -54,6 +54,9 @@ class Sales_EDocument_Service_Validate
             throw new Tinebase_Exception_Backend('edocument validation service didn\'t return xml');
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' validation service response: ' . PHP_EOL
+            . $response->getBody());
+
         $errors = [];
         $xml->rewind();
         foreach ($xml->children('svrl', true)->{'failed-assert'} as $node) {
