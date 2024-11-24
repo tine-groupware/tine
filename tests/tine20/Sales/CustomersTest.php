@@ -159,6 +159,7 @@ class Sales_CustomersTest extends TestCase
                         'pobox'   => '888888888',
                         'type' => 'delivery'
                     ]],
+                    Sales_Model_Debitor::FLD_EINVOICE_CONFIG => null,
                 ]
             ],
         );

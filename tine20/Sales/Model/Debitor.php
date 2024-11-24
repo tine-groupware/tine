@@ -213,10 +213,12 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     self::REF_MODEL_FIELD           => self::FLD_EINVOICE_TYPE,
                     self::PERSISTENT                => true,
                 ],
+                self::INPUT_FILTERS         => [
+                    Zend_Filter_Empty::class => [[]],
+                ],
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Empty::class => [],
-                    Zend_Filter_Input::DEFAULT_VALUE => [0 => []], // zend anybody?!
+                    Zend_Filter_Input::DEFAULT_VALUE => [[]],
                     [Tinebase_Record_Validator_SubValidate::class, [Tinebase_Record_Validator_SubValidate::IGNORE_VALUE => []]],
                 ],
             ],
