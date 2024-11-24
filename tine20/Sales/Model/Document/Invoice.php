@@ -465,7 +465,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                 )
                 ->setPrice((new \UBL21\Common\CommonAggregateComponents\Price)
-                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE}))
+                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}))
                         ->setCurrencyID('EUR')
                     )
                 )
