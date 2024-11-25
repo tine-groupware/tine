@@ -13,6 +13,9 @@
     :visible="visibleInternal"
     :placement="placement"
     @hide="hide($event)"
+    @keydown.esc="hide($event)"
+    @keydown.enter="selectAppInFocus($event)"
+    @keydown.up.down.left.right.stop="moveFocusAround($event)"
   >
     <div class="tine-application-menu">
       <div class="container">
@@ -20,12 +23,14 @@
         <hr class="my-1">
         <div class="row row-cols-3">
           <div
-            v-for="item in menuItemsInternal"
+            v-for="(item, idx) in menuItemsInternal"
             :key="item.name"
             class="col application-menu-item"
-            @click="emits('itemClicked', item.name)"
-            tabindex="0"
             role="button"
+            @click="emits('itemClicked', item.name)"
+            :class="{
+                'application-menu-item__active': appInFocus === idx,
+              }"
           >
             <div class="d-flex align-items-center flex-column p-2 cursor-pointer">
               <div class="application-menu-item__icon" :class="item.iconCls"/>
@@ -85,19 +90,56 @@ const visibleInternal = ref(false)
 
 const searchField = ref()
 watch(() => props.visible, newVal => {
-  visibleInternal.value = newVal
   if (newVal) {
+    appInFocus.value = 0
+    searchTerm.value = ''
     nextTick(() => {
       searchField.value.focus()
     })
   }
+  visibleInternal.value = newVal
 }, { immediate: true })
 
 const hide = (e) => {
   visibleInternal.value = false
-  searchTerm.value = ''
   emits('hide', e)
 }
+
+const appInFocus = ref(0)
+
+watch(menuItemsInternal, (newVal) => {
+  if (appInFocus.value > newVal.length) appInFocus.value = newVal.length - 1
+})
+
+const selectAppInFocus = (e) => {
+  const app = menuItemsInternal.value[appInFocus.value]
+  emits('itemClicked', app.name)
+  hide(e)
+}
+
+const moveFocusAround = (e) => {
+  function moveFocusToIdx (idx) {
+    if (idx < 0 || idx > menuItemsInternal.value.length - 1) return
+    appInFocus.value = idx
+  }
+
+  switch (e.key) {
+    case 'ArrowLeft':
+      moveFocusToIdx(appInFocus.value - 1)
+      break
+    case 'ArrowRight':
+      moveFocusToIdx(appInFocus.value + 1)
+      break
+    case 'ArrowUp':
+      moveFocusToIdx(appInFocus.value - 3)
+      break
+    case 'ArrowDown':
+      moveFocusToIdx(appInFocus.value + 3)
+      break
+    default:
+  }
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -117,7 +159,7 @@ const hide = (e) => {
     }
 
     &__active{
-      // todo
+      background-color: var(--selection-color);
     }
 
     @media (hover: hover){
