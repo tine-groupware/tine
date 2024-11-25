@@ -158,7 +158,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createFloorPlanConfig()
     {
         Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS} = [[
-            'name' => 'O. Floor',
+            'name' => 'Demo Floor',
             'image' => 'https://tine-docu.s3web.rz1.metaways.net/images/Calendar/Floorplans/demo_floor.svg',
             'resources' => [[
                 'eventSaveLocation' => 'RESOURCE_CAL',
