@@ -138,7 +138,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }, {
                                     flex: 1,
                                     xtype:'addressbookcontactpicker',
-                                    name: 'site',
+                                    name: 'event_site',
                                     userOnly: false,
                                     useAccountRecord: false,
                                     searchComboConfig: {useEditPlugin: false},
