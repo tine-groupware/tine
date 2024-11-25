@@ -67,7 +67,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'effectiveAndLocalQuota'},
     { name: 'mfa_configs'},
     { name: 'xprops'},
-    { name: 'type'}
+    { name: 'type'},
+    { name: 'must_change_password'} // dynamically calculated value, not a persisted property
 ];
 
 Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat(Tine.Admin.Model.UserArray), {

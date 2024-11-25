@@ -143,22 +143,21 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     mustChangePasswordCheck: function () {
-        const changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
-        if (!changeAfter || changeAfter === 0) return
-
-        const lastChangeDate = this.record.get('accountLastPasswordChangeRaw')
-
-        const maxDate = new Date(lastChangeDate).add('d', changeAfter)
-        if (maxDate > new Date()) return
+        const must_change_password = this.record.get('must_change_password')
+        if (!must_change_password || must_change_password !== 'expired') return
 
         const lastChangeField = this.getForm().findField('accountLastPasswordChange')
         const mustChangeField = this.getForm().findField('password_must_change')
 
         lastChangeField.addClass('tinebase-warning')
+
+        // store real value of the flag, so it is not overwritten later
+        this.record.set('password_must_change_actual', this.record.get('password_must_change'))
+
+        // password must be changed no matter whether the flag is set
+        this.record.set('password_must_change', true)
         mustChangeField.disable()
 
-        this.record.set('password_must_change_actual', this.record.get('password_must_change'))
-        this.record.set('password_must_change', 1)
         this.mustChangeTriggerPlugin.setVisible(true)
     },
 
