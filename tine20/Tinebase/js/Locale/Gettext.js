@@ -48,10 +48,11 @@ Locale.Gettext.prototype.dcgettext = function (domain, msgid, category) {
 };
 
 Locale.Gettext.prototype.dcngettext = function (domain, msgid, msgid_plural, n, category) {
-  var msg = this.getmsg(domain, category);
+  var msg = this.getmsg(domain, category),
+      tmsg = this.getmsg('Tinebase', category);
   
   if (msg) {
-    return (msg.get(msgid, msgid_plural) || [msgid, msgid_plural])[msg.plural(n)] || (n > 1 ? msgid_plural : msgid);
+    return (msg.get(msgid, msgid_plural) || tmsg.get(msgid, msgid_plural) || [msgid, msgid_plural])[msg.plural(n)] || (n > 1 ? msgid_plural : msgid);
   } else {
     // fallback if cataloge is not available
     return n > 1 ? msgid_plural : msgid;

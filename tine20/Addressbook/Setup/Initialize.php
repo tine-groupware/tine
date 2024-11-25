@@ -479,7 +479,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_pager',
-            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Pager', // _(Pager')
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Pager', // _('Pager')
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 70,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,

@@ -384,7 +384,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::LABEL                 => 'Enable Spam Suspicion Strategy',
                     //_('Enable Spam Suspicion Strategy')
                     self::DESCRIPTION           => 'Enable Spam Suspicion Strategy',
-                    //_('SEnable pam Suspicion Strategy')
+                    //_('Enable Spam Suspicion Strategy')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],

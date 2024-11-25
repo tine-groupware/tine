@@ -146,7 +146,7 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
  */
 Tine.Felamimail.nodeActions.EmptyFolderAction = {
     app: 'Felamimail',
-    text: 'Empty Folder',
+    text: 'Empty Folder', // _('Empty Folder')
     itemId: 'EmptyFolderAction',
     iconCls: 'action_folder_emptytrash',
     scope: this,
@@ -185,7 +185,7 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
 // we need this for adding folders to account (root level)
 Tine.Felamimail.nodeActions.AddFolderAction = {
     app: 'Felamimail',
-    text: 'Add Folder',
+    text: 'Add Folder', // _('Add Folder')
     itemId: 'AddFolderAction',
     iconCls: 'action_add',
     scope: this,
@@ -214,7 +214,7 @@ Tine.Felamimail.nodeActions.AddFolderAction = {
 
 Tine.Felamimail.nodeActions.EditAccountAction = {
     app: 'Felamimail',
-    text: 'Edit Account',
+    text: 'Edit Account', // _('Edit Account')
     itemId: 'EditAccountAction',
     iconCls: 'FelamimailIconCls',
     scope: this,
@@ -253,7 +253,7 @@ Tine.Felamimail.nodeActions.EditAccountAction = {
 
 Tine.Felamimail.nodeActions.EditVacationAction = {
     app: 'Felamimail',
-    text: 'Edit Vacation Message',
+    text: 'Edit Vacation Message', // _('Edit Vacation Message')
     itemId: 'EditVacationAction',
     iconCls: 'action_email_replyAll',
     scope: this,
@@ -268,7 +268,7 @@ Tine.Felamimail.nodeActions.EditVacationAction = {
 
 Tine.Felamimail.nodeActions.EditRulesAction = {
     app: 'Felamimail',
-    text: 'Edit Filter Rules',
+    text: 'Edit Filter Rules', // _('Edit Filter Rules')
     itemId: 'EditRulesAction',
     iconCls: 'action_email_forward',
     scope: this,
@@ -282,7 +282,7 @@ Tine.Felamimail.nodeActions.EditRulesAction = {
 
 Tine.Felamimail.nodeActions.EditNotificationAction = {
     app: 'Felamimail',
-    text: 'Notifications',
+    text: 'Notifications', // _('Notifications')
     itemId: 'EditNotificationAction',
     iconCls: 'felamimail-action-sieve-notification',
     scope: this,
@@ -296,7 +296,7 @@ Tine.Felamimail.nodeActions.EditNotificationAction = {
 
 Tine.Felamimail.nodeActions.MarkFolderSeenAction = {
     app: 'Felamimail',
-    text: 'Mark Folder as read',
+    text: 'Mark Folder as read', // _('Mark Folder as read')
     itemId: 'MarkFolderSeenAction',
     iconCls: 'action_mark_read',
     scope: this,
@@ -326,7 +326,7 @@ Tine.Felamimail.nodeActions.MarkFolderSeenAction = {
 
 Tine.Felamimail.nodeActions.UpdateFolderCacheAction = {
     app: 'Felamimail',
-    text: 'Update Folder List',
+    text: 'Update Folder List', // _('Update Folder List')
     itemId: 'UpdateFolderCacheAction',
     iconCls: 'action_update_cache',
     scope: this,
@@ -361,7 +361,7 @@ Tine.Felamimail.nodeActions.UpdateFolderCacheAction = {
 
 Tine.Felamimail.nodeActions.ApproveMigrationAction = {
     app: 'Felamimail',
-    text: 'Approve Migration',
+    text: 'Approve Migration', // _('Approve Migration')
     itemId: 'ApproveMigrationAction',
     iconCls: 'action_approve_migration',
     scope: this,
@@ -394,7 +394,7 @@ Tine.Felamimail.nodeActions.ApproveMigrationAction = {
 
 Tine.Felamimail.nodeActions.MoveFolderAction = {
     app: 'Felamimail',
-    text: 'Move Folder',
+    text: 'Move Folder', // _('Move Folder')
     itemId: 'MoveFolderAction',
     iconCls: 'action_move',
     scope: this,
@@ -456,7 +456,7 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
 
 Tine.Felamimail.nodeActions.RefreshFolderAction = {
     app: 'Felamimail',
-    text: 'Update Folder',
+    text: 'Update Folder', // _('Update Folder')
     itemId: 'RefreshFolderAction',
     iconCls: 'action_update_cache',
     scope: this,

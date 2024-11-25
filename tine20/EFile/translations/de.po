@@ -14,22 +14,27 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:505
+msgid "EFile node names may not contain:"
+msgstr ""
+
 #: js/nodeFileMetadataPanel.js:19
 msgid "Jump to File"
 msgstr "Zur Akte springen"
 
+#: js/nodeFileMetadataPanel.js:121
 msgid "Metadata entered here is automatically inherited in newly created e-files."
 msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
 
-#: js/nodeEFileHookPanel.js:25 Setup/setup.xml:4
+#: js/nodeEFileHookPanel.js:27 Setup/setup.xml:4
 msgid "eFile"
 msgstr "eAkte"
 
-#: js/nodeEFileHookPanel.js:45
+#: js/nodeEFileHookPanel.js:47
 msgid "Enter contents"
 msgstr "Inhalt hinzufügen"
 
-#: js/nodeEFileHookPanel.js:46
+#: js/nodeEFileHookPanel.js:48
 msgid "Contents"
 msgstr "Inhalt"
 
@@ -51,7 +56,7 @@ msgstr "Name"
 msgid "Note: A number prefix will be automatically assigned when creating this folder."
 msgstr "Hinweis: Beim Anlegen des Ordners wird wird automatisch eine Ebenen-Nummer vorangestellt."
 
-#: js/createEFileAction.js:73 js/Application.js:21
+#: js/createEFileAction.js:74 js/Application.js:21
 msgid "Electronic File"
 msgstr "eAkte"
 
@@ -87,25 +92,25 @@ msgstr "Dokument"
 msgid "eFile Tier Type"
 msgstr "eAkten Ebenen-Typ"
 
-#: Setup/Initialize.php:83
+#: Setup/Initialize.php:82
 msgid "eFile File Metadata"
 msgstr "eAkten Metadaten"
 
-#: Setup/Initialize.php:115
+#: Setup/Initialize.php:114
 msgid "eFile Tier Token"
 msgstr "eAkten Ebenen-Nummer"
 
-#: Setup/Initialize.php:138
+#: Setup/Initialize.php:137
 msgid "eFile Tier Reference Number"
 msgstr "Aktenzeichen"
 
-#: Setup/Initialize.php:161
+#: Setup/Initialize.php:160
 msgid "eFile Tier Counter"
 msgstr "eAkten Ebenen-Zähler"
 
 #: Config.php:53 Config.php:54
-msgid "Base path"
-msgstr "Basis Ordner"
+msgid "Base paths"
+msgstr ""
 
 #: Config.php:68
 msgid "Retention Periods"
@@ -127,7 +132,7 @@ msgstr "10 Jahre"
 msgid "Eternally"
 msgstr "Ewig"
 
-#: Config.php:82 Model/FileMetadata.php:222
+#: Config.php:82 Model/FileMetadata.php:212
 msgid "Disposal Type"
 msgstr "Aussonderungsart"
 
@@ -151,65 +156,68 @@ msgstr "eAkten Ebenen-Nummer Präfix"
 msgid "eFile Token Template"
 msgstr "eAkten Ebenen-Nummer Vorlage"
 
-#: Model/FileMetadata.php:119
+#: Model/FileMetadata.php:113
 msgid "Duration Start"
 msgstr "Laufzeit von"
 
-#: Model/FileMetadata.php:125
+#: Model/FileMetadata.php:119
 msgid "Duration End"
 msgstr "Laufzeit bis"
 
-#: Model/FileMetadata.php:134
+#: Model/FileMetadata.php:126
 msgid "Commissioned Office"
 msgstr "Aktenführende Stelle"
 
-#: Model/FileMetadata.php:140
+#: Model/FileMetadata.php:132
 msgid "File is Hybrid (a corresponding paper file exists)"
 msgstr "Hybridakte (Es gibt eine korrespondierende Papierakte)"
 
-#: Model/FileMetadata.php:147
+#: Model/FileMetadata.php:139
 msgid "Location of Paper File"
 msgstr "Standort der Papierakte"
 
-#: Model/FileMetadata.php:154
+#: Model/FileMetadata.php:146
 msgid "File is Closed"
 msgstr "Die Akte ist geschlossen"
 
-#: Model/FileMetadata.php:156 Model/FileMetadata.php:165
-#: Model/FileMetadata.php:180 Model/FileMetadata.php:192
-#: Model/FileMetadata.php:201
+#: Model/FileMetadata.php:148 Model/FileMetadata.php:157
+#: Model/FileMetadata.php:172 Model/FileMetadata.php:184
+#: Model/FileMetadata.php:193
 msgid "Final Decree"
 msgstr "Schlussverfügung"
 
-#: Model/FileMetadata.php:163
+#: Model/FileMetadata.php:155
 msgid "Final Decree Date"
 msgstr "Datum Schlussverfügung"
 
-#: Model/FileMetadata.php:178
+#: Model/FileMetadata.php:170
 msgid "Final Decree by"
 msgstr "Schlussverfügung durch"
 
-#: Model/FileMetadata.php:190
+#: Model/FileMetadata.php:182
 msgid "Retention Period"
 msgstr "Aufbewahrungsfrist"
 
-#: Model/FileMetadata.php:199
+#: Model/FileMetadata.php:191
 msgid "Retention Period End Date"
 msgstr "Ende der Aufbewahrungsfrist"
 
-#: Model/FileMetadata.php:210
+#: Model/FileMetadata.php:200
 msgid "File is Disposed"
 msgstr "Die Akte ist ausgesondert"
 
-#: Model/FileMetadata.php:212 Model/FileMetadata.php:224
-#: Model/FileMetadata.php:233 Model/FileMetadata.php:243
+#: Model/FileMetadata.php:202 Model/FileMetadata.php:214
+#: Model/FileMetadata.php:223 Model/FileMetadata.php:233
 msgid "Disposal"
 msgstr "Aussonderung"
 
-#: Model/FileMetadata.php:231
+#: Model/FileMetadata.php:221
 msgid "Disposal Date"
 msgstr "Aussonderungsdatum"
 
-#: Model/FileMetadata.php:241
+#: Model/FileMetadata.php:231
 msgid "Archive Name"
 msgstr "Archivname"
+
+#~ msgid "Base path"
+#~ msgstr "Basis Ordner"

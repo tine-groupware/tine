@@ -346,6 +346,41 @@ Tine.Tinebase.tineInit = {
                     contentEl: Ext.select('div[class^=tine-viewport-]')
                 }]
             },
+            initComponent : function() {
+                Ext.Viewport.prototype.initComponent.call(this);
+                this.colorSchemeAction = new Ext.Action({
+                    menu: [{
+                        text: 'Follow System', // _('Follow System')
+                        checked: (['dark', 'light'].indexOf(Ext.util.Cookies.get('color-scheme')) < 0),
+                        group: 'color-scheme',
+                        checkHandler: this.setColorScheme.createDelegate(this, ['auto']),
+                        _name: 'auto'
+                    }, {
+                        text: 'Dark Mode', // _('Dark Mode')
+                        checked: Ext.util.Cookies.get('color-scheme') === 'dark',
+                        group: 'color-scheme',
+                        checkHandler: this.setColorScheme.createDelegate(this, ['dark']),
+                        _name: 'dark'
+                    }, {
+                        text: 'Light Mode', // _('Light Mode')
+                        checked: Ext.util.Cookies.get('color-scheme') === 'light',
+                        group: 'color-scheme',
+                        checkHandler: this.setColorScheme.createDelegate(this, ['light']),
+                        _name: 'light'
+                    }],
+                    getActiveColorScheme: () => Ext.util.Cookies.get('color-scheme') || 'auto',
+                    listeners: {
+                        afterrender: () => {
+                            this.colorSchemeAction.items[0].menu.items.each((item) => {
+                                item.setText(i18n._hidden(item.text));
+                            })
+                        }
+                    }
+                });
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.onColorSchemeChange);
+                this.onColorSchemeChange();
+            },
+
             async setWaitText(text) {
                 const msgEl = this.el.child('.tine-viewport-waittext') || this.el.child('.tine-viewport-waitcycle').wrap({cls: 'tine-viewport-waitbox'}).createChild({cls: 'tine-viewport-waittext'});
                 let msg = '';
@@ -355,6 +390,21 @@ Tine.Tinebase.tineInit = {
                     return new Promise((resolve) => setTimeout(resolve, 20));
                 });
 
+            },
+
+            onColorSchemeChange : function(){
+                const system = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                const preference = Ext.util.Cookies.get('color-scheme') || 'auto';
+                const mode = ['dark', 'light'].indexOf(preference) >= 0 ? preference : system;
+                const jobs = mode === 'dark' ? ['light','dark'] : ['dark','light'];
+                Ext.getBody().removeClass(`${jobs[0]}-mode`);
+                Ext.getBody().addClass(`${jobs[1]}-mode`);
+                this.colorSchemeAction.setIconClass(`color-scheme-${mode}`);
+            },
+
+            setColorScheme : function(schema) {
+                Ext.util.Cookies.set('color-scheme', schema, new Date().add(Date.YEAR, 100));
+                this.onColorSchemeChange();
             }
         });
     },

@@ -17,42 +17,46 @@ msgstr ""
 "X-Poedit-Language: French\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ExampleDetailsPanel.js:56
-msgid "Total Example Records"
-msgstr ""
-
-#: js/ExampleDetailsPanel.js:74 js/ExampleRecordEditDialog.js:66
-#: Model/ExampleRecord.php:97 Model/OneToOne.php:92
-msgid "Name"
-msgstr ""
-
-#: js/ExampleDetailsPanel.js:78 js/ExampleRecordEditDialog.js:72
-#: Model/ExampleRecord.php:110
-msgid "Status"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:49
-msgid "ExampleRecord"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:78 Model/ExampleRecord.php:117
-msgid "Reason"
-msgstr ""
-
-#: js/ExampleRecordEditDialog.js:84 Model/ExampleRecord.php:104
-msgid "Description"
-msgstr ""
-
-#: js/Example.js:23
-msgid "New Example"
-msgstr ""
-
 #: Preference.php:60
 msgid "Default Example Record Container"
 msgstr ""
 
 #: Preference.php:61
 msgid "The default container for new records"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:49
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:66 js/ExampleDetailsPanel.js:74
+#: Model/OneToOne.php:93 Model/ExampleRecord.php:101
+msgid "Name"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:72 js/ExampleDetailsPanel.js:78
+#: Model/ExampleRecord.php:114
+msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:78 Model/ExampleRecord.php:121
+msgid "Reason"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:84 Model/ExampleRecord.php:108
+msgid "Description"
+msgstr ""
+
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr ""
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
 msgstr ""
 
 #: Config.php:124
@@ -131,32 +135,28 @@ msgstr ""
 msgid "Just an example string for test purpose"
 msgstr ""
 
-#: Model/ExampleRecord.php:52
+#: Model/ExampleRecord.php:56
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/ExampleRecord.php:53
+#: Model/ExampleRecord.php:57
 msgid "example records"
 msgstr ""
 
-#: Model/ExampleRecord.php:56
+#: Model/ExampleRecord.php:60
 msgid "example record list"
 msgstr ""
 
-#: Model/ExampleRecord.php:57
+#: Model/ExampleRecord.php:61
 msgid "example record lists"
 msgstr ""
 
-#: Model/ExampleRecord.php:124 Model/ExampleRecord.php:145
+#: Model/ExampleRecord.php:128 Model/ExampleRecord.php:149
 msgid "Number"
 msgstr ""
 
-#: Model/ExampleRecord.php:156
+#: Model/ExampleRecord.php:160
 msgid "datetime"
-msgstr ""
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
 msgstr ""

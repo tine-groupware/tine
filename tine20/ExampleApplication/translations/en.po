@@ -14,36 +14,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ExampleDetailsPanel.js:56
-msgid "Total Example Records"
-msgstr "Total Example Records"
-
-#: js/ExampleDetailsPanel.js:74 js/ExampleRecordEditDialog.js:66
-#: Model/ExampleRecord.php:97 Model/OneToOne.php:92
-msgid "Name"
-msgstr "Name"
-
-#: js/ExampleDetailsPanel.js:78 js/ExampleRecordEditDialog.js:72
-#: Model/ExampleRecord.php:110
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleRecordEditDialog.js:49
-msgid "ExampleRecord"
-msgstr "ExampleRecord"
-
-#: js/ExampleRecordEditDialog.js:78 Model/ExampleRecord.php:117
-msgid "Reason"
-msgstr "Reason"
-
-#: js/ExampleRecordEditDialog.js:84 Model/ExampleRecord.php:104
-msgid "Description"
-msgstr "Description"
-
-#: js/Example.js:23
-msgid "New Example"
-msgstr "New Example"
-
 #: Preference.php:60
 msgid "Default Example Record Container"
 msgstr "Default Example Record Container"
@@ -51,6 +21,40 @@ msgstr "Default Example Record Container"
 #: Preference.php:61
 msgid "The default container for new records"
 msgstr "The default container for new records"
+
+#: js/ExampleRecordEditDialog.js:49
+msgid "ExampleRecord"
+msgstr "ExampleRecord"
+
+#: js/ExampleRecordEditDialog.js:66 js/ExampleDetailsPanel.js:74
+#: Model/OneToOne.php:93 Model/ExampleRecord.php:101
+msgid "Name"
+msgstr "Name"
+
+#: js/ExampleRecordEditDialog.js:72 js/ExampleDetailsPanel.js:78
+#: Model/ExampleRecord.php:114
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordEditDialog.js:78 Model/ExampleRecord.php:121
+msgid "Reason"
+msgstr "Reason"
+
+#: js/ExampleRecordEditDialog.js:84 Model/ExampleRecord.php:108
+msgid "Description"
+msgstr "Description"
+
+#: js/ExampleDetailsPanel.js:56
+msgid "Total Example Records"
+msgstr "Total Example Records"
+
+#: js/Example.js:23
+msgid "New Example"
+msgstr "New Example"
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
+msgstr "ExampleApplication"
 
 #: Config.php:124
 msgid "Status Available"
@@ -128,32 +132,28 @@ msgstr "Example String"
 msgid "Just an example string for test purpose"
 msgstr "Just an example string for test purpose"
 
-#: Model/ExampleRecord.php:52
+#: Model/ExampleRecord.php:56
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "example record"
 msgstr[1] "example records"
 
-#: Model/ExampleRecord.php:53
+#: Model/ExampleRecord.php:57
 msgid "example records"
 msgstr "example records"
 
-#: Model/ExampleRecord.php:56
+#: Model/ExampleRecord.php:60
 msgid "example record list"
 msgstr "example record list"
 
-#: Model/ExampleRecord.php:57
+#: Model/ExampleRecord.php:61
 msgid "example record lists"
 msgstr "example record lists"
 
-#: Model/ExampleRecord.php:124 Model/ExampleRecord.php:145
+#: Model/ExampleRecord.php:128 Model/ExampleRecord.php:149
 msgid "Number"
 msgstr "Number"
 
-#: Model/ExampleRecord.php:156
+#: Model/ExampleRecord.php:160
 msgid "datetime"
 msgstr "datetime"
-
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "ExampleApplication"

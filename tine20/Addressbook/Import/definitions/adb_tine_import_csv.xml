@@ -8,7 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <label>Tine contact CSV import"</label>
-    <!-- _("Tine contact CSV import"") -->
+    <!-- _("Tine contact CSV import") -->
     <description>Import CSV formated contacts from tine address book</description>
     <!-- _("Import CSV formated contacts from tine address book") -->
     <example>Addressbook/Import/examples/adb_tine_import.csv</example>

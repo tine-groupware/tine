@@ -17,13 +17,70 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:89
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Wszystkie moje projekty"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
+
+#: js/ProjectEditDialog.js:93 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Uczestnik"
 
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Rola uczestnika"
+#: js/ProjectEditDialog.js:94 js/AddToProjectPanel.js:87
+msgid "Role"
+msgstr "Rola"
+
+#: js/ProjectEditDialog.js:121 js/ProjectEditDialog.js:134 Config.php:117
+#: Model/Project.php:49
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "projekty"
+msgstr[2] "projekty"
+msgstr[3] "projekty"
+
+#: js/ProjectEditDialog.js:146
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ProjectEditDialog.js:151 Model/Project.php:115
+msgid "Number"
+msgstr "Ilość"
+
+#: js/ProjectEditDialog.js:157 Model/Project.php:143
+msgid "Status"
+msgstr "Status"
+
+#: js/ProjectEditDialog.js:163 Model/Project.php:153
+msgid "Start"
+msgstr ""
+
+#: js/ProjectEditDialog.js:169 Model/Project.php:161
+msgid "End"
+msgstr ""
+
+#: js/ProjectEditDialog.js:177 Model/Project.php:168
+msgid "Scope"
+msgstr ""
+
+#: js/ProjectEditDialog.js:184 Model/Project.php:178
+msgid "Type"
+msgstr ""
+
+#: js/ProjectEditDialog.js:245 Model/Project.php:135
+msgid "Description"
+msgstr "Opis"
+
+#: js/ProjectEditDialog.js:259
+msgid "Enter description"
+msgstr "Wprowadź opis"
 
 #: js/AddToProjectPanel.js:40
 msgid "Please choose the Project to add the contacts to"
@@ -37,10 +94,6 @@ msgstr "Proszę wybrać rolę uczestnika"
 msgid "Select Project"
 msgstr "Wybierz projekt"
 
-#: js/AddToProjectPanel.js:87 js/ProjectEditDialog.js:90
-msgid "Role"
-msgstr "Rola"
-
 #: js/AddToProjectPanel.js:88
 msgid "Select Role"
 msgstr "Wybierz rolę"
@@ -50,62 +103,33 @@ msgstr "Wybierz rolę"
 msgid "Adding {0} Participants to project"
 msgstr "Dodawanie {0} uczestników do projektu"
 
-#: js/ProjectEditDialog.js:115 js/ProjectEditDialog.js:128 Config.php:117
-#: Model/Project.php:47
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "projekty"
-msgstr[2] "projekty"
-msgstr[3] "projekty"
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Rola uczestnika"
 
-#: js/ProjectEditDialog.js:140
-msgid "Title"
-msgstr "Tytuł"
+#: Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projekty"
 
-#: js/ProjectEditDialog.js:145 Model/Project.php:90
-msgid "Number"
-msgstr "Ilość"
-
-#: js/ProjectEditDialog.js:151 Model/Project.php:118
-msgid "Status"
-msgstr "Status"
-
-#: js/ProjectEditDialog.js:157 Model/Project.php:128
-msgid "Start"
-msgstr ""
-
-#: js/ProjectEditDialog.js:163 Model/Project.php:136
-msgid "End"
-msgstr ""
-
-#: js/ProjectEditDialog.js:171 Model/Project.php:143
-msgid "Scope"
-msgstr ""
-
-#: js/ProjectEditDialog.js:178 Model/Project.php:153
-msgid "Type"
-msgstr ""
-
-#: js/ProjectEditDialog.js:216 Model/Project.php:110
-msgid "Description"
-msgstr "Opis"
-
-#: js/ProjectEditDialog.js:230
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: Preference.php:24
-msgid "All my projects"
+#: Setup/Initialize.php:36
+msgid "All my open projects"
 msgstr "Wszystkie moje projekty"
 
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "Projekty, za które odpowiadam"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "Wszystkie otwarte projekty, za które odpowiadam"
+
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "Moje, oczekujące projekty"
+
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "Moje, wstrzymane projekty"
 
 #: Config.php:58
 msgid "Available Project Attendee Role"
@@ -175,46 +199,29 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's projekty osobiste"
+#: Model/Project.php:54
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Lista projektów"
+msgstr[1] "listy projektów"
+msgstr[2] "listy projektów"
+msgstr[3] "listy projektów"
 
-#: Model/Project.php:52
-msgid "Projects list"
-msgid_plural "Projects lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#: Model/Project.php:100
+#: Model/Project.php:125
 msgid "Name"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projekty"
+#: Model/Project.php:188
+msgid "Tasks"
+msgstr ""
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "Wszystkie moje projekty"
+#: Export/definitions/projects_xls_current_columns.xml:5
+msgid "Excel current columns"
+msgstr ""
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "Projekty, za które odpowiadam"
-
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "Wszystkie otwarte projekty, za które odpowiadam"
-
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "Moje, oczekujące projekty"
-
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "Moje, wstrzymane projekty"
+#: Export/definitions/projects_xls.xml:5
+msgid "Excel all data"
+msgstr ""
 
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
@@ -224,18 +231,15 @@ msgstr "zarządzanie wspólnymi ulubionymi projektu"
 msgid "Create new shared project favorites"
 msgstr "Utwórz nowe, wspólne ulubione projektu"
 
+#, python-format
+#~ msgid "%s's personal Projects"
+#~ msgstr "%s's projekty osobiste"
+
 #~ msgid "Search FAQ"
 #~ msgstr "Przeszukiwanie FAQ"
 
 #~ msgid "Tags"
 #~ msgstr "Znaczniki"
-
-#~ msgid "Project list"
-#~ msgid_plural "Project lists"
-#~ msgstr[0] "Lista projektów"
-#~ msgstr[1] "listy projektów"
-#~ msgstr[2] "listy projektów"
-#~ msgstr[3] "listy projektów"
 
 #~ msgid "Project lists"
 #~ msgstr "Listy projektów"
