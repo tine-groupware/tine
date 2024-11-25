@@ -402,7 +402,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         if ($this->has('customfields')) {
             $application = Tinebase_Application::getInstance()->getApplicationByName($this->_application);
             $customFields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application, get_class($this))->name;
-            $recordCustomFields = array();
+            $recordCustomFields = $_data['customfields'] ?? [];
         } else {
             $customFields = array();
         }
