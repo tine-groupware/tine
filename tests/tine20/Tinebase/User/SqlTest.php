@@ -425,7 +425,7 @@ class Tinebase_User_SqlTest extends TestCase
         self::assertNull($user->mustChangePassword());
 
         // change days config to 10
-        Tinebase_Config::getInstance()->set(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER, 10);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USER_PASSWORD_POLICY, [Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER => 10]);
 
         // set password change: 11 days ago)
         $now = Tinebase_DateTime::now();

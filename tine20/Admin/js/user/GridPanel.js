@@ -202,7 +202,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', hidden: this.isLdapBackend, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', width: 120, hidden: this.isLdapBackend},
             { header: this.app.i18n._('MFA Configured'), id: 'mfa_configs', renderer: this.mfaRenderer.createDelegate(this), hidden: false},
-            { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', renderer: this.mustChangeRenderer, hidden: false},
+            { header: this.app.i18n._('Password Must Change'), id: 'must_change_password', renderer: this.mustChangeRenderer, hidden: false, sortable: false},
             { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', renderer: this.dateTimeRenderer, hidden: false},
             { header: this.app.i18n._('Expires'), id: 'accountExpires', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
             { header: this.app.i18n._('Full Name'), id: 'accountFullName'}
@@ -232,25 +232,17 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return rendered
     },
 
-    mustChangeRenderer: function (_value, metadata, _record) {
-        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
-        if (!changeAfter || changeAfter === 0) return Tine.Tinebase.common.booleanRenderer(_value)
-
-        let hoverText = i18n._('Password is expired in accordance with the password policy and needs to be changed')
-
-        let lastChangeDate = _record.get('accountLastPasswordChange')
-        if (!lastChangeDate) {
+    mustChangeRenderer: function (_value, metadata) {
+        if (_value === 'expired') {
+            const hoverText = i18n._('Password is expired in accordance with the password policy and needs to be changed')
             metadata.cellAttr = 'title="'+hoverText+'"'
-            return Tine.Tinebase.common.booleanRenderer('yes')
+        } else {
+            metadata.cellAttr = ''
         }
-
-        let maxDate = new Date(lastChangeDate).add('d', changeAfter)
-        if (maxDate < new Date()) {
-            metadata.cellAttr = 'title="'+hoverText+'"'
-            return Tine.Tinebase.common.booleanRenderer('yes')
+        if (_value !== null) {
+            return Tine.Tinebase.common.booleanRenderer('1')
         }
-
-        return Tine.Tinebase.common.booleanRenderer(_value)
+        return Tine.Tinebase.common.booleanRenderer('0')
     },
 
     enableDisableButtonHandler: function(status) {

@@ -59,6 +59,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     public const USER_TYPE_USER = 'user';
     public const USER_TYPE_VOLUNTEER = 'volunteer';
 
+    public const PASSWORD_EXPIRED = 'expired';
+    public const PASSWORD_FLAGGED = 'flagged';
+    public const PASSWORD_NEVER_CHANGED = 'neverChanged';
+
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -251,6 +256,12 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 self::TYPE          => self::TYPE_VIRTUAL,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ),
+            'must_change_password'  => [
+                self::TYPE              => self::TYPE_STRING,
+                self::NULLABLE          => true,
+                self::IS_VIRTUAL        => true,
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ]
         ],
     ];
 
@@ -421,7 +432,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             return true;
         }
 
-        $passwordChangeDays = Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER);
+        $passwordChangeDays = $this->getPasswordChangeDays();
 
         if ($passwordChangeDays > 0) {
             $now = Tinebase_DateTime::now();
@@ -511,5 +522,35 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     public function getEmailUserId($type = self::XPROP_EMAIL_USERID_IMAP)
     {
         return Tinebase_EmailUser_XpropsFacade::getEmailUserId($this, $type);
+    }
+
+    public function getMustChangePassword(): ?string
+    {
+        if (empty($this->accountLastPasswordChange)) {
+            return self::PASSWORD_NEVER_CHANGED;
+        }
+
+        $mustChange = null;
+        if ($this->password_must_change) {
+            $mustChange = self::PASSWORD_FLAGGED;
+        }
+
+        $passwordChangeDays = $this->getPasswordChangeDays();
+        if ($passwordChangeDays > 0) {
+            $now = Tinebase_DateTime::now();
+            $mustChange = $this->accountLastPasswordChange->isEarlier($now->subDay($passwordChangeDays)) ? self::PASSWORD_EXPIRED : $mustChange;
+        }
+        return $mustChange;
+    }
+
+    public function getPasswordChangeDays(): ?int
+    {
+        $passwordPolicy = Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY);
+
+        $passwordChangeDays = 0;
+        if ($passwordPolicy) {
+            $passwordChangeDays = $passwordPolicy->get(Tinebase_Config::PASSWORD_POLICY_CHANGE_AFTER);
+        }
+        return $passwordChangeDays;
     }
 }

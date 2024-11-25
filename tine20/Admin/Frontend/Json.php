@@ -194,6 +194,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if (!empty($id)) {
             $user = Admin_Controller_User::getInstance()->get($id);
+            $user->must_change_password = $user->getMustChangePassword();
+
             $userArray = $this->_recordToJson($user);
             
             // don't send some infos to the client: unset email uid+gid
@@ -223,7 +225,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 );
                 $userRoles = array();
             }
-            
+
             
         } else {
             $userArray = array('accountStatus' => 'enabled', 'visibility' => 'displayed');
@@ -271,6 +273,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
         $accounts = Admin_Controller_User::getInstance()->searchFullUsers($filter, $sort, $dir, $start, $limit);
+        /* @var Tinebase_Model_FullUser $account */
+        foreach ($accounts as $account) {
+            $account->must_change_password = $account->getMustChangePassword();
+        }
         $results = array();
         foreach ($this->_multipleRecordsToJson($accounts) as $val) {
             $val['filesystemSize'] = null;
