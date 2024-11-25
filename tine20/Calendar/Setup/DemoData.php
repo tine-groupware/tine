@@ -146,6 +146,8 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $this->_adminGrants,
                 true);
         }
+
+        $this->_createFloorPlanConfig();
     }
 
     public function getSharedCalendar()
