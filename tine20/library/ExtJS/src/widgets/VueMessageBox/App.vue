@@ -11,6 +11,7 @@
           :noCloseOnBackdrop="true"
           :noCloseOnEsc="true"
           @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
+          @keydown.esc="props.opt.closable ? reject() : null"
   >
     <template #default>
       <div class="container">
@@ -22,10 +23,14 @@
             <div class="pb-1 mb-1">
               <span v-html="props.opt.msg"></span>
             </div>
-            <div class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisiblity">
+            <div
+              class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisiblity"
+              @keyup.enter="confirm">
               <BFormTextarea v-model="textElValue" :rows="textAreaHeight" ref="textAreaField"/>
             </div>
-            <div class="pb-1 mb-1" v-if="textBoxElVisibility">
+            <div
+              class="pb-1 mb-1" v-if="textBoxElVisibility"
+              @keyup.enter="confirm">
               <BFormInput v-model="textElValue" ref="inputField"/>
             </div>
             <div v-if="progressBarVisibility">
@@ -108,6 +113,20 @@ const closeBox = () => {
 }
 
 const buttonOrder = ['cancel', 'no', 'yes', 'ok']
+
+const confirm = () => {
+  buttonToShow.value.find((btnCfg) => {
+    const clsName = btnCfg.class
+    return clsName.startsWith('yes') || clsName.startsWith('ok')
+  }).clickHandler()
+}
+
+const reject = () => {
+  buttonToShow.value.find((btnCfg) => {
+    const clsName = btnCfg.class
+    return clsName.startsWith('cancel') || clsName.startsWith('no')
+  })?.clickHandler() || closeBox()
+}
 
 const buttonToShow = computed(() => {
   if (props.opt.buttons) {
