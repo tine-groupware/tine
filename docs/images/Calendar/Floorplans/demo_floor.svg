@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 28.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="EG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 2000 2000" style="enable-background:new 0 0 2000 2000;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;stroke:#1D1D1B;stroke-width:1.2427;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-width:4.1338;stroke-miterlimit:10;}
+	.st2{fill:#008BD0;}
+	.st3{fill:#1D1D1B;}
+</style>
+<path id="windows" class="st0" d="M1573.4,565.2l-1117.1,6l-0.3-56.3l1117.1-6L1573.4,565.2z"/>
+<path id="doors" class="st1" d="M1036.8,1317.4l-0.2-142.6c0,0,128.3,5.4,126.2,142.6"/>
+<path id="doors_00000077285091898049656100000006548631165420510340_" class="st1" d="M782.4,1317.4
+	c-2-137.2,126.2-142.6,126.2-142.6l-0.2,142.6"/>
+<rect id="desk_4" x="377.1" y="748.9" transform="matrix(4.491169e-11 -1 1 4.491169e-11 -290.1508 1375.8606)" class="st2" width="331.4" height="168.2"/>
+<rect id="desk_3" x="560.7" y="748.9" transform="matrix(4.490103e-11 -1 1 4.490103e-11 -106.569 1559.4424)" class="st2" width="331.4" height="168.2"/>
+<rect id="desk_2" x="1060.2" y="748.9" transform="matrix(4.491169e-11 -1 1 4.491169e-11 392.8698 2058.8811)" class="st2" width="331.4" height="168.2"/>
+<rect id="desk_1" x="1243.7" y="748.9" transform="matrix(4.490103e-11 -1 1 4.490103e-11 576.4516 2242.4629)" class="st2" width="331.4" height="168.2"/>
+<polygon class="st3" points="298.9,579.5 507.6,579.5 507.6,503 272,503 272,579.5 272,579.5 272,1317.4 284.4,1317.4 298.9,1317.4 
+	782.5,1317.4 782.5,1288.4 298.9,1288.4 "/>
+<polygon class="st3" points="981.4,579.5 1202.1,579.5 1202.1,503 763.9,503 763.9,579.5 958.2,579.5 958.2,1288.4 908.6,1288.4 
+	908.6,1317.4 1036.8,1317.4 1036.8,1288.4 981.4,1288.4 "/>
+<polygon class="st3" points="1433.6,503 1433.6,579.5 1663,579.5 1663,1288.4 1162.8,1288.4 1162.8,1317.4 1663,1317.4 
+	1681.6,1317.4 1686.2,1317.4 1686.2,503 "/>
+</svg>
