@@ -105,7 +105,6 @@ const activeApp = computed(() => {
 
 const appMenuVisible = ref(false)
 const hideApplicationMenu = (e) => {
-  console.warn('hide')
   appMenuVisible.value = false
   e.__skip_toggle = true
 }

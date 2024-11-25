@@ -168,7 +168,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     public function toUbl(): string
     {
-        if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Document_Debitor) {
+        if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Debitor) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_DEBITOR_ID . ' not set or resolved');
         }
         if (null !== $debitor->{Sales_Model_Debitor::FLD_EAS_ID} && !$debitor->{Sales_Model_Debitor::FLD_EAS_ID} instanceof Sales_Model_EDocument_EAS) {
@@ -382,11 +382,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
         // BT-13: Purchase order reference
         if ($this->{self::FLD_PURCHASE_ORDER_REFERENCE}) {
-            $ublInvoice->setOrderReference([(new \UBL21\Common\CommonAggregateComponents\OrderReference)
+            $ublInvoice->setOrderReference((new \UBL21\Common\CommonAggregateComponents\OrderReference)
                 ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PURCHASE_ORDER_REFERENCE}))
                 // BT-14: Sales order reference
                 //->setSalesOrderID()
-            ]);
+            );
         }
 
         if ($buyerContact) {
@@ -432,11 +432,13 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         $lineCounter = 0;
+        $defaultRate = 19;
         /** @var Sales_Model_DocumentPosition_Invoice $position */
         foreach ($this->{self::FLD_POSITIONS} as $position) {
             if (Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE}) {
                 continue;
             }
+            $defaultRate = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE};
             $ublInvoice->addToInvoiceLine((new \UBL21\Common\CommonAggregateComponents\InvoiceLine)
                 ->setID(new \UBL21\Common\CommonBasicComponents\ID(++$lineCounter))
                 ->setUUID($position->getId() ? new \UBL21\Common\CommonBasicComponents\UUID($position->getId()) : null)
@@ -465,7 +467,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                 )
                 ->setPrice((new \UBL21\Common\CommonAggregateComponents\Price)
-                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE}))
+                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}))
                         ->setCurrencyID('EUR')
                     )
                 )
@@ -495,6 +497,14 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             );
         }
 
+        // fix 0 Eur line issue -> no tax rates set
+        if (empty($this->xprops(self::FLD_SALES_TAX_BY_RATE))) {
+            $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                self::NET_SUM => 0,
+                self::TAX_SUM => 0,
+                self::TAX_RATE => $defaultRate,
+            ];
+        }
         foreach ($this->xprops(self::FLD_SALES_TAX_BY_RATE) as $taxRate) {
             $taxTotal->addToTaxSubtotal((new \UBL21\Common\CommonAggregateComponents\TaxSubtotal)
                 ->setTaxableAmount((new \UBL21\Common\CommonBasicComponents\TaxableAmount($taxRate[self::NET_SUM]))

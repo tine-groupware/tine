@@ -31,7 +31,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'adr_lat' },
     { name: 'location' },
     { name: 'location_record' },
-    { name: 'site' },
+    { name: 'event_site' },
     { name: 'organizer_type' },
     { name: 'organizer' },
     { name: 'organizer_email' },
