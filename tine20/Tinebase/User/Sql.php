@@ -1109,7 +1109,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             if ($oldUser->accountStatus === Tinebase_User::STATUS_BLOCKED) {
                 $accountData[$this->rowNameMapping['loginFailures']] = $this->resetLoginFailureCount();
-            } elseif ($oldUser->accountStatus === Tinebase_User::STATUS_EXPIRED) {
+            } elseif ($oldUser->accountStatus === Tinebase_User::STATUS_EXPIRED &&
+                $oldUser->accountExpires === $accountData[$this->rowNameMapping['accountExpires']]) {
                 $accountData[$this->rowNameMapping['accountExpires']] = null;
             }
         } elseif ($_user->accountStatus === Tinebase_User::STATUS_DISABLED ||
