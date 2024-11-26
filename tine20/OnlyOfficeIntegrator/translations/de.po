@@ -2,16 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - OnlyOfficeIntegrator\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2019-12-14 00:47+0100\n"
+"PO-Revision-Date: 2024-11-25 11:20+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.5\n"
+
+#: Controller.php:750
+msgid "conflict"
+msgstr "Konflikt"
 
 #: Frontend/Json.php:42
 msgid "New Document"
@@ -37,135 +41,166 @@ msgstr "Neue Tabellenkalkulation  (%1$d)"
 msgid "New Presentation (%1$d)"
 msgstr "Neue Präsentation  (%1$d)"
 
-#: Setup/Initialize.php:42
-msgid "Editing"
-msgstr ""
+#: Frontend/Json.php:880
+msgid "filetype of node is not supported"
+msgstr "Dateityp wird nicht unterstützt"
 
-#: Setup/Initialize.php:59
-msgid "Current Editors"
-msgstr ""
+#: Frontend/Json.php:884
+msgid "node has no revision, it might be a partial upload"
+msgstr "Der Knoten hat keine Revision, es könnte ein Teil-Upload sein"
 
-#: Config.php:47
-msgid "Public OnlyOffice document server url"
-msgstr ""
+#: Frontend/Json.php:920
+msgid "this revision currently can't be opened as a different revision is already open"
+msgstr "Diese Revision kann nicht geöffnet werden, da eine andere bereits offen ist"
 
-#: Config.php:49
-msgid "OnlyOffice document server url accessible by the users browser"
-msgstr ""
-
-#: Config.php:57
-msgid "Internal/Server OnlyOffice document server url"
-msgstr ""
-
-#: Config.php:59
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-msgstr ""
-
-#: Config.php:67
-msgid "Server url of this installation"
-msgstr ""
-
-#: Config.php:69
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr ""
-
-#: Config.php:77
-msgid "Enable oo jwt tokens"
-msgstr ""
-
-#: Config.php:79
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr ""
-
-#: Config.php:88
-msgid "OnlyOffice jwt secret string"
-msgstr ""
-
-#: Config.php:90
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr ""
-
-#: Config.php:98 Config.php:100
-msgid "Live time of token subscriptions"
-msgstr ""
-
-#: js/editDocumentAction.js:23
-msgid "Open Document"
-msgstr "Dokument öffnen"
-
-#: js/OnlyOfficeEditDialog.js:132
-msgid "Select Image"
-msgstr "Bild auswählen"
-
-#: js/OnlyOfficeEditDialog.js:174
-msgid "Save Copy As"
-msgstr "Kopie speichern als"
-
-#: js/OnlyOfficeEditDialog.js:181
-msgid "Exporting Document ..."
-msgstr "Dokument wird exportiert…"
-
-#: js/OnlyOfficeEditDialog.js:260
-msgid "Overwrite Existing File?"
-msgstr "Bestehende Datei überschreiben?"
-
-msgid "Preparing Attachment..."
-msgstr "Anhang wird vorbereitet..."
-
-#: js/OnlyOfficeEditDialog.js:261
-#, python-brace-format
-msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
-msgstr ""
-
-#: js/OnlyOfficeEditDialog.js:274
-msgid "Restoring ..."
-msgstr "Wiederherstellen..."
-
-#: js/OnlyOfficeEditDialog.js:307
-msgid "No Document Specified"
-msgstr "Kein Dokument ausgewählt"
-
-#: js/OnlyOfficeEditDialog.js:308
-msgid "Something went wrong, please try again later."
-msgstr "Es gibt Probleme, bitte versuchen sie es später noch einmal."
-
-#: js/OnlyOfficeEditDialog.js:329
-msgid "Outdated Revision"
-msgstr "Veraltete Revision"
-
-#: js/OnlyOfficeEditDialog.js:330
-msgid "This revision of the document is outdated, please open the latest revision"
-msgstr "Diese Revision ist veraltet, bitte öffnen sie die neuste Version"
-
-#: js/OnlyOfficeEditDialog.js:382
-msgid "Saving Document ..."
-msgstr "Dokument wird gespeichert …"
-
+#: js/OnlyOfficeEditDialog.js:86 js/OnlyOfficeEditDialog.js:99
 msgid "Absence detected"
 msgstr "Abwesenheit erkannt"
 
+#: js/OnlyOfficeEditDialog.js:87
+#, python-brace-format
 msgid "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
 msgstr "Es sieht so aus als würden sie das Dokument derzeit nicht bearbeiten. Um die Inhalte zu schützen wird es daher in {0} Sekunden automatisch geschlossen."
 
+#: js/OnlyOfficeEditDialog.js:100
 msgid "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
 msgstr "Es sah so aus als hätten sie das Dokument nicht mehr bearbeitet. Um die Inhalte zu schützen wurde es daher automatisch geschlossen."
+
+#: js/OnlyOfficeEditDialog.js:198
+msgid "Select Image"
+msgstr "Bild auswählen"
+
+#: js/OnlyOfficeEditDialog.js:243
+msgid "Save Copy As"
+msgstr "Kopie speichern als"
+
+#: js/OnlyOfficeEditDialog.js:252
+msgid "Exporting Document ..."
+msgstr "Dokument wird exportiert…"
+
+#: js/OnlyOfficeEditDialog.js:334
+msgid "Overwrite Existing File?"
+msgstr "Bestehende Datei überschreiben?"
+
+#: js/OnlyOfficeEditDialog.js:335
+#, python-brace-format
+msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
+msgstr "Sie sind im Begriff die Datei „{filename}“ mit der alten Version {version} zu ersetzen. Alle neueren Änderungen gehen verloren .Wollen sie wirklich fortfahren?"
+
+#: js/OnlyOfficeEditDialog.js:348
+msgid "Restoring ..."
+msgstr "Wiederherstellen..."
+
+#: js/OnlyOfficeEditDialog.js:381
+msgid "No Document Specified"
+msgstr "Kein Dokument ausgewählt"
+
+#: js/OnlyOfficeEditDialog.js:382
+msgid "Something went wrong, please try again later."
+msgstr "Es gibt Probleme, bitte versuchen sie es später noch einmal."
+
+#: js/OnlyOfficeEditDialog.js:402
+msgid "Error"
+msgstr "Fehler"
+
+#: js/OnlyOfficeEditDialog.js:460
+msgid "Saving Document ..."
+msgstr "Dokument wird gespeichert …"
+
+#: js/nodeGridPanelPlugin.js:16
+msgid "Is edited by"
+msgstr "In Bearbeitung durch"
+
+#: js/nodeGridPanelPlugin.js:16
+msgid "Who is currently editing this document"
+msgstr "Wer bearbeitet derzeitig dieses Dokument"
 
 #: js/Application.js:21
 msgid "Only Office Integrator"
 msgstr "Only Office Integrator"
 
-#: js/createDocumentAction.js:40
+#: js/editDocumentAction.js:23
+msgid "Open Document"
+msgstr "Dokument öffnen"
+
+#: js/editDocumentAction.js:26
+msgid "Preparing Attachment..."
+msgstr "Anhang wird vorbereitet..."
+
+#: js/createDocumentAction.js:37
 msgid "Add Document"
 msgstr "Neues Dokument"
 
-#: js/createDocumentAction.js:42
+#: js/createDocumentAction.js:39
 msgid "Add Text"
 msgstr "Neuer Text"
 
-#: js/createDocumentAction.js:46
+#: js/createDocumentAction.js:43
 msgid "Add Spreadsheet"
 msgstr "Neue Tabellenkalkulation"
 
-#: js/createDocumentAction.js:50
+#: js/createDocumentAction.js:47
 msgid "Add Presentation"
 msgstr "Neue Präsentation"
+
+#: Setup/Initialize.php:79
+msgid "Editing"
+msgstr "In Bearbeitung"
+
+#: Setup/Initialize.php:97
+msgid "Current Editors"
+msgstr "Derzeitige Bearbeiter"
+
+#: Config.php:48
+msgid "Public OnlyOffice document server url"
+msgstr "Öffentliche OnlyOffice Document-Server URL"
+
+#: Config.php:50
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr "OnlyOffice Document-Server URL die durch die Nutzer*innen Browser erreichbar ist"
+
+#: Config.php:58
+msgid "Internal/Server OnlyOffice document server url"
+msgstr "Interne/Server OnlyOffice Document Server URL"
+
+#: Config.php:60
+msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgstr "OnlyOffice Document-Server URL die durch diesen Server erreichbar ist. Leer lassen wenn diese der öffentlichen URL entspricht"
+
+#: Config.php:68
+msgid "Server url of this installation"
+msgstr "Server URL dieser Installation"
+
+#: Config.php:70
+msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgstr "Server URL dieser Installation die durch den OnlyOffice Document-Server erreichbar ist"
+
+#: Config.php:78
+msgid "Enable oo jwt tokens"
+msgstr "OnlyOffice Jet Tokens aktivieren"
+
+#: Config.php:80
+msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgstr "Aktiviert Tokens für Browser-Anfragen. Korrespondiert mit der OnlyOffice JWT_ENABLED Umgebungsvariable"
+
+#: Config.php:89
+msgid "OnlyOffice jwt secret string"
+msgstr "OnlyOffice JWT Geheimnis"
+
+#: Config.php:91
+msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgstr "OnlyOffice JWT Geheimnis. Korrespondiert mit der OnlyOffice JWT_SECRET Umgebungsvariable"
+
+#: Config.php:99 Config.php:101
+msgid "Interval in seconds to force save"
+msgstr "Intervall (in Sekunden) für Erzwungenes Speichern"
+
+#: Config.php:110 Config.php:112
+msgid "Live time of token subscriptions"
+msgstr "Lebenszeit für Token"
+
+#~ msgid "Outdated Revision"
+#~ msgstr "Veraltete Revision"
+
+#~ msgid "This revision of the document is outdated, please open the latest revision"
+#~ msgstr "Diese Revision ist veraltet, bitte öffnen sie die neuste Version"

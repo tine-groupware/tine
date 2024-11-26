@@ -16,279 +16,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/TimeaccountResponsibleFilterModel.js:30 Model/Timeaccount.php:265
-msgid "Responsible"
-msgstr ""
-
-#: js/TimeaccountResponsibleFilterModel.js:32
-msgid "without responsible"
-msgstr ""
-
-#: js/TimeaccountGridPanel.js:64
-msgid "Bookmark Timeaccount"
-msgstr ""
-
-#: js/TimeaccountGridPanel.js:124
-msgid "Close Timeaccount"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:92
-msgid "timeframe"
-msgstr "时段"
-
-#: js/TimesheetGridPanel.js:116
-msgid "summary"
-msgstr "摘要"
-
-#: js/TimesheetGridPanel.js:119
-msgid "Total Timesheets"
-msgstr "全部的时间表"
-
-#: js/TimesheetGridPanel.js:120
-msgid "Billable Timesheets"
-msgstr "记帐的时间表"
-
-#: js/TimesheetGridPanel.js:121
-msgid "Total Time"
-msgstr "全部时间"
-
-#: js/TimesheetGridPanel.js:122
-msgid "Time of Billable Timesheets"
-msgstr "记帐时间表的时间"
-
-#: js/TimesheetGridPanel.js:179 js/TimesheetEditDialog.js:490
-#: js/TimeaccountEditDialog.js:249 Model/Timeaccount.php:155
-#: Model/Timesheet.php:243
-msgid "Description"
-msgstr "描述"
-
-#: js/TimesheetGridPanel.js:193
-msgid "Detail"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:258
-#, python-brace-format
-msgid "Assign '{0}' Tag"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:269
-msgid "Export Timesheets"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:279
-msgid "Export as ODS"
-msgstr "导出 ODS"
-
-#: js/TimesheetGridPanel.js:286
-msgid "Export as CSV"
-msgstr "导出 CSV"
-
-#: js/TimesheetGridPanel.js:293
-msgid "Export as ..."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:318 Model/Timesheet.php:38
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "时间表"
-
-#: js/TimesheetEditDialog.js:400
-msgid "Accounting"
-msgstr ""
-
-#: js/TimesheetEditDialog.js:473 Model/Timeaccount.php:57
-msgid "Timeaccount"
-msgid_plural "Timeaccounts"
-msgstr[0] ""
-
-#: js/TimesheetEditDialog.js:526
-msgid "Failed"
-msgstr ""
-
-#: js/TimesheetEditDialog.js:527
-#, python-brace-format
-msgid "Could not save {0}."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:528
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:536 js/TimesheetEditDialog.js:548
-msgid "Closed Timeaccount Warning!"
-msgstr ""
-
-#: js/TimesheetEditDialog.js:537
-msgid "The selected Time Account is already closed."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:549
-msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
-msgstr ""
-
-#: js/TimeAccountContractFilterModel.js:30 Model/Timeaccount.php:109
-#: Model/Timeaccount.php:277
-msgid "Contract"
-msgstr ""
-
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:70
-msgid "Add New Timeaccount"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:97
-msgid "Unit"
-msgstr "单位"
-
-#: js/TimeaccountEditDialog.js:101
-msgid "Unit Price"
-msgstr "单价"
-
-#: js/TimeaccountEditDialog.js:107
-msgid "Factor"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:114
-msgid "Budget"
-msgstr "预算"
-
-#: js/TimeaccountEditDialog.js:119 Model/Timeaccount.php:189
-msgid "Status"
-msgstr "状态"
-
-#: js/TimeaccountEditDialog.js:125 js/Timetracker.js:19 js/Timetracker.js:24
-#: js/Timetracker.js:50 js/TimeAccountStatusFilterModel.js:44
-msgid "closed"
-msgstr "已结清"
-
-#: js/TimeaccountEditDialog.js:125 js/Timetracker.js:50
-#: js/TimeAccountStatusFilterModel.js:44
-msgid "open"
-msgstr "打开"
-
-#: js/TimeaccountEditDialog.js:146
-msgid "Cleared In"
-msgstr "已清除于"
-
-#: js/TimeaccountEditDialog.js:165 Model/Timeaccount.php:237
-msgid "Cleared at"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:171 Model/Timeaccount.php:311
-msgid "Cost Center"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:186 Model/Timeaccount.php:315
-msgid "Responsible Person"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:195
-msgid "Timesheets are billable"
-msgstr "记帐的时间表"
-
-#: js/TimeaccountEditDialog.js:205 Model/Timeaccount.php:212
-msgid "Invoice"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:221 Model/Timeaccount.php:319
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "时间帐户"
-
-#: js/TimeaccountEditDialog.js:237 Model/Timeaccount.php:147
-msgid "Number"
-msgstr "号码"
-
-#: js/TimeaccountEditDialog.js:243 Model/Timeaccount.php:140
-msgid "Title"
-msgstr "头衔"
-
-#: js/TimeaccountEditDialog.js:274
-msgid "Access"
-msgstr "访问"
-
-#: js/TimeaccountEditDialog.js:289
-msgid "Permissions"
-msgstr "许可"
-
-#: js/TimeAccountBilledFilterModel.js:24
-msgid "Time Account - Billed"
-msgstr ""
-
-#: js/TimeAccountBilledFilterModel.js:44 Config.php:88
-msgid "not yet billed"
-msgstr "还没记帐"
-
-#: js/TimeAccountBilledFilterModel.js:45
-msgid "to bill"
-msgstr "记帐"
-
-#: js/TimeAccountBilledFilterModel.js:46 Config.php:90
-msgid "billed"
-msgstr "已记帐"
-
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
-msgstr "时间帐户－状态"
-
-#: js/Models.js:32
-msgid "Timeaccount Grant"
-msgid_plural "Timeaccount Grants"
-msgstr[0] ""
-
-#: js/Models.js:38
-msgid "Book Own"
-msgstr "预定自己的"
-
-#: js/Models.js:39
-msgid "The grant to add Timesheets to this Timeaccount"
-msgstr ""
-
-#: js/Models.js:40
-msgid "View All"
-msgstr "浏览所有的"
-
-#: js/Models.js:41
-msgid "The grant to view Timesheets of other users"
-msgstr ""
-
-#: js/Models.js:42
-msgid "Book All"
-msgstr "预定所有的"
-
-#: js/Models.js:43
-msgid "The grant to add Timesheets for other users"
-msgstr ""
-
-#: js/Models.js:44
-msgid "Manage Clearing"
-msgstr "管理清除"
-
-#: js/Models.js:45
-msgid "The grant to manage clearing of Timesheets"
-msgstr ""
-
-#: js/TimeaccountFavoritesPanel.js:67
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#: js/TimeaccountFavoritesPanel.js:86
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-
-#: js/TimeaccountFavoritesPanel.js:86
-msgid "Favorite"
-msgstr ""
-
-#: js/TimeaccountPickerCombo.js:52
-msgid "Show closed"
-msgstr "关闭展示"
-
 #: Preference.php:70
 msgid "Timesheets ODS export configuration"
 msgstr ""
@@ -309,164 +36,522 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-#: Config.php:48
-msgid "Enabled Features"
+#: js/TimeaccountGridPanel.js:65
+msgid "Bookmark Timeaccount"
 msgstr ""
 
-#: Config.php:50
-msgid "Enabled Features in Timetracker Application."
+#: js/TimeaccountGridPanel.js:125
+msgid "Close Timeaccount"
 msgstr ""
 
-#: Config.php:58
-msgid "Timeaccount Bookmarks"
+#: js/Timetracker.js:23 js/Timetracker.js:33
+#: js/TimeAccountStatusFilterModel.js:44 js/TimeaccountEditDialog.js:99
+msgid "closed"
+msgstr "已结清"
+
+#: js/Timetracker.js:33 js/TimeAccountStatusFilterModel.js:44
+#: js/TimeaccountEditDialog.js:99
+msgid "open"
+msgstr "打开"
+
+#: js/Tasks/timeaccountingPanel.js:56
+msgid "Timesheets of this Task:"
 msgstr ""
 
-#: Config.php:75
-msgid "none"
+#: js/Tasks/addTimesheetAction.js:8
+msgid "Add Timesheet"
 msgstr ""
 
-#: Config.php:76
-msgid "last week"
+#: js/TimeaccountResponsibleFilterModel.js:30 Model/Timeaccount.php:277
+msgid "Responsible"
 msgstr ""
 
-#: Config.php:89
-msgid "status to bill"
+#: js/TimeaccountResponsibleFilterModel.js:32
+msgid "without responsible"
 msgstr ""
 
-#: Config.php:61
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+#: js/TimesheetEditDialog.js:282
+msgid "End Time Change"
 msgstr ""
 
-#: Model/Timeaccount.php:178
-msgid "Price"
+#: js/TimesheetEditDialog.js:283
+msgid "End time was shortened as timesheet must not overlap day"
 msgstr ""
 
-#: Model/Timeaccount.php:206
-msgid "Cleared in"
-msgstr "已清除于"
-
-#: Model/Timeaccount.php:232
-msgid "Billed"
-msgstr "已记帐"
-
-#: Model/Timeaccount.php:247
-msgid "Booking deadline"
+#: js/TimesheetEditDialog.js:311
+msgid "Duration Change"
 msgstr ""
 
-#: Model/Timeaccount.php:286 Model/Timesheet.php:255
-msgid "Accounting time factor"
+#: js/TimesheetEditDialog.js:312
+msgid "Duration was shortened as timesheet must not overlap day"
 msgstr ""
 
-#: Model/Timeaccount.php:295
-msgid "Stream"
+#: js/TimesheetEditDialog.js:396 Model/Timesheet.php:47
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "时间表"
+
+#: js/TimesheetEditDialog.js:464
+msgid "End must not before start."
 msgstr ""
 
-#: Model/Timeaccount.php:719 Model/Timesheet.php:318
-msgid "hour"
+#: js/TimesheetEditDialog.js:494
+msgid "Accounting"
 msgstr ""
 
-#: Model/Timesheet.php:90
-msgid "Account"
-msgstr "帐户"
-
-#: Model/Timesheet.php:97
-msgid "Time Account (Number - Title)"
+#: js/TimesheetEditDialog.js:515 js/TimeaccountEditDialog.js:80
+msgid "Factor"
 msgstr ""
 
-#: Model/Timesheet.php:123
-msgid "Project time billable"
-msgstr ""
-
-#: Model/Timesheet.php:134
-msgid "Project time billable (combined)"
-msgstr ""
-
-#: Model/Timesheet.php:139
-msgid "Billable"
-msgstr "记帐"
-
-#: Model/Timesheet.php:147
-msgid "Project time cleared in"
-msgstr ""
-
-#: Model/Timesheet.php:155
-msgid "Project time Invoice"
-msgstr ""
-
-#: Model/Timesheet.php:170
-msgid "Project time is cleared"
-msgstr ""
-
-#: Model/Timesheet.php:181
-msgid "Projecttime cleared (combined)"
-msgstr ""
-
-#: Model/Timesheet.php:195 Model/Timesheet.php:202
-msgid "Date"
-msgstr "日期"
-
-#: Model/Timesheet.php:210
-msgid "Start time"
-msgstr "开始时间"
-
-#: Model/Timesheet.php:228
-msgid "End time"
-msgstr ""
-
-#: Model/Timesheet.php:236
-msgid "Duration"
-msgstr "期间"
-
-#: Model/Timesheet.php:249
-msgid "Need for Clarification"
-msgstr ""
-
-#: Model/Timesheet.php:261
+#: js/TimesheetEditDialog.js:522
 msgid "Accounting time"
 msgstr ""
 
-#: Model/Timesheet.php:268
-msgid "Workingtime is cleared"
+#: js/TimesheetEditDialog.js:573 Setup/Initialize.php:211
+#: Model/Timeaccount.php:57
+msgid "Timeaccount"
+msgid_plural "Timeaccounts"
+msgstr[0] ""
+
+#: js/TimesheetEditDialog.js:590 js/TimesheetGridPanel.js:224
+#: js/TimeaccountEditDialog.js:208 Model/Timeaccount.php:165
+#: Model/Timesheet.php:258
+msgid "Description"
+msgstr "描述"
+
+#: js/TimesheetEditDialog.js:626
+msgid "Failed"
 msgstr ""
 
-#: Model/Timesheet.php:274
-msgid "Workingtime cleared in"
+#: js/TimesheetEditDialog.js:627
+#, python-brace-format
+msgid "Could not save {0}."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:628
+msgid "Booking deadline for this Timeaccount has been exceeded."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:636 js/TimesheetEditDialog.js:652
+msgid "Closed Timeaccount Warning!"
+msgstr ""
+
+#: js/TimesheetEditDialog.js:637
+msgid "The selected Time Account is already closed."
+msgstr ""
+
+#: js/TimesheetEditDialog.js:653
+msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
+msgstr ""
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "时间帐户－状态"
+
+#: js/TimeAccountBilledFilterModel.js:24
+msgid "Time Account - Billed"
+msgstr ""
+
+#: js/TimeAccountBilledFilterModel.js:44 Config.php:107
+msgid "not yet billed"
+msgstr "还没记帐"
+
+#: js/TimeAccountBilledFilterModel.js:45
+msgid "to bill"
+msgstr "记帐"
+
+#: js/TimeAccountBilledFilterModel.js:46 Config.php:109
+msgid "billed"
+msgstr "已记帐"
+
+#: js/TimesheetGridPanel.js:76
+msgid "Workingtime:"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:78
+msgid "Turnover:"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:89
+msgid "Working Time Statistics"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:109
+msgid "Turnover Statistics"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:137
+msgid "timeframe"
+msgstr "时段"
+
+#: js/TimesheetGridPanel.js:161
+msgid "summary"
+msgstr "摘要"
+
+#: js/TimesheetGridPanel.js:164
+msgid "Total Timesheets"
+msgstr "全部的时间表"
+
+#: js/TimesheetGridPanel.js:165
+msgid "Billable Timesheets"
+msgstr "记帐的时间表"
+
+#: js/TimesheetGridPanel.js:166
+msgid "Total Time"
+msgstr "全部时间"
+
+#: js/TimesheetGridPanel.js:167
+msgid "Time of Billable Timesheets"
+msgstr "记帐时间表的时间"
+
+#: js/TimesheetGridPanel.js:238
+msgid "Detail"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:303
+#, python-brace-format
+msgid "Assign '{0}' Tag"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:314
+msgid "Export Timesheets"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:324
+msgid "Export as ODS"
+msgstr "导出 ODS"
+
+#: js/TimesheetGridPanel.js:331
+msgid "Export as CSV"
+msgstr "导出 CSV"
+
+#: js/TimesheetGridPanel.js:338
+msgid "Export as ..."
+msgstr ""
+
+#: js/TimeaccountFavoritesPanel.js:67
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#: js/TimeaccountFavoritesPanel.js:86
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+
+#: js/TimeaccountFavoritesPanel.js:86
+msgid "Favorite"
+msgstr ""
+
+#: js/TimeAccountContractFilterModel.js:30 Model/Timeaccount.php:119
+#: Model/Timeaccount.php:289
+msgid "Contract"
+msgstr ""
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr ""
+
+#: js/TimeaccountPickerCombo.js:54
+msgid "Show closed"
+msgstr "关闭展示"
+
+#: js/TimeaccountEditDialog.js:70
+msgid "Unit"
+msgstr "单位"
+
+#: js/TimeaccountEditDialog.js:74
+msgid "Unit Price"
+msgstr "单价"
+
+#: js/TimeaccountEditDialog.js:87 Model/Timeaccount.php:173
+msgid "Budget in hours"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:93 Model/Timeaccount.php:200
+msgid "Status"
+msgstr "状态"
+
+#: js/TimeaccountEditDialog.js:129 Model/Timeaccount.php:249
+msgid "Cleared at"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:136 Model/Timeaccount.php:323
+msgid "Responsible Person"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:145
+msgid "Timesheets are billable"
+msgstr "记帐的时间表"
+
+#: js/TimeaccountEditDialog.js:157 js/TimeaccountEditDialog.js:258
+#: Model/Timeaccount.php:223
+msgid "Invoice"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:180 Model/Timeaccount.php:327
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "时间帐户"
+
+#: js/TimeaccountEditDialog.js:196 Model/Timeaccount.php:157
+msgid "Number"
+msgstr "号码"
+
+#: js/TimeaccountEditDialog.js:202 Model/Timeaccount.php:150
+msgid "Title"
+msgstr "头衔"
+
+#: js/TimeaccountEditDialog.js:251 js/TimeaccountEditDialog.js:292
+msgid "Select invoice"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:324
+msgid "Update Timesheets?"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:325
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
 msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "时间跟踪器"
 
-#: Setup/Initialize.php:33
+#: Setup/Initialize.php:27
+msgid "Requested Timesheets"
+msgstr ""
+
+#: Setup/Initialize.php:51
 msgid "My Timesheets today"
 msgstr ""
 
-#: Setup/Initialize.php:47
+#: Setup/Initialize.php:65
 msgid "My Timesheets this week"
 msgstr ""
 
-#: Setup/Initialize.php:61
+#: Setup/Initialize.php:79
 msgid "My Timesheets last week"
 msgstr ""
 
-#: Setup/Initialize.php:75
+#: Setup/Initialize.php:93
 msgid "My Timesheets this month"
 msgstr ""
 
-#: Setup/Initialize.php:89
+#: Setup/Initialize.php:107
 msgid "My Timesheets last month"
 msgstr ""
 
-#: Setup/Initialize.php:112
+#: Setup/Initialize.php:131
 msgid "Timeaccounts to bill"
 msgstr ""
 
-#: Setup/Initialize.php:126
+#: Setup/Initialize.php:145
 msgid "Timeaccounts not yet billed"
 msgstr ""
 
-#: Setup/Initialize.php:141
+#: Setup/Initialize.php:160
 msgid "Timeaccounts already billed"
+msgstr ""
+
+#: Config.php:67
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:69
+msgid "Enabled Features in Timetracker Application."
+msgstr ""
+
+#: Config.php:77
+msgid "Timeaccount Bookmarks"
+msgstr ""
+
+#: Config.php:94
+msgid "none"
+msgstr ""
+
+#: Config.php:95
+msgid "last week"
+msgstr ""
+
+#: Config.php:108
+msgid "status to bill"
+msgstr ""
+
+#: Config.php:121
+msgid "Requested"
+msgstr ""
+
+#: Config.php:122
+msgid "Accepted"
+msgstr ""
+
+#: Config.php:123
+msgid "Declined"
+msgstr ""
+
+#: Config.php:80
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+#: Controller/Timeaccount.php:121
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+#: Controller/Timesheet.php:393
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+#: Model/TimeaccountGrants.php:62
+msgid "Read Own"
+msgstr ""
+
+#: Model/TimeaccountGrants.php:63
+msgid "The grant to read own time sheets in this time account."
+msgstr ""
+
+#: Model/TimeaccountGrants.php:66
+msgid "Request Own"
+msgstr ""
+
+#: Model/TimeaccountGrants.php:67
+msgid "The grant to add own time sheets request in this time account."
+msgstr ""
+
+#: Model/TimeaccountGrants.php:70
+msgid "Book Own"
+msgstr "预定自己的"
+
+#: Model/TimeaccountGrants.php:71
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr ""
+
+#: Model/TimeaccountGrants.php:74
+msgid "View All"
+msgstr "浏览所有的"
+
+#: Model/TimeaccountGrants.php:75
+msgid "The grant to view Timesheets of other users"
+msgstr ""
+
+#: Model/TimeaccountGrants.php:78
+msgid "Book All"
+msgstr "预定所有的"
+
+#: Model/TimeaccountGrants.php:79
+msgid "The grant to add Timesheets for other users"
+msgstr ""
+
+#: Model/TimeaccountGrants.php:82
+msgid "Manage Clearing"
+msgstr "管理清除"
+
+#: Model/TimeaccountGrants.php:83
+msgid "The grant to manage clearing of Timesheets"
+msgstr ""
+
+#: Model/Timeaccount.php:189
+msgid "Price"
+msgstr ""
+
+#: Model/Timeaccount.php:211 Model/Timesheet.php:145
+msgid "Project time billable"
+msgstr ""
+
+#: Model/Timeaccount.php:217 Model/Timesheet.php:171
+msgid "Project time cleared in"
+msgstr ""
+
+#: Model/Timeaccount.php:244
+msgid "Project time billed"
+msgstr ""
+
+#: Model/Timeaccount.php:259
+msgid "Booking deadline"
+msgstr ""
+
+#: Model/Timeaccount.php:298
+msgid "Accounting time factor"
+msgstr ""
+
+#: Model/Timeaccount.php:307
+msgid "Stream"
+msgstr ""
+
+#: Model/Timeaccount.php:727 Model/Timesheet.php:363
+msgid "hour"
+msgstr ""
+
+#: Model/Timesheet.php:112
+msgid "Account"
+msgstr "帐户"
+
+#: Model/Timesheet.php:121
+msgid "Time Account (Number - Title)"
+msgstr ""
+
+#: Model/Timesheet.php:157
+msgid "Project time billable (combined)"
+msgstr ""
+
+#: Model/Timesheet.php:163
+msgid "Billable"
+msgstr "记帐"
+
+#: Model/Timesheet.php:180
+msgid "Project time Invoice"
+msgstr ""
+
+#: Model/Timesheet.php:196
+msgid "Project time is cleared"
+msgstr ""
+
+#: Model/Timesheet.php:206
+msgid "Cleared amount"
+msgstr ""
+
+#: Model/Timesheet.php:212 Model/Timesheet.php:219
+msgid "Date"
+msgstr "日期"
+
+#: Model/Timesheet.php:225
+msgid "Start time"
+msgstr "开始时间"
+
+#: Model/Timesheet.php:243
+msgid "End time"
+msgstr ""
+
+#: Model/Timesheet.php:251
+msgid "Duration"
+msgstr "期间"
+
+#: Model/Timesheet.php:264
+msgid "Need for Clarification"
+msgstr ""
+
+#: Model/Timesheet.php:270
+msgid "Projecttime Accounting factor"
+msgstr ""
+
+#: Model/Timesheet.php:278
+msgid "Accounting Projecttime"
+msgstr ""
+
+#: Model/Timesheet.php:285
+msgid "Workingtime is cleared"
+msgstr ""
+
+#: Model/Timesheet.php:291
+msgid "Workingtime cleared in"
+msgstr ""
+
+#: Model/Timesheet.php:298
+msgid "Process Status"
+msgstr ""
+
+#: Model/Timesheet.php:305
+msgid "Source"
 msgstr ""
 
 #: Acl/Rights.php:121
@@ -496,6 +581,24 @@ msgstr ""
 #: Acl/Rights.php:134
 msgid "Create or update shared timesheet favorites"
 msgstr ""
+
+#~ msgid "Budget"
+#~ msgstr "预算"
+
+#~ msgid "Cleared In"
+#~ msgstr "已清除于"
+
+#~ msgid "Access"
+#~ msgstr "访问"
+
+#~ msgid "Permissions"
+#~ msgstr "许可"
+
+#~ msgid "Cleared in"
+#~ msgstr "已清除于"
+
+#~ msgid "Billed"
+#~ msgstr "已记帐"
 
 #~ msgid "Cleared"
 #~ msgstr "已清除"

@@ -700,7 +700,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'class':             return $t->_('Classification');
             case 'description':       return $t->_('Description');
             case 'location':          return $t->_('Location');
-            case 'event_site':              return $t->_('event_site');
+            case 'event_site':        return $t->_('Event Site');
             case 'organizer':         return $t->_('Organizer');
             case 'priority':          return $t->_('Priority');
             case 'status':            return $t->_('Status');

@@ -53,6 +53,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_PROJECT_REFERENCE = 'project_reference';
     public const FLD_PURCHASE_ORDER_REFERENCE = 'purchase_order_reference';
 
+    public const FLD_SERVICE_PERIOD_START = 'service_period_start';
+    public const FLD_SERVICE_PERIOD_END = 'service_period_end';
+
     public const FLD_INVOICE_DISCOUNT_TYPE = 'invoice_discount_type'; // PERCENTAGE|SUM
     public const FLD_INVOICE_DISCOUNT_PERCENTAGE = 'invoice_discount_percentage'; // automatische Berechnung je nach tupe
     public const FLD_INVOICE_DISCOUNT_SUM = 'invoice_discount_sum'; // automatische Berechnung je nach type
@@ -272,6 +275,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     'format' => ['medium'],
                 ],
             ],
+            self::FLD_SERVICE_PERIOD_START => [
+                self::TYPE                  => self::TYPE_DATE,
+                self::LABEL                 => 'Service Period Start', //_('Service Period Start')
+                self::NULLABLE              => true,
+            ],
+            self::FLD_SERVICE_PERIOD_END =>  [
+                self::TYPE                  => self::TYPE_DATE,
+                self::LABEL                 => 'Service Period End', //_('Service Period End')
+                self::NULLABLE              => true,
+            ],
+
             self::FLD_BUYER_REFERENCE        => [
                 self::LABEL                         => 'Buyer Reference', //_('Buyer Reference')
                 self::TYPE                          => self::TYPE_STRING,

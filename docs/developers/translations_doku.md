@@ -6,11 +6,15 @@ prerequisites
     $ sudo apt install php-xml
     $ sudo pip install transifex-client
 
+for po-merge-helper (ubuntu)
+
+    $ sudo apt install gettext
+
 po-merge-helper aktivieren (eintrag in .git/config)
 
     [merge "pofile"]
         name = merge po-files driver
-        driver = ./scripts/merge-po-files %A %O %B
+        driver = ./scripts/git/merge-po-files %A %O %B
         recursive = binary
 
 tx-pull - holt die aktuellen übersetzungen von transi

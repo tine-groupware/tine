@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.Calendar');
 
+import OrganizerCombo from "./OrganizerCombo";
+
 /**
  * Simple Import Dialog
  *
@@ -82,6 +84,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
 
         // finally apend generic options from Calendar_Import_Abstract
         Object.assign(params.importOptions, this.eventOptionsForm.getForm().getFieldValues())
+
+        const attendeePanel = _.find(this.eventOptionsForm.items.items, { name: 'attendee' });
+        attendeePanel.onRecordUpdate(attendeePanel.record);
+        params.importOptions.attendee = attendeePanel.record.get('attendee');
 
         Ext.Ajax.request({
             scope: this,
@@ -500,18 +506,13 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 items: [{
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Update Existing Events'),
-                    boxLabel: this.app.i18n._('Force update of existing events'),
+                    boxLabel: this.app.i18n._('Update already existing events'),
                     name: 'updateExisting'
                 }, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Force Update Existing Events'),
                     boxLabel: this.app.i18n._("Update exiting events even if imported sequence number isn't higher"),
                     name: 'forceUpdateExisting'
-                }, {
-                    xtype: 'checkbox',
-                    fieldLabel: this.app.i18n._('Keep Existing Attendee'),
-                    boxLabel: this.app.i18n._('Do not remove attendee of existing events which are not in the import data'),
-                    name: 'keepExistingAttendee'
                 }, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Delete Missing Events'),
@@ -522,8 +523,45 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     fieldLabel: this.app.i18n._('Basic Data Only'),
                     boxLabel: this.app.i18n._('Import basic data only (i.e. without attendee, alarms, uid, ...)'),
                     name: 'onlyBasicData'
-                }*/
-                ]
+                }*/, new Tine.Calendar.AttendeeGridPanel({
+                    height: 200,
+                    name: 'attendee',
+                    initComponent: function() {
+                        Tine.Calendar.AttendeeGridPanel.prototype.initComponent.call(this);
+                        this.onRecordLoad(new Tine.Calendar.Model.Event({
+                            editGrant: true
+                        }));
+                    },
+                }), {
+                    xtype: 'radiogroup',
+                    name: 'attendeeStrategy',
+                    columns: 2,
+                    items: [{
+                        inputValue: 'add',
+                        name: 'attendeeStrategy',
+                        boxLabel: this.app.i18n._('Add Attendee to Import Data'),
+                        checked: true
+                    }, {
+                        inputValue: 'replace',
+                        name: 'attendeeStrategy',
+                        boxLabel: this.app.i18n._('Ignore Import Data and Replace Attendee'),
+                    }]
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Keep Existing Attendee'),
+                    boxLabel: this.app.i18n._('Do not remove attendee of existing events which are not in the import data'),
+                    name: 'keepExistingAttendee'
+                }, {
+                    xtype: 'calendar-event-organizer-combo',
+                    fieldLabel: this.app.i18n._('Force Organizer for new Events'),
+                    name: 'overwriteOrganizer',
+                    onOrganizerSelect: function(data) {
+                        this.organizerData = data;
+                    },
+                    getValue: function() {
+                        return this.organizerData;
+                    }
+                }]
             }],
             onFinishButton: (function() {
                 if (! this.importMask) {

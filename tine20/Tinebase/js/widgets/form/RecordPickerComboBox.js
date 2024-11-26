@@ -193,6 +193,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             })));
         }
 
+        this.on('specialkey', this.onSpecialkey, this);
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
 

@@ -292,8 +292,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('Add, delete and edit shared tags.'),
             ),
             self::MANAGE_SHARED_FILESYSTEM_QUOTAS    => [
-                'text'          => $translate->_('Manage shared admin quotas'),
-                'description'   => $translate->_('Add, delete and edit shared admin quotas.'),
+                'text'          => $translate->_('Manage shared filesystem quotas'),
+                'description'   => $translate->_('Add, delete and edit shared filesystem quotas.'),
             ],
             self::MANAGE_SHARED_EMAIL_QUOTAS    => [
                 'text'          => $translate->_('Manage shared email quotas'),
@@ -365,7 +365,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             ),
             self::MANAGE_SSO => [
                 'text'          => $translate->_('Manage SSO'),
-                'description'   => $translate->_('Manage relying parties for single sign on '),
+                'description'   => $translate->_('Manage relying parties for single sign on'),
             ]
         );
 

@@ -14,6 +14,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
 
+#: Controller.php:750
+msgid "conflict"
+msgstr ""
+
 #: Frontend/Json.php:42
 msgid "New Document"
 msgstr ""
@@ -38,123 +42,160 @@ msgstr ""
 msgid "New Presentation (%1$d)"
 msgstr ""
 
-#: Setup/Initialize.php:42
-msgid "Editing"
+#: Frontend/Json.php:880
+msgid "filetype of node is not supported"
 msgstr ""
 
-#: Setup/Initialize.php:59
-msgid "Current Editors"
+#: Frontend/Json.php:884
+msgid "node has no revision, it might be a partial upload"
 msgstr ""
 
-#: Config.php:47
-msgid "Public OnlyOffice document server url"
+#: Frontend/Json.php:920
+msgid "this revision currently can't be opened as a different revision is already open"
 msgstr ""
 
-#: Config.php:49
-msgid "OnlyOffice document server url accessible by the users browser"
+#: js/OnlyOfficeEditDialog.js:86 js/OnlyOfficeEditDialog.js:99
+msgid "Absence detected"
 msgstr ""
 
-#: Config.php:57
-msgid "Internal/Server OnlyOffice document server url"
+#: js/OnlyOfficeEditDialog.js:87
+#, python-brace-format
+msgid "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
 msgstr ""
 
-#: Config.php:59
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+#: js/OnlyOfficeEditDialog.js:100
+msgid "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
 msgstr ""
 
-#: Config.php:67
-msgid "Server url of this installation"
-msgstr ""
-
-#: Config.php:69
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr ""
-
-#: Config.php:77
-msgid "Enable oo jwt tokens"
-msgstr ""
-
-#: Config.php:79
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr ""
-
-#: Config.php:88
-msgid "OnlyOffice jwt secret string"
-msgstr ""
-
-#: Config.php:90
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr ""
-
-#: Config.php:98 Config.php:100
-msgid "Live time of token subscriptions"
-msgstr ""
-
-#: js/editDocumentAction.js:23
-msgid "Open Document"
-msgstr ""
-
-#: js/OnlyOfficeEditDialog.js:132
+#: js/OnlyOfficeEditDialog.js:198
 msgid "Select Image"
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:174
+#: js/OnlyOfficeEditDialog.js:243
 msgid "Save Copy As"
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:181
+#: js/OnlyOfficeEditDialog.js:252
 msgid "Exporting Document ..."
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:260
+#: js/OnlyOfficeEditDialog.js:334
 msgid "Overwrite Existing File?"
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:261
+#: js/OnlyOfficeEditDialog.js:335
 #, python-brace-format
 msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:274
+#: js/OnlyOfficeEditDialog.js:348
 msgid "Restoring ..."
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:307
+#: js/OnlyOfficeEditDialog.js:381
 msgid "No Document Specified"
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:308
+#: js/OnlyOfficeEditDialog.js:382
 msgid "Something went wrong, please try again later."
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:329
-msgid "Outdated Revision"
+#: js/OnlyOfficeEditDialog.js:402
+msgid "Error"
 msgstr ""
 
-#: js/OnlyOfficeEditDialog.js:330
-msgid "This revision of the document is outdated, please open the latest revision"
-msgstr ""
-
-#: js/OnlyOfficeEditDialog.js:382
+#: js/OnlyOfficeEditDialog.js:460
 msgid "Saving Document ..."
+msgstr ""
+
+#: js/nodeGridPanelPlugin.js:16
+msgid "Is edited by"
+msgstr ""
+
+#: js/nodeGridPanelPlugin.js:16
+msgid "Who is currently editing this document"
 msgstr ""
 
 #: js/Application.js:21
 msgid "Only Office Integrator"
 msgstr ""
 
-#: js/createDocumentAction.js:40
+#: js/editDocumentAction.js:23
+msgid "Open Document"
+msgstr ""
+
+#: js/editDocumentAction.js:26
+msgid "Preparing Attachment..."
+msgstr ""
+
+#: js/createDocumentAction.js:37
 msgid "Add Document"
 msgstr ""
 
-#: js/createDocumentAction.js:42
+#: js/createDocumentAction.js:39
 msgid "Add Text"
 msgstr ""
 
-#: js/createDocumentAction.js:46
+#: js/createDocumentAction.js:43
 msgid "Add Spreadsheet"
 msgstr ""
 
-#: js/createDocumentAction.js:50
+#: js/createDocumentAction.js:47
 msgid "Add Presentation"
+msgstr ""
+
+#: Setup/Initialize.php:79
+msgid "Editing"
+msgstr ""
+
+#: Setup/Initialize.php:97
+msgid "Current Editors"
+msgstr ""
+
+#: Config.php:48
+msgid "Public OnlyOffice document server url"
+msgstr ""
+
+#: Config.php:50
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr ""
+
+#: Config.php:58
+msgid "Internal/Server OnlyOffice document server url"
+msgstr ""
+
+#: Config.php:60
+msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgstr ""
+
+#: Config.php:68
+msgid "Server url of this installation"
+msgstr ""
+
+#: Config.php:70
+msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgstr ""
+
+#: Config.php:78
+msgid "Enable oo jwt tokens"
+msgstr ""
+
+#: Config.php:80
+msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgstr ""
+
+#: Config.php:89
+msgid "OnlyOffice jwt secret string"
+msgstr ""
+
+#: Config.php:91
+msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgstr ""
+
+#: Config.php:99 Config.php:101
+msgid "Interval in seconds to force save"
+msgstr ""
+
+#: Config.php:110 Config.php:112
+msgid "Live time of token subscriptions"
 msgstr ""

@@ -52,6 +52,9 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_SALES_TAX = 'sales_tax'; // Mehrwertssteuer
     const FLD_GROSS_PRICE= 'gross_price'; // Bruttopreis - berechnen
 
+    const FLD_SERVICE_PERIOD_START = 'service_period_start';
+    const FLD_SERVICE_PERIOD_END = 'service_period_end';
+
     const FLD_EVAL_DIM_COST_CENTER = 'eval_dim_cost_center'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
     const FLD_EVAL_DIM_COST_BEARER = 'eval_dim_cost_bearer'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
     const FLD_REVERSAL = 'reversal';
@@ -238,7 +241,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [
                 // needs to be set by concrete model
-                self::LABEL                         => 'Document', // _('Document)
+                self::LABEL                         => 'Document', // _('Document')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
@@ -437,6 +440,16 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+            ],
+            self::FLD_SERVICE_PERIOD_START => [
+                self::TYPE                  => self::TYPE_DATE,
+                self::LABEL                 => 'Service Period Start', //_('Service Period Start')
+                self::NULLABLE              => true,
+            ],
+            self::FLD_SERVICE_PERIOD_END =>  [
+                self::TYPE                  => self::TYPE_DATE,
+                self::LABEL                 => 'Service Period End', //_('Service Period End')
+                self::NULLABLE              => true,
             ],
             self::FLD_REVERSAL                  => [
                 self::TYPE                          => self::TYPE_BOOLEAN,

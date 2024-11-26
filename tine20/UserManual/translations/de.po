@@ -21,6 +21,26 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Frontend/Http.php:111
+msgid "Manual page not found"
+msgstr "Seite nicht gefunden"
+
+#: js/UserManualDialog.js:37
+msgid "Previous"
+msgstr ""
+
+#: js/UserManualDialog.js:44
+msgid "Next"
+msgstr ""
+
+#: js/UserManualDialog.js:51
+msgid "Up"
+msgstr ""
+
+#: js/UserManualDialog.js:57
+msgid "Go to Index"
+msgstr ""
+
 #: js/UserManualDialog.js:68
 msgid "Search in User Manual"
 msgstr "Suchen im Handbuch"
@@ -33,20 +53,63 @@ msgstr "Schließen"
 msgid "Loading Manual Page..."
 msgstr "Lädt das Handbuch..."
 
+#: js/UserManualAction.js:14 Setup/setup.xml:4
+msgid "User Manual"
+msgstr ""
+
 #: js/ContextItem.js:15
 msgid "Help"
 msgstr "Hilfe"
 
-#: Frontend/Http.php:113
-msgid "Manual page not found"
-msgstr "Seite nicht gefunden"
-
-#: js/UserManualDialog.js:148
-msgid "UserManual"
-msgstr "Handbuch"
-
+#: js/ContextItem.js:46
 msgid "Show Canonical Path"
 msgstr "Zeige den Kanonischen Pfad"
 
+#: js/ContextItem.js:50
 msgid "Canonical Path"
 msgstr "Kanonischer Pfad"
+
+#: Model/ManualPage.php:36
+msgid "ManualPage"
+msgid_plural "ManualPages"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ManualPage.php:40
+msgid "ManualPages list"
+msgid_plural "ManualPages lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ManualPage.php:71 Model/ManualContext.php:77
+msgid "Title"
+msgstr ""
+
+#: Model/ManualPage.php:78 Model/ManualContext.php:71
+msgid "Filename"
+msgstr ""
+
+#: Model/ManualPage.php:84
+msgid "Content"
+msgstr ""
+
+#: Model/ManualContext.php:36
+msgid "ManualContext"
+msgid_plural "ManualContexts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ManualContext.php:65
+msgid "Context"
+msgstr ""
+
+#: Model/ManualContext.php:84
+msgid "Target"
+msgstr ""
+
+#: Model/ManualContext.php:90
+msgid "Chapter"
+msgstr ""
+
+#~ msgid "UserManual"
+#~ msgstr "Handbuch"

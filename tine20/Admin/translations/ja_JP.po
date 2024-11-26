@@ -16,183 +16,411 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ImportExportDefinitionEditDialog.js:54
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
+#: Frontend/Cli.php:780
+msgid "Notifications"
+msgstr ""
 
-#: js/ApplicationFilter.js:33 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:155 js/customfield/GridPanel.js:70
-#: js/customfield/EditDialog.js:229 js/customfield/EditDialog.js:389
-#: js/Models.js:140
+#: js/Applications.js:24 js/Applications.js:144
+msgid "Enable Application"
+msgstr ""
+
+#: js/Applications.js:33 js/Applications.js:145
+msgid "Disable Application"
+msgstr ""
+
+#: js/Applications.js:42 js/Applications.js:146
+msgid "Settings"
+msgstr ""
+
+#: js/Applications.js:71
+#, python-brace-format
+msgid "{0} Settings"
+msgstr ""
+
+#: js/Applications.js:183 js/Groups.js:182 js/Tags.js:172 js/Roles.js:178
+msgid "Search:"
+msgstr ""
+
+#: js/Applications.js:223 js/Admin.js:413
+msgid "Disabled"
+msgstr ""
+
+#: js/Applications.js:226
+msgid "Enabled"
+msgstr ""
+
+#: js/Applications.js:230
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#: js/Applications.js:268
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr ""
+
+#: js/Applications.js:269
+msgid "No applications to display"
+msgstr ""
+
+#: js/Applications.js:278 js/customfield/EditDialog.js:531
+#: js/container/EditDialog.js:199
+msgid "Order"
+msgstr ""
+
+#: js/Applications.js:279 js/Groups.js:242 js/customfield/EditDialog.js:492
+#: js/customfield/GridPanel.js:69 js/config/GridPanel.js:75
+#: js/SambaMachineGrid.js:76 js/Tags.js:229 js/Roles.js:236
+#: js/user/EditDialog.js:359 js/user/EditDialog.js:395
+#: js/container/EditDialog.js:146 js/AccessLog.js:132 js/QuotaManagement.js:91
+#: Model/SchedulerTask/Import.php:39
+msgid "Name"
+msgstr ""
+
+#: js/Applications.js:280 js/user/EditDialog.js:1084 js/user/GridPanel.js:193
+msgid "Status"
+msgstr ""
+
+#: js/Applications.js:281
+msgid "Version"
+msgstr ""
+
+#: js/SchedulerModelPicker.js:9
+msgid "Built in configs"
+msgstr ""
+
+#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
+msgid "Confirm"
+msgstr ""
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr ""
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr ""
+
+#: js/Groups.js:110
+msgid "Add Group"
+msgstr ""
+
+#: js/Groups.js:118
+msgid "Edit Group"
+msgstr ""
+
+#: js/Groups.js:126
+msgid "Delete Group"
+msgstr ""
+
+#: js/Groups.js:230
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr ""
+
+#: js/Groups.js:231 js/Groups.js:291
+msgid "No groups to display"
+msgstr ""
+
+#: js/Groups.js:241 js/customfield/GridPanel.js:67 js/SambaMachineGrid.js:75
+#: js/Tags.js:225 js/Roles.js:235 js/user/GridPanel.js:192
+#: js/container/GridPanel.js:65
+msgid "ID"
+msgstr ""
+
+#: js/Groups.js:243 js/user/EditDialog.js:1045 js/user/GridPanel.js:198
+#: js/GroupEditDialog.js:113
+msgid "E-mail"
+msgstr ""
+
+#: js/Groups.js:244
+msgid "Account only"
+msgstr ""
+
+#: js/Groups.js:245 js/config/GridPanel.js:64 js/SambaMachineGrid.js:57
+#: js/SambaMachineGrid.js:77 js/TagEditDialog.js:236 js/Tags.js:230
+#: js/RoleEditDialog.js:297 js/Roles.js:237 js/user/GridPanel.js:94
+#: js/GroupEditDialog.js:72
+msgid "Description"
+msgstr ""
+
+#: js/Groups.js:246
+msgid "Creation Time"
+msgstr ""
+
+#: js/Groups.js:247
+msgid "Created By"
+msgstr ""
+
+#: js/Groups.js:248
+msgid "Last Modified Time"
+msgstr ""
+
+#: js/Groups.js:249
+msgid "Last Modified By"
+msgstr ""
+
+#: js/SchedulerPanel.js:2
+msgid "Scheduler"
+msgstr ""
+
+#: js/customfield/EditDialog.js:145 js/customfield/EditDialog.js:281
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:118
+msgid "Errors"
+msgstr ""
+
+#: js/customfield/EditDialog.js:145
+msgid "Please configure store for this field type"
+msgstr ""
+
+#: js/customfield/EditDialog.js:236 js/customfield/EditDialog.js:422
+#: js/customfield/GridPanel.js:71 js/Models.js:156
+#: js/container/EditDialog.js:155 js/container/GridPanel.js:67
+#: js/ApplicationFilter.js:33
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] ""
 
-#: js/Admin.js:28 js/AccessLog.js:106 js/user/Users.js:77
-msgid "User"
-msgid_plural "Users"
+#: js/customfield/EditDialog.js:256
+msgid "Record Class"
+msgstr ""
+
+#: js/customfield/EditDialog.js:281
+msgid "Given record class not found"
+msgstr ""
+
+#: js/customfield/EditDialog.js:318 js/user/EditDialog.js:864
+msgid "Cancel"
+msgstr ""
+
+#: js/customfield/EditDialog.js:324
+msgid "OK"
+msgstr ""
+
+#: js/customfield/EditDialog.js:370
+msgid "Configure store"
+msgstr ""
+
+#: js/customfield/EditDialog.js:378
+msgid "Permissions"
+msgstr ""
+
+#: js/customfield/EditDialog.js:383 js/TagEditDialog.js:201
+msgid "View"
+msgstr ""
+
+#: js/customfield/EditDialog.js:388 js/TagEditDialog.js:206
+msgid "Use"
+msgstr ""
+
+#: js/customfield/EditDialog.js:444 js/customfield/GridPanel.js:72
+#: js/container/EditDialog.js:174
+msgid "Model"
+msgstr ""
+
+#: js/customfield/EditDialog.js:456
+msgid "Custom field definition"
+msgstr ""
+
+#: js/customfield/EditDialog.js:467
+msgid "Text"
+msgstr ""
+
+#: js/customfield/EditDialog.js:468
+msgid "Textarea"
+msgstr ""
+
+#: js/customfield/EditDialog.js:469
+msgid "Number"
+msgstr ""
+
+#: js/customfield/EditDialog.js:470
+msgid "Date"
+msgstr ""
+
+#: js/customfield/EditDialog.js:471
+msgid "DateTime"
+msgstr ""
+
+#: js/customfield/EditDialog.js:472
+msgid "Time"
+msgstr ""
+
+#: js/customfield/EditDialog.js:473
+msgid "Boolean"
+msgstr ""
+
+#: js/customfield/EditDialog.js:474
+msgid "Search Combo"
+msgstr ""
+
+#: js/customfield/EditDialog.js:475
+msgid "Key Field"
+msgstr ""
+
+#: js/customfield/EditDialog.js:476
+msgid "Record"
+msgstr ""
+
+#: js/customfield/EditDialog.js:477
+msgid "Record List"
+msgstr ""
+
+#: js/customfield/EditDialog.js:480 js/customfield/GridPanel.js:70
+#: js/container/EditDialog.js:185 js/container/GridPanel.js:68
+#: js/container/GridPanel.js:103
+msgid "Type"
+msgstr ""
+
+#: js/customfield/EditDialog.js:498 js/customfield/GridPanel.js:68
+#: js/config/GridPanel.js:80
+msgid "Label"
+msgstr ""
+
+#: js/customfield/EditDialog.js:504
+msgid "Length"
+msgstr ""
+
+#: js/customfield/EditDialog.js:509
+msgid "Required"
+msgstr ""
+
+#: js/customfield/EditDialog.js:516
+msgid "Custom field additional properties"
+msgstr ""
+
+#: js/customfield/EditDialog.js:521
+msgid "Tab Panel"
+msgstr ""
+
+#: js/customfield/EditDialog.js:526 js/Models.js:107
+msgid "Group"
+msgid_plural "Groups"
 msgstr[0] ""
 
-#: js/Admin.js:41 js/Models.js:91
-msgid "Groups"
+#: js/customfield/EditDialog.js:536
+msgid "Key"
 msgstr ""
 
-#: js/Admin.js:54
-msgid "Roles"
+#: js/customfield/EditDialog.js:562
+msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
-#: js/Admin.js:66 js/Models.js:140
-msgid "Applications"
-msgstr ""
-
-#: js/Admin.js:79
-msgid "Containers"
-msgstr ""
-
-#: js/Admin.js:91
-msgid "Shared Tags"
-msgstr ""
-
-#: js/Admin.js:104
-msgid "Customfields"
-msgstr ""
-
-#: js/Admin.js:116
-msgid "Computers"
-msgstr ""
-
-#: js/Admin.js:130 js/AccessLog.js:104 js/Models.js:52
-msgid "Access Log"
-msgid_plural "Access Logs"
+#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:116
+msgid "Customfield"
+msgid_plural "Customfields"
 msgstr[0] ""
 
-#: js/Admin.js:143
-msgid "Log"
+#: js/customfield/Customfield.js:60
+msgid "Anyone"
 msgstr ""
 
-#: js/Admin.js:155
-msgid "Server Information"
+#: js/customfield/GridPanel.js:73
+msgid "UI Config"
 msgstr ""
 
-#: js/Admin.js:171
-msgid "ActiveSync Devices"
+#: js/customfield/GridPanel.js:189
+msgid "This custom field is still in use!"
 msgstr ""
 
-#: js/Admin.js:190
-msgid "E-mail Accounts"
+#: js/customfield/GridPanel.js:190
+msgid "Are you sure you want to delete them?"
 msgstr ""
 
-#: js/Admin.js:209
-msgid "Import Export Definitions"
+#: js/config/FieldManager.js:52
+msgid "Yes"
 msgstr ""
 
-#: js/Admin.js:280
-msgid "Admin"
+#: js/config/FieldManager.js:52
+msgid "No"
 msgstr ""
 
-#: js/Admin.js:378
-msgid "Refresh"
+#: js/config/GridPanel.js:49 js/Models.js:188
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+
+#: js/config/GridPanel.js:86
+msgid "Value"
 msgstr ""
 
-#: js/Admin.js:401 js/Applications.js:220
-msgid "Disabled"
+#: js/config/GridPanel.js:270
+#, python-brace-format
+msgid "Default ({0})"
 msgstr ""
 
-#: js/Admin.js:401
-msgid "Feature is disabled by configuration."
+#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
 msgstr ""
 
 #: js/AdminPanel.js:46
 msgid "Default Addressbook for new contacts and groups"
 msgstr ""
 
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:56
-msgid "Computer Name"
+#: js/TagEditDialog.js:38 js/RoleEditDialog.js:73
+msgid "Please wait"
 msgstr ""
 
-#: js/config/GridPanel.js:49 js/Models.js:172
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-
-#: js/config/GridPanel.js:64 js/GroupEditDialog.js:70 js/Tags.js:230
-#: js/Roles.js:237 js/Groups.js:243 js/user/GridPanel.js:94
-#: js/RoleEditDialog.js:295 js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89
-#: js/TagEditDialog.js:234
-msgid "Description"
+#: js/TagEditDialog.js:38
+msgid "Updating Tag"
 msgstr ""
 
-#: js/config/GridPanel.js:75 js/Tags.js:229 js/Roles.js:236
-#: js/container/EditDialog.js:146 js/Groups.js:240 js/AccessLog.js:132
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:459
-#: js/user/EditDialog.js:295 js/user/EditDialog.js:331
-#: js/SambaMachineGrid.js:83 js/QuotaUsage.js:51 js/Applications.js:276
-msgid "Name"
+#: js/TagEditDialog.js:84 js/RoleEditDialog.js:111 js/RoleEditDialog.js:139
+#: js/Roles.js:67
+msgid "Failed"
 msgstr ""
 
-#: js/config/GridPanel.js:81 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:465
-msgid "Label"
-msgstr ""
-
-#: js/config/GridPanel.js:88
-msgid "Value"
-msgstr ""
-
-#: js/config/GridPanel.js:268
+#: js/TagEditDialog.js:85
 #, python-brace-format
-msgid "Default ({0})"
+msgid "Could not save tag ({0})"
 msgstr ""
 
-#: js/config/FieldManager.js:49
-msgid "Yes"
+#: js/TagEditDialog.js:91 js/RoleEditDialog.js:118
+msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/config/FieldManager.js:49
-msgid "No"
+#: js/TagEditDialog.js:172
+msgid "Allowed Contexts"
 msgstr ""
 
-#: js/GroupEditDialog.js:62
-msgid "Group Name"
+#: js/TagEditDialog.js:178
+msgid "Context"
 msgstr ""
 
-#: js/GroupEditDialog.js:78 js/user/EditDialog.js:1022
-msgid "Visibility"
+#: js/TagEditDialog.js:191
+msgid "Account Rights"
 msgstr ""
 
-#: js/GroupEditDialog.js:84 js/user/EditDialog.js:1029
-msgid "Display in addressbook"
+#: js/TagEditDialog.js:224
+msgid "Tag Name"
 msgstr ""
 
-#: js/GroupEditDialog.js:84 js/user/EditDialog.js:1029
-msgid "Hide from addressbook"
+#: js/TagEditDialog.js:231 js/Tags.js:226 js/container/EditDialog.js:205
+msgid "Color"
 msgstr ""
 
-#: js/GroupEditDialog.js:100 js/user/EditDialog.js:1043
-msgid "Saved in Addressbook"
+#: js/TagEditDialog.js:296 js/RoleEditDialog.js:364
+#, python-brace-format
+msgid "Transferring {0}..."
 msgstr ""
 
-#: js/GroupEditDialog.js:111 js/Groups.js:241 js/user/GridPanel.js:193
-#: js/user/EditDialog.js:943
-msgid "E-mail"
+#: js/TagEditDialog.js:296
+msgid "Tag"
 msgstr ""
 
-#: js/GroupEditDialog.js:120
-msgid "Only system accounts can be added to Addressbook group"
+#: js/TagEditDialog.js:306
+msgid "Add New Tag"
 msgstr ""
 
-#: js/GroupEditDialog.js:127
-msgid "Group Members"
+#: js/TagEditDialog.js:308
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
 msgstr ""
 
-#: js/GroupEditDialog.js:178 js/user/EditDialog.js:210
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
-msgid "Confirm"
-msgstr ""
+#: js/ImportExportDefinitionEditDialog.js:53
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
 
 #: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
@@ -214,31 +442,62 @@ msgstr ""
 msgid "Delete Tag"
 msgstr ""
 
-#: js/Tags.js:172 js/Roles.js:178 js/Groups.js:180 js/Applications.js:180
-msgid "Search:"
-msgstr ""
-
 #: js/Tags.js:214
 #, python-brace-format
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr ""
 
-#: js/Tags.js:215 js/Tags.js:271
+#: js/Tags.js:215 js/Tags.js:273
 msgid "No tags to display"
-msgstr ""
-
-#: js/Tags.js:225 js/Roles.js:235 js/container/GridPanel.js:65 js/Groups.js:239
-#: js/customfield/GridPanel.js:66 js/user/GridPanel.js:187
-#: js/SambaMachineGrid.js:76
-msgid "ID"
-msgstr ""
-
-#: js/Tags.js:226 js/container/EditDialog.js:205 js/TagEditDialog.js:229
-msgid "Color"
 msgstr ""
 
 #: js/Tags.js:227
 msgid "Usage:&#160;"
+msgstr ""
+
+#: js/Tags.js:231
+msgid "System Tag"
+msgstr ""
+
+#: js/RoleEditDialog.js:73
+msgid "Updating Memberships"
+msgstr ""
+
+#: js/RoleEditDialog.js:111
+msgid "Could not save role."
+msgstr ""
+
+#: js/RoleEditDialog.js:131
+msgid "Deleting role..."
+msgstr ""
+
+#: js/RoleEditDialog.js:139 js/Roles.js:67
+msgid "Some error occurred while trying to delete the role."
+msgstr ""
+
+#: js/RoleEditDialog.js:163
+msgid "Rights"
+msgstr ""
+
+#: js/RoleEditDialog.js:265
+msgid "Members"
+msgstr ""
+
+#: js/RoleEditDialog.js:289
+msgid "Role Name"
+msgstr ""
+
+#: js/RoleEditDialog.js:364
+msgid "Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:374
+msgid "Add New Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:376
+#, python-brace-format
+msgid "Edit Role \"{0}\""
 msgstr ""
 
 #: js/Roles.js:47
@@ -247,15 +506,6 @@ msgstr ""
 
 #: js/Roles.js:62
 msgid "Deleting role(s)..."
-msgstr ""
-
-#: js/Roles.js:67 js/Groups.js:74 js/RoleEditDialog.js:109
-#: js/RoleEditDialog.js:137 js/TagEditDialog.js:84
-msgid "Failed"
-msgstr ""
-
-#: js/Roles.js:67 js/RoleEditDialog.js:137
-msgid "Some error occurred while trying to delete the role."
 msgstr ""
 
 #: js/Roles.js:105
@@ -279,41 +529,445 @@ msgstr ""
 msgid "No roles to display"
 msgstr ""
 
-#: js/container/GridPanel.js:66
-msgid "Container Name"
-msgstr ""
-
-#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
-#: js/container/EditDialog.js:185 js/customfield/GridPanel.js:69
-#: js/customfield/EditDialog.js:447
-msgid "Type"
-msgstr ""
-
-#: js/container/GridPanel.js:69
-msgid "Container Order"
-msgstr ""
-
-#: js/container/GridPanel.js:99 js/container/Container.js:46
-msgid "Container"
-msgid_plural "Containers"
+#: js/Models.js:68 js/Admin.js:137 js/AccessLog.js:104
+msgid "Access Log"
+msgid_plural "Access Logs"
 msgstr[0] ""
 
-#: js/container/EditDialog.js:174 js/customfield/GridPanel.js:71
-#: js/customfield/EditDialog.js:411
-msgid "Model"
+#: js/Models.js:107 js/Admin.js:42
+msgid "Groups"
 msgstr ""
 
-#: js/container/EditDialog.js:186
+#: js/Models.js:156 js/Admin.js:69
+msgid "Applications"
+msgstr ""
+
+#: js/Models.js:188
+msgid "Configs"
+msgstr ""
+
+#: js/QuotaEditDialog.js:124 js/QuotaEditDialog.js:193
+#: js/QuotaEditDialog.js:212 js/user/EditDialog.js:558
+#: js/user/EditDialog.js:600 js/user/EditDialog.js:632 js/QuotaManagement.js:96
+msgid "Quota"
+msgstr ""
+
+#: js/QuotaEditDialog.js:136 js/user/Users.js:154
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] ""
+
+#: js/QuotaEditDialog.js:143 js/user/EditDialog.js:581
+msgid "IMAP Quota"
+msgstr ""
+
+#: js/QuotaEditDialog.js:150 js/user/EditDialog.js:605
+msgid "Current Mailbox size"
+msgstr ""
+
+#: js/QuotaEditDialog.js:155 js/user/EditDialog.js:613
+msgid "Sieve Quota"
+msgstr ""
+
+#: js/QuotaEditDialog.js:162 js/user/EditDialog.js:637
+msgid "Current Sieve size"
+msgstr ""
+
+#: js/QuotaEditDialog.js:176
+msgid "path"
+msgstr ""
+
+#: js/QuotaEditDialog.js:184
+msgid "This folder has own quota"
+msgstr ""
+
+#: js/QuotaEditDialog.js:195
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+#: js/QuotaEditDialog.js:203
+msgid "Current Usage"
+msgstr ""
+
+#: js/user/EditDialog.js:254 js/GroupEditDialog.js:190
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/user/EditDialog.js:255
+msgid "Allowed Domains"
+msgstr ""
+
+#: js/user/EditDialog.js:276
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+#: js/user/EditDialog.js:308 js/user/EditDialog.js:311
+#: js/user/EditDialog.js:861
+msgid "Passwords do not match!"
+msgstr ""
+
+#: js/user/EditDialog.js:314
+msgid "Passwords match!"
+msgstr ""
+
+#: js/user/EditDialog.js:360 js/user/EditDialog.js:1061
+msgid "Primary group"
+msgstr ""
+
+#: js/user/EditDialog.js:437
+msgid "Unix"
+msgstr ""
+
+#: js/user/EditDialog.js:451
+msgid "Home Directory"
+msgstr ""
+
+#: js/user/EditDialog.js:455
+msgid "Login Shell"
+msgstr ""
+
+#: js/user/EditDialog.js:461
+msgid "Windows"
+msgstr ""
+
+#: js/user/EditDialog.js:475
+msgid "Home Drive"
+msgstr ""
+
+#: js/user/EditDialog.js:480 js/AccessLog.js:107 js/AccessLog.js:134
+msgid "Login Time"
+msgstr ""
+
+#: js/user/EditDialog.js:482 js/user/EditDialog.js:1148
+#: js/user/EditDialog.js:1152
+msgid "never logged in"
+msgstr ""
+
+#: js/user/EditDialog.js:485
+msgid "Home Path"
+msgstr ""
+
+#: js/user/EditDialog.js:490 js/AccessLog.js:108 js/AccessLog.js:135
+msgid "Logout Time"
+msgstr ""
+
+#: js/user/EditDialog.js:492
+msgid "never logged off"
+msgstr ""
+
+#: js/user/EditDialog.js:495
+msgid "Profile Path"
+msgstr ""
+
+#: js/user/EditDialog.js:500
+msgid "Password Last Set"
+msgstr ""
+
+#: js/user/EditDialog.js:502 js/user/EditDialog.js:1126
+#: js/user/EditDialog.js:1156
+msgid "never"
+msgstr ""
+
+#: js/user/EditDialog.js:505
+msgid "Logon Script"
+msgstr ""
+
+#: js/user/EditDialog.js:510
+msgid "Password Can Change"
+msgstr ""
+
+#: js/user/EditDialog.js:512 js/user/EditDialog.js:517
+#: js/user/EditDialog.js:522
+msgid "not set"
+msgstr ""
+
+#: js/user/EditDialog.js:515 js/user/EditDialog.js:933 js/user/GridPanel.js:205
+msgid "Password Must Change"
+msgstr ""
+
+#: js/user/EditDialog.js:520
+msgid "Kick Off Time"
+msgstr ""
+
+#: js/user/EditDialog.js:539
+msgid "Filesystem Quota"
+msgstr ""
+
+#: js/user/EditDialog.js:559 js/user/EditDialog.js:601
+#: js/user/EditDialog.js:633 js/QuotaManagement.js:263
+msgid "no quota set"
+msgstr ""
+
+#: js/user/EditDialog.js:563
+msgid "Current Filesystem usage"
+msgstr ""
+
+#: js/user/EditDialog.js:646 js/user/EditDialog.js:1131
+msgid "Information"
+msgstr ""
+
+#: js/user/EditDialog.js:660
+msgid "Last Login"
+msgstr ""
+
+#: js/user/EditDialog.js:690
+msgid "Forward Only"
+msgstr ""
+
+#: js/user/EditDialog.js:728
+msgid "E-mail Alias"
+msgstr ""
+
+#: js/user/EditDialog.js:733
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/user/EditDialog.js:744
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+#: js/user/EditDialog.js:771
+msgid "Domain not allowed"
+msgstr ""
+
+#: js/user/EditDialog.js:772
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+#: js/user/EditDialog.js:799
+msgid "Forwarding to self"
+msgstr ""
+
+#: js/user/EditDialog.js:800
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+#: js/user/EditDialog.js:809
+msgid "E-mail Forward"
+msgstr ""
+
+#: js/user/EditDialog.js:814
+msgid "Add a forwarding address..."
+msgstr ""
+
+#: js/user/EditDialog.js:827
+msgid "Password confirmation"
+msgstr ""
+
+#: js/user/EditDialog.js:845
+msgid "Repeat password"
+msgstr ""
+
+#: js/user/EditDialog.js:871
+msgid "Ok"
+msgstr ""
+
+#: js/user/EditDialog.js:926 js/user/GridPanel.js:216 js/user/GridPanel.js:239
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+#: js/user/EditDialog.js:948
+msgid "Account"
+msgstr ""
+
+#: js/user/EditDialog.js:963 js/user/GridPanel.js:197
+msgid "First name"
+msgstr ""
+
+#: js/user/EditDialog.js:976 js/user/GridPanel.js:196
+msgid "Last name"
+msgstr ""
+
+#: js/user/EditDialog.js:986 js/user/GridPanel.js:194
+msgid "Display name"
+msgstr ""
+
+#: js/user/EditDialog.js:991 js/user/GridPanel.js:208
+msgid "Full Name"
+msgstr ""
+
+#: js/user/EditDialog.js:995
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+#: js/user/EditDialog.js:997 js/user/EditDialog.js:1056
+#: js/user/GridPanel.js:195
+msgid "Login name"
+msgstr ""
+
+#: js/user/EditDialog.js:1002
+msgid "Password"
+msgstr ""
+
+#: js/user/EditDialog.js:1037
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+#: js/user/EditDialog.js:1055 js/user/GridPanel.js:201
+msgid "OpenID"
+msgstr ""
+
+#: js/user/EditDialog.js:1077
+msgid "User Type"
+msgstr ""
+
+#: js/user/EditDialog.js:1091
+msgid "enabled"
+msgstr ""
+
+#: js/user/EditDialog.js:1092
+msgid "disabled"
+msgstr ""
+
+#: js/user/EditDialog.js:1093
+msgid "expired"
+msgstr ""
+
+#: js/user/EditDialog.js:1094
+msgid "blocked"
+msgstr ""
+
+#: js/user/EditDialog.js:1101
+msgid "Invalid Status"
+msgstr ""
+
+#: js/user/EditDialog.js:1102
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr ""
+
+#: js/user/EditDialog.js:1124 js/user/GridPanel.js:207
+msgid "Expires"
+msgstr ""
+
+#: js/user/EditDialog.js:1146 js/user/GridPanel.js:202
+msgid "Last login at"
+msgstr ""
+
+#: js/user/EditDialog.js:1148 js/user/EditDialog.js:1152
+msgid "don't know"
+msgstr ""
+
+#: js/user/EditDialog.js:1150 js/user/GridPanel.js:203
+msgid "Last login from"
+msgstr ""
+
+#: js/user/EditDialog.js:1154
+msgid "Password set"
+msgstr ""
+
+#: js/user/EditDialog.js:1159
+msgid "Account ID"
+msgstr ""
+
+#: js/user/EditDialog.js:1165
+msgid "User groups"
+msgstr ""
+
+#: js/user/EditDialog.js:1171
+msgid "User roles"
+msgstr ""
+
+#: js/user/EditDialog.js:1177
+msgid "Fileserver"
+msgstr ""
+
+#: js/user/EditDialog.js:1183
+msgid "Filesystem"
+msgstr ""
+
+#: js/user/EditDialog.js:1188
+msgid "IMAP"
+msgstr ""
+
+#: js/user/EditDialog.js:1197
+msgid "SMTP"
+msgstr ""
+
+#: js/user/EditDialog.js:1252 js/GroupEditDialog.js:80
+msgid "Visibility"
+msgstr ""
+
+#: js/user/EditDialog.js:1260 js/GroupEditDialog.js:86
+msgid "Display in addressbook"
+msgstr ""
+
+#: js/user/EditDialog.js:1260 js/GroupEditDialog.js:86
+msgid "Hide from addressbook"
+msgstr ""
+
+#: js/user/EditDialog.js:1274 js/GroupEditDialog.js:102
+msgid "Saved in Addressbook"
+msgstr ""
+
+#: js/user/Users.js:78 js/Admin.js:28 js/AccessLog.js:106
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+
+#: js/user/Users.js:78
+msgid "Users"
+msgstr ""
+
+#: js/user/Users.js:128
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] ""
+
+#: js/user/GridPanel.js:51
+msgid "Enable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:61
+msgid "Disable Account"
+msgstr ""
+
+#: js/user/GridPanel.js:71
+msgid "Reset Password"
+msgstr ""
+
+#: js/user/GridPanel.js:199
+msgid "E-mail usage"
+msgstr ""
+
+#: js/user/GridPanel.js:200
+msgid "Filesystem usage"
+msgstr ""
+
+#: js/user/GridPanel.js:204
+msgid "MFA Configured"
+msgstr ""
+
+#: js/user/GridPanel.js:206
+msgid "Password changed"
+msgstr ""
+
+#: js/user/GridPanel.js:313
+msgid "Set new password"
+msgstr ""
+
+#: js/user/GridPanel.js:313
+msgid "Please enter the new password:"
+msgstr ""
+
+#: js/GroupEditDialog.js:64
+msgid "Group Name"
+msgstr ""
+
+#: js/GroupEditDialog.js:128
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+#: js/GroupEditDialog.js:135
+msgid "Group Members"
+msgstr ""
+
+#: js/container/EditDialog.js:186 js/container/GridPanel.js:98
 msgid "personal"
 msgstr ""
 
-#: js/container/EditDialog.js:186
+#: js/container/EditDialog.js:186 js/container/GridPanel.js:98
 msgid "shared"
-msgstr ""
-
-#: js/container/EditDialog.js:199 js/customfield/EditDialog.js:498
-#: js/Applications.js:275
-msgid "Order"
 msgstr ""
 
 #: js/container/EditDialog.js:209
@@ -332,69 +986,78 @@ msgstr ""
 msgid "Please create Resources in Addressbook or CoreData."
 msgstr ""
 
-#: js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
+#: js/container/Container.js:46 js/container/GridPanel.js:102
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+
+#: js/container/GridPanel.js:66
+msgid "Container Name"
 msgstr ""
 
-#: js/Groups.js:69
-msgid "Deleting group(s)..."
+#: js/container/GridPanel.js:69
+msgid "Container Order"
 msgstr ""
 
-#: js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+
+#: js/Admin.js:56
+msgid "Roles"
 msgstr ""
 
-#: js/Groups.js:108
-msgid "Add Group"
+#: js/Admin.js:83
+msgid "Containers"
 msgstr ""
 
-#: js/Groups.js:116
-msgid "Edit Group"
+#: js/Admin.js:96
+msgid "Shared Tags"
 msgstr ""
 
-#: js/Groups.js:124
-msgid "Delete Group"
+#: js/Admin.js:110
+msgid "Customfields"
 msgstr ""
 
-#: js/Groups.js:228
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
+#: js/Admin.js:123
+msgid "Computers"
 msgstr ""
 
-#: js/Groups.js:229 js/Groups.js:289
-msgid "No groups to display"
+#: js/Admin.js:151
+msgid "Log"
 msgstr ""
 
-#: js/Groups.js:242
-msgid "Account only"
+#: js/Admin.js:164
+msgid "Server Information"
 msgstr ""
 
-#: js/Groups.js:244
-msgid "Creation Time"
+#: js/Admin.js:181
+msgid "ActiveSync Devices"
 msgstr ""
 
-#: js/Groups.js:245
-msgid "Created By"
+#: js/Admin.js:200
+msgid "E-mail Accounts"
 msgstr ""
 
-#: js/Groups.js:246
-msgid "Last Modified Time"
+#: js/Admin.js:220
+msgid "Import Export Definitions"
 msgstr ""
 
-#: js/Groups.js:247
-msgid "Last Modified By"
+#: js/Admin.js:291
+msgid "Admin"
+msgstr ""
+
+#: js/Admin.js:390
+msgid "Refresh"
+msgstr ""
+
+#: js/Admin.js:413
+msgid "Feature is disabled by configuration."
 msgstr ""
 
 #: js/AccessLog.js:105 js/AccessLog.js:133
 msgid "IP Address"
-msgstr ""
-
-#: js/AccessLog.js:107 js/AccessLog.js:134 js/user/EditDialog.js:416
-msgid "Login Time"
-msgstr ""
-
-#: js/AccessLog.js:108 js/AccessLog.js:135 js/user/EditDialog.js:426
-msgid "Logout Time"
 msgstr ""
 
 #: js/AccessLog.js:109 js/AccessLog.js:138
@@ -417,669 +1080,120 @@ msgstr ""
 msgid "User Agent"
 msgstr ""
 
-#: js/AccessLog.js:158
+#: js/AccessLog.js:159
 msgid "user blocked"
 msgstr ""
 
-#: js/AccessLog.js:162
+#: js/AccessLog.js:163
 msgid "password expired"
 msgstr ""
 
-#: js/AccessLog.js:166
+#: js/AccessLog.js:167
 msgid "user disabled"
 msgstr ""
 
-#: js/AccessLog.js:170
+#: js/AccessLog.js:171
 msgid "invalid password"
 msgstr ""
 
-#: js/AccessLog.js:174
+#: js/AccessLog.js:175
 msgid "ambiguous username"
 msgstr ""
 
-#: js/AccessLog.js:178
+#: js/AccessLog.js:179
 msgid "user not found"
 msgstr ""
 
-#: js/AccessLog.js:182
+#: js/AccessLog.js:183
 msgid "failure"
 msgstr ""
 
-#: js/AccessLog.js:186
+#: js/AccessLog.js:187
 msgid "success"
 msgstr ""
 
-#: js/customfield/GridPanel.js:111 js/customfield/Customfield.js:44
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-
-#: js/customfield/GridPanel.js:184
-msgid "This custom field is still in use!"
-msgstr ""
-
-#: js/customfield/GridPanel.js:185
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-#: js/customfield/EditDialog.js:138 js/customfield/EditDialog.js:274
-#: js/RoleEditDialog.js:116 js/TagEditDialog.js:91
-msgid "Errors"
-msgstr ""
-
-#: js/customfield/EditDialog.js:138
-msgid "Please configure store for this field type"
-msgstr ""
-
-#: js/customfield/EditDialog.js:249
-msgid "Record Class"
-msgstr ""
-
-#: js/customfield/EditDialog.js:274
-msgid "Given record class not found"
-msgstr ""
-
-#: js/customfield/EditDialog.js:311 js/user/EditDialog.js:796
-msgid "Cancel"
-msgstr ""
-
-#: js/customfield/EditDialog.js:317
-msgid "OK"
-msgstr ""
-
-#: js/customfield/EditDialog.js:363
-msgid "Configure store"
-msgstr ""
-
-#: js/customfield/EditDialog.js:423
-msgid "Custom field definition"
-msgstr ""
-
-#: js/customfield/EditDialog.js:434
-msgid "Text"
-msgstr ""
-
-#: js/customfield/EditDialog.js:435
-msgid "Textarea"
-msgstr ""
-
-#: js/customfield/EditDialog.js:436
-msgid "Number"
-msgstr ""
-
-#: js/customfield/EditDialog.js:437
-msgid "Date"
-msgstr ""
-
-#: js/customfield/EditDialog.js:438
-msgid "DateTime"
-msgstr ""
-
-#: js/customfield/EditDialog.js:439
-msgid "Time"
-msgstr ""
-
-#: js/customfield/EditDialog.js:440
-msgid "Boolean"
-msgstr ""
-
-#: js/customfield/EditDialog.js:441
-msgid "Search Combo"
-msgstr ""
-
-#: js/customfield/EditDialog.js:442
-msgid "Key Field"
-msgstr ""
-
-#: js/customfield/EditDialog.js:443
-msgid "Record"
-msgstr ""
-
-#: js/customfield/EditDialog.js:444
-msgid "Record List"
-msgstr ""
-
-#: js/customfield/EditDialog.js:471
-msgid "Length"
-msgstr ""
-
-#: js/customfield/EditDialog.js:476
-msgid "Required"
-msgstr ""
-
-#: js/customfield/EditDialog.js:483
-msgid "Custom field additional properties"
-msgstr ""
-
-#: js/customfield/EditDialog.js:488
-msgid "Tab Panel"
-msgstr ""
-
-#: js/customfield/EditDialog.js:493 js/Models.js:91
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-
-#: js/customfield/EditDialog.js:503
-msgid "Key"
-msgstr ""
-
-#: js/customfield/EditDialog.js:527
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-#: js/user/GridPanel.js:51
-msgid "Enable Account"
-msgstr ""
-
-#: js/user/GridPanel.js:61
-msgid "Disable Account"
-msgstr ""
-
-#: js/user/GridPanel.js:71
-msgid "Reset Password"
-msgstr ""
-
-#: js/user/GridPanel.js:188 js/user/EditDialog.js:975 js/Applications.js:277
-msgid "Status"
-msgstr ""
-
-#: js/user/GridPanel.js:189
-msgid "Display name"
-msgstr ""
-
-#: js/user/GridPanel.js:190 js/user/EditDialog.js:893 js/user/EditDialog.js:951
-msgid "Login name"
-msgstr ""
-
-#: js/user/GridPanel.js:191 js/user/EditDialog.js:887
-msgid "Last name"
-msgstr ""
-
-#: js/user/GridPanel.js:192 js/user/EditDialog.js:876
-msgid "First name"
-msgstr ""
-
-#: js/user/GridPanel.js:194
-msgid "E-mail usage"
-msgstr ""
-
-#: js/user/GridPanel.js:195
-msgid "Filesystem usage"
-msgstr ""
-
-#: js/user/GridPanel.js:196 js/user/EditDialog.js:950
-msgid "OpenID"
-msgstr ""
-
-#: js/user/GridPanel.js:197 js/user/EditDialog.js:1092
-msgid "Last login at"
-msgstr ""
-
-#: js/user/GridPanel.js:198 js/user/EditDialog.js:1096
-msgid "Last login from"
-msgstr ""
-
-#: js/user/GridPanel.js:199 js/user/EditDialog.js:451
-#: js/user/EditDialog.js:1069
-msgid "Password Must Change"
-msgstr ""
-
-#: js/user/GridPanel.js:200
-msgid "Password changed"
-msgstr ""
-
-#: js/user/GridPanel.js:201 js/user/EditDialog.js:1016
-msgid "Expires"
-msgstr ""
-
-#: js/user/GridPanel.js:262
-msgid "Set new password"
-msgstr ""
-
-#: js/user/GridPanel.js:262
-msgid "Please enter the new password:"
-msgstr ""
-
-#: js/user/Users.js:77
-msgid "Users"
-msgstr ""
-
-#: js/user/Users.js:127
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] ""
-
-#: js/user/Users.js:153
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] ""
-
-#: js/user/EditDialog.js:220
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-#: js/user/EditDialog.js:244 js/user/EditDialog.js:247
-#: js/user/EditDialog.js:793
-msgid "Passwords do not match!"
-msgstr ""
-
-#: js/user/EditDialog.js:250
-msgid "Passwords match!"
-msgstr ""
-
-#: js/user/EditDialog.js:296 js/user/EditDialog.js:957
-msgid "Primary group"
-msgstr ""
-
-#: js/user/EditDialog.js:373
-msgid "Unix"
-msgstr ""
-
-#: js/user/EditDialog.js:387
-msgid "Home Directory"
-msgstr ""
-
-#: js/user/EditDialog.js:391
-msgid "Login Shell"
-msgstr ""
-
-#: js/user/EditDialog.js:397
-msgid "Windows"
-msgstr ""
-
-#: js/user/EditDialog.js:411
-msgid "Home Drive"
-msgstr ""
-
-#: js/user/EditDialog.js:418 js/user/EditDialog.js:1094
-#: js/user/EditDialog.js:1098
-msgid "never logged in"
-msgstr ""
-
-#: js/user/EditDialog.js:421
-msgid "Home Path"
-msgstr ""
-
-#: js/user/EditDialog.js:428
-msgid "never logged off"
-msgstr ""
-
-#: js/user/EditDialog.js:431
-msgid "Profile Path"
-msgstr ""
-
-#: js/user/EditDialog.js:436
-msgid "Password Last Set"
-msgstr ""
-
-#: js/user/EditDialog.js:438 js/user/EditDialog.js:1019
-#: js/user/EditDialog.js:1102
-msgid "never"
-msgstr ""
-
-#: js/user/EditDialog.js:441
-msgid "Logon Script"
-msgstr ""
-
-#: js/user/EditDialog.js:446
-msgid "Password Can Change"
-msgstr ""
-
-#: js/user/EditDialog.js:448 js/user/EditDialog.js:453
-#: js/user/EditDialog.js:458
-msgid "not set"
-msgstr ""
-
-#: js/user/EditDialog.js:456
-msgid "Kick Off Time"
-msgstr ""
-
-#: js/user/EditDialog.js:475
-msgid "Filesystem Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:494 js/user/EditDialog.js:536
-#: js/user/EditDialog.js:568
-msgid "Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:495 js/user/EditDialog.js:537
-#: js/user/EditDialog.js:569
-msgid "no quota set"
-msgstr ""
-
-#: js/user/EditDialog.js:499
-msgid "Current Filesystem usage"
-msgstr ""
-
-#: js/user/EditDialog.js:517
-msgid "IMAP Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:541
-msgid "Current Mailbox size"
-msgstr ""
-
-#: js/user/EditDialog.js:549
-msgid "Sieve Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:573
-msgid "Current Sieve size"
-msgstr ""
-
-#: js/user/EditDialog.js:582 js/user/EditDialog.js:1077
-msgid "Information"
-msgstr ""
-
-#: js/user/EditDialog.js:596
-msgid "Last Login"
-msgstr ""
-
-#: js/user/EditDialog.js:638
-msgid "Forward Only"
-msgstr ""
-
-#: js/user/EditDialog.js:660
-msgid "E-mail Alias"
-msgstr ""
-
-#: js/user/EditDialog.js:666
-msgid "Add an alias address..."
-msgstr ""
-
-#: js/user/EditDialog.js:677
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-#: js/user/EditDialog.js:704
-msgid "Domain not allowed"
-msgstr ""
-
-#: js/user/EditDialog.js:705
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-#: js/user/EditDialog.js:731
-msgid "Forwarding to self"
-msgstr ""
-
-#: js/user/EditDialog.js:732
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-#: js/user/EditDialog.js:741
-msgid "E-mail Forward"
-msgstr ""
-
-#: js/user/EditDialog.js:747
-msgid "Add a forwarding address..."
-msgstr ""
-
-#: js/user/EditDialog.js:759
-msgid "Password confirmation"
-msgstr ""
-
-#: js/user/EditDialog.js:777
-msgid "Repeat password"
-msgstr ""
-
-#: js/user/EditDialog.js:803
-msgid "Ok"
-msgstr ""
-
-#: js/user/EditDialog.js:861
-msgid "Account"
-msgstr ""
-
-#: js/user/EditDialog.js:899
-msgid "Password"
-msgstr ""
-
-#: js/user/EditDialog.js:935
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-#: js/user/EditDialog.js:983
-msgid "enabled"
-msgstr ""
-
-#: js/user/EditDialog.js:984
-msgid "disabled"
-msgstr ""
-
-#: js/user/EditDialog.js:985
-msgid "expired"
-msgstr ""
-
-#: js/user/EditDialog.js:986
-msgid "blocked"
-msgstr ""
-
-#: js/user/EditDialog.js:993
-msgid "Invalid Status"
-msgstr ""
-
-#: js/user/EditDialog.js:994
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr ""
-
-#: js/user/EditDialog.js:1094 js/user/EditDialog.js:1098
-msgid "don't know"
-msgstr ""
-
-#: js/user/EditDialog.js:1100
-msgid "Password set"
-msgstr ""
-
-#: js/user/EditDialog.js:1107
-msgid "User groups"
-msgstr ""
-
-#: js/user/EditDialog.js:1113
-msgid "User roles"
-msgstr ""
-
-#: js/user/EditDialog.js:1119
-msgid "Fileserver"
-msgstr ""
-
-#: js/user/EditDialog.js:1125
-msgid "Filesystem"
-msgstr ""
-
-#: js/user/EditDialog.js:1130
-msgid "IMAP"
-msgstr ""
-
-#: js/user/EditDialog.js:1139
-msgid "SMTP"
-msgstr ""
-
-#: js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] ""
-
-#: js/RoleEditDialog.js:71 js/TagEditDialog.js:38
-msgid "Please wait"
-msgstr ""
-
-#: js/RoleEditDialog.js:71
-msgid "Updating Memberships"
-msgstr ""
-
-#: js/RoleEditDialog.js:109
-msgid "Could not save role."
-msgstr ""
-
-#: js/RoleEditDialog.js:116 js/TagEditDialog.js:91
-msgid "Please fix the errors noted."
-msgstr ""
-
-#: js/RoleEditDialog.js:129
-msgid "Deleting role..."
-msgstr ""
-
-#: js/RoleEditDialog.js:161
-msgid "Rights"
-msgstr ""
-
-#: js/RoleEditDialog.js:263
-msgid "Members"
-msgstr ""
-
-#: js/RoleEditDialog.js:287
-msgid "Role Name"
-msgstr ""
-
-#: js/RoleEditDialog.js:362 js/TagEditDialog.js:294
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr ""
-
-#: js/RoleEditDialog.js:362
-msgid "Role"
-msgstr ""
-
-#: js/RoleEditDialog.js:372
-msgid "Add New Role"
-msgstr ""
-
-#: js/RoleEditDialog.js:374
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr ""
-
-#: js/Models.js:172
-msgid "Configs"
-msgstr ""
-
-#: js/QuotaUsage.js:57
+#: js/QuotaManagement.js:109
 msgid "Size"
 msgstr ""
 
-#: js/QuotaUsage.js:69
+#: js/QuotaManagement.js:121
 msgid "Revision Size"
 msgstr ""
 
-#: js/QuotaUsage.js:70
+#: js/QuotaManagement.js:122
 msgid "Total size of all available revisions"
 msgstr ""
 
-#: js/QuotaUsage.js:107
-msgid "Quota Usage"
+#: js/QuotaManagement.js:165
+msgid "Edit Quota"
 msgstr ""
 
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
+#: js/QuotaManagement.js:174 js/QuotaManagement.js:286
+msgid "Manage Total Quota"
 msgstr ""
 
-#: js/TagEditDialog.js:85
-#, python-brace-format
-msgid "Could not save tag ({0})"
+#: js/QuotaManagement.js:262
+msgid "Total quota"
 msgstr ""
 
-#: js/TagEditDialog.js:172
-msgid "Allowed Contexts"
+#: js/QuotaManagement.js:327
+msgid "Quota Management"
 msgstr ""
 
-#: js/TagEditDialog.js:178
-msgid "Context"
+#: Config.php:102
+msgid "Apps to show"
 msgstr ""
 
-#: js/TagEditDialog.js:191
-msgid "Account Rights"
+#: Config.php:104
+msgid "Applications to show in quota, defaults null means all apps"
 msgstr ""
 
-#: js/TagEditDialog.js:200
-msgid "View"
+#: Config.php:113
+msgid "Modules to show"
 msgstr ""
 
-#: js/TagEditDialog.js:205
-msgid "Use"
+#: Config.php:144 Config.php:146
+msgid "Allow total quota in MB management"
 msgstr ""
 
-#: js/TagEditDialog.js:222
-msgid "Tag Name"
+#: Config.php:155 Config.php:157
+msgid "Default password must change for new user"
 msgstr ""
 
-#: js/TagEditDialog.js:294
-msgid "Tag"
-msgstr ""
-
-#: js/TagEditDialog.js:304
-msgid "Add New Tag"
-msgstr ""
-
-#: js/TagEditDialog.js:306
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr ""
-
-#: js/Applications.js:23 js/Applications.js:141
-msgid "Enable Application"
-msgstr ""
-
-#: js/Applications.js:31 js/Applications.js:142
-msgid "Disable Application"
-msgstr ""
-
-#: js/Applications.js:39 js/Applications.js:143
-msgid "Settings"
-msgstr ""
-
-#: js/Applications.js:68
-#, python-brace-format
-msgid "{0} Settings"
-msgstr ""
-
-#: js/Applications.js:223
-msgid "Enabled"
-msgstr ""
-
-#: js/Applications.js:227
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#: js/Applications.js:265
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
-
-#: js/Applications.js:266
-msgid "No applications to display"
-msgstr ""
-
-#: js/Applications.js:278
-msgid "Version"
-msgstr ""
-
-#: Config.php:60 Config.php:62
-msgid "Default password must change for new user settings"
-msgstr ""
-
-#: Config.php:71 Config.php:73
+#: Config.php:166 Config.php:168
 msgid "Default IMAP user settings"
 msgstr ""
 
-#: Config.php:82
+#: Config.php:177
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:84
+#: Config.php:179
 msgid "Enabled Features in Admin Application."
 msgstr ""
 
-#: Config.php:92
+#: Config.php:187
 msgid "Prevent special chars in login name"
 msgstr ""
 
-#: Config.php:97 Config.php:103
+#: Config.php:192 Config.php:203
 msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+#: Config.php:196
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+#: Config.php:207 Config.php:209
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+#: Config.php:213 Config.php:215
+msgid "Allow to change user type"
+msgstr ""
+
+#: Config.php:115
+msgid "Modules to show in admin app, default value null means all modules."
 msgstr ""
 
 #: Controller/Container.php:207
@@ -1090,182 +1204,277 @@ msgstr ""
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 
-#: Controller/User.php:287
+#: Controller/Group.php:652
+msgid "A group with this name already exists"
+msgstr ""
+
+#: Controller/User.php:285
 msgid "Password is needed for system account creation"
 msgstr ""
 
-#: Frontend/Cli.php:339
-msgid "Notifications"
+#: Controller/User.php:502
+msgid "Maximum number of users reached."
 msgstr ""
 
-#: Acl/Rights.php:251
-msgid "Manage access log"
+#: Controller/User.php:503
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
 msgstr ""
 
-#: Acl/Rights.php:252
-msgid "Delete access log entries."
+#: Controller/User.php:683
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
 msgstr ""
 
-#: Acl/Rights.php:255
-msgid "Manage accounts"
+#: Controller/Quota.php:74
+msgid "Record data needs to be set!"
 msgstr ""
 
-#: Acl/Rights.php:256
-msgid "Add and edit users and groups, add group members, change user passwords."
+#: Controller/Quota.php:87
+msgid "Account E-Mail needs to be set!"
 msgstr ""
 
-#: Acl/Rights.php:259
-msgid "Manage e-mail accounts"
+#: Controller/Quota.php:105
+msgid "E-Mail account not found."
 msgstr ""
 
-#: Acl/Rights.php:260
-msgid "Add and edit shared and personal e-mail accounts."
+#: Controller/EmailAccount.php:157
+msgid "Email address is already in use"
 msgstr ""
 
-#: Acl/Rights.php:263
-msgid "Manage applications"
+#: Model/SchedulerTask/Import.php:31
+msgid "GENDER_Scheduled Import Task config"
 msgstr ""
 
-#: Acl/Rights.php:264
-msgid "Enable and disable applications, edit application settings."
+#: Model/SchedulerTask/Import.php:32
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+
+#: Model/SchedulerTask/Import.php:43
+msgid "Plugin"
 msgstr ""
 
-#: Acl/Rights.php:267
-msgid "Manage roles"
+#: Model/SchedulerTask/Import.php:47
+msgid "Options"
 msgstr ""
 
-#: Acl/Rights.php:268
-msgid "Add and edit roles, add new members to roles, add application rights to roles."
+#: Model/SchedulerTask/Abstract.php:32
+msgid "GENDER_Task config"
+msgstr ""
+
+#: Model/SchedulerTask/Abstract.php:33 Model/SchedulerTask.php:73
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+
+#: Model/SchedulerTask.php:48
+msgid "Period"
+msgstr ""
+
+#: Model/SchedulerTask.php:59
+msgid "Task type"
+msgstr ""
+
+#: Model/SchedulerTask.php:86
+msgid "Emails"
+msgstr ""
+
+#: Export/definitions/admin_group_export_csv.xml:5
+#: Export/definitions/admin_user_export_csv.xml:5
+msgid "CSV all data"
 msgstr ""
 
 #: Acl/Rights.php:271
-msgid "Manage shared tags"
+msgid "Manage access log"
 msgstr ""
 
 #: Acl/Rights.php:272
-msgid "Add, delete and edit shared tags."
+msgid "Delete access log entries."
 msgstr ""
 
 #: Acl/Rights.php:275
-msgid "Manage computers"
+msgid "Manage accounts"
 msgstr ""
 
 #: Acl/Rights.php:276
-msgid "Add, delete and edit (samba) computers."
+msgid "Add and edit users and groups, add group members, change user passwords."
 msgstr ""
 
 #: Acl/Rights.php:279
-msgid "Manage containers"
+msgid "Manage e-mail accounts"
 msgstr ""
 
 #: Acl/Rights.php:280
-msgid "Add, delete and edit containers and manage container grants."
+msgid "Add and edit shared and personal e-mail accounts."
 msgstr ""
 
 #: Acl/Rights.php:283
-msgid "Manage customfields"
+msgid "Manage applications"
 msgstr ""
 
 #: Acl/Rights.php:284
-msgid "Add and edit customfields."
+msgid "Enable and disable applications, edit application settings."
 msgstr ""
 
 #: Acl/Rights.php:287
-msgid "Manage import and export definitions"
+msgid "Manage roles"
 msgstr ""
 
 #: Acl/Rights.php:288
-msgid "Add and edit import and export definitions"
+msgid "Add and edit roles, add new members to roles, add application rights to roles."
 msgstr ""
 
 #: Acl/Rights.php:291
-msgid "View access log"
+msgid "Manage shared tags"
 msgstr ""
 
 #: Acl/Rights.php:292
-msgid "View access log list."
+msgid "Add, delete and edit shared tags."
 msgstr ""
 
 #: Acl/Rights.php:295
-msgid "View accounts"
+msgid "Manage shared admin quotas"
 msgstr ""
 
 #: Acl/Rights.php:296
-msgid "View accounts list and details."
+msgid "Add, delete and edit shared admin quotas."
 msgstr ""
 
 #: Acl/Rights.php:299
-msgid "View e-mail accounts"
+msgid "Manage shared email quotas"
 msgstr ""
 
 #: Acl/Rights.php:300
-msgid "View shared and personal e-mail accounts."
+msgid "Add, delete and edit shared email quotas."
 msgstr ""
 
 #: Acl/Rights.php:303
-msgid "View applications"
+msgid "Manage computers"
 msgstr ""
 
 #: Acl/Rights.php:304
-msgid "View applications list and details."
+msgid "Add, delete and edit (samba) computers."
 msgstr ""
 
 #: Acl/Rights.php:307
-msgid "View roles"
+msgid "Manage containers"
 msgstr ""
 
 #: Acl/Rights.php:308
-msgid "View roles list and details."
+msgid "Add, delete and edit containers and manage container grants."
 msgstr ""
 
 #: Acl/Rights.php:311
-msgid "View shared tags"
+msgid "Manage customfields"
 msgstr ""
 
 #: Acl/Rights.php:312
-msgid "View shared tags list and details."
+msgid "Add and edit customfields."
 msgstr ""
 
 #: Acl/Rights.php:315
-msgid "View computers"
+msgid "Manage import and export definitions"
 msgstr ""
 
 #: Acl/Rights.php:316
-msgid "View computers list and details."
+msgid "Add and edit import and export definitions"
 msgstr ""
 
 #: Acl/Rights.php:319
-msgid "View containers"
+msgid "View access log"
 msgstr ""
 
 #: Acl/Rights.php:320
-msgid "View personal and shared containers."
+msgid "View access log list."
 msgstr ""
 
 #: Acl/Rights.php:323
-msgid "View customfields"
+msgid "View accounts"
 msgstr ""
 
 #: Acl/Rights.php:324
-msgid "View customfields list."
+msgid "View accounts list and details."
 msgstr ""
 
 #: Acl/Rights.php:327
-msgid "View serverinfo"
+msgid "View e-mail accounts"
 msgstr ""
 
 #: Acl/Rights.php:328
-msgid "View serverinfo list."
+msgid "View shared and personal e-mail accounts."
 msgstr ""
 
 #: Acl/Rights.php:331
-msgid "View quota usage"
+msgid "View applications"
 msgstr ""
 
 #: Acl/Rights.php:332
+msgid "View applications list and details."
+msgstr ""
+
+#: Acl/Rights.php:335
+msgid "View roles"
+msgstr ""
+
+#: Acl/Rights.php:336
+msgid "View roles list and details."
+msgstr ""
+
+#: Acl/Rights.php:339
+msgid "View shared tags"
+msgstr ""
+
+#: Acl/Rights.php:340
+msgid "View shared tags list and details."
+msgstr ""
+
+#: Acl/Rights.php:343
+msgid "View computers"
+msgstr ""
+
+#: Acl/Rights.php:344
+msgid "View computers list and details."
+msgstr ""
+
+#: Acl/Rights.php:347
+msgid "View containers"
+msgstr ""
+
+#: Acl/Rights.php:348
+msgid "View personal and shared containers."
+msgstr ""
+
+#: Acl/Rights.php:351
+msgid "View customfields"
+msgstr ""
+
+#: Acl/Rights.php:352
+msgid "View customfields list."
+msgstr ""
+
+#: Acl/Rights.php:355
+msgid "View serverinfo"
+msgstr ""
+
+#: Acl/Rights.php:356
+msgid "View serverinfo list."
+msgstr ""
+
+#: Acl/Rights.php:359
+msgid "View quota usage"
+msgstr ""
+
+#: Acl/Rights.php:360
 msgid "View quota usage."
 msgstr ""
 
-#: Acl/Rights.php:335 Acl/Rights.php:336
+#: Acl/Rights.php:363 Acl/Rights.php:364
 msgid "view ImportExportDefinitions"
+msgstr ""
+
+#: Acl/Rights.php:367
+msgid "Manage SSO"
+msgstr ""
+
+#: Acl/Rights.php:368
+msgid "Manage relying parties for single sign on "
 msgstr ""

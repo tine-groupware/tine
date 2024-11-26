@@ -37,7 +37,7 @@ class Filemanager_Config extends Tinebase_Config_Abstract
         self::PUBLIC_DOWNLOAD_DEFAULT_VALID_TIME => [
             //_('Public Download Default Valid Time')
             'label'                 => 'Public Download Default Valid Time',
-            //_('Public download fefault valid time, unit is day')
+            //_('Public download default valid time. Unit is day')
             'description'           => 'Public Download Default Valid Time, unit is day',
             self::TYPE                  => self::TYPE_INT,
             self::DEFAULT_STR           => 30, // 30 days
