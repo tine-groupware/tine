@@ -17,112 +17,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr ""
+#: Controller.php:149
+msgid "Draft"
+msgstr "Mustand"
 
-#: js/FaqGridDetailsPanel.js:151 js/FaqGridPanel.js:98 js/FaqEditDialog.js:99
-msgid "Question"
-msgstr "Küsimus"
+#: Controller.php:150
+msgid "released"
+msgstr "väljastatud"
 
-#: js/FaqGridDetailsPanel.js:157 js/FaqGridPanel.js:105 js/SimpleFAQ.js:46
-#: js/FaqEditDialog.js:106
-msgid "Answer"
-msgstr "Vastus"
+#: Controller.php:151
+msgid "obsolete"
+msgstr "üleliigne"
 
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:79
-msgid "Tags"
-msgstr "Sildid"
+#: Controller.php:154
+msgid "Internal"
+msgstr "Sisemine"
 
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Loomise aeg"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Lisas"
-
-#: js/FaqGridDetailsPanel.js:199 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/FaqGridDetailsPanel.js:204 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Vastus pole veel"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Vaikeväärtused"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr ""
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr ""
-
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
-msgid "Status"
-msgstr "Staatus"
-
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
-msgid "Type"
-msgstr "Tüüp"
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr ""
-
-#: js/Model.js:35 js/SimpleFAQ.js:19
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:39
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:39
-msgid "FAQ Lists"
-msgstr ""
-
-#: js/Model.js:74
-msgid "Quick Search"
-msgstr ""
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr ""
-
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr ""
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr ""
-
-#: js/FaqEditDialog.js:100
-msgid "Enter a question..."
-msgstr "Sisesta küsimus..."
-
-#: js/FaqEditDialog.js:107
-msgid "Enter a answer..."
-msgstr "Sisesta vastus..."
+#: Controller.php:155
+msgid "Public"
+msgstr "Avalik"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -144,30 +57,112 @@ msgstr ""
 msgid "The default FAQ list to create new FAQ in."
 msgstr ""
 
-#: Controller.php:119
-#, python-format
-msgid "%s's personal FAQs"
+#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
 msgstr ""
 
-#: Controller.php:159
-msgid "Draft"
-msgstr "Mustand"
+#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Küsimus"
 
-#: Controller.php:160
-msgid "released"
-msgstr "väljastatud"
+#: js/FaqEditDialog.js:66
+msgid "Enter a question..."
+msgstr "Sisesta küsimus..."
 
-#: Controller.php:161
-msgid "obsolete"
-msgstr "üleliigne"
+#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Vastus"
 
-#: Controller.php:164
-msgid "Internal"
-msgstr "Sisemine"
+#: js/FaqEditDialog.js:73
+msgid "Enter a answer..."
+msgstr "Sisesta vastus..."
 
-#: Controller.php:165
-msgid "Public"
-msgstr "Avalik"
+#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
+msgid "Type"
+msgstr "Tüüp"
+
+#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
+msgid "Status"
+msgstr "Staatus"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Vaikeväärtused"
+
+#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr ""
+
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr ""
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr ""
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Sildid"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Loomise aeg"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Lisas"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Vastus pole veel"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr ""
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr ""
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr ""
 
 #: Setup/Initialize.php:33
 msgid "All FAQs of my FAQ Lists"

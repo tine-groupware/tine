@@ -23,38 +23,352 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/EnvCheckGridPanel.js:89
-msgid "Performing Environment Checks..."
-msgstr "Проведение проверок окружения..."
-
-#: js/EnvCheckGridPanel.js:130
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+#: Controller.php:762
+msgid "Maximum number of users reached. "
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:160
-msgid "Check"
-msgstr "Проверка"
-
-#: js/EnvCheckGridPanel.js:161
-msgid "Result"
-msgstr "Результат"
-
-#: js/EnvCheckGridPanel.js:162
-msgid "Message"
+#: Controller.php:765
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:180
-msgid "Run setup tests"
-msgstr "Запуск тестов установки"
+#: js/TermsPanel.js:32
+msgid "I have read the license agreement and accept it"
+msgstr "Я прочитал лицензионное соглашение и согласен его соблюдать"
 
-#: js/EnvCheckGridPanel.js:189
-msgid "Ignore setup tests"
-msgstr "Пропустить тестирование"
+#: js/TermsPanel.js:41
+msgid "License Agreement"
+msgstr "Лицензионное соглашение"
 
-#: js/EnvCheckGridPanel.js:204 js/ApplicationGridPanel.js:78
-msgid "Install application"
-msgstr "Установить приложение"
+#: js/TermsPanel.js:60
+msgid "I have read the privacy agreement and accept it"
+msgstr "Я прочёл соглашение о приватных данных и согласен с ними"
+
+#: js/TermsPanel.js:69
+msgid "Privacy Agreement"
+msgstr "Соглашение о приватных данных"
+
+#: js/TermsPanel.js:86
+msgid "Accept Terms and Conditions"
+msgstr "Согласен с правилами и условиями"
+
+#: js/LicensePanel.js:70
+msgid "Delete current Subscription"
+msgstr ""
+
+#: js/LicensePanel.js:141
+msgid "Your Subscription is not valid."
+msgstr ""
+
+#: js/LicensePanel.js:194
+msgid "Subscription Configuration"
+msgstr ""
+
+#: js/LicensePanel.js:203
+msgid "Upload from disk"
+msgstr ""
+
+#: js/LicensePanel.js:205
+msgid "Select file containing your Subscription key"
+msgstr ""
+
+#: js/LicensePanel.js:216
+msgid "No valid Subscription"
+msgstr ""
+
+#: js/LicensePanel.js:218
+msgid "Contract ID"
+msgstr ""
+
+#: js/LicensePanel.js:223
+msgid "Organization"
+msgstr ""
+
+#: js/LicensePanel.js:228
+msgid "Activation Key"
+msgstr ""
+
+#: js/LicensePanel.js:233
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+#: js/LicensePanel.js:238
+msgid "Valid from"
+msgstr ""
+
+#: js/LicensePanel.js:244
+msgid "Valid to"
+msgstr ""
+
+#: js/LicensePanel.js:261
+msgid "Subscription Information"
+msgstr ""
+
+#: js/EmailPanel.js:146 js/EmailPanel.js:480 js/AuthenticationPanel.js:203
+#: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
+#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
+#: js/ConfigManagerPanel.js:183
+msgid "Backend"
+msgstr "Бэкенд"
+
+#: js/EmailPanel.js:150
+msgid "Standard IMAP"
+msgstr "Стандартный IMAP"
+
+#: js/EmailPanel.js:161
+msgid "Standard SMTP"
+msgstr "Стандартный SMTP"
+
+#: js/EmailPanel.js:182
+msgid "Imap"
+msgstr "Imap"
+
+#: js/EmailPanel.js:190 js/EmailPanel.js:312 js/EmailPanel.js:445
+#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
+#: js/ConfigManagerPanel.js:325 js/ConfigManagerPanel.js:345
+#: js/ConfigManagerPanel.js:386 js/ConfigManagerPanel.js:445
+msgid "Hostname"
+msgstr "Имя узла"
+
+#: js/EmailPanel.js:194 js/ConfigManagerPanel.js:203
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: js/EmailPanel.js:198 js/AuthenticationPanel.js:317
+#: js/AuthenticationPanel.js:609 js/ConfigManagerPanel.js:212
+#: js/ConfigManagerPanel.js:243
+msgid "Password"
+msgstr "Пароль"
+
+#: js/EmailPanel.js:204 js/EmailPanel.js:316 js/EmailPanel.js:449
+#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
+#: js/AuthenticationPanel.js:633 js/ConfigManagerPanel.js:232
+#: js/ConfigManagerPanel.js:329 js/ConfigManagerPanel.js:349
+#: js/ConfigManagerPanel.js:390 js/ConfigManagerPanel.js:449
+msgid "Port"
+msgstr "Порт"
+
+#: js/EmailPanel.js:208 js/EmailPanel.js:320 js/EmailPanel.js:453
+#: js/AuthenticationPanel.js:387
+msgid "Secure Connection"
+msgstr "Безопасное подключение"
+
+#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:334
+#: js/EmailPanel.js:456 js/AuthenticationPanel.js:389
+msgid "None"
+msgstr "Нет"
+
+#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
+#: js/AuthenticationPanel.js:389
+msgid "TLS"
+msgstr "TLS"
+
+#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
+#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
+#: js/AuthenticationPanel.js:627
+msgid "SSL"
+msgstr "SSL"
+
+#: js/EmailPanel.js:214 js/EmailPanel.js:326
+msgid "Verify peer Certificate"
+msgstr ""
+
+#: js/EmailPanel.js:220
+msgid "Use system account"
+msgstr "Использование системной учетной записи"
+
+#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
+#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
+#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
+#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
+#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
+#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
+#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
+#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
+#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
+msgid "No"
+msgstr "Нет"
+
+#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
+#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
+#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
+#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
+#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
+#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
+#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
+#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
+#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
+#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
+msgid "Yes"
+msgstr "Да"
+
+#: js/EmailPanel.js:226 js/AuthenticationPanel.js:394
+msgid "Append domain to login name"
+msgstr "Добавить имя домена в логин"
+
+#: js/EmailPanel.js:231
+msgid "Use email address as login name"
+msgstr ""
+
+#: js/EmailPanel.js:267
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:270
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:276
+msgid "Use proxy auth"
+msgstr ""
+
+#: js/EmailPanel.js:304
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/EmailPanel.js:331
+msgid "Authentication"
+msgstr "Аутентификация"
+
+#: js/EmailPanel.js:334
+msgid "Login"
+msgstr "Имя пользователя"
+
+#: js/EmailPanel.js:334
+msgid "Plain"
+msgstr "Обычная"
+
+#: js/EmailPanel.js:338
+msgid "Primary Domain"
+msgstr "Основной домен"
+
+#: js/EmailPanel.js:342
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:346
+msgid "Aditional Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:350
+msgid "Notifications service address"
+msgstr "Адрес службы уведомлений"
+
+#: js/EmailPanel.js:354
+msgid "Notification Username"
+msgstr "Имя службы уведомлений"
+
+#: js/EmailPanel.js:358
+msgid "Notification Password"
+msgstr "Пароль службы уведомлений"
+
+#: js/EmailPanel.js:363
+msgid "Notifications local client (hostname or IP address)"
+msgstr ""
+
+#: js/EmailPanel.js:439
+msgid "SIEVE"
+msgstr "SIEVE"
+
+#: js/EmailPanel.js:507
+msgid "MySql Hostname"
+msgstr "Хост MySQL"
+
+#: js/EmailPanel.js:510
+msgid "MySql Database"
+msgstr "База данных MySql"
+
+#: js/EmailPanel.js:513
+msgid "MySql User"
+msgstr "Пользователь MySql"
+
+#: js/EmailPanel.js:516
+msgid "MySql Password"
+msgstr "Пароль MySql"
+
+#: js/EmailPanel.js:521
+msgid "MySql Port"
+msgstr "Порт MySql"
+
+#: js/EmailPanel.js:537
+msgid "User or UID"
+msgstr "Пользователь или UID"
+
+#: js/EmailPanel.js:540
+msgid "Group or GID"
+msgstr "Группа или GID"
+
+#: js/EmailPanel.js:543
+msgid "Home Template"
+msgstr ""
+
+#: js/EmailPanel.js:545
+msgid "Password Scheme"
+msgstr "Схема пароля"
+
+#: js/EmailPanel.js:556
+msgid "PLAIN-MD5"
+msgstr "PLAIN-MD5"
+
+#: js/EmailPanel.js:557
+msgid "MD5-CRYPT"
+msgstr "MD5-CRYPT"
+
+#: js/EmailPanel.js:558
+msgid "SHA1"
+msgstr "SHA1"
+
+#: js/EmailPanel.js:559
+msgid "SHA256"
+msgstr "SHA256"
+
+#: js/EmailPanel.js:560
+msgid "SSHA256"
+msgstr "SSHA256"
+
+#: js/EmailPanel.js:561
+msgid "SHA512"
+msgstr "SHA512"
+
+#: js/EmailPanel.js:562
+msgid "SSHA512"
+msgstr "SSHA512"
+
+#: js/EmailPanel.js:563
+msgid "PLAIN"
+msgstr "PLAIN"
+
+#: js/TreePanel.js:53
+msgid "Terms and Conditions"
+msgstr "Условия и Положения"
+
+#: js/TreePanel.js:58
+msgid "Setup Checks"
+msgstr "Проверки установки"
+
+#: js/TreePanel.js:64
+msgid "Config Manager"
+msgstr "Управление конфигурацией"
+
+#: js/TreePanel.js:70
+msgid "Authentication/Accounts"
+msgstr ""
+
+#: js/TreePanel.js:76
+msgid "Email"
+msgstr "Электронная почта"
+
+#: js/TreePanel.js:82
+msgid "Application Manager"
+msgstr "Управление приложениями"
+
+#: js/TreePanel.js:88
+msgid "Subscription"
+msgstr ""
+
+#: js/init.js:76
+msgid "Setup"
+msgstr ""
 
 #: js/ApplicationGridPanel.js:63
 msgid "Name"
@@ -84,36 +398,40 @@ msgstr "Статус"
 msgid "Depends on"
 msgstr "Зависит от"
 
-#: js/ApplicationGridPanel.js:87
+#: js/ApplicationGridPanel.js:79 js/EnvCheckGridPanel.js:205
+msgid "Install application"
+msgstr "Установить приложение"
+
+#: js/ApplicationGridPanel.js:88
 msgid "Uninstall application"
 msgstr "Удалить приложение"
 
-#: js/ApplicationGridPanel.js:96
+#: js/ApplicationGridPanel.js:97
 msgid "Update applications"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:104
+#: js/ApplicationGridPanel.js:105
 #, python-brace-format
 msgid "Go to {0} login"
 msgstr "Залогиниться в {0}"
 
-#: js/ApplicationGridPanel.js:182
+#: js/ApplicationGridPanel.js:183
 msgid "uninstall"
 msgstr "удалить"
 
-#: js/ApplicationGridPanel.js:182
+#: js/ApplicationGridPanel.js:183
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Вы действительно хотите удалить приложение(я)?"
 
-#: js/ApplicationGridPanel.js:245
+#: js/ApplicationGridPanel.js:246
 msgid "This may take a while"
 msgstr "Это может занять некоторое время"
 
-#: js/ApplicationGridPanel.js:279
+#: js/ApplicationGridPanel.js:280
 msgid "Dependency Violation"
 msgstr "Нарушена зависимость"
 
-#: js/ApplicationGridPanel.js:288
+#: js/ApplicationGridPanel.js:289
 msgid "CLI Required"
 msgstr ""
 
@@ -124,13 +442,6 @@ msgstr "Удалить всех существующих пользовател�
 #: js/AuthenticationPanel.js:126
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "Переключение с SQL на LDAP удалит все учётные записи, группы и роли. Вы действительно хотите переключить хранилище учётных записей на LDAP?"
-
-#: js/AuthenticationPanel.js:203 js/AuthenticationPanel.js:216
-#: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:159
-#: js/ConfigManagerPanel.js:171 js/ConfigManagerPanel.js:183
-#: js/EmailPanel.js:146 js/EmailPanel.js:476
-msgid "Backend"
-msgstr "Бэкенд"
 
 #: js/AuthenticationPanel.js:204
 msgid "TLS client certificate"
@@ -161,32 +472,6 @@ msgstr "Проверка подлинности поставщика"
 msgid "Try to split username"
 msgstr "Попробуйте разделить имя пользователя"
 
-#: js/AuthenticationPanel.js:283 js/AuthenticationPanel.js:324
-#: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:336
-#: js/AuthenticationPanel.js:353 js/AuthenticationPanel.js:415
-#: js/AuthenticationPanel.js:486 js/AuthenticationPanel.js:510
-#: js/AuthenticationPanel.js:516 js/AuthenticationPanel.js:522
-#: js/AuthenticationPanel.js:551 js/AuthenticationPanel.js:572
-#: js/AuthenticationPanel.js:578 js/AuthenticationPanel.js:616
-#: js/AuthenticationPanel.js:622 js/AuthenticationPanel.js:628
-#: js/AuthenticationPanel.js:683 js/AuthenticationPanel.js:719
-#: js/EmailPanel.js:221 js/EmailPanel.js:277
-msgid "Yes"
-msgstr "Да"
-
-#: js/AuthenticationPanel.js:283 js/AuthenticationPanel.js:324
-#: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:336
-#: js/AuthenticationPanel.js:353 js/AuthenticationPanel.js:415
-#: js/AuthenticationPanel.js:486 js/AuthenticationPanel.js:510
-#: js/AuthenticationPanel.js:516 js/AuthenticationPanel.js:522
-#: js/AuthenticationPanel.js:551 js/AuthenticationPanel.js:572
-#: js/AuthenticationPanel.js:578 js/AuthenticationPanel.js:616
-#: js/AuthenticationPanel.js:622 js/AuthenticationPanel.js:628
-#: js/AuthenticationPanel.js:683 js/AuthenticationPanel.js:719
-#: js/EmailPanel.js:221 js/EmailPanel.js:277
-msgid "No"
-msgstr "Нет"
-
 #: js/AuthenticationPanel.js:288 js/AuthenticationPanel.js:358
 msgid "Account canonical form"
 msgstr ""
@@ -207,12 +492,6 @@ msgstr "Хост"
 msgid "Login name"
 msgstr "Имя"
 
-#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:609
-#: js/ConfigManagerPanel.js:212 js/ConfigManagerPanel.js:243
-#: js/EmailPanel.js:198
-msgid "Password"
-msgstr "Пароль"
-
 #: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:615
 msgid "Bind requires DN"
 msgstr ""
@@ -221,20 +500,6 @@ msgstr ""
 msgid "Start TLS"
 msgstr ""
 
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
-#: js/AuthenticationPanel.js:627 js/EmailPanel.js:211 js/EmailPanel.js:323
-#: js/EmailPanel.js:452
-msgid "SSL"
-msgstr "SSL"
-
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
-#: js/AuthenticationPanel.js:633 js/ConfigManagerPanel.js:232
-#: js/ConfigManagerPanel.js:329 js/ConfigManagerPanel.js:349
-#: js/ConfigManagerPanel.js:390 js/ConfigManagerPanel.js:449
-#: js/EmailPanel.js:204 js/EmailPanel.js:316 js/EmailPanel.js:445
-msgid "Port"
-msgstr "Порт"
-
 #: js/AuthenticationPanel.js:345
 msgid "Base DN"
 msgstr ""
@@ -242,32 +507,6 @@ msgstr ""
 #: js/AuthenticationPanel.js:348
 msgid "Search filter"
 msgstr "Фильтр поиска"
-
-#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
-#: js/ConfigManagerPanel.js:325 js/ConfigManagerPanel.js:345
-#: js/ConfigManagerPanel.js:386 js/ConfigManagerPanel.js:445
-#: js/EmailPanel.js:190 js/EmailPanel.js:312 js/EmailPanel.js:441
-msgid "Hostname"
-msgstr "Имя узла"
-
-#: js/AuthenticationPanel.js:387 js/EmailPanel.js:208 js/EmailPanel.js:320
-#: js/EmailPanel.js:449
-msgid "Secure Connection"
-msgstr "Безопасное подключение"
-
-#: js/AuthenticationPanel.js:389 js/EmailPanel.js:211 js/EmailPanel.js:323
-#: js/EmailPanel.js:334 js/EmailPanel.js:452
-msgid "None"
-msgstr "Нет"
-
-#: js/AuthenticationPanel.js:389 js/EmailPanel.js:211 js/EmailPanel.js:323
-#: js/EmailPanel.js:452
-msgid "TLS"
-msgstr "TLS"
-
-#: js/AuthenticationPanel.js:394 js/EmailPanel.js:226
-msgid "Append domain to login name"
-msgstr "Добавить имя домена в логин"
 
 #: js/AuthenticationPanel.js:407
 msgid "Certificate validation"
@@ -285,11 +524,11 @@ msgstr "CRL директория"
 msgid "Accounts storage"
 msgstr "Хранилище учётных записей"
 
-#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:711
+#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:721
 msgid "Default user group name"
 msgstr "Группа пользователей по-умолчанию"
 
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:714
+#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:724
 msgid "Default admin group name"
 msgstr "Группа администраторов по-умолчанию"
 
@@ -417,75 +656,120 @@ msgstr ""
 msgid "User Filter"
 msgstr "Фильтр пользователей"
 
-#: js/AuthenticationPanel.js:663
+#: js/AuthenticationPanel.js:662
+msgid "E-Mail Attribute"
+msgstr ""
+
+#: js/AuthenticationPanel.js:667
+msgid "Write Password to SQL backend"
+msgstr ""
+
+#: js/AuthenticationPanel.js:673
 msgid "User Search Scope"
 msgstr "Область поиска для пользователей"
 
-#: js/AuthenticationPanel.js:669
+#: js/AuthenticationPanel.js:679
 msgid "Groups DN"
 msgstr "DN групп"
 
-#: js/AuthenticationPanel.js:672
+#: js/AuthenticationPanel.js:682
 msgid "Group Filter"
 msgstr "Фильтр группы"
 
-#: js/AuthenticationPanel.js:676
+#: js/AuthenticationPanel.js:686
 msgid "Group Search Scope"
 msgstr "Область поиска для группы"
 
-#: js/AuthenticationPanel.js:682
+#: js/AuthenticationPanel.js:692
 msgid "Use Rfc 2307 bis"
 msgstr "Использовать Rfc 2307 bis"
 
-#: js/AuthenticationPanel.js:682
+#: js/AuthenticationPanel.js:692
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-#: js/AuthenticationPanel.js:688
+#: js/AuthenticationPanel.js:698
 msgid "Min User Id"
 msgstr "Мин ID пользователя"
 
-#: js/AuthenticationPanel.js:691
+#: js/AuthenticationPanel.js:701
 msgid "Max User Id"
 msgstr "Макс ID пользователя"
 
-#: js/AuthenticationPanel.js:694
+#: js/AuthenticationPanel.js:704
 msgid "Min Group Id"
 msgstr "Минимальный ID группы"
 
-#: js/AuthenticationPanel.js:697
+#: js/AuthenticationPanel.js:707
 msgid "Max Group Id"
 msgstr "Максимальный ID группы"
 
-#: js/AuthenticationPanel.js:701
+#: js/AuthenticationPanel.js:711
 msgid "Group UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:706
+#: js/AuthenticationPanel.js:716
 msgid "User UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:718
+#: js/AuthenticationPanel.js:728
 msgid "Readonly access"
 msgstr "Доступ только на чтение"
 
-#: js/AuthenticationPanel.js:732
+#: js/AuthenticationPanel.js:742
 msgid "Save config and install"
 msgstr "Сохранить конфигурацию и установить"
 
-#: js/AuthenticationPanel.js:734 js/ConfigManagerPanel.js:507
+#: js/AuthenticationPanel.js:744 js/ConfigManagerPanel.js:507
 msgid "Save config"
 msgstr "Сохранить конфигурацию"
 
-#: js/AuthenticationPanel.js:759
+#: js/AuthenticationPanel.js:769
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
 
-#: js/AuthenticationPanel.js:772 js/AuthenticationPanel.js:779
-#: js/AuthenticationPanel.js:783 js/AuthenticationPanel.js:795
-#: js/AuthenticationPanel.js:806
+#: js/AuthenticationPanel.js:782 js/AuthenticationPanel.js:789
+#: js/AuthenticationPanel.js:793 js/AuthenticationPanel.js:805
+#: js/AuthenticationPanel.js:816
 msgid "Should not be empty"
 msgstr "Не должен быть пустым"
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Проведение проверок окружения..."
+
+#: js/EnvCheckGridPanel.js:130
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Проверка"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Результат"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:181
+msgid "Run setup tests"
+msgstr "Запуск тестов установки"
+
+#: js/EnvCheckGridPanel.js:190
+msgid "Ignore setup tests"
+msgstr "Пропустить тестирование"
+
+#: js/Model.js:33
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Приложение"
+msgstr[1] "Приложения"
+msgstr[2] "Приложений"
+msgstr[3] "Приложений"
 
 #: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
 msgid "File"
@@ -494,10 +778,6 @@ msgstr "Файл"
 #: js/ConfigManagerPanel.js:196
 msgid "Setup Authentication"
 msgstr "Аутентификация установки"
-
-#: js/ConfigManagerPanel.js:203 js/EmailPanel.js:194
-msgid "Username"
-msgstr "Имя пользователя"
 
 #: js/ConfigManagerPanel.js:217 js/ConfigManagerPanel.js:235
 msgid "Database"
@@ -587,210 +867,6 @@ msgstr "Загрузить файл конфигурации"
 #, python-brace-format
 msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
-
-#: js/EmailPanel.js:150
-msgid "Standard IMAP"
-msgstr "Стандартный IMAP"
-
-#: js/EmailPanel.js:161
-msgid "Standard SMTP"
-msgstr "Стандартный SMTP"
-
-#: js/EmailPanel.js:182
-msgid "Imap"
-msgstr "Imap"
-
-#: js/EmailPanel.js:214 js/EmailPanel.js:326
-msgid "Verify peer Certificate"
-msgstr ""
-
-#: js/EmailPanel.js:220
-msgid "Use system account"
-msgstr "Использование системной учетной записи"
-
-#: js/EmailPanel.js:231
-msgid "Use email address as login name"
-msgstr ""
-
-#: js/EmailPanel.js:267
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:270
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:276
-msgid "Use proxy auth"
-msgstr ""
-
-#: js/EmailPanel.js:304
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:331
-msgid "Authentication"
-msgstr "Аутентификация"
-
-#: js/EmailPanel.js:334
-msgid "Login"
-msgstr "Имя пользователя"
-
-#: js/EmailPanel.js:334
-msgid "Plain"
-msgstr "Обычная"
-
-#: js/EmailPanel.js:338
-msgid "Primary Domain"
-msgstr "Основной домен"
-
-#: js/EmailPanel.js:342
-msgid "Secondary Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:346
-msgid "Notifications service address"
-msgstr "Адрес службы уведомлений"
-
-#: js/EmailPanel.js:350
-msgid "Notification Username"
-msgstr "Имя службы уведомлений"
-
-#: js/EmailPanel.js:354
-msgid "Notification Password"
-msgstr "Пароль службы уведомлений"
-
-#: js/EmailPanel.js:359
-msgid "Notifications local client (hostname or IP address)"
-msgstr ""
-
-#: js/EmailPanel.js:435
-msgid "SIEVE"
-msgstr "SIEVE"
-
-#: js/EmailPanel.js:504
-msgid "MySql Hostname"
-msgstr "Хост MySQL"
-
-#: js/EmailPanel.js:507
-msgid "MySql Database"
-msgstr "База данных MySql"
-
-#: js/EmailPanel.js:510
-msgid "MySql User"
-msgstr "Пользователь MySql"
-
-#: js/EmailPanel.js:513
-msgid "MySql Password"
-msgstr "Пароль MySql"
-
-#: js/EmailPanel.js:518
-msgid "MySql Port"
-msgstr "Порт MySql"
-
-#: js/EmailPanel.js:534
-msgid "User or UID"
-msgstr "Пользователь или UID"
-
-#: js/EmailPanel.js:537
-msgid "Group or GID"
-msgstr "Группа или GID"
-
-#: js/EmailPanel.js:540
-msgid "Home Template"
-msgstr ""
-
-#: js/EmailPanel.js:542
-msgid "Password Scheme"
-msgstr "Схема пароля"
-
-#: js/EmailPanel.js:553
-msgid "PLAIN-MD5"
-msgstr "PLAIN-MD5"
-
-#: js/EmailPanel.js:554
-msgid "MD5-CRYPT"
-msgstr "MD5-CRYPT"
-
-#: js/EmailPanel.js:555
-msgid "SHA1"
-msgstr "SHA1"
-
-#: js/EmailPanel.js:556
-msgid "SHA256"
-msgstr "SHA256"
-
-#: js/EmailPanel.js:557
-msgid "SSHA256"
-msgstr "SSHA256"
-
-#: js/EmailPanel.js:558
-msgid "SHA512"
-msgstr "SHA512"
-
-#: js/EmailPanel.js:559
-msgid "SSHA512"
-msgstr "SSHA512"
-
-#: js/EmailPanel.js:560
-msgid "PLAIN"
-msgstr "PLAIN"
-
-#: js/init.js:75
-msgid "Setup"
-msgstr ""
-
-#: js/Model.js:33
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Приложение"
-msgstr[1] "Приложения"
-msgstr[2] "Приложений"
-msgstr[3] "Приложений"
-
-#: js/TreePanel.js:52
-msgid "Terms and Conditions"
-msgstr "Условия и Положения"
-
-#: js/TreePanel.js:57
-msgid "Setup Checks"
-msgstr "Проверки установки"
-
-#: js/TreePanel.js:63
-msgid "Config Manager"
-msgstr "Управление конфигурацией"
-
-#: js/TreePanel.js:69
-msgid "Authentication/Accounts"
-msgstr ""
-
-#: js/TreePanel.js:75
-msgid "Email"
-msgstr "Электронная почта"
-
-#: js/TreePanel.js:81
-msgid "Application Manager"
-msgstr "Управление приложениями"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Я прочитал лицензионное соглашение и согласен его соблюдать"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Лицензионное соглашение"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Я прочёл соглашение о приватных данных и согласен с ними"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Соглашение о приватных данных"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Согласен с правилами и условиями"
 
 #~ msgid "Update application"
 #~ msgstr "Обновить приложение"

@@ -2922,7 +2922,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ),
         self::CURRENCY_SYMBOL => array(
             //_('currency symbol')
-            self::LABEL => 'urrency symbol',
+            self::LABEL => 'currency symbol',
             //_('Path to custom favicon.')
             self::DESCRIPTION => 'Define currency symbol to be used.',
             self::TYPE => 'string',

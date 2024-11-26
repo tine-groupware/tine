@@ -1,0 +1,164 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - SSO\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Vietnamese\n"
+"X-Poedit-Country: VIETNAM\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: js/AdminPanel.js:26
+msgid "Relying Parties"
+msgstr ""
+
+#: js/AdminPanel.js:34
+msgid "External Identity Providers"
+msgstr ""
+
+#: js/login.js:26
+msgid "SSO"
+msgstr ""
+
+#: js/login.js:29
+#, python-brace-format
+msgid "After successful login you will be redirected to {0}"
+msgstr ""
+
+#: Config.php:46 Config.php:48
+msgid "PasswordLess Login"
+msgstr ""
+
+#: Config.php:56 Config.php:58
+msgid "Oauth2"
+msgstr ""
+
+#: Config.php:76 Config.php:78
+msgid "SAML2"
+msgstr ""
+
+#: Config.php:104 Config.php:105
+msgid "SAML2 bindings"
+msgstr ""
+
+#: Model/OAuthOIdRPConfig.php:45
+msgid "OAuth2 Relying Party Config"
+msgid_plural "OAuth2 Relying Party Configs"
+msgstr[0] ""
+
+#: Model/OAuthOIdRPConfig.php:54
+msgid "Redirect URLs"
+msgstr ""
+
+#: Model/OAuthOIdRPConfig.php:63
+msgid "Secret"
+msgstr ""
+
+#: Model/Token.php:50
+msgid "OAuth2 Access Token"
+msgid_plural "OAuth2 Access Tokens"
+msgstr[0] ""
+
+#: Model/Token.php:74
+msgid "Token"
+msgstr ""
+
+#: Model/Token.php:83
+msgid "Type"
+msgstr ""
+
+#: Model/Token.php:88
+msgid "Data"
+msgstr ""
+
+#: Model/Token.php:93
+msgid "TTL"
+msgstr ""
+
+#: Model/ExIdpDomain.php:36
+msgid "External Identity Provider Domain"
+msgid_plural "External Identity Provider Domains"
+msgstr[0] ""
+
+#: Model/ExIdpDomain.php:72 Model/RelyingParty.php:75 Model/ExternalIdp.php:82
+#: Model/Saml2RPConfig.php:62
+msgid "Name"
+msgstr ""
+
+#: Model/RelyingParty.php:47
+msgid "Relying Party"
+msgid_plural "Relying Parties"
+msgstr[0] ""
+
+#: Model/RelyingParty.php:82
+msgid "Label"
+msgstr ""
+
+#: Model/RelyingParty.php:88 Model/ExternalIdp.php:88
+msgid "Description"
+msgstr ""
+
+#: Model/RelyingParty.php:93
+msgid "Logo"
+msgstr ""
+
+#: Model/ExternalIdp.php:48
+msgid "External Identity Provider"
+msgid_plural "External Identity Providers"
+msgstr[0] ""
+
+#: Model/ExIdp/OIdConfig.php:42
+msgid "External Identity Provider Config"
+msgid_plural "External Identity Provider Configs"
+msgstr[0] ""
+
+#: Model/ExIdp/OIdConfig.php:47
+msgid "Provider URL"
+msgstr ""
+
+#: Model/ExIdp/OIdConfig.php:55
+msgid "Issuer"
+msgstr ""
+
+#: Model/ExIdp/OIdConfig.php:63
+msgid "Client ID"
+msgstr ""
+
+#: Model/ExIdp/OIdConfig.php:71
+msgid "Client Secret"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:52
+msgid "SAML2 Relying Party Config"
+msgid_plural "SAML2 Relying Party Configs"
+msgstr[0] ""
+
+#: Model/Saml2RPConfig.php:70
+msgid "Entity ID"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:78
+msgid "Metadata URL"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:81
+msgid "Assertion Consumer Service Binding"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:91
+msgid "Assertion Consumer Service Location"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:99
+msgid "Logout Service Binding"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:114
+msgid "Logout Service Location"
+msgstr ""

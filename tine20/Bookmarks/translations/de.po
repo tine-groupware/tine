@@ -13,34 +13,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: Model/Bookmark.php:40
+#: Setup/setup.xml:4
+msgid "Bookmarks"
+msgstr "Lesezeichen"
+
+#: Config.php:33 Config.php:35
+msgid "Live time of token subscriptions"
+msgstr "Laufzeit von Token-Abonnements"
+
+#: Model/Bookmark.php:50
 msgid "Bookmark"
 msgid_plural "Bookmarks"
 msgstr[0] "Lesezeichen"
 msgstr[1] "Lesezeichen"
 
 # Model/Bookmark.php:45
+#: Model/Bookmark.php:55
+#, fuzzy
 msgid "Bookmark list"
-msgid_plural "Bookmark lists"
+msgid_plural "Bookmarks lists"
 msgstr[0] "Lesezeichenliste"
 msgstr[1] "Lesezeichenlisten"
 
-#: Model/Bookmark.php:76
-msgid "Url"
-msgstr "Url"
-
-#: Model/Bookmark.php:84
+#: Model/Bookmark.php:87
 msgid "Name"
 msgstr "Name"
 
-#: Model/Bookmark.php:91
+#: Model/Bookmark.php:94
+msgid "Url"
+msgstr "Url"
+
+#: Model/Bookmark.php:101
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/Bookmark.php:91
+#: Model/Bookmark.php:110
 msgid "Access count"
 msgstr "Zugriffszähler"
 
-#: Setup/setup.xml:4
-msgid "Bookmarks"
-msgstr "Lesezeichen"
+#: Import/definitions/bookmarks_import_html.xml:9
+msgid "Import html formated bookmarks"
+msgstr "HTML formatierte Lesezeichen importieren"
+
+#: Import/definitions/bookmarks_import_html.xml:13
+msgid "Bookmarks HTML import"
+msgstr "HTML Lesezeichen Import"

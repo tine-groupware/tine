@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
+    <!-- gettext('Tasks') -->
     <name>Tasks</name>
     <version>18.0</version>
     <order>30</order>
