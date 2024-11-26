@@ -60,7 +60,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     checkStates () {
-        if(this.loadRequest){
+        if (this.loadRequest) {
             return _.delay(_.bind(this.checkStates, this), 250)
         }
 
@@ -86,7 +86,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             a['gross_sum_by_tax_rate'][rate] = (a['gross_sum_by_tax_rate'].hasOwnProperty(rate) ? a['gross_sum_by_tax_rate'][rate] : 0) + (pos['position_price'] || 0)
 
             return a;
-        }, {positions_net_sum:0, positions_gross_sum:0, positions_discount_sum: 0, sales_tax_by_rate: {}, net_sum_by_tax_rate: {}, gross_sum_by_tax_rate: {}})
+        }, {
+            positions_net_sum: 0,
+            positions_gross_sum: 0,
+            positions_discount_sum: 0,
+            sales_tax_by_rate: {},
+            net_sum_by_tax_rate: {},
+            gross_sum_by_tax_rate: {}
+        })
 
         Object.keys(sums).forEach((fld) => {
             if (this.recordClass.hasField(fld)) {
@@ -109,14 +116,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             // sales_tax & sales_tax_by_rate
             // ok discount is already applied -> lower sales_tax_by_rate by discount rate
             this.record.set('sales_tax', Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
-                sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum')/this.record.get('positions_gross_sum'))
+                sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum') / this.record.get('positions_gross_sum'))
                 return a + sums['sales_tax_by_rate'][rate]
             }, 0))
             this.record.set('net_sum', this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax'))
             this.getForm().findField('net_sum')?.setValue(this.record.get('net_sum'))
         } else {
             this.record.set('sales_tax', Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
-                sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum'))||0)) * rate / 100
+                sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) || 0)) * rate / 100
                 return a + sums['sales_tax_by_rate'][rate]
             }, 0))
 
@@ -126,7 +133,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         // reformat sales_tax_by_rate
         this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
-            return a.concat(Number(rate) ? [{'tax_rate': Number(rate), 'tax_sum': sums['sales_tax_by_rate'][rate]}] : [])
+            return a.concat(Number(rate) ? [{
+                'tax_rate': Number(rate),
+                'tax_sum': sums['sales_tax_by_rate'][rate]
+            }] : [])
         }, Tine.Tinebase.common.assertComparable([])))
 
         this.getForm().findField('sales_tax_by_rate')?.setValue(this.record.get('sales_tax_by_rate'))
@@ -138,10 +148,38 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.getForm().items.each((field) => {
             if (_.get(field, 'initialConfig.readOnly')) return;
             if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
-            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
+                && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                 field.setReadOnly(booked);
             }
         });
+
+        // check service period contains all positions
+        let servicePeriodAdopted = false
+        const serviceStart = this.getForm().findField('service_period_start')?.getValue();
+        const minPosServiceStart = _.reduce(positions, (minDate, pos) => {
+            return !minDate ? pos.service_period_start : (pos.service_period_start < minDate ? pos.service_period_start : minDate)
+        }, null)
+        if (serviceStart && minPosServiceStart && serviceStart > minPosServiceStart) {
+            this.getForm().findField('service_period_start')?.setValue(minPosServiceStart);
+            servicePeriodAdopted = true
+        }
+        const serviceEnd = this.getForm().findField('service_period_start')?.getValue();
+        const maxServiceEnd = _.reduce(positions, (maxDate, pos) => {
+            return !maxDate ? pos.service_period_end : (pos.service_period_end > maxDate ? pos.service_period_end : maxDate)
+        }, null)
+        if (serviceEnd && maxServiceEnd > serviceEnd) {
+            this.getForm().findField('service_period_end')?.setValue(maxServiceEnd);
+            servicePeriodAdopted = true
+        }
+
+        if (servicePeriodAdopted) {
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: this.app.i18n._('Service Start Extended'),
+                msg: this.app.i18n._("The service period of the invoice has been extended so that it now includes the service periods of all items.")
+            });
+        }
 
         // handle eval_dim division subfilter
         this.getForm().items.each((field) => {
@@ -258,6 +296,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 // NOTE: contract_id waits for contract rewrite
                 [/*fields.contract_id, */ _.assign(fields.customer_id, {columnWidth: 2/5}), _.assign(fields.recipient_id, {columnWidth: 3/5})],
                 _.assign([ _.assign(fields.buyer_reference, {columnWidth: 2/5}), fields.purchase_order_reference, fields.project_reference, fields.contact_id], {line: 'references'}),
+                [fields.service_period_start, fields.service_period_end, _.assign({ ...placeholder } , {columnWidth: 3/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],
