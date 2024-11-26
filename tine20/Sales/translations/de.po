@@ -30,12 +30,11 @@ msgid "You do not have admin rights on Sales"
 msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
 
 #: Controller.php:153 Model/EDocument/EAS.php:32 Model/Division.php:212
-#: Model/Debitor.php:225 Model/Debitor.php:227
-#, fuzzy
+#: Model/Debitor.php:227
 msgid "Electronic Address Schema"
 msgid_plural "Electronic Address Schemas"
 msgstr[0] "Elektronisches Adressierungsschema"
-msgstr[1] "Elektronisches Adressierungsschema"
+msgstr[1] "Elektronische Adressierungsschemata"
 
 #: Controller.php:160
 msgid "Divisions"
