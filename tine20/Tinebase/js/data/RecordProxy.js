@@ -222,7 +222,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @success {Ext.data.Record}
      */
     saveRecord: function(record, options, additionalArguments) {
-        const action = (!_.get(record, 'data.id') && _.get(record, 'data.id')) ||
+        const action = !_.get(record, 'data.id') ||
         (!_.get(record, 'data.creation_time') && this.recordClass.hasField && this.recordClass.hasField(('creation_time'))) ?
             'create' : 'update';
 
