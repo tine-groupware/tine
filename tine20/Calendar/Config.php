@@ -644,7 +644,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR       => false,
                 ),
                 self::FEATURE_EVENT_NOTIFICATION_CONFIRMATION   => [
-                    self::LABEL         => 'Event Notification Confirmation', //_('Lead Notification Confirmation')
+                    self::LABEL         => 'Event Notification Confirmation', //_('Event Notification Confirmation')
                     self::DESCRIPTION   => 'Event Notification Confirmation',
                     self::TYPE          => self::TYPE_BOOL,
                     self::DEFAULT_STR   => false,

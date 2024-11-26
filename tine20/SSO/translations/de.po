@@ -14,86 +14,12 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: \n"
 
-#: Model/RelyingParty.php:47
-msgid "Relying Party"
-msgid_plural "Relying Parties"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/RelyingParty.php:74 Model/Saml2RPConfig.php:58
-msgid "Name"
-msgstr "Name"
-
-#: Model/RelyingParty.php:80
-msgid "Label"
-msgstr "Bezeichnung"
-
-#: Model/RelyingParty.php:85
-msgid "Description"
-msgstr "Beschreibung"
-
-#: Model/RelyingParty.php:91
-msgid "Logo"
-msgstr "Logo"
-
-#: Model/Token.php:48
-msgid "OAuth2 Access Token"
-msgid_plural "OAuth2 Access Tokens"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Token.php:72
-msgid "Token"
-msgstr ""
-
-#: Model/Token.php:81
-msgid "Type"
-msgstr ""
-
-#: Model/Token.php:86
-msgid "Data"
-msgstr ""
-
-#: Model/OAuthOIdRPConfig.php:52
-msgid "Redirect URLs"
-msgstr "Weiterleitungs URLs"
-
-#: Model/OAuthOIdRPConfig.php:61
-msgid "Secret"
-msgstr "Geheimnis"
-
-#: Model/Saml2RPConfig.php:48
-msgid "SAML2 Relying Party Config"
-msgid_plural "SAML2 Relying Party Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Saml2RPConfig.php:67
-msgid "Entity ID"
-msgstr ""
-
-#: Model/Saml2RPConfig.php:76
-msgid "Consumer Service Binding"
-msgstr ""
-
-#: Model/Saml2RPConfig.php:85
-msgid "Consumer Service Location"
-msgstr ""
-
-#: Model/Saml2RPConfig.php:94
-msgid "Logout Service Location"
-msgstr ""
-
-#: Config.php:37 Config.php:39
-msgid "Oauth2"
-msgstr ""
-
-#: Config.php:57 Config.php:59
-msgid "SAML2"
-msgstr ""
-
 #: js/AdminPanel.js:26
 msgid "Relying Parties"
+msgstr ""
+
+#: js/AdminPanel.js:34
+msgid "External Identity Providers"
 msgstr ""
 
 #: js/login.js:26
@@ -105,3 +31,141 @@ msgstr ""
 msgid "After successful login you will be redirected to {0}"
 msgstr "Nach der erfolgreichen Anmeldung werden sie zu {0} weitergeleitet"
 
+#: Config.php:46 Config.php:48
+msgid "PasswordLess Login"
+msgstr ""
+
+#: Config.php:56 Config.php:58
+msgid "Oauth2"
+msgstr ""
+
+#: Config.php:76 Config.php:78
+msgid "SAML2"
+msgstr ""
+
+#: Config.php:104 Config.php:105
+msgid "SAML2 bindings"
+msgstr ""
+
+#: Model/OAuthOIdRPConfig.php:45
+msgid "OAuth2 Relying Party Config"
+msgid_plural "OAuth2 Relying Party Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/OAuthOIdRPConfig.php:54
+msgid "Redirect URLs"
+msgstr "Weiterleitungs URLs"
+
+#: Model/OAuthOIdRPConfig.php:63
+msgid "Secret"
+msgstr "Geheimnis"
+
+#: Model/Token.php:50
+msgid "OAuth2 Access Token"
+msgid_plural "OAuth2 Access Tokens"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Token.php:74
+msgid "Token"
+msgstr ""
+
+#: Model/Token.php:83
+msgid "Type"
+msgstr ""
+
+#: Model/Token.php:88
+msgid "Data"
+msgstr ""
+
+#: Model/Token.php:93
+msgid "TTL"
+msgstr ""
+
+#: Model/ExIdpDomain.php:36
+msgid "External Identity Provider Domain"
+msgid_plural "External Identity Provider Domains"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ExIdpDomain.php:72 Model/RelyingParty.php:75 Model/ExternalIdp.php:82
+#: Model/Saml2RPConfig.php:62
+msgid "Name"
+msgstr "Name"
+
+#: Model/RelyingParty.php:47
+msgid "Relying Party"
+msgid_plural "Relying Parties"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/RelyingParty.php:82
+msgid "Label"
+msgstr "Bezeichnung"
+
+#: Model/RelyingParty.php:88 Model/ExternalIdp.php:88
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Model/RelyingParty.php:93
+msgid "Logo"
+msgstr "Logo"
+
+#: Model/ExternalIdp.php:48
+msgid "External Identity Provider"
+msgid_plural "External Identity Providers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ExIdp/OIdConfig.php:42
+msgid "External Identity Provider Config"
+msgid_plural "External Identity Provider Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/ExIdp/OIdConfig.php:47
+msgid "Provider URL"
+msgstr ""
+
+#: Model/ExIdp/OIdConfig.php:55
+msgid "Issuer"
+msgstr ""
+
+#: Model/ExIdp/OIdConfig.php:63
+msgid "Client ID"
+msgstr ""
+
+#: Model/ExIdp/OIdConfig.php:71
+msgid "Client Secret"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:52
+msgid "SAML2 Relying Party Config"
+msgid_plural "SAML2 Relying Party Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Model/Saml2RPConfig.php:70
+msgid "Entity ID"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:78
+msgid "Metadata URL"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:81
+msgid "Assertion Consumer Service Binding"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:91
+msgid "Assertion Consumer Service Location"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:99
+msgid "Logout Service Binding"
+msgstr ""
+
+#: Model/Saml2RPConfig.php:114
+msgid "Logout Service Location"
+msgstr ""

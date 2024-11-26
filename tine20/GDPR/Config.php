@@ -108,7 +108,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
         ],
         self::LANGUAGES_AVAILABLE => [
             self::LABEL                 => 'Languages Available', //_('Languages Available')
-            self::DESCRIPTION           => 'List of languages available in the sales modules.', //_('List of languages available in the sales modules.')
+            self::DESCRIPTION           => 'List of the language in which the multilingual texts are laid out.', //_('List of the language in which the multilingual texts are laid out.')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             'localeTranslationList'     => 'Language',
             self::CLIENTREGISTRYINCLUDE => true,

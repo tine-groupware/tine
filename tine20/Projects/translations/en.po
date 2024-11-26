@@ -14,13 +14,68 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:89
+#: Preference.php:24
+msgid "All my projects"
+msgstr "All my projects"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Default Favorite"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "The default favorite which is loaded on Projects startup"
+
+#: js/ProjectEditDialog.js:93 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Attendee"
 
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Attendee Role"
+#: js/ProjectEditDialog.js:94 js/AddToProjectPanel.js:87
+msgid "Role"
+msgstr "Role"
+
+#: js/ProjectEditDialog.js:121 js/ProjectEditDialog.js:134 Config.php:117
+#: Model/Project.php:49
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Project"
+msgstr[1] "Projects"
+
+#: js/ProjectEditDialog.js:146
+msgid "Title"
+msgstr "Title"
+
+#: js/ProjectEditDialog.js:151 Model/Project.php:115
+msgid "Number"
+msgstr "Number"
+
+#: js/ProjectEditDialog.js:157 Model/Project.php:143
+msgid "Status"
+msgstr "Status"
+
+#: js/ProjectEditDialog.js:163 Model/Project.php:153
+msgid "Start"
+msgstr "Start"
+
+#: js/ProjectEditDialog.js:169 Model/Project.php:161
+msgid "End"
+msgstr "End"
+
+#: js/ProjectEditDialog.js:177 Model/Project.php:168
+msgid "Scope"
+msgstr "Scope"
+
+#: js/ProjectEditDialog.js:184 Model/Project.php:178
+msgid "Type"
+msgstr "Type"
+
+#: js/ProjectEditDialog.js:245 Model/Project.php:135
+msgid "Description"
+msgstr "Description"
+
+#: js/ProjectEditDialog.js:259
+msgid "Enter description"
+msgstr "Enter description"
 
 #: js/AddToProjectPanel.js:40
 msgid "Please choose the Project to add the contacts to"
@@ -34,10 +89,6 @@ msgstr "Please select the attenders' role"
 msgid "Select Project"
 msgstr "Select Project"
 
-#: js/AddToProjectPanel.js:87 js/ProjectEditDialog.js:90
-msgid "Role"
-msgstr "Role"
-
 #: js/AddToProjectPanel.js:88
 msgid "Select Role"
 msgstr "Select Role"
@@ -47,60 +98,33 @@ msgstr "Select Role"
 msgid "Adding {0} Participants to project"
 msgstr "Adding {0} Participants to project"
 
-#: js/ProjectEditDialog.js:115 js/ProjectEditDialog.js:128 Config.php:117
-#: Model/Project.php:47
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Project"
-msgstr[1] "Projects"
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Attendee Role"
 
-#: js/ProjectEditDialog.js:140
-msgid "Title"
-msgstr "Title"
+#: Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projects"
 
-#: js/ProjectEditDialog.js:145 Model/Project.php:90
-msgid "Number"
-msgstr "Number"
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr "All my open projects"
 
-#: js/ProjectEditDialog.js:151 Model/Project.php:118
-msgid "Status"
-msgstr "Status"
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "My projects that I'm responsible for"
 
-#: js/ProjectEditDialog.js:157 Model/Project.php:128
-msgid "Start"
-msgstr "Start"
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "All my open projects that I am responsible for"
 
-#: js/ProjectEditDialog.js:163 Model/Project.php:136
-msgid "End"
-msgstr "End"
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "My waiting projects"
 
-#: js/ProjectEditDialog.js:171 Model/Project.php:143
-msgid "Scope"
-msgstr "Scope"
-
-#: js/ProjectEditDialog.js:178 Model/Project.php:153
-msgid "Type"
-msgstr "Type"
-
-#: js/ProjectEditDialog.js:216 Model/Project.php:110
-msgid "Description"
-msgstr "Description"
-
-#: js/ProjectEditDialog.js:230
-msgid "Enter description"
-msgstr "Enter description"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "All my projects"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Default Favorite"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "The default favorite which is loaded on Projects startup"
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "My projects that are on hold"
 
 #: Config.php:58
 msgid "Available Project Attendee Role"
@@ -170,44 +194,27 @@ msgstr "Activity"
 msgid "Contract"
 msgstr "Contract"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s's personal Projects"
+#: Model/Project.php:54
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Project list"
+msgstr[1] "Project lists"
 
-#: Model/Project.php:52
-msgid "Projects list"
-msgid_plural "Projects lists"
-msgstr[0] "Projects list"
-msgstr[1] "Projects lists"
-
-#: Model/Project.php:100
+#: Model/Project.php:125
 msgid "Name"
 msgstr "Name"
 
-#: Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projects"
+#: Model/Project.php:188
+msgid "Tasks"
+msgstr "Tasks"
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "All my open projects"
+#: Export/definitions/projects_xls_current_columns.xml:5
+msgid "Excel current columns"
+msgstr "Excel current columns"
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "My projects that I'm responsible for"
-
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "All my open projects that I am responsible for"
-
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "My waiting projects"
-
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "My projects that are on hold"
+#: Export/definitions/projects_xls.xml:5
+msgid "Excel all data"
+msgstr "Excel all data"
 
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"

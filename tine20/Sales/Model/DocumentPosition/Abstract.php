@@ -238,7 +238,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [
                 // needs to be set by concrete model
-                self::LABEL                         => 'Document', // _('Document)
+                self::LABEL                         => 'Document', // _('Document')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,

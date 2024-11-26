@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2018-11-28 12:25+0000\n"
+"PO-Revision-Date: 2024-11-25 13:11+0100\n"
 "Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -17,70 +17,105 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.5\n"
 
-msgid "This Task is part of:"
-msgstr "Die Aufgabe ist teil von:"
+#: Controller.php:105
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%ss persönliche Aufgaben"
 
-#: js/TaskEditDialog.js:89
-msgid "Add New Task"
-msgstr "Neue Aufgabe hinzufügen"
+#: Preference.php:24
+msgid "All my tasks"
+msgstr "Alle meine Aufgaben"
 
-#: js/TaskEditDialog.js:140
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
+#: Preference.php:81
+msgid "Default Favorite"
+msgstr "Standard Favorit"
 
-#: js/TaskEditDialog.js:184 js/TaskGridPanel.js:100 js/Models.js:114
-msgid "Summary"
-msgstr "Zusammenfassung"
+#: Preference.php:82
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
 
-#: js/TaskEditDialog.js:191
-msgid "Due date"
-msgstr "Fälligkeitsdatum"
+#: Preference.php:85
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
 
-#: js/TaskEditDialog.js:195 js/TaskGridPanel.js:127 Model/Task.php:311
-msgid "Priority"
-msgstr "Priorität"
+#: Preference.php:86
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 
-#: js/TaskEditDialog.js:202 Model/Task.php:116 Model/Task.php:309
-msgid "Organizer / Responsible"
-msgstr "Organisator / Verantwortlich"
+#: Preference.php:89
+msgid "Enable Standard Alarm"
+msgstr "Standardalarm"
 
-#: js/TaskEditDialog.js:203
-msgid "Add Responsible ..."
-msgstr "Verantwortlichen hinzufügen ..."
+#: Preference.php:90
+msgid "New task get a standard alarm as defined below"
+msgstr "Neue Aufgaben bekommen einen Standardalarm wie unten definiert"
 
-#: js/TaskEditDialog.js:210
-msgid "Notes"
-msgstr "Anmerkungen"
+#: Preference.php:93
+msgid "Standard Alarm Time"
+msgstr "Standardalarmzeit"
 
-#: js/TaskEditDialog.js:211
-msgid "Enter description..."
-msgstr "Beschreibung eingeben..."
+#: Preference.php:94
+msgid "Minutes before the task ends"
+msgstr "Minuten bevor die Aufgabe endet"
 
-#: js/TaskEditDialog.js:217
-msgid "Percentage"
-msgstr "Prozent"
+#: Preference.php:97
+msgid "Task Title Template"
+msgstr "Aufgaben Titel Template"
 
-#: js/TaskEditDialog.js:224 js/TaskGridPanel.js:155 js/Models.js:117
-#: js/Models.js:175 Model/Task.php:312
+#: Preference.php:98
+msgid "How to build task titles."
+msgstr "Wie Aufgabentitel angezeigt werden."
+
+#: js/TasksDueFilter.js:27
+msgid "Filter: To be done for"
+msgstr "Filter: Zu erledigen für"
+
+#: js/TasksDueFilter.js:28
+msgid "Show all tasks matching all the following criteria:"
+msgstr "Zeigt alle Aufgaben die den folgenden Kriterien entsprechen:"
+
+#: js/TasksDueFilter.js:30
+msgid "Tasks has an open status."
+msgstr "Die Aufgabe ist in einem offenen Status."
+
+#: js/TasksDueFilter.js:31
+msgid "Filtered person is either:"
+msgstr "Die gefilterte Person ist entweder:"
+
+#: js/TasksDueFilter.js:33
+msgid "Organizer and no coworker with open status is assigned."
+msgstr "Organisator und es sind keine Mitarbeitende mit offenen Status zugewiesen."
+
+#: js/TasksDueFilter.js:34
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr "Organisator und das Fälligkeitsdatum ist verstrichen, unabhängig der zugewiesenen Mitarbeitenden."
+
+#: js/TasksDueFilter.js:35
+msgid "Coworker with an open status assigned."
+msgstr "Mitarbeitend mit einem offenen Status."
+
+#: js/TasksDueFilter.js:39
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr "Bitte beachten: Aufgaben werden nicht angezeigt wenn die gefilterte Person zwar Organisator ist, aber das Fälligkeitsdatum noch nicht verstrichen ist so lange es Mitarbeitende mit offenen Status gibt."
+
+#: js/Models.js:75 js/TaskGridPanel.js:154 js/DependentTasksPanel.js:116
+#: js/TaskEditDialog.js:244 Model/Attendee.php:118 Model/Task.php:173
+#: Model/Task.php:398
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Status"
 msgstr[1] "Status"
 
-#: js/TaskEditDialog.js:233 js/TaskGridPanel.js:174 Config.php:49
-#: Model/Task.php:82
-msgid "Completed"
-msgstr "Abgeschlossen"
+#: js/Tasks.js:42
+msgid "New Task"
+msgstr "Neue Aufgabe"
 
-msgid "Tasks Template Container"
-msgstr "Vorlagen Ordner für Aufgaben"
-
-msgid "Container for task templates"
-msgstr "Ordner für Aufgaben Vorlagen"
+#: js/CreateFromTemplateAction.js:53 js/CreateFromTemplateAction.js:73
+msgid "Create from Template"
+msgstr "Von Vorlage erstellen"
 
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
@@ -88,277 +123,130 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/TaskGridPanel.js:83
-msgid "Attachments"
-msgstr ""
-
 #: js/TaskGridPanel.js:84
 msgid "Tags"
 msgstr "Tags"
 
-#: js/TaskGridPanel.js:90
-msgid "Lead name"
-msgstr "Leadname"
+#: js/TaskGridPanel.js:91 js/DependentTasksPanel.js:34 js/TaskEditDialog.js:197
+#: Model/Task.php:139
+msgid "Summary"
+msgstr "Zusammenfassung"
 
-#: js/TaskGridPanel.js:108
+#: js/TaskGridPanel.js:97 js/DependentTasksPanel.js:39
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/TaskGridPanel.js:113 js/Models.js:115
+#: js/TaskGridPanel.js:104 js/DependentTasksPanel.js:66
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/TaskGridPanel.js:142 Model/Task.php:76 Model/Task.php:313
-msgid "Percent"
-msgstr "Prozent"
+#: js/TaskGridPanel.js:116 js/DependentTasksPanel.js:80
+#: js/TaskEditDialog.js:213 Model/Task.php:159 Model/Task.php:397
+msgid "Priority"
+msgstr "Priorität"
 
-#: js/TaskGridPanel.js:181 js/Models.js:125
-msgid "Responsible"
-msgstr "Verantwortlich"
-
-#: js/Models.js:66 Model/Task.php:38
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Aufgabe"
-msgstr[1] "Aufgaben"
-
-#: js/Models.js:66
-msgid "Tasks"
-msgstr "Aufgaben"
-
-#: js/Models.js:70
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "Aufgabenliste"
-msgstr[1] "Aufgabenlisten"
-
-#: js/Models.js:70
-msgid "to do lists"
-msgstr "Aufgabenlisten"
-
-#: js/Models.js:112
-msgid "Quick Search"
-msgstr "Schnellsuche"
-
-#: js/Models.js:127
-msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
-
-#: js/Models.js:128
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-#: js/Models.js:129
-msgid "Creation Time"
-msgstr "Angelegt am"
-
-#: js/Models.js:130
-msgid "Created By"
-msgstr "Angelegt von"
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "Neue Aufgabe"
-
-#: Preference.php:24
-msgid "All my tasks"
-msgstr "Alle meine Aufgaben"
-
-#: Preference.php:78
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-#: Preference.php:79
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
-
-#: Preference.php:82
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:83
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
-
-#: Preference.php:86
-msgid "Enable Standard Alarm"
-msgstr "Standardalarm"
-
-#: Preference.php:87
-msgid "New task get a standard alarm as defined below"
-msgstr "Neue Aufgaben bekommen einen Standardalarm wie unten definiert"
-
-#: Preference.php:90
-msgid "Standard Alarm Time"
-msgstr "Standardalarmzeit"
-
-#: Preference.php:91
-msgid "Minutes before the task ends"
-msgstr "Minuten bevor die Aufgabe endet"
-
-#: Config.php:38
-msgid "Tasks status available"
-msgstr "Verfügbare Taskstatus"
-
-#: Config.php:40
-msgid ""
-"Possible tasks status. Please note that additional attendee status might "
-"impact other Tasks systems on export or syncronisation."
-msgstr ""
-"Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim "
-"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
-"werden könnten."
-
-#: Config.php:48
-msgid "No response"
-msgstr "Keine Antwort"
-
-msgid "Accepted"
-msgstr "Akzeptiert"
-
-msgid "Declined"
-msgstr "Abgelehnt"
-
-msgid "Tentative"
-msgstr "Vorläufig"
-
-msgid "Delegated"
-msgstr "Delegiert"
-
-#: Config.php:50
-msgid "Cancelled"
-msgstr "Abgebrochen"
-
-#: Config.php:51
-msgid "In process"
-msgstr "Laufend"
-
-#: Config.php:57
-msgid "Task priorities available"
-msgstr "Verfügbare Aufgabenprioritäten"
-
-#: Config.php:59
-msgid ""
-"Possible task priorities. Please note that additional priorities might "
-"impact other Tasks systems on export or syncronisation."
-msgstr ""
-"Verfügbare Aufgabenprioritäten. Please note that additional attendee status "
-"might impact other Tasks systems on export or syncronisation."
-
-#: Config.php:66
-msgid "low"
-msgstr "niedrig"
-
-#: Config.php:67
-msgid "normal"
-msgstr "normal"
-
-#: Config.php:68
-msgid "high"
-msgstr "hoch"
-
-#: Config.php:69
-msgid "urgent"
-msgstr "dringend"
-
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%ss persönliche Aufgaben"
-
-#: Model/Task.php:37
-msgid "GENDER_Task"
-msgstr "female"
-
-#: Model/Task.php:87 Model/Task.php:308
-msgid "Due"
-msgstr "Fälligkeit"
-
-#: Model/Task.php:92
-msgid "Class"
-msgstr ""
-
-#: Model/Task.php:100 Model/Task.php:310
-msgid "Description"
-msgstr "Beschreibung"
-
-#: Model/Task.php:106
-msgid "Geo"
-msgstr ""
-
-#: Model/Task.php:111
-msgid "Location"
-msgstr ""
-
-#: Model/Task.php:320
-msgid "Lead"
-msgstr "Lead"
-
-#: Model/Task.php:326
-msgid "Telephone"
-msgstr "Telefon"
-
-#: Model/Task.php:327
-msgid "Email"
-msgstr "Email"
-
-msgid "Create from Template"
-msgstr "Von Vorlage erstellen"
-
+#: js/TaskGridPanel.js:129 js/DependentTasksPanel.js:96 Model/Task.php:271
 msgid "Depends on"
 msgstr "Hängt ab von"
 
-msgid "Dependent Tasks"
-msgstr "Abhängige Aufgaben"
+#: js/TaskGridPanel.js:143 js/DependentTasksPanel.js:102 Model/Task.php:166
+#: Model/Task.php:399
+msgid "Percent"
+msgstr "Prozent"
 
-msgid "Task Dependency"
-msgid_plural "Task Dependencies"
-msgstr[0] "Abhängigkeit"
-msgstr[1] "Abhängigkeiten"
+#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:253 Config.php:68
+#: Config.php:112 Model/Task.php:204
+msgid "Completed"
+msgstr "Abgeschlossen"
 
-msgid "Collaborator"
-msgid_plural "Collaborators"
-msgstr[0] "Teammitglied"
-msgstr[1] "Teammitglieder"
+#: js/TaskGridPanel.js:176 js/TaskEditDialog.js:221 Model/Task.php:180
+msgid "Organizer / Responsible"
+msgstr "Organisator / Verantwortlich"
 
-msgid "Collaborators"
-msgstr "Mitarbeitende"
+#: js/DependentTasksPanel.js:133
+msgid "Responsible"
+msgstr "Verantwortlich"
 
-msgid "GENDER_Collaborator"
-msgstr "female"
-
-msgid "GENDER_Task Dependency"
-msgstr "female"
-
-#: Controller/Task.php:211
-msgid "Notification for Task %1$s"
-msgstr "Benachrichtigung für Aufgabe %1$s"
-
-#: Setup/Initialize.php:38
-msgid "All tasks of my taskslists"
-msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
-
-#: Setup/Initialize.php:47
+#: js/DependentTasksPanel.js:159
 msgid "My open tasks"
 msgstr "Offene Aufgaben für mich"
 
-#: Setup/Initialize.php:56
-msgid "To be done for me this week"
-msgstr "Diese Woche zu erledigen für mich"
+#: js/DependencyPanel.js:17
+msgid "Use show all button bellow to search for all tasks"
+msgstr "Den „Alle anzeigen“ Knopf benutzen um in allen Aufgaben zu suchen"
 
-#: Setup/Initialize.php:65
+#: js/DependencyPanel.js:35
+msgid "Show all"
+msgstr "Alle anzeigen"
+
+#: js/DependencyPanel.js:77
+msgid "Invalid selection"
+msgstr "Ungültige Auswahl"
+
+#: js/DependencyPanel.js:77
+msgid "A task cannot depend on itself"
+msgstr "Eine Aufgabe kann nicht von sich selbst abhängen"
+
+#: js/TaskEditDialog.js:87
+msgid "Add New Task"
+msgstr "Neue Aufgabe hinzufügen"
+
+#: js/TaskEditDialog.js:92
+msgid "This Task is part of:"
+msgstr "Die Aufgabe ist teil von:"
+
+#: js/TaskEditDialog.js:144
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
+
+#: js/TaskEditDialog.js:204
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+#: js/TaskEditDialog.js:222
+msgid "Add Responsible ..."
+msgstr "Verantwortlichen hinzufügen ..."
+
+#: js/TaskEditDialog.js:230
+msgid "Notes"
+msgstr "Anmerkungen"
+
+#: js/TaskEditDialog.js:231
+msgid "Enter description..."
+msgstr "Beschreibung eingeben..."
+
+#: js/TaskEditDialog.js:237
+msgid "Percentage"
+msgstr "Prozent"
+
+#: js/TaskEditDialog.js:296
+msgid "Attention: This due date is in the past!"
+msgstr "Achtung: Das Fälligkeitsdatum liegt in der Vergangenheit!"
+
+#: Setup/Update/17.php:76 Setup/Initialize.php:48
 msgid "My responsibility"
 msgstr "Meine Verantwortung"
 
-#: Setup/Initialize.php:66
+#: Setup/Update/17.php:77 Setup/Update/17.php:85 Setup/Initialize.php:49
+#: Setup/Initialize.php:57
 msgid "All tasks that I am responsible for"
 msgstr "Alle Aufgaben, für die ich verantwortlich bin"
 
-msgid "To be done for me"
-msgstr "Zu erledigen für mich"
+#: Setup/Update/17.php:84 Setup/Initialize.php:56
+msgid "All tasks for me"
+msgstr "Alle Aufgaben für mich"
 
-msgid "All tasks to be done for me"
-msgstr "Alle aufgaben die ich zu erledigen habe"
+#: Setup/Update/17.php:93 Setup/Initialize.php:65
+msgid "To be done for me this week"
+msgstr "Diese Woche zu erledigen für mich"
+
+#: Setup/setup.xml:3
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: Setup/Initialize.php:40
+msgid "All tasks of my taskslists"
+msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
 #: Setup/Initialize.php:73
 msgid "Last modified by me"
@@ -371,6 +259,180 @@ msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
 #: Setup/Initialize.php:83
 msgid "Tasks without responsible"
 msgstr "Aufgaben ohne Verantwortlichen"
+
+#: Config.php:55
+msgid "Tasks status available"
+msgstr "Verfügbare Taskstatus"
+
+#: Config.php:57
+msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation."
+msgstr "Mögliche Aufgaben Status. Bitte beachten sie, dass zusätzliche Aufgaben Status andere System bei Export und Synchronisation betreffen."
+
+#: Config.php:66 Config.php:106
+msgid "No response"
+msgstr "Keine Antwort"
+
+#: Config.php:70
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: Config.php:72 Config.php:111
+msgid "In process"
+msgstr "Laufend"
+
+#: Config.php:78
+msgid "Task priorities available"
+msgstr "Verfügbare Aufgabenprioritäten"
+
+#: Config.php:80
+msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
+msgstr "Verfügbare Aufgabenprioritäten. Bitte beachten sie, dass zusätzliche Mitarbeiter*innen Status andere System bei Export und Synchronisation betreffen."
+
+#: Config.php:87
+msgid "low"
+msgstr "niedrig"
+
+#: Config.php:88
+msgid "normal"
+msgstr "normal"
+
+#: Config.php:89
+msgid "high"
+msgstr "hoch"
+
+#: Config.php:90
+msgid "urgent"
+msgstr "dringend"
+
+#: Config.php:96
+msgid "Collaborator Status Available"
+msgstr "Verfügbare Mitarbeiter*innen Status"
+
+#: Config.php:98
+msgid "Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation."
+msgstr "Verfügbare Mitarbeiter*innen Status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+
+#: Config.php:107
+msgid "Accepted"
+msgstr "Akzeptiert"
+
+#: Config.php:108
+msgid "Declined"
+msgstr "Abgelehnt"
+
+#: Config.php:109
+msgid "Tentative"
+msgstr "Vorläufig"
+
+#: Config.php:110
+msgid "Delegated"
+msgstr "Delegiert"
+
+#: Config.php:118
+msgid "Tasks Template Container"
+msgstr "Vorlagen Ordner für Aufgaben"
+
+#: Config.php:119
+msgid "Container for task templates"
+msgstr "Ordner für Aufgaben Vorlagen"
+
+#: Controller/Task.php:280
+msgid "Notification for Task %1$s"
+msgstr "Benachrichtigung für Aufgabe %1$s"
+
+#: Model/TaskDependency.php:39
+msgid "GENDER_Task Dependency"
+msgstr "female"
+
+#: Model/TaskDependency.php:40
+msgid "Task Dependency"
+msgid_plural "Task Dependencies"
+msgstr[0] "Abhängigkeit"
+msgstr[1] "Abhängigkeiten"
+
+#: Model/TaskDependency.php:83 Model/Attendee.php:106 Model/Task.php:54
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Aufgabe"
+msgstr[1] "Aufgaben"
+
+#: Model/TaskDependency.php:100
+msgid "Depends on Task"
+msgstr "Abhängig von Aufgabe"
+
+#: Model/Attendee.php:56
+msgid "GENDER_Collaborator"
+msgstr "female"
+
+#: Model/Attendee.php:57 Model/Attendee.php:95
+msgid "Collaborator"
+msgid_plural "Collaborators"
+msgstr[0] "Mitarbeiter*in"
+msgstr[1] "Mitarbeiter*innen"
+
+#: Model/Task.php:53
+msgid "GENDER_Task"
+msgstr "female"
+
+#: Model/Task.php:130
+msgid "To be done for"
+msgstr "Zu erledigen für"
+
+#: Model/Task.php:146 Model/Task.php:396
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Model/Task.php:153 Model/Task.php:394
+msgid "Due"
+msgstr "Fälligkeit"
+
+#: Model/Task.php:195
+msgid "Class"
+msgstr "Klassifizierung"
+
+#: Model/Task.php:211
+msgid "Geo"
+msgstr ""
+
+#: Model/Task.php:218
+msgid "Location"
+msgstr "Ort"
+
+#: Model/Task.php:250
+msgid "Source"
+msgstr "Quelle"
+
+#: Model/Task.php:284
+msgid "Dependent Tasks"
+msgstr "Abhängige Aufgaben"
+
+#: Model/Task.php:297
+msgid "Collaborators"
+msgstr "Mitarbeitende"
+
+#: Model/Task.php:307
+msgid "Estimated Duration"
+msgstr "Geschätzte Dauer"
+
+#: Model/Task.php:395
+msgid "Organizer"
+msgstr "Organisator*in"
+
+#: Model/Task.php:419
+msgid "Lead"
+msgstr "Lead"
+
+#: Model/Task.php:425
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Model/Task.php:427
+msgid "Email"
+msgstr "Email"
+
+#: Export/definitions/tasks_xls.xml:5
+msgid "Excel all data"
+msgstr "Excel Alle Daten"
 
 #: Acl/Rights.php:97
 msgid "manage shared task lists"
@@ -388,50 +450,46 @@ msgstr "Gemeinsame Aufgaben-Favoriten verwalten"
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben-Favoriten erstellen oder bearbeiten"
 
-msgid "Create New Task"
-msgstr "Als neue Aufgabe hinzufügen"
+#~ msgid "Lead name"
+#~ msgstr "Leadname"
 
-msgid "Creating new Task..."
-msgstr "Erstelle neue Aufgabe..."
+#~ msgid "to do list"
+#~ msgid_plural "to do lists"
+#~ msgstr[0] "Aufgabenliste"
+#~ msgstr[1] "Aufgabenlisten"
 
-msgid "Attention: This due date is in the past!"
-msgstr "Achtung: Das Fälligkeitsdatum liegt in der Vergangenheit!"
+#~ msgid "to do lists"
+#~ msgstr "Aufgabenlisten"
 
-msgid "To be done for"
-msgstr "Zu erledigen für"
+#~ msgid "Quick Search"
+#~ msgstr "Schnellsuche"
 
-msgid "Filter: To be done for"
-msgstr "Filter: Zu erledigen für"
+#~ msgid "Last Modified Time"
+#~ msgstr "Zuletzt geändert"
 
-msgid "Show all tasks matching all the following criteria:"
-msgstr "Zeigt alle Aufgaben die den folgenden Kriterien entsprechen:"
+#~ msgid "Last Modified By"
+#~ msgstr "Zuletzt geändert von"
 
-msgid "Tasks has an open status."
-msgstr "Die Aufgabe ist in einem offenen Status"
+#~ msgid "Creation Time"
+#~ msgstr "Angelegt am"
 
-msgid "Filtered person is either:"
-msgstr "Die gefilterte Person ist entweder:"
+#~ msgid "Created By"
+#~ msgstr "Angelegt von"
 
-msgid "Organizer and no coworker with open status is assigned."
-msgstr "Organisator und es sind keine Mitarbeitende mit offenen Status zugewiesen."
+#~ msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+#~ msgstr "Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr "Organisator und das Fälligkeitsdatum ist verstrichen, unabhängig der zugewiesenen Mitarbeitenden."
+#~ msgid "To be done for me"
+#~ msgstr "Zu erledigen für mich"
 
-msgid "Coworker with an open status assigned."
-msgstr "Mitarbeitend mit einem offenen Status"
+#~ msgid "All tasks to be done for me"
+#~ msgstr "Alle aufgaben die ich zu erledigen habe"
 
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr "Bitte beachten: Aufgaben werden nicht angezeigt wenn die gefilterte Person zwar Organisator ist, aber das Fälligkeitsdatum noch nicht verstrichen ist so lange es Mitarbeitende mit offenen Status gibt."
+#~ msgid "Create New Task"
+#~ msgstr "Als neue Aufgabe hinzufügen"
 
-msgid "Estimated Duration"
-msgstr "Geschätzte Dauer"
+#~ msgid "Creating new Task..."
+#~ msgstr "Erstelle neue Aufgabe..."
 
-msgid "Task Title Template"
-msgstr "Aufgaben Titel Template"
-
-msgid "How to build task titles."
-msgstr "Wie Aufgabentitel angezeigt werden."
-
-msgid "(source): Summary"
-msgstr "(Quelle): Zusammenfassung"
+#~ msgid "(source): Summary"
+#~ msgstr "(Quelle): Zusammenfassung"

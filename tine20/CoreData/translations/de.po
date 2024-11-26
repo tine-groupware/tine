@@ -14,6 +14,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/CoreData.js:88
+msgid "Please select core data from tree ..."
+msgstr "Bitte wählen Sie Stammdaten aus der Baumansicht ..."
+
 #: js/TreePanel.js:47
 msgid "Core Data"
 msgstr "Stammdaten"
@@ -25,10 +29,6 @@ msgstr "Allgemeine Daten"
 #: js/TreePanel.js:60
 msgid "Application Data"
 msgstr "Applikationsdaten"
-
-#: js/CoreData.js:87
-msgid "Please select core data from tree ..."
-msgstr "Bitte wählen Sie Stammdaten aus der Baumansicht ..."
 
 #: Setup/setup.xml:4
 msgid "CoreData"

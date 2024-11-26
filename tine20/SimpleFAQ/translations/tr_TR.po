@@ -18,136 +18,25 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "FAQ Bilgileri"
+#: Controller.php:149
+msgid "Draft"
+msgstr "Taslak"
 
-#: js/FaqGridDetailsPanel.js:151 js/FaqGridPanel.js:98 js/FaqEditDialog.js:99
-msgid "Question"
-msgstr "Soru"
+#: Controller.php:150
+msgid "released"
+msgstr "Yayınlanmış"
 
-#: js/FaqGridDetailsPanel.js:157 js/FaqGridPanel.js:105 js/SimpleFAQ.js:46
-#: js/FaqEditDialog.js:106
-msgid "Answer"
-msgstr "Cevap"
+#: Controller.php:151
+msgid "obsolete"
+msgstr "Eskimiş"
 
-#: js/FaqGridDetailsPanel.js:163 js/FaqGridPanel.js:79
-msgid "Tags"
-msgstr ""
+#: Controller.php:154
+msgid "Internal"
+msgstr "Sistem İçi"
 
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Oluşturum Vakti"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Oluşturan"
-
-#: js/FaqGridDetailsPanel.js:199 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] ""
-"one: FAQ Durumu\n"
-"\n"
-"other: FAQ Durumu"
-msgstr[1] ""
-"one: FAQ Durumu\n"
-"\n"
-"other: FAQ Durumu"
-
-#: js/FaqGridDetailsPanel.js:204 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] ""
-"one: FAQ Tipi\n"
-"\n"
-"other: FAQ Tipleri"
-msgstr[1] ""
-"one: FAQ Tipi\n"
-"\n"
-"other: FAQ Tipleri"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Şu An Cevap Yok"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Standartlar"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Yeni FAQ Tipi Ekle"
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr "FAQ ID"
-
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
-msgid "Status"
-msgstr "Durum"
-
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
-msgid "Type"
-msgstr "Tip"
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr ""
-
-#: js/Model.js:35 js/SimpleFAQ.js:19
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] ""
-"one: FAQ\n"
-"\n"
-"other: FAQs"
-msgstr[1] ""
-"one: FAQ\n"
-"\n"
-"other: FAQs"
-
-#: js/Model.js:39
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] ""
-"one: FAQ Listesi\n"
-"\n"
-"other: FAQ Listeleri"
-msgstr[1] ""
-"one: FAQ Listesi\n"
-"\n"
-"other: FAQ Listeleri"
-
-#: js/Model.js:39
-msgid "FAQ Lists"
-msgstr "FAQ Listeleri"
-
-#: js/Model.js:74
-msgid "Quick Search"
-msgstr ""
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Yeni FAQ Durumu Ekle"
-
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr ""
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr ""
-
-#: js/FaqEditDialog.js:100
-msgid "Enter a question..."
-msgstr "Soru Gir"
-
-#: js/FaqEditDialog.js:107
-msgid "Enter a answer..."
-msgstr "Cevap Gir"
+#: Controller.php:155
+msgid "Public"
+msgstr "Açık"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -169,30 +58,136 @@ msgstr "Standart FAQ Listesi"
 msgid "The default FAQ list to create new FAQ in."
 msgstr ""
 
-#: Controller.php:119
-#, python-format
-msgid "%s's personal FAQs"
+#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] ""
+"one: FAQ Tipi\n"
+"\n"
+"other: FAQ Tipleri"
+msgstr[1] ""
+"one: FAQ Tipi\n"
+"\n"
+"other: FAQ Tipleri"
+
+#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] ""
+"one: FAQ Durumu\n"
+"\n"
+"other: FAQ Durumu"
+msgstr[1] ""
+"one: FAQ Durumu\n"
+"\n"
+"other: FAQ Durumu"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Yeni FAQ Durumu Ekle"
+
+#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Soru"
+
+#: js/FaqEditDialog.js:66
+msgid "Enter a question..."
+msgstr "Soru Gir"
+
+#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Cevap"
+
+#: js/FaqEditDialog.js:73
+msgid "Enter a answer..."
+msgstr "Cevap Gir"
+
+#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
+msgid "Type"
+msgstr "Tip"
+
+#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
+msgid "Status"
+msgstr "Durum"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Standartlar"
+
+#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] ""
+"one: FAQ\n"
+"\n"
+"other: FAQs"
+msgstr[1] ""
+"one: FAQ\n"
+"\n"
+"other: FAQs"
+
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
 msgstr ""
 
-#: Controller.php:159
-msgid "Draft"
-msgstr "Taslak"
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr ""
 
-#: Controller.php:160
-msgid "released"
-msgstr "Yayınlanmış"
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "FAQ ID"
 
-#: Controller.php:161
-msgid "obsolete"
-msgstr "Eskimiş"
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr ""
 
-#: Controller.php:164
-msgid "Internal"
-msgstr "Sistem İçi"
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Yeni FAQ Tipi Ekle"
 
-#: Controller.php:165
-msgid "Public"
-msgstr "Açık"
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "FAQ Bilgileri"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Oluşturum Vakti"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Oluşturan"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Şu An Cevap Yok"
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr ""
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] ""
+"one: FAQ Listesi\n"
+"\n"
+"other: FAQ Listeleri"
+msgstr[1] ""
+"one: FAQ Listesi\n"
+"\n"
+"other: FAQ Listeleri"
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr "FAQ Listeleri"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr ""
 
 #: Setup/Initialize.php:33
 msgid "All FAQs of my FAQ Lists"

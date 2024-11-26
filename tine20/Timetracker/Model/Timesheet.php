@@ -203,7 +203,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             ),
             self::FLD_CLEARED_AMOUNT => [
                 self::TYPE              => self::TYPE_MONEY,
-                self::LABEL             => 'Cleared amount', // _('Cleared amount)
+                self::LABEL             => 'Cleared amount', // _('Cleared amount')
                 self::NULLABLE          => true,
             ],
             // TODO combine those three fields like this?

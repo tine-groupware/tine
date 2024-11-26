@@ -17,13 +17,68 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:89
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Minden projektem"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Alapértelmezett kedvenc, amely a Projekt indulásakor betöltődik"
+
+#: js/ProjectEditDialog.js:93 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Résztvevő"
 
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Résztvevő szerep"
+#: js/ProjectEditDialog.js:94 js/AddToProjectPanel.js:87
+msgid "Role"
+msgstr "Szerep"
+
+#: js/ProjectEditDialog.js:121 js/ProjectEditDialog.js:134 Config.php:117
+#: Model/Project.php:49
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projektek"
+
+#: js/ProjectEditDialog.js:146
+msgid "Title"
+msgstr "Cím"
+
+#: js/ProjectEditDialog.js:151 Model/Project.php:115
+msgid "Number"
+msgstr "Szám"
+
+#: js/ProjectEditDialog.js:157 Model/Project.php:143
+msgid "Status"
+msgstr "Státusz"
+
+#: js/ProjectEditDialog.js:163 Model/Project.php:153
+msgid "Start"
+msgstr ""
+
+#: js/ProjectEditDialog.js:169 Model/Project.php:161
+msgid "End"
+msgstr ""
+
+#: js/ProjectEditDialog.js:177 Model/Project.php:168
+msgid "Scope"
+msgstr ""
+
+#: js/ProjectEditDialog.js:184 Model/Project.php:178
+msgid "Type"
+msgstr ""
+
+#: js/ProjectEditDialog.js:245 Model/Project.php:135
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ProjectEditDialog.js:259
+msgid "Enter description"
+msgstr "Leírás megadása"
 
 #: js/AddToProjectPanel.js:40
 msgid "Please choose the Project to add the contacts to"
@@ -37,10 +92,6 @@ msgstr "Kérlek válaszd ki a résztvevők szerepét"
 msgid "Select Project"
 msgstr "Projekt kiválasztás"
 
-#: js/AddToProjectPanel.js:87 js/ProjectEditDialog.js:90
-msgid "Role"
-msgstr "Szerep"
-
 #: js/AddToProjectPanel.js:88
 msgid "Select Role"
 msgstr "Szerep kiválasztás"
@@ -50,60 +101,33 @@ msgstr "Szerep kiválasztás"
 msgid "Adding {0} Participants to project"
 msgstr "{0} résztvevő hozzáadása a projekthez"
 
-#: js/ProjectEditDialog.js:115 js/ProjectEditDialog.js:128 Config.php:117
-#: Model/Project.php:47
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projektek"
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Résztvevő szerep"
 
-#: js/ProjectEditDialog.js:140
-msgid "Title"
-msgstr "Cím"
+#: Setup/setup.xml:4
+msgid "Projects"
+msgstr "Projektek"
 
-#: js/ProjectEditDialog.js:145 Model/Project.php:90
-msgid "Number"
-msgstr "Szám"
+#: Setup/Initialize.php:36
+msgid "All my open projects"
+msgstr "Minden nyitott projektjeim"
 
-#: js/ProjectEditDialog.js:151 Model/Project.php:118
-msgid "Status"
-msgstr "Státusz"
+#: Setup/Initialize.php:56
+msgid "My projects that I'm responsible for"
+msgstr "Projektjeim amikért felelős vagyok"
 
-#: js/ProjectEditDialog.js:157 Model/Project.php:128
-msgid "Start"
-msgstr ""
+#: Setup/Initialize.php:57
+msgid "All my open projects that I am responsible for"
+msgstr "Minden nyitott projektem, amikért felelős vagyok"
 
-#: js/ProjectEditDialog.js:163 Model/Project.php:136
-msgid "End"
-msgstr ""
+#: Setup/Initialize.php:77
+msgid "My waiting projects"
+msgstr "Várakozó projektjeim"
 
-#: js/ProjectEditDialog.js:171 Model/Project.php:143
-msgid "Scope"
-msgstr ""
-
-#: js/ProjectEditDialog.js:178 Model/Project.php:153
-msgid "Type"
-msgstr ""
-
-#: js/ProjectEditDialog.js:216 Model/Project.php:110
-msgid "Description"
-msgstr "Leírás"
-
-#: js/ProjectEditDialog.js:230
-msgid "Enter description"
-msgstr "Leírás megadása"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Minden projektem"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Alapértelmezett kedvenc, amely a Projekt indulásakor betöltődik"
+#: Setup/Initialize.php:78
+msgid "My projects that are on hold"
+msgstr "Tartásban lévő projektjeim"
 
 #: Config.php:58
 msgid "Available Project Attendee Role"
@@ -173,44 +197,27 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "%s személyes Projektjei"
+#: Model/Project.php:54
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Projekt lista"
+msgstr[1] "Projekt listák"
 
-#: Model/Project.php:52
-msgid "Projects list"
-msgid_plural "Projects lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: Model/Project.php:100
+#: Model/Project.php:125
 msgid "Name"
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "Projects"
-msgstr "Projektek"
+#: Model/Project.php:188
+msgid "Tasks"
+msgstr ""
 
-#: Setup/Initialize.php:36
-msgid "All my open projects"
-msgstr "Minden nyitott projektjeim"
+#: Export/definitions/projects_xls_current_columns.xml:5
+msgid "Excel current columns"
+msgstr ""
 
-#: Setup/Initialize.php:56
-msgid "My projects that I'm responsible for"
-msgstr "Projektjeim amikért felelős vagyok"
-
-#: Setup/Initialize.php:57
-msgid "All my open projects that I am responsible for"
-msgstr "Minden nyitott projektem, amikért felelős vagyok"
-
-#: Setup/Initialize.php:77
-msgid "My waiting projects"
-msgstr "Várakozó projektjeim"
-
-#: Setup/Initialize.php:78
-msgid "My projects that are on hold"
-msgstr "Tartásban lévő projektjeim"
+#: Export/definitions/projects_xls.xml:5
+msgid "Excel all data"
+msgstr ""
 
 #: Acl/Rights.php:90
 msgid "Manage shared project favorites"
@@ -220,13 +227,12 @@ msgstr ""
 msgid "Create new shared project favorites"
 msgstr ""
 
+#, python-format
+#~ msgid "%s's personal Projects"
+#~ msgstr "%s személyes Projektjei"
+
 #~ msgid "Tags"
 #~ msgstr "Címkék"
-
-#~ msgid "Project list"
-#~ msgid_plural "Project lists"
-#~ msgstr[0] "Projekt lista"
-#~ msgstr[1] "Projekt listák"
 
 #~ msgid "Project lists"
 #~ msgstr "Projekt listák"
