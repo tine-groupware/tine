@@ -336,4 +336,79 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         }
         self::assertEquals(4, $uebungen, print_r($importEvents->summary, true));
     }
+
+    public function testImportOverwriteOrganizer()
+    {
+        $forcedOrganizerData = [
+            'organizer' => $this->_getPersonasContacts('sclever')->getId(),
+            'organizer_type' => 'contact',
+            'organizer_email' => $this->_getPersonasContacts('sclever')->getPreferredEmailAddress(),
+            'organizer_displayname' => $this->_getPersonasContacts('sclever')->getTitle()
+        ];
+
+        $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true, [
+            'overwriteOrganizer' => $forcedOrganizerData
+        ]);
+
+        $startbucks = $importEvents->find('uid', '3632597');
+        foreach($forcedOrganizerData as $field => $value) {
+            $this->assertEquals($forcedOrganizerData[$field], $startbucks->{$field}, "failed to force field '{$field}'");
+        }
+    }
+
+    public function testImportAddAttendee()
+    {
+        $sclever = [
+            'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'      => $this->_getPersonasContacts('sclever')->getId(),
+        ];
+
+        $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true, [
+            'attendeeStrategy' => 'add',
+            'attendee' => [$sclever],
+        ]);
+        $startbucks = $importEvents->find('uid', '3632597');
+        $this->assertEquals(2, count($startbucks->attendee), 'attendee replaced instead of added');
+        $this->assertNotEmpty(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
+    }
+
+    public function testImportReplaceAttendee()
+    {
+        $sclever = [
+            'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'      => $this->_getPersonasContacts('sclever')->getId(),
+        ];
+
+        $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true, [
+            'attendeeStrategy' => 'replace',
+            'attendee' => [$sclever],
+        ]);
+        $startbucks = $importEvents->find('uid', '3632597');
+        $this->assertEquals(1, count($startbucks->attendee), 'attendee added instead of replaced');
+        $this->assertNotEmpty(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
+    }
+
+    public function testKeepExistingAttendee()
+    {
+        $sclever = [
+            'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'      => $this->_getPersonasContacts('sclever')->getId(),
+        ];
+
+        // first import: with sclever added
+        $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true, [
+            'attendeeStrategy' => 'add',
+            'attendee' => [$sclever],
+        ]);
+
+        // second import: without sclever added
+        $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true, [
+            'updateExisting' => true,
+            'forceUpdateExisting' => true,
+            'keepExistingAttendee' => true,
+        ]);
+        $startbucks = $importEvents->find('uid', '3632597');
+        $this->assertEquals(2, count($startbucks->attendee), 'attendee replaced instead of added');
+        $this->assertNotEmpty(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
+    }
 }

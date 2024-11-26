@@ -41,6 +41,18 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
          */
         'forceUpdateExisting'   => FALSE,
         /**
+         * list of event attendee to add or replace (see attendeeStrategy)
+         * @var array of attendeeData
+         */
+        'attendee' => null,
+        /**
+         * what to do with attendee from attendee option
+         *  add -> add to import data attendee
+         *  replace ->  replace import data attendee with given attendee
+         * @var string add|replace
+         */
+        'attendeeStrategy' => 'add',
+        /**
          * keep existing attendee
          * @var boolean
          */
@@ -49,6 +61,11 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
          * delete events missing in import file (future only)
          */
         'deleteMissing'         => FALSE,
+        /**
+         * overwrite organizer data
+         * @var array with keys organizer, organizer_type, organizer_email, organizer_displayname
+         */
+        'overwriteOrganizer'    => null,
         /**
          * container the events should be imported in
          * @var string
@@ -124,7 +141,11 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
     {
         $this->_initImportResult();
         $this->_cc = $this->_getCalendarController();
-
+        $ccAssertions = [
+            'assertCalUserOrganizer' => $this->_cc->assertCalUserOrganizer(),
+            'assertCalUserAttendee' => $this->_cc->assertCalUserAttendee(),
+        ];
+        
         // make sure container exists
         $container = Tinebase_Container::getInstance()->getContainerById($this->_options['container_id']);
 
@@ -150,6 +171,26 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         $existingEvents->addIndices(array('uid'));
         foreach ($events as $event) {
             $existingEvent = $existingEvents->find('uid', $event->uid);
+            if (is_array($this->_options['overwriteOrganizer'])) {
+                $this->_cc->assertCalUserOrganizer(false);
+                foreach($this->_options['overwriteOrganizer'] as $fieldName => $value) {
+                    $event->{$fieldName} = $value;
+                }
+            }
+
+            if ($this->_options['attendeeStrategy'] === 'add' && is_array($this->_options['attendee'])) {
+                $attendees = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, $this->_options['attendee']);
+                foreach($attendees as $attendee) {
+                    if (! Calendar_Model_Attender::getAttendee($event->attendee, $attendee)) {
+                        $event->attendee->addRecord($attendee);
+                    }
+                }
+
+            } else if ($this->_options['attendeeStrategy'] === 'replace') {
+                $this->_cc->assertCalUserAttendee(false);
+                $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, $this->_options['attendee']);
+            }
+
             try {
                 if (! $existingEvent) {
                     $event->container_id = $this->_options['container_id'];
@@ -181,6 +222,10 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
             . ' / duplicates: ' . $this->_importResult['duplicatecount']
             . ' / fails: ' . $this->_importResult['failcount']);
 
+        foreach ($ccAssertions as $method => $oldValue) {
+            $this->_cc->{$method}($oldValue);
+        }
+
         return $this->_importResult;
     }
 
@@ -189,6 +234,8 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         $event->container_id = $this->_options['container_id'];
         $event->id = $existingEvent->getId();
         $event->last_modified_time = ($existingEvent->last_modified_time instanceof Tinebase_DateTime) ? clone $existingEvent->last_modified_time : NULL;
+        $event->seq = $existingEvent->seq;
+
         if ($this->_options['keepExistingAttendee']) {
             $this->_checkForExistingAttendee($event, $existingEvent);
         }
