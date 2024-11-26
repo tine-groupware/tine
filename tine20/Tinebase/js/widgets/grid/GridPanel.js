@@ -1813,7 +1813,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.layoutMenu = new Ext.Action({
                 xtype: 'tbsplit',
                 menu: new Ext.menu.Menu({items: layoutActions}),
-                hidden: true,
                 displayPriority: 80,
                 iconCls: 'x-cols-icon',
                 tooltip: 'Layout',
