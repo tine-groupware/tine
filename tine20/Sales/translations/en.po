@@ -19,7 +19,7 @@ msgid "You do not have admin rights on Sales"
 msgstr "You do not have admin rights on Sales"
 
 #: Controller.php:153 Model/EDocument/EAS.php:32 Model/Division.php:212
-#: Model/Debitor.php:225
+#: Model/Debitor.php:227
 msgid "Electronic Address Schema"
 msgid_plural "Electronic Address Schemas"
 msgstr[0] "Electronic Address Schema"
@@ -70,7 +70,7 @@ msgstr "Title"
 #: js/CustomerEditDialog.js:163 js/DocumentPosition/customerColumn.js:14
 #: js/InvoiceEditDialog.js:555 Model/Offer.php:52 Model/Offer.php:96
 #: Model/Address.php:92 Model/Document/Abstract.php:300 Model/Customer.php:47
-#: Model/Customer.php:338 Model/Invoice.php:109 Model/Invoice.php:283
+#: Model/Customer.php:339 Model/Invoice.php:109 Model/Invoice.php:283
 #: Model/Invoice.php:331 Model/Debitor.php:111 Model/Boilerplate.php:149
 #: Model/Contract.php:209 Model/Contract.php:285 Model/Contract.php:302
 #: Model/DocumentPosition/Abstract.php:212
@@ -85,7 +85,7 @@ msgstr[1] "Customers"
 #: js/CustomerDetailsPanel.js:157 js/ContractEditDialog.js:318
 #: js/CustomerEditDialog.js:392 js/PurchaseInvoiceEditDialog.js:535
 #: js/InvoiceEditDialog.js:534 Model/OrderConfirmation.php:74
-#: Model/Offer.php:87 Model/Product.php:163 Model/Customer.php:191
+#: Model/Offer.php:87 Model/Product.php:163 Model/Customer.php:192
 #: Model/Invoice.php:131 Model/Supplier.php:75 Model/PurchaseInvoice.php:108
 #: Model/Contract.php:166 Model/DocumentPosition/Abstract.php:334
 msgid "Description"
@@ -236,7 +236,7 @@ msgstr "Supplier Number"
 #: js/SupplierEditDialog.js:265 js/CustomerDetailsPanel.js:126
 #: js/CustomerEditDialog.js:188 js/CustomerEditDialog.js:314
 #: Model/Product.php:151 Model/EDocument/EAS.php:56
-#: Model/Document/Category.php:72 Model/Division.php:96 Model/Customer.php:169
+#: Model/Document/Category.php:72 Model/Division.php:96 Model/Customer.php:170
 #: Model/Supplier.php:62 Model/Supplier.php:173 Model/Supplier.php:181
 #: Model/Debitor.php:107 Model/Boilerplate.php:97
 msgid "Name"
@@ -244,20 +244,20 @@ msgstr "Name"
 
 #: js/SupplierDetailsPanel.js:127 js/SupplierEditDialog.js:323
 #: js/CustomerDetailsPanel.js:127 js/CustomerEditDialog.js:370
-#: Model/Customer.php:184 Model/Supplier.php:69
+#: Model/Customer.php:185 Model/Supplier.php:69
 msgid "Web"
 msgstr "Web"
 
 #: js/SupplierDetailsPanel.js:128 js/SupplierEditDialog.js:191
 #: js/CustomerDetailsPanel.js:128 js/ContractEditDialog.js:291
-#: js/CustomerEditDialog.js:197 Model/Customer.php:199 Model/Supplier.php:82
+#: js/CustomerEditDialog.js:197 Model/Customer.php:200 Model/Supplier.php:82
 #: Model/Contract.php:125 Model/Contract.php:221
 msgid "Contact Person (external)"
 msgstr "Contact Person (external)"
 
 #: js/SupplierDetailsPanel.js:129 js/SupplierEditDialog.js:201
 #: js/CustomerDetailsPanel.js:129 js/ContractEditDialog.js:303
-#: js/CustomerEditDialog.js:207 Model/Customer.php:212 Model/Supplier.php:93
+#: js/CustomerEditDialog.js:207 Model/Customer.php:213 Model/Supplier.php:93
 #: Model/Contract.php:114 Model/Contract.php:233
 msgid "Contact Person (internal)"
 msgstr "Contact Person (internal)"
@@ -279,19 +279,19 @@ msgstr "BIC"
 
 #: js/SupplierDetailsPanel.js:145 js/SupplierEditDialog.js:217
 #: js/CustomerDetailsPanel.js:145 js/CustomerEditDialog.js:223
-#: Model/Customer.php:225 Model/Supplier.php:104
+#: Model/Customer.php:226 Model/Supplier.php:104
 msgid "VAT ID"
 msgstr "VAT ID"
 
 #: js/SupplierDetailsPanel.js:146 js/SupplierEditDialog.js:231
 #: js/CustomerDetailsPanel.js:146 js/CustomerEditDialog.js:228
-#: Model/Customer.php:260 Model/Supplier.php:117
+#: Model/Customer.php:261 Model/Supplier.php:117
 msgid "Currency"
 msgstr "Currency"
 
 #: js/SupplierDetailsPanel.js:147 js/SupplierEditDialog.js:236
 #: js/CustomerDetailsPanel.js:147 js/CustomerEditDialog.js:232
-#: Model/Customer.php:267 Model/Supplier.php:122
+#: Model/Customer.php:268 Model/Supplier.php:122
 msgid "Currency Translation Rate"
 msgstr "Currency Translation Rate"
 
@@ -313,7 +313,7 @@ msgid "Edit Supplier \"{0}\""
 msgstr "Edit Supplier \"{0}\""
 
 #: js/SupplierEditDialog.js:220 js/CustomerEditDialog.js:264
-#: Model/Document/Abstract.php:456 Model/Customer.php:251
+#: Model/Document/Abstract.php:456 Model/Customer.php:252
 #: Model/Supplier.php:110
 msgid "Credit Term (days)"
 msgstr "Credit Term (days)"
@@ -392,7 +392,7 @@ msgstr "Export Records from these Positions"
 msgid "Select customer"
 msgstr "Select customer"
 
-#: js/CustomerDetailsPanel.js:125 Model/Customer.php:159
+#: js/CustomerDetailsPanel.js:125 Model/Customer.php:160
 msgid "Customer Number"
 msgstr "Customer Number"
 
@@ -717,16 +717,16 @@ msgid "Edit Customer \"{0}\""
 msgstr "Edit Customer \"{0}\""
 
 #: js/CustomerEditDialog.js:250 js/PurchaseInvoiceEditDialog.js:373
-#: Model/Customer.php:276 Model/PurchaseInvoice.php:178
+#: Model/Customer.php:277 Model/PurchaseInvoice.php:178
 msgid "Discount (%)"
 msgstr "Discount (%)"
 
-#: js/CustomerEditDialog.js:282 Model/Customer.php:301
+#: js/CustomerEditDialog.js:282 Model/Customer.php:302
 msgid "Debitors"
 msgstr "Debitors"
 
 #: js/CustomerEditDialog.js:299 js/AddressEditDialog.js:86
-#: Model/Address.php:114 Model/Customer.php:176
+#: Model/Address.php:114 Model/Customer.php:177
 msgid "Name shorthand"
 msgstr "Name shorthand"
 
@@ -2088,7 +2088,7 @@ msgstr "Invoice Discount Sum"
 msgid "Net Sum"
 msgstr "Net Sum"
 
-#: Model/Document/Abstract.php:424 Model/Customer.php:232
+#: Model/Document/Abstract.php:424 Model/Customer.php:233
 msgid "VAT Procedure"
 msgstr "VAT Procedure"
 
@@ -2182,11 +2182,11 @@ msgstr "Last Datev send date"
 msgid "IN-"
 msgstr "IN-"
 
-#: Model/Document/Invoice.php:342 Model/Document/Invoice.php:644
+#: Model/Document/Invoice.php:342 Model/Document/Invoice.php:654
 msgid "Payable immediately without deduction."
 msgstr "Payable immediately without deduction."
 
-#: Model/Document/Invoice.php:344 Model/Document/Invoice.php:646
+#: Model/Document/Invoice.php:344 Model/Document/Invoice.php:656
 #, python-brace-format
 msgid "Payable within {days} days without deduction."
 msgstr "Payable within {days} days without deduction."
@@ -2265,7 +2265,7 @@ msgstr "VAT Number"
 msgid "Bank Accounts"
 msgstr "Bank Accounts"
 
-#: Model/Division.php:221 Model/Debitor.php:234
+#: Model/Division.php:221 Model/Debitor.php:236
 msgid "Electronic Address"
 msgstr "Electronic Address"
 
@@ -2273,19 +2273,19 @@ msgstr "Electronic Address"
 msgid "GENDER_Customer"
 msgstr "GENDER_Customer"
 
-#: Model/Customer.php:100
+#: Model/Customer.php:101
 msgid "Has Offers"
 msgstr "Has Offers"
 
-#: Model/Customer.php:114
+#: Model/Customer.php:115
 msgid "Has Orders"
 msgstr "Has Orders"
 
-#: Model/Customer.php:128
+#: Model/Customer.php:129
 msgid "Has Invoices"
 msgstr "Has Invoices"
 
-#: Model/Customer.php:142
+#: Model/Customer.php:143
 msgid "Has Deliveries"
 msgstr "Has Deliveries"
 
@@ -2317,7 +2317,7 @@ msgstr "Electronic Invoice Type"
 msgid "Electronic Invoice Config"
 msgstr "Electronic Invoice Config"
 
-#: Model/Debitor.php:240
+#: Model/Debitor.php:242
 msgid "Electronic Document Transport Method"
 msgstr "Electronic Document Transport Method"
 

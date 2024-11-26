@@ -49,6 +49,8 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX_RATE]);
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX]);
         unset($_definition[self::FIELDS][self::FLD_GROSS_PRICE]);
+        unset($_definition[self::FIELDS][self::FLD_SERVICE_PERIOD_START]);
+        unset($_definition[self::FIELDS][self::FLD_SERVICE_PERIOD_END]);
     }
 
     /**

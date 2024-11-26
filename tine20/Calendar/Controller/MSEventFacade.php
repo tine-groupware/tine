@@ -69,6 +69,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected $_assertCalUserAttendee = true;
 
     /**
+     * @var bool
+     */
+    protected $_assertCalUserOrganizer = true;
+
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -939,7 +944,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         // assert organizer
-        if (Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type) {
+        if ($this->_assertCalUserOrganizer && Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type) {
             $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: $this->_calendarUser->user_id);
         }
 
@@ -997,7 +1002,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($this->_currentEventFacadeContainer && $this->_currentEventFacadeContainer->getId() == $_event->container_id
             && $this->_currentEventFacadeContainer->type == Tinebase_Model_Container::TYPE_PERSONAL
             && !$_event->hasExternalOrganizer()
-            && Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type) {
+            && Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type
+            && ($this->_assertCalUserOrganizer || !$_event->organizer)) {
 
             $_event->organizer = $this->_calendarUser->user_id;
         }
@@ -1142,6 +1148,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $oldValue = $this->_assertCalUserAttendee;
         if (null !== $b) {
             $this->_assertCalUserAttendee = $b;
+        }
+        return $oldValue;
+    }
+    public function assertCalUserOrganizer(?bool $b = null): bool
+    {
+        $oldValue = $this->_assertCalUserOrganizer;
+        if (null !== $b) {
+            $this->_assertCalUserOrganizer = $b;
         }
         return $oldValue;
     }

@@ -51,7 +51,7 @@ Ext.form.RadioGroup = Ext.extend(Ext.form.CheckboxGroup, {
         var out = null;
         this.eachItem(function(item){
             if(item.checked){
-                out = item;
+                out = item.inputValue;
                 return false;
             }
         });
