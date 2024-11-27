@@ -198,7 +198,14 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 })
                 ->build();
 
-        if ($this->{self::FLD_POSITIONS}->filter(Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL, 1)->count() > 0) {
+        // see \Sales_Model_Document_Abstract::calculatePrices $documentPriceType
+        if (null !== $this->{self::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE, Sales_Config::PRICE_TYPE_NET)) {
+            $documentPriceType = Sales_Config::PRICE_TYPE_NET;
+        } else {
+            $documentPriceType = Sales_Config::PRICE_TYPE_GROSS;
+        }
+
+        if (null !== $this->{self::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL, 1)) {
             $isStorno = true;
             if (!$this->{self::FLD_PRECURSOR_DOCUMENTS} instanceof Tinebase_Record_RecordSet || $this->{self::FLD_PRECURSOR_DOCUMENTS}->count() === 0) {
                 throw new Tinebase_Exception_UnexpectedValue('precursor documents on storno/reversal not resolved or present');
@@ -207,6 +214,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $isStorno = false;
         }
 
+        $allowances = 0.0;
         $ublInvoice = (new UBL21\Invoice\Invoice())
             // BT-24: Specification identifier
             ->setCustomizationID(new \UBL21\Common\CommonBasicComponents\CustomizationID('urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0'))
@@ -297,7 +305,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     ->setPaymentMeansCode(new \UBL21\Common\CommonBasicComponents\PaymentMeansCode('58'))  // BT-81 Zahlungsart 58 SEPA Überweisung 59 SEPA Einzug
                     ->setPaymentID([new \UBL21\Common\CommonBasicComponents\PaymentID($this->{self::FLD_DOCUMENT_NUMBER})]) // BT-83 Verwendungszweck
             ])
-            ->setLegalMonetaryTotal((new \UBL21\Common\CommonAggregateComponents\LegalMonetaryTotal)
+            ->setLegalMonetaryTotal(($legalMonetaryTotal = new \UBL21\Common\CommonAggregateComponents\LegalMonetaryTotal)
                 ->setLineExtensionAmount((new \UBL21\Common\CommonBasicComponents\LineExtensionAmount($this->{self::FLD_POSITIONS_NET_SUM}))
                     ->setCurrencyID('EUR')
                 )
@@ -315,6 +323,20 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 ->setTaxAmount((new \UBL21\Common\CommonBasicComponents\TaxAmount($this->{self::FLD_SALES_TAX}))
                     ->setCurrencyID(('EUR'))
                 )
+            )
+            ->setAllowanceCharge(
+                $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} && $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM} ? [
+                    (new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
+                        ->setChargeIndicator(false)
+                        ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
+                        ->setAmount((new \UBL21\Common\CommonBasicComponents\Amount($allowances += (
+                        Sales_Config::PRICE_TYPE_GROSS === $documentPriceType ?
+                            $this->{Sales_Model_Document_Invoice::FLD_POSITIONS_NET_SUM}  - $this->{Sales_Model_Document_Invoice::FLD_NET_SUM}
+                            : $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}))
+                        )
+                            ->setCurrencyID('EUR')
+                        )
+                ] : null
             )
         ;
         /*
@@ -428,7 +450,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $defaultRate = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE};
             $ublInvoice->addToInvoiceLine((new \UBL21\Common\CommonAggregateComponents\InvoiceLine)
                 ->setID(new \UBL21\Common\CommonBasicComponents\ID(++$lineCounter))
-                ->setUUID($position->getId() ? new \UBL21\Common\CommonBasicComponents\UUID($position->getId()) : null)
+                //->setUUID($position->getId() ? new \UBL21\Common\CommonBasicComponents\UUID($position->getId()) : null)
                 ->setInvoicedQuantity((new \UBL21\Common\CommonBasicComponents\InvoicedQuantity($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY}))
                     ->setUnitCode('C62')
                 )
@@ -462,6 +484,25 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     [new \UBL21\Common\CommonBasicComponents\Note($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION})]
                     : null
                 )
+                ->setAllowanceCharge(
+                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_TYPE} && $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM} ? [
+                        (new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
+                            ->setChargeIndicator(false)
+                            ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
+                            ->setAmount((new \UBL21\Common\CommonBasicComponents\Amount(/*$allowances +=*/ (
+                                    Sales_Config::PRICE_TYPE_GROSS === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
+                                        round(($position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE} * 100) / (100 + (float)$position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}), 2) - $position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}
+                                    : $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM})))
+                                ->setCurrencyID('EUR')
+                            )
+                    ] : null
+                )
+            );
+        }
+
+        if ($allowances !== 0.0) {
+            $legalMonetaryTotal->setAllowanceTotalAmount((new \UBL21\Common\CommonBasicComponents\AllowanceTotalAmount($allowances))
+                ->setCurrencyID('EUR')
             );
         }
 
@@ -511,163 +552,5 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         return $serializer->serialize($ublInvoice, 'xml');
-    }
-
-    // TODO FIXME all usage of email: validate valid email format before using? as we do not enforce a valid email but xrechnung etc. probably enforce!
-    // TODO FIXME check usage of all model properties, either they need to be mandatory and/or a empty/format check needs to be performed before using
-    public function toEinvoice(?Sales_Model_Einvoice_PresetInterface $einvoiceConfig = null): Sales_EDocument_Einvoicing_Invoice
-    {
-        if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Document_Debitor) {
-            throw new Tinebase_Exception_UnexpectedValue(self::FLD_DEBITOR_ID . ' not set or resolved');
-        }
-        if (null !== $debitor->{Sales_Model_Debitor::FLD_EAS_ID} && !$debitor->{Sales_Model_Debitor::FLD_EAS_ID} instanceof Sales_Model_EDocument_EAS) {
-            throw new Tinebase_Exception_UnexpectedValue('debitors eas not resolved');
-        }
-        if (! $this->{self::FLD_DOCUMENT_CATEGORY} instanceof Sales_Model_Document_Category) {
-            throw new Tinebase_Exception_UnexpectedValue(self::FLD_DOCUMENT_CATEGORY . ' not set or resolved');
-        }
-        if (!($division = $this->{self::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_DIVISION_ID}) instanceof Sales_Model_Division) {
-            throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Debitor::FLD_DIVISION_ID . ' on category not set or resolved');
-        }
-        Tinebase_Record_Expander::expandRecord($division);
-        if (!$division->{Sales_Model_Division::FLD_BANK_ACCOUNTS} instanceof Tinebase_Record_RecordSet || 0 === $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() || !$division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->getFirstRecord()->{Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT} instanceof Tinebase_Model_BankAccount) {
-            throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Division::FLD_BANK_ACCOUNTS . ' not set or resolved');
-        }
-        if (!($billingAddress = $this->{self::FLD_RECIPIENT_ID}) instanceof Sales_Model_Document_Address) {
-            throw new Tinebase_Exception_UnexpectedValue(self::FLD_RECIPIENT_ID . ' not set or resolved');
-        }
-        if (($buyerContact = $this->{self::FLD_CONTACT_ID}) && !$buyerContact instanceof Addressbook_Model_Contact) {
-            throw new Tinebase_Exception_UnexpectedValue(self::FLD_CONTACT_ID . ' set but not resolved');
-        }
-        /** @var Sales_Model_Einvoice_PresetInterface $einvoiceConfig */
-        if (null === $einvoiceConfig && !($einvoiceConfig = $debitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}) instanceof Sales_Model_Einvoice_PresetInterface) {
-            throw new Tinebase_Exception_UnexpectedValue('debitor doesnt have einvoice config');
-        }
-
-        $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
-
-        $ublInvoice = (new Sales_EDocument_Einvoicing_Invoice($einvoiceConfig->getPresetClassName()))
-            ->setInvoicePeriodStart($this->{self::FLD_SERVICE_PERIOD_START})
-            ->setInvoicePeriodEnd($this->{self::FLD_SERVICE_PERIOD_END})
-            ->setNumber($this->{self::FLD_DOCUMENT_NUMBER})
-            ->setIssueDate($this->{self::FLD_DOCUMENT_DATE})
-
-            ->setBuyerReference($this->{self::FLD_BUYER_REFERENCE} ?: ($debitor->{Sales_Model_Debitor::FLD_BUYER_REFERENCE} ?: null))
-            ->setContractReference($this->{self::FLD_CONTRACT_ID} instanceof Sales_Model_Contract ? $this->{self::FLD_CONTRACT_ID}->number : null)
-            ->setProjectReference($this->{self::FLD_PROJECT_REFERENCE} ?: null)
-            ->setPurchaseOrderReference($this->{self::FLD_PURCHASE_ORDER_REFERENCE} ?: null)
-
-            ->setSeller((new \Einvoicing\Party())
-                ->setName($division->{Sales_Model_Division::FLD_NAME})
-                ->setVatNumber($division->{Sales_Model_Division::FLD_VAT_NUMBER})
-                ->setTaxRegistrationId($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} ? new \Einvoicing\Identifier($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}, 'FC') : null) // BT-32 // 'FC' aus validen xrechnungen rausgesucht, ist nicht in codeliste, unklar wo das herkommt
-                ->setElectronicAddress($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} && $division->{Sales_Model_Division::FLD_EAS_ID} ? new \Einvoicing\Identifier($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS}, $division->{Sales_Model_Division::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE}) : null)
-                ->setAddress(array_merge(
-                    [$division->{Sales_Model_Division::FLD_ADDR_PREFIX1}],
-                    $division->{Sales_Model_Division::FLD_ADDR_PREFIX2} ? [$division->{Sales_Model_Division::FLD_ADDR_PREFIX2}] : [],
-                    $division->{Sales_Model_Division::FLD_ADDR_PREFIX3} ? [$division->{Sales_Model_Division::FLD_ADDR_PREFIX3}] : []
-                ))
-                ->setPostalCode($division->{Sales_Model_Division::FLD_ADDR_POSTAL})
-                ->setCity($division->{Sales_Model_Division::FLD_ADDR_LOCALITY})
-                ->setCountry($division->{Sales_Model_Division::FLD_ADDR_COUNTRY})
-                ->setContactName($division->{Sales_Model_Division::FLD_CONTACT_NAME})
-                ->setContactPhone($division->{Sales_Model_Division::FLD_CONTACT_PHONE})
-                ->setContactEmail($division->{Sales_Model_Division::FLD_CONTACT_EMAIL})
-            )
-
-            ->setBuyer(($buyer = new \Einvoicing\Party())
-                ->setElectronicAddress($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS} && $debitor->{Sales_Model_Debitor::FLD_EAS_ID} ? new \Einvoicing\Identifier($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}, $debitor->{Sales_Model_Debitor::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE}) : null)
-                ->setName($billingAddress->{Sales_Model_Address::FLD_NAME} ?: $this->{self::FLD_CUSTOMER_ID}->name)
-                ->setAddress([$billingAddress->{Sales_Model_Address::FLD_STREET}])
-                ->setPostalCode($billingAddress->{Sales_Model_Address::FLD_POSTALCODE} ?: null)
-                ->setCity($billingAddress->{Sales_Model_Address::FLD_LOCALITY} ?: null)
-                ->setCountry($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME} ?: null)
-            )
-
-            ->addPayment(($payment = new \Einvoicing\Payments\Payment())
-                ->setMeansCode('58') // BT-81 Zahlungsart 58 SEPA Überweisung 59 SEPA Einzug
-                //->setMeansText('SEPA Überweisung') // BT-82
-                ->setId($this->{self::FLD_DOCUMENT_NUMBER}) // BT-83 Verwendungszweck
-            )
-        ;
-
-        if ($buyerContact) {
-            $buyer
-                ->setContactName($buyerContact->n_fn)
-                ->setContactPhone($buyerContact->tel_work ?: null)
-                ->setContactEmail($buyerContact->email ?: null);
-        }
-
-        // wenn storno
-        /* BT-3
-• 326 (Partial invoice)
-• 380 (Commercial invoice)
-• 384 (Corrected invoice)
-• 389 (Self-billed invoice)
-• 381 (Credit note)
-• 875 (Partial construction invoice)
-• 876 (Partial final construction invoice)
-• 877 (Final construction invoice)
-        */
-        if ($this->{self::FLD_POSITIONS}->filter(Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL, 1)->count() > 0) {
-            if (!$this->{self::FLD_PRECURSOR_DOCUMENTS} instanceof Tinebase_Record_RecordSet || $this->{self::FLD_PRECURSOR_DOCUMENTS}->count() === 0) {
-                throw new Tinebase_Exception_UnexpectedValue('precursor documents on storno/reversal not resolved or present');
-            }
-            $refDoc = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD};
-            $ublInvoice->setType(384); // BT-3 384 Credit note
-            $ublInvoice->addPrecedingInvoiceReference(
-                new InvoiceReference($refDoc->{self::FLD_DOCUMENT_NUMBER}, $refDoc->{self::FLD_DOCUMENT_DATE})
-            );
-        }
-
-        /** @var Sales_Model_DocumentPosition_Invoice $position */
-        foreach ($this->{self::FLD_POSITIONS} as $position) {
-            if (Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE}) {
-                continue;
-            }
-            $ublInvoice->addLine(($line = new \Einvoicing\InvoiceLine())
-                ->setPrice($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}, $position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY})
-                ->setVatRate($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})
-                ->setQuantity($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY})
-            );
-            if ($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE}) {
-                $line->setName($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE});
-            }
-            if ($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION}) {
-                $line->setDescription($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION});
-            }
-        }
-
-        /** @var Tinebase_Model_BankAccount $bankAccount */
-        foreach ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS} as $bankAccount) {
-            $bankAccount = $bankAccount->{Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT};
-            $payment->addTransfer((new \Einvoicing\Payments\Transfer())
-                ->setAccountName($division->{Sales_Model_Division::FLD_NAME})
-                ->setProvider($bankAccount->{Tinebase_Model_BankAccount::FLD_BIC})
-                ->setAccountId($bankAccount->{Tinebase_Model_BankAccount::FLD_IBAN})
-            );
-        }
-
-        if (is_numeric($this->{self::FLD_PAYMENT_TERMS})) {
-            $paymentTermDays = (int)$this->{self::FLD_PAYMENT_TERMS};
-            if (0 === $paymentTermDays) {
-                $paymentTerms = $t->_('Payable immediately without deduction.');
-            } else {
-                $paymentTerms = str_replace('{days}', (string)$paymentTermDays, $t->_('Payable within {days} days without deduction.'));
-            }
-            $ublInvoice
-                ->setDueDate($this->{self::FLD_DOCUMENT_DATE}->getClone()->addDay($paymentTermDays))
-                ->setPaymentTerms((new PaymentTerms())->setNote($paymentTerms));
-        }
-
-
-        // @TODO attachments? (nice to have)
-// stundenzettel, rechnungspdf, ...
-
-// Es könnte auch Bezug auf die Bestellung genommen werden (BT-13, BT-14)
-
-// Es könnte auch Bezug auf die Lieferung genommen werden (BT-72, ...)
-
-        return $ublInvoice;
     }
 }

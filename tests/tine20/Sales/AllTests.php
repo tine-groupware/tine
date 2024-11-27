@@ -32,6 +32,7 @@ class Sales_AllTests
         $suite->addTestSuite(Sales_Document_ControllerTest::class);
         $suite->addTestSuite(Sales_Document_ExportTest::class);
         $suite->addTestSuite(Sales_Document_JsonTest::class);
+        $suite->addTestSuite(Sales_Document_UblTest::class);
         $suite->addTestSuite(Sales_Export_DebitorTest::class);
         $suite->addTestSuite(Sales_Export_ProductTest::class);
         $suite->addTestSuite(Sales_Import_AllTests::class);

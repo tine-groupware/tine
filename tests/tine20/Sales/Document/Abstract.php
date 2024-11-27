@@ -8,6 +8,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * AbstractTest class for Sales_Document_*
  */
@@ -26,7 +28,7 @@ class Sales_Document_Abstract extends TestCase
 
     protected function _createCustomer(): Sales_Model_Customer
     {
-        $division = self::addBankAccountToDefaultDivison();
+        $division = self::makeDefaultDivisonUblReady();
 
         $name = Tinebase_Record_Abstract::generateUID();
         /** @var Sales_Model_Customer $customer */
@@ -39,6 +41,7 @@ class Sales_Document_Abstract extends TestCase
                 'street' => 'teststreet for ' . $name,
                 'type' => 'postal'
             ]),
+            'vatid' => 'DE0987654321',
             Sales_Model_Customer::FLD_DEBITORS => [[
                 Sales_Model_Debitor::FLD_NAME => '-',
                 Sales_Model_Debitor::FLD_DIVISION_ID => $division->getId(),
@@ -47,9 +50,16 @@ class Sales_Document_Abstract extends TestCase
                     'type' => 'delivery'
                 ]]),
                 'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
+                    Sales_Model_Address::FLD_POSTALCODE => '12345',
+                    Sales_Model_Address::FLD_LOCALITY => 'Neu Altdorf',
                     'name' => 'some billing address for ' . $name,
                     'type' => 'billing'
                 ]]),
+                Sales_Model_Debitor::FLD_EAS_ID => Sales_Controller_EDocument_EAS::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_EAS::class, [
+                    [TMFA::FIELD => Sales_Model_EDocument_EAS::FLD_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => '9930'],
+                ]))->getFirstRecord(),
+                Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS => 'DE0987654321',
+                Sales_Model_Debitor::FLD_BUYER_REFERENCE => 'buy ref',
             ]],
         ]));
 
@@ -57,9 +67,10 @@ class Sales_Document_Abstract extends TestCase
         return $customer;
     }
 
-    public function addBankAccountToDefaultDivison()
+    public function makeDefaultDivisonUblReady()
     {
         $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+
         if ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
             $bankAccounts = Tinebase_Controller_BankAccount::getInstance()->getAll();
             if ($bankAccounts->count() === 0) {
@@ -72,9 +83,20 @@ class Sales_Document_Abstract extends TestCase
             $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
                 Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => $bankAccounts->getFirstRecord(),
             ], true));
-            Sales_Controller_Division::getInstance()->update($division);
         }
 
-        return $division;
+        if (empty($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS})) {
+            $division->{Sales_Model_Division::FLD_EAS_ID} = Sales_Controller_EDocument_EAS::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_EAS::class, [
+                [TMFA::FIELD => Sales_Model_EDocument_EAS::FLD_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => '9930'],
+            ]))->getFirstRecord();
+            $division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} = 'DE1234567890';
+        }
+        $division->{Sales_Model_Division::FLD_VAT_NUMBER} = 'DE1234567890';
+        $division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} = '1234567890';
+        $division->{Sales_Model_Division::FLD_ADDR_COUNTRY} = 'de';
+        $division->{Sales_Model_Division::FLD_CONTACT_PHONE} = '123';
+        $division->{Sales_Model_Division::FLD_CONTACT_EMAIL} = 'test@foo.de';
+
+        return Sales_Controller_Division::getInstance()->update($division);
     }
 }
