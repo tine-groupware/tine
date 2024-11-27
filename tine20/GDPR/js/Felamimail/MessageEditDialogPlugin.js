@@ -184,7 +184,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
             getEventData: function (eventName) {
                 const option = this.getForm().findField('optionGroup').getValue();
                 if (eventName === 'apply') return {
-                    recipientMode: option ? option.getGroupValue() : '',
+                    recipientMode: option || '',
                 }
             },
             items: [{
