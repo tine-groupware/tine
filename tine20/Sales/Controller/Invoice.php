@@ -1546,8 +1546,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
                 rewind($stream); // redundant, but cheap and good for readability
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
+                }
             }
 
             $attachmentName = str_replace('/', '-', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml');
@@ -1558,7 +1560,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($invoice, $attachmentName, $stream);
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
         } catch (Exception $e) {
-            Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $invoice->getId()]);
+            if ($e instanceof Tinebase_Exception_ProgramFlow) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $e->getMessage());
+                }
+            } else {
+                Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $invoice->getId()]);
+            }
         }
     }
 

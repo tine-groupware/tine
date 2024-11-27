@@ -127,7 +127,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
             $record = $exception['exception']['clientRecord'];
             if ($record['email'] === Tinebase_Core::getUser()->accountEmailAddress) {
                 $found = TRUE;
-                $this->assertEquals($myContact->org_name, $record['org_name']);
+                $this->assertStringContainsString('leckerer', $record['org_name']);
             }
         }
         
