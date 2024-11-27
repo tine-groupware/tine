@@ -838,8 +838,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         exec($cmd, $output);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'backexecoutput ' . print_r($output, true));
 
-        //smtp_destinations (select all rows belonging to users that belong to our installation)
-        $where = "userid IN (SELECT userid FROM ". $this->_userTable . " WHERE client_idnr='" . $clientId . "')";
+        // smtp_destinations (select all rows belonging to users that belong to our installation)
+        if ($this instanceof Tinebase_EmailUser_Smtp_PostfixMultiInstance) {
+            // TODO make this configurable / put into member var
+            $where = "users_id IN (SELECT id FROM ". $this->_userTable . " WHERE client_idnr='" . $clientId . "')";
+        } else {
+            $where = "userid IN (SELECT userid FROM ". $this->_userTable . " WHERE client_idnr='" . $clientId . "')";
+        }
+
         $cmd = "mysqldump --defaults-extra-file=$mycnf "
             ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
