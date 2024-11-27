@@ -926,25 +926,27 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         $this->_uit->getEmbedUrlForNodeId($node->getId());
     }
 
+    protected function _checkSystemGenericException($node)
+    {
+        $translation = Tinebase_Translation::getTranslation('OnlyOfficeIntegrator');
+        static::expectException(Tinebase_Exception_SystemGeneric::class);
+        static::expectExceptionMessage($translation->_('filetype of node is not supported'));
+        $this->_uit->getEmbedUrlForNodeId($node->getId());
+    }
+
     public function testGetTokenForNodeIdException4()
     {
         Tinebase_FileSystem::getInstance()->createAclNode('/Tinebase/folders/shared/ootest');
         file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.asd', 'blub');
         $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.asd');
-
-        static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage('filetype of node is not supported');
-        $this->_uit->getEmbedUrlForNodeId($node->getId());
+        $this->_checkSystemGenericException($node);
     }
 
     public function testGetTokenForNodeIdException5()
     {
         Tinebase_FileSystem::getInstance()->createAclNode('/Tinebase/folders/shared/ootest');
         $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest');
-
-        static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage('filetype of node is not supported');
-        $this->_uit->getEmbedUrlForNodeId($node->getId());
+        $this->_checkSystemGenericException($node);
     }
 
     public function testGetTokenForNodeIdException6()
@@ -952,10 +954,7 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         Tinebase_FileSystem::getInstance()->createAclNode('/Tinebase/folders/shared/ootest');
         file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.asd', 'blub');
         $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.asd');
-
-        static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage('filetype of node is not supported');
-        $this->_uit->getEditorConfigForNodeId($node->getId());
+        $this->_checkSystemGenericException($node);
     }
 
     public function testGetTokenForNodeIdException7()
@@ -973,9 +972,10 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         $httpTestClient = new Zend_Http_Client_Adapter_Test();
         $httpTestClient->setResponse(new Zend_Http_Response(200, [], '{"error":0}'));
         onlyOfficeIntegrator_Controller::getInstance()->setCmdServiceClientAdapter($httpTestClient);
-        
+
+        $translation = Tinebase_Translation::getTranslation('OnlyOfficeIntegrator');
         static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage('this revision currently can\'t be opened as a different revision is already open');
+        static::expectExceptionMessage($translation->_('this revision currently can\'t be opened as a different revision is already open'));
         static::expectExceptionCode(647);
         $this->_uit->getEditorConfigForNodeId($node->getId());
     }
