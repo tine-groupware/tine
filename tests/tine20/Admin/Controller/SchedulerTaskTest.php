@@ -37,6 +37,7 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         $this->assertEquals('0', $createdTask->failure_count);
 
         // run 5 times, there might be other tasks to do
+        // TODO maybe we should disable the other tasks temporarily to make sure only "our" task is run
         for ($i = 0; $i < 5; $i++) {
             $this->assertTrue(Tinebase_Scheduler::getInstance()->run());
         }
