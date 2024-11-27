@@ -2421,12 +2421,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if (! $container instanceof Tinebase_Model_Container || $container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
                 // move into special (external users) container
-                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->organizer_email ? null : $_record->resolveOrganizer(), $_record->organizer_email);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . ($_record->organizer_email ?: $_record->organizer?->email));
-                $_record->container_id = $container->getId();
+                try {
+                    $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->organizer_email ? null : $_record->resolveOrganizer(), $_record->organizer_email);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . ($_record->organizer_email ?: $_record->organizer?->email));
+                    $_record->container_id = $container->getId();
+                } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+                    // do not move ...
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Could not move event: ' . $teuv->getMessage());
+                    }
+                }
             }
-            
         }
         
         if ($_record->is_all_day_event) {
