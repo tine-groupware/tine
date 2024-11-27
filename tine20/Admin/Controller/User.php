@@ -220,6 +220,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
             $deactivated = $this->_checkAccountStatus($_user, $oldUser);
             $this->_inspectBeforeUpdateOrCreate($_user, $oldUser);
+            $this->_checkExtendExpiration($_user, $oldUser);
             $user = $this->_userBackend->updateUser($_user);
 
             // make sure primary groups is in the list of group memberships
@@ -730,5 +731,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             'newAccount' => $user,
         ]);
         Tinebase_Event::fireEvent($event);
+    }
+
+    private function _checkExtendExpiration(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser|Tinebase_Model_User $oldUser): void
+    {
+        if ($oldUser->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_EXPIRED &&
+            $user->accountExpires !== null &&
+            !$oldUser->accountExpires->equals($user->accountExpires))
+        {
+            if ($user->accountExpires->isLater(new Tinebase_DateTime())) {
+                $user->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
+            }
+        }
     }
 }
