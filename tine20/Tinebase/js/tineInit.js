@@ -1211,8 +1211,8 @@ Tine.Tinebase.tineInit = {
      */
     checkServerUpdateRequired: function (registryData) {
         if (_.get(registryData, 'Tinebase.setupRequired')) {
-            const msg = i18n._('Tine 2.0 needs to be updated or is not installed yet.');
-            const title =  i18n._('Please wait or contact your administrator');
+            const msg = i18n._('tine needs to be updated or is not installed yet.');
+            const title = i18n._('Please wait or contact your administrator');
 
             Ext.MessageBox.show({
                 title : title,

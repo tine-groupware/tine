@@ -1,68 +1,55 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - UserManual\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2024-11-25 17:09+0000\n"
+"Language-Team: Slovenian (https://app.transifex.com/tine/teams/16133/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Slovenian\n"
-"X-Poedit-Country: \n"
+"Language: sl\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
 
-#: Frontend/Http.php:111
 msgid "Manual page not found"
 msgstr ""
 
-#: js/UserManualDialog.js:37
 msgid "Previous"
 msgstr ""
 
-#: js/UserManualDialog.js:44
 msgid "Next"
 msgstr ""
 
-#: js/UserManualDialog.js:51
 msgid "Up"
 msgstr ""
 
-#: js/UserManualDialog.js:57
 msgid "Go to Index"
 msgstr ""
 
-#: js/UserManualDialog.js:68
 msgid "Search in User Manual"
 msgstr ""
 
-#: js/UserManualDialog.js:75
 msgid "Close"
 msgstr ""
 
-#: js/UserManualDialog.js:114
 msgid "Loading Manual Page..."
 msgstr ""
 
-#: js/UserManualAction.js:14 Setup/setup.xml:4
 msgid "User Manual"
 msgstr ""
 
-#: js/ContextItem.js:15
 msgid "Help"
 msgstr ""
 
-#: js/ContextItem.js:46
 msgid "Show Canonical Path"
 msgstr ""
 
-#: js/ContextItem.js:50
 msgid "Canonical Path"
 msgstr ""
 
-#: Model/ManualPage.php:36
 msgid "ManualPage"
 msgid_plural "ManualPages"
 msgstr[0] ""
@@ -70,7 +57,6 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: Model/ManualPage.php:40
 msgid "ManualPages list"
 msgid_plural "ManualPages lists"
 msgstr[0] ""
@@ -78,19 +64,15 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: Model/ManualPage.php:71 Model/ManualContext.php:77
 msgid "Title"
 msgstr ""
 
-#: Model/ManualPage.php:78 Model/ManualContext.php:71
 msgid "Filename"
 msgstr ""
 
-#: Model/ManualPage.php:84
 msgid "Content"
 msgstr ""
 
-#: Model/ManualContext.php:36
 msgid "ManualContext"
 msgid_plural "ManualContexts"
 msgstr[0] ""
@@ -98,14 +80,11 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: Model/ManualContext.php:65
 msgid "Context"
 msgstr ""
 
-#: Model/ManualContext.php:84
 msgid "Target"
 msgstr ""
 
-#: Model/ManualContext.php:90
 msgid "Chapter"
 msgstr ""

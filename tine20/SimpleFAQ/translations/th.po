@@ -2,177 +2,134 @@
 # Translators:
 # 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014
 # 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014
+# 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 19:55+0000\n"
-"Last-Translator: 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>\n"
-"Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
-"Language: th\n"
+"PO-Revision-Date: 2012-04-02 13:32+0000\n"
+"Last-Translator: 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014\n"
+"Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:149
 msgid "Draft"
 msgstr "โครงร่าง"
 
-#: Controller.php:150
 msgid "released"
 msgstr "ได้ปล่อย"
 
-#: Controller.php:151
 msgid "obsolete"
 msgstr "เลิกใช้"
 
-#: Controller.php:154
 msgid "Internal"
 msgstr "ภายใน"
 
-#: Controller.php:155
 msgid "Public"
 msgstr "สาธารณะ"
 
-#: Preference.php:28
 msgid "All my FAQs"
 msgstr "คำถามที่ถามบ่อยของฉันทั้งหมด"
 
-#: Preference.php:70
 msgid "Default Favorite"
 msgstr "ค่าที่ชอบหลัก"
 
-#: Preference.php:71
 msgid "The default favorite which is loaded on FAQ startup"
 msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด FAQ"
 
-#: Preference.php:74
 msgid "Default FAQ List"
 msgstr "รายการคำถามหลักที่ถามบ่อย"
 
-#: Preference.php:75
 msgid "The default FAQ list to create new FAQ in."
 msgstr "รายการ FAQ ค่าหลัก ที่จะสร้าง FAQ ใหม่เข้าไป"
 
-#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "ประเภทของคำถามที่ถามบ่อย"
 
-#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "สถานะ คำถามที่ถามบ่อย"
 
-#: js/FaqStatus.js:141
 msgid "Add a new FAQ Status..."
 msgstr "ใส่สถานะคำถามที่ถามบ่อยใหม่"
 
-#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
 msgid "Question"
 msgstr "คำถาม"
 
-#: js/FaqEditDialog.js:66
 msgid "Enter a question..."
 msgstr "ใส่คำถาม"
 
-#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
-#: js/FaqGridDetailsPanel.js:157
 msgid "Answer"
 msgstr "คำตอบ"
 
-#: js/FaqEditDialog.js:73
 msgid "Enter a answer..."
 msgstr "ใส่คำตอบ"
 
-#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
 msgid "Type"
 msgstr "ประเภท"
 
-#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
 msgid "Status"
 msgstr "สถานะ"
 
-#: js/AdminPanel.js:105
 msgid "Defaults"
 msgstr "ค่าหลัก"
 
-#: js/SimpleFAQ.js:19 js/Model.js:35
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "คำถามที่ถามบ่อย"
 
-#: js/SimpleFAQ.js:26
 msgid "Find Question"
 msgstr "หาคำถาม"
 
-#: js/SimpleFAQ.js:35
 msgid "Search question"
 msgstr "ค้นหาคำถาม"
 
-#: js/FaqGridPanel.js:72
 msgid "FAQ id"
 msgstr "รหัสของคำถามที่ถามบ่อย"
 
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
 msgid "Tags"
 msgstr "ป้ายกำกับ"
 
-#: js/FaqType.js:144
 msgid "Add a new FAQ Type..."
 msgstr "ใส่ประเภทคำถามที่ถามบ่อยใหม่"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"
 msgstr "ข้อมูลเกี่ยวกับคำถามที่ถามบ่อย"
 
-#: js/FaqGridDetailsPanel.js:189
 msgid "Creation Time"
 msgstr "เวลาที่สร้างขึ้น"
 
-#: js/FaqGridDetailsPanel.js:194
 msgid "Created By"
 msgstr "สร้าง โดย"
 
-#: js/FaqGridDetailsPanel.js:226
 msgid "No answer yet"
 msgstr "ยังไม่มีคำตอบ"
 
-#: js/SearchCombo.js:8
 msgid "Search FAQ"
 msgstr "ค้นหาคำถามที่ถามบ่อย"
 
-#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] "รายชื่อคำถามที่ถามบ่อย"
 
-#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr "รายการคำถามที่ถามบ่อย"
 
-#: js/Model.js:74
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
-#: Setup/Initialize.php:33
 msgid "All FAQs of my FAQ Lists"
 msgstr "คำถามที่ถามบ่อยทั้งหมดของรายการคำถามที่ถามบ่อยของฉัน"
 
-#: Setup/Initialize.php:40
 msgid "Last modified by me"
 msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
 
-#: Setup/Initialize.php:41
 msgid "All FAQs that I have last modified"
 msgstr "คำถามที่ถามบ่อยที่ฉันได้ปรับปรุงครั้งล่าสุด"
-
-#, python-format
-#~ msgid "%s's personal FAQs"
-#~ msgstr "%s ของคำถามที่ถามบ่อย ส่วนตัว"

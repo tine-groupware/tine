@@ -1,906 +1,631 @@
 #
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
-# Ettore Atalan <atalanttore@googlemail.com>, 2014
-# Michael Spahn <michael@spahn.me>, 2014
+# Ettore Atalan <atalanttore@googlemail.com>, 2014,2016
+# Michael Spahn <michael@spahn.me>, 2013-2014
 # Michael Spahn <michael@spahn.me>, 2013
 # pschuele <p.schuele@metaways.de>, 2013-2014
 # pschuele <p.schuele@metaways.de>, 2012
+# pschuele <p.schuele@metaways.de>, 2012
+# sstamer <s.stamer@metaways.de>, 2015
 # sstamer <s.stamer@metaways.de>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 10:28+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
-"Language: de\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>, 2015\n"
+"Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:762
 msgid "Maximum number of users reached. "
 msgstr ""
 
-#: Controller.php:765
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr ""
 
-#: js/TermsPanel.js:32
 msgid "I have read the license agreement and accept it"
 msgstr "Ich habe die Lizenzvereinbarung gelesen und akzeptiere sie"
 
-#: js/TermsPanel.js:41
 msgid "License Agreement"
 msgstr "Lizenzvereinbarung"
 
-#: js/TermsPanel.js:60
 msgid "I have read the privacy agreement and accept it"
 msgstr "Ich habe die Datenschutzvereinbarung gelesen und akzeptiere sie"
 
-#: js/TermsPanel.js:69
 msgid "Privacy Agreement"
 msgstr "Datenschutzvereinbarung"
 
-#: js/TermsPanel.js:86
 msgid "Accept Terms and Conditions"
 msgstr "Bedingungen und Konditionen akzeptieren"
 
-#: js/LicensePanel.js:70
 msgid "Delete current Subscription"
 msgstr "Aktuelle Subskription löschen"
 
-#: js/LicensePanel.js:141
 msgid "Your Subscription is not valid."
 msgstr "Sie haben keine gültige Subskription."
 
-#: js/LicensePanel.js:194
 msgid "Subscription Configuration"
 msgstr "Subskription Konfiguration"
 
-# LICENSE TRANSLATIONS
-#: js/LicensePanel.js:203
 msgid "Upload from disk"
 msgstr "Von der Festplatte hochladen"
 
-#: js/LicensePanel.js:205
 msgid "Select file containing your Subscription key"
 msgstr "Wählen Sie die Datei, die Ihren Subskription enthält"
 
-#: js/LicensePanel.js:216
 msgid "No valid Subscription"
 msgstr ""
 
-#: js/LicensePanel.js:218
 msgid "Contract ID"
 msgstr "Vertragsnummer"
 
-#: js/LicensePanel.js:223
 msgid "Organization"
 msgstr ""
 
-#: js/LicensePanel.js:228
 msgid "Activation Key"
 msgstr ""
 
-#: js/LicensePanel.js:233
 msgid "Maximum Users (0=unlimited)"
 msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
 
-#: js/LicensePanel.js:238
 msgid "Valid from"
 msgstr "Gültig ab"
 
-#: js/LicensePanel.js:244
 msgid "Valid to"
 msgstr "Gültig bis"
 
-#: js/LicensePanel.js:261
 msgid "Subscription Information"
 msgstr "Subskription Informationen"
 
-#: js/EmailPanel.js:146 js/EmailPanel.js:480 js/AuthenticationPanel.js:203
-#: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
 msgid "Backend"
 msgstr "Backend"
 
-#: js/EmailPanel.js:150
 msgid "Standard IMAP"
 msgstr "Standard IMAP"
 
-#: js/EmailPanel.js:161
 msgid "Standard SMTP"
 msgstr "Standard  SMTP"
 
-#: js/EmailPanel.js:182
 msgid "Imap"
 msgstr "Imap"
 
-#: js/EmailPanel.js:190 js/EmailPanel.js:312 js/EmailPanel.js:445
-#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
-#: js/ConfigManagerPanel.js:325 js/ConfigManagerPanel.js:345
-#: js/ConfigManagerPanel.js:386 js/ConfigManagerPanel.js:445
 msgid "Hostname"
 msgstr "Hostname"
 
-#: js/EmailPanel.js:194 js/ConfigManagerPanel.js:203
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/EmailPanel.js:198 js/AuthenticationPanel.js:317
-#: js/AuthenticationPanel.js:609 js/ConfigManagerPanel.js:212
-#: js/ConfigManagerPanel.js:243
 msgid "Password"
 msgstr "Kennwort"
 
-#: js/EmailPanel.js:204 js/EmailPanel.js:316 js/EmailPanel.js:449
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
-#: js/AuthenticationPanel.js:633 js/ConfigManagerPanel.js:232
-#: js/ConfigManagerPanel.js:329 js/ConfigManagerPanel.js:349
-#: js/ConfigManagerPanel.js:390 js/ConfigManagerPanel.js:449
 msgid "Port"
 msgstr "Port"
 
-#: js/EmailPanel.js:208 js/EmailPanel.js:320 js/EmailPanel.js:453
-#: js/AuthenticationPanel.js:387
 msgid "Secure Connection"
 msgstr "Sichere Verbindung"
 
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:334
-#: js/EmailPanel.js:456 js/AuthenticationPanel.js:389
 msgid "None"
 msgstr "Keine"
 
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:389
 msgid "TLS"
 msgstr "TLS"
 
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
-#: js/AuthenticationPanel.js:627
 msgid "SSL"
 msgstr "SSL"
 
-#: js/EmailPanel.js:214 js/EmailPanel.js:326
 msgid "Verify peer Certificate"
 msgstr ""
 
-#: js/EmailPanel.js:220
 msgid "Use system account"
 msgstr "Systemkonto benutzen"
 
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
 msgid "No"
 msgstr "Nein"
 
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
 msgid "Yes"
 msgstr "Ja"
 
-#: js/EmailPanel.js:226 js/AuthenticationPanel.js:394
 msgid "Append domain to login name"
 msgstr "Domäne an den Benutzernamen anhängen"
 
-#: js/EmailPanel.js:231
 msgid "Use email address as login name"
 msgstr "E-Mail als Benutzername verwenden"
 
-#: js/EmailPanel.js:267
 msgid "Cyrus Admin"
 msgstr "Cyrus Admin"
 
-#: js/EmailPanel.js:270
 msgid "Cyrus Admin Password"
 msgstr "Cyrus Admin Passwort"
 
-#: js/EmailPanel.js:276
 msgid "Use proxy auth"
 msgstr "Proxy-Authentifizierung verwenden"
 
-#: js/EmailPanel.js:304
 msgid "Smtp"
 msgstr "Smtp"
 
-#: js/EmailPanel.js:331
 msgid "Authentication"
 msgstr "Authentifizierung"
 
-#: js/EmailPanel.js:334
 msgid "Login"
 msgstr "Login"
 
-#: js/EmailPanel.js:334
 msgid "Plain"
 msgstr "Klartext"
 
-#: js/EmailPanel.js:338
 msgid "Primary Domain"
 msgstr "Primäre Domäne"
 
-#: js/EmailPanel.js:342
 msgid "Secondary Domains (comma separated)"
 msgstr "Sekundäre Domänen (durch Komma getrennt)"
 
-#: js/EmailPanel.js:346
 msgid "Aditional Domains (comma separated)"
 msgstr ""
 
-#: js/EmailPanel.js:350
 msgid "Notifications service address"
 msgstr "Notifikationsdienst Emailadresse"
 
-#: js/EmailPanel.js:354
 msgid "Notification Username"
 msgstr "Benachrichtigungs-Benutzername"
 
-#: js/EmailPanel.js:358
 msgid "Notification Password"
 msgstr "Benachrichtigungs-Passwort"
 
-#: js/EmailPanel.js:363
 msgid "Notifications local client (hostname or IP address)"
 msgstr "Lokaler Hostname (oder IP-Adresse) für den Notifikationsdienst"
 
-#: js/EmailPanel.js:439
 msgid "SIEVE"
 msgstr "SIEVE"
 
-#: js/EmailPanel.js:507
 msgid "MySql Hostname"
 msgstr "MySql Hostname"
 
-#: js/EmailPanel.js:510
 msgid "MySql Database"
 msgstr "MySql Datenbank"
 
-#: js/EmailPanel.js:513
 msgid "MySql User"
 msgstr "MySql Benutzer"
 
-#: js/EmailPanel.js:516
 msgid "MySql Password"
 msgstr "MySql Passwort"
 
-#: js/EmailPanel.js:521
 msgid "MySql Port"
 msgstr "MySql Port"
 
-#: js/EmailPanel.js:537
 msgid "User or UID"
 msgstr "Benutzer oder UID"
 
-#: js/EmailPanel.js:540
 msgid "Group or GID"
 msgstr "Gruppe oder GID"
 
-#: js/EmailPanel.js:543
 msgid "Home Template"
 msgstr "Home Template"
 
-#: js/EmailPanel.js:545
 msgid "Password Scheme"
 msgstr "Passwortschema"
 
-#: js/EmailPanel.js:556
 msgid "PLAIN-MD5"
 msgstr "PLAIN-MD5"
 
-#: js/EmailPanel.js:557
 msgid "MD5-CRYPT"
 msgstr "MD5-CRYPT"
 
-#: js/EmailPanel.js:558
 msgid "SHA1"
 msgstr "SHA1"
 
-#: js/EmailPanel.js:559
 msgid "SHA256"
 msgstr "SHA256"
 
-#: js/EmailPanel.js:560
 msgid "SSHA256"
 msgstr "SSHA256"
 
-#: js/EmailPanel.js:561
 msgid "SHA512"
 msgstr "SHA512"
 
-#: js/EmailPanel.js:562
 msgid "SSHA512"
 msgstr "SSHA512"
 
-#: js/EmailPanel.js:563
 msgid "PLAIN"
 msgstr "PLAIN"
 
-#: js/TreePanel.js:53
 msgid "Terms and Conditions"
 msgstr "Bedingungen und Konditionen"
 
-#: js/TreePanel.js:58
 msgid "Setup Checks"
 msgstr "Setup Tests"
 
-#: js/TreePanel.js:64
 msgid "Config Manager"
 msgstr "Konfigurations-Verwaltung"
 
-#: js/TreePanel.js:70
 msgid "Authentication/Accounts"
 msgstr "Authentifizierung/Benutzerkonten"
 
-#: js/TreePanel.js:76
 msgid "Email"
 msgstr "Email"
 
-#: js/TreePanel.js:82
 msgid "Application Manager"
 msgstr "Anwendungs-Verwaltung"
 
-#: js/TreePanel.js:88
 msgid "Subscription"
 msgstr ""
 
-#: js/init.js:76
 msgid "Setup"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:63
 msgid "Name"
 msgstr "Name"
 
-#: js/ApplicationGridPanel.js:64
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: js/ApplicationGridPanel.js:65
 msgid "Order"
 msgstr "Reihenfolge"
 
-#: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
 msgstr "Installierte Version"
 
-#: js/ApplicationGridPanel.js:67
 msgid "Available Version"
 msgstr "Verfügbare Version"
 
-#: js/ApplicationGridPanel.js:68
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:69
 msgid "Depends on"
 msgstr "Hängt ab von"
 
-#: js/ApplicationGridPanel.js:79 js/EnvCheckGridPanel.js:205
 msgid "Install application"
 msgstr "Anwendung installieren"
 
-#: js/ApplicationGridPanel.js:88
 msgid "Uninstall application"
 msgstr "Anwendung deinstallieren"
 
-#: js/ApplicationGridPanel.js:97
 msgid "Update applications"
 msgstr "Anwendungen aktualisieren"
 
-#: js/ApplicationGridPanel.js:105
 #, python-brace-format
 msgid "Go to {0} login"
 msgstr "Zum {0} Login"
 
-#: js/ApplicationGridPanel.js:183
 msgid "uninstall"
 msgstr "Deinstallieren"
 
-#: js/ApplicationGridPanel.js:183
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Möchten Sie die Anwendung(en) wirklich deinstallieren?"
 
-#: js/ApplicationGridPanel.js:246
 msgid "This may take a while"
 msgstr "Dies kann eine einige Zeit in Anspruch nehmen"
 
-#: js/ApplicationGridPanel.js:280
 msgid "Dependency Violation"
 msgstr "Verletzung von Abhängigkeiten"
 
-#: js/ApplicationGridPanel.js:289
 msgid "CLI Required"
 msgstr "CLI erforderlich"
 
-#: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Lösche alle existierenden Benutzer und Gruppen"
 
-#: js/AuthenticationPanel.js:126
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer, Gruppen und Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
 
-#: js/AuthenticationPanel.js:204
 msgid "TLS client certificate"
 msgstr "TLS Client-Zertifikat"
 
-#: js/AuthenticationPanel.js:232
 msgid "Initial Admin User"
 msgstr "Initialer Admin-Benutzer"
 
-#: js/AuthenticationPanel.js:244
 msgid "Initial admin login name"
 msgstr "Initialer Admin Loginname"
 
-#: js/AuthenticationPanel.js:249
 msgid "Initial admin Password"
 msgstr "Initiales Admin Password"
 
-#: js/AuthenticationPanel.js:253
 msgid "Password confirmation"
 msgstr "Passwort Bestätigung"
 
-#: js/AuthenticationPanel.js:261
 msgid "Authentication provider"
 msgstr "Authentifizierungsdienst"
 
-#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:352
-#: js/AuthenticationPanel.js:414
 msgid "Try to split username"
 msgstr "Versuche den Benutzernamen zu splitten"
 
-#: js/AuthenticationPanel.js:288 js/AuthenticationPanel.js:358
 msgid "Account canonical form"
 msgstr "Kanonische Form der Benutzerkonten"
 
-#: js/AuthenticationPanel.js:294 js/AuthenticationPanel.js:364
 msgid "Account domain name"
 msgstr "Kontodomänenname"
 
-#: js/AuthenticationPanel.js:297 js/AuthenticationPanel.js:367
 msgid "Account domain short name"
 msgstr "Account domain short name"
 
-#: js/AuthenticationPanel.js:311 js/AuthenticationPanel.js:603
 msgid "Host"
 msgstr "Host"
 
-#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:606
 msgid "Login name"
 msgstr "Loginname"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:615
 msgid "Bind requires DN"
 msgstr "Verbindung benötigt DN"
 
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:621
 msgid "Start TLS"
 msgstr "Start TLS verwenden"
 
-#: js/AuthenticationPanel.js:345
 msgid "Base DN"
 msgstr "Base DN"
 
-#: js/AuthenticationPanel.js:348
 msgid "Search filter"
 msgstr "Suchfilter"
 
-#: js/AuthenticationPanel.js:407
 msgid "Certificate validation"
 msgstr "Zertifikatsvalidierung"
 
-#: js/AuthenticationPanel.js:420
 msgid "CA file"
 msgstr "CA Datei"
 
-#: js/AuthenticationPanel.js:423
 msgid "CRL directory"
 msgstr "CRL Verzeichnis"
 
-#: js/AuthenticationPanel.js:433
 msgid "Accounts storage"
 msgstr "Speicherort der Benutzerkonten"
 
-#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:721
 msgid "Default user group name"
 msgstr "Standard Benutzer Gruppenname"
 
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:724
 msgid "Default admin group name"
 msgstr "Standard Admin Gruppenname"
 
-#: js/AuthenticationPanel.js:470
 msgid "Login panel"
 msgstr "Anmeldebereich"
 
-#: js/AuthenticationPanel.js:485
 msgid "Reuse last username logged"
 msgstr "Den zuletzt benutzten Benutzernamen verwenden"
 
-#: js/AuthenticationPanel.js:494
 msgid "Password Settings"
 msgstr "Passworteinstellungen"
 
-#: js/AuthenticationPanel.js:509
 msgid "User can change password"
 msgstr "Benutzer kann Passwort ändern"
 
-#: js/AuthenticationPanel.js:515
 msgid "Enable password policy"
 msgstr "Passwortrichtlinie aktivieren"
 
-#: js/AuthenticationPanel.js:521
 msgid "Only ASCII"
 msgstr "Nur ASCII-Zeichen"
 
-#: js/AuthenticationPanel.js:526
 msgid "Minimum length"
 msgstr "Minimale Länge"
 
-#: js/AuthenticationPanel.js:529
 msgid "Minimum word chars"
 msgstr "Minimale Anzahl Wortzeichen"
 
-#: js/AuthenticationPanel.js:532
 msgid "Minimum uppercase chars"
 msgstr "Minimale Anzahl Großbuchstaben"
 
-#: js/AuthenticationPanel.js:535
 msgid "Minimum special chars"
 msgstr "Minimale Anzahl Sonderzeichen"
 
-#: js/AuthenticationPanel.js:538
 msgid "Minimum numbers"
 msgstr "Minimale Anzahl Zahlen"
 
-#: js/AuthenticationPanel.js:541
 msgid "Change password after ... days"
 msgstr ""
 
-#: js/AuthenticationPanel.js:550
 msgid "Forbid part of username in password"
 msgstr "Verbiete einen Teil des Benutzernamens im Passwort"
 
-#: js/AuthenticationPanel.js:559
 msgid "Redirect Settings"
 msgstr "Weiterleitungs Einstellungen"
 
-#: js/AuthenticationPanel.js:567
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr "Weiterleitungs-URL (Weiterleitung zum Login wenn leer)"
 
-#: js/AuthenticationPanel.js:571
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Immer Weiterleiten (Wenn Nein: nur nach dem ausloggen weiterleiten)"
 
-#: js/AuthenticationPanel.js:577
 msgid "Redirect to referring site, if exists"
 msgstr "Weiterleitung an die Herkunftsseite, falls eine existiert"
 
-#: js/AuthenticationPanel.js:638
 msgid "Password encoding"
 msgstr "Passwort Verschlüsselung"
 
-#: js/AuthenticationPanel.js:640
 msgid "des"
 msgstr "des"
 
-#: js/AuthenticationPanel.js:641
 msgid "crypt"
 msgstr "crypt"
 
-#: js/AuthenticationPanel.js:642
 msgid "blowfish_crypt"
 msgstr "blowfish_crypt"
 
-#: js/AuthenticationPanel.js:643
 msgid "md5_crypt"
 msgstr "md5_crypt"
 
-#: js/AuthenticationPanel.js:644
 msgid "ext_crypt"
 msgstr "ext_crypt"
 
-#: js/AuthenticationPanel.js:645
 msgid "md5"
 msgstr "md5"
 
-#: js/AuthenticationPanel.js:646
 msgid "smd5"
 msgstr "smd5"
 
-#: js/AuthenticationPanel.js:647
 msgid "sha"
 msgstr "sha"
 
-#: js/AuthenticationPanel.js:648
 msgid "ssha"
 msgstr "ssha"
 
-#: js/AuthenticationPanel.js:649
 msgid "ntpassword"
 msgstr "ntpassword"
 
-#: js/AuthenticationPanel.js:650
 msgid "plain"
 msgstr "plain"
 
-#: js/AuthenticationPanel.js:656
 msgid "User DN"
 msgstr "Benutzer DN"
 
-#: js/AuthenticationPanel.js:659
 msgid "User Filter"
 msgstr "Benutzerfilter"
 
-#: js/AuthenticationPanel.js:662
 msgid "E-Mail Attribute"
 msgstr ""
 
-#: js/AuthenticationPanel.js:667
 msgid "Write Password to SQL backend"
 msgstr ""
 
-#: js/AuthenticationPanel.js:673
 msgid "User Search Scope"
 msgstr "Benutzersuche-Bereich"
 
-#: js/AuthenticationPanel.js:679
 msgid "Groups DN"
 msgstr "Gruppen DN"
 
-#: js/AuthenticationPanel.js:682
 msgid "Group Filter"
 msgstr "Gruppenfilter"
 
-#: js/AuthenticationPanel.js:686
 msgid "Group Search Scope"
 msgstr "Gruppensuche-Bereich"
 
-#: js/AuthenticationPanel.js:692
 msgid "Use Rfc 2307 bis"
 msgstr "Benutze RFC2307bis"
 
-#: js/AuthenticationPanel.js:692
 msgid "Maintain RFC 2307 attributes"
 msgstr "RFC 2307-Attribute beibehalten"
 
-#: js/AuthenticationPanel.js:698
 msgid "Min User Id"
 msgstr "Minimale Benutzer Id"
 
-#: js/AuthenticationPanel.js:701
 msgid "Max User Id"
 msgstr "Maximale Benutzer Id"
 
-#: js/AuthenticationPanel.js:704
 msgid "Min Group Id"
 msgstr "Minimale Gruppen Id"
 
-#: js/AuthenticationPanel.js:707
 msgid "Max Group Id"
 msgstr "Maximale Gruppen Id"
 
-#: js/AuthenticationPanel.js:711
 msgid "Group UUID Attribute name"
 msgstr "UUID Attribut von Gruppen"
 
-#: js/AuthenticationPanel.js:716
 msgid "User UUID Attribute name"
 msgstr "UUID Attribut von Benutzerkonten"
 
-#: js/AuthenticationPanel.js:728
 msgid "Readonly access"
 msgstr "Nur lesender Zugriff"
 
-#: js/AuthenticationPanel.js:742
 msgid "Save config and install"
 msgstr "Konfiguration speichern und installieren"
 
-#: js/AuthenticationPanel.js:744 js/ConfigManagerPanel.js:507
 msgid "Save config"
 msgstr "Konfiguration speichern"
 
-#: js/AuthenticationPanel.js:769
 msgid "Passwords don't match"
 msgstr "Die Passwörter stimmen nicht überein"
 
-#: js/AuthenticationPanel.js:782 js/AuthenticationPanel.js:789
-#: js/AuthenticationPanel.js:793 js/AuthenticationPanel.js:805
-#: js/AuthenticationPanel.js:816
 msgid "Should not be empty"
 msgstr "Darf nicht leer sein"
 
-#: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
 msgstr "Führe Environment Prüfungen aus..."
 
-#: js/EnvCheckGridPanel.js:130
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder den/die {1}, in dem/der Sie suchen."
 
-#: js/EnvCheckGridPanel.js:160
 msgid "Check"
 msgstr "Teste"
 
-#: js/EnvCheckGridPanel.js:161
 msgid "Result"
 msgstr "Ergebnis"
 
-#: js/EnvCheckGridPanel.js:162
 msgid "Message"
 msgstr "Informationen"
 
-#: js/EnvCheckGridPanel.js:181
 msgid "Run setup tests"
 msgstr "Setup Tests ausführen"
 
-#: js/EnvCheckGridPanel.js:190
 msgid "Ignore setup tests"
 msgstr "Setuptests ignorieren"
 
-#: js/Model.js:33
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
 msgid "File"
 msgstr "Datei"
 
-#: js/ConfigManagerPanel.js:196
 msgid "Setup Authentication"
 msgstr "Setup Authentifizierung"
 
-#: js/ConfigManagerPanel.js:217 js/ConfigManagerPanel.js:235
 msgid "Database"
 msgstr "Datenbank"
 
-#: js/ConfigManagerPanel.js:239
 msgid "User"
 msgstr "Benutzer"
 
-#: js/ConfigManagerPanel.js:248
 msgid "Prefix"
 msgstr "Prefix"
 
-#: js/ConfigManagerPanel.js:252
 msgid "Logging"
 msgstr "Logging"
 
-#: js/ConfigManagerPanel.js:262
 msgid "Filename"
 msgstr "Dateiname"
 
-#: js/ConfigManagerPanel.js:265
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/ConfigManagerPanel.js:278
 msgid "Caching"
 msgstr "Caching"
 
-#: js/ConfigManagerPanel.js:289 js/ConfigManagerPanel.js:406
 msgid "Lifetime (seconds)"
 msgstr "Lifetime (sekunden)"
 
-#: js/ConfigManagerPanel.js:312 js/ConfigManagerPanel.js:431
 msgid "Path"
 msgstr "Pfad"
 
-#: js/ConfigManagerPanel.js:357
 msgid "Queue"
 msgstr "Queue"
 
-#: js/ConfigManagerPanel.js:398
 msgid "Session"
 msgstr "Session"
 
-#: js/ConfigManagerPanel.js:457
 msgid "Temporary files"
 msgstr "Flüchtige Dateien"
 
-#: js/ConfigManagerPanel.js:465
 msgid "Temporary Files Path"
 msgstr "Pfad für flüchtige Dateien"
 
-#: js/ConfigManagerPanel.js:470
 msgid "Filestore directory"
 msgstr "Datei-Ablage Verzeichnis"
 
-#: js/ConfigManagerPanel.js:478
 msgid "Filestore Path"
 msgstr "Datei-Ablage Verzeichnis"
 
-#: js/ConfigManagerPanel.js:483
 msgid "Addressbook Map panel"
 msgstr "Kartenfenster im Adressbuch"
 
-#: js/ConfigManagerPanel.js:491
 msgid "Map panel"
 msgstr "Kartenfenster"
 
-#: js/ConfigManagerPanel.js:493
 msgid "disabled"
 msgstr "deaktiviert"
 
-#: js/ConfigManagerPanel.js:493
 msgid "enabled"
 msgstr "aktiviert"
 
-#: js/ConfigManagerPanel.js:505
 msgid "Config file is not writable"
 msgstr "Konfigurationsdatei nicht schreibbar"
 
-#: js/ConfigManagerPanel.js:524
 msgid "Download config file"
 msgstr "Konfigurationsdatei herunterladen"
 
-#: js/ConfigManagerPanel.js:565
 #, python-brace-format
 msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr ""
-
-#~ msgid "Error"
-#~ msgstr "Fehler"
-
-#~ msgid "Update application"
-#~ msgstr "Anwendung aktualisieren"
-
-#~ msgid "Use Custom Theme"
-#~ msgstr "Custom Theme verwenden"
-
-#~ msgid "Theme path"
-#~ msgstr "Theme Pfad"
-
-#~ msgid "Use blue theme as base"
-#~ msgstr "Verwende blaues Theme als Basis"
-
-#~ msgid "Updating application"
-#~ msgid_plural "Updating applications"
-#~ msgstr[0] "Aktualisiere Anwendung"
-#~ msgstr[1] "Aktualisiere Anwendungen"
-
-#~ msgid "Select file containing your license key"
-#~ msgstr "Wählen Sie die Datei, die Ihren Lizenzschlüssel enthält"
-
-#~ msgid "Updating {0} Applications."
-#~ msgstr "Aktualisiere {0} Anwendungen."
-
-#~ msgid "No valid license"
-#~ msgstr "Keine aktive Lizenz"
-
-#~ msgid "License Information"
-#~ msgstr "Lizenzinformation"
-
-#~ msgid "License Configuration"
-#~ msgstr "Lizenzkonfiguration"
-
-#~ msgid "Serial Number"
-#~ msgstr "Seriennummer"

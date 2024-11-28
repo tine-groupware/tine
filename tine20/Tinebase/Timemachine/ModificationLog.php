@@ -645,15 +645,15 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      */
     public function manageConcurrentUpdates($applicationId, Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $curRecord)
     {
-        if (! $newRecord->has('seq') || null === $newRecord->seq) {
-            /** @noinspection PhpDeprecationInspection */
-            return $this->manageConcurrentUpdatesByTimestamp($newRecord, $curRecord, get_class($newRecord), 'Sql', $newRecord->getId());
-        }
-
         $this->_applicationId = $applicationId;
 
+        if (! $newRecord->has('seq') || null === $newRecord->seq) {
+            /** @noinspection PhpDeprecationInspection */
+            return $this->manageConcurrentUpdatesByTimestamp($newRecord, $curRecord, get_class($newRecord),
+                'Sql', $newRecord->getId());
+        }
+
         if ($curRecord->seq != $newRecord->seq) {
-            
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 " Concurrent updates: current record last updated '" .
                 ($curRecord->last_modified_time instanceof DateTime ? $curRecord->last_modified_time : 'unknown') .

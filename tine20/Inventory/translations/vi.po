@@ -3,241 +3,160 @@
 # sao sang <saosangmo@yahoo.com>, 2013
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-12-13 11:05+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
-"Language: vi\n"
+"PO-Revision-Date: 2012-10-04 15:23+0000\n"
+"Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
+"Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:120
 msgid "Types"
 msgstr ""
 
-#: Preference.php:60
 msgid "Default Inventory Item Container"
 msgstr "Bộ chưa kho hàng mặc định"
 
-#: Preference.php:61
 msgid "The default container for new items"
 msgstr "Bộ chứa mặc định cho mục mới"
 
-#: js/InventoryItemEditDialog.js:45
 msgid "The active number must be less than or equal total number."
 msgstr "Số luân chuyển phải nhỏ hơn hoặc bằng tổng số"
 
-#: js/InventoryItemEditDialog.js:64 Model/InventoryItem.php:210
 msgid "Purchase Invoice"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:81
 msgid "General"
 msgstr "Chung"
 
-#: js/InventoryItemEditDialog.js:106 Model/InventoryItem.php:128
-#: Model/Type.php:84
 msgid "Name"
 msgstr "Tên"
 
-#: js/InventoryItemEditDialog.js:113 Model/InventoryItem.php:140
 msgid "Serial Number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:118 Model/InventoryItem.php:199
 msgid "Inventory Type"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:126 Model/InventoryItem.php:103
-#: Model/InventoryItem.php:269
 msgid "Employee"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:149 Model/InventoryItem.php:153
-#: Model/Type.php:91
 msgid "Description"
 msgstr "Mô tả"
 
-#: js/InventoryItemEditDialog.js:153
 msgid "Enter description"
 msgstr "Nhập mô tả"
 
-#: js/InventoryItemEditDialog.js:183 Model/InventoryItem.php:163
 msgid "Location"
 msgstr "Địa điểm"
 
-#: js/InventoryItemEditDialog.js:190 Model/InventoryItem.php:234
 msgid "Added"
 msgstr "Đã thêm"
 
-#: js/InventoryItemEditDialog.js:196 Model/InventoryItem.php:226
 msgid "Warranty"
 msgstr "Bảo hành"
 
-#: js/InventoryItemEditDialog.js:202 Config.php:46 Model/InventoryItem.php:243
 msgid "Removed"
 msgstr "Đã xóa"
 
-#: js/InventoryItemEditDialog.js:209
 msgid "Total number"
 msgstr "Số tổng"
 
-#: js/InventoryItemEditDialog.js:217
 msgid "Available number"
 msgstr "Số sẵn có"
 
-#: js/InventoryItemEditDialog.js:225 Model/InventoryItem.php:132
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/InventoryItemEditDialog.js:258
 msgid "Accounting"
 msgstr "Thống kê"
 
-#: js/InventoryItemEditDialog.js:279 Model/InventoryItem.php:220
 msgid "Price"
 msgstr "Giá"
 
-#: js/InventoryItemEditDialog.js:286 Model/InventoryItem.php:168
 msgid "Invoice date"
 msgstr "Ngày hóa đơn"
 
-#: js/InventoryItemEditDialog.js:291
 msgid "Depreciate"
 msgstr "Giảm giá"
 
-#: Setup/setup.xml:4
 msgid "Inventory"
 msgstr "Kho"
 
-#: Setup/Initialize.php:36
 msgid "All Inventory Items"
 msgstr "Tất cả hàng trong kho"
 
-#: Setup/Initialize.php:37
 msgid "All existing Inventory Items"
 msgstr "Tất cả hàng còn lại trong kho"
 
-#: Config.php:33
 msgid "Inventory Status Available"
 msgstr "Trạng thái sẵn sàng của kho"
 
-#: Config.php:35
 msgid "Possible status."
 msgstr "Trạng thái có thể"
 
-#: Config.php:42
 msgid "Ordered"
 msgstr ""
 
-#: Config.php:43
 msgid "Available"
 msgstr ""
 
-#: Config.php:44
 msgid "Defect"
 msgstr ""
 
-#: Config.php:45
 msgid "Missing"
 msgstr ""
 
-#: Config.php:47
 msgid "Unknown"
 msgstr ""
 
-#: Config.php:48
 msgid "Stored"
 msgstr ""
 
-#: Config.php:49
 msgid "Sold"
 msgstr ""
 
-#: Config.php:50
 msgid "Destroyed"
 msgstr ""
 
-#: Model/InventoryItem.php:58
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "Quản lý kho"
 
-#: Model/InventoryItem.php:63
 msgid "Inventory item list"
 msgid_plural "Inventory item lists"
 msgstr[0] ""
 
-#: Model/InventoryItem.php:150
 msgid "Inventory ID"
 msgstr "Mã kho"
 
-#: Model/InventoryItem.php:257
 msgid "Depreciated"
 msgstr ""
 
-#: Model/Type.php:46
 msgid "Inventory type"
 msgid_plural "Inventory types"
 msgstr[0] ""
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:11
 msgid "Tine 2.0 inventory CSV import"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:13
 msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:18
-#: Import/definitions/inv_tine_import_csv.xml:20
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Nhập danh sách (###CURRENTDATE###)"
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:20
 msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
 msgstr "Nhập dữ liệu kiểm kê CSV"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
 msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Mục được nhập trong ###CURRENTDATE### tại ###CURRENTTIME### bởi ###USERFULLNAME###"
-
-#~ msgid "ID"
-#~ msgstr "Mã"
-
-#~ msgid "Invoice"
-#~ msgstr "Hóa đơn"
-
-#~ msgid "ordered"
-#~ msgstr "đã xếp lại"
-
-#~ msgid "available"
-#~ msgstr "sẵn sàng"
-
-#~ msgid "defect"
-#~ msgstr "thiếu"
-
-#~ msgid "missing"
-#~ msgstr "thất lạc"
-
-#~ msgid "removed"
-#~ msgstr "đã xóa"
-
-#~ msgid "unknown"
-#~ msgstr "không rõ"
-
-#~ msgid "Item added"
-#~ msgstr "Hàng đã thêm"
-
-#~ msgid "Item removed"
-#~ msgstr "Hàng đã xóa"
