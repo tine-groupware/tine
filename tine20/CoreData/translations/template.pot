@@ -13,22 +13,17 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/CoreData.js:88
 msgid "Please select core data from tree ..."
 msgstr ""
 
-#: js/TreePanel.js:47
 msgid "Core Data"
 msgstr ""
 
-#: js/TreePanel.js:53
 msgid "General Data"
 msgstr ""
 
-#: js/TreePanel.js:60
 msgid "Application Data"
 msgstr ""
 
-#: Setup/setup.xml:4
 msgid "CoreData"
 msgstr ""

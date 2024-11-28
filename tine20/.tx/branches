@@ -1,0 +1,40 @@
+[2024.11]
+apps[] = ActiveSync
+apps[] = Addressbook
+apps[] = Admin
+apps[] = Bookmarks
+apps[] = Calendar
+apps[] = CoreData
+apps[] = Courses
+apps[] = Crm
+apps[] = DFCom
+apps[] = EFile
+apps[] = EventManager
+apps[] = ExampleApplication
+apps[] = Felamimail
+apps[] = Filemanager
+apps[] = GDPR
+apps[] = HumanResources
+apps[] = Inventory
+apps[] = OnlyOfficeIntegrator
+apps[] = Projects
+apps[] = Sales
+apps[] = Setup
+apps[] = SimpleFAQ
+apps[] = SSO
+apps[] = Tasks
+apps[] = Timetracker
+apps[] = Tinebase
+apps[] = UserManual
+
+[ecclesias/2024.11]
+apps[] = CashBook
+apps[] = ChruchEdition
+apps[] = ContractManager
+apps[] = CrewScheduling
+apps[] = Intention
+apps[] = KeyManager
+apps[] = MeetingManager
+apps[] = Offertory
+
+

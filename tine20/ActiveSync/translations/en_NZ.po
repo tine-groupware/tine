@@ -3,353 +3,238 @@
 # Ingo Ratsdorf, 2014-2015,2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2020-05-11 11:43+0000\n"
-"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
-"Language-Team: English (New Zealand) (http://www.transifex.com/tine20/tine20/language/en_NZ/)\n"
-"Language: en_NZ\n"
+"PO-Revision-Date: 2012-04-02 13:30+0000\n"
+"Last-Translator: Ingo Ratsdorf, 2014-2015,2017\n"
+"Language-Team: English (New Zealand) (http://app.transifex.com/tine/groupware/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en_NZ\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:75
 msgid "Default Address book"
 msgstr ""
 
-#: Preference.php:76
 msgid "The default address book to create new contacts in."
 msgstr ""
 
-#: Preference.php:79
 msgid "Default Calendar"
 msgstr "Default calendar"
 
-#: Preference.php:80
 msgid "The default calendar to create new events in."
 msgstr "The default calendar for new events"
 
-#: Preference.php:83
 msgid "Default Task List"
 msgstr "Default task list"
 
-#: Preference.php:84
 msgid "The default task list to create new tasks in."
 msgstr "The default task list for new tasks"
 
-#: js/AdminPanel.js:45
 msgid "Sync Devices"
 msgstr "Sync Devices"
 
-#: js/EditDialog.js:72 js/SyncDevicesGridPanel.js:70
-#: js/SyncDevicesGridPanel.js:158
 msgid "Device ID"
 msgstr "Device ID"
 
-#: js/EditDialog.js:79
 msgid "Devicetype"
 msgstr "Device ype"
 
-#: js/EditDialog.js:86 js/SyncDevicesGridPanel.js:72
-#: js/SyncDevicesGridPanel.js:159
 msgid "Owned by"
 msgstr "Owned by"
 
-#: js/EditDialog.js:98 js/SyncDevicesGridPanel.js:73
 msgid "Policy"
 msgstr "Policy"
 
-#: js/EditDialog.js:104 js/SyncDevicesGridPanel.js:74
 msgid "ActiveSync Version"
 msgstr ""
 
-#: js/EditDialog.js:110 js/SyncDevicesGridPanel.js:75
 msgid "User agent"
 msgstr ""
 
-#: js/EditDialog.js:116 js/SyncDevicesGridPanel.js:76
 msgid "Model"
 msgstr "Model"
 
-#: js/EditDialog.js:122 js/SyncDevicesGridPanel.js:77
 msgid "IMEI"
 msgstr "IMEI"
 
-#: js/EditDialog.js:128 js/SyncDevicesGridPanel.js:78
 msgid "Friendly Name"
 msgstr "Friendly name"
 
-#: js/EditDialog.js:134
 msgid "OS"
 msgstr "OS"
 
-#: js/EditDialog.js:140 js/SyncDevicesGridPanel.js:80
 msgid "OS Language"
 msgstr "OS language"
 
-#: js/EditDialog.js:146
 msgid "Phonenumber"
 msgstr "Phone number"
 
-#: js/SyncDevices.js:70
 msgid "Sync Device"
 msgid_plural "Sync Devices"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Device"
 msgstr[1] "Devices"
 
-#: js/Model.js:42
 msgid "Devices"
 msgstr "Devices"
 
-#: js/Application.js:27
 msgid "Active Sync"
 msgstr "ActiveSync"
 
-#: js/Application.js:43
 msgid "Select a Device"
 msgstr "Select a device"
 
-#: js/Application.js:57
 msgid "No ActiveSync Device registered"
 msgstr "No ActiveSync device registered"
 
-#: js/Application.js:65
 #, python-brace-format
 msgid "Set as {0} Filter"
 msgstr "Set as {0} filter"
 
-#: js/Application.js:90
 msgid "Resetted Sync Filter"
 msgstr "Sync filter reset"
 
-#: js/Application.js:91 js/Application.js:103
 #, python-brace-format
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "{0} filter for device \"{1}\" is now \"{2}\""
 
-#: js/Application.js:94
 msgid "resetted"
 msgstr "reset"
 
-#: js/Application.js:102
 msgid "Set Sync Filter"
 msgstr "Set sync filter"
 
-#: js/SyncDevicesGridPanel.js:69
 msgid "ID"
 msgstr "ID"
 
-#: js/SyncDevicesGridPanel.js:71
 msgid "Device Type"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:79
 msgid "Operating System"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:81
 msgid "Phone Number"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:82
 msgid "Ping Lifetime"
 msgstr "Ping lifetime"
 
-#: js/SyncDevicesGridPanel.js:83
 msgid "Ping Folder"
 msgstr "Ping folder"
 
-#: js/SyncDevicesGridPanel.js:84
 msgid "Remote Wipe"
 msgstr "Remote wipe"
 
-#: js/SyncDevicesGridPanel.js:85
 msgid "Calendar Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:86
 msgid "Contacts Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:87
 msgid "E-mail Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:88
 msgid "Tasks Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:89
 msgid "Last Ping"
 msgstr "Last ping"
 
-#: js/SyncDevicesGridPanel.js:90
 msgid "Monitor Last Ping"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:103
 msgid "Remote Device Reset"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:120
 msgid "Please confirm"
 msgstr "Please confirm"
 
-#: js/SyncDevicesGridPanel.js:121
 msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:157
 msgid "Quicksearch"
 msgstr "Quicksearch"
 
-#: Setup/setup.xml:549
 msgid "Default Policy"
 msgstr "Default policy"
 
-#: Setup/setup.xml:554
 msgid "Default Policy installed during setup"
 msgstr "Default policy installed during setup"
 
-#: Config.php:64
 msgid "Default policy for new devices"
 msgstr "Default policy for new devices"
 
-#: Config.php:66
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Enter the policy ID to apply to newly created devices."
 
-#: Config.php:75
 msgid "Device Model Agent Deny List"
 msgstr ""
 
-#: Config.php:77
 msgid "Array of regular expressions of Device-Model strings"
 msgstr ""
 
-#: Config.php:88
 msgid "User Agent Deny List"
 msgstr ""
 
-#: Config.php:90
 msgid "Array of regular expressions of User-Agent strings"
 msgstr ""
 
-#: Config.php:101
 msgid "Disable Remote Reset Action"
 msgstr ""
 
-#: Config.php:103
 msgid "Disable Remote Reset Action AdminPanel"
 msgstr ""
 
-#: Config.php:112
 msgid "Disable Access Log"
 msgstr "Disable access log"
 
-#: Config.php:114
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Disable ActiveSync access log creation."
 
-#: Config.php:123
 msgid "Filter timeslot for e-mails"
 msgstr ""
 
-#: Config.php:125
 msgid "For how long in the past the e-mails should be synchronized."
 msgstr ""
 
-#: Config.php:146
 msgid "Filter timeslot for events"
 msgstr "Filter timeslot for events"
 
-#: Config.php:148
 msgid "For how long in the past the events should be synchronized."
 msgstr "For how long into the past the events should be synchronized for."
 
-#: Controller/Device.php:214
 msgid "%1$s ActiveSync failure"
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:1
 msgid "Dear user,"
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:3
 msgid "%1$s has noticed that the syncronization with your ActiveSync device is no longer active. Please trigger the syncronisation on your device."
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:5
 msgid "Thank you."
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:7
 msgid "Your %1$s Team"
 msgstr ""
 
-#: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
 msgstr "Manage ActiveSync devices"
 
-#: Acl/Rights.php:111
 msgid "See, edit and delete ActiveSync devices"
 msgstr "Show, edit and delete ActiveSync devices"
 
-#: Acl/Rights.php:114
 msgid "Reset ActiveSync devices"
 msgstr "Reset ActiveSync devices"
 
-#: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr "Remotely reset ActiveSync devices to factory state, deleting all data"
-
-#~ msgid "Default Addressbook"
-#~ msgstr "Default addressbook"
-
-#~ msgid "The default addressbook to create new contacts in."
-#~ msgstr "The default addressbook for new contacts."
-
-#~ msgid "AS Version"
-#~ msgstr "AS Version"
-
-#~ msgid "Useragent"
-#~ msgstr "Useragent"
-
-#~ msgid "Calendarfilter"
-#~ msgstr "Calendar filter"
-
-#~ msgid "Contactsfilter"
-#~ msgstr "Contact filter"
-
-#~ msgid "Emailfilter"
-#~ msgstr "Email filter"
-
-#~ msgid "Tasksfilter"
-#~ msgstr "Task filter"
-
-#~ msgid "Remote Reset Device"
-#~ msgstr "Remote Reset Device"
-
-#~ msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device is reset to factory settings!"
-#~ msgstr "Do you really want to wipe the selected devices? All personal data will be removed and the device is reset to factory settings!"
-
-#~ msgid "SyncDevice"
-#~ msgid_plural "SyncDevices"
-#~ msgstr[0] "SyncDevice"
-#~ msgstr[1] "SyncDevices"
-
-#~ msgid "Filter timeslot for emails"
-#~ msgstr "Filter timeslot for emails"
-
-#~ msgid "For how long in the past the emails should be synchronized."
-#~ msgstr "For how long into the past the events should be synchronized for."
