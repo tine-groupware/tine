@@ -45,15 +45,18 @@ try {
         'update|u'        => 'Update lang files (shortcut for --pot --potmerge --mo --clean)',
         'package=s'       => 'Create a translation package',
         'app=s'           => 'Work only on this Application',
+        'keep-line-numbers' => 'Keep line numbers in po/pot files',
         'pot'             => '(re) generate xgettext po template files',
         'potmerge'        => 'merge pot contents into po files',
         'statistics'      => 'generate lang statistics',
         'contribute=s'    => 'merge contributed translations of <path to archive> (implies --update)',
-        'language=s'      => 'contributed language or language to handle',
+        'language|l=s'      => 'contributed language or language to handle',
         'mo'              => 'Build mo files',
         'newlang=s'       => 'Add new language',
         'overwrite'       => '  overwrite existing lang files',
         'git'             => 'Add new/updated lang files to git',
+        'txmerge'          => 'merge changes with tx',
+        'branch'          => 'own branch, autodetect (using git) if empty',
         'help|h'          => 'Display this help Message',
         
         //'filter=s'        => 'Filter for applications'
@@ -108,16 +111,16 @@ if ($opts->u || $opts->contribute) {
 }
 
 if ($opts->pot) {
-    generatePOTFiles($opts->v);
+    generatePOTFiles($opts);
 }
 
 if ($opts->potmerge) {
-    potmerge($opts->v);
+    potmerge($opts);
 }
 
 if ($opts->newlang) {
     generateNewTranslationFiles($opts->newlang, $opts->v, $opts->overwrite);
-    potmerge($opts->v);
+    potmerge($opts);
     msgfmt($opts->v);
     if($opts->git) {
         gitAdd($opts->newlang);
@@ -149,8 +152,9 @@ if ($opts->mo) {
 
 if ($opts->c || $opts->package) {
     // remove translation backups of msgmerge
-    `cd "$tine20path"
-    find . -type f -iname "*.po~" -exec rm {} \;`;
+    `cd "$tine20path" \
+    find . -type f -iname "*.po~" -exec rm {} \; \
+    find . -type f -iname "*.mo" -exec rm {} \;`;
 }
 if ($opts->statistics) {
     statistics($opts->v);
@@ -160,6 +164,13 @@ if ($opts->package) {
     buildpackage($opts->v, $opts->{'package'} ?: NULL);
 }
 
+if ($opts->txmerge) {
+    txMerge($opts);
+}
+
+if ($opts->txconf) {
+    generateTxConfig($opts);
+}
 /**
  * returns list of existing langugages
  * (those, having a correspoinding Tinebase po file)
@@ -249,7 +260,7 @@ function translationExists($_locale)
 /**
  * (re) generates po template files
  */
-function generatePOTFiles($_verbose)
+function generatePOTFiles($opts)
 {
     global $tine20path;
     if (file_exists("$tine20path/Tinebase/js/tine-all.js")) {
@@ -258,17 +269,17 @@ function generatePOTFiles($_verbose)
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         
-        if( ! checkAppName($appName, $_verbose)) {
+        if( ! checkAppName($appName, $opts->v)) {
             continue;
         }
         
-        if ($_verbose) {
+        if ($opts->v) {
             echo "Creating $appName template \n";
         }
         $appPath = "$translationPath/../";
         $tempExtractDir = $appPath . 'tempExtract';
 
-        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $_verbose);
+        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/template.pot",  $opts->v);
 
         chdir($appPath);
         mkdir($tempExtractDir);
@@ -283,6 +294,7 @@ function generatePOTFiles($_verbose)
         `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.vue" -or -type f -iname "*.xml" -or -iname "*.twig" \
         | grep -v node_modules | \
         xgettext \
+          --no-wrap \
           --force-po \
           --omit-header \
           --join-existing \
@@ -293,6 +305,11 @@ function generatePOTFiles($_verbose)
           --keyword=translate \
           --files-from=- \
           2> /dev/null`;
+
+        if (! $opts->{'keep-line-numbers'}) {
+            `grep -v '#: ' translations/template.pot > $tempExtractDir/template.pot`;
+            `cp $tempExtractDir/template.pot translations/template.pot`;
+        }
 
         `rm -rf "$tempExtractDir"`;
     }
@@ -323,38 +340,38 @@ function extractTemplates($path, $target)
 /**
  * potmerge
  */
-function potmerge($_verbose)
+function potmerge($opts)
 {
     
-    $langs = getExistingLanguages($_verbose);
-    $msgDebug = $_verbose ? '' : '2> /dev/null';
+    $langs = getExistingLanguages($opts->v);
+    $msgDebug = $opts->v ? '' : '2> /dev/null';
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         
-        if( ! checkAppName($appName, $_verbose)) {
+        if( ! checkAppName($appName, $opts->v)) {
             continue;
         }
         
-        if ($_verbose) {
+        if ($opts->v) {
             echo "Processing $appName po files \n";
         }
         
-        if ($_verbose) {
+        if ($opts->v) {
            echo "creating en.po from template.po\n";
         }
-        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $_verbose);
+        generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $opts->v);
         $enHeader = file_get_contents("$translationPath/en.po");
         `cd "$translationPath"
          msgen template.pot > en.po $msgDebug`;
          
         foreach ($langs as $langCode) {
             
-            if (! checkLang($langCode, $_verbose)) continue;
+            if (! checkLang($langCode, $opts->v)) continue;
             
             $poFile = "$translationPath/$langCode.po";
             
             if (! is_file($poFile)) {
-                if ($_verbose) {
+                if ($opts->v) {
                     echo "Adding non exising translation $langCode for $appName\n";
                 }
                 
@@ -370,14 +387,20 @@ function potmerge($_verbose)
                 $regionName = ($region) ? $locale->getTranslation($region, 'country') : '';
                 $pluralForm = getPluralForm($languageName);
                 
-                generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $poFile, $_verbose);
+                generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $poFile, $opts->v);
             }
 
-            if ($_verbose) {
+            if ($opts->v) {
                echo $poFile . ": ";
             }
             `cd "$translationPath"
              msgmerge --no-fuzzy-matching --no-wrap $poFile template.pot $msgDebug -o $poFile`;
+
+            if (! $opts->{'keep-line-numbers'}) {
+                `grep -v '#: ' $poFile > $poFile.nolinenumbers`;
+                `cp $poFile.nolinenumbers $poFile && rm $poFile.nolinenumbers`;
+            }
+
         }
     }
 }
@@ -856,3 +879,46 @@ function gitAdd($_locale)
         }
     }
 }
+
+function txMerge($opts)
+{
+    $branch = $opts->branch ?? trim(`git rev-parse --abbrev-ref HEAD`);
+    $config = new Zend_Config_Ini('.tx/branches');
+    if (!isset($config->$branch)) {
+        if ($opts->v) {
+            echo "  no branch config in .tx/branches for '$branch' -> nothing to do! \n";
+            return;
+        }
+    }
+
+    $forceApp = $opts->app;
+
+    foreach($config->{$branch}->apps->toArray() as $appName) {
+        if ($forceApp && $forceApp !== $appName) continue;
+
+        $opts->app = $appName;
+        generatePOTFiles($opts);
+
+        chdir(__DIR__);
+
+        // push all stuff to tx to avoid content loss on pull as tx pull doesn't merge
+        $cmd = "tx push -s -t -f --skip ". ($opts->language ? "-l $opts->language " : "") . "groupware.$appName";
+        $opts->v ? passthru($cmd) : `$cmd`;
+
+        // pull from tx n - NOTE: we don't use -f here to not lose fuzzy strings in principal
+        $cmd = "tx pull -t --use-git-timestamps --skip  " . ($opts->language ? "-l $opts->language " : "") . "groupware.$appName";
+        $opts->v ? passthru($cmd) : `$cmd`;
+
+        // reformat as tx wraps lines,
+        foreach (scandir("$appName/translations") as $poFile) {
+            if ($opts->language && $opts->language !== str_replace('.po', '', $poFile)) continue;
+            if (substr($poFile, -3) === '.po') {
+                `msgcat --no-wrap -o $appName/translations/$poFile $appName/translations/$poFile`;
+            }
+        }
+    }
+
+    // @TODO finally add an commit
+}
+
+

@@ -117,7 +117,7 @@ Bug reports should contain the following information:
 
 ## Translations
 
-Tine 2.0 manages translations at [Transifex](https://www.transifex.net/projects/p/tine20/),
+Tine 2.0 manages translations at [Transifex](https://app.transifex.com/tine/groupware/dashboard/),
 a free Web-Service for open source projects.
 
 ## Write Documentation

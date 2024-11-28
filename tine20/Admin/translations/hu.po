@@ -3,1606 +3,1110 @@
 # Tamás Faragó <>, 2012-2013
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2020-05-11 11:46+0000\n"
-"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
-"Language-Team: Hungarian (http://www.transifex.com/tine20/tine20/language/hu/)\n"
-"Language: hu\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Tamás Faragó <>, 2012-2013\n"
+"Language-Team: Hungarian (http://app.transifex.com/tine/groupware/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Frontend/Cli.php:780
 msgid "Notifications"
 msgstr ""
 
-#: js/Applications.js:24 js/Applications.js:144
 msgid "Enable Application"
 msgstr "Alkalmazás engedélyezése"
 
-#: js/Applications.js:33 js/Applications.js:145
 msgid "Disable Application"
 msgstr "Alkalmazás letiltása"
 
-#: js/Applications.js:42 js/Applications.js:146
 msgid "Settings"
 msgstr "Beállítása"
 
-#: js/Applications.js:71
 #, python-brace-format
 msgid "{0} Settings"
 msgstr "{0} Beállítások"
 
-#: js/Applications.js:183 js/Groups.js:182 js/Tags.js:172 js/Roles.js:178
 msgid "Search:"
 msgstr "Keresés:"
 
-#: js/Applications.js:223 js/Admin.js:413
 msgid "Disabled"
 msgstr ""
 
-#: js/Applications.js:226
 msgid "Enabled"
 msgstr ""
 
-#: js/Applications.js:230
 #, python-brace-format
 msgid "Unknown status ({0})"
 msgstr ""
 
-#: js/Applications.js:268
 #, python-brace-format
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Alkalmazások megjelenítése {0} - {1} / {2}"
 
-#: js/Applications.js:269
 msgid "No applications to display"
 msgstr "Nincs megjeleníthető alkalamazás"
 
-#: js/Applications.js:278 js/customfield/EditDialog.js:531
-#: js/container/EditDialog.js:199
 msgid "Order"
 msgstr "Sorrend"
 
-#: js/Applications.js:279 js/Groups.js:242 js/customfield/EditDialog.js:492
-#: js/customfield/GridPanel.js:69 js/config/GridPanel.js:75
-#: js/SambaMachineGrid.js:76 js/Tags.js:229 js/Roles.js:236
-#: js/user/EditDialog.js:359 js/user/EditDialog.js:395
-#: js/container/EditDialog.js:146 js/AccessLog.js:132 js/QuotaManagement.js:91
-#: Model/SchedulerTask/Import.php:39
 msgid "Name"
 msgstr "Név"
 
-#: js/Applications.js:280 js/user/EditDialog.js:1084 js/user/GridPanel.js:193
 msgid "Status"
 msgstr "Állapot"
 
-#: js/Applications.js:281
 msgid "Version"
 msgstr "Verzió"
 
-#: js/SchedulerModelPicker.js:9
 msgid "Built in configs"
 msgstr ""
 
-#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
 msgid "Confirm"
 msgstr "Megerősít"
 
-#: js/Groups.js:52
 msgid "Do you really want to delete the selected groups?"
 msgstr "Valóban törölni akarja a kiválasztott csoportokat?"
 
-#: js/Groups.js:69
 msgid "Deleting group(s)..."
 msgstr "Csoport(ok) törlése..."
 
-#: js/Groups.js:110
 msgid "Add Group"
 msgstr "Csoport hozzáadása"
 
-#: js/Groups.js:118
 msgid "Edit Group"
 msgstr "Csoport szerkesztése"
 
-#: js/Groups.js:126
 msgid "Delete Group"
 msgstr "Csoport törlése"
 
-#: js/Groups.js:230
 #, python-brace-format
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Csoportok megjelenítése {0} - {1} / {2}"
 
-#: js/Groups.js:231 js/Groups.js:291
 msgid "No groups to display"
 msgstr "Nincs megjeleníthető csoport"
 
-#: js/Groups.js:241 js/customfield/GridPanel.js:67 js/SambaMachineGrid.js:75
-#: js/Tags.js:225 js/Roles.js:235 js/user/GridPanel.js:192
-#: js/container/GridPanel.js:65
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:243 js/user/EditDialog.js:1045 js/user/GridPanel.js:198
-#: js/GroupEditDialog.js:113
 msgid "E-mail"
 msgstr ""
 
-#: js/Groups.js:244
 msgid "Account only"
 msgstr ""
 
-#: js/Groups.js:245 js/config/GridPanel.js:64 js/SambaMachineGrid.js:57
-#: js/SambaMachineGrid.js:77 js/TagEditDialog.js:236 js/Tags.js:230
-#: js/RoleEditDialog.js:297 js/Roles.js:237 js/user/GridPanel.js:94
-#: js/GroupEditDialog.js:72
 msgid "Description"
 msgstr "Leírás"
 
-#: js/Groups.js:246
 msgid "Creation Time"
 msgstr ""
 
-#: js/Groups.js:247
 msgid "Created By"
 msgstr ""
 
-#: js/Groups.js:248
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Groups.js:249
 msgid "Last Modified By"
 msgstr ""
 
-#: js/SchedulerPanel.js:2
 msgid "Scheduler"
 msgstr ""
 
-#: js/customfield/EditDialog.js:145 js/customfield/EditDialog.js:281
-#: js/TagEditDialog.js:91 js/RoleEditDialog.js:118
 msgid "Errors"
 msgstr "Hibák"
 
-#: js/customfield/EditDialog.js:145
 msgid "Please configure store for this field type"
 msgstr "Kérlek állítsd be ennek a mező típusnak a tárolását"
 
-#: js/customfield/EditDialog.js:236 js/customfield/EditDialog.js:422
-#: js/customfield/GridPanel.js:71 js/Models.js:156
-#: js/container/EditDialog.js:155 js/container/GridPanel.js:67
-#: js/ApplicationFilter.js:33
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Alkalmazás"
 msgstr[1] "Alkalmazások"
 
-#: js/customfield/EditDialog.js:256
 msgid "Record Class"
 msgstr "Adat osztály"
 
-#: js/customfield/EditDialog.js:281
 msgid "Given record class not found"
 msgstr "Megadott adat osztály nem találató"
 
-#: js/customfield/EditDialog.js:318 js/user/EditDialog.js:864
 msgid "Cancel"
 msgstr "Megszakítás"
 
-#: js/customfield/EditDialog.js:324
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:370
 msgid "Configure store"
 msgstr "Tárolás beállítása"
 
-#: js/customfield/EditDialog.js:378
 msgid "Permissions"
 msgstr ""
 
-#: js/customfield/EditDialog.js:383 js/TagEditDialog.js:201
 msgid "View"
 msgstr "Megtekintés"
 
-#: js/customfield/EditDialog.js:388 js/TagEditDialog.js:206
 msgid "Use"
 msgstr "Használ"
 
-#: js/customfield/EditDialog.js:444 js/customfield/GridPanel.js:72
-#: js/container/EditDialog.js:174
 msgid "Model"
 msgstr "Modell"
 
-#: js/customfield/EditDialog.js:456
 msgid "Custom field definition"
 msgstr "Egyedi mező leírás"
 
-#: js/customfield/EditDialog.js:467
 msgid "Text"
 msgstr "Szöveg"
 
-#: js/customfield/EditDialog.js:468
 msgid "Textarea"
 msgstr ""
 
-#: js/customfield/EditDialog.js:469
 msgid "Number"
 msgstr "Szám"
 
-#: js/customfield/EditDialog.js:470
 msgid "Date"
 msgstr "Dátum"
 
-#: js/customfield/EditDialog.js:471
 msgid "DateTime"
 msgstr "DátumIdő"
 
-#: js/customfield/EditDialog.js:472
 msgid "Time"
 msgstr "Idő"
 
-#: js/customfield/EditDialog.js:473
 msgid "Boolean"
 msgstr "Logikai"
 
-#: js/customfield/EditDialog.js:474
 msgid "Search Combo"
 msgstr "Kombó kerés"
 
-#: js/customfield/EditDialog.js:475
 msgid "Key Field"
 msgstr "Kulcs mező"
 
-#: js/customfield/EditDialog.js:476
 msgid "Record"
 msgstr "Adat"
 
-#: js/customfield/EditDialog.js:477
 msgid "Record List"
 msgstr ""
 
-#: js/customfield/EditDialog.js:480 js/customfield/GridPanel.js:70
-#: js/container/EditDialog.js:185 js/container/GridPanel.js:68
-#: js/container/GridPanel.js:103
 msgid "Type"
 msgstr "Típus"
 
-#: js/customfield/EditDialog.js:498 js/customfield/GridPanel.js:68
-#: js/config/GridPanel.js:80
 msgid "Label"
 msgstr "Osztályozás"
 
-#: js/customfield/EditDialog.js:504
 msgid "Length"
 msgstr "Hossz"
 
-#: js/customfield/EditDialog.js:509
 msgid "Required"
 msgstr "Szükséges"
 
-#: js/customfield/EditDialog.js:516
 msgid "Custom field additional properties"
 msgstr "Egyedi mező további beállításai"
 
-#: js/customfield/EditDialog.js:521
 msgid "Tab Panel"
 msgstr ""
 
-#: js/customfield/EditDialog.js:526 js/Models.js:107
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Csoport"
 msgstr[1] "Csoport"
 
-#: js/customfield/EditDialog.js:536
 msgid "Key"
 msgstr ""
 
-#: js/customfield/EditDialog.js:562
 msgid "Customfield already exists. Please choose another name."
 msgstr "Egyedi mező már létezik. Kérlek válassz egy másik nevet."
 
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:116
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] "Egyedi mező"
 msgstr[1] "Egyedi mezők"
 
-#: js/customfield/Customfield.js:60
 msgid "Anyone"
 msgstr ""
 
-#: js/customfield/GridPanel.js:73
 msgid "UI Config"
 msgstr ""
 
-#: js/customfield/GridPanel.js:189
 msgid "This custom field is still in use!"
 msgstr ""
 
-#: js/customfield/GridPanel.js:190
 msgid "Are you sure you want to delete them?"
 msgstr ""
 
-#: js/config/FieldManager.js:52
 msgid "Yes"
 msgstr ""
 
-#: js/config/FieldManager.js:52
 msgid "No"
 msgstr ""
 
-#: js/config/GridPanel.js:49 js/Models.js:188
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/config/GridPanel.js:86
 msgid "Value"
 msgstr "Érték"
 
-#: js/config/GridPanel.js:270
 #, python-brace-format
 msgid "Default ({0})"
 msgstr ""
 
-#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
 msgstr "Számítógép Név"
 
-#: js/AdminPanel.js:46
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Alapértelmezett Címjegyzék új kapcsolatokhoz és csoportokhoz"
 
-#: js/TagEditDialog.js:38 js/RoleEditDialog.js:73
 msgid "Please wait"
 msgstr "Kérlek várj"
 
-#: js/TagEditDialog.js:38
 msgid "Updating Tag"
 msgstr "Címke frissítése"
 
-#: js/TagEditDialog.js:84 js/RoleEditDialog.js:111 js/RoleEditDialog.js:139
-#: js/Roles.js:67
 msgid "Failed"
 msgstr "Nem sikerült"
 
-#: js/TagEditDialog.js:85
 #, python-brace-format
 msgid "Could not save tag ({0})"
 msgstr ""
 
-#: js/TagEditDialog.js:91 js/RoleEditDialog.js:118
 msgid "Please fix the errors noted."
 msgstr "Kérjük javítsa kis a jelölt hibákat."
 
-#: js/TagEditDialog.js:172
 msgid "Allowed Contexts"
 msgstr "Megengedett kontextus"
 
-#: js/TagEditDialog.js:178
 msgid "Context"
 msgstr "Kontextus"
 
-#: js/TagEditDialog.js:191
 msgid "Account Rights"
 msgstr "Fiók jogok"
 
-#: js/TagEditDialog.js:224
 msgid "Tag Name"
 msgstr "Címke név"
 
-#: js/TagEditDialog.js:231 js/Tags.js:226 js/container/EditDialog.js:205
 msgid "Color"
 msgstr "Szín"
 
-#: js/TagEditDialog.js:296 js/RoleEditDialog.js:364
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr "{0} átvitele..."
 
-#: js/TagEditDialog.js:296
 msgid "Tag"
 msgstr "Címke"
 
-#: js/TagEditDialog.js:306
 msgid "Add New Tag"
 msgstr "Új címke hozzáadása"
 
-#: js/TagEditDialog.js:308
 #, python-brace-format
 msgid "Edit Tag \"{0}\""
 msgstr "Címke szerkesztése  \"{0}\""
 
-#: js/ImportExportDefinitionEditDialog.js:53
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
 msgstr "Biztos törölni akarja a kiválaszott címkéket?"
 
-#: js/Tags.js:80
 msgid "Deleting tag(s)..."
 msgstr "Címke(ék) törlése..."
 
-#: js/Tags.js:100
 msgid "Add Tag"
 msgstr "Címke hozzáadása"
 
-#: js/Tags.js:108
 msgid "Edit Tag"
 msgstr "Címke szerkesztése"
 
-#: js/Tags.js:116
 msgid "Delete Tag"
 msgstr "Címke törlése"
 
-#: js/Tags.js:214
 #, python-brace-format
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Címkék megjelenítése {0} - {1} / {2}"
 
-#: js/Tags.js:215 js/Tags.js:273
 msgid "No tags to display"
 msgstr "Nincs megjeleníthető címke"
 
-#: js/Tags.js:227
 msgid "Usage:&#160;"
 msgstr "Használat:&#160;"
 
-#: js/Tags.js:231
 msgid "System Tag"
 msgstr ""
 
-#: js/RoleEditDialog.js:73
 msgid "Updating Memberships"
 msgstr "Tagságok frissítése"
 
-#: js/RoleEditDialog.js:111
 msgid "Could not save role."
 msgstr "Szerep mentése nem sikerült."
 
-#: js/RoleEditDialog.js:131
 msgid "Deleting role..."
 msgstr "Szerep törlése..."
 
-#: js/RoleEditDialog.js:139 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "Valamilyen hiba történt a szerep mentése közben."
 
-#: js/RoleEditDialog.js:163
 msgid "Rights"
 msgstr "Jogok"
 
-#: js/RoleEditDialog.js:265
 msgid "Members"
 msgstr "Tagok"
 
-#: js/RoleEditDialog.js:289
 msgid "Role Name"
 msgstr "Szerep neve"
 
-#: js/RoleEditDialog.js:364
 msgid "Role"
 msgstr "Szerep"
 
-#: js/RoleEditDialog.js:374
 msgid "Add New Role"
 msgstr "Új szerep hozzáadása"
 
-#: js/RoleEditDialog.js:376
 #, python-brace-format
 msgid "Edit Role \"{0}\""
 msgstr "Szerep szerkesztése \"{0}\""
 
-#: js/Roles.js:47
 msgid "Do you really want to delete the selected roles?"
 msgstr "Biztos törölni akarod a kiválasztott szerepeket?"
 
-#: js/Roles.js:62
 msgid "Deleting role(s)..."
 msgstr "Szerep(ek) törlése..."
 
-#: js/Roles.js:105
 msgid "Add Role"
 msgstr "Szabály hozzáadása"
 
-#: js/Roles.js:113
 msgid "Edit Role"
 msgstr "Szabály szerkesztése"
 
-#: js/Roles.js:121
 msgid "Delete Role"
 msgstr "Szabály törlése"
 
-#: js/Roles.js:224
 #, python-brace-format
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Szerepek megjelenítése{0} - {1} / {2}"
 
-#: js/Roles.js:225 js/Roles.js:279
 msgid "No roles to display"
 msgstr "Nincs megjelenthető szerep"
 
-#: js/Models.js:68 js/Admin.js:137 js/AccessLog.js:104
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "Hozzáférési Napló"
 msgstr[1] "Hozzáférési Napló"
 
-#: js/Models.js:107 js/Admin.js:42
 msgid "Groups"
 msgstr "Csoportok"
 
-#: js/Models.js:156 js/Admin.js:69
 msgid "Applications"
 msgstr "Alkalmazások"
 
-#: js/Models.js:188
 msgid "Configs"
 msgstr ""
 
-#: js/QuotaEditDialog.js:124 js/QuotaEditDialog.js:193
-#: js/QuotaEditDialog.js:212 js/user/EditDialog.js:558
-#: js/user/EditDialog.js:600 js/user/EditDialog.js:632 js/QuotaManagement.js:96
 msgid "Quota"
 msgstr "Kvóta"
 
-#: js/QuotaEditDialog.js:136 js/user/Users.js:154
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Email User"
 msgstr[1] "Email Users"
 
-#: js/QuotaEditDialog.js:143 js/user/EditDialog.js:581
 msgid "IMAP Quota"
 msgstr ""
 
-#: js/QuotaEditDialog.js:150 js/user/EditDialog.js:605
 msgid "Current Mailbox size"
 msgstr "Mostani Postafiók mérete"
 
-#: js/QuotaEditDialog.js:155 js/user/EditDialog.js:613
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/QuotaEditDialog.js:162 js/user/EditDialog.js:637
 msgid "Current Sieve size"
 msgstr "Mostani Sieve mérete"
 
-#: js/QuotaEditDialog.js:176
 msgid "path"
 msgstr ""
 
-#: js/QuotaEditDialog.js:184
 msgid "This folder has own quota"
 msgstr ""
 
-#: js/QuotaEditDialog.js:195
 msgid "No quota set (examples: 10 GB, 900 MB)"
 msgstr ""
 
-#: js/QuotaEditDialog.js:203
 msgid "Current Usage"
 msgstr ""
 
-#: js/user/EditDialog.js:254 js/GroupEditDialog.js:190
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Domain nem engedélyezett. Nézd meg az SMTP domain konfigurációt."
 
-#: js/user/EditDialog.js:255
 msgid "Allowed Domains"
 msgstr ""
 
-#: js/user/EditDialog.js:276
 msgid "Special characters are not allowed in login name."
 msgstr ""
 
-#: js/user/EditDialog.js:308 js/user/EditDialog.js:311
-#: js/user/EditDialog.js:861
 msgid "Passwords do not match!"
 msgstr "A jelszavak nem egyeznek!"
 
-#: js/user/EditDialog.js:314
 msgid "Passwords match!"
 msgstr "Jelszó megegyezik!"
 
-#: js/user/EditDialog.js:360 js/user/EditDialog.js:1061
 msgid "Primary group"
 msgstr "Elsődleges csoport"
 
-#: js/user/EditDialog.js:437
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:451
 msgid "Home Directory"
 msgstr "Home könyvtár"
 
-#: js/user/EditDialog.js:455
 msgid "Login Shell"
 msgstr "Bejelentkezési Környezet"
 
-#: js/user/EditDialog.js:461
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:475
 msgid "Home Drive"
 msgstr "Home meghajtó"
 
-#: js/user/EditDialog.js:480 js/AccessLog.js:107 js/AccessLog.js:134
 msgid "Login Time"
 msgstr "Bejelentkezés ideje"
 
-#: js/user/EditDialog.js:482 js/user/EditDialog.js:1148
-#: js/user/EditDialog.js:1152
 msgid "never logged in"
 msgstr "sosem jelentkezett be"
 
-#: js/user/EditDialog.js:485
 msgid "Home Path"
 msgstr "Home útvonal"
 
-#: js/user/EditDialog.js:490 js/AccessLog.js:108 js/AccessLog.js:135
 msgid "Logout Time"
 msgstr "Kijelentkezés ideje"
 
-#: js/user/EditDialog.js:492
 msgid "never logged off"
 msgstr "sosem jelentkezett ki"
 
-#: js/user/EditDialog.js:495
 msgid "Profile Path"
 msgstr "Profil útvonal"
 
-#: js/user/EditDialog.js:500
 msgid "Password Last Set"
 msgstr "Utolsónak megadott jelszó"
 
-#: js/user/EditDialog.js:502 js/user/EditDialog.js:1126
-#: js/user/EditDialog.js:1156
 msgid "never"
 msgstr "soha"
 
-#: js/user/EditDialog.js:505
 msgid "Logon Script"
 msgstr "Bejelentkezési Script"
 
-#: js/user/EditDialog.js:510
 msgid "Password Can Change"
 msgstr "A jelszó megváltozhat"
 
-#: js/user/EditDialog.js:512 js/user/EditDialog.js:517
-#: js/user/EditDialog.js:522
 msgid "not set"
 msgstr "nincs beállítva"
 
-#: js/user/EditDialog.js:515 js/user/EditDialog.js:933 js/user/GridPanel.js:205
 msgid "Password Must Change"
 msgstr "A jelszót meg kell változtatni"
 
-#: js/user/EditDialog.js:520
 msgid "Kick Off Time"
 msgstr "Kirúgás ideje"
 
-#: js/user/EditDialog.js:539
 msgid "Filesystem Quota"
 msgstr ""
 
-#: js/user/EditDialog.js:559 js/user/EditDialog.js:601
-#: js/user/EditDialog.js:633 js/QuotaManagement.js:263
 msgid "no quota set"
 msgstr "nincs kvóta beállítva"
 
-#: js/user/EditDialog.js:563
 msgid "Current Filesystem usage"
 msgstr ""
 
-#: js/user/EditDialog.js:646 js/user/EditDialog.js:1131
 msgid "Information"
 msgstr "Információ"
 
-#: js/user/EditDialog.js:660
 msgid "Last Login"
 msgstr "Utolsó bejelentkezés"
 
-#: js/user/EditDialog.js:690
 msgid "Forward Only"
 msgstr "Csak továbbítás"
 
-#: js/user/EditDialog.js:728
 msgid "E-mail Alias"
 msgstr ""
 
-#: js/user/EditDialog.js:733
 msgid "Add an alias address..."
 msgstr "Aliasz cím hozzáadása..."
 
-#: js/user/EditDialog.js:744
 msgid "This alias can be used for sending e-mails."
 msgstr ""
 
-#: js/user/EditDialog.js:771
 msgid "Domain not allowed"
 msgstr "Domain nem engedélyezett"
 
-#: js/user/EditDialog.js:772
 #, python-brace-format
 msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
 msgstr ""
 
-#: js/user/EditDialog.js:799
 msgid "Forwarding to self"
 msgstr "Továbbítás magamnak"
 
-#: js/user/EditDialog.js:800
 msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
 msgstr ""
 
-#: js/user/EditDialog.js:809
 msgid "E-mail Forward"
 msgstr ""
 
-#: js/user/EditDialog.js:814
 msgid "Add a forwarding address..."
 msgstr ""
 
-#: js/user/EditDialog.js:827
 msgid "Password confirmation"
 msgstr "Jelszó megerősítés"
 
-#: js/user/EditDialog.js:845
 msgid "Repeat password"
 msgstr "Jelszó ismétlése"
 
-#: js/user/EditDialog.js:871
 msgid "Ok"
 msgstr "OK"
 
-#: js/user/EditDialog.js:926 js/user/GridPanel.js:216 js/user/GridPanel.js:239
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr ""
 
-#: js/user/EditDialog.js:948
 msgid "Account"
 msgstr "Fiók"
 
-#: js/user/EditDialog.js:963 js/user/GridPanel.js:197
 msgid "First name"
 msgstr "Keresztnév"
 
-#: js/user/EditDialog.js:976 js/user/GridPanel.js:196
 msgid "Last name"
 msgstr "Vezetéknév"
 
-#: js/user/EditDialog.js:986 js/user/GridPanel.js:194
 msgid "Display name"
 msgstr "Megjelenítési név"
 
-#: js/user/EditDialog.js:991 js/user/GridPanel.js:208
 msgid "Full Name"
 msgstr ""
 
-#: js/user/EditDialog.js:995
 msgid "Full name is used to create the distinguishedName (DN) in AD integration"
 msgstr ""
 
-#: js/user/EditDialog.js:997 js/user/EditDialog.js:1056
-#: js/user/GridPanel.js:195
 msgid "Login name"
 msgstr "Bejelentkezési név"
 
-#: js/user/EditDialog.js:1002
 msgid "Password"
 msgstr "Jelszó"
 
-#: js/user/EditDialog.js:1037
 msgid "Multi Factor Authentication Config"
 msgstr ""
 
-#: js/user/EditDialog.js:1055 js/user/GridPanel.js:201
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/EditDialog.js:1077
 msgid "User Type"
 msgstr ""
 
-#: js/user/EditDialog.js:1091
 msgid "enabled"
 msgstr "engedélyezve"
 
-#: js/user/EditDialog.js:1092
 msgid "disabled"
 msgstr "felfüggesztve"
 
-#: js/user/EditDialog.js:1093
 msgid "expired"
 msgstr "lejárt"
 
-#: js/user/EditDialog.js:1094
 msgid "blocked"
 msgstr "blokkolt"
 
-#: js/user/EditDialog.js:1101
 msgid "Invalid Status"
 msgstr "Érvénytelen állapot"
 
-#: js/user/EditDialog.js:1102
 msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
 msgstr "A blokkolt állapot csak akkor él, ha egy felhasználó túl gyakran próbált meg rossz jelszóval bejelentkezni. Itt nem lehetséges ezt az állapotot beállítani."
 
-#: js/user/EditDialog.js:1124 js/user/GridPanel.js:207
 msgid "Expires"
 msgstr "Lejár"
 
-#: js/user/EditDialog.js:1146 js/user/GridPanel.js:202
 msgid "Last login at"
 msgstr "Utolsó bejelentkezés"
 
-#: js/user/EditDialog.js:1148 js/user/EditDialog.js:1152
 msgid "don't know"
 msgstr "nem tudom"
 
-#: js/user/EditDialog.js:1150 js/user/GridPanel.js:203
 msgid "Last login from"
 msgstr "Utolsó bejelentkezés helye"
 
-#: js/user/EditDialog.js:1154
 msgid "Password set"
 msgstr "Beállított jelszó"
 
-#: js/user/EditDialog.js:1159
 msgid "Account ID"
 msgstr ""
 
-#: js/user/EditDialog.js:1165
 msgid "User groups"
 msgstr "Felhasználói csoportok"
 
-#: js/user/EditDialog.js:1171
 msgid "User roles"
 msgstr "Felhasználó szerepek"
 
-#: js/user/EditDialog.js:1177
 msgid "Fileserver"
 msgstr "Fileserver"
 
-#: js/user/EditDialog.js:1183
 msgid "Filesystem"
 msgstr ""
 
-#: js/user/EditDialog.js:1188
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:1197
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/user/EditDialog.js:1252 js/GroupEditDialog.js:80
 msgid "Visibility"
 msgstr "Láthatóság"
 
-#: js/user/EditDialog.js:1260 js/GroupEditDialog.js:86
 msgid "Display in addressbook"
 msgstr "Megjelenítés a címjegyzékben"
 
-#: js/user/EditDialog.js:1260 js/GroupEditDialog.js:86
 msgid "Hide from addressbook"
 msgstr "Elrejtés a címjegyzékben"
 
-#: js/user/EditDialog.js:1274 js/GroupEditDialog.js:102
 msgid "Saved in Addressbook"
 msgstr "Címjegyzékben mentve"
 
-#: js/user/Users.js:78 js/Admin.js:28 js/AccessLog.js:106
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Felhasználó"
 msgstr[1] "Felhasználók"
 
-#: js/user/Users.js:78
 msgid "Users"
 msgstr "Felhasználók"
 
-#: js/user/Users.js:128
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Samba User"
 msgstr[1] "Samba Users"
 
-#: js/user/GridPanel.js:51
 msgid "Enable Account"
 msgstr "Fiók engedélyezése"
 
-#: js/user/GridPanel.js:61
 msgid "Disable Account"
 msgstr "Fiók törlése"
 
-#: js/user/GridPanel.js:71
 msgid "Reset Password"
 msgstr "Jelszó visszaállítása"
 
-#: js/user/GridPanel.js:199
 msgid "E-mail usage"
 msgstr ""
 
-#: js/user/GridPanel.js:200
 msgid "Filesystem usage"
 msgstr ""
 
-#: js/user/GridPanel.js:204
 msgid "MFA Configured"
 msgstr ""
 
-#: js/user/GridPanel.js:206
 msgid "Password changed"
 msgstr "Jelszó megváltoztatása"
 
-#: js/user/GridPanel.js:313
 msgid "Set new password"
 msgstr "Új jelszó beállítása"
 
-#: js/user/GridPanel.js:313
 msgid "Please enter the new password:"
 msgstr "Kérjük adja meg az új jelszavat:"
 
-#: js/GroupEditDialog.js:64
 msgid "Group Name"
 msgstr "Csoport neve"
 
-#: js/GroupEditDialog.js:128
 msgid "Only system accounts can be added to Addressbook group"
 msgstr ""
 
-#: js/GroupEditDialog.js:135
 msgid "Group Members"
 msgstr "Csoport tagok"
 
-#: js/container/EditDialog.js:186 js/container/GridPanel.js:98
 msgid "personal"
 msgstr "személyes"
 
-#: js/container/EditDialog.js:186 js/container/GridPanel.js:98
 msgid "shared"
 msgstr "megosztott"
 
-#: js/container/EditDialog.js:209
 msgid "Container Hierarchy/Name"
 msgstr ""
 
-#: js/container/EditDialog.js:216
 msgid "Note for Owner"
 msgstr "Feljegyzés a tulajdonosnak"
 
-#: js/container/EditDialog.js:229
 msgid "Info"
 msgstr ""
 
-#: js/container/EditDialog.js:229
 msgid "Please create Resources in Addressbook or CoreData."
 msgstr ""
 
-#: js/container/Container.js:46 js/container/GridPanel.js:102
 msgid "Container"
 msgid_plural "Containers"
 msgstr[0] "Konténer"
 msgstr[1] "Konténerek"
 
-#: js/container/GridPanel.js:66
 msgid "Container Name"
 msgstr "Konténer Név"
 
-#: js/container/GridPanel.js:69
 msgid "Container Order"
 msgstr ""
 
-#: js/SambaMachineModel.js:39
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Számítógép"
 msgstr[1] "Számítógépek"
 
-#: js/Admin.js:56
 msgid "Roles"
 msgstr "Szerepek"
 
-#: js/Admin.js:83
 msgid "Containers"
 msgstr "Konténerek"
 
-#: js/Admin.js:96
 msgid "Shared Tags"
 msgstr "Megosztott címkék"
 
-#: js/Admin.js:110
 msgid "Customfields"
 msgstr "Egyedi mezők"
 
-#: js/Admin.js:123
 msgid "Computers"
 msgstr "Számítógépek"
 
-#: js/Admin.js:151
 msgid "Log"
 msgstr ""
 
-#: js/Admin.js:164
 msgid "Server Information"
 msgstr "Szerver információ"
 
-#: js/Admin.js:181
 msgid "ActiveSync Devices"
 msgstr ""
 
-#: js/Admin.js:200
 msgid "E-mail Accounts"
 msgstr ""
 
-#: js/Admin.js:220
 msgid "Import Export Definitions"
 msgstr ""
 
-#: js/Admin.js:291
 msgid "Admin"
 msgstr "Admin"
 
-#: js/Admin.js:390
 msgid "Refresh"
 msgstr "Frissítés"
 
-#: js/Admin.js:413
 msgid "Feature is disabled by configuration."
 msgstr ""
 
-#: js/AccessLog.js:105 js/AccessLog.js:133
 msgid "IP Address"
 msgstr "IP Cím"
 
-#: js/AccessLog.js:109 js/AccessLog.js:138
 msgid "Client Type"
 msgstr "Kliens típus"
 
-#: js/AccessLog.js:130
 msgid "Session ID"
 msgstr "Hozzáférés ID"
 
-#: js/AccessLog.js:131
 msgid "Login Name"
 msgstr "Bejelentkezési név"
 
-#: js/AccessLog.js:136
 msgid "Result"
 msgstr "Eredmény"
 
-#: js/AccessLog.js:137
 msgid "User Agent"
 msgstr ""
 
-#: js/AccessLog.js:159
 msgid "user blocked"
 msgstr "felhasználó blokkolva"
 
-#: js/AccessLog.js:163
 msgid "password expired"
 msgstr "jelszó lejárt"
 
-#: js/AccessLog.js:167
 msgid "user disabled"
 msgstr "felhasználó letiltva"
 
-#: js/AccessLog.js:171
 msgid "invalid password"
 msgstr "érvénytelen jelszó"
 
-#: js/AccessLog.js:175
 msgid "ambiguous username"
 msgstr "kétértelmű felhasználó név"
 
-#: js/AccessLog.js:179
 msgid "user not found"
 msgstr "felhasználó nem található"
 
-#: js/AccessLog.js:183
 msgid "failure"
 msgstr "hiba"
 
-#: js/AccessLog.js:187
 msgid "success"
 msgstr "siker"
 
-#: js/QuotaManagement.js:109
 msgid "Size"
 msgstr ""
 
-#: js/QuotaManagement.js:121
 msgid "Revision Size"
 msgstr ""
 
-#: js/QuotaManagement.js:122
 msgid "Total size of all available revisions"
 msgstr ""
 
-#: js/QuotaManagement.js:165
 msgid "Edit Quota"
 msgstr ""
 
-#: js/QuotaManagement.js:174 js/QuotaManagement.js:286
 msgid "Manage Total Quota"
 msgstr ""
 
-#: js/QuotaManagement.js:262
 msgid "Total quota"
 msgstr ""
 
-#: js/QuotaManagement.js:327
 msgid "Quota Management"
 msgstr ""
 
-#: Config.php:102
 msgid "Apps to show"
 msgstr ""
 
-#: Config.php:104
 msgid "Applications to show in quota, defaults null means all apps"
 msgstr ""
 
-#: Config.php:113
 msgid "Modules to show"
 msgstr ""
 
-#: Config.php:144 Config.php:146
 msgid "Allow total quota in MB management"
 msgstr ""
 
-#: Config.php:155 Config.php:157
 msgid "Default password must change for new user"
 msgstr ""
 
-#: Config.php:166 Config.php:168
 msgid "Default IMAP user settings"
 msgstr "Alapértelmezett IMAP felhasználó beállítások"
 
-#: Config.php:177
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:179
 msgid "Enabled Features in Admin Application."
 msgstr ""
 
-#: Config.php:187
 msgid "Prevent special chars in login name"
 msgstr ""
 
-#: Config.php:192 Config.php:203
 msgid "Force retype of new password in user edit dialog"
 msgstr ""
 
-#: Config.php:196
 msgid "Enable XProps Editor in Edit-Dialogs"
 msgstr ""
 
-#: Config.php:207 Config.php:209
 msgid "Prevent applications disable in front end"
 msgstr ""
 
-#: Config.php:213 Config.php:215
 msgid "Allow to change user type"
 msgstr ""
 
-#: Config.php:115
 msgid "Modules to show in admin app, default value null means all modules."
 msgstr ""
 
-#: Controller/Container.php:207
 msgid "Your container has been changed"
 msgstr "Konténered megváltozott"
 
-#: Controller/Container.php:208
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Konténeredet megváltozotta %1$s %2$sFeljegyzés: %3$s"
 
-#: Controller/Group.php:652
 msgid "A group with this name already exists"
 msgstr ""
 
-#: Controller/User.php:285
 msgid "Password is needed for system account creation"
 msgstr ""
 
-#: Controller/User.php:502
 msgid "Maximum number of users reached."
 msgstr ""
 
-#: Controller/User.php:503
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
 msgstr ""
 
-#: Controller/User.php:683
 msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
 msgstr ""
 
-#: Controller/Quota.php:74
 msgid "Record data needs to be set!"
 msgstr ""
 
-#: Controller/Quota.php:87
 msgid "Account E-Mail needs to be set!"
 msgstr ""
 
-#: Controller/Quota.php:105
 msgid "E-Mail account not found."
 msgstr ""
 
-#: Controller/EmailAccount.php:157
 msgid "Email address is already in use"
 msgstr ""
 
-#: Model/SchedulerTask/Import.php:31
 msgid "GENDER_Scheduled Import Task config"
 msgstr ""
 
-#: Model/SchedulerTask/Import.php:32
 msgid "Scheduled Import Task config"
 msgid_plural "Scheduled Import Task configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/SchedulerTask/Import.php:43
 msgid "Plugin"
 msgstr ""
 
-#: Model/SchedulerTask/Import.php:47
 msgid "Options"
 msgstr ""
 
-#: Model/SchedulerTask/Abstract.php:32
 msgid "GENDER_Task config"
 msgstr ""
 
-#: Model/SchedulerTask/Abstract.php:33 Model/SchedulerTask.php:73
 msgid "Task config"
 msgid_plural "Task configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/SchedulerTask.php:48
 msgid "Period"
 msgstr ""
 
-#: Model/SchedulerTask.php:59
 msgid "Task type"
 msgstr ""
 
-#: Model/SchedulerTask.php:86
 msgid "Emails"
 msgstr ""
 
-#: Export/definitions/admin_group_export_csv.xml:5
-#: Export/definitions/admin_user_export_csv.xml:5
 msgid "CSV all data"
 msgstr ""
 
-#: Acl/Rights.php:271
 msgid "Manage access log"
 msgstr ""
 
-#: Acl/Rights.php:272
 msgid "Delete access log entries."
 msgstr ""
 
-#: Acl/Rights.php:275
 msgid "Manage accounts"
 msgstr ""
 
-#: Acl/Rights.php:276
 msgid "Add and edit users and groups, add group members, change user passwords."
 msgstr ""
 
-#: Acl/Rights.php:279
 msgid "Manage e-mail accounts"
 msgstr ""
 
-#: Acl/Rights.php:280
 msgid "Add and edit shared and personal e-mail accounts."
 msgstr ""
 
-#: Acl/Rights.php:283
 msgid "Manage applications"
 msgstr ""
 
-#: Acl/Rights.php:284
 msgid "Enable and disable applications, edit application settings."
 msgstr ""
 
-#: Acl/Rights.php:287
 msgid "Manage roles"
 msgstr ""
 
-#: Acl/Rights.php:288
 msgid "Add and edit roles, add new members to roles, add application rights to roles."
 msgstr ""
 
-#: Acl/Rights.php:291
 msgid "Manage shared tags"
 msgstr ""
 
-#: Acl/Rights.php:292
 msgid "Add, delete and edit shared tags."
 msgstr ""
 
-#: Acl/Rights.php:295
-msgid "Manage shared admin quotas"
+msgid "Manage shared filesystem quotas"
 msgstr ""
 
-#: Acl/Rights.php:296
-msgid "Add, delete and edit shared admin quotas."
+msgid "Add, delete and edit shared filesystem quotas."
 msgstr ""
 
-#: Acl/Rights.php:299
 msgid "Manage shared email quotas"
 msgstr ""
 
-#: Acl/Rights.php:300
 msgid "Add, delete and edit shared email quotas."
 msgstr ""
 
-#: Acl/Rights.php:303
 msgid "Manage computers"
 msgstr ""
 
-#: Acl/Rights.php:304
 msgid "Add, delete and edit (samba) computers."
 msgstr ""
 
-#: Acl/Rights.php:307
 msgid "Manage containers"
 msgstr ""
 
-#: Acl/Rights.php:308
 msgid "Add, delete and edit containers and manage container grants."
 msgstr ""
 
-#: Acl/Rights.php:311
 msgid "Manage customfields"
 msgstr ""
 
-#: Acl/Rights.php:312
 msgid "Add and edit customfields."
 msgstr ""
 
-#: Acl/Rights.php:315
 msgid "Manage import and export definitions"
 msgstr ""
 
-#: Acl/Rights.php:316
 msgid "Add and edit import and export definitions"
 msgstr ""
 
-#: Acl/Rights.php:319
 msgid "View access log"
 msgstr ""
 
-#: Acl/Rights.php:320
 msgid "View access log list."
 msgstr ""
 
-#: Acl/Rights.php:323
 msgid "View accounts"
 msgstr ""
 
-#: Acl/Rights.php:324
 msgid "View accounts list and details."
 msgstr ""
 
-#: Acl/Rights.php:327
 msgid "View e-mail accounts"
 msgstr ""
 
-#: Acl/Rights.php:328
 msgid "View shared and personal e-mail accounts."
 msgstr ""
 
-#: Acl/Rights.php:331
 msgid "View applications"
 msgstr ""
 
-#: Acl/Rights.php:332
 msgid "View applications list and details."
 msgstr ""
 
-#: Acl/Rights.php:335
 msgid "View roles"
 msgstr ""
 
-#: Acl/Rights.php:336
 msgid "View roles list and details."
 msgstr ""
 
-#: Acl/Rights.php:339
 msgid "View shared tags"
 msgstr ""
 
-#: Acl/Rights.php:340
 msgid "View shared tags list and details."
 msgstr ""
 
-#: Acl/Rights.php:343
 msgid "View computers"
 msgstr ""
 
-#: Acl/Rights.php:344
 msgid "View computers list and details."
 msgstr ""
 
-#: Acl/Rights.php:347
 msgid "View containers"
 msgstr ""
 
-#: Acl/Rights.php:348
 msgid "View personal and shared containers."
 msgstr ""
 
-#: Acl/Rights.php:351
 msgid "View customfields"
 msgstr ""
 
-#: Acl/Rights.php:352
 msgid "View customfields list."
 msgstr ""
 
-#: Acl/Rights.php:355
 msgid "View serverinfo"
 msgstr ""
 
-#: Acl/Rights.php:356
 msgid "View serverinfo list."
 msgstr ""
 
-#: Acl/Rights.php:359
 msgid "View quota usage"
 msgstr ""
 
-#: Acl/Rights.php:360
 msgid "View quota usage."
 msgstr ""
 
-#: Acl/Rights.php:363 Acl/Rights.php:364
 msgid "view ImportExportDefinitions"
 msgstr ""
 
-#: Acl/Rights.php:367
 msgid "Manage SSO"
 msgstr ""
 
-#: Acl/Rights.php:368
-msgid "Manage relying parties for single sign on "
+msgid "Manage relying parties for single sign on"
 msgstr ""
-
-#~ msgid "Some error occurred while trying to delete the group."
-#~ msgstr "Valamilyen hiba történt a csoport törlése közben."
-
-#~ msgid "manage access log"
-#~ msgstr "hozzáférési napló kezelése"
-
-#~ msgid "delete access log entries"
-#~ msgstr "hozzáférési napló bejegyzés törlése"
-
-#~ msgid "manage accounts"
-#~ msgstr "fiókok kezelése"
-
-#~ msgid "add and edit users and groups, add group members, change user passwords"
-#~ msgstr "felhasználók és csoportok hozzáadása, szerkesztése, csoporttag hozzáadása, felhasználó jelszó megváltoztatása"
-
-#~ msgid "manage applications"
-#~ msgstr "alkalmazások kezelése"
-
-#~ msgid "enable and disable applications, edit application settings"
-#~ msgstr "alkalmazások be és kikapcsolása és beállítások módosítása"
-
-#~ msgid "manage roles"
-#~ msgstr "szerepek kezelése"
-
-#~ msgid "add and edit roles, add new members to roles, add application rights to roles"
-#~ msgstr "szerepek hozzáadása és szerkesztése, új szerep hozzáadása felhasználóhóz, alkalmazás hozzáférések szerepekhez adása"
-
-#~ msgid "manage shared tags"
-#~ msgstr "megosztott címkék kezelése"
-
-#~ msgid "add, delete and edit shared tags"
-#~ msgstr "címkék hozzáadása, szerkesztése, törlése"
-
-#~ msgid "manage computers"
-#~ msgstr "számítógépek kezelése"
-
-#~ msgid "add, delete and edit (samba) computers"
-#~ msgstr "számítógép (samba) hozzáadása, szerkesztése, törlése"
-
-#~ msgid "manage containers"
-#~ msgstr "konténerek kezelése"
-
-#~ msgid "add, delete and edit containers and manage container grants"
-#~ msgstr "konténerek hozzáadása, szerkesztése, törlése és konténer jogok kezelése"
-
-#~ msgid "view access log"
-#~ msgstr "hozzáférési napló megtekintése"
-
-#~ msgid "view access log list"
-#~ msgstr "hozzáférési napló listája"
-
-#~ msgid "view accounts"
-#~ msgstr "fiókok megtekintése"
-
-#~ msgid "view accounts list and details"
-#~ msgstr "fiók lista és részletek listája"
-
-#~ msgid "view applications"
-#~ msgstr "alkalmazások megtekintése"
-
-#~ msgid "view applications list and details"
-#~ msgstr "alkalmazás lista és részletek"
-
-#~ msgid "view roles"
-#~ msgstr "szerepek megtekintése"
-
-#~ msgid "view roles list and details"
-#~ msgstr "szerepek és részletek listjája"
-
-#~ msgid "view computers"
-#~ msgstr "számítógépek megtekintése"
-
-#~ msgid "view computers list and details"
-#~ msgstr "számítógépek és részletek listája"
-
-#~ msgid "view containers"
-#~ msgstr "konténerek megtekintése"
-
-#~ msgid "view personal and shared containers"
-#~ msgstr "személyes és megosztott konténerek megtekintése"
-
-#~ msgid "Email"
-#~ msgstr "Email"
-
-#~ msgid "Logon Time"
-#~ msgstr "Bejelentkezés ideje"
-
-#~ msgid "Logoff Time"
-#~ msgstr "Kijelentkezés ideje"
-
-#~ msgid "Email Alias"
-#~ msgstr "Email Aliasz"
-
-#~ msgid "You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases."
-#~ msgstr "Nincs lehetőséged beállítani egy olyan továbbítási email címet, amely azonos a felhasználó elsődleges email címével vagy valamelyik aliasával."
-
-#~ msgid "Email Forward"
-#~ msgstr "Email Továbbítás"
-
-#~ msgid "Add a forward address..."
-#~ msgstr "Továbbítási cím hozzáadása..."
-
-#~ msgid "enable application"
-#~ msgstr "alkalmazás engedélyezése"
-
-#~ msgid "disable application"
-#~ msgstr "alkalmazás felfüggesztése"
-
-#~ msgid "settings"
-#~ msgstr "beállítások"
-
-#~ msgid "unknown status ({0})"
-#~ msgstr "ismeretlen állapot ({0})"

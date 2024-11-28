@@ -3,179 +3,135 @@
 # Tamás Faragó <>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:08+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
-"Language-Team: Hungarian (http://www.transifex.com/tine20/tine20/language/hu/)\n"
-"Language: hu\n"
+"PO-Revision-Date: 2012-04-02 13:32+0000\n"
+"Last-Translator: Tamás Faragó <>, 2012\n"
+"Language-Team: Hungarian (http://app.transifex.com/tine/groupware/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:149
 msgid "Draft"
 msgstr "Sablon"
 
-#: Controller.php:150
 msgid "released"
 msgstr "kiadott"
 
-#: Controller.php:151
 msgid "obsolete"
 msgstr "elavult"
 
-#: Controller.php:154
 msgid "Internal"
 msgstr "Belső"
 
-#: Controller.php:155
 msgid "Public"
 msgstr "Publikus"
 
-#: Preference.php:28
 msgid "All my FAQs"
 msgstr "Minden GYIKom"
 
-#: Preference.php:70
 msgid "Default Favorite"
 msgstr "Alapértelmezett kedvenc"
 
-#: Preference.php:71
 msgid "The default favorite which is loaded on FAQ startup"
 msgstr "Az alapértelmezett kedvenc, amelyik a GYIK indításakor betöltődik"
 
-#: Preference.php:74
 msgid "Default FAQ List"
 msgstr "Alapértelmezett GYIK lista"
 
-#: Preference.php:75
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Az alapértelmezett GYIK lista új GYIK létrehozására."
 
-#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "GYIK típus"
 msgstr[1] "GYIK típusok"
 
-#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "GYIK állapot"
 msgstr[1] "GYIK állapot"
 
-#: js/FaqStatus.js:141
 msgid "Add a new FAQ Status..."
 msgstr "Új GYIK állapot hozzáadása..."
 
-#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
 msgid "Question"
 msgstr "Kérdés"
 
-#: js/FaqEditDialog.js:66
 msgid "Enter a question..."
 msgstr "Írj be egy kérdést..."
 
-#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
-#: js/FaqGridDetailsPanel.js:157
 msgid "Answer"
 msgstr "Válasz"
 
-#: js/FaqEditDialog.js:73
 msgid "Enter a answer..."
 msgstr "Írj be egy választ..."
 
-#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
 msgid "Type"
 msgstr "Típus"
 
-#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
 msgid "Status"
 msgstr "Állapot"
 
-#: js/AdminPanel.js:105
 msgid "Defaults"
 msgstr "Alapérelmezettek"
 
-#: js/SimpleFAQ.js:19 js/Model.js:35
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "GYIK"
 msgstr[1] "GYIK"
 
-#: js/SimpleFAQ.js:26
 msgid "Find Question"
 msgstr ""
 
-#: js/SimpleFAQ.js:35
 msgid "Search question"
 msgstr ""
 
-#: js/FaqGridPanel.js:72
 msgid "FAQ id"
 msgstr "GYIK id"
 
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
 msgid "Tags"
 msgstr "Címkék"
 
-#: js/FaqType.js:144
 msgid "Add a new FAQ Type..."
 msgstr "Új GYIK típus hozzáadása..."
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"
 msgstr "GYIK információk"
 
-#: js/FaqGridDetailsPanel.js:189
 msgid "Creation Time"
 msgstr "Létrehozás ideje"
 
-#: js/FaqGridDetailsPanel.js:194
 msgid "Created By"
 msgstr "Készítette"
 
-#: js/FaqGridDetailsPanel.js:226
 msgid "No answer yet"
 msgstr "Nincs még válasz"
 
-#: js/SearchCombo.js:8
 msgid "Search FAQ"
 msgstr ""
 
-#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] "GYIK lista"
 msgstr[1] "GYIK listák"
 
-#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr "GYIK listák"
 
-#: js/Model.js:74
 msgid "Quick Search"
 msgstr ""
 
-#: Setup/Initialize.php:33
 msgid "All FAQs of my FAQ Lists"
 msgstr "Minden GYIK a GYIK listámból"
 
-#: Setup/Initialize.php:40
 msgid "Last modified by me"
 msgstr "Utoljára álltalam módosított"
 
-#: Setup/Initialize.php:41
 msgid "All FAQs that I have last modified"
 msgstr "Minden GYIK amit utoljára én módosítottam"
-
-#, python-format
-#~ msgid "%s's personal FAQs"
-#~ msgstr "%s személyes GYIK"
