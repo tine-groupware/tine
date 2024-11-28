@@ -5,42 +5,35 @@
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:08+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
-"Language: ru\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>, 2012-2013\n"
+"Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:24
 msgid "All my projects"
 msgstr "Все мои проекты"
 
-#: Preference.php:60
 msgid "Default Favorite"
 msgstr "Избранный по умолчанию"
 
-#: Preference.php:61
 msgid "The default favorite which is loaded on Projects startup"
 msgstr "Будет загружено по-умолчанию при загрузке Проектов"
 
-#: js/ProjectEditDialog.js:93 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Участник"
 
-#: js/ProjectEditDialog.js:94 js/AddToProjectPanel.js:87
 msgid "Role"
 msgstr "Роль"
 
-#: js/ProjectEditDialog.js:121 js/ProjectEditDialog.js:134 Config.php:117
-#: Model/Project.php:49
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Проект"
@@ -48,160 +41,121 @@ msgstr[1] "Проекты"
 msgstr[2] "Проекты"
 msgstr[3] "Проекты"
 
-#: js/ProjectEditDialog.js:146
 msgid "Title"
 msgstr "Заголовок"
 
-#: js/ProjectEditDialog.js:151 Model/Project.php:115
 msgid "Number"
 msgstr "Номер"
 
-#: js/ProjectEditDialog.js:157 Model/Project.php:143
 msgid "Status"
 msgstr "Статус"
 
-#: js/ProjectEditDialog.js:163 Model/Project.php:153
 msgid "Start"
 msgstr ""
 
-#: js/ProjectEditDialog.js:169 Model/Project.php:161
 msgid "End"
 msgstr ""
 
-#: js/ProjectEditDialog.js:177 Model/Project.php:168
 msgid "Scope"
 msgstr ""
 
-#: js/ProjectEditDialog.js:184 Model/Project.php:178
 msgid "Type"
 msgstr ""
 
-#: js/ProjectEditDialog.js:245 Model/Project.php:135
 msgid "Description"
 msgstr "Описание"
 
-#: js/ProjectEditDialog.js:259
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/AddToProjectPanel.js:40
 msgid "Please choose the Project to add the contacts to"
 msgstr "Пожалуйста, выберите проект для добавления контактов"
 
-#: js/AddToProjectPanel.js:44
 msgid "Please select the attenders' role"
 msgstr "Пожалуйста, выберите роль участника"
 
-#: js/AddToProjectPanel.js:85
 msgid "Select Project"
 msgstr "Выберите проект"
 
-#: js/AddToProjectPanel.js:88
 msgid "Select Role"
 msgstr "Выберите роль"
 
-#: js/AddToProjectPanel.js:108
 #, python-brace-format
 msgid "Adding {0} Participants to project"
 msgstr "Добавлено {0} участников в проект"
 
-#: js/ProjectAttendeeFilter.js:49
 msgid "Attendee Role"
 msgstr "Роль участника"
 
-#: Setup/setup.xml:4
 msgid "Projects"
 msgstr "Проекты"
 
-#: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Все мои открытые проекты"
 
-#: Setup/Initialize.php:56
 msgid "My projects that I'm responsible for"
 msgstr "Проекты, за которые я отвечаю"
 
-#: Setup/Initialize.php:57
 msgid "All my open projects that I am responsible for"
 msgstr "Все открытые проекты, за которые я отвечаю"
 
-#: Setup/Initialize.php:77
 msgid "My waiting projects"
 msgstr "Мои ожидающие проекты"
 
-#: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Мои приостановленные проекты"
 
-#: Config.php:58
 msgid "Available Project Attendee Role"
 msgstr ""
 
-#: Config.php:60
 msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:67
 msgid "Coworker"
 msgstr "Коллега"
 
-#: Config.php:68
 msgid "Responsible"
 msgstr "Ответственный"
 
-#: Config.php:74
 msgid "Available Project Scopes"
 msgstr ""
 
-#: Config.php:82
 msgid "Internal"
 msgstr ""
 
-#: Config.php:83
 msgid "External"
 msgstr ""
 
-#: Config.php:88
 msgid "Available Project Status"
 msgstr ""
 
-#: Config.php:90
 msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:97
 msgid "On hold"
 msgstr "на удержании"
 
-#: Config.php:98
 msgid "Completed"
 msgstr "Завершен"
 
-#: Config.php:99
 msgid "Cancelled"
 msgstr "Отменён"
 
-#: Config.php:100
 msgid "In process"
 msgstr "в работе"
 
-#: Config.php:106
 msgid "Available Project Types"
 msgstr ""
 
-#: Config.php:114
 msgid "Campaign"
 msgstr ""
 
-#: Config.php:115
 msgid "Activity"
 msgstr ""
 
-#: Config.php:116
 msgid "Contract"
 msgstr ""
 
-#: Model/Project.php:54
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Список проектов"
@@ -209,66 +163,20 @@ msgstr[1] "Списки проектов"
 msgstr[2] "Списки проектов"
 msgstr[3] "Списки проектов"
 
-#: Model/Project.php:125
 msgid "Name"
 msgstr ""
 
-#: Model/Project.php:188
 msgid "Tasks"
 msgstr ""
 
-#: Export/definitions/projects_xls_current_columns.xml:5
 msgid "Excel current columns"
 msgstr ""
 
-#: Export/definitions/projects_xls.xml:5
 msgid "Excel all data"
 msgstr ""
 
-#: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr "Управление общими избранными проектами"
 
-#: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr "Создание новых общих избранных проектов"
-
-#, python-format
-#~ msgid "%s's personal Projects"
-#~ msgstr "Персональные проекты %s"
-
-#~ msgid "Search FAQ"
-#~ msgstr "Найти FAQ"
-
-#~ msgid "Tags"
-#~ msgstr "Теги"
-
-#~ msgid "Project lists"
-#~ msgstr "Списки проектов"
-
-#~ msgid "Quick Search"
-#~ msgstr "Быстрый поиск"
-
-#~ msgid "Last Modified Time"
-#~ msgstr "Время последнего изменения"
-
-#~ msgid "Last Modified By"
-#~ msgstr "Последнее изменение"
-
-#~ msgid "Creation Time"
-#~ msgstr "Время создания"
-
-#~ msgid "Created By"
-#~ msgstr "Создано"
-
-#~ msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or syncronisation."
-#~ msgstr "Возможные состояния проекта. Пожалуйста, обратите внимание, что дополнительные состояния проекта могут повлиять на другие системы проектов при экспорте или синхронизации."
-
-#~ msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation."
-#~ msgstr "Возможные роли участника проекта. Пожалуйста, обратите внимание, что дополнительные роли участника проекта могут повлиять на другие системы проектов при экспорте или синхронизации."
-
-#~ msgid "Project Status Available"
-#~ msgstr "Доступно состояние проекта"
-
-#~ msgid "Project Attendee Role Available"
-#~ msgstr "Доступна роль участника проекта"

@@ -4,179 +4,139 @@
 # Juan Fortuna <jfortuna@antel.com.uy>, 2014
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-09-19 12:16+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
-"Language-Team: Spanish (http://www.transifex.com/tine20/tine20/language/es/)\n"
-"Language: es\n"
+"PO-Revision-Date: 2012-04-02 13:32+0000\n"
+"Last-Translator: Juan Fortuna <jfortuna@antel.com.uy>, 2014\n"
+"Language-Team: Spanish (http://app.transifex.com/tine/groupware/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:149
 msgid "Draft"
 msgstr "Borrador"
 
-#: Controller.php:150
 msgid "released"
 msgstr "publicada"
 
-#: Controller.php:151
 msgid "obsolete"
 msgstr "obsoleta"
 
-#: Controller.php:154
 msgid "Internal"
 msgstr "Interna"
 
-#: Controller.php:155
 msgid "Public"
 msgstr "Pública"
 
-#: Preference.php:28
 msgid "All my FAQs"
 msgstr "Todas mis FAQs"
 
-#: Preference.php:70
 msgid "Default Favorite"
 msgstr "Favorito por defecto"
 
-#: Preference.php:71
 msgid "The default favorite which is loaded on FAQ startup"
 msgstr "El favorito por defecto se carga al iniciar las FAQ"
 
-#: Preference.php:74
 msgid "Default FAQ List"
 msgstr "Lista de FAQ por defecto"
 
-#: Preference.php:75
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Lista de FAQs por defecto para crear nuevas FAQ en élla."
 
-#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "Tipo de FAQ"
 msgstr[1] "Tipos de FAQ's"
+msgstr[2] "Tipos de FAQ's"
 
-#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "FAQ estado"
 msgstr[1] "FAQs Estados"
+msgstr[2] "FAQs Estados"
 
-#: js/FaqStatus.js:141
 msgid "Add a new FAQ Status..."
 msgstr "Añadir un Nuevo Estado a las FAQ"
 
-#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
 msgid "Question"
 msgstr "Pregunta"
 
-#: js/FaqEditDialog.js:66
 msgid "Enter a question..."
 msgstr "Escriba una pregunta..."
 
-#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
-#: js/FaqGridDetailsPanel.js:157
 msgid "Answer"
 msgstr "Respuesta"
 
-#: js/FaqEditDialog.js:73
 msgid "Enter a answer..."
 msgstr "Escriba una respuesta..."
 
-#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
 msgid "Type"
 msgstr "Tipo"
 
-#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
 msgid "Status"
 msgstr "Estado"
 
-#: js/AdminPanel.js:105
 msgid "Defaults"
 msgstr "Por defecto"
 
-#: js/SimpleFAQ.js:19 js/Model.js:35
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "FAQs"
 msgstr[1] "FAQs"
+msgstr[2] "FAQs"
 
-#: js/SimpleFAQ.js:26
 msgid "Find Question"
 msgstr "Encontrar pregunta"
 
-#: js/SimpleFAQ.js:35
 msgid "Search question"
 msgstr "Buscar pregunta"
 
-#: js/FaqGridPanel.js:72
 msgid "FAQ id"
 msgstr "FAQ id"
 
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: js/FaqType.js:144
 msgid "Add a new FAQ Type..."
 msgstr "Añadir un Nuevo Tipo a las FAQ"
 
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"
 msgstr "Información de las FAQ"
 
-#: js/FaqGridDetailsPanel.js:189
 msgid "Creation Time"
 msgstr "Fecha de Creación"
 
-#: js/FaqGridDetailsPanel.js:194
 msgid "Created By"
 msgstr "Creada Por"
 
-#: js/FaqGridDetailsPanel.js:226
 msgid "No answer yet"
 msgstr "Sin respuestas todavia"
 
-#: js/SearchCombo.js:8
 msgid "Search FAQ"
 msgstr "Buscar FAQ"
 
-#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] "Lista de FAQ"
 msgstr[1] "Listas de FAQs"
+msgstr[2] "Listas de FAQs"
 
-#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr "Listas de FAQs"
 
-#: js/Model.js:74
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
-#: Setup/Initialize.php:33
 msgid "All FAQs of my FAQ Lists"
 msgstr "Todas mis FAQs en mis listas de FAQ"
 
-#: Setup/Initialize.php:40
 msgid "Last modified by me"
 msgstr "Última modificación por mi"
 
-#: Setup/Initialize.php:41
 msgid "All FAQs that I have last modified"
 msgstr "Todas las FAQs que he modificado anteriormente"
-
-#, python-format
-#~ msgid "%s's personal FAQs"
-#~ msgstr "FAQs personales de %s's"

@@ -22,9 +22,24 @@ file_filter = Bookmarks/translations/<lang>.po
 source_file = Bookmarks/translations/template.pot
 source_lang = en
 
+[o:tine:p:groupware:r:CashBook]
+file_filter = CashBook/translations/<lang>.po
+source_file = CashBook/translations/template.pot
+source_lang = en
+
 [o:tine:p:groupware:r:Calendar]
 file_filter = Calendar/translations/<lang>.po
 source_file = Calendar/translations/template.pot
+source_lang = en
+
+[o:tine:p:groupware:r:ChruchEdition]
+file_filter = ChruchEdition/translations/<lang>.po
+source_file = ChruchEdition/translations/template.pot
+source_lang = en
+
+[o:tine:p:groupware:r:ContractManager]
+file_filter = ContractManager/translations/<lang>.po
+source_file = ContractManager/translations/template.pot
 source_lang = en
 
 [o:tine:p:groupware:r:CoreData]
@@ -35,6 +50,11 @@ source_lang = en
 [o:tine:p:groupware:r:Courses]
 file_filter = Courses/translations/<lang>.po
 source_file = Courses/translations/template.pot
+source_lang = en
+
+[o:tine:p:groupware:r:CrewScheduling]
+file_filter = CrewScheduling/translations/<lang>.po
+source_file = CrewScheduling/translations/template.pot
 source_lang = en
 
 [o:tine:p:groupware:r:Crm]
@@ -77,9 +97,29 @@ file_filter = HumanResources/translations/<lang>.po
 source_file = HumanResources/translations/template.pot
 source_lang = en
 
+[o:tine:p:groupware:r:Intention]
+file_filter = Intention/translations/<lang>.po
+source_file = Intention/translations/template.pot
+source_lang = en
+
 [o:tine:p:groupware:r:Inventory]
 file_filter = Inventory/translations/<lang>.po
 source_file = Inventory/translations/template.pot
+source_lang = en
+
+[o:tine:p:groupware:r:KeyManager]
+file_filter = KeyManager/translations/<lang>.po
+source_file = KeyManager/translations/template.pot
+source_lang = en
+
+[o:tine:p:groupware:r:MeetingManager]
+file_filter = MeetingManager/translations/<lang>.po
+source_file = MeetingManager/translations/template.pot
+source_lang = en
+
+[o:tine:p:groupware:r:Offertory]
+file_filter = Offertory/translations/<lang>.po
+source_file = Offertory/translations/template.pot
 source_lang = en
 
 [o:tine:p:groupware:r:OnlyOfficeIntegrator]

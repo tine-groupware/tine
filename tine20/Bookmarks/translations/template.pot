@@ -13,46 +13,36 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Setup/setup.xml:4
 msgid "Bookmarks"
 msgstr ""
 
-#: Config.php:33 Config.php:35
 msgid "Live time of token subscriptions"
 msgstr ""
 
-#: Model/Bookmark.php:50
 msgid "Bookmark"
 msgid_plural "Bookmarks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Bookmark.php:55
 msgid "Bookmark list"
 msgid_plural "Bookmarks lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/Bookmark.php:87
 msgid "Name"
 msgstr ""
 
-#: Model/Bookmark.php:94
 msgid "Url"
 msgstr ""
 
-#: Model/Bookmark.php:101
 msgid "Description"
 msgstr ""
 
-#: Model/Bookmark.php:110
 msgid "Access count"
 msgstr ""
 
-#: Import/definitions/bookmarks_import_html.xml:9
 msgid "Import html formated bookmarks"
 msgstr ""
 
-#: Import/definitions/bookmarks_import_html.xml:13
 msgid "Bookmarks HTML import"
 msgstr ""

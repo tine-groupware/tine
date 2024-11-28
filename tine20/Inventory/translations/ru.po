@@ -4,168 +4,128 @@
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2016
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2017-12-13 11:05+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
-"Language: ru\n"
+"PO-Revision-Date: 2012-10-04 15:23+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2016\n"
+"Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:120
 msgid "Types"
 msgstr ""
 
-#: Preference.php:60
 msgid "Default Inventory Item Container"
 msgstr "Контейнер по-умолчанию для инвентаризации"
 
-#: Preference.php:61
 msgid "The default container for new items"
 msgstr "Контейнер по-умолчанию для новых предметов"
 
-#: js/InventoryItemEditDialog.js:45
 msgid "The active number must be less than or equal total number."
 msgstr "Этот номер должен быть меньше или равным общему."
 
-#: js/InventoryItemEditDialog.js:64 Model/InventoryItem.php:210
 msgid "Purchase Invoice"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:81
 msgid "General"
 msgstr "Общее"
 
-#: js/InventoryItemEditDialog.js:106 Model/InventoryItem.php:128
-#: Model/Type.php:84
 msgid "Name"
 msgstr "Название"
 
-#: js/InventoryItemEditDialog.js:113 Model/InventoryItem.php:140
 msgid "Serial Number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:118 Model/InventoryItem.php:199
 msgid "Inventory Type"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:126 Model/InventoryItem.php:103
-#: Model/InventoryItem.php:269
 msgid "Employee"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:149 Model/InventoryItem.php:153
-#: Model/Type.php:91
 msgid "Description"
 msgstr "Описание"
 
-#: js/InventoryItemEditDialog.js:153
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/InventoryItemEditDialog.js:183 Model/InventoryItem.php:163
 msgid "Location"
 msgstr "Расположение"
 
-#: js/InventoryItemEditDialog.js:190 Model/InventoryItem.php:234
 msgid "Added"
 msgstr "Добавлен"
 
-#: js/InventoryItemEditDialog.js:196 Model/InventoryItem.php:226
 msgid "Warranty"
 msgstr "Гарантия"
 
-#: js/InventoryItemEditDialog.js:202 Config.php:46 Model/InventoryItem.php:243
 msgid "Removed"
 msgstr "Удалено"
 
-#: js/InventoryItemEditDialog.js:209
 msgid "Total number"
 msgstr "Общее число"
 
-#: js/InventoryItemEditDialog.js:217
 msgid "Available number"
 msgstr "Доступный номер"
 
-#: js/InventoryItemEditDialog.js:225 Model/InventoryItem.php:132
 msgid "Status"
 msgstr "Состояние"
 
-#: js/InventoryItemEditDialog.js:258
 msgid "Accounting"
 msgstr "Учёт"
 
-#: js/InventoryItemEditDialog.js:279 Model/InventoryItem.php:220
 msgid "Price"
 msgstr "Цена"
 
-#: js/InventoryItemEditDialog.js:286 Model/InventoryItem.php:168
 msgid "Invoice date"
 msgstr "Дата счёта"
 
-#: js/InventoryItemEditDialog.js:291
 msgid "Depreciate"
 msgstr "Не используется"
 
-#: Setup/setup.xml:4
 msgid "Inventory"
 msgstr "инвентарь"
 
-#: Setup/Initialize.php:36
 msgid "All Inventory Items"
 msgstr "Все предметы из инвентаризации"
 
-#: Setup/Initialize.php:37
 msgid "All existing Inventory Items"
 msgstr "Все существующие предметы из инвентаризации"
 
-#: Config.php:33
 msgid "Inventory Status Available"
 msgstr "Доступен статус инвенторизации"
 
-#: Config.php:35
 msgid "Possible status."
 msgstr "Возможное состояние."
 
-#: Config.php:42
 msgid "Ordered"
 msgstr ""
 
-#: Config.php:43
 msgid "Available"
 msgstr ""
 
-#: Config.php:44
 msgid "Defect"
 msgstr ""
 
-#: Config.php:45
 msgid "Missing"
 msgstr ""
 
-#: Config.php:47
 msgid "Unknown"
 msgstr ""
 
-#: Config.php:48
 msgid "Stored"
 msgstr ""
 
-#: Config.php:49
 msgid "Sold"
 msgstr ""
 
-#: Config.php:50
 msgid "Destroyed"
 msgstr ""
 
-#: Model/InventoryItem.php:58
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "предметы из инвентаризации"
@@ -173,7 +133,6 @@ msgstr[1] "предметы из инвентаризации"
 msgstr[2] "предметы из инвентаризации"
 msgstr[3] "предметы из инвентаризации"
 
-#: Model/InventoryItem.php:63
 msgid "Inventory item list"
 msgid_plural "Inventory item lists"
 msgstr[0] "лист инвентаризации"
@@ -181,15 +140,12 @@ msgstr[1] "листы инвентаризации"
 msgstr[2] ""
 msgstr[3] "листы инвентаризации"
 
-#: Model/InventoryItem.php:150
 msgid "Inventory ID"
 msgstr "Инвентарный №"
 
-#: Model/InventoryItem.php:257
 msgid "Depreciated"
 msgstr ""
 
-#: Model/Type.php:46
 msgid "Inventory type"
 msgid_plural "Inventory types"
 msgstr[0] ""
@@ -197,60 +153,20 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:11
 msgid "Tine 2.0 inventory CSV import"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:13
 msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:18
-#: Import/definitions/inv_tine_import_csv.xml:20
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Импорт списка (###CURRENTDATE###)"
 
-#: Import/definitions/inv_tine_import_alldata_csv.xml:20
 msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
 msgstr "Импорт файла CSV"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
 msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
-
-#~ msgid "ID"
-#~ msgstr "№"
-
-#~ msgid "Invoice"
-#~ msgstr "Счёт"
-
-#~ msgid "ordered"
-#~ msgstr "заказан"
-
-#~ msgid "available"
-#~ msgstr "доступен"
-
-#~ msgid "defect"
-#~ msgstr "повреждён"
-
-#~ msgid "missing"
-#~ msgstr "утерян"
-
-#~ msgid "removed"
-#~ msgstr "списан"
-
-#~ msgid "unknown"
-#~ msgstr "неизвестно"
-
-#~ msgid "Cost Center"
-#~ msgstr "Затраты"
-
-#~ msgid "Item added"
-#~ msgstr "Пункт добавлен"
-
-#~ msgid "Item removed"
-#~ msgstr "пункт удалён"

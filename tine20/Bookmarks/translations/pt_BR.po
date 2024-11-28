@@ -1,59 +1,51 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
+"PO-Revision-Date: 2024-11-25 16:54+0000\n"
+"Language-Team: Portuguese (Brazil) (https://app.transifex.com/tine/teams/16133/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Portugiesisch\n"
-"X-Poedit-Country: BRASILIEN\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: \n"
 
-#: Setup/setup.xml:4
 msgid "Bookmarks"
 msgstr ""
 
-#: Config.php:33 Config.php:35
 msgid "Live time of token subscriptions"
 msgstr ""
 
-#: Model/Bookmark.php:50
 msgid "Bookmark"
 msgid_plural "Bookmarks"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: Model/Bookmark.php:55
 msgid "Bookmark list"
 msgid_plural "Bookmarks lists"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: Model/Bookmark.php:87
 msgid "Name"
 msgstr ""
 
-#: Model/Bookmark.php:94
 msgid "Url"
 msgstr ""
 
-#: Model/Bookmark.php:101
 msgid "Description"
 msgstr ""
 
-#: Model/Bookmark.php:110
 msgid "Access count"
 msgstr ""
 
-#: Import/definitions/bookmarks_import_html.xml:9
 msgid "Import html formated bookmarks"
 msgstr ""
 
-#: Import/definitions/bookmarks_import_html.xml:13
 msgid "Bookmarks HTML import"
 msgstr ""

@@ -1,189 +1,137 @@
 #
 # Translators:
 # Aleksey <aleksdem@aleksdem.com>, 2013-2015
-# Артур Мудрых <arturmon82@gmail.com>, 2012
+# Artur Mudrykh <arturmon82@gmail.com>, 2012
 # John Doe <twisted_tits@mail.ru>, 2015
 # Nikolay Parukhin <parukhin@gmail.com>, 2012,2016
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
-# Артур Мудрых <arturmon82@gmail.com>, 2012
-# Артур Мудрых <arturmon82@gmail.com>, 2012
+# Artur Mudrykh <arturmon82@gmail.com>, 2012
+# Artur Mudrykh <arturmon82@gmail.com>, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2020-05-11 11:46+0000\n"
-"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
-"Language: ru\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Artur Mudrykh <arturmon82@gmail.com>, 2012\n"
+"Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Frontend/Cli.php:780
 msgid "Notifications"
 msgstr ""
 
-#: js/Applications.js:24 js/Applications.js:144
 msgid "Enable Application"
 msgstr "Включить приложение"
 
-#: js/Applications.js:33 js/Applications.js:145
 msgid "Disable Application"
 msgstr "Отключить приложение"
 
-#: js/Applications.js:42 js/Applications.js:146
 msgid "Settings"
 msgstr "Настройки"
 
-#: js/Applications.js:71
 #, python-brace-format
 msgid "{0} Settings"
 msgstr "{0} Настройки"
 
-#: js/Applications.js:183 js/Groups.js:182 js/Tags.js:172 js/Roles.js:178
 msgid "Search:"
 msgstr "Поиск:"
 
-#: js/Applications.js:223 js/Admin.js:413
 msgid "Disabled"
 msgstr ""
 
-#: js/Applications.js:226
 msgid "Enabled"
 msgstr ""
 
-#: js/Applications.js:230
 #, python-brace-format
 msgid "Unknown status ({0})"
 msgstr ""
 
-#: js/Applications.js:268
 #, python-brace-format
 msgid "Displaying application {0} - {1} of {2}"
 msgstr "Показаны приложения {0} - {1} из {2}"
 
-#: js/Applications.js:269
 msgid "No applications to display"
 msgstr "Нет приложений"
 
-#: js/Applications.js:278 js/customfield/EditDialog.js:531
-#: js/container/EditDialog.js:199
 msgid "Order"
 msgstr "Порядок"
 
-#: js/Applications.js:279 js/Groups.js:242 js/customfield/EditDialog.js:492
-#: js/customfield/GridPanel.js:69 js/config/GridPanel.js:75
-#: js/SambaMachineGrid.js:76 js/Tags.js:229 js/Roles.js:236
-#: js/user/EditDialog.js:359 js/user/EditDialog.js:395
-#: js/container/EditDialog.js:146 js/AccessLog.js:132 js/QuotaManagement.js:91
-#: Model/SchedulerTask/Import.php:39
 msgid "Name"
 msgstr "Имя"
 
-#: js/Applications.js:280 js/user/EditDialog.js:1084 js/user/GridPanel.js:193
 msgid "Status"
 msgstr "Статус"
 
-#: js/Applications.js:281
 msgid "Version"
 msgstr "Версия"
 
-#: js/SchedulerModelPicker.js:9
 msgid "Built in configs"
 msgstr ""
 
-#: js/Groups.js:52 js/Tags.js:64 js/Roles.js:47
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: js/Groups.js:52
 msgid "Do you really want to delete the selected groups?"
 msgstr "Вы уверены что хотите удалить выбранные группы?"
 
-#: js/Groups.js:69
 msgid "Deleting group(s)..."
 msgstr "Удаление групп(ы)..."
 
-#: js/Groups.js:110
 msgid "Add Group"
 msgstr "Добавить группу"
 
-#: js/Groups.js:118
 msgid "Edit Group"
 msgstr "Изменить группу"
 
-#: js/Groups.js:126
 msgid "Delete Group"
 msgstr "Удалить группу"
 
-#: js/Groups.js:230
 #, python-brace-format
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Показаны группы {0} - {1} из {2}"
 
-#: js/Groups.js:231 js/Groups.js:291
 msgid "No groups to display"
 msgstr "Нет групп"
 
-#: js/Groups.js:241 js/customfield/GridPanel.js:67 js/SambaMachineGrid.js:75
-#: js/Tags.js:225 js/Roles.js:235 js/user/GridPanel.js:192
-#: js/container/GridPanel.js:65
 msgid "ID"
 msgstr "ID"
 
-#: js/Groups.js:243 js/user/EditDialog.js:1045 js/user/GridPanel.js:198
-#: js/GroupEditDialog.js:113
 msgid "E-mail"
 msgstr ""
 
-#: js/Groups.js:244
 msgid "Account only"
 msgstr ""
 
-#: js/Groups.js:245 js/config/GridPanel.js:64 js/SambaMachineGrid.js:57
-#: js/SambaMachineGrid.js:77 js/TagEditDialog.js:236 js/Tags.js:230
-#: js/RoleEditDialog.js:297 js/Roles.js:237 js/user/GridPanel.js:94
-#: js/GroupEditDialog.js:72
 msgid "Description"
 msgstr "Описание"
 
-#: js/Groups.js:246
 msgid "Creation Time"
 msgstr ""
 
-#: js/Groups.js:247
 msgid "Created By"
 msgstr ""
 
-#: js/Groups.js:248
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Groups.js:249
 msgid "Last Modified By"
 msgstr ""
 
-#: js/SchedulerPanel.js:2
 msgid "Scheduler"
 msgstr ""
 
-#: js/customfield/EditDialog.js:145 js/customfield/EditDialog.js:281
-#: js/TagEditDialog.js:91 js/RoleEditDialog.js:118
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/customfield/EditDialog.js:145
 msgid "Please configure store for this field type"
 msgstr "Пожалуйста, настройте хранилище для этого типа поля"
 
-#: js/customfield/EditDialog.js:236 js/customfield/EditDialog.js:422
-#: js/customfield/GridPanel.js:71 js/Models.js:156
-#: js/container/EditDialog.js:155 js/container/GridPanel.js:67
-#: js/ApplicationFilter.js:33
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Приложение"
@@ -191,119 +139,87 @@ msgstr[1] "Приложения"
 msgstr[2] "Приложения"
 msgstr[3] "Приложения"
 
-#: js/customfield/EditDialog.js:256
 msgid "Record Class"
 msgstr "Класс записей"
 
-#: js/customfield/EditDialog.js:281
 msgid "Given record class not found"
 msgstr "Данный класс записи не найден"
 
-#: js/customfield/EditDialog.js:318 js/user/EditDialog.js:864
 msgid "Cancel"
 msgstr "Отмена"
 
-#: js/customfield/EditDialog.js:324
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:370
 msgid "Configure store"
 msgstr "Настроить хранилище"
 
-#: js/customfield/EditDialog.js:378
 msgid "Permissions"
 msgstr ""
 
-#: js/customfield/EditDialog.js:383 js/TagEditDialog.js:201
 msgid "View"
 msgstr "Представление"
 
-#: js/customfield/EditDialog.js:388 js/TagEditDialog.js:206
 msgid "Use"
 msgstr "Использовать"
 
-#: js/customfield/EditDialog.js:444 js/customfield/GridPanel.js:72
-#: js/container/EditDialog.js:174
 msgid "Model"
 msgstr "Модель"
 
-#: js/customfield/EditDialog.js:456
 msgid "Custom field definition"
 msgstr "Пользовательское поле определений"
 
-#: js/customfield/EditDialog.js:467
 msgid "Text"
 msgstr "Текст"
 
-#: js/customfield/EditDialog.js:468
 msgid "Textarea"
 msgstr ""
 
-#: js/customfield/EditDialog.js:469
 msgid "Number"
 msgstr "Номер"
 
-#: js/customfield/EditDialog.js:470
 msgid "Date"
 msgstr "Дата"
 
-#: js/customfield/EditDialog.js:471
 msgid "DateTime"
 msgstr "Время"
 
-#: js/customfield/EditDialog.js:472
 msgid "Time"
 msgstr "Время"
 
-#: js/customfield/EditDialog.js:473
 msgid "Boolean"
 msgstr "Булево"
 
-#: js/customfield/EditDialog.js:474
 msgid "Search Combo"
 msgstr "Составной поиск"
 
-#: js/customfield/EditDialog.js:475
 msgid "Key Field"
 msgstr "Ключевое поле"
 
-#: js/customfield/EditDialog.js:476
 msgid "Record"
 msgstr "Запись"
 
-#: js/customfield/EditDialog.js:477
 msgid "Record List"
 msgstr ""
 
-#: js/customfield/EditDialog.js:480 js/customfield/GridPanel.js:70
-#: js/container/EditDialog.js:185 js/container/GridPanel.js:68
-#: js/container/GridPanel.js:103
 msgid "Type"
 msgstr "Тип"
 
-#: js/customfield/EditDialog.js:498 js/customfield/GridPanel.js:68
-#: js/config/GridPanel.js:80
 msgid "Label"
 msgstr "Метка"
 
-#: js/customfield/EditDialog.js:504
 msgid "Length"
 msgstr "Длина"
 
-#: js/customfield/EditDialog.js:509
 msgid "Required"
 msgstr "Требуется"
 
-#: js/customfield/EditDialog.js:516
 msgid "Custom field additional properties"
 msgstr "Пользовательские поля дополнительных свойств"
 
-#: js/customfield/EditDialog.js:521
 msgid "Tab Panel"
 msgstr ""
 
-#: js/customfield/EditDialog.js:526 js/Models.js:107
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Группа"
@@ -311,15 +227,12 @@ msgstr[1] "Группы"
 msgstr[2] "Группы"
 msgstr[3] "Группы"
 
-#: js/customfield/EditDialog.js:536
 msgid "Key"
 msgstr ""
 
-#: js/customfield/EditDialog.js:562
 msgid "Customfield already exists. Please choose another name."
 msgstr "Это настраиваемое поле уже существует. Пожалуйста, используйте другое имя."
 
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:116
 msgid "Customfield"
 msgid_plural "Customfields"
 msgstr[0] "Настраиваемые поля"
@@ -327,31 +240,24 @@ msgstr[1] "Настраиваемые поля"
 msgstr[2] "Настраиваемые поля"
 msgstr[3] "Настраиваемые поля"
 
-#: js/customfield/Customfield.js:60
 msgid "Anyone"
 msgstr ""
 
-#: js/customfield/GridPanel.js:73
 msgid "UI Config"
 msgstr ""
 
-#: js/customfield/GridPanel.js:189
 msgid "This custom field is still in use!"
 msgstr ""
 
-#: js/customfield/GridPanel.js:190
 msgid "Are you sure you want to delete them?"
 msgstr ""
 
-#: js/config/FieldManager.js:52
 msgid "Yes"
 msgstr "Да"
 
-#: js/config/FieldManager.js:52
 msgid "No"
 msgstr "Нет"
 
-#: js/config/GridPanel.js:49 js/Models.js:188
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "Настройка"
@@ -359,84 +265,64 @@ msgstr[1] "Настройки"
 msgstr[2] "Настройки"
 msgstr[3] "Настройки"
 
-#: js/config/GridPanel.js:86
 msgid "Value"
 msgstr "Значение"
 
-#: js/config/GridPanel.js:270
 #, python-brace-format
 msgid "Default ({0})"
 msgstr "По умолчанию ({0})"
 
-#: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
 msgstr "Имя компьютера"
 
-#: js/AdminPanel.js:46
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Адресная книга по умолчанию для новых контактов и групп"
 
-#: js/TagEditDialog.js:38 js/RoleEditDialog.js:73
 msgid "Please wait"
 msgstr "Пожалуйста, подождите"
 
-#: js/TagEditDialog.js:38
 msgid "Updating Tag"
 msgstr "Обновление тега"
 
-#: js/TagEditDialog.js:84 js/RoleEditDialog.js:111 js/RoleEditDialog.js:139
-#: js/Roles.js:67
 msgid "Failed"
 msgstr "Неудача"
 
-#: js/TagEditDialog.js:85
 #, python-brace-format
 msgid "Could not save tag ({0})"
 msgstr "Тег ({0}) не сохранён"
 
-#: js/TagEditDialog.js:91 js/RoleEditDialog.js:118
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, устраните отмеченные ошибки."
 
-#: js/TagEditDialog.js:172
 msgid "Allowed Contexts"
 msgstr "Разрешённый контекст"
 
-#: js/TagEditDialog.js:178
 msgid "Context"
 msgstr "Контекст"
 
-#: js/TagEditDialog.js:191
 msgid "Account Rights"
 msgstr "Права учётной записи"
 
-#: js/TagEditDialog.js:224
 msgid "Tag Name"
 msgstr "Название тэга"
 
-#: js/TagEditDialog.js:231 js/Tags.js:226 js/container/EditDialog.js:205
 msgid "Color"
 msgstr "Цвет"
 
-#: js/TagEditDialog.js:296 js/RoleEditDialog.js:364
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr "Передано {0}..."
 
-#: js/TagEditDialog.js:296
 msgid "Tag"
 msgstr "Тег"
 
-#: js/TagEditDialog.js:306
 msgid "Add New Tag"
 msgstr "Добавить новый тэг"
 
-#: js/TagEditDialog.js:308
 #, python-brace-format
 msgid "Edit Tag \"{0}\""
 msgstr "Изменить тэг \"{0}\""
 
-#: js/ImportExportDefinitionEditDialog.js:53
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"
 msgstr[0] ""
@@ -444,114 +330,87 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
 msgstr "Вы действительно хотите удалить выбранные тэги?"
 
-#: js/Tags.js:80
 msgid "Deleting tag(s)..."
 msgstr "Удаление тэга(ов)..."
 
-#: js/Tags.js:100
 msgid "Add Tag"
 msgstr "Добавить тег"
 
-#: js/Tags.js:108
 msgid "Edit Tag"
 msgstr "Изменить тег"
 
-#: js/Tags.js:116
 msgid "Delete Tag"
 msgstr "Удалить тег"
 
-#: js/Tags.js:214
 #, python-brace-format
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Показаны тэги {0} - {1} из {2}"
 
-#: js/Tags.js:215 js/Tags.js:273
 msgid "No tags to display"
 msgstr "Нет тэгов"
 
-#: js/Tags.js:227
 msgid "Usage:&#160;"
 msgstr "Использование:&#160;"
 
-#: js/Tags.js:231
 msgid "System Tag"
 msgstr ""
 
-#: js/RoleEditDialog.js:73
 msgid "Updating Memberships"
 msgstr "Обновить членство"
 
-#: js/RoleEditDialog.js:111
 msgid "Could not save role."
 msgstr "Не удалось сохранить роль."
 
-#: js/RoleEditDialog.js:131
 msgid "Deleting role..."
 msgstr "Удаление роли..."
 
-#: js/RoleEditDialog.js:139 js/Roles.js:67
 msgid "Some error occurred while trying to delete the role."
 msgstr "При удаление роли произошла ошибка."
 
-#: js/RoleEditDialog.js:163
 msgid "Rights"
 msgstr "Права"
 
-#: js/RoleEditDialog.js:265
 msgid "Members"
 msgstr "Участники"
 
-#: js/RoleEditDialog.js:289
 msgid "Role Name"
 msgstr "Название роли"
 
-#: js/RoleEditDialog.js:364
 msgid "Role"
 msgstr "Роль"
 
-#: js/RoleEditDialog.js:374
 msgid "Add New Role"
 msgstr "Добавьте новую роль"
 
-#: js/RoleEditDialog.js:376
 #, python-brace-format
 msgid "Edit Role \"{0}\""
 msgstr "Изменить роль \"{0}\""
 
-#: js/Roles.js:47
 msgid "Do you really want to delete the selected roles?"
 msgstr "Вы действительно хотите удалить выбранные роли?"
 
-#: js/Roles.js:62
 msgid "Deleting role(s)..."
 msgstr "Удаление роли(ей)..."
 
-#: js/Roles.js:105
 msgid "Add Role"
 msgstr "Добавить роль"
 
-#: js/Roles.js:113
 msgid "Edit Role"
 msgstr "Изменить роль"
 
-#: js/Roles.js:121
 msgid "Delete Role"
 msgstr "Удалить роль"
 
-#: js/Roles.js:224
 #, python-brace-format
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Показаны роли {0} - {1} из {2}"
 
-#: js/Roles.js:225 js/Roles.js:279
 msgid "No roles to display"
 msgstr "Нет ролей"
 
-#: js/Models.js:68 js/Admin.js:137 js/AccessLog.js:104
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "Журнал доступа"
@@ -559,25 +418,18 @@ msgstr[1] "Журналы доступа"
 msgstr[2] "Журналы доступа"
 msgstr[3] "Журналы доступа"
 
-#: js/Models.js:107 js/Admin.js:42
 msgid "Groups"
 msgstr "Группы"
 
-#: js/Models.js:156 js/Admin.js:69
 msgid "Applications"
 msgstr "Приложения"
 
-#: js/Models.js:188
 msgid "Configs"
 msgstr "Настройки"
 
-#: js/QuotaEditDialog.js:124 js/QuotaEditDialog.js:193
-#: js/QuotaEditDialog.js:212 js/user/EditDialog.js:558
-#: js/user/EditDialog.js:600 js/user/EditDialog.js:632 js/QuotaManagement.js:96
 msgid "Quota"
 msgstr "Квота"
 
-#: js/QuotaEditDialog.js:136 js/user/Users.js:154
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Электронные адреса пользователей"
@@ -585,350 +437,259 @@ msgstr[1] "Электронные адреса пользователей"
 msgstr[2] "Электронные адреса пользователей"
 msgstr[3] "Электронные адреса пользователей"
 
-#: js/QuotaEditDialog.js:143 js/user/EditDialog.js:581
 msgid "IMAP Quota"
 msgstr ""
 
-#: js/QuotaEditDialog.js:150 js/user/EditDialog.js:605
 msgid "Current Mailbox size"
 msgstr "Размер почтового ящика"
 
-#: js/QuotaEditDialog.js:155 js/user/EditDialog.js:613
 msgid "Sieve Quota"
 msgstr ""
 
-#: js/QuotaEditDialog.js:162 js/user/EditDialog.js:637
 msgid "Current Sieve size"
 msgstr "Размер Sieve"
 
-#: js/QuotaEditDialog.js:176
 msgid "path"
 msgstr ""
 
-#: js/QuotaEditDialog.js:184
 msgid "This folder has own quota"
 msgstr ""
 
-#: js/QuotaEditDialog.js:195
 msgid "No quota set (examples: 10 GB, 900 MB)"
 msgstr ""
 
-#: js/QuotaEditDialog.js:203
 msgid "Current Usage"
 msgstr ""
 
-#: js/user/EditDialog.js:254 js/GroupEditDialog.js:190
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Домен недопустим. Пожалуйста, проверьте настройки домена в конфигурации SMTP"
 
-#: js/user/EditDialog.js:255
 msgid "Allowed Domains"
 msgstr ""
 
-#: js/user/EditDialog.js:276
 msgid "Special characters are not allowed in login name."
 msgstr ""
 
-#: js/user/EditDialog.js:308 js/user/EditDialog.js:311
-#: js/user/EditDialog.js:861
 msgid "Passwords do not match!"
 msgstr "Пароли не совпадают!"
 
-#: js/user/EditDialog.js:314
 msgid "Passwords match!"
 msgstr "Пароли совпадают!"
 
-#: js/user/EditDialog.js:360 js/user/EditDialog.js:1061
 msgid "Primary group"
 msgstr "Основная группа"
 
-#: js/user/EditDialog.js:437
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:451
 msgid "Home Directory"
 msgstr "Домашний каталог"
 
-#: js/user/EditDialog.js:455
 msgid "Login Shell"
 msgstr "Оболочка"
 
-#: js/user/EditDialog.js:461
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:475
 msgid "Home Drive"
 msgstr "Домашний диск"
 
-#: js/user/EditDialog.js:480 js/AccessLog.js:107 js/AccessLog.js:134
 msgid "Login Time"
 msgstr "Время регистрации"
 
-#: js/user/EditDialog.js:482 js/user/EditDialog.js:1148
-#: js/user/EditDialog.js:1152
 msgid "never logged in"
 msgstr "никогда не регистрировался"
 
-#: js/user/EditDialog.js:485
 msgid "Home Path"
 msgstr "Домашний путь"
 
-#: js/user/EditDialog.js:490 js/AccessLog.js:108 js/AccessLog.js:135
 msgid "Logout Time"
 msgstr "Время выхода из системы"
 
-#: js/user/EditDialog.js:492
 msgid "never logged off"
 msgstr "никогда не регистрировался"
 
-#: js/user/EditDialog.js:495
 msgid "Profile Path"
 msgstr "Путь профиля"
 
-#: js/user/EditDialog.js:500
 msgid "Password Last Set"
 msgstr "Последняя установка пароля"
 
-#: js/user/EditDialog.js:502 js/user/EditDialog.js:1126
-#: js/user/EditDialog.js:1156
 msgid "never"
 msgstr "никогда"
 
-#: js/user/EditDialog.js:505
 msgid "Logon Script"
 msgstr "Скрипт входа"
 
-#: js/user/EditDialog.js:510
 msgid "Password Can Change"
 msgstr "Пароль может быть изменен"
 
-#: js/user/EditDialog.js:512 js/user/EditDialog.js:517
-#: js/user/EditDialog.js:522
 msgid "not set"
 msgstr "не задан"
 
-#: js/user/EditDialog.js:515 js/user/EditDialog.js:933 js/user/GridPanel.js:205
 msgid "Password Must Change"
 msgstr "Пароль должен быть изменен"
 
-#: js/user/EditDialog.js:520
 msgid "Kick Off Time"
 msgstr "Время начала"
 
-#: js/user/EditDialog.js:539
 msgid "Filesystem Quota"
 msgstr ""
 
-#: js/user/EditDialog.js:559 js/user/EditDialog.js:601
-#: js/user/EditDialog.js:633 js/QuotaManagement.js:263
 msgid "no quota set"
 msgstr "квота не задана"
 
-#: js/user/EditDialog.js:563
 msgid "Current Filesystem usage"
 msgstr ""
 
-#: js/user/EditDialog.js:646 js/user/EditDialog.js:1131
 msgid "Information"
 msgstr "Информация"
 
-#: js/user/EditDialog.js:660
 msgid "Last Login"
 msgstr "Последний вход"
 
-#: js/user/EditDialog.js:690
 msgid "Forward Only"
 msgstr "Только пересылка"
 
-#: js/user/EditDialog.js:728
 msgid "E-mail Alias"
 msgstr ""
 
-#: js/user/EditDialog.js:733
 msgid "Add an alias address..."
 msgstr "Добавить псевдоним..."
 
-#: js/user/EditDialog.js:744
 msgid "This alias can be used for sending e-mails."
 msgstr ""
 
-#: js/user/EditDialog.js:771
 msgid "Domain not allowed"
 msgstr "Домен недопустим"
 
-#: js/user/EditDialog.js:772
 #, python-brace-format
 msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
 msgstr "Домен {0} псевдонима {1}, который вы пытаетесь добавить, не является ни основным, ни дополнительным. Пожалуйста добавьте этот домен во второстепенные домены в настройках SMTP или используйте другой домен."
 
-#: js/user/EditDialog.js:799
 msgid "Forwarding to self"
 msgstr "Пересылка себе"
 
-#: js/user/EditDialog.js:800
 msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
 msgstr ""
 
-#: js/user/EditDialog.js:809
 msgid "E-mail Forward"
 msgstr ""
 
-#: js/user/EditDialog.js:814
 msgid "Add a forwarding address..."
 msgstr ""
 
-#: js/user/EditDialog.js:827
 msgid "Password confirmation"
 msgstr "Подтверждение пароля"
 
-#: js/user/EditDialog.js:845
 msgid "Repeat password"
 msgstr "Повтор пароля"
 
-#: js/user/EditDialog.js:871
 msgid "Ok"
 msgstr "Ok"
 
-#: js/user/EditDialog.js:926 js/user/GridPanel.js:216 js/user/GridPanel.js:239
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr ""
 
-#: js/user/EditDialog.js:948
 msgid "Account"
 msgstr "Учётная запись"
 
-#: js/user/EditDialog.js:963 js/user/GridPanel.js:197
 msgid "First name"
 msgstr "Имя"
 
-#: js/user/EditDialog.js:976 js/user/GridPanel.js:196
 msgid "Last name"
 msgstr "Фамилия"
 
-#: js/user/EditDialog.js:986 js/user/GridPanel.js:194
 msgid "Display name"
 msgstr "Отображать как"
 
-#: js/user/EditDialog.js:991 js/user/GridPanel.js:208
 msgid "Full Name"
 msgstr ""
 
-#: js/user/EditDialog.js:995
 msgid "Full name is used to create the distinguishedName (DN) in AD integration"
 msgstr ""
 
-#: js/user/EditDialog.js:997 js/user/EditDialog.js:1056
-#: js/user/GridPanel.js:195
 msgid "Login name"
 msgstr "Имя пользователя"
 
-#: js/user/EditDialog.js:1002
 msgid "Password"
 msgstr "Пароль"
 
-#: js/user/EditDialog.js:1037
 msgid "Multi Factor Authentication Config"
 msgstr ""
 
-#: js/user/EditDialog.js:1055 js/user/GridPanel.js:201
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/EditDialog.js:1077
 msgid "User Type"
 msgstr ""
 
-#: js/user/EditDialog.js:1091
 msgid "enabled"
 msgstr "включено"
 
-#: js/user/EditDialog.js:1092
 msgid "disabled"
 msgstr "отключено"
 
-#: js/user/EditDialog.js:1093
 msgid "expired"
 msgstr "завершённый"
 
-#: js/user/EditDialog.js:1094
 msgid "blocked"
 msgstr "заблокирован"
 
-#: js/user/EditDialog.js:1101
 msgid "Invalid Status"
 msgstr "Некорректный статус"
 
-#: js/user/EditDialog.js:1102
 msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
 msgstr "Статус \"заблокировано\" будет стоять только в том случае, если пользователь часто ошибался с вводом пароля. Выставить этот статус здесь невозможно."
 
-#: js/user/EditDialog.js:1124 js/user/GridPanel.js:207
 msgid "Expires"
 msgstr "Истекает"
 
-#: js/user/EditDialog.js:1146 js/user/GridPanel.js:202
 msgid "Last login at"
 msgstr "Последний регистрировался в"
 
-#: js/user/EditDialog.js:1148 js/user/EditDialog.js:1152
 msgid "don't know"
 msgstr "неизвестно"
 
-#: js/user/EditDialog.js:1150 js/user/GridPanel.js:203
 msgid "Last login from"
 msgstr "Последняя регистрация от"
 
-#: js/user/EditDialog.js:1154
 msgid "Password set"
 msgstr "Пароль установлен"
 
-#: js/user/EditDialog.js:1159
 msgid "Account ID"
 msgstr ""
 
-#: js/user/EditDialog.js:1165
 msgid "User groups"
 msgstr "Группы пользователей"
 
-#: js/user/EditDialog.js:1171
 msgid "User roles"
 msgstr "Роли пользователей"
 
-#: js/user/EditDialog.js:1177
 msgid "Fileserver"
 msgstr "Файловый сервер"
 
-#: js/user/EditDialog.js:1183
 msgid "Filesystem"
 msgstr ""
 
-#: js/user/EditDialog.js:1188
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:1197
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/user/EditDialog.js:1252 js/GroupEditDialog.js:80
 msgid "Visibility"
 msgstr "Видимость"
 
-#: js/user/EditDialog.js:1260 js/GroupEditDialog.js:86
 msgid "Display in addressbook"
 msgstr "Отображать в адресной книге"
 
-#: js/user/EditDialog.js:1260 js/GroupEditDialog.js:86
 msgid "Hide from addressbook"
 msgstr "Скрыть в адресной книги"
 
-#: js/user/EditDialog.js:1274 js/GroupEditDialog.js:102
 msgid "Saved in Addressbook"
 msgstr "Сохранено в адресную книгу"
 
-#: js/user/Users.js:78 js/Admin.js:28 js/AccessLog.js:106
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Пользователь"
@@ -936,11 +697,9 @@ msgstr[1] "Пользователя"
 msgstr[2] "Пользователей"
 msgstr[3] "Пользователей"
 
-#: js/user/Users.js:78
 msgid "Users"
 msgstr "Пользователи"
 
-#: js/user/Users.js:128
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Пользователь Samba"
@@ -948,79 +707,60 @@ msgstr[1] "Пользователя Samba"
 msgstr[2] "Пользователей Samba"
 msgstr[3] "Пользователей Samba"
 
-#: js/user/GridPanel.js:51
 msgid "Enable Account"
 msgstr "включить учётную запись"
 
-#: js/user/GridPanel.js:61
 msgid "Disable Account"
 msgstr "отключить учётную запись"
 
-#: js/user/GridPanel.js:71
 msgid "Reset Password"
 msgstr "Сбросить пароль"
 
-#: js/user/GridPanel.js:199
 msgid "E-mail usage"
 msgstr ""
 
-#: js/user/GridPanel.js:200
 msgid "Filesystem usage"
 msgstr ""
 
-#: js/user/GridPanel.js:204
 msgid "MFA Configured"
 msgstr ""
 
-#: js/user/GridPanel.js:206
 msgid "Password changed"
 msgstr "Пароль изменен"
 
-#: js/user/GridPanel.js:313
 msgid "Set new password"
 msgstr "Задать новый пароль"
 
-#: js/user/GridPanel.js:313
 msgid "Please enter the new password:"
 msgstr "Пожалуйста, введите новый пароль:"
 
-#: js/GroupEditDialog.js:64
 msgid "Group Name"
 msgstr "Название группы"
 
-#: js/GroupEditDialog.js:128
 msgid "Only system accounts can be added to Addressbook group"
 msgstr ""
 
-#: js/GroupEditDialog.js:135
 msgid "Group Members"
 msgstr "Члены группы"
 
-#: js/container/EditDialog.js:186 js/container/GridPanel.js:98
 msgid "personal"
 msgstr "личный"
 
-#: js/container/EditDialog.js:186 js/container/GridPanel.js:98
 msgid "shared"
 msgstr "общий"
 
-#: js/container/EditDialog.js:209
 msgid "Container Hierarchy/Name"
 msgstr ""
 
-#: js/container/EditDialog.js:216
 msgid "Note for Owner"
 msgstr "Примечание владельца"
 
-#: js/container/EditDialog.js:229
 msgid "Info"
 msgstr ""
 
-#: js/container/EditDialog.js:229
 msgid "Please create Resources in Addressbook or CoreData."
 msgstr ""
 
-#: js/container/Container.js:46 js/container/GridPanel.js:102
 msgid "Container"
 msgid_plural "Containers"
 msgstr[0] "Контейнер"
@@ -1028,15 +768,12 @@ msgstr[1] "Контейнеры"
 msgstr[2] "Контейнеры"
 msgstr[3] "Контейнеры"
 
-#: js/container/GridPanel.js:66
 msgid "Container Name"
 msgstr "Имя контейнера"
 
-#: js/container/GridPanel.js:69
 msgid "Container Order"
 msgstr "Порядок контейнеров"
 
-#: js/SambaMachineModel.js:39
 msgid "Computer"
 msgid_plural "Computers"
 msgstr[0] "Компьютер"
@@ -1044,247 +781,186 @@ msgstr[1] "Компьютера"
 msgstr[2] "Компьютеров"
 msgstr[3] "Компьютеров"
 
-#: js/Admin.js:56
 msgid "Roles"
 msgstr "Роли"
 
-#: js/Admin.js:83
 msgid "Containers"
 msgstr "Контейнеры"
 
-#: js/Admin.js:96
 msgid "Shared Tags"
 msgstr "Общие тэги"
 
-#: js/Admin.js:110
 msgid "Customfields"
 msgstr "Настраиваемые поля"
 
-#: js/Admin.js:123
 msgid "Computers"
 msgstr "Компьютеры"
 
-#: js/Admin.js:151
 msgid "Log"
 msgstr ""
 
-#: js/Admin.js:164
 msgid "Server Information"
 msgstr "Информация о сервере"
 
-#: js/Admin.js:181
 msgid "ActiveSync Devices"
 msgstr "Устройства с поддержкой Active Sync"
 
-#: js/Admin.js:200
 msgid "E-mail Accounts"
 msgstr ""
 
-#: js/Admin.js:220
 msgid "Import Export Definitions"
 msgstr ""
 
-#: js/Admin.js:291
 msgid "Admin"
 msgstr "Администратор"
 
-#: js/Admin.js:390
 msgid "Refresh"
 msgstr "Обновить"
 
-#: js/Admin.js:413
 msgid "Feature is disabled by configuration."
 msgstr ""
 
-#: js/AccessLog.js:105 js/AccessLog.js:133
 msgid "IP Address"
 msgstr "IP адрес"
 
-#: js/AccessLog.js:109 js/AccessLog.js:138
 msgid "Client Type"
 msgstr "Тип клиента"
 
-#: js/AccessLog.js:130
 msgid "Session ID"
 msgstr "ID сессии"
 
-#: js/AccessLog.js:131
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
-#: js/AccessLog.js:136
 msgid "Result"
 msgstr "Результат"
 
-#: js/AccessLog.js:137
 msgid "User Agent"
 msgstr ""
 
-#: js/AccessLog.js:159
 msgid "user blocked"
 msgstr "пользователь заблокирован"
 
-#: js/AccessLog.js:163
 msgid "password expired"
 msgstr "истек срок пароля"
 
-#: js/AccessLog.js:167
 msgid "user disabled"
 msgstr "пользователь отключен"
 
-#: js/AccessLog.js:171
 msgid "invalid password"
 msgstr "неверный пароль"
 
-#: js/AccessLog.js:175
 msgid "ambiguous username"
 msgstr "Имя пользователя многозначно"
 
-#: js/AccessLog.js:179
 msgid "user not found"
 msgstr "пользователь не найден"
 
-#: js/AccessLog.js:183
 msgid "failure"
 msgstr "неудачно"
 
-#: js/AccessLog.js:187
 msgid "success"
 msgstr "успешно"
 
-#: js/QuotaManagement.js:109
 msgid "Size"
 msgstr ""
 
-#: js/QuotaManagement.js:121
 msgid "Revision Size"
 msgstr ""
 
-#: js/QuotaManagement.js:122
 msgid "Total size of all available revisions"
 msgstr ""
 
-#: js/QuotaManagement.js:165
 msgid "Edit Quota"
 msgstr ""
 
-#: js/QuotaManagement.js:174 js/QuotaManagement.js:286
 msgid "Manage Total Quota"
 msgstr ""
 
-#: js/QuotaManagement.js:262
 msgid "Total quota"
 msgstr ""
 
-#: js/QuotaManagement.js:327
 msgid "Quota Management"
 msgstr ""
 
-#: Config.php:102
 msgid "Apps to show"
 msgstr ""
 
-#: Config.php:104
 msgid "Applications to show in quota, defaults null means all apps"
 msgstr ""
 
-#: Config.php:113
 msgid "Modules to show"
 msgstr ""
 
-#: Config.php:144 Config.php:146
 msgid "Allow total quota in MB management"
 msgstr ""
 
-#: Config.php:155 Config.php:157
 msgid "Default password must change for new user"
 msgstr ""
 
-#: Config.php:166 Config.php:168
 msgid "Default IMAP user settings"
 msgstr "Пользовательские настройки IMAP по-умолчанию."
 
-#: Config.php:177
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:179
 msgid "Enabled Features in Admin Application."
 msgstr ""
 
-#: Config.php:187
 msgid "Prevent special chars in login name"
 msgstr ""
 
-#: Config.php:192 Config.php:203
 msgid "Force retype of new password in user edit dialog"
 msgstr ""
 
-#: Config.php:196
 msgid "Enable XProps Editor in Edit-Dialogs"
 msgstr ""
 
-#: Config.php:207 Config.php:209
 msgid "Prevent applications disable in front end"
 msgstr ""
 
-#: Config.php:213 Config.php:215
 msgid "Allow to change user type"
 msgstr ""
 
-#: Config.php:115
 msgid "Modules to show in admin app, default value null means all modules."
 msgstr ""
 
-#: Controller/Container.php:207
 msgid "Your container has been changed"
 msgstr "Ваш контейнер изменён"
 
-#: Controller/Container.php:208
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Ваш контейнер изменён %1$s %2$sПримечание: %3$s"
 
-#: Controller/Group.php:652
 msgid "A group with this name already exists"
 msgstr ""
 
-#: Controller/User.php:285
 msgid "Password is needed for system account creation"
 msgstr ""
 
-#: Controller/User.php:502
 msgid "Maximum number of users reached."
 msgstr ""
 
-#: Controller/User.php:503
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
 msgstr ""
 
-#: Controller/User.php:683
 msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
 msgstr ""
 
-#: Controller/Quota.php:74
 msgid "Record data needs to be set!"
 msgstr ""
 
-#: Controller/Quota.php:87
 msgid "Account E-Mail needs to be set!"
 msgstr ""
 
-#: Controller/Quota.php:105
 msgid "E-Mail account not found."
 msgstr ""
 
-#: Controller/EmailAccount.php:157
 msgid "Email address is already in use"
 msgstr ""
 
-#: Model/SchedulerTask/Import.php:31
 msgid "GENDER_Scheduled Import Task config"
 msgstr ""
 
-#: Model/SchedulerTask/Import.php:32
 msgid "Scheduled Import Task config"
 msgid_plural "Scheduled Import Task configs"
 msgstr[0] ""
@@ -1292,19 +968,15 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: Model/SchedulerTask/Import.php:43
 msgid "Plugin"
 msgstr ""
 
-#: Model/SchedulerTask/Import.php:47
 msgid "Options"
 msgstr ""
 
-#: Model/SchedulerTask/Abstract.php:32
 msgid "GENDER_Task config"
 msgstr ""
 
-#: Model/SchedulerTask/Abstract.php:33 Model/SchedulerTask.php:73
 msgid "Task config"
 msgid_plural "Task configs"
 msgstr[0] ""
@@ -1312,347 +984,161 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: Model/SchedulerTask.php:48
 msgid "Period"
 msgstr ""
 
-#: Model/SchedulerTask.php:59
 msgid "Task type"
 msgstr ""
 
-#: Model/SchedulerTask.php:86
 msgid "Emails"
 msgstr ""
 
-#: Export/definitions/admin_group_export_csv.xml:5
-#: Export/definitions/admin_user_export_csv.xml:5
 msgid "CSV all data"
 msgstr ""
 
-#: Acl/Rights.php:271
 msgid "Manage access log"
 msgstr ""
 
-#: Acl/Rights.php:272
 msgid "Delete access log entries."
 msgstr ""
 
-#: Acl/Rights.php:275
 msgid "Manage accounts"
 msgstr ""
 
-#: Acl/Rights.php:276
 msgid "Add and edit users and groups, add group members, change user passwords."
 msgstr ""
 
-#: Acl/Rights.php:279
 msgid "Manage e-mail accounts"
 msgstr ""
 
-#: Acl/Rights.php:280
 msgid "Add and edit shared and personal e-mail accounts."
 msgstr ""
 
-#: Acl/Rights.php:283
 msgid "Manage applications"
 msgstr ""
 
-#: Acl/Rights.php:284
 msgid "Enable and disable applications, edit application settings."
 msgstr ""
 
-#: Acl/Rights.php:287
 msgid "Manage roles"
 msgstr ""
 
-#: Acl/Rights.php:288
 msgid "Add and edit roles, add new members to roles, add application rights to roles."
 msgstr ""
 
-#: Acl/Rights.php:291
 msgid "Manage shared tags"
 msgstr ""
 
-#: Acl/Rights.php:292
 msgid "Add, delete and edit shared tags."
 msgstr ""
 
-#: Acl/Rights.php:295
-msgid "Manage shared admin quotas"
+msgid "Manage shared filesystem quotas"
 msgstr ""
 
-#: Acl/Rights.php:296
-msgid "Add, delete and edit shared admin quotas."
+msgid "Add, delete and edit shared filesystem quotas."
 msgstr ""
 
-#: Acl/Rights.php:299
 msgid "Manage shared email quotas"
 msgstr ""
 
-#: Acl/Rights.php:300
 msgid "Add, delete and edit shared email quotas."
 msgstr ""
 
-#: Acl/Rights.php:303
 msgid "Manage computers"
 msgstr ""
 
-#: Acl/Rights.php:304
 msgid "Add, delete and edit (samba) computers."
 msgstr ""
 
-#: Acl/Rights.php:307
 msgid "Manage containers"
 msgstr ""
 
-#: Acl/Rights.php:308
 msgid "Add, delete and edit containers and manage container grants."
 msgstr ""
 
-#: Acl/Rights.php:311
 msgid "Manage customfields"
 msgstr ""
 
-#: Acl/Rights.php:312
 msgid "Add and edit customfields."
 msgstr ""
 
-#: Acl/Rights.php:315
 msgid "Manage import and export definitions"
 msgstr ""
 
-#: Acl/Rights.php:316
 msgid "Add and edit import and export definitions"
 msgstr ""
 
-#: Acl/Rights.php:319
 msgid "View access log"
 msgstr ""
 
-#: Acl/Rights.php:320
 msgid "View access log list."
 msgstr ""
 
-#: Acl/Rights.php:323
 msgid "View accounts"
 msgstr ""
 
-#: Acl/Rights.php:324
 msgid "View accounts list and details."
 msgstr ""
 
-#: Acl/Rights.php:327
 msgid "View e-mail accounts"
 msgstr ""
 
-#: Acl/Rights.php:328
 msgid "View shared and personal e-mail accounts."
 msgstr ""
 
-#: Acl/Rights.php:331
 msgid "View applications"
 msgstr ""
 
-#: Acl/Rights.php:332
 msgid "View applications list and details."
 msgstr ""
 
-#: Acl/Rights.php:335
 msgid "View roles"
 msgstr ""
 
-#: Acl/Rights.php:336
 msgid "View roles list and details."
 msgstr ""
 
-#: Acl/Rights.php:339
 msgid "View shared tags"
 msgstr ""
 
-#: Acl/Rights.php:340
 msgid "View shared tags list and details."
 msgstr ""
 
-#: Acl/Rights.php:343
 msgid "View computers"
 msgstr ""
 
-#: Acl/Rights.php:344
 msgid "View computers list and details."
 msgstr ""
 
-#: Acl/Rights.php:347
 msgid "View containers"
 msgstr ""
 
-#: Acl/Rights.php:348
 msgid "View personal and shared containers."
 msgstr ""
 
-#: Acl/Rights.php:351
 msgid "View customfields"
 msgstr ""
 
-#: Acl/Rights.php:352
 msgid "View customfields list."
 msgstr ""
 
-#: Acl/Rights.php:355
 msgid "View serverinfo"
 msgstr ""
 
-#: Acl/Rights.php:356
 msgid "View serverinfo list."
 msgstr ""
 
-#: Acl/Rights.php:359
 msgid "View quota usage"
 msgstr ""
 
-#: Acl/Rights.php:360
 msgid "View quota usage."
 msgstr ""
 
-#: Acl/Rights.php:363 Acl/Rights.php:364
 msgid "view ImportExportDefinitions"
 msgstr ""
 
-#: Acl/Rights.php:367
 msgid "Manage SSO"
 msgstr ""
 
-#: Acl/Rights.php:368
-msgid "Manage relying parties for single sign on "
+msgid "Manage relying parties for single sign on"
 msgstr ""
-
-#~ msgid "Some error occurred while trying to delete the group."
-#~ msgstr "При удаление группы произошла ошибка."
-
-#~ msgid "manage access log"
-#~ msgstr "Управлять логом доступа"
-
-#~ msgid "delete access log entries"
-#~ msgstr "удалить элементы лога доступа"
-
-#~ msgid "manage accounts"
-#~ msgstr "управлять учётными записями"
-
-#~ msgid "add and edit users and groups, add group members, change user passwords"
-#~ msgstr "добавить и изменить пользователей и группы, добавить пользователей в группы, изменить пароли пользователей"
-
-#~ msgid "manage applications"
-#~ msgstr "Управлять приложениями"
-
-#~ msgid "enable and disable applications, edit application settings"
-#~ msgstr "разрешить и запретить приложения, изменить настройки приложений"
-
-#~ msgid "manage roles"
-#~ msgstr "управлять ролями"
-
-#~ msgid "add and edit roles, add new members to roles, add application rights to roles"
-#~ msgstr "добавить и изменить роли, добавить новых участников к ролям, добавить права приложений к ролям"
-
-#~ msgid "manage shared tags"
-#~ msgstr "управлять общими тэгами"
-
-#~ msgid "add, delete and edit shared tags"
-#~ msgstr "добавить, удалить и изменить общие тэги"
-
-#~ msgid "manage computers"
-#~ msgstr "управлять компьютерами"
-
-#~ msgid "add, delete and edit (samba) computers"
-#~ msgstr "добавлять, удалять и изменять (samba) компьютеры"
-
-#~ msgid "manage containers"
-#~ msgstr "управление контейнерами"
-
-#~ msgid "add, delete and edit containers and manage container grants"
-#~ msgstr "добавить, удалить или редактировать контейнер, а так же управление правами на него"
-
-#~ msgid "manage customfields"
-#~ msgstr "управление настраиваемыми полями"
-
-#~ msgid "add and edit customfields"
-#~ msgstr "добавить или изменить настраиваемые поля"
-
-#~ msgid "view access log"
-#~ msgstr "посмотреть лог доступа"
-
-#~ msgid "view access log list"
-#~ msgstr "посмотреть список логов доступа"
-
-#~ msgid "view accounts"
-#~ msgstr "посмотреть учётные записи"
-
-#~ msgid "view accounts list and details"
-#~ msgstr "посмотреть список учётных записей и подробности"
-
-#~ msgid "view applications"
-#~ msgstr "посмотреть приложения"
-
-#~ msgid "view applications list and details"
-#~ msgstr "посмотреть список приложений и подробности"
-
-#~ msgid "view roles"
-#~ msgstr "посмотреть роли"
-
-#~ msgid "view roles list and details"
-#~ msgstr "посмотреть список ролей и подробности"
-
-#~ msgid "view computers"
-#~ msgstr "посмотреть компьютеры"
-
-#~ msgid "view computers list and details"
-#~ msgstr "посмотреть список компьютеров и подробности"
-
-#~ msgid "view containers"
-#~ msgstr "просмотр контейнеров"
-
-#~ msgid "view personal and shared containers"
-#~ msgstr "просмотреть личные и общие контейнеры"
-
-#~ msgid "view customfields"
-#~ msgstr "просмотр настраиваемых полей"
-
-#~ msgid "view customfields list"
-#~ msgstr "лист настраиваемых полей"
-
-#~ msgid "view serverinfo"
-#~ msgstr "просмотр информации о сервере"
-
-#~ msgid "view serverinfo list"
-#~ msgstr "лист информации о сервере"
-
-#~ msgid "Email"
-#~ msgstr "Электронная почта"
-
-#~ msgid "Logon Time"
-#~ msgstr "Время выхода"
-
-#~ msgid "Logoff Time"
-#~ msgstr "Время выхода из системы"
-
-#~ msgid "Email Alias"
-#~ msgstr "Псевдонимы почты"
-
-#~ msgid "You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases."
-#~ msgstr "Вы не можете перенаправить письмо на заданный адрес."
-
-#~ msgid "Email Forward"
-#~ msgstr "Пересылка почты"
-
-#~ msgid "Add a forward address..."
-#~ msgstr "Добавить адрес для пересылки..."
-
-#~ msgid "enable application"
-#~ msgstr "Активировать приложение"
-
-#~ msgid "disable application"
-#~ msgstr "Деактивировать приложение"
-
-#~ msgid "settings"
-#~ msgstr "настройки"
-
-#~ msgid "unknown status ({0})"
-#~ msgstr "неизвестный статус ({0})"
