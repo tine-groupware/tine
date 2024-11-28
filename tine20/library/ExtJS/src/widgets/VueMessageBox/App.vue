@@ -2,12 +2,13 @@
   <BModal v-model="showModal"
           :title="props.opt.title"
           :title-class="'title'"
-          :modal-class="'bootstrap-scope vue-message-box'"
+          :modal-class="'bootstrap-scope vue-message-box dark-reverse'"
           :hide-header-close="!props.opt.closable"
           :hide-footer="!props.opt.buttons"
           :centered="true"
           :no-fade="true"
           :lazy="true"
+          v-bind:data-bs-theme="darkmode"
           :noCloseOnBackdrop="true"
           :noCloseOnEsc="true"
           @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
@@ -76,6 +77,8 @@ const textAreaField = ref();
 const progressBarVisibility = ref(false);
 const textAreaHeight = ref(0);
 const textElValue = ref("");
+
+const darkmode = document.getElementsByTagName('body')[0].classList.contains('dark-mode') ? ref('dark') : ref('light')
 
 const init = async function () {
   if (props.opt.prompt) {
