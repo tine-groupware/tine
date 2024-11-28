@@ -1443,8 +1443,8 @@ msgid "A new client is available, press OK to get this version"
 msgstr "Ein neuer Client ist verfügbar, klicken Sie OK um die neue Version zu erhalten"
 
 #: js/tineInit.js:1214
-msgid "Tine 2.0 needs to be updated or is not installed yet."
-msgstr "Tine 2.0 muss aktualisiert werden oder ist noch nicht komplett installiert."
+msgid "tine needs to be updated or is not installed yet."
+msgstr "tine muss aktualisiert werden oder ist noch nicht komplett installiert."
 
 #: js/tineInit.js:1215
 msgid "Please wait or contact your administrator"
@@ -2180,13 +2180,13 @@ msgid "(shared)"
 msgstr "(geteilt)"
 
 #: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
-msgid "New version of Tine 2.0 available"
-msgstr "Eine neue Version von Tine 2.0 ist verfügbar."
+msgid "New version of tine available"
+msgstr "Eine neue Version von tine ist verfügbar."
 
 #: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Die Version \"{0}\" von Tine 2.0 ist verfügbar."
+msgid "Version \"{0}\" of tine is available."
+msgstr "Die Version \"{0}\" von tine ist verfügbar."
 
 #: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
