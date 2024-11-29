@@ -299,7 +299,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             }
         } else {
             if ($_valueToJson && !empty($this->_foreignIds)) {
-                if (count($this->_foreignIds) > 1) {
+                if (in_array($this->_operator, ['in', 'notin']) || count($this->_foreignIds) > 1) {
                     foreach ($this->_foreignIds as $key => $value) {
                         $result['value'][$key] = $this->_resolveRecord($value);
                     }
