@@ -1026,13 +1026,13 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         try {
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
-
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->accountId);
             $massMailingMessage = new Felamimail_Model_Message([
                 'account_id' => $this->_account->getId(),
                 'subject' => 'test GDPR mass mailing',
                 'bcc' => [
                     [
-                        "email" => Tinebase_Core::getUser()->accountEmailAddress,
+                        "email" => $contact->email,
                         "name" => '',
                         "type" =>  '',
                         "n_fileas" => '',
@@ -1045,15 +1045,18 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                 'headers' => ['X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822],
                 'massMailingFlag' => true,
             ]);
-            
+
             static::flushMailer();
             Felamimail_Controller_Message_Send::getInstance()->sendMessage($massMailingMessage);
             $messages = static::getMessages();
-            static::assertEquals(2, count($messages), 'expected 3 mails send');
+            static::assertEquals(2, count($messages), 'expected 2 mails send');
             
             foreach($messages as $message) {
                 $body = $message->getBodytext()->getRawContent();
-                static::assertStringContainsString('/GDPR/view', $body);
+                if (str_contains($body, $contact->n_fileas)) {
+                    static::assertStringContainsString($contact->getId(), $body);
+                }
+                static::assertStringContainsString('/GDPR/view/manageConsent', $body);
                 static::assertStringNotContainsString('recipient', $body);
                 static::assertStringNotContainsString('sender', $body);
             }

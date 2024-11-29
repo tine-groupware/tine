@@ -150,40 +150,31 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $twig->getEnvironment()->addGlobal('sender', $from);
 
         $contacts = Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($_message);
+        $recipientTokens = [];
+
+        foreach ($contacts as $contact) {
+            $recipientTokens = array_merge($recipientTokens, $contact->getRecipientTokens());
+        }
 
         foreach ($_message->bcc as $to) {
             $emailTo = $to['email'] ?? $to;
-            $tokens = [];
-            $skip = false;
-            foreach ($contacts as $contact) {
-                foreach (array_keys(Addressbook_Model_Contact::getEmailFields()) as $emailField) {
-                    if ($contact->{$emailField} === $emailTo) {
-                        if ($contact->isPrivateEmail($emailTo)) {
-                            $skip = true;
-                            continue;
-                        }
-                        $tokens[] = [
-                            "n_fileas" => $contact["name"] ?? '',
-                            "name" => $contact["name"] ?? '',
-                            "type" => '',
-                            "email" => $emailTo,
-                            "email_type_field" =>  '',
-                            "contact_record" => null,
-                        ];
-                    }
-                }
-            }
-            if (sizeof($tokens) === 0 && !$skip) {
+            $tokens = array_filter($recipientTokens, function ($token) use ($emailTo) {
+                return $token['email'] === $emailTo;
+            });
+            if (sizeof($tokens) === 0) {
                 $tokens[] = [
                     "n_fileas" => $emailTo,
                     "name" => $emailTo,
                     "type" => '',
                     "email" => $emailTo,
                     "email_type_field" =>  '',
-                    "contact_record" => null,
+                    "contact_record" => '',
                 ];
             }
             foreach ($tokens as $token) {
+                if (!empty($token['is_private'])) {
+                    continue;
+                }
                 $clonedMessage = clone $_message;
                 $clonedMessage->to = [$token];
                 $clonedMessage->cc = [];
