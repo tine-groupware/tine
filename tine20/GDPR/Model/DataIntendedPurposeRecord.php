@@ -42,7 +42,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         'version' => 2,
-        'recordName' => 'Data intended purpose',
+        'recordName' => 'Data intended purpose',   // _('GENDER_Data intended purpose')
         'recordsName' => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
         'titleProperty' => 'id',
         'hasRelations' => false,

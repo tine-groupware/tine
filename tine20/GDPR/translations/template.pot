@@ -206,6 +206,9 @@ msgstr ""
 msgid "List of the language in which the multilingual texts are laid out."
 msgstr ""
 
+msgid "GENDER_Data intended purpose"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 

@@ -7111,6 +7111,11 @@ parameters:
 			path: tine20/langHelper.php
 
 		-
+			message: "#^Function txMerge not found\\.$#"
+			count: 1
+			path: tine20/langHelper.php
+
+		-
 			message: "#^Variable \\$_verbose might not be defined\\.$#"
 			count: 2
 			path: tine20/langHelper.php
