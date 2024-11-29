@@ -1208,15 +1208,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      *
      * @param $email
      */
-    public function isPrivateEmail($email): bool
+    public function isPrivateEmail($email, $emailField): bool
     {
         $fields = self::getEmailFields();
         $result = false;
-        foreach ($fields as $field => $data) {
-            $match = !empty($this->{$field}) && $email === $this->{$field};
-            if ($match && is_array($data['grant_matrix']) && in_array(Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, $data['grant_matrix'])) {
-                $result = true;
-            }
+
+        $match = !empty($this->{$emailField}) && $email === $this->{$emailField};
+        if ($match && is_array($fields[$emailField]['grant_matrix']) && in_array(Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, $fields[$emailField]['grant_matrix'])) {
+            $result = true;
         }
         return $result;
     }
@@ -1640,7 +1639,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 "type" =>  $this->type ?? '',
                 "email" => $this[$emailField],
                 "email_type_field" => $emailField,
-                "contact_record" => $this->toArray()
+                "contact_record" => $this->toArray(),
+                "is_private" => $this->isPrivateEmail($this[$emailField], $emailField),
             ];
         }
 
