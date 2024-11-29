@@ -1,4 +1,3 @@
-#: Config.php:3524
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
@@ -6,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,5890 +13,4336 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Tree/Node.php:208
 msgid "node name must not contain the character /"
 msgstr "node name must not contain the character /"
 
-#: Container.php:763
 msgid "Personal container"
 msgstr "Personal container"
 
-#: Container.php:806 FileSystem.php:3941
 #, python-format
 msgid "%s's personal container"
 msgstr "%s's personal container"
 
-#: Container.php:1260
 msgid "You are not allowed to delete your default container!"
 msgstr "You are not allowed to delete your default container!"
 
-#: Container.php:1781
 msgid "You are not allowed to remove all (admin) grants for this container."
 msgstr "You are not allowed to remove all (admin) grants for this container."
 
-#: Container.php:1904
 msgid "Personal containers can have only one owner!"
 msgstr "Personal containers can have only one owner!"
 
-#: Container.php:2132
 msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
 msgstr "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
 
-#: Container.php:2278
 msgid "A container with this name already exists."
 msgstr "A container with this name already exists."
 
-#: Controller.php:451
 msgid "Maximum number of users reached."
 msgstr "Maximum number of users reached."
 
-#: Controller.php:508
 msgid "The new password must be different from the old one."
 msgstr "The new password must be different from the old one."
 
-#: Controller.php:518
 msgid "Old pin is wrong."
 msgstr "Old pin is wrong."
 
-#: Controller.php:953 Auth/MFA.php:57
 msgid "MFA send out failed, please try again or check with your system administrator"
 msgstr "MFA send out failed, please try again or check with your system administrator"
 
-#: Controller.php:2055 Config.php:1879 Model/MunicipalityKey.php:61
 msgid "Municipality Key"
 msgid_plural "Municipality Keys"
 msgstr[0] "Municipality Key"
 msgstr[1] "Municipality Keys"
 
-#: Controller.php:2075 Model/BankHolidayCalendar.php:34
-#: Model/BankHoliday.php:70
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
 msgstr[0] "Bank Holiday Calendar"
 msgstr[1] "Bank Holiday Calendars"
 
-#: Record/PropertyLocalization.php:115
 msgid "GENDER_Text"
 msgstr "GENDER_Text"
 
-#: Record/PropertyLocalization.php:116
 msgid "Text"
 msgid_plural "Texts"
 msgstr[0] "Text"
 msgstr[1] "Texts"
 
-#: Record/Expander/PropertyClass/Grants.php:65 Frontend/Json/Container.php:223
-#: js/widgets/account/PickerGridPanel.js:241
 msgid "Anyone"
 msgstr "Anyone"
 
-#: Record/RecordSetDiff.php:47
 msgid "added"
 msgstr "added"
 
-#: Record/RecordSetDiff.php:48
 msgid "removed"
 msgstr "removed"
 
-#: Record/RecordSetDiff.php:49
 msgid "modified"
 msgstr "modified"
 
-#: Frontend/Cli.php:2245
 msgid "Number of distinct users"
 msgstr "Number of distinct users"
 
-#: Frontend/Cli.php:2252
 msgid "Number of users"
 msgstr "Number of users"
 
-#: Frontend/Cli.php:2261
 msgid "  User Accounts:\n"
 msgstr "  User Accounts:\n"
 
-#: Frontend/Json/AreaLock.php:218
 msgid "MFA password wrong"
 msgstr "MFA password wrong"
 
-#: Frontend/Json/AreaLock.php:224
 msgid "MFA send out triggered"
 msgstr "MFA send out triggered"
 
-#: EmailUser/Sql.php:508 EmailUser.php:591
 msgid "Email account already exists"
 msgstr "Email account already exists"
 
-#: AreaLock.php:179
 msgid "Invalid authentication"
 msgstr "Invalid authentication"
 
-#: Config/MCKeyFieldRecord.php:25
 msgid "GENDER_Key Field Record"
 msgstr "GENDER_Key Field Record"
 
-#: Config/MCKeyFieldRecord.php:26
 msgid "Key Field Record"
 msgid_plural "Key Field Records"
 msgstr[0] "Key Field Record"
 msgstr[1] "Key Field Records"
 
-#: Config/MCKeyFieldRecord.php:37 js/widgets/keyfield/ConfigGrid.js:161
 msgid "Value"
 msgstr "Value"
 
-#: Config/MCKeyFieldRecord.php:45
 msgid "Icon"
 msgstr "Icon"
 
-#: Config/MCKeyFieldRecord.php:52 js/widgets/tags/TagsPanel.js:538
-#: js/widgets/container/PropertiesDialog.js:149
-#: js/widgets/keyfield/ConfigGrid.js:178 Model/Container.php:164
 msgid "Color"
 msgstr "Color"
 
-#: Config/MCKeyFieldRecord.php:59
 msgid "System"
 msgstr "System"
 
-#: Config/MCKeyFieldRecord.php:65
 msgid "Disabled"
 msgstr "Disabled"
 
-#: Preference.php:132
 msgid "Page size"
 msgstr "Page size"
 
-#: Preference.php:133
 msgid "Page size in grids"
 msgstr "Page size in grids"
 
-#: Preference.php:136
 msgid "Grid stripe rows"
 msgstr "Grid stripe rows"
 
-#: Preference.php:137
 msgid "Stripe rows in grids"
 msgstr "Stripe rows in grids"
 
-#: Preference.php:140
 msgid "Grid load mask"
 msgstr "Grid load mask"
 
-#: Preference.php:141
 msgid "Show load mask in grids"
 msgstr "Show load mask in grids"
 
-#: Preference.php:144
 msgid "Grid resizing strategy"
 msgstr "Grid resizing strategy"
 
-#: Preference.php:145
 msgid "How to resize grid columns"
 msgstr "How to resize grid columns"
 
-#: Preference.php:148
 msgid "Auto search on filter change"
 msgstr "Auto search on filter change"
 
-#: Preference.php:149
 msgid "Perform auto search when filter is changed"
 msgstr "Perform auto search when filter is changed"
 
-#: Preference.php:152 js/widgets/TimezoneChooser.js:36
 msgid "Timezone"
 msgstr "Timezone"
 
-#: Preference.php:153
 msgid "The timezone in which dates are shown in Tine 2.0."
 msgstr "The timezone in which dates are shown in Tine 2.0."
 
-#: Preference.php:156 js/widgets/LangChooser.js:35
 msgid "Language"
 msgstr "Language"
 
-#: Preference.php:157
 msgid "The language of the Tine 2.0 GUI."
 msgstr "The language of the Tine 2.0 GUI."
 
-#: Preference.php:160
 msgid "Default Application"
 msgstr "Default Application"
 
-#: Preference.php:161
 msgid "The default application to show after login."
 msgstr "The default application to show after login."
 
-#: Preference.php:164
 msgid "Window Type"
 msgstr "Window Type"
 
-#: Preference.php:165
 msgid "You can choose between modal windows or normal browser popup windows."
 msgstr "You can choose between modal windows or normal browser popup windows."
 
-#: Preference.php:168
 msgid "Confirm Logout"
 msgstr "Confirm Logout"
 
-#: Preference.php:169
 msgid "Show confirmation dialog on logout."
 msgstr "Show confirmation dialog on logout."
 
-#: Preference.php:172
 msgid "Enable advanced search"
 msgstr "Enable advanced search"
 
-#: Preference.php:173
 msgid "If enabled quickfilter searches through relations as well."
 msgstr "If enabled quickfilter searches through relations as well."
 
-#: Preference.php:176
 msgid "File double-clicking action"
 msgstr "File double-clicking action"
 
-#: Preference.php:177
 msgid "Which action should be executed by default when a file is double-clicked."
 msgstr "Which action should be executed by default when a file is double-clicked."
 
-#: Auth/MFA.php:70
 msgid "MFA validation failed, please try again or check with your system administrator"
 msgstr "MFA validation failed, please try again or check with your system administrator"
 
-#: Auth/MFA/GenericSmsAdapter.php:62
 msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr "{{ code }} is your {{ app.branding.title }} security code."
 
-#: Group/Abstract.php:280 js/ux/ConnectionStatus.js:60 User/Abstract.php:352
-#: User/Abstract.php:353 User/Abstract.php:354 User/Abstract.php:355
-#: User/Abstract.php:356 User/Abstract.php:357 Acl/Roles.php:1048
 msgid "unknown"
 msgstr "unknown"
 
-#: js/AppTabsPanel.js:127
 msgid "Search for Application ..."
 msgstr "Search for Application ..."
 
-#: js/AboutDialog.js:43 js/MainMenu.js:156 js/TineBar/index.js:144
 #, python-brace-format
 msgid "About {0}"
 msgstr "About {0}"
 
-#: js/AboutDialog.js:58 js/MainMenu.js:211 js/TineBar/index.js:199
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr "Learn more about {0}"
 
-#: js/AboutDialog.js:63 js/ux/form/LayerCombo.js:199
-#: js/ux/file/UploadManagerUI.js:203 js/LicenseScreen.js:51
-#: js/SubscriptionScreen.js:93 js/CreditsScreen.js:53
-#: js/widgets/ActivitiesGridPanel.js:329
-#: js/widgets/tags/TagsMassAttachAction.js:103
-#: js/widgets/dialog/MultiOptionsDialog.js:140
-#: js/widgets/dialog/vue/ModalDialog/index.js:195
-#: js/widgets/dialog/vue/MultiOptionsDialog/index.js:87
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:56
-#: js/widgets/dialog/EditDialog.js:691
-#: js/widgets/dialog/AddToRecordPanel.js:111 js/widgets/dialog/Dialog.js:40
-#: js/widgets/dialog/Dialog.js:76
-#: js/widgets/dialog/ExceptionHandlerDialog.js:197
-#: js/widgets/dialog/PreferencesDialog.js:110
-#: js/widgets/container/SelectionDialog.js:80
-#: js/widgets/account/ChangeAccountAction.js:78 js/widgets/EditRecord.js:157
-#: js/PasswordChangeDialog.js:87
 msgid "Ok"
 msgstr "Ok"
 
-#: js/AboutDialog.js:73
 msgid "Released under different"
 msgstr "Released under different"
 
-#: js/AboutDialog.js:74
 msgid "Open Source Licenses"
 msgstr "Open Source Licenses"
 
-#: js/AboutDialog.js:82
 msgid "with the help of our"
 msgstr "with the help of our"
 
-#: js/AboutDialog.js:83
 msgid "Contributors"
 msgstr "Contributors"
 
-#: js/AboutDialog.js:91 js/SubscriptionScreen.js:35
 msgid "Subscription"
 msgstr "Subscription"
 
-#: js/BL/BLConfigPanel.js:72
 msgid "Add new Element..."
 msgstr "Add new Element..."
 
-#: js/MunicipalityKey/picker.js:23
 msgid "Search for Municipality Keys ..."
 msgstr "Search for Municipality Keys ..."
 
-#: js/AreaLocks.js:123
 msgid "Choose MFA Deivce"
 msgstr "Choose MFA Deivce"
 
-#: js/AreaLocks.js:124
 msgid "This area is locked. Which device should be used to unlock?"
 msgstr "This area is locked. Which device should be used to unlock?"
 
-#: js/AreaLocks.js:247
 msgid "Unlocking ..."
 msgstr "Unlocking ..."
 
-#: js/AreaLocks.js:250
 msgid "Click here to unlock this area."
 msgstr "Click here to unlock this area."
 
-#: js/AreaLocks.js:380
 msgid "MFA device missing"
 msgstr "MFA device missing"
 
-#: js/AreaLocks.js:381
 msgid "No matching MFA device for this area found. Configure a matching device please."
 msgstr "No matching MFA device for this area found. Configure a matching device please."
 
-#: js/AreaLocks.js:391
 msgid "Try again?"
 msgstr "Try again?"
 
-#: js/AdminPanel.js:48
 msgid "Filesystem Mounts"
 msgstr "Filesystem Mounts"
 
-#: js/AdminPanel.js:85
 msgid "Profile Information"
 msgstr "Profile Information"
 
-#: js/AdminPanel.js:89 js/widgets/dialog/EditDialog.js:704
-#: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Apply"
 
-#: js/AdminPanel.js:104 js/widgets/LangChooser.js:68
-#: js/widgets/TimezoneChooser.js:76
 msgid "Please Wait"
 msgstr "Please Wait"
 
-#: js/AdminPanel.js:166
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:258
-#: js/widgets/container/GrantsGrid.js:49
 msgid "Read"
 msgstr "Read"
 
-#: js/AdminPanel.js:167
 msgid "The field is readable part of the profile"
 msgstr "The field is readable part of the profile"
 
-#: js/AdminPanel.js:171 js/tineInit.js:523 js/tineInit.js:558
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:263
-#: js/widgets/container/GrantsGrid.js:53 js/widgets/grid/DetailsPanel.js:145
 msgid "Edit"
 msgstr "Edit"
 
-#: js/AdminPanel.js:172
 msgid "The field is editable part of the profile"
 msgstr "The field is editable part of the profile"
 
-#: js/AdminPanel.js:185 js/widgets/dialog/DuplicateResolveGridPanel.js:219
 msgid "Field Name"
 msgstr "Field Name"
 
-#: js/fatClient.js:25
 msgid "Outdated Browser"
 msgstr "Outdated Browser"
 
-#: js/fatClient.js:26
 msgid "You need a current Browser to use this program."
 msgstr "You need a current Browser to use this program."
 
-#: js/MainMenu.js:67
 #, python-brace-format
 msgid "User: {0}"
 msgstr "User: {0}"
 
-#: js/MainMenu.js:116 js/TineBar/index.js:105
 msgid "Return to original user account"
 msgstr "Return to original user account"
 
-#: js/MainMenu.js:162 js/TineBar/index.js:150
 msgid "Help"
 msgstr "Help"
 
-#: js/MainMenu.js:170 js/TineBar/index.js:158
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Debug Console (Ctrl + F11)"
 
-#: js/MainMenu.js:176 js/TineBar/index.js:164
-#: js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
 msgstr "Preferences"
 
-#: js/MainMenu.js:183 js/TineBar/index.js:171
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
-#: js/MainMenu.js:190 js/TineBar/index.js:178
 msgid "Change password"
 msgstr "Change password"
 
-#: js/MainMenu.js:197 js/TineBar/index.js:185
 msgid "Manage MFA Devices"
 msgstr "Manage MFA Devices"
 
-#: js/MainMenu.js:203 js/TineBar/index.js:191
 msgid "Logout"
 msgstr "Logout"
 
-#: js/MainMenu.js:204 js/TineBar/index.js:192
 #, python-brace-format
 msgid "Logout from {0}"
 msgstr "Logout from {0}"
 
-#: js/MainMenu.js:230 js/TineBar/index.js:218
 #, python-brace-format
 msgid "The license expires in {0} days"
 msgstr "The license expires in {0} days"
 
-#: js/MainMenu.js:231 js/MainMenu.js:241 js/TineBar/index.js:219
-#: js/TineBar/index.js:229
 #, python-brace-format
 msgid "Please visit the shop at {0}"
 msgstr "Please visit the shop at {0}"
 
-#: js/MainMenu.js:240 js/LoginPanel.js:290 js/TineBar/index.js:228
 #, python-brace-format
 msgid "Your {0} license expired."
 msgstr "Your {0} license expired."
 
-#: js/MainMenu.js:252 js/TineBar/index.js:240
 msgid "Allow desktop notifications"
 msgstr "Allow desktop notifications"
 
-#: js/MainMenu.js:253 js/TineBar/index.js:241
 msgid "Request permissions for webkit desktop notifications."
 msgstr "Request permissions for webkit desktop notifications."
 
-#: js/MainMenu.js:264 js/TineBar/index.js:252
 msgid "Reload the application"
 msgstr "Reload the application"
 
-#: js/MainMenu.js:265 js/TineBar/index.js:253
 msgid "Reloads the application and clears caches."
 msgstr "Reloads the application and clears caches."
 
-#: js/MainMenu.js:338 js/TineBar/index.js:326 js/common.js:935
-#: js/widgets/tree/ContextMenu.js:358
-#: js/widgets/persistentfilter/PickerPanel.js:358
-#: js/widgets/dialog/EditDialog.js:1458
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:799
-#: js/widgets/grid/GridPanel.js:2957
 msgid "Confirm"
 msgstr "Confirm"
 
-#: js/MainMenu.js:338 js/TineBar/index.js:326
 msgid "Are you sure you want to logout?"
 msgstr "Are you sure you want to logout?"
 
-#: js/MainMenu.js:353 js/TineBar/index.js:341 js/tineInit.js:648
 msgid "Logging you out..."
 msgstr "Logging you out..."
 
-#: js/MainMenu.js:353 js/LoginPanel.js:493 js/LoginPanel.js:563
-#: js/LoginPanel.js:652 js/TineBar/index.js:341 js/tineInit.js:645
-#: js/tineInit.js:648
 msgid "Please wait!"
 msgstr "Please wait!"
 
-#: js/ExceptionDialog.js:74
 msgid "Abnormal End"
 msgstr "Abnormal End"
 
-#: js/ExceptionDialog.js:114 js/ux/form/LayerCombo.js:206
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
-#: js/widgets/ActivitiesGridPanel.js:321 js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:97
-#: js/widgets/dialog/MultiOptionsDialog.js:132
-#: js/widgets/dialog/WizardPanel.js:189
-#: js/widgets/dialog/vue/ModalDialog/index.js:190
-#: js/widgets/dialog/vue/MultiOptionsDialog/index.js:81
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:51
-#: js/widgets/dialog/EditDialog.js:714 js/widgets/dialog/EditDialog.js:1100
-#: js/widgets/dialog/AddToRecordPanel.js:103 js/widgets/dialog/Dialog.js:45
-#: js/widgets/dialog/Dialog.js:69
-#: js/widgets/dialog/ExceptionHandlerDialog.js:189
-#: js/widgets/dialog/DuplicateMergeDialog.js:79
-#: js/widgets/dialog/PreferencesDialog.js:118
-#: js/widgets/container/SelectionDialog.js:71
-#: js/widgets/account/ChangeAccountAction.js:99 js/widgets/EditRecord.js:178
-#: js/PasswordChangeDialog.js:81
 msgid "Cancel"
 msgstr "Cancel"
 
-#: js/ExceptionDialog.js:121
 msgid "Send Report"
 msgstr "Send Report"
 
-#: js/ExceptionDialog.js:166
 msgid "An error occurred, the program ended abnormal."
 msgstr "An error occurred, the program ended abnormal."
 
-#: js/ExceptionDialog.js:167
 msgid "The last action you made was potentially not performed correctly."
 msgstr "The last action you made was potentially not performed correctly."
 
-#: js/ExceptionDialog.js:168
 msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 msgstr "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 
-#: js/ExceptionDialog.js:174 js/widgets/relation/GenericPickerGridPanel.js:626
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
-#: js/widgets/tags/TagsPanel.js:534 js/widgets/dialog/EditDialog.js:530
-#: js/widgets/dialog/ExportDialog.js:115
-#: js/widgets/dialog/SimpleRecordEditDialog.js:59
-#: Model/ImportExportDefinition.php:171 Model/BankHolidayCalendar.php:64
-#: Model/EvaluationDimensionItem.php:103 Model/BankHoliday.php:105
-#: Model/EvaluationDimension.php:85 Model/Role.php:64 Model/BankAccount.php:88
 msgid "Description"
 msgstr "Description"
 
-#: js/ExceptionDialog.js:182
 msgid "Send Contact Information"
 msgstr "Send Contact Information"
 
-#: js/ExceptionDialog.js:203
 msgid "Details:"
 msgstr "Details:"
 
-#: js/ExceptionDialog.js:226
 msgid "Sending report..."
 msgstr "Sending report..."
 
-#: js/ExceptionDialog.js:226
 msgid "Please wait a moment"
 msgstr "Please wait a moment"
 
-#: js/ExceptionDialog.js:307
 msgid "Transmission Completed"
 msgstr "Transmission Completed"
 
-#: js/ExceptionDialog.js:308
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Your report has been sent. Thanks for your contribution"
 
-#: js/ExceptionDialog.js:308
 msgid "Please restart your browser now!"
 msgstr "Please restart your browser now!"
 
-#: js/BankHoliday/FractionField.js:13
 msgid "Fraction of the day"
 msgstr "Fraction of the day"
 
-#: js/BankHoliday/FractionField.js:15
 msgid "One quarter of the day"
 msgstr "One quarter of the day"
 
-#: js/BankHoliday/FractionField.js:16
 msgid "One third of the day"
 msgstr "One third of the day"
 
-#: js/BankHoliday/FractionField.js:17
 msgid "Half of the day"
 msgstr "Half of the day"
 
-#: js/BankHoliday/FractionField.js:18
 msgid "Two third of the day"
 msgstr "Two third of the day"
 
-#: js/BankHoliday/FractionField.js:19
 msgid "Three quarters of the day"
 msgstr "Three quarters of the day"
 
-#: js/BankHoliday/FractionField.js:20
 msgid "Whole day"
 msgstr "Whole day"
 
-#: js/LoginPanel.js:88 js/LoginPanel.js:153
 msgid "Login"
 msgstr "Login"
 
-#: js/LoginPanel.js:98 js/widgets/dialog/CredentialsDialog.js:61
-#: views/deactivationNotification.php:12
 msgid "Username"
 msgstr "Username"
 
-#: js/LoginPanel.js:128 js/MFA/Providers/UserPassword.js:17
-#: js/widgets/dialog/PasswordDialog.js:86
-#: js/widgets/dialog/vue/PasswordDialog/index.js:65
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:28
-#: js/widgets/dialog/CredentialsDialog.js:65 js/PasswordChangeDialog.js:37
 msgid "Password"
 msgstr "Password"
 
-#: js/LoginPanel.js:143
 msgid "Certificate detected. Please, press Login button to proceed."
 msgstr "Certificate detected. Please, press Login button to proceed."
 
-#: js/LoginPanel.js:167
 msgid "Login via OpenID Connect"
 msgstr "Login via OpenID Connect"
 
-#: js/LoginPanel.js:213 Model/Application.php:105
 msgid "Version"
 msgstr "Version"
 
-#: js/LoginPanel.js:247
 #, python-brace-format
 msgid "{0} is made for you"
 msgstr "{0} is made for you"
 
-#: js/LoginPanel.js:249
 #, python-brace-format
 msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
 msgstr "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
 
-#: js/LoginPanel.js:255
 #, python-brace-format
 msgid "{0} Homepage"
 msgstr "{0} Homepage"
 
-#: js/LoginPanel.js:259
 msgid "Translations"
 msgstr "Translations"
 
-#: js/LoginPanel.js:261
 #, python-brace-format
 msgid "Translation state of {0}: {1}%."
 msgstr "Translation state of {0}: {1}%."
 
-#: js/LoginPanel.js:263
 #, python-brace-format
 msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
 msgstr "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
 
-#: js/LoginPanel.js:266
 #, python-brace-format
 msgid "{0} Translation Howto"
 msgstr "{0} Translation Howto"
 
-#: js/LoginPanel.js:267
 msgid "Detailed Language Statistics"
 msgstr "Detailed Language Statistics"
 
-#: js/LoginPanel.js:291
 #, python-brace-format
 msgid "{0} trial"
 msgstr "{0} trial"
 
-#: js/LoginPanel.js:297
 #, python-brace-format
 msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
 msgstr "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
 
-#: js/LoginPanel.js:298
 msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
 msgstr "Please contact Metaways Infosystems GmbH to buy a valid license."
 
-#: js/LoginPanel.js:328
 msgid "Powered by:"
 msgstr "Powered by:"
 
-#: js/LoginPanel.js:328
 msgid "online open source groupware and crm"
 msgstr "online open source groupware and crm"
 
-#: js/LoginPanel.js:378
 #, python-brace-format
 msgid "about {0} minutes"
 msgstr "about {0} minutes"
 
-#: js/LoginPanel.js:383 js/LoginPanel.js:695
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 needs your help"
 
-#: js/LoginPanel.js:385 js/LoginPanel.js:697
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 
-#: js/LoginPanel.js:391
 msgid "participate!"
 msgstr "participate!"
 
-#: js/LoginPanel.js:413
 msgid "Languages"
 msgstr "Languages"
 
-#: js/LoginPanel.js:414
 msgid "Duration"
 msgstr "Duration"
 
-#: js/LoginPanel.js:453
 msgid "Browser incompatible"
 msgstr "Browser incompatible"
 
-#: js/LoginPanel.js:455
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "Your browser is not supported by Tine 2.0."
 
-#: js/LoginPanel.js:460
 msgid "Browser incompatible?"
 msgstr "Browser incompatible?"
 
-#: js/LoginPanel.js:462
 msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr "You are using an unrecognized browser. This could result in unexpected behaviour."
 
-#: js/LoginPanel.js:468
 msgid "You might try one of these browsers:"
 msgstr "You might try one of these browsers:"
 
-#: js/LoginPanel.js:493 js/LoginPanel.js:563 js/tineInit.js:645
 #, python-brace-format
 msgid "Login successful. Loading {0}..."
 msgstr "Login successful. Loading {0}..."
 
-#: js/LoginPanel.js:577
 msgid "There was an error verifying your certificate!"
 msgstr "There was an error verifying your certificate!"
 
-#: js/LoginPanel.js:578
 msgid "Your username and/or your password are wrong!"
 msgstr "Your username and/or your password are wrong!"
 
-#: js/LoginPanel.js:580
 msgid "Login failure"
 msgstr "Login failure"
 
-#: js/LoginPanel.js:633
 msgid "Logging you in..."
 msgstr "Logging you in..."
 
-#: js/LoginPanel.js:633 js/widgets/tree/ContextMenu.js:223
-#: js/widgets/persistentfilter/PickerPanel.js:360
-#: js/widgets/persistentfilter/PickerPanel.js:398
-#: js/widgets/persistentfilter/PickerPanel.js:453
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:802
-#: js/widgets/container/GrantsDialog.js:88
 msgid "Please wait"
 msgstr "Please wait"
 
-#: js/LoginPanel.js:647 js/widgets/dialog/EditDialog.js:1414
-#: js/widgets/dialog/CredentialsDialog.js:127
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:717
-#: js/widgets/dialog/ExportDialog.js:334
-#: js/widgets/dialog/PreferencesDialog.js:284
-#: js/widgets/dialog/PreferencesDialog.js:312
 msgid "Errors"
 msgstr "Errors"
 
-#: js/LoginPanel.js:647 js/widgets/dialog/CredentialsDialog.js:127
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:717
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
-#: js/LoginPanel.js:652
 msgid "Redirecting to SSO Identity Provider"
 msgstr "Redirecting to SSO Identity Provider"
 
-#: js/LoginPanel.js:667
 msgid "Please enter your login data"
 msgstr "Please enter your login data"
 
-#: js/Models.js:46 js/widgets/CountryFilter.js:32
 msgid "Country"
 msgid_plural "Countries"
 msgstr[0] "Country"
 msgstr[1] "Countries"
 
-#: js/Models.js:156 Model/Grants.php:126
 msgid "Grant"
 msgid_plural "Grants"
 msgstr[0] "Grant"
 msgstr[1] "Grants"
 
-#: js/Models.js:184 js/widgets/tags/TagFilter.js:31 Model/Tag.php:63
 msgid "Tag"
 msgid_plural "Tags"
 msgstr[0] "Tag"
 msgstr[1] "Tags"
 
-#: js/Models.js:304 Model/Alarm.php:99
 msgid "Alarm"
 msgid_plural "Alarms"
 msgstr[0] "Alarm"
 msgstr[1] "Alarms"
 
-#: js/Models.js:342
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Import"
 msgstr[1] "Imports"
 
-#: js/Models.js:370 js/widgets/dialog/ExportDialog.js:59
-#: js/widgets/dialog/ExportDialog.js:101 js/widgets/container/GrantsGrid.js:57
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] "Export"
 msgstr[1] "Export"
 
-#: js/Models.js:391
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Credentials"
 msgstr[1] "Credentials"
 
-#: js/Models.js:418 js/widgets/relation/GenericPickerGridPanel.js:165
-#: js/widgets/relation/FilterModel.js:32 Model/Relation.php:102
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relation"
 msgstr[1] "Relations"
 
-#: js/Models.js:454
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] "Department"
 msgstr[1] "Departments"
 
-#: js/Models.js:461 js/widgets/dialog/AttachmentsGridPanel.js:149
-#: js/widgets/dialog/SimpleRecordEditDialog.js:55
-#: js/widgets/container/PropertiesDialog.js:137
-#: js/widgets/account/PickerGridPanel.js:355
-#: js/widgets/grid/LinkGridPanel.js:114 Model/ImportExportDefinition.php:159
-#: Model/Tree/Node.php:198 Model/Application.php:72 Model/Container.php:124
-#: Model/BankHolidayCalendar.php:54 Model/EvaluationDimensionItem.php:93
-#: Model/BankHoliday.php:96 Model/EvaluationDimension.php:74 Model/Role.php:57
-#: Model/RoleRight.php:53 Model/RoleRight.php:59 Model/RoleRight.php:65
-#: Model/SchedulerTask.php:83 Model/BankAccount.php:68
 msgid "Name"
 msgstr "Name"
 
-#: js/Models.js:491 Model/BLConfig.php:54
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "Config"
 msgstr[1] "Configs"
 
-#: js/Models.js:491
 msgid "Configs"
 msgstr "Configs"
 
-#: js/Models.js:528
 msgid "Query"
 msgstr "Query"
 
-#: js/Models.js:529 Model/Tree/Node.php:450 Model/Path.php:41
 msgid "Path"
 msgid_plural "Paths"
 msgstr[0] "Path"
 msgstr[1] "Paths"
 
-#: js/MainScreenPanel.js:189
 msgid "You need to set a new password."
 msgstr "You need to set a new password."
 
-#: js/MainScreenPanel.js:197
 msgid "Multi Factor Authentication"
 msgstr "Multi Factor Authentication"
 
-#: js/MainScreenPanel.js:199
 msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
 msgstr "We strongly encourage you to enable Multi-Factor Authentication for added security."
 
-#: js/MainScreenPanel.js:201
 msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
 msgstr "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
 
-#: js/MFA/DeviceSelfServiceDialog.js:19
 msgid "Multi Factor Authentication Device Configuration"
 msgstr "Multi Factor Authentication Device Configuration"
 
-#: js/MFA/HTOTPSecretField.js:20 Model/MFA/TOTPUserConfig.php:55
-#: Model/MFA/HOTPUserConfig.php:55
 msgid "Secret Key"
 msgstr "Secret Key"
 
-#: js/MFA/HTOTPSecretField.js:22 js/MFA/WebAuthnPublicKeyDataField.js:17
 msgid "Please note: After saving you can not view this autogenerated secret key again!"
 msgstr "Please note: After saving you can not view this autogenerated secret key again!"
 
-#: js/MFA/HTOTPSecretField.js:56
 msgid "Generating secret key ..."
 msgstr "Generating secret key ..."
 
-#: js/MFA/HTOTPSecretField.js:66 js/MFA/WebAuthnPublicKeyDataField.js:59
 msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
 msgstr "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
 
-#: js/MFA/HTOTPSecretField.js:106
 msgid "for"
 msgstr "for"
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:15 Model/MFA/WebAuthnUserConfig.php:37
 msgid "FIDO2 WebAuthn Device"
 msgid_plural "FIDO2 WebAuthn Devices"
 msgstr[0] "FIDO2 WebAuthn Device"
 msgstr[1] "FIDO2 WebAuthn Devices"
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:21
 msgid "Please open the following URL in your Browser for more security key options"
 msgstr "Please open the following URL in your Browser for more security key options"
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:57
 msgid "Configuring FIDO2 WebAuthn Device ..."
 msgstr "Configuring FIDO2 WebAuthn Device ..."
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:60 Model/MFA/WebAuthnUserConfig.php:38
 msgid "FIDO2 WebAuthn Device is configured."
 msgstr "FIDO2 WebAuthn Device is configured."
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:73
 msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
 msgstr "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:78
 msgid "Unsupported Configuration"
 msgstr "Unsupported Configuration"
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:80
 #, python-brace-format
 msgid "see {url} for details"
 msgstr "see {url} for details"
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:79
 #, python-brace-format
 msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
 msgstr "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:113 js/MFA/Providers/WebAuthn.js:53
-#: js/widgets/container/GrantsDialog.js:118
-#: js/widgets/keyfield/ConfigGrid.js:254 js/widgets/keyfield/ConfigGrid.js:259
 msgid "Error"
 msgstr "Error"
 
-#: js/MFA/WebAuthnPublicKeyDataField.js:114
 msgid "FIDO2 WebAuthn registration failed. Try again?"
 msgstr "FIDO2 WebAuthn registration failed. Try again?"
 
-#: js/MFA/Providers/Generic.js:15 js/MFA/Providers/WebAuthn.js:16
 msgid "MFA secret required"
 msgstr "MFA secret required"
 
-#: js/MFA/Providers/Generic.js:16 js/MFA/Providers/WebAuthn.js:17
 #, python-brace-format
 msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
 msgstr "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
 
-#: js/MFA/Providers/Generic.js:17 js/MFA/Providers/WebAuthn.js:18
 #, python-brace-format
 msgid "Secret from {mfaDevice.device_name}"
 msgstr "Secret from {mfaDevice.device_name}"
 
-#: js/MFA/Providers/UserPassword.js:15
 msgid "Password required"
 msgstr "Password required"
 
-#: js/MFA/Providers/UserPassword.js:16
 msgid "This area is locked. To unlock it you need to provide your password."
 msgstr "This area is locked. To unlock it you need to provide your password."
 
-#: js/MFA/Providers/HTOTPAuthenticator.js:15
 msgid "Authenticator code required"
 msgstr "Authenticator code required"
 
-#: js/MFA/Providers/HTOTPAuthenticator.js:16
 #, python-brace-format
 msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
 msgstr "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
 
-#: js/MFA/Providers/HTOTPAuthenticator.js:17
 #, python-brace-format
 msgid "Authenticator code from {mfaDevice.device_name}"
 msgstr "Authenticator code from {mfaDevice.device_name}"
 
-#: js/MFA/Providers/YubicoOTP.js:15
 msgid "Yubico OTP required"
 msgstr "Yubico OTP required"
 
-#: js/MFA/Providers/YubicoOTP.js:16
 msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
 msgstr "This area is locked. To unlock it you need to provide your Yubico OTP."
 
-#: js/MFA/Providers/YubicoOTP.js:17 Model/MFA/YubicoOTPUserConfig.php:42
 msgid "Yubico OTP"
 msgid_plural "Yubico OTPs"
 msgstr[0] "Yubico OTP"
 msgstr[1] "Yubico OTPs"
 
-#: js/MFA/Providers/Pin.js:15
 msgid "PIN required"
 msgstr "PIN required"
 
-#: js/MFA/Providers/Pin.js:16
 #, python-brace-format
 msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
 msgstr "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
 
-#: js/MFA/Providers/Pin.js:17
 #, python-brace-format
 msgid "{mfaDevice.device_name} secret"
 msgstr "{mfaDevice.device_name} secret"
 
-#: js/MFA/Providers/Token.js:15
 msgid "Token required"
 msgstr "Token required"
 
-#: js/MFA/Providers/Token.js:16
 #, python-brace-format
 msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
 msgstr "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
 
-#: js/MFA/Providers/Token.js:17
 #, python-brace-format
 msgid "Token from {mfaDevice.device_name}"
 msgstr "Token from {mfaDevice.device_name}"
 
-#: js/MFA/Providers/Sms.js:15
 msgid "SMS security code required"
 msgstr "SMS security code required"
 
-#: js/MFA/Providers/Sms.js:16
 #, python-brace-format
 msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
 msgstr "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
 
-#: js/MFA/Providers/Sms.js:17
 #, python-brace-format
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "Security code from {mfaDevice.device_name}"
 
-#: js/MFA/Providers/WebAuthn.js:54
 msgid "FIDO2 WebAuthn authentication failed. Try again?"
 msgstr "FIDO2 WebAuthn authentication failed. Try again?"
 
-#: js/MFA/UserConfigPanel.js:30
 msgid "Add new MFA Device"
 msgstr "Add new MFA Device"
 
-#: js/MFA/UserConfigPanel.js:72
 msgid "Click here to add note"
 msgstr "Click here to add note"
 
-#: js/TineDock/TineDock.vue:63 tempExtract/vueStrings.js:11315
 msgid "Remove"
 msgstr "Remove"
 
-#: js/UploadmanagerStatusButton.js:61
 msgid "Total    Uploads"
 msgstr "Total    Uploads"
 
-#: js/UploadmanagerStatusButton.js:64
 msgid "Complete Uploads"
 msgstr "Complete Uploads"
 
-#: js/UploadmanagerStatusButton.js:67
 msgid "Failed   Uploads"
 msgstr "Failed   Uploads"
 
-#: js/ux/form/BytesField.js:62
 #, python-brace-format
 msgid "{0} is not a valid unit"
 msgstr "{0} is not a valid unit"
 
-#: js/ux/form/HtmlEditor.js:186
 msgid "Select Image"
 msgstr "Select Image"
 
-#: js/ux/form/HtmlEditor.js:187
 msgid "Insert an image with the selected size"
 msgstr "Insert an image with the selected size"
 
-#: js/ux/form/HtmlEditor.js:743
 msgid "Convert to pure text"
 msgstr "Convert to pure text"
 
-#: js/ux/form/ComboBoxRecentsPlugin.js:43
-#: js/widgets/container/SelectionComboBox.js:144
 #, python-brace-format
 msgid "choose other {0}..."
 msgstr "choose other {0}..."
 
-#: js/ux/form/DurationSpinner.js:102
 msgid "Not a valid time"
 msgstr "Not a valid time"
 
-#: js/ux/form/NumberField.js:195
 msgid "no decimals allowed"
 msgstr "no decimals allowed"
 
-#: js/ux/form/NumberField.js:202
 #, python-brace-format
 msgid "max decimals allowed: {0}"
 msgstr "max decimals allowed: {0}"
 
-#: js/ux/form/PeriodPicker.js:26
 msgid "Day"
 msgstr "Day"
 
-#: js/ux/form/PeriodPicker.js:26
 msgid "Week"
 msgstr "Week"
 
-#: js/ux/form/PeriodPicker.js:26 js/widgets/grid/MonthFilter.js:35
 msgid "Month"
 msgstr "Month"
 
-#: js/ux/form/PeriodPicker.js:26
 msgid "Quarter"
 msgstr "Quarter"
 
-#: js/ux/form/PeriodPicker.js:26
 msgid "Year"
 msgstr "Year"
 
-#: js/ux/form/LockCombo.js:91
 msgid "When preference is locked, normal user can not edit the preference anymore."
 msgstr "When preference is locked, normal user can not edit the preference anymore."
 
-#: js/ux/form/ImageField.js:86 js/widgets/dialog/vue/ModalDialog/index.js:130
-#: js/widgets/dialog/vue/ModalDialog/index.js:165
 msgid "Loading"
 msgstr "Loading"
 
-#: js/ux/form/ImageField.js:88
 msgid "Click to edit"
 msgstr "Click to edit"
 
-#: js/ux/form/ImageField.js:162
 msgid "Image Failed"
 msgstr "Image Failed"
 
-#: js/ux/form/ImageField.js:162
 msgid "Could not load image. Please notify your Administrator"
 msgstr "Could not load image. Please notify your Administrator"
 
-#: js/ux/form/ImageField.js:184
 msgid "Not An Image"
 msgstr "Not An Image"
 
-#: js/ux/form/ImageField.js:184
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr "Please select an image file (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:227 js/ux/file/Upload.js:485
-#: js/widgets/grid/FileUploadGrid.js:190
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
-#: js/ux/form/ImageField.js:227
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "Could not upload image. Please notify your Administrator"
 
-#: js/ux/form/ImageField.js:239
 msgid "Change Image"
 msgstr "Change Image"
 
-#: js/ux/form/ImageField.js:251 js/ux/form/ImageField.js:269
 msgid "Crop Image"
 msgstr "Crop Image"
 
-#: js/ux/form/ImageField.js:275
 msgid "Delete Image"
 msgstr "Delete Image"
 
-#: js/ux/form/ImageField.js:284
 msgid "Show Original Image"
 msgstr "Show Original Image"
 
-#: js/ux/form/RecordsComboBox.js:26
 msgid "Software Version"
 msgstr "Software Version"
 
-#: js/ux/form/FieldMaximizePlugin.js:6
 msgid "Job Title"
 msgstr "Job Title"
 
-#: js/ux/form/BooleanCombo.js:29 js/ux/Printer/renderers/Check.js:9
 msgid "Yes"
 msgstr "Yes"
 
-#: js/ux/form/BooleanCombo.js:29 js/ux/Printer/renderers/Check.js:9
-#: js/widgets/dialog/FileListDialog.js:99
 msgid "No"
 msgstr "No"
 
-#: js/ux/file/Upload.js:482
 #, python-brace-format
 msgid "Error while uploading \"{fileName}\". Please try again later."
 msgstr "Error while uploading \"{fileName}\". Please try again later."
 
-#: js/ux/file/UploadManagerUI.js:40
 msgid "Uploads Monitor"
 msgstr "Uploads Monitor"
 
-#: js/ux/file/UploadManagerUI.js:62 js/ux/file/UploadManagerUI.js:78
 msgid "Empty List"
 msgstr "Empty List"
 
-#: js/ux/file/UploadManagerUI.js:79
 msgid "Not all uploads are finished yet. What would you to do?"
 msgstr "Not all uploads are finished yet. What would you to do?"
 
-#: js/ux/file/UploadManagerUI.js:83
 msgid "Remove finished uploads from this list only"
 msgstr "Remove finished uploads from this list only"
 
-#: js/ux/file/UploadManagerUI.js:84
 msgid "Cancel all unfinished uploads before"
 msgstr "Cancel all unfinished uploads before"
 
-#: js/ux/file/UploadManagerUI.js:89
 msgid "Removing files..."
 msgstr "Removing files..."
 
-#: js/ux/file/UploadManagerUI.js:185
 msgid "Total Uploads : "
 msgstr "Total Uploads : "
 
-#: js/ux/file/ProgressRenderer.js:19
 msgid "Upload progress"
 msgstr "Upload progress"
 
-#: js/ux/file/ProgressRenderer.js:45 js/widgets/grid/QuotaRenderer.js:45
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "{0} available (total: {1})"
 
-#: js/ux/Printer/renderers/Tags.js:11 js/widgets/tags/TagsPanel.js:57
-#: js/widgets/tags/TagsPanel.js:441 Export/Pdf.php:216
 msgid "Tags"
 msgstr "Tags"
 
-#: js/ux/Printer/renderers/EditDialogRenderer.js:95
-#: js/widgets/grid/ForeignRecordFilter.js:131
 msgid "Related to"
 msgstr "Related to"
 
-#: js/ux/Printer/renderers/Base.js:48
 msgid "Preparing print, please wait..."
 msgstr "Preparing print, please wait..."
 
-#: js/ux/Printer/renderers/Base.js:62
 msgid "Printing Error"
 msgstr "Printing Error"
 
-#: js/ux/PopupWindow.js:202
 msgid "Cannot open new window"
 msgstr "Cannot open new window"
 
-#: js/ux/PopupWindow.js:203
 #, python-brace-format
 msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
 msgstr "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
 
-#: js/ux/PopupWindow.js:373
 msgid "Window can be closed"
 msgstr "Window can be closed"
 
-#: js/ux/PopupWindow.js:374
 #, python-brace-format
 msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
 msgstr "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
 
-#: js/ux/SearchField.js:44
 msgid "enter searchfilter"
 msgstr "enter searchfilter"
 
-#: js/ux/WindowFactory.js:234
 msgid "Leave site?"
 msgstr "Leave site?"
 
-#: js/ux/WindowFactory.js:235
 msgid "Changes you made may not be saved."
 msgstr "Changes you made may not be saved."
 
-#: js/ux/ConnectionStatus.js:58
 msgid "online"
 msgstr "online"
 
-#: js/ux/ConnectionStatus.js:59
 msgid "offline"
 msgstr "offline"
 
-#: js/ux/PopupWindowManager.js:176
 msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
 msgstr "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
 
-#: js/ux/Percentage.js:247
 msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
 msgstr "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
 
-#: js/ux/Percentage.js:248
 msgid "quarantined"
 msgstr "quarantined"
 
-#: js/ux/Percentage.js:270
 msgid "(paused)"
 msgstr "(paused)"
 
-#: js/ux/grid/DDSortPlugin.js:103
 #, python-brace-format
 msgid "Please Sort by \"{0}\""
 msgstr "Please Sort by \"{0}\""
 
-#: js/ux/grid/DDSortPlugin.js:104
 #, python-brace-format
 msgid "To use manual sorting, you need to sort by column \"{0}\""
 msgstr "To use manual sorting, you need to sort by column \"{0}\""
 
-#: js/ux/grid/PagingToolbar.js:59
 #, python-brace-format
 msgid "{0} selected"
 msgstr "{0} selected"
 
-#: js/ux/grid/PagingToolbar.js:60
 msgid "Unselect all"
 msgstr "Unselect all"
 
-#: js/ux/grid/PagingToolbar.js:61
 #, python-brace-format
 msgid "Select all pages ({0} records)"
 msgstr "Select all pages ({0} records)"
 
-#: js/ux/grid/PagingToolbar.js:62
 msgid "Toggle selection"
 msgstr "Toggle selection"
 
-#: js/ux/grid/GroupingGridPlugin.js:95
 msgid "Export Records from these Positions"
 msgstr "Export Records from these Positions"
 
-#: js/ux/grid/CheckColumn.js:87
 msgid "Select all"
 msgstr "Select all"
 
-#: js/ux/grid/CheckColumn.js:91
 msgid "Deselect all"
 msgstr "Deselect all"
 
-#: js/AppManager.js:125
 msgid "Missing Applications"
 msgstr "Missing Applications"
 
-#: js/AppManager.js:126
 msgid "There are no applications enabled for you. Please contact your administrator."
 msgstr "There are no applications enabled for you. Please contact your administrator."
 
-#: js/tineInit.js:353
 msgid "Follow System"
 msgstr "Follow System"
 
-#: js/tineInit.js:359
 msgid "Dark Mode"
 msgstr "Dark Mode"
 
-#: js/tineInit.js:365
 msgid "Light Mode"
 msgstr "Light Mode"
 
-#: js/tineInit.js:455
 msgid "Create Contact"
 msgstr "Create Contact"
 
-#: js/tineInit.js:465 js/widgets/form/PasswordTriggerField.js:134
 msgid "Copy to Clipboard"
 msgstr "Copy to Clipboard"
 
-#: js/tineInit.js:480
 msgid "Compose Message To"
 msgstr "Compose Message To"
 
-#: js/tineInit.js:633
 msgid "Session Timed Out"
 msgstr "Session Timed Out"
 
-#: js/tineInit.js:634
 msgid "You can close this window."
 msgstr "You can close this window."
 
-#: js/tineInit.js:1195
 msgid "Your Client is Outdated"
 msgstr "Your Client is Outdated"
 
-#: js/tineInit.js:1196
 msgid "A new client is available, press OK to get this version"
 msgstr "A new client is available, press OK to get this version"
 
-#: js/tineInit.js:1214
-msgid "Tine 2.0 needs to be updated or is not installed yet."
-msgstr "Tine 2.0 needs to be updated or is not installed yet."
+msgid "tine needs to be updated or is not installed yet."
+msgstr "tine needs to be updated or is not installed yet."
 
-#: js/tineInit.js:1215
 msgid "Please wait or contact your administrator"
 msgstr "Please wait or contact your administrator"
 
-#: js/ExceptionHandler.js:183
 msgid "Insufficient Rights"
 msgstr "Insufficient Rights"
 
-#: js/ExceptionHandler.js:184
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Sorry, you are not permitted to perform this action"
 
-#: js/ExceptionHandler.js:192
 msgid "Not Found"
 msgstr "Not Found"
 
-#: js/ExceptionHandler.js:193
 msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 msgstr "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 
-#: js/ExceptionHandler.js:201
 msgid "Concurrent Updates"
 msgstr "Concurrent Updates"
 
-#: js/ExceptionHandler.js:202
 msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 msgstr "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 
-#: js/ExceptionHandler.js:214
 msgid "Rate-Limit"
 msgstr "Rate-Limit"
 
-#: js/ExceptionHandler.js:215
 msgid "This method is rate-limited and you sent too many requests."
 msgstr "This method is rate-limited and you sent too many requests."
 
-#: js/ExceptionHandler.js:223
 msgid "Service Unavailable"
 msgstr "Service Unavailable"
 
-#: js/ExceptionHandler.js:224
 msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
 msgstr "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
 
-#: js/ExceptionHandler.js:230
 msgid "Server Message:"
 msgstr "Server Message:"
 
-#: js/ExceptionHandler.js:232
 msgid "Invalid Data"
 msgstr "Invalid Data"
 
-#: js/ExceptionHandler.js:233
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Your input data is not valid. Please provide valid data."
 
-#: js/ExceptionHandler.js:245
 msgid "Connection lost, please check your network!"
 msgstr "Connection lost, please check your network!"
 
-#: js/ExceptionHandler.js:251
 msgid "Timeout"
 msgstr "Timeout"
 
-#: js/ExceptionHandler.js:252
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 
-#: js/ExceptionHandler.js:260
 msgid "No Response"
 msgstr "No Response"
 
-#: js/ExceptionHandler.js:261
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 
-#: js/ExceptionHandler.js:268
 msgid "Out of Resources"
 msgstr "Out of Resources"
 
-#: js/ExceptionHandler.js:269
 msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 
-#: js/ExceptionHandler.js:284
 msgid "No Role Memberships"
 msgstr "No Role Memberships"
 
-#: js/ExceptionHandler.js:285
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr "Your user account has no role memberships. Please contact your administrator."
 
-#: js/ExceptionHandler.js:353
 msgid "Method Not Found / Insufficent Permissions"
 msgstr "Method Not Found / Insufficent Permissions"
 
-#: js/ExceptionHandler.js:354
 msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
 msgstr "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
 
-#: js/LicenseScreen.js:35
 msgid "License"
 msgstr "License"
 
-#: js/SubscriptionScreen.js:62
 msgid "Valid from"
 msgstr "Valid from"
 
-#: js/SubscriptionScreen.js:63
 msgid "Valid to"
 msgstr "Valid to"
 
-#: js/SubscriptionScreen.js:64
 msgid "Activation Key"
 msgstr "Activation Key"
 
-#: js/SubscriptionScreen.js:65
 msgid "Maximum Users (0=unlimited)"
 msgstr "Maximum Users (0=unlimited)"
 
-#: js/SubscriptionScreen.js:66
 msgid "Organization"
 msgstr "Organization"
 
-#: js/SubscriptionScreen.js:67
 msgid "Activated Features"
 msgstr "Activated Features"
 
-#: js/SubscriptionScreen.js:72 js/SubscriptionScreen.js:80
 msgid "Your Subscription is unavailable"
 msgstr "Your Subscription is unavailable"
 
-#: js/SubscriptionScreen.js:76
 msgid "Your Subscription is not valid"
 msgstr "Your Subscription is not valid"
 
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
 msgid "Outdent Text"
 msgstr "Outdent Text"
 
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
 msgid "Indent Text"
 msgstr "Indent Text"
 
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
 msgid "Remove Formatting"
 msgstr "Remove Formatting"
 
-#: js/common.js:282
 msgid "Usage:&#160;"
 msgstr "Usage:&#160;"
 
-#: js/common.js:303 js/common.js:308 js/widgets/tags/TagToggleBox.js:113
-#: js/widgets/tags/TagToggleBox.js:118 js/widgets/tags/TagsPanel.js:138
-#: js/widgets/tags/TagCombo.js:132 js/widgets/tags/TagCombo.js:137
 msgid "personal"
 msgstr "personal"
 
-#: js/common.js:321 js/common.js:359
 msgid "No Information"
 msgstr "No Information"
 
-#: js/common.js:398 js/widgets/relation/GenericPickerGridPanel.js:750
-#: js/widgets/relation/GridRenderer.js:53
 msgid "No Access"
 msgstr "No Access"
 
-#: js/common.js:462
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "{0} second"
 msgstr[1] "{0} seconds"
 
-#: js/common.js:935
 msgid "Restart application to apply new configuration?"
 msgstr "Restart application to apply new configuration?"
 
-#: js/Container.js:127
 #, python-brace-format
 msgid "All {0}"
 msgstr "All {0}"
 
-#: js/Container.js:128
 #, python-brace-format
 msgid "Shared {0}"
 msgstr "Shared {0}"
 
-#: js/Container.js:129
 #, python-brace-format
 msgid "Other Users {0}"
 msgstr "Other Users {0}"
 
-#: js/Container.js:134
 #, python-brace-format
 msgid "My {0}"
 msgstr "My {0}"
 
-#: js/CreditsScreen.js:36
 msgid "Credits"
 msgstr "Credits"
 
-#: js/Application.js:239
 msgid "Not Supported"
 msgstr "Not Supported"
 
-#: js/Application.js:240
 msgid "Your request is not supported by this version."
 msgstr "Your request is not supported by this version."
 
-#: js/data/Record.js:210
 msgid "Translation not found"
 msgstr "Translation not found"
 
-#: js/data/Record.js:337
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Task"
 msgstr[1] "Tasks"
 
-#: js/data/Record.js:341
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "to do list"
 msgstr[1] "to do lists"
 
-#: js/widgets/tree/ContextMenu.js:40 js/widgets/ActivitiesGridPanel.js:235
-#: js/widgets/grid/FileUploadGrid.js:480 js/widgets/grid/GridPanel.js:1001
 #, python-brace-format
 msgid "Add {0}"
 msgstr "Add {0}"
 
-#: js/widgets/tree/ContextMenu.js:49
 #, python-brace-format
 msgid "Rename {0}"
 msgstr "Rename {0}"
 
-#: js/widgets/tree/ContextMenu.js:59 js/widgets/grid/GridPanel.js:1193
-#: js/widgets/grid/GridPanel.js:1194 js/widgets/grid/GridPanel.js:1196
 #, python-brace-format
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Delete {0}"
 msgstr[1] "Delete {0}"
 
-#: js/widgets/tree/ContextMenu.js:69
 #, python-brace-format
 msgid "Manage {0} Permissions"
 msgstr "Manage {0} Permissions"
 
-#: js/widgets/tree/ContextMenu.js:77
 #, python-brace-format
 msgid "{0} Properties"
 msgstr "{0} Properties"
 
-#: js/widgets/tree/ContextMenu.js:86
 #, python-brace-format
 msgid "Set {0} color"
 msgstr "Set {0} color"
 
-#: js/widgets/tree/ContextMenu.js:106
 #, python-brace-format
 msgid "Reload {0}"
 msgstr "Reload {0}"
 
-#: js/widgets/tree/ContextMenu.js:114 js/widgets/grid/FileUploadGrid.js:276
 msgid "Resume upload"
 msgstr "Resume upload"
 
-#: js/widgets/tree/ContextMenu.js:121 js/widgets/grid/FileUploadGrid.js:268
 msgid "Pause upload"
 msgstr "Pause upload"
 
-#: js/widgets/tree/ContextMenu.js:129 js/widgets/dialog/ExportDialog.js:202
-#: js/widgets/grid/ExportButton.js:192 js/widgets/grid/FileUploadGrid.js:287
 msgid "Download"
 msgstr "Download"
 
-#: js/widgets/tree/ContextMenu.js:137
 msgid "Publish"
 msgstr "Publish"
 
-#: js/widgets/tree/ContextMenu.js:204
 msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
 msgstr "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
 
-#: js/widgets/tree/ContextMenu.js:205
 msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
 msgstr "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
 
-#: js/widgets/tree/ContextMenu.js:214
 #, python-brace-format
 msgid "No {0} added"
 msgstr "No {0} added"
 
-#: js/widgets/tree/ContextMenu.js:215 js/widgets/tree/ContextMenu.js:284
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr "You have to supply a {0} name!"
 
-#: js/widgets/tree/ContextMenu.js:216
 msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
 msgstr "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
 
-#: js/widgets/tree/ContextMenu.js:217
 msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
 msgstr "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
 
-#: js/widgets/tree/ContextMenu.js:223
 #, python-brace-format
 msgid "Creating {0}..."
 msgstr "Creating {0}..."
 
-#: js/widgets/tree/ContextMenu.js:277
 msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
 msgstr "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
 
-#: js/widgets/tree/ContextMenu.js:278
 msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
 msgstr "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
 
-#: js/widgets/tree/ContextMenu.js:284
 #, python-brace-format
 msgid "Not renamed {0}"
 msgstr "Not renamed {0}"
 
-#: js/widgets/tree/ContextMenu.js:358
 #, python-brace-format
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Do you really want to delete the {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:469
 #, python-brace-format
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Manage Permissions for {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:496
 #, python-brace-format
 msgid "Properties for {0} \"{1}\""
 msgstr "Properties for {0} \"{1}\""
 
-#: js/widgets/LangChooser.js:68
 msgid "Setting new language..."
 msgstr "Setting new language..."
 
-#: js/widgets/MainScreen.js:482
 msgid "Save current view as favorite"
 msgstr "Save current view as favorite"
 
-#: js/widgets/form/FieldManager.js:335
 msgid "Gets assigned automatically"
 msgstr "Gets assigned automatically"
 
-#: js/widgets/form/ApplicationPickerCombo.js:27
-#: Model/ImportExportDefinition.php:139 Model/ImportExportDefinition.php:150
-#: Model/Application.php:44 Model/Container.php:185
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Application"
 msgstr[1] "Applications"
 
-#: js/widgets/form/RecordEditField.js:30
 msgid "No record"
 msgstr "No record"
 
-#: js/widgets/form/PasswordTriggerField.js:133
 msgid "Cleartext/Hidden"
 msgstr "Cleartext/Hidden"
 
-#: js/widgets/form/RecordPickerManager.js:53
-#: js/widgets/form/RecordPickerComboBox.js:170
 msgid "Searching..."
 msgstr "Searching..."
 
-#: js/widgets/form/ModelPicker.js:28
 msgid "Search for Model..."
 msgstr "Search for Model..."
 
-#: js/widgets/form/ModelPicker.js:69
 msgid "GENDER_Model"
 msgstr "GENDER_Model"
 
-#: js/widgets/form/ModelPicker.js:70 Model/ImportExportDefinition.php:153
-#: Model/Container.php:200 Model/NumberableConfig.php:61
 msgid "Model"
 msgid_plural "Models"
 msgstr[0] "Model"
 msgstr[1] "Models"
 
-#: js/widgets/form/VMultiPicker/index.js:30
 msgid "Search for records ..."
 msgstr "Search for records ..."
 
-#: js/widgets/form/FileUploadButton.js:78
 msgid "Wrong File Type"
 msgstr "Wrong File Type"
 
-#: js/widgets/form/FileUploadButton.js:78
 msgid "Please select a file with one of the following extensions:"
 msgstr "Please select a file with one of the following extensions:"
 
-#: js/widgets/form/ConfigPanel.js:113
 msgid "Configuration Problem"
 msgstr "Configuration Problem"
 
-#: js/widgets/form/ConfigPanel.js:134
 msgid "Invalid configuration"
 msgstr "Invalid configuration"
 
-#: js/widgets/form/ConfigPanel.js:134
-#: js/widgets/dialog/PreferencesDialog.js:284
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "You need to correct the red marked fields before config could be saved"
 
-#: js/widgets/form/ConfigPanel.js:158
 msgid "Transferring Configuration..."
 msgstr "Transferring Configuration..."
 
-#: js/widgets/form/ConfigPanel.js:254
 msgid "Save config"
 msgstr "Save config"
 
-#: js/widgets/form/ConfigPanel.js:264
 msgid "Reload config"
 msgstr "Reload config"
 
-#: js/widgets/form/LocalizedLangPicker.js:20
 msgid "Some fields are  multilingual. Click here to select language to display."
 msgstr "Some fields are  multilingual. Click here to select language to display."
 
-#: js/widgets/form/RecordPickerComboBox.js:153
 msgid "Edit copy"
 msgstr "Edit copy"
 
-#: js/widgets/form/RecordPickerComboBox.js:168
 #, python-brace-format
 msgid "Search for {0} ..."
 msgstr "Search for {0} ..."
 
-#: js/widgets/form/RecordPickerComboBox.js:168
-#: js/widgets/relation/GenericPickerGridPanel.js:625
-#: js/widgets/dialog/ImportDialog.js:697 js/widgets/grid/PickerGridPanel.js:188
-#: js/widgets/grid/GridPanel.js:2003 js/widgets/grid/QuickaddGridPanel.js:96
 msgid "Record"
 msgstr "Record"
 
-#: js/widgets/form/RecordPickerComboBox.js:432
-#: js/widgets/relation/GenericPickerGridPanel.js:1161
-#: js/widgets/relation/GenericPickerGridPanel.js:1173
-#: js/widgets/dialog/ImportDialog.js:701
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:95
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:107
-#: js/widgets/dialog/ExportDialog.js:253 js/widgets/dialog/ExportDialog.js:276
-#: js/widgets/dialog/ExportDialog.js:298
-#: js/widgets/dialog/MultipleEditResultSummary.js:196
-#: js/widgets/grid/ExportButton.js:225 js/widgets/grid/ExportButton.js:245
-#: js/PasswordChangeDialog.js:128 js/PasswordChangeDialog.js:140
 msgid "Failure"
 msgstr "Failure"
 
-#: js/widgets/form/RecordPickerComboBox.js:433
-#: js/widgets/relation/GenericPickerGridPanel.js:1174
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "You tried to link a record with itself. This is not allowed!"
 
-#: js/widgets/mainscreen/WestPanel.js:330
 msgid "containers"
 msgstr "containers"
 
-#: js/widgets/mainscreen/WestPanel.js:357
 msgid "Favorites"
 msgstr "Favorites"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:158
 msgid "Edit record"
 msgstr "Edit record"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:192
 msgid "Sibling"
 msgstr "Sibling"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:193
 msgid "Parent"
 msgstr "Parent"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:194
 msgid "Child"
 msgstr "Child"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:311
 #, python-brace-format
 msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
 msgstr "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:316
 #, python-brace-format
 msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
 msgstr "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:359
 msgid "Contents of Related Folder"
 msgstr "Contents of Related Folder"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:365
-#: js/widgets/dialog/EditDialog.js:714 js/widgets/dialog/EditDialog.js:1100
 msgid "Close"
 msgstr "Close"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:425
 msgid "No Dialog"
 msgstr "No Dialog"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:426
 msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
 msgstr "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:539
 msgid "Attachments: Anyone who has access to the record can see the data"
 msgstr "Attachments: Anyone who has access to the record can see the data"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:540
 msgid "Links: Rights of the respective application are respected"
 msgstr "Links: Rights of the respective application are respected"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:627
 msgid "Remark"
 msgstr "Remark"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:628
 msgid "Dependency"
 msgstr "Dependency"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:629
-#: js/widgets/ActivitiesGridPanel.js:105 js/widgets/ActivitiesGridPanel.js:351
-#: js/widgets/ActivitiesPanel.js:88 js/widgets/ActivitiesPanel.js:290
-#: js/widgets/grid/LinkGridPanel.js:120 Model/ImportExportDefinition.php:176
-#: Model/BLConfig.php:50 Model/Container.php:144
 msgid "Type"
 msgstr "Type"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:630
-#: js/widgets/dialog/AttachmentsGridPanel.js:156
-#: js/widgets/grid/GridPanel.js:2358
 msgid "Creation Time"
 msgstr "Creation Time"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:854
 #, python-brace-format
 msgid "No access to {0}"
 msgstr "No access to {0}"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:1162
 msgid "The record you tried to link is already linked. Please edit the existing link."
 msgstr "The record you tried to link is already linked. Please edit the existing link."
 
-#: js/widgets/relation/FilterModel.js:76
 msgid "Defined by ..."
 msgstr "Defined by ..."
 
-#: js/widgets/relation/FilterModel.js:91 js/widgets/grid/FilterModel.js:348
-#: js/widgets/grid/ForeignRecordFilter.js:559
 msgid "select a operator"
 msgstr "select a operator"
 
-#: js/widgets/relation/FilterModel.js:118
 msgid "Define ..."
 msgstr "Define ..."
 
-#: js/widgets/relation/PickerGridPanel.js:122
 msgid "Delete { ownRecordName }?"
 msgstr "Delete { ownRecordName }?"
 
-#: js/widgets/relation/PickerGridPanel.js:123
 msgid "What do you want to delete?"
 msgstr "What do you want to delete?"
 
-#: js/widgets/relation/PickerGridPanel.js:127
 msgid "Delete { ownRecordName }"
 msgstr "Delete { ownRecordName }"
 
-#: js/widgets/relation/PickerGridPanel.js:128
 msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
 msgstr "Remove { ownRecordName } relation to this { relatedRecordName } only"
 
-#: js/widgets/relation/PickerCombo.js:140
 #, python-brace-format
 msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
 msgstr "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
 
-#: js/widgets/file/SelectionDialog.js:116
 msgid "Select files"
 msgstr "Select files"
 
-#: js/widgets/file/SelectionDialog.js:116
 msgid "Select file"
 msgstr "Select file"
 
-#: js/widgets/file/SelectionDialog.js:117
 msgid "Select folders"
 msgstr "Select folders"
 
-#: js/widgets/file/SelectionDialog.js:117
 msgid "Select folder"
 msgstr "Select folder"
 
-#: js/widgets/file/SelectionDialog.js:118
 msgid "Select items"
 msgstr "Select items"
 
-#: js/widgets/file/SelectionDialog.js:118
 msgid "Select item"
 msgstr "Select item"
 
-#: js/widgets/file/SelectionDialog.js:253
 msgid "Places"
 msgstr "Places"
 
-#: js/widgets/file/LocationTypePlugin/Download.js:16
-#: js/widgets/file/LocationTypePlugin/Upload.js:17
 msgid "My Device"
 msgstr "My Device"
 
-#: js/widgets/file/LocationTypePlugin/Download.js:57
 msgid "Download file and save on my local device."
 msgstr "Download file and save on my local device."
 
-#: js/widgets/file/LocationTypePlugin/Upload.js:34
 msgid "Select or drop file to upload"
 msgstr "Select or drop file to upload"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:69
-#: js/widgets/dialog/DuplicateMergeDialog.js:87
-#: js/widgets/dialog/MultipleEditResultSummary.js:86
 msgid "OK"
 msgstr "OK"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:134
 msgid "Favorite not saved"
 msgstr "Favorite not saved"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:189
-#: ModelConfiguration.php:449
 msgid "Title"
 msgstr "Title"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:207
 msgid "Shared Favorite (visible by other users)"
 msgstr "Shared Favorite (visible by other users)"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:260
 msgid "The grant to see and use this filter"
 msgstr "The grant to see and use this filter"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:264
 msgid "The grant to edit this filter"
 msgstr "The grant to edit this filter"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:268
-#: js/widgets/container/GrantsGrid.js:55
 msgid "Delete"
 msgstr "Delete"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:269
 msgid "The grant to delete this filter"
 msgstr "The grant to delete this filter"
 
-#: js/widgets/persistentfilter/EditPersistentFilterPanel.js:277
-#: js/widgets/dialog/EditDialog.js:1594
 msgid "Permissions"
 msgstr "Permissions"
 
-#: js/widgets/persistentfilter/PickerPanel.js:126
 msgid "My favorites"
 msgstr "My favorites"
 
-#: js/widgets/persistentfilter/PickerPanel.js:331
 msgid "Delete Favorite"
 msgstr "Delete Favorite"
 
-#: js/widgets/persistentfilter/PickerPanel.js:336
-#: js/widgets/persistentfilter/PickerPanel.js:429
 msgid "Edit Favorite"
 msgstr "Edit Favorite"
 
-#: js/widgets/persistentfilter/PickerPanel.js:341
 msgid "Overwrite Favorite"
 msgstr "Overwrite Favorite"
 
-#: js/widgets/persistentfilter/PickerPanel.js:358
 #, python-brace-format
 msgid "Do you really want to delete the favorite \"{0}\"?"
 msgstr "Do you really want to delete the favorite \"{0}\"?"
 
-#: js/widgets/persistentfilter/PickerPanel.js:360
 #, python-brace-format
 msgid "Deleting Favorite \"{0}\""
 msgstr "Deleting Favorite \"{0}\""
 
-#: js/widgets/persistentfilter/PickerPanel.js:396
 msgid "Overwrite?"
 msgstr "Overwrite?"
 
-#: js/widgets/persistentfilter/PickerPanel.js:396
 #, python-brace-format
 msgid "Do you want to overwrite the favorite \"{0}\"?"
 msgstr "Do you want to overwrite the favorite \"{0}\"?"
 
-#: js/widgets/persistentfilter/PickerPanel.js:398
 #, python-brace-format
 msgid "Overwriting Favorite \"{0}\""
 msgstr "Overwriting Favorite \"{0}\""
 
-#: js/widgets/persistentfilter/PickerPanel.js:419
 msgid "Could not save Favorite"
 msgstr "Could not save Favorite"
 
-#: js/widgets/persistentfilter/PickerPanel.js:419
 msgid "Your current view does not support favorites"
 msgstr "Your current view does not support favorites"
 
-#: js/widgets/persistentfilter/PickerPanel.js:427
 msgid "Create Favorite"
 msgstr "Create Favorite"
 
-#: js/widgets/persistentfilter/PickerPanel.js:453
 #, python-brace-format
 msgid "Saving Favorite \"{0}\""
 msgstr "Saving Favorite \"{0}\""
 
-#: js/widgets/persistentfilter/PickerPanel.js:667
 msgid "(shared)"
 msgstr "(shared)"
 
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
-msgid "New version of Tine 2.0 available"
-msgstr "New version of Tine 2.0 available"
+msgid "New version of tine available"
+msgstr "New version of tine available"
 
-#: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Version \"{0}\" of Tine 2.0 is available."
+msgid "Version \"{0}\" of tine is available."
+msgstr "Version \"{0}\" of tine is available."
 
-#: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "It's a critical update and must be installed as soon as possible!"
 
-#: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
 msgstr "Please consider updating!"
 
-#: js/widgets/ActivitiesGridPanel.js:71
 msgid "Notes"
 msgstr "Notes"
 
-#: js/widgets/ActivitiesGridPanel.js:106 js/widgets/ActivitiesPanel.js:89
-#: Config.php:3559 Model/Note.php:111 Model/MFA/UserConfig.php:90
 msgid "Note"
 msgid_plural "Notes"
 msgstr[0] "Note"
 msgstr[1] "Notes"
 
-#: js/widgets/ActivitiesGridPanel.js:107
-#: js/widgets/dialog/AttachmentsGridPanel.js:157
-#: js/widgets/ActivitiesPanel.js:90 js/widgets/grid/GridPanel.js:2359
 msgid "Created By"
 msgstr "Created By"
 
-#: js/widgets/ActivitiesGridPanel.js:108
 msgid "Creation time"
 msgstr "Creation time"
 
-#: js/widgets/ActivitiesGridPanel.js:242 js/widgets/grid/PickerGridPanel.js:330
-#: js/widgets/grid/GridPanel.js:444 js/widgets/grid/GridPanel.js:975
-#: js/widgets/grid/GridPanel.js:976 js/widgets/grid/GridPanel.js:977
 #, python-brace-format
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] "Edit {0}"
 msgstr[1] "Edit {0}"
 
-#: js/widgets/ActivitiesGridPanel.js:251 js/widgets/grid/PickerGridPanel.js:346
-#: js/widgets/grid/FileUploadGrid.js:260
 #, python-brace-format
 msgid "Remove {0}"
 msgstr "Remove {0}"
 
-#: js/widgets/ActivitiesGridPanel.js:361
 msgid "Enter new note:"
 msgstr "Enter new note:"
 
-#: js/widgets/ActivitiesGridPanel.js:371
 msgid "Add Note"
 msgstr "Add Note"
 
-#: js/widgets/TimezoneChooser.js:76
 msgid "Setting new timezone..."
 msgstr "Setting new timezone..."
 
-#: js/widgets/ContentTypeTreePanel.js:39
 msgid "Modules"
 msgstr "Modules"
 
-#: js/widgets/tags/TagToggleBox.js:52
 msgid "Detach Tags"
 msgstr "Detach Tags"
 
-#: js/widgets/tags/TagToggleBox.js:52
 msgid "Attach Tags"
 msgstr "Attach Tags"
 
-#: js/widgets/tags/TagToggleBox.js:141
 msgid "No Tags to detach found in the selected records"
 msgstr "No Tags to detach found in the selected records"
 
-#: js/widgets/tags/TagToggleBox.js:142
 msgid "Please Wait..."
 msgstr "Please Wait..."
 
-#: js/widgets/tags/TagToggleBox.js:153
 msgid "Detaching Tags"
 msgstr "Detaching Tags"
 
-#: js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
 msgstr "Add a new personal tag"
 
-#: js/widgets/tags/TagsPanel.js:118
 msgid "Add New Personal Tag"
 msgstr "Add New Personal Tag"
 
-#: js/widgets/tags/TagsPanel.js:119
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Please note: You create a personal tag. Only you can see it!"
 
-#: js/widgets/tags/TagsPanel.js:119
 msgid "Enter tag name:"
 msgstr "Enter tag name:"
 
-#: js/widgets/tags/TagsPanel.js:160
 msgid "No Tags to display"
 msgstr "No Tags to display"
 
-#: js/widgets/tags/TagsPanel.js:187
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Detach tag"
 msgstr[1] "Detach tags"
 
-#: js/widgets/tags/TagsPanel.js:197
 msgid "Edit tag"
 msgstr "Edit tag"
 
-#: js/widgets/tags/TagsPanel.js:202 js/widgets/tags/TagsPanel.js:207
 msgid "Rename Tag"
 msgstr "Rename Tag"
 
-#: js/widgets/tags/TagsPanel.js:207
 msgid "Please enter a new name:"
 msgstr "Please enter a new name:"
 
-#: js/widgets/tags/TagsPanel.js:216
 msgid "Edit Description"
 msgstr "Edit Description"
 
-#: js/widgets/tags/TagsPanel.js:221
 msgid "Description for tag"
 msgstr "Description for tag"
 
-#: js/widgets/tags/TagsPanel.js:221
 msgid "Please enter new description:"
 msgstr "Please enter new description:"
 
-#: js/widgets/tags/TagsPanel.js:230
 msgid "Change Color"
 msgstr "Change Color"
 
-#: js/widgets/tags/TagsPanel.js:259
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Delete Tag"
 msgstr[1] "Delete Tags"
 
-#: js/widgets/tags/TagsPanel.js:272
 msgid "Really delete selected tag?"
 msgid_plural "Really delete selected tags?"
 msgstr[0] "Really delete selected tag?"
 msgstr[1] "Really delete selected tags?"
 
-#: js/widgets/tags/TagsPanel.js:273
 msgid "The selected tag will be deleted and disappear for all entries"
 msgid_plural "The selected tags will be removed and disappear for all entries"
 msgstr[0] "The selected tag will be deleted and disappear for all entries"
 msgstr[1] "The selected tags will be removed and disappear for all entries"
 
-#: js/widgets/tags/TagsPanel.js:277
 msgid "Please wait a moment..."
 msgstr "Please wait a moment..."
 
-#: js/widgets/tags/TagsPanel.js:277
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Deleting Tag"
 msgstr[1] "Deleting Tags"
 
-#: js/widgets/tags/TagsPanel.js:294 js/widgets/tags/TagsPanel.js:394
-#: js/widgets/tags/TagsPanel.js:428 js/widgets/dialog/EditDialog.js:1469
 msgid "Failed"
 msgstr "Failed"
 
-#: js/widgets/tags/TagsPanel.js:294
 msgid "Could not delete Tag(s)."
 msgstr "Could not delete Tag(s)."
 
-#: js/widgets/tags/TagsPanel.js:343 js/widgets/tags/TagsPanel.js:408
 msgid "Notice"
 msgstr "Notice"
 
-#: js/widgets/tags/TagsPanel.js:344 js/widgets/tags/TagsPanel.js:409
 msgid "The minimum tag length is three."
 msgstr "The minimum tag length is three."
 
-#: js/widgets/tags/TagsPanel.js:394
 msgid "Could not create tag."
 msgstr "Could not create tag."
 
-#: js/widgets/tags/TagsPanel.js:428
 msgid "Could not update tag."
 msgstr "Could not update tag."
 
-#: js/widgets/tags/TagCombo.js:44
 msgid "tag name"
 msgstr "tag name"
 
-#: js/widgets/tags/TagsMassAttachAction.js:18
 msgid "Add Tags"
 msgstr "Add Tags"
 
-#: js/widgets/tags/TagsMassAttachAction.js:89
 msgid "Select Tags"
 msgstr "Select Tags"
 
-#: js/widgets/tags/TagsMassAttachAction.js:129
 msgid "Attaching Tag"
 msgstr "Attaching Tag"
 
-#: js/widgets/tags/TagsMassDetachAction.js:18
 msgid "Detach tag(s)"
 msgstr "Detach tag(s)"
 
-#: js/widgets/tags/TagsMassDetachAction.js:84
 msgid "Select Tag(s) to detach"
 msgstr "Select Tag(s) to detach"
 
-#: js/widgets/dialog/PasswordDialog.js:66
-#: js/widgets/dialog/vue/PasswordDialog/index.js:59
 msgid "Set password"
 msgstr "Set password"
 
-#: js/widgets/dialog/PasswordDialog.js:121
-#: js/widgets/dialog/vue/PasswordDialog/PasswordDialog.vue:27
-#: tempExtract/vueStrings.js:12802
 msgid "Generate password"
 msgstr "Generate password"
 
-#: js/widgets/dialog/MultiOptionsDialog.js:29
-#: js/widgets/dialog/MultiOptionsDialog.js:85
-#: js/widgets/dialog/vue/MultiOptionsDialog/index.js:24
-#: js/widgets/dialog/FileListDialog.js:29
 msgid "What would you like to do?"
 msgstr "What would you like to do?"
 
-#: js/widgets/dialog/MultiOptionsDialog.js:33
-#: js/widgets/dialog/MultiOptionsDialog.js:180
-#: js/widgets/dialog/vue/MultiOptionsDialog/index.js:28
-#: js/widgets/dialog/vue/MultiOptionsDialog/index.js:140
-#: js/widgets/dialog/FileListDialog.js:33
 msgid "You need to select an option!"
 msgstr "You need to select an option!"
 
-#: js/widgets/dialog/PreferencesPanel.js:156
 msgid "There are no preferences for this application."
 msgstr "There are no preferences for this application."
 
-#: js/widgets/dialog/WizardPanel.js:175 js/widgets/grid/DetailsPanel.js:152
 msgid "Back"
 msgstr "Back"
 
-#: js/widgets/dialog/WizardPanel.js:182
 msgid "Next"
 msgstr "Next"
 
-#: js/widgets/dialog/WizardPanel.js:196
 msgid "Finish"
 msgstr "Finish"
 
-#: js/widgets/dialog/AdminPanel.js:59
 #, python-brace-format
 msgid "Change settings for application {0}"
 msgstr "Change settings for application {0}"
 
-#: js/widgets/dialog/AdminPanel.js:107
 msgid "Defaults"
 msgstr "Defaults"
 
-#: js/widgets/dialog/ImportDialog.js:252
-#: js/widgets/dialog/SimpleImportDialog.js:188
 msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
 msgstr "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
 
-#: js/widgets/dialog/ImportDialog.js:253
 msgid "Following you find a list of all supported import formats."
 msgstr "Following you find a list of all supported import formats."
 
-#: js/widgets/dialog/ImportDialog.js:256
-#: js/widgets/dialog/SimpleImportDialog.js:134
 msgid "Choose File and Format"
 msgstr "Choose File and Format"
 
-#: js/widgets/dialog/ImportDialog.js:266
-#: js/widgets/dialog/SimpleImportDialog.js:143
 msgid "Choose Import File"
 msgstr "Choose Import File"
 
-#: js/widgets/dialog/ImportDialog.js:270
-#: js/widgets/dialog/SimpleImportDialog.js:147
 msgid "Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr "Please choose the file that contains the records you want to add to Tine 2.0"
 
-#: js/widgets/dialog/ImportDialog.js:274
-#: js/widgets/dialog/SimpleImportDialog.js:151
 #, python-brace-format
 msgid "Select file containing your {0}"
 msgstr "Select file containing your {0}"
 
-#: js/widgets/dialog/ImportDialog.js:282
-#: js/widgets/dialog/SimpleImportDialog.js:180
 msgid "What should the file you upload look like?"
 msgstr "What should the file you upload look like?"
 
-#: js/widgets/dialog/ImportDialog.js:286
-#: js/widgets/dialog/SimpleImportDialog.js:185
 msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
 
-#: js/widgets/dialog/ImportDialog.js:292
-#: js/widgets/dialog/SimpleImportDialog.js:191
 msgid "Please select the import format of the file you want to upload"
 msgstr "Please select the import format of the file you want to upload"
 
-#: js/widgets/dialog/ImportDialog.js:313 js/widgets/dialog/ImportDialog.js:344
-#: js/widgets/dialog/SimpleImportDialog.js:212
 msgid "Download example file"
 msgstr "Download example file"
 
-#: js/widgets/dialog/ImportDialog.js:369
-#: js/widgets/dialog/SimpleImportDialog.js:163
 #, python-brace-format
 msgid "Select {0} to add you {1} to:"
 msgstr "Select {0} to add you {1} to:"
 
-#: js/widgets/dialog/ImportDialog.js:402
-#: js/widgets/dialog/SimpleImportDialog.js:159
 msgid "Set Import Options"
 msgstr "Set Import Options"
 
-#: js/widgets/dialog/ImportDialog.js:449
 msgid "Checking Import"
 msgstr "Checking Import"
 
-#: js/widgets/dialog/ImportDialog.js:478
 msgid "Resolve Conflicts"
 msgstr "Resolve Conflicts"
 
-#: js/widgets/dialog/ImportDialog.js:489
 msgid "Conflict"
 msgstr "Conflict"
 
-#: js/widgets/dialog/ImportDialog.js:490
 msgid "First Conflict"
 msgstr "First Conflict"
 
-#: js/widgets/dialog/ImportDialog.js:491
 msgid "Previous Conflict"
 msgstr "Previous Conflict"
 
-#: js/widgets/dialog/ImportDialog.js:492
 msgid "Next Conflict"
 msgstr "Next Conflict"
 
-#: js/widgets/dialog/ImportDialog.js:493
 msgid "Last Conflict"
 msgstr "Last Conflict"
 
-#: js/widgets/dialog/ImportDialog.js:499
 msgid "Resolve this conflict"
 msgstr "Resolve this conflict"
 
-#: js/widgets/dialog/ImportDialog.js:504
 msgid "Resolve all conflicts"
 msgstr "Resolve all conflicts"
 
-#: js/widgets/dialog/ImportDialog.js:598
 msgid "Processing Conflict Data"
 msgstr "Processing Conflict Data"
 
-#: js/widgets/dialog/ImportDialog.js:623 js/widgets/dialog/ImportDialog.js:643
 msgid "No conflict to resolve"
 msgstr "No conflict to resolve"
 
-#: js/widgets/dialog/ImportDialog.js:642
 #, python-brace-format
 msgid "(This is record {0} in your import file)"
 msgstr "(This is record {0} in your import file)"
 
-#: js/widgets/dialog/ImportDialog.js:661
 msgid "No Detail Informations"
 msgstr "No Detail Informations"
 
-#: js/widgets/dialog/ImportDialog.js:666
-#: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
 msgstr "Summary"
 
-#: js/widgets/dialog/ImportDialog.js:696
-#: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
 msgstr "Index"
 
-#: js/widgets/dialog/ImportDialog.js:716
-#: js/widgets/dialog/SimpleImportDialog.js:228
 #, python-brace-format
 msgid "Importing {0}"
 msgstr "Importing {0}"
 
-#: js/widgets/dialog/ImportDialog.js:747
 #, python-brace-format
 msgid "{0} records had failures and where discarded."
 msgstr "{0} records had failures and where discarded."
 
-#: js/widgets/dialog/ImportDialog.js:789
 #, python-brace-format
 msgid "In total we found {0} records in your import file."
 msgstr "In total we found {0} records in your import file."
 
-#: js/widgets/dialog/ImportDialog.js:792
 #, python-brace-format
 msgid "{0} of them will be added as new records into: \"{1}\"."
 msgstr "{0} of them will be added as new records into: \"{1}\"."
 
-#: js/widgets/dialog/ImportDialog.js:799
 #, python-brace-format
 msgid "{0} of them where identified as duplicates."
 msgstr "{0} of them where identified as duplicates."
 
-#: js/widgets/dialog/ImportDialog.js:802
 #, python-brace-format
 msgid "From the identified duplicates {0} will be merged into the existing records."
 msgstr "From the identified duplicates {0} will be merged into the existing records."
 
-#: js/widgets/dialog/ImportDialog.js:806
 #, python-brace-format
 msgid "From the identified duplicates {0} will be discarded."
 msgstr "From the identified duplicates {0} will be discarded."
 
-#: js/widgets/dialog/ImportDialog.js:822
 #, python-brace-format
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
 msgstr "All records will be tagged with: \"{0}\" so you can find them easily."
 
-#: js/widgets/dialog/ImportDialog.js:833
 #, python-brace-format
 msgid "{0} records have failures and will be discarded."
 msgstr "{0} records have failures and will be discarded."
 
-#: js/widgets/dialog/AttachmentsGridPanel.js:76
-#: js/widgets/grid/ColumnManager.js:176
 msgid "Attachments"
 msgstr "Attachments"
 
-#: js/widgets/dialog/AttachmentsGridPanel.js:77 js/ApplicationStarter.js:151
 msgid "Attachment"
 msgstr "Attachment"
 
-#: js/widgets/dialog/AttachmentsGridPanel.js:150 Model/Tree/Node.php:368
 msgid "Size"
 msgstr "Size"
 
-#: js/widgets/dialog/AttachmentsGridPanel.js:151
 msgid "Content Type"
 msgstr "Content Type"
 
-#: js/widgets/dialog/SecondFactorDialog.js:18
 msgid "Second Factor Password Required"
 msgstr "Second Factor Password Required"
 
-#: js/widgets/dialog/SecondFactorDialog.js:30
 msgid "Validating password..."
 msgstr "Validating password..."
 
-#: js/widgets/dialog/SecondFactorDialog.js:80
 msgid "Wrong Password"
 msgstr "Wrong Password"
 
-#: js/widgets/dialog/SecondFactorDialog.js:81
 msgid "Invalid second factor password given"
 msgstr "Invalid second factor password given"
 
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:28
-#: js/PasswordChangeDialog.js:37 Model/MFA/PinUserConfig.php:36
 msgid "PIN"
 msgid_plural "PINs"
 msgstr[0] "PIN"
 msgstr[1] "PINs"
 
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:30
-#: js/PasswordChangeDialog.js:39
 #, python-brace-format
 msgid "Change {0} For \"{1}\""
 msgstr "Change {0} For \"{1}\""
 
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:63
-#: js/PasswordChangeDialog.js:93
 #, python-brace-format
 msgid "Changing {0}"
 msgstr "Changing {0}"
 
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:79
-#: js/widgets/dialog/ExportDialog.js:242 js/widgets/dialog/ExportDialog.js:289
-#: js/widgets/grid/ExportButton.js:243 js/PasswordChangeDialog.js:112
 msgid "Success"
 msgstr "Success"
 
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:80
-#: js/PasswordChangeDialog.js:113
 #, python-brace-format
 msgid "Your {0} has been changed."
 msgstr "Your {0} has been changed."
 
-#: js/widgets/dialog/vue/PasswordChangeDialog/index.js:108
-#: js/PasswordChangeDialog.js:141
 #, python-brace-format
 msgid "{0} mismatch, please correct."
 msgstr "{0} mismatch, please correct."
 
-#: js/widgets/dialog/EditDialog.js:548
 msgid "Enter description"
 msgstr "Enter description"
 
-#: js/widgets/dialog/EditDialog.js:723 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "delete"
 
-#: js/widgets/dialog/EditDialog.js:738
 #, python-brace-format
 msgid "Print {0}"
 msgstr "Print {0}"
 
-#: js/widgets/dialog/EditDialog.js:819 js/widgets/dialog/EditDialog.js:851
-#: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Saved in"
 
-#: js/widgets/dialog/EditDialog.js:1002
 #, python-brace-format
 msgid "{0} (copy)"
 msgstr "{0} (copy)"
 
-#: js/widgets/dialog/EditDialog.js:1055 js/widgets/grid/PickerGridPanel.js:356
-#: js/widgets/grid/GridPanel.js:990
 #, python-brace-format
 msgid "Copy {0}"
 msgstr "Copy {0}"
 
-#: js/widgets/dialog/EditDialog.js:1058
 msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
 msgstr "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
 
-#: js/widgets/dialog/EditDialog.js:1068
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr "Edit {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:1246
 msgid "Files are still uploading."
 msgstr "Files are still uploading."
 
-#: js/widgets/dialog/EditDialog.js:1451
 msgid "Please review the fields marked red. They contain invalid values."
 msgstr "Please review the fields marked red. They contain invalid values."
 
-#: js/widgets/dialog/EditDialog.js:1458
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
 msgstr "Do you really want to delete this {0}?"
 
-#: js/widgets/dialog/EditDialog.js:1460 js/widgets/grid/GridPanel.js:3006
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr "Deleting {0}"
 
-#: js/widgets/dialog/EditDialog.js:1469
 #, python-brace-format
 msgid "Could not delete {0}."
 msgstr "Could not delete {0}."
 
-#: js/widgets/dialog/EditDialog.js:1530
 #, python-brace-format
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr "Resolve Duplicate {0} Suspicion"
 
-#: js/widgets/dialog/EditDialog.js:1625
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr "Transferring {0}..."
 
-#: js/widgets/dialog/CredentialsDialog.js:85
 msgid "Please enter your credentials"
 msgstr "Please enter your credentials"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:371
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:514
 msgid "Delete value from all selected records"
 msgstr "Delete value from all selected records"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:496
 msgid "Undo change for all selected records"
 msgstr "Undo change for all selected records"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:588
 #, python-brace-format
 msgid "Edit {0} {1}"
 msgstr "Edit {0} {1}"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:653
 msgid "Different Values"
 msgstr "Different Values"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:654
 msgid "This field has different values. Editing this field will overwrite the old values."
 msgstr "This field has different values. Editing this field will overwrite the old values."
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:756
 #, python-brace-format
 msgid "Add {0} Relation"
 msgstr "Add {0} Relation"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:799
 #, python-brace-format
 msgid "Do you really want to change these {0} records?"
 msgstr "Do you really want to change these {0} records?"
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:802
 msgid "Applying changes"
 msgstr "Applying changes"
 
-#: js/widgets/dialog/ExceptionHandlerDialog.js:220
 #, python-brace-format
 msgid "{1} - Exception {0}"
 msgstr "{1} - Exception {0}"
 
-#: js/widgets/dialog/ExceptionHandlerDialog.js:222
 #, python-brace-format
 msgid "{0} - Unknown Exception"
 msgstr "{0} - Unknown Exception"
 
-#: js/widgets/dialog/ExportDialog.js:110
 msgid "Select Export Definition ..."
 msgstr "Select Export Definition ..."
 
-#: js/widgets/dialog/ExportDialog.js:173 js/widgets/exportAction.js:106
-#: js/widgets/exportAction.js:107 js/widgets/exportAction.js:108
 #, python-brace-format
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] "Export {0}"
 msgstr[1] "Export {0}"
 
-#: js/widgets/dialog/ExportDialog.js:203 js/widgets/grid/ExportButton.js:193
 msgid "Filemanager"
 msgstr "Filemanager"
 
-#: js/widgets/dialog/ExportDialog.js:210 js/widgets/grid/ExportButton.js:197
 msgid "Open"
 msgstr "Open"
 
-#: js/widgets/dialog/ExportDialog.js:215 js/widgets/grid/ExportButton.js:201
 msgid "Choose Export Location"
 msgstr "Choose Export Location"
 
-#: js/widgets/dialog/ExportDialog.js:216 js/widgets/grid/ExportButton.js:202
 msgid "How would you like to save your export?"
 msgstr "How would you like to save your export?"
 
-#: js/widgets/dialog/ExportDialog.js:225 js/widgets/dialog/ExportDialog.js:265
-#: js/widgets/grid/ExportButton.js:215
 msgid "Exporting..."
 msgstr "Exporting..."
 
-#: js/widgets/dialog/ExportDialog.js:243 js/widgets/dialog/ExportDialog.js:290
-#: js/widgets/grid/ExportButton.js:243
 msgid "Export created successfully."
 msgstr "Export created successfully."
 
-#: js/widgets/dialog/ExportDialog.js:244
 msgid "Please check your computers downloads folder!"
 msgstr "Please check your computers downloads folder!"
 
-#: js/widgets/dialog/ExportDialog.js:254 js/widgets/dialog/ExportDialog.js:276
-#: js/widgets/dialog/ExportDialog.js:299 js/widgets/grid/ExportButton.js:225
-#: js/widgets/grid/ExportButton.js:245
 msgid "Export could not be created. Please try again later"
 msgstr "Export could not be created. Please try again later"
 
-#: js/widgets/dialog/AlarmPanel.js:34
 msgid "Alarms"
 msgstr "Alarms"
 
-#: js/widgets/dialog/AlarmPanel.js:37
 msgid "0 minutes before"
 msgstr "0 minutes before"
 
-#: js/widgets/dialog/AlarmPanel.js:38
 msgid "5 minutes before"
 msgstr "5 minutes before"
 
-#: js/widgets/dialog/AlarmPanel.js:39
 msgid "15 minutes before"
 msgstr "15 minutes before"
 
-#: js/widgets/dialog/AlarmPanel.js:40
 msgid "30 minutes before"
 msgstr "30 minutes before"
 
-#: js/widgets/dialog/AlarmPanel.js:41
 msgid "1 hour before"
 msgstr "1 hour before"
 
-#: js/widgets/dialog/AlarmPanel.js:42
 msgid "2 hours before"
 msgstr "2 hours before"
 
-#: js/widgets/dialog/AlarmPanel.js:43
 msgid "12 hours before"
 msgstr "12 hours before"
 
-#: js/widgets/dialog/AlarmPanel.js:44
 msgid "1 day before"
 msgstr "1 day before"
 
-#: js/widgets/dialog/AlarmPanel.js:45
 msgid "2 days before"
 msgstr "2 days before"
 
-#: js/widgets/dialog/AlarmPanel.js:46
 msgid "Custom Datetime"
 msgstr "Custom Datetime"
 
-#: js/widgets/dialog/AlarmPanel.js:58
 msgid "Alarm Time"
 msgstr "Alarm Time"
 
-#: js/widgets/dialog/AlarmPanel.js:168
 #, python-brace-format
 msgid "{0} minutes before"
 msgstr "{0} minutes before"
 
-#: js/widgets/dialog/XPropsPanel.js:25
 msgid "Create xprop"
 msgstr "Create xprop"
 
-#: js/widgets/dialog/XPropsPanel.js:28
 msgid "xprop Name"
 msgstr "xprop Name"
 
-#: js/widgets/dialog/XPropsPanel.js:28
 msgid "Please enter the name of the new xprop"
 msgstr "Please enter the name of the new xprop"
 
-#: js/widgets/dialog/XPropsPanel.js:35
 msgid "Delete xprop"
 msgstr "Delete xprop"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:136
 msgid "Merging Records..."
 msgstr "Merging Records..."
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:175
 msgid "Merge Failed"
 msgstr "Merge Failed"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:175
 #, python-brace-format
 msgid "The merge succeeded, but the duplicate {0} could not be deleted."
 msgstr "The merge succeeded, but the duplicate {0} could not be deleted."
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:214
 #, python-brace-format
 msgid "Merge {0}, prefer First"
 msgstr "Merge {0}, prefer First"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:215
 #, python-brace-format
 msgid "Merge {0}, prefer Second"
 msgstr "Merge {0}, prefer Second"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:223
-#: js/widgets/grid/GridPanel.js:1057
 #, python-brace-format
 msgid "Merge {0}"
 msgstr "Merge {0}"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:226
 #, python-brace-format
 msgid "First {0}"
 msgstr "First {0}"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:227
 #, python-brace-format
 msgid "Second {0}"
 msgstr "Second {0}"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:228
 #, python-brace-format
 msgid "Final {0}"
 msgstr "Final {0}"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:41
 msgid "The record you try to add might already exist."
 msgstr "The record you try to add might already exist."
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:212
 msgid "Field Group"
 msgstr "Field Group"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
 msgid "My Value"
 msgstr "My Value"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:234
 msgid "Existing Value"
 msgstr "Existing Value"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:242
 msgid "Final Value"
 msgstr "Final Value"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:258
 msgid "Keep both records"
 msgstr "Keep both records"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:263
 msgid "Merge, keeping existing details"
 msgstr "Merge, keeping existing details"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:264
 msgid "Merge, keeping my details"
 msgstr "Merge, keeping my details"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:265
 msgid "Keep existing record and discard mine"
 msgstr "Keep existing record and discard mine"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:271
 msgid "Action:"
 msgstr "Action:"
 
-#: js/widgets/dialog/PreferencesTreePanel.js:67
 msgid "All Settings"
 msgstr "All Settings"
 
-#: js/widgets/dialog/PreferencesTreePanel.js:74
 msgid "General Preferences"
 msgstr "General Preferences"
 
-#: js/widgets/dialog/PreferencesTreePanel.js:81
 msgid "Application Settings"
 msgstr "Application Settings"
 
-#: js/widgets/dialog/PreferencesTreePanel.js:99
 msgid "My Profile"
 msgstr "My Profile"
 
-#: js/widgets/dialog/PreferencesDialog.js:126
 msgid "Admin Mode"
 msgstr "Admin Mode"
 
-#: js/widgets/dialog/PreferencesDialog.js:152
 msgid "All Users"
 msgstr "All Users"
 
-#: js/widgets/dialog/PreferencesDialog.js:160 js/widgets/ActivitiesPanel.js:287
-#: Config.php:3612 Model/FullUser.php:76 Model/LogEntry.php:73
-#: Model/User.php:104 Model/ActionLog.php:71
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "User"
 msgstr[1] "Users"
 
-#: js/widgets/dialog/PreferencesDialog.js:200
 msgid "Applications"
 msgstr "Applications"
 
-#: js/widgets/dialog/PreferencesDialog.js:229
 msgid "Edit Preferences"
 msgstr "Edit Preferences"
 
-#: js/widgets/dialog/PreferencesDialog.js:230
 msgid "Loading ..."
 msgstr "Loading ..."
 
-#: js/widgets/dialog/PreferencesDialog.js:312
 msgid "Saving of preferences failed."
 msgstr "Saving of preferences failed."
 
-#: js/widgets/dialog/MultipleEditResultSummary.js:146
 #, python-brace-format
 msgid "You edited {0} {1}."
 msgstr "You edited {0} {1}."
 
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
 #, python-brace-format
 msgid "{0} {1} have been updated properly."
 msgstr "{0} {1} have been updated properly."
 
-#: js/widgets/dialog/MultipleEditResultSummary.js:149
 #, python-brace-format
 msgid "{0} {1} has been updated properly."
 msgstr "{0} {1} has been updated properly."
 
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
 #, python-brace-format
 msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr "{0} {1} have invalid data after updating. These {1} have not been changed."
 
-#: js/widgets/dialog/MultipleEditResultSummary.js:152
 #, python-brace-format
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr "{0} {1} has invalid data after updating. This {1} has not been changed."
 
-#: js/widgets/container/GrantsDialog.js:52 Model/Tree/Node.php:125
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Folder"
 msgstr[1] "Folders"
 
-#: js/widgets/container/GrantsDialog.js:88
 msgid "Updating Grants"
 msgstr "Updating Grants"
 
-#: js/widgets/container/GrantsDialog.js:119
 msgid "You are not allowed to remove all admins for this container!"
 msgstr "You are not allowed to remove all admins for this container!"
 
-#: js/widgets/container/FilterModel.js:160
 msgid "is personal of"
 msgstr "is personal of"
 
-#: js/widgets/container/FilterModel.js:160
-#: js/widgets/container/FilterModel.js:164 js/widgets/grid/FilterModel.js:267
 msgid "is equal to"
 msgstr "is equal to"
 
-#: js/widgets/container/FilterModel.js:270
 #, python-brace-format
 msgid "Selected {0}"
 msgstr "Selected {0}"
 
-#: js/widgets/container/TreePanel.js:186
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "container"
 msgstr[1] "containers"
 
-#: js/widgets/container/TreePanel.js:742
 #, python-brace-format
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "You are not allowed to select the {0} '{1}':"
 
-#: js/widgets/container/TreePanel.js:743
 #, python-brace-format
 msgid "{0} grant is required for desired action"
 msgstr "{0} grant is required for desired action"
 
-#: js/widgets/container/TreePanel.js:744
 msgid "Insufficient Grants"
 msgstr "Insufficient Grants"
 
-#: js/widgets/container/SelectionDialog.js:67 Model/Container.php:72
 msgid "Container"
 msgid_plural "Containers"
 msgstr[0] "Container"
 msgstr[1] "Containers"
 
-#: js/widgets/container/SelectionDialog.js:68
 #, python-brace-format
 msgid "please select a {0}"
 msgstr "please select a {0}"
 
-#: js/widgets/container/SelectionComboBox.js:147
 #, python-brace-format
 msgid "Select a {0}"
 msgstr "Select a {0}"
 
-#: js/widgets/container/PropertiesDialog.js:120
 msgid "Properties"
 msgstr "Properties"
 
-#: js/widgets/container/PropertiesDialog.js:143
 msgid "Hierarchy/Name"
 msgstr "Hierarchy/Name"
 
-#: js/widgets/container/PropertiesDialog.js:155
 msgid "My Grants"
 msgstr "My Grants"
 
-#: js/widgets/container/CalDAVContainerPropertiesHookField.js:35
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
-#: js/widgets/container/GrantsGrid.js:50
 msgid "The grant to read records of this container"
 msgstr "The grant to read records of this container"
 
-#: js/widgets/container/GrantsGrid.js:51
 msgid "Add"
 msgstr "Add"
 
-#: js/widgets/container/GrantsGrid.js:52
 msgid "The grant to add records to this container"
 msgstr "The grant to add records to this container"
 
-#: js/widgets/container/GrantsGrid.js:54
 msgid "The grant to edit records in this container"
 msgstr "The grant to edit records in this container"
 
-#: js/widgets/container/GrantsGrid.js:56
 msgid "The grant to delete records in this container"
 msgstr "The grant to delete records in this container"
 
-#: js/widgets/container/GrantsGrid.js:58
 msgid "The grant to export records from this container"
 msgstr "The grant to export records from this container"
 
-#: js/widgets/container/GrantsGrid.js:59
 msgid "Sync"
 msgstr "Sync"
 
-#: js/widgets/container/GrantsGrid.js:60
 msgid "The grant to synchronise records with this container"
 msgstr "The grant to synchronise records with this container"
 
-#: js/widgets/container/GrantsGrid.js:61
 msgid "Admin"
 msgstr "Admin"
 
-#: js/widgets/container/GrantsGrid.js:62
 msgid "The grant to administrate this container"
 msgstr "The grant to administrate this container"
 
-#: js/widgets/ActivitiesPanel.js:91
 msgid "Timestamp"
 msgstr "Timestamp"
 
-#: js/widgets/ActivitiesPanel.js:105
 #, python-brace-format
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Displaying history records {0} - {1} of {2}"
 
-#: js/widgets/ActivitiesPanel.js:106
 msgid "No history to display"
 msgstr "No history to display"
 
-#: js/widgets/ActivitiesPanel.js:271
 msgid "History"
 msgstr "History"
 
-#: js/widgets/ActivitiesPanel.js:283
 msgid "Quick Search"
 msgstr "Quick Search"
 
-#: js/widgets/ActivitiesPanel.js:284 js/widgets/ActivitiesPanel.js:285
 msgid "Time"
 msgstr "Time"
 
-#: js/widgets/keyfield/ConfigField.js:53
 msgid "Key Field Records"
 msgstr "Key Field Records"
 
-#: js/widgets/keyfield/ComboBox.js:110
 #, python-brace-format
 msgid "Transition from {current} to {target} is not allowed."
 msgstr "Transition from {current} to {target} is not allowed."
 
-#: js/widgets/keyfield/ComboBox.js:114 js/widgets/grid/GridPanel.js:2930
 msgid "Not Allowed"
 msgstr "Not Allowed"
 
-#: js/widgets/keyfield/ConfigGrid.js:67
 msgid "Default"
 msgstr "Default"
 
-#: js/widgets/keyfield/ConfigGrid.js:151
 msgid "ID"
 msgstr "ID"
 
-#: js/widgets/keyfield/ConfigGrid.js:157
 msgid "Add a New ID..."
 msgstr "Add a New ID..."
 
-#: js/widgets/keyfield/ConfigGrid.js:167
 msgid "Add a New Value..."
 msgstr "Add a New Value..."
 
-#: js/widgets/keyfield/ConfigGrid.js:254
 msgid "ID already exists"
 msgstr "ID already exists"
 
-#: js/widgets/keyfield/ConfigGrid.js:259
 msgid "ID needs to follow the syntax PARENTID:ID"
 msgstr "ID needs to follow the syntax PARENTID:ID"
 
-#: js/widgets/customfields/EditDialogPlugin.js:228
 msgid "Custom Fields"
 msgstr "Custom Fields"
 
-#: js/widgets/CountryCombo.js:34
 msgid "Select a country..."
 msgstr "Select a country..."
 
-#: js/widgets/exportAction.js:94
 msgid "Export as ..."
 msgstr "Export as ..."
 
-#: js/widgets/account/ChangeAccountAction.js:18
 msgid "Change user account"
 msgstr "Change user account"
 
-#: js/widgets/account/ChangeAccountAction.js:20
 msgid "Switch to another user's account"
 msgstr "Switch to another user's account"
 
-#: js/widgets/account/ChangeAccountAction.js:65
 msgid "Switch to this user account:"
 msgstr "Switch to this user account:"
 
-#: js/widgets/account/ChangeAccountAction.js:92
 msgid "Select Account"
 msgstr "Select Account"
 
-#: js/widgets/account/ChangeAccountAction.js:115
 msgid "Changing user account ..."
 msgstr "Changing user account ..."
 
-#: js/widgets/account/PickerGridPanel.js:164
 msgid "Search User"
 msgstr "Search User"
 
-#: js/widgets/account/PickerGridPanel.js:170
 msgid "Search Group"
 msgstr "Search Group"
 
-#: js/widgets/account/PickerGridPanel.js:176
 msgid "Search Role"
 msgstr "Search Role"
 
-#: js/widgets/account/PickerGridPanel.js:182
 msgid "Add Anyone"
 msgstr "Add Anyone"
 
-#: js/widgets/account/PickerGridPanel.js:188
 msgid "Add Myself"
 msgstr "Add Myself"
 
-#: js/widgets/account/PickerGridPanel.js:291
 msgid "Search for users ..."
 msgstr "Search for users ..."
 
-#: js/widgets/account/PickerGridPanel.js:316
 msgid "Search for groups ..."
 msgstr "Search for groups ..."
 
-#: js/widgets/account/PickerGridPanel.js:334
 msgid "Search for roles ..."
 msgstr "Search for roles ..."
 
-#: js/widgets/SiteFilter.js:28
 msgid "Site"
 msgstr "Site"
 
-#: js/widgets/SiteFilter.js:31
 msgid "no site association"
 msgstr "no site association"
 
-#: js/widgets/grid/MonthFilter.js:126 js/widgets/grid/FilterModel.js:212
 msgid "this month"
 msgstr "this month"
 
-#: js/widgets/grid/MonthFilter.js:127 js/widgets/grid/FilterModel.js:213
 msgid "last month"
 msgstr "last month"
 
-#: js/widgets/grid/MonthFilter.js:128 js/widgets/grid/FilterModel.js:217
 msgid "this quarter"
 msgstr "this quarter"
 
-#: js/widgets/grid/MonthFilter.js:129 js/widgets/grid/FilterModel.js:218
 msgid "last quarter"
 msgstr "last quarter"
 
-#: js/widgets/grid/MonthFilter.js:130 js/widgets/grid/FilterModel.js:219
 msgid "this year"
 msgstr "this year"
 
-#: js/widgets/grid/MonthFilter.js:131 js/widgets/grid/FilterModel.js:220
 msgid "last year"
 msgstr "last year"
 
-#: js/widgets/grid/ColumnManager.js:188 ModelConfiguration.php:1465
 msgid "Image"
 msgstr "Image"
 
-#: js/widgets/grid/BbarGridPanel.js:46
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
 msgstr "There could not be found any {0}. Please try to change your filter-criteria or view-options."
 
-#: js/widgets/grid/QuotaRenderer.js:19
 msgid "Quota usage"
 msgstr "Quota usage"
 
-#: js/widgets/grid/FilterModel.js:207
 msgid "today"
 msgstr "today"
 
-#: js/widgets/grid/FilterModel.js:208
 msgid "yesterday"
 msgstr "yesterday"
 
-#: js/widgets/grid/FilterModel.js:209
 msgid "this week"
 msgstr "this week"
 
-#: js/widgets/grid/FilterModel.js:210
 msgid "last week"
 msgstr "last week"
 
-#: js/widgets/grid/FilterModel.js:211
 msgid "the week before last"
 msgstr "the week before last"
 
-#: js/widgets/grid/FilterModel.js:214
 msgid "last three months"
 msgstr "last three months"
 
-#: js/widgets/grid/FilterModel.js:215
 msgid "last six months"
 msgstr "last six months"
 
-#: js/widgets/grid/FilterModel.js:216
 msgid "anytime"
 msgstr "anytime"
 
-#: js/widgets/grid/FilterModel.js:231
 msgid "tomorrow"
 msgstr "tomorrow"
 
-#: js/widgets/grid/FilterModel.js:232
 msgid "next week"
 msgstr "next week"
 
-#: js/widgets/grid/FilterModel.js:233
 msgid "next month"
 msgstr "next month"
 
-#: js/widgets/grid/FilterModel.js:234
 msgid "next quarter"
 msgstr "next quarter"
 
-#: js/widgets/grid/FilterModel.js:235
 msgid "next year"
 msgstr "next year"
 
-#: js/widgets/grid/FilterModel.js:263
 msgid "contains"
 msgstr "contains"
 
-#: js/widgets/grid/FilterModel.js:264
 msgid "contains word starting with"
 msgstr "contains word starting with"
 
-#: js/widgets/grid/FilterModel.js:265
 msgid "contains not"
 msgstr "contains not"
 
-#: js/widgets/grid/FilterModel.js:266
 msgid "reg. exp."
 msgstr "reg. exp."
 
-#: js/widgets/grid/FilterModel.js:268
 msgid "is equal to without (-, )"
 msgstr "is equal to without (-, )"
 
-#: js/widgets/grid/FilterModel.js:269
 msgid "is greater than"
 msgstr "is greater than"
 
-#: js/widgets/grid/FilterModel.js:270
 msgid "is less than"
 msgstr "is less than"
 
-#: js/widgets/grid/FilterModel.js:271
 msgid "is not"
 msgstr "is not"
 
-#: js/widgets/grid/FilterModel.js:272
 msgid "{gender, select, male {one of} female {one of} other {one of}}"
 msgstr "{gender, select, male {one of} female {one of} other {one of}}"
 
-#: js/widgets/grid/FilterModel.js:273
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {all of} female {all of} other {all of}}"
 
-#: js/widgets/grid/FilterModel.js:274
 msgid "{gender, select, male {none of} female {none of} other {none of}}"
 msgstr "{gender, select, male {none of} female {none of} other {none of}}"
 
-#: js/widgets/grid/FilterModel.js:275
 msgid "is before"
 msgstr "is before"
 
-#: js/widgets/grid/FilterModel.js:276
 msgid "is after"
 msgstr "is after"
 
-#: js/widgets/grid/FilterModel.js:277
 msgid "is within"
 msgstr "is within"
 
-#: js/widgets/grid/FilterModel.js:278
 msgid "is in week no."
 msgstr "is in week no."
 
-#: js/widgets/grid/FilterModel.js:279
 msgid "starts with"
 msgstr "starts with"
 
-#: js/widgets/grid/FilterModel.js:280
 msgid "ends with"
 msgstr "ends with"
 
-#: js/widgets/grid/FilterModel.js:281
 msgid "defined by"
 msgstr "defined by"
 
-#: js/widgets/grid/FilterModel.js:502
 msgid "Search Account ..."
 msgstr "Search Account ..."
 
-#: js/widgets/grid/FilterModel.js:651
 msgid "Period ..."
 msgstr "Period ..."
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:199
 msgid "show details"
 msgstr "show details"
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:200
 msgid "Always show advanced filters"
 msgstr "Always show advanced filters"
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:210
 msgid "hide details"
 msgstr "hide details"
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:247
 msgid "show"
 msgstr "show"
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:425
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] "Your view is limited by {0} criteria:"
 msgstr[1] "Your view is limited by {0} criterias:"
 
-#: js/widgets/grid/PickerGridPanel.js:323
 #, python-brace-format
 msgid "Create {0}"
 msgstr "Create {0}"
 
-#: js/widgets/grid/PickerGridPanel.js:731
 #, python-brace-format
 msgid "Loading {0} ..."
 msgstr "Loading {0} ..."
 
-#: js/widgets/grid/ForeignRecordFilter.js:68
 msgid "Edit definition"
 msgstr "Edit definition"
 
-#: js/widgets/grid/ForeignRecordFilter.js:78
 msgid "Start definition"
 msgstr "Start definition"
 
-#: js/widgets/grid/FileUploadGrid.js:81 FileSystem.php:4730
-#: Model/Tree/Node.php:123
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "File"
 msgstr[1] "Files"
 
-#: js/widgets/grid/FileUploadGrid.js:191
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
 msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
 
-#: js/widgets/grid/FileUploadGrid.js:299
 msgid "Send by E-Mail"
 msgstr "Send by E-Mail"
 
-#: js/widgets/grid/FileUploadGrid.js:541
 msgid "name"
 msgstr "name"
 
-#: js/widgets/grid/FileUploadGrid.js:542
 msgid "size"
 msgstr "size"
 
-#: js/widgets/grid/FileUploadGrid.js:543
 msgid "type"
 msgstr "type"
 
-#: js/widgets/grid/MappingPickerGridPanel.js:110
 msgid "via"
 msgstr "via"
 
-#: js/widgets/grid/GridPanel.js:441
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 
-#: js/widgets/grid/GridPanel.js:442
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
 msgstr "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
 
-#: js/widgets/grid/GridPanel.js:827
 msgid "Move Details Panel To"
 msgstr "Move Details Panel To"
 
-#: js/widgets/grid/GridPanel.js:834
 msgid "Bottom"
 msgstr "Bottom"
 
-#: js/widgets/grid/GridPanel.js:843
 msgid "Right"
 msgstr "Right"
 
-#: js/widgets/grid/GridPanel.js:1009
 msgid "Print Page"
 msgstr "Print Page"
 
-#: js/widgets/grid/GridPanel.js:1025 js/widgets/grid/GridPanel.js:1026
-#: js/widgets/grid/GridPanel.js:1028
 #, python-brace-format
 msgid "Move {0}"
 msgid_plural "Move {0}"
 msgstr[0] "Move {0}"
 msgstr[1] "Move {0}"
 
-#: js/widgets/grid/GridPanel.js:1100
 #, python-brace-format
 msgid "Export as {0}"
 msgstr "Export as {0}"
 
-#: js/widgets/grid/GridPanel.js:1134
 msgid "Import items"
 msgstr "Import items"
 
-#: js/widgets/grid/GridPanel.js:1732
 msgid "No data to display"
 msgstr "No data to display"
 
-#: js/widgets/grid/GridPanel.js:1757
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Displaying records {0} - {1} of {2}"
 
-#: js/widgets/grid/GridPanel.js:1758
 #, python-brace-format
 msgid "No {0} to display"
 msgstr "No {0} to display"
 
-#: js/widgets/grid/GridPanel.js:1981
 msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
 msgstr "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
 
-#: js/widgets/grid/GridPanel.js:2003
 msgid "Records"
 msgstr "Records"
 
-#: js/widgets/grid/GridPanel.js:2281
 msgid "New..."
 msgstr "New..."
 
-#: js/widgets/grid/GridPanel.js:2300
 msgid "Add to..."
 msgstr "Add to..."
 
-#: js/widgets/grid/GridPanel.js:2360
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-#: js/widgets/grid/GridPanel.js:2361
 msgid "Last Modified By"
 msgstr "Last Modified By"
 
-#: js/widgets/grid/GridPanel.js:2513
 msgid "Grid Panel Key Bindings"
 msgstr "Grid Panel Key Bindings"
 
-#: js/widgets/grid/GridPanel.js:2858
 #, python-brace-format
 msgid "Moving {0}"
 msgstr "Moving {0}"
 
-#: js/widgets/grid/GridPanel.js:2931
 msgid "You are not allowed to delete all pages at once"
 msgstr "You are not allowed to delete all pages at once"
 
-#: js/widgets/grid/GridPanel.js:2954
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Do you really want to delete the selected record ({0})?"
 msgstr[1] "Do you really want to delete the selected records ({0})?"
 
-#: js/widgets/grid/GridPanel.js:3006
 msgid "... This may take a long time!"
 msgstr "... This may take a long time!"
 
-#: js/widgets/grid/PickerFilter.js:330
-#: js/widgets/grid/FilterModelMultiSelect.js:206
 #, python-brace-format
 msgid "Selected  {0}"
 msgstr "Selected  {0}"
 
-#: js/widgets/grid/RendererManager.js:58
 msgid "has notes"
 msgstr "has notes"
 
-#: js/widgets/grid/RendererManager.js:295
 msgid "This is a multilingual field:"
 msgstr "This is a multilingual field:"
 
-#: js/widgets/grid/FilterStructureTreePanel.js:35
-#: js/widgets/grid/FilterStructureTreePanel.js:52
 msgid "Show records that match to one of the following filters"
 msgstr "Show records that match to one of the following filters"
 
-#: js/widgets/grid/FilterStructureTreePanel.js:37
-#: js/widgets/grid/FilterStructureTreePanel.js:51
 msgid "or alternatively"
 msgstr "or alternatively"
 
-#: js/widgets/grid/FilterStructureTreePanel.js:55
 msgid "Add alternative filter"
 msgstr "Add alternative filter"
 
-#: js/widgets/grid/FilterStructureTreePanel.js:65
 msgid "Remove Filter"
 msgstr "Remove Filter"
 
-#: js/widgets/grid/FilterToolbar.js:89 js/widgets/grid/FilterToolbar.js:625
 msgid "Show"
 msgstr "Show"
 
-#: js/widgets/grid/FilterToolbar.js:111
 msgid "and"
 msgstr "and"
 
-#: js/widgets/grid/FilterToolbar.js:112
 msgid "or"
 msgstr "or"
 
-#: js/widgets/grid/FilterToolbar.js:178
 msgid "add new filter"
 msgstr "add new filter"
 
-#: js/widgets/grid/FilterToolbar.js:184
 msgid "reset all filters"
 msgstr "reset all filters"
 
-#: js/widgets/grid/FilterToolbar.js:190
 msgid "start search"
 msgstr "start search"
 
-#: js/widgets/grid/FilterToolbar.js:201
 msgid "save as favorite"
 msgstr "save as favorite"
 
-#: js/widgets/grid/FilterToolbar.js:208
 msgid "Load a favorite"
 msgstr "Load a favorite"
 
-#: js/widgets/grid/FilterToolbar.js:378
 msgid "select a field"
 msgstr "select a field"
 
-#: js/widgets/grid/FilterToolbar.js:422
 msgid "Delete this filter"
 msgstr "Delete this filter"
 
-#: js/PasswordChangeDialog.js:67
 #, python-brace-format
 msgid "Old {0}"
 msgstr "Old {0}"
 
-#: js/PasswordChangeDialog.js:72
 #, python-brace-format
 msgid "New {0}"
 msgstr "New {0}"
 
-#: js/PasswordChangeDialog.js:77
 #, python-brace-format
 msgid "Repeat new {0}"
 msgstr "Repeat new {0}"
 
-#: js/ApplicationStarter.js:609
 msgid "New "
 msgstr "New "
 
-#: FileSystem.php:4729
 msgid "The following files have changed:"
 msgstr "The following files have changed:"
 
-#: FileSystem.php:4731
 msgid "has been created."
 msgstr "has been created."
 
-#: FileSystem.php:4732
 msgid "has been changed."
 msgstr "has been changed."
 
-#: FileSystem.php:4733
 msgid "has been deleted."
 msgstr "has been deleted."
 
-#: FileSystem.php:4768
 msgid "filemanager notification"
 msgstr "filemanager notification"
 
-#: FileSystem.php:5098
 msgid "email quota notification"
 msgstr "email quota notification"
 
-#: FileSystem.php:5099
 msgid "email soft quota notification"
 msgstr "email soft quota notification"
 
-#: FileSystem.php:5100
 msgid "email "
 msgstr "email "
 
-#: FileSystem.php:5124
 msgid "filemanager quota notification"
 msgstr "filemanager quota notification"
 
-#: FileSystem.php:5125
 msgid "filemanager soft quota notification"
 msgstr "filemanager soft quota notification"
 
-#: User/Sql.php:1050
 msgid "MFA configs are not valid:"
 msgstr "MFA configs are not valid:"
 
-#: User/Sql.php:1482
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr "Your Tine 2.0 account has been deactivated"
 
-#: User/PasswordPolicy.php:113
 msgid "Password failed to match the following policy requirements: "
 msgstr "Password failed to match the following policy requirements: "
 
-#: Config.php:1005 Config.php:1007
 msgid "Accesslog rotation in days"
 msgstr "Accesslog rotation in days"
 
-#: Config.php:1019
 msgid "Account Deletion Event"
 msgstr "Account Deletion Event"
 
-#: Config.php:1021
 msgid "Configure what should happen to data of deleted users"
 msgstr "Configure what should happen to data of deleted users"
 
-#: Config.php:1030
 msgid "Delete personal containers"
 msgstr "Delete personal containers"
 
-#: Config.php:1037
 msgid "Delete file folders and files"
 msgstr "Delete file folders and files"
 
-#: Config.php:1044
 msgid "Delete Email accounts"
 msgstr "Delete Email accounts"
 
-#: Config.php:1051
 msgid "Keep account as contact in the Addressbook"
 msgstr "Keep account as contact in the Addressbook"
 
-#: Config.php:1058
 msgid "Keep accounts organizer events as external events in the Calendar"
 msgstr "Keep accounts organizer events as external events in the Calendar"
 
-#: Config.php:1065
 msgid "Keep accounts Calendar event attendee as external attendee"
 msgstr "Keep accounts Calendar event attendee as external attendee"
 
-#: Config.php:1072
 msgid "Additional text"
 msgstr "Additional text"
 
-#: Config.php:1084
 msgid "Area Locks"
 msgstr "Area Locks"
 
-#: Config.php:1086
 msgid "Configured Area Locks"
 msgstr "Configured Area Locks"
 
-#: Config.php:1103
 msgid "Database Configuration"
 msgstr "Database Configuration"
 
-#: Config.php:1113
 msgid "Logger Configuration"
 msgstr "Logger Configuration"
 
-#: Config.php:1123 Config.php:1124
 msgid "MFA Bypass Netmasks"
 msgstr "MFA Bypass Netmasks"
 
-#: Config.php:1132
 msgid "MFA"
 msgstr "MFA"
 
-#: Config.php:1134
 msgid "Configured MFAs"
 msgstr "Configured MFAs"
 
-#: Config.php:1169
 msgid "Available Languages"
 msgstr "Available Languages"
 
-#: Config.php:1171
 msgid "Whitelist available languages that can be chosen in the GUI"
 msgstr "Whitelist available languages that can be chosen in the GUI"
 
-#: Config.php:1182
 msgid "Encourage MFA at login"
 msgstr "Encourage MFA at login"
 
-#: Config.php:1184
 msgid "Encourage user at login to configure a mfa device"
 msgstr "Encourage user at login to configure a mfa device"
 
-#: Config.php:1198
 msgid "Build Type"
 msgstr "Build Type"
 
-#: Config.php:1200
 msgid "One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE"
 msgstr "One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE"
 
-#: Config.php:1209
 msgid "DB logger configuration"
 msgstr "DB logger configuration"
 
-#: Config.php:1229
 msgid "Default application"
 msgstr "Default application"
 
-#: Config.php:1231
 msgid "Default application for this installation."
 msgstr "Default application for this installation."
 
-#: Config.php:1243
 msgid "Default Locale"
 msgstr "Default Locale"
 
-#: Config.php:1245
 msgid "Default locale for this installation."
 msgstr "Default locale for this installation."
 
-#: Config.php:1262
 msgid "Internet proxy config"
 msgstr "Internet proxy config"
 
-#: Config.php:1291
 msgid "System IMAP"
 msgstr "System IMAP"
 
-#: Config.php:1293
 msgid "System IMAP server configuration."
 msgstr "System IMAP server configuration."
 
-#: Config.php:1319
 msgid "System SMTP"
 msgstr "System SMTP"
 
-#: Config.php:1321
 msgid "System SMTP server configuration."
 msgstr "System SMTP server configuration."
 
-#: Config.php:1330
 msgid "System SIEVE"
 msgstr "System SIEVE"
 
-#: Config.php:1332
 msgid "System SIEVE server configuration."
 msgstr "System SIEVE server configuration."
 
-#: Config.php:1342 Config.php:1344
 msgid "Use record XPROPS to save email user id"
 msgstr "Use record XPROPS to save email user id"
 
-#: Config.php:1354
 msgid "Trusted Proxies"
 msgstr "Trusted Proxies"
 
-#: Config.php:1356
 msgid "If this is set, the HTTP_X_FORWARDED_FOR header is used."
 msgstr "If this is set, the HTTP_X_FORWARDED_FOR header is used."
 
-#: Config.php:1364
 msgid "Authentication Backend"
 msgstr "Authentication Backend"
 
-#: Config.php:1366
 msgid "Backend adapter for user authentication."
 msgstr "Backend adapter for user authentication."
 
-#: Config.php:1374
 msgid "Authentication Configuration"
 msgstr "Authentication Configuration"
 
-#: Config.php:1376
 msgid "Authentication backend configuration."
 msgstr "Authentication backend configuration."
 
-#: Config.php:1386
 msgid "Authentication by Email"
 msgstr "Authentication by Email"
 
-#: Config.php:1395
 msgid "Path for cached config file (defaults to tmpdir if empty)"
 msgstr "Path for cached config file (defaults to tmpdir if empty)"
 
-#: Config.php:1404
 msgid "Skip maximum license user check in setup"
 msgstr "Skip maximum license user check in setup"
 
-#: Config.php:1412
 msgid "User Backend"
 msgstr "User Backend"
 
-#: Config.php:1414
 msgid "Backend adapter for user data."
 msgstr "Backend adapter for user data."
 
-#: Config.php:1422
 msgid "Replication master configuration"
 msgstr "Replication master configuration"
 
-#: Config.php:1424
 msgid "Replication master configuration."
 msgstr "Replication master configuration."
 
-#: Config.php:1441
 msgid "Replication slave configuration"
 msgstr "Replication slave configuration"
 
-#: Config.php:1443
 msgid "Replication slave configuration."
 msgstr "Replication slave configuration."
 
-#: Config.php:1466
 msgid "Full text configuration"
 msgstr "Full text configuration"
 
-#: Config.php:1468
 msgid "Full text configuration."
 msgstr "Full text configuration."
 
-#: Config.php:1496
 msgid "Action queue configuration"
 msgstr "Action queue configuration"
 
-#: Config.php:1498
 msgid "Action queue configuration."
 msgstr "Action queue configuration."
 
-#: Config.php:1610
 msgid "User Configuration"
 msgstr "User Configuration"
 
-#: Config.php:1612
 msgid "User backend configuration."
 msgstr "User backend configuration."
 
-#: Config.php:1739 Config.php:2237
 msgid "Sync contact data from sync backend"
 msgstr "Sync contact data from sync backend"
 
-#: Config.php:1741 Config.php:2239
 msgid "Sync user contact data from sync backend"
 msgstr "Sync user contact data from sync backend"
 
-#: Config.php:1750
 msgid "Sync contact photo from sync backend"
 msgstr "Sync contact photo from sync backend"
 
-#: Config.php:1752
 msgid "Sync user contact photo from sync backend"
 msgstr "Sync user contact photo from sync backend"
 
-#: Config.php:1761 Config.php:1763
 msgid "Sync deleted users from sync backend"
 msgstr "Sync deleted users from sync backend"
 
-#: Config.php:1772 Config.php:1774
 msgid "Sync user account status from sync backend"
 msgstr "Sync user account status from sync backend"
 
-#: Config.php:1783 Config.php:1785
 msgid "Sync user accounts / groups disabled"
 msgstr "Sync user accounts / groups disabled"
 
-#: Config.php:1794 Config.php:1796
 msgid "Sync user accounts to sync backend if member of one of these groups"
 msgstr "Sync user accounts to sync backend if member of one of these groups"
 
-#: Config.php:1805 Config.php:1807
 msgid "Sync deviated user accounts default group"
 msgstr "Sync deviated user accounts default group"
 
-#: Config.php:1821
 msgid "Enabled Features"
 msgstr "Enabled Features"
 
-#: Config.php:1829
 msgid "Show Advanced Search"
 msgstr "Show Advanced Search"
 
-#: Config.php:1832
 msgid "Show toggle button to switch on or off the advanced search for the quickfilter"
 msgstr "Show toggle button to switch on or off the advanced search for the quickfilter"
 
-#: Config.php:1837
 msgid "Remeber Popup Size"
 msgstr "Remeber Popup Size"
 
-#: Config.php:1839
 msgid "Save edit dialog size in state"
 msgstr "Save edit dialog size in state"
 
-#: Config.php:1844
 msgid "Create File Previews"
 msgstr "Create File Previews"
 
-#: Config.php:1850
 msgid "Create FullText Indices"
 msgstr "Create FullText Indices"
 
-#: Config.php:1863 Config.php:1865
 msgid "Autodiscover"
 msgstr "Autodiscover"
 
-#: Config.php:1871 Config.php:1873
 msgid "Autodiscover mail config"
 msgstr "Autodiscover mail config"
 
-#: Config.php:1881
 msgid "Show the Municipality Key in the Coredata"
 msgstr "Show the Municipality Key in the Coredata"
 
-#: Config.php:1887
 msgid "Activate Sites"
 msgstr "Activate Sites"
 
-#: Config.php:1889
 msgid "Sites are addressbook contacts matching the siteFilter config."
 msgstr "Sites are addressbook contacts matching the siteFilter config."
 
-#: Config.php:1897
 msgid "Default Admin Role Name"
 msgstr "Default Admin Role Name"
 
-#: Config.php:1907
 msgid "Default User Role Name"
 msgstr "Default User Role Name"
 
-#: Config.php:1917
 msgid "Deleted Data Retention Time"
 msgstr "Deleted Data Retention Time"
 
-#: Config.php:1926
 msgid "Cronjob Disabled"
 msgstr "Cronjob Disabled"
 
-#: Config.php:1928
 msgid "triggerAsyncEvents does not do anything and monitoringCheckCron does not alert"
 msgstr "triggerAsyncEvents does not do anything and monitoringCheckCron does not alert"
 
-#: Config.php:1937
 msgid "Cronuser ID"
 msgstr "Cronuser ID"
 
-#: Config.php:1939
 msgid "User ID of the cron user."
 msgstr "User ID of the cron user."
 
-#: Config.php:1947
 msgid "Import/Export Default Container"
 msgstr "Import/Export Default Container"
 
-#: Config.php:1955
 msgid "Title Postfix"
 msgstr "Title Postfix"
 
-#: Config.php:1957
 msgid "Postfix string appended to the title of this installation."
 msgstr "Postfix string appended to the title of this installation."
 
-#: Config.php:1965
 msgid "Redirect URL"
 msgstr "Redirect URL"
 
-#: Config.php:1967
 msgid "Redirect to this URL after logout."
 msgstr "Redirect to this URL after logout."
 
-#: Config.php:1975
 msgid "Redirect to Referrer"
 msgstr "Redirect to Referrer"
 
-#: Config.php:1977
 msgid "Redirect to referrer after logout."
 msgstr "Redirect to referrer after logout."
 
-#: Config.php:1985
 msgid "Redirect Always"
 msgstr "Redirect Always"
 
-#: Config.php:1987
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Redirect to configured redirect URL also for login."
 
-#: Config.php:2035
 msgid "Status Info"
 msgstr "Status Info"
 
-#: Config.php:2037
 msgid "If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status"
 msgstr "If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status"
 
-#: Config.php:2046
 msgid "Allowed Origins"
 msgstr "Allowed Origins"
 
-#: Config.php:2048
 msgid "Allowed Origins for the JSON API."
 msgstr "Allowed Origins for the JSON API."
 
-#: Config.php:2056
 msgid "Allowed Health Check IPs"
 msgstr "Allowed Health Check IPs"
 
-#: Config.php:2058
 msgid "Hosts that are allowed to access the TINEURL/health API"
 msgstr "Hosts that are allowed to access the TINEURL/health API"
 
-#: Config.php:2067
 msgid "Accepted Terms Version"
 msgstr "Accepted Terms Version"
 
-#: Config.php:2069
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Accepted version number of the terms and conditions document."
 
-#: Config.php:2077
 msgid "Use Nominatim Geocoding Services"
 msgstr "Use Nominatim Geocoding Services"
 
-#: Config.php:2079
 msgid "Use of external Nominatim Geocoding service is allowed."
 msgstr "Use of external Nominatim Geocoding service is allowed."
 
-#: Config.php:2088 Config.php:2090
 msgid "Use map service"
 msgstr "Use map service"
 
-#: Config.php:2099 Config.php:2101
 msgid "Nominatim Service URL"
 msgstr "Nominatim Service URL"
 
-#: Config.php:2109 Config.php:2111
 msgid "Map Service URL"
 msgstr "Map Service URL"
 
-#: Config.php:2121
 msgid "Disable LDAP TLS Certificate Check"
 msgstr "Disable LDAP TLS Certificate Check"
 
-#: Config.php:2123
 msgid "LDAP TLS Certificate should not be checked"
 msgstr "LDAP TLS Certificate should not be checked"
 
-#: Config.php:2134
 msgid "Contact fields overwritten by LDAP"
 msgstr "Contact fields overwritten by LDAP"
 
-#: Config.php:2136
 msgid "These fields are overwritten during LDAP sync if empty"
 msgstr "These fields are overwritten during LDAP sync if empty"
 
-#: Config.php:2165
 msgid "Sales Tax Default"
 msgstr "Sales Tax Default"
 
-#: Config.php:2167
 msgid "Sales tax that is used as default value in Tine 2.0 apps like Sales."
 msgstr "Sales tax that is used as default value in Tine 2.0 apps like Sales."
 
-#: Config.php:2176
 msgid "Sentry service URI"
 msgstr "Sentry service URI"
 
-#: Config.php:2178
 msgid "URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>"
 msgstr "URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>"
 
-#: Config.php:2186 Config.php:2188
 msgid "Sentry Loglevel Bitmask"
 msgstr "Sentry Loglevel Bitmask"
 
-#: Config.php:2197 Config.php:2199
 msgid "API key to access status URI"
 msgstr "API key to access status URI"
 
-#: Config.php:2207 Config.php:2209
 msgid "API key to access status metrics URI"
 msgstr "API key to access status metrics URI"
 
-#: Config.php:2217
 msgid "Custom event handling hook"
 msgstr "Custom event handling hook"
 
-#: Config.php:2219
 msgid "Configure PHP hook class for custom event handling"
 msgstr "Configure PHP hook class for custom event handling"
 
-#: Config.php:2227
 msgid "Configure hook class for user sync"
 msgstr "Configure hook class for user sync"
 
-#: Config.php:2229
 msgid "Allows to change data after fetching user from sync backend"
 msgstr "Allows to change data after fetching user from sync backend"
 
-#: Config.php:2250
 msgid "Removed users should be deleted after X months"
 msgstr "Removed users should be deleted after X months"
 
-#: Config.php:2248
 msgid "Sync user: delete after X months)"
 msgstr "Sync user: delete after X months)"
 
-#: Config.php:2259
 msgid "IP Session Validator"
 msgstr "IP Session Validator"
 
-#: Config.php:2261
 msgid "Destroy session if the users IP changes."
 msgstr "Destroy session if the users IP changes."
 
-#: Config.php:2269
 msgid "UA Session Validator"
 msgstr "UA Session Validator"
 
-#: Config.php:2271
 msgid "Destroy session if the users user agent string changes."
 msgstr "Destroy session if the users user agent string changes."
 
-#: Config.php:2280
 msgid "Files Directory"
 msgstr "Files Directory"
 
-#: Config.php:2282
 msgid "Directory with web server write access for user files."
 msgstr "Directory with web server write access for user files."
 
-#: Config.php:2290 Config.php:2292
 msgid "Reuse last username logged"
 msgstr "Reuse last username logged"
 
-#: Config.php:2300 Config.php:2302
 msgid "User may change password"
 msgstr "User may change password"
 
-#: Config.php:2311
 msgid "Browser password manager can be used"
 msgstr "Browser password manager can be used"
 
-#: Config.php:2321
 msgid "Support NTLM V2 authentication"
 msgstr "Support NTLM V2 authentication"
 
-#: Config.php:2323
 msgid "Support NTLM V2 authentication and store account password as ntlm v2 hash"
 msgstr "Support NTLM V2 authentication and store account password as ntlm v2 hash"
 
-#: Config.php:2332 Config.php:2334
 msgid "Update NTLM V2 password has on login"
 msgstr "Update NTLM V2 password has on login"
 
-#: Config.php:2343
 msgid "NTLM V2 password hash encryption key"
 msgstr "NTLM V2 password hash encryption key"
 
-#: Config.php:2345
 msgid "Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database."
 msgstr "Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database."
 
-#: Config.php:2354
 msgid "User password policy"
 msgstr "User password policy"
 
-#: Config.php:2356
 msgid "User password policy settings."
 msgstr "User password policy settings."
 
-#: Config.php:2365
 msgid "Check password policies at login"
 msgstr "Check password policies at login"
 
-#: Config.php:2374 Config.php:2376 Config.php:2497 Config.php:2499
 msgid "A password must be set"
 msgstr "A password must be set"
 
-#: Config.php:2384 Config.php:2386 Config.php:2507 Config.php:2509
 msgid "Enable password policy"
 msgstr "Enable password policy"
 
-#: Config.php:2394 Config.php:2517
 msgid "Only ASCII"
 msgstr "Only ASCII"
 
-#: Config.php:2396 Config.php:2519
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Only ASCII characters are allowed in passwords."
 
-#: Config.php:2404 Config.php:2527
 msgid "Minimum length"
 msgstr "Minimum length"
 
-#: Config.php:2406 Config.php:2529
 msgid "Minimum password length"
 msgstr "Minimum password length"
 
-#: Config.php:2414 Config.php:2537
 msgid "Minimum word chars"
 msgstr "Minimum word chars"
 
-#: Config.php:2416 Config.php:2539
 msgid "Minimum word chars in password"
 msgstr "Minimum word chars in password"
 
-#: Config.php:2424 Config.php:2547
 msgid "Minimum uppercase chars"
 msgstr "Minimum uppercase chars"
 
-#: Config.php:2426 Config.php:2549
 msgid "Minimum uppercase chars in password"
 msgstr "Minimum uppercase chars in password"
 
-#: Config.php:2434 Config.php:2557
 msgid "Minimum special chars"
 msgstr "Minimum special chars"
 
-#: Config.php:2436 Config.php:2559
 msgid "Minimum special chars in password"
 msgstr "Minimum special chars in password"
 
-#: Config.php:2444 Config.php:2567
 msgid "Minimum numbers"
 msgstr "Minimum numbers"
 
-#: Config.php:2446 Config.php:2569
 msgid "Minimum numbers in password"
 msgstr "Minimum numbers in password"
 
-#: Config.php:2454 Config.php:2577
 msgid "Forbid part of username"
 msgstr "Forbid part of username"
 
-#: Config.php:2456 Config.php:2579
 msgid "Forbid part of username in password"
 msgstr "Forbid part of username in password"
 
-#: Config.php:2464 Config.php:2587
 msgid "Change Password After ... Days"
 msgstr "Change Password After ... Days"
 
-#: Config.php:2466 Config.php:2589
 msgid "Users need to change their passwords after defined number of days"
 msgstr "Users need to change their passwords after defined number of days"
 
-#: Config.php:2485
 msgid "Download password policy"
 msgstr "Download password policy"
 
-#: Config.php:2487
 msgid "Download password policy settings."
 msgstr "Download password policy settings."
 
-#: Config.php:2600
 msgid "Automatic bugreports"
 msgstr "Automatic bugreports"
 
-#: Config.php:2602
 msgid "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Always send bugreports, even on timeouts and other exceptions / failures."
 
-#: Config.php:2610 Config.php:2612
 msgid "License Type"
 msgstr "License Type"
 
-#: Config.php:2621
 msgid "Last sessions cleanup run"
 msgstr "Last sessions cleanup run"
 
-#: Config.php:2623
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Stores the timestamp of the last sessions cleanup task run."
 
-#: Config.php:2631
 msgid "Warn after X login failures"
 msgstr "Warn after X login failures"
 
-#: Config.php:2633
 msgid "Maximum allowed login failures before writing warn log messages"
 msgstr "Maximum allowed login failures before writing warn log messages"
 
-#: Config.php:2642
 msgid "Disable Anyone Account"
 msgstr "Disable Anyone Account"
 
-#: Config.php:2644
 msgid "Disallow anyone account in grant configurations"
 msgstr "Disallow anyone account in grant configurations"
 
-#: Config.php:2652
 msgid "Alarms sent each job"
 msgstr "Alarms sent each job"
 
-#: Config.php:2654
 msgid "Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)"
 msgstr "Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)"
 
-#: Config.php:2662
 msgid "Account deactivation notfication"
 msgstr "Account deactivation notfication"
 
-#: Config.php:2664
 msgid "Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account"
 msgstr "Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account"
 
-#: Config.php:2672
 msgid "Role change allowed"
 msgstr "Role change allowed"
 
-#: Config.php:2674
 msgid "Allows to configure which user is allowed to switch to another users account"
 msgstr "Allows to configure which user is allowed to switch to another users account"
 
-#: Config.php:2682 Config.php:2684
 msgid "Max username length"
 msgstr "Max username length"
 
-#: Config.php:2691
 msgid "User PIN"
 msgstr "User PIN"
 
-#: Config.php:2693
 msgid "Users can have a PIN"
 msgstr "Users can have a PIN"
 
-#: Config.php:2700 Config.php:2702
 msgid "User PIN minimum length"
 msgstr "User PIN minimum length"
 
-#: Config.php:2709
 msgid "conf.d folder name"
 msgstr "conf.d folder name"
 
-#: Config.php:2711
 msgid "Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!"
 msgstr "Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!"
 
-#: Config.php:2720
 msgid "Maintenance mode enabled"
 msgstr "Maintenance mode enabled"
 
-#: Config.php:2722
 msgid "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 msgstr "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 
-#: Config.php:2731
 msgid "Version check enabled"
 msgstr "Version check enabled"
 
-#: Config.php:2743
 msgid "Custom Javascript includes for Fat-Client"
 msgstr "Custom Javascript includes for Fat-Client"
 
-#: Config.php:2745
 msgid "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver."
 msgstr "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver."
 
-#: Config.php:2754
 msgid "custom title"
 msgstr "custom title"
 
-#: Config.php:2756
 msgid "Custom title for branding."
 msgstr "Custom title for branding."
 
-#: Config.php:2765
 msgid "custom logo path"
 msgstr "custom logo path"
 
-#: Config.php:2767
 msgid "Path to custom logo."
 msgstr "Path to custom logo."
 
-#: Config.php:2776
 msgid "custom description"
 msgstr "custom description"
 
-#: Config.php:2778
 msgid "Custom description for branding."
 msgstr "Custom description for branding."
 
-#: Config.php:2787
 msgid "custom weburl"
 msgstr "custom weburl"
 
-#: Config.php:2789
 msgid "Custom weburl for branding."
 msgstr "Custom weburl for branding."
 
-#: Config.php:2798
 msgid "custom help url"
 msgstr "custom help url"
 
-#: Config.php:2800
 msgid "Custom url for help."
 msgstr "Custom url for help."
 
-#: Config.php:2809
 msgid "custom shop url"
 msgstr "custom shop url"
 
-#: Config.php:2811
 msgid "Custom url for the shop."
 msgstr "Custom url for the shop."
 
-#: Config.php:2820
 msgid "custom bugreport url"
 msgstr "custom bugreport url"
 
-#: Config.php:2822
 msgid "Custom bugreport url."
 msgstr "Custom bugreport url."
 
-#: Config.php:2831
 msgid "custom favicon paths"
 msgstr "custom favicon paths"
 
-#: Config.php:2833
 msgid "Paths to custom favicons."
 msgstr "Paths to custom favicons."
 
-#: Config.php:2846
 msgid "custom svg favicon paths"
 msgstr "custom svg favicon paths"
 
-#: Config.php:2848
 msgid "Paths to custom svg favicon."
 msgstr "Paths to custom svg favicon."
 
-#: Config.php:2857
 msgid "Mask Icon Color"
 msgstr "Mask Icon Color"
 
-#: Config.php:2859
 msgid "Background color of mask icon (safari pinned tab)."
 msgstr "Background color of mask icon (safari pinned tab)."
 
-#: Config.php:2869
 msgid "Installation logo"
 msgstr "Installation logo"
 
-#: Config.php:2871
 msgid "Path to custom installation logo."
 msgstr "Path to custom installation logo."
 
-#: Config.php:2880
 msgid "custom website url"
 msgstr "custom website url"
 
-#: Config.php:2882
 msgid "Custom url used for logo on login page."
 msgstr "Custom url used for logo on login page."
 
-#: Config.php:2891
 msgid "Use login name instead of full name"
 msgstr "Use login name instead of full name"
 
-#: Config.php:2893
 msgid "Use login name instead of full name for webdav."
 msgstr "Use login name instead of full name for webdav."
 
-#: Config.php:2902
 msgid "List of WebDav agent strings that will be denied"
 msgstr "List of WebDav agent strings that will be denied"
 
-#: Config.php:2904
 msgid "List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
 msgstr "List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
 
-#: Config.php:2913
 msgid "Enable SyncToken plugin"
 msgstr "Enable SyncToken plugin"
 
-#: Config.php:2915
 msgid "Enable the use of the SyncToken plugin."
 msgstr "Enable the use of the SyncToken plugin."
 
-#: Config.php:2924
 msgid "currency symbol"
 msgstr "currency symbol"
 
-#: Config.php:2926
 msgid "Path to custom favicon."
 msgstr "Path to custom favicon."
 
-#: Config.php:2935
 msgid "Filesystem settings"
 msgstr "Filesystem settings"
 
-#: Config.php:2937
 msgid "Filesystem settings."
 msgstr "Filesystem settings."
 
-#: Config.php:2946 Config.php:2948
 msgid "FlySystems Local Adapter Base Paths"
 msgstr "FlySystems Local Adapter Base Paths"
 
-#: Config.php:2957
 msgid "Filesystem history"
 msgstr "Filesystem history"
 
-#: Config.php:2959
 msgid "Filesystem keeps history, default is false."
 msgstr "Filesystem keeps history, default is false."
 
-#: Config.php:2968 Config.php:2969
 msgid "Filesystem default grants"
 msgstr "Filesystem default grants"
 
-#: Config.php:3038
 msgid "Filesystem number of revisions"
 msgstr "Filesystem number of revisions"
 
-#: Config.php:3040
 msgid "Filesystem number of revisions being kept before they are automatically deleted."
 msgstr "Filesystem number of revisions being kept before they are automatically deleted."
 
-#: Config.php:3049
 msgid "Filesystem months of revisions"
 msgstr "Filesystem months of revisions"
 
-#: Config.php:3051
 msgid "Filesystem number of months revisions being kept before they are automatically deleted."
 msgstr "Filesystem number of months revisions being kept before they are automatically deleted."
 
-#: Config.php:3060
 msgid "Filesystem index content"
 msgstr "Filesystem index content"
 
-#: Config.php:3062
 msgid "Filesystem index content."
 msgstr "Filesystem index content."
 
-#: Config.php:3071
 msgid "Filesystem enable notifications"
 msgstr "Filesystem enable notifications"
 
-#: Config.php:3073
 msgid "Filesystem enable notifications."
 msgstr "Filesystem enable notifications."
 
-#: Config.php:3082
 msgid "Filesystem create previews"
 msgstr "Filesystem create previews"
 
-#: Config.php:3084
 msgid "Filesystem create previews."
 msgstr "Filesystem create previews."
 
-#: Config.php:3093
 msgid "URL of preview service"
 msgstr "URL of preview service"
 
-#: Config.php:3095
 msgid "URL of preview service."
 msgstr "URL of preview service."
 
-#: Config.php:3104 Config.php:3115
 msgid "Class for preview service"
 msgstr "Class for preview service"
 
-#: Config.php:3106 Config.php:3117
 msgid "Class to use, to connect to preview service."
 msgstr "Class to use, to connect to preview service."
 
-#: Config.php:3126
 msgid "Max file size for preview service"
 msgstr "Max file size for preview service"
 
-#: Config.php:3128
 msgid "Max file size for preview service."
 msgstr "Max file size for preview service."
 
-#: Config.php:3137 Config.php:3139
 msgid "Max per preview preview service error count, for trying to generate preview."
 msgstr "Max per preview preview service error count, for trying to generate preview."
 
-#: Config.php:3148 Config.php:3150
 msgid "X size of thumbnail images."
 msgstr "X size of thumbnail images."
 
-#: Config.php:3159 Config.php:3161
 msgid "Y size of thumbnail images."
 msgstr "Y size of thumbnail images."
 
-#: Config.php:3170 Config.php:3172 Config.php:3192 Config.php:3194
 msgid "X size of preview images."
 msgstr "X size of preview images."
 
-#: Config.php:3181 Config.php:3183 Config.php:3203 Config.php:3205
 msgid "Y size of preview images."
 msgstr "Y size of preview images."
 
-#: Config.php:3214 Config.php:3216
 msgid "Ignore Proxy config for preview service"
 msgstr "Ignore Proxy config for preview service"
 
-#: Config.php:3225 Config.php:3227
 msgid "Antivirus Scan Max File Size"
 msgstr "Antivirus Scan Max File Size"
 
-#: Config.php:3236 Config.php:3238
 msgid "Antivirus Scan Mode"
 msgstr "Antivirus Scan Mode"
 
-#: Config.php:3249 Config.php:3251
 msgid "Antivirus Scan URL"
 msgstr "Antivirus Scan URL"
 
-#: Config.php:3259 Config.php:3261
 msgid "Antivirus Scan Notification Role"
 msgstr "Antivirus Scan Notification Role"
 
-#: Config.php:3269
 msgid "Filesystem show current usage"
 msgstr "Filesystem show current usage"
 
-#: Config.php:3271
 msgid "Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values."
 msgstr "Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values."
 
-#: Config.php:3283 Config.php:3285
 msgid "Filter sync token settings"
 msgstr "Filter sync token settings"
 
-#: Config.php:3294 Config.php:3296
 msgid "Max age in days"
 msgstr "Max age in days"
 
-#: Config.php:3305 Config.php:3307
 msgid "Max amount in total"
 msgstr "Max amount in total"
 
-#: Config.php:3316 Config.php:3318
 msgid "Max amount per filter"
 msgstr "Max amount per filter"
 
-#: Config.php:3330
 msgid "Enable Password Less Login"
 msgstr "Enable Password Less Login"
 
-#: Config.php:3339 Config.php:3341
 msgid "Quota settings"
 msgstr "Quota settings"
 
-#: Config.php:3350
 msgid "Show UI"
 msgstr "Show UI"
 
-#: Config.php:3352
 msgid "Should the quota UI elements be rendered or not."
 msgstr "Should the quota UI elements be rendered or not."
 
-#: Config.php:3361
 msgid "Include revisions"
 msgstr "Include revisions"
 
-#: Config.php:3363
 msgid "Should all revisions be used to calculate total usage?"
 msgstr "Should all revisions be used to calculate total usage?"
 
-#: Config.php:3372
 msgid "Total quota in MB"
 msgstr "Total quota in MB"
 
-#: Config.php:3374
 msgid "Total quota in MB (0 for unlimited)"
 msgstr "Total quota in MB (0 for unlimited)"
 
-#: Config.php:3383
 msgid "Filesystem total quota in MB"
 msgstr "Filesystem total quota in MB"
 
-#: Config.php:3385
 msgid "Filesystem total quota in MB (0 for unlimited)"
 msgstr "Filesystem total quota in MB (0 for unlimited)"
 
-#: Config.php:3394
 msgid "Total quota by user in MB"
 msgstr "Total quota by user in MB"
 
-#: Config.php:3396
 msgid "Total quota by user in MB (0 for unlimited)"
 msgstr "Total quota by user in MB (0 for unlimited)"
 
-#: Config.php:3405
 msgid "Soft quota in %"
 msgstr "Soft quota in %"
 
-#: Config.php:3407
 msgid "Soft quota in % (0-100, 0 means off)"
 msgstr "Soft quota in % (0-100, 0 means off)"
 
-#: Config.php:3416
 msgid "Soft quota notification role"
 msgstr "Soft quota notification role"
 
-#: Config.php:3418
 msgid "Name of the role to notify if soft quota is exceeded"
 msgstr "Name of the role to notify if soft quota is exceeded"
 
-#: Config.php:3427 Config.php:3429
 msgid "Skip Imap Quota Notfication"
 msgstr "Skip Imap Quota Notfication"
 
-#: Config.php:3438
 msgid "Quota notification addresses"
 msgstr "Quota notification addresses"
 
-#: Config.php:3440
 msgid "Addresses for sending quota notification email"
 msgstr "Addresses for sending quota notification email"
 
-#: Config.php:3449 Config.php:3451
 msgid "Quota Monitoring"
 msgstr "Quota Monitoring"
 
-#: Config.php:3463
 msgid "Tine20 URL"
 msgstr "Tine20 URL"
 
-#: Config.php:3465
 msgid "The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable."
 msgstr "The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable."
 
-#: Config.php:3474
 msgid "Tine20 URL Used For JS Client"
 msgstr "Tine20 URL Used For JS Client"
 
-#: Config.php:3476
 msgid "see https://github.com/tine20/tine20/issues/7218"
 msgstr "see https://github.com/tine20/tine20/issues/7218"
 
-#: Config.php:3500 Config.php:3502
 msgid "auth token default and maximum TTL in seconds"
 msgstr "auth token default and maximum TTL in seconds"
 
-#: Config.php:3511 Config.php:3513
 msgid "shared credential cache cryptographic key"
 msgstr "shared credential cache cryptographic key"
 
-#: Config.php:3522 Model/MunicipalityKey.php:272
 msgid "Grad der Verstädterung"
 msgstr "Grad der Verstädterung"
 
-#: Config.php:3532
 msgid "dicht besiedelt"
 msgstr "dicht besiedelt"
 
-#: Config.php:3533
 msgid "mittlere Besiedlungsdichte"
 msgstr "mittlere Besiedlungsdichte"
 
-#: Config.php:3534
 msgid "gering besiedelt"
 msgstr "gering besiedelt"
 
-#: Config.php:3539
 msgid "Municipality Key duplicate check fields"
 msgstr "Municipality Key duplicate check fields"
 
-#: Config.php:3541
 msgid "These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr "These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 
-#: Config.php:3549
 msgid "Note Type"
 msgstr "Note Type"
 
-#: Config.php:3550
 msgid "Available Note types for modlog history"
 msgstr "Available Note types for modlog history"
 
-#: Config.php:3561
 msgid "Telephone"
 msgstr "Telephone"
 
-#: Config.php:3563
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: Config.php:3565
 msgid "Created"
 msgstr "Created"
 
-#: Config.php:3567
 msgid "Changed"
 msgstr "Changed"
 
-#: Config.php:3569
 msgid "Reveal password"
 msgstr "Reveal password"
 
-#: Config.php:3575
 msgid "SMS Config"
 msgstr "SMS Config"
 
-#: Config.php:3584 Model/Sms/AdapterConfigs.php:36
 msgid "SMS Adapter Configs"
 msgstr "SMS Adapter Configs"
 
-#: Config.php:3595 Model/FullUser.php:217
 msgid "User type"
 msgstr "User type"
 
-#: Config.php:3606
 msgid "System User"
 msgstr "System User"
 
-#: Config.php:3618
 msgid "Volunteer"
 msgstr "Volunteer"
 
-#: Config.php:3627
 msgid "Action log type"
 msgstr "Action log type"
 
-#: Config.php:3636
 msgid "Add User Confirmation"
 msgstr "Add User Confirmation"
 
-#: Config.php:3637
 msgid "Deletion"
 msgstr "Deletion"
 
-#: Config.php:3638
 msgid "Email Notification"
 msgstr "Email Notification"
 
-#: Config.php:3639
 msgid "Support request"
 msgstr "Support request"
 
-#: Config.php:3644
 msgid "Site Filter"
 msgstr "Site Filter"
 
-#: Config.php:3646
 msgid "Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter."
 msgstr "Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter."
 
-#: Notes.php:480
 msgid "by"
 msgstr "by"
 
-#: Notes.php:484
 msgid "Changed fields:"
 msgstr "Changed fields:"
 
-#: Controller/Event.php:86
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's personal files"
 
-#: Controller/Record/Abstract.php:4007
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "A Message has been filed to this record. Subject: {0}"
 
-#: Controller/Record/Abstract.php:4150
 #, python-format
 msgid "Status %s is not valid."
 msgstr "Status %s is not valid."
 
-#: Controller/EvaluationDimension.php:86
 msgid "renaming is currently only possible if no models are assigned"
 msgstr "renaming is currently only possible if no models are assigned"
 
-#: Preference/Abstract.php:631 Preference/Abstract.php:958
 msgid "Personal default"
 msgstr "Personal default"
 
-#: Preference/Abstract.php:634
 msgid "default"
 msgstr "default"
 
-#: EmailUser.php:534
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr "Email address {0} not in allowed domains [{1}] or invalid"
 
-#: Scheduler.php:204
 msgid "Scheduler task failed"
 msgstr "Scheduler task failed"
 
-#: Scheduler.php:205
 #, python-format
 msgid "Your scheduler task %s has failed %d times."
 msgstr "Your scheduler task %s has failed %d times."
 
-#: PersistentFilter.php:159
 msgid "- The last filter I used -"
 msgstr "- The last filter I used -"
 
-#: Model/FullUser.php:246
 msgid "Area lock configurations"
 msgstr "Area lock configurations"
 
-#: Model/FullUser.php:464 Model/FullUser.php:469
 msgid "Your password expired."
 msgstr "Your password expired."
 
-#: Model/ImportExportDefinition.php:108
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"
 msgstr[0] "ImportExportDefinition"
 msgstr[1] "ImportExportDefinitions"
 
-#: Model/ImportExportDefinition.php:166
 msgid "Label"
 msgstr "Label"
 
-#: Model/ImportExportDefinition.php:185
 msgid "Favorite"
 msgstr "Favorite"
 
-#: Model/ImportExportDefinition.php:190 Model/Application.php:97
-#: Model/Container.php:171
 msgid "Order"
 msgstr "Order"
 
-#: Model/ImportExportDefinition.php:195
 msgid "Icon Class"
 msgstr "Icon Class"
 
-#: Model/ImportExportDefinition.php:201
 msgid "Plugin"
 msgstr "Plugin"
 
-#: Model/ImportExportDefinition.php:206
 msgid "Scope"
 msgstr "Scope"
 
-#: Model/ImportExportDefinition.php:212
 msgid "Plugin Options"
 msgstr "Plugin Options"
 
-#: Model/ImportExportDefinition.php:222
 msgid "Plugin Options Definition"
 msgstr "Plugin Options Definition"
 
-#: Model/ImportExportDefinition.php:228
 msgid "Format"
 msgstr "Format"
 
-#: Model/ImportExportDefinition.php:233
 msgid "Filename"
 msgstr "Filename"
 
-#: Model/ImportExportDefinition.php:238
 msgid "Filter"
 msgstr "Filter"
 
-#: Model/ImportExportDefinition.php:243
 msgid "Skip Upstream Updates"
 msgstr "Skip Upstream Updates"
 
-#: Model/Tree/FlySystem/AdapterConfig/WebDAV.php:28
-#: Model/Tree/FlySystem/AdapterConfig/WebDAV.php:29
 msgid "WebDAV Mount"
 msgid_plural "WebDAV Mounts"
 msgstr[0] "WebDAV Mount"
 msgstr[1] "WebDAV Mounts"
 
-#: Model/Tree/FlySystem/AdapterConfig/Local.php:26
-#: Model/Tree/FlySystem/AdapterConfig/Local.php:27
 msgid "Local Filesystem"
 msgid_plural "Local Filesystems"
 msgstr[0] "Local Filesystem"
 msgstr[1] "Local Filesystems"
 
-#: Model/Tree/FlySystem.php:34 Model/Tree/FlySystem.php:35
 msgid "Flysystem Mount"
 msgid_plural "Flysystem Mounts"
 msgstr[0] "Flysystem Mount"
 msgstr[1] "Flysystem Mounts"
 
-#: Model/Tree/Node.php:174
 msgid "File Contents"
 msgstr "File Contents"
 
-#: Model/Tree/Node.php:178 Model/Tree/Node.php:358
 msgid "Indexed"
 msgstr "Indexed"
 
-#: Model/Tree/Node.php:326
 msgid "Content type"
 msgstr "Content type"
 
-#: Model/Tree/Node.php:349
 msgid "MD5 Hash"
 msgstr "MD5 Hash"
 
-#: Model/Tree/Node.php:383
 msgid "Revision Size"
 msgstr "Revision Size"
 
-#: Model/Application.php:81
 msgid "Status"
 msgstr "Status"
 
-#: Model/MunicipalityKey.php:60
 msgid "GENDER_Municipality Key"
 msgstr "GENDER_Municipality Key"
 
-#: Model/MunicipalityKey.php:165
 msgid "Amtlicher Regionalschlüssel"
 msgstr "Amtlicher Regionalschlüssel"
 
-#: Model/MunicipalityKey.php:176
 msgid "Gemeindename"
 msgstr "Gemeindename"
 
-#: Model/MunicipalityKey.php:185
 msgid "Fläche"
 msgstr "Fläche"
 
-#: Model/MunicipalityKey.php:194
 msgid "Bevölkerung insgesamt"
 msgstr "Bevölkerung insgesamt"
 
-#: Model/MunicipalityKey.php:204
 msgid "Bevölkerung männlich"
 msgstr "Bevölkerung männlich"
 
-#: Model/MunicipalityKey.php:214
 msgid "Bevölkerung weiblich"
 msgstr "Bevölkerung weiblich"
 
-#: Model/MunicipalityKey.php:224
 msgid "Bevölkerung je quadrat km"
 msgstr "Bevölkerung je quadrat km"
 
-#: Model/MunicipalityKey.php:234
 msgid "plz"
 msgstr "plz"
 
-#: Model/MunicipalityKey.php:243
 msgid "Längengrad"
 msgstr "Längengrad"
 
-#: Model/MunicipalityKey.php:252
 msgid "Breitengrad"
 msgstr "Breitengrad"
 
-#: Model/MunicipalityKey.php:262
 msgid "Reisegebiet"
 msgstr "Reisegebiet"
 
-#: Model/MunicipalityKey.php:278
 msgid "Gebietsstand"
 msgstr "Gebietsstand"
 
-#: Model/MunicipalityKey.php:285
 msgid "Bevölkerungsstand"
 msgstr "Bevölkerungsstand"
 
-#: Model/Container.php:133
 msgid "Hierarchy"
 msgstr "Hierarchy"
 
-#: Model/Container.php:153
 msgid "Owner"
 msgstr "Owner"
 
-#: Model/Container.php:212
 msgid "UUID"
 msgstr "UUID"
 
-#: Model/BankHolidayCalendar.php:33
 msgid "GENDER_Bank Holiday Calendar"
 msgstr "GENDER_Bank Holiday Calendar"
 
-#: Model/BankHolidayCalendar.php:69
 msgid "Bank Holidays"
 msgstr "Bank Holidays"
 
-#: Model/BankHolidayCalendar.php:79
 msgid "Data Source Url"
 msgstr "Data Source Url"
 
-#: Model/BankHolidayCalendar.php:85
 msgid "Target Calendar"
 msgstr "Target Calendar"
 
-#: Model/EvaluationDimensionItem.php:41
 msgid "GENDER_Item"
 msgstr "GENDER_Item"
 
-#: Model/EvaluationDimensionItem.php:42
 msgid "Item"
 msgid_plural "Items"
 msgstr[0] "Item"
 msgstr[1] "Items"
 
-#: Model/EvaluationDimensionItem.php:83
 msgid "Number"
 msgstr "Number"
 
-#: Model/AreaLockState.php:38
 msgid "Area Lock State"
 msgid_plural "Area Lock States"
 msgstr[0] "Area Lock State"
 msgstr[1] "Area Lock States"
 
-#: Model/AreaLockState.php:49
 msgid "Area"
 msgstr "Area"
 
-#: Model/AreaLockState.php:57
 msgid "Expires"
 msgstr "Expires"
 
-#: Model/LogEntry.php:35
 msgid "LogEntry"
 msgid_plural "LogEntries"
 msgstr[0] "LogEntry"
 msgstr[1] "LogEntries"
 
-#: Model/LogEntry.php:36
 msgid "LogEntries"
 msgstr "LogEntries"
 
-#: Model/LogEntry.php:63
 msgid "Client Requestid"
 msgstr "Client Requestid"
 
-#: Model/LogEntry.php:70
 msgid "Server Requestid"
 msgstr "Server Requestid"
 
-#: Model/LogEntry.php:78
 msgid "Logtime"
 msgstr "Logtime"
 
-#: Model/LogEntry.php:83 Model/LogEntry.php:88
 msgid "Difftime"
 msgstr "Difftime"
 
-#: Model/LogEntry.php:101
 msgid "Loglevel"
 msgstr "Loglevel"
 
-#: Model/NumberableConfig.php:46
 msgid "GENDER_Numbering Range"
 msgstr "GENDER_Numbering Range"
 
-#: Model/NumberableConfig.php:47
 msgid "Numbering Range"
 msgid_plural "Numbering Ranges"
 msgstr[0] "Numbering Range"
 msgstr[1] "Numbering Ranges"
 
-#: Model/NumberableConfig.php:74
 msgid "Property"
 msgstr "Property"
 
-#: Model/NumberableConfig.php:87
 msgid "Additional Key"
 msgstr "Additional Key"
 
-#: Model/NumberableConfig.php:103
 msgid "Numbering Range Start"
 msgstr "Numbering Range Start"
 
-#: Model/NumberableConfig.php:108
 msgid "Number of Zerofill"
 msgstr "Number of Zerofill"
 
-#: Model/NumberableConfig.php:113
 msgid "Prefix"
 msgstr "Prefix"
 
-#: Model/NumberableConfig.php:119
 msgid "Number is Editable"
 msgstr "Number is Editable"
 
-#: Model/BankHoliday.php:36
 msgid "GENDER_Bank Holiday"
 msgstr "GENDER_Bank Holiday"
 
-#: Model/BankHoliday.php:37
 msgid "Bank Holiday"
 msgid_plural "Bank Holidays"
 msgstr[0] "Bank Holiday"
 msgstr[1] "Bank Holidays"
 
-#: Model/BankHoliday.php:83
 msgid "Date"
 msgstr "Date"
 
-#: Model/BankHoliday.php:91
 msgid "Fraction"
 msgstr "Fraction"
 
-#: Model/Sms/SendConfig.php:41 Model/Sms/AdapterConfig.php:42
 msgid "SMS Adapter Type"
 msgstr "SMS Adapter Type"
 
-#: Model/Sms/SendConfig.php:50 Model/Sms/AdapterConfig.php:51
 msgid "SMS Adapter Config"
 msgstr "SMS Adapter Config"
 
-#: Model/EvaluationDimension.php:47
 msgid "GENDER_Evaluation Dimension"
 msgstr "GENDER_Evaluation Dimension"
 
-#: Model/EvaluationDimension.php:48
 msgid "Evaluation Dimension"
 msgid_plural "Evaluation Dimensions"
 msgstr[0] "Evaluation Dimension"
 msgstr[1] "Evaluation Dimensions"
 
-#: Model/EvaluationDimension.php:93
 msgid "Dimension Items"
 msgstr "Dimension Items"
 
-#: Model/EvaluationDimension.php:102
 msgid "Configured Models"
 msgstr "Configured Models"
 
-#: Model/EvaluationDimension.php:111
 msgid "Depends on"
 msgstr "Depends on"
 
-#: Model/EvaluationDimension.php:120
 msgid "Sorting"
 msgstr "Sorting"
 
-#: Model/AreaLockConfig.php:80
 msgid "Area Lock Configuration"
 msgid_plural "Area Lock Configurations"
 msgstr[0] "Area Lock Configuration"
 msgstr[1] "Area Lock Configurations"
 
-#: Model/AreaLockConfig.php:93
 msgid "Area name"
 msgstr "Area name"
 
-#: Model/AreaLockConfig.php:104
 msgid "Areas"
 msgstr "Areas"
 
-#: Model/AreaLockConfig.php:142
 msgid "MFAs"
 msgstr "MFAs"
 
-#: Model/AreaLockConfig.php:156
 msgid "Validity"
 msgstr "Validity"
 
-#: Model/AreaLockConfig.php:163
 msgid "Lifetime in Minutes"
 msgstr "Lifetime in Minutes"
 
-#: Model/AreaLockConfig.php:166
 msgid "Policy"
 msgstr "Policy"
 
-#: Model/RoleMember.php:34
 msgid "RoleMember"
 msgid_plural "RoleMembers"
 msgstr[0] "RoleMember"
 msgstr[1] "RoleMembers"
 
-#: Model/RoleMember.php:49
 msgid "role_id"
 msgstr "role_id"
 
-#: Model/RoleMember.php:55
 msgid "account_type"
 msgstr "account_type"
 
-#: Model/RoleMember.php:61
 msgid "account_id"
 msgstr "account_id"
 
-#: Model/Role.php:42
 msgid "Role"
 msgid_plural "Roles"
 msgstr[0] "Role"
 msgstr[1] "Roles"
 
-#: Model/Role.php:70
 msgid "Rights"
 msgstr "Rights"
 
-#: Model/Role.php:81
 msgid "Members"
 msgstr "Members"
 
-#: Model/ActionLog.php:57
 msgid "ActionLog"
 msgid_plural "ActionLogs"
 msgstr[0] "ActionLog"
 msgstr[1] "ActionLogs"
 
-#: Model/ActionLog.php:65
 msgid "Action type"
 msgstr "Action type"
 
-#: Model/ActionLog.php:80
 msgid "Datetime"
 msgstr "Datetime"
 
-#: Model/ActionLog.php:90 Export/Spreadsheet/Ods.php:459
 msgid "Data"
 msgstr "Data"
 
-#: Model/MFA/UserConfig.php:36 Model/MFA/UserConfig.php:78
 msgid "MFA Device Config"
 msgid_plural "MFA Device Configs"
 msgstr[0] "MFA Device Config"
 msgstr[1] "MFA Device Configs"
 
-#: Model/MFA/UserConfig.php:58
 msgid "MFA Device Type"
 msgstr "MFA Device Type"
 
-#: Model/MFA/PinUserConfig.php:35
 msgid "GENDER_PIN"
 msgstr "GENDER_PIN"
 
-#: Model/MFA/PinUserConfig.php:37
 msgid "{% true %}Static PIN for user: ●●●●●●"
 msgstr "{% true %}Static PIN for user: ●●●●●●"
 
-#: Model/MFA/PinUserConfig.php:42
 msgid "New PIN"
 msgstr "New PIN"
 
-#: Model/MFA/YubicoOTPUserConfig.php:41 Model/MFA/WebAuthnUserConfig.php:36
 msgid "GENDER_FIDO2 WebAuthn Device"
 msgstr "GENDER_FIDO2 WebAuthn Device"
 
-#: Model/MFA/YubicoOTPUserConfig.php:48
 msgid "Yubico OTP public id"
 msgstr "Yubico OTP public id"
 
-#: Model/MFA/YubicoOTPUserConfig.php:57
 msgid "Yubico OTP privat id"
 msgstr "Yubico OTP privat id"
 
-#: Model/MFA/YubicoOTPUserConfig.php:61
 msgid "Yubico privat key"
 msgstr "Yubico privat key"
 
-#: Model/MFA/SmsUserConfig.php:32
 msgid "GENDER_SMS"
 msgstr "GENDER_SMS"
 
-#: Model/MFA/SmsUserConfig.php:33
 msgid "SMS"
 msgid_plural "SMSs"
 msgstr[0] "SMS"
 msgstr[1] "SMSs"
 
-#: Model/MFA/SmsUserConfig.php:34
 msgid "Security codes are send to: {{ cellphonenumber }}."
 msgstr "Security codes are send to: {{ cellphonenumber }}."
 
-#: Model/MFA/SmsUserConfig.php:39
 msgid "Cell Phone Number"
 msgstr "Cell Phone Number"
 
-#: Model/MFA/TOTPUserConfig.php:40
 msgid "GENDER_Time based OTP (TOTP)"
 msgstr "GENDER_Time based OTP (TOTP)"
 
-#: Model/MFA/TOTPUserConfig.php:41
 msgid "Time based OTP (TOTP)"
 msgid_plural "Time based OTPs (TOTP)"
 msgstr[0] "Time based OTP (TOTP)"
 msgstr[1] "Time based OTPs (TOTP)"
 
-#: Model/MFA/TOTPUserConfig.php:42
 msgid "Time based OTP (TOPT) is configured"
 msgstr "Time based OTP (TOPT) is configured"
 
-#: Model/MFA/HOTPUserConfig.php:40
 msgid "GENDER_Counter based OTP (HOTP)"
 msgstr "GENDER_Counter based OTP (HOTP)"
 
-#: Model/MFA/HOTPUserConfig.php:41
 msgid "Counter based OTP (HOTP)"
 msgid_plural "Counter based OTPs (HOTP)"
 msgstr[0] "Counter based OTP (HOTP)"
 msgstr[1] "Counter based OTPs (HOTP)"
 
-#: Model/MFA/HOTPUserConfig.php:42
 msgid "Counter based OTP (HOTP) is configured"
 msgstr "Counter based OTP (HOTP) is configured"
 
-#: Model/Grants.php:125
 msgid "GENDER_Grant"
 msgstr "GENDER_Grant"
 
-#: Model/RoleRight.php:38
 msgid "RoleRight"
 msgid_plural "RoleRights"
 msgstr[0] "RoleRight"
 msgstr[1] "RoleRights"
 
-#: Model/SchedulerTask.php:45
 msgid "Scheduler task"
 msgid_plural "Scheduler tasks"
 msgstr[0] "Scheduler task"
 msgstr[1] "Scheduler tasks"
 
-#: Model/SchedulerTask.php:89
 msgid "Configuration"
 msgstr "Configuration"
 
-#: Model/SchedulerTask.php:95
 msgid "Last run"
 msgstr "Last run"
 
-#: Model/SchedulerTask.php:105
 msgid "Last run duration"
 msgstr "Last run duration"
 
-#: Model/SchedulerTask.php:117
 msgid "Lock id"
 msgstr "Lock id"
 
-#: Model/SchedulerTask.php:126
 msgid "Next run"
 msgstr "Next run"
 
-#: Model/SchedulerTask.php:131
 msgid "Last failure"
 msgstr "Last failure"
 
-#: Model/SchedulerTask.php:141
 msgid "Failure count"
 msgstr "Failure count"
 
-#: Model/BankAccount.php:41
 msgid "Bank Account"
 msgid_plural "Bank Accounts"
 msgstr[0] "Bank Account"
 msgstr[1] "Bank Accounts"
 
-#: Model/BankAccount.php:76
 msgid "IBAN"
 msgstr "IBAN"
 
-#: Model/BankAccount.php:85
 msgid "BIC"
 msgstr "BIC"
 
-#: WebDav/PrincipalBackend.php:666
 msgid "Shared folders"
 msgstr "Shared folders"
 
-#: WebDav/PrincipalBackend.php:806 WebDav/PrincipalBackend.php:812
-#: WebDav/PrincipalBackend.php:837 WebDav/PrincipalBackend.php:843
-#: ModelConfiguration.php:388 ModelConfiguration.php:492
 msgid "Group"
 msgstr "Group"
 
-#: Export/Spreadsheet/Ods.php:316
 msgid "Total: "
 msgstr "Total: "
 
-#: Export/Abstract.php:24
 msgid "Exporttime"
 msgstr "Exporttime"
 
-#: Export/Abstract.php:1842
 msgid "Export only currently shown columns"
 msgstr "Export only currently shown columns"
 
-#: Export/Pdf.php:437
 msgid "Created by"
 msgstr "Created by"
 
-#: Export/Pdf.php:481
 msgid "Activities"
 msgstr "Activities"
 
-#: Export/definitions/tinebase_expot_costcenter_xls.xml:6
-#: Export/definitions/tinebase_expot_municipalitykey_xls.xml:6
 msgid "Excel all data"
 msgstr "Excel all data"
 
-#: Export/definitions/municipalitykey_xls_current_columns.xml:5
 msgid "Excel current columns"
 msgstr "Excel current columns"
 
-#: Import/Csv/Abstract.php:286
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr "The following fields weren't imported: %s"
 
-#: Import/Csv/Abstract.php:287
 msgid "N/A"
 msgstr "N/A"
 
-#: Import/definitions/tinebase_import_municipalitykey.xml:10
 msgid "Import Community identification Numbers"
 msgstr "Import Community identification Numbers"
 
-#: Import/definitions/tinebase_import_municipalitykey.xml:13
 msgid "Municipality Key Import"
 msgstr "Municipality Key Import"
 
-#: ModelConfiguration.php:187 ModelConfiguration.php:196
-#: ModelConfiguration.php:268 ModelConfiguration.php:277
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] "Record Name"
 msgstr[1] "Records Name"
 
-#: ModelConfiguration.php:453
 msgid "New Car"
 msgstr "New Car"
 
-#: views/deactivationNotification.php:11
 msgid "Your user account has been deactivated"
 msgstr "Your user account has been deactivated"
 
-#: views/deactivationNotification.php:13
 msgid "Deactivation date"
 msgstr "Deactivation date"
 
-#: views/deactivationNotification.php:14
 msgid "Tine 2.0 URL"
 msgstr "Tine 2.0 URL"
 
-#: Exception.php:63
 #, python-brace-format
 msgid "Exception ({0})"
 msgstr "Exception ({0})"
 
-#: Exception/AreaUnlockFailed.php:22
 msgid "Area could not be unlocked"
 msgstr "Area could not be unlocked"
 
-#: Exception/QuotaExceeded.php:22
 msgid "Quota is exceeded"
 msgstr "Quota is exceeded"
 
-#: Exception/AreaLocked.php:22
 msgid "Area is locked"
 msgstr "Area is locked"
 
-#: Exception/Record/SystemContainer.php:22
 msgid "System Container"
 msgstr "System Container"
 
-#: Exception/Record/SystemContainer.php:28
 msgid "This is a system container which could not be deleted!"
 msgstr "This is a system container which could not be deleted!"
 
-#: Exception/InvalidRelationConstraints.php:26
 msgid "Invalid Relations"
 msgstr "Invalid Relations"
 
-#: Exception/InvalidRelationConstraints.php:36
 msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
 msgstr "You tried to create a relation which is forbidden by the constraints config of one of the models."
 
-#: Exception/Confirmation.php:22
 msgid "Confirmation is required"
 msgstr "Confirmation is required"
 
-#: Exception/SystemGeneric.php:27
 msgid "Generic System Exception"
 msgstr "Generic System Exception"
 
-#: Exception/MonthFormat.php:26
 msgid "Wrong month format!"
 msgstr "Wrong month format!"
 
-#: Exception/MonthFormat.php:31
 msgid "The month must have the format YYYY-MM!"
 msgstr "The month must have the format YYYY-MM!"
 
-#: Exception/PasswordPolicyViolation.php:22
 msgid "Password Policy Violation"
 msgstr "Password Policy Violation"
 
-#: Acl/Rights/Abstract.php:85
 msgid "admin"
 msgstr "admin"
 
-#: Acl/Rights/Abstract.php:86
 msgid "admin right description"
 msgstr "admin right description"
 
-#: Acl/Rights/Abstract.php:89
 msgid "run"
 msgstr "run"
 
-#: Acl/Rights/Abstract.php:90
 msgid "run right description"
 msgstr "run right description"
 
-#: Acl/Rights/Abstract.php:93
 msgid "Use Mainscreen"
 msgstr "Use Mainscreen"
 
-#: Acl/Rights/Abstract.php:94
 msgid "App mainscreen is available in UI"
 msgstr "App mainscreen is available in UI"
 
-#: Acl/Rights/Abstract.php:97
 msgid "Personal tags"
 msgstr "Personal tags"
 
-#: Acl/Rights/Abstract.php:98
 msgid "Use and see personal tags"
 msgstr "Use and see personal tags"
 
-#: Acl/Rights.php:190
 msgid "Report bugs"
 msgstr "Report bugs"
 
-#: Acl/Rights.php:191
 msgid "Report bugs to the software vendor directly when they occur."
 msgstr "Report bugs to the software vendor directly when they occur."
 
-#: Acl/Rights.php:194
 msgid "Check version"
 msgstr "Check version"
 
-#: Acl/Rights.php:195
 msgid "Check for new versions of this software."
 msgstr "Check for new versions of this software."
 
-#: Acl/Rights.php:198
 msgid "Manage bank accounts"
 msgstr "Manage bank accounts"
 
-#: Acl/Rights.php:199
 msgid "The right to manage bank accounts."
 msgstr "The right to manage bank accounts."
 
-#: Acl/Rights.php:202
 msgid "Manage own profile"
 msgstr "Manage own profile"
 
-#: Acl/Rights.php:203
 msgid "The right to manage the own profile (selected contact data)."
 msgstr "The right to manage the own profile (selected contact data)."
 
-#: Acl/Rights.php:206
 msgid "Manage Numberables"
 msgstr "Manage Numberables"
 
-#: Acl/Rights.php:207
 msgid "The right to manage numberables."
 msgstr "The right to manage numberables."
 
-#: Acl/Rights.php:210
 msgid "Manage own client state"
 msgstr "Manage own client state"
 
-#: Acl/Rights.php:211
 msgid "The right to manage the own client state."
 msgstr "The right to manage the own client state."
 
-#: Acl/Rights.php:214
 msgid "Manage evaluation dimensions"
 msgstr "Manage evaluation dimensions"
 
-#: Acl/Rights.php:215
 msgid "The right to manage evaluation dimensions."
 msgstr "The right to manage evaluation dimensions."
 
-#: Acl/Rights.php:218
 msgid "Maintenance"
 msgstr "Maintenance"
 
-#: Acl/Rights.php:219
 msgid "The right to use the installation in maintenance mode."
 msgstr "The right to use the installation in maintenance mode."
 
-#: Acl/Rights.php:222
 msgid "Show License Info"
 msgstr "Show License Info"
 
-#: Acl/Rights.php:223
 msgid "The right to be able to see license information (expiry, ...)."
 msgstr "The right to be able to see license information (expiry, ...)."
 
-#: Acl/Rights.php:226
 msgid "Replication"
 msgstr "Replication"
 
-#: Acl/Rights.php:227
 msgid "The right to access the replication data of all applications."
 msgstr "The right to access the replication data of all applications."

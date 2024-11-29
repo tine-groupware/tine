@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,432 +13,322 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:105
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s's personal tasks"
 
-#: Preference.php:24
 msgid "All my tasks"
 msgstr "All my tasks"
 
-#: Preference.php:81
 msgid "Default Favorite"
 msgstr "Default Favorite"
 
-#: Preference.php:82
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "The default favorite which is loaded on Tasks startup"
 
-#: Preference.php:85
 msgid "Default Task List"
 msgstr "Default Task List"
 
-#: Preference.php:86
 msgid "The default task list to create new tasks in."
 msgstr "The default task list to create new tasks in."
 
-#: Preference.php:89
 msgid "Enable Standard Alarm"
 msgstr "Enable Standard Alarm"
 
-#: Preference.php:90
 msgid "New task get a standard alarm as defined below"
 msgstr "New task get a standard alarm as defined below"
 
-#: Preference.php:93
 msgid "Standard Alarm Time"
 msgstr "Standard Alarm Time"
 
-#: Preference.php:94
 msgid "Minutes before the task ends"
 msgstr "Minutes before the task ends"
 
-#: Preference.php:97
 msgid "Task Title Template"
 msgstr "Task Title Template"
 
-#: Preference.php:98
 msgid "How to build task titles."
 msgstr "How to build task titles."
 
-#: js/TasksDueFilter.js:27
 msgid "Filter: To be done for"
 msgstr "Filter: To be done for"
 
-#: js/TasksDueFilter.js:28
 msgid "Show all tasks matching all the following criteria:"
 msgstr "Show all tasks matching all the following criteria:"
 
-#: js/TasksDueFilter.js:30
 msgid "Tasks has an open status."
 msgstr "Tasks has an open status."
 
-#: js/TasksDueFilter.js:31
 msgid "Filtered person is either:"
 msgstr "Filtered person is either:"
 
-#: js/TasksDueFilter.js:33
 msgid "Organizer and no coworker with open status is assigned."
 msgstr "Organizer and no coworker with open status is assigned."
 
-#: js/TasksDueFilter.js:34
 msgid "Organizer and the task is over due date, regardless of assigned coworkers."
 msgstr "Organizer and the task is over due date, regardless of assigned coworkers."
 
-#: js/TasksDueFilter.js:35
 msgid "Coworker with an open status assigned."
 msgstr "Coworker with an open status assigned."
 
-#: js/TasksDueFilter.js:39
 msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
 msgstr "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
 
-#: js/Models.js:75 js/TaskGridPanel.js:154 js/DependentTasksPanel.js:116
-#: js/TaskEditDialog.js:244 Model/Attendee.php:118 Model/Task.php:173
-#: Model/Task.php:398
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Status"
 msgstr[1] "Status"
 
-#: js/Tasks.js:42
 msgid "New Task"
 msgstr "New Task"
 
-#: js/CreateFromTemplateAction.js:53 js/CreateFromTemplateAction.js:73
 msgid "Create from Template"
 msgstr "Create from Template"
 
-#: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Do you really want to delete the selected task?"
 msgstr[1] "Do you really want to delete the selected tasks?"
 
-#: js/TaskGridPanel.js:84
 msgid "Tags"
 msgstr "Tags"
 
-#: js/TaskGridPanel.js:91 js/DependentTasksPanel.js:34 js/TaskEditDialog.js:197
-#: Model/Task.php:139
 msgid "Summary"
 msgstr "Summary"
 
-#: js/TaskGridPanel.js:97 js/DependentTasksPanel.js:39
 msgid "Add a task..."
 msgstr "Add a task..."
 
-#: js/TaskGridPanel.js:104 js/DependentTasksPanel.js:66
 msgid "Due Date"
 msgstr "Due Date"
 
-#: js/TaskGridPanel.js:116 js/DependentTasksPanel.js:80
-#: js/TaskEditDialog.js:213 Model/Task.php:159 Model/Task.php:397
 msgid "Priority"
 msgstr "Priority"
 
-#: js/TaskGridPanel.js:129 js/DependentTasksPanel.js:96 Model/Task.php:271
 msgid "Depends on"
 msgstr "Depends on"
 
-#: js/TaskGridPanel.js:143 js/DependentTasksPanel.js:102 Model/Task.php:166
-#: Model/Task.php:399
 msgid "Percent"
 msgstr "Percent"
 
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:253 Config.php:68
-#: Config.php:112 Model/Task.php:204
 msgid "Completed"
 msgstr "Completed"
 
-#: js/TaskGridPanel.js:176 js/TaskEditDialog.js:221 Model/Task.php:180
 msgid "Organizer / Responsible"
 msgstr "Organizer / Responsible"
 
-#: js/DependentTasksPanel.js:133
 msgid "Responsible"
 msgstr "Responsible"
 
-#: js/DependentTasksPanel.js:159
 msgid "My open tasks"
 msgstr "My open tasks"
 
-#: js/DependencyPanel.js:17
 msgid "Use show all button bellow to search for all tasks"
 msgstr "Use show all button bellow to search for all tasks"
 
-#: js/DependencyPanel.js:35
 msgid "Show all"
 msgstr "Show all"
 
-#: js/DependencyPanel.js:77
 msgid "Invalid selection"
 msgstr "Invalid selection"
 
-#: js/DependencyPanel.js:77
 msgid "A task cannot depend on itself"
 msgstr "A task cannot depend on itself"
 
-#: js/TaskEditDialog.js:87
 msgid "Add New Task"
 msgstr "Add New Task"
 
-#: js/TaskEditDialog.js:92
 msgid "This Task is part of:"
 msgstr "This Task is part of:"
 
-#: js/TaskEditDialog.js:144
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr "You have to supply a due date, because an alarm ist set!"
 
-#: js/TaskEditDialog.js:204
 msgid "Due date"
 msgstr "Due date"
 
-#: js/TaskEditDialog.js:222
 msgid "Add Responsible ..."
 msgstr "Add Responsible ..."
 
-#: js/TaskEditDialog.js:230
 msgid "Notes"
 msgstr "Notes"
 
-#: js/TaskEditDialog.js:231
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: js/TaskEditDialog.js:237
 msgid "Percentage"
 msgstr "Percentage"
 
-#: js/TaskEditDialog.js:296
 msgid "Attention: This due date is in the past!"
 msgstr "Attention: This due date is in the past!"
 
-#: Setup/Update/17.php:76 Setup/Initialize.php:48
 msgid "My responsibility"
 msgstr "My responsibility"
 
-#: Setup/Update/17.php:77 Setup/Update/17.php:85 Setup/Initialize.php:49
-#: Setup/Initialize.php:57
 msgid "All tasks that I am responsible for"
 msgstr "All tasks that I am responsible for"
 
-#: Setup/Update/17.php:84 Setup/Initialize.php:56
 msgid "All tasks for me"
 msgstr "All tasks for me"
 
-#: Setup/Update/17.php:93 Setup/Initialize.php:65
 msgid "To be done for me this week"
 msgstr "To be done for me this week"
 
-#: Setup/setup.xml:3
 msgid "Tasks"
 msgstr "Tasks"
 
-#: Setup/Initialize.php:40
 msgid "All tasks of my taskslists"
 msgstr "All tasks of my taskslists"
 
-#: Setup/Initialize.php:73
 msgid "Last modified by me"
 msgstr "Last modified by me"
 
-#: Setup/Initialize.php:74
 msgid "All tasks that I have last modified"
 msgstr "All tasks that I have last modified"
 
-#: Setup/Initialize.php:83
 msgid "Tasks without responsible"
 msgstr "Tasks without responsible"
 
-#: Config.php:55
 msgid "Tasks status available"
 msgstr "Tasks status available"
 
-#: Config.php:57
 msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation."
 msgstr "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation."
 
-#: Config.php:66 Config.php:106
 msgid "No response"
 msgstr "No response"
 
-#: Config.php:70
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: Config.php:72 Config.php:111
 msgid "In process"
 msgstr "In process"
 
-#: Config.php:78
 msgid "Task priorities available"
 msgstr "Task priorities available"
 
-#: Config.php:80
 msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
 msgstr "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
 
-#: Config.php:87
 msgid "low"
 msgstr "low"
 
-#: Config.php:88
 msgid "normal"
 msgstr "normal"
 
-#: Config.php:89
 msgid "high"
 msgstr "high"
 
-#: Config.php:90
 msgid "urgent"
 msgstr "urgent"
 
-#: Config.php:96
 msgid "Collaborator Status Available"
 msgstr "Collaborator Status Available"
 
-#: Config.php:98
 msgid "Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation."
 msgstr "Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation."
 
-#: Config.php:107
 msgid "Accepted"
 msgstr "Accepted"
 
-#: Config.php:108
 msgid "Declined"
 msgstr "Declined"
 
-#: Config.php:109
 msgid "Tentative"
 msgstr "Tentative"
 
-#: Config.php:110
 msgid "Delegated"
 msgstr "Delegated"
 
-#: Config.php:118
 msgid "Tasks Template Container"
 msgstr "Tasks Template Container"
 
-#: Config.php:119
 msgid "Container for task templates"
 msgstr "Container for task templates"
 
-#: Controller/Task.php:280
 msgid "Notification for Task %1$s"
 msgstr "Notification for Task %1$s"
 
-#: Model/TaskDependency.php:39
 msgid "GENDER_Task Dependency"
 msgstr "GENDER_Task Dependency"
 
-#: Model/TaskDependency.php:40
 msgid "Task Dependency"
 msgid_plural "Task Dependencies"
 msgstr[0] "Task Dependency"
 msgstr[1] "Task Dependencies"
 
-#: Model/TaskDependency.php:83 Model/Attendee.php:106 Model/Task.php:54
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Task"
 msgstr[1] "Tasks"
 
-#: Model/TaskDependency.php:100
 msgid "Depends on Task"
 msgstr "Depends on Task"
 
-#: Model/Attendee.php:56
 msgid "GENDER_Collaborator"
 msgstr "GENDER_Collaborator"
 
-#: Model/Attendee.php:57 Model/Attendee.php:95
 msgid "Collaborator"
 msgid_plural "Collaborators"
 msgstr[0] "Collaborator"
 msgstr[1] "Collaborators"
 
-#: Model/Task.php:53
 msgid "GENDER_Task"
 msgstr "GENDER_Task"
 
-#: Model/Task.php:130
 msgid "To be done for"
 msgstr "To be done for"
 
-#: Model/Task.php:146 Model/Task.php:396
 msgid "Description"
 msgstr "Description"
 
-#: Model/Task.php:153 Model/Task.php:394
 msgid "Due"
 msgstr "Due"
 
-#: Model/Task.php:195
 msgid "Class"
 msgstr "Class"
 
-#: Model/Task.php:211
 msgid "Geo"
 msgstr "Geo"
 
-#: Model/Task.php:218
 msgid "Location"
 msgstr "Location"
 
-#: Model/Task.php:250
 msgid "Source"
 msgstr "Source"
 
-#: Model/Task.php:284
 msgid "Dependent Tasks"
 msgstr "Dependent Tasks"
 
-#: Model/Task.php:297
 msgid "Collaborators"
 msgstr "Collaborators"
 
-#: Model/Task.php:307
 msgid "Estimated Duration"
 msgstr "Estimated Duration"
 
-#: Model/Task.php:395
 msgid "Organizer"
 msgstr "Organizer"
 
-#: Model/Task.php:419
 msgid "Lead"
 msgstr "Lead"
 
-#: Model/Task.php:425
 msgid "Telephone"
 msgstr "Telephone"
 
-#: Model/Task.php:427
 msgid "Email"
 msgstr "Email"
 
-#: Export/definitions/tasks_xls.xml:5
 msgid "Excel all data"
 msgstr "Excel all data"
 
-#: Acl/Rights.php:97
 msgid "manage shared task lists"
 msgstr "manage shared task lists"
 
-#: Acl/Rights.php:98
 msgid "Create new shared tasks lists"
 msgstr "Create new shared tasks lists"
 
-#: Acl/Rights.php:101
 msgid "manage shared tasks favorites"
 msgstr "manage shared tasks favorites"
 
-#: Acl/Rights.php:102
 msgid "Create or update shared tasks favorites"
 msgstr "Create or update shared tasks favorites"

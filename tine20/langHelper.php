@@ -168,9 +168,6 @@ if ($opts->txmerge) {
     txMerge($opts);
 }
 
-if ($opts->txconf) {
-    generateTxConfig($opts);
-}
 /**
  * returns list of existing langugages
  * (those, having a correspoinding Tinebase po file)
@@ -362,7 +359,7 @@ function potmerge($opts)
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $opts->v);
         $enHeader = file_get_contents("$translationPath/en.po");
         `cd "$translationPath"
-         msgen template.pot > en.po $msgDebug`;
+         msgen --no-wrap template.pot > en.po $msgDebug`;
          
         foreach ($langs as $langCode) {
             
