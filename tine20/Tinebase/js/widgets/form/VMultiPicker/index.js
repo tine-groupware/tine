@@ -58,15 +58,15 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         const { reactive } = window.vue
         this.vueEventBus = window.mitt()
         this.injectKey = 'injectKey'+this.id
-        if (_.isArray(this.value)) {
-            this.setValue(this.value)
-        }
         this.props = reactive({
             injectKey: this.injectKey,
             records: this.records,
             emptyText: this.emptyText,
             recordRenderer: this.recordRenderer
         })
+        if (_.isArray(this.value)) {
+            this.setValue(this.value)
+        }
         Tine.Tinebase.widgets.form.VMultiPicker.superclass.initComponent.call(this)
     },
 
@@ -159,8 +159,11 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     },
 
     addRecord: async function(record) {
+        // NOTE: getValue get's overwritten e.g. in filterToolbar
+        const getValue = _.bind(Tine.Tinebase.widgets.form.VMultiPicker.prototype.getValue, this)
+
         if ( record === "" ) return
-        const oldValue = JSON.stringify(this.getValue())
+        const oldValue = JSON.stringify(getValue())
 
         let records;
         if ( this.props ) {
@@ -176,7 +179,8 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         this.fireAsyncEvent('beforeselect', this, record).then(() => {
             records.set(record.getId(), record)
 
-            const newValue = JSON.stringify(this.getValue())
+            this.value = getValue()
+            const newValue = JSON.stringify(this.value)
             if (newValue !== oldValue) {
                 // NOTE: with stringify and parse we get rid of the proxies
                 this.fireEvent('select', this, record)
