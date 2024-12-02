@@ -4,6 +4,7 @@ translations doku
 [Transifex Projekt](https://app.transifex.com/tine/groupware/dashboard/)
 
 Überblick
+
 - Im Quellcode gehen die englischen strings durch die übersetzungsfunktionen `_('en text')`, `ngettext('singular en text', 'plural en text', n)`, `formatMessage('...')` (js only), `translate('...)` (templates)
 - Mittels `langHelper -u` werden diese strings aus den sourcen extrahiert und in die po/pot files aufgenommen
 - Die strings sollten nicht per Hand in die po files zugefügt werden. Lieber `./console src:langHelper -- '-u --app Calendar -l de'` für eine app/sprache
@@ -15,6 +16,7 @@ translations doku
   - `./console src:langHelper -- '-u -l de'` (Zeilennummern wieder entfernen)
 
 Was wird übersetzt?
+
 - Alle Apps aus `tine-groupware` übersetzen wir:
   - Die erste hälfte des Releases `current-stable`
   - Die zweite hälfte `next` bzw `main`
