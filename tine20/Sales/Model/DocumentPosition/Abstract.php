@@ -639,7 +639,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
      */
     public function computePrice(bool $onlyProductType = true): void
     {
-        if ($onlyProductType && self::POS_TYPE_PRODUCT !== $this->{self::FLD_TYPE}) {
+        if ($onlyProductType && $this->{self::FLD_TYPE} && self::POS_TYPE_PRODUCT !== $this->{self::FLD_TYPE}) {
             return;
         }
         $this->{self::FLD_POSITION_PRICE} = is_null($this->{self::FLD_UNIT_PRICE}) || is_null($this->{self::FLD_QUANTITY}) ? null
