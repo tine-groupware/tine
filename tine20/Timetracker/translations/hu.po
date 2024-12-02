@@ -8,35 +8,110 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Tamás Faragó <>, 2012\n"
 "Language-Team: Hungarian (http://app.transifex.com/tine/groupware/language/hu/)\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
-msgstr "Munkaidő nyílvántartások ODS exportálásának beállítása"
+msgid "Manage timeaccounts"
+msgstr "Időazonosítók kezelése"
 
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Használd ezt a beállítást a munkaidő nyílvántartás ODS exportálására."
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Időazonosítók hozzáadása, szerkesztése és törlése (beleértve minden munkaidő nyilvántartási jogot)"
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Add timeaccounts"
+msgstr "Időazonosító hozzáadása"
+
+msgid "Manage shared timeaccount favorites"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Create or update shared timeaccount favorites"
 msgstr ""
 
-msgid "default"
-msgstr "alapértelmezett"
-
-msgid "Bookmark Timeaccount"
+msgid "Manage shared timesheet favorites"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "Create or update shared timesheet favorites"
 msgstr ""
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Timetracker Application."
+msgstr ""
+
+msgid "Timeaccount Bookmarks"
+msgstr ""
+
+msgid "none"
+msgstr "semmi"
+
+msgid "last week"
+msgstr "múlt hét"
+
+msgid "not yet billed"
+msgstr "még nem számlázott"
+
+msgid "status to bill"
+msgstr ""
+
+msgid "billed"
+msgstr "számlázott"
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr ""
+
+msgid "to bill"
+msgstr "számlázni"
+
+msgid "Contract"
+msgstr ""
+
+msgid "without contract"
+msgstr ""
+
+msgid "Unit"
+msgstr "Egység"
+
+msgid "Unit Price"
+msgstr "Egységár"
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
+msgstr "Állapot"
 
 msgid "closed"
 msgstr "zárt"
@@ -44,17 +119,70 @@ msgstr "zárt"
 msgid "open"
 msgstr "nyitott"
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Responsible Person"
 msgstr ""
+
+msgid "Timesheets are billable"
+msgstr "Munkaidő nyílvántartás számlázható"
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Időazonosító"
+msgstr[1] "Időazonosítók"
+
+msgid "Number"
+msgstr "Szám"
+
+msgid "Title"
+msgstr "Cím"
+
+msgid "Description"
+msgstr "Leírás"
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
+msgstr "Lezártak mutatása"
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
 msgstr ""
+
+msgid "Time Account - Status"
+msgstr "Időazonosító - Állapot"
 
 msgid "End Time Change"
 msgstr ""
@@ -79,9 +207,6 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
@@ -89,9 +214,6 @@ msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Description"
-msgstr "Leírás"
 
 msgid "Failed"
 msgstr "Hibás"
@@ -111,21 +233,6 @@ msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
-
-msgid "Time Account - Status"
-msgstr "Időazonosító - Állapot"
-
-msgid "Time Account - Billed"
-msgstr ""
-
-msgid "not yet billed"
-msgstr "még nem számlázott"
-
-msgid "to bill"
-msgstr "számlázni"
-
-msgid "billed"
-msgstr "számlázott"
 
 msgid "Workingtime:"
 msgstr ""
@@ -175,137 +282,6 @@ msgstr "Exportálás CSV-be"
 
 msgid "Export as ..."
 msgstr "Exportálás másként ..."
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr ""
-
-msgid "without contract"
-msgstr ""
-
-msgid "Show closed"
-msgstr "Lezártak mutatása"
-
-msgid "Unit"
-msgstr "Egység"
-
-msgid "Unit Price"
-msgstr "Egységár"
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr "Állapot"
-
-msgid "Cleared at"
-msgstr ""
-
-msgid "Responsible Person"
-msgstr ""
-
-msgid "Timesheets are billable"
-msgstr "Munkaidő nyílvántartás számlázható"
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Időazonosító"
-msgstr[1] "Időazonosítók"
-
-msgid "Number"
-msgstr "Szám"
-
-msgid "Title"
-msgstr "Cím"
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr "Munkaidő-követés"
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr "Mai munkaidőm"
-
-msgid "My Timesheets this week"
-msgstr "Heti munkaidőm"
-
-msgid "My Timesheets last week"
-msgstr "Múlt heti munkaidőm"
-
-msgid "My Timesheets this month"
-msgstr "Havi munkaidőm"
-
-msgid "My Timesheets last month"
-msgstr "Múlt havi munkaidőm"
-
-msgid "Timeaccounts to bill"
-msgstr "Számlázandó időazonosítók"
-
-msgid "Timeaccounts not yet billed"
-msgstr "Még nem számlázott időazonosítók"
-
-msgid "Timeaccounts already billed"
-msgstr "Kiszámlázott időazonosítók"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr "semmi"
-
-msgid "last week"
-msgstr "múlt hét"
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr ""
 
 msgid "Read Own"
 msgstr ""
@@ -421,23 +397,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "Időazonosítók kezelése"
+msgid "Timesheets ODS export configuration"
+msgstr "Munkaidő nyílvántartások ODS exportálásának beállítása"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Időazonosítók hozzáadása, szerkesztése és törlése (beleértve minden munkaidő nyilvántartási jogot)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Használd ezt a beállítást a munkaidő nyílvántartás ODS exportálására."
 
-msgid "Add timeaccounts"
-msgstr "Időazonosító hozzáadása"
-
-msgid "Manage shared timeaccount favorites"
+msgid "A Tag which is available in context menu for fast assignment"
 msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
 msgstr ""
 
-msgid "Manage shared timesheet favorites"
+msgid "default"
+msgstr "alapértelmezett"
+
+msgid "Requested Timesheets"
 msgstr ""
 
-msgid "Create or update shared timesheet favorites"
-msgstr ""
+msgid "My Timesheets today"
+msgstr "Mai munkaidőm"
+
+msgid "My Timesheets this week"
+msgstr "Heti munkaidőm"
+
+msgid "My Timesheets last week"
+msgstr "Múlt heti munkaidőm"
+
+msgid "My Timesheets this month"
+msgstr "Havi munkaidőm"
+
+msgid "My Timesheets last month"
+msgstr "Múlt havi munkaidőm"
+
+msgid "Timeaccounts to bill"
+msgstr "Számlázandó időazonosítók"
+
+msgid "Timeaccounts not yet billed"
+msgstr "Még nem számlázott időazonosítók"
+
+msgid "Timeaccounts already billed"
+msgstr "Kiszámlázott időazonosítók"
+
+msgid "Timetracker"
+msgstr "Munkaidő-követés"

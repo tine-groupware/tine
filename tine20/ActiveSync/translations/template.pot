@@ -13,25 +13,90 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Default Address book"
+msgid "Manage ActiveSync devices"
 msgstr ""
 
-msgid "The default address book to create new contacts in."
+msgid "See, edit and delete ActiveSync devices"
 msgstr ""
 
-msgid "Default Calendar"
+msgid "Reset ActiveSync devices"
 msgstr ""
 
-msgid "The default calendar to create new events in."
+msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
 
-msgid "Default Task List"
+msgid "Default policy for new devices"
 msgstr ""
 
-msgid "The default task list to create new tasks in."
+msgid "Enter the id of the policy to apply to newly created devices."
+msgstr ""
+
+msgid "Device Model Agent Deny List"
+msgstr ""
+
+msgid "Array of regular expressions of Device-Model strings"
+msgstr ""
+
+msgid "User Agent Deny List"
+msgstr ""
+
+msgid "Array of regular expressions of User-Agent strings"
+msgstr ""
+
+msgid "Disable Remote Reset Action"
+msgstr ""
+
+msgid "Disable Remote Reset Action AdminPanel"
+msgstr ""
+
+msgid "Disable Access Log"
+msgstr ""
+
+msgid "Disable ActiveSync Access Log creation."
+msgstr ""
+
+msgid "Filter timeslot for e-mails"
+msgstr ""
+
+msgid "For how long in the past the e-mails should be synchronized."
+msgstr ""
+
+msgid "Filter timeslot for events"
+msgstr ""
+
+msgid "For how long in the past the events should be synchronized."
+msgstr ""
+
+msgid "%1$s ActiveSync failure"
 msgstr ""
 
 msgid "Sync Devices"
+msgstr ""
+
+msgid "Active Sync"
+msgstr ""
+
+msgid "Select a Device"
+msgstr ""
+
+msgid "No ActiveSync Device registered"
+msgstr ""
+
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr ""
+
+msgid "Resetted Sync Filter"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr ""
+
+msgid "resetted"
+msgstr ""
+
+msgid "Set Sync Filter"
 msgstr ""
 
 msgid "Device ID"
@@ -70,43 +135,12 @@ msgstr ""
 msgid "Phonenumber"
 msgstr ""
 
-msgid "Sync Device"
-msgid_plural "Sync Devices"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Devices"
-msgstr ""
-
-msgid "Active Sync"
-msgstr ""
-
-msgid "Select a Device"
-msgstr ""
-
-msgid "No ActiveSync Device registered"
-msgstr ""
-
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr ""
-
-msgid "Resetted Sync Filter"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
-
-msgid "resetted"
-msgstr ""
-
-msgid "Set Sync Filter"
 msgstr ""
 
 msgid "ID"
@@ -160,55 +194,33 @@ msgstr ""
 msgid "Quicksearch"
 msgstr ""
 
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Default Address book"
+msgstr ""
+
+msgid "The default address book to create new contacts in."
+msgstr ""
+
+msgid "Default Calendar"
+msgstr ""
+
+msgid "The default calendar to create new events in."
+msgstr ""
+
+msgid "Default Task List"
+msgstr ""
+
+msgid "The default task list to create new tasks in."
+msgstr ""
+
 msgid "Default Policy"
 msgstr ""
 
 msgid "Default Policy installed during setup"
-msgstr ""
-
-msgid "Default policy for new devices"
-msgstr ""
-
-msgid "Enter the id of the policy to apply to newly created devices."
-msgstr ""
-
-msgid "Device Model Agent Deny List"
-msgstr ""
-
-msgid "Array of regular expressions of Device-Model strings"
-msgstr ""
-
-msgid "User Agent Deny List"
-msgstr ""
-
-msgid "Array of regular expressions of User-Agent strings"
-msgstr ""
-
-msgid "Disable Remote Reset Action"
-msgstr ""
-
-msgid "Disable Remote Reset Action AdminPanel"
-msgstr ""
-
-msgid "Disable Access Log"
-msgstr ""
-
-msgid "Disable ActiveSync Access Log creation."
-msgstr ""
-
-msgid "Filter timeslot for e-mails"
-msgstr ""
-
-msgid "For how long in the past the e-mails should be synchronized."
-msgstr ""
-
-msgid "Filter timeslot for events"
-msgstr ""
-
-msgid "For how long in the past the events should be synchronized."
-msgstr ""
-
-msgid "%1$s ActiveSync failure"
 msgstr ""
 
 msgid "Dear user,"
@@ -221,16 +233,4 @@ msgid "Thank you."
 msgstr ""
 
 msgid "Your %1$s Team"
-msgstr ""
-
-msgid "Manage ActiveSync devices"
-msgstr ""
-
-msgid "See, edit and delete ActiveSync devices"
-msgstr ""
-
-msgid "Reset ActiveSync devices"
-msgstr ""
-
-msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""

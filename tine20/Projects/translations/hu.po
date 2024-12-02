@@ -8,98 +8,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Tamás Faragó <>, 2012\n"
 "Language-Team: Hungarian (http://app.transifex.com/tine/groupware/language/hu/)\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Minden projektem"
-
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Alapértelmezett kedvenc, amely a Projekt indulásakor betöltődik"
-
-msgid "Attendee"
-msgstr "Résztvevő"
-
-msgid "Role"
-msgstr "Szerep"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projektek"
-
-msgid "Title"
-msgstr "Cím"
-
-msgid "Number"
-msgstr "Szám"
-
-msgid "Status"
-msgstr "Státusz"
-
-msgid "Start"
+msgid "Manage shared project favorites"
 msgstr ""
 
-msgid "End"
+msgid "Create new shared project favorites"
 msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "Leírás"
-
-msgid "Enter description"
-msgstr "Leírás megadása"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Kérlek válaszd ki a Projektet a kapcsolat hozzáadásához"
-
-msgid "Please select the attenders' role"
-msgstr "Kérlek válaszd ki a résztvevők szerepét"
-
-msgid "Select Project"
-msgstr "Projekt kiválasztás"
-
-msgid "Select Role"
-msgstr "Szerep kiválasztás"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "{0} résztvevő hozzáadása a projekthez"
-
-msgid "Attendee Role"
-msgstr "Résztvevő szerep"
-
-msgid "Projects"
-msgstr "Projektek"
-
-msgid "All my open projects"
-msgstr "Minden nyitott projektjeim"
-
-msgid "My projects that I'm responsible for"
-msgstr "Projektjeim amikért felelős vagyok"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Minden nyitott projektem, amikért felelős vagyok"
-
-msgid "My waiting projects"
-msgstr "Várakozó projektjeim"
-
-msgid "My projects that are on hold"
-msgstr "Tartásban lévő projektjeim"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -152,6 +74,69 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projektek"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Kérlek válaszd ki a Projektet a kapcsolat hozzáadásához"
+
+msgid "Please select the attenders' role"
+msgstr "Kérlek válaszd ki a résztvevők szerepét"
+
+msgid "Select Project"
+msgstr "Projekt kiválasztás"
+
+msgid "Role"
+msgstr "Szerep"
+
+msgid "Select Role"
+msgstr "Szerep kiválasztás"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "{0} résztvevő hozzáadása a projekthez"
+
+msgid "Attendee"
+msgstr "Résztvevő"
+
+msgid "Attendee Role"
+msgstr "Résztvevő szerep"
+
+msgid "Title"
+msgstr "Cím"
+
+msgid "Number"
+msgstr "Szám"
+
+msgid "Status"
+msgstr "Státusz"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "Leírás"
+
+msgid "Enter description"
+msgstr "Leírás megadása"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Projekt lista"
@@ -163,14 +148,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "Minden projektem"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
 
-msgid "Manage shared project favorites"
-msgstr ""
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Alapértelmezett kedvenc, amely a Projekt indulásakor betöltődik"
 
-msgid "Create new shared project favorites"
-msgstr ""
+msgid "All my open projects"
+msgstr "Minden nyitott projektjeim"
+
+msgid "My projects that I'm responsible for"
+msgstr "Projektjeim amikért felelős vagyok"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Minden nyitott projektem, amikért felelős vagyok"
+
+msgid "My waiting projects"
+msgstr "Várakozó projektjeim"
+
+msgid "My projects that are on hold"
+msgstr "Tartásban lévő projektjeim"
+
+msgid "Projects"
+msgstr "Projektek"

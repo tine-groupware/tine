@@ -18,238 +18,180 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-msgid "All courses"
-msgstr "Tutti i corsi"
+msgid "Add new user"
+msgstr "Aggiungi nuovo utente"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Il preferito di default che viene caricato all'avvio delle Classi"
+msgid "Add new user as member to a course"
+msgstr "Aggiungi nuovo utente come membro di un corso"
 
-#: js/Models.js:43 js/CourseEditDialog.js:215 Controller/Course.php:105
+msgid "Add existing user"
+msgstr "Aggiungi utente esistente"
+
+msgid "Add existing user as member to a course"
+msgstr "Aggiungi utente esistente come membro di un corso"
+
+msgid "Manage shared courses favorites"
+msgstr ""
+
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+msgid "Set additional memberships"
+msgstr ""
+
+msgid "Set additional course member group memberships"
+msgstr ""
+
+msgid "Additional Group Memberships"
+msgstr ""
+
+msgid "Array of IDs of Groups students can be members of"
+msgstr ""
+
+msgid "Internet Access"
+msgstr "Accesso Internet"
+
+msgid "Internet access options."
+msgstr "Opzioni accesso internet."
+
+msgid "On"
+msgstr "Attivo"
+
+msgid "Off"
+msgstr "Inattivo"
+
+msgid "Filtered"
+msgstr "Filtrato"
+
+msgid "Internet Access Group (ON)"
+msgstr "Gruppo Accesso Internet (ATTIVO)"
+
+msgid "Internet Access Group (FILTERED)"
+msgstr "Gruppo Accesso Internet (FILTRATO)"
+
+msgid "Students Group"
+msgstr "Gruppo Studenti"
+
+msgid "Students Import Definition"
+msgstr "Definizione Importazione Studenti"
+
+msgid "Students login name prefix"
+msgstr "Prefisso del nome di login degli studenti"
+
+msgid "Students password suffix"
+msgstr ""
+
+msgid "Teacher password"
+msgstr ""
+
+msgid "Student username schema"
+msgstr ""
+
+msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
+msgstr ""
+
+msgid "Samba user settings"
+msgstr "Impostazioni Utente Samba "
+
+msgid "Default department"
+msgstr ""
+
+msgid "The default department for new Courses"
+msgstr ""
+
+msgid "Course -> Department Mapping"
+msgstr ""
+
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Corso"
 msgstr[1] "Corsi"
 
-#: js/Models.js:67
-msgid "Quick Search"
-msgstr "Ricerca veloce"
+msgid "Teacher"
+msgstr "Insegnante"
 
-#: js/Models.js:68 js/CourseGridPanel.js:43
+msgid "Teacher Account"
+msgstr "Account Insegnante"
+
+msgid "My course"
+msgstr "Mio corso"
+
+msgid "First Name"
+msgstr "Nome"
+
+msgid "Last Name"
+msgstr "Cognome"
+
+msgid "Add new member to course"
+msgstr "Aggiungi nuovo utente ad un corso"
+
+msgid "Errors"
+msgstr "Errori"
+
+msgid "Please fix the errors noted."
+msgstr "Si prega di correggere gli errori rilevati."
+
+msgid "Import course members"
+msgstr "Importa membri del corso"
+
+msgid "Add new member"
+msgstr "Aggiungi nuovo membro"
+
+msgid "Course Name"
+msgstr "Nome Corso"
+
+msgid "Course / School Type"
+msgstr "Corso / Tipo Corso"
+
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Members"
+msgstr "Membri"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "unknown"
+msgstr "sconosciuto"
+
+msgid "Reset Password"
+msgstr "Ripristina Password"
+
+msgid "Please enter the new Password."
+msgstr ""
+
 msgid "Name"
 msgstr "Nome"
 
-#: js/Models.js:70 js/CourseEditDialog.js:254 Config.php:124
-msgid "Internet Access"
-msgstr "Accesso Internet"
+msgid "Type"
+msgstr "Tipo"
 
-#: js/Models.js:105
+msgid "Failed"
+msgstr "Fallito"
+
+msgid "Some error occured while trying to update the courses."
+msgstr "Si sono verificati alcuni errori durante il tentativo di aggiornare i corsi."
+
+msgid "Quick Search"
+msgstr "Ricerca veloce"
+
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Tipo di Corso"
 msgstr[1] "Tipi di Corsi"
 
-#: js/CourseEditDialog.js:40
-msgid "Import course members"
-msgstr "Importa membri del corso"
+msgid "All courses"
+msgstr "Tutti i corsi"
 
-#: js/CourseEditDialog.js:49
-msgid "Add new member"
-msgstr "Aggiungi nuovo membro"
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Il preferito di default che viene caricato all'avvio delle Classi"
 
-#: js/CourseEditDialog.js:231
-msgid "Course Name"
-msgstr "Nome Corso"
-
-#: js/CourseEditDialog.js:238
-msgid "Course / School Type"
-msgstr "Corso / Tipo Corso"
-
-#: js/CourseEditDialog.js:248
-msgid "Description"
-msgstr "Descrizione"
-
-#: js/CourseEditDialog.js:283
-msgid "Members"
-msgstr "Membri"
-
-#: js/CourseEditDialog.js:312
-msgid "Login"
-msgstr "Login"
-
-#: js/CourseEditDialog.js:315
-msgid "unknown"
-msgstr "sconosciuto"
-
-#: js/CourseEditDialog.js:339
-msgid "Reset Password"
-msgstr "Ripristina Password"
-
-#: js/CourseEditDialog.js:359
-msgid "Please enter the new Password."
-msgstr ""
-
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Nome"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Cognome"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Aggiungi nuovo utente ad un corso"
-
-#: js/AddMemberDialog.js:121
-msgid "Errors"
-msgstr "Errori"
-
-#: js/AddMemberDialog.js:121
-msgid "Please fix the errors noted."
-msgstr "Si prega di correggere gli errori rilevati."
-
-#: js/CourseGridPanel.js:44
-msgid "Type"
-msgstr "Tipo"
-
-#: js/CourseGridPanel.js:85
-msgid "Failed"
-msgstr "Fallito"
-
-#: js/CourseGridPanel.js:86
-msgid "Some error occured while trying to update the courses."
-msgstr "Si sono verificati alcuni errori durante il tentativo di aggiornare i corsi."
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Corsi"
-
-#: Setup/Initialize.php:57
 msgid "School"
 msgstr ""
 
-#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""
 
-#: Config.php:114
-msgid "Additional Group Memberships"
-msgstr ""
-
-#: Config.php:116
-msgid "Array of IDs of Groups students can be members of"
-msgstr ""
-
-#: Config.php:126
-msgid "Internet access options."
-msgstr "Opzioni accesso internet."
-
-#: Config.php:133
-msgid "On"
-msgstr "Attivo"
-
-#: Config.php:134
-msgid "Off"
-msgstr "Inattivo"
-
-#: Config.php:135
-msgid "Filtered"
-msgstr "Filtrato"
-
-#: Config.php:140 Config.php:142
-msgid "Internet Access Group (ON)"
-msgstr "Gruppo Accesso Internet (ATTIVO)"
-
-#: Config.php:148 Config.php:150
-msgid "Internet Access Group (FILTERED)"
-msgstr "Gruppo Accesso Internet (FILTRATO)"
-
-#: Config.php:156 Config.php:158
-msgid "Students Group"
-msgstr "Gruppo Studenti"
-
-#: Config.php:164 Config.php:166
-msgid "Students Import Definition"
-msgstr "Definizione Importazione Studenti"
-
-#: Config.php:172
-msgid "Students login name prefix"
-msgstr "Prefisso del nome di login degli studenti"
-
-#: Config.php:179
-msgid "Students password suffix"
-msgstr ""
-
-#: Config.php:186
-msgid "Teacher password"
-msgstr ""
-
-#: Config.php:203
-msgid "Student username schema"
-msgstr ""
-
-#: Config.php:205
-msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
-msgstr ""
-
-#: Config.php:212 Config.php:214
-msgid "Samba user settings"
-msgstr "Impostazioni Utente Samba "
-
-#: Config.php:223
-msgid "Default department"
-msgstr ""
-
-#: Config.php:225
-msgid "The default department for new Courses"
-msgstr ""
-
-#: Config.php:233 Config.php:235
-msgid "Course -> Department Mapping"
-msgstr ""
-
-#: Controller/Course.php:340 Controller/Course.php:385
-msgid "Teacher"
-msgstr "Insegnante"
-
-#: Controller/Course.php:341
-msgid "Teacher Account"
-msgstr "Account Insegnante"
-
-#: Controller/Course.php:406
-msgid "My course"
-msgstr "Mio corso"
-
-#: Acl/Rights.php:116
-msgid "Add new user"
-msgstr "Aggiungi nuovo utente"
-
-#: Acl/Rights.php:117
-msgid "Add new user as member to a course"
-msgstr "Aggiungi nuovo utente come membro di un corso"
-
-#: Acl/Rights.php:120
-msgid "Add existing user"
-msgstr "Aggiungi utente esistente"
-
-#: Acl/Rights.php:121
-msgid "Add existing user as member to a course"
-msgstr "Aggiungi utente esistente come membro di un corso"
-
-#: Acl/Rights.php:124
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:125
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:128
-msgid "Set additional memberships"
-msgstr ""
-
-#: Acl/Rights.php:129
-msgid "Set additional course member group memberships"
-msgstr ""
+msgid "Courses"
+msgstr "Corsi"

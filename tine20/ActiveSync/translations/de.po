@@ -23,26 +23,91 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Default Address book"
-msgstr "Standard-Adressbuch"
+msgid "Manage ActiveSync devices"
+msgstr "ActiveSync-Geräte verwalten"
 
-msgid "The default address book to create new contacts in."
-msgstr "Das Standard-Adressbuch für neue Kontakte."
+msgid "See, edit and delete ActiveSync devices"
+msgstr "ActiveSync-Geräte sehen, verwalten und löschen"
 
-msgid "Default Calendar"
-msgstr "Standard-Kalender"
+msgid "Reset ActiveSync devices"
+msgstr "ActiveSync-Geräte zurücksetzen"
 
-msgid "The default calendar to create new events in."
-msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
+msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
+msgstr "Zurücksetzen der ActiveSync-Geräte per Fernzugriff auf den Werkszustand (alle Daten werden gelöscht)"
 
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
+msgid "Default policy for new devices"
+msgstr "Standard-Richtlinie für neue Geräte"
 
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+msgid "Enter the id of the policy to apply to newly created devices."
+msgstr "Geben Sie die ID der Richtlinie für neue Geräte an."
+
+msgid "Device Model Agent Deny List"
+msgstr "Geräte-Modelle Sperr-Liste"
+
+msgid "Array of regular expressions of Device-Model strings"
+msgstr "Array mit regulären Ausdrücken für Geräte-Modelle"
+
+msgid "User Agent Deny List"
+msgstr "User Agents Sperr-Liste"
+
+msgid "Array of regular expressions of User-Agent strings"
+msgstr "Array mit regulären Ausdrücken für User-Agents"
+
+msgid "Disable Remote Reset Action"
+msgstr "Entferntes Löschen/Reseten deaktivieren"
+
+msgid "Disable Remote Reset Action AdminPanel"
+msgstr "Deaktiviere die „Entferntes Löschen“ Aktion im Admin Bereich"
+
+msgid "Disable Access Log"
+msgstr "Zugriffe nicht protokolieren"
+
+msgid "Disable ActiveSync Access Log creation."
+msgstr "Zugriffe per ActiveSync nicht im Zugriffslog speichern."
+
+msgid "Filter timeslot for e-mails"
+msgstr "Filter-Zeitpunkt für E-Mails"
+
+msgid "For how long in the past the e-mails should be synchronized."
+msgstr "Maximales Alter für E-Mails, die synchronisiert werden dürfen."
+
+msgid "Filter timeslot for events"
+msgstr "Maximales Alter für Termine"
+
+msgid "For how long in the past the events should be synchronized."
+msgstr "Maximales Alter für Termine, die synchronisiert werden dürfen."
+
+msgid "%1$s ActiveSync failure"
+msgstr "%1$s ActiveSync Fehler"
 
 msgid "Sync Devices"
 msgstr "Sync-Geräte"
+
+msgid "Active Sync"
+msgstr "ActiveSync"
+
+msgid "Select a Device"
+msgstr "Gerät auswählen"
+
+msgid "No ActiveSync Device registered"
+msgstr "Kein ActiveSync-Gerät verfügbar"
+
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Als {0} Filter setzen"
+
+msgid "Resetted Sync Filter"
+msgstr "Sync-Filter zurückgesetzt"
+
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
+
+msgid "resetted"
+msgstr "zurückgesetzt"
+
+msgid "Set Sync Filter"
+msgstr "Setze Sync-Filter"
 
 msgid "Device ID"
 msgstr "Geräte ID"
@@ -80,11 +145,6 @@ msgstr "OS Sprache"
 msgid "Phonenumber"
 msgstr "Telefonnummer"
 
-msgid "Sync Device"
-msgid_plural "Sync Devices"
-msgstr[0] "Sync-Gerät"
-msgstr[1] "Sync-Geräte"
-
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Gerät"
@@ -92,32 +152,6 @@ msgstr[1] "Geräte"
 
 msgid "Devices"
 msgstr "Geräte"
-
-msgid "Active Sync"
-msgstr "ActiveSync"
-
-msgid "Select a Device"
-msgstr "Gerät auswählen"
-
-msgid "No ActiveSync Device registered"
-msgstr "Kein ActiveSync-Gerät verfügbar"
-
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Als {0} Filter setzen"
-
-msgid "Resetted Sync Filter"
-msgstr "Sync-Filter zurückgesetzt"
-
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
-
-msgid "resetted"
-msgstr "zurückgesetzt"
-
-msgid "Set Sync Filter"
-msgstr "Setze Sync-Filter"
 
 msgid "ID"
 msgstr "ID"
@@ -170,56 +204,34 @@ msgstr "Möchten Sie die ausgewählten Geräte wirklich löschen? Alle persönli
 msgid "Quicksearch"
 msgstr "Schnellsuche"
 
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] "Sync-Gerät"
+msgstr[1] "Sync-Geräte"
+
+msgid "Default Address book"
+msgstr "Standard-Adressbuch"
+
+msgid "The default address book to create new contacts in."
+msgstr "Das Standard-Adressbuch für neue Kontakte."
+
+msgid "Default Calendar"
+msgstr "Standard-Kalender"
+
+msgid "The default calendar to create new events in."
+msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
+
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
 msgid "Default Policy"
 msgstr "Standardrichtlinie"
 
 msgid "Default Policy installed during setup"
 msgstr "Standard-Richtlinie aus dem Setup-Prozess"
-
-msgid "Default policy for new devices"
-msgstr "Standard-Richtlinie für neue Geräte"
-
-msgid "Enter the id of the policy to apply to newly created devices."
-msgstr "Geben Sie die ID der Richtlinie für neue Geräte an."
-
-msgid "Device Model Agent Deny List"
-msgstr "Geräte-Modelle Sperr-Liste"
-
-msgid "Array of regular expressions of Device-Model strings"
-msgstr "Array mit regulären Ausdrücken für Geräte-Modelle"
-
-msgid "User Agent Deny List"
-msgstr "User Agents Sperr-Liste"
-
-msgid "Array of regular expressions of User-Agent strings"
-msgstr "Array mit regulären Ausdrücken für User-Agents"
-
-msgid "Disable Remote Reset Action"
-msgstr "Entferntes Löschen/Reseten deaktivieren"
-
-msgid "Disable Remote Reset Action AdminPanel"
-msgstr "Deaktiviere die „Entferntes Löschen“ Aktion im Admin Bereich"
-
-msgid "Disable Access Log"
-msgstr "Zugriffe nicht protokolieren"
-
-msgid "Disable ActiveSync Access Log creation."
-msgstr "Zugriffe per ActiveSync nicht im Zugriffslog speichern."
-
-msgid "Filter timeslot for e-mails"
-msgstr "Filter-Zeitpunkt für E-Mails"
-
-msgid "For how long in the past the e-mails should be synchronized."
-msgstr "Maximales Alter für E-Mails, die synchronisiert werden dürfen."
-
-msgid "Filter timeslot for events"
-msgstr "Maximales Alter für Termine"
-
-msgid "For how long in the past the events should be synchronized."
-msgstr "Maximales Alter für Termine, die synchronisiert werden dürfen."
-
-msgid "%1$s ActiveSync failure"
-msgstr "%1$s ActiveSync Fehler"
 
 msgid "Dear user,"
 msgstr "Lieber Benutzer*in,"
@@ -232,15 +244,3 @@ msgstr "Vielen Dank."
 
 msgid "Your %1$s Team"
 msgstr "Dein %1$s Team"
-
-msgid "Manage ActiveSync devices"
-msgstr "ActiveSync-Geräte verwalten"
-
-msgid "See, edit and delete ActiveSync devices"
-msgstr "ActiveSync-Geräte sehen, verwalten und löschen"
-
-msgid "Reset ActiveSync devices"
-msgstr "ActiveSync-Geräte zurücksetzen"
-
-msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
-msgstr "Zurücksetzen der ActiveSync-Geräte per Fernzugriff auf den Werkszustand (alle Daten werden gelöscht)"

@@ -8,99 +8,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Danijel Getejanc <getejanc@gmail.com>, 2019\n"
 "Language-Team: Serbian (http://app.transifex.com/tine/groupware/language/sr/)\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sr\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Svi moji projekti"
+msgid "Manage shared project favorites"
+msgstr "Upravljajte zajedničkim favoritima projekta"
 
-msgid "Default Favorite"
-msgstr "Podrazumevano omiljeno"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Podrazumevano omiljeni koji su učitani prilikom pokretanja projekata"
-
-msgid "Attendee"
-msgstr "Učesnik"
-
-msgid "Role"
-msgstr "Uloga"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekat"
-msgstr[1] "projekata"
-msgstr[2] "projekti"
-
-msgid "Title"
-msgstr "Naslov"
-
-msgid "Number"
-msgstr "Broj"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "Opis"
-
-msgid "Enter description"
-msgstr "Unesite opis"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Molimo izaberite projekat okem će se dodati kontakt"
-
-msgid "Please select the attenders' role"
-msgstr "Molimo da izaberete ulogu učesnika"
-
-msgid "Select Project"
-msgstr "Izaberite projektat"
-
-msgid "Select Role"
-msgstr "Izaberite ulogu"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Dodavanje {0} učesnika projekta"
-
-msgid "Attendee Role"
-msgstr "Uloga učesnika"
-
-msgid "Projects"
-msgstr "Projekti"
-
-msgid "All my open projects"
-msgstr "Svi moji otvoreni projekti"
-
-msgid "My projects that I'm responsible for"
-msgstr "Moji projekti za koje sam odgovoran"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Svi moji otvoreni projekti za koje sam odgovoran"
-
-msgid "My waiting projects"
-msgstr "Moji projekti čekanja"
-
-msgid "My projects that are on hold"
-msgstr "Moji projekti koji su na čekanju"
+msgid "Create new shared project favorites"
+msgstr "Napravite nove favorite za zajedničke projekte"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -153,6 +74,70 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekat"
+msgstr[1] "projekata"
+msgstr[2] "projekti"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Molimo izaberite projekat okem će se dodati kontakt"
+
+msgid "Please select the attenders' role"
+msgstr "Molimo da izaberete ulogu učesnika"
+
+msgid "Select Project"
+msgstr "Izaberite projektat"
+
+msgid "Role"
+msgstr "Uloga"
+
+msgid "Select Role"
+msgstr "Izaberite ulogu"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Dodavanje {0} učesnika projekta"
+
+msgid "Attendee"
+msgstr "Učesnik"
+
+msgid "Attendee Role"
+msgstr "Uloga učesnika"
+
+msgid "Title"
+msgstr "Naslov"
+
+msgid "Number"
+msgstr "Broj"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Enter description"
+msgstr "Unesite opis"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Projekt lista"
@@ -165,14 +150,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "Svi moji projekti"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "Podrazumevano omiljeno"
 
-msgid "Manage shared project favorites"
-msgstr "Upravljajte zajedničkim favoritima projekta"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Podrazumevano omiljeni koji su učitani prilikom pokretanja projekata"
 
-msgid "Create new shared project favorites"
-msgstr "Napravite nove favorite za zajedničke projekte"
+msgid "All my open projects"
+msgstr "Svi moji otvoreni projekti"
+
+msgid "My projects that I'm responsible for"
+msgstr "Moji projekti za koje sam odgovoran"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Svi moji otvoreni projekti za koje sam odgovoran"
+
+msgid "My waiting projects"
+msgstr "Moji projekti čekanja"
+
+msgid "My projects that are on hold"
+msgstr "Moji projekti koji su na čekanju"
+
+msgid "Projects"
+msgstr "Projekti"

@@ -11,190 +11,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Tommi Turkia <sahkari@saunalahti.fi>, 2012\n"
 "Language-Team: Finnish (http://app.transifex.com/tine/groupware/language/fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's henkilökohtaisia tehtäviä"
+msgid "manage shared task lists"
+msgstr "hallitse jaettua tehtävää"
 
-msgid "All my tasks"
-msgstr "Kaikki tehtäväni"
+msgid "Create new shared tasks lists"
+msgstr "Luo uusi jaettu tehtävä"
 
-msgid "Default Favorite"
-msgstr "Oletus suosikki"
+msgid "manage shared tasks favorites"
+msgstr "hallitse jaetun tehtävän suosikkeja"
 
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Oletus suosikki joka ladataan käynnistettäessä"
-
-msgid "Default Task List"
-msgstr "Oletus tehtävälista"
-
-msgid "The default task list to create new tasks in."
-msgstr "Lista, johon uudet tehtävät luodaan oletusarvoisesti."
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New task get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the task ends"
-msgstr ""
-
-msgid "Task Title Template"
-msgstr ""
-
-msgid "How to build task titles."
-msgstr ""
-
-msgid "Filter: To be done for"
-msgstr ""
-
-msgid "Show all tasks matching all the following criteria:"
-msgstr ""
-
-msgid "Tasks has an open status."
-msgstr ""
-
-msgid "Filtered person is either:"
-msgstr ""
-
-msgid "Organizer and no coworker with open status is assigned."
-msgstr ""
-
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr ""
-
-msgid "Coworker with an open status assigned."
-msgstr ""
-
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr ""
-
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "Tila"
-msgstr[1] "Tilat"
-
-msgid "New Task"
-msgstr "Uusi tehtävä"
-
-msgid "Create from Template"
-msgstr ""
-
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Haluatko poistaa valitun tehtävän?"
-msgstr[1] "Haluatko poistaa valitut tehtävät?"
-
-msgid "Tags"
-msgstr "Tagit"
-
-msgid "Summary"
-msgstr "Yhteeneveto"
-
-msgid "Add a task..."
-msgstr "Lisää tehtävä..."
-
-msgid "Due Date"
-msgstr "Määräpäivä"
-
-msgid "Priority"
-msgstr "Tärkeys"
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Percent"
-msgstr "Prosenttia"
-
-msgid "Completed"
-msgstr "Valmis"
-
-msgid "Organizer / Responsible"
-msgstr ""
-
-msgid "Responsible"
-msgstr "Vastuuhenkilö"
-
-msgid "My open tasks"
-msgstr "Avoimet tehtäväni"
-
-msgid "Use show all button bellow to search for all tasks"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Invalid selection"
-msgstr ""
-
-msgid "A task cannot depend on itself"
-msgstr ""
-
-msgid "Add New Task"
-msgstr ""
-
-msgid "This Task is part of:"
-msgstr ""
-
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Määritä määräpäivä koska hälytys on asetettu!"
-
-msgid "Due date"
-msgstr "Määräpäivä"
-
-msgid "Add Responsible ..."
-msgstr "Lisää vastuuhenkilö ..."
-
-msgid "Notes"
-msgstr "Huomautukset"
-
-msgid "Enter description..."
-msgstr "Lisää kuvaus...."
-
-msgid "Percentage"
-msgstr "Prosenttia"
-
-msgid "Attention: This due date is in the past!"
-msgstr ""
-
-msgid "My responsibility"
-msgstr ""
-
-msgid "All tasks that I am responsible for"
-msgstr "Tehtävät, joissa olen vastuuhenkilö"
-
-msgid "All tasks for me"
-msgstr "Kaikki tehtäväni"
-
-msgid "To be done for me this week"
-msgstr ""
-
-msgid "Tasks"
-msgstr "Tehtävät"
-
-msgid "All tasks of my taskslists"
-msgstr "Oman tehtävälistan tehtävät"
-
-msgid "Last modified by me"
-msgstr "Edellinen muokkaukseni"
-
-msgid "All tasks that I have last modified"
-msgstr "Kaikki tehtävät joita olen muokannut"
-
-msgid "Tasks without responsible"
-msgstr "Tehtävä ilman vastausta"
+msgid "Create or update shared tasks favorites"
+msgstr "Luo tai päivitä jaettujen tehtävien suosikkeja"
 
 msgid "Tasks status available"
 msgstr "Tehtävien tila saatavilla"
@@ -204,6 +40,9 @@ msgstr ""
 
 msgid "No response"
 msgstr "Ei vastausta"
+
+msgid "Completed"
+msgstr "Valmis"
 
 msgid "Cancelled"
 msgstr "Peruutettu"
@@ -253,8 +92,137 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's henkilökohtaisia tehtäviä"
+
 msgid "Notification for Task %1$s"
 msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Create from Template"
+msgstr ""
+
+msgid "Use show all button bellow to search for all tasks"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Invalid selection"
+msgstr ""
+
+msgid "A task cannot depend on itself"
+msgstr ""
+
+msgid "Summary"
+msgstr "Yhteeneveto"
+
+msgid "Add a task..."
+msgstr "Lisää tehtävä..."
+
+msgid "Due Date"
+msgstr "Määräpäivä"
+
+msgid "Priority"
+msgstr "Tärkeys"
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Percent"
+msgstr "Prosenttia"
+
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Tila"
+msgstr[1] "Tilat"
+
+msgid "Responsible"
+msgstr "Vastuuhenkilö"
+
+msgid "My open tasks"
+msgstr "Avoimet tehtäväni"
+
+msgid "Add New Task"
+msgstr ""
+
+msgid "This Task is part of:"
+msgstr ""
+
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Määritä määräpäivä koska hälytys on asetettu!"
+
+msgid "Due date"
+msgstr "Määräpäivä"
+
+msgid "Organizer / Responsible"
+msgstr ""
+
+msgid "Add Responsible ..."
+msgstr "Lisää vastuuhenkilö ..."
+
+msgid "Notes"
+msgstr "Huomautukset"
+
+msgid "Enter description..."
+msgstr "Lisää kuvaus...."
+
+msgid "Percentage"
+msgstr "Prosenttia"
+
+msgid "Attention: This due date is in the past!"
+msgstr ""
+
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Haluatko poistaa valitun tehtävän?"
+msgstr[1] "Haluatko poistaa valitut tehtävät?"
+
+msgid "Tags"
+msgstr "Tagit"
+
+msgid "Filter: To be done for"
+msgstr ""
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr ""
+
+msgid "Tasks has an open status."
+msgstr ""
+
+msgid "Filtered person is either:"
+msgstr ""
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr ""
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr ""
+
+msgid "Coworker with an open status assigned."
+msgstr ""
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr ""
+
+msgid "New Task"
+msgstr "Uusi tehtävä"
+
+msgid "GENDER_Collaborator"
+msgstr ""
+
+msgid "Collaborator"
+msgid_plural "Collaborators"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tehtävä"
+msgstr[1] "Tehtävät"
 
 msgid "GENDER_Task Dependency"
 msgstr ""
@@ -264,21 +232,8 @@ msgid_plural "Task Dependencies"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tehtävä"
-msgstr[1] "Tehtävät"
-
 msgid "Depends on Task"
 msgstr ""
-
-msgid "GENDER_Collaborator"
-msgstr ""
-
-msgid "Collaborator"
-msgid_plural "Collaborators"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "GENDER_Task"
 msgstr ""
@@ -325,17 +280,62 @@ msgstr "Puhelin"
 msgid "Email"
 msgstr "Sähköposti"
 
-msgid "Excel all data"
+msgid "All my tasks"
+msgstr "Kaikki tehtäväni"
+
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
+
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Oletus suosikki joka ladataan käynnistettäessä"
+
+msgid "Default Task List"
+msgstr "Oletus tehtävälista"
+
+msgid "The default task list to create new tasks in."
+msgstr "Lista, johon uudet tehtävät luodaan oletusarvoisesti."
+
+msgid "Enable Standard Alarm"
 msgstr ""
 
-msgid "manage shared task lists"
-msgstr "hallitse jaettua tehtävää"
+msgid "New task get a standard alarm as defined below"
+msgstr ""
 
-msgid "Create new shared tasks lists"
-msgstr "Luo uusi jaettu tehtävä"
+msgid "Standard Alarm Time"
+msgstr ""
 
-msgid "manage shared tasks favorites"
-msgstr "hallitse jaetun tehtävän suosikkeja"
+msgid "Minutes before the task ends"
+msgstr ""
 
-msgid "Create or update shared tasks favorites"
-msgstr "Luo tai päivitä jaettujen tehtävien suosikkeja"
+msgid "Task Title Template"
+msgstr ""
+
+msgid "How to build task titles."
+msgstr ""
+
+msgid "All tasks of my taskslists"
+msgstr "Oman tehtävälistan tehtävät"
+
+msgid "My responsibility"
+msgstr ""
+
+msgid "All tasks that I am responsible for"
+msgstr "Tehtävät, joissa olen vastuuhenkilö"
+
+msgid "All tasks for me"
+msgstr "Kaikki tehtäväni"
+
+msgid "To be done for me this week"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr "Edellinen muokkaukseni"
+
+msgid "All tasks that I have last modified"
+msgstr "Kaikki tehtävät joita olen muokannut"
+
+msgid "Tasks without responsible"
+msgstr "Tehtävä ilman vastausta"
+
+msgid "Tasks"
+msgstr "Tehtävät"

@@ -8,35 +8,110 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
 "Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
-msgstr "Cấu hình xuất dữ liệu chấm công ODS"
+msgid "Manage timeaccounts"
+msgstr "Quản lý tài khoản thời gian"
 
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Sử dụng cấu hình này cho việc xuất dữ liệu chấm công ODS"
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Thêm, sửa và xóa tài khoản thời gian (bao gồm mọi quyền nhật ký chấm công)"
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Add timeaccounts"
+msgstr "Thêm tài khoản thời gian"
+
+msgid "Manage shared timeaccount favorites"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Create or update shared timeaccount favorites"
 msgstr ""
 
-msgid "default"
-msgstr "mặc định"
+msgid "Manage shared timesheet favorites"
+msgstr "Quản lý lối tắt dự án dùng chung"
 
-msgid "Bookmark Timeaccount"
+msgid "Create or update shared timesheet favorites"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "Enabled Features"
 msgstr ""
+
+msgid "Enabled Features in Timetracker Application."
+msgstr ""
+
+msgid "Timeaccount Bookmarks"
+msgstr ""
+
+msgid "none"
+msgstr "không"
+
+msgid "last week"
+msgstr "tuần trước"
+
+msgid "not yet billed"
+msgstr "chưa trả"
+
+msgid "status to bill"
+msgstr ""
+
+msgid "billed"
+msgstr "đã trả"
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr "Tài khoản theo thời gian - Đã trả"
+
+msgid "to bill"
+msgstr "phải trả"
+
+msgid "Contract"
+msgstr "Hợp đồng"
+
+msgid "without contract"
+msgstr "Không có hợp đồng"
+
+msgid "Unit"
+msgstr "Đơn vị"
+
+msgid "Unit Price"
+msgstr "Giá đơn vị"
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
+msgstr "Trạng thái"
 
 msgid "closed"
 msgstr "đã đóng"
@@ -44,17 +119,70 @@ msgstr "đã đóng"
 msgid "open"
 msgstr "mở"
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
+msgstr "Xóa vào"
+
+msgid "Responsible Person"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Timesheets are billable"
+msgstr "Chấm công có hóa đơn"
+
+msgid "Invoice"
 msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] ""
+"one: Tài khoản thời gian\n"
+"other: Tài khoản thời gian"
+
+msgid "Number"
+msgstr "Số"
+
+msgid "Title"
+msgstr "Tiêu đề"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
+msgstr "Hiển thị bị đóng"
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
 msgstr ""
+
+msgid "Time Account - Status"
+msgstr "Tài khoản thời gian - Trạng thái"
 
 msgid "End Time Change"
 msgstr ""
@@ -78,18 +206,12 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
 msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] ""
-
-msgid "Description"
-msgstr "Mô tả"
 
 msgid "Failed"
 msgstr "Lỗi"
@@ -109,21 +231,6 @@ msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
-
-msgid "Time Account - Status"
-msgstr "Tài khoản thời gian - Trạng thái"
-
-msgid "Time Account - Billed"
-msgstr "Tài khoản theo thời gian - Đã trả"
-
-msgid "not yet billed"
-msgstr "chưa trả"
-
-msgid "to bill"
-msgstr "phải trả"
-
-msgid "billed"
-msgstr "đã trả"
 
 msgid "Workingtime:"
 msgstr ""
@@ -173,137 +280,6 @@ msgstr "Xuất dữ liệu dạng CSV"
 
 msgid "Export as ..."
 msgstr "Xuất dạng ..."
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr "Hợp đồng"
-
-msgid "without contract"
-msgstr "Không có hợp đồng"
-
-msgid "Show closed"
-msgstr "Hiển thị bị đóng"
-
-msgid "Unit"
-msgstr "Đơn vị"
-
-msgid "Unit Price"
-msgstr "Giá đơn vị"
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr "Trạng thái"
-
-msgid "Cleared at"
-msgstr "Xóa vào"
-
-msgid "Responsible Person"
-msgstr ""
-
-msgid "Timesheets are billable"
-msgstr "Chấm công có hóa đơn"
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] ""
-"one: Tài khoản thời gian\n"
-"other: Tài khoản thời gian"
-
-msgid "Number"
-msgstr "Số"
-
-msgid "Title"
-msgstr "Tiêu đề"
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr "Bộ đếm thời gian"
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr "Chấm công hôm nay của tôi"
-
-msgid "My Timesheets this week"
-msgstr "Chấm công tuần này của tôi"
-
-msgid "My Timesheets last week"
-msgstr "Chấm công tuần trước của tôi"
-
-msgid "My Timesheets this month"
-msgstr "Chấm công tháng này của tôi"
-
-msgid "My Timesheets last month"
-msgstr "Chấm công tháng trước của tôi"
-
-msgid "Timeaccounts to bill"
-msgstr "Tài khoản thời gian cần thanh toán"
-
-msgid "Timeaccounts not yet billed"
-msgstr "Tài khoản thời gian chưa thanh toán"
-
-msgid "Timeaccounts already billed"
-msgstr "Tài khoản thời gian đã thanh toán"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr "không"
-
-msgid "last week"
-msgstr "tuần trước"
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr ""
 
 msgid "Read Own"
 msgstr ""
@@ -419,23 +395,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "Quản lý tài khoản thời gian"
+msgid "Timesheets ODS export configuration"
+msgstr "Cấu hình xuất dữ liệu chấm công ODS"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Thêm, sửa và xóa tài khoản thời gian (bao gồm mọi quyền nhật ký chấm công)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Sử dụng cấu hình này cho việc xuất dữ liệu chấm công ODS"
 
-msgid "Add timeaccounts"
-msgstr "Thêm tài khoản thời gian"
-
-msgid "Manage shared timeaccount favorites"
+msgid "A Tag which is available in context menu for fast assignment"
 msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
 msgstr ""
 
-msgid "Manage shared timesheet favorites"
-msgstr "Quản lý lối tắt dự án dùng chung"
+msgid "default"
+msgstr "mặc định"
 
-msgid "Create or update shared timesheet favorites"
+msgid "Requested Timesheets"
 msgstr ""
+
+msgid "My Timesheets today"
+msgstr "Chấm công hôm nay của tôi"
+
+msgid "My Timesheets this week"
+msgstr "Chấm công tuần này của tôi"
+
+msgid "My Timesheets last week"
+msgstr "Chấm công tuần trước của tôi"
+
+msgid "My Timesheets this month"
+msgstr "Chấm công tháng này của tôi"
+
+msgid "My Timesheets last month"
+msgstr "Chấm công tháng trước của tôi"
+
+msgid "Timeaccounts to bill"
+msgstr "Tài khoản thời gian cần thanh toán"
+
+msgid "Timeaccounts not yet billed"
+msgstr "Tài khoản thời gian chưa thanh toán"
+
+msgid "Timeaccounts already billed"
+msgstr "Tài khoản thời gian đã thanh toán"
+
+msgid "Timetracker"
+msgstr "Bộ đếm thời gian"

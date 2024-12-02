@@ -14,313 +14,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Artur Mudrykh <arturmon82@gmail.com>, 2012\n"
 "Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All leads"
-msgstr "Все предложения"
+msgid "manage shared lead folders"
+msgstr "управлять общими папками предложений"
 
-msgid "Default Lead List"
-msgstr "Список предложений по умолчанию"
+msgid "Create new shared lead folders"
+msgstr "Создать новую общую папку предложений"
 
-msgid "The default list for new leads"
-msgstr "Список предложений для создания новых задач по умолчанию"
+msgid "manage shared leads favorites"
+msgstr "управление избранными общими предложениями"
 
-msgid "Get Notification E-mails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about."
-msgstr ""
-
-msgid "Send Notifications e-mails for own actions"
-msgstr ""
-
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "Избранный по умолчанию"
-
-msgid "The default favorite which is loaded on crm startup"
-msgstr "Будет загружено по-умолчанию при загрузке CRM"
-
-msgid "New Lead"
-msgstr "Новое предложение"
-
-msgid "Tags"
-msgstr "Теги"
-
-msgid "Lead name"
-msgstr "Название предложения"
-
-msgid "Responsible"
-msgstr "Ответственный"
-
-msgid "Partner"
-msgstr "Партнёр"
-
-msgid "Customer"
-msgstr "Клиент"
-
-msgid "Leadstate"
-msgstr "Состояние предложения"
-
-msgid "Leadtype"
-msgstr "Тип предложения"
-
-msgid "Leadsource"
-msgstr "Источник предложения"
-
-msgid "Probability"
-msgstr "Вероятность"
-
-msgid "Turnover"
-msgstr "Оборот"
-
-msgid "Estimated end"
-msgstr "Предполагаемый конец"
-
-msgid "End"
-msgstr "Конец"
-
-msgid "Start"
-msgstr "Начать"
-
-msgid "Probable Turnover"
-msgstr "Возможный оборот"
-
-msgid "Resubmission Date"
-msgstr ""
-
-msgid "Import leads"
-msgstr ""
-
-msgid "Contact"
-msgstr "Контакт"
-
-msgid "CRM Role"
-msgstr "CRM роль"
-
-msgid "Tasks"
-msgstr "Задания"
-
-msgid "No Tasks to display"
-msgstr "Задания отсутствуют"
-
-msgid "Summary"
-msgstr "Описание"
-
-msgid "Add a task..."
-msgstr "Добавить задание..."
-
-msgid "Due Date"
-msgstr "До даты"
-
-msgid "Priority"
-msgstr "Приоритет"
-
-msgid "Percent"
-msgstr "Процент"
-
-msgid "Status"
-msgstr "Статус"
-
-msgid "Organizer"
-msgstr "Организатор"
-
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "Добавить новый {0}"
-
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Изменить {0}"
-
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Изменить выделенные {0}"
-
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Пожалуйста, выберите предложение для добавления контактов"
-
-msgid "Please select the attenders' role"
-msgstr "Пожалуйста, выберите роль участника"
-
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Предложения"
-msgstr[1] "Предложения"
-msgstr[2] "Предложения"
-msgstr[3] "Предложения"
-
-msgid "Select Lead"
-msgstr "Выберите предложение"
-
-msgid "Role"
-msgstr "Роль"
-
-msgid "Select Role"
-msgstr "Выберите роль"
-
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr "Добавлено {0} контактов в предложение"
-
-msgid "Phone"
-msgstr "Телефон"
-
-msgid "Mobile"
-msgstr "Мобильный"
-
-msgid "Fax"
-msgstr "Факс"
-
-msgid "E-Mail"
-msgstr "Электронная почта"
-
-msgid "Web"
-msgstr "Интернет"
-
-msgid "Address"
-msgstr "Адрес"
-
-msgid "Change type to Customer"
-msgstr "Поменять тип на клиента"
-
-msgid "Change type to Responsible"
-msgstr "Поменять тип на ответственного"
-
-msgid "Change type to Partner"
-msgstr "Поменять тип на партнера"
-
-msgid "Change contact type"
-msgstr "Поменять тип контакта"
-
-msgid "Search for Contacts to add ..."
-msgstr "Поиск контактов для добавления..."
-
-msgid "Name"
-msgstr "Имя"
-
-msgid "Data"
-msgstr "Данные"
-
-msgid "Cellphone"
-msgstr "Сотовый телефон"
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr ""
-
-msgid "Products"
-msgstr "Продукты"
-
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr ""
-
-msgid "Enter lead name"
-msgstr ""
-
-msgid "Expected turnover"
-msgstr "Ожидаемый оборот"
-
-msgid "Description"
-msgstr "Описание"
-
-msgid "Enter description"
-msgstr "Введите описание"
-
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "Лист предложений"
-msgstr[1] "Лист предложений"
-msgstr[2] "Листы предложений"
-msgstr[3] "Листы предложений"
-
-msgid "lead lists"
-msgstr "Лист предложений"
-
-msgid "Quick Search"
-msgstr "Быстрый поиск"
-
-msgid "Last Modified Time"
-msgstr "Время последнего изменения"
-
-msgid "Last Modified By"
-msgstr "Последнее изменение:"
-
-msgid "Creation Time"
-msgstr "Время создания"
-
-msgid "Created By"
-msgstr "Создано"
-
-msgid "X Lead"
-msgstr ""
-
-msgid "read-only"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Product"
-msgstr "Продукт"
-
-msgid "Price"
-msgstr "Цена"
-
-msgid "Quantity"
-msgstr "Количество"
-
-msgid "Search for Products to add ..."
-msgstr "Выбрать продукт, который нужно добавить..."
-
-msgid "All leads I have read grants for"
-msgstr "Все предложения, которые я могу видеть"
-
-msgid "Last modified by me"
-msgstr "Мои последнии изменения"
-
-msgid "All leads that I have last modified"
-msgstr "Все последние изменённые мной предложения"
-
-msgid "My leads"
-msgstr "Мои предложения"
-
-msgid "All leads that I am responsible for"
-msgstr "Все предложения, за которые я ответственнен"
-
-msgid "Leads with overdue tasks"
-msgstr "Предложения с просроченными задачами"
+msgid "Create or update shared leads favorites"
+msgstr "Создание или обновление избранных общих предложений"
 
 msgid "controls sending notification of Leads"
 msgstr ""
@@ -367,6 +80,9 @@ msgstr "принятый"
 msgid "lost"
 msgstr "потерянный"
 
+msgid "read-only"
+msgstr ""
+
 msgid "Lead Sources Available"
 msgstr ""
 
@@ -378,6 +94,12 @@ msgstr ""
 
 msgid "Possible lead types."
 msgstr ""
+
+msgid "Customer"
+msgstr "Клиент"
+
+msgid "Partner"
+msgstr "Партнёр"
 
 msgid "Reseller"
 msgstr "Реселлер"
@@ -415,11 +137,26 @@ msgstr ""
 msgid "State"
 msgstr "Состояние"
 
+msgid "Role"
+msgstr "Роль"
+
 msgid "Source"
 msgstr "Источник"
 
+msgid "Start"
+msgstr "Начать"
+
 msgid "Scheduled end"
 msgstr "Запланированный конец"
+
+msgid "End"
+msgstr "Конец"
+
+msgid "Turnover"
+msgstr "Оборот"
+
+msgid "Probability"
+msgstr "Вероятность"
 
 msgid "Folder"
 msgstr "Папка"
@@ -433,6 +170,9 @@ msgstr "Обновлённые поля:"
 #, python-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
+
+msgid "Tags"
+msgstr "Теги"
 
 #, python-format
 msgid "Lead %s has been changed"
@@ -449,14 +189,20 @@ msgstr "Ведущим %s было создано"
 msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
 msgstr ""
 
-msgid "GENDER_Lead"
-msgstr ""
-
-msgid "Show Closed"
+msgid "CSV all data"
 msgstr ""
 
 msgid "Lead Data"
 msgstr "Данные предложения"
+
+msgid "Leadstate"
+msgstr "Состояние предложения"
+
+msgid "Leadtype"
+msgstr "Тип предложения"
+
+msgid "Leadsource"
+msgstr "Источник предложения"
 
 msgid "End Scheduled"
 msgstr "Конец запланирован"
@@ -464,11 +210,26 @@ msgstr "Конец запланирован"
 msgid "Contacts"
 msgstr "Контакты"
 
+msgid "Address"
+msgstr "Адрес"
+
 msgid "Telephone"
 msgstr "Телефон"
 
 msgid "Email"
 msgstr "Электронная почта"
+
+msgid "Tasks"
+msgstr "Задания"
+
+msgid "Due Date"
+msgstr "До даты"
+
+msgid "Priority"
+msgstr "Приоритет"
+
+msgid "Products"
+msgstr "Продукты"
 
 msgid "low"
 msgstr "низкий"
@@ -482,18 +243,6 @@ msgstr "высокий"
 msgid "urgent"
 msgstr "срочный"
 
-msgid "CSV all data"
-msgstr ""
-
-msgid "Lead CSV import"
-msgstr ""
-
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
 msgid "Edit new lead"
 msgstr ""
 
@@ -505,14 +254,265 @@ msgstr ""
 msgid "%s new leads have been imported"
 msgstr ""
 
-msgid "manage shared lead folders"
-msgstr "управлять общими папками предложений"
+msgid "Lead CSV import"
+msgstr ""
 
-msgid "Create new shared lead folders"
-msgstr "Создать новую общую папку предложений"
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
 
-msgid "manage shared leads favorites"
-msgstr "управление избранными общими предложениями"
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
 
-msgid "Create or update shared leads favorites"
-msgstr "Создание или обновление избранных общих предложений"
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Пожалуйста, выберите предложение для добавления контактов"
+
+msgid "Please select the attenders' role"
+msgstr "Пожалуйста, выберите роль участника"
+
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Предложения"
+msgstr[1] "Предложения"
+msgstr[2] "Предложения"
+msgstr[3] "Предложения"
+
+msgid "Select Lead"
+msgstr "Выберите предложение"
+
+msgid "Select Role"
+msgstr "Выберите роль"
+
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Добавлено {0} контактов в предложение"
+
+msgid "Change type to Customer"
+msgstr "Поменять тип на клиента"
+
+msgid "Responsible"
+msgstr "Ответственный"
+
+msgid "Change type to Responsible"
+msgstr "Поменять тип на ответственного"
+
+msgid "Change type to Partner"
+msgstr "Поменять тип на партнера"
+
+msgid "Change contact type"
+msgstr "Поменять тип контакта"
+
+msgid "Search for Contacts to add ..."
+msgstr "Поиск контактов для добавления..."
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Data"
+msgstr "Данные"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Cellphone"
+msgstr "Сотовый телефон"
+
+msgid "New Lead"
+msgstr "Новое предложение"
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr ""
+
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr ""
+
+msgid "Enter lead name"
+msgstr ""
+
+msgid "Expected turnover"
+msgstr "Ожидаемый оборот"
+
+msgid "Resubmission Date"
+msgstr ""
+
+msgid "Estimated end"
+msgstr "Предполагаемый конец"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Enter description"
+msgstr "Введите описание"
+
+msgid "Contact"
+msgstr "Контакт"
+
+msgid "CRM Role"
+msgstr "CRM роль"
+
+msgid "Mobile"
+msgstr "Мобильный"
+
+msgid "Fax"
+msgstr "Факс"
+
+msgid "E-Mail"
+msgstr "Электронная почта"
+
+msgid "Web"
+msgstr "Интернет"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Lead name"
+msgstr "Название предложения"
+
+msgid "Probable Turnover"
+msgstr "Возможный оборот"
+
+msgid "Import leads"
+msgstr ""
+
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Добавить новый {0}"
+
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Изменить {0}"
+
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Изменить выделенные {0}"
+
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "Лист предложений"
+msgstr[1] "Лист предложений"
+msgstr[2] "Листы предложений"
+msgstr[3] "Листы предложений"
+
+msgid "lead lists"
+msgstr "Лист предложений"
+
+msgid "Quick Search"
+msgstr "Быстрый поиск"
+
+msgid "Last Modified Time"
+msgstr "Время последнего изменения"
+
+msgid "Last Modified By"
+msgstr "Последнее изменение:"
+
+msgid "Creation Time"
+msgstr "Время создания"
+
+msgid "Created By"
+msgstr "Создано"
+
+msgid "X Lead"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Product"
+msgstr "Продукт"
+
+msgid "Price"
+msgstr "Цена"
+
+msgid "Quantity"
+msgstr "Количество"
+
+msgid "Search for Products to add ..."
+msgstr "Выбрать продукт, который нужно добавить..."
+
+msgid "No Tasks to display"
+msgstr "Задания отсутствуют"
+
+msgid "Summary"
+msgstr "Описание"
+
+msgid "Add a task..."
+msgstr "Добавить задание..."
+
+msgid "Percent"
+msgstr "Процент"
+
+msgid "Organizer"
+msgstr "Организатор"
+
+msgid "GENDER_Lead"
+msgstr ""
+
+msgid "Show Closed"
+msgstr ""
+
+msgid "All leads"
+msgstr "Все предложения"
+
+msgid "Default Lead List"
+msgstr "Список предложений по умолчанию"
+
+msgid "The default list for new leads"
+msgstr "Список предложений для создания новых задач по умолчанию"
+
+msgid "Get Notification E-mails"
+msgstr ""
+
+msgid "The level of actions you want to be notified about."
+msgstr ""
+
+msgid "Send Notifications e-mails for own actions"
+msgstr ""
+
+msgid "Get notifications e-mails for actions you did yourself"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr "Избранный по умолчанию"
+
+msgid "The default favorite which is loaded on crm startup"
+msgstr "Будет загружено по-умолчанию при загрузке CRM"
+
+msgid "All leads I have read grants for"
+msgstr "Все предложения, которые я могу видеть"
+
+msgid "Last modified by me"
+msgstr "Мои последнии изменения"
+
+msgid "All leads that I have last modified"
+msgstr "Все последние изменённые мной предложения"
+
+msgid "My leads"
+msgstr "Мои предложения"
+
+msgid "All leads that I am responsible for"
+msgstr "Все предложения, за которые я ответственнен"
+
+msgid "Leads with overdue tasks"
+msgstr "Предложения с просроченными задачами"

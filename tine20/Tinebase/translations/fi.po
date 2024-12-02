@@ -9,101 +9,112 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 12:12+0000\n"
 "Last-Translator: Tommi Turkia <sahkari@saunalahti.fi>, 2012\n"
 "Language-Team: Finnish (http://app.transifex.com/tine/groupware/language/fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "node name must not contain the character /"
+msgid "admin"
+msgstr "ylläpitäjä"
+
+msgid "admin right description"
+msgstr "ylläpitäjän oikeuksien kuvaus"
+
+msgid "run"
 msgstr ""
 
-msgid "Personal container"
+msgid "run right description"
 msgstr ""
 
-#, python-format
-msgid "%s's personal container"
+msgid "Use Mainscreen"
 msgstr ""
 
-msgid "You are not allowed to delete your default container!"
+msgid "App mainscreen is available in UI"
 msgstr ""
 
-msgid "You are not allowed to remove all (admin) grants for this container."
+msgid "Personal tags"
 msgstr ""
 
-msgid "Personal containers can have only one owner!"
+msgid "Use and see personal tags"
 msgstr ""
 
-msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
+msgid "Report bugs"
+msgstr "Raportoi virheestä"
+
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr "Raportoi virheestä suoraan ohjelman tekijälle kun virhe havaitaan."
+
+msgid "Check version"
+msgstr "Tarkista versio"
+
+msgid "Check for new versions of this software."
+msgstr "Tarkista ohjelman uusin versio"
+
+msgid "Manage bank accounts"
 msgstr ""
 
-msgid "A container with this name already exists."
+msgid "The right to manage bank accounts."
 msgstr ""
 
-msgid "Maximum number of users reached."
+msgid "Manage own profile"
+msgstr "Hallitse omaa profiilia"
+
+msgid "The right to manage the own profile (selected contact data)."
 msgstr ""
 
-msgid "The new password must be different from the old one."
+msgid "Manage Numberables"
 msgstr ""
 
-msgid "Old pin is wrong."
+msgid "The right to manage numberables."
+msgstr ""
+
+msgid "Manage own client state"
+msgstr ""
+
+msgid "The right to manage the own client state."
+msgstr ""
+
+msgid "Manage evaluation dimensions"
+msgstr ""
+
+msgid "The right to manage evaluation dimensions."
+msgstr ""
+
+msgid "Maintenance"
+msgstr ""
+
+msgid "The right to use the installation in maintenance mode."
+msgstr ""
+
+msgid "Show License Info"
+msgstr ""
+
+msgid "The right to be able to see license information (expiry, ...)."
+msgstr ""
+
+msgid "Replication"
+msgstr ""
+
+msgid "The right to access the replication data of all applications."
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "Invalid authentication"
+msgstr ""
+
+msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr ""
 
 msgid "MFA send out failed, please try again or check with your system administrator"
 msgstr ""
 
-msgid "Municipality Key"
-msgid_plural "Municipality Keys"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Bank Holiday Calendar"
-msgid_plural "Bank Holiday Calendars"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Text"
-msgstr ""
-
-msgid "Text"
-msgid_plural "Texts"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "added"
-msgstr ""
-
-msgid "removed"
-msgstr ""
-
-msgid "modified"
-msgstr ""
-
-msgid "Number of distinct users"
-msgstr ""
-
-msgid "Number of users"
-msgstr ""
-
-msgid "  User Accounts:\n"
-msgstr ""
-
-msgid "MFA password wrong"
-msgstr ""
-
-msgid "MFA send out triggered"
-msgstr ""
-
-msgid "Email account already exists"
-msgstr ""
-
-msgid "Invalid authentication"
+msgid "MFA validation failed, please try again or check with your system administrator"
 msgstr ""
 
 msgid "GENDER_Key Field Record"
@@ -127,2657 +138,6 @@ msgid "System"
 msgstr ""
 
 msgid "Disabled"
-msgstr ""
-
-msgid "Page size"
-msgstr ""
-
-msgid "Page size in grids"
-msgstr ""
-
-msgid "Grid stripe rows"
-msgstr ""
-
-msgid "Stripe rows in grids"
-msgstr ""
-
-msgid "Grid load mask"
-msgstr ""
-
-msgid "Show load mask in grids"
-msgstr ""
-
-msgid "Grid resizing strategy"
-msgstr ""
-
-msgid "How to resize grid columns"
-msgstr ""
-
-msgid "Auto search on filter change"
-msgstr ""
-
-msgid "Perform auto search when filter is changed"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Aikavyöhyke"
-
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr ""
-
-msgid "Language"
-msgstr ""
-
-msgid "The language of the Tine 2.0 GUI."
-msgstr ""
-
-msgid "Default Application"
-msgstr "Oletus sovellukset"
-
-msgid "The default application to show after login."
-msgstr "Näytettävät ohjelmat kirjautumisen jälkeen."
-
-msgid "Window Type"
-msgstr "Ikkuna tyyppi"
-
-msgid "You can choose between modal windows or normal browser popup windows."
-msgstr ""
-
-msgid "Confirm Logout"
-msgstr "Vahvista uloskirjaus"
-
-msgid "Show confirmation dialog on logout."
-msgstr "Näytä vahvistus ikkuna ulos kirjauduttaessa"
-
-msgid "Enable advanced search"
-msgstr ""
-
-msgid "If enabled quickfilter searches through relations as well."
-msgstr ""
-
-msgid "File double-clicking action"
-msgstr ""
-
-msgid "Which action should be executed by default when a file is double-clicked."
-msgstr ""
-
-msgid "MFA validation failed, please try again or check with your system administrator"
-msgstr ""
-
-msgid "{{ code }} is your {{ app.branding.title }} security code."
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-msgid "Search for Application ..."
-msgstr ""
-
-#, python-brace-format
-msgid "About {0}"
-msgstr "Tietoa"
-
-#, python-brace-format
-msgid "Learn more about {0}"
-msgstr ""
-
-msgid "Ok"
-msgstr ""
-
-msgid "Released under different"
-msgstr ""
-
-msgid "Open Source Licenses"
-msgstr ""
-
-msgid "with the help of our"
-msgstr ""
-
-msgid "Contributors"
-msgstr ""
-
-msgid "Subscription"
-msgstr ""
-
-msgid "Add new Element..."
-msgstr ""
-
-msgid "Search for Municipality Keys ..."
-msgstr ""
-
-msgid "Choose MFA Deivce"
-msgstr ""
-
-msgid "This area is locked. Which device should be used to unlock?"
-msgstr ""
-
-msgid "Unlocking ..."
-msgstr ""
-
-msgid "Click here to unlock this area."
-msgstr ""
-
-msgid "MFA device missing"
-msgstr ""
-
-msgid "No matching MFA device for this area found. Configure a matching device please."
-msgstr ""
-
-msgid "Try again?"
-msgstr ""
-
-msgid "Filesystem Mounts"
-msgstr ""
-
-msgid "Profile Information"
-msgstr "Profiilin tiedot"
-
-msgid "Apply"
-msgstr "Hyväksy"
-
-msgid "Please Wait"
-msgstr "Odota hetki"
-
-msgid "Read"
-msgstr "Lue"
-
-msgid "The field is readable part of the profile"
-msgstr "Kenttä on luettava osa profiilia"
-
-msgid "Edit"
-msgstr "Muokkaa"
-
-msgid "The field is editable part of the profile"
-msgstr "Kenttä on muokattava osa profiilia"
-
-msgid "Field Name"
-msgstr "Kentän nimi"
-
-msgid "Outdated Browser"
-msgstr ""
-
-msgid "You need a current Browser to use this program."
-msgstr ""
-
-#, python-brace-format
-msgid "User: {0}"
-msgstr "Käyttäjä: {0}"
-
-msgid "Return to original user account"
-msgstr ""
-
-msgid "Help"
-msgstr ""
-
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Vikatila Console (Ctrl + F11)"
-
-msgid "Preferences"
-msgstr "Asetukset"
-
-msgid "Edit Profile"
-msgstr "Muokkaa profiilia"
-
-msgid "Change password"
-msgstr "Muuta salasana"
-
-msgid "Manage MFA Devices"
-msgstr ""
-
-msgid "Logout"
-msgstr "Kirjaudu ulos"
-
-#, python-brace-format
-msgid "Logout from {0}"
-msgstr "Kirjaudutaan ulos {0}"
-
-#, python-brace-format
-msgid "The license expires in {0} days"
-msgstr ""
-
-#, python-brace-format
-msgid "Please visit the shop at {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license expired."
-msgstr ""
-
-msgid "Allow desktop notifications"
-msgstr "Salli työpöydän ilmoitukset"
-
-msgid "Request permissions for webkit desktop notifications."
-msgstr "Salli työpöydän ilmoitukset"
-
-msgid "Reload the application"
-msgstr ""
-
-msgid "Reloads the application and clears caches."
-msgstr ""
-
-msgid "Confirm"
-msgstr "Vahvista"
-
-msgid "Are you sure you want to logout?"
-msgstr "Haluatko todella kirjautua ulos?"
-
-msgid "Logging you out..."
-msgstr "Kirjaudutaan ulos..."
-
-msgid "Please wait!"
-msgstr "Odota hetki!"
-
-msgid "Abnormal End"
-msgstr ""
-
-msgid "Cancel"
-msgstr "Peruuta"
-
-msgid "Send Report"
-msgstr "Lähetä raportti"
-
-msgid "An error occurred, the program ended abnormal."
-msgstr ""
-
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Viimeksi suorittamasi toiminto ei tehty kunnolla."
-
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "Helpottaaksesi ohjelman kehitystä. Liitä pieni kuvaus mitä olit tekemässä kun virhe ilmeni."
-
-msgid "Description"
-msgstr "Kuvaus"
-
-msgid "Send Contact Information"
-msgstr "Lähetä yhteystiedot"
-
-msgid "Details:"
-msgstr "Tiedot:"
-
-msgid "Sending report..."
-msgstr "Lähetetään raporttia..."
-
-msgid "Please wait a moment"
-msgstr "Ole hyvä ja odota hetki"
-
-msgid "Transmission Completed"
-msgstr "Lähetys valmis"
-
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Raporttisi on lähetetty. Kiitos avustasi"
-
-msgid "Please restart your browser now!"
-msgstr "Käynnistä selaimesi uudestaan nyt!"
-
-msgid "Fraction of the day"
-msgstr ""
-
-msgid "One quarter of the day"
-msgstr ""
-
-msgid "One third of the day"
-msgstr ""
-
-msgid "Half of the day"
-msgstr ""
-
-msgid "Two third of the day"
-msgstr ""
-
-msgid "Three quarters of the day"
-msgstr ""
-
-msgid "Whole day"
-msgstr ""
-
-msgid "Login"
-msgstr "Kirjaudu"
-
-msgid "Username"
-msgstr "Käyttäjätunnus"
-
-msgid "Password"
-msgstr "Salasana"
-
-msgid "Certificate detected. Please, press Login button to proceed."
-msgstr ""
-
-msgid "Login via OpenID Connect"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is made for you"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Homepage"
-msgstr ""
-
-msgid "Translations"
-msgstr ""
-
-#, python-brace-format
-msgid "Translation state of {0}: {1}%."
-msgstr ""
-
-#, python-brace-format
-msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Translation Howto"
-msgstr ""
-
-msgid "Detailed Language Statistics"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} trial"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr ""
-
-msgid "Powered by:"
-msgstr ""
-
-msgid "online open source groupware and crm"
-msgstr ""
-
-#, python-brace-format
-msgid "about {0} minutes"
-msgstr "noin {0} minuuttia"
-
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 tarvitsee apuasi"
-
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr "Mekin tarvitsemme säännöllisesti palautetta, jotta seuraava Tine 2.0 sopisi tarpeisiisi vieläkin paremmin. Auta meitä ja itseäsi osallistumalla:"
-
-msgid "participate!"
-msgstr "osallistu!"
-
-msgid "Languages"
-msgstr "Kielet"
-
-msgid "Duration"
-msgstr "Kesto"
-
-msgid "Browser incompatible"
-msgstr "Selaimen yhteensopimattomuus"
-
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Selaimesi ei tue Tine 2.0 ohjelmaa"
-
-msgid "Browser incompatible?"
-msgstr "Selaimen yhteensopimattomuus?"
-
-msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-msgstr ""
-
-msgid "You might try one of these browsers:"
-msgstr "Voit kokeilla seuraavia selaimia:"
-
-#, python-brace-format
-msgid "Login successful. Loading {0}..."
-msgstr "Kirjautuminen onnistui. Ladataan {0}..."
-
-msgid "There was an error verifying your certificate!"
-msgstr ""
-
-msgid "Your username and/or your password are wrong!"
-msgstr ""
-
-msgid "Login failure"
-msgstr "Kirjautuminen epäonnistui"
-
-msgid "Logging you in..."
-msgstr "Kirjaudutaan sisään..."
-
-msgid "Please wait"
-msgstr "Odota hetki"
-
-msgid "Errors"
-msgstr "Virheet"
-
-msgid "Please fix the errors noted."
-msgstr "Korjaa seuraavat virheet."
-
-msgid "Redirecting to SSO Identity Provider"
-msgstr ""
-
-msgid "Please enter your login data"
-msgstr "Kirjoita kirjautumistietosi"
-
-msgid "Country"
-msgid_plural "Countries"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Grant"
-msgid_plural "Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Merkki"
-msgstr[1] "Merkit"
-
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] "Tuo"
-msgstr[1] "Tuonti"
-
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] "Vie"
-msgstr[1] "Vienti"
-
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Valtakirja"
-msgstr[1] "Valtakirjat"
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] "Suhde"
-msgstr[1] "Suhteet"
-
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] "Osasto"
-msgstr[1] "Osastot"
-
-msgid "Name"
-msgstr "Nimi"
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "Asetus"
-msgstr[1] "Asetukset"
-
-msgid "Configs"
-msgstr "Asetukset"
-
-msgid "Query"
-msgstr ""
-
-msgid "Path"
-msgid_plural "Paths"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "You need to set a new password."
-msgstr ""
-
-msgid "Multi Factor Authentication"
-msgstr ""
-
-msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
-msgstr ""
-
-msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
-msgstr ""
-
-msgid "Multi Factor Authentication Device Configuration"
-msgstr ""
-
-msgid "Secret Key"
-msgstr ""
-
-msgid "Please note: After saving you can not view this autogenerated secret key again!"
-msgstr ""
-
-msgid "Generating secret key ..."
-msgstr ""
-
-msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
-msgstr ""
-
-msgid "for"
-msgstr ""
-
-msgid "FIDO2 WebAuthn Device"
-msgid_plural "FIDO2 WebAuthn Devices"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Please open the following URL in your Browser for more security key options"
-msgstr ""
-
-msgid "Configuring FIDO2 WebAuthn Device ..."
-msgstr ""
-
-msgid "FIDO2 WebAuthn Device is configured."
-msgstr ""
-
-msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
-msgstr ""
-
-msgid "Unsupported Configuration"
-msgstr ""
-
-#, python-brace-format
-msgid "see {url} for details"
-msgstr ""
-
-#, python-brace-format
-msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
-msgstr ""
-
-msgid "Error"
-msgstr ""
-
-msgid "FIDO2 WebAuthn registration failed. Try again?"
-msgstr ""
-
-msgid "MFA secret required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Secret from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "Password required"
-msgstr ""
-
-msgid "This area is locked. To unlock it you need to provide your password."
-msgstr ""
-
-msgid "Authenticator code required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Authenticator code from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "Yubico OTP required"
-msgstr ""
-
-msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
-msgstr ""
-
-msgid "Yubico OTP"
-msgid_plural "Yubico OTPs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "PIN required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
-msgstr ""
-
-#, python-brace-format
-msgid "{mfaDevice.device_name} secret"
-msgstr ""
-
-msgid "Token required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Token from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "SMS security code required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Security code from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
-msgstr ""
-
-msgid "Add new MFA Device"
-msgstr ""
-
-msgid "Click here to add note"
-msgstr ""
-
-msgid "Remove"
-msgstr ""
-
-msgid "Total    Uploads"
-msgstr ""
-
-msgid "Complete Uploads"
-msgstr ""
-
-msgid "Failed   Uploads"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is not a valid unit"
-msgstr ""
-
-msgid "Select Image"
-msgstr ""
-
-msgid "Insert an image with the selected size"
-msgstr ""
-
-msgid "Convert to pure text"
-msgstr ""
-
-#, python-brace-format
-msgid "choose other {0}..."
-msgstr ""
-
-msgid "Not a valid time"
-msgstr ""
-
-msgid "no decimals allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "max decimals allowed: {0}"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Week"
-msgstr ""
-
-msgid "Month"
-msgstr ""
-
-msgid "Quarter"
-msgstr ""
-
-msgid "Year"
-msgstr ""
-
-msgid "When preference is locked, normal user can not edit the preference anymore."
-msgstr ""
-
-msgid "Loading"
-msgstr "Ladataan"
-
-msgid "Click to edit"
-msgstr "Muokkaa"
-
-msgid "Image Failed"
-msgstr "Kuva epäonnistui"
-
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Kuvan lataus ei onnistunut. Ota yhteyttä ylläpitoon jos ongelma ei poistu."
-
-msgid "Not An Image"
-msgstr ""
-
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Valitse kuvatiedosto  (gif/png/jpeg)"
-
-msgid "Upload Failed"
-msgstr "Päivitys eäonnistui"
-
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Kuvan lataus epäonnistui. Ota yhteyttä ylläpitoon jos ongelma ei poistu."
-
-msgid "Change Image"
-msgstr "Muuta kuva"
-
-msgid "Crop Image"
-msgstr "Leikkaa kuva"
-
-msgid "Delete Image"
-msgstr "Poista kuva"
-
-msgid "Show Original Image"
-msgstr "Näytä alkuperäinen kuva"
-
-msgid "Software Version"
-msgstr "Ohjelma versio"
-
-msgid "Job Title"
-msgstr ""
-
-msgid "Yes"
-msgstr "Kyllä"
-
-msgid "No"
-msgstr "Ei"
-
-#, python-brace-format
-msgid "Error while uploading \"{fileName}\". Please try again later."
-msgstr ""
-
-msgid "Uploads Monitor"
-msgstr ""
-
-msgid "Empty List"
-msgstr ""
-
-msgid "Not all uploads are finished yet. What would you to do?"
-msgstr ""
-
-msgid "Remove finished uploads from this list only"
-msgstr ""
-
-msgid "Cancel all unfinished uploads before"
-msgstr ""
-
-msgid "Removing files..."
-msgstr ""
-
-msgid "Total Uploads : "
-msgstr ""
-
-msgid "Upload progress"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} available (total: {1})"
-msgstr ""
-
-msgid "Tags"
-msgstr ""
-
-msgid "Related to"
-msgstr ""
-
-msgid "Preparing print, please wait..."
-msgstr ""
-
-msgid "Printing Error"
-msgstr ""
-
-msgid "Cannot open new window"
-msgstr ""
-
-#, python-brace-format
-msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
-msgstr ""
-
-msgid "Window can be closed"
-msgstr ""
-
-#, python-brace-format
-msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
-msgstr ""
-
-msgid "enter searchfilter"
-msgstr ""
-
-msgid "Leave site?"
-msgstr ""
-
-msgid "Changes you made may not be saved."
-msgstr ""
-
-msgid "online"
-msgstr "paikalla"
-
-msgid "offline"
-msgstr "poissa"
-
-msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
-msgstr ""
-
-msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
-msgstr ""
-
-msgid "quarantined"
-msgstr ""
-
-msgid "(paused)"
-msgstr ""
-
-#, python-brace-format
-msgid "Please Sort by \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "To use manual sorting, you need to sort by column \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "{0} selected"
-msgstr "valitut"
-
-msgid "Unselect all"
-msgstr ""
-
-#, python-brace-format
-msgid "Select all pages ({0} records)"
-msgstr ""
-
-msgid "Toggle selection"
-msgstr ""
-
-msgid "Export Records from these Positions"
-msgstr ""
-
-msgid "Select all"
-msgstr ""
-
-msgid "Deselect all"
-msgstr ""
-
-msgid "Missing Applications"
-msgstr "Puuttuvat ohjelmat"
-
-msgid "There are no applications enabled for you. Please contact your administrator."
-msgstr "Ohjelmia ei ole aktivoitu sinulle. Ota yhteyttä ylläpitäjään."
-
-msgid "Follow System"
-msgstr ""
-
-msgid "Dark Mode"
-msgstr ""
-
-msgid "Light Mode"
-msgstr ""
-
-msgid "Create Contact"
-msgstr ""
-
-msgid "Copy to Clipboard"
-msgstr ""
-
-msgid "Compose Message To"
-msgstr ""
-
-msgid "Session Timed Out"
-msgstr ""
-
-msgid "You can close this window."
-msgstr ""
-
-msgid "Your Client is Outdated"
-msgstr ""
-
-msgid "A new client is available, press OK to get this version"
-msgstr ""
-
-msgid "tine needs to be updated or is not installed yet."
-msgstr ""
-
-msgid "Please wait or contact your administrator"
-msgstr ""
-
-msgid "Insufficient Rights"
-msgstr ""
-
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Olemme pahoillamme, sinulla ei ole oikeuksia tehdä tätä toimintoa."
-
-msgid "Not Found"
-msgstr "Ei löytynyt"
-
-msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
-msgstr ""
-
-msgid "Concurrent Updates"
-msgstr ""
-
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-msgstr ""
-
-msgid "Rate-Limit"
-msgstr ""
-
-msgid "This method is rate-limited and you sent too many requests."
-msgstr ""
-
-msgid "Service Unavailable"
-msgstr "Palvelu ei saatavilla"
-
-msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
-msgstr ""
-
-msgid "Server Message:"
-msgstr "Palvelimen viesti:"
-
-msgid "Invalid Data"
-msgstr "Virheellinen tieto"
-
-msgid "Your input data is not valid. Please provide valid data."
-msgstr "Antamasi tietoa on virheellinen. Tarkista tietojen oikeellisuus."
-
-msgid "Connection lost, please check your network!"
-msgstr "Yhteys katkennut, tarkista verkkoyhteytesi!"
-
-msgid "Timeout"
-msgstr "Aikakatkaisu"
-
-msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-msgstr ""
-
-msgid "No Response"
-msgstr ""
-
-msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-msgstr ""
-
-msgid "Out of Resources"
-msgstr ""
-
-msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
-msgstr ""
-
-msgid "No Role Memberships"
-msgstr ""
-
-msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr ""
-
-msgid "Method Not Found / Insufficent Permissions"
-msgstr ""
-
-msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
-msgstr ""
-
-msgid "License"
-msgstr ""
-
-msgid "Valid from"
-msgstr ""
-
-msgid "Valid to"
-msgstr ""
-
-msgid "Activation Key"
-msgstr ""
-
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-msgid "Organization"
-msgstr ""
-
-msgid "Activated Features"
-msgstr ""
-
-msgid "Your Subscription is unavailable"
-msgstr ""
-
-msgid "Your Subscription is not valid"
-msgstr ""
-
-msgid "Outdent Text"
-msgstr "Ulonna teksti"
-
-msgid "Indent Text"
-msgstr "Sisennä teksti"
-
-msgid "Remove Formatting"
-msgstr "Poista muotoilu"
-
-msgid "Usage:&#160;"
-msgstr "Käyttö"
-
-msgid "personal"
-msgstr "henkilökohtainen"
-
-msgid "No Information"
-msgstr "Ei tietoa"
-
-msgid "No Access"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} second"
-msgid_plural "{0} seconds"
-msgstr[0] "sekuntti"
-msgstr[1] "sekunnit"
-
-msgid "Restart application to apply new configuration?"
-msgstr ""
-
-#, python-brace-format
-msgid "All {0}"
-msgstr "Kaikki"
-
-#, python-brace-format
-msgid "Shared {0}"
-msgstr "Jaettu"
-
-#, python-brace-format
-msgid "Other Users {0}"
-msgstr "Muut käyttäjät"
-
-#, python-brace-format
-msgid "My {0}"
-msgstr "Minä"
-
-msgid "Credits"
-msgstr ""
-
-msgid "Not Supported"
-msgstr ""
-
-msgid "Your request is not supported by this version."
-msgstr ""
-
-msgid "Translation not found"
-msgstr ""
-
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tehtävä"
-msgstr[1] "Tehtävät"
-
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "tehtävälista"
-msgstr[1] "tehtävälistat"
-
-#, python-brace-format
-msgid "Add {0}"
-msgstr "Lisää"
-
-#, python-brace-format
-msgid "Rename {0}"
-msgstr "Uudelleen nimeä"
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Poista"
-msgstr[1] "Poista"
-
-#, python-brace-format
-msgid "Manage {0} Permissions"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Properties"
-msgstr ""
-
-#, python-brace-format
-msgid "Set {0} color"
-msgstr ""
-
-#, python-brace-format
-msgid "Reload {0}"
-msgstr ""
-
-msgid "Resume upload"
-msgstr ""
-
-msgid "Pause upload"
-msgstr ""
-
-msgid "Download"
-msgstr ""
-
-msgid "Publish"
-msgstr ""
-
-msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
-msgstr ""
-
-msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
-msgstr ""
-
-#, python-brace-format
-msgid "No {0} added"
-msgstr ""
-
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr ""
-
-msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
-msgstr ""
-
-msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Creating {0}..."
-msgstr ""
-
-msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
-msgstr ""
-
-msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr ""
-
-#, python-brace-format
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr ""
-
-#, python-brace-format
-msgid "Properties for {0} \"{1}\""
-msgstr ""
-
-msgid "Setting new language..."
-msgstr ""
-
-msgid "Save current view as favorite"
-msgstr ""
-
-msgid "Gets assigned automatically"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "No record"
-msgstr ""
-
-msgid "Cleartext/Hidden"
-msgstr ""
-
-msgid "Searching..."
-msgstr "Etsitään..."
-
-msgid "Search for Model..."
-msgstr ""
-
-msgid "GENDER_Model"
-msgstr ""
-
-msgid "Model"
-msgid_plural "Models"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Search for records ..."
-msgstr ""
-
-msgid "Wrong File Type"
-msgstr "Väärä tiedosto tyyppi"
-
-msgid "Please select a file with one of the following extensions:"
-msgstr ""
-
-msgid "Configuration Problem"
-msgstr "Asetus ongelma"
-
-msgid "Invalid configuration"
-msgstr "Virheelliset asetukset"
-
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
-
-msgid "Transferring Configuration..."
-msgstr "Siirretään asetuksia..."
-
-msgid "Save config"
-msgstr "Tallenna asetukset"
-
-msgid "Reload config"
-msgstr "Lataa asetukset"
-
-msgid "Some fields are  multilingual. Click here to select language to display."
-msgstr ""
-
-msgid "Edit copy"
-msgstr ""
-
-#, python-brace-format
-msgid "Search for {0} ..."
-msgstr ""
-
-msgid "Record"
-msgstr ""
-
-msgid "Failure"
-msgstr "Virhe"
-
-msgid "You tried to link a record with itself. This is not allowed!"
-msgstr ""
-
-msgid "containers"
-msgstr ""
-
-msgid "Favorites"
-msgstr ""
-
-msgid "Edit record"
-msgstr ""
-
-msgid "Sibling"
-msgstr ""
-
-msgid "Parent"
-msgstr ""
-
-msgid "Child"
-msgstr ""
-
-#, python-brace-format
-msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
-msgstr ""
-
-#, python-brace-format
-msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
-msgstr ""
-
-msgid "Contents of Related Folder"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "No Dialog"
-msgstr ""
-
-msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
-msgstr ""
-
-msgid "Attachments: Anyone who has access to the record can see the data"
-msgstr ""
-
-msgid "Links: Rights of the respective application are respected"
-msgstr ""
-
-msgid "Remark"
-msgstr ""
-
-msgid "Dependency"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Creation Time"
-msgstr "Luotu"
-
-#, python-brace-format
-msgid "No access to {0}"
-msgstr ""
-
-msgid "The record you tried to link is already linked. Please edit the existing link."
-msgstr ""
-
-msgid "Defined by ..."
-msgstr ""
-
-msgid "select a operator"
-msgstr ""
-
-msgid "Define ..."
-msgstr ""
-
-msgid "Delete { ownRecordName }?"
-msgstr ""
-
-msgid "What do you want to delete?"
-msgstr ""
-
-msgid "Delete { ownRecordName }"
-msgstr ""
-
-msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
-msgstr ""
-
-#, python-brace-format
-msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
-msgstr ""
-
-msgid "Select files"
-msgstr ""
-
-msgid "Select file"
-msgstr ""
-
-msgid "Select folders"
-msgstr ""
-
-msgid "Select folder"
-msgstr ""
-
-msgid "Select items"
-msgstr ""
-
-msgid "Select item"
-msgstr ""
-
-msgid "Places"
-msgstr ""
-
-msgid "My Device"
-msgstr ""
-
-msgid "Download file and save on my local device."
-msgstr ""
-
-msgid "Select or drop file to upload"
-msgstr ""
-
-msgid "OK"
-msgstr "Ok"
-
-msgid "Favorite not saved"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Shared Favorite (visible by other users)"
-msgstr ""
-
-msgid "The grant to see and use this filter"
-msgstr ""
-
-msgid "The grant to edit this filter"
-msgstr ""
-
-msgid "Delete"
-msgstr "Poista"
-
-msgid "The grant to delete this filter"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "My favorites"
-msgstr "Omat suosikit"
-
-msgid "Delete Favorite"
-msgstr ""
-
-msgid "Edit Favorite"
-msgstr ""
-
-msgid "Overwrite Favorite"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr ""
-
-#, python-brace-format
-msgid "Deleting Favorite \"{0}\""
-msgstr ""
-
-msgid "Overwrite?"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you want to overwrite the favorite \"{0}\"?"
-msgstr ""
-
-#, python-brace-format
-msgid "Overwriting Favorite \"{0}\""
-msgstr ""
-
-msgid "Could not save Favorite"
-msgstr ""
-
-msgid "Your current view does not support favorites"
-msgstr ""
-
-msgid "Create Favorite"
-msgstr ""
-
-#, python-brace-format
-msgid "Saving Favorite \"{0}\""
-msgstr ""
-
-msgid "(shared)"
-msgstr ""
-
-msgid "New version of tine available"
-msgstr ""
-
-#, python-brace-format
-msgid "Version \"{0}\" of tine is available."
-msgstr ""
-
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr ""
-
-msgid "Please consider updating!"
-msgstr ""
-
-msgid "Notes"
-msgstr ""
-
-msgid "Note"
-msgid_plural "Notes"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Creation time"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "Muokkaa"
-msgstr[1] "Muokkaa"
-
-#, python-brace-format
-msgid "Remove {0}"
-msgstr ""
-
-msgid "Enter new note:"
-msgstr ""
-
-msgid "Add Note"
-msgstr ""
-
-msgid "Setting new timezone..."
-msgstr ""
-
-msgid "Modules"
-msgstr ""
-
-msgid "Detach Tags"
-msgstr ""
-
-msgid "Attach Tags"
-msgstr ""
-
-msgid "No Tags to detach found in the selected records"
-msgstr ""
-
-msgid "Please Wait..."
-msgstr "Odota hetki..."
-
-msgid "Detaching Tags"
-msgstr ""
-
-msgid "Add a new personal tag"
-msgstr ""
-
-msgid "Add New Personal Tag"
-msgstr ""
-
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr ""
-
-msgid "Enter tag name:"
-msgstr ""
-
-msgid "No Tags to display"
-msgstr ""
-
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Edit tag"
-msgstr ""
-
-msgid "Rename Tag"
-msgstr ""
-
-msgid "Please enter a new name:"
-msgstr ""
-
-msgid "Edit Description"
-msgstr ""
-
-msgid "Description for tag"
-msgstr ""
-
-msgid "Please enter new description:"
-msgstr ""
-
-msgid "Change Color"
-msgstr "Vaihda väriä"
-
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Really delete selected tag?"
-msgid_plural "Really delete selected tags?"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "The selected tag will be deleted and disappear for all entries"
-msgid_plural "The selected tags will be removed and disappear for all entries"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Please wait a moment..."
-msgstr ""
-
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Failed"
-msgstr "Epäonnistui"
-
-msgid "Could not delete Tag(s)."
-msgstr ""
-
-msgid "Notice"
-msgstr ""
-
-msgid "The minimum tag length is three."
-msgstr ""
-
-msgid "Could not create tag."
-msgstr ""
-
-msgid "Could not update tag."
-msgstr ""
-
-msgid "tag name"
-msgstr ""
-
-msgid "Add Tags"
-msgstr ""
-
-msgid "Select Tags"
-msgstr ""
-
-msgid "Attaching Tag"
-msgstr ""
-
-msgid "Detach tag(s)"
-msgstr ""
-
-msgid "Select Tag(s) to detach"
-msgstr ""
-
-msgid "Set password"
-msgstr ""
-
-msgid "Generate password"
-msgstr ""
-
-msgid "What would you like to do?"
-msgstr ""
-
-msgid "You need to select an option!"
-msgstr ""
-
-msgid "There are no preferences for this application."
-msgstr ""
-
-msgid "Back"
-msgstr "Takaisin"
-
-msgid "Next"
-msgstr "Seuraava"
-
-msgid "Finish"
-msgstr "Valmis"
-
-#, python-brace-format
-msgid "Change settings for application {0}"
-msgstr "Muuta ohjelman asetuksia"
-
-msgid "Defaults"
-msgstr "Oletukset"
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr ""
-
-msgid "Following you find a list of all supported import formats."
-msgstr ""
-
-msgid "Choose File and Format"
-msgstr ""
-
-msgid "Choose Import File"
-msgstr ""
-
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr ""
-
-msgid "What should the file you upload look like?"
-msgstr ""
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-msgid "Download example file"
-msgstr ""
-
-#, python-brace-format
-msgid "Select {0} to add you {1} to:"
-msgstr ""
-
-msgid "Set Import Options"
-msgstr ""
-
-msgid "Checking Import"
-msgstr ""
-
-msgid "Resolve Conflicts"
-msgstr ""
-
-msgid "Conflict"
-msgstr ""
-
-msgid "First Conflict"
-msgstr ""
-
-msgid "Previous Conflict"
-msgstr ""
-
-msgid "Next Conflict"
-msgstr ""
-
-msgid "Last Conflict"
-msgstr ""
-
-msgid "Resolve this conflict"
-msgstr ""
-
-msgid "Resolve all conflicts"
-msgstr ""
-
-msgid "Processing Conflict Data"
-msgstr ""
-
-msgid "No conflict to resolve"
-msgstr ""
-
-#, python-brace-format
-msgid "(This is record {0} in your import file)"
-msgstr ""
-
-msgid "No Detail Informations"
-msgstr ""
-
-msgid "Summary"
-msgstr "Yhteenveto"
-
-msgid "Index"
-msgstr ""
-
-#, python-brace-format
-msgid "Importing {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} records had failures and where discarded."
-msgstr ""
-
-#, python-brace-format
-msgid "In total we found {0} records in your import file."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} of them will be added as new records into: \"{1}\"."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} of them where identified as duplicates."
-msgstr ""
-
-#, python-brace-format
-msgid "From the identified duplicates {0} will be merged into the existing records."
-msgstr ""
-
-#, python-brace-format
-msgid "From the identified duplicates {0} will be discarded."
-msgstr ""
-
-#, python-brace-format
-msgid "All records will be tagged with: \"{0}\" so you can find them easily."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} records have failures and will be discarded."
-msgstr ""
-
-msgid "Attachments"
-msgstr ""
-
-msgid "Attachment"
-msgstr ""
-
-msgid "Size"
-msgstr ""
-
-msgid "Content Type"
-msgstr ""
-
-msgid "Second Factor Password Required"
-msgstr ""
-
-msgid "Validating password..."
-msgstr ""
-
-msgid "Wrong Password"
-msgstr ""
-
-msgid "Invalid second factor password given"
-msgstr ""
-
-msgid "PIN"
-msgid_plural "PINs"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-brace-format
-msgid "Change {0} For \"{1}\""
-msgstr ""
-
-#, python-brace-format
-msgid "Changing {0}"
-msgstr ""
-
-msgid "Success"
-msgstr "Onnistui"
-
-#, python-brace-format
-msgid "Your {0} has been changed."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} mismatch, please correct."
-msgstr ""
-
-msgid "Enter description"
-msgstr ""
-
-msgid "delete"
-msgstr "poista"
-
-#, python-brace-format
-msgid "Print {0}"
-msgstr ""
-
-msgid "Saved in"
-msgstr "tallennettu kohteeseen"
-
-#, python-brace-format
-msgid "{0} (copy)"
-msgstr ""
-
-#, python-brace-format
-msgid "Copy {0}"
-msgstr "Kopioi {0}"
-
-msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0} \"{1}\""
-msgstr "Muokkaa {0} \"{1}\""
-
-msgid "Files are still uploading."
-msgstr ""
-
-msgid "Please review the fields marked red. They contain invalid values."
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete this {0}?"
-msgstr "Haluatko poistaa nämä {0}?"
-
-#, python-brace-format
-msgid "Deleting {0}"
-msgstr "Poista {0}"
-
-#, python-brace-format
-msgid "Could not delete {0}."
-msgstr "Ei voida poistaa {0}."
-
-#, python-brace-format
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr ""
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Siirretään {0}..."
-
-msgid "Please enter your credentials"
-msgstr ""
-
-msgid "Delete value from all selected records"
-msgstr ""
-
-msgid "Undo change for all selected records"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0} {1}"
-msgstr "Muokkaa"
-
-msgid "Different Values"
-msgstr ""
-
-msgid "This field has different values. Editing this field will overwrite the old values."
-msgstr ""
-
-#, python-brace-format
-msgid "Add {0} Relation"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to change these {0} records?"
-msgstr ""
-
-msgid "Applying changes"
-msgstr ""
-
-#, python-brace-format
-msgid "{1} - Exception {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} - Unknown Exception"
-msgstr ""
-
-msgid "Select Export Definition ..."
-msgstr ""
-
-#, python-brace-format
-msgid "Export {0}"
-msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Filemanager"
-msgstr ""
-
-msgid "Open"
-msgstr ""
-
-msgid "Choose Export Location"
-msgstr ""
-
-msgid "How would you like to save your export?"
-msgstr ""
-
-msgid "Exporting..."
-msgstr ""
-
-msgid "Export created successfully."
-msgstr ""
-
-msgid "Please check your computers downloads folder!"
-msgstr ""
-
-msgid "Export could not be created. Please try again later"
-msgstr ""
-
-msgid "Alarms"
-msgstr "Hälytykset"
-
-msgid "0 minutes before"
-msgstr "0 minuuttia ennen"
-
-msgid "5 minutes before"
-msgstr "5 minuuttia ennen"
-
-msgid "15 minutes before"
-msgstr "15 minuuttia ennen"
-
-msgid "30 minutes before"
-msgstr "30 minuuttia ennen"
-
-msgid "1 hour before"
-msgstr "1 tuntia ennen"
-
-msgid "2 hours before"
-msgstr "2 tuntia ennen"
-
-msgid "12 hours before"
-msgstr "12 tuntia ennen"
-
-msgid "1 day before"
-msgstr "1 päivää ennen"
-
-msgid "2 days before"
-msgstr "2 päivää ennen"
-
-msgid "Custom Datetime"
-msgstr "Muokattava päiväys"
-
-msgid "Alarm Time"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} minutes before"
-msgstr ""
-
-msgid "Create xprop"
-msgstr ""
-
-msgid "xprop Name"
-msgstr ""
-
-msgid "Please enter the name of the new xprop"
-msgstr ""
-
-msgid "Delete xprop"
-msgstr ""
-
-msgid "Merging Records..."
-msgstr "Yhdistä tiedot..."
-
-msgid "Merge Failed"
-msgstr "Yhdistäminen epäonnistui"
-
-#, python-brace-format
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
-msgstr ""
-
-#, python-brace-format
-msgid "Merge {0}, prefer First"
-msgstr "Yhdistä, ensimmäiseksi"
-
-#, python-brace-format
-msgid "Merge {0}, prefer Second"
-msgstr "Yhdistä, toiseksi"
-
-#, python-brace-format
-msgid "Merge {0}"
-msgstr "Yhdistä"
-
-#, python-brace-format
-msgid "First {0}"
-msgstr "Ensimmäinen"
-
-#, python-brace-format
-msgid "Second {0}"
-msgstr "Toinen"
-
-#, python-brace-format
-msgid "Final {0}"
-msgstr "Viimeinen"
-
-msgid "The record you try to add might already exist."
-msgstr ""
-
-msgid "Field Group"
-msgstr ""
-
-msgid "My Value"
-msgstr "Oma arvo"
-
-msgid "Existing Value"
-msgstr ""
-
-msgid "Final Value"
-msgstr ""
-
-msgid "Keep both records"
-msgstr ""
-
-msgid "Merge, keeping existing details"
-msgstr ""
-
-msgid "Merge, keeping my details"
-msgstr ""
-
-msgid "Keep existing record and discard mine"
-msgstr ""
-
-msgid "Action:"
-msgstr "Toiminto:"
-
-msgid "All Settings"
-msgstr ""
-
-msgid "General Preferences"
-msgstr "Yleiset asetukset"
-
-msgid "Application Settings"
-msgstr ""
-
-msgid "My Profile"
-msgstr "Oma profiili"
-
-msgid "Admin Mode"
-msgstr "Ylläpitäjä tila"
-
-msgid "All Users"
-msgstr ""
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Applications"
-msgstr "Ohjelmat"
-
-msgid "Edit Preferences"
-msgstr "Muokkaa asetuksia"
-
-msgid "Loading ..."
-msgstr "Ladataan..."
-
-msgid "Saving of preferences failed."
-msgstr "Asetuksien tallennus epäonnistui."
-
-#, python-brace-format
-msgid "You edited {0} {1}."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} have been updated properly."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} has been updated properly."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr ""
-
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Updating Grants"
-msgstr ""
-
-msgid "You are not allowed to remove all admins for this container!"
-msgstr ""
-
-msgid "is personal of"
-msgstr ""
-
-msgid "is equal to"
-msgstr ""
-
-#, python-brace-format
-msgid "Selected {0}"
-msgstr ""
-
-msgid "container"
-msgid_plural "containers"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-brace-format
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Sinulla ei ole oikeuksia valita"
-
-#, python-brace-format
-msgid "{0} grant is required for desired action"
-msgstr ""
-
-msgid "Insufficient Grants"
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-brace-format
-msgid "please select a {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Select a {0}"
-msgstr ""
-
-msgid "Properties"
-msgstr "Asetukset"
-
-msgid "Hierarchy/Name"
-msgstr ""
-
-msgid "My Grants"
-msgstr ""
-
-msgid "CalDAV URL"
-msgstr ""
-
-msgid "The grant to read records of this container"
-msgstr ""
-
-msgid "Add"
-msgstr ""
-
-msgid "The grant to add records to this container"
-msgstr ""
-
-msgid "The grant to edit records in this container"
-msgstr ""
-
-msgid "The grant to delete records in this container"
-msgstr ""
-
-msgid "The grant to export records from this container"
-msgstr ""
-
-msgid "Sync"
-msgstr "Synkronoi"
-
-msgid "The grant to synchronise records with this container"
-msgstr ""
-
-msgid "Admin"
-msgstr "Ylläpitäjä"
-
-msgid "The grant to administrate this container"
-msgstr ""
-
-msgid "Timestamp"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr ""
-
-msgid "No history to display"
-msgstr ""
-
-msgid "History"
-msgstr ""
-
-msgid "Quick Search"
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "Key Field Records"
-msgstr ""
-
-#, python-brace-format
-msgid "Transition from {current} to {target} is not allowed."
-msgstr ""
-
-msgid "Not Allowed"
-msgstr ""
-
-msgid "Default"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Add a New ID..."
-msgstr ""
-
-msgid "Add a New Value..."
-msgstr ""
-
-msgid "ID already exists"
-msgstr ""
-
-msgid "ID needs to follow the syntax PARENTID:ID"
-msgstr ""
-
-msgid "Custom Fields"
-msgstr "Muokattavat kentät"
-
-msgid "Select a country..."
-msgstr "Valitse maa..."
-
-msgid "Export as ..."
-msgstr ""
-
-msgid "Change user account"
-msgstr ""
-
-msgid "Switch to another user's account"
-msgstr ""
-
-msgid "Switch to this user account:"
-msgstr ""
-
-msgid "Select Account"
-msgstr ""
-
-msgid "Changing user account ..."
-msgstr ""
-
-msgid "Search User"
-msgstr ""
-
-msgid "Search Group"
-msgstr ""
-
-msgid "Search Role"
-msgstr ""
-
-msgid "Add Anyone"
-msgstr ""
-
-msgid "Add Myself"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Search for roles ..."
-msgstr ""
-
-msgid "Site"
-msgstr ""
-
-msgid "no site association"
-msgstr ""
-
-msgid "this month"
-msgstr "tämä kuukausi"
-
-msgid "last month"
-msgstr "edellinen kuukausi"
-
-msgid "this quarter"
-msgstr "tämä neljännes"
-
-msgid "last quarter"
-msgstr "edellinen neljännes"
-
-msgid "this year"
-msgstr "tämä vuosi"
-
-msgid "last year"
-msgstr "edellinen vuosi"
-
-msgid "Image"
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
-msgstr ""
-
-msgid "Quota usage"
-msgstr ""
-
-msgid "today"
-msgstr "tänään"
-
-msgid "yesterday"
-msgstr "eilen"
-
-msgid "this week"
-msgstr "tämä viikko"
-
-msgid "last week"
-msgstr "edellinen viikko"
-
-msgid "the week before last"
-msgstr ""
-
-msgid "last three months"
-msgstr ""
-
-msgid "last six months"
-msgstr ""
-
-msgid "anytime"
-msgstr ""
-
-msgid "tomorrow"
-msgstr "huomenna"
-
-msgid "next week"
-msgstr "seuraava viikko"
-
-msgid "next month"
-msgstr "seuraava vuosi"
-
-msgid "next quarter"
-msgstr "seuraava neljännes"
-
-msgid "next year"
-msgstr "seuraava vuosi"
-
-msgid "contains"
-msgstr ""
-
-msgid "contains word starting with"
-msgstr ""
-
-msgid "contains not"
-msgstr ""
-
-msgid "reg. exp."
-msgstr ""
-
-msgid "is equal to without (-, )"
-msgstr ""
-
-msgid "is greater than"
-msgstr ""
-
-msgid "is less than"
-msgstr ""
-
-msgid "is not"
-msgstr ""
-
-msgid "{gender, select, male {one of} female {one of} other {one of}}"
-msgstr ""
-
-msgid "{gender, select, male {all of} female {all of} other {all of}}"
-msgstr ""
-
-msgid "{gender, select, male {none of} female {none of} other {none of}}"
-msgstr ""
-
-msgid "is before"
-msgstr ""
-
-msgid "is after"
-msgstr ""
-
-msgid "is within"
-msgstr ""
-
-msgid "is in week no."
-msgstr ""
-
-msgid "starts with"
-msgstr ""
-
-msgid "ends with"
-msgstr ""
-
-msgid "defined by"
-msgstr ""
-
-msgid "Search Account ..."
-msgstr ""
-
-msgid "Period ..."
-msgstr ""
-
-msgid "show details"
-msgstr "näytä tiedot"
-
-msgid "Always show advanced filters"
-msgstr ""
-
-msgid "hide details"
-msgstr ""
-
-msgid "show"
-msgstr ""
-
-#, python-brace-format
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-brace-format
-msgid "Create {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Loading {0} ..."
-msgstr ""
-
-msgid "Edit definition"
-msgstr ""
-
-msgid "Start definition"
-msgstr ""
-
-msgid "File"
-msgid_plural "Files"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
-msgstr ""
-
-msgid "Send by E-Mail"
-msgstr ""
-
-msgid "name"
-msgstr ""
-
-msgid "size"
-msgstr ""
-
-msgid "type"
-msgstr "tyyppi"
-
-msgid "via"
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
-msgstr ""
-
-msgid "Move Details Panel To"
-msgstr ""
-
-msgid "Bottom"
-msgstr ""
-
-msgid "Right"
-msgstr ""
-
-msgid "Print Page"
-msgstr "Tulosta sivu"
-
-#, python-brace-format
-msgid "Move {0}"
-msgid_plural "Move {0}"
-msgstr[0] ""
-msgstr[1] ""
-
-#, python-brace-format
-msgid "Export as {0}"
-msgstr ""
-
-msgid "Import items"
-msgstr ""
-
-msgid "No data to display"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying records {0} - {1} of {2}"
-msgstr ""
-
-#, python-brace-format
-msgid "No {0} to display"
-msgstr ""
-
-msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
-msgstr ""
-
-msgid "Records"
-msgstr ""
-
-msgid "New..."
-msgstr "Uusi..."
-
-msgid "Add to..."
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Grid Panel Key Bindings"
-msgstr ""
-
-#, python-brace-format
-msgid "Moving {0}"
-msgstr ""
-
-msgid "You are not allowed to delete all pages at once"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "... This may take a long time!"
-msgstr ""
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr ""
-
-msgid "has notes"
-msgstr ""
-
-msgid "This is a multilingual field:"
-msgstr ""
-
-msgid "Show records that match to one of the following filters"
-msgstr ""
-
-msgid "or alternatively"
-msgstr ""
-
-msgid "Add alternative filter"
-msgstr ""
-
-msgid "Remove Filter"
-msgstr ""
-
-msgid "Show"
-msgstr "Näytä"
-
-msgid "and"
-msgstr ""
-
-msgid "or"
-msgstr ""
-
-msgid "add new filter"
-msgstr "Lisää uusi suodatin"
-
-msgid "reset all filters"
-msgstr "nollaa kaikki suodattimet"
-
-msgid "start search"
-msgstr "aloita haku"
-
-msgid "save as favorite"
-msgstr ""
-
-msgid "Load a favorite"
-msgstr ""
-
-msgid "select a field"
-msgstr "valitse kenttä"
-
-msgid "Delete this filter"
-msgstr "Poista tämä suodatin"
-
-#, python-brace-format
-msgid "Old {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "New {0}"
-msgstr "Uusi"
-
-#, python-brace-format
-msgid "Repeat new {0}"
-msgstr ""
-
-msgid "New "
-msgstr ""
-
-msgid "The following files have changed:"
-msgstr ""
-
-msgid "has been created."
-msgstr ""
-
-msgid "has been changed."
-msgstr ""
-
-msgid "has been deleted."
-msgstr ""
-
-msgid "filemanager notification"
-msgstr ""
-
-msgid "email quota notification"
-msgstr ""
-
-msgid "email soft quota notification"
-msgstr ""
-
-msgid "email "
-msgstr ""
-
-msgid "filemanager quota notification"
-msgstr ""
-
-msgid "filemanager soft quota notification"
-msgstr ""
-
-msgid "MFA configs are not valid:"
-msgstr ""
-
-msgid "Your Tine 2.0 account has been deactivated"
-msgstr ""
-
-msgid "Password failed to match the following policy requirements: "
 msgstr ""
 
 msgid "Accesslog rotation in days"
@@ -3004,6 +364,11 @@ msgstr ""
 
 msgid "Autodiscover mail config"
 msgstr ""
+
+msgid "Municipality Key"
+msgid_plural "Municipality Keys"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Show the Municipality Key in the Coredata"
 msgstr ""
@@ -3653,6 +1018,11 @@ msgstr ""
 msgid "Available Note types for modlog history"
 msgstr ""
 
+msgid "Note"
+msgid_plural "Notes"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Telephone"
 msgstr ""
 
@@ -3680,6 +1050,11 @@ msgstr ""
 msgid "System User"
 msgstr ""
 
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Volunteer"
 msgstr ""
 
@@ -3704,15 +1079,48 @@ msgstr ""
 msgid "Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter."
 msgstr ""
 
-msgid "by"
+msgid "Personal container"
 msgstr ""
 
-msgid "Changed fields:"
+#, python-format
+msgid "%s's personal container"
+msgstr ""
+
+msgid "You are not allowed to delete your default container!"
+msgstr ""
+
+msgid "You are not allowed to remove all (admin) grants for this container."
+msgstr ""
+
+msgid "Personal containers can have only one owner!"
+msgstr ""
+
+msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
+msgstr ""
+
+msgid "A container with this name already exists."
+msgstr ""
+
+msgid "renaming is currently only possible if no models are assigned"
 msgstr ""
 
 #, python-format
 msgid "%s's personal files"
 msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "The new password must be different from the old one."
+msgstr ""
+
+msgid "Old pin is wrong."
+msgstr ""
+
+msgid "Bank Holiday Calendar"
+msgid_plural "Bank Holiday Calendars"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
@@ -3722,33 +1130,2811 @@ msgstr ""
 msgid "Status %s is not valid."
 msgstr ""
 
-msgid "renaming is currently only possible if no models are assigned"
-msgstr ""
-
-msgid "Personal default"
-msgstr ""
-
-msgid "default"
-msgstr "oletus"
-
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr ""
 
-msgid "Scheduler task failed"
+msgid "Email account already exists"
+msgstr ""
+
+msgid "Area is locked"
+msgstr ""
+
+msgid "Area could not be unlocked"
+msgstr ""
+
+msgid "Confirmation is required"
+msgstr ""
+
+msgid "Invalid Relations"
+msgstr ""
+
+msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
+msgstr ""
+
+msgid "Wrong month format!"
+msgstr ""
+
+msgid "The month must have the format YYYY-MM!"
+msgstr ""
+
+msgid "Password Policy Violation"
+msgstr ""
+
+#, python-brace-format
+msgid "Exception ({0})"
+msgstr ""
+
+msgid "Quota is exceeded"
+msgstr ""
+
+msgid "System Container"
+msgstr ""
+
+msgid "This is a system container which could not be deleted!"
+msgstr ""
+
+msgid "Generic System Exception"
+msgstr ""
+
+msgid "Exporttime"
+msgstr ""
+
+msgid "Export only currently shown columns"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Created by"
+msgstr ""
+
+msgid "Activities"
+msgstr ""
+
+msgid "Total: "
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "The following files have changed:"
+msgstr ""
+
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "has been created."
+msgstr ""
+
+msgid "has been changed."
+msgstr ""
+
+msgid "has been deleted."
+msgstr ""
+
+msgid "filemanager notification"
+msgstr ""
+
+msgid "email quota notification"
+msgstr ""
+
+msgid "email soft quota notification"
+msgstr ""
+
+msgid "email "
+msgstr ""
+
+msgid "filemanager quota notification"
+msgstr ""
+
+msgid "filemanager soft quota notification"
+msgstr ""
+
+msgid "Number of distinct users"
+msgstr ""
+
+msgid "Number of users"
+msgstr ""
+
+msgid "  User Accounts:\n"
+msgstr ""
+
+msgid "MFA password wrong"
+msgstr ""
+
+msgid "MFA send out triggered"
+msgstr ""
+
+msgid "Anyone"
 msgstr ""
 
 #, python-format
-msgid "Your scheduler task %s has failed %d times."
+msgid "The following fields weren't imported: %s"
 msgstr ""
 
-msgid "- The last filter I used -"
+msgid "N/A"
+msgstr ""
+
+msgid "Import Community identification Numbers"
+msgstr ""
+
+msgid "Municipality Key Import"
+msgstr ""
+
+#, python-brace-format
+msgid "About {0}"
+msgstr "Tietoa"
+
+#, python-brace-format
+msgid "Learn more about {0}"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Released under different"
+msgstr ""
+
+msgid "Open Source Licenses"
+msgstr ""
+
+msgid "with the help of our"
+msgstr ""
+
+msgid "Contributors"
+msgstr ""
+
+msgid "Subscription"
+msgstr ""
+
+msgid "Filesystem Mounts"
+msgstr ""
+
+msgid "Profile Information"
+msgstr "Profiilin tiedot"
+
+msgid "Apply"
+msgstr "Hyväksy"
+
+msgid "Please Wait"
+msgstr "Odota hetki"
+
+msgid "Read"
+msgstr "Lue"
+
+msgid "The field is readable part of the profile"
+msgstr "Kenttä on luettava osa profiilia"
+
+msgid "Edit"
+msgstr "Muokkaa"
+
+msgid "The field is editable part of the profile"
+msgstr "Kenttä on muokattava osa profiilia"
+
+msgid "Field Name"
+msgstr "Kentän nimi"
+
+msgid "Not Supported"
+msgstr ""
+
+msgid "Your request is not supported by this version."
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "New "
+msgstr ""
+
+msgid "Missing Applications"
+msgstr "Puuttuvat ohjelmat"
+
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Ohjelmia ei ole aktivoitu sinulle. Ota yhteyttä ylläpitäjään."
+
+msgid "Search for Application ..."
+msgstr ""
+
+msgid "Choose MFA Deivce"
+msgstr ""
+
+msgid "This area is locked. Which device should be used to unlock?"
+msgstr ""
+
+msgid "Unlocking ..."
+msgstr ""
+
+msgid "Click here to unlock this area."
+msgstr ""
+
+msgid "MFA device missing"
+msgstr ""
+
+msgid "No matching MFA device for this area found. Configure a matching device please."
+msgstr ""
+
+msgid "Try again?"
+msgstr ""
+
+msgid "Fraction of the day"
+msgstr ""
+
+msgid "One quarter of the day"
+msgstr ""
+
+msgid "One third of the day"
+msgstr ""
+
+msgid "Half of the day"
+msgstr ""
+
+msgid "Two third of the day"
+msgstr ""
+
+msgid "Three quarters of the day"
+msgstr ""
+
+msgid "Whole day"
+msgstr ""
+
+msgid "Add new Element..."
+msgstr ""
+
+msgid "Usage:&#160;"
+msgstr "Käyttö"
+
+msgid "personal"
+msgstr "henkilökohtainen"
+
+msgid "No Information"
+msgstr "Ei tietoa"
+
+msgid "No Access"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} second"
+msgid_plural "{0} seconds"
+msgstr[0] "sekuntti"
+msgstr[1] "sekunnit"
+
+msgid "Confirm"
+msgstr "Vahvista"
+
+msgid "Restart application to apply new configuration?"
+msgstr ""
+
+#, python-brace-format
+msgid "All {0}"
+msgstr "Kaikki"
+
+#, python-brace-format
+msgid "Shared {0}"
+msgstr "Jaettu"
+
+#, python-brace-format
+msgid "Other Users {0}"
+msgstr "Muut käyttäjät"
+
+#, python-brace-format
+msgid "My {0}"
+msgstr "Minä"
+
+msgid "Credits"
+msgstr ""
+
+msgid "Translation not found"
+msgstr ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tehtävä"
+msgstr[1] "Tehtävät"
+
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "tehtävälista"
+msgstr[1] "tehtävälistat"
+
+msgid "Abnormal End"
+msgstr ""
+
+msgid "Cancel"
+msgstr "Peruuta"
+
+msgid "Send Report"
+msgstr "Lähetä raportti"
+
+msgid "An error occurred, the program ended abnormal."
+msgstr ""
+
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Viimeksi suorittamasi toiminto ei tehty kunnolla."
+
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Helpottaaksesi ohjelman kehitystä. Liitä pieni kuvaus mitä olit tekemässä kun virhe ilmeni."
+
+msgid "Description"
+msgstr "Kuvaus"
+
+msgid "Send Contact Information"
+msgstr "Lähetä yhteystiedot"
+
+msgid "Details:"
+msgstr "Tiedot:"
+
+msgid "Sending report..."
+msgstr "Lähetetään raporttia..."
+
+msgid "Please wait a moment"
+msgstr "Ole hyvä ja odota hetki"
+
+msgid "Transmission Completed"
+msgstr "Lähetys valmis"
+
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Raporttisi on lähetetty. Kiitos avustasi"
+
+msgid "Please restart your browser now!"
+msgstr "Käynnistä selaimesi uudestaan nyt!"
+
+msgid "Insufficient Rights"
+msgstr ""
+
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Olemme pahoillamme, sinulla ei ole oikeuksia tehdä tätä toimintoa."
+
+msgid "Not Found"
+msgstr "Ei löytynyt"
+
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr ""
+
+msgid "Concurrent Updates"
+msgstr ""
+
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr ""
+
+msgid "Rate-Limit"
+msgstr ""
+
+msgid "This method is rate-limited and you sent too many requests."
+msgstr ""
+
+msgid "Service Unavailable"
+msgstr "Palvelu ei saatavilla"
+
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
+msgstr ""
+
+msgid "Server Message:"
+msgstr "Palvelimen viesti:"
+
+msgid "Invalid Data"
+msgstr "Virheellinen tieto"
+
+msgid "Your input data is not valid. Please provide valid data."
+msgstr "Antamasi tietoa on virheellinen. Tarkista tietojen oikeellisuus."
+
+msgid "Connection lost, please check your network!"
+msgstr "Yhteys katkennut, tarkista verkkoyhteytesi!"
+
+msgid "Timeout"
+msgstr "Aikakatkaisu"
+
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "No Response"
+msgstr ""
+
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Out of Resources"
+msgstr ""
+
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
+msgstr ""
+
+msgid "No Role Memberships"
+msgstr ""
+
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr ""
+
+msgid "Method Not Found / Insufficent Permissions"
+msgstr ""
+
+msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Outdated Browser"
+msgstr ""
+
+msgid "You need a current Browser to use this program."
+msgstr ""
+
+msgid "License"
+msgstr ""
+
+msgid "Login"
+msgstr "Kirjaudu"
+
+msgid "Username"
+msgstr "Käyttäjätunnus"
+
+msgid "Password"
+msgstr "Salasana"
+
+msgid "Certificate detected. Please, press Login button to proceed."
+msgstr ""
+
+msgid "Login via OpenID Connect"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} is made for you"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Homepage"
+msgstr ""
+
+msgid "Translations"
+msgstr ""
+
+#, python-brace-format
+msgid "Translation state of {0}: {1}%."
+msgstr ""
+
+#, python-brace-format
+msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Translation Howto"
+msgstr ""
+
+msgid "Detailed Language Statistics"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license expired."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} trial"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+
+msgid "Powered by:"
+msgstr ""
+
+msgid "online open source groupware and crm"
+msgstr ""
+
+#, python-brace-format
+msgid "about {0} minutes"
+msgstr "noin {0} minuuttia"
+
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 tarvitsee apuasi"
+
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "Mekin tarvitsemme säännöllisesti palautetta, jotta seuraava Tine 2.0 sopisi tarpeisiisi vieläkin paremmin. Auta meitä ja itseäsi osallistumalla:"
+
+msgid "participate!"
+msgstr "osallistu!"
+
+msgid "Languages"
+msgstr "Kielet"
+
+msgid "Duration"
+msgstr "Kesto"
+
+msgid "Browser incompatible"
+msgstr "Selaimen yhteensopimattomuus"
+
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Selaimesi ei tue Tine 2.0 ohjelmaa"
+
+msgid "Browser incompatible?"
+msgstr "Selaimen yhteensopimattomuus?"
+
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr ""
+
+msgid "You might try one of these browsers:"
+msgstr "Voit kokeilla seuraavia selaimia:"
+
+#, python-brace-format
+msgid "Login successful. Loading {0}..."
+msgstr "Kirjautuminen onnistui. Ladataan {0}..."
+
+msgid "Please wait!"
+msgstr "Odota hetki!"
+
+msgid "There was an error verifying your certificate!"
+msgstr ""
+
+msgid "Your username and/or your password are wrong!"
+msgstr ""
+
+msgid "Login failure"
+msgstr "Kirjautuminen epäonnistui"
+
+msgid "Logging you in..."
+msgstr "Kirjaudutaan sisään..."
+
+msgid "Please wait"
+msgstr "Odota hetki"
+
+msgid "Errors"
+msgstr "Virheet"
+
+msgid "Please fix the errors noted."
+msgstr "Korjaa seuraavat virheet."
+
+msgid "Redirecting to SSO Identity Provider"
+msgstr ""
+
+msgid "Please enter your login data"
+msgstr "Kirjoita kirjautumistietosi"
+
+#, python-brace-format
+msgid "User: {0}"
+msgstr "Käyttäjä: {0}"
+
+msgid "Return to original user account"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Vikatila Console (Ctrl + F11)"
+
+msgid "Preferences"
+msgstr "Asetukset"
+
+msgid "Edit Profile"
+msgstr "Muokkaa profiilia"
+
+msgid "Change password"
+msgstr "Muuta salasana"
+
+msgid "Manage MFA Devices"
+msgstr ""
+
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
+#, python-brace-format
+msgid "Logout from {0}"
+msgstr "Kirjaudutaan ulos {0}"
+
+#, python-brace-format
+msgid "The license expires in {0} days"
+msgstr ""
+
+#, python-brace-format
+msgid "Please visit the shop at {0}"
+msgstr ""
+
+msgid "Allow desktop notifications"
+msgstr "Salli työpöydän ilmoitukset"
+
+msgid "Request permissions for webkit desktop notifications."
+msgstr "Salli työpöydän ilmoitukset"
+
+msgid "Reload the application"
+msgstr ""
+
+msgid "Reloads the application and clears caches."
+msgstr ""
+
+msgid "Are you sure you want to logout?"
+msgstr "Haluatko todella kirjautua ulos?"
+
+msgid "Logging you out..."
+msgstr "Kirjaudutaan ulos..."
+
+msgid "You need to set a new password."
+msgstr ""
+
+msgid "Multi Factor Authentication"
+msgstr ""
+
+msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
+msgstr ""
+
+msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
+msgstr ""
+
+msgid "Multi Factor Authentication Device Configuration"
+msgstr ""
+
+msgid "Secret Key"
+msgstr ""
+
+msgid "Please note: After saving you can not view this autogenerated secret key again!"
+msgstr ""
+
+msgid "Generating secret key ..."
+msgstr ""
+
+msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
+msgstr ""
+
+msgid "for"
+msgstr ""
+
+msgid "MFA secret required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Secret from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Authenticator code required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Authenticator code from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "PIN required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
+msgstr ""
+
+#, python-brace-format
+msgid "{mfaDevice.device_name} secret"
+msgstr ""
+
+msgid "SMS security code required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Security code from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Token required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Token from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Password required"
+msgstr ""
+
+msgid "This area is locked. To unlock it you need to provide your password."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr ""
+
+msgid "Yubico OTP required"
+msgstr ""
+
+msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
+msgstr ""
+
+msgid "Yubico OTP"
+msgid_plural "Yubico OTPs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Add new MFA Device"
+msgstr ""
+
+msgid "Click here to add note"
+msgstr ""
+
+msgid "FIDO2 WebAuthn Device"
+msgid_plural "FIDO2 WebAuthn Devices"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Please open the following URL in your Browser for more security key options"
+msgstr ""
+
+msgid "Configuring FIDO2 WebAuthn Device ..."
+msgstr ""
+
+msgid "FIDO2 WebAuthn Device is configured."
+msgstr ""
+
+msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
+msgstr ""
+
+msgid "Unsupported Configuration"
+msgstr ""
+
+#, python-brace-format
+msgid "see {url} for details"
+msgstr ""
+
+#, python-brace-format
+msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
+msgstr ""
+
+msgid "FIDO2 WebAuthn registration failed. Try again?"
+msgstr ""
+
+msgid "Country"
+msgid_plural "Countries"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Grant"
+msgid_plural "Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Merkki"
+msgstr[1] "Merkit"
+
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "Tuo"
+msgstr[1] "Tuonti"
+
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "Vie"
+msgstr[1] "Vienti"
+
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Valtakirja"
+msgstr[1] "Valtakirjat"
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Suhde"
+msgstr[1] "Suhteet"
+
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "Osasto"
+msgstr[1] "Osastot"
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "Asetus"
+msgstr[1] "Asetukset"
+
+msgid "Configs"
+msgstr "Asetukset"
+
+msgid "Query"
+msgstr ""
+
+msgid "Path"
+msgid_plural "Paths"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Search for Municipality Keys ..."
+msgstr ""
+
+msgid "PIN"
+msgid_plural "PINs"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Change {0} For \"{1}\""
+msgstr ""
+
+#, python-brace-format
+msgid "Old {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "New {0}"
+msgstr "Uusi"
+
+#, python-brace-format
+msgid "Repeat new {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Changing {0}"
+msgstr ""
+
+msgid "Success"
+msgstr "Onnistui"
+
+#, python-brace-format
+msgid "Your {0} has been changed."
+msgstr ""
+
+msgid "Failure"
+msgstr "Virhe"
+
+#, python-brace-format
+msgid "{0} mismatch, please correct."
+msgstr ""
+
+msgid "Outdent Text"
+msgstr "Ulonna teksti"
+
+msgid "Indent Text"
+msgstr "Sisennä teksti"
+
+msgid "Remove Formatting"
+msgstr "Poista muotoilu"
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activated Features"
+msgstr ""
+
+msgid "Your Subscription is unavailable"
+msgstr ""
+
+msgid "Your Subscription is not valid"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Follow System"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Light Mode"
+msgstr ""
+
+msgid "Create Contact"
+msgstr ""
+
+msgid "Copy to Clipboard"
+msgstr ""
+
+msgid "Compose Message To"
+msgstr ""
+
+msgid "Session Timed Out"
+msgstr ""
+
+msgid "You can close this window."
+msgstr ""
+
+msgid "Your Client is Outdated"
+msgstr ""
+
+msgid "A new client is available, press OK to get this version"
+msgstr ""
+
+msgid "tine needs to be updated or is not installed yet."
+msgstr ""
+
+msgid "Please wait or contact your administrator"
+msgstr ""
+
+msgid "Total    Uploads"
+msgstr ""
+
+msgid "Complete Uploads"
+msgstr ""
+
+msgid "Failed   Uploads"
+msgstr ""
+
+msgid "online"
+msgstr "paikalla"
+
+msgid "offline"
+msgstr "poissa"
+
+msgid "Upload progress"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} available (total: {1})"
+msgstr ""
+
+#, python-brace-format
+msgid "Error while uploading \"{fileName}\". Please try again later."
+msgstr ""
+
+msgid "Upload Failed"
+msgstr "Päivitys eäonnistui"
+
+msgid "Uploads Monitor"
+msgstr ""
+
+msgid "Empty List"
+msgstr ""
+
+msgid "Not all uploads are finished yet. What would you to do?"
+msgstr ""
+
+msgid "Remove finished uploads from this list only"
+msgstr ""
+
+msgid "Cancel all unfinished uploads before"
+msgstr ""
+
+msgid "Removing files..."
+msgstr ""
+
+msgid "Total Uploads : "
+msgstr ""
+
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "No"
+msgstr "Ei"
+
+#, python-brace-format
+msgid "{0} is not a valid unit"
+msgstr ""
+
+#, python-brace-format
+msgid "choose other {0}..."
+msgstr ""
+
+msgid "Not a valid time"
+msgstr ""
+
+msgid "Job Title"
+msgstr ""
+
+msgid "Select Image"
+msgstr ""
+
+msgid "Insert an image with the selected size"
+msgstr ""
+
+msgid "Convert to pure text"
+msgstr ""
+
+msgid "Loading"
+msgstr "Ladataan"
+
+msgid "Click to edit"
+msgstr "Muokkaa"
+
+msgid "Image Failed"
+msgstr "Kuva epäonnistui"
+
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Kuvan lataus ei onnistunut. Ota yhteyttä ylläpitoon jos ongelma ei poistu."
+
+msgid "Not An Image"
+msgstr ""
+
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Valitse kuvatiedosto  (gif/png/jpeg)"
+
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Kuvan lataus epäonnistui. Ota yhteyttä ylläpitoon jos ongelma ei poistu."
+
+msgid "Change Image"
+msgstr "Muuta kuva"
+
+msgid "Crop Image"
+msgstr "Leikkaa kuva"
+
+msgid "Delete Image"
+msgstr "Poista kuva"
+
+msgid "Show Original Image"
+msgstr "Näytä alkuperäinen kuva"
+
+msgid "When preference is locked, normal user can not edit the preference anymore."
+msgstr ""
+
+msgid "no decimals allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "max decimals allowed: {0}"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Quarter"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Software Version"
+msgstr "Ohjelma versio"
+
+msgid "Select all"
+msgstr ""
+
+msgid "Deselect all"
+msgstr ""
+
+#, python-brace-format
+msgid "Please Sort by \"{0}\""
+msgstr ""
+
+#, python-brace-format
+msgid "To use manual sorting, you need to sort by column \"{0}\""
+msgstr ""
+
+msgid "Export Records from these Positions"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} selected"
+msgstr "valitut"
+
+msgid "Unselect all"
+msgstr ""
+
+#, python-brace-format
+msgid "Select all pages ({0} records)"
+msgstr ""
+
+msgid "Toggle selection"
+msgstr ""
+
+msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
+msgstr ""
+
+msgid "quarantined"
+msgstr ""
+
+msgid "(paused)"
+msgstr ""
+
+msgid "Cannot open new window"
+msgstr ""
+
+#, python-brace-format
+msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
+msgstr ""
+
+msgid "Window can be closed"
+msgstr ""
+
+#, python-brace-format
+msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
+msgstr ""
+
+msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+msgstr ""
+
+msgid "Preparing print, please wait..."
+msgstr ""
+
+msgid "Printing Error"
+msgstr ""
+
+msgid "Related to"
+msgstr ""
+
+msgid "enter searchfilter"
+msgstr ""
+
+msgid "Leave site?"
+msgstr ""
+
+msgid "Changes you made may not be saved."
+msgstr ""
+
+msgid "Change user account"
+msgstr ""
+
+msgid "Switch to another user's account"
+msgstr ""
+
+msgid "Switch to this user account:"
+msgstr ""
+
+msgid "Select Account"
+msgstr ""
+
+msgid "Changing user account ..."
+msgstr ""
+
+msgid "Search User"
+msgstr ""
+
+msgid "Search Group"
+msgstr ""
+
+msgid "Search Role"
+msgstr ""
+
+msgid "Add Anyone"
+msgstr ""
+
+msgid "Add Myself"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Search for roles ..."
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Creation time"
+msgstr ""
+
+#, python-brace-format
+msgid "Add {0}"
+msgstr "Lisää"
+
+#, python-brace-format
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Muokkaa"
+msgstr[1] "Muokkaa"
+
+#, python-brace-format
+msgid "Remove {0}"
+msgstr ""
+
+msgid "Enter new note:"
+msgstr ""
+
+msgid "Add Note"
+msgstr ""
+
+msgid "Timestamp"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr ""
+
+msgid "No history to display"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "CalDAV URL"
+msgstr ""
+
+msgid "is personal of"
+msgstr ""
+
+msgid "is equal to"
+msgstr ""
+
+#, python-brace-format
+msgid "Selected {0}"
+msgstr ""
+
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Updating Grants"
+msgstr ""
+
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+
+msgid "The grant to read records of this container"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "The grant to add records to this container"
+msgstr ""
+
+msgid "The grant to edit records in this container"
+msgstr ""
+
+msgid "Delete"
+msgstr "Poista"
+
+msgid "The grant to delete records in this container"
+msgstr ""
+
+msgid "The grant to export records from this container"
+msgstr ""
+
+msgid "Sync"
+msgstr "Synkronoi"
+
+msgid "The grant to synchronise records with this container"
+msgstr ""
+
+msgid "Admin"
+msgstr "Ylläpitäjä"
+
+msgid "The grant to administrate this container"
+msgstr ""
+
+msgid "Properties"
+msgstr "Asetukset"
+
+msgid "Hierarchy/Name"
+msgstr ""
+
+msgid "My Grants"
+msgstr ""
+
+#, python-brace-format
+msgid "Select a {0}"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "please select a {0}"
+msgstr ""
+
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Sinulla ei ole oikeuksia valita"
+
+#, python-brace-format
+msgid "{0} grant is required for desired action"
+msgstr ""
+
+msgid "Insufficient Grants"
+msgstr ""
+
+msgid "Modules"
+msgstr ""
+
+msgid "Select a country..."
+msgstr "Valitse maa..."
+
+msgid "Custom Fields"
+msgstr "Muokattavat kentät"
+
+#, python-brace-format
+msgid "Change settings for application {0}"
+msgstr "Muuta ohjelman asetuksia"
+
+msgid "Defaults"
+msgstr "Oletukset"
+
+msgid "Alarms"
+msgstr "Hälytykset"
+
+msgid "0 minutes before"
+msgstr "0 minuuttia ennen"
+
+msgid "5 minutes before"
+msgstr "5 minuuttia ennen"
+
+msgid "15 minutes before"
+msgstr "15 minuuttia ennen"
+
+msgid "30 minutes before"
+msgstr "30 minuuttia ennen"
+
+msgid "1 hour before"
+msgstr "1 tuntia ennen"
+
+msgid "2 hours before"
+msgstr "2 tuntia ennen"
+
+msgid "12 hours before"
+msgstr "12 tuntia ennen"
+
+msgid "1 day before"
+msgstr "1 päivää ennen"
+
+msgid "2 days before"
+msgstr "2 päivää ennen"
+
+msgid "Custom Datetime"
+msgstr "Muokattava päiväys"
+
+msgid "Alarm Time"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} minutes before"
+msgstr ""
+
+msgid "Attachments"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Content Type"
+msgstr ""
+
+msgid "Creation Time"
+msgstr "Luotu"
+
+msgid "Please enter your credentials"
+msgstr ""
+
+msgid "OK"
+msgstr "Ok"
+
+msgid "Merging Records..."
+msgstr "Yhdistä tiedot..."
+
+msgid "Merge Failed"
+msgstr "Yhdistäminen epäonnistui"
+
+#, python-brace-format
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr ""
+
+#, python-brace-format
+msgid "Merge {0}, prefer First"
+msgstr "Yhdistä, ensimmäiseksi"
+
+#, python-brace-format
+msgid "Merge {0}, prefer Second"
+msgstr "Yhdistä, toiseksi"
+
+#, python-brace-format
+msgid "Merge {0}"
+msgstr "Yhdistä"
+
+#, python-brace-format
+msgid "First {0}"
+msgstr "Ensimmäinen"
+
+#, python-brace-format
+msgid "Second {0}"
+msgstr "Toinen"
+
+#, python-brace-format
+msgid "Final {0}"
+msgstr "Viimeinen"
+
+msgid "The record you try to add might already exist."
+msgstr ""
+
+msgid "Field Group"
+msgstr ""
+
+msgid "My Value"
+msgstr "Oma arvo"
+
+msgid "Existing Value"
+msgstr ""
+
+msgid "Final Value"
+msgstr ""
+
+msgid "Keep both records"
+msgstr ""
+
+msgid "Merge, keeping existing details"
+msgstr ""
+
+msgid "Merge, keeping my details"
+msgstr ""
+
+msgid "Keep existing record and discard mine"
+msgstr ""
+
+msgid "Action:"
+msgstr "Toiminto:"
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "delete"
+msgstr "poista"
+
+#, python-brace-format
+msgid "Print {0}"
+msgstr ""
+
+msgid "Saved in"
+msgstr "tallennettu kohteeseen"
+
+#, python-brace-format
+msgid "{0} (copy)"
+msgstr ""
+
+#, python-brace-format
+msgid "Copy {0}"
+msgstr "Kopioi {0}"
+
+msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr "Muokkaa {0} \"{1}\""
+
+msgid "Files are still uploading."
+msgstr ""
+
+msgid "Please review the fields marked red. They contain invalid values."
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete this {0}?"
+msgstr "Haluatko poistaa nämä {0}?"
+
+#, python-brace-format
+msgid "Deleting {0}"
+msgstr "Poista {0}"
+
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#, python-brace-format
+msgid "Could not delete {0}."
+msgstr "Ei voida poistaa {0}."
+
+#, python-brace-format
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Siirretään {0}..."
+
+#, python-brace-format
+msgid "{1} - Exception {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} - Unknown Exception"
+msgstr ""
+
+msgid "Select Export Definition ..."
+msgstr ""
+
+#, python-brace-format
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Filemanager"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Choose Export Location"
+msgstr ""
+
+msgid "How would you like to save your export?"
+msgstr ""
+
+msgid "Exporting..."
+msgstr ""
+
+msgid "Export created successfully."
+msgstr ""
+
+msgid "Please check your computers downloads folder!"
+msgstr ""
+
+msgid "Export could not be created. Please try again later"
+msgstr ""
+
+msgid "What would you like to do?"
+msgstr ""
+
+msgid "You need to select an option!"
+msgstr ""
+
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgstr ""
+
+msgid "Following you find a list of all supported import formats."
+msgstr ""
+
+msgid "Choose File and Format"
+msgstr ""
+
+msgid "Choose Import File"
+msgstr ""
+
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+msgid "What should the file you upload look like?"
+msgstr ""
+
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+msgid "Download example file"
+msgstr ""
+
+#, python-brace-format
+msgid "Select {0} to add you {1} to:"
+msgstr ""
+
+msgid "Set Import Options"
+msgstr ""
+
+msgid "Checking Import"
+msgstr ""
+
+msgid "Resolve Conflicts"
+msgstr ""
+
+msgid "Conflict"
+msgstr ""
+
+msgid "First Conflict"
+msgstr ""
+
+msgid "Previous Conflict"
+msgstr ""
+
+msgid "Next Conflict"
+msgstr ""
+
+msgid "Last Conflict"
+msgstr ""
+
+msgid "Resolve this conflict"
+msgstr ""
+
+msgid "Resolve all conflicts"
+msgstr ""
+
+msgid "Processing Conflict Data"
+msgstr ""
+
+msgid "No conflict to resolve"
+msgstr ""
+
+#, python-brace-format
+msgid "(This is record {0} in your import file)"
+msgstr ""
+
+msgid "No Detail Informations"
+msgstr ""
+
+msgid "Summary"
+msgstr "Yhteenveto"
+
+msgid "Index"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} records had failures and where discarded."
+msgstr ""
+
+#, python-brace-format
+msgid "In total we found {0} records in your import file."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} of them will be added as new records into: \"{1}\"."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} of them where identified as duplicates."
+msgstr ""
+
+#, python-brace-format
+msgid "From the identified duplicates {0} will be merged into the existing records."
+msgstr ""
+
+#, python-brace-format
+msgid "From the identified duplicates {0} will be discarded."
+msgstr ""
+
+#, python-brace-format
+msgid "All records will be tagged with: \"{0}\" so you can find them easily."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} records have failures and will be discarded."
+msgstr ""
+
+msgid "Delete value from all selected records"
+msgstr ""
+
+msgid "Undo change for all selected records"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0} {1}"
+msgstr "Muokkaa"
+
+msgid "Different Values"
+msgstr ""
+
+msgid "This field has different values. Editing this field will overwrite the old values."
+msgstr ""
+
+#, python-brace-format
+msgid "Add {0} Relation"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to change these {0} records?"
+msgstr ""
+
+msgid "Applying changes"
+msgstr ""
+
+#, python-brace-format
+msgid "You edited {0} {1}."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} have been updated properly."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} has been updated properly."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr ""
+
+msgid "Set password"
+msgstr ""
+
+msgid "Generate password"
+msgstr ""
+
+msgid "Admin Mode"
+msgstr "Ylläpitäjä tila"
+
+msgid "All Users"
+msgstr ""
+
+msgid "Applications"
+msgstr "Ohjelmat"
+
+msgid "Edit Preferences"
+msgstr "Muokkaa asetuksia"
+
+msgid "Loading ..."
+msgstr "Ladataan..."
+
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr ""
+
+msgid "Saving of preferences failed."
+msgstr "Asetuksien tallennus epäonnistui."
+
+msgid "There are no preferences for this application."
+msgstr ""
+
+msgid "All Settings"
+msgstr ""
+
+msgid "General Preferences"
+msgstr "Yleiset asetukset"
+
+msgid "Application Settings"
+msgstr ""
+
+msgid "My Profile"
+msgstr "Oma profiili"
+
+msgid "Second Factor Password Required"
+msgstr ""
+
+msgid "Validating password..."
+msgstr ""
+
+msgid "Wrong Password"
+msgstr ""
+
+msgid "Invalid second factor password given"
+msgstr ""
+
+msgid "Back"
+msgstr "Takaisin"
+
+msgid "Next"
+msgstr "Seuraava"
+
+msgid "Finish"
+msgstr "Valmis"
+
+msgid "Create xprop"
+msgstr ""
+
+msgid "xprop Name"
+msgstr ""
+
+msgid "Please enter the name of the new xprop"
+msgstr ""
+
+msgid "Delete xprop"
+msgstr ""
+
+msgid "Export as ..."
+msgstr ""
+
+msgid "My Device"
+msgstr ""
+
+msgid "Download file and save on my local device."
+msgstr ""
+
+msgid "Select or drop file to upload"
+msgstr ""
+
+msgid "Select files"
+msgstr ""
+
+msgid "Select file"
+msgstr ""
+
+msgid "Select folders"
+msgstr ""
+
+msgid "Select folder"
+msgstr ""
+
+msgid "Select items"
+msgstr ""
+
+msgid "Select item"
+msgstr ""
+
+msgid "Places"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configuration Problem"
+msgstr "Asetus ongelma"
+
+msgid "Invalid configuration"
+msgstr "Virheelliset asetukset"
+
+msgid "Transferring Configuration..."
+msgstr "Siirretään asetuksia..."
+
+msgid "Save config"
+msgstr "Tallenna asetukset"
+
+msgid "Reload config"
+msgstr "Lataa asetukset"
+
+msgid "Gets assigned automatically"
+msgstr ""
+
+msgid "Wrong File Type"
+msgstr "Väärä tiedosto tyyppi"
+
+msgid "Please select a file with one of the following extensions:"
+msgstr ""
+
+msgid "Some fields are  multilingual. Click here to select language to display."
+msgstr ""
+
+msgid "Search for Model..."
+msgstr ""
+
+msgid "GENDER_Model"
+msgstr ""
+
+msgid "Model"
+msgid_plural "Models"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Cleartext/Hidden"
+msgstr ""
+
+msgid "No record"
+msgstr ""
+
+msgid "Edit copy"
+msgstr ""
+
+#, python-brace-format
+msgid "Search for {0} ..."
+msgstr ""
+
+msgid "Searching..."
+msgstr "Etsitään..."
+
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr ""
+
+msgid "Search for records ..."
+msgstr ""
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
+msgstr ""
+
+msgid "Pause upload"
+msgstr ""
+
+msgid "Resume upload"
+msgstr ""
+
+msgid "Send by E-Mail"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "size"
+msgstr ""
+
+msgid "type"
+msgstr "tyyppi"
+
+msgid "today"
+msgstr "tänään"
+
+msgid "yesterday"
+msgstr "eilen"
+
+msgid "this week"
+msgstr "tämä viikko"
+
+msgid "last week"
+msgstr "edellinen viikko"
+
+msgid "the week before last"
+msgstr ""
+
+msgid "this month"
+msgstr "tämä kuukausi"
+
+msgid "last month"
+msgstr "edellinen kuukausi"
+
+msgid "last three months"
+msgstr ""
+
+msgid "last six months"
+msgstr ""
+
+msgid "anytime"
+msgstr ""
+
+msgid "this quarter"
+msgstr "tämä neljännes"
+
+msgid "last quarter"
+msgstr "edellinen neljännes"
+
+msgid "this year"
+msgstr "tämä vuosi"
+
+msgid "last year"
+msgstr "edellinen vuosi"
+
+msgid "tomorrow"
+msgstr "huomenna"
+
+msgid "next week"
+msgstr "seuraava viikko"
+
+msgid "next month"
+msgstr "seuraava vuosi"
+
+msgid "next quarter"
+msgstr "seuraava neljännes"
+
+msgid "next year"
+msgstr "seuraava vuosi"
+
+msgid "contains"
+msgstr ""
+
+msgid "contains word starting with"
+msgstr ""
+
+msgid "contains not"
+msgstr ""
+
+msgid "reg. exp."
+msgstr ""
+
+msgid "is equal to without (-, )"
+msgstr ""
+
+msgid "is greater than"
+msgstr ""
+
+msgid "is less than"
+msgstr ""
+
+msgid "is not"
+msgstr ""
+
+msgid "{gender, select, male {one of} female {one of} other {one of}}"
+msgstr ""
+
+msgid "{gender, select, male {all of} female {all of} other {all of}}"
+msgstr ""
+
+msgid "{gender, select, male {none of} female {none of} other {none of}}"
+msgstr ""
+
+msgid "is before"
+msgstr ""
+
+msgid "is after"
+msgstr ""
+
+msgid "is within"
+msgstr ""
+
+msgid "is in week no."
+msgstr ""
+
+msgid "starts with"
+msgstr ""
+
+msgid "ends with"
+msgstr ""
+
+msgid "defined by"
+msgstr ""
+
+msgid "select a operator"
+msgstr ""
+
+msgid "Search Account ..."
+msgstr ""
+
+msgid "Period ..."
+msgstr ""
+
+#, python-brace-format
+msgid "Selected  {0}"
+msgstr ""
+
+msgid "Show records that match to one of the following filters"
+msgstr ""
+
+msgid "or alternatively"
+msgstr ""
+
+msgid "Add alternative filter"
+msgstr ""
+
+msgid "Remove Filter"
+msgstr ""
+
+msgid "Show"
+msgstr "Näytä"
+
+msgid "and"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "add new filter"
+msgstr "Lisää uusi suodatin"
+
+msgid "reset all filters"
+msgstr "nollaa kaikki suodattimet"
+
+msgid "start search"
+msgstr "aloita haku"
+
+msgid "save as favorite"
+msgstr ""
+
+msgid "Load a favorite"
+msgstr ""
+
+msgid "select a field"
+msgstr "valitse kenttä"
+
+msgid "Delete this filter"
+msgstr "Poista tämä suodatin"
+
+msgid "show details"
+msgstr "näytä tiedot"
+
+msgid "Always show advanced filters"
+msgstr ""
+
+msgid "hide details"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+#, python-brace-format
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Edit definition"
+msgstr ""
+
+msgid "Start definition"
+msgstr ""
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr ""
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
+msgstr ""
+
+msgid "Move Details Panel To"
+msgstr ""
+
+msgid "Bottom"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Print Page"
+msgstr "Tulosta sivu"
+
+#, python-brace-format
+msgid "Move {0}"
+msgid_plural "Move {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-brace-format
+msgid "Export as {0}"
+msgstr ""
+
+msgid "Import items"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Poista"
+msgstr[1] "Poista"
+
+msgid "No data to display"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying records {0} - {1} of {2}"
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} to display"
+msgstr ""
+
+msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
+msgstr ""
+
+msgid "Records"
+msgstr ""
+
+msgid "New..."
+msgstr "Uusi..."
+
+msgid "Add to..."
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "Grid Panel Key Bindings"
+msgstr ""
+
+#, python-brace-format
+msgid "Moving {0}"
+msgstr ""
+
+msgid "Not Allowed"
+msgstr ""
+
+msgid "You are not allowed to delete all pages at once"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "... This may take a long time!"
+msgstr ""
+
+msgid "via"
+msgstr ""
+
+#, python-brace-format
+msgid "Create {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Loading {0} ..."
+msgstr ""
+
+msgid "Quota usage"
+msgstr ""
+
+msgid "has notes"
+msgstr ""
+
+msgid "This is a multilingual field:"
+msgstr ""
+
+#, python-brace-format
+msgid "Transition from {current} to {target} is not allowed."
+msgstr ""
+
+msgid "Key Field Records"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Add a New ID..."
+msgstr ""
+
+msgid "Add a New Value..."
+msgstr ""
+
+msgid "ID already exists"
+msgstr ""
+
+msgid "ID needs to follow the syntax PARENTID:ID"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Setting new language..."
+msgstr ""
+
+msgid "Save current view as favorite"
+msgstr ""
+
+msgid "containers"
+msgstr ""
+
+msgid "Favorites"
+msgstr ""
+
+msgid "Favorite not saved"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Shared Favorite (visible by other users)"
+msgstr ""
+
+msgid "The grant to see and use this filter"
+msgstr ""
+
+msgid "The grant to edit this filter"
+msgstr ""
+
+msgid "The grant to delete this filter"
+msgstr ""
+
+msgid "My favorites"
+msgstr "Omat suosikit"
+
+msgid "Delete Favorite"
+msgstr ""
+
+msgid "Edit Favorite"
+msgstr ""
+
+msgid "Overwrite Favorite"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr ""
+
+#, python-brace-format
+msgid "Deleting Favorite \"{0}\""
+msgstr ""
+
+msgid "Overwrite?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you want to overwrite the favorite \"{0}\"?"
+msgstr ""
+
+#, python-brace-format
+msgid "Overwriting Favorite \"{0}\""
+msgstr ""
+
+msgid "Could not save Favorite"
+msgstr ""
+
+msgid "Your current view does not support favorites"
+msgstr ""
+
+msgid "Create Favorite"
+msgstr ""
+
+#, python-brace-format
+msgid "Saving Favorite \"{0}\""
+msgstr ""
+
+msgid "(shared)"
+msgstr ""
+
+msgid "Defined by ..."
+msgstr ""
+
+msgid "Define ..."
+msgstr ""
+
+msgid "Edit record"
+msgstr ""
+
+msgid "Sibling"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "Child"
+msgstr ""
+
+#, python-brace-format
+msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
+msgstr ""
+
+#, python-brace-format
+msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
+msgstr ""
+
+msgid "Contents of Related Folder"
+msgstr ""
+
+msgid "No Dialog"
+msgstr ""
+
+msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
+msgstr ""
+
+msgid "Attachments: Anyone who has access to the record can see the data"
+msgstr ""
+
+msgid "Links: Rights of the respective application are respected"
+msgstr ""
+
+msgid "Remark"
+msgstr ""
+
+msgid "Dependency"
+msgstr ""
+
+#, python-brace-format
+msgid "No access to {0}"
+msgstr ""
+
+msgid "The record you tried to link is already linked. Please edit the existing link."
+msgstr ""
+
+#, python-brace-format
+msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
+msgstr ""
+
+msgid "Delete { ownRecordName }?"
+msgstr ""
+
+msgid "What do you want to delete?"
+msgstr ""
+
+msgid "Delete { ownRecordName }"
+msgstr ""
+
+msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
+msgstr ""
+
+msgid "Site"
+msgstr ""
+
+msgid "no site association"
+msgstr ""
+
+msgid "tag name"
+msgstr ""
+
+msgid "Add Tags"
+msgstr ""
+
+msgid "Select Tags"
+msgstr ""
+
+msgid "Attaching Tag"
+msgstr ""
+
+msgid "Detach tag(s)"
+msgstr ""
+
+msgid "Select Tag(s) to detach"
+msgstr ""
+
+msgid "Add a new personal tag"
+msgstr ""
+
+msgid "Add New Personal Tag"
+msgstr ""
+
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr ""
+
+msgid "Enter tag name:"
+msgstr ""
+
+msgid "No Tags to display"
+msgstr ""
+
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Edit tag"
+msgstr ""
+
+msgid "Rename Tag"
+msgstr ""
+
+msgid "Please enter a new name:"
+msgstr ""
+
+msgid "Edit Description"
+msgstr ""
+
+msgid "Description for tag"
+msgstr ""
+
+msgid "Please enter new description:"
+msgstr ""
+
+msgid "Change Color"
+msgstr "Vaihda väriä"
+
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Really delete selected tag?"
+msgid_plural "Really delete selected tags?"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "The selected tag will be deleted and disappear for all entries"
+msgid_plural "The selected tags will be removed and disappear for all entries"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Please wait a moment..."
+msgstr ""
+
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Could not delete Tag(s)."
+msgstr ""
+
+msgid "Notice"
+msgstr ""
+
+msgid "The minimum tag length is three."
+msgstr ""
+
+msgid "Could not create tag."
+msgstr ""
+
+msgid "Could not update tag."
+msgstr ""
+
+msgid "Detach Tags"
+msgstr ""
+
+msgid "Attach Tags"
+msgstr ""
+
+msgid "No Tags to detach found in the selected records"
+msgstr ""
+
+msgid "Please Wait..."
+msgstr "Odota hetki..."
+
+msgid "Detaching Tags"
+msgstr ""
+
+msgid "Timezone"
+msgstr "Aikavyöhyke"
+
+msgid "Setting new timezone..."
+msgstr ""
+
+#, python-brace-format
+msgid "Rename {0}"
+msgstr "Uudelleen nimeä"
+
+#, python-brace-format
+msgid "Manage {0} Permissions"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Properties"
+msgstr ""
+
+#, python-brace-format
+msgid "Set {0} color"
+msgstr ""
+
+#, python-brace-format
+msgid "Reload {0}"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
+msgstr ""
+
+msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} added"
+msgstr ""
+
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
+msgstr ""
+
+msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Creating {0}..."
+msgstr ""
+
+msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
+msgstr ""
+
+msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr ""
+
+#, python-brace-format
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr ""
+
+#, python-brace-format
+msgid "Properties for {0} \"{1}\""
+msgstr ""
+
+msgid "New version of tine available"
+msgstr ""
+
+#, python-brace-format
+msgid "Version \"{0}\" of tine is available."
+msgstr ""
+
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr ""
+
+msgid "Please consider updating!"
+msgstr ""
+
+msgid "ActionLog"
+msgid_plural "ActionLogs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Action type"
+msgstr ""
+
+msgid "Datetime"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Area Lock Configuration"
+msgid_plural "Area Lock Configurations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Area name"
+msgstr ""
+
+msgid "Areas"
+msgstr ""
+
+msgid "MFAs"
+msgstr ""
+
+msgid "Validity"
+msgstr ""
+
+msgid "Lifetime in Minutes"
+msgstr ""
+
+msgid "Policy"
+msgstr ""
+
+msgid "Area Lock State"
+msgid_plural "Area Lock States"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Bank Account"
+msgid_plural "Bank Accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "GENDER_Bank Holiday Calendar"
+msgstr ""
+
+msgid "Bank Holidays"
+msgstr ""
+
+msgid "Data Source Url"
+msgstr ""
+
+msgid "Target Calendar"
+msgstr ""
+
+msgid "GENDER_Bank Holiday"
+msgstr ""
+
+msgid "Bank Holiday"
+msgid_plural "Bank Holidays"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Fraction"
+msgstr ""
+
+msgid "Record Name"
+msgid_plural "Records Name"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Group"
+msgstr ""
+
+msgid "New Car"
+msgstr ""
+
+msgid "Hierarchy"
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "UUID"
+msgstr ""
+
+msgid "GENDER_Item"
+msgstr ""
+
+msgid "Item"
+msgid_plural "Items"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Number"
+msgstr ""
+
+msgid "GENDER_Evaluation Dimension"
+msgstr ""
+
+msgid "Evaluation Dimension"
+msgid_plural "Evaluation Dimensions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Dimension Items"
+msgstr ""
+
+msgid "Configured Models"
+msgstr ""
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Sorting"
 msgstr ""
 
 msgid "Area lock configurations"
 msgstr ""
 
 msgid "Your password expired."
+msgstr ""
+
+msgid "GENDER_Grant"
 msgstr ""
 
 msgid "ImportExportDefinition"
@@ -3760,9 +3946,6 @@ msgid "Label"
 msgstr ""
 
 msgid "Favorite"
-msgstr ""
-
-msgid "Order"
 msgstr ""
 
 msgid "Icon Class"
@@ -3792,37 +3975,92 @@ msgstr ""
 msgid "Skip Upstream Updates"
 msgstr ""
 
-msgid "WebDAV Mount"
-msgid_plural "WebDAV Mounts"
+msgid "LogEntry"
+msgid_plural "LogEntries"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Local Filesystem"
-msgid_plural "Local Filesystems"
+msgid "LogEntries"
+msgstr ""
+
+msgid "Client Requestid"
+msgstr ""
+
+msgid "Server Requestid"
+msgstr ""
+
+msgid "Logtime"
+msgstr ""
+
+msgid "Difftime"
+msgstr ""
+
+msgid "Loglevel"
+msgstr ""
+
+msgid "GENDER_Counter based OTP (HOTP)"
+msgstr ""
+
+msgid "Counter based OTP (HOTP)"
+msgid_plural "Counter based OTPs (HOTP)"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Flysystem Mount"
-msgid_plural "Flysystem Mounts"
+msgid "Counter based OTP (HOTP) is configured"
+msgstr ""
+
+msgid "GENDER_PIN"
+msgstr ""
+
+msgid "{% true %}Static PIN for user: ●●●●●●"
+msgstr ""
+
+msgid "New PIN"
+msgstr ""
+
+msgid "GENDER_SMS"
+msgstr ""
+
+msgid "SMS"
+msgid_plural "SMSs"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "File Contents"
+msgid "Security codes are send to: {{ cellphonenumber }}."
 msgstr ""
 
-msgid "Indexed"
+msgid "Cell Phone Number"
 msgstr ""
 
-msgid "Content type"
+msgid "GENDER_Time based OTP (TOTP)"
 msgstr ""
 
-msgid "MD5 Hash"
+msgid "Time based OTP (TOTP)"
+msgid_plural "Time based OTPs (TOTP)"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Time based OTP (TOPT) is configured"
 msgstr ""
 
-msgid "Revision Size"
+msgid "MFA Device Config"
+msgid_plural "MFA Device Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "MFA Device Type"
 msgstr ""
 
-msgid "Status"
+msgid "GENDER_FIDO2 WebAuthn Device"
+msgstr ""
+
+msgid "Yubico OTP public id"
+msgstr ""
+
+msgid "Yubico OTP privat id"
+msgstr ""
+
+msgid "Yubico privat key"
 msgstr ""
 
 msgid "GENDER_Municipality Key"
@@ -3867,72 +4105,6 @@ msgstr ""
 msgid "Bevölkerungsstand"
 msgstr ""
 
-msgid "Hierarchy"
-msgstr ""
-
-msgid "Owner"
-msgstr ""
-
-msgid "UUID"
-msgstr ""
-
-msgid "GENDER_Bank Holiday Calendar"
-msgstr ""
-
-msgid "Bank Holidays"
-msgstr ""
-
-msgid "Data Source Url"
-msgstr ""
-
-msgid "Target Calendar"
-msgstr ""
-
-msgid "GENDER_Item"
-msgstr ""
-
-msgid "Item"
-msgid_plural "Items"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Area Lock State"
-msgid_plural "Area Lock States"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Area"
-msgstr ""
-
-msgid "Expires"
-msgstr ""
-
-msgid "LogEntry"
-msgid_plural "LogEntries"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "LogEntries"
-msgstr ""
-
-msgid "Client Requestid"
-msgstr ""
-
-msgid "Server Requestid"
-msgstr ""
-
-msgid "Logtime"
-msgstr ""
-
-msgid "Difftime"
-msgstr ""
-
-msgid "Loglevel"
-msgstr ""
-
 msgid "GENDER_Numbering Range"
 msgstr ""
 
@@ -3959,69 +4131,6 @@ msgstr ""
 msgid "Number is Editable"
 msgstr ""
 
-msgid "GENDER_Bank Holiday"
-msgstr ""
-
-msgid "Bank Holiday"
-msgid_plural "Bank Holidays"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Fraction"
-msgstr ""
-
-msgid "SMS Adapter Type"
-msgstr ""
-
-msgid "SMS Adapter Config"
-msgstr ""
-
-msgid "GENDER_Evaluation Dimension"
-msgstr ""
-
-msgid "Evaluation Dimension"
-msgid_plural "Evaluation Dimensions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Dimension Items"
-msgstr ""
-
-msgid "Configured Models"
-msgstr ""
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Sorting"
-msgstr ""
-
-msgid "Area Lock Configuration"
-msgid_plural "Area Lock Configurations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Area name"
-msgstr ""
-
-msgid "Areas"
-msgstr ""
-
-msgid "MFAs"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Lifetime in Minutes"
-msgstr ""
-
-msgid "Policy"
-msgstr ""
-
 msgid "RoleMember"
 msgid_plural "RoleMembers"
 msgstr[0] ""
@@ -4045,88 +4154,6 @@ msgid "Rights"
 msgstr ""
 
 msgid "Members"
-msgstr ""
-
-msgid "ActionLog"
-msgid_plural "ActionLogs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Action type"
-msgstr ""
-
-msgid "Datetime"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "MFA Device Config"
-msgid_plural "MFA Device Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "MFA Device Type"
-msgstr ""
-
-msgid "GENDER_PIN"
-msgstr ""
-
-msgid "{% true %}Static PIN for user: ●●●●●●"
-msgstr ""
-
-msgid "New PIN"
-msgstr ""
-
-msgid "GENDER_FIDO2 WebAuthn Device"
-msgstr ""
-
-msgid "Yubico OTP public id"
-msgstr ""
-
-msgid "Yubico OTP privat id"
-msgstr ""
-
-msgid "Yubico privat key"
-msgstr ""
-
-msgid "GENDER_SMS"
-msgstr ""
-
-msgid "SMS"
-msgid_plural "SMSs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Security codes are send to: {{ cellphonenumber }}."
-msgstr ""
-
-msgid "Cell Phone Number"
-msgstr ""
-
-msgid "GENDER_Time based OTP (TOTP)"
-msgstr ""
-
-msgid "Time based OTP (TOTP)"
-msgid_plural "Time based OTPs (TOTP)"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Time based OTP (TOPT) is configured"
-msgstr ""
-
-msgid "GENDER_Counter based OTP (HOTP)"
-msgstr ""
-
-msgid "Counter based OTP (HOTP)"
-msgid_plural "Counter based OTPs (HOTP)"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Counter based OTP (HOTP) is configured"
-msgstr ""
-
-msgid "GENDER_Grant"
 msgstr ""
 
 msgid "RoleRight"
@@ -4160,63 +4187,157 @@ msgstr ""
 msgid "Failure count"
 msgstr ""
 
-msgid "Bank Account"
-msgid_plural "Bank Accounts"
+msgid "SMS Adapter Type"
+msgstr ""
+
+msgid "SMS Adapter Config"
+msgstr ""
+
+msgid "Local Filesystem"
+msgid_plural "Local Filesystems"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "IBAN"
+msgid "WebDAV Mount"
+msgid_plural "WebDAV Mounts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Flysystem Mount"
+msgid_plural "Flysystem Mounts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "File Contents"
 msgstr ""
 
-msgid "BIC"
+msgid "Indexed"
 msgstr ""
 
-msgid "Shared folders"
+msgid "Content type"
 msgstr ""
 
-msgid "Group"
+msgid "MD5 Hash"
 msgstr ""
 
-msgid "Total: "
+msgid "Revision Size"
 msgstr ""
 
-msgid "Exporttime"
+msgid "by"
 msgstr ""
 
-msgid "Export only currently shown columns"
+msgid "Changed fields:"
 msgstr ""
 
-msgid "Created by"
+msgid "- The last filter I used -"
 msgstr ""
 
-msgid "Activities"
+msgid "Personal default"
 msgstr ""
 
-msgid "Excel all data"
+msgid "default"
+msgstr "oletus"
+
+msgid "Page size"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Page size in grids"
+msgstr ""
+
+msgid "Grid stripe rows"
+msgstr ""
+
+msgid "Stripe rows in grids"
+msgstr ""
+
+msgid "Grid load mask"
+msgstr ""
+
+msgid "Show load mask in grids"
+msgstr ""
+
+msgid "Grid resizing strategy"
+msgstr ""
+
+msgid "How to resize grid columns"
+msgstr ""
+
+msgid "Auto search on filter change"
+msgstr ""
+
+msgid "Perform auto search when filter is changed"
+msgstr ""
+
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr ""
+
+msgid "The language of the Tine 2.0 GUI."
+msgstr ""
+
+msgid "Default Application"
+msgstr "Oletus sovellukset"
+
+msgid "The default application to show after login."
+msgstr "Näytettävät ohjelmat kirjautumisen jälkeen."
+
+msgid "Window Type"
+msgstr "Ikkuna tyyppi"
+
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr ""
+
+msgid "Confirm Logout"
+msgstr "Vahvista uloskirjaus"
+
+msgid "Show confirmation dialog on logout."
+msgstr "Näytä vahvistus ikkuna ulos kirjauduttaessa"
+
+msgid "Enable advanced search"
+msgstr ""
+
+msgid "If enabled quickfilter searches through relations as well."
+msgstr ""
+
+msgid "File double-clicking action"
+msgstr ""
+
+msgid "Which action should be executed by default when a file is double-clicked."
+msgstr ""
+
+msgid "GENDER_Text"
+msgstr ""
+
+msgid "Text"
+msgid_plural "Texts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "added"
+msgstr ""
+
+msgid "removed"
+msgstr ""
+
+msgid "modified"
+msgstr ""
+
+msgid "Scheduler task failed"
 msgstr ""
 
 #, python-format
-msgid "The following fields weren't imported: %s"
+msgid "Your scheduler task %s has failed %d times."
 msgstr ""
 
-msgid "N/A"
+msgid "node name must not contain the character /"
 msgstr ""
 
-msgid "Import Community identification Numbers"
+msgid "Password failed to match the following policy requirements: "
 msgstr ""
 
-msgid "Municipality Key Import"
+msgid "MFA configs are not valid:"
 msgstr ""
 
-msgid "Record Name"
-msgid_plural "Records Name"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "New Car"
+msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
 msgid "Your user account has been deactivated"
@@ -4228,126 +4349,5 @@ msgstr ""
 msgid "Tine 2.0 URL"
 msgstr ""
 
-#, python-brace-format
-msgid "Exception ({0})"
-msgstr ""
-
-msgid "Area could not be unlocked"
-msgstr ""
-
-msgid "Quota is exceeded"
-msgstr ""
-
-msgid "Area is locked"
-msgstr ""
-
-msgid "System Container"
-msgstr ""
-
-msgid "This is a system container which could not be deleted!"
-msgstr ""
-
-msgid "Invalid Relations"
-msgstr ""
-
-msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
-msgstr ""
-
-msgid "Confirmation is required"
-msgstr ""
-
-msgid "Generic System Exception"
-msgstr ""
-
-msgid "Wrong month format!"
-msgstr ""
-
-msgid "The month must have the format YYYY-MM!"
-msgstr ""
-
-msgid "Password Policy Violation"
-msgstr ""
-
-msgid "admin"
-msgstr "ylläpitäjä"
-
-msgid "admin right description"
-msgstr "ylläpitäjän oikeuksien kuvaus"
-
-msgid "run"
-msgstr ""
-
-msgid "run right description"
-msgstr ""
-
-msgid "Use Mainscreen"
-msgstr ""
-
-msgid "App mainscreen is available in UI"
-msgstr ""
-
-msgid "Personal tags"
-msgstr ""
-
-msgid "Use and see personal tags"
-msgstr ""
-
-msgid "Report bugs"
-msgstr "Raportoi virheestä"
-
-msgid "Report bugs to the software vendor directly when they occur."
-msgstr "Raportoi virheestä suoraan ohjelman tekijälle kun virhe havaitaan."
-
-msgid "Check version"
-msgstr "Tarkista versio"
-
-msgid "Check for new versions of this software."
-msgstr "Tarkista ohjelman uusin versio"
-
-msgid "Manage bank accounts"
-msgstr ""
-
-msgid "The right to manage bank accounts."
-msgstr ""
-
-msgid "Manage own profile"
-msgstr "Hallitse omaa profiilia"
-
-msgid "The right to manage the own profile (selected contact data)."
-msgstr ""
-
-msgid "Manage Numberables"
-msgstr ""
-
-msgid "The right to manage numberables."
-msgstr ""
-
-msgid "Manage own client state"
-msgstr ""
-
-msgid "The right to manage the own client state."
-msgstr ""
-
-msgid "Manage evaluation dimensions"
-msgstr ""
-
-msgid "The right to manage evaluation dimensions."
-msgstr ""
-
-msgid "Maintenance"
-msgstr ""
-
-msgid "The right to use the installation in maintenance mode."
-msgstr ""
-
-msgid "Show License Info"
-msgstr ""
-
-msgid "The right to be able to see license information (expiry, ...)."
-msgstr ""
-
-msgid "Replication"
-msgstr ""
-
-msgid "The right to access the replication data of all applications."
+msgid "Shared folders"
 msgstr ""

@@ -18,9 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Transponder Id"
-msgstr ""
-
 msgid "Device List Status"
 msgstr "Gerätelistenstatus"
 
@@ -90,6 +87,12 @@ msgstr "Handler Klasse für angegebenen Geräte-Datensatz."
 msgid "New Device"
 msgstr "Neue Geräteliste"
 
+msgid "Absence Reasons Device List"
+msgstr "Abwesenheitsgründe Geräte Liste"
+
+msgid "Employee Device List"
+msgstr "Mitarbeiter Geräte Liste"
+
 msgid "Device list"
 msgid_plural "Device lists"
 msgstr[0] "Geräteliste"
@@ -114,25 +117,6 @@ msgstr "Listenstatus"
 
 msgid "Control Commands on List Feedback"
 msgstr "Kontroll Kommandos bei Listen-Rückmeldung"
-
-msgid "Device Record"
-msgid_plural "Device Records"
-msgstr[0] "Geräte Datensatz"
-msgstr[1] "Geräte Datensätze"
-
-msgid "Device Records Container"
-msgid_plural "Device Records Containers"
-msgstr[0] "Geräte Datensatz Ordner"
-msgstr[1] "Geräte Datensatz Ordner"
-
-msgid "Device Table"
-msgstr "Geräte Tabelle"
-
-msgid "Data"
-msgstr "Daten"
-
-msgid "Processed by"
-msgstr ""
 
 msgid "Type"
 msgstr "Typ"
@@ -182,14 +166,30 @@ msgstr "Listen"
 msgid "Control Commands"
 msgstr "Steuer Kommandos"
 
-msgid "Absence Reasons Device List"
-msgstr "Abwesenheitsgründe Geräte Liste"
+msgid "Device Record"
+msgid_plural "Device Records"
+msgstr[0] "Geräte Datensatz"
+msgstr[1] "Geräte Datensätze"
 
-msgid "Employee Device List"
-msgstr "Mitarbeiter Geräte Liste"
+msgid "Device Records Container"
+msgid_plural "Device Records Containers"
+msgstr[0] "Geräte Datensatz Ordner"
+msgstr[1] "Geräte Datensatz Ordner"
+
+msgid "Device Table"
+msgstr "Geräte Tabelle"
+
+msgid "Data"
+msgstr "Daten"
+
+msgid "Processed by"
+msgstr ""
 
 msgid "Clock in: %1$s"
 msgstr "Kommen: %1$s"
 
 msgid "Clock out: %1$s"
 msgstr "Gehen: %1$s"
+
+msgid "Transponder Id"
+msgstr ""

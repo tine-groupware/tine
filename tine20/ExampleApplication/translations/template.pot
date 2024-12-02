@@ -13,36 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Default Example Record Container"
-msgstr ""
-
-msgid "The default container for new records"
-msgstr ""
-
-msgid "ExampleRecord"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Reason"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Total Example Records"
-msgstr ""
-
-msgid "New Example"
-msgstr ""
-
-msgid "ExampleApplication"
-msgstr ""
-
 msgid "Status Available"
 msgstr ""
 
@@ -100,6 +70,27 @@ msgstr ""
 msgid "Just an example string for test purpose"
 msgstr ""
 
+msgid "Total Example Records"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "New Example"
+msgstr ""
+
+msgid "ExampleRecord"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] ""
@@ -118,4 +109,13 @@ msgid "Number"
 msgstr ""
 
 msgid "datetime"
+msgstr ""
+
+msgid "Default Example Record Container"
+msgstr ""
+
+msgid "The default container for new records"
+msgstr ""
+
+msgid "ExampleApplication"
 msgstr ""

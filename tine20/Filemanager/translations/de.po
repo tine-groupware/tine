@@ -23,503 +23,23 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Password for download required"
-msgstr "Zum Herunterladen Passwort eingeben"
+msgid "Manage shared folders"
+msgstr "Gemeinsame Ordner verwalten"
 
-msgid "Submit"
-msgstr "Abschicken"
+msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
+msgstr "Erlaube das Erstellen und Verschieben neuer Unterordner im Gemeinsamen Ordner. Sowohl das Löschen als auch das Umbenennen von Ordnern erfordert Admin-Recht."
 
-msgid "File not found!"
-msgstr "Datei nicht gefunden!"
+msgid "Manage anonymous download links"
+msgstr "Anonyme Download Links verwalten"
 
-msgid "Name"
-msgstr "Name"
+msgid "Allow viewing, adding and deleting download links"
+msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
-msgid "Size"
-msgstr "Größe"
+msgid "Manage shared filemanager favorites"
+msgstr "Gemeinsame Dateimanager-Favoriten verwalten"
 
-msgid "Last Modified"
-msgstr "Letzter Änderungszeitpunkt"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Folder"
-msgstr "Ordner"
-
-msgid "File"
-msgstr "Datei"
-
-msgid "New Folder"
-msgstr "Neuer Ordner"
-
-msgid "Please enter the name of the new folder:"
-msgstr "Bitte geben Sie den Namen für den neuen Ordner ein:"
-
-#, python-brace-format
-msgid "No {0} added"
-msgstr "Kein {0} hinzugefügt"
-
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "Sie müssen einen {0}-namen angeben!"
-
-msgid "Illegal characters: "
-msgstr "Ungültige Zeichen:"
-
-msgid "Folder with this name already exists!"
-msgstr "Ordner mit dem Namen ist bereits vorhanden!"
-
-msgid "Show Filters"
-msgstr "Zeige Filter"
-
-msgid "Hide Filters"
-msgstr "Verberge Filter"
-
-msgid "Checking ..."
-msgstr "Prüfe…"
-
-msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
-msgstr "{attachmentCount, plural, one {Wollen Sie die bestehende Datei wirklich überschreiben?} other {Wollen Sie die bestehenden Dateien wirklich überschreiben?}}"
-
-msgid "Overwrite?"
-msgstr "Überschreiben?"
-
-msgid "Content type"
-msgstr "Inhaltstyp"
-
-msgid "Creation Time"
-msgstr "Erstellt am"
-
-msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
-
-msgid "path"
-msgstr "Pfad"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "Password"
-msgstr "Passwort"
-
-msgid "Valid until"
-msgstr "Gültig bis"
-
-msgid "Send as e-mail"
-msgstr "Sende als E-Mail"
-
-msgid "Close"
-msgstr "Schließen"
-
-msgid "Download"
-msgstr "Herunterladen"
-
-#, python-brace-format
-msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
-msgstr "Eine Datei mit dem Namen {0} ist bereits vorhanden. Möchten Sie diese durch die aktuelle Datei ersetzen?"
-
-msgid "Apply to All"
-msgstr "Auf Alle anwenden"
-
-msgid "Skip"
-msgstr "Überspringen"
-
-msgid "Stop"
-msgstr "Stopp"
-
-msgid "Replace"
-msgstr "Ersetzen"
-
-msgid "Overwrite Existing File?"
-msgstr "Bestehende Datei Überschreiben?"
-
-msgid "Create Public Link"
-msgstr "Öffentlichen Link erstellen"
-
-msgid "Copy Public Link"
-msgstr "Öffentlichen Link kopieren"
-
-msgid "Remove record"
-msgstr "Eintrag entfernen"
-
-msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
-msgstr "Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
-
-msgid "Creating new Download Link..."
-msgstr "Erstelle neuen Download Link..."
-
-msgid "Deleting Download Links..."
-msgstr "Lösche Download Links..."
-
-msgid "Deleting Download Link..."
-msgstr "Lösche Download Link..."
-
-msgid "Created By"
-msgstr "Erstellt von"
-
-msgid "Access Count"
-msgstr "Anzahl der Zugriffe"
-
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-msgid "Revision"
-msgstr "Version"
-
-msgid "This folder has own revision settings"
-msgstr "Dieser Ordner hat eigene Revisions Einstellungen"
-
-msgid "Revision active"
-msgstr "Revision aktiv"
-
-msgid "Limit revision amount to"
-msgstr "Revisionen limitieren auf"
-
-msgid "Hold-back in months"
-msgstr "Vorhalten in Monaten"
-
-msgid "Upload Failed"
-msgstr "Hochladen fehlgeschlagen"
-
-msgid "It is not permitted to store files in this folder!"
-msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
-
-msgid "Select a file"
-msgstr "Wähle eine Datei"
-
-msgid "Select files"
-msgstr "Wähle Dateien aus"
-
-msgid "Select a folder"
-msgstr "Wähle einen Ordner aus"
-
-msgid "Select folders"
-msgstr "Ordner Auswählen"
-
-msgid "Select an item"
-msgstr "Wähle einen Artikel aus"
-
-msgid "Select items"
-msgstr "Artikel Auswählen"
-
-msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
-msgstr "Sie haben fehlgeschlagen Uploads, Bitte überprüfen Sie den Uploads Fortschritt und starten Sie die fehlgeschlagenen Uploads erneut."
-
-msgid "Do you want to restart the failed uploads?"
-msgstr "Möchten Sie die nicht erfolgreich Datei(en) erneut hochladen?"
-
-msgid "Processing files..."
-msgstr "Dateien verarbeiten..."
-
-msgid "Total size of all available revisions"
-msgstr "Gesamtgröße der verfügbaren Revisionen"
-
-msgid "File contents is part of the search index"
-msgstr "Dateiinhalte sind im Suchindex"
-
-msgid "Upload Folder"
-msgstr "Ordner Hochladen"
-
-msgid "Upload File"
-msgstr "Datei hochladen"
-
-msgid "Open Data Safe"
-msgstr "Datentresor öffnen"
-
-msgid "Folder Up"
-msgstr "Aufwärts"
-
-msgid "Locking data safe..."
-msgstr "Datentresor wird geschlossen..."
-
-msgid "Unlocking data safe..."
-msgstr "Datentresor wird geöffnet..."
-
-msgid "Close Data Safe"
-msgstr "Datentresor schließen"
-
-msgid "Filemanager"
-msgstr "Dateimanager"
-
-msgid "Show in Filemanager"
-msgstr "Im Dateimanager anzeigen"
-
-msgid "Save locally"
-msgstr "Lokal speichern"
-
-msgid "Edit folder"
-msgstr "Ordner bearbeiten"
-
-msgid "edit file"
-msgstr "Datei bearbeiten"
-
-msgid "Public Links"
-msgstr "Öffentliche Links"
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Indexed"
-msgstr "Indiziert"
-
-msgid "Not yet indexed"
-msgstr "Noch nicht indiziert"
-
-msgid "Modified By"
-msgstr "Zuletzt geändert von"
-
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
-msgid "Service Unavailable"
-msgstr "Dienst nicht verfügbar"
-
-#, python-brace-format
-msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
-
-msgid "File(s) already exists"
-msgstr "Datei(en) schon vorhanden"
-
-msgid "Do you want to replace the following file(s)?"
-msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
-
-msgid "An error occurred creating this folder"
-msgstr "Beim Erstellen dieses Ordners ist ein Fehler aufgetreten"
-
-msgid "Item with this name already exists!"
-msgstr "Item(s) mit diesem Namen schon vorhanden!"
-
-msgid "Whole Filemanager"
-msgstr "Gesamter Dateimanager"
-
-msgid "This Folder"
-msgstr "Dieser Ordner"
-
-msgid "Search"
-msgstr "Suche"
-
-msgid "Errors"
-msgstr "Fehler"
-
-msgid "Failed to download this file!"
-msgstr "Das Herunterladen dieser Datei ist fehlgeschlagen!"
-
-msgid "The grant to download files"
-msgstr "Das Recht, Dateien zu herunterzuladen"
-
-msgid "Publish"
-msgstr "Veröffentlichen"
-
-msgid "The grant to create anonymous download links for files"
-msgstr "Das Recht, anonyme Download Links für Dateien zu erstellen"
-
-#, python-brace-format
-msgid "Copying data .. {0}"
-msgstr "Kopiere Daten .. {0}"
-
-#, python-brace-format
-msgid "Moving data .. {0}"
-msgstr "Verschiebe Daten .. {0}"
-
-msgid "Confirm Changing of Folder Grants"
-msgstr "Ordner Berechtigungen werden geändert"
-
-msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
-msgstr "Sie sind im Begriff einen Ordner zu verschieben der eigene Berechtigungen enthält. Diese gehen verloren und es werden die Berechtigungen des neuen übergeordneten Ordners geerbt."
-
-msgid "Please wait"
-msgstr "Bitte warten"
-
-msgid "Download Link"
-msgid_plural "Download Links"
-msgstr[0] "Download Link"
-msgstr[1] "Download Links"
-
-msgid "Node Download Links"
-msgstr "Knoten Download Links"
-
-msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
-msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
-
-msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
-msgstr "Das geht z.B. für .doc, .jpg, .pdf und noch für weitere Dateiformate."
-
-msgid "Interested? Then let us know!"
-msgstr "Interessiert? Dann melden Sie sich bei uns!"
-
-msgid "We would be happy to make you a non-binding offer."
-msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
-
-msgid "This file has no contents. The Upload has failed or has not yet finished."
-msgstr "Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder noch nicht fertig."
-
-msgid "No preview available."
-msgstr "Keine Vorschau verfügbar."
-
-msgid "No preview available yet - Please try again in a few minutes."
-msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
-
-msgid "Notifications"
-msgstr "Benachrichtigungen"
-
-msgid "This folder has own notification settings"
-msgstr "Dieser Ordner hat eigene Benachrichtigungs Einstellungen"
-
-msgid "Use this link to share the entry with other system users"
-msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
-
-msgid "Notification"
-msgstr "Benachrichtigung"
-
-msgid "Notification active"
-msgstr "Benachrichtigung aktiv"
-
-msgid "Summary"
-msgstr "Zusammenfassung"
-
-#, python-brace-format
-msgid "Once a Day"
-msgid_plural "Every {0} Days"
-msgstr[0] "Einmal am Tag"
-msgstr[1] "Alle {0} Tage"
-
-msgid "No"
-msgstr "Nein"
-
-msgid "Don't summarize"
-msgstr "Nicht zusammenfassen"
-
-msgid "Once a day"
-msgstr "Einmal täglich"
-
-msgid "Every 3 days"
-msgstr "Alle 3 Tage"
-
-msgid "Once a week"
-msgstr "Einmal die Woche"
-
-msgid "Once a month"
-msgstr "Einmal pro Monat"
-
-msgid "Once a year"
-msgstr "Einmal pro Jahr"
-
-msgid "Search for users ..."
-msgstr "Suche nach Benutzern ..."
-
-msgid "No permission"
-msgstr "Keine Berechtigung"
-
-msgid "all"
-msgstr "alle"
-
-msgid "Search for groups ..."
-msgstr "Suche nach Gruppen ..."
-
-msgid "Grants"
-msgstr "Berechtigungen"
-
-msgid "This folder has its own grants"
-msgstr "Dieser Ordner hat eigene Berechtigungen"
-
-msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
-msgstr "Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei denn, sie verfügen über eigene Rechte."
-
-msgid "This folder is part of the data safe"
-msgstr "Dieser Ordner ist Teil des Datentresors"
-
-msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
-msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
-
-#, python-brace-format
-msgid "Grants are inherited from {locationsHtml} as follows"
-msgstr "Berechtigungen geerbt von {locationsHtml} wie folgt"
-
-msgid "Usage"
-msgstr "Verbrauch"
-
-msgid "This folder has own quota"
-msgstr "Dieser Ordner hat ein eigenes Kontingent"
-
-msgid "Quota"
-msgstr "Kontingent"
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr "Kein Kontingent gesetzt (Bsp.: 10 GB, 900 MB)"
-
-msgid "Current Usage"
-msgstr "Aktuelle Nutzung"
-
-msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
-msgstr "Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
-
-msgid "Revision Size"
-msgstr "Revisions Größe"
-
-msgid "File Type"
-msgstr "Dateityp"
-
-msgid "Usage by File Type"
-msgstr "Verbrauch nach Dateityp"
-
-msgid "User"
-msgstr "Benutzer"
-
-msgid "Usage by User"
-msgstr "Verbrauch nach Benutzer"
-
-msgid "unknown"
-msgstr "unbekannt"
-
-msgid "Reload"
-msgstr "Aktualisieren"
-
-msgid "Create Folder"
-msgstr "Ordner anlegen"
-
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "Unbenannter {0}"
-
-msgid "Edit Properties"
-msgstr "Eigenschaften bearbeiten"
-
-msgid "Rename"
-msgstr "Umbenennen"
-
-#, python-brace-format
-msgid "Rename {0}"
-msgstr "{0} umbenennen"
-
-#, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr "Bitte den neuen Namen von {0} eingeben:"
-
-msgid "System Link"
-msgstr "System Link"
-
-msgid "Delete"
-msgstr "Löschen"
-
-msgid "Do you really want to delete the following files?"
-msgstr "Möchten Sie folgende Datei(en) löschen?"
-
-msgid "Move"
-msgstr "Verschieben"
-
-msgid "Move Items"
-msgstr "Einträge verschieben"
-
-msgid "Preview"
-msgstr "Vorschau"
-
-msgid "Folder has been published successfully"
-msgstr "Ordner wurde erfolgreich veröffentlicht"
-
-msgid "File has been published successfully"
-msgstr "Datei wurde erfolgreich veröffentlicht"
+msgid "Create or update shared filemanager favorites"
+msgstr "Gemeinsame Dateimanager Favoriten erstellen oder bearbeiten"
 
 msgid "Public Download URL"
 msgstr "Öffentliche Download URL"
@@ -584,20 +104,500 @@ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausg
 msgid "Quarantined File"
 msgstr "In Quarantäne gestellte Datei"
 
-msgid "Manage shared folders"
-msgstr "Gemeinsame Ordner verwalten"
+msgid "Password for download required"
+msgstr "Zum Herunterladen Passwort eingeben"
 
-msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
-msgstr "Erlaube das Erstellen und Verschieben neuer Unterordner im Gemeinsamen Ordner. Sowohl das Löschen als auch das Umbenennen von Ordnern erfordert Admin-Recht."
+msgid "Submit"
+msgstr "Abschicken"
 
-msgid "Manage anonymous download links"
-msgstr "Anonyme Download Links verwalten"
+msgid "File not found!"
+msgstr "Datei nicht gefunden!"
 
-msgid "Allow viewing, adding and deleting download links"
-msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
+msgid "Name"
+msgstr "Name"
 
-msgid "Manage shared filemanager favorites"
-msgstr "Gemeinsame Dateimanager-Favoriten verwalten"
+msgid "Size"
+msgstr "Größe"
 
-msgid "Create or update shared filemanager favorites"
-msgstr "Gemeinsame Dateimanager Favoriten erstellen oder bearbeiten"
+msgid "Last Modified"
+msgstr "Letzter Änderungszeitpunkt"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Folder"
+msgstr "Ordner"
+
+msgid "File"
+msgstr "Datei"
+
+msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
+msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
+
+msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
+msgstr "Das geht z.B. für .doc, .jpg, .pdf und noch für weitere Dateiformate."
+
+msgid "Interested? Then let us know!"
+msgstr "Interessiert? Dann melden Sie sich bei uns!"
+
+msgid "We would be happy to make you a non-binding offer."
+msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
+
+msgid "This file has no contents. The Upload has failed or has not yet finished."
+msgstr "Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder noch nicht fertig."
+
+msgid "No preview available."
+msgstr "Keine Vorschau verfügbar."
+
+msgid "No preview available yet - Please try again in a few minutes."
+msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
+
+msgid "Node Download Links"
+msgstr "Knoten Download Links"
+
+msgid "Create Public Link"
+msgstr "Öffentlichen Link erstellen"
+
+msgid "Copy Public Link"
+msgstr "Öffentlichen Link kopieren"
+
+msgid "Remove record"
+msgstr "Eintrag entfernen"
+
+msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
+msgstr "Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
+
+msgid "Creating new Download Link..."
+msgstr "Erstelle neuen Download Link..."
+
+msgid "Deleting Download Links..."
+msgstr "Lösche Download Links..."
+
+msgid "Deleting Download Link..."
+msgstr "Lösche Download Link..."
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Created By"
+msgstr "Erstellt von"
+
+msgid "Creation Time"
+msgstr "Erstellt am"
+
+msgid "Valid until"
+msgstr "Gültig bis"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Access Count"
+msgstr "Anzahl der Zugriffe"
+
+msgid "Last Modified Time"
+msgstr "Zuletzt geändert"
+
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
+
+#, python-brace-format
+msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
+msgstr "Eine Datei mit dem Namen {0} ist bereits vorhanden. Möchten Sie diese durch die aktuelle Datei ersetzen?"
+
+msgid "Apply to All"
+msgstr "Auf Alle anwenden"
+
+msgid "Skip"
+msgstr "Überspringen"
+
+msgid "Stop"
+msgstr "Stopp"
+
+msgid "Replace"
+msgstr "Ersetzen"
+
+msgid "Overwrite Existing File?"
+msgstr "Bestehende Datei Überschreiben?"
+
+msgid "Service Unavailable"
+msgstr "Dienst nicht verfügbar"
+
+#, python-brace-format
+msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
+
+msgid "File(s) already exists"
+msgstr "Datei(en) schon vorhanden"
+
+msgid "Do you want to replace the following file(s)?"
+msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
+
+msgid "An error occurred creating this folder"
+msgstr "Beim Erstellen dieses Ordners ist ein Fehler aufgetreten"
+
+msgid "Item with this name already exists!"
+msgstr "Item(s) mit diesem Namen schon vorhanden!"
+
+msgid "Filemanager"
+msgstr "Dateimanager"
+
+msgid "Show in Filemanager"
+msgstr "Im Dateimanager anzeigen"
+
+msgid "Save locally"
+msgstr "Lokal speichern"
+
+msgid "Select a file"
+msgstr "Wähle eine Datei"
+
+msgid "Select files"
+msgstr "Wähle Dateien aus"
+
+msgid "Select a folder"
+msgstr "Wähle einen Ordner aus"
+
+msgid "Select folders"
+msgstr "Ordner Auswählen"
+
+msgid "Select an item"
+msgstr "Wähle einen Artikel aus"
+
+msgid "Select items"
+msgstr "Artikel Auswählen"
+
+msgid "New Folder"
+msgstr "Neuer Ordner"
+
+msgid "Please enter the name of the new folder:"
+msgstr "Bitte geben Sie den Namen für den neuen Ordner ein:"
+
+#, python-brace-format
+msgid "No {0} added"
+msgstr "Kein {0} hinzugefügt"
+
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "Sie müssen einen {0}-namen angeben!"
+
+msgid "Illegal characters: "
+msgstr "Ungültige Zeichen:"
+
+msgid "Folder with this name already exists!"
+msgstr "Ordner mit dem Namen ist bereits vorhanden!"
+
+msgid "Show Filters"
+msgstr "Zeige Filter"
+
+msgid "Hide Filters"
+msgstr "Verberge Filter"
+
+msgid "Checking ..."
+msgstr "Prüfe…"
+
+msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
+msgstr "{attachmentCount, plural, one {Wollen Sie die bestehende Datei wirklich überschreiben?} other {Wollen Sie die bestehenden Dateien wirklich überschreiben?}}"
+
+msgid "Overwrite?"
+msgstr "Überschreiben?"
+
+msgid "Content type"
+msgstr "Inhaltstyp"
+
+msgid "Send as e-mail"
+msgstr "Sende als E-Mail"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Download"
+msgstr "Herunterladen"
+
+msgid "Use this link to share the entry with other system users"
+msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
+
+msgid "Grants"
+msgstr "Berechtigungen"
+
+msgid "This folder has its own grants"
+msgstr "Dieser Ordner hat eigene Berechtigungen"
+
+msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
+msgstr "Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei denn, sie verfügen über eigene Rechte."
+
+msgid "This folder is part of the data safe"
+msgstr "Dieser Ordner ist Teil des Datentresors"
+
+msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
+msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
+
+#, python-brace-format
+msgid "Grants are inherited from {locationsHtml} as follows"
+msgstr "Berechtigungen geerbt von {locationsHtml} wie folgt"
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "Failed to download this file!"
+msgstr "Das Herunterladen dieser Datei ist fehlgeschlagen!"
+
+msgid "The grant to download files"
+msgstr "Das Recht, Dateien zu herunterzuladen"
+
+msgid "Publish"
+msgstr "Veröffentlichen"
+
+msgid "The grant to create anonymous download links for files"
+msgstr "Das Recht, anonyme Download Links für Dateien zu erstellen"
+
+msgid "Revision"
+msgstr "Version"
+
+#, python-brace-format
+msgid "Copying data .. {0}"
+msgstr "Kopiere Daten .. {0}"
+
+#, python-brace-format
+msgid "Moving data .. {0}"
+msgstr "Verschiebe Daten .. {0}"
+
+msgid "Confirm Changing of Folder Grants"
+msgstr "Ordner Berechtigungen werden geändert"
+
+msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
+msgstr "Sie sind im Begriff einen Ordner zu verschieben der eigene Berechtigungen enthält. Diese gehen verloren und es werden die Berechtigungen des neuen übergeordneten Ordners geerbt."
+
+msgid "Please wait"
+msgstr "Bitte warten"
+
+msgid "Download Link"
+msgid_plural "Download Links"
+msgstr[0] "Download Link"
+msgstr[1] "Download Links"
+
+msgid "Reload"
+msgstr "Aktualisieren"
+
+msgid "Create Folder"
+msgstr "Ordner anlegen"
+
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Unbenannter {0}"
+
+msgid "Edit Properties"
+msgstr "Eigenschaften bearbeiten"
+
+msgid "Rename"
+msgstr "Umbenennen"
+
+#, python-brace-format
+msgid "Rename {0}"
+msgstr "{0} umbenennen"
+
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr "Bitte den neuen Namen von {0} eingeben:"
+
+msgid "System Link"
+msgstr "System Link"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Do you really want to delete the following files?"
+msgstr "Möchten Sie folgende Datei(en) löschen?"
+
+msgid "Move"
+msgstr "Verschieben"
+
+msgid "Move Items"
+msgstr "Einträge verschieben"
+
+msgid "Preview"
+msgstr "Vorschau"
+
+msgid "Folder has been published successfully"
+msgstr "Ordner wurde erfolgreich veröffentlicht"
+
+msgid "File has been published successfully"
+msgstr "Datei wurde erfolgreich veröffentlicht"
+
+msgid "Edit folder"
+msgstr "Ordner bearbeiten"
+
+msgid "edit file"
+msgstr "Datei bearbeiten"
+
+msgid "Public Links"
+msgstr "Öffentliche Links"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Indexed"
+msgstr "Indiziert"
+
+msgid "Not yet indexed"
+msgstr "Noch nicht indiziert"
+
+msgid "Modified By"
+msgstr "Zuletzt geändert von"
+
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
+msgstr "Sie haben fehlgeschlagen Uploads, Bitte überprüfen Sie den Uploads Fortschritt und starten Sie die fehlgeschlagenen Uploads erneut."
+
+msgid "Do you want to restart the failed uploads?"
+msgstr "Möchten Sie die nicht erfolgreich Datei(en) erneut hochladen?"
+
+msgid "Processing files..."
+msgstr "Dateien verarbeiten..."
+
+msgid "Total size of all available revisions"
+msgstr "Gesamtgröße der verfügbaren Revisionen"
+
+msgid "File contents is part of the search index"
+msgstr "Dateiinhalte sind im Suchindex"
+
+msgid "Upload Folder"
+msgstr "Ordner Hochladen"
+
+msgid "Upload File"
+msgstr "Datei hochladen"
+
+msgid "Open Data Safe"
+msgstr "Datentresor öffnen"
+
+msgid "Folder Up"
+msgstr "Aufwärts"
+
+msgid "Locking data safe..."
+msgstr "Datentresor wird geschlossen..."
+
+msgid "Unlocking data safe..."
+msgstr "Datentresor wird geöffnet..."
+
+msgid "Close Data Safe"
+msgstr "Datentresor schließen"
+
+msgid "Upload Failed"
+msgstr "Hochladen fehlgeschlagen"
+
+msgid "It is not permitted to store files in this folder!"
+msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
+
+msgid "Notification"
+msgstr "Benachrichtigung"
+
+msgid "Notification active"
+msgstr "Benachrichtigung aktiv"
+
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#, python-brace-format
+msgid "Once a Day"
+msgid_plural "Every {0} Days"
+msgstr[0] "Einmal am Tag"
+msgstr[1] "Alle {0} Tage"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Don't summarize"
+msgstr "Nicht zusammenfassen"
+
+msgid "Once a day"
+msgstr "Einmal täglich"
+
+msgid "Every 3 days"
+msgstr "Alle 3 Tage"
+
+msgid "Once a week"
+msgstr "Einmal die Woche"
+
+msgid "Once a month"
+msgstr "Einmal pro Monat"
+
+msgid "Once a year"
+msgstr "Einmal pro Jahr"
+
+msgid "Search for users ..."
+msgstr "Suche nach Benutzern ..."
+
+msgid "No permission"
+msgstr "Keine Berechtigung"
+
+msgid "all"
+msgstr "alle"
+
+msgid "Search for groups ..."
+msgstr "Suche nach Gruppen ..."
+
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+msgid "This folder has own notification settings"
+msgstr "Dieser Ordner hat eigene Benachrichtigungs Einstellungen"
+
+msgid "path"
+msgstr "Pfad"
+
+msgid "Whole Filemanager"
+msgstr "Gesamter Dateimanager"
+
+msgid "This Folder"
+msgstr "Dieser Ordner"
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "This folder has own revision settings"
+msgstr "Dieser Ordner hat eigene Revisions Einstellungen"
+
+msgid "Revision active"
+msgstr "Revision aktiv"
+
+msgid "Limit revision amount to"
+msgstr "Revisionen limitieren auf"
+
+msgid "Hold-back in months"
+msgstr "Vorhalten in Monaten"
+
+msgid "Usage"
+msgstr "Verbrauch"
+
+msgid "This folder has own quota"
+msgstr "Dieser Ordner hat ein eigenes Kontingent"
+
+msgid "Quota"
+msgstr "Kontingent"
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr "Kein Kontingent gesetzt (Bsp.: 10 GB, 900 MB)"
+
+msgid "Current Usage"
+msgstr "Aktuelle Nutzung"
+
+msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
+msgstr "Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
+
+msgid "Revision Size"
+msgstr "Revisions Größe"
+
+msgid "File Type"
+msgstr "Dateityp"
+
+msgid "Usage by File Type"
+msgstr "Verbrauch nach Dateityp"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "Usage by User"
+msgstr "Verbrauch nach Benutzer"
+
+msgid "unknown"
+msgstr "unbekannt"

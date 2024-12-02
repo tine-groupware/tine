@@ -21,6 +21,18 @@ msgstr ""
 msgid "Manual page not found"
 msgstr "Seite nicht gefunden"
 
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "Show Canonical Path"
+msgstr "Zeige den Kanonischen Pfad"
+
+msgid "Canonical Path"
+msgstr "Kanonischer Pfad"
+
+msgid "User Manual"
+msgstr ""
+
 msgid "Previous"
 msgstr ""
 
@@ -42,17 +54,25 @@ msgstr "Schließen"
 msgid "Loading Manual Page..."
 msgstr "Lädt das Handbuch..."
 
-msgid "User Manual"
+msgid "ManualContext"
+msgid_plural "ManualContexts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Context"
 msgstr ""
 
-msgid "Help"
-msgstr "Hilfe"
+msgid "Filename"
+msgstr ""
 
-msgid "Show Canonical Path"
-msgstr "Zeige den Kanonischen Pfad"
+msgid "Title"
+msgstr ""
 
-msgid "Canonical Path"
-msgstr "Kanonischer Pfad"
+msgid "Target"
+msgstr ""
+
+msgid "Chapter"
+msgstr ""
 
 msgid "ManualPage"
 msgid_plural "ManualPages"
@@ -64,25 +84,5 @@ msgid_plural "ManualPages lists"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Title"
-msgstr ""
-
-msgid "Filename"
-msgstr ""
-
 msgid "Content"
-msgstr ""
-
-msgid "ManualContext"
-msgid_plural "ManualContexts"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Context"
-msgstr ""
-
-msgid "Target"
-msgstr ""
-
-msgid "Chapter"
 msgstr ""

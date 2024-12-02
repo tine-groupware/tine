@@ -18,300 +18,226 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:75
-msgid "Default Address book"
+msgid "Manage ActiveSync devices"
 msgstr ""
 
-#: Preference.php:76
-msgid "The default address book to create new contacts in."
+msgid "See, edit and delete ActiveSync devices"
 msgstr ""
 
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Agenda par défaut"
+msgid "Reset ActiveSync devices"
+msgstr ""
 
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Calendrier où seront créés par défaut les nouveaux évènements."
+msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
+msgstr ""
 
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Liste des tâches par défaut"
+msgid "Default policy for new devices"
+msgstr "Politique par défaut pour les nouveaux appareils"
 
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Liste où seront créés par défaut les nouvelles tâches."
+msgid "Enter the id of the policy to apply to newly created devices."
+msgstr "Entrez le numéro de la politique qui s'appliquera aux appareils nouvellement enregistrés"
 
-#: js/AdminPanel.js:45
+msgid "Device Model Agent Deny List"
+msgstr ""
+
+msgid "Array of regular expressions of Device-Model strings"
+msgstr ""
+
+msgid "User Agent Deny List"
+msgstr ""
+
+msgid "Array of regular expressions of User-Agent strings"
+msgstr ""
+
+msgid "Disable Remote Reset Action"
+msgstr ""
+
+msgid "Disable Remote Reset Action AdminPanel"
+msgstr ""
+
+msgid "Disable Access Log"
+msgstr "Désactiver la journalisation des accès"
+
+msgid "Disable ActiveSync Access Log creation."
+msgstr "Désactiver la journalisation des accès"
+
+msgid "Filter timeslot for e-mails"
+msgstr ""
+
+msgid "For how long in the past the e-mails should be synchronized."
+msgstr ""
+
+msgid "Filter timeslot for events"
+msgstr "Jours à synchroniser pour les évènements"
+
+msgid "For how long in the past the events should be synchronized."
+msgstr "Période de synchronisation des événements passés"
+
+msgid "%1$s ActiveSync failure"
+msgstr ""
+
 msgid "Sync Devices"
 msgstr ""
 
-#: js/EditDialog.js:72 js/SyncDevicesGridPanel.js:70
-#: js/SyncDevicesGridPanel.js:158
+msgid "Active Sync"
+msgstr "ActiveSync"
+
+msgid "Select a Device"
+msgstr "Sélectionnez un appareil"
+
+msgid "No ActiveSync Device registered"
+msgstr "Aucun appareil ActiveSync enregistré"
+
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Définir en tant que filtre {0}"
+
+msgid "Resetted Sync Filter"
+msgstr "Filtre de synchronisations réinitialisé"
+
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "Le filtre {0} pour l'appareil \"{1}\" est désormais \"{2}\""
+
+msgid "resetted"
+msgstr "réinitialisé"
+
+msgid "Set Sync Filter"
+msgstr "Définir le filtre de synchronisation"
+
 msgid "Device ID"
 msgstr ""
 
-#: js/EditDialog.js:79
 msgid "Devicetype"
 msgstr ""
 
-#: js/EditDialog.js:86 js/SyncDevicesGridPanel.js:72
-#: js/SyncDevicesGridPanel.js:159
 msgid "Owned by"
 msgstr ""
 
-#: js/EditDialog.js:98 js/SyncDevicesGridPanel.js:73
 msgid "Policy"
 msgstr ""
 
-#: js/EditDialog.js:104 js/SyncDevicesGridPanel.js:74
 msgid "ActiveSync Version"
 msgstr ""
 
-#: js/EditDialog.js:110 js/SyncDevicesGridPanel.js:75
 msgid "User agent"
 msgstr ""
 
-#: js/EditDialog.js:116 js/SyncDevicesGridPanel.js:76
 msgid "Model"
 msgstr ""
 
-#: js/EditDialog.js:122 js/SyncDevicesGridPanel.js:77
 msgid "IMEI"
 msgstr ""
 
-#: js/EditDialog.js:128 js/SyncDevicesGridPanel.js:78
 msgid "Friendly Name"
 msgstr ""
 
-#: js/EditDialog.js:134
 msgid "OS"
 msgstr ""
 
-#: js/EditDialog.js:140 js/SyncDevicesGridPanel.js:80
 msgid "OS Language"
 msgstr ""
 
-#: js/EditDialog.js:146
 msgid "Phonenumber"
 msgstr ""
 
-#: js/SyncDevices.js:70
-msgid "Sync Device"
-msgid_plural "Sync Devices"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Appareil"
 msgstr[1] "Appareils"
 
-#: js/Model.js:42
 msgid "Devices"
 msgstr "Appareils"
 
-#: js/Application.js:27
-msgid "Active Sync"
-msgstr "ActiveSync"
-
-#: js/Application.js:43
-msgid "Select a Device"
-msgstr "Sélectionnez un appareil"
-
-#: js/Application.js:57
-msgid "No ActiveSync Device registered"
-msgstr "Aucun appareil ActiveSync enregistré"
-
-#: js/Application.js:65
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Définir en tant que filtre {0}"
-
-#: js/Application.js:90
-msgid "Resetted Sync Filter"
-msgstr "Filtre de synchronisations réinitialisé"
-
-#: js/Application.js:91 js/Application.js:103
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "Le filtre {0} pour l'appareil \"{1}\" est désormais \"{2}\""
-
-#: js/Application.js:94
-msgid "resetted"
-msgstr "réinitialisé"
-
-#: js/Application.js:102
-msgid "Set Sync Filter"
-msgstr "Définir le filtre de synchronisation"
-
-#: js/SyncDevicesGridPanel.js:69
 msgid "ID"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:71
 msgid "Device Type"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:79
 msgid "Operating System"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:81
 msgid "Phone Number"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:82
 msgid "Ping Lifetime"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:83
 msgid "Ping Folder"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:84
 msgid "Remote Wipe"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:85
 msgid "Calendar Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:86
 msgid "Contacts Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:87
 msgid "E-mail Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:88
 msgid "Tasks Filter"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:89
 msgid "Last Ping"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:90
 msgid "Monitor Last Ping"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:103
 msgid "Remote Device Reset"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:120
 msgid "Please confirm"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:121
 msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!"
 msgstr ""
 
-#: js/SyncDevicesGridPanel.js:157
 msgid "Quicksearch"
 msgstr ""
 
-#: Setup/setup.xml:549
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Default Address book"
+msgstr ""
+
+msgid "The default address book to create new contacts in."
+msgstr ""
+
+msgid "Default Calendar"
+msgstr "Agenda par défaut"
+
+msgid "The default calendar to create new events in."
+msgstr "Calendrier où seront créés par défaut les nouveaux évènements."
+
+msgid "Default Task List"
+msgstr "Liste des tâches par défaut"
+
+msgid "The default task list to create new tasks in."
+msgstr "Liste où seront créés par défaut les nouvelles tâches."
+
 msgid "Default Policy"
 msgstr "Règle par défaut"
 
-#: Setup/setup.xml:554
 msgid "Default Policy installed during setup"
 msgstr "Politique par défaut configurée durant l'installation"
 
-#: Config.php:64
-msgid "Default policy for new devices"
-msgstr "Politique par défaut pour les nouveaux appareils"
-
-#: Config.php:66
-msgid "Enter the id of the policy to apply to newly created devices."
-msgstr "Entrez le numéro de la politique qui s'appliquera aux appareils nouvellement enregistrés"
-
-#: Config.php:75
-msgid "Device Model Agent Deny List"
-msgstr ""
-
-#: Config.php:77
-msgid "Array of regular expressions of Device-Model strings"
-msgstr ""
-
-#: Config.php:88
-msgid "User Agent Deny List"
-msgstr ""
-
-#: Config.php:90
-msgid "Array of regular expressions of User-Agent strings"
-msgstr ""
-
-#: Config.php:101
-msgid "Disable Remote Reset Action"
-msgstr ""
-
-#: Config.php:103
-msgid "Disable Remote Reset Action AdminPanel"
-msgstr ""
-
-#: Config.php:112
-msgid "Disable Access Log"
-msgstr "Désactiver la journalisation des accès"
-
-#: Config.php:114
-msgid "Disable ActiveSync Access Log creation."
-msgstr "Désactiver la journalisation des accès"
-
-#: Config.php:123
-msgid "Filter timeslot for e-mails"
-msgstr ""
-
-#: Config.php:125
-msgid "For how long in the past the e-mails should be synchronized."
-msgstr ""
-
-#: Config.php:146
-msgid "Filter timeslot for events"
-msgstr "Jours à synchroniser pour les évènements"
-
-#: Config.php:148
-msgid "For how long in the past the events should be synchronized."
-msgstr "Période de synchronisation des événements passés"
-
-#: Controller/Device.php:214
-msgid "%1$s ActiveSync failure"
-msgstr ""
-
-#: views/lastPingNotificationToUserEmail.twig:1
 msgid "Dear user,"
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:3
 msgid "%1$s has noticed that the syncronization with your ActiveSync device is no longer active. Please trigger the syncronisation on your device."
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:5
 msgid "Thank you."
 msgstr ""
 
-#: views/lastPingNotificationToUserEmail.twig:7
 msgid "Your %1$s Team"
-msgstr ""
-
-#: Acl/Rights.php:110
-msgid "Manage ActiveSync devices"
-msgstr ""
-
-#: Acl/Rights.php:111
-msgid "See, edit and delete ActiveSync devices"
-msgstr ""
-
-#: Acl/Rights.php:114
-msgid "Reset ActiveSync devices"
-msgstr ""
-
-#: Acl/Rights.php:115
-msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
 msgstr ""
 
 #~ msgid "Default Addressbook"

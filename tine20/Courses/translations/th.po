@@ -18,236 +18,178 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-msgid "All courses"
-msgstr "ทุก ๆ วิชา"
+msgid "Add new user"
+msgstr "เพิ่มผู้ใช้ใหม่"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
+msgid "Add new user as member to a course"
+msgstr "เพิ่มผู้ใช้ใหม่ ในฐานะสมาชิกของหลักสูตร"
+
+msgid "Add existing user"
+msgstr "เพิ่มผู้ใช้ที่มีอยู่"
+
+msgid "Add existing user as member to a course"
+msgstr "เพิ่มผู้ใช้ที่มีอยู่ ในฐานะสมาชิกของหลักสูตร"
+
+msgid "Manage shared courses favorites"
 msgstr ""
 
-#: js/Models.js:43 js/CourseEditDialog.js:215 Controller/Course.php:105
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+msgid "Set additional memberships"
+msgstr ""
+
+msgid "Set additional course member group memberships"
+msgstr ""
+
+msgid "Additional Group Memberships"
+msgstr ""
+
+msgid "Array of IDs of Groups students can be members of"
+msgstr ""
+
+msgid "Internet Access"
+msgstr "การเข้าถึงอินเตอร์เนต"
+
+msgid "Internet access options."
+msgstr ""
+
+msgid "On"
+msgstr "เปิด"
+
+msgid "Off"
+msgstr "ปิด"
+
+msgid "Filtered"
+msgstr "ได้กรองแล้ว"
+
+msgid "Internet Access Group (ON)"
+msgstr ""
+
+msgid "Internet Access Group (FILTERED)"
+msgstr ""
+
+msgid "Students Group"
+msgstr "กลุ่มนักเรียน"
+
+msgid "Students Import Definition"
+msgstr ""
+
+msgid "Students login name prefix"
+msgstr ""
+
+msgid "Students password suffix"
+msgstr ""
+
+msgid "Teacher password"
+msgstr ""
+
+msgid "Student username schema"
+msgstr "เรื่องชื่อผู้ใช้ของผู้เรียน"
+
+msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
+msgstr "เรื่องชื่อผู้ใช้ของผู้เรียน (0 = เฉพาะ นามสกุล (10 ตัวอักษร), 1 = นามสกุล + 2 ตัวอักษรของชื่อตัว"
+
+msgid "Samba user settings"
+msgstr "ค่าติดตั้งของผู้ใช้ Samba"
+
+msgid "Default department"
+msgstr ""
+
+msgid "The default department for new Courses"
+msgstr ""
+
+msgid "Course -> Department Mapping"
+msgstr ""
+
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "หลักสูตรต่าง ๆ"
 
-#: js/Models.js:67
-msgid "Quick Search"
-msgstr "ค้นหาอย่างรวดเร็ว"
+msgid "Teacher"
+msgstr "ผู้สอน"
 
-#: js/Models.js:68 js/CourseGridPanel.js:43
+msgid "Teacher Account"
+msgstr "บัญชีผู้สอน"
+
+msgid "My course"
+msgstr "หลักสูตรของฉัน"
+
+msgid "First Name"
+msgstr "ชื่อตัว"
+
+msgid "Last Name"
+msgstr "นามสกุล"
+
+msgid "Add new member to course"
+msgstr "เพิ่มผู้สมาชิกใหม่ในหลักสูตร"
+
+msgid "Errors"
+msgstr "ข้อผิดพลาด"
+
+msgid "Please fix the errors noted."
+msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
+
+msgid "Import course members"
+msgstr "นำเข้ารายชื่อสมาชิกของหลักสูตร"
+
+msgid "Add new member"
+msgstr "เพิ่มสมาชิกใหม่"
+
+msgid "Course Name"
+msgstr "ชื่อหลักสูตร"
+
+msgid "Course / School Type"
+msgstr "หลักสูตร / ประเภทการสอน"
+
+msgid "Description"
+msgstr "คำบรรยาย"
+
+msgid "Members"
+msgstr "สมาชิก"
+
+msgid "Login"
+msgstr "ลงบันทึกเข้า"
+
+msgid "unknown"
+msgstr "ไม่รู้จัก"
+
+msgid "Reset Password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+msgid "Please enter the new Password."
+msgstr ""
+
 msgid "Name"
 msgstr "ชื่อ"
 
-#: js/Models.js:70 js/CourseEditDialog.js:254 Config.php:124
-msgid "Internet Access"
-msgstr "การเข้าถึงอินเตอร์เนต"
+msgid "Type"
+msgstr "ประเภท"
 
-#: js/Models.js:105
+msgid "Failed"
+msgstr "ได้ล้มเหลว"
+
+msgid "Some error occured while trying to update the courses."
+msgstr "มีความผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามปรับปรุงวิชาต่าง ๆ"
+
+msgid "Quick Search"
+msgstr "ค้นหาอย่างรวดเร็ว"
+
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "ประเภทต่าง ๆ ของหลักสูตร"
 
-#: js/CourseEditDialog.js:40
-msgid "Import course members"
-msgstr "นำเข้ารายชื่อสมาชิกของหลักสูตร"
+msgid "All courses"
+msgstr "ทุก ๆ วิชา"
 
-#: js/CourseEditDialog.js:49
-msgid "Add new member"
-msgstr "เพิ่มสมาชิกใหม่"
-
-#: js/CourseEditDialog.js:231
-msgid "Course Name"
-msgstr "ชื่อหลักสูตร"
-
-#: js/CourseEditDialog.js:238
-msgid "Course / School Type"
-msgstr "หลักสูตร / ประเภทการสอน"
-
-#: js/CourseEditDialog.js:248
-msgid "Description"
-msgstr "คำบรรยาย"
-
-#: js/CourseEditDialog.js:283
-msgid "Members"
-msgstr "สมาชิก"
-
-#: js/CourseEditDialog.js:312
-msgid "Login"
-msgstr "ลงบันทึกเข้า"
-
-#: js/CourseEditDialog.js:315
-msgid "unknown"
-msgstr "ไม่รู้จัก"
-
-#: js/CourseEditDialog.js:339
-msgid "Reset Password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-#: js/CourseEditDialog.js:359
-msgid "Please enter the new Password."
+msgid "The default favorite which is loaded on Classes startup"
 msgstr ""
 
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "ชื่อตัว"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "นามสกุล"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "เพิ่มผู้สมาชิกใหม่ในหลักสูตร"
-
-#: js/AddMemberDialog.js:121
-msgid "Errors"
-msgstr "ข้อผิดพลาด"
-
-#: js/AddMemberDialog.js:121
-msgid "Please fix the errors noted."
-msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
-
-#: js/CourseGridPanel.js:44
-msgid "Type"
-msgstr "ประเภท"
-
-#: js/CourseGridPanel.js:85
-msgid "Failed"
-msgstr "ได้ล้มเหลว"
-
-#: js/CourseGridPanel.js:86
-msgid "Some error occured while trying to update the courses."
-msgstr "มีความผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามปรับปรุงวิชาต่าง ๆ"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "หลักสูตรต่าง ๆ"
-
-#: Setup/Initialize.php:57
 msgid "School"
 msgstr ""
 
-#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""
 
-#: Config.php:114
-msgid "Additional Group Memberships"
-msgstr ""
-
-#: Config.php:116
-msgid "Array of IDs of Groups students can be members of"
-msgstr ""
-
-#: Config.php:126
-msgid "Internet access options."
-msgstr ""
-
-#: Config.php:133
-msgid "On"
-msgstr "เปิด"
-
-#: Config.php:134
-msgid "Off"
-msgstr "ปิด"
-
-#: Config.php:135
-msgid "Filtered"
-msgstr "ได้กรองแล้ว"
-
-#: Config.php:140 Config.php:142
-msgid "Internet Access Group (ON)"
-msgstr ""
-
-#: Config.php:148 Config.php:150
-msgid "Internet Access Group (FILTERED)"
-msgstr ""
-
-#: Config.php:156 Config.php:158
-msgid "Students Group"
-msgstr "กลุ่มนักเรียน"
-
-#: Config.php:164 Config.php:166
-msgid "Students Import Definition"
-msgstr ""
-
-#: Config.php:172
-msgid "Students login name prefix"
-msgstr ""
-
-#: Config.php:179
-msgid "Students password suffix"
-msgstr ""
-
-#: Config.php:186
-msgid "Teacher password"
-msgstr ""
-
-#: Config.php:203
-msgid "Student username schema"
-msgstr "เรื่องชื่อผู้ใช้ของผู้เรียน"
-
-#: Config.php:205
-msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
-msgstr "เรื่องชื่อผู้ใช้ของผู้เรียน (0 = เฉพาะ นามสกุล (10 ตัวอักษร), 1 = นามสกุล + 2 ตัวอักษรของชื่อตัว"
-
-#: Config.php:212 Config.php:214
-msgid "Samba user settings"
-msgstr "ค่าติดตั้งของผู้ใช้ Samba"
-
-#: Config.php:223
-msgid "Default department"
-msgstr ""
-
-#: Config.php:225
-msgid "The default department for new Courses"
-msgstr ""
-
-#: Config.php:233 Config.php:235
-msgid "Course -> Department Mapping"
-msgstr ""
-
-#: Controller/Course.php:340 Controller/Course.php:385
-msgid "Teacher"
-msgstr "ผู้สอน"
-
-#: Controller/Course.php:341
-msgid "Teacher Account"
-msgstr "บัญชีผู้สอน"
-
-#: Controller/Course.php:406
-msgid "My course"
-msgstr "หลักสูตรของฉัน"
-
-#: Acl/Rights.php:116
-msgid "Add new user"
-msgstr "เพิ่มผู้ใช้ใหม่"
-
-#: Acl/Rights.php:117
-msgid "Add new user as member to a course"
-msgstr "เพิ่มผู้ใช้ใหม่ ในฐานะสมาชิกของหลักสูตร"
-
-#: Acl/Rights.php:120
-msgid "Add existing user"
-msgstr "เพิ่มผู้ใช้ที่มีอยู่"
-
-#: Acl/Rights.php:121
-msgid "Add existing user as member to a course"
-msgstr "เพิ่มผู้ใช้ที่มีอยู่ ในฐานะสมาชิกของหลักสูตร"
-
-#: Acl/Rights.php:124
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:125
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:128
-msgid "Set additional memberships"
-msgstr ""
-
-#: Acl/Rights.php:129
-msgid "Set additional course member group memberships"
-msgstr ""
+msgid "Courses"
+msgstr "หลักสูตรต่าง ๆ"

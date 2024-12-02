@@ -11,98 +11,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Tommi Turkia <sahkari@saunalahti.fi>, 2012\n"
 "Language-Team: Finnish (http://app.transifex.com/tine/groupware/language/fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Kaikki projektini"
+msgid "Manage shared project favorites"
+msgstr "Hallinnoi projektin jaettuja suosikkeja"
 
-msgid "Default Favorite"
-msgstr "Oletus suosikki"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
-
-msgid "Attendee"
-msgstr "Osallistuja"
-
-msgid "Role"
-msgstr "Rooli"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekti"
-msgstr[1] "Projektit"
-
-msgid "Title"
-msgstr "Otsikko"
-
-msgid "Number"
-msgstr "Numero"
-
-msgid "Status"
-msgstr "Tila"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "Kuvaus"
-
-msgid "Enter description"
-msgstr "Lisää kuvaus"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
-
-msgid "Please select the attenders' role"
-msgstr "Valitse osallistujan rooli"
-
-msgid "Select Project"
-msgstr "Valitse projekti"
-
-msgid "Select Role"
-msgstr "Valitse rooli"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Lisätty {0} osallistujaa projektiin"
-
-msgid "Attendee Role"
-msgstr "Osallistujan rooli"
-
-msgid "Projects"
-msgstr "Projektit"
-
-msgid "All my open projects"
-msgstr "Kaikki avoimet projektini"
-
-msgid "My projects that I'm responsible for"
-msgstr "Omat projektit joista olen vastuussa"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Kaikki avoimet projektit joista olen vastuussa"
-
-msgid "My waiting projects"
-msgstr "Odottavat projektit"
-
-msgid "My projects that are on hold"
-msgstr "Odottamassa olevat projektini"
+msgid "Create new shared project favorites"
+msgstr "Luo projektille uusi jaettu suosikki"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -155,6 +77,69 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekti"
+msgstr[1] "Projektit"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Valitse projekti lisätäksesi yhteyshenkilöt"
+
+msgid "Please select the attenders' role"
+msgstr "Valitse osallistujan rooli"
+
+msgid "Select Project"
+msgstr "Valitse projekti"
+
+msgid "Role"
+msgstr "Rooli"
+
+msgid "Select Role"
+msgstr "Valitse rooli"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Lisätty {0} osallistujaa projektiin"
+
+msgid "Attendee"
+msgstr "Osallistuja"
+
+msgid "Attendee Role"
+msgstr "Osallistujan rooli"
+
+msgid "Title"
+msgstr "Otsikko"
+
+msgid "Number"
+msgstr "Numero"
+
+msgid "Status"
+msgstr "Tila"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "Kuvaus"
+
+msgid "Enter description"
+msgstr "Lisää kuvaus"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Projekti lista"
@@ -166,14 +151,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "Kaikki projektini"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "Oletus suosikki"
 
-msgid "Manage shared project favorites"
-msgstr "Hallinnoi projektin jaettuja suosikkeja"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Oletus suosikki joka ladataan projekti ohjelmaa käynnistettäessä"
 
-msgid "Create new shared project favorites"
-msgstr "Luo projektille uusi jaettu suosikki"
+msgid "All my open projects"
+msgstr "Kaikki avoimet projektini"
+
+msgid "My projects that I'm responsible for"
+msgstr "Omat projektit joista olen vastuussa"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Kaikki avoimet projektit joista olen vastuussa"
+
+msgid "My waiting projects"
+msgstr "Odottavat projektit"
+
+msgid "My projects that are on hold"
+msgstr "Odottamassa olevat projektini"
+
+msgid "Projects"
+msgstr "Projektit"

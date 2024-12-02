@@ -18,18 +18,102 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Manage data provenances in CoreData"
+msgstr "Datenherkunft in Stammdaten verwalten"
+
+msgid "View, create, delete or update data provenances in CoreData application"
+msgstr "Anzeigen, anlegen, löschen und bearbeiten von Datenherkünften in der Stammdaten Anwendung"
+
+msgid "Manage data intended purposes in CoreData"
+msgstr "Verwendungszwecke in Stammdaten verwalten"
+
+msgid "View, create, delete or update data intended purposes in CoreData application"
+msgstr "Anzeigen, anlegen, löschen und bearbeiten von Verwendungszwecken in der Stammdaten Anwendung"
+
+msgid "Data provenance for ADB contacts mandatory"
+msgstr "Adressbuch Kontakte benötigen Datenherkunft"
+
+msgid "Whether the data provenance for ADB contacts is mandatory, not mandatory or empty provenances will be set to a default"
+msgstr "Ob die Datenherkunft für Adressbuchkontakte benötigt, nicht benötigt oder wenn nicht anderes angegeben auf einen Standardwert gesetzt wird"
+
+msgid "yes"
+msgstr "Ja"
+
+msgid "no"
+msgstr "nein"
+
+msgid "default"
+msgstr "Standard"
+
+msgid "Default data provenance for ADB contacts"
+msgstr "Standard Datenherkunft für Adressbuch Kontakte"
+
+msgid "Manage consent page explain text"
+msgstr "Erklärungstext für Seite zur Verwaltung von Einwilligungen"
+
+msgid "Manage consent Email template"
+msgstr "E-Mail Schablone für Verwaltung von Einwilligungen"
+
+msgid "Languages Available"
+msgstr "Verfügbare Sprachen"
+
+msgid "List of the language in which the multilingual texts are laid out."
+msgstr "Liste der Sprache in denen die mehrsprachigen Texte gelegt werden."
+
+msgid "Consent management for"
+msgstr "Consent management für"
+
 msgid "Data provenances"
 msgstr "Datenherkünfte"
 
 msgid "Data intended purposes"
 msgstr "Verwendungszwecke"
 
+msgid "Excel all data"
+msgstr "Excel alle Daten"
+
+msgid "GDPR"
+msgstr "DSGVO"
+
+msgid "GRPR LINK"
+msgstr "DSGVO Link"
+
+msgid "Must not be contacted"
+msgstr "Darf nicht kontaktiert werden"
+
+msgid "This Contact withdrawed usage of his data for any purpose."
+msgstr "Dieser Kontakt hat die Erlaubnis zur Verwendung seiner Daten in jeder Weise wiederrufen."
+
+msgid "Expiry Date"
+msgstr "Ablaufdatum"
+
+msgid "Contact gets deleted after this date automatically."
+msgstr "Kontakt wird nach dem Ablaufdatum automatisch gelöscht."
+
+msgid "Blacklist"
+msgstr "Sperrliste"
+
+msgid "Data Provenance"
+msgstr "Datenherkunft"
+
+msgid "Reason for Editing"
+msgstr "Bearbeitungsgrund"
+
+msgid "Please enter the reason for editing this data"
+msgstr "Grund der Bearbeitung eingeben"
+
+msgid "Please Confirm the Data Provenance"
+msgstr "Bitte die Datenherkunft bestätigen"
+
+msgid "Show expired"
+msgstr "Abgelaufene anzeigen"
+
+msgid "GDPR Intended Purpose"
+msgstr "DSGVO Verwendungszweck"
+
 #, python-brace-format
 msgid "I am not {email}"
 msgstr "Ich bin nicht {email}"
-
-msgid "Consent management for"
-msgstr "Consent management für"
 
 msgid "Data intended purpose"
 msgid_plural "Data intended purposes"
@@ -47,6 +131,12 @@ msgstr "Wiederrufsdatum"
 
 msgid "Agreement date"
 msgstr "Zustimmungsdatum"
+
+msgid "Enter your email address"
+msgstr "Ihre E-Mail Adresse eingeben"
+
+msgid "Get my link"
+msgstr "Meinen Link bekommen"
 
 msgid "I hereby withdraw the following data intended purpose"
 msgstr "Hiermit widerrufe ich die Verarbeitung meiner Daten zum folgenden Zweck"
@@ -71,51 +161,6 @@ msgstr "Abbrechen"
 
 msgid "Confirm"
 msgstr "Bestätigen"
-
-msgid "Enter your email address"
-msgstr "Ihre E-Mail Adresse eingeben"
-
-msgid "Get my link"
-msgstr "Meinen Link bekommen"
-
-msgid "Show expired"
-msgstr "Abgelaufene anzeigen"
-
-msgid "Data Provenance"
-msgstr "Datenherkunft"
-
-msgid "Reason for Editing"
-msgstr "Bearbeitungsgrund"
-
-msgid "Please enter the reason for editing this data"
-msgstr "Grund der Bearbeitung eingeben"
-
-msgid "Please Confirm the Data Provenance"
-msgstr "Bitte die Datenherkunft bestätigen"
-
-msgid "GDPR"
-msgstr "DSGVO"
-
-msgid "GRPR LINK"
-msgstr "DSGVO Link"
-
-msgid "Must not be contacted"
-msgstr "Darf nicht kontaktiert werden"
-
-msgid "This Contact withdrawed usage of his data for any purpose."
-msgstr "Dieser Kontakt hat die Erlaubnis zur Verwendung seiner Daten in jeder Weise wiederrufen."
-
-msgid "Expiry Date"
-msgstr "Ablaufdatum"
-
-msgid "Contact gets deleted after this date automatically."
-msgstr "Kontakt wird nach dem Ablaufdatum automatisch gelöscht."
-
-msgid "Blacklist"
-msgstr "Sperrliste"
-
-msgid "GDPR Intended Purpose"
-msgstr "DSGVO Verwendungszweck"
 
 msgid "Data Intended purpose of this mass mailing"
 msgstr "Verwendungszweck dieser Massen-Mail"
@@ -166,8 +211,19 @@ msgstr "Alle Kontakte, die diesem Verwendungszweck zugestimmt haben, als Empfän
 msgid "Compose mass mail without recipients"
 msgstr "Keine Empfänger der Massenmail hinzufügen"
 
-msgid "Enter your email"
-msgstr "Ihre E-Mail eingeben"
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "GENDER_Data intended purpose"
+msgstr "male"
+
+msgid "Data provenance"
+msgid_plural "Data provenances"
+msgstr[0] "Datenherkunft"
+msgstr[1] "Datenherkünfte"
+
+msgid "Expiration"
+msgstr "Ablauf"
 
 msgid "GDPR Blacklisted"
 msgstr "DSGVO Sperrliste"
@@ -181,67 +237,11 @@ msgstr "DSGVO Bearbeitungsgrund"
 msgid "GDPR Data Expiry Date"
 msgstr "DSGVO Datenablaufdatum"
 
-msgid "Data provenance for ADB contacts mandatory"
-msgstr "Adressbuch Kontakte benötigen Datenherkunft"
-
-msgid "Whether the data provenance for ADB contacts is mandatory, not mandatory or empty provenances will be set to a default"
-msgstr "Ob die Datenherkunft für Adressbuchkontakte benötigt, nicht benötigt oder wenn nicht anderes angegeben auf einen Standardwert gesetzt wird"
-
-msgid "yes"
-msgstr "Ja"
-
-msgid "no"
-msgstr "nein"
-
-msgid "default"
-msgstr "Standard"
-
-msgid "Default data provenance for ADB contacts"
-msgstr "Standard Datenherkunft für Adressbuch Kontakte"
-
-msgid "Manage consent page explain text"
-msgstr "Erklärungstext für Seite zur Verwaltung von Einwilligungen"
-
-msgid "Manage consent Email template"
-msgstr "E-Mail Schablone für Verwaltung von Einwilligungen"
-
-msgid "Languages Available"
-msgstr "Verfügbare Sprachen"
-
-msgid "List of the language in which the multilingual texts are laid out."
-msgstr "Liste der Sprache in denen die mehrsprachigen Texte gelegt werden."
-
-msgid "GENDER_Data intended purpose"
-msgstr "male"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Data provenance"
-msgid_plural "Data provenances"
-msgstr[0] "Datenherkunft"
-msgstr[1] "Datenherkünfte"
-
-msgid "Expiration"
-msgstr "Ablauf"
-
-msgid "Excel all data"
-msgstr "Excel alle Daten"
+msgid "Enter your email"
+msgstr "Ihre E-Mail eingeben"
 
 msgid "Thank you for using GDPR module\""
 msgstr "Danke für die Nutzung des DSGVO Moduls"
 
 msgid "To review or edit your consent please use the following link:"
 msgstr "Um ihre Einwilligungen zu verwalten folgen sie bitte diesem Link:"
-
-msgid "Manage data provenances in CoreData"
-msgstr "Datenherkunft in Stammdaten verwalten"
-
-msgid "View, create, delete or update data provenances in CoreData application"
-msgstr "Anzeigen, anlegen, löschen und bearbeiten von Datenherkünften in der Stammdaten Anwendung"
-
-msgid "Manage data intended purposes in CoreData"
-msgstr "Verwendungszwecke in Stammdaten verwalten"
-
-msgid "View, create, delete or update data intended purposes in CoreData application"
-msgstr "Anzeigen, anlegen, löschen und bearbeiten von Verwendungszwecken in der Stammdaten Anwendung"

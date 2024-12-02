@@ -5,14 +5,26 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2024-11-25 16:04+0000\n"
 "Language-Team: Japanese (Japan) (https://app.transifex.com/tine/teams/16133/ja_JP/)\n"
+"Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja_JP\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+msgid "PasswordLess Login"
+msgstr ""
+
+msgid "Oauth2"
+msgstr ""
+
+msgid "SAML2"
+msgstr ""
+
+msgid "SAML2 bindings"
+msgstr ""
 
 msgid "Relying Parties"
 msgstr ""
@@ -27,67 +39,12 @@ msgstr ""
 msgid "After successful login you will be redirected to {0}"
 msgstr ""
 
-msgid "PasswordLess Login"
-msgstr ""
-
-msgid "Oauth2"
-msgstr ""
-
-msgid "SAML2"
-msgstr ""
-
-msgid "SAML2 bindings"
-msgstr ""
-
-msgid "OAuth2 Relying Party Config"
-msgid_plural "OAuth2 Relying Party Configs"
-msgstr[0] ""
-
-msgid "Redirect URLs"
-msgstr ""
-
-msgid "Secret"
-msgstr ""
-
-msgid "OAuth2 Access Token"
-msgid_plural "OAuth2 Access Tokens"
-msgstr[0] ""
-
-msgid "Token"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "TTL"
-msgstr ""
-
 msgid "External Identity Provider Domain"
 msgid_plural "External Identity Provider Domains"
 msgstr[0] ""
 
 msgid "Name"
 msgstr ""
-
-msgid "Relying Party"
-msgid_plural "Relying Parties"
-msgstr[0] ""
-
-msgid "Label"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Logo"
-msgstr ""
-
-msgid "External Identity Provider"
-msgid_plural "External Identity Providers"
-msgstr[0] ""
 
 msgid "External Identity Provider Config"
 msgid_plural "External Identity Provider Configs"
@@ -103,6 +60,33 @@ msgid "Client ID"
 msgstr ""
 
 msgid "Client Secret"
+msgstr ""
+
+msgid "External Identity Provider"
+msgid_plural "External Identity Providers"
+msgstr[0] ""
+
+msgid "Description"
+msgstr ""
+
+msgid "OAuth2 Relying Party Config"
+msgid_plural "OAuth2 Relying Party Configs"
+msgstr[0] ""
+
+msgid "Redirect URLs"
+msgstr ""
+
+msgid "Secret"
+msgstr ""
+
+msgid "Relying Party"
+msgid_plural "Relying Parties"
+msgstr[0] ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Logo"
 msgstr ""
 
 msgid "SAML2 Relying Party Config"
@@ -125,4 +109,20 @@ msgid "Logout Service Binding"
 msgstr ""
 
 msgid "Logout Service Location"
+msgstr ""
+
+msgid "OAuth2 Access Token"
+msgid_plural "OAuth2 Access Tokens"
+msgstr[0] ""
+
+msgid "Token"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "TTL"
 msgstr ""

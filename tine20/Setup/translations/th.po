@@ -18,846 +18,608 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:762
 msgid "Maximum number of users reached. "
 msgstr ""
 
-#: Controller.php:765
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr ""
 
-#: js/TermsPanel.js:32
-msgid "I have read the license agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:41
-msgid "License Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:60
-msgid "I have read the privacy agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:69
-msgid "Privacy Agreement"
-msgstr "ข้อตกลงเรื่องความเป็นส่วนตัว"
-
-#: js/TermsPanel.js:86
-msgid "Accept Terms and Conditions"
-msgstr ""
-
-#: js/LicensePanel.js:70
-msgid "Delete current Subscription"
-msgstr ""
-
-#: js/LicensePanel.js:141
-msgid "Your Subscription is not valid."
-msgstr ""
-
-#: js/LicensePanel.js:194
-msgid "Subscription Configuration"
-msgstr ""
-
-#: js/LicensePanel.js:203
-msgid "Upload from disk"
-msgstr ""
-
-#: js/LicensePanel.js:205
-msgid "Select file containing your Subscription key"
-msgstr ""
-
-#: js/LicensePanel.js:216
-msgid "No valid Subscription"
-msgstr ""
-
-#: js/LicensePanel.js:218
-msgid "Contract ID"
-msgstr ""
-
-#: js/LicensePanel.js:223
-msgid "Organization"
-msgstr ""
-
-#: js/LicensePanel.js:228
-msgid "Activation Key"
-msgstr ""
-
-#: js/LicensePanel.js:233
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-#: js/LicensePanel.js:238
-msgid "Valid from"
-msgstr ""
-
-#: js/LicensePanel.js:244
-msgid "Valid to"
-msgstr ""
-
-#: js/LicensePanel.js:261
-msgid "Subscription Information"
-msgstr ""
-
-#: js/EmailPanel.js:146 js/EmailPanel.js:480 js/AuthenticationPanel.js:203
-#: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
-msgid "Backend"
-msgstr "ส่วนหลัง"
-
-#: js/EmailPanel.js:150
-msgid "Standard IMAP"
-msgstr "IMAP มาตรฐาน"
-
-#: js/EmailPanel.js:161
-msgid "Standard SMTP"
-msgstr "SMTP มาตรฐาน "
-
-#: js/EmailPanel.js:182
-msgid "Imap"
-msgstr ""
-
-#: js/EmailPanel.js:190 js/EmailPanel.js:312 js/EmailPanel.js:445
-#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
-#: js/ConfigManagerPanel.js:325 js/ConfigManagerPanel.js:345
-#: js/ConfigManagerPanel.js:386 js/ConfigManagerPanel.js:445
-msgid "Hostname"
-msgstr "ชื่อแม่ข่าย"
-
-#: js/EmailPanel.js:194 js/ConfigManagerPanel.js:203
-msgid "Username"
-msgstr "ชื่อผู้ใช้"
-
-#: js/EmailPanel.js:198 js/AuthenticationPanel.js:317
-#: js/AuthenticationPanel.js:609 js/ConfigManagerPanel.js:212
-#: js/ConfigManagerPanel.js:243
-msgid "Password"
-msgstr "รหัสผ่าน"
-
-#: js/EmailPanel.js:204 js/EmailPanel.js:316 js/EmailPanel.js:449
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
-#: js/AuthenticationPanel.js:633 js/ConfigManagerPanel.js:232
-#: js/ConfigManagerPanel.js:329 js/ConfigManagerPanel.js:349
-#: js/ConfigManagerPanel.js:390 js/ConfigManagerPanel.js:449
-msgid "Port"
-msgstr "พอร์ท"
-
-#: js/EmailPanel.js:208 js/EmailPanel.js:320 js/EmailPanel.js:453
-#: js/AuthenticationPanel.js:387
-msgid "Secure Connection"
-msgstr "การเชื่อมต่อที่ปลอดภัย"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:334
-#: js/EmailPanel.js:456 js/AuthenticationPanel.js:389
-msgid "None"
-msgstr "ไม่มีเลย"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:389
-msgid "TLS"
-msgstr "TLS"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
-#: js/AuthenticationPanel.js:627
-msgid "SSL"
-msgstr "SSL"
-
-#: js/EmailPanel.js:214 js/EmailPanel.js:326
-msgid "Verify peer Certificate"
-msgstr ""
-
-#: js/EmailPanel.js:220
-msgid "Use system account"
-msgstr "ใช้บัญชีของระบบ"
-
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
-msgid "No"
-msgstr "ไม่"
-
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
-msgid "Yes"
-msgstr "ใช่"
-
-#: js/EmailPanel.js:226 js/AuthenticationPanel.js:394
-msgid "Append domain to login name"
-msgstr ""
-
-#: js/EmailPanel.js:231
-msgid "Use email address as login name"
-msgstr ""
-
-#: js/EmailPanel.js:267
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:270
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:276
-msgid "Use proxy auth"
-msgstr ""
-
-#: js/EmailPanel.js:304
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:331
-msgid "Authentication"
-msgstr "การอนุญาต"
-
-#: js/EmailPanel.js:334
-msgid "Login"
-msgstr "ลงบันทึกเข้า"
-
-#: js/EmailPanel.js:334
-msgid "Plain"
-msgstr "ธรรมดา"
-
-#: js/EmailPanel.js:338
-msgid "Primary Domain"
-msgstr "โดเมนหลัก"
-
-#: js/EmailPanel.js:342
-msgid "Secondary Domains (comma separated)"
-msgstr "โดเมนรอง (แบ่งโดยจุลภาค)"
-
-#: js/EmailPanel.js:346
-msgid "Aditional Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:350
-msgid "Notifications service address"
-msgstr ""
-
-#: js/EmailPanel.js:354
-msgid "Notification Username"
-msgstr "การแจ้งชื่อผู้ใช้"
-
-#: js/EmailPanel.js:358
-msgid "Notification Password"
-msgstr "การแจ้งรหัสผ่าน"
-
-#: js/EmailPanel.js:363
-msgid "Notifications local client (hostname or IP address)"
-msgstr ""
-
-#: js/EmailPanel.js:439
-msgid "SIEVE"
-msgstr "กรอง"
-
-#: js/EmailPanel.js:507
-msgid "MySql Hostname"
-msgstr "ชื่อแม่ข่าย MySql"
-
-#: js/EmailPanel.js:510
-msgid "MySql Database"
-msgstr "ฐานข้อมูล MySql"
-
-#: js/EmailPanel.js:513
-msgid "MySql User"
-msgstr "ผู้ใช้ MySql"
-
-#: js/EmailPanel.js:516
-msgid "MySql Password"
-msgstr "รหัสผ่าน MySql"
-
-#: js/EmailPanel.js:521
-msgid "MySql Port"
-msgstr "พอร์ท MySql"
-
-#: js/EmailPanel.js:537
-msgid "User or UID"
-msgstr "ผู้ใช้ หรือ UID"
-
-#: js/EmailPanel.js:540
-msgid "Group or GID"
-msgstr "กลุ่ม หรือ GID"
-
-#: js/EmailPanel.js:543
-msgid "Home Template"
-msgstr ""
-
-#: js/EmailPanel.js:545
-msgid "Password Scheme"
-msgstr ""
-
-#: js/EmailPanel.js:556
-msgid "PLAIN-MD5"
-msgstr ""
-
-#: js/EmailPanel.js:557
-msgid "MD5-CRYPT"
-msgstr ""
-
-#: js/EmailPanel.js:558
-msgid "SHA1"
-msgstr ""
-
-#: js/EmailPanel.js:559
-msgid "SHA256"
-msgstr ""
-
-#: js/EmailPanel.js:560
-msgid "SSHA256"
-msgstr ""
-
-#: js/EmailPanel.js:561
-msgid "SHA512"
-msgstr ""
-
-#: js/EmailPanel.js:562
-msgid "SSHA512"
-msgstr ""
-
-#: js/EmailPanel.js:563
-msgid "PLAIN"
-msgstr ""
-
-#: js/TreePanel.js:53
-msgid "Terms and Conditions"
-msgstr ""
-
-#: js/TreePanel.js:58
-msgid "Setup Checks"
-msgstr ""
-
-#: js/TreePanel.js:64
-msgid "Config Manager"
-msgstr ""
-
-#: js/TreePanel.js:70
-msgid "Authentication/Accounts"
-msgstr ""
-
-#: js/TreePanel.js:76
-msgid "Email"
-msgstr "อีเมล"
-
-#: js/TreePanel.js:82
-msgid "Application Manager"
-msgstr "ตัวจัดการแอพพลิเคชั่น"
-
-#: js/TreePanel.js:88
-msgid "Subscription"
-msgstr ""
-
-#: js/init.js:76
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
 msgid "Name"
 msgstr "ชื่อ"
 
-#: js/ApplicationGridPanel.js:64
 msgid "Enabled"
 msgstr "เปิดใช้งานแล้ว"
 
-#: js/ApplicationGridPanel.js:65
 msgid "Order"
 msgstr "คำสั่ง"
 
-#: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
 msgstr "เวอร์ชั่นที่ได้ติดตั้ง"
 
-#: js/ApplicationGridPanel.js:67
 msgid "Available Version"
 msgstr "เวอร์ชั่นที่มี"
 
-#: js/ApplicationGridPanel.js:68
 msgid "Status"
 msgstr "สถานะ"
 
-#: js/ApplicationGridPanel.js:69
 msgid "Depends on"
 msgstr "ขึ้นอยู่กับ"
 
-#: js/ApplicationGridPanel.js:79 js/EnvCheckGridPanel.js:205
 msgid "Install application"
 msgstr "ติดตั้งแอพพลิเคชั่น"
 
-#: js/ApplicationGridPanel.js:88
 msgid "Uninstall application"
 msgstr "ถอนการติดตั้งแอพพลิเคชั่น"
 
-#: js/ApplicationGridPanel.js:97
 msgid "Update applications"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:105
 #, python-brace-format
 msgid "Go to {0} login"
 msgstr "ไปยังการเข้าใช้ {0} "
 
-#: js/ApplicationGridPanel.js:183
 msgid "uninstall"
 msgstr "ถอนการติดตั้ง"
 
-#: js/ApplicationGridPanel.js:183
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "คุณแน่ใจว่าต้องการถอนการติดตั้งแอพพลิเคชั่น(s)?"
 
-#: js/ApplicationGridPanel.js:246
 msgid "This may take a while"
 msgstr "นี่อาจจะใช้เวลาสักครู่"
 
-#: js/ApplicationGridPanel.js:280
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:289
 msgid "CLI Required"
 msgstr ""
 
-#: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "ลบผ๔้ใช้และกลุ่มที่มีอยู่ทั้งหมด"
 
-#: js/AuthenticationPanel.js:126
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "การสลับจาก SQL ไปยัง LDAP จะลบบัญชี กลุ่ม และหน้าที่ของผู้ใช้ที่มีอยู่ทั้งหมด คุณแน่ใจว่าต้องการสลับการจัดเก็บบัญชีส่วนหลังไปใช้ LDAP?"
 
-#: js/AuthenticationPanel.js:204
+msgid "Backend"
+msgstr "ส่วนหลัง"
+
 msgid "TLS client certificate"
 msgstr ""
 
-#: js/AuthenticationPanel.js:232
 msgid "Initial Admin User"
 msgstr ""
 
-#: js/AuthenticationPanel.js:244
 msgid "Initial admin login name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:249
 msgid "Initial admin Password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:253
 msgid "Password confirmation"
 msgstr "การยืนยันรหัสผ่าน"
 
-#: js/AuthenticationPanel.js:261
 msgid "Authentication provider"
 msgstr "ผู้ให้การอนุญาต"
 
-#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:352
-#: js/AuthenticationPanel.js:414
 msgid "Try to split username"
 msgstr "พยายามที่จะแตกชื่อผู้ใช้"
 
-#: js/AuthenticationPanel.js:288 js/AuthenticationPanel.js:358
+msgid "Yes"
+msgstr "ใช่"
+
+msgid "No"
+msgstr "ไม่"
+
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationPanel.js:294 js/AuthenticationPanel.js:364
 msgid "Account domain name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:297 js/AuthenticationPanel.js:367
 msgid "Account domain short name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:311 js/AuthenticationPanel.js:603
 msgid "Host"
 msgstr "แม่ข่าย"
 
-#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:606
 msgid "Login name"
 msgstr "ชื่อที่เข้าใช้"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:615
+msgid "Password"
+msgstr "รหัสผ่าน"
+
 msgid "Bind requires DN"
 msgstr "การเชื่อมต่อต้องการ DN"
 
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:621
 msgid "Start TLS"
 msgstr "เริ่ม TLS"
 
-#: js/AuthenticationPanel.js:345
+msgid "SSL"
+msgstr "SSL"
+
+msgid "Port"
+msgstr "พอร์ท"
+
 msgid "Base DN"
 msgstr "ฐาน DN"
 
-#: js/AuthenticationPanel.js:348
 msgid "Search filter"
 msgstr "หาตัวกรอง"
 
-#: js/AuthenticationPanel.js:407
+msgid "Hostname"
+msgstr "ชื่อแม่ข่าย"
+
+msgid "Secure Connection"
+msgstr "การเชื่อมต่อที่ปลอดภัย"
+
+msgid "None"
+msgstr "ไม่มีเลย"
+
+msgid "TLS"
+msgstr "TLS"
+
+msgid "Append domain to login name"
+msgstr ""
+
 msgid "Certificate validation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:420
 msgid "CA file"
 msgstr "ไฟล์ CA"
 
-#: js/AuthenticationPanel.js:423
 msgid "CRL directory"
 msgstr "ไดเรคทอรี่ CRL "
 
-#: js/AuthenticationPanel.js:433
 msgid "Accounts storage"
 msgstr "การจัดเก็บบัญชี"
 
-#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:721
 msgid "Default user group name"
 msgstr "ชื่อกลุ่มผู้ใช้หลัก"
 
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:724
 msgid "Default admin group name"
 msgstr "ชื่อกลุ่มผู้ดูแลหลัก"
 
-#: js/AuthenticationPanel.js:470
 msgid "Login panel"
 msgstr "ช่องลงชื่อเข้าใช้"
 
-#: js/AuthenticationPanel.js:485
 msgid "Reuse last username logged"
 msgstr ""
 
-#: js/AuthenticationPanel.js:494
 msgid "Password Settings"
 msgstr "การรติดตั้งรหัสผ่าน"
 
-#: js/AuthenticationPanel.js:509
 msgid "User can change password"
 msgstr "ผู้ใช้สามารถเปลี่ยนรหัสผ่านได้"
 
-#: js/AuthenticationPanel.js:515
 msgid "Enable password policy"
 msgstr ""
 
-#: js/AuthenticationPanel.js:521
 msgid "Only ASCII"
 msgstr "เฉพาะ ASCII"
 
-#: js/AuthenticationPanel.js:526
 msgid "Minimum length"
 msgstr "ความยาวอย่างน้อยที่สุด"
 
-#: js/AuthenticationPanel.js:529
 msgid "Minimum word chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:532
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:535
 msgid "Minimum special chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:538
 msgid "Minimum numbers"
 msgstr "จำนวนหมายเลขที่น้อยที่สุด"
 
-#: js/AuthenticationPanel.js:541
 msgid "Change password after ... days"
 msgstr ""
 
-#: js/AuthenticationPanel.js:550
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:559
 msgid "Redirect Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:567
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:571
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:577
 msgid "Redirect to referring site, if exists"
 msgstr ""
 
-#: js/AuthenticationPanel.js:638
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationPanel.js:640
 msgid "des"
 msgstr ""
 
-#: js/AuthenticationPanel.js:641
 msgid "crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:642
 msgid "blowfish_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:643
 msgid "md5_crypt"
 msgstr "md5_crypt"
 
-#: js/AuthenticationPanel.js:644
 msgid "ext_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:645
 msgid "md5"
 msgstr ""
 
-#: js/AuthenticationPanel.js:646
 msgid "smd5"
 msgstr ""
 
-#: js/AuthenticationPanel.js:647
 msgid "sha"
 msgstr ""
 
-#: js/AuthenticationPanel.js:648
 msgid "ssha"
 msgstr ""
 
-#: js/AuthenticationPanel.js:649
 msgid "ntpassword"
 msgstr ""
 
-#: js/AuthenticationPanel.js:650
 msgid "plain"
 msgstr "ว่าง"
 
-#: js/AuthenticationPanel.js:656
 msgid "User DN"
 msgstr " ผู้ใช้ DN"
 
-#: js/AuthenticationPanel.js:659
 msgid "User Filter"
 msgstr "ตัวกรองผู้ใช้"
 
-#: js/AuthenticationPanel.js:662
 msgid "E-Mail Attribute"
 msgstr ""
 
-#: js/AuthenticationPanel.js:667
 msgid "Write Password to SQL backend"
 msgstr ""
 
-#: js/AuthenticationPanel.js:673
 msgid "User Search Scope"
 msgstr "ขอบเขตการค้นหาของผู้ใช้"
 
-#: js/AuthenticationPanel.js:679
 msgid "Groups DN"
 msgstr "กลุ่ม DN"
 
-#: js/AuthenticationPanel.js:682
 msgid "Group Filter"
 msgstr "ตัวกรองกลุ่ม"
 
-#: js/AuthenticationPanel.js:686
 msgid "Group Search Scope"
 msgstr "ขอบเขตการค้นหาของกลุ่ม"
 
-#: js/AuthenticationPanel.js:692
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationPanel.js:692
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-#: js/AuthenticationPanel.js:698
 msgid "Min User Id"
 msgstr "รหัสของผู้ใช้ที่สั้นที่สุด"
 
-#: js/AuthenticationPanel.js:701
 msgid "Max User Id"
 msgstr "รหัสของผู้ใช้ที่ยาวที่สุด"
 
-#: js/AuthenticationPanel.js:704
 msgid "Min Group Id"
 msgstr "รหัสของกลุ่มที่สั้นที่สุด"
 
-#: js/AuthenticationPanel.js:707
 msgid "Max Group Id"
 msgstr "รหัสของกลุ่มที่ยาวที่สุด"
 
-#: js/AuthenticationPanel.js:711
 msgid "Group UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:716
 msgid "User UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:728
 msgid "Readonly access"
 msgstr ""
 
-#: js/AuthenticationPanel.js:742
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:744 js/ConfigManagerPanel.js:507
 msgid "Save config"
 msgstr ""
 
-#: js/AuthenticationPanel.js:769
 msgid "Passwords don't match"
 msgstr "รหัสผ่านไม่ตรง"
 
-#: js/AuthenticationPanel.js:782 js/AuthenticationPanel.js:789
-#: js/AuthenticationPanel.js:793 js/AuthenticationPanel.js:805
-#: js/AuthenticationPanel.js:816
 msgid "Should not be empty"
 msgstr "ไม่ควรว่างไว้"
 
-#: js/EnvCheckGridPanel.js:89
+msgid "File"
+msgstr "ไฟล์"
+
+msgid "Setup Authentication"
+msgstr "การอนุญาตติดตั้ง"
+
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
+
+msgid "Database"
+msgstr "ฐานข้อมูล"
+
+msgid "User"
+msgstr "ผู้ใช้"
+
+msgid "Prefix"
+msgstr ""
+
+msgid "Logging"
+msgstr ""
+
+msgid "Filename"
+msgstr "ชื่อไฟล์"
+
+msgid "Priority"
+msgstr "ลำดับความสำคัญ"
+
+msgid "Caching"
+msgstr "กำลังแคช"
+
+msgid "Lifetime (seconds)"
+msgstr "เวลาชีวิต (วินาที)"
+
+msgid "Path"
+msgstr "เส้นทาง"
+
+msgid "Queue"
+msgstr "คิว"
+
+msgid "Session"
+msgstr "เซสชัน"
+
+msgid "Temporary files"
+msgstr "ไฟล์ชั่วคราว"
+
+msgid "Temporary Files Path"
+msgstr "ทางของไฟล์ชั่วคราว"
+
+msgid "Filestore directory"
+msgstr ""
+
+msgid "Filestore Path"
+msgstr ""
+
+msgid "Addressbook Map panel"
+msgstr ""
+
+msgid "Map panel"
+msgstr ""
+
+msgid "disabled"
+msgstr "ไม่สามารถใช้งานได้"
+
+msgid "enabled"
+msgstr ""
+
+msgid "Config file is not writable"
+msgstr ""
+
+msgid "Download config file"
+msgstr ""
+
+#, python-brace-format
+msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgstr ""
+
+msgid "Standard IMAP"
+msgstr "IMAP มาตรฐาน"
+
+msgid "Standard SMTP"
+msgstr "SMTP มาตรฐาน "
+
+msgid "Imap"
+msgstr ""
+
+msgid "Verify peer Certificate"
+msgstr ""
+
+msgid "Use system account"
+msgstr "ใช้บัญชีของระบบ"
+
+msgid "Use email address as login name"
+msgstr ""
+
+msgid "Cyrus Admin"
+msgstr ""
+
+msgid "Cyrus Admin Password"
+msgstr ""
+
+msgid "Use proxy auth"
+msgstr ""
+
+msgid "Smtp"
+msgstr "Smtp"
+
+msgid "Authentication"
+msgstr "การอนุญาต"
+
+msgid "Login"
+msgstr "ลงบันทึกเข้า"
+
+msgid "Plain"
+msgstr "ธรรมดา"
+
+msgid "Primary Domain"
+msgstr "โดเมนหลัก"
+
+msgid "Secondary Domains (comma separated)"
+msgstr "โดเมนรอง (แบ่งโดยจุลภาค)"
+
+msgid "Aditional Domains (comma separated)"
+msgstr ""
+
+msgid "Notifications service address"
+msgstr ""
+
+msgid "Notification Username"
+msgstr "การแจ้งชื่อผู้ใช้"
+
+msgid "Notification Password"
+msgstr "การแจ้งรหัสผ่าน"
+
+msgid "Notifications local client (hostname or IP address)"
+msgstr ""
+
+msgid "SIEVE"
+msgstr "กรอง"
+
+msgid "MySql Hostname"
+msgstr "ชื่อแม่ข่าย MySql"
+
+msgid "MySql Database"
+msgstr "ฐานข้อมูล MySql"
+
+msgid "MySql User"
+msgstr "ผู้ใช้ MySql"
+
+msgid "MySql Password"
+msgstr "รหัสผ่าน MySql"
+
+msgid "MySql Port"
+msgstr "พอร์ท MySql"
+
+msgid "User or UID"
+msgstr "ผู้ใช้ หรือ UID"
+
+msgid "Group or GID"
+msgstr "กลุ่ม หรือ GID"
+
+msgid "Home Template"
+msgstr ""
+
+msgid "Password Scheme"
+msgstr ""
+
+msgid "PLAIN-MD5"
+msgstr ""
+
+msgid "MD5-CRYPT"
+msgstr ""
+
+msgid "SHA1"
+msgstr ""
+
+msgid "SHA256"
+msgstr ""
+
+msgid "SSHA256"
+msgstr ""
+
+msgid "SHA512"
+msgstr ""
+
+msgid "SSHA512"
+msgstr ""
+
+msgid "PLAIN"
+msgstr ""
+
 msgid "Performing Environment Checks..."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:130
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:160
 msgid "Check"
 msgstr "ตรวจสอบ"
 
-#: js/EnvCheckGridPanel.js:161
 msgid "Result"
 msgstr "ผลลัพธ์"
 
-#: js/EnvCheckGridPanel.js:162
 msgid "Message"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:181
 msgid "Run setup tests"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:190
 msgid "Ignore setup tests"
 msgstr ""
 
-#: js/Model.js:33
+msgid "Setup"
+msgstr ""
+
+msgid "Delete current Subscription"
+msgstr ""
+
+msgid "Your Subscription is not valid."
+msgstr ""
+
+msgid "Subscription Configuration"
+msgstr ""
+
+msgid "Upload from disk"
+msgstr ""
+
+msgid "Select file containing your Subscription key"
+msgstr ""
+
+msgid "No valid Subscription"
+msgstr ""
+
+msgid "Contract ID"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Subscription Information"
+msgstr ""
+
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "แอพพลิเคชั่น"
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
-msgstr "ไฟล์"
-
-#: js/ConfigManagerPanel.js:196
-msgid "Setup Authentication"
-msgstr "การอนุญาตติดตั้ง"
-
-#: js/ConfigManagerPanel.js:217 js/ConfigManagerPanel.js:235
-msgid "Database"
-msgstr "ฐานข้อมูล"
-
-#: js/ConfigManagerPanel.js:239
-msgid "User"
-msgstr "ผู้ใช้"
-
-#: js/ConfigManagerPanel.js:248
-msgid "Prefix"
+msgid "I have read the license agreement and accept it"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:252
-msgid "Logging"
+msgid "License Agreement"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:262
-msgid "Filename"
-msgstr "ชื่อไฟล์"
-
-#: js/ConfigManagerPanel.js:265
-msgid "Priority"
-msgstr "ลำดับความสำคัญ"
-
-#: js/ConfigManagerPanel.js:278
-msgid "Caching"
-msgstr "กำลังแคช"
-
-#: js/ConfigManagerPanel.js:289 js/ConfigManagerPanel.js:406
-msgid "Lifetime (seconds)"
-msgstr "เวลาชีวิต (วินาที)"
-
-#: js/ConfigManagerPanel.js:312 js/ConfigManagerPanel.js:431
-msgid "Path"
-msgstr "เส้นทาง"
-
-#: js/ConfigManagerPanel.js:357
-msgid "Queue"
-msgstr "คิว"
-
-#: js/ConfigManagerPanel.js:398
-msgid "Session"
-msgstr "เซสชัน"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary files"
-msgstr "ไฟล์ชั่วคราว"
-
-#: js/ConfigManagerPanel.js:465
-msgid "Temporary Files Path"
-msgstr "ทางของไฟล์ชั่วคราว"
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore directory"
+msgid "I have read the privacy agreement and accept it"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:478
-msgid "Filestore Path"
+msgid "Privacy Agreement"
+msgstr "ข้อตกลงเรื่องความเป็นส่วนตัว"
+
+msgid "Accept Terms and Conditions"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:483
-msgid "Addressbook Map panel"
+msgid "Terms and Conditions"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:491
-msgid "Map panel"
+msgid "Setup Checks"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:493
-msgid "disabled"
-msgstr "ไม่สามารถใช้งานได้"
-
-#: js/ConfigManagerPanel.js:493
-msgid "enabled"
+msgid "Config Manager"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:505
-msgid "Config file is not writable"
+msgid "Authentication/Accounts"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:524
-msgid "Download config file"
-msgstr ""
+msgid "Email"
+msgstr "อีเมล"
 
-#: js/ConfigManagerPanel.js:565
-#, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid "Application Manager"
+msgstr "ตัวจัดการแอพพลิเคชั่น"
+
+msgid "Subscription"
 msgstr ""
 
 #~ msgid "Update application"

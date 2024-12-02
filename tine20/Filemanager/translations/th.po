@@ -10,510 +10,32 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014\n"
 "Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Password for download required"
+msgid "Manage shared folders"
 msgstr ""
 
-msgid "Submit"
+msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
 msgstr ""
 
-msgid "File not found!"
+msgid "Manage anonymous download links"
 msgstr ""
 
-msgid "Name"
-msgstr "ชื่อ"
-
-msgid "Size"
-msgstr "ขนาด"
-
-msgid "Last Modified"
-msgstr ""
-
-msgid "Description"
-msgstr "การอธิบาย"
-
-msgid "Folder"
-msgstr ""
-
-msgid "File"
-msgstr ""
-
-msgid "New Folder"
-msgstr "แฟ้มเอกสารใหม่"
-
-msgid "Please enter the name of the new folder:"
-msgstr "กรุณาใส่ชื่อของแฟ้มใหม่:"
-
-#, python-brace-format
-msgid "No {0} added"
-msgstr "ไม่ได้เพิ่ม {0} "
-
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr ""
-
-msgid "Illegal characters: "
-msgstr ""
-
-msgid "Folder with this name already exists!"
-msgstr ""
-
-msgid "Show Filters"
-msgstr ""
-
-msgid "Hide Filters"
-msgstr ""
-
-msgid "Checking ..."
-msgstr ""
-
-msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
-msgstr ""
-
-msgid "Overwrite?"
-msgstr ""
-
-msgid "Content type"
-msgstr ""
-
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-msgid "path"
-msgstr "เส้นทาง"
-
-msgid "URL"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Valid until"
-msgstr ""
-
-msgid "Send as e-mail"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "Download"
-msgstr ""
-
-#, python-brace-format
-msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
-msgstr ""
-
-msgid "Apply to All"
-msgstr ""
-
-msgid "Skip"
-msgstr ""
-
-msgid "Stop"
-msgstr ""
-
-msgid "Replace"
-msgstr ""
-
-msgid "Overwrite Existing File?"
-msgstr ""
-
-msgid "Create Public Link"
-msgstr "สร้าง ลิงค์สาธารณะ"
-
-msgid "Copy Public Link"
-msgstr ""
-
-msgid "Remove record"
-msgstr "เอาบันทึกออก"
-
-msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
-msgstr ""
-
-msgid "Creating new Download Link..."
-msgstr "กำลังสร้าง ลิงค์ดาวน์โหลดใหม่..."
-
-msgid "Deleting Download Links..."
-msgstr "กำลังลบ ลิงค์ดาวน์โหลด..."
-
-msgid "Deleting Download Link..."
-msgstr ""
-
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-msgid "Access Count"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-msgid "Revision"
-msgstr "การแก้ไขปรับปรุง"
-
-msgid "This folder has own revision settings"
-msgstr ""
-
-msgid "Revision active"
-msgstr ""
-
-msgid "Limit revision amount to"
-msgstr ""
-
-msgid "Hold-back in months"
-msgstr ""
-
-msgid "Upload Failed"
-msgstr "การอัปโหลดได้ล้มเหลว"
-
-msgid "It is not permitted to store files in this folder!"
-msgstr ""
-
-msgid "Select a file"
-msgstr ""
-
-msgid "Select files"
-msgstr ""
-
-msgid "Select a folder"
-msgstr ""
-
-msgid "Select folders"
-msgstr ""
-
-msgid "Select an item"
-msgstr ""
-
-msgid "Select items"
-msgstr ""
-
-msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
-msgstr ""
-
-msgid "Do you want to restart the failed uploads?"
-msgstr ""
-
-msgid "Processing files..."
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "File contents is part of the search index"
-msgstr ""
-
-msgid "Upload Folder"
-msgstr ""
-
-msgid "Upload File"
-msgstr ""
-
-msgid "Open Data Safe"
-msgstr ""
-
-msgid "Folder Up"
-msgstr ""
-
-msgid "Locking data safe..."
-msgstr ""
-
-msgid "Unlocking data safe..."
-msgstr ""
-
-msgid "Close Data Safe"
-msgstr ""
-
-msgid "Filemanager"
-msgstr "ตัวจัดการไฟล์"
-
-msgid "Show in Filemanager"
-msgstr ""
-
-msgid "Save locally"
-msgstr ""
-
-msgid "Edit folder"
-msgstr ""
-
-msgid "edit file"
-msgstr ""
-
-msgid "Public Links"
-msgstr "ลิงค์สาธารณะ"
-
-msgid "Type"
-msgstr "ประเภท"
-
-msgid "Indexed"
-msgstr ""
-
-msgid "Not yet indexed"
-msgstr ""
-
-msgid "Modified By"
-msgstr ""
-
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
-
-msgid "Service Unavailable"
-msgstr "ไม่สามารถให้บริการได้"
-
-#, python-brace-format
-msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr ""
-
-msgid "File(s) already exists"
-msgstr ""
-
-msgid "Do you want to replace the following file(s)?"
-msgstr "คุณต้องการแทนที่ไฟล์(s) ต่อไปนี้?"
-
-msgid "An error occurred creating this folder"
-msgstr ""
-
-msgid "Item with this name already exists!"
-msgstr "รายการกับชื่อนี้มีอยู่แล้ว!"
-
-msgid "Whole Filemanager"
-msgstr ""
-
-msgid "This Folder"
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "Errors"
-msgstr ""
-
-msgid "Failed to download this file!"
-msgstr ""
-
-msgid "The grant to download files"
-msgstr ""
-
-msgid "Publish"
-msgstr "ตีพิมพ์"
-
-msgid "The grant to create anonymous download links for files"
-msgstr ""
-
-#, python-brace-format
-msgid "Copying data .. {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Moving data .. {0}"
-msgstr ""
-
-msgid "Confirm Changing of Folder Grants"
-msgstr ""
-
-msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
-msgstr ""
-
-msgid "Please wait"
-msgstr "กรุณารอ"
-
-msgid "Download Link"
-msgid_plural "Download Links"
-msgstr[0] ""
-
-msgid "Node Download Links"
-msgstr ""
-
-msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
-msgstr ""
-
-msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
-msgstr ""
-
-msgid "Interested? Then let us know!"
-msgstr ""
-
-msgid "We would be happy to make you a non-binding offer."
-msgstr ""
-
-msgid "This file has no contents. The Upload has failed or has not yet finished."
-msgstr ""
-
-msgid "No preview available."
-msgstr ""
-
-msgid "No preview available yet - Please try again in a few minutes."
-msgstr ""
-
-msgid "Notifications"
-msgstr ""
-
-msgid "This folder has own notification settings"
-msgstr ""
-
-msgid "Use this link to share the entry with other system users"
-msgstr ""
-
-msgid "Notification"
-msgstr ""
-
-msgid "Notification active"
-msgstr ""
-
-msgid "Summary"
-msgstr ""
-
-#, python-brace-format
-msgid "Once a Day"
-msgid_plural "Every {0} Days"
-msgstr[0] ""
-
-msgid "No"
-msgstr ""
-
-msgid "Don't summarize"
-msgstr ""
-
-msgid "Once a day"
-msgstr ""
-
-msgid "Every 3 days"
+msgid "Allow viewing, adding and deleting download links"
 msgstr ""
 
-msgid "Once a week"
+msgid "Manage shared filemanager favorites"
 msgstr ""
 
-msgid "Once a month"
+msgid "Create or update shared filemanager favorites"
 msgstr ""
-
-msgid "Once a year"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "No permission"
-msgstr ""
-
-msgid "all"
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Grants"
-msgstr ""
-
-msgid "This folder has its own grants"
-msgstr ""
-
-msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
-msgstr ""
-
-msgid "This folder is part of the data safe"
-msgstr ""
-
-msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
-msgstr ""
-
-#, python-brace-format
-msgid "Grants are inherited from {locationsHtml} as follows"
-msgstr ""
-
-msgid "Usage"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "Quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "File Type"
-msgstr ""
-
-msgid "Usage by File Type"
-msgstr ""
-
-msgid "User"
-msgstr ""
-
-msgid "Usage by User"
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-msgid "Reload"
-msgstr ""
-
-msgid "Create Folder"
-msgstr "สร้างแฟ้มเอกสาร"
-
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr ""
-
-msgid "Edit Properties"
-msgstr "จัดการ คุณสมบัติต่าง ๆ "
-
-msgid "Rename"
-msgstr ""
-
-#, python-brace-format
-msgid "Rename {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr "กรุณาใส่ชื่อใหม่ของ {0}:"
-
-msgid "System Link"
-msgstr ""
-
-msgid "Delete"
-msgstr "ลบ"
-
-msgid "Do you really want to delete the following files?"
-msgstr "คุณแน่ใจว่าต้องการลบไฟล์ต่อไปนี้?"
-
-msgid "Move"
-msgstr ""
-
-msgid "Move Items"
-msgstr ""
-
-msgid "Preview"
-msgstr ""
-
-msgid "Folder has been published successfully"
-msgstr "แฟ้มได้ถูกตีพิมพ์อย่างประสบความสำเร็จ"
-
-msgid "File has been published successfully"
-msgstr "ไฟล์ได้ถูกตีพิมพ์อย่างถูกต้อง"
 
 msgid "Public Download URL"
 msgstr ""
@@ -578,20 +100,498 @@ msgstr ""
 msgid "Quarantined File"
 msgstr ""
 
-msgid "Manage shared folders"
+msgid "Password for download required"
 msgstr ""
 
-msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
+msgid "Submit"
 msgstr ""
 
-msgid "Manage anonymous download links"
+msgid "File not found!"
 msgstr ""
 
-msgid "Allow viewing, adding and deleting download links"
+msgid "Name"
+msgstr "ชื่อ"
+
+msgid "Size"
+msgstr "ขนาด"
+
+msgid "Last Modified"
 msgstr ""
 
-msgid "Manage shared filemanager favorites"
+msgid "Description"
+msgstr "การอธิบาย"
+
+msgid "Folder"
 msgstr ""
 
-msgid "Create or update shared filemanager favorites"
+msgid "File"
+msgstr ""
+
+msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
+msgstr ""
+
+msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
+msgstr ""
+
+msgid "Interested? Then let us know!"
+msgstr ""
+
+msgid "We would be happy to make you a non-binding offer."
+msgstr ""
+
+msgid "This file has no contents. The Upload has failed or has not yet finished."
+msgstr ""
+
+msgid "No preview available."
+msgstr ""
+
+msgid "No preview available yet - Please try again in a few minutes."
+msgstr ""
+
+msgid "Node Download Links"
+msgstr ""
+
+msgid "Create Public Link"
+msgstr "สร้าง ลิงค์สาธารณะ"
+
+msgid "Copy Public Link"
+msgstr ""
+
+msgid "Remove record"
+msgstr "เอาบันทึกออก"
+
+msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
+msgstr ""
+
+msgid "Creating new Download Link..."
+msgstr "กำลังสร้าง ลิงค์ดาวน์โหลดใหม่..."
+
+msgid "Deleting Download Links..."
+msgstr "กำลังลบ ลิงค์ดาวน์โหลด..."
+
+msgid "Deleting Download Link..."
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Created By"
+msgstr "สร้าง โดย"
+
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
+
+msgid "Valid until"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Access Count"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+#, python-brace-format
+msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
+msgstr ""
+
+msgid "Apply to All"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Replace"
+msgstr ""
+
+msgid "Overwrite Existing File?"
+msgstr ""
+
+msgid "Service Unavailable"
+msgstr "ไม่สามารถให้บริการได้"
+
+#, python-brace-format
+msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr ""
+
+msgid "File(s) already exists"
+msgstr ""
+
+msgid "Do you want to replace the following file(s)?"
+msgstr "คุณต้องการแทนที่ไฟล์(s) ต่อไปนี้?"
+
+msgid "An error occurred creating this folder"
+msgstr ""
+
+msgid "Item with this name already exists!"
+msgstr "รายการกับชื่อนี้มีอยู่แล้ว!"
+
+msgid "Filemanager"
+msgstr "ตัวจัดการไฟล์"
+
+msgid "Show in Filemanager"
+msgstr ""
+
+msgid "Save locally"
+msgstr ""
+
+msgid "Select a file"
+msgstr ""
+
+msgid "Select files"
+msgstr ""
+
+msgid "Select a folder"
+msgstr ""
+
+msgid "Select folders"
+msgstr ""
+
+msgid "Select an item"
+msgstr ""
+
+msgid "Select items"
+msgstr ""
+
+msgid "New Folder"
+msgstr "แฟ้มเอกสารใหม่"
+
+msgid "Please enter the name of the new folder:"
+msgstr "กรุณาใส่ชื่อของแฟ้มใหม่:"
+
+#, python-brace-format
+msgid "No {0} added"
+msgstr "ไม่ได้เพิ่ม {0} "
+
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr ""
+
+msgid "Illegal characters: "
+msgstr ""
+
+msgid "Folder with this name already exists!"
+msgstr ""
+
+msgid "Show Filters"
+msgstr ""
+
+msgid "Hide Filters"
+msgstr ""
+
+msgid "Checking ..."
+msgstr ""
+
+msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
+msgstr ""
+
+msgid "Overwrite?"
+msgstr ""
+
+msgid "Content type"
+msgstr ""
+
+msgid "Send as e-mail"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Use this link to share the entry with other system users"
+msgstr ""
+
+msgid "Grants"
+msgstr ""
+
+msgid "This folder has its own grants"
+msgstr ""
+
+msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
+msgstr ""
+
+msgid "This folder is part of the data safe"
+msgstr ""
+
+msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
+msgstr ""
+
+#, python-brace-format
+msgid "Grants are inherited from {locationsHtml} as follows"
+msgstr ""
+
+msgid "Errors"
+msgstr ""
+
+msgid "Failed to download this file!"
+msgstr ""
+
+msgid "The grant to download files"
+msgstr ""
+
+msgid "Publish"
+msgstr "ตีพิมพ์"
+
+msgid "The grant to create anonymous download links for files"
+msgstr ""
+
+msgid "Revision"
+msgstr "การแก้ไขปรับปรุง"
+
+#, python-brace-format
+msgid "Copying data .. {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Moving data .. {0}"
+msgstr ""
+
+msgid "Confirm Changing of Folder Grants"
+msgstr ""
+
+msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
+msgstr ""
+
+msgid "Please wait"
+msgstr "กรุณารอ"
+
+msgid "Download Link"
+msgid_plural "Download Links"
+msgstr[0] ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Create Folder"
+msgstr "สร้างแฟ้มเอกสาร"
+
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr ""
+
+msgid "Edit Properties"
+msgstr "จัดการ คุณสมบัติต่าง ๆ "
+
+msgid "Rename"
+msgstr ""
+
+#, python-brace-format
+msgid "Rename {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr "กรุณาใส่ชื่อใหม่ของ {0}:"
+
+msgid "System Link"
+msgstr ""
+
+msgid "Delete"
+msgstr "ลบ"
+
+msgid "Do you really want to delete the following files?"
+msgstr "คุณแน่ใจว่าต้องการลบไฟล์ต่อไปนี้?"
+
+msgid "Move"
+msgstr ""
+
+msgid "Move Items"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Folder has been published successfully"
+msgstr "แฟ้มได้ถูกตีพิมพ์อย่างประสบความสำเร็จ"
+
+msgid "File has been published successfully"
+msgstr "ไฟล์ได้ถูกตีพิมพ์อย่างถูกต้อง"
+
+msgid "Edit folder"
+msgstr ""
+
+msgid "edit file"
+msgstr ""
+
+msgid "Public Links"
+msgstr "ลิงค์สาธารณะ"
+
+msgid "Type"
+msgstr "ประเภท"
+
+msgid "Indexed"
+msgstr ""
+
+msgid "Not yet indexed"
+msgstr ""
+
+msgid "Modified By"
+msgstr ""
+
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
+msgstr ""
+
+msgid "Do you want to restart the failed uploads?"
+msgstr ""
+
+msgid "Processing files..."
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "File contents is part of the search index"
+msgstr ""
+
+msgid "Upload Folder"
+msgstr ""
+
+msgid "Upload File"
+msgstr ""
+
+msgid "Open Data Safe"
+msgstr ""
+
+msgid "Folder Up"
+msgstr ""
+
+msgid "Locking data safe..."
+msgstr ""
+
+msgid "Unlocking data safe..."
+msgstr ""
+
+msgid "Close Data Safe"
+msgstr ""
+
+msgid "Upload Failed"
+msgstr "การอัปโหลดได้ล้มเหลว"
+
+msgid "It is not permitted to store files in this folder!"
+msgstr ""
+
+msgid "Notification"
+msgstr ""
+
+msgid "Notification active"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+#, python-brace-format
+msgid "Once a Day"
+msgid_plural "Every {0} Days"
+msgstr[0] ""
+
+msgid "No"
+msgstr ""
+
+msgid "Don't summarize"
+msgstr ""
+
+msgid "Once a day"
+msgstr ""
+
+msgid "Every 3 days"
+msgstr ""
+
+msgid "Once a week"
+msgstr ""
+
+msgid "Once a month"
+msgstr ""
+
+msgid "Once a year"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "No permission"
+msgstr ""
+
+msgid "all"
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "This folder has own notification settings"
+msgstr ""
+
+msgid "path"
+msgstr "เส้นทาง"
+
+msgid "Whole Filemanager"
+msgstr ""
+
+msgid "This Folder"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "This folder has own revision settings"
+msgstr ""
+
+msgid "Revision active"
+msgstr ""
+
+msgid "Limit revision amount to"
+msgstr ""
+
+msgid "Hold-back in months"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "Quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "File Type"
+msgstr ""
+
+msgid "Usage by File Type"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Usage by User"
+msgstr ""
+
+msgid "unknown"
 msgstr ""

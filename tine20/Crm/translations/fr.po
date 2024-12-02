@@ -9,311 +9,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Etienne <inscription@arrakeen.net>, 2012-2013\n"
 "Language-Team: French (http://app.transifex.com/tine/groupware/language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All leads"
-msgstr "Tous les prospects"
+msgid "manage shared lead folders"
+msgstr "gérer les dossiers de prospects partagés"
 
-msgid "Default Lead List"
-msgstr "Liste de prospects par défaut"
+msgid "Create new shared lead folders"
+msgstr "Créer de nouveaux dossiers de prospects partagés"
 
-msgid "The default list for new leads"
-msgstr "La liste par défaut pour les nouveaux prospects"
+msgid "manage shared leads favorites"
+msgstr "gérer les favoris de prospects partagés"
 
-msgid "Get Notification E-mails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about."
-msgstr "Le niveau des actions qui vous seront notifiées."
-
-msgid "Send Notifications e-mails for own actions"
-msgstr ""
-
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "Favoris par défaut"
-
-msgid "The default favorite which is loaded on crm startup"
-msgstr "Le favoris par défaut qui est charge au lancement du GRC"
-
-msgid "New Lead"
-msgstr "Nouveau prospect"
-
-msgid "Tags"
-msgstr "Marqueurs"
-
-msgid "Lead name"
-msgstr "Nom du prospect"
-
-msgid "Responsible"
-msgstr "Responsable"
-
-msgid "Partner"
-msgstr "Partenaire"
-
-msgid "Customer"
-msgstr "Client"
-
-msgid "Leadstate"
-msgstr "État du prospect"
-
-msgid "Leadtype"
-msgstr "Type du prospect"
-
-msgid "Leadsource"
-msgstr "Origine du prospect"
-
-msgid "Probability"
-msgstr "Probabilité"
-
-msgid "Turnover"
-msgstr "Rotation"
-
-msgid "Estimated end"
-msgstr "Fin estimée"
-
-msgid "End"
-msgstr "Fin"
-
-msgid "Start"
-msgstr "Début"
-
-msgid "Probable Turnover"
-msgstr "Rotation probable"
-
-msgid "Resubmission Date"
-msgstr ""
-
-msgid "Import leads"
-msgstr ""
-
-msgid "Contact"
-msgstr "Contacte"
-
-msgid "CRM Role"
-msgstr "Rôle CRM"
-
-msgid "Tasks"
-msgstr "Tâches"
-
-msgid "No Tasks to display"
-msgstr "Pas de tĉhe à afficher"
-
-msgid "Summary"
-msgstr "Résumé"
-
-msgid "Add a task..."
-msgstr "Ajouter un tâche"
-
-msgid "Due Date"
-msgstr "Date prévue"
-
-msgid "Priority"
-msgstr "Priorité"
-
-msgid "Percent"
-msgstr "Pourcent"
-
-msgid "Status"
-msgstr "Statut"
-
-msgid "Organizer"
-msgstr ""
-
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "Ajouter un nouveau {0}"
-
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr "Délier {0}"
-
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr "Délier les {0} sélectionnés"
-
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Éditer le {0}"
-
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Éditer le {0} sélectionné"
-
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Choisissez le prospect lié aux contacts"
-
-msgid "Please select the attenders' role"
-msgstr "Choisissez le rôle du participant"
-
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Prospect"
-msgstr[1] "Prospects"
-msgstr[2] "Prospects"
-
-msgid "Select Lead"
-msgstr "Choisissez un prospect"
-
-msgid "Role"
-msgstr "Rôle"
-
-msgid "Select Role"
-msgstr "Choisissez un rôle"
-
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr "Ajout de {0} contacts au prospect"
-
-msgid "Phone"
-msgstr "Téléphone"
-
-msgid "Mobile"
-msgstr "Portable"
-
-msgid "Fax"
-msgstr "Fax"
-
-msgid "E-Mail"
-msgstr "E-Mail"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "Address"
-msgstr "Adresse"
-
-msgid "Change type to Customer"
-msgstr "Modifier en client"
-
-msgid "Change type to Responsible"
-msgstr "Modifier en responsable"
-
-msgid "Change type to Partner"
-msgstr "Modifier en partenaire"
-
-msgid "Change contact type"
-msgstr "Modifier le type de contacte"
-
-msgid "Search for Contacts to add ..."
-msgstr "Recherche de contacte à ajouter..."
-
-msgid "Name"
-msgstr "Nom"
-
-msgid "Data"
-msgstr "Données"
-
-msgid "Cellphone"
-msgstr "Téléphone (portable)"
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "Vous n'avez pas les droits pour lancer l'application Tâches, ou  celle-ci n'est pas activée."
-
-msgid "Products"
-msgstr "Produits"
-
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "Vous n'avez pas les droits pour lancer l'application Ventes, ou celle-ci n'est pas activée."
-
-msgid "Enter lead name"
-msgstr ""
-
-msgid "Expected turnover"
-msgstr "Rotation attendue"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Enter description"
-msgstr "Veuillez saisir une description"
-
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "liste de prospects"
-msgstr[1] "listes de prospects"
-msgstr[2] "listes de prospects"
-
-msgid "lead lists"
-msgstr "listes de prospects"
-
-msgid "Quick Search"
-msgstr "Recherche rapide"
-
-msgid "Last Modified Time"
-msgstr "Dernière modification"
-
-msgid "Last Modified By"
-msgstr "Modifié par"
-
-msgid "Creation Time"
-msgstr "Date de création"
-
-msgid "Created By"
-msgstr "Créé par"
-
-msgid "X Lead"
-msgstr ""
-
-msgid "read-only"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Product"
-msgstr "Produit"
-
-msgid "Price"
-msgstr "Prix"
-
-msgid "Quantity"
-msgstr "Quantité"
-
-msgid "Search for Products to add ..."
-msgstr "Recherche de produits à ajouter"
-
-msgid "All leads I have read grants for"
-msgstr "Tous les prospects auxquels j'ai accès"
-
-msgid "Last modified by me"
-msgstr "Mes dernières modifications"
-
-msgid "All leads that I have last modified"
-msgstr "Prospects que j'ai modifié dernièrement"
-
-msgid "My leads"
-msgstr "Mes prospects"
-
-msgid "All leads that I am responsible for"
-msgstr "Tous les prospects dont je suis responsable"
-
-msgid "Leads with overdue tasks"
-msgstr "Tâches en retard"
+msgid "Create or update shared leads favorites"
+msgstr "Créer ou mettre à jour les favoris de prospects partagés"
 
 msgid "controls sending notification of Leads"
 msgstr ""
@@ -360,6 +75,9 @@ msgstr "accepté"
 msgid "lost"
 msgstr "perdu"
 
+msgid "read-only"
+msgstr ""
+
 msgid "Lead Sources Available"
 msgstr ""
 
@@ -371,6 +89,12 @@ msgstr ""
 
 msgid "Possible lead types."
 msgstr ""
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "Partner"
+msgstr "Partenaire"
 
 msgid "Reseller"
 msgstr "Revendeur"
@@ -408,11 +132,26 @@ msgstr ""
 msgid "State"
 msgstr "État"
 
+msgid "Role"
+msgstr "Rôle"
+
 msgid "Source"
 msgstr "Source"
 
+msgid "Start"
+msgstr "Début"
+
 msgid "Scheduled end"
 msgstr "Fin planifiée"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Turnover"
+msgstr "Rotation"
+
+msgid "Probability"
+msgstr "Probabilité"
 
 msgid "Folder"
 msgstr "Dossier"
@@ -426,6 +165,9 @@ msgstr "Champs mis à jour :"
 #, python-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
+
+msgid "Tags"
+msgstr "Marqueurs"
 
 #, python-format
 msgid "Lead %s has been changed"
@@ -442,14 +184,20 @@ msgstr "Le prospect %s a été créé"
 msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
 msgstr ""
 
-msgid "GENDER_Lead"
-msgstr ""
-
-msgid "Show Closed"
+msgid "CSV all data"
 msgstr ""
 
 msgid "Lead Data"
 msgstr "Données du prospect"
+
+msgid "Leadstate"
+msgstr "État du prospect"
+
+msgid "Leadtype"
+msgstr "Type du prospect"
+
+msgid "Leadsource"
+msgstr "Origine du prospect"
 
 msgid "End Scheduled"
 msgstr "Fin planifiée"
@@ -457,11 +205,26 @@ msgstr "Fin planifiée"
 msgid "Contacts"
 msgstr "Contacts"
 
+msgid "Address"
+msgstr "Adresse"
+
 msgid "Telephone"
 msgstr "Téléphone"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Tasks"
+msgstr "Tâches"
+
+msgid "Due Date"
+msgstr "Date prévue"
+
+msgid "Priority"
+msgstr "Priorité"
+
+msgid "Products"
+msgstr "Produits"
 
 msgid "low"
 msgstr "basse"
@@ -475,18 +238,6 @@ msgstr "haute"
 msgid "urgent"
 msgstr "urgent"
 
-msgid "CSV all data"
-msgstr ""
-
-msgid "Lead CSV import"
-msgstr ""
-
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
 msgid "Edit new lead"
 msgstr ""
 
@@ -498,14 +249,263 @@ msgstr ""
 msgid "%s new leads have been imported"
 msgstr ""
 
-msgid "manage shared lead folders"
-msgstr "gérer les dossiers de prospects partagés"
+msgid "Lead CSV import"
+msgstr ""
 
-msgid "Create new shared lead folders"
-msgstr "Créer de nouveaux dossiers de prospects partagés"
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
 
-msgid "manage shared leads favorites"
-msgstr "gérer les favoris de prospects partagés"
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
 
-msgid "Create or update shared leads favorites"
-msgstr "Créer ou mettre à jour les favoris de prospects partagés"
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Choisissez le prospect lié aux contacts"
+
+msgid "Please select the attenders' role"
+msgstr "Choisissez le rôle du participant"
+
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Prospect"
+msgstr[1] "Prospects"
+msgstr[2] "Prospects"
+
+msgid "Select Lead"
+msgstr "Choisissez un prospect"
+
+msgid "Select Role"
+msgstr "Choisissez un rôle"
+
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Ajout de {0} contacts au prospect"
+
+msgid "Change type to Customer"
+msgstr "Modifier en client"
+
+msgid "Responsible"
+msgstr "Responsable"
+
+msgid "Change type to Responsible"
+msgstr "Modifier en responsable"
+
+msgid "Change type to Partner"
+msgstr "Modifier en partenaire"
+
+msgid "Change contact type"
+msgstr "Modifier le type de contacte"
+
+msgid "Search for Contacts to add ..."
+msgstr "Recherche de contacte à ajouter..."
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Data"
+msgstr "Données"
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "Cellphone"
+msgstr "Téléphone (portable)"
+
+msgid "New Lead"
+msgstr "Nouveau prospect"
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "Vous n'avez pas les droits pour lancer l'application Tâches, ou  celle-ci n'est pas activée."
+
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "Vous n'avez pas les droits pour lancer l'application Ventes, ou celle-ci n'est pas activée."
+
+msgid "Enter lead name"
+msgstr ""
+
+msgid "Expected turnover"
+msgstr "Rotation attendue"
+
+msgid "Resubmission Date"
+msgstr ""
+
+msgid "Estimated end"
+msgstr "Fin estimée"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Enter description"
+msgstr "Veuillez saisir une description"
+
+msgid "Contact"
+msgstr "Contacte"
+
+msgid "CRM Role"
+msgstr "Rôle CRM"
+
+msgid "Mobile"
+msgstr "Portable"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Lead name"
+msgstr "Nom du prospect"
+
+msgid "Probable Turnover"
+msgstr "Rotation probable"
+
+msgid "Import leads"
+msgstr ""
+
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Ajouter un nouveau {0}"
+
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "Délier {0}"
+
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr "Délier les {0} sélectionnés"
+
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Éditer le {0}"
+
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Éditer le {0} sélectionné"
+
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "liste de prospects"
+msgstr[1] "listes de prospects"
+msgstr[2] "listes de prospects"
+
+msgid "lead lists"
+msgstr "listes de prospects"
+
+msgid "Quick Search"
+msgstr "Recherche rapide"
+
+msgid "Last Modified Time"
+msgstr "Dernière modification"
+
+msgid "Last Modified By"
+msgstr "Modifié par"
+
+msgid "Creation Time"
+msgstr "Date de création"
+
+msgid "Created By"
+msgstr "Créé par"
+
+msgid "X Lead"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Product"
+msgstr "Produit"
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "Quantity"
+msgstr "Quantité"
+
+msgid "Search for Products to add ..."
+msgstr "Recherche de produits à ajouter"
+
+msgid "No Tasks to display"
+msgstr "Pas de tĉhe à afficher"
+
+msgid "Summary"
+msgstr "Résumé"
+
+msgid "Add a task..."
+msgstr "Ajouter un tâche"
+
+msgid "Percent"
+msgstr "Pourcent"
+
+msgid "Organizer"
+msgstr ""
+
+msgid "GENDER_Lead"
+msgstr ""
+
+msgid "Show Closed"
+msgstr ""
+
+msgid "All leads"
+msgstr "Tous les prospects"
+
+msgid "Default Lead List"
+msgstr "Liste de prospects par défaut"
+
+msgid "The default list for new leads"
+msgstr "La liste par défaut pour les nouveaux prospects"
+
+msgid "Get Notification E-mails"
+msgstr ""
+
+msgid "The level of actions you want to be notified about."
+msgstr "Le niveau des actions qui vous seront notifiées."
+
+msgid "Send Notifications e-mails for own actions"
+msgstr ""
+
+msgid "Get notifications e-mails for actions you did yourself"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr "Favoris par défaut"
+
+msgid "The default favorite which is loaded on crm startup"
+msgstr "Le favoris par défaut qui est charge au lancement du GRC"
+
+msgid "All leads I have read grants for"
+msgstr "Tous les prospects auxquels j'ai accès"
+
+msgid "Last modified by me"
+msgstr "Mes dernières modifications"
+
+msgid "All leads that I have last modified"
+msgstr "Prospects que j'ai modifié dernièrement"
+
+msgid "My leads"
+msgstr "Mes prospects"
+
+msgid "All leads that I am responsible for"
+msgstr "Tous les prospects dont je suis responsable"
+
+msgid "Leads with overdue tasks"
+msgstr "Tâches en retard"

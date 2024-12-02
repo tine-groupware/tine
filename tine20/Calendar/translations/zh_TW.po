@@ -7,1366 +7,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 12:18+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/tine/groupware/language/zh_TW/)\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal calendar"
+msgid "manage shared calendars"
 msgstr ""
 
-msgid "Resources"
+msgid "Create new shared calendars"
 msgstr ""
 
-msgid "Event Types"
+msgid "manage shared calendars favorites"
 msgstr ""
 
-msgid "All my events"
+msgid "Create or update shared calendars favorites"
 msgstr ""
 
-msgid "Start Time"
-msgstr ""
-
-msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
-
-msgid "End Time"
-msgstr ""
-
-msgid "Position on the left time axis, day and week view should end with"
-msgstr ""
-
-msgid "Default Start Time"
-msgstr ""
-
-msgid "Scroll position on the left time axis, day and week view should start with"
-msgstr ""
-
-msgid "Visible Time"
-msgstr ""
-
-msgid "Time to be displayed at once"
-msgstr ""
-
-msgid "Default Calendar"
-msgstr ""
-
-msgid "The default calendar for invitations and new events"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr ""
-
-msgid "The default favorite which is loaded on calendar startup"
-msgstr ""
-
-msgid "Web Event Title Template"
-msgstr ""
-
-msgid "How to build event titles in web ui."
-msgstr ""
-
-msgid "Get Notification Emails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr ""
-
-msgid "Send Notifications Emails of own Actions"
-msgstr ""
-
-msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-
-msgid "Send Notifications Emails of tentative events"
-msgstr ""
-
-msgid "Get notifications emails of tentative events"
-msgstr ""
-
-msgid "Send Alarm Notifications Emails"
-msgstr ""
-
-msgid "Get event alarms via email"
-msgstr ""
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New events get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the event starts"
-msgstr ""
-
-msgid "Default Attendee Strategy"
-msgstr ""
-
-msgid "Default Attendee Strategy for new events"
-msgstr ""
-
-msgid "Time Increment"
-msgstr ""
-
-msgid "Increment of event time steps"
-msgstr ""
-
-msgid "Default set Events to privat"
-msgstr ""
-
-msgid "If enabled every created event is always privat"
-msgstr ""
-
-msgid "First Day of Week"
-msgstr ""
-
-msgid "On what day the week should be starting"
-msgstr ""
-
-msgid "Default calendar strategy"
-msgstr ""
-
-msgid "The calendar for new events if no container is selected"
-msgstr ""
-
-msgid "Remove all filters on change selection"
-msgstr ""
-
-msgid "On Calendar Change will remove all filters"
-msgstr ""
-
-msgid "Fixed Calendars"
-msgstr ""
-
-msgid "Calendars always selected regardless of all filter parameters."
-msgstr ""
-
-msgid "Never"
-msgstr ""
-
-msgid "On invitation and cancellation only"
-msgstr ""
-
-msgid "On time changes"
-msgstr ""
-
-msgid "On all updates but attendee responses"
-msgstr ""
-
-msgid "On attendee responses too"
-msgstr ""
-
-msgid "Events"
-msgstr ""
-
-msgid "Summary"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "No Information"
-msgstr ""
-
-msgid "recurring event"
-msgstr ""
-
-msgid "recurring event exception"
-msgstr ""
-
-msgid "Blocking"
-msgstr ""
-
-msgid "Tentative"
-msgstr ""
-
-msgid "Event Location"
-msgstr ""
-
-msgid "Organizer"
-msgstr ""
-
-msgid "Attendee"
-msgid_plural "Attendees"
-msgstr[0] ""
-
-msgid "URL"
-msgstr ""
-
-msgid "Add attendee"
-msgstr ""
-
-msgid "Sort Attendee"
-msgstr ""
-
-msgid "Check to filter for this attendee"
-msgstr ""
-
-msgid "Private"
-msgstr ""
-
-msgid "Tags"
-msgstr ""
-
-msgid "whole day"
-msgstr ""
-
-msgid "Location"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Attendee/Resources"
-msgstr ""
-
-msgid "Additional Attendees ..."
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Ok"
-msgstr ""
-
-msgid "This event is originally stored in a calendar you don't have access to."
-msgstr ""
-
-#, python-brace-format
-msgid "This event is originally stored in {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr ""
-
-msgid "Set as definite event"
-msgstr ""
-
-msgid "Set This Date as Definite Event?"
-msgstr ""
-
-msgid "Do you want to close the poll and remove all other alternatives?"
-msgstr ""
-
-msgid "Please choose the Event to add the contacts to"
-msgstr ""
-
-msgid "Role"
-msgstr ""
-
-msgid "Select Role"
-msgstr ""
-
-msgid "Select Status"
-msgstr ""
-
-#, python-brace-format
-msgid "Adding {0} Attendee to event"
-msgstr ""
-
-msgid "Checking Calendar Data..."
-msgstr ""
-
-msgid "Reply to Recurring Event"
-msgstr ""
-
-msgid "You are responding to an recurring event. What would you like to do?"
-msgstr ""
-
-msgid "Respond to whole series"
-msgstr ""
-
-msgid "Do not respond"
-msgstr ""
-
-msgid "Save"
-msgstr ""
-
-msgid "Save in calendar without response"
-msgstr ""
-
-msgid "The event of this message does not exist"
-msgstr ""
-
-msgid "The sender is not authorised to update the event"
-msgstr ""
-
-msgid "This message is already processed"
-msgstr ""
-
-msgid "You are not an attendee of this event"
-msgstr ""
-
-msgid "This event has been deleted by the organizer"
-msgstr ""
-
-msgid "This event has been canceled."
-msgstr ""
-
-msgid "Unsupported message"
-msgstr ""
-
-msgid "This is an event invitation for someone else."
-msgstr ""
-
-msgid "You have already replied to this event invitation."
-msgstr ""
-
-msgid "The event got rescheduled. Set your response to:"
-msgstr ""
-
-msgid "You received an event invitation. Set your response to:"
-msgstr ""
-
-msgid "An invited attendee responded to the invitation."
-msgstr ""
-
-msgid "Unsupported method"
-msgstr ""
-
-msgid "Loading events, please wait..."
-msgstr ""
-
-msgid "Cut event"
-msgstr ""
-
-msgid "Copy Event to clipboard"
-msgstr ""
-
-msgid "Stop cut / copy & paste"
-msgstr ""
-
-msgid "Print Page"
-msgstr ""
-
-msgid "Loose-Leaf"
-msgstr ""
-
-msgid "Sheet"
-msgstr ""
-
-msgid "Grid"
-msgstr ""
-
-msgid "Timeline"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Week"
-msgstr ""
-
-msgid "Month"
-msgstr ""
-
-msgid "Year"
-msgstr ""
-
-msgid "Custom Selection"
-msgstr ""
-
-msgid "Import Events"
-msgstr ""
-
-#, python-brace-format
-msgid "Paste event \"{0}\""
-msgstr ""
-
-msgid "Set my response"
-msgstr ""
-
-#, python-brace-format
-msgid "Copy {0}"
-msgstr ""
-
-msgid "Set event status"
-msgstr ""
-
-msgid "Updating event in the past"
-msgstr ""
-
-msgid "Update this event"
-msgstr ""
-
-msgid "Do not update this event"
-msgstr ""
-
-msgid "Creating event in the past"
-msgstr ""
-
-msgid "Create this event"
-msgstr ""
-
-msgid "Do not create this event"
-msgstr ""
-
-msgid "Update this event only"
-msgstr ""
-
-msgid "Update this and all future events"
-msgstr ""
-
-msgid "Update nothing"
-msgstr ""
-
-msgid "Update Event"
-msgstr ""
-
-msgid "Please Change Selection"
-msgstr ""
-
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr ""
-
-msgid "Delete Event"
-msgstr ""
-
-msgid "Delete this event only"
-msgstr ""
-
-msgid "Delete this and all future events"
-msgstr ""
-
-msgid "Delete whole series"
-msgstr ""
-
-msgid "Delete nothing"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete this event?"
-msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] ""
-
-msgid "Could not Print"
-msgstr ""
-
-msgid "Sorry, your current view does not support printing."
-msgstr ""
-
-msgid "Scheduling Conflict"
-msgstr ""
-
-msgid "The following attendee are busy at the requested time:"
-msgstr ""
-
-msgid "Ignore Conflict"
-msgstr ""
-
-msgid "Edit Event"
-msgstr ""
-
-msgid "Cancel this action"
-msgstr ""
-
-msgid "Update Status for all Attendee?"
-msgstr ""
-
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
-msgstr ""
-
-msgid "Manage Resources"
-msgstr ""
-
-msgid "External organizer"
-msgstr ""
-
-msgid "Internal organizer"
-msgstr ""
-
-msgid "Import Definition Success!"
-msgstr ""
-
-msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
-msgstr ""
-
-msgid "Choose Import File"
-msgstr ""
-
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr ""
-
-msgid "once"
-msgstr ""
-
-msgid "hourly"
-msgstr ""
-
-msgid "daily"
-msgstr ""
-
-msgid "weekly"
-msgstr ""
-
-msgid "Choose Remote Location"
-msgstr ""
-
-msgid "Please choose a remote location you want to add to Tine 2.0"
-msgstr ""
-
-msgid "Username"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Refresh time"
-msgstr ""
-
-msgid "General Settings"
-msgstr ""
-
-msgid "Calendar name (you need permissions to add events)"
-msgstr ""
-
-msgid "What should the file you upload look like?"
-msgstr ""
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr ""
-
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-msgid "Download example file"
-msgstr ""
-
-msgid "Remote ICS File"
-msgstr ""
-
-msgid "Remote CalDAV Server"
-msgstr ""
-
-msgid "Upload Local File"
-msgstr ""
-
-msgid "Choose File and Format"
-msgstr ""
-
-msgid "Select type of source"
-msgstr ""
-
-msgid "Event Import Options"
-msgstr ""
-
-msgid "Update Existing Events"
-msgstr ""
-
-msgid "Update already existing events"
-msgstr ""
-
-msgid "Force Update Existing Events"
-msgstr ""
-
-msgid "Update exiting events even if imported sequence number isn't higher"
-msgstr ""
-
-msgid "Delete Missing Events"
-msgstr ""
-
-msgid "Delete events missing in import data (future only)"
-msgstr ""
-
-msgid "Basic Data Only"
-msgstr ""
-
-msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
-msgstr ""
-
-msgid "Add Attendee to Import Data"
-msgstr ""
-
-msgid "Ignore Import Data and Replace Attendee"
-msgstr ""
-
-msgid "Keep Existing Attendee"
-msgstr ""
-
-msgid "Do not remove attendee of existing events which are not in the import data"
-msgstr ""
-
-msgid "Force Organizer for new Events"
-msgstr ""
-
-#, python-brace-format
-msgid "Importing {0}"
-msgstr ""
-
-msgid "Back"
-msgstr ""
-
-msgid "Next"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "Free Time Search"
-msgstr ""
-
-msgid "Searching for Free Time..."
-msgstr ""
-
-msgid "No Free Time found"
-msgstr ""
-
-#, python-brace-format
-msgid "No free timeslot could be found Until {0}. Do you want to continue?"
-msgstr ""
-
-msgid "Continue"
-msgstr ""
-
-msgid "Give up"
-msgstr ""
-
-msgid "Free Time Search Options"
-msgstr ""
-
-msgid "Event Type"
-msgid_plural "Event Types"
-msgstr[0] ""
-
-msgid "Site"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "Details"
-msgstr ""
-
-msgid "Saved in"
-msgstr ""
-
-msgid "non-blocking"
-msgstr ""
-
-msgid "Enter description"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Print Event"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "End date is not valid"
-msgstr ""
-
-msgid "End date must be after start date"
-msgstr ""
-
-msgid "End time is not allowed to be after the configured time."
-msgstr ""
-
-msgid "Start date is not valid"
-msgstr ""
-
-msgid "Start date is not allowed to be before the configured time."
-msgstr ""
-
-#, python-brace-format
-msgid "Week {0} :"
-msgstr ""
-
-msgid "Originally"
-msgstr ""
-
-msgid "Poll"
-msgid_plural "Polls"
-msgstr[0] ""
-
-msgid "Alternative Dates"
-msgstr ""
-
-msgid "Create Poll for this Event"
-msgstr ""
-
-msgid "Name for poll"
-msgstr ""
-
-msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
-msgstr ""
-
-msgid "Share the link below to poll for attendee status feedback."
-msgstr ""
-
-msgid "Public URL"
-msgstr ""
-
-msgid "Protect poll with a password"
-msgstr ""
-
-msgid "Only invited attendee can reply"
-msgstr ""
-
-msgid "Start Date"
-msgstr ""
-
-msgid "Info"
-msgstr ""
-
-msgid "loading alternative dates"
-msgstr ""
-
-msgid "Select one Event Only"
-msgstr ""
-
-msgid "You need to select exactly one event as the definite event."
-msgstr ""
-
-msgid "Setting definite event"
-msgstr ""
-
-msgid "Event finder options"
-msgstr ""
-
-msgid "Unavailable"
-msgstr ""
-
-msgid "Edit Resource"
-msgstr ""
-
-msgid "View Resource"
-msgstr ""
-
-msgid "WK"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "until"
-msgstr ""
-
-msgid "Rrule"
-msgstr ""
-
-msgid "Daily"
-msgstr ""
-
-msgid "Weekly"
-msgstr ""
-
-msgid "Monthly"
-msgstr ""
-
-msgid "Yearly"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Calendar Hierarchy/Name"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Maximum number of attendee"
-msgstr ""
-
-msgid "Default Status"
-msgstr ""
-
-msgid "Default Status with status grant"
-msgstr ""
-
-msgid "Busy Type"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "No Access"
-msgstr ""
-
-msgid "Additional Tags ..."
-msgstr ""
-
-msgid "New Event"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} more..."
-msgstr ""
-
-msgid "private classification"
-msgstr ""
-
-msgid "has alarm"
-msgstr ""
-
-msgid "has attachments"
-msgstr ""
-
-msgid "is part of an open poll"
-msgstr ""
-
-#, python-brace-format
-msgid "{0}, the {1}. of {2}"
-msgstr ""
-
-msgid "Click here to invite another attender..."
-msgstr ""
-
-msgid "User"
-msgstr ""
-
-msgid "Group"
-msgstr ""
-
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] ""
-
-msgid "Member of group"
-msgstr ""
-
-msgid "This is the calendar where the attender has saved this event in"
-msgstr ""
-
-msgid "Click icon to change"
-msgstr ""
-
-msgid "Availability of Attendee"
-msgstr ""
-
-msgid "Whole Group or each Member of Group"
-msgstr ""
-
-msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
-msgstr ""
-
-msgid "Member of Group"
-msgstr ""
-
-msgid "Loading Groupmembers..."
-msgstr ""
-
-msgid "Remove Attender"
-msgstr ""
-
-msgid "Use as event location"
-msgstr ""
-
-msgid "Compose email"
-msgstr ""
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "(as a group member)"
-msgstr ""
-
-msgid "External Attendee"
-msgstr ""
-
-#, python-brace-format
-msgid "Reserve Resource: {name}"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
-msgstr ""
-
-#, python-brace-format
-msgid "Resource: {name} reserved by you"
-msgstr ""
-
-msgid "Floorplan"
-msgstr ""
-
-msgid "Resource Grant"
-msgid_plural "Resource Grants"
-msgstr[0] ""
-
-msgid "Invite Resource"
-msgstr ""
-
-msgid "The grant to invite the resource to an event"
-msgstr ""
-
-msgid "Resource status"
-msgstr ""
-
-msgid "The grant to set the resource attendee status"
-msgstr ""
-
-msgid "Resource notification"
-msgstr ""
-
-msgid "The grant to receive notifications for this resource"
-msgstr ""
-
-msgid "Read Resource"
-msgstr ""
-
-msgid "The grant to read the resource itself"
-msgstr ""
-
-msgid "The grant to edit the resource itself"
-msgstr ""
-
-msgid "Export Resource"
-msgstr ""
-
-msgid "The grant to export the resource itself"
-msgstr ""
-
-msgid "Sync Resource"
-msgstr ""
-
-msgid "The grant to synchronise the resource itself"
-msgstr ""
-
-msgid "Resource Admin"
-msgstr ""
-
-msgid "The grant to administrate the resource itself"
-msgstr ""
-
-msgid "Add Events"
-msgstr ""
-
-msgid "The grant to directly add events into this resource calendar"
-msgstr ""
-
-msgid "Read Events"
-msgstr ""
-
-msgid "The grant to read events from this resource calendar"
-msgstr ""
-
-msgid "Export Events"
-msgstr ""
-
-msgid "The grant to export events from this resource calendar"
-msgstr ""
-
-msgid "Sync Events"
-msgstr ""
-
-msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
-msgstr ""
-
-msgid "Events Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events from this resource calendar"
-msgstr ""
-
-msgid "Edit Events"
-msgstr ""
-
-msgid "The grant to edit events directly saved in this resource calendar"
-msgstr ""
-
-msgid "Delete Events"
-msgstr ""
-
-msgid "The grant to delete events directly stored in this resource calendar"
-msgstr ""
-
-msgid "Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events in this calendar"
-msgstr ""
-
-msgid "The grant to access events marked as private in this calendar"
-msgstr ""
-
-msgid "no events found"
-msgstr ""
-
-msgid "Searching..."
-msgstr ""
-
-msgid "Search Event"
-msgstr ""
-
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-
-msgid "Switch to public poll"
-msgstr ""
-
-#, python-brace-format
-msgid "Welcome {name}"
-msgstr ""
-
-msgid "This is a closed poll. No Attendee can be added."
-msgstr ""
-
-msgid "This poll is closed already"
-msgstr ""
-
-#, python-brace-format
-msgid "I am not {name}"
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "{headerDate, date, full} {headerDate, time, short}"
-msgstr ""
-
-msgid "By using this service you agree to our terms and conditions"
-msgstr ""
-
-msgid "Please wait..."
-msgstr ""
-
-msgid "Use your personal link please."
-msgstr ""
-
-msgid "We have sent it to your E-Mail account again."
-msgstr ""
-
-msgid "If you did not receive the link, please contact the organiser."
-msgstr ""
-
-msgid "Submit"
-msgstr ""
-
-msgid "Wrong password!"
-msgstr ""
-
-msgid "Please log in"
-msgstr ""
-
-msgid "User name"
-msgstr ""
-
-#, python-brace-format
-msgid "Calendar of {name}"
-msgstr ""
-
-msgid "An unexpected error occurred."
-msgstr ""
-
-msgid "Mini Calendar"
-msgstr ""
-
-msgid "Colors"
-msgstr ""
-
-msgid "Side bar color"
-msgstr ""
-
-msgid "Color by Calendar"
-msgstr ""
-
-msgid "Color by Attendee Calendar"
-msgstr ""
-
-msgid "Color by Tags"
-msgstr ""
-
-msgid "Color by Attendee Role"
-msgstr ""
-
-msgid "Colors by response"
-msgstr ""
-
-msgid "Colors by tags"
-msgstr ""
-
-msgid "Colors by attendee"
-msgstr ""
-
-msgid "Colors by resource"
-msgstr ""
-
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] ""
-
-msgid "Calendars"
-msgstr ""
-
-msgid "Quick Search"
-msgstr ""
-
-msgid "Location Contact"
-msgstr ""
-
-msgid "GENDER_Calendar"
-msgstr ""
-
-msgid "Attendee Status"
-msgstr ""
-
-msgid "GENDER_Attendee Status"
-msgstr ""
-
-msgid "Attendee Role"
-msgstr ""
-
-msgid "GENDER_Attendee Role"
-msgstr ""
-
-msgid "GENDER_Status"
-msgstr ""
-
-msgid "GENDER_Blocking"
-msgstr ""
-
-msgid "Classification"
-msgstr ""
-
-msgid "GENDER_Classification"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Unknown date"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} o'clock"
-msgstr ""
-
-msgid "Event (as attendee)"
-msgstr ""
-
-msgid "Event (as organizer)"
-msgstr ""
-
-msgid "Event attendee"
-msgstr ""
-
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] ""
-
-msgid "Default attendee status"
-msgstr ""
-
-msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
-msgstr ""
-
-msgid "Default attendee status with status grant"
-msgstr ""
-
-msgid "Resource Location"
-msgstr ""
-
-msgid "Suppress notification"
-msgstr ""
-
-msgid "Enter description..."
-msgstr ""
-
-msgid "Grants"
-msgstr ""
-
-msgid "Displayed in"
-msgstr ""
-
-msgid "Event not found"
-msgstr ""
-
-msgid "The Event was deleted in the meantime or you don't have access rights to it."
-msgstr ""
-
-msgid "GENDER_Attendee"
-msgstr ""
-
-msgid "Select Attendee"
-msgstr ""
-
-msgid "The summary must not be longer than 255 characters."
-msgstr ""
-
-msgid "The summary must have at least 1 character."
-msgstr ""
-
-msgid "Summary too Long"
-msgstr ""
-
-msgid "Summary too Short"
-msgstr ""
-
-msgid "Recurrances"
-msgstr ""
-
-msgid "No recurring rule defined"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "Individual"
-msgstr ""
-
-msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr ""
-
-msgid "at"
-msgstr ""
-
-msgid "never"
-msgstr ""
-
-#, python-brace-format
-msgid "after {0} occurrences"
-msgstr ""
-
-msgid "Except"
-msgstr ""
-
-msgid "during events in the calendars"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Until has to be after event start"
-msgstr ""
-
-msgid "The event is longer than the recurring interval"
-msgstr ""
-
-#, python-brace-format
-msgid "Every {0}. Day"
-msgstr ""
-
-#, python-brace-format
-msgid "Every {0}. Week at"
-msgstr ""
-
-#, python-brace-format
-msgid "Every {0}. Month"
-msgstr ""
-
-msgid "at the"
-msgstr ""
-
-msgid "first"
-msgstr ""
-
-msgid "second"
-msgstr ""
-
-msgid "third"
-msgstr ""
-
-msgid "fourth"
-msgstr ""
-
-msgid "last"
-msgstr ""
-
-#, python-brace-format
-msgid "Every {0}. Year"
-msgstr ""
-
-msgid "of"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "First name, ĺast name"
-msgstr ""
-
-msgid "E-Mail address"
-msgstr ""
-
-msgid "General terms and conditions"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00B359B9"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "All events I attend"
-msgstr ""
-
-msgid "Awaiting response"
-msgstr ""
-
-msgid "Events I have not yet responded to"
-msgstr ""
-
-msgid "Declined events"
-msgstr ""
+msgid "manage resources"
+msgstr "管理資源"
 
-msgid "Events I have declined"
+msgid "All Rights to administrate resources"
 msgstr ""
 
-msgid "I'm organizer"
+msgid "manage event types"
 msgstr ""
 
-msgid "Events I'm the organizer of"
+msgid "The Right to manage event types"
 msgstr ""
 
 msgid "You can not have more than one grants filter"
+msgstr ""
+
+msgid "Fixed Calendars"
 msgstr ""
 
 msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
@@ -1390,6 +67,13 @@ msgstr ""
 msgid "Default View for Events"
 msgstr ""
 
+msgid "Attendee"
+msgid_plural "Attendees"
+msgstr[0] ""
+
+msgid "Organizer"
+msgstr ""
+
 msgid "Event Status Available"
 msgstr ""
 
@@ -1397,6 +81,9 @@ msgid "Possible event status. Please note that additional event status might imp
 msgstr ""
 
 msgid "Confirmed"
+msgstr ""
+
+msgid "Tentative"
 msgstr ""
 
 msgid "Canceled"
@@ -1409,6 +96,9 @@ msgid "Possible event classes. Please note that additional event classes might i
 msgstr ""
 
 msgid "Public"
+msgstr ""
+
+msgid "Private"
 msgstr ""
 
 msgid "Confidential"
@@ -1462,6 +152,10 @@ msgstr ""
 msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
 msgstr ""
 
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] ""
+
 msgid "Room"
 msgstr ""
 
@@ -1505,6 +199,9 @@ msgid "Free"
 msgstr ""
 
 msgid "Busy"
+msgstr ""
+
+msgid "Unavailable"
 msgstr ""
 
 msgid "Filter timeslot for CalDAV events"
@@ -1669,12 +366,6 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
-msgid "No RRULE found in base event!"
-msgstr ""
-
-msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
-msgstr ""
-
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
@@ -1720,6 +411,22 @@ msgstr ""
 msgid "Resource Management"
 msgstr ""
 
+msgid "No RRULE found in base event!"
+msgstr ""
+
+msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
+msgstr ""
+
+#, python-format
+msgid "%s's personal calendar"
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Event Types"
+msgstr ""
+
 msgid "Polls for recurring events are not supported"
 msgstr ""
 
@@ -1730,6 +437,1223 @@ msgid "Attendance Confirmation for Poll \"%1$s\""
 msgstr ""
 
 msgid "%1$s is scheduled for %2$s"
+msgstr ""
+
+msgid "Different Calendar"
+msgstr ""
+
+msgid "Exdate container move are not allowed"
+msgstr ""
+
+msgid "Invalid URL given"
+msgstr ""
+
+msgid "The URL you used is invalid. Please use a valid one!"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "The right Resource Admin must be set once."
+msgstr ""
+
+msgid "Word event sheet"
+msgstr ""
+
+msgid "Export Events as Calendar Sheet"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "Export event data into ods spreadsheet"
+msgstr ""
+
+msgid "VCalendar Report"
+msgstr ""
+
+msgid "Export multiple calendars to ics files"
+msgstr ""
+
+msgid "VCalendar/ICS"
+msgstr ""
+
+msgid "Export visible events to ics file"
+msgstr ""
+
+msgid "Resource CSV"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Shared Calendar CSV"
+msgstr ""
+
+msgid "Calendars to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "Import iCal-files"
+msgstr ""
+
+msgid "Please choose the Event to add the contacts to"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Select Role"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Select Status"
+msgstr ""
+
+#, python-brace-format
+msgid "Adding {0} Attendee to event"
+msgstr ""
+
+msgid "Manage Resources"
+msgstr ""
+
+msgid "New Event"
+msgstr ""
+
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] ""
+
+msgid "Event not found"
+msgstr ""
+
+msgid "The Event was deleted in the meantime or you don't have access rights to it."
+msgstr ""
+
+msgid "Add attendee"
+msgstr ""
+
+msgid "Sort Attendee"
+msgstr ""
+
+msgid "Check to filter for this attendee"
+msgstr ""
+
+msgid "GENDER_Attendee"
+msgstr ""
+
+msgid "Select Attendee"
+msgstr ""
+
+msgid "Click here to invite another attender..."
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Member of group"
+msgstr ""
+
+msgid "This is the calendar where the attender has saved this event in"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Click icon to change"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Availability of Attendee"
+msgstr ""
+
+msgid "Whole Group or each Member of Group"
+msgstr ""
+
+msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
+msgstr ""
+
+msgid "Member of Group"
+msgstr ""
+
+msgid "Loading Groupmembers..."
+msgstr ""
+
+msgid "Remove Attender"
+msgstr ""
+
+msgid "Use as event location"
+msgstr ""
+
+msgid "Compose email"
+msgstr ""
+
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+msgid "Edit Resource"
+msgstr ""
+
+msgid "View Resource"
+msgstr ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "No Information"
+msgstr ""
+
+msgid "(as a group member)"
+msgstr ""
+
+msgid "External Attendee"
+msgstr ""
+
+msgid "This event is originally stored in a calendar you don't have access to."
+msgstr ""
+
+#, python-brace-format
+msgid "This event is originally stored in {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "This event is additionally displayed in your personal calendar {0}"
+msgstr ""
+
+msgid "Originally"
+msgstr ""
+
+msgid "Colors"
+msgstr ""
+
+msgid "Side bar color"
+msgstr ""
+
+msgid "Color by Calendar"
+msgstr ""
+
+msgid "Color by Attendee Calendar"
+msgstr ""
+
+msgid "Color by Tags"
+msgstr ""
+
+msgid "Color by Attendee Role"
+msgstr ""
+
+msgid "Colors by response"
+msgstr ""
+
+msgid "Colors by tags"
+msgstr ""
+
+msgid "Colors by attendee"
+msgstr ""
+
+msgid "Colors by resource"
+msgstr ""
+
+msgid "Events"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Start Time"
+msgstr ""
+
+#, python-brace-format
+msgid "{0}, the {1}. of {2}"
+msgstr ""
+
+msgid "The summary must not be longer than 255 characters."
+msgstr ""
+
+msgid "The summary must have at least 1 character."
+msgstr ""
+
+msgid "Summary too Long"
+msgstr ""
+
+msgid "Summary too Short"
+msgstr ""
+
+msgid "Attendee/Resources"
+msgstr ""
+
+msgid "Additional Attendees ..."
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Additional Tags ..."
+msgstr ""
+
+msgid "recurring event"
+msgstr ""
+
+msgid "recurring event exception"
+msgstr ""
+
+msgid "End Time"
+msgstr ""
+
+msgid "Blocking"
+msgstr ""
+
+msgid "Event Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Event Type"
+msgid_plural "Event Types"
+msgstr[0] ""
+
+msgid "Site"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "whole day"
+msgstr ""
+
+msgid "Saved in"
+msgstr ""
+
+msgid "Update Status for all Attendee?"
+msgstr ""
+
+msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
+msgstr ""
+
+msgid "non-blocking"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Free Time Search"
+msgstr ""
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Print Event"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "End date is not valid"
+msgstr ""
+
+msgid "End date must be after start date"
+msgstr ""
+
+msgid "End time is not allowed to be after the configured time."
+msgstr ""
+
+msgid "Start date is not valid"
+msgstr ""
+
+msgid "Start date is not allowed to be before the configured time."
+msgstr ""
+
+msgid "Event finder options"
+msgstr ""
+
+msgid "private classification"
+msgstr ""
+
+msgid "has alarm"
+msgstr ""
+
+msgid "has attachments"
+msgstr ""
+
+msgid "is part of an open poll"
+msgstr ""
+
+#, python-brace-format
+msgid "Reserve Resource: {name}"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
+msgstr ""
+
+#, python-brace-format
+msgid "Resource: {name} reserved by you"
+msgstr ""
+
+msgid "Floorplan"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Searching for Free Time..."
+msgstr ""
+
+msgid "No Free Time found"
+msgstr ""
+
+#, python-brace-format
+msgid "No free timeslot could be found Until {0}. Do you want to continue?"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Give up"
+msgstr ""
+
+msgid "Free Time Search Options"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Checking Calendar Data..."
+msgstr ""
+
+msgid "Reply to Recurring Event"
+msgstr ""
+
+msgid "You are responding to an recurring event. What would you like to do?"
+msgstr ""
+
+msgid "Respond to whole series"
+msgstr ""
+
+msgid "Do not respond"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save in calendar without response"
+msgstr ""
+
+msgid "The event of this message does not exist"
+msgstr ""
+
+msgid "The sender is not authorised to update the event"
+msgstr ""
+
+msgid "This message is already processed"
+msgstr ""
+
+msgid "You are not an attendee of this event"
+msgstr ""
+
+msgid "This event has been deleted by the organizer"
+msgstr ""
+
+msgid "This event has been canceled."
+msgstr ""
+
+msgid "Unsupported message"
+msgstr ""
+
+msgid "This is an event invitation for someone else."
+msgstr ""
+
+msgid "You have already replied to this event invitation."
+msgstr ""
+
+msgid "The event got rescheduled. Set your response to:"
+msgstr ""
+
+msgid "You received an event invitation. Set your response to:"
+msgstr ""
+
+msgid "An invited attendee responded to the invitation."
+msgstr ""
+
+msgid "Unsupported method"
+msgstr ""
+
+msgid "Import Definition Success!"
+msgstr ""
+
+msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
+msgstr ""
+
+msgid "Choose Import File"
+msgstr ""
+
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+msgid "once"
+msgstr ""
+
+msgid "hourly"
+msgstr ""
+
+msgid "daily"
+msgstr ""
+
+msgid "weekly"
+msgstr ""
+
+msgid "Choose Remote Location"
+msgstr ""
+
+msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Refresh time"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "Calendar name (you need permissions to add events)"
+msgstr ""
+
+msgid "What should the file you upload look like?"
+msgstr ""
+
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgstr ""
+
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+msgid "Download example file"
+msgstr ""
+
+msgid "Remote ICS File"
+msgstr ""
+
+msgid "Remote CalDAV Server"
+msgstr ""
+
+msgid "Upload Local File"
+msgstr ""
+
+msgid "Choose File and Format"
+msgstr ""
+
+msgid "Select type of source"
+msgstr ""
+
+msgid "Event Import Options"
+msgstr ""
+
+msgid "Update Existing Events"
+msgstr ""
+
+msgid "Update already existing events"
+msgstr ""
+
+msgid "Force Update Existing Events"
+msgstr ""
+
+msgid "Update exiting events even if imported sequence number isn't higher"
+msgstr ""
+
+msgid "Delete Missing Events"
+msgstr ""
+
+msgid "Delete events missing in import data (future only)"
+msgstr ""
+
+msgid "Basic Data Only"
+msgstr ""
+
+msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
+msgstr ""
+
+msgid "Add Attendee to Import Data"
+msgstr ""
+
+msgid "Ignore Import Data and Replace Attendee"
+msgstr ""
+
+msgid "Keep Existing Attendee"
+msgstr ""
+
+msgid "Do not remove attendee of existing events which are not in the import data"
+msgstr ""
+
+msgid "Force Organizer for new Events"
+msgstr ""
+
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+msgid "Loading events, please wait..."
+msgstr ""
+
+msgid "Cut event"
+msgstr ""
+
+msgid "Copy Event to clipboard"
+msgstr ""
+
+msgid "Stop cut / copy & paste"
+msgstr ""
+
+msgid "Print Page"
+msgstr ""
+
+msgid "Loose-Leaf"
+msgstr ""
+
+msgid "Sheet"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "Timeline"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Custom Selection"
+msgstr ""
+
+msgid "Import Events"
+msgstr ""
+
+#, python-brace-format
+msgid "Paste event \"{0}\""
+msgstr ""
+
+msgid "Set as definite event"
+msgstr ""
+
+msgid "Set my response"
+msgstr ""
+
+#, python-brace-format
+msgid "Copy {0}"
+msgstr ""
+
+msgid "Set event status"
+msgstr ""
+
+msgid "Updating event in the past"
+msgstr ""
+
+msgid "Update this event"
+msgstr ""
+
+msgid "Do not update this event"
+msgstr ""
+
+msgid "Creating event in the past"
+msgstr ""
+
+msgid "Create this event"
+msgstr ""
+
+msgid "Do not create this event"
+msgstr ""
+
+msgid "Update this event only"
+msgstr ""
+
+msgid "Update this and all future events"
+msgstr ""
+
+msgid "Update nothing"
+msgstr ""
+
+msgid "Update Event"
+msgstr ""
+
+msgid "Please Change Selection"
+msgstr ""
+
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr ""
+
+msgid "Delete Event"
+msgstr ""
+
+msgid "Delete this event only"
+msgstr ""
+
+msgid "Delete this and all future events"
+msgstr ""
+
+msgid "Delete whole series"
+msgstr ""
+
+msgid "Delete nothing"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] ""
+
+msgid "Could not Print"
+msgstr ""
+
+msgid "Sorry, your current view does not support printing."
+msgstr ""
+
+msgid "Scheduling Conflict"
+msgstr ""
+
+msgid "The following attendee are busy at the requested time:"
+msgstr ""
+
+msgid "Ignore Conflict"
+msgstr ""
+
+msgid "Edit Event"
+msgstr ""
+
+msgid "Cancel this action"
+msgstr ""
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+
+msgid "Calendars"
+msgstr ""
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Location Contact"
+msgstr ""
+
+msgid "GENDER_Calendar"
+msgstr ""
+
+msgid "Attendee Status"
+msgstr ""
+
+msgid "GENDER_Attendee Status"
+msgstr ""
+
+msgid "Attendee Role"
+msgstr ""
+
+msgid "GENDER_Attendee Role"
+msgstr ""
+
+msgid "GENDER_Status"
+msgstr ""
+
+msgid "GENDER_Blocking"
+msgstr ""
+
+msgid "Classification"
+msgstr ""
+
+msgid "GENDER_Classification"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Unknown date"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} o'clock"
+msgstr ""
+
+msgid "Event (as attendee)"
+msgstr ""
+
+msgid "Event (as organizer)"
+msgstr ""
+
+msgid "Event attendee"
+msgstr ""
+
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] ""
+
+msgid "Calendar Hierarchy/Name"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Maximum number of attendee"
+msgstr ""
+
+msgid "Default attendee status"
+msgstr ""
+
+msgid "Busy Type"
+msgstr ""
+
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] ""
+
+msgid "Invite Resource"
+msgstr ""
+
+msgid "The grant to invite the resource to an event"
+msgstr ""
+
+msgid "Resource status"
+msgstr ""
+
+msgid "The grant to set the resource attendee status"
+msgstr ""
+
+msgid "Resource notification"
+msgstr ""
+
+msgid "The grant to receive notifications for this resource"
+msgstr ""
+
+msgid "Read Resource"
+msgstr ""
+
+msgid "The grant to read the resource itself"
+msgstr ""
+
+msgid "The grant to edit the resource itself"
+msgstr ""
+
+msgid "Export Resource"
+msgstr ""
+
+msgid "The grant to export the resource itself"
+msgstr ""
+
+msgid "Sync Resource"
+msgstr ""
+
+msgid "The grant to synchronise the resource itself"
+msgstr ""
+
+msgid "Resource Admin"
+msgstr ""
+
+msgid "The grant to administrate the resource itself"
+msgstr ""
+
+msgid "Add Events"
+msgstr ""
+
+msgid "The grant to directly add events into this resource calendar"
+msgstr ""
+
+msgid "Read Events"
+msgstr ""
+
+msgid "The grant to read events from this resource calendar"
+msgstr ""
+
+msgid "Export Events"
+msgstr ""
+
+msgid "The grant to export events from this resource calendar"
+msgstr ""
+
+msgid "Sync Events"
+msgstr ""
+
+msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
+msgstr ""
+
+msgid "Events Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events from this resource calendar"
+msgstr ""
+
+msgid "Edit Events"
+msgstr ""
+
+msgid "The grant to edit events directly saved in this resource calendar"
+msgstr ""
+
+msgid "Delete Events"
+msgstr ""
+
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr ""
+
+msgid "Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr ""
+
+msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+
+msgid "WK"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} more..."
+msgstr ""
+
+msgid "External organizer"
+msgstr ""
+
+msgid "Internal organizer"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "until"
+msgstr ""
+
+msgid "Displayed in"
+msgstr ""
+
+msgid "Switch to public poll"
+msgstr ""
+
+#, python-brace-format
+msgid "Welcome {name}"
+msgstr ""
+
+msgid "This is a closed poll. No Attendee can be added."
+msgstr ""
+
+msgid "This poll is closed already"
+msgstr ""
+
+#, python-brace-format
+msgid "I am not {name}"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "{headerDate, date, full} {headerDate, time, short}"
+msgstr ""
+
+msgid "By using this service you agree to our terms and conditions"
+msgstr ""
+
+msgid "Please wait..."
+msgstr ""
+
+msgid "Use your personal link please."
+msgstr ""
+
+msgid "We have sent it to your E-Mail account again."
+msgstr ""
+
+msgid "If you did not receive the link, please contact the organiser."
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "Please log in"
+msgstr ""
+
+msgid "User name"
+msgstr ""
+
+#, python-brace-format
+msgid "Calendar of {name}"
+msgstr ""
+
+msgid "An unexpected error occurred."
+msgstr ""
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] ""
+
+msgid "Alternative Dates"
+msgstr ""
+
+msgid "Create Poll for this Event"
+msgstr ""
+
+msgid "Name for poll"
+msgstr ""
+
+msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
+msgstr ""
+
+msgid "Share the link below to poll for attendee status feedback."
+msgstr ""
+
+msgid "Public URL"
+msgstr ""
+
+msgid "Protect poll with a password"
+msgstr ""
+
+msgid "Only invited attendee can reply"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "loading alternative dates"
+msgstr ""
+
+msgid "Select one Event Only"
+msgstr ""
+
+msgid "You need to select exactly one event as the definite event."
+msgstr ""
+
+msgid "Setting definite event"
+msgstr ""
+
+msgid "Set This Date as Definite Event?"
+msgstr ""
+
+msgid "Do you want to close the poll and remove all other alternatives?"
+msgstr ""
+
+#, python-brace-format
+msgid "Week {0} :"
+msgstr ""
+
+msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
+msgstr ""
+
+msgid "Default attendee status with status grant"
+msgstr ""
+
+msgid "Resource Location"
+msgstr ""
+
+msgid "Suppress notification"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Enter description..."
+msgstr ""
+
+msgid "Grants"
+msgstr ""
+
+msgid "Default Status"
+msgstr ""
+
+msgid "Default Status with status grant"
+msgstr ""
+
+msgid "No Access"
+msgstr ""
+
+msgid "Rrule"
+msgstr ""
+
+msgid "Daily"
+msgstr ""
+
+msgid "Weekly"
+msgstr ""
+
+msgid "Monthly"
+msgstr ""
+
+msgid "Yearly"
+msgstr ""
+
+msgid "Recurrances"
+msgstr ""
+
+msgid "No recurring rule defined"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Individual"
+msgstr ""
+
+msgid "Exceptions of reccuring events can't have recurrences themselves."
+msgstr ""
+
+msgid "at"
+msgstr ""
+
+msgid "never"
+msgstr ""
+
+#, python-brace-format
+msgid "after {0} occurrences"
+msgstr ""
+
+msgid "Except"
+msgstr ""
+
+msgid "during events in the calendars"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Until has to be after event start"
+msgstr ""
+
+msgid "The event is longer than the recurring interval"
+msgstr ""
+
+#, python-brace-format
+msgid "Every {0}. Day"
+msgstr ""
+
+#, python-brace-format
+msgid "Every {0}. Week at"
+msgstr ""
+
+#, python-brace-format
+msgid "Every {0}. Month"
+msgstr ""
+
+msgid "at the"
+msgstr ""
+
+msgid "first"
+msgstr ""
+
+msgid "second"
+msgstr ""
+
+msgid "third"
+msgstr ""
+
+msgid "fourth"
+msgstr ""
+
+msgid "last"
+msgstr ""
+
+#, python-brace-format
+msgid "Every {0}. Year"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "no events found"
+msgstr ""
+
+msgid "Searching..."
+msgstr ""
+
+msgid "Search Event"
+msgstr ""
+
+msgid "Mini Calendar"
+msgstr ""
+
+msgid "Event Id"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+msgid "The email address has been shortened:"
 msgstr ""
 
 msgid "GENDER_Event"
@@ -1756,16 +1680,13 @@ msgstr ""
 msgid "Organizer timezone"
 msgstr ""
 
-msgid "Event Id"
+msgid "Short Name"
 msgstr ""
 
-msgid "unknown"
+msgid "Locked"
 msgstr ""
 
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-msgid "The email address has been shortened:"
+msgid "Closed"
 msgstr ""
 
 #, python-format
@@ -1818,64 +1739,185 @@ msgstr ""
 msgid "th"
 msgstr ""
 
-msgid "Locked"
+msgid "All my events"
 msgstr ""
 
-msgid "Closed"
+msgid "Position on the left time axis, day and week view should start with"
 msgstr ""
 
-msgid "Short Name"
+msgid "Position on the left time axis, day and week view should end with"
 msgstr ""
 
-msgid "Calendars to export"
+msgid "Default Start Time"
 msgstr ""
 
-msgid "Export target"
+msgid "Scroll position on the left time axis, day and week view should start with"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Visible Time"
 msgstr ""
 
-msgid "Word details"
+msgid "Time to be displayed at once"
 msgstr ""
 
-msgid "Excel overview"
+msgid "Default Calendar"
 msgstr ""
 
-msgid "VCalendar/ICS"
+msgid "The default calendar for invitations and new events"
 msgstr ""
 
-msgid "Export visible events to ics file"
+msgid "Default Favorite"
 msgstr ""
 
-msgid "Resource CSV"
+msgid "The default favorite which is loaded on calendar startup"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "Web Event Title Template"
 msgstr ""
 
-msgid "Export event data into ods spreadsheet"
+msgid "How to build event titles in web ui."
 msgstr ""
 
-msgid "Shared Calendar CSV"
+msgid "Get Notification Emails"
 msgstr ""
 
-msgid "Word event sheet"
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr ""
 
-msgid "Export Events as Calendar Sheet"
+msgid "Send Notifications Emails of own Actions"
 msgstr ""
 
-msgid "VCalendar Report"
+msgid "Get notifications emails for actions you did yourself"
 msgstr ""
 
-msgid "Export multiple calendars to ics files"
+msgid "Send Notifications Emails of tentative events"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Get notifications emails of tentative events"
 msgstr ""
 
-msgid "Import iCal-files"
+msgid "Send Alarm Notifications Emails"
+msgstr ""
+
+msgid "Get event alarms via email"
+msgstr ""
+
+msgid "Enable Standard Alarm"
+msgstr ""
+
+msgid "New events get a standard alarm as defined below"
+msgstr ""
+
+msgid "Standard Alarm Time"
+msgstr ""
+
+msgid "Minutes before the event starts"
+msgstr ""
+
+msgid "Default Attendee Strategy"
+msgstr ""
+
+msgid "Default Attendee Strategy for new events"
+msgstr ""
+
+msgid "Time Increment"
+msgstr ""
+
+msgid "Increment of event time steps"
+msgstr ""
+
+msgid "Default set Events to privat"
+msgstr ""
+
+msgid "If enabled every created event is always privat"
+msgstr ""
+
+msgid "First Day of Week"
+msgstr ""
+
+msgid "On what day the week should be starting"
+msgstr ""
+
+msgid "Default calendar strategy"
+msgstr ""
+
+msgid "The calendar for new events if no container is selected"
+msgstr ""
+
+msgid "Remove all filters on change selection"
+msgstr ""
+
+msgid "On Calendar Change will remove all filters"
+msgstr ""
+
+msgid "Calendars always selected regardless of all filter parameters."
+msgstr ""
+
+msgid "Never"
+msgstr ""
+
+msgid "On invitation and cancellation only"
+msgstr ""
+
+msgid "On time changes"
+msgstr ""
+
+msgid "On all updates but attendee responses"
+msgstr ""
+
+msgid "On attendee responses too"
+msgstr ""
+
+msgid "All events I attend"
+msgstr ""
+
+msgid "Awaiting response"
+msgstr ""
+
+msgid "Events I have not yet responded to"
+msgstr ""
+
+msgid "Declined events"
+msgstr ""
+
+msgid "Events I have declined"
+msgstr ""
+
+msgid "I'm organizer"
+msgstr ""
+
+msgid "Events I'm the organizer of"
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+msgid "Exporttime"
+msgstr ""
+
+msgid "0009326B"
+msgstr ""
+
+msgid "20"
+msgstr ""
+
+msgid "00B359B9"
+msgstr ""
+
+msgid "00997199"
+msgstr ""
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+
+msgid "First name, ĺast name"
+msgstr ""
+
+msgid "E-Mail address"
+msgstr ""
+
+msgid "General terms and conditions"
 msgstr ""
 
 msgid "Updates from"
@@ -1914,6 +1956,12 @@ msgstr ""
 msgid "Event details"
 msgstr ""
 
+msgid "Thank you for attendening the poll \"%1$s\""
+msgstr ""
+
+msgid "To review or edit your status please use your personal link:"
+msgstr ""
+
 msgid "The poll \"%1$s\" has been closed."
 msgstr ""
 
@@ -1921,52 +1969,4 @@ msgid "The definite event is scheduled for \"%1$s\""
 msgstr ""
 
 msgid "You can review the poll results here:"
-msgstr ""
-
-msgid "Thank you for attendening the poll \"%1$s\""
-msgstr ""
-
-msgid "To review or edit your status please use your personal link:"
-msgstr ""
-
-msgid "Different Calendar"
-msgstr ""
-
-msgid "Exdate container move are not allowed"
-msgstr ""
-
-msgid "Failed"
-msgstr ""
-
-msgid "The right Resource Admin must be set once."
-msgstr ""
-
-msgid "Invalid URL given"
-msgstr ""
-
-msgid "The URL you used is invalid. Please use a valid one!"
-msgstr ""
-
-msgid "manage shared calendars"
-msgstr ""
-
-msgid "Create new shared calendars"
-msgstr ""
-
-msgid "manage shared calendars favorites"
-msgstr ""
-
-msgid "Create or update shared calendars favorites"
-msgstr ""
-
-msgid "manage resources"
-msgstr "管理資源"
-
-msgid "All Rights to administrate resources"
-msgstr ""
-
-msgid "manage event types"
-msgstr ""
-
-msgid "The Right to manage event types"
 msgstr ""

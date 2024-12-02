@@ -7,190 +7,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Catalan (http://app.transifex.com/tine/groupware/language/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal tasks"
-msgstr "tasques personals de %s"
+msgid "manage shared task lists"
+msgstr "gestiona les llistes de tasques compartides"
 
-msgid "All my tasks"
-msgstr "Totes les meves tasques"
+msgid "Create new shared tasks lists"
+msgstr "Crea noves llistes de tasques compartides"
 
-msgid "Default Favorite"
-msgstr "Preferit per defecte"
+msgid "manage shared tasks favorites"
+msgstr "gestiona els preferits de les tasques compartides"
 
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "El preferit per defecte que es carrega a l'inici de Tasques"
-
-msgid "Default Task List"
-msgstr ""
-
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New task get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the task ends"
-msgstr ""
-
-msgid "Task Title Template"
-msgstr ""
-
-msgid "How to build task titles."
-msgstr ""
-
-msgid "Filter: To be done for"
-msgstr ""
-
-msgid "Show all tasks matching all the following criteria:"
-msgstr ""
-
-msgid "Tasks has an open status."
-msgstr ""
-
-msgid "Filtered person is either:"
-msgstr ""
-
-msgid "Organizer and no coworker with open status is assigned."
-msgstr ""
-
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr ""
-
-msgid "Coworker with an open status assigned."
-msgstr ""
-
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr ""
-
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "New Task"
-msgstr ""
-
-msgid "Create from Template"
-msgstr ""
-
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Esteu segur que voleu eliminar la tasca seleccionada?"
-msgstr[1] "Esteu segur que voleu eliminar les tasques seleccionades?"
-
-msgid "Tags"
-msgstr "Etiquetes"
-
-msgid "Summary"
-msgstr "Resum"
-
-msgid "Add a task..."
-msgstr "Afegeix una tasca..."
-
-msgid "Due Date"
-msgstr "Data de venciment"
-
-msgid "Priority"
-msgstr "Prioritat"
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Percent"
-msgstr "Percentatge"
-
-msgid "Completed"
-msgstr "Completada"
-
-msgid "Organizer / Responsible"
-msgstr ""
-
-msgid "Responsible"
-msgstr "Responsable"
-
-msgid "My open tasks"
-msgstr ""
-
-msgid "Use show all button bellow to search for all tasks"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Invalid selection"
-msgstr ""
-
-msgid "A task cannot depend on itself"
-msgstr ""
-
-msgid "Add New Task"
-msgstr ""
-
-msgid "This Task is part of:"
-msgstr ""
-
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
-
-msgid "Due date"
-msgstr "Data de venciment"
-
-msgid "Add Responsible ..."
-msgstr "Afegeix un responsable ..."
-
-msgid "Notes"
-msgstr "Notes"
-
-msgid "Enter description..."
-msgstr "Introduïu una descripció"
-
-msgid "Percentage"
-msgstr "Percentatge"
-
-msgid "Attention: This due date is in the past!"
-msgstr ""
-
-msgid "My responsibility"
-msgstr ""
-
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-msgid "All tasks for me"
-msgstr ""
-
-msgid "To be done for me this week"
-msgstr ""
-
-msgid "Tasks"
-msgstr "Tasques"
-
-msgid "All tasks of my taskslists"
-msgstr "Totes les tasques de les meves llistes de tasques"
-
-msgid "Last modified by me"
-msgstr ""
-
-msgid "All tasks that I have last modified"
-msgstr ""
-
-msgid "Tasks without responsible"
-msgstr ""
+msgid "Create or update shared tasks favorites"
+msgstr "Crea o actualitza preferits de tasques compartides"
 
 msgid "Tasks status available"
 msgstr ""
@@ -200,6 +36,9 @@ msgstr ""
 
 msgid "No response"
 msgstr ""
+
+msgid "Completed"
+msgstr "Completada"
 
 msgid "Cancelled"
 msgstr ""
@@ -249,23 +88,123 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
+#, python-format
+msgid "%s's personal tasks"
+msgstr "tasques personals de %s"
+
 msgid "Notification for Task %1$s"
 msgstr ""
 
-msgid "GENDER_Task Dependency"
+msgid "Excel all data"
 msgstr ""
 
-msgid "Task Dependency"
-msgid_plural "Task Dependencies"
+msgid "Create from Template"
+msgstr ""
+
+msgid "Use show all button bellow to search for all tasks"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Invalid selection"
+msgstr ""
+
+msgid "A task cannot depend on itself"
+msgstr ""
+
+msgid "Summary"
+msgstr "Resum"
+
+msgid "Add a task..."
+msgstr "Afegeix una tasca..."
+
+msgid "Due Date"
+msgstr "Data de venciment"
+
+msgid "Priority"
+msgstr "Prioritat"
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Percent"
+msgstr "Percentatge"
+
+msgid "Status"
+msgid_plural "Status"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tasca"
-msgstr[1] "Tasques"
+msgid "Responsible"
+msgstr "Responsable"
 
-msgid "Depends on Task"
+msgid "My open tasks"
+msgstr ""
+
+msgid "Add New Task"
+msgstr ""
+
+msgid "This Task is part of:"
+msgstr ""
+
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
+
+msgid "Due date"
+msgstr "Data de venciment"
+
+msgid "Organizer / Responsible"
+msgstr ""
+
+msgid "Add Responsible ..."
+msgstr "Afegeix un responsable ..."
+
+msgid "Notes"
+msgstr "Notes"
+
+msgid "Enter description..."
+msgstr "Introduïu una descripció"
+
+msgid "Percentage"
+msgstr "Percentatge"
+
+msgid "Attention: This due date is in the past!"
+msgstr ""
+
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Esteu segur que voleu eliminar la tasca seleccionada?"
+msgstr[1] "Esteu segur que voleu eliminar les tasques seleccionades?"
+
+msgid "Tags"
+msgstr "Etiquetes"
+
+msgid "Filter: To be done for"
+msgstr ""
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr ""
+
+msgid "Tasks has an open status."
+msgstr ""
+
+msgid "Filtered person is either:"
+msgstr ""
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr ""
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr ""
+
+msgid "Coworker with an open status assigned."
+msgstr ""
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr ""
+
+msgid "New Task"
 msgstr ""
 
 msgid "GENDER_Collaborator"
@@ -275,6 +214,22 @@ msgid "Collaborator"
 msgid_plural "Collaborators"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tasca"
+msgstr[1] "Tasques"
+
+msgid "GENDER_Task Dependency"
+msgstr ""
+
+msgid "Task Dependency"
+msgid_plural "Task Dependencies"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Depends on Task"
+msgstr ""
 
 msgid "GENDER_Task"
 msgstr ""
@@ -321,17 +276,62 @@ msgstr "Telèfon"
 msgid "Email"
 msgstr "Correu electrònic"
 
-msgid "Excel all data"
+msgid "All my tasks"
+msgstr "Totes les meves tasques"
+
+msgid "Default Favorite"
+msgstr "Preferit per defecte"
+
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "El preferit per defecte que es carrega a l'inici de Tasques"
+
+msgid "Default Task List"
 msgstr ""
 
-msgid "manage shared task lists"
-msgstr "gestiona les llistes de tasques compartides"
+msgid "The default task list to create new tasks in."
+msgstr ""
 
-msgid "Create new shared tasks lists"
-msgstr "Crea noves llistes de tasques compartides"
+msgid "Enable Standard Alarm"
+msgstr ""
 
-msgid "manage shared tasks favorites"
-msgstr "gestiona els preferits de les tasques compartides"
+msgid "New task get a standard alarm as defined below"
+msgstr ""
 
-msgid "Create or update shared tasks favorites"
-msgstr "Crea o actualitza preferits de tasques compartides"
+msgid "Standard Alarm Time"
+msgstr ""
+
+msgid "Minutes before the task ends"
+msgstr ""
+
+msgid "Task Title Template"
+msgstr ""
+
+msgid "How to build task titles."
+msgstr ""
+
+msgid "All tasks of my taskslists"
+msgstr "Totes les tasques de les meves llistes de tasques"
+
+msgid "My responsibility"
+msgstr ""
+
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+msgid "All tasks for me"
+msgstr ""
+
+msgid "To be done for me this week"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr ""
+
+msgid "All tasks that I have last modified"
+msgstr ""
+
+msgid "Tasks without responsible"
+msgstr ""
+
+msgid "Tasks"
+msgstr "Tasques"

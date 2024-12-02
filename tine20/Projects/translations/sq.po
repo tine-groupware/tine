@@ -8,98 +8,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Enri Mullai <enri_mullai@albnet.net>, 2013\n"
 "Language-Team: Albanian (http://app.transifex.com/tine/groupware/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Të gjithë Projektet e mi"
+msgid "Manage shared project favorites"
+msgstr "Menaxho prefenecialet e projekteve të ndarë"
 
-msgid "Default Favorite"
-msgstr "Preferencialja e paracaktuar"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Preferencialja e paracaktuar që ngarkohet kur Projekti nis"
-
-msgid "Attendee"
-msgstr "Vijues"
-
-msgid "Role"
-msgstr "Roli"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projekte"
-
-msgid "Title"
-msgstr "Titull"
-
-msgid "Number"
-msgstr "Numër"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "Përshkrim"
-
-msgid "Enter description"
-msgstr "Vendosni përshkrimin"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Ju lutemi zgjidhni Projektin ku të shtoni kontaktet"
-
-msgid "Please select the attenders' role"
-msgstr "Ju lutem zgjidhni rolin e vijuesve"
-
-msgid "Select Project"
-msgstr "Zgjidhni Projektin"
-
-msgid "Select Role"
-msgstr "Zgjidhni Rolin"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Duke shtuar {0} Pjesmarrës në projekt"
-
-msgid "Attendee Role"
-msgstr "Rol Vijuesi"
-
-msgid "Projects"
-msgstr "Projekte"
-
-msgid "All my open projects"
-msgstr "Të gjithë projektet e mi të hapur"
-
-msgid "My projects that I'm responsible for"
-msgstr "Prjoketet e mi për të cilët jam përgjegjës"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Të gjith projektet e mi të hapur për të cilë jam përgjegjës"
-
-msgid "My waiting projects"
-msgstr "Projektet e mi në pritje"
-
-msgid "My projects that are on hold"
-msgstr "Projektet e mi në pritje"
+msgid "Create new shared project favorites"
+msgstr "Krijo preferenciale të reja të projekteve të ndarë"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -152,6 +74,69 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekte"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Ju lutemi zgjidhni Projektin ku të shtoni kontaktet"
+
+msgid "Please select the attenders' role"
+msgstr "Ju lutem zgjidhni rolin e vijuesve"
+
+msgid "Select Project"
+msgstr "Zgjidhni Projektin"
+
+msgid "Role"
+msgstr "Roli"
+
+msgid "Select Role"
+msgstr "Zgjidhni Rolin"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Duke shtuar {0} Pjesmarrës në projekt"
+
+msgid "Attendee"
+msgstr "Vijues"
+
+msgid "Attendee Role"
+msgstr "Rol Vijuesi"
+
+msgid "Title"
+msgstr "Titull"
+
+msgid "Number"
+msgstr "Numër"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "Përshkrim"
+
+msgid "Enter description"
+msgstr "Vendosni përshkrimin"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Listë Projekti"
@@ -163,14 +148,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "Të gjithë Projektet e mi"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "Preferencialja e paracaktuar"
 
-msgid "Manage shared project favorites"
-msgstr "Menaxho prefenecialet e projekteve të ndarë"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Preferencialja e paracaktuar që ngarkohet kur Projekti nis"
 
-msgid "Create new shared project favorites"
-msgstr "Krijo preferenciale të reja të projekteve të ndarë"
+msgid "All my open projects"
+msgstr "Të gjithë projektet e mi të hapur"
+
+msgid "My projects that I'm responsible for"
+msgstr "Prjoketet e mi për të cilët jam përgjegjës"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Të gjith projektet e mi të hapur për të cilë jam përgjegjës"
+
+msgid "My waiting projects"
+msgstr "Projektet e mi në pritje"
+
+msgid "My projects that are on hold"
+msgstr "Projektet e mi në pritje"
+
+msgid "Projects"
+msgstr "Projekte"

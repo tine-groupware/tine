@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,6 +13,42 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgid "Public OnlyOffice document server url"
+msgstr "Public OnlyOffice document server url"
+
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr "OnlyOffice document server url accessible by the users browser"
+
+msgid "Internal/Server OnlyOffice document server url"
+msgstr "Internal/Server OnlyOffice document server url"
+
+msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgstr "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+
+msgid "Server url of this installation"
+msgstr "Server url of this installation"
+
+msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgstr "Server url of this installation accessible by the OnlyOffice document server"
+
+msgid "Enable oo jwt tokens"
+msgstr "Enable oo jwt tokens"
+
+msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgstr "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+
+msgid "OnlyOffice jwt secret string"
+msgstr "OnlyOffice jwt secret string"
+
+msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgstr "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+
+msgid "Interval in seconds to force save"
+msgstr "Interval in seconds to force save"
+
+msgid "Live time of token subscriptions"
+msgstr "Live time of token subscriptions"
 
 msgid "conflict"
 msgstr "conflict"
@@ -42,6 +79,33 @@ msgstr "node has no revision, it might be a partial upload"
 
 msgid "this revision currently can't be opened as a different revision is already open"
 msgstr "this revision currently can't be opened as a different revision is already open"
+
+msgid "Only Office Integrator"
+msgstr "Only Office Integrator"
+
+msgid "Add Document"
+msgstr "Add Document"
+
+msgid "Add Text"
+msgstr "Add Text"
+
+msgid "Add Spreadsheet"
+msgstr "Add Spreadsheet"
+
+msgid "Add Presentation"
+msgstr "Add Presentation"
+
+msgid "Open Document"
+msgstr "Open Document"
+
+msgid "Preparing Attachment..."
+msgstr "Preparing Attachment..."
+
+msgid "Is edited by"
+msgstr "Is edited by"
+
+msgid "Who is currently editing this document"
+msgstr "Who is currently editing this document"
 
 msgid "Absence detected"
 msgstr "Absence detected"
@@ -84,71 +148,8 @@ msgstr "Error"
 msgid "Saving Document ..."
 msgstr "Saving Document ..."
 
-msgid "Is edited by"
-msgstr "Is edited by"
-
-msgid "Who is currently editing this document"
-msgstr "Who is currently editing this document"
-
-msgid "Only Office Integrator"
-msgstr "Only Office Integrator"
-
-msgid "Open Document"
-msgstr "Open Document"
-
-msgid "Preparing Attachment..."
-msgstr "Preparing Attachment..."
-
-msgid "Add Document"
-msgstr "Add Document"
-
-msgid "Add Text"
-msgstr "Add Text"
-
-msgid "Add Spreadsheet"
-msgstr "Add Spreadsheet"
-
-msgid "Add Presentation"
-msgstr "Add Presentation"
-
 msgid "Editing"
 msgstr "Editing"
 
 msgid "Current Editors"
 msgstr "Current Editors"
-
-msgid "Public OnlyOffice document server url"
-msgstr "Public OnlyOffice document server url"
-
-msgid "OnlyOffice document server url accessible by the users browser"
-msgstr "OnlyOffice document server url accessible by the users browser"
-
-msgid "Internal/Server OnlyOffice document server url"
-msgstr "Internal/Server OnlyOffice document server url"
-
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-msgstr "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-
-msgid "Server url of this installation"
-msgstr "Server url of this installation"
-
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr "Server url of this installation accessible by the OnlyOffice document server"
-
-msgid "Enable oo jwt tokens"
-msgstr "Enable oo jwt tokens"
-
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-
-msgid "OnlyOffice jwt secret string"
-msgstr "OnlyOffice jwt secret string"
-
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-
-msgid "Interval in seconds to force save"
-msgstr "Interval in seconds to force save"
-
-msgid "Live time of token subscriptions"
-msgstr "Live time of token subscriptions"

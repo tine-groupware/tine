@@ -26,779 +26,77 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "You do not have admin rights on Sales"
-msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
+msgid "Manage Products"
+msgstr "Produkte Verwalten"
 
-msgid "Electronic Address Schema"
-msgid_plural "Electronic Address Schemas"
-msgstr[0] "Elektronisches Adressierungsschema"
-msgstr[1] "Elektronische Adressierungsschemata"
+msgid "Add, edit and delete products."
+msgstr "Hinzufügen, editieren und löschen von Produkten."
 
-msgid "Divisions"
-msgstr "Geschäftsbereiche"
+msgid "Manage Contracts"
+msgstr "Verträge Verwalten"
 
-msgid "Categories"
-msgstr "Kategorien"
+msgid "Add, edit and delete contracts."
+msgstr "Verträge hinzufügen, bearbeiten und löschen."
 
-msgid "Boilerplate"
-msgid_plural "Boilerplates"
-msgstr[0] "Textbaustein"
-msgstr[1] "Textbausteine"
+msgid "Manage Cost Centers"
+msgstr "Kostenstellen Verwalten"
 
-msgid "You have to set a customer!"
-msgstr "Bitte legen Sei einen Kunden fest!"
+msgid "Add, edit and delete cost centers."
+msgstr "Kostenstellen hinzufügen, bearbeiten und löschen."
 
-msgid "Add New Offer"
-msgstr "Neues Angebot hinzufügen"
+msgid "Manage Customers"
+msgstr "Kunden Verwalten"
 
-msgid "Number"
-msgstr "Nummer"
+msgid "Add, edit and delete customers."
+msgstr "Kunden hinzufügen, bearbeiten und löschen."
 
-msgid "Title"
-msgstr "Titel"
+msgid "Manage Suppliers"
+msgstr "Lieferanten Verwalten"
 
-msgid "Customer"
-msgid_plural "Customers"
-msgstr[0] "Kunde"
-msgstr[1] "Kunden"
+msgid "Add, edit and delete suppliers."
+msgstr "Lieferanten hinzufügen, editieren oder entfernen."
 
-msgid "Description"
-msgstr "Beschreibung"
+msgid "manage invoices"
+msgstr "Rechungen verwalten"
 
-msgid "Enter description"
-msgstr "Bitte geben Sie eine Beschreibung an"
+msgid "Add, edit and delete invoices."
+msgstr "Rechnungen hinzufügen, bearbeiten und löschen."
 
-msgid "Approver"
-msgstr "Genehmigt von"
+msgid "Manage Order Confirmations"
+msgstr "Auftragsbestätigungen Verwalten"
 
-msgid "without approver"
-msgstr "nicht genehmigt"
+msgid "Add, edit and delete order confirmations."
+msgstr "Auftragsbestätigungen hinzufügen, bearbeiten und löschen."
 
-msgid "Select invoice"
-msgstr "Rechnung auswählen"
+msgid "Manage Offers"
+msgstr "Angebote Verwalten"
 
-msgid "Invoice"
-msgid_plural "Invoices"
-msgstr[0] "Rechnung"
-msgstr[1] "Rechnungen"
+msgid "Add, edit and delete offers."
+msgstr "Angebote hinzufügen, bearbeiten und löschen."
 
-msgid "Invoice Number"
-msgstr "Rechnungsnummer"
+msgid "Manage Purchase Invoices"
+msgstr "Eingangsrechnungen Verwalten"
 
-msgid "Date"
-msgstr "Datum"
+msgid "Add, edit and delete purchase invoices."
+msgstr "Eingangsrechnungen hinzufügen, editieren oder entfernen."
 
-msgid "Type"
-msgstr "Typ"
+msgid "Change number of an order confirmations"
+msgstr "Nummer einer Auftragsbestätigung ändern"
 
-msgid "Supplier"
-msgid_plural "Suppliers"
-msgstr[0] "Lieferant"
-msgstr[1] "Lieferanten"
+msgid "Allow changing the number of an order confirmation during the update."
+msgstr "Änderung der Nummer einer Auftragsbestätigung beim Update erlauben."
 
-msgid "Billing Address"
-msgstr "Rechnungsanschrift"
+msgid "Set number of invoices"
+msgstr "Rechnungsnummer manuell vergeben"
 
-msgid "Miscellaneous"
-msgstr "Sonstiges"
+msgid "Allow to set the number of an invoice."
+msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben."
 
-msgid "Credit Term"
-msgstr "Zahlungsziel in Tagen"
+msgid "Manage Divisions"
+msgstr "Geschäftsbereiche Verwalten"
 
-msgid "Cleared"
-msgstr "Gebucht"
-
-msgid "Price Net"
-msgstr "Nettopreis"
-
-msgid "Taxes (VAT)"
-msgstr "MwSt"
-
-msgid "Total Price"
-msgstr "Gesamtpreis"
-
-msgid "Add New Order Confirmation"
-msgstr "Neue Auftragsbestätigung hinzufügen"
-
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-msgid "Offer"
-msgid_plural "Offers"
-msgstr[0] "Angebot"
-msgstr[1] "Angebote"
-
-msgid "Clipboard"
-msgstr "Zwischenablage"
-
-msgid "Copy address to the clipboard"
-msgstr "Adresse in die Zwischenablage kopieren"
-
-msgid "Select supplier"
-msgstr "Lieferant auswählen"
-
-msgid "Core Data"
-msgstr "Stammdaten"
-
-msgid "Supplier Number"
-msgstr "Lieferantennummer"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Web"
-msgstr "Internet"
-
-msgid "Contact Person (external)"
-msgstr "Kontaktperson (extern)"
-
-msgid "Contact Person (internal)"
-msgstr "Kontaktperson (intern)"
-
-msgid "Accounting"
-msgstr "Abrechnung"
-
-msgid "IBAN"
-msgstr "IBAN"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "VAT ID"
-msgstr "USt.-ID"
-
-msgid "Currency"
-msgstr "Währung"
-
-msgid "Currency Translation Rate"
-msgstr "Wechselkurs"
-
-msgid "Either postalcode or postbox is required!"
-msgstr "Bitte geben Sie entweder eine Postleitzahl oder ein Postfach an!"
-
-msgid "Copy Supplier"
-msgstr "Lieferant kopieren"
-
-msgid "Add New Supplier"
-msgstr "Neuen Lieferant hinzufügen"
-
-#, python-brace-format
-msgid "Edit Supplier \"{0}\""
-msgstr "Lieferant \"{0}\" bearbeiten"
-
-msgid "Credit Term (days)"
-msgstr "Zahlungsziel in Tagen"
-
-msgid "Postal Address"
-msgstr "Postanschrift"
-
-msgid "Email"
-msgstr "E-Mail"
-
-msgid "Street"
-msgstr "Straße"
-
-msgid "Postbox"
-msgstr "Postfach"
-
-msgid "Postalcode"
-msgstr "Postleitzahl"
-
-msgid "Locality"
-msgstr "Ort"
-
-msgid "Region"
-msgstr "Region"
-
-msgid "Country"
-msgstr "Land"
-
-msgid "Prefix"
-msgstr "Zusatz"
-
-msgid "Additional Prefix"
-msgstr "Weiterer Zusatz"
-
-msgid "Cancel"
-msgstr "Abbrechen"
-
-msgid "Ok"
-msgstr "Ok"
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr "{0} ausgewählt"
-
-msgid "Price Gross"
-msgstr "Bruttopreis"
-
-msgid "Export Records from these Positions"
-msgstr "Exportiere Einträge dieser Positionen"
-
-msgid "Select customer"
-msgstr "Kunden auswählen"
-
-msgid "Customer Number"
-msgstr "Kundennummer"
-
-msgid "Order Confirmation"
-msgid_plural "Order Confirmations"
-msgstr[0] "Auftragsbestätigung"
-msgstr[1] "Auftragsbestätigungen"
-
-msgid "without order confirmation"
-msgstr "ohne Auftragsbestätigung"
-
-msgid "Bill Contract"
-msgstr "Vertrag abrechnen"
-
-msgid "Billing Contract..."
-msgstr "Rechne Vertrag ab..."
-
-#, python-brace-format
-msgid "Bill Contract \"{0} - {1}\""
-msgstr "Vertrag \"{0} - {1}\" abrechnen"
-
-msgid "Select the date to generate the bill for"
-msgstr "Bitte wählen Sie das Datum, zu dem Sie die Rechnung erzeugen möchten"
-
-msgid "Set as accountable"
-msgstr "Als verantwortlich festlegen"
-
-msgid "Choose product for accountable"
-msgstr "Wählen Sie das Produkt für verantwortlich"
-
-msgid "Please use a decimal number here!"
-msgstr "Bitte benutzen Sie eine Dezimalzahl!"
-
-msgid "Positions"
-msgstr "Positionen"
-
-msgid "Start Date"
-msgstr "Anfang"
-
-msgid "End Date"
-msgstr "Ende"
-
-msgid "Enter description..."
-msgstr "Bitte geben Sie eine Beschreibung ein..."
-
-msgid "Show closed"
-msgstr "Geschlossene anzeigen"
-
-msgid "Confirm Status Change"
-msgstr "Statusübergang bestätigen"
-
-msgid "Changing this workflow status might not be revertible. Proceed anyway?"
-msgstr "Die Änderung des Status im Arbeitsablauf ist ggf. nicht umkehrbar. Trotzdem fortfahren?"
-
-msgid "Change Document Date?"
-msgstr "Belegdatum ändern?"
-
-msgid "Change document date from { date } to today?"
-msgstr "Soll das Belegdatum von { date } auf heute geändert werden?"
-
-msgid "Service Start Extended"
-msgstr "Leistungszeitraum erweitert"
-
-msgid "The service period of the invoice has been extended so that it now includes the service periods of all items."
-msgstr "Der Leistungszeitraum der Rechnung wurde erweitert so dass er nun die Leistungszeiträume aller Positionen beinhaltet."
-
-msgid "No Matching Debitor"
-msgstr "Passender Debitor fehlt"
-
-#, python-brace-format
-msgid "The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category."
-msgstr "Die Kategorie <b>{category}</b> kann nicht ausgewählt werden, da der Kunde <b>{customer}</b> keinen Debitor im Geschäftsbereich <b>{division.title}</b> dieser Kategorie hat."
-
-#, python-brace-format
-msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>."
-msgstr "Der Kunde <b>{customer}</b> kann nicht ausgewählt werden, da er keinen Debitor im Geschäftsbereich <b>{division.title}</b> der Kategorie <b>{category}</b> dieses Dokumentes hat."
-
-msgid "Please wait..."
-msgstr "Bitte warten…"
-
-msgid "Set { recordName } dispatched"
-msgstr "Setze { recordName } auf versendet"
-
-msgid "Dispatch Document"
-msgstr "Belegversandt"
-
-msgid "Generated when dispatched"
-msgstr "Wird beim Versandt erzeugt"
-
-msgid "Paperslip ({ filename })"
-msgstr "Papierbeleg ({ filename })"
-
-msgid "eDocument ({ filename })"
-msgstr "eDokument ({ filename })"
-
-msgid "Please Select Files to Dispatch"
-msgstr "Bitte wählen sie die Dateien zum versenden"
-
-msgid "Please select the files which should be dispatched."
-msgstr "Bitte wählen sie die Dateien aus die versendet werden sollen."
-
-msgid "Manual Dispatch"
-msgstr "Manueller versandt"
-
-msgid "Dispatch documents where created, please download and dispatch manually."
-msgstr "Die Dokumente für den Beleg-Versandt wurden erstellt. Bitte laden sie diese herunter und versenden sie diese manuell."
-
-msgid "There where Errors:"
-msgstr "Diese Fehler sind aufgetreten:"
-
-msgid "Show Dispatch History"
-msgstr "Speichere Beleg-Versandt Historie"
-
-msgid "Include to Dispatch Document"
-msgstr "In Belegversandt aufnehmen"
-
-msgid "Exclude from Dispatch Document"
-msgstr "Vom Belegversandt ausschließen"
-
-msgid "More Boilerplates"
-msgstr "Weitere Textbausteine"
-
-msgid "Choose Boilerplate"
-msgstr "Textbaustein auswählen"
-
-msgid "Please choose which boilerplate you want to use as { name }"
-msgstr "Bitte wählen sie aus welcher Textbaustein soll als { name } genutzt werden soll"
-
-msgid "Existing:"
-msgstr "Aktuell:"
-
-msgid "Applicable:"
-msgstr "Anwendbar:"
-
-msgid "Send as Email to Datev"
-msgstr "Als E-Mail an Datev senden"
-
-msgid "Confirm"
-msgstr "Bestätigen"
-
-msgid "Datev email has been sent before , continue anyway?"
-msgstr "Die Datev-E-Mail wurde gesendet, wollen Sie trotzdem fortfahren?"
-
-msgid "Track Document"
-msgstr "Belegverfolgung"
-
-msgid "Paper Slip"
-msgstr "Papierbeleg"
-
-msgid "eDocument"
-msgstr "eDokument"
-
-msgid "Creating { recordName } { typeName }"
-msgstr "Erzeuge { recordName } { typeName }"
-
-msgid "Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }"
-msgstr "{ typeName } für { recordName } konnte nicht erzeugt werden: { title } ({e.code}) { e.message }"
-
-msgid "Print Paper Slip"
-msgstr "Belegdruck"
-
-msgid "Send by E-Mail"
-msgstr "Als E-Mail senden"
-
-msgid "Book Document"
-msgstr "Beleg buchen"
-
-msgid "Please select the { sourceRecordsName } where you want to change the document date to today."
-msgstr "Bitte wählen die die { sourceRecordsName } bei denen das Belegdatum auf Heute geändert werden soll."
-
-msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"
-msgstr "Konnte { sourceDocument } nicht buchen: ({e.code}) { e.message })"
-
-msgid "Trac Document { title }"
-msgstr "Belegverfolgung zu { title }"
-
-msgid "Expand Positions"
-msgstr "Positionen ausklappen"
-
-msgid "Reversal"
-msgstr "Storno"
-
-msgid "Reversals"
-msgstr "Stornos"
-
-msgid "Create { targetRecordName }"
-msgstr "Erstelle { targetRecordName }"
-
-msgid "Creating { targetRecordsName }"
-msgstr "{ targetRecordsName } wird erzeugt"
-
-msgid "Create new { targetRecordName }?"
-msgstr "{ targetRecordName } neu erzeugen?"
-
-msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
-msgstr "Storno { sourceRecordsName } können nicht rückgängig gemacht werden. Wenn sie fortfahren, wird ein neuer { targetRecordName }s-Beleg mit positiven Werten erstellt."
-
-msgid "Book unbooked { sourceRecordsName }"
-msgstr "Ungebuchte { sourceRecordsName } buchen"
-
-msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?"
-msgstr "Die Erstellung von Folge-{ targetRecordsName } ist nur für gebuchte { sourceRecordsName } erlaubt. Ausgewählte { sourceRecordsName } jetzt buchen?"
-
-msgid "Nothing to do"
-msgstr "Nichts zu tun"
-
-msgid "{ document } has no open positions left."
-msgstr "{ document } hat keine übrigen offenen Positionen."
-
-msgid "Choose { sourceRecordsName }"
-msgstr "{ sourceRecordsName } auswählen"
-
-msgid "Please choose which { sourceRecordsName } should be included in shared { targetRecordName }"
-msgstr "Bitte wählen sie welche { sourceRecordsName } in der Sammel-{ targetRecordName } inkludiert werden sollen"
-
-msgid "Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }"
-msgstr "Konnte { targetType } nicht erzeugen: ({e.code}) { e.message })"
-
-msgid "Documents Created:"
-msgstr "Erzeugte Dokumente:"
-
-msgid "without customer"
-msgstr "ohne Kunde"
-
-msgid "without contract"
-msgstr "ohne Vertrag"
-
-msgid "Copy Customer"
-msgstr "Kunden kopieren"
-
-msgid "Add New Customer"
-msgstr "Neuen Kunden hinzufügen"
-
-#, python-brace-format
-msgid "Edit Customer \"{0}\""
-msgstr "Kunden \"{0}\" bearbeiten"
-
-msgid "Discount (%)"
-msgstr "Rabatt in Prozent"
-
-msgid "Debitors"
-msgstr "Debitoren"
-
-msgid "Name shorthand"
-msgstr "Kunden Kürzel"
-
-msgid "Language"
-msgstr "Sprache"
-
-msgid "Prefix 1"
-msgstr ""
-
-msgid "Prefix 2"
-msgstr ""
-
-msgid "Prefix 3"
-msgstr ""
-
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Produkt"
-msgstr[1] "Produkte"
-
-msgid "Quantity"
-msgstr "Anzahl"
-
-msgid "Interval"
-msgstr "Intervall"
-
-msgid "Billing Point"
-msgstr "Abrechnungszeitpunkt"
-
-msgid "begin"
-msgstr "Anfang des Intervalls"
-
-msgid "end"
-msgstr "Ende des Intervalls"
-
-msgid "Attributes"
-msgstr "Attribute"
-
-msgid "Last Autobill"
-msgstr "Zuletzt Abgerechnet"
-
-msgid "Creation Time"
-msgstr "Angelegt am"
-
-msgid "Created By"
-msgstr "Angelegt von"
-
-msgid "Last Modified Time"
-msgstr "Letztes Modifikationsdatum"
-
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-msgid "Edit Attributes"
-msgstr "Attribute bearbeiten"
-
-msgid "Attribute"
-msgstr "Attribute"
-
-msgid "Value"
-msgstr "Wert"
-
-msgid "Add a New Value..."
-msgstr "Neuen Wert hinzufügen ..."
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Apply postal address"
-msgstr "Postanschrift anwenden"
-
-msgid "Number Debit"
-msgstr "Debitorennummer"
-
-msgid "Address"
-msgid_plural "Addresss"
-msgstr[0] "Anschrift"
-msgstr[1] "Anschriften"
-
-msgid "Copy Purchase Invoice"
-msgstr "Eingangsrechnung kopieren"
-
-msgid "Add New Purchase Invoice"
-msgstr "Neue Eingangsrechnung hinzufügen"
-
-#, python-brace-format
-msgid "Edit Purchase Invoice \"{0}\""
-msgstr "Eingangsrechnung \"{0}\" bearbeiten"
-
-msgid "Date of invoice"
-msgstr "Rechnungsdatum"
-
-msgid "Due in"
-msgstr "Fällig in"
-
-msgid "Due date"
-msgstr "Fälligkeitsdatum"
-
-msgid "Additional Price Gross"
-msgstr "Zusätzlicher Bruttopreis"
-
-msgid "Sales Tax (percent)"
-msgstr "MwSt. in Prozent"
-
-msgid "Purchase Invoice"
-msgid_plural "Purchase Invoices"
-msgstr[0] "Eingangsrechnung"
-msgstr[1] "Eingangsrechnungen"
-
-msgid "automatically set..."
-msgstr "automatisch ausgefüllt..."
-
-msgid "Overdue date"
-msgstr "Überfälligkeits Datum"
-
-msgid "Discount until"
-msgstr "Skonto bis"
-
-msgid "Dun date"
-msgstr "Mahnungsdatum"
-
-msgid "Payed at"
-msgstr "Gezahlt am"
-
-msgid "Method of payment"
-msgstr "Zahlungsart"
-
-msgid "without supplier"
-msgstr "ohne Lieferant"
-
-msgid "Select Debitor"
-msgstr "Debitor auswählen"
-
-msgid "Please select debitor"
-msgstr "Bitte einen Debitor auswählen"
-
-msgid "Products"
-msgstr "Produkte"
-
-msgid "Accountable"
-msgstr "Rechnet ab"
-
-msgid "Category"
-msgid_plural "Categories"
-msgstr[0] "Kategorie"
-msgstr[1] "Kategorien"
-
-msgid "Generic"
-msgstr "Generell"
-
-msgid "Price"
-msgstr "Preis"
-
-msgid "Discount"
-msgstr "Rabatt"
-
-msgid "Total"
-msgstr "Gesamt"
-
-msgid "Create Reversal Invoice"
-msgstr "Storno-Rechnung erstellen"
-
-msgid "Copy Invoice"
-msgstr "Rechnung kopieren"
-
-msgid "Add New Invoice"
-msgstr "Neue Rechnung hinzufügen"
-
-#, python-brace-format
-msgid "Edit Invoice \"{0}\""
-msgstr "Rechnung \"{0}\" bearbeiten"
-
-#, python-brace-format
-msgid "Positions ({0})"
-msgstr "Position ({0})"
-
-msgid "No customer assigned"
-msgstr "Kein Kunde zugeordnet"
-
-msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
-msgstr "Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einem Kunden."
-
-msgid "No cost center assigned"
-msgstr "Keine Kostenstelle zugeordnet"
-
-msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
-msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
-
-msgid "Inventory Change"
-msgstr "Bestandsänderung"
-
-msgid "Interval Begins"
-msgstr "Buchungszeitraum Beginn"
-
-msgid "Interval Ends"
-msgstr "Buchungszeitraum Ende"
-
-msgid "Rebilling Invoice..."
-msgstr "Erzeuge Rechnung neu..."
-
-msgid "Rebill Invoice"
-msgstr "Rechnung neu erzeugen"
-
-msgid "Merge Invoices"
-msgstr "Rechnungen zusammenführen"
-
-msgid "Arial"
-msgstr "Arial"
-
-msgid "Active Contracts"
-msgstr "Aktive Verträge"
-
-msgid "Contracts that are still running"
-msgstr "Verträge die noch am laufen sind"
-
-msgid "My Products"
-msgstr "Meine Produkte"
-
-msgid "Products created by me"
-msgstr "Produktdatensätze, die ich angelegt habe"
-
-msgid "My Contracts"
-msgstr "Meine Verträge"
-
-msgid "Contracts created by myself"
-msgstr "Von mir erstellte Aufträge"
-
-msgid "All Customers"
-msgstr "Alle Kunden"
-
-msgid "All customer records"
-msgstr "Datensätze aller Kunden"
-
-msgid "All Offers"
-msgstr "Alle Angebotsdatensätze"
-
-msgid "All offer records"
-msgstr "Alle Angebote"
-
-msgid "Limit to Sales Divisions"
-msgstr "Auf Geschäftsbereiche limitieren"
-
-msgid "Inactive Contracts"
-msgstr "Inaktive Verträge"
-
-msgid "Contracts that have already been terminated"
-msgstr "Verträge die bereits gekündigt sind"
-
-msgid "All Suppliers"
-msgstr "Alle Lieferanten"
-
-msgid "All supplier records"
-msgstr "Alle Lieferanten Datensätze"
-
-msgid "All Purchase Imvoices"
-msgstr "Alle Eingangsrechnungen"
-
-msgid "All purchase invoices"
-msgstr "Alle Eingangsrechnungen"
-
-msgid "All Products"
-msgstr "Alle Produkte"
-
-msgid "All product records"
-msgstr "Alle Produktdatensätze"
-
-msgid "All Contracts"
-msgstr "Alle Verträge"
-
-msgid "All contract records"
-msgstr "Alle Vertragsdatensätze"
-
-msgid "All Invoices"
-msgstr "Alle Rechnungen"
-
-msgid "All invoice records"
-msgstr "Alle Rechnungsdatensätze"
-
-msgid "All Order Confirmations"
-msgstr "Alle Auftragsbestätigungen"
-
-msgid "All order confirmation records"
-msgstr "Alle Auftragsbestätigungsdatensätze"
-
-msgid "Default Division"
-msgstr "Standard Geschäftsbereich"
-
-msgid "Fill with name"
-msgstr "Mit Namen befüllen"
-
-msgid "Fill with address"
-msgstr "Mit Adresse befüllen"
-
-msgid "Fill with postal"
-msgstr "Mit Postleitzahl befüllen"
-
-msgid "Fill with locality"
-msgstr "Mit Stadt befüllen"
-
-msgid "Fill with country"
-msgstr "Mit Land befüllen"
-
-msgid "Fill with contact name"
-msgstr "Mit Kontakt-Namen befüllen"
-
-msgid "Fill with contact email"
-msgstr "Mit Kontakt-Email befüllen"
-
-msgid "Fill with contact phone"
-msgstr "Mit Kontakt-Telefonnummer befüllen"
-
-msgid "Fill with vat number"
-msgstr "Mit Steuernummer befüllen"
-
-msgid "Standard"
-msgstr "Standard"
+msgid "Add, edit and delete divisions"
+msgstr "Hinzufügen, bearbeiten und löschen von Geschäftsbereichen"
 
 msgid "Auto Invoice Contract Interval"
 msgstr "Vertragsintervall automatisch abrechnen"
@@ -959,6 +257,9 @@ msgstr "Vertragsnummer-Validierung"
 msgid "The Number can be validated as text or number."
 msgstr "Die Vertragsnummer kann als Text oder Nummer validiert werden."
 
+msgid "Number"
+msgstr "Nummer"
+
 msgid "Text"
 msgstr "Text"
 
@@ -979,6 +280,14 @@ msgstr "Rechnungstyp"
 
 msgid "Possible Invoice Types."
 msgstr "Mögliche Rechnungstypen."
+
+msgid "Invoice"
+msgid_plural "Invoices"
+msgstr[0] "Rechnung"
+msgstr[1] "Rechnungen"
+
+msgid "Reversal"
+msgstr "Storno"
 
 msgid "Credit"
 msgstr "Gutschrift"
@@ -1006,6 +315,11 @@ msgstr "Summe"
 
 msgid "Document Position Type"
 msgstr "Belegpositionstyp"
+
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Produkt"
+msgstr[1] "Produkte"
 
 msgid "Heading"
 msgstr "Überschrift"
@@ -1151,6 +465,9 @@ msgstr "Schablone für Umkehr der Steuerschuld"
 msgid "Enabled Features in Sales Application."
 msgstr "Feature in der Sales Applikation aktivieren."
 
+msgid "Default Division"
+msgstr "Standard Geschäftsbereich"
+
 msgid "Default Payment Terms"
 msgstr "Standard Zahlungsbedingungen"
 
@@ -1181,28 +498,818 @@ msgstr "Eingangsrechnungsmodul"
 msgid "Legacy (non-document) Offers)"
 msgstr "Angebote (alt, nicht dokumententbaiert)"
 
-msgid "The number you have tried to set is already in use!"
-msgstr "Diese Nummer ist bereits vergeben!"
-
 msgid "Name needs to be unique."
 msgstr "Der Name muss eindeutig sein."
 
 msgid "Dates \""
 msgstr "Daten „"
 
-msgid "GENDER_Order Confirmation"
+msgid "The number you have tried to set is already in use!"
+msgstr "Diese Nummer ist bereits vergeben!"
+
+msgid "You do not have admin rights on Sales"
+msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
+
+msgid "Electronic Address Schema"
+msgid_plural "Electronic Address Schemas"
+msgstr[0] "Elektronisches Adressierungsschema"
+msgstr[1] "Elektronische Adressierungsschemata"
+
+msgid "Divisions"
+msgstr "Geschäftsbereiche"
+
+msgid "Categories"
+msgstr "Kategorien"
+
+msgid "Boilerplate"
+msgid_plural "Boilerplates"
+msgstr[0] "Textbaustein"
+msgstr[1] "Textbausteine"
+
+msgid "No Right to alter the Number"
+msgstr "Keine Berechtigung die Nummer zu verändern"
+
+msgid "You are not allowed to alter the number afterwards!"
+msgstr "Die Nummer kann nachträglich nicht mehr geändert werden!"
+
+msgid "Following Invoices Found"
+msgstr "Nachfolgende Rechnungen gefunden"
+
+msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
+msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
+
+msgid "Address as Billing Address in Use"
+msgstr "Adresse als Rechnungsadresse in Benutzung"
+
+msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
+msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
+
+msgid "Number duplicate"
+msgstr "Mehrfach vergebene Nummer"
+
+msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
+msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld leer, um die nächst freie Nummer zu verwenden."
+
+msgid "Invoice is cleared already"
+msgstr "Rechnung ist bereits gebucht"
+
+msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
+msgstr "Die Rechnung die Sie löschen wollten, ist bereits gebucht und kann nicht mehr gelöscht werden!"
+
+msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
+msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits gebucht und kann nicht weiter bearbeitet werden!"
+
+msgid "Unknown Currency Code"
+msgstr "Unbekannter Währungscode"
+
+msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
+msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
+
+msgid "Excel current columns"
+msgstr "Excel - Aktuelle Spalten"
+
+msgid "Excel all data"
+msgstr "Excel alle Daten"
+
+msgid "Invoice Timesheet"
+msgstr "Rechnungs Timesheet"
+
+msgid "CSV all data"
+msgstr "CSV Alle Daten"
+
+msgid "CLEARED"
+msgstr "GEBUCHT"
+
+msgid "INVOICE"
+msgstr "RECHNUNG"
+
+msgid "You have to set a customer!"
+msgstr "Bitte legen Sei einen Kunden fest!"
+
+msgid "Name shorthand"
+msgstr "Kunden Kürzel"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Apply postal address"
+msgstr "Postanschrift anwenden"
+
+msgid "Street"
+msgstr "Straße"
+
+msgid "Postbox"
+msgstr "Postfach"
+
+msgid "Postalcode"
+msgstr "Postleitzahl"
+
+msgid "Locality"
+msgstr "Ort"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Number Debit"
+msgstr "Debitorennummer"
+
+msgid "Address"
+msgid_plural "Addresss"
+msgstr[0] "Anschrift"
+msgstr[1] "Anschriften"
+
+msgid "Select Debitor"
+msgstr "Debitor auswählen"
+
+msgid "Please select debitor"
+msgstr "Bitte einen Debitor auswählen"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Set as accountable"
+msgstr "Als verantwortlich festlegen"
+
+msgid "Choose product for accountable"
+msgstr "Wählen Sie das Produkt für verantwortlich"
+
+msgid "Please use a decimal number here!"
+msgstr "Bitte benutzen Sie eine Dezimalzahl!"
+
+msgid "Positions"
+msgstr "Positionen"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Customer"
+msgid_plural "Customers"
+msgstr[0] "Kunde"
+msgstr[1] "Kunden"
+
+msgid "Billing Address"
+msgstr "Rechnungsanschrift"
+
+msgid "Start Date"
+msgstr "Anfang"
+
+msgid "End Date"
+msgstr "Ende"
+
+msgid "Contact Person (external)"
+msgstr "Kontaktperson (extern)"
+
+msgid "Contact Person (internal)"
+msgstr "Kontaktperson (intern)"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Enter description..."
+msgstr "Bitte geben Sie eine Beschreibung ein..."
+
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
+
+msgid "without contract"
+msgstr "ohne Vertrag"
+
+msgid "Bill Contract"
+msgstr "Vertrag abrechnen"
+
+msgid "Billing Contract..."
+msgstr "Rechne Vertrag ab..."
+
+#, python-brace-format
+msgid "Bill Contract \"{0} - {1}\""
+msgstr "Vertrag \"{0} - {1}\" abrechnen"
+
+msgid "Select the date to generate the bill for"
+msgstr "Bitte wählen Sie das Datum, zu dem Sie die Rechnung erzeugen möchten"
+
+msgid "Products"
+msgstr "Produkte"
+
+msgid "without customer"
+msgstr "ohne Kunde"
+
+msgid "Show closed"
+msgstr "Geschlossene anzeigen"
+
+msgid "Select customer"
+msgstr "Kunden auswählen"
+
+msgid "Core Data"
+msgstr "Stammdaten"
+
+msgid "Customer Number"
+msgstr "Kundennummer"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Web"
+msgstr "Internet"
+
+msgid "Accounting"
+msgstr "Abrechnung"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "VAT ID"
+msgstr "USt.-ID"
+
+msgid "Currency"
+msgstr "Währung"
+
+msgid "Currency Translation Rate"
+msgstr "Wechselkurs"
+
+msgid "Copy Customer"
+msgstr "Kunden kopieren"
+
+msgid "Add New Customer"
+msgstr "Neuen Kunden hinzufügen"
+
+#, python-brace-format
+msgid "Edit Customer \"{0}\""
+msgstr "Kunden \"{0}\" bearbeiten"
+
+msgid "Copy address to the clipboard"
+msgstr "Adresse in die Zwischenablage kopieren"
+
+msgid "Discount (%)"
+msgstr "Rabatt in Prozent"
+
+msgid "Credit Term (days)"
+msgstr "Zahlungsziel in Tagen"
+
+msgid "Debitors"
+msgstr "Debitoren"
+
+msgid "Postal Address"
+msgstr "Postanschrift"
+
+msgid "Prefix 1"
+msgstr ""
+
+msgid "Prefix 2"
+msgstr ""
+
+msgid "Prefix 3"
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr "Sonstiges"
+
+msgid "Enter description"
+msgstr "Bitte geben Sie eine Beschreibung an"
+
+msgid "Please wait..."
+msgstr "Bitte warten…"
+
+msgid "Confirm Status Change"
+msgstr "Statusübergang bestätigen"
+
+msgid "Changing this workflow status might not be revertible. Proceed anyway?"
+msgstr "Die Änderung des Status im Arbeitsablauf ist ggf. nicht umkehrbar. Trotzdem fortfahren?"
+
+msgid "Change Document Date?"
+msgstr "Belegdatum ändern?"
+
+msgid "Change document date from { date } to today?"
+msgstr "Soll das Belegdatum von { date } auf heute geändert werden?"
+
+msgid "Service Start Extended"
+msgstr "Leistungszeitraum erweitert"
+
+msgid "The service period of the invoice has been extended so that it now includes the service periods of all items."
+msgstr "Der Leistungszeitraum der Rechnung wurde erweitert so dass er nun die Leistungszeiträume aller Positionen beinhaltet."
+
+msgid "No Matching Debitor"
+msgstr "Passender Debitor fehlt"
+
+#, python-brace-format
+msgid "The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category."
+msgstr "Die Kategorie <b>{category}</b> kann nicht ausgewählt werden, da der Kunde <b>{customer}</b> keinen Debitor im Geschäftsbereich <b>{division.title}</b> dieser Kategorie hat."
+
+#, python-brace-format
+msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>."
+msgstr "Der Kunde <b>{customer}</b> kann nicht ausgewählt werden, da er keinen Debitor im Geschäftsbereich <b>{division.title}</b> der Kategorie <b>{category}</b> dieses Dokumentes hat."
+
+msgid "Include to Dispatch Document"
+msgstr "In Belegversandt aufnehmen"
+
+msgid "Exclude from Dispatch Document"
+msgstr "Vom Belegversandt ausschließen"
+
+msgid "Show Dispatch History"
+msgstr "Speichere Beleg-Versandt Historie"
+
+msgid "More Boilerplates"
+msgstr "Weitere Textbausteine"
+
+msgid "Choose Boilerplate"
+msgstr "Textbaustein auswählen"
+
+msgid "Please choose which boilerplate you want to use as { name }"
+msgstr "Bitte wählen sie aus welcher Textbaustein soll als { name } genutzt werden soll"
+
+msgid "Existing:"
+msgstr "Aktuell:"
+
+msgid "Applicable:"
+msgstr "Anwendbar:"
+
+msgid "Book Document"
+msgstr "Beleg buchen"
+
+msgid "Please select the { sourceRecordsName } where you want to change the document date to today."
+msgstr "Bitte wählen die die { sourceRecordsName } bei denen das Belegdatum auf Heute geändert werden soll."
+
+msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"
+msgstr "Konnte { sourceDocument } nicht buchen: ({e.code}) { e.message })"
+
+msgid "There where Errors:"
+msgstr "Diese Fehler sind aufgetreten:"
+
+msgid "Reversals"
+msgstr "Stornos"
+
+msgid "Create { targetRecordName }"
+msgstr "Erstelle { targetRecordName }"
+
+msgid "Creating { targetRecordsName }"
+msgstr "{ targetRecordsName } wird erzeugt"
+
+msgid "Create new { targetRecordName }?"
+msgstr "{ targetRecordName } neu erzeugen?"
+
+msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
+msgstr "Storno { sourceRecordsName } können nicht rückgängig gemacht werden. Wenn sie fortfahren, wird ein neuer { targetRecordName }s-Beleg mit positiven Werten erstellt."
+
+msgid "Book unbooked { sourceRecordsName }"
+msgstr "Ungebuchte { sourceRecordsName } buchen"
+
+msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?"
+msgstr "Die Erstellung von Folge-{ targetRecordsName } ist nur für gebuchte { sourceRecordsName } erlaubt. Ausgewählte { sourceRecordsName } jetzt buchen?"
+
+msgid "Nothing to do"
+msgstr "Nichts zu tun"
+
+msgid "{ document } has no open positions left."
+msgstr "{ document } hat keine übrigen offenen Positionen."
+
+msgid "Choose { sourceRecordsName }"
+msgstr "{ sourceRecordsName } auswählen"
+
+msgid "Please choose which { sourceRecordsName } should be included in shared { targetRecordName }"
+msgstr "Bitte wählen sie welche { sourceRecordsName } in der Sammel-{ targetRecordName } inkludiert werden sollen"
+
+msgid "Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }"
+msgstr "Konnte { targetType } nicht erzeugen: ({e.code}) { e.message })"
+
+msgid "Documents Created:"
+msgstr "Erzeugte Dokumente:"
+
+msgid "Paper Slip"
+msgstr "Papierbeleg"
+
+msgid "eDocument"
+msgstr "eDokument"
+
+msgid "Creating { recordName } { typeName }"
+msgstr "Erzeuge { recordName } { typeName }"
+
+msgid "Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }"
+msgstr "{ typeName } für { recordName } konnte nicht erzeugt werden: { title } ({e.code}) { e.message }"
+
+msgid "Print Paper Slip"
+msgstr "Belegdruck"
+
+msgid "Send by E-Mail"
+msgstr "Als E-Mail senden"
+
+msgid "Set { recordName } dispatched"
+msgstr "Setze { recordName } auf versendet"
+
+msgid "Dispatch Document"
+msgstr "Belegversandt"
+
+msgid "Generated when dispatched"
+msgstr "Wird beim Versandt erzeugt"
+
+msgid "Paperslip ({ filename })"
+msgstr "Papierbeleg ({ filename })"
+
+msgid "eDocument ({ filename })"
+msgstr "eDokument ({ filename })"
+
+msgid "Please Select Files to Dispatch"
+msgstr "Bitte wählen sie die Dateien zum versenden"
+
+msgid "Please select the files which should be dispatched."
+msgstr "Bitte wählen sie die Dateien aus die versendet werden sollen."
+
+msgid "Manual Dispatch"
+msgstr "Manueller versandt"
+
+msgid "Dispatch documents where created, please download and dispatch manually."
+msgstr "Die Dokumente für den Beleg-Versandt wurden erstellt. Bitte laden sie diese herunter und versenden sie diese manuell."
+
+msgid "Generic"
+msgstr "Generell"
+
+msgid "Price"
+msgstr "Preis"
+
+msgid "Discount"
+msgstr "Rabatt"
+
+msgid "Total"
+msgstr "Gesamt"
+
+msgid "Category"
+msgid_plural "Categories"
+msgstr[0] "Kategorie"
+msgstr[1] "Kategorien"
+
+msgid "Send as Email to Datev"
+msgstr "Als E-Mail an Datev senden"
+
+msgid "Select invoice"
+msgstr "Rechnung auswählen"
+
+msgid "Confirm"
+msgstr "Bestätigen"
+
+msgid "Datev email has been sent before , continue anyway?"
+msgstr "Die Datev-E-Mail wurde gesendet, wollen Sie trotzdem fortfahren?"
+
+msgid "Track Document"
+msgstr "Belegverfolgung"
+
+msgid "Trac Document { title }"
+msgstr "Belegverfolgung zu { title }"
+
+msgid "Expand Positions"
+msgstr "Positionen ausklappen"
+
+msgid "Invoice Number"
+msgstr "Rechnungsnummer"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Credit Term"
+msgstr "Zahlungsziel in Tagen"
+
+msgid "Cleared"
+msgstr "Gebucht"
+
+msgid "Price Net"
+msgstr "Nettopreis"
+
+msgid "Taxes (VAT)"
+msgstr "MwSt"
+
+msgid "Price Gross"
+msgstr "Bruttopreis"
+
+msgid "Create Reversal Invoice"
+msgstr "Storno-Rechnung erstellen"
+
+msgid "Copy Invoice"
+msgstr "Rechnung kopieren"
+
+msgid "Add New Invoice"
+msgstr "Neue Rechnung hinzufügen"
+
+#, python-brace-format
+msgid "Edit Invoice \"{0}\""
+msgstr "Rechnung \"{0}\" bearbeiten"
+
+#, python-brace-format
+msgid "Positions ({0})"
+msgstr "Position ({0})"
+
+msgid "No customer assigned"
+msgstr "Kein Kunde zugeordnet"
+
+msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
+msgstr "Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einem Kunden."
+
+msgid "No cost center assigned"
+msgstr "Keine Kostenstelle zugeordnet"
+
+msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
+msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
+
+msgid "Sales Tax (percent)"
+msgstr "MwSt. in Prozent"
+
+msgid "Inventory Change"
+msgstr "Bestandsänderung"
+
+msgid "automatically set..."
+msgstr "automatisch ausgefüllt..."
+
+msgid "Interval Begins"
+msgstr "Buchungszeitraum Beginn"
+
+msgid "Interval Ends"
+msgstr "Buchungszeitraum Ende"
+
+msgid "Rebilling Invoice..."
+msgstr "Erzeuge Rechnung neu..."
+
+msgid "Rebill Invoice"
+msgstr "Rechnung neu erzeugen"
+
+msgid "Merge Invoices"
+msgstr "Rechnungen zusammenführen"
+
+msgid "Export Records from these Positions"
+msgstr "Exportiere Einträge dieser Positionen"
+
+msgid "Add New Offer"
+msgstr "Neues Angebot hinzufügen"
+
+msgid "Add New Order Confirmation"
+msgstr "Neue Auftragsbestätigung hinzufügen"
+
+msgid "Offer"
+msgid_plural "Offers"
+msgstr[0] "Angebot"
+msgstr[1] "Angebote"
+
+msgid "Order Confirmation"
+msgid_plural "Order Confirmations"
+msgstr[0] "Auftragsbestätigung"
+msgstr[1] "Auftragsbestätigungen"
+
+msgid "without order confirmation"
+msgstr "ohne Auftragsbestätigung"
+
+msgid "Quantity"
+msgstr "Anzahl"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Billing Point"
+msgstr "Abrechnungszeitpunkt"
+
+msgid "begin"
+msgstr "Anfang des Intervalls"
+
+msgid "end"
+msgstr "Ende des Intervalls"
+
+msgid "Attributes"
+msgstr "Attribute"
+
+msgid "Last Autobill"
+msgstr "Zuletzt Abgerechnet"
+
+msgid "Creation Time"
+msgstr "Angelegt am"
+
+msgid "Created By"
+msgstr "Angelegt von"
+
+msgid "Last Modified Time"
+msgstr "Letztes Modifikationsdatum"
+
+msgid "Last Modified By"
+msgstr "Zuletzt geändert von"
+
+msgid "Edit Attributes"
+msgstr "Attribute bearbeiten"
+
+msgid "Attribute"
+msgstr "Attribute"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Add a New Value..."
+msgstr "Neuen Wert hinzufügen ..."
+
+msgid "OK"
+msgstr "OK"
+
+#, python-brace-format
+msgid "Selected  {0}"
+msgstr "{0} ausgewählt"
+
+msgid "Accountable"
+msgstr "Rechnet ab"
+
+msgid "Approver"
+msgstr "Genehmigt von"
+
+msgid "without approver"
+msgstr "nicht genehmigt"
+
+msgid "Supplier"
+msgid_plural "Suppliers"
+msgstr[0] "Lieferant"
+msgstr[1] "Lieferanten"
+
+msgid "Total Price"
+msgstr "Gesamtpreis"
+
+msgid "Copy Purchase Invoice"
+msgstr "Eingangsrechnung kopieren"
+
+msgid "Add New Purchase Invoice"
+msgstr "Neue Eingangsrechnung hinzufügen"
+
+#, python-brace-format
+msgid "Edit Purchase Invoice \"{0}\""
+msgstr "Eingangsrechnung \"{0}\" bearbeiten"
+
+msgid "Date of invoice"
+msgstr "Rechnungsdatum"
+
+msgid "Due in"
+msgstr "Fällig in"
+
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+msgid "Additional Price Gross"
+msgstr "Zusätzlicher Bruttopreis"
+
+msgid "Purchase Invoice"
+msgid_plural "Purchase Invoices"
+msgstr[0] "Eingangsrechnung"
+msgstr[1] "Eingangsrechnungen"
+
+msgid "Overdue date"
+msgstr "Überfälligkeits Datum"
+
+msgid "Discount until"
+msgstr "Skonto bis"
+
+msgid "Dun date"
+msgstr "Mahnungsdatum"
+
+msgid "Payed at"
+msgstr "Gezahlt am"
+
+msgid "Method of payment"
+msgstr "Zahlungsart"
+
+msgid "Clipboard"
+msgstr "Zwischenablage"
+
+msgid "Select supplier"
+msgstr "Lieferant auswählen"
+
+msgid "Supplier Number"
+msgstr "Lieferantennummer"
+
+msgid "Either postalcode or postbox is required!"
+msgstr "Bitte geben Sie entweder eine Postleitzahl oder ein Postfach an!"
+
+msgid "Copy Supplier"
+msgstr "Lieferant kopieren"
+
+msgid "Add New Supplier"
+msgstr "Neuen Lieferant hinzufügen"
+
+#, python-brace-format
+msgid "Edit Supplier \"{0}\""
+msgstr "Lieferant \"{0}\" bearbeiten"
+
+msgid "Prefix"
+msgstr "Zusatz"
+
+msgid "Additional Prefix"
+msgstr "Weiterer Zusatz"
+
+msgid "without supplier"
+msgstr "ohne Lieferant"
+
+msgid "GENDER_Address"
 msgstr "female"
 
-msgid "Invoice Position"
-msgid_plural "Invoice Positions"
-msgstr[0] "Rechnungsposition"
-msgstr[1] "Rechnungspositionen"
+msgid "Debitor Number"
+msgstr "Debitorennummer"
 
-msgid "Month"
-msgstr "Monat"
+msgid "Customer Name"
+msgstr "Kundenname"
 
-msgid "Unit"
-msgstr "Einheit"
+msgid "Company / Organisation (Prefix 1)"
+msgstr "Firma / Organisation (Zusatz 1)"
+
+msgid "Unit (Prefix 2)"
+msgstr "Abteilung (Zusatz 2)"
+
+msgid "Recipient Name (Prefix 3)"
+msgstr "Name des Empfangenden (Zusatz 3)"
+
+msgid "Invoice Item"
+msgstr "Rechnungsposten"
+
+msgid "Model"
+msgstr "Belegart"
+
+msgid "From"
+msgstr "Von"
+
+msgid "Until"
+msgstr "Bis"
+
+msgid "GENDER_Contract"
+msgstr "male"
+
+msgid "Responsible"
+msgstr "Verantwortlicher"
+
+msgid "Partner"
+msgstr "Partner"
+
+msgid "Time Account"
+msgstr "Zeitkonto"
+
+msgid "GENDER_Customer"
+msgstr "male"
+
+msgid "Has Offers"
+msgstr "Hat Angebote"
+
+msgid "Has Orders"
+msgstr "Hat Aufträge"
+
+msgid "Has Invoices"
+msgstr "Hat Rechnungen"
+
+msgid "Has Deliveries"
+msgstr "Hat Lieferungen"
+
+msgid "VAT Procedure"
+msgstr "Mehrwertsteuer-Verfahren"
+
+msgid "GENDER_Debitor"
+msgstr "male"
+
+msgid "Debitor"
+msgid_plural "Debitors"
+msgstr[0] "Debitor"
+msgstr[1] "Debitoren"
+
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Geschäftsbereich"
+msgstr[1] "Geschäftsbereiche"
+
+msgid "Delivery Addresses"
+msgstr "Lieferanschriften"
+
+msgid "Billing Addresses"
+msgstr "Rechnungsanschriften"
+
+msgid "Buyer Reference"
+msgstr "Kundenreferenz / Leitweg-ID"
+
+msgid "Electronic Invoice Type"
+msgstr "Elektronischer Rechnungstyp"
+
+msgid "Electronic Invoice Config"
+msgstr "Elektronische Rechnungskonfiguration"
+
+msgid "Electronic Address"
+msgstr "Elektronische Adresse"
+
+msgid "Electronic Document Transport Method"
+msgstr "Elektronische Dokumenten Übertragungsmethode"
+
+msgid "Bank Account"
+msgstr "Bankkonto"
+
+msgid "GENDER_Division"
+msgstr "female"
 
 msgid "Read Debitors"
 msgstr "Debitoren lesen"
@@ -1270,119 +1377,188 @@ msgstr "Verwaltung"
 msgid "The grant to administrate this division (implies all other grants and the grant to set grants as well)."
 msgstr "Die Berechtigung diesen Geschäftsbereiches zu verwalten (beinhaltet alle anderen Berechtigungen)"
 
-msgid "GENDER_Offer"
+msgid "Address Prefix 1"
+msgstr "Adress Präfix 1"
+
+msgid "Address Prefix 2"
+msgstr "Adress Präfix 2"
+
+msgid "Address Prefix 3"
+msgstr "Adress Präfix 3"
+
+msgid "Address Postal Code"
+msgstr "Adress Postleitzahl"
+
+msgid "Address Region"
+msgstr "Adress Region"
+
+msgid "Address Locality"
+msgstr "Adress Stadt"
+
+msgid "Address Country"
+msgstr "Adress Land"
+
+msgid "Contact Name"
+msgstr "Kontakt Name"
+
+msgid "Contact EMail"
+msgstr "Kontakt E-Mail"
+
+msgid "Contact Phone"
+msgstr "Kontakt Telefon"
+
+msgid "Tax Registration Id"
+msgstr "Steuernummer"
+
+msgid "VAT Number"
+msgstr "Umsatzsteuer Nummer"
+
+msgid "Bank Accounts"
+msgstr "Bankkonten"
+
+msgid "Document"
+msgid_plural "Documents"
+msgstr[0] "Beleg"
+msgstr[1] "Belege"
+
+msgid "GENDER_Document"
+msgstr "male"
+
+msgid "Document Number"
+msgstr "Belegnummer"
+
+msgid "Boilerplates"
+msgstr "Textbausteine"
+
+msgid "Document Date"
+msgstr "Belegdatum"
+
+msgid "Service Period Start"
+msgstr "Leistungszeitraum Start"
+
+msgid "Service Period End"
+msgstr "Leistungszeitraum Ende"
+
+msgid "Recipient"
+msgstr "Empfänger"
+
+msgid "Reference Person"
+msgstr "Ansprechpartner"
+
+msgid "Positions Net Sum"
+msgstr "Zwischensumme (netto)"
+
+msgid "Positions Gross Sum"
+msgstr "Zwischensumme (brutto)"
+
+msgid "Positions Discount Sum"
+msgstr "Positionsrabatt Summe"
+
+msgid "Invoice Discount Percentage"
+msgstr "Rechnungsrabatt Prozentsatz"
+
+msgid "Invoice Discount Sum"
+msgstr "Rechnungsrabatt Summe"
+
+msgid "Net Sum"
+msgstr "Netto"
+
+msgid "Sales Tax"
+msgstr "Mehrwertsteuer"
+
+msgid "Sales Tax by Rate"
+msgstr "MwSt nach Satz"
+
+msgid "Gross Sum"
+msgstr "Endbetrag"
+
+msgid "Internal Note"
+msgstr "Interne Notiz"
+
+msgid "Project Reference"
+msgstr "Projektkennung"
+
+msgid "Purchase Order Reference"
+msgstr "Bestellnummer"
+
+msgid "Attached Documents"
+msgstr "Angehängte Dokumente"
+
+msgid "GENDER_Attached Document"
 msgstr "other"
 
-msgid "GTIN"
-msgstr "GTIN"
+msgid "Attached Document"
+msgid_plural "Attached Documents"
+msgstr[0] "Angehängtes Dokument"
+msgstr[1] "Angehängte Dokumente"
 
-msgid "Shortcut"
-msgstr "Kürzel"
+msgid "Created for Version"
+msgstr "Erzeugt für Version"
 
-msgid "Default Grouping"
-msgstr "Standard Gruppierung"
-
-msgid "Default Sorting"
-msgstr "Standard Sortierung"
-
-msgid "Purchaseprice"
-msgstr "Einkaufspreis"
-
-msgid "Salesprice Type"
-msgstr "Verkaufspreistyp"
-
-msgid "Salesprice"
-msgstr "Verkaufspreis"
-
-msgid "Sales Tax Rate"
-msgstr "Mehrwertsteuersatz"
-
-msgid "Manufacturer"
-msgstr "Hersteller"
-
-msgid "Subproducts"
-msgstr "Subprodukte"
-
-msgid "Is Sales Product"
-msgstr "Ist ein Verkaufsprodukt"
-
-msgid "Is active"
-msgstr "Ist aktiv"
-
-msgid "Valid from"
-msgstr "Gültig ab"
-
-msgid "Valid until"
-msgstr "Gültig bis"
-
-msgid "GENDER_Subproduct"
-msgstr "other"
-
-msgid "Subproduct"
-msgid_plural "Subproducts"
-msgstr[0] "Subprodukt"
-msgstr[1] "Subprodukte"
-
-msgid "Variable Position Flag"
-msgstr "Position ist variabel"
-
-msgid "Amount"
-msgstr "Anzahl"
-
-msgid "Sorting"
-msgstr "Sortierung"
-
-msgid "GENDER_Address"
-msgstr "female"
-
-msgid "Debitor Number"
-msgstr "Debitorennummer"
-
-msgid "Customer Name"
-msgstr "Kundenname"
-
-msgid "Company / Organisation (Prefix 1)"
-msgstr "Firma / Organisation (Zusatz 1)"
-
-msgid "Unit (Prefix 2)"
-msgstr "Abteilung (Zusatz 2)"
-
-msgid "Recipient Name (Prefix 3)"
-msgstr "Name des Empfangenden (Zusatz 3)"
-
-msgid "Invoice Item"
-msgstr "Rechnungsposten"
-
-msgid "Billing Interval"
-msgstr "Mtl. Abrechnungsintervall (variabel)"
-
-msgid "XRechnung"
-msgid_plural "XRechnungen"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_XRechnung"
-msgstr "female"
-
-msgid "GENDER_Electronic Address Schema"
-msgstr "other"
-
-msgid "Code"
-msgstr ""
-
-msgid "Remark"
-msgstr "Anmerkung"
+msgid "Dispatch History"
+msgstr "Belegversandt Historie"
 
 msgid "GENDER_Category"
 msgstr "female"
 
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "Geschäftsbereich"
-msgstr[1] "Geschäftsbereiche"
+msgid "GENDER_Delivery"
+msgstr "female"
+
+msgid "Delivery"
+msgid_plural "Deliveries"
+msgstr[0] "Lieferung"
+msgstr[1] "Lieferungen"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Proforma Number"
+msgstr "Proforma Nummer"
+
+msgid "PD-"
+msgstr "PL-"
+
+msgid "Shared Document"
+msgstr "Sammelbeleg"
+
+msgid "DN-"
+msgstr "LS-"
+
+msgid "GENDER_Dispatch Report"
+msgstr ""
+
+msgid "Dispatch Report"
+msgid_plural "Dispatch Reports"
+msgstr[0] "Belegversandt Report"
+msgstr[1] "Belegversandt Reports"
+
+msgid "Dispatch Date"
+msgstr "Belegversandt Datum"
+
+msgid "Dispatch Transport Method"
+msgstr "Belegversandt Transport Methode"
+
+msgid "GENDER_Invoice"
+msgstr "female"
+
+msgid "PI-"
+msgstr "PR-"
+
+msgid "Last Datev send date"
+msgstr "Letztes Datev Sende-Datum"
+
+msgid "IN-"
+msgstr "RE-"
+
+msgid "Payable immediately without deduction."
+msgstr "Zahlbar sofort ohne Abzug"
+
+#, python-brace-format
+msgid "Payable within {days} days without deduction."
+msgstr "Zahlbar innerhalb {days} Tagen ohne Abzug."
+
+msgid "GENDER_Offer"
+msgstr "other"
 
 msgid "Order Created"
 msgstr "Auftrag erstellt"
@@ -1434,247 +1610,152 @@ msgstr "Einer Sammelrechnung hinzufügen"
 msgid "OR-"
 msgstr "AU-"
 
-msgid "Document"
-msgid_plural "Documents"
-msgstr[0] "Beleg"
-msgstr[1] "Belege"
+msgid "Position"
+msgid_plural "Positions"
+msgstr[0] "Position"
+msgstr[1] "Positionen"
 
-msgid "GENDER_Document"
-msgstr "male"
+msgid "GENDER_Position"
+msgstr "female"
 
-msgid "Document Number"
-msgstr "Belegnummer"
+msgid "Pos."
+msgstr "Pos."
 
-msgid "Boilerplates"
-msgstr "Textbausteine"
+msgid "Grouping"
+msgstr "Gruppierung"
 
-msgid "Document Date"
-msgstr "Belegdatum"
+msgid "Sorting"
+msgstr "Sortierung"
 
-msgid "Service Period Start"
-msgstr "Leistungszeitraum Start"
+msgid "Product / Service"
+msgstr "Produkt / Service"
 
-msgid "Service Period End"
-msgstr "Leistungszeitraum Ende"
+msgid "Use Actual Quantity"
+msgstr "Tatsächliche Anzahl nutzen"
 
-msgid "Buyer Reference"
-msgstr "Kundenreferenz / Leitweg-ID"
+msgid "Unit"
+msgstr "Einheit"
 
-msgid "Debitor"
-msgid_plural "Debitors"
-msgstr[0] "Debitor"
-msgstr[1] "Debitoren"
+msgid "Unit Price"
+msgstr "Einzelpreis"
 
-msgid "Recipient"
-msgstr "Empfänger"
+msgid "Position Discount Type"
+msgstr "Positionsrabatt Typ"
 
-msgid "Reference Person"
-msgstr "Ansprechpartner"
+msgid "Position Discount Percentage"
+msgstr "Positionsrabatt Prozentsatz"
 
-msgid "Positions Net Sum"
-msgstr "Zwischensumme (netto)"
-
-msgid "Positions Gross Sum"
-msgstr "Zwischensumme (brutto)"
-
-msgid "Positions Discount Sum"
+msgid "Position Discount Sum"
 msgstr "Positionsrabatt Summe"
 
-msgid "Invoice Discount Percentage"
-msgstr "Rechnungsrabatt Prozentsatz"
+msgid "Net price"
+msgstr "Nettopreis"
 
-msgid "Invoice Discount Sum"
-msgstr "Rechnungsrabatt Summe"
+msgid "Sales Tax Rate"
+msgstr "Mehrwertsteuersatz"
 
-msgid "Net Sum"
-msgstr "Netto"
+msgid "Gross Price"
+msgstr "Bruttopreis"
 
-msgid "VAT Procedure"
-msgstr "Mehrwertsteuer-Verfahren"
+msgid "Delivery Position"
+msgid_plural "Delivery Positions"
+msgstr[0] "Lieferposition"
+msgstr[1] "Lieferpositionen"
 
-msgid "Sales Tax"
-msgstr "Mehrwertsteuer"
-
-msgid "Sales Tax by Rate"
-msgstr "MwSt nach Satz"
-
-msgid "Gross Sum"
-msgstr "Endbetrag"
-
-msgid "Internal Note"
-msgstr "Interne Notiz"
-
-msgid "Project Reference"
-msgstr "Projektkennung"
-
-msgid "Purchase Order Reference"
-msgstr "Bestellnummer"
-
-msgid "Attached Documents"
-msgstr "Angehängte Dokumente"
-
-msgid "GENDER_Delivery"
+msgid "GENDER_Delivery Position"
 msgstr "female"
 
-msgid "Delivery"
-msgid_plural "Deliveries"
-msgstr[0] "Lieferung"
-msgstr[1] "Lieferungen"
+msgid "Invoice Position"
+msgid_plural "Invoice Positions"
+msgstr[0] "Rechnungsposition"
+msgstr[1] "Rechnungspositionen"
 
-msgid "Proforma Number"
-msgstr "Proforma Nummer"
-
-msgid "PD-"
-msgstr "PL-"
-
-msgid "Shared Document"
-msgstr "Sammelbeleg"
-
-msgid "DN-"
-msgstr "LS-"
-
-msgid "GENDER_Dispatch Report"
-msgstr ""
-
-msgid "Dispatch Report"
-msgid_plural "Dispatch Reports"
-msgstr[0] "Belegversandt Report"
-msgstr[1] "Belegversandt Reports"
-
-msgid "Dispatch Date"
-msgstr "Belegversandt Datum"
-
-msgid "Dispatch Transport Method"
-msgstr "Belegversandt Transport Methode"
-
-msgid "GENDER_Invoice"
+msgid "GENDER_Invoice Position"
 msgstr "female"
 
-msgid "PI-"
-msgstr "PR-"
+msgid "Offer Position"
+msgid_plural "Offer Positions"
+msgstr[0] "Angebotsposition"
+msgstr[1] "Angebotspositionen"
 
-msgid "Last Datev send date"
-msgstr "Letztes Datev Sende-Datum"
+msgid "GENDER_Offer Position"
+msgstr "female"
 
-msgid "IN-"
-msgstr "RE-"
+msgid "Order Position"
+msgid_plural "Order Positions"
+msgstr[0] "Auftragsposition"
+msgstr[1] "Auftragspositionen"
 
-msgid "Payable immediately without deduction."
-msgstr "Zahlbar sofort ohne Abzug"
+msgid "GENDER_Order Position"
+msgstr "female"
 
-#, python-brace-format
-msgid "Payable within {days} days without deduction."
-msgstr "Zahlbar innerhalb {days} Tagen ohne Abzug."
-
-msgid "GENDER_Attached Document"
+msgid "GENDER_Electronic Address Schema"
 msgstr "other"
 
-msgid "Attached Document"
-msgid_plural "Attached Documents"
-msgstr[0] "Angehängtes Dokument"
-msgstr[1] "Angehängte Dokumente"
+msgid "Code"
+msgstr ""
 
-msgid "Created for Version"
-msgstr "Erzeugt für Version"
+msgid "Remark"
+msgstr "Anmerkung"
 
-msgid "Dispatch History"
-msgstr "Belegversandt Historie"
+msgid "XRechnung"
+msgid_plural "XRechnungen"
+msgstr[0] ""
+msgstr[1] ""
 
-msgid "GENDER_Division"
+msgid "GENDER_XRechnung"
 msgstr "female"
-
-msgid "Address Prefix 1"
-msgstr "Adress Präfix 1"
-
-msgid "Address Prefix 2"
-msgstr "Adress Präfix 2"
-
-msgid "Address Prefix 3"
-msgstr "Adress Präfix 3"
-
-msgid "Address Postal Code"
-msgstr "Adress Postleitzahl"
-
-msgid "Address Region"
-msgstr "Adress Region"
-
-msgid "Address Locality"
-msgstr "Adress Stadt"
-
-msgid "Address Country"
-msgstr "Adress Land"
-
-msgid "Contact Name"
-msgstr "Kontakt Name"
-
-msgid "Contact EMail"
-msgstr "Kontakt E-Mail"
-
-msgid "Contact Phone"
-msgstr "Kontakt Telefon"
-
-msgid "Tax Registration Id"
-msgstr "Steuernummer"
-
-msgid "VAT Number"
-msgstr "Umsatzsteuer Nummer"
-
-msgid "Bank Accounts"
-msgstr "Bankkonten"
-
-msgid "Electronic Address"
-msgstr "Elektronische Adresse"
-
-msgid "GENDER_Customer"
-msgstr "male"
-
-msgid "Has Offers"
-msgstr "Hat Angebote"
-
-msgid "Has Orders"
-msgstr "Hat Aufträge"
-
-msgid "Has Invoices"
-msgstr "Hat Rechnungen"
-
-msgid "Has Deliveries"
-msgstr "Hat Lieferungen"
 
 msgid "Reversal Invoice"
 msgstr "Storno-Rechnung"
 
-msgid "GENDER_Supplier"
-msgstr "male"
+msgid "Month"
+msgstr "Monat"
 
-msgid "GENDER_Debitor"
-msgstr "male"
+msgid "GENDER_Order Confirmation"
+msgstr "female"
 
-msgid "Delivery Addresses"
-msgstr "Lieferanschriften"
+msgid "Billing Interval"
+msgstr "Mtl. Abrechnungsintervall (variabel)"
 
-msgid "Billing Addresses"
-msgstr "Rechnungsanschriften"
+msgid "GTIN"
+msgstr "GTIN"
 
-msgid "Electronic Invoice Type"
-msgstr "Elektronischer Rechnungstyp"
+msgid "Shortcut"
+msgstr "Kürzel"
 
-msgid "Electronic Invoice Config"
-msgstr "Elektronische Rechnungskonfiguration"
+msgid "Default Grouping"
+msgstr "Standard Gruppierung"
 
-msgid "Electronic Document Transport Method"
-msgstr "Elektronische Dokumenten Übertragungsmethode"
+msgid "Default Sorting"
+msgstr "Standard Sortierung"
 
-msgid "Model"
-msgstr "Belegart"
+msgid "Purchaseprice"
+msgstr "Einkaufspreis"
 
-msgid "From"
-msgstr "Von"
+msgid "Salesprice Type"
+msgstr "Verkaufspreistyp"
 
-msgid "Until"
-msgstr "Bis"
+msgid "Salesprice"
+msgstr "Verkaufspreis"
 
-msgid "Bank Account"
-msgstr "Bankkonto"
+msgid "Manufacturer"
+msgstr "Hersteller"
+
+msgid "Subproducts"
+msgstr "Subprodukte"
+
+msgid "Is Sales Product"
+msgstr "Ist ein Verkaufsprodukt"
+
+msgid "Is active"
+msgstr "Ist aktiv"
+
+msgid "Valid from"
+msgstr "Gültig ab"
+
+msgid "Valid until"
+msgstr "Gültig bis"
 
 msgid "Due at"
 msgstr "Fällig am"
@@ -1694,100 +1775,130 @@ msgstr "Gemahnt am"
 msgid "Is approved"
 msgstr "Ist Freigegeben"
 
-msgid "GENDER_Contract"
+msgid "GENDER_Subproduct"
+msgstr "other"
+
+msgid "Subproduct"
+msgid_plural "Subproducts"
+msgstr[0] "Subprodukt"
+msgstr[1] "Subprodukte"
+
+msgid "Variable Position Flag"
+msgstr "Position ist variabel"
+
+msgid "Amount"
+msgstr "Anzahl"
+
+msgid "GENDER_Supplier"
 msgstr "male"
 
-msgid "Responsible"
-msgstr "Verantwortlicher"
+msgid "My Products"
+msgstr "Meine Produkte"
 
-msgid "Partner"
-msgstr "Partner"
+msgid "Products created by me"
+msgstr "Produktdatensätze, die ich angelegt habe"
 
-msgid "Time Account"
-msgstr "Zeitkonto"
+msgid "My Contracts"
+msgstr "Meine Verträge"
 
-msgid "Offer Position"
-msgid_plural "Offer Positions"
-msgstr[0] "Angebotsposition"
-msgstr[1] "Angebotspositionen"
+msgid "Contracts created by myself"
+msgstr "Von mir erstellte Aufträge"
 
-msgid "GENDER_Offer Position"
-msgstr "female"
+msgid "All Customers"
+msgstr "Alle Kunden"
 
-msgid "Order Position"
-msgid_plural "Order Positions"
-msgstr[0] "Auftragsposition"
-msgstr[1] "Auftragspositionen"
+msgid "All customer records"
+msgstr "Datensätze aller Kunden"
 
-msgid "GENDER_Order Position"
-msgstr "female"
+msgid "All Offers"
+msgstr "Alle Angebotsdatensätze"
 
-msgid "Position"
-msgid_plural "Positions"
-msgstr[0] "Position"
-msgstr[1] "Positionen"
+msgid "All offer records"
+msgstr "Alle Angebote"
 
-msgid "GENDER_Position"
-msgstr "female"
+msgid "Limit to Sales Divisions"
+msgstr "Auf Geschäftsbereiche limitieren"
 
-msgid "Pos."
-msgstr "Pos."
+msgid "Inactive Contracts"
+msgstr "Inaktive Verträge"
 
-msgid "Grouping"
-msgstr "Gruppierung"
+msgid "Contracts that have already been terminated"
+msgstr "Verträge die bereits gekündigt sind"
 
-msgid "Product / Service"
-msgstr "Produkt / Service"
+msgid "Active Contracts"
+msgstr "Aktive Verträge"
 
-msgid "Use Actual Quantity"
-msgstr "Tatsächliche Anzahl nutzen"
+msgid "Contracts that are still running"
+msgstr "Verträge die noch am laufen sind"
 
-msgid "Unit Price"
-msgstr "Einzelpreis"
+msgid "All Suppliers"
+msgstr "Alle Lieferanten"
 
-msgid "Position Discount Type"
-msgstr "Positionsrabatt Typ"
+msgid "All supplier records"
+msgstr "Alle Lieferanten Datensätze"
 
-msgid "Position Discount Percentage"
-msgstr "Positionsrabatt Prozentsatz"
+msgid "All Purchase Imvoices"
+msgstr "Alle Eingangsrechnungen"
 
-msgid "Position Discount Sum"
-msgstr "Positionsrabatt Summe"
+msgid "All purchase invoices"
+msgstr "Alle Eingangsrechnungen"
 
-msgid "Net price"
-msgstr "Nettopreis"
+msgid "All Products"
+msgstr "Alle Produkte"
 
-msgid "Gross Price"
-msgstr "Bruttopreis"
+msgid "All product records"
+msgstr "Alle Produktdatensätze"
 
-msgid "Delivery Position"
-msgid_plural "Delivery Positions"
-msgstr[0] "Lieferposition"
-msgstr[1] "Lieferpositionen"
+msgid "All Contracts"
+msgstr "Alle Verträge"
 
-msgid "GENDER_Delivery Position"
-msgstr "female"
+msgid "All contract records"
+msgstr "Alle Vertragsdatensätze"
 
-msgid "GENDER_Invoice Position"
-msgstr "female"
+msgid "All Invoices"
+msgstr "Alle Rechnungen"
 
-msgid "CLEARED"
-msgstr "GEBUCHT"
+msgid "All invoice records"
+msgstr "Alle Rechnungsdatensätze"
 
-msgid "INVOICE"
-msgstr "RECHNUNG"
+msgid "All Order Confirmations"
+msgstr "Alle Auftragsbestätigungen"
 
-msgid "Excel all data"
-msgstr "Excel alle Daten"
+msgid "All order confirmation records"
+msgstr "Alle Auftragsbestätigungsdatensätze"
 
-msgid "Excel current columns"
-msgstr "Excel - Aktuelle Spalten"
+msgid "Fill with name"
+msgstr "Mit Namen befüllen"
 
-msgid "Invoice Timesheet"
-msgstr "Rechnungs Timesheet"
+msgid "Fill with address"
+msgstr "Mit Adresse befüllen"
 
-msgid "CSV all data"
-msgstr "CSV Alle Daten"
+msgid "Fill with postal"
+msgstr "Mit Postleitzahl befüllen"
+
+msgid "Fill with locality"
+msgstr "Mit Stadt befüllen"
+
+msgid "Fill with country"
+msgstr "Mit Land befüllen"
+
+msgid "Fill with contact name"
+msgstr "Mit Kontakt-Namen befüllen"
+
+msgid "Fill with contact email"
+msgstr "Mit Kontakt-Email befüllen"
+
+msgid "Fill with contact phone"
+msgstr "Mit Kontakt-Telefonnummer befüllen"
+
+msgid "Fill with vat number"
+msgstr "Mit Steuernummer befüllen"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Arial"
+msgstr "Arial"
 
 msgid "Can't create eDocument (XRechnungs) view. Possible reasons:"
 msgstr "eDokument (XRechnung) kann nicht angezeigt werden. Mögliche Gründe:"
@@ -1800,114 +1911,3 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
-
-msgid "No Right to alter the Number"
-msgstr "Keine Berechtigung die Nummer zu verändern"
-
-msgid "You are not allowed to alter the number afterwards!"
-msgstr "Die Nummer kann nachträglich nicht mehr geändert werden!"
-
-msgid "Invoice is cleared already"
-msgstr "Rechnung ist bereits gebucht"
-
-msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
-msgstr "Die Rechnung die Sie löschen wollten, ist bereits gebucht und kann nicht mehr gelöscht werden!"
-
-msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
-msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits gebucht und kann nicht weiter bearbeitet werden!"
-
-msgid "Following Invoices Found"
-msgstr "Nachfolgende Rechnungen gefunden"
-
-msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
-msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
-
-msgid "Number duplicate"
-msgstr "Mehrfach vergebene Nummer"
-
-msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
-msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld leer, um die nächst freie Nummer zu verwenden."
-
-msgid "Unknown Currency Code"
-msgstr "Unbekannter Währungscode"
-
-msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
-msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
-
-msgid "Address as Billing Address in Use"
-msgstr "Adresse als Rechnungsadresse in Benutzung"
-
-msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
-msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
-
-msgid "Manage Products"
-msgstr "Produkte Verwalten"
-
-msgid "Add, edit and delete products."
-msgstr "Hinzufügen, editieren und löschen von Produkten."
-
-msgid "Manage Contracts"
-msgstr "Verträge Verwalten"
-
-msgid "Add, edit and delete contracts."
-msgstr "Verträge hinzufügen, bearbeiten und löschen."
-
-msgid "Manage Cost Centers"
-msgstr "Kostenstellen Verwalten"
-
-msgid "Add, edit and delete cost centers."
-msgstr "Kostenstellen hinzufügen, bearbeiten und löschen."
-
-msgid "Manage Customers"
-msgstr "Kunden Verwalten"
-
-msgid "Add, edit and delete customers."
-msgstr "Kunden hinzufügen, bearbeiten und löschen."
-
-msgid "Manage Suppliers"
-msgstr "Lieferanten Verwalten"
-
-msgid "Add, edit and delete suppliers."
-msgstr "Lieferanten hinzufügen, editieren oder entfernen."
-
-msgid "manage invoices"
-msgstr "Rechungen verwalten"
-
-msgid "Add, edit and delete invoices."
-msgstr "Rechnungen hinzufügen, bearbeiten und löschen."
-
-msgid "Manage Order Confirmations"
-msgstr "Auftragsbestätigungen Verwalten"
-
-msgid "Add, edit and delete order confirmations."
-msgstr "Auftragsbestätigungen hinzufügen, bearbeiten und löschen."
-
-msgid "Manage Offers"
-msgstr "Angebote Verwalten"
-
-msgid "Add, edit and delete offers."
-msgstr "Angebote hinzufügen, bearbeiten und löschen."
-
-msgid "Manage Purchase Invoices"
-msgstr "Eingangsrechnungen Verwalten"
-
-msgid "Add, edit and delete purchase invoices."
-msgstr "Eingangsrechnungen hinzufügen, editieren oder entfernen."
-
-msgid "Change number of an order confirmations"
-msgstr "Nummer einer Auftragsbestätigung ändern"
-
-msgid "Allow changing the number of an order confirmation during the update."
-msgstr "Änderung der Nummer einer Auftragsbestätigung beim Update erlauben."
-
-msgid "Set number of invoices"
-msgstr "Rechnungsnummer manuell vergeben"
-
-msgid "Allow to set the number of an invoice."
-msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben."
-
-msgid "Manage Divisions"
-msgstr "Geschäftsbereiche Verwalten"
-
-msgid "Add, edit and delete divisions"
-msgstr "Hinzufügen, bearbeiten und löschen von Geschäftsbereichen"

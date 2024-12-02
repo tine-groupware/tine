@@ -13,88 +13,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "All my projects"
+msgid "Manage shared project favorites"
 msgstr ""
 
-msgid "Default Favorite"
-msgstr ""
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr ""
-
-msgid "Attendee"
-msgstr ""
-
-msgid "Role"
-msgstr ""
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Enter description"
-msgstr ""
-
-msgid "Please choose the Project to add the contacts to"
-msgstr ""
-
-msgid "Please select the attenders' role"
-msgstr ""
-
-msgid "Select Project"
-msgstr ""
-
-msgid "Select Role"
-msgstr ""
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr ""
-
-msgid "Attendee Role"
-msgstr ""
-
-msgid "Projects"
-msgstr ""
-
-msgid "All my open projects"
-msgstr ""
-
-msgid "My projects that I'm responsible for"
-msgstr ""
-
-msgid "All my open projects that I am responsible for"
-msgstr ""
-
-msgid "My waiting projects"
-msgstr ""
-
-msgid "My projects that are on hold"
+msgid "Create new shared project favorites"
 msgstr ""
 
 msgid "Available Project Attendee Role"
@@ -148,6 +70,69 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr ""
+
+msgid "Please select the attenders' role"
+msgstr ""
+
+msgid "Select Project"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Select Role"
+msgstr ""
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr ""
+
+msgid "Attendee"
+msgstr ""
+
+msgid "Attendee Role"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Enter description"
+msgstr ""
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] ""
@@ -159,14 +144,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "All my projects"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Default Favorite"
 msgstr ""
 
-msgid "Manage shared project favorites"
+msgid "The default favorite which is loaded on Projects startup"
 msgstr ""
 
-msgid "Create new shared project favorites"
+msgid "All my open projects"
+msgstr ""
+
+msgid "My projects that I'm responsible for"
+msgstr ""
+
+msgid "All my open projects that I am responsible for"
+msgstr ""
+
+msgid "My waiting projects"
+msgstr ""
+
+msgid "My projects that are on hold"
+msgstr ""
+
+msgid "Projects"
 msgstr ""

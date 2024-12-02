@@ -9,1377 +9,44 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 12:18+0000\n"
 "Last-Translator: Enri Mullai <enri_mullai@albnet.net>, 2013\n"
 "Language-Team: Albanian (http://app.transifex.com/tine/groupware/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal calendar"
-msgstr "Kalendari perosnal i %s"
+msgid "manage shared calendars"
+msgstr "menaxho kalendarët e ndarë"
 
-msgid "Resources"
-msgstr "Burime"
+msgid "Create new shared calendars"
+msgstr "Krijo kalendarë të rinj të ndarë"
 
-msgid "Event Types"
+msgid "manage shared calendars favorites"
+msgstr "menaxho preferencalet e kalendarëve të ndarë"
+
+msgid "Create or update shared calendars favorites"
+msgstr "Krijo ose përditëso preferencialet e kalendarëve të ndarë"
+
+msgid "manage resources"
+msgstr "menaxho burimet"
+
+msgid "All Rights to administrate resources"
+msgstr "Të gjithë të drejtat për administrimin e burimeve"
+
+msgid "manage event types"
 msgstr ""
 
-msgid "All my events"
-msgstr "Të gjitha ngjarjet e mia"
-
-msgid "Start Time"
-msgstr "Koha e fillimit"
-
-msgid "Position on the left time axis, day and week view should start with"
-msgstr "Pozicioni i krahut të majte kohor, pamja e ditës dhe javës duhet të fillojë me  "
-
-msgid "End Time"
-msgstr "Koha e mbarimit"
-
-msgid "Position on the left time axis, day and week view should end with"
+msgid "The Right to manage event types"
 msgstr ""
 
-msgid "Default Start Time"
-msgstr ""
-
-msgid "Scroll position on the left time axis, day and week view should start with"
-msgstr ""
-
-msgid "Visible Time"
-msgstr ""
-
-msgid "Time to be displayed at once"
-msgstr ""
-
-msgid "Default Calendar"
-msgstr "Kalendari i paracaktuar"
-
-msgid "The default calendar for invitations and new events"
-msgstr "Kalendari i paracaktuar për ftesa dhe ngjarje të reja"
-
-msgid "Default Favorite"
-msgstr "Të preferuarat e Paracaktuara"
-
-msgid "The default favorite which is loaded on calendar startup"
-msgstr "E preferuara e paracaktuar që ngarkohet në nisje të kalendarit"
-
-msgid "Web Event Title Template"
-msgstr ""
-
-msgid "How to build event titles in web ui."
-msgstr ""
-
-msgid "Get Notification Emails"
-msgstr "Merr E-Postë njoftuese"
-
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Niveli i veprimeve që ju doni të njoftoheni. Ju lutem kini parasysh që organizuesit do të marrin njoftimpër të gjithë përditësimet, përfshirë edhe përgjigjet e vijuesëve, derisa kjo preferncë të jetë vendosur në \"Never\""
-
-msgid "Send Notifications Emails of own Actions"
-msgstr "Dërgo E-Postë njoftuese për Veprimet vetjake"
-
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Dërgo E-Postë njoftuese për veprimet që bëre vetë"
-
-msgid "Send Notifications Emails of tentative events"
-msgstr ""
-
-msgid "Get notifications emails of tentative events"
-msgstr ""
-
-msgid "Send Alarm Notifications Emails"
-msgstr ""
-
-msgid "Get event alarms via email"
-msgstr ""
-
-msgid "Enable Standard Alarm"
-msgstr "Aktivizo Alarmin Standart"
-
-msgid "New events get a standard alarm as defined below"
-msgstr "Ngjarjet e reja marrin një alarm standart siç përcaktohet më poshtë"
-
-msgid "Standard Alarm Time"
-msgstr "Koha e Alarmit Standart"
-
-msgid "Minutes before the event starts"
-msgstr "Minuta përpara se ngjarja të fillojë"
-
-msgid "Default Attendee Strategy"
-msgstr ""
-
-msgid "Default Attendee Strategy for new events"
-msgstr ""
-
-msgid "Time Increment"
-msgstr ""
-
-msgid "Increment of event time steps"
-msgstr ""
-
-msgid "Default set Events to privat"
-msgstr ""
-
-msgid "If enabled every created event is always privat"
-msgstr ""
-
-msgid "First Day of Week"
-msgstr ""
-
-msgid "On what day the week should be starting"
-msgstr ""
-
-msgid "Default calendar strategy"
-msgstr ""
-
-msgid "The calendar for new events if no container is selected"
-msgstr ""
-
-msgid "Remove all filters on change selection"
-msgstr ""
-
-msgid "On Calendar Change will remove all filters"
+msgid "You can not have more than one grants filter"
 msgstr ""
 
 msgid "Fixed Calendars"
 msgstr "Kalendarë fiks"
-
-msgid "Calendars always selected regardless of all filter parameters."
-msgstr ""
-
-msgid "Never"
-msgstr "Asnjëherë"
-
-msgid "On invitation and cancellation only"
-msgstr "Vetëm në ftesa dhe anullime"
-
-msgid "On time changes"
-msgstr "Në ndryshime të kohës"
-
-msgid "On all updates but attendee responses"
-msgstr "Në të gjithë përditësimet e përgjigjeve të vijuesve"
-
-msgid "On attendee responses too"
-msgstr "Gjithashtu në përgjigje të vijuesve"
-
-msgid "Events"
-msgstr "Ngjarje"
-
-msgid "Summary"
-msgstr "Përmbledhje"
-
-msgid "Status"
-msgstr "Statusi"
-
-msgid "No Information"
-msgstr "Nuk ka informacion"
-
-msgid "recurring event"
-msgstr "ngjarje periodike"
-
-msgid "recurring event exception"
-msgstr "përjashtim i ngjarjes periodike"
-
-msgid "Blocking"
-msgstr "Bllokim"
-
-msgid "Tentative"
-msgstr "E paqarte"
-
-msgid "Event Location"
-msgstr ""
-
-msgid "Organizer"
-msgstr "Organizuesi"
-
-msgid "Attendee"
-msgid_plural "Attendees"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "URL"
-msgstr ""
-
-msgid "Add attendee"
-msgstr "Shto vijues"
-
-msgid "Sort Attendee"
-msgstr "Rradhit Vijuesit"
-
-msgid "Check to filter for this attendee"
-msgstr "Kontrollo tek filtri për këtë vijues"
-
-msgid "Private"
-msgstr "Private"
-
-msgid "Tags"
-msgstr "Etiketa"
-
-msgid "whole day"
-msgstr "të gjithë ditën"
-
-msgid "Location"
-msgstr "Vëndi"
-
-msgid "Description"
-msgstr "Përshkrimi"
-
-msgid "Attendee/Resources"
-msgstr ""
-
-msgid "Additional Attendees ..."
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Ok"
-msgstr ""
-
-msgid "This event is originally stored in a calendar you don't have access to."
-msgstr "Kjo ngjarje është vendosur fillimisht në një kalendar ku ju nuk kini të drejta"
-
-#, python-brace-format
-msgid "This event is originally stored in {0}"
-msgstr "Kjo ngjarje është vendosur fillimisht në {0}"
-
-#, python-brace-format
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr "Kjo ngjarje është shfaqur gjithashtu tek kalendari juaj personal {0}"
-
-msgid "Set as definite event"
-msgstr ""
-
-msgid "Set This Date as Definite Event?"
-msgstr ""
-
-msgid "Do you want to close the poll and remove all other alternatives?"
-msgstr ""
-
-msgid "Please choose the Event to add the contacts to"
-msgstr "Lutemi zgjidhni Ngjarjen ku të shtohen kontaktet"
-
-msgid "Role"
-msgstr "Role"
-
-msgid "Select Role"
-msgstr "Zgjidhni Rolin"
-
-msgid "Select Status"
-msgstr "Zgjidhni Statusin"
-
-#, python-brace-format
-msgid "Adding {0} Attendee to event"
-msgstr "Duke i shtuar {0} vijues ngjarjes"
-
-msgid "Checking Calendar Data..."
-msgstr "Duke kontrolluar të dhënat e kalendarit..."
-
-msgid "Reply to Recurring Event"
-msgstr "Përgjigju Ngjarjes Periodike"
-
-msgid "You are responding to an recurring event. What would you like to do?"
-msgstr "Ju po i përgjigjeni një ngjarje periodike. Çfarë doni të bëni?"
-
-msgid "Respond to whole series"
-msgstr "Përgjigju të gjithë serive"
-
-msgid "Do not respond"
-msgstr "Mos u përgjigj"
-
-msgid "Save"
-msgstr ""
-
-msgid "Save in calendar without response"
-msgstr ""
-
-msgid "The event of this message does not exist"
-msgstr "Ngjarja e këtij mesazhi nuk ekziston"
-
-msgid "The sender is not authorised to update the event"
-msgstr "Dërguesi nuk është i autorizuar te përditësoje këte ngjarje"
-
-msgid "This message is already processed"
-msgstr "Ky mesazh është tashmë i përpunuar"
-
-msgid "You are not an attendee of this event"
-msgstr "Ju nuk jeni në vijim të kësaj ngjarje"
-
-msgid "This event has been deleted by the organizer"
-msgstr ""
-
-msgid "This event has been canceled."
-msgstr ""
-
-msgid "Unsupported message"
-msgstr "Mesazh i pa mbështetshëm"
-
-msgid "This is an event invitation for someone else."
-msgstr "Kjo është një ftesë ngjarje për dikë tjetër"
-
-msgid "You have already replied to this event invitation."
-msgstr "Ju i jeni përgjigjur tashmë ftesës së kesaj ngjarjeje"
-
-msgid "The event got rescheduled. Set your response to:"
-msgstr ""
-
-msgid "You received an event invitation. Set your response to:"
-msgstr "Ju ka ardhur një ftesë ngjarjeje. Vendosni përgjigjen tuaj tek:"
-
-msgid "An invited attendee responded to the invitation."
-msgstr "Një vijues i ftuar i është përgjigjur ftesës"
-
-msgid "Unsupported method"
-msgstr "Metodë e pa mbështetshme"
-
-msgid "Loading events, please wait..."
-msgstr "Duke ngarkuar ngjarjet, ju lutem prisni..."
-
-msgid "Cut event"
-msgstr ""
-
-msgid "Copy Event to clipboard"
-msgstr ""
-
-msgid "Stop cut / copy & paste"
-msgstr ""
-
-msgid "Print Page"
-msgstr "Printo Faqen"
-
-msgid "Loose-Leaf"
-msgstr ""
-
-msgid "Sheet"
-msgstr "Tabelë"
-
-msgid "Grid"
-msgstr "Rrjet"
-
-msgid "Timeline"
-msgstr ""
-
-msgid "Day"
-msgstr "Ditë"
-
-msgid "Week"
-msgstr "Javë"
-
-msgid "Month"
-msgstr "Muaj"
-
-msgid "Year"
-msgstr ""
-
-msgid "Custom Selection"
-msgstr ""
-
-msgid "Import Events"
-msgstr ""
-
-#, python-brace-format
-msgid "Paste event \"{0}\""
-msgstr ""
-
-msgid "Set my response"
-msgstr "Vendos përgjigjen time"
-
-#, python-brace-format
-msgid "Copy {0}"
-msgstr "Kopje {0}"
-
-msgid "Set event status"
-msgstr ""
-
-msgid "Updating event in the past"
-msgstr "Duke përditësuar ngjarjen në të shkuarën"
-
-msgid "Update this event"
-msgstr "Përditëso këtë ngjarje"
-
-msgid "Do not update this event"
-msgstr "Mos përditëso këtë ngjarje"
-
-msgid "Creating event in the past"
-msgstr "Duke krijuar ngjarje në të shkuarën"
-
-msgid "Create this event"
-msgstr "Krijo këtë ngjarje"
-
-msgid "Do not create this event"
-msgstr "Mos krijo këte ngjarje"
-
-msgid "Update this event only"
-msgstr "Përditëso vetëm këtë ngjarje"
-
-msgid "Update this and all future events"
-msgstr "Përditëso këtë dhe të gjithë ngjarjet e ardhshme"
-
-msgid "Update nothing"
-msgstr "Mos përditëso asgjë"
-
-msgid "Update Event"
-msgstr "Përditëso ngjarjen"
-
-msgid "Please Change Selection"
-msgstr "Ju lutemi ndryshoni Zgjedhjet"
-
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Zgjedhja juaj përmban ngjarje të përërituar. Ngjarjet e përsëritura duhet të fshihen veçmas"
-
-msgid "Delete Event"
-msgstr "Fshij ngjaren"
-
-msgid "Delete this event only"
-msgstr "Fshij vetëm këtë ngjarje"
-
-msgid "Delete this and all future events"
-msgstr "Fshij këtë dhe gjithë ngjarjet e ardhshme"
-
-msgid "Delete whole series"
-msgstr "Fshij të gjithë serinë"
-
-msgid "Delete nothing"
-msgstr "Mos fshij asgjë"
-
-#, python-brace-format
-msgid "Do you really want to delete this event?"
-msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] "Doni vërtetë të fshini këtë ngjarje?"
-msgstr[1] "Doni vertetë të fshini këto ngjarje"
-
-msgid "Could not Print"
-msgstr "Nuk mund të Printohej"
-
-msgid "Sorry, your current view does not support printing."
-msgstr "Na falni, pamja juaj e shfaqur aktualisht nuk përmban printimin"
-
-msgid "Scheduling Conflict"
-msgstr "Duke planifikuar konfliktin"
-
-msgid "The following attendee are busy at the requested time:"
-msgstr "Vijuesit e mëposhtëm janë të zënë në kohën e kërkuar"
-
-msgid "Ignore Conflict"
-msgstr "Injoro konfliktin"
-
-msgid "Edit Event"
-msgstr "Modifiko ngjarjen"
-
-msgid "Cancel this action"
-msgstr "Anullo këtë veprim"
-
-msgid "Update Status for all Attendee?"
-msgstr ""
-
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
-msgstr ""
-
-msgid "Manage Resources"
-msgstr "Menaxho Burimet"
-
-msgid "External organizer"
-msgstr ""
-
-msgid "Internal organizer"
-msgstr ""
-
-msgid "Import Definition Success!"
-msgstr ""
-
-msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
-msgstr ""
-
-msgid "Choose Import File"
-msgstr ""
-
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr ""
-
-msgid "once"
-msgstr ""
-
-msgid "hourly"
-msgstr ""
-
-msgid "daily"
-msgstr ""
-
-msgid "weekly"
-msgstr ""
-
-msgid "Choose Remote Location"
-msgstr ""
-
-msgid "Please choose a remote location you want to add to Tine 2.0"
-msgstr ""
-
-msgid "Username"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Refresh time"
-msgstr ""
-
-msgid "General Settings"
-msgstr ""
-
-msgid "Calendar name (you need permissions to add events)"
-msgstr ""
-
-msgid "What should the file you upload look like?"
-msgstr ""
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr ""
-
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-msgid "Download example file"
-msgstr ""
-
-msgid "Remote ICS File"
-msgstr ""
-
-msgid "Remote CalDAV Server"
-msgstr ""
-
-msgid "Upload Local File"
-msgstr ""
-
-msgid "Choose File and Format"
-msgstr ""
-
-msgid "Select type of source"
-msgstr ""
-
-msgid "Event Import Options"
-msgstr ""
-
-msgid "Update Existing Events"
-msgstr ""
-
-msgid "Update already existing events"
-msgstr ""
-
-msgid "Force Update Existing Events"
-msgstr ""
-
-msgid "Update exiting events even if imported sequence number isn't higher"
-msgstr ""
-
-msgid "Delete Missing Events"
-msgstr ""
-
-msgid "Delete events missing in import data (future only)"
-msgstr ""
-
-msgid "Basic Data Only"
-msgstr ""
-
-msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
-msgstr ""
-
-msgid "Add Attendee to Import Data"
-msgstr ""
-
-msgid "Ignore Import Data and Replace Attendee"
-msgstr ""
-
-msgid "Keep Existing Attendee"
-msgstr ""
-
-msgid "Do not remove attendee of existing events which are not in the import data"
-msgstr ""
-
-msgid "Force Organizer for new Events"
-msgstr ""
-
-#, python-brace-format
-msgid "Importing {0}"
-msgstr ""
-
-msgid "Back"
-msgstr ""
-
-msgid "Next"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "Free Time Search"
-msgstr ""
-
-msgid "Searching for Free Time..."
-msgstr ""
-
-msgid "No Free Time found"
-msgstr ""
-
-#, python-brace-format
-msgid "No free timeslot could be found Until {0}. Do you want to continue?"
-msgstr ""
-
-msgid "Continue"
-msgstr ""
-
-msgid "Give up"
-msgstr ""
-
-msgid "Free Time Search Options"
-msgstr ""
-
-msgid "Event Type"
-msgid_plural "Event Types"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Site"
-msgstr ""
-
-msgid "View"
-msgstr "Shiko"
-
-msgid "Details"
-msgstr "Detaje"
-
-msgid "Saved in"
-msgstr "Ruajtur në"
-
-msgid "non-blocking"
-msgstr "jo-bllokuar"
-
-msgid "Enter description"
-msgstr "Fusni përshkrimin"
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Print Event"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "End date is not valid"
-msgstr "Data e mbarimit nuk është e vlefshme"
-
-msgid "End date must be after start date"
-msgstr "Data e mbarimit duhet të jetë mbas datës së fillimit"
-
-msgid "End time is not allowed to be after the configured time."
-msgstr ""
-
-msgid "Start date is not valid"
-msgstr "Data e fillimit nuk është e vlefshme"
-
-msgid "Start date is not allowed to be before the configured time."
-msgstr ""
-
-#, python-brace-format
-msgid "Week {0} :"
-msgstr "Java {0} :"
-
-msgid "Originally"
-msgstr "Fillimisht"
-
-msgid "Poll"
-msgid_plural "Polls"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Alternative Dates"
-msgstr ""
-
-msgid "Create Poll for this Event"
-msgstr ""
-
-msgid "Name for poll"
-msgstr ""
-
-msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
-msgstr ""
-
-msgid "Share the link below to poll for attendee status feedback."
-msgstr ""
-
-msgid "Public URL"
-msgstr ""
-
-msgid "Protect poll with a password"
-msgstr ""
-
-msgid "Only invited attendee can reply"
-msgstr ""
-
-msgid "Start Date"
-msgstr ""
-
-msgid "Info"
-msgstr ""
-
-msgid "loading alternative dates"
-msgstr ""
-
-msgid "Select one Event Only"
-msgstr ""
-
-msgid "You need to select exactly one event as the definite event."
-msgstr ""
-
-msgid "Setting definite event"
-msgstr ""
-
-msgid "Event finder options"
-msgstr ""
-
-msgid "Unavailable"
-msgstr ""
-
-msgid "Edit Resource"
-msgstr ""
-
-msgid "View Resource"
-msgstr ""
-
-msgid "WK"
-msgstr "JV"
-
-msgid "From"
-msgstr ""
-
-msgid "until"
-msgstr ""
-
-msgid "Rrule"
-msgstr ""
-
-msgid "Daily"
-msgstr "I Përditshëm"
-
-msgid "Weekly"
-msgstr "I Përjavshëm"
-
-msgid "Monthly"
-msgstr "I Përmuajshëm"
-
-msgid "Yearly"
-msgstr "I Përvitshëm"
-
-msgid "Name"
-msgstr "Emri"
-
-msgid "Calendar Hierarchy/Name"
-msgstr ""
-
-msgid "Email"
-msgstr "E-Postë"
-
-msgid "Type"
-msgstr "Tipi"
-
-msgid "Maximum number of attendee"
-msgstr ""
-
-msgid "Default Status"
-msgstr ""
-
-msgid "Default Status with status grant"
-msgstr ""
-
-msgid "Busy Type"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "No Access"
-msgstr ""
-
-msgid "Additional Tags ..."
-msgstr ""
-
-msgid "New Event"
-msgstr "Ngjarje e Re"
-
-#, python-brace-format
-msgid "{0} more..."
-msgstr "{0} më shumë..."
-
-msgid "private classification"
-msgstr "klasifikim privat"
-
-msgid "has alarm"
-msgstr "ka alarm"
-
-msgid "has attachments"
-msgstr "ka bashkangjitje"
-
-msgid "is part of an open poll"
-msgstr ""
-
-#, python-brace-format
-msgid "{0}, the {1}. of {2}"
-msgstr "{0}, në {1}. të {2}"
-
-msgid "Click here to invite another attender..."
-msgstr "Kliko këtu për të ftuar një vijues tjetër"
-
-msgid "User"
-msgstr "Përdorues"
-
-msgid "Group"
-msgstr "Grup"
-
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Burim"
-msgstr[1] "Burime"
-
-msgid "Member of group"
-msgstr "Pjesëtar i grupit"
-
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Ky është kalendari ku vijuesi ka ruajtur këtë ngjarje"
-
-msgid "Click icon to change"
-msgstr ""
-
-msgid "Availability of Attendee"
-msgstr ""
-
-msgid "Whole Group or each Member of Group"
-msgstr ""
-
-msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
-msgstr ""
-
-msgid "Member of Group"
-msgstr ""
-
-msgid "Loading Groupmembers..."
-msgstr ""
-
-msgid "Remove Attender"
-msgstr "Hiqni Vijuesin"
-
-msgid "Use as event location"
-msgstr ""
-
-msgid "Compose email"
-msgstr "Krijo E-Poste"
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "(as a group member)"
-msgstr "(si pjesëtar i grupit)"
-
-msgid "External Attendee"
-msgstr "Vijues i Jashtem"
-
-#, python-brace-format
-msgid "Reserve Resource: {name}"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
-msgstr ""
-
-#, python-brace-format
-msgid "Resource: {name} reserved by you"
-msgstr ""
-
-msgid "Floorplan"
-msgstr ""
-
-msgid "Resource Grant"
-msgid_plural "Resource Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Invite Resource"
-msgstr ""
-
-msgid "The grant to invite the resource to an event"
-msgstr ""
-
-msgid "Resource status"
-msgstr ""
-
-msgid "The grant to set the resource attendee status"
-msgstr ""
-
-msgid "Resource notification"
-msgstr ""
-
-msgid "The grant to receive notifications for this resource"
-msgstr ""
-
-msgid "Read Resource"
-msgstr ""
-
-msgid "The grant to read the resource itself"
-msgstr ""
-
-msgid "The grant to edit the resource itself"
-msgstr ""
-
-msgid "Export Resource"
-msgstr ""
-
-msgid "The grant to export the resource itself"
-msgstr ""
-
-msgid "Sync Resource"
-msgstr ""
-
-msgid "The grant to synchronise the resource itself"
-msgstr ""
-
-msgid "Resource Admin"
-msgstr ""
-
-msgid "The grant to administrate the resource itself"
-msgstr ""
-
-msgid "Add Events"
-msgstr ""
-
-msgid "The grant to directly add events into this resource calendar"
-msgstr ""
-
-msgid "Read Events"
-msgstr ""
-
-msgid "The grant to read events from this resource calendar"
-msgstr ""
-
-msgid "Export Events"
-msgstr ""
-
-msgid "The grant to export events from this resource calendar"
-msgstr ""
-
-msgid "Sync Events"
-msgstr ""
-
-msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
-msgstr ""
-
-msgid "Events Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events from this resource calendar"
-msgstr ""
-
-msgid "Edit Events"
-msgstr ""
-
-msgid "The grant to edit events directly saved in this resource calendar"
-msgstr ""
-
-msgid "Delete Events"
-msgstr ""
-
-msgid "The grant to delete events directly stored in this resource calendar"
-msgstr ""
-
-msgid "Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events in this calendar"
-msgstr ""
-
-msgid "The grant to access events marked as private in this calendar"
-msgstr ""
-
-msgid "no events found"
-msgstr "nuk u gjendën ngjarje"
-
-msgid "Searching..."
-msgstr "Duke Kërkuar"
-
-msgid "Search Event"
-msgstr "Kërko Ngjarje"
-
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Ngjarje"
-msgstr[1] "Ngjarje"
-
-msgid "Switch to public poll"
-msgstr ""
-
-#, python-brace-format
-msgid "Welcome {name}"
-msgstr ""
-
-msgid "This is a closed poll. No Attendee can be added."
-msgstr ""
-
-msgid "This poll is closed already"
-msgstr ""
-
-#, python-brace-format
-msgid "I am not {name}"
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "{headerDate, date, full} {headerDate, time, short}"
-msgstr ""
-
-msgid "By using this service you agree to our terms and conditions"
-msgstr ""
-
-msgid "Please wait..."
-msgstr ""
-
-msgid "Use your personal link please."
-msgstr ""
-
-msgid "We have sent it to your E-Mail account again."
-msgstr ""
-
-msgid "If you did not receive the link, please contact the organiser."
-msgstr ""
-
-msgid "Submit"
-msgstr ""
-
-msgid "Wrong password!"
-msgstr ""
-
-msgid "Please log in"
-msgstr ""
-
-msgid "User name"
-msgstr ""
-
-#, python-brace-format
-msgid "Calendar of {name}"
-msgstr ""
-
-msgid "An unexpected error occurred."
-msgstr ""
-
-msgid "Mini Calendar"
-msgstr "Mini Kalendar"
-
-msgid "Colors"
-msgstr ""
-
-msgid "Side bar color"
-msgstr ""
-
-msgid "Color by Calendar"
-msgstr ""
-
-msgid "Color by Attendee Calendar"
-msgstr ""
-
-msgid "Color by Tags"
-msgstr ""
-
-msgid "Color by Attendee Role"
-msgstr ""
-
-msgid "Colors by response"
-msgstr ""
-
-msgid "Colors by tags"
-msgstr ""
-
-msgid "Colors by attendee"
-msgstr ""
-
-msgid "Colors by resource"
-msgstr ""
-
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Kalendar"
-msgstr[1] "Kalendarë"
-
-msgid "Calendars"
-msgstr "Kalendarë"
-
-msgid "Quick Search"
-msgstr "Kërkim i Shpejtë"
-
-msgid "Location Contact"
-msgstr ""
-
-msgid "GENDER_Calendar"
-msgstr ""
-
-msgid "Attendee Status"
-msgstr "Statusi i Vijuesit"
-
-msgid "GENDER_Attendee Status"
-msgstr ""
-
-msgid "Attendee Role"
-msgstr "Roli i Vijuesit"
-
-msgid "GENDER_Attendee Role"
-msgstr ""
-
-msgid "GENDER_Status"
-msgstr ""
-
-msgid "GENDER_Blocking"
-msgstr ""
-
-msgid "Classification"
-msgstr "Klasifikimi"
-
-msgid "GENDER_Classification"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Unknown date"
-msgstr "Date e panjohur"
-
-#, python-brace-format
-msgid "{0} {1} o'clock"
-msgstr "Ora {0} {1} "
-
-msgid "Event (as attendee)"
-msgstr "Ngjarje (si vijues)"
-
-msgid "Event (as organizer)"
-msgstr "Ngjarje (si organizues)"
-
-msgid "Event attendee"
-msgstr "Vijues ngjarjeje"
-
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Vijues"
-msgstr[1] "Vijues"
-
-msgid "Default attendee status"
-msgstr ""
-
-msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
-msgstr ""
-
-msgid "Default attendee status with status grant"
-msgstr ""
-
-msgid "Resource Location"
-msgstr ""
-
-msgid "Suppress notification"
-msgstr ""
-
-msgid "Enter description..."
-msgstr "Vendosni përshkrimin..."
-
-msgid "Grants"
-msgstr "Të Drejta"
-
-msgid "Displayed in"
-msgstr "E shfaqur në"
-
-msgid "Event not found"
-msgstr ""
-
-msgid "The Event was deleted in the meantime or you don't have access rights to it."
-msgstr ""
-
-msgid "GENDER_Attendee"
-msgstr ""
-
-msgid "Select Attendee"
-msgstr "Zgjidhni Vijues"
-
-msgid "The summary must not be longer than 255 characters."
-msgstr "Përmbledhja nuk mund të jetë më e gjatë se 255 karaktere"
-
-msgid "The summary must have at least 1 character."
-msgstr "Përmbledhja duhet të ketë të paktën 1 karakter"
-
-msgid "Summary too Long"
-msgstr "Përmbledhja shumë e gjatë"
-
-msgid "Summary too Short"
-msgstr "Përmbledhja shumë e shkurtër"
-
-msgid "Recurrances"
-msgstr "Përsëritje"
-
-msgid "No recurring rule defined"
-msgstr "Nuk është përcaktuar një rregull përseritës"
-
-msgid "None"
-msgstr "Asnjë"
-
-msgid "Individual"
-msgstr ""
-
-msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr "Përjashtimet e ngjarjeve përsëritëse nuk mund të përsërisin vetvehten"
-
-msgid "at"
-msgstr "në"
-
-msgid "never"
-msgstr "asnjëherë"
-
-#, python-brace-format
-msgid "after {0} occurrences"
-msgstr "pas {0} ndodhive"
-
-msgid "Except"
-msgstr ""
-
-msgid "during events in the calendars"
-msgstr ""
-
-msgid "End"
-msgstr "Fund"
-
-msgid "Until has to be after event start"
-msgstr "Derisa të jetë pasi ngjarja fillon"
-
-msgid "The event is longer than the recurring interval"
-msgstr ""
-
-#, python-brace-format
-msgid "Every {0}. Day"
-msgstr "Çdo {0}. Ditë"
-
-#, python-brace-format
-msgid "Every {0}. Week at"
-msgstr "Çdo {0}. Javë në"
-
-#, python-brace-format
-msgid "Every {0}. Month"
-msgstr "Çdo {0}. Muaj"
-
-msgid "at the"
-msgstr "Në"
-
-msgid "first"
-msgstr "i pari"
-
-msgid "second"
-msgstr "i dyti"
-
-msgid "third"
-msgstr "i treti"
-
-msgid "fourth"
-msgstr "i katërti"
-
-msgid "last"
-msgstr "i fundit"
-
-#, python-brace-format
-msgid "Every {0}. Year"
-msgstr "Çdo {0}. Vit"
-
-msgid "of"
-msgstr "e"
-
-msgid "Date"
-msgstr ""
-
-msgid "First name, ĺast name"
-msgstr ""
-
-msgid "E-Mail address"
-msgstr ""
-
-msgid "General terms and conditions"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00B359B9"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "All events I attend"
-msgstr "Të gjithë ngjarjet që unë pres"
-
-msgid "Awaiting response"
-msgstr "Duke pritur përgjigje"
-
-msgid "Events I have not yet responded to"
-msgstr "Ngjarje që nuk i jam përgjigjur"
-
-msgid "Declined events"
-msgstr "Ngjarje të papranuara"
-
-msgid "Events I have declined"
-msgstr "Ngjarje që nuk i kam pranuar"
-
-msgid "I'm organizer"
-msgstr "Unë jam organizues"
-
-msgid "Events I'm the organizer of"
-msgstr "Ngjarje që unë jam organizuesi"
-
-msgid "You can not have more than one grants filter"
-msgstr ""
 
 msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr "Kalendarët zgjidhen gjithmonë në pamvarësi të parametrave të filtrave. Një përdorim i vlefshëmmund të jetë të shfaqet me forcë një kalendar pushimesh"
@@ -1402,6 +69,14 @@ msgstr ""
 msgid "Default View for Events"
 msgstr ""
 
+msgid "Attendee"
+msgid_plural "Attendees"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Organizer"
+msgstr "Organizuesi"
+
 msgid "Event Status Available"
 msgstr ""
 
@@ -1410,6 +85,9 @@ msgstr ""
 
 msgid "Confirmed"
 msgstr ""
+
+msgid "Tentative"
+msgstr "E paqarte"
 
 msgid "Canceled"
 msgstr ""
@@ -1422,6 +100,9 @@ msgstr ""
 
 msgid "Public"
 msgstr ""
+
+msgid "Private"
+msgstr "Private"
 
 msgid "Confidential"
 msgstr ""
@@ -1474,6 +155,11 @@ msgstr ""
 msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
 msgstr ""
 
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Burim"
+msgstr[1] "Burime"
+
 msgid "Room"
 msgstr ""
 
@@ -1517,6 +203,9 @@ msgid "Free"
 msgstr ""
 
 msgid "Busy"
+msgstr ""
+
+msgid "Unavailable"
 msgstr ""
 
 msgid "Filter timeslot for CalDAV events"
@@ -1681,12 +370,6 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
-msgid "No RRULE found in base event!"
-msgstr ""
-
-msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
-msgstr ""
-
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Alarm për ngjarjen \"%1$s\" në %2$s"
 
@@ -1732,6 +415,22 @@ msgstr ""
 msgid "Resource Management"
 msgstr ""
 
+msgid "No RRULE found in base event!"
+msgstr ""
+
+msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
+msgstr ""
+
+#, python-format
+msgid "%s's personal calendar"
+msgstr "Kalendari perosnal i %s"
+
+msgid "Resources"
+msgstr "Burime"
+
+msgid "Event Types"
+msgstr ""
+
 msgid "Polls for recurring events are not supported"
 msgstr ""
 
@@ -1742,6 +441,1230 @@ msgid "Attendance Confirmation for Poll \"%1$s\""
 msgstr ""
 
 msgid "%1$s is scheduled for %2$s"
+msgstr ""
+
+msgid "Different Calendar"
+msgstr ""
+
+msgid "Exdate container move are not allowed"
+msgstr ""
+
+msgid "Invalid URL given"
+msgstr ""
+
+msgid "The URL you used is invalid. Please use a valid one!"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "The right Resource Admin must be set once."
+msgstr ""
+
+msgid "Word event sheet"
+msgstr ""
+
+msgid "Export Events as Calendar Sheet"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "Export event data into ods spreadsheet"
+msgstr ""
+
+msgid "VCalendar Report"
+msgstr ""
+
+msgid "Export multiple calendars to ics files"
+msgstr ""
+
+msgid "VCalendar/ICS"
+msgstr ""
+
+msgid "Export visible events to ics file"
+msgstr ""
+
+msgid "Resource CSV"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Shared Calendar CSV"
+msgstr ""
+
+msgid "Calendars to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "Import iCal-files"
+msgstr ""
+
+msgid "Please choose the Event to add the contacts to"
+msgstr "Lutemi zgjidhni Ngjarjen ku të shtohen kontaktet"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Select Role"
+msgstr "Zgjidhni Rolin"
+
+msgid "Status"
+msgstr "Statusi"
+
+msgid "Select Status"
+msgstr "Zgjidhni Statusin"
+
+#, python-brace-format
+msgid "Adding {0} Attendee to event"
+msgstr "Duke i shtuar {0} vijues ngjarjes"
+
+msgid "Manage Resources"
+msgstr "Menaxho Burimet"
+
+msgid "New Event"
+msgstr "Ngjarje e Re"
+
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Kalendar"
+msgstr[1] "Kalendarë"
+
+msgid "Event not found"
+msgstr ""
+
+msgid "The Event was deleted in the meantime or you don't have access rights to it."
+msgstr ""
+
+msgid "Add attendee"
+msgstr "Shto vijues"
+
+msgid "Sort Attendee"
+msgstr "Rradhit Vijuesit"
+
+msgid "Check to filter for this attendee"
+msgstr "Kontrollo tek filtri për këtë vijues"
+
+msgid "GENDER_Attendee"
+msgstr ""
+
+msgid "Select Attendee"
+msgstr "Zgjidhni Vijues"
+
+msgid "Click here to invite another attender..."
+msgstr "Kliko këtu për të ftuar një vijues tjetër"
+
+msgid "User"
+msgstr "Përdorues"
+
+msgid "Group"
+msgstr "Grup"
+
+msgid "Member of group"
+msgstr "Pjesëtar i grupit"
+
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Ky është kalendari ku vijuesi ka ruajtur këtë ngjarje"
+
+msgid "Type"
+msgstr "Tipi"
+
+msgid "Click icon to change"
+msgstr ""
+
+msgid "Name"
+msgstr "Emri"
+
+msgid "Availability of Attendee"
+msgstr ""
+
+msgid "Whole Group or each Member of Group"
+msgstr ""
+
+msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
+msgstr ""
+
+msgid "Member of Group"
+msgstr ""
+
+msgid "Loading Groupmembers..."
+msgstr ""
+
+msgid "Remove Attender"
+msgstr "Hiqni Vijuesin"
+
+msgid "Use as event location"
+msgstr ""
+
+msgid "Compose email"
+msgstr "Krijo E-Poste"
+
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+msgid "Edit Resource"
+msgstr ""
+
+msgid "View Resource"
+msgstr ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "No Information"
+msgstr "Nuk ka informacion"
+
+msgid "(as a group member)"
+msgstr "(si pjesëtar i grupit)"
+
+msgid "External Attendee"
+msgstr "Vijues i Jashtem"
+
+msgid "This event is originally stored in a calendar you don't have access to."
+msgstr "Kjo ngjarje është vendosur fillimisht në një kalendar ku ju nuk kini të drejta"
+
+#, python-brace-format
+msgid "This event is originally stored in {0}"
+msgstr "Kjo ngjarje është vendosur fillimisht në {0}"
+
+#, python-brace-format
+msgid "This event is additionally displayed in your personal calendar {0}"
+msgstr "Kjo ngjarje është shfaqur gjithashtu tek kalendari juaj personal {0}"
+
+msgid "Originally"
+msgstr "Fillimisht"
+
+msgid "Colors"
+msgstr ""
+
+msgid "Side bar color"
+msgstr ""
+
+msgid "Color by Calendar"
+msgstr ""
+
+msgid "Color by Attendee Calendar"
+msgstr ""
+
+msgid "Color by Tags"
+msgstr ""
+
+msgid "Color by Attendee Role"
+msgstr ""
+
+msgid "Colors by response"
+msgstr ""
+
+msgid "Colors by tags"
+msgstr ""
+
+msgid "Colors by attendee"
+msgstr ""
+
+msgid "Colors by resource"
+msgstr ""
+
+msgid "Events"
+msgstr "Ngjarje"
+
+msgid "Summary"
+msgstr "Përmbledhje"
+
+msgid "Start Time"
+msgstr "Koha e fillimit"
+
+#, python-brace-format
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, në {1}. të {2}"
+
+msgid "The summary must not be longer than 255 characters."
+msgstr "Përmbledhja nuk mund të jetë më e gjatë se 255 karaktere"
+
+msgid "The summary must have at least 1 character."
+msgstr "Përmbledhja duhet të ketë të paktën 1 karakter"
+
+msgid "Summary too Long"
+msgstr "Përmbledhja shumë e gjatë"
+
+msgid "Summary too Short"
+msgstr "Përmbledhja shumë e shkurtër"
+
+msgid "Attendee/Resources"
+msgstr ""
+
+msgid "Additional Attendees ..."
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Additional Tags ..."
+msgstr ""
+
+msgid "recurring event"
+msgstr "ngjarje periodike"
+
+msgid "recurring event exception"
+msgstr "përjashtim i ngjarjes periodike"
+
+msgid "End Time"
+msgstr "Koha e mbarimit"
+
+msgid "Blocking"
+msgstr "Bllokim"
+
+msgid "Event Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Event Type"
+msgid_plural "Event Types"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Site"
+msgstr ""
+
+msgid "View"
+msgstr "Shiko"
+
+msgid "Details"
+msgstr "Detaje"
+
+msgid "whole day"
+msgstr "të gjithë ditën"
+
+msgid "Saved in"
+msgstr "Ruajtur në"
+
+msgid "Update Status for all Attendee?"
+msgstr ""
+
+msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
+msgstr ""
+
+msgid "non-blocking"
+msgstr "jo-bllokuar"
+
+msgid "Description"
+msgstr "Përshkrimi"
+
+msgid "Enter description"
+msgstr "Fusni përshkrimin"
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Free Time Search"
+msgstr ""
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Print Event"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "End date is not valid"
+msgstr "Data e mbarimit nuk është e vlefshme"
+
+msgid "End date must be after start date"
+msgstr "Data e mbarimit duhet të jetë mbas datës së fillimit"
+
+msgid "End time is not allowed to be after the configured time."
+msgstr ""
+
+msgid "Start date is not valid"
+msgstr "Data e fillimit nuk është e vlefshme"
+
+msgid "Start date is not allowed to be before the configured time."
+msgstr ""
+
+msgid "Event finder options"
+msgstr ""
+
+msgid "private classification"
+msgstr "klasifikim privat"
+
+msgid "has alarm"
+msgstr "ka alarm"
+
+msgid "has attachments"
+msgstr "ka bashkangjitje"
+
+msgid "is part of an open poll"
+msgstr ""
+
+#, python-brace-format
+msgid "Reserve Resource: {name}"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
+msgstr ""
+
+#, python-brace-format
+msgid "Resource: {name} reserved by you"
+msgstr ""
+
+msgid "Floorplan"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Searching for Free Time..."
+msgstr ""
+
+msgid "No Free Time found"
+msgstr ""
+
+#, python-brace-format
+msgid "No free timeslot could be found Until {0}. Do you want to continue?"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Give up"
+msgstr ""
+
+msgid "Free Time Search Options"
+msgstr ""
+
+msgid "Tags"
+msgstr "Etiketa"
+
+msgid "Location"
+msgstr "Vëndi"
+
+msgid "Checking Calendar Data..."
+msgstr "Duke kontrolluar të dhënat e kalendarit..."
+
+msgid "Reply to Recurring Event"
+msgstr "Përgjigju Ngjarjes Periodike"
+
+msgid "You are responding to an recurring event. What would you like to do?"
+msgstr "Ju po i përgjigjeni një ngjarje periodike. Çfarë doni të bëni?"
+
+msgid "Respond to whole series"
+msgstr "Përgjigju të gjithë serive"
+
+msgid "Do not respond"
+msgstr "Mos u përgjigj"
+
+msgid "Save"
+msgstr ""
+
+msgid "Save in calendar without response"
+msgstr ""
+
+msgid "The event of this message does not exist"
+msgstr "Ngjarja e këtij mesazhi nuk ekziston"
+
+msgid "The sender is not authorised to update the event"
+msgstr "Dërguesi nuk është i autorizuar te përditësoje këte ngjarje"
+
+msgid "This message is already processed"
+msgstr "Ky mesazh është tashmë i përpunuar"
+
+msgid "You are not an attendee of this event"
+msgstr "Ju nuk jeni në vijim të kësaj ngjarje"
+
+msgid "This event has been deleted by the organizer"
+msgstr ""
+
+msgid "This event has been canceled."
+msgstr ""
+
+msgid "Unsupported message"
+msgstr "Mesazh i pa mbështetshëm"
+
+msgid "This is an event invitation for someone else."
+msgstr "Kjo është një ftesë ngjarje për dikë tjetër"
+
+msgid "You have already replied to this event invitation."
+msgstr "Ju i jeni përgjigjur tashmë ftesës së kesaj ngjarjeje"
+
+msgid "The event got rescheduled. Set your response to:"
+msgstr ""
+
+msgid "You received an event invitation. Set your response to:"
+msgstr "Ju ka ardhur një ftesë ngjarjeje. Vendosni përgjigjen tuaj tek:"
+
+msgid "An invited attendee responded to the invitation."
+msgstr "Një vijues i ftuar i është përgjigjur ftesës"
+
+msgid "Unsupported method"
+msgstr "Metodë e pa mbështetshme"
+
+msgid "Import Definition Success!"
+msgstr ""
+
+msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
+msgstr ""
+
+msgid "Choose Import File"
+msgstr ""
+
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+msgid "once"
+msgstr ""
+
+msgid "hourly"
+msgstr ""
+
+msgid "daily"
+msgstr ""
+
+msgid "weekly"
+msgstr ""
+
+msgid "Choose Remote Location"
+msgstr ""
+
+msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Refresh time"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "Calendar name (you need permissions to add events)"
+msgstr ""
+
+msgid "What should the file you upload look like?"
+msgstr ""
+
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgstr ""
+
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+msgid "Download example file"
+msgstr ""
+
+msgid "Remote ICS File"
+msgstr ""
+
+msgid "Remote CalDAV Server"
+msgstr ""
+
+msgid "Upload Local File"
+msgstr ""
+
+msgid "Choose File and Format"
+msgstr ""
+
+msgid "Select type of source"
+msgstr ""
+
+msgid "Event Import Options"
+msgstr ""
+
+msgid "Update Existing Events"
+msgstr ""
+
+msgid "Update already existing events"
+msgstr ""
+
+msgid "Force Update Existing Events"
+msgstr ""
+
+msgid "Update exiting events even if imported sequence number isn't higher"
+msgstr ""
+
+msgid "Delete Missing Events"
+msgstr ""
+
+msgid "Delete events missing in import data (future only)"
+msgstr ""
+
+msgid "Basic Data Only"
+msgstr ""
+
+msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
+msgstr ""
+
+msgid "Add Attendee to Import Data"
+msgstr ""
+
+msgid "Ignore Import Data and Replace Attendee"
+msgstr ""
+
+msgid "Keep Existing Attendee"
+msgstr ""
+
+msgid "Do not remove attendee of existing events which are not in the import data"
+msgstr ""
+
+msgid "Force Organizer for new Events"
+msgstr ""
+
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+msgid "Loading events, please wait..."
+msgstr "Duke ngarkuar ngjarjet, ju lutem prisni..."
+
+msgid "Cut event"
+msgstr ""
+
+msgid "Copy Event to clipboard"
+msgstr ""
+
+msgid "Stop cut / copy & paste"
+msgstr ""
+
+msgid "Print Page"
+msgstr "Printo Faqen"
+
+msgid "Loose-Leaf"
+msgstr ""
+
+msgid "Sheet"
+msgstr "Tabelë"
+
+msgid "Grid"
+msgstr "Rrjet"
+
+msgid "Timeline"
+msgstr ""
+
+msgid "Day"
+msgstr "Ditë"
+
+msgid "Week"
+msgstr "Javë"
+
+msgid "Month"
+msgstr "Muaj"
+
+msgid "Year"
+msgstr ""
+
+msgid "Custom Selection"
+msgstr ""
+
+msgid "Import Events"
+msgstr ""
+
+#, python-brace-format
+msgid "Paste event \"{0}\""
+msgstr ""
+
+msgid "Set as definite event"
+msgstr ""
+
+msgid "Set my response"
+msgstr "Vendos përgjigjen time"
+
+#, python-brace-format
+msgid "Copy {0}"
+msgstr "Kopje {0}"
+
+msgid "Set event status"
+msgstr ""
+
+msgid "Updating event in the past"
+msgstr "Duke përditësuar ngjarjen në të shkuarën"
+
+msgid "Update this event"
+msgstr "Përditëso këtë ngjarje"
+
+msgid "Do not update this event"
+msgstr "Mos përditëso këtë ngjarje"
+
+msgid "Creating event in the past"
+msgstr "Duke krijuar ngjarje në të shkuarën"
+
+msgid "Create this event"
+msgstr "Krijo këtë ngjarje"
+
+msgid "Do not create this event"
+msgstr "Mos krijo këte ngjarje"
+
+msgid "Update this event only"
+msgstr "Përditëso vetëm këtë ngjarje"
+
+msgid "Update this and all future events"
+msgstr "Përditëso këtë dhe të gjithë ngjarjet e ardhshme"
+
+msgid "Update nothing"
+msgstr "Mos përditëso asgjë"
+
+msgid "Update Event"
+msgstr "Përditëso ngjarjen"
+
+msgid "Please Change Selection"
+msgstr "Ju lutemi ndryshoni Zgjedhjet"
+
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Zgjedhja juaj përmban ngjarje të përërituar. Ngjarjet e përsëritura duhet të fshihen veçmas"
+
+msgid "Delete Event"
+msgstr "Fshij ngjaren"
+
+msgid "Delete this event only"
+msgstr "Fshij vetëm këtë ngjarje"
+
+msgid "Delete this and all future events"
+msgstr "Fshij këtë dhe gjithë ngjarjet e ardhshme"
+
+msgid "Delete whole series"
+msgstr "Fshij të gjithë serinë"
+
+msgid "Delete nothing"
+msgstr "Mos fshij asgjë"
+
+#, python-brace-format
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] "Doni vërtetë të fshini këtë ngjarje?"
+msgstr[1] "Doni vertetë të fshini këto ngjarje"
+
+msgid "Could not Print"
+msgstr "Nuk mund të Printohej"
+
+msgid "Sorry, your current view does not support printing."
+msgstr "Na falni, pamja juaj e shfaqur aktualisht nuk përmban printimin"
+
+msgid "Scheduling Conflict"
+msgstr "Duke planifikuar konfliktin"
+
+msgid "The following attendee are busy at the requested time:"
+msgstr "Vijuesit e mëposhtëm janë të zënë në kohën e kërkuar"
+
+msgid "Ignore Conflict"
+msgstr "Injoro konfliktin"
+
+msgid "Edit Event"
+msgstr "Modifiko ngjarjen"
+
+msgid "Cancel this action"
+msgstr "Anullo këtë veprim"
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Ngjarje"
+msgstr[1] "Ngjarje"
+
+msgid "Calendars"
+msgstr "Kalendarë"
+
+msgid "Quick Search"
+msgstr "Kërkim i Shpejtë"
+
+msgid "Location Contact"
+msgstr ""
+
+msgid "GENDER_Calendar"
+msgstr ""
+
+msgid "Attendee Status"
+msgstr "Statusi i Vijuesit"
+
+msgid "GENDER_Attendee Status"
+msgstr ""
+
+msgid "Attendee Role"
+msgstr "Roli i Vijuesit"
+
+msgid "GENDER_Attendee Role"
+msgstr ""
+
+msgid "GENDER_Status"
+msgstr ""
+
+msgid "GENDER_Blocking"
+msgstr ""
+
+msgid "Classification"
+msgstr "Klasifikimi"
+
+msgid "GENDER_Classification"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Unknown date"
+msgstr "Date e panjohur"
+
+#, python-brace-format
+msgid "{0} {1} o'clock"
+msgstr "Ora {0} {1} "
+
+msgid "Event (as attendee)"
+msgstr "Ngjarje (si vijues)"
+
+msgid "Event (as organizer)"
+msgstr "Ngjarje (si organizues)"
+
+msgid "Event attendee"
+msgstr "Vijues ngjarjeje"
+
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Vijues"
+msgstr[1] "Vijues"
+
+msgid "Calendar Hierarchy/Name"
+msgstr ""
+
+msgid "Email"
+msgstr "E-Postë"
+
+msgid "Maximum number of attendee"
+msgstr ""
+
+msgid "Default attendee status"
+msgstr ""
+
+msgid "Busy Type"
+msgstr ""
+
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Invite Resource"
+msgstr ""
+
+msgid "The grant to invite the resource to an event"
+msgstr ""
+
+msgid "Resource status"
+msgstr ""
+
+msgid "The grant to set the resource attendee status"
+msgstr ""
+
+msgid "Resource notification"
+msgstr ""
+
+msgid "The grant to receive notifications for this resource"
+msgstr ""
+
+msgid "Read Resource"
+msgstr ""
+
+msgid "The grant to read the resource itself"
+msgstr ""
+
+msgid "The grant to edit the resource itself"
+msgstr ""
+
+msgid "Export Resource"
+msgstr ""
+
+msgid "The grant to export the resource itself"
+msgstr ""
+
+msgid "Sync Resource"
+msgstr ""
+
+msgid "The grant to synchronise the resource itself"
+msgstr ""
+
+msgid "Resource Admin"
+msgstr ""
+
+msgid "The grant to administrate the resource itself"
+msgstr ""
+
+msgid "Add Events"
+msgstr ""
+
+msgid "The grant to directly add events into this resource calendar"
+msgstr ""
+
+msgid "Read Events"
+msgstr ""
+
+msgid "The grant to read events from this resource calendar"
+msgstr ""
+
+msgid "Export Events"
+msgstr ""
+
+msgid "The grant to export events from this resource calendar"
+msgstr ""
+
+msgid "Sync Events"
+msgstr ""
+
+msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
+msgstr ""
+
+msgid "Events Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events from this resource calendar"
+msgstr ""
+
+msgid "Edit Events"
+msgstr ""
+
+msgid "The grant to edit events directly saved in this resource calendar"
+msgstr ""
+
+msgid "Delete Events"
+msgstr ""
+
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr ""
+
+msgid "Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr ""
+
+msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+
+msgid "WK"
+msgstr "JV"
+
+#, python-brace-format
+msgid "{0} more..."
+msgstr "{0} më shumë..."
+
+msgid "External organizer"
+msgstr ""
+
+msgid "Internal organizer"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "until"
+msgstr ""
+
+msgid "Displayed in"
+msgstr "E shfaqur në"
+
+msgid "Switch to public poll"
+msgstr ""
+
+#, python-brace-format
+msgid "Welcome {name}"
+msgstr ""
+
+msgid "This is a closed poll. No Attendee can be added."
+msgstr ""
+
+msgid "This poll is closed already"
+msgstr ""
+
+#, python-brace-format
+msgid "I am not {name}"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "{headerDate, date, full} {headerDate, time, short}"
+msgstr ""
+
+msgid "By using this service you agree to our terms and conditions"
+msgstr ""
+
+msgid "Please wait..."
+msgstr ""
+
+msgid "Use your personal link please."
+msgstr ""
+
+msgid "We have sent it to your E-Mail account again."
+msgstr ""
+
+msgid "If you did not receive the link, please contact the organiser."
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "Please log in"
+msgstr ""
+
+msgid "User name"
+msgstr ""
+
+#, python-brace-format
+msgid "Calendar of {name}"
+msgstr ""
+
+msgid "An unexpected error occurred."
+msgstr ""
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Alternative Dates"
+msgstr ""
+
+msgid "Create Poll for this Event"
+msgstr ""
+
+msgid "Name for poll"
+msgstr ""
+
+msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
+msgstr ""
+
+msgid "Share the link below to poll for attendee status feedback."
+msgstr ""
+
+msgid "Public URL"
+msgstr ""
+
+msgid "Protect poll with a password"
+msgstr ""
+
+msgid "Only invited attendee can reply"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "loading alternative dates"
+msgstr ""
+
+msgid "Select one Event Only"
+msgstr ""
+
+msgid "You need to select exactly one event as the definite event."
+msgstr ""
+
+msgid "Setting definite event"
+msgstr ""
+
+msgid "Set This Date as Definite Event?"
+msgstr ""
+
+msgid "Do you want to close the poll and remove all other alternatives?"
+msgstr ""
+
+#, python-brace-format
+msgid "Week {0} :"
+msgstr "Java {0} :"
+
+msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
+msgstr ""
+
+msgid "Default attendee status with status grant"
+msgstr ""
+
+msgid "Resource Location"
+msgstr ""
+
+msgid "Suppress notification"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Enter description..."
+msgstr "Vendosni përshkrimin..."
+
+msgid "Grants"
+msgstr "Të Drejta"
+
+msgid "Default Status"
+msgstr ""
+
+msgid "Default Status with status grant"
+msgstr ""
+
+msgid "No Access"
+msgstr ""
+
+msgid "Rrule"
+msgstr ""
+
+msgid "Daily"
+msgstr "I Përditshëm"
+
+msgid "Weekly"
+msgstr "I Përjavshëm"
+
+msgid "Monthly"
+msgstr "I Përmuajshëm"
+
+msgid "Yearly"
+msgstr "I Përvitshëm"
+
+msgid "Recurrances"
+msgstr "Përsëritje"
+
+msgid "No recurring rule defined"
+msgstr "Nuk është përcaktuar një rregull përseritës"
+
+msgid "None"
+msgstr "Asnjë"
+
+msgid "Individual"
+msgstr ""
+
+msgid "Exceptions of reccuring events can't have recurrences themselves."
+msgstr "Përjashtimet e ngjarjeve përsëritëse nuk mund të përsërisin vetvehten"
+
+msgid "at"
+msgstr "në"
+
+msgid "never"
+msgstr "asnjëherë"
+
+#, python-brace-format
+msgid "after {0} occurrences"
+msgstr "pas {0} ndodhive"
+
+msgid "Except"
+msgstr ""
+
+msgid "during events in the calendars"
+msgstr ""
+
+msgid "End"
+msgstr "Fund"
+
+msgid "Until has to be after event start"
+msgstr "Derisa të jetë pasi ngjarja fillon"
+
+msgid "The event is longer than the recurring interval"
+msgstr ""
+
+#, python-brace-format
+msgid "Every {0}. Day"
+msgstr "Çdo {0}. Ditë"
+
+#, python-brace-format
+msgid "Every {0}. Week at"
+msgstr "Çdo {0}. Javë në"
+
+#, python-brace-format
+msgid "Every {0}. Month"
+msgstr "Çdo {0}. Muaj"
+
+msgid "at the"
+msgstr "Në"
+
+msgid "first"
+msgstr "i pari"
+
+msgid "second"
+msgstr "i dyti"
+
+msgid "third"
+msgstr "i treti"
+
+msgid "fourth"
+msgstr "i katërti"
+
+msgid "last"
+msgstr "i fundit"
+
+#, python-brace-format
+msgid "Every {0}. Year"
+msgstr "Çdo {0}. Vit"
+
+msgid "of"
+msgstr "e"
+
+msgid "Date"
+msgstr ""
+
+msgid "no events found"
+msgstr "nuk u gjendën ngjarje"
+
+msgid "Searching..."
+msgstr "Duke Kërkuar"
+
+msgid "Search Event"
+msgstr "Kërko Ngjarje"
+
+msgid "Mini Calendar"
+msgstr "Mini Kalendar"
+
+msgid "Event Id"
+msgstr ""
+
+msgid "unknown"
+msgstr "i panjohur"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Ky kontakt u shtua automatikisht nga sistemi si një Vijues ngjarjesh"
+
+msgid "The email address has been shortened:"
 msgstr ""
 
 msgid "GENDER_Event"
@@ -1768,16 +1691,13 @@ msgstr "Është ngjarje e të gjithë ditës"
 msgid "Organizer timezone"
 msgstr "Organizues i brezit kohor"
 
-msgid "Event Id"
+msgid "Short Name"
 msgstr ""
 
-msgid "unknown"
-msgstr "i panjohur"
+msgid "Locked"
+msgstr ""
 
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Ky kontakt u shtua automatikisht nga sistemi si një Vijues ngjarjesh"
-
-msgid "The email address has been shortened:"
+msgid "Closed"
 msgstr ""
 
 #, python-format
@@ -1830,64 +1750,186 @@ msgstr "të"
 msgid "th"
 msgstr "ët"
 
-msgid "Locked"
+msgid "All my events"
+msgstr "Të gjitha ngjarjet e mia"
+
+msgid "Position on the left time axis, day and week view should start with"
+msgstr "Pozicioni i krahut të majte kohor, pamja e ditës dhe javës duhet të fillojë me  "
+
+msgid "Position on the left time axis, day and week view should end with"
 msgstr ""
 
-msgid "Closed"
+msgid "Default Start Time"
 msgstr ""
 
-msgid "Short Name"
+msgid "Scroll position on the left time axis, day and week view should start with"
 msgstr ""
 
-msgid "Calendars to export"
+msgid "Visible Time"
 msgstr ""
 
-msgid "Export target"
+msgid "Time to be displayed at once"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Default Calendar"
+msgstr "Kalendari i paracaktuar"
+
+msgid "The default calendar for invitations and new events"
+msgstr "Kalendari i paracaktuar për ftesa dhe ngjarje të reja"
+
+msgid "Default Favorite"
+msgstr "Të preferuarat e Paracaktuara"
+
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "E preferuara e paracaktuar që ngarkohet në nisje të kalendarit"
+
+msgid "Web Event Title Template"
 msgstr ""
 
-msgid "Word details"
+msgid "How to build event titles in web ui."
 msgstr ""
 
-msgid "Excel overview"
+msgid "Get Notification Emails"
+msgstr "Merr E-Postë njoftuese"
+
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Niveli i veprimeve që ju doni të njoftoheni. Ju lutem kini parasysh që organizuesit do të marrin njoftimpër të gjithë përditësimet, përfshirë edhe përgjigjet e vijuesëve, derisa kjo preferncë të jetë vendosur në \"Never\""
+
+msgid "Send Notifications Emails of own Actions"
+msgstr "Dërgo E-Postë njoftuese për Veprimet vetjake"
+
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Dërgo E-Postë njoftuese për veprimet që bëre vetë"
+
+msgid "Send Notifications Emails of tentative events"
 msgstr ""
 
-msgid "VCalendar/ICS"
+msgid "Get notifications emails of tentative events"
 msgstr ""
 
-msgid "Export visible events to ics file"
+msgid "Send Alarm Notifications Emails"
 msgstr ""
 
-msgid "Resource CSV"
+msgid "Get event alarms via email"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "Enable Standard Alarm"
+msgstr "Aktivizo Alarmin Standart"
+
+msgid "New events get a standard alarm as defined below"
+msgstr "Ngjarjet e reja marrin një alarm standart siç përcaktohet më poshtë"
+
+msgid "Standard Alarm Time"
+msgstr "Koha e Alarmit Standart"
+
+msgid "Minutes before the event starts"
+msgstr "Minuta përpara se ngjarja të fillojë"
+
+msgid "Default Attendee Strategy"
 msgstr ""
 
-msgid "Export event data into ods spreadsheet"
+msgid "Default Attendee Strategy for new events"
 msgstr ""
 
-msgid "Shared Calendar CSV"
+msgid "Time Increment"
 msgstr ""
 
-msgid "Word event sheet"
+msgid "Increment of event time steps"
 msgstr ""
 
-msgid "Export Events as Calendar Sheet"
+msgid "Default set Events to privat"
 msgstr ""
 
-msgid "VCalendar Report"
+msgid "If enabled every created event is always privat"
 msgstr ""
 
-msgid "Export multiple calendars to ics files"
+msgid "First Day of Week"
 msgstr ""
 
-msgid "Excel all data"
+msgid "On what day the week should be starting"
 msgstr ""
 
-msgid "Import iCal-files"
+msgid "Default calendar strategy"
+msgstr ""
+
+msgid "The calendar for new events if no container is selected"
+msgstr ""
+
+msgid "Remove all filters on change selection"
+msgstr ""
+
+msgid "On Calendar Change will remove all filters"
+msgstr ""
+
+msgid "Calendars always selected regardless of all filter parameters."
+msgstr ""
+
+msgid "Never"
+msgstr "Asnjëherë"
+
+msgid "On invitation and cancellation only"
+msgstr "Vetëm në ftesa dhe anullime"
+
+msgid "On time changes"
+msgstr "Në ndryshime të kohës"
+
+msgid "On all updates but attendee responses"
+msgstr "Në të gjithë përditësimet e përgjigjeve të vijuesve"
+
+msgid "On attendee responses too"
+msgstr "Gjithashtu në përgjigje të vijuesve"
+
+msgid "All events I attend"
+msgstr "Të gjithë ngjarjet që unë pres"
+
+msgid "Awaiting response"
+msgstr "Duke pritur përgjigje"
+
+msgid "Events I have not yet responded to"
+msgstr "Ngjarje që nuk i jam përgjigjur"
+
+msgid "Declined events"
+msgstr "Ngjarje të papranuara"
+
+msgid "Events I have declined"
+msgstr "Ngjarje që nuk i kam pranuar"
+
+msgid "I'm organizer"
+msgstr "Unë jam organizues"
+
+msgid "Events I'm the organizer of"
+msgstr "Ngjarje që unë jam organizuesi"
+
+msgid "Account"
+msgstr ""
+
+msgid "Exporttime"
+msgstr ""
+
+msgid "0009326B"
+msgstr ""
+
+msgid "20"
+msgstr ""
+
+msgid "00B359B9"
+msgstr ""
+
+msgid "00997199"
+msgstr ""
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "First name, ĺast name"
+msgstr ""
+
+msgid "E-Mail address"
+msgstr ""
+
+msgid "General terms and conditions"
 msgstr ""
 
 msgid "Updates from"
@@ -1926,6 +1968,12 @@ msgstr ""
 msgid "Event details"
 msgstr "Detaje të ngjarjes"
 
+msgid "Thank you for attendening the poll \"%1$s\""
+msgstr ""
+
+msgid "To review or edit your status please use your personal link:"
+msgstr ""
+
 msgid "The poll \"%1$s\" has been closed."
 msgstr ""
 
@@ -1933,52 +1981,4 @@ msgid "The definite event is scheduled for \"%1$s\""
 msgstr ""
 
 msgid "You can review the poll results here:"
-msgstr ""
-
-msgid "Thank you for attendening the poll \"%1$s\""
-msgstr ""
-
-msgid "To review or edit your status please use your personal link:"
-msgstr ""
-
-msgid "Different Calendar"
-msgstr ""
-
-msgid "Exdate container move are not allowed"
-msgstr ""
-
-msgid "Failed"
-msgstr ""
-
-msgid "The right Resource Admin must be set once."
-msgstr ""
-
-msgid "Invalid URL given"
-msgstr ""
-
-msgid "The URL you used is invalid. Please use a valid one!"
-msgstr ""
-
-msgid "manage shared calendars"
-msgstr "menaxho kalendarët e ndarë"
-
-msgid "Create new shared calendars"
-msgstr "Krijo kalendarë të rinj të ndarë"
-
-msgid "manage shared calendars favorites"
-msgstr "menaxho preferencalet e kalendarëve të ndarë"
-
-msgid "Create or update shared calendars favorites"
-msgstr "Krijo ose përditëso preferencialet e kalendarëve të ndarë"
-
-msgid "manage resources"
-msgstr "menaxho burimet"
-
-msgid "All Rights to administrate resources"
-msgstr "Të gjithë të drejtat për administrimin e burimeve"
-
-msgid "manage event types"
-msgstr ""
-
-msgid "The Right to manage event types"
 msgstr ""

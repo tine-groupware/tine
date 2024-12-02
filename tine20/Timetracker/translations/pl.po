@@ -8,35 +8,110 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013\n"
 "Language-Team: Polish (http://app.transifex.com/tine/groupware/language/pl/)\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
-msgstr "Konfiguracja eksportu kart czasu pracy do formatu ODS"
+msgid "Manage timeaccounts"
+msgstr "Zarządzaj kontami godzin"
 
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Użyj niniejszej konfiguracji podczas eksportu kart czasu pracy do formatu ODS"
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Dodaj, edytuj i usuń konta godzin (razem ze wszystkimi uprawnieniami do kart czasu pracy)"
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Add timeaccounts"
+msgstr "Dodaj konta godzin"
+
+msgid "Manage shared timeaccount favorites"
+msgstr "Zarządzaj wspólnymi ulubionymi śledzenia czasu"
+
+msgid "Create or update shared timeaccount favorites"
+msgstr "Utwórz albo uaktualnij wspólne ulubione śledzenia czasu"
+
+msgid "Manage shared timesheet favorites"
+msgstr "Zarządzaj wspólnymi ulubionymi śledzenia czasu"
+
+msgid "Create or update shared timesheet favorites"
+msgstr "Utwórz albo uaktualnij wspólne ulubione śledzenia czasu"
+
+msgid "Enabled Features"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Enabled Features in Timetracker Application."
 msgstr ""
 
-msgid "default"
-msgstr "domyślnie"
-
-msgid "Bookmark Timeaccount"
+msgid "Timeaccount Bookmarks"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "none"
+msgstr "Brak"
+
+msgid "last week"
+msgstr "ubiegły tydzień"
+
+msgid "not yet billed"
+msgstr "jeszcze nieprzeliczone"
+
+msgid "status to bill"
 msgstr ""
+
+msgid "billed"
+msgstr "przeliczone"
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr "Czas pracy - zliczony"
+
+msgid "to bill"
+msgstr "przelicz"
+
+msgid "Contract"
+msgstr "Kontrakt"
+
+msgid "without contract"
+msgstr "bez kontraktu"
+
+msgid "Unit"
+msgstr "Jednostka"
+
+msgid "Unit Price"
+msgstr "Cena jednostkowa"
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
+msgstr "Status"
 
 msgid "closed"
 msgstr "zakończone"
@@ -44,17 +119,74 @@ msgstr "zakończone"
 msgid "open"
 msgstr "otwarte"
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Responsible Person"
 msgstr ""
+
+msgid "Timesheets are billable"
+msgstr "Karty czasu pracy gotowe do przeliczenia"
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Konto godzin"
+msgstr[1] "konta godzin"
+msgstr[2] "konta godzin"
+msgstr[3] "konta godzin"
+
+msgid "Number"
+msgstr "Numer"
+
+msgid "Title"
+msgstr "Tytuł"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
+msgstr "Pokaż zakończone"
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
 msgstr ""
+
+msgid "Time Account - Status"
+msgstr "Status konta godzin"
 
 msgid "End Time Change"
 msgstr ""
@@ -81,9 +213,6 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
@@ -93,9 +222,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
-
-msgid "Description"
-msgstr "Opis"
 
 msgid "Failed"
 msgstr "Próba nieudana"
@@ -115,21 +241,6 @@ msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
-
-msgid "Time Account - Status"
-msgstr "Status konta godzin"
-
-msgid "Time Account - Billed"
-msgstr "Czas pracy - zliczony"
-
-msgid "not yet billed"
-msgstr "jeszcze nieprzeliczone"
-
-msgid "to bill"
-msgstr "przelicz"
-
-msgid "billed"
-msgstr "przeliczone"
 
 msgid "Workingtime:"
 msgstr ""
@@ -179,141 +290,6 @@ msgstr "Eksportuj jako CSV"
 
 msgid "Export as ..."
 msgstr "Eksportuj jako ..."
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr "Kontrakt"
-
-msgid "without contract"
-msgstr "bez kontraktu"
-
-msgid "Show closed"
-msgstr "Pokaż zakończone"
-
-msgid "Unit"
-msgstr "Jednostka"
-
-msgid "Unit Price"
-msgstr "Cena jednostkowa"
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Cleared at"
-msgstr ""
-
-msgid "Responsible Person"
-msgstr ""
-
-msgid "Timesheets are billable"
-msgstr "Karty czasu pracy gotowe do przeliczenia"
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Konto godzin"
-msgstr[1] "konta godzin"
-msgstr[2] "konta godzin"
-msgstr[3] "konta godzin"
-
-msgid "Number"
-msgstr "Numer"
-
-msgid "Title"
-msgstr "Tytuł"
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr "Zliczanie czasu"
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr "Moje, dzisiejsze karty czasu pracy"
-
-msgid "My Timesheets this week"
-msgstr "Moje karty czasu pracy z bieżącego tygodnia"
-
-msgid "My Timesheets last week"
-msgstr "Moje karty czasu pracy z ubiegłego tygodnia"
-
-msgid "My Timesheets this month"
-msgstr "Moje karty czasu pracy z bieżącego miesiąca"
-
-msgid "My Timesheets last month"
-msgstr "Moje karty czasu pracy z ubiegłego miesiąca"
-
-msgid "Timeaccounts to bill"
-msgstr "Karty czasu pracy do przeliczenia"
-
-msgid "Timeaccounts not yet billed"
-msgstr "Nieprzeliczone konta godzin"
-
-msgid "Timeaccounts already billed"
-msgstr "Przeliczone konta godzin"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr "Brak"
-
-msgid "last week"
-msgstr "ubiegły tydzień"
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr ""
 
 msgid "Read Own"
 msgstr ""
@@ -429,23 +405,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "Zarządzaj kontami godzin"
+msgid "Timesheets ODS export configuration"
+msgstr "Konfiguracja eksportu kart czasu pracy do formatu ODS"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Dodaj, edytuj i usuń konta godzin (razem ze wszystkimi uprawnieniami do kart czasu pracy)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Użyj niniejszej konfiguracji podczas eksportu kart czasu pracy do formatu ODS"
 
-msgid "Add timeaccounts"
-msgstr "Dodaj konta godzin"
+msgid "A Tag which is available in context menu for fast assignment"
+msgstr ""
 
-msgid "Manage shared timeaccount favorites"
-msgstr "Zarządzaj wspólnymi ulubionymi śledzenia czasu"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
-msgstr "Utwórz albo uaktualnij wspólne ulubione śledzenia czasu"
+msgid "default"
+msgstr "domyślnie"
 
-msgid "Manage shared timesheet favorites"
-msgstr "Zarządzaj wspólnymi ulubionymi śledzenia czasu"
+msgid "Requested Timesheets"
+msgstr ""
 
-msgid "Create or update shared timesheet favorites"
-msgstr "Utwórz albo uaktualnij wspólne ulubione śledzenia czasu"
+msgid "My Timesheets today"
+msgstr "Moje, dzisiejsze karty czasu pracy"
+
+msgid "My Timesheets this week"
+msgstr "Moje karty czasu pracy z bieżącego tygodnia"
+
+msgid "My Timesheets last week"
+msgstr "Moje karty czasu pracy z ubiegłego tygodnia"
+
+msgid "My Timesheets this month"
+msgstr "Moje karty czasu pracy z bieżącego miesiąca"
+
+msgid "My Timesheets last month"
+msgstr "Moje karty czasu pracy z ubiegłego miesiąca"
+
+msgid "Timeaccounts to bill"
+msgstr "Karty czasu pracy do przeliczenia"
+
+msgid "Timeaccounts not yet billed"
+msgstr "Nieprzeliczone konta godzin"
+
+msgid "Timeaccounts already billed"
+msgstr "Przeliczone konta godzin"
+
+msgid "Timetracker"
+msgstr "Zliczanie czasu"

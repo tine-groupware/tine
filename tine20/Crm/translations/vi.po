@@ -8,311 +8,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
 "Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All leads"
-msgstr "Mọi khởi đầu"
+msgid "manage shared lead folders"
+msgstr "Quản lý thư mục đầu mối chia sẻ"
 
-msgid "Default Lead List"
-msgstr "Danh sách đầu mối mặc định"
+msgid "Create new shared lead folders"
+msgstr "Tạo thư mục đầu mối chia sẻ mới"
 
-msgid "The default list for new leads"
-msgstr "Danh sách mặc định cho đầu mối mới"
+msgid "manage shared leads favorites"
+msgstr "quản lý đầu mối chia sẻ thường dùng"
 
-msgid "Get Notification E-mails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about."
-msgstr "Mức độ hoạt động bạn muốn được thông báo"
-
-msgid "Send Notifications e-mails for own actions"
-msgstr ""
-
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "Thường dùng mặc định"
-
-msgid "The default favorite which is loaded on crm startup"
-msgstr "Thường dùng mặc định được nạp khi quản lý quan hệ khách hàng được nạp"
-
-msgid "New Lead"
-msgstr "Đầu mối mới"
-
-msgid "Tags"
-msgstr "Thẻ"
-
-msgid "Lead name"
-msgstr "Tên đầu mối"
-
-msgid "Responsible"
-msgstr "Trách nhiệm"
-
-msgid "Partner"
-msgstr "Đôi tác"
-
-msgid "Customer"
-msgstr "Khách hàng"
-
-msgid "Leadstate"
-msgstr "Trạng thái đầu mối"
-
-msgid "Leadtype"
-msgstr "Loại đầu mối"
-
-msgid "Leadsource"
-msgstr "Nguồn đầu mối"
-
-msgid "Probability"
-msgstr "Có khả năng"
-
-msgid "Turnover"
-msgstr "Doanh số"
-
-msgid "Estimated end"
-msgstr "Dự kiến thời gian kết thúc"
-
-msgid "End"
-msgstr "Kết thúc"
-
-msgid "Start"
-msgstr "Bắt đầu"
-
-msgid "Probable Turnover"
-msgstr "Có thể bỏ qua"
-
-msgid "Resubmission Date"
-msgstr ""
-
-msgid "Import leads"
-msgstr ""
-
-msgid "Contact"
-msgstr "Liên hệ"
-
-msgid "CRM Role"
-msgstr "Vai trò quan hệ khách hàng"
-
-msgid "Tasks"
-msgstr "Công việc"
-
-msgid "No Tasks to display"
-msgstr "Chưa có việc gì"
-
-msgid "Summary"
-msgstr "Tóm tắt"
-
-msgid "Add a task..."
-msgstr "Thêm 1 việc..."
-
-msgid "Due Date"
-msgstr "Ngày đến hạn"
-
-msgid "Priority"
-msgstr "Độ quan trọng"
-
-msgid "Percent"
-msgstr "Phần trăm"
-
-msgid "Status"
-msgstr "Trạng thái"
-
-msgid "Organizer"
-msgstr ""
-
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "Thêm mới {0}"
-
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr "Ngừng liên kết {0}"
-
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr "Ngừng liên kết phần chọn {0}"
-
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Sửa {0}"
-
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Sửa phần chọn {0}"
-
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Xin chọn đầu mối để thêm liên lạc"
-
-msgid "Please select the attenders' role"
-msgstr "Chọn vai trò người tham gia"
-
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] ""
-"one: Đầu mối\n"
-"other: Đầu mối khác"
-
-msgid "Select Lead"
-msgstr "Chọn đầu mối"
-
-msgid "Role"
-msgstr "Vai trò"
-
-msgid "Select Role"
-msgstr "Chọn vai trò"
-
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr "Thêm {0} liên lạc vào đầu mối"
-
-msgid "Phone"
-msgstr "Điện thoại"
-
-msgid "Mobile"
-msgstr "Điện thoại"
-
-msgid "Fax"
-msgstr "Fax"
-
-msgid "E-Mail"
-msgstr "Email"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "Address"
-msgstr "Địa chỉ"
-
-msgid "Change type to Customer"
-msgstr "Đổi loại khách hàng"
-
-msgid "Change type to Responsible"
-msgstr "Thay đổi loại trách nhiệm"
-
-msgid "Change type to Partner"
-msgstr "Thay đổi loại đối tác"
-
-msgid "Change contact type"
-msgstr "Thay đổi kiểu liên lạc"
-
-msgid "Search for Contacts to add ..."
-msgstr "Tìm kiếm liên lạc để thêm..."
-
-msgid "Name"
-msgstr "Tên"
-
-msgid "Data"
-msgstr "Dữ liệu"
-
-msgid "Cellphone"
-msgstr "Số cầm tay"
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
-
-msgid "Products"
-msgstr "Sản phẩm"
-
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
-
-msgid "Enter lead name"
-msgstr ""
-
-msgid "Expected turnover"
-msgstr "Doanh số mong đợi"
-
-msgid "Description"
-msgstr "Mô tả"
-
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] ""
-"one: danh sách lãnh đạo\n"
-"other: danh sách lãnh đạo"
-
-msgid "lead lists"
-msgstr "danh sách lãnh đạo"
-
-msgid "Quick Search"
-msgstr "Tìm nhanh"
-
-msgid "Last Modified Time"
-msgstr "Thời gian sửa lần cuối"
-
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-msgid "Created By"
-msgstr "Tạo bởi"
-
-msgid "X Lead"
-msgstr ""
-
-msgid "read-only"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Product"
-msgstr "Sản phẩm"
-
-msgid "Price"
-msgstr "Giá"
-
-msgid "Quantity"
-msgstr "Số lượng"
-
-msgid "Search for Products to add ..."
-msgstr "Tìm sản phẩm để thêm..."
-
-msgid "All leads I have read grants for"
-msgstr "Mọi đầu mối tôi đã đọc quyền"
-
-msgid "Last modified by me"
-msgstr "Sửa lần cuối bởi tôi"
-
-msgid "All leads that I have last modified"
-msgstr "Mọi đầu mối tôi đã sửa"
-
-msgid "My leads"
-msgstr "Đầu mối của tôi"
-
-msgid "All leads that I am responsible for"
-msgstr "Mọi đầu mối tôi chịu trách nhiệm"
-
-msgid "Leads with overdue tasks"
-msgstr "Đầu mối với việc quá hạn"
+msgid "Create or update shared leads favorites"
+msgstr "Tạo hoặc cập nhật đầu mối chia sẻ thường dùng"
 
 msgid "controls sending notification of Leads"
 msgstr ""
@@ -359,6 +74,9 @@ msgstr "đã chấp nhận"
 msgid "lost"
 msgstr "mất"
 
+msgid "read-only"
+msgstr ""
+
 msgid "Lead Sources Available"
 msgstr ""
 
@@ -370,6 +88,12 @@ msgstr ""
 
 msgid "Possible lead types."
 msgstr ""
+
+msgid "Customer"
+msgstr "Khách hàng"
+
+msgid "Partner"
+msgstr "Đôi tác"
 
 msgid "Reseller"
 msgstr "Đại lý"
@@ -407,11 +131,26 @@ msgstr ""
 msgid "State"
 msgstr "Trạng thái"
 
+msgid "Role"
+msgstr "Vai trò"
+
 msgid "Source"
 msgstr "Nguồn"
 
+msgid "Start"
+msgstr "Bắt đầu"
+
 msgid "Scheduled end"
 msgstr "Kết thúc theo lịch"
+
+msgid "End"
+msgstr "Kết thúc"
+
+msgid "Turnover"
+msgstr "Doanh số"
+
+msgid "Probability"
+msgstr "Có khả năng"
 
 msgid "Folder"
 msgstr "Thư mục"
@@ -425,6 +164,9 @@ msgstr "Trường được cập nhật"
 #, python-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
+
+msgid "Tags"
+msgstr "Thẻ"
 
 #, python-format
 msgid "Lead %s has been changed"
@@ -441,14 +183,20 @@ msgstr "Đầu mối %s đã được tạo"
 msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
 msgstr ""
 
-msgid "GENDER_Lead"
-msgstr ""
-
-msgid "Show Closed"
+msgid "CSV all data"
 msgstr ""
 
 msgid "Lead Data"
 msgstr "Dữ liệu đầu mối"
+
+msgid "Leadstate"
+msgstr "Trạng thái đầu mối"
+
+msgid "Leadtype"
+msgstr "Loại đầu mối"
+
+msgid "Leadsource"
+msgstr "Nguồn đầu mối"
 
 msgid "End Scheduled"
 msgstr "Lịch kết thúc"
@@ -456,11 +204,26 @@ msgstr "Lịch kết thúc"
 msgid "Contacts"
 msgstr "Liên lạc"
 
+msgid "Address"
+msgstr "Địa chỉ"
+
 msgid "Telephone"
 msgstr "Điện thoại"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Tasks"
+msgstr "Công việc"
+
+msgid "Due Date"
+msgstr "Ngày đến hạn"
+
+msgid "Priority"
+msgstr "Độ quan trọng"
+
+msgid "Products"
+msgstr "Sản phẩm"
 
 msgid "low"
 msgstr "thấp"
@@ -474,18 +237,6 @@ msgstr "cao"
 msgid "urgent"
 msgstr "khẩn cấp"
 
-msgid "CSV all data"
-msgstr ""
-
-msgid "Lead CSV import"
-msgstr ""
-
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
 msgid "Edit new lead"
 msgstr ""
 
@@ -497,14 +248,263 @@ msgstr ""
 msgid "%s new leads have been imported"
 msgstr ""
 
-msgid "manage shared lead folders"
-msgstr "Quản lý thư mục đầu mối chia sẻ"
+msgid "Lead CSV import"
+msgstr ""
 
-msgid "Create new shared lead folders"
-msgstr "Tạo thư mục đầu mối chia sẻ mới"
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
 
-msgid "manage shared leads favorites"
-msgstr "quản lý đầu mối chia sẻ thường dùng"
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
 
-msgid "Create or update shared leads favorites"
-msgstr "Tạo hoặc cập nhật đầu mối chia sẻ thường dùng"
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Xin chọn đầu mối để thêm liên lạc"
+
+msgid "Please select the attenders' role"
+msgstr "Chọn vai trò người tham gia"
+
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] ""
+"one: Đầu mối\n"
+"other: Đầu mối khác"
+
+msgid "Select Lead"
+msgstr "Chọn đầu mối"
+
+msgid "Select Role"
+msgstr "Chọn vai trò"
+
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Thêm {0} liên lạc vào đầu mối"
+
+msgid "Change type to Customer"
+msgstr "Đổi loại khách hàng"
+
+msgid "Responsible"
+msgstr "Trách nhiệm"
+
+msgid "Change type to Responsible"
+msgstr "Thay đổi loại trách nhiệm"
+
+msgid "Change type to Partner"
+msgstr "Thay đổi loại đối tác"
+
+msgid "Change contact type"
+msgstr "Thay đổi kiểu liên lạc"
+
+msgid "Search for Contacts to add ..."
+msgstr "Tìm kiếm liên lạc để thêm..."
+
+msgid "Name"
+msgstr "Tên"
+
+msgid "Data"
+msgstr "Dữ liệu"
+
+msgid "Phone"
+msgstr "Điện thoại"
+
+msgid "Cellphone"
+msgstr "Số cầm tay"
+
+msgid "New Lead"
+msgstr "Đầu mối mới"
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "Bạn không có quyền chạy ứng dụng Công việc hoặc nó chưa được kích hoạt"
+
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa được kích hoạt"
+
+msgid "Enter lead name"
+msgstr ""
+
+msgid "Expected turnover"
+msgstr "Doanh số mong đợi"
+
+msgid "Resubmission Date"
+msgstr ""
+
+msgid "Estimated end"
+msgstr "Dự kiến thời gian kết thúc"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+msgid "Contact"
+msgstr "Liên hệ"
+
+msgid "CRM Role"
+msgstr "Vai trò quan hệ khách hàng"
+
+msgid "Mobile"
+msgstr "Điện thoại"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "E-Mail"
+msgstr "Email"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Status"
+msgstr "Trạng thái"
+
+msgid "Lead name"
+msgstr "Tên đầu mối"
+
+msgid "Probable Turnover"
+msgstr "Có thể bỏ qua"
+
+msgid "Import leads"
+msgstr ""
+
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Thêm mới {0}"
+
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "Ngừng liên kết {0}"
+
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr "Ngừng liên kết phần chọn {0}"
+
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Sửa {0}"
+
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Sửa phần chọn {0}"
+
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+"one: danh sách lãnh đạo\n"
+"other: danh sách lãnh đạo"
+
+msgid "lead lists"
+msgstr "danh sách lãnh đạo"
+
+msgid "Quick Search"
+msgstr "Tìm nhanh"
+
+msgid "Last Modified Time"
+msgstr "Thời gian sửa lần cuối"
+
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+msgid "Created By"
+msgstr "Tạo bởi"
+
+msgid "X Lead"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Product"
+msgstr "Sản phẩm"
+
+msgid "Price"
+msgstr "Giá"
+
+msgid "Quantity"
+msgstr "Số lượng"
+
+msgid "Search for Products to add ..."
+msgstr "Tìm sản phẩm để thêm..."
+
+msgid "No Tasks to display"
+msgstr "Chưa có việc gì"
+
+msgid "Summary"
+msgstr "Tóm tắt"
+
+msgid "Add a task..."
+msgstr "Thêm 1 việc..."
+
+msgid "Percent"
+msgstr "Phần trăm"
+
+msgid "Organizer"
+msgstr ""
+
+msgid "GENDER_Lead"
+msgstr ""
+
+msgid "Show Closed"
+msgstr ""
+
+msgid "All leads"
+msgstr "Mọi khởi đầu"
+
+msgid "Default Lead List"
+msgstr "Danh sách đầu mối mặc định"
+
+msgid "The default list for new leads"
+msgstr "Danh sách mặc định cho đầu mối mới"
+
+msgid "Get Notification E-mails"
+msgstr ""
+
+msgid "The level of actions you want to be notified about."
+msgstr "Mức độ hoạt động bạn muốn được thông báo"
+
+msgid "Send Notifications e-mails for own actions"
+msgstr ""
+
+msgid "Get notifications e-mails for actions you did yourself"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr "Thường dùng mặc định"
+
+msgid "The default favorite which is loaded on crm startup"
+msgstr "Thường dùng mặc định được nạp khi quản lý quan hệ khách hàng được nạp"
+
+msgid "All leads I have read grants for"
+msgstr "Mọi đầu mối tôi đã đọc quyền"
+
+msgid "Last modified by me"
+msgstr "Sửa lần cuối bởi tôi"
+
+msgid "All leads that I have last modified"
+msgstr "Mọi đầu mối tôi đã sửa"
+
+msgid "My leads"
+msgstr "Đầu mối của tôi"
+
+msgid "All leads that I am responsible for"
+msgstr "Mọi đầu mối tôi chịu trách nhiệm"
+
+msgid "Leads with overdue tasks"
+msgstr "Đầu mối với việc quá hạn"
