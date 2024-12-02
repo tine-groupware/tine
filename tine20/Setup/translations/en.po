@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,234 +19,6 @@ msgstr "Maximum number of users reached. "
 
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr "Please contact Metaways Infosystems GmbH to buy a license that supports a "
-
-msgid "I have read the license agreement and accept it"
-msgstr "I have read the license agreement and accept it"
-
-msgid "License Agreement"
-msgstr "License Agreement"
-
-msgid "I have read the privacy agreement and accept it"
-msgstr "I have read the privacy agreement and accept it"
-
-msgid "Privacy Agreement"
-msgstr "Privacy Agreement"
-
-msgid "Accept Terms and Conditions"
-msgstr "Accept Terms and Conditions"
-
-msgid "Delete current Subscription"
-msgstr "Delete current Subscription"
-
-msgid "Your Subscription is not valid."
-msgstr "Your Subscription is not valid."
-
-msgid "Subscription Configuration"
-msgstr "Subscription Configuration"
-
-msgid "Upload from disk"
-msgstr "Upload from disk"
-
-msgid "Select file containing your Subscription key"
-msgstr "Select file containing your Subscription key"
-
-msgid "No valid Subscription"
-msgstr "No valid Subscription"
-
-msgid "Contract ID"
-msgstr "Contract ID"
-
-msgid "Organization"
-msgstr "Organization"
-
-msgid "Activation Key"
-msgstr "Activation Key"
-
-msgid "Maximum Users (0=unlimited)"
-msgstr "Maximum Users (0=unlimited)"
-
-msgid "Valid from"
-msgstr "Valid from"
-
-msgid "Valid to"
-msgstr "Valid to"
-
-msgid "Subscription Information"
-msgstr "Subscription Information"
-
-msgid "Backend"
-msgstr "Backend"
-
-msgid "Standard IMAP"
-msgstr "Standard IMAP"
-
-msgid "Standard SMTP"
-msgstr "Standard SMTP"
-
-msgid "Imap"
-msgstr "Imap"
-
-msgid "Hostname"
-msgstr "Hostname"
-
-msgid "Username"
-msgstr "Username"
-
-msgid "Password"
-msgstr "Password"
-
-msgid "Port"
-msgstr "Port"
-
-msgid "Secure Connection"
-msgstr "Secure Connection"
-
-msgid "None"
-msgstr "None"
-
-msgid "TLS"
-msgstr "TLS"
-
-msgid "SSL"
-msgstr "SSL"
-
-msgid "Verify peer Certificate"
-msgstr "Verify peer Certificate"
-
-msgid "Use system account"
-msgstr "Use system account"
-
-msgid "No"
-msgstr "No"
-
-msgid "Yes"
-msgstr "Yes"
-
-msgid "Append domain to login name"
-msgstr "Append domain to login name"
-
-msgid "Use email address as login name"
-msgstr "Use email address as login name"
-
-msgid "Cyrus Admin"
-msgstr "Cyrus Admin"
-
-msgid "Cyrus Admin Password"
-msgstr "Cyrus Admin Password"
-
-msgid "Use proxy auth"
-msgstr "Use proxy auth"
-
-msgid "Smtp"
-msgstr "Smtp"
-
-msgid "Authentication"
-msgstr "Authentication"
-
-msgid "Login"
-msgstr "Login"
-
-msgid "Plain"
-msgstr "Plain"
-
-msgid "Primary Domain"
-msgstr "Primary Domain"
-
-msgid "Secondary Domains (comma separated)"
-msgstr "Secondary Domains (comma separated)"
-
-msgid "Aditional Domains (comma separated)"
-msgstr "Aditional Domains (comma separated)"
-
-msgid "Notifications service address"
-msgstr "Notifications service address"
-
-msgid "Notification Username"
-msgstr "Notification Username"
-
-msgid "Notification Password"
-msgstr "Notification Password"
-
-msgid "Notifications local client (hostname or IP address)"
-msgstr "Notifications local client (hostname or IP address)"
-
-msgid "SIEVE"
-msgstr "SIEVE"
-
-msgid "MySql Hostname"
-msgstr "MySql Hostname"
-
-msgid "MySql Database"
-msgstr "MySql Database"
-
-msgid "MySql User"
-msgstr "MySql User"
-
-msgid "MySql Password"
-msgstr "MySql Password"
-
-msgid "MySql Port"
-msgstr "MySql Port"
-
-msgid "User or UID"
-msgstr "User or UID"
-
-msgid "Group or GID"
-msgstr "Group or GID"
-
-msgid "Home Template"
-msgstr "Home Template"
-
-msgid "Password Scheme"
-msgstr "Password Scheme"
-
-msgid "PLAIN-MD5"
-msgstr "PLAIN-MD5"
-
-msgid "MD5-CRYPT"
-msgstr "MD5-CRYPT"
-
-msgid "SHA1"
-msgstr "SHA1"
-
-msgid "SHA256"
-msgstr "SHA256"
-
-msgid "SSHA256"
-msgstr "SSHA256"
-
-msgid "SHA512"
-msgstr "SHA512"
-
-msgid "SSHA512"
-msgstr "SSHA512"
-
-msgid "PLAIN"
-msgstr "PLAIN"
-
-msgid "Terms and Conditions"
-msgstr "Terms and Conditions"
-
-msgid "Setup Checks"
-msgstr "Setup Checks"
-
-msgid "Config Manager"
-msgstr "Config Manager"
-
-msgid "Authentication/Accounts"
-msgstr "Authentication/Accounts"
-
-msgid "Email"
-msgstr "Email"
-
-msgid "Application Manager"
-msgstr "Application Manager"
-
-msgid "Subscription"
-msgstr "Subscription"
-
-msgid "Setup"
-msgstr "Setup"
 
 msgid "Name"
 msgstr "Name"
@@ -302,6 +75,9 @@ msgstr "Delete all existing users and groups"
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 
+msgid "Backend"
+msgstr "Backend"
+
 msgid "TLS client certificate"
 msgstr "TLS client certificate"
 
@@ -323,6 +99,12 @@ msgstr "Authentication provider"
 msgid "Try to split username"
 msgstr "Try to split username"
 
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
 msgid "Account canonical form"
 msgstr "Account canonical form"
 
@@ -338,17 +120,41 @@ msgstr "Host"
 msgid "Login name"
 msgstr "Login name"
 
+msgid "Password"
+msgstr "Password"
+
 msgid "Bind requires DN"
 msgstr "Bind requires DN"
 
 msgid "Start TLS"
 msgstr "Start TLS"
 
+msgid "SSL"
+msgstr "SSL"
+
+msgid "Port"
+msgstr "Port"
+
 msgid "Base DN"
 msgstr "Base DN"
 
 msgid "Search filter"
 msgstr "Search filter"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Secure Connection"
+msgstr "Secure Connection"
+
+msgid "None"
+msgstr "None"
+
+msgid "TLS"
+msgstr "TLS"
+
+msgid "Append domain to login name"
+msgstr "Append domain to login name"
 
 msgid "Certificate validation"
 msgstr "Certificate validation"
@@ -518,38 +324,14 @@ msgstr "Passwords don't match"
 msgid "Should not be empty"
 msgstr "Should not be empty"
 
-msgid "Performing Environment Checks..."
-msgstr "Performing Environment Checks..."
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-
-msgid "Check"
-msgstr "Check"
-
-msgid "Result"
-msgstr "Result"
-
-msgid "Message"
-msgstr "Message"
-
-msgid "Run setup tests"
-msgstr "Run setup tests"
-
-msgid "Ignore setup tests"
-msgstr "Ignore setup tests"
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Application"
-msgstr[1] "Applications"
-
 msgid "File"
 msgstr "File"
 
 msgid "Setup Authentication"
 msgstr "Setup Authentication"
+
+msgid "Username"
+msgstr "Username"
 
 msgid "Database"
 msgstr "Database"
@@ -617,3 +399,222 @@ msgstr "Download config file"
 #, python-brace-format
 msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
 msgstr "This prefix is too long. Please choose a prefix no longer than {0} chars."
+
+msgid "Standard IMAP"
+msgstr "Standard IMAP"
+
+msgid "Standard SMTP"
+msgstr "Standard SMTP"
+
+msgid "Imap"
+msgstr "Imap"
+
+msgid "Verify peer Certificate"
+msgstr "Verify peer Certificate"
+
+msgid "Use system account"
+msgstr "Use system account"
+
+msgid "Use email address as login name"
+msgstr "Use email address as login name"
+
+msgid "Cyrus Admin"
+msgstr "Cyrus Admin"
+
+msgid "Cyrus Admin Password"
+msgstr "Cyrus Admin Password"
+
+msgid "Use proxy auth"
+msgstr "Use proxy auth"
+
+msgid "Smtp"
+msgstr "Smtp"
+
+msgid "Authentication"
+msgstr "Authentication"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Plain"
+msgstr "Plain"
+
+msgid "Primary Domain"
+msgstr "Primary Domain"
+
+msgid "Secondary Domains (comma separated)"
+msgstr "Secondary Domains (comma separated)"
+
+msgid "Aditional Domains (comma separated)"
+msgstr "Aditional Domains (comma separated)"
+
+msgid "Notifications service address"
+msgstr "Notifications service address"
+
+msgid "Notification Username"
+msgstr "Notification Username"
+
+msgid "Notification Password"
+msgstr "Notification Password"
+
+msgid "Notifications local client (hostname or IP address)"
+msgstr "Notifications local client (hostname or IP address)"
+
+msgid "SIEVE"
+msgstr "SIEVE"
+
+msgid "MySql Hostname"
+msgstr "MySql Hostname"
+
+msgid "MySql Database"
+msgstr "MySql Database"
+
+msgid "MySql User"
+msgstr "MySql User"
+
+msgid "MySql Password"
+msgstr "MySql Password"
+
+msgid "MySql Port"
+msgstr "MySql Port"
+
+msgid "User or UID"
+msgstr "User or UID"
+
+msgid "Group or GID"
+msgstr "Group or GID"
+
+msgid "Home Template"
+msgstr "Home Template"
+
+msgid "Password Scheme"
+msgstr "Password Scheme"
+
+msgid "PLAIN-MD5"
+msgstr "PLAIN-MD5"
+
+msgid "MD5-CRYPT"
+msgstr "MD5-CRYPT"
+
+msgid "SHA1"
+msgstr "SHA1"
+
+msgid "SHA256"
+msgstr "SHA256"
+
+msgid "SSHA256"
+msgstr "SSHA256"
+
+msgid "SHA512"
+msgstr "SHA512"
+
+msgid "SSHA512"
+msgstr "SSHA512"
+
+msgid "PLAIN"
+msgstr "PLAIN"
+
+msgid "Performing Environment Checks..."
+msgstr "Performing Environment Checks..."
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Result"
+msgstr "Result"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Run setup tests"
+msgstr "Run setup tests"
+
+msgid "Ignore setup tests"
+msgstr "Ignore setup tests"
+
+msgid "Setup"
+msgstr "Setup"
+
+msgid "Delete current Subscription"
+msgstr "Delete current Subscription"
+
+msgid "Your Subscription is not valid."
+msgstr "Your Subscription is not valid."
+
+msgid "Subscription Configuration"
+msgstr "Subscription Configuration"
+
+msgid "Upload from disk"
+msgstr "Upload from disk"
+
+msgid "Select file containing your Subscription key"
+msgstr "Select file containing your Subscription key"
+
+msgid "No valid Subscription"
+msgstr "No valid Subscription"
+
+msgid "Contract ID"
+msgstr "Contract ID"
+
+msgid "Organization"
+msgstr "Organization"
+
+msgid "Activation Key"
+msgstr "Activation Key"
+
+msgid "Maximum Users (0=unlimited)"
+msgstr "Maximum Users (0=unlimited)"
+
+msgid "Valid from"
+msgstr "Valid from"
+
+msgid "Valid to"
+msgstr "Valid to"
+
+msgid "Subscription Information"
+msgstr "Subscription Information"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Application"
+msgstr[1] "Applications"
+
+msgid "I have read the license agreement and accept it"
+msgstr "I have read the license agreement and accept it"
+
+msgid "License Agreement"
+msgstr "License Agreement"
+
+msgid "I have read the privacy agreement and accept it"
+msgstr "I have read the privacy agreement and accept it"
+
+msgid "Privacy Agreement"
+msgstr "Privacy Agreement"
+
+msgid "Accept Terms and Conditions"
+msgstr "Accept Terms and Conditions"
+
+msgid "Terms and Conditions"
+msgstr "Terms and Conditions"
+
+msgid "Setup Checks"
+msgstr "Setup Checks"
+
+msgid "Config Manager"
+msgstr "Config Manager"
+
+msgid "Authentication/Accounts"
+msgstr "Authentication/Accounts"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Application Manager"
+msgstr "Application Manager"
+
+msgid "Subscription"
+msgstr "Subscription"

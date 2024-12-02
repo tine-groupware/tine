@@ -10,306 +10,25 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014\n"
 "Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All leads"
+msgid "manage shared lead folders"
 msgstr ""
 
-msgid "Default Lead List"
+msgid "Create new shared lead folders"
 msgstr ""
 
-msgid "The default list for new leads"
+msgid "manage shared leads favorites"
 msgstr ""
 
-msgid "Get Notification E-mails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about."
-msgstr "ระดับของการกระทำที่คุณต้องการรับทราบ"
-
-msgid "Send Notifications e-mails for own actions"
-msgstr ""
-
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "ค่าที่ชอบหลัก"
-
-msgid "The default favorite which is loaded on crm startup"
-msgstr ""
-
-msgid "New Lead"
-msgstr ""
-
-msgid "Tags"
-msgstr "ป้ายกำกับ"
-
-msgid "Lead name"
-msgstr ""
-
-msgid "Responsible"
-msgstr "รับผิดชอบ"
-
-msgid "Partner"
-msgstr "คู่หู"
-
-msgid "Customer"
-msgstr "ลูกค้า"
-
-msgid "Leadstate"
-msgstr "สถานะดำเนินการ"
-
-msgid "Leadtype"
-msgstr "ประเภทดำเนินการ"
-
-msgid "Leadsource"
-msgstr "แหล่งดำเนินการ"
-
-msgid "Probability"
-msgstr "ความน่าจะเป็น"
-
-msgid "Turnover"
-msgstr ""
-
-msgid "Estimated end"
-msgstr ""
-
-msgid "End"
-msgstr "สิ้นสุด"
-
-msgid "Start"
-msgstr "เริ่มต้น"
-
-msgid "Probable Turnover"
-msgstr ""
-
-msgid "Resubmission Date"
-msgstr ""
-
-msgid "Import leads"
-msgstr ""
-
-msgid "Contact"
-msgstr "การติดต่อ"
-
-msgid "CRM Role"
-msgstr "หน้าที่ CRM"
-
-msgid "Tasks"
-msgstr "หน้าที่"
-
-msgid "No Tasks to display"
-msgstr "ไม่มีหน้าที่ให้แสดง"
-
-msgid "Summary"
-msgstr "ข้อสรุป"
-
-msgid "Add a task..."
-msgstr "เพิ่มหน้าที่..."
-
-msgid "Due Date"
-msgstr "วันครบกำหนด"
-
-msgid "Priority"
-msgstr "ลำดับความสำคัญ"
-
-msgid "Percent"
-msgstr "เปอร์เซนต์"
-
-msgid "Status"
-msgstr "สถานะ"
-
-msgid "Organizer"
-msgstr ""
-
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "เพิ่ม {0} ใหม่"
-
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr "ยกเลิกการเชื่อมต่อ {0}"
-
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "แก้ไข {0}"
-
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "แก้ไข {0} ที่เลือก"
-
-msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-
-msgid "Please select the attenders' role"
-msgstr ""
-
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] ""
-
-msgid "Select Lead"
-msgstr ""
-
-msgid "Role"
-msgstr "หน้าที่"
-
-msgid "Select Role"
-msgstr "เลือก หน้าที่"
-
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr ""
-
-msgid "Phone"
-msgstr "โทรศัพท์"
-
-msgid "Mobile"
-msgstr "โทรศัพท์เคลื่อนที่"
-
-msgid "Fax"
-msgstr "โทรสาร"
-
-msgid "E-Mail"
-msgstr "อีเมล"
-
-msgid "Web"
-msgstr "เวบไซด์"
-
-msgid "Address"
-msgstr "ที่อยู่"
-
-msgid "Change type to Customer"
-msgstr "เปลี่ยน ประเภทลูกค้า"
-
-msgid "Change type to Responsible"
-msgstr ""
-
-msgid "Change type to Partner"
-msgstr ""
-
-msgid "Change contact type"
-msgstr "เปลี่ยนประเภทการติดต่อ"
-
-msgid "Search for Contacts to add ..."
-msgstr "ค้นหาการติดต่อเพื่อเพิ่ม ..."
-
-msgid "Name"
-msgstr "ชื่อ"
-
-msgid "Data"
-msgstr "ข้อมูล"
-
-msgid "Cellphone"
-msgstr "โทรศัพท์เคลื่อนที่"
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr ""
-
-msgid "Products"
-msgstr "สินค้า"
-
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr ""
-
-msgid "Enter lead name"
-msgstr ""
-
-msgid "Expected turnover"
-msgstr ""
-
-msgid "Description"
-msgstr "การอธิบาย"
-
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
-
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] ""
-
-msgid "lead lists"
-msgstr ""
-
-msgid "Quick Search"
-msgstr "ค้นหาอย่างรวดเร็ว"
-
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-msgid "X Lead"
-msgstr ""
-
-msgid "read-only"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Product"
-msgstr "สินค้า"
-
-msgid "Price"
-msgstr "ราคา"
-
-msgid "Quantity"
-msgstr "จำนวน"
-
-msgid "Search for Products to add ..."
-msgstr "ค้นหาสินค้าเพื่อเพิ่ม ..."
-
-msgid "All leads I have read grants for"
-msgstr ""
-
-msgid "Last modified by me"
-msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
-
-msgid "All leads that I have last modified"
-msgstr ""
-
-msgid "My leads"
-msgstr ""
-
-msgid "All leads that I am responsible for"
-msgstr ""
-
-msgid "Leads with overdue tasks"
+msgid "Create or update shared leads favorites"
 msgstr ""
 
 msgid "controls sending notification of Leads"
@@ -357,6 +76,9 @@ msgstr "ได้ยอมรับแล้ว"
 msgid "lost"
 msgstr "หาย"
 
+msgid "read-only"
+msgstr ""
+
 msgid "Lead Sources Available"
 msgstr ""
 
@@ -368,6 +90,12 @@ msgstr ""
 
 msgid "Possible lead types."
 msgstr ""
+
+msgid "Customer"
+msgstr "ลูกค้า"
+
+msgid "Partner"
+msgstr "คู่หู"
 
 msgid "Reseller"
 msgstr "ตัวแทนจำหน่าย"
@@ -405,11 +133,26 @@ msgstr ""
 msgid "State"
 msgstr ""
 
+msgid "Role"
+msgstr "หน้าที่"
+
 msgid "Source"
 msgstr "แหล่งข้อมูล"
 
+msgid "Start"
+msgstr "เริ่มต้น"
+
 msgid "Scheduled end"
 msgstr ""
+
+msgid "End"
+msgstr "สิ้นสุด"
+
+msgid "Turnover"
+msgstr ""
+
+msgid "Probability"
+msgstr "ความน่าจะเป็น"
 
 msgid "Folder"
 msgstr "แฟ้มเอกสาร"
@@ -423,6 +166,9 @@ msgstr "เขตข้อมูลที่ทำการอัพเดท: "
 #, python-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
+
+msgid "Tags"
+msgstr "ป้ายกำกับ"
 
 #, python-format
 msgid "Lead %s has been changed"
@@ -439,14 +185,20 @@ msgstr ""
 msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
 msgstr ""
 
-msgid "GENDER_Lead"
-msgstr ""
-
-msgid "Show Closed"
+msgid "CSV all data"
 msgstr ""
 
 msgid "Lead Data"
 msgstr "ข้อมูลที่ดำเนินการ"
+
+msgid "Leadstate"
+msgstr "สถานะดำเนินการ"
+
+msgid "Leadtype"
+msgstr "ประเภทดำเนินการ"
+
+msgid "Leadsource"
+msgstr "แหล่งดำเนินการ"
 
 msgid "End Scheduled"
 msgstr ""
@@ -454,11 +206,26 @@ msgstr ""
 msgid "Contacts"
 msgstr "การติดต่อ"
 
+msgid "Address"
+msgstr "ที่อยู่"
+
 msgid "Telephone"
 msgstr "โทรศัพท์"
 
 msgid "Email"
 msgstr "อีเมล"
+
+msgid "Tasks"
+msgstr "หน้าที่"
+
+msgid "Due Date"
+msgstr "วันครบกำหนด"
+
+msgid "Priority"
+msgstr "ลำดับความสำคัญ"
+
+msgid "Products"
+msgstr "สินค้า"
 
 msgid "low"
 msgstr "ต่ำ"
@@ -472,18 +239,6 @@ msgstr "สูง"
 msgid "urgent"
 msgstr "ด่วน"
 
-msgid "CSV all data"
-msgstr ""
-
-msgid "Lead CSV import"
-msgstr ""
-
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
 msgid "Edit new lead"
 msgstr ""
 
@@ -495,14 +250,259 @@ msgstr ""
 msgid "%s new leads have been imported"
 msgstr ""
 
-msgid "manage shared lead folders"
+msgid "Lead CSV import"
 msgstr ""
 
-msgid "Create new shared lead folders"
+msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
-msgid "manage shared leads favorites"
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-msgid "Create or update shared leads favorites"
+msgid "Please choose the Lead to add the contacts to"
+msgstr ""
+
+msgid "Please select the attenders' role"
+msgstr ""
+
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] ""
+
+msgid "Select Lead"
+msgstr ""
+
+msgid "Select Role"
+msgstr "เลือก หน้าที่"
+
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr ""
+
+msgid "Change type to Customer"
+msgstr "เปลี่ยน ประเภทลูกค้า"
+
+msgid "Responsible"
+msgstr "รับผิดชอบ"
+
+msgid "Change type to Responsible"
+msgstr ""
+
+msgid "Change type to Partner"
+msgstr ""
+
+msgid "Change contact type"
+msgstr "เปลี่ยนประเภทการติดต่อ"
+
+msgid "Search for Contacts to add ..."
+msgstr "ค้นหาการติดต่อเพื่อเพิ่ม ..."
+
+msgid "Name"
+msgstr "ชื่อ"
+
+msgid "Data"
+msgstr "ข้อมูล"
+
+msgid "Phone"
+msgstr "โทรศัพท์"
+
+msgid "Cellphone"
+msgstr "โทรศัพท์เคลื่อนที่"
+
+msgid "New Lead"
+msgstr ""
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr ""
+
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr ""
+
+msgid "Enter lead name"
+msgstr ""
+
+msgid "Expected turnover"
+msgstr ""
+
+msgid "Resubmission Date"
+msgstr ""
+
+msgid "Estimated end"
+msgstr ""
+
+msgid "Description"
+msgstr "การอธิบาย"
+
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+msgid "Contact"
+msgstr "การติดต่อ"
+
+msgid "CRM Role"
+msgstr "หน้าที่ CRM"
+
+msgid "Mobile"
+msgstr "โทรศัพท์เคลื่อนที่"
+
+msgid "Fax"
+msgstr "โทรสาร"
+
+msgid "E-Mail"
+msgstr "อีเมล"
+
+msgid "Web"
+msgstr "เวบไซด์"
+
+msgid "Status"
+msgstr "สถานะ"
+
+msgid "Lead name"
+msgstr ""
+
+msgid "Probable Turnover"
+msgstr ""
+
+msgid "Import leads"
+msgstr ""
+
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "เพิ่ม {0} ใหม่"
+
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "ยกเลิกการเชื่อมต่อ {0}"
+
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "แก้ไข {0}"
+
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "แก้ไข {0} ที่เลือก"
+
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+
+msgid "lead lists"
+msgstr ""
+
+msgid "Quick Search"
+msgstr "ค้นหาอย่างรวดเร็ว"
+
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
+
+msgid "Created By"
+msgstr "สร้าง โดย"
+
+msgid "X Lead"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Product"
+msgstr "สินค้า"
+
+msgid "Price"
+msgstr "ราคา"
+
+msgid "Quantity"
+msgstr "จำนวน"
+
+msgid "Search for Products to add ..."
+msgstr "ค้นหาสินค้าเพื่อเพิ่ม ..."
+
+msgid "No Tasks to display"
+msgstr "ไม่มีหน้าที่ให้แสดง"
+
+msgid "Summary"
+msgstr "ข้อสรุป"
+
+msgid "Add a task..."
+msgstr "เพิ่มหน้าที่..."
+
+msgid "Percent"
+msgstr "เปอร์เซนต์"
+
+msgid "Organizer"
+msgstr ""
+
+msgid "GENDER_Lead"
+msgstr ""
+
+msgid "Show Closed"
+msgstr ""
+
+msgid "All leads"
+msgstr ""
+
+msgid "Default Lead List"
+msgstr ""
+
+msgid "The default list for new leads"
+msgstr ""
+
+msgid "Get Notification E-mails"
+msgstr ""
+
+msgid "The level of actions you want to be notified about."
+msgstr "ระดับของการกระทำที่คุณต้องการรับทราบ"
+
+msgid "Send Notifications e-mails for own actions"
+msgstr ""
+
+msgid "Get notifications e-mails for actions you did yourself"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr "ค่าที่ชอบหลัก"
+
+msgid "The default favorite which is loaded on crm startup"
+msgstr ""
+
+msgid "All leads I have read grants for"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
+
+msgid "All leads that I have last modified"
+msgstr ""
+
+msgid "My leads"
+msgstr ""
+
+msgid "All leads that I am responsible for"
+msgstr ""
+
+msgid "Leads with overdue tasks"
 msgstr ""

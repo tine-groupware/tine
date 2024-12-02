@@ -8,966 +8,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
 "Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr "Mở ứng dụng"
-
-msgid "Disable Application"
-msgstr "Cấm ứng dụng"
-
-msgid "Settings"
-msgstr "Thiết lập"
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "{0} Thiết lập"
-
-msgid "Search:"
-msgstr "Tìm kiếm:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Hiển thị ứng dụng {0} - {1} của {2}"
-
-msgid "No applications to display"
-msgstr "Không có ứng dụng nào"
-
-msgid "Order"
-msgstr "Xắp xếp"
-
-msgid "Name"
-msgstr "Tên"
-
-msgid "Status"
-msgstr "Trạng thái"
-
-msgid "Version"
-msgstr "Phiên bản"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Xác nhận"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Bạn có muốn xóa nhóm được chọn"
-
-msgid "Deleting group(s)..."
-msgstr "Đang xóa nhóm ..."
-
-msgid "Add Group"
-msgstr "Tạo nhóm"
-
-msgid "Edit Group"
-msgstr "Sửa nhóm"
-
-msgid "Delete Group"
-msgstr "Xóa nhóm"
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Hiển thị nhóm {0} - {1} của {2}"
-
-msgid "No groups to display"
-msgstr "Không có nhóm bài được hiển thị"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Mô tả"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Lỗi"
-
-msgid "Please configure store for this field type"
-msgstr "Xin cấu hình store cho loại trường này"
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-"one: Ứng dụng\n"
-"other: Ứng dụng"
-
-msgid "Record Class"
-msgstr "Record Class"
-
-msgid "Given record class not found"
-msgstr "Lớp (class) biểu ghi đã cho không tồn tại"
-
-msgid "Cancel"
-msgstr "Hủy"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Configure store"
-msgstr "Cấu hình store"
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "Xem"
-
-msgid "Use"
-msgstr "Sử dụng"
-
-msgid "Model"
-msgstr "Model"
-
-msgid "Custom field definition"
-msgstr "Định nghĩa trường tùy biến"
-
-msgid "Text"
-msgstr "Chữ"
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr "Số"
-
-msgid "Date"
-msgstr "Ngày"
-
-msgid "DateTime"
-msgstr "DateTime"
-
-msgid "Time"
-msgstr "Time"
-
-msgid "Boolean"
-msgstr "Boolean"
-
-msgid "Search Combo"
-msgstr "Kết hợp tìm kiếm"
-
-msgid "Key Field"
-msgstr "Trường chính"
-
-msgid "Record"
-msgstr "Biểu ghi"
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr "Loại"
-
-msgid "Label"
-msgstr "Nhãn"
-
-msgid "Length"
-msgstr "Độ dài"
-
-msgid "Required"
-msgstr "Yêu cầu"
-
-msgid "Custom field additional properties"
-msgstr "Thuộc tính khác cho trường tùy biến"
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-"one: Nhóm\n"
-"other: Nhóm"
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr "Trường tùy biến đã tồn tại. Xin chọn tên khác."
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-"one: Trường tùy biến\n"
-"other: Trường tùy biến"
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-
-msgid "Value"
-msgstr "Giá trị"
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "Tên máy tính"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Danh bạ mặc định cho nhóm và liên lạc mới"
-
-msgid "Please wait"
-msgstr "Xin hãy đợi"
-
-msgid "Updating Tag"
-msgstr "Đang cập nhật từ khóa"
-
-msgid "Failed"
-msgstr "Hỏng"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr "Xin hãy sửa các lỗi được ghi chú."
-
-msgid "Allowed Contexts"
-msgstr "Ngữ cảnh được phép"
-
-msgid "Context"
-msgstr "Ngữ cảnh"
-
-msgid "Account Rights"
-msgstr "Quyền tài khoản"
-
-msgid "Tag Name"
-msgstr "Tên từ khóa"
-
-msgid "Color"
-msgstr "Màu"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Đang chuyển {0} ..."
-
-msgid "Tag"
-msgstr "Từ khóa"
-
-msgid "Add New Tag"
-msgstr "Thêm từ khóa"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Sửa từ khóa \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "Bạn có muốn xóa các từ khóa đa chọn?"
-
-msgid "Deleting tag(s)..."
-msgstr "Đang xóa từ khóa ..."
-
-msgid "Add Tag"
-msgstr "Thêm từ khóa"
-
-msgid "Edit Tag"
-msgstr "Sửa từ khóa"
-
-msgid "Delete Tag"
-msgstr "Xóa từ khóa"
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Hiển thị từ khóa {0} - {1} của {2}"
-
-msgid "No tags to display"
-msgstr "Không có từ khóa nào"
-
-msgid "Usage:&#160;"
-msgstr "Sử dụng:&#160;"
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "Đang cập nhật thành viên"
-
-msgid "Could not save role."
-msgstr "Không thể lưu vai trò"
-
-msgid "Deleting role..."
-msgstr "Đang xóa vai trò ..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "Có lỗi khi xóa vai trò"
-
-msgid "Rights"
-msgstr "Quyền"
-
-msgid "Members"
-msgstr "Thành viên"
-
-msgid "Role Name"
-msgstr "Tên vai trò"
-
-msgid "Role"
-msgstr "Vai trò"
-
-msgid "Add New Role"
-msgstr "Thêm vai trò"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Sửa vai trò \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "Bạn có muốn xóa vai trò đã chọn"
-
-msgid "Deleting role(s)..."
-msgstr "Đang xóa vai trò..."
-
-msgid "Add Role"
-msgstr "Thêm vai trò"
-
-msgid "Edit Role"
-msgstr "Sửa vai trò"
-
-msgid "Delete Role"
-msgstr "Xóa vai trò"
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Hiển thị vai trò {0} - {1} của {2}"
-
-msgid "No roles to display"
-msgstr "Không có vai trò nào"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] ""
-"one: Nhật ký truy cập\n"
-"other: Nhật ký truy cập"
-
-msgid "Groups"
-msgstr "Nhóm"
-
-msgid "Applications"
-msgstr "Ứng dụng"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "Quota"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] ""
-"one: Người sử dụng email\n"
-"other: Người sử dụng email"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr "Dung lượng Mailbox hiện tại"
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr "Current Sieve size"
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Tên miền không được phép. Kiểm tra cấu hình tên miền SMTP"
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr "Mật khẩu không giống nhau"
-
-msgid "Passwords match!"
-msgstr "Mật khẩu giống nhau"
-
-msgid "Primary group"
-msgstr "Nhóm chính"
-
-msgid "Unix"
-msgstr "Unix"
-
-msgid "Home Directory"
-msgstr "Thư mục Home"
-
-msgid "Login Shell"
-msgstr "Shell Login"
-
-msgid "Windows"
-msgstr "Windows"
-
-msgid "Home Drive"
-msgstr "Home Drive"
-
-msgid "Login Time"
-msgstr "Thời gian đăng nhập"
-
-msgid "never logged in"
-msgstr "chưa bao giờ đăng nhập"
-
-msgid "Home Path"
-msgstr "Đường dẫn trang chủ"
-
-msgid "Logout Time"
-msgstr "Thời gian thoát"
-
-msgid "never logged off"
-msgstr "chưa bao giờ thoát"
-
-msgid "Profile Path"
-msgstr "Đường dẫn hồ sơ"
-
-msgid "Password Last Set"
-msgstr "Đặt mật khẩu lần cuối"
-
-msgid "never"
-msgstr "chưa bao giờ"
-
-msgid "Logon Script"
-msgstr "Script đăng nhập"
-
-msgid "Password Can Change"
-msgstr "Mật khẩu có thể đổi"
-
-msgid "not set"
-msgstr "chưa đặt"
-
-msgid "Password Must Change"
-msgstr "Mật khẩu phải được thay đổi"
-
-msgid "Kick Off Time"
-msgstr "Thời gian bắt đầu"
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr "chưa đặt quota"
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Thông tin"
-
-msgid "Last Login"
-msgstr "Đăng nhập lần cuối"
-
-msgid "Forward Only"
-msgstr "Chỉ chuyển tiếp"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr "Thêm 1 địa chỉ ánh xạ email..."
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr "Tên miền không được phép sử dụng"
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr "Chuyển tiếp tới chính tôi"
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Xác nhận mật khẩu"
-
-msgid "Repeat password"
-msgstr "Nhập lại mật khẩu"
-
-msgid "Ok"
-msgstr "OK"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Tài khoản"
-
-msgid "First name"
-msgstr "Tên họ"
-
-msgid "Last name"
-msgstr "Tên"
-
-msgid "Display name"
-msgstr "Tên hiển thị"
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr "Tên đăng nhập"
-
-msgid "Password"
-msgstr "Mật khẩu"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "OpenID"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "đang mở"
-
-msgid "disabled"
-msgstr "đã tắt"
-
-msgid "expired"
-msgstr "hết hạn"
-
-msgid "blocked"
-msgstr "đã bị phong tỏa"
-
-msgid "Invalid Status"
-msgstr "Trạng thái không hợp lệ"
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "Trạng thái bị phong tỏa chỉ hợp lệ khi người dùng cố đăng nhập với một mật khẩu sai một cách thường xuyên. Nó không thể được đặt trạng thái này ở đây."
-
-msgid "Expires"
-msgstr "Hết hạn"
-
-msgid "Last login at"
-msgstr "Đăng nhập lần cuối lúc"
-
-msgid "don't know"
-msgstr "không biết"
-
-msgid "Last login from"
-msgstr "Đawng nhập lần cuối từ"
-
-msgid "Password set"
-msgstr "Mật khẩu được đặt"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr "Nhóm người dùng"
-
-msgid "User roles"
-msgstr "Vai trò người dùng"
-
-msgid "Fileserver"
-msgstr "Máy chủ file"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Có thể nhìn thấy"
-
-msgid "Display in addressbook"
-msgstr "Hiển thị trong sổ địa chỉ"
-
-msgid "Hide from addressbook"
-msgstr "Ẩn từ sổ địa chỉ"
-
-msgid "Saved in Addressbook"
-msgstr "Đã lưu trong Sổ địa chỉ"
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] ""
-"one: Người dùng\n"
-"other: Người dùng"
-
-msgid "Users"
-msgstr "Người dùng"
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] ""
-"one: Người dùng Samba\n"
-"other: Người dùng Samba"
-
-msgid "Enable Account"
-msgstr "Mở tài khoản"
-
-msgid "Disable Account"
-msgstr "Tắt tài khoản"
-
-msgid "Reset Password"
-msgstr "Nhập lại mật khẩu"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "Đã đổi mật khẩu"
-
-msgid "Set new password"
-msgstr "Đặt mật khẩu mới"
-
-msgid "Please enter the new password:"
-msgstr "Xin hãy nhập mật khẩu mới"
-
-msgid "Group Name"
-msgstr "Tên nhóm"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Nhóm thành viên"
-
-msgid "personal"
-msgstr "cá nhân"
-
-msgid "shared"
-msgstr "dùng chung"
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr "Ghi chép cho chủ sở huwuxu"
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-"one: Bộ chứa\n"
-"other: Bộ chứa"
-
-msgid "Container Name"
-msgstr "Tên bộ chứa"
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] ""
-"one: Máy tính\n"
-"other: Máy tính"
-
-msgid "Roles"
-msgstr "Vai trò"
-
-msgid "Containers"
-msgstr "Bộ chứa"
-
-msgid "Shared Tags"
-msgstr "Từ khóa chia sẻ"
-
-msgid "Customfields"
-msgstr "Trường tùy biến"
-
-msgid "Computers"
-msgstr "Máy tính"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "Thông tin máy chủ"
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Admin"
-
-msgid "Refresh"
-msgstr "Nạp lại"
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "Địa chỉ IP"
-
-msgid "Client Type"
-msgstr "Loại người dùng"
-
-msgid "Session ID"
-msgstr "Session ID"
-
-msgid "Login Name"
-msgstr "Tên đăng nhập"
-
-msgid "Result"
-msgstr "Kết quả"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr "người dùng đã bị phong tỏa"
-
-msgid "password expired"
-msgstr "mật khẩu đã hết hạn"
-
-msgid "user disabled"
-msgstr "người dùng đã bị cấm"
-
-msgid "invalid password"
-msgstr "sai mật khẩu"
-
-msgid "ambiguous username"
-msgstr "Tên truy cập không rõ"
-
-msgid "user not found"
-msgstr "không tìm thấy người dùng"
-
-msgid "failure"
-msgstr "hỏng"
-
-msgid "success"
-msgstr "thành công"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr "Default IMAP user settings"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr "Bộ chứa của bạn đã được thay đổi"
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Bộ chứa của bạn đã được đổi từ %1$s %2$s. Ghi chú: %3$s"
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1114,4 +162,956 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr "Default IMAP user settings"
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr "Bộ chứa của bạn đã được thay đổi"
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Bộ chứa của bạn đã được đổi từ %1$s %2$s. Ghi chú: %3$s"
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] ""
+"one: Nhật ký truy cập\n"
+"other: Nhật ký truy cập"
+
+msgid "IP Address"
+msgstr "Địa chỉ IP"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+"one: Người dùng\n"
+"other: Người dùng"
+
+msgid "Login Time"
+msgstr "Thời gian đăng nhập"
+
+msgid "Logout Time"
+msgstr "Thời gian thoát"
+
+msgid "Client Type"
+msgstr "Loại người dùng"
+
+msgid "Session ID"
+msgstr "Session ID"
+
+msgid "Login Name"
+msgstr "Tên đăng nhập"
+
+msgid "Name"
+msgstr "Tên"
+
+msgid "Result"
+msgstr "Kết quả"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr "người dùng đã bị phong tỏa"
+
+msgid "password expired"
+msgstr "mật khẩu đã hết hạn"
+
+msgid "user disabled"
+msgstr "người dùng đã bị cấm"
+
+msgid "invalid password"
+msgstr "sai mật khẩu"
+
+msgid "ambiguous username"
+msgstr "Tên truy cập không rõ"
+
+msgid "user not found"
+msgstr "không tìm thấy người dùng"
+
+msgid "failure"
+msgstr "hỏng"
+
+msgid "success"
+msgstr "thành công"
+
+msgid "Groups"
+msgstr "Nhóm"
+
+msgid "Roles"
+msgstr "Vai trò"
+
+msgid "Applications"
+msgstr "Ứng dụng"
+
+msgid "Containers"
+msgstr "Bộ chứa"
+
+msgid "Shared Tags"
+msgstr "Từ khóa chia sẻ"
+
+msgid "Customfields"
+msgstr "Trường tùy biến"
+
+msgid "Computers"
+msgstr "Máy tính"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "Thông tin máy chủ"
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Refresh"
+msgstr "Nạp lại"
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Danh bạ mặc định cho nhóm và liên lạc mới"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+"one: Ứng dụng\n"
+"other: Ứng dụng"
+
+msgid "Enable Application"
+msgstr "Mở ứng dụng"
+
+msgid "Disable Application"
+msgstr "Cấm ứng dụng"
+
+msgid "Settings"
+msgstr "Thiết lập"
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Thiết lập"
+
+msgid "Search:"
+msgstr "Tìm kiếm:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Hiển thị ứng dụng {0} - {1} của {2}"
+
+msgid "No applications to display"
+msgstr "Không có ứng dụng nào"
+
+msgid "Order"
+msgstr "Xắp xếp"
+
+msgid "Status"
+msgstr "Trạng thái"
+
+msgid "Version"
+msgstr "Phiên bản"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Label"
+msgstr "Nhãn"
+
+msgid "Value"
+msgstr "Giá trị"
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+"one: Bộ chứa\n"
+"other: Bộ chứa"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Type"
+msgstr "Loại"
+
+msgid "personal"
+msgstr "cá nhân"
+
+msgid "shared"
+msgstr "dùng chung"
+
+msgid "Color"
+msgstr "Màu"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr "Ghi chép cho chủ sở huwuxu"
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Container Name"
+msgstr "Tên bộ chứa"
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] ""
+"one: Trường tùy biến\n"
+"other: Trường tùy biến"
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Lỗi"
+
+msgid "Please configure store for this field type"
+msgstr "Xin cấu hình store cho loại trường này"
+
+msgid "Record Class"
+msgstr "Record Class"
+
+msgid "Given record class not found"
+msgstr "Lớp (class) biểu ghi đã cho không tồn tại"
+
+msgid "Cancel"
+msgstr "Hủy"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Configure store"
+msgstr "Cấu hình store"
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "Xem"
+
+msgid "Use"
+msgstr "Sử dụng"
+
+msgid "Custom field definition"
+msgstr "Định nghĩa trường tùy biến"
+
+msgid "Text"
+msgstr "Chữ"
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr "Số"
+
+msgid "Date"
+msgstr "Ngày"
+
+msgid "DateTime"
+msgstr "DateTime"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Boolean"
+msgstr "Boolean"
+
+msgid "Search Combo"
+msgstr "Kết hợp tìm kiếm"
+
+msgid "Key Field"
+msgstr "Trường chính"
+
+msgid "Record"
+msgstr "Biểu ghi"
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr "Độ dài"
+
+msgid "Required"
+msgstr "Yêu cầu"
+
+msgid "Custom field additional properties"
+msgstr "Thuộc tính khác cho trường tùy biến"
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+"one: Nhóm\n"
+"other: Nhóm"
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr "Trường tùy biến đã tồn tại. Xin chọn tên khác."
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Tên nhóm"
+
+msgid "Visibility"
+msgstr "Có thể nhìn thấy"
+
+msgid "Display in addressbook"
+msgstr "Hiển thị trong sổ địa chỉ"
+
+msgid "Hide from addressbook"
+msgstr "Ẩn từ sổ địa chỉ"
+
+msgid "Saved in Addressbook"
+msgstr "Đã lưu trong Sổ địa chỉ"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Nhóm thành viên"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Tên miền không được phép. Kiểm tra cấu hình tên miền SMTP"
+
+msgid "Confirm"
+msgstr "Xác nhận"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Bạn có muốn xóa nhóm được chọn"
+
+msgid "Deleting group(s)..."
+msgstr "Đang xóa nhóm ..."
+
+msgid "Add Group"
+msgstr "Tạo nhóm"
+
+msgid "Edit Group"
+msgstr "Sửa nhóm"
+
+msgid "Delete Group"
+msgstr "Xóa nhóm"
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Hiển thị nhóm {0} - {1} của {2}"
+
+msgid "No groups to display"
+msgstr "Không có nhóm bài được hiển thị"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "Quota"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] ""
+"one: Người sử dụng email\n"
+"other: Người sử dụng email"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr "Dung lượng Mailbox hiện tại"
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr "Current Sieve size"
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr "chưa đặt quota"
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Xin hãy đợi"
+
+msgid "Updating Memberships"
+msgstr "Đang cập nhật thành viên"
+
+msgid "Failed"
+msgstr "Hỏng"
+
+msgid "Could not save role."
+msgstr "Không thể lưu vai trò"
+
+msgid "Please fix the errors noted."
+msgstr "Xin hãy sửa các lỗi được ghi chú."
+
+msgid "Deleting role..."
+msgstr "Đang xóa vai trò ..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "Có lỗi khi xóa vai trò"
+
+msgid "Rights"
+msgstr "Quyền"
+
+msgid "Members"
+msgstr "Thành viên"
+
+msgid "Role Name"
+msgstr "Tên vai trò"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Đang chuyển {0} ..."
+
+msgid "Role"
+msgstr "Vai trò"
+
+msgid "Add New Role"
+msgstr "Thêm vai trò"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Sửa vai trò \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "Bạn có muốn xóa vai trò đã chọn"
+
+msgid "Deleting role(s)..."
+msgstr "Đang xóa vai trò..."
+
+msgid "Add Role"
+msgstr "Thêm vai trò"
+
+msgid "Edit Role"
+msgstr "Sửa vai trò"
+
+msgid "Delete Role"
+msgstr "Xóa vai trò"
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Hiển thị vai trò {0} - {1} của {2}"
+
+msgid "No roles to display"
+msgstr "Không có vai trò nào"
+
+msgid "Computer Name"
+msgstr "Tên máy tính"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+"one: Máy tính\n"
+"other: Máy tính"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "Đang cập nhật từ khóa"
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr "Ngữ cảnh được phép"
+
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+msgid "Account Rights"
+msgstr "Quyền tài khoản"
+
+msgid "Tag Name"
+msgstr "Tên từ khóa"
+
+msgid "Tag"
+msgstr "Từ khóa"
+
+msgid "Add New Tag"
+msgstr "Thêm từ khóa"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Sửa từ khóa \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "Bạn có muốn xóa các từ khóa đa chọn?"
+
+msgid "Deleting tag(s)..."
+msgstr "Đang xóa từ khóa ..."
+
+msgid "Add Tag"
+msgstr "Thêm từ khóa"
+
+msgid "Edit Tag"
+msgstr "Sửa từ khóa"
+
+msgid "Delete Tag"
+msgstr "Xóa từ khóa"
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Hiển thị từ khóa {0} - {1} của {2}"
+
+msgid "No tags to display"
+msgstr "Không có từ khóa nào"
+
+msgid "Usage:&#160;"
+msgstr "Sử dụng:&#160;"
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr "Mật khẩu không giống nhau"
+
+msgid "Passwords match!"
+msgstr "Mật khẩu giống nhau"
+
+msgid "Primary group"
+msgstr "Nhóm chính"
+
+msgid "Unix"
+msgstr "Unix"
+
+msgid "Home Directory"
+msgstr "Thư mục Home"
+
+msgid "Login Shell"
+msgstr "Shell Login"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "Home Drive"
+msgstr "Home Drive"
+
+msgid "never logged in"
+msgstr "chưa bao giờ đăng nhập"
+
+msgid "Home Path"
+msgstr "Đường dẫn trang chủ"
+
+msgid "never logged off"
+msgstr "chưa bao giờ thoát"
+
+msgid "Profile Path"
+msgstr "Đường dẫn hồ sơ"
+
+msgid "Password Last Set"
+msgstr "Đặt mật khẩu lần cuối"
+
+msgid "never"
+msgstr "chưa bao giờ"
+
+msgid "Logon Script"
+msgstr "Script đăng nhập"
+
+msgid "Password Can Change"
+msgstr "Mật khẩu có thể đổi"
+
+msgid "not set"
+msgstr "chưa đặt"
+
+msgid "Password Must Change"
+msgstr "Mật khẩu phải được thay đổi"
+
+msgid "Kick Off Time"
+msgstr "Thời gian bắt đầu"
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Thông tin"
+
+msgid "Last Login"
+msgstr "Đăng nhập lần cuối"
+
+msgid "Forward Only"
+msgstr "Chỉ chuyển tiếp"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr "Thêm 1 địa chỉ ánh xạ email..."
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr "Tên miền không được phép sử dụng"
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr "Chuyển tiếp tới chính tôi"
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Xác nhận mật khẩu"
+
+msgid "Repeat password"
+msgstr "Nhập lại mật khẩu"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Tài khoản"
+
+msgid "First name"
+msgstr "Tên họ"
+
+msgid "Last name"
+msgstr "Tên"
+
+msgid "Display name"
+msgstr "Tên hiển thị"
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr "Tên đăng nhập"
+
+msgid "Password"
+msgstr "Mật khẩu"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "OpenID"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "đang mở"
+
+msgid "disabled"
+msgstr "đã tắt"
+
+msgid "expired"
+msgstr "hết hạn"
+
+msgid "blocked"
+msgstr "đã bị phong tỏa"
+
+msgid "Invalid Status"
+msgstr "Trạng thái không hợp lệ"
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr "Trạng thái bị phong tỏa chỉ hợp lệ khi người dùng cố đăng nhập với một mật khẩu sai một cách thường xuyên. Nó không thể được đặt trạng thái này ở đây."
+
+msgid "Expires"
+msgstr "Hết hạn"
+
+msgid "Last login at"
+msgstr "Đăng nhập lần cuối lúc"
+
+msgid "don't know"
+msgstr "không biết"
+
+msgid "Last login from"
+msgstr "Đawng nhập lần cuối từ"
+
+msgid "Password set"
+msgstr "Mật khẩu được đặt"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr "Nhóm người dùng"
+
+msgid "User roles"
+msgstr "Vai trò người dùng"
+
+msgid "Fileserver"
+msgstr "Máy chủ file"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr "Mở tài khoản"
+
+msgid "Disable Account"
+msgstr "Tắt tài khoản"
+
+msgid "Reset Password"
+msgstr "Nhập lại mật khẩu"
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "Đã đổi mật khẩu"
+
+msgid "Set new password"
+msgstr "Đặt mật khẩu mới"
+
+msgid "Please enter the new password:"
+msgstr "Xin hãy nhập mật khẩu mới"
+
+msgid "Users"
+msgstr "Người dùng"
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] ""
+"one: Người dùng Samba\n"
+"other: Người dùng Samba"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

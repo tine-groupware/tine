@@ -9,579 +9,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2014\n"
 "Language-Team: Romanian (Romania) (http://app.transifex.com/tine/groupware/language/ro_RO/)\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro_RO\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal addressbook"
+msgid "manage shared addressbooks"
 msgstr ""
 
-msgid "Groups"
+msgid "Create new shared addressbook folders"
 msgstr ""
 
-msgid "Group Functions"
+msgid "manage shared addressbook favorites"
 msgstr ""
 
-msgid "Industries"
+msgid "Create or update shared addressbook favorites"
 msgstr ""
 
-msgid "All Contacts"
-msgstr "Toate contactele"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-msgid "All contacts"
-msgstr "Toate contactele"
-
-msgid "Default Addressbook"
-msgstr ""
-
-msgid "The default addressbook for new contacts"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "Favorite Implicit"
-
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
-
-msgid "Contacts ODS export configuration"
-msgstr "Configurare export Contacte ODS"
-
-msgid "Use this configuration for the contact ODS export."
-msgstr ""
-
-msgid "Contacts XLS export configuration"
-msgstr "Configurare export Contacte XLS"
-
-msgid "Use this configuration for the contact XLS export."
-msgstr ""
-
-msgid "Contact Title Template"
-msgstr ""
-
-msgid "How to build contact titles."
-msgstr ""
-
-msgid "default"
-msgstr "implicit"
-
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Contact"
-msgstr[1] "Contacte"
-msgstr[2] "Contacte"
-
-msgid "Set as preferred E-Mail"
-msgstr ""
-
-msgid "Preferred Address"
-msgstr ""
-
-msgid "Street"
-msgstr "Strada"
-
-msgid "Street 2"
-msgstr "Strada 2"
-
-msgid "Region"
-msgstr "Regiune"
-
-msgid "Postal Code"
-msgstr "Cod Poştal"
-
-msgid "City"
-msgstr "Oraş"
-
-msgid "Country"
-msgstr "Ţara"
-
-msgid "System Group"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Group Information"
-msgstr ""
-
-msgid "Name"
-msgstr "Nume"
-
-msgid "E-Mail"
-msgstr "E-Mail"
-
-msgid "List type"
-msgstr ""
-
-msgid "System accounts only"
-msgstr ""
-
-msgid "Description"
-msgstr "Descriere"
-
-msgid "Enter description"
-msgstr "Introducere Descriere"
-
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
-
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr ""
-
-msgid "Search for system groups ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Contact Properties"
-msgstr ""
-
-msgid "Contact Information"
-msgstr "Informaţii Contact"
-
-msgid "Company Address"
-msgstr "Adresă Companie"
-
-msgid "Private Address"
-msgstr "Adresă Privată"
-
-msgid "Related to"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "New Contact"
-msgstr "Contact nou"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Private"
-msgstr "Privat"
-
-msgid "The grant to access contacts private information"
-msgstr ""
-
-msgid "Map"
-msgstr "Harta"
-
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr ""
-
-msgid "Personal Information"
-msgstr "Informaţii Personale"
-
-msgid "Salutation"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Short Name"
-msgstr ""
-
-msgid "First Name"
-msgstr "Prenume"
-
-msgid "Middle Name"
-msgstr ""
-
-msgid "Last Name"
-msgstr "Nume"
-
-msgid "Company / Organisation"
-msgstr ""
-
-msgid "Unit"
-msgstr "Unit"
-
-msgid "Sites"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Display Name"
-msgstr "Nume Afişat"
-
-msgid "Job Title"
-msgstr "Titlu Job"
-
-msgid "Birthday (private)"
-msgstr ""
-
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Note"
-msgstr "Notă"
-
-msgid "Enter Note"
-msgstr ""
-
-msgid "Parse address"
-msgstr ""
-
-msgid "Print contact"
-msgstr ""
-
-msgid "Paste address"
-msgstr ""
-
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr ""
-
-msgid "Failed to parse address!"
-msgstr ""
-
-msgid "The address could not be read."
-msgstr ""
-
-msgid "End token mode"
-msgstr ""
-
-msgid "You do not have the required private grant to view history."
-msgstr ""
-
-msgid "Import contacts"
-msgstr "Import contacte"
-
-msgid "Contact of a user account"
-msgstr "Contact al unui cont de utilizator"
-
-msgid "Email Account Contact"
-msgstr ""
-
-msgid "No name"
-msgstr ""
-
-msgid "Business"
-msgstr ""
-
-msgid "Not set"
-msgstr ""
-
-msgid "Type"
-msgstr "Tip"
-
-msgid "Contact Image"
-msgstr ""
-
-msgid "Tags"
-msgstr "Taguri"
-
-msgid "Full Name"
-msgstr "Nume Complet"
-
-msgid "Job Role"
-msgstr "Rol Job"
-
-msgid "Room"
-msgstr "Camera"
-
-msgid "Postalcode"
-msgstr "CodPoştal"
-
-msgid "Street (private)"
-msgstr "Strada (privată)"
-
-msgid "City (private)"
-msgstr "Oraş (privat)"
-
-msgid "Region (private)"
-msgstr "Regiune (privată)"
-
-msgid "Postalcode (private)"
-msgstr "Cod Poştal (privat)"
-
-msgid "Country (private)"
-msgstr "Ţara (privată)"
-
-msgid "Preferred E-Mail"
-msgstr ""
-
-msgid "Email"
-msgid_plural "Emails"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Mobile"
-msgstr "Mobil"
-
-msgid "Fax"
-msgstr "Fax"
-
-msgid "Car phone"
-msgstr "Telefon maşină"
-
-msgid "Pager"
-msgstr "Pager"
-
-msgid "Phone (private)"
-msgstr "Telefon (privat)"
-
-msgid "Fax (private)"
-msgstr "Fax (privat)"
-
-msgid "Mobile (private)"
-msgstr "Mobil (privat)"
-
-msgid "Email (private)"
-msgstr "Email (privat)"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "URL (private)"
-msgstr "URL (privat)"
-
-msgid "Language"
-msgstr ""
-
-msgid "Timezone"
-msgstr ""
-
-msgid "Geo"
-msgstr "Geo"
-
-msgid "Birthday"
-msgstr "Data naşterii"
-
-msgid "Select record to see its details"
-msgstr ""
-
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-msgid "Loading Structure data..."
-msgstr ""
-
-msgid "Company address"
-msgstr "Adresă Companie"
-
-msgid "Private address"
-msgstr "Adresă privată"
-
-msgid "CardDAV URL"
-msgstr "URL CardDAV "
-
-msgid "List Personal Grant"
-msgid_plural "List Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Contact Personal Grant"
-msgid_plural "Contact Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Search for members ..."
-msgstr ""
-
-msgid "List Roles"
-msgstr ""
-
-msgid "Select Group"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "Search for Contacts ..."
-msgstr ""
-
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Email Addresses"
-msgstr ""
-
-msgid "Addressbooks"
-msgstr ""
-
-msgid "Quick search"
-msgstr ""
-
-msgid "Structures"
-msgstr ""
-
-msgid "Mailing List"
-msgstr ""
-
-msgid "This group is a mailing list"
-msgstr ""
-
-msgid "Reply to"
-msgstr ""
-
-msgid "Distribution list"
-msgstr ""
-
-msgid "Sender"
-msgstr ""
-
-msgid "Sender and Distributor"
-msgstr ""
-
-msgid "Keep copy of group mails"
-msgstr ""
-
-msgid "Forward external mails"
-msgstr ""
-
-msgid "Only forward member mails"
-msgstr ""
-
-msgid "Only forward to system email accounts"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "28"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00877546"
-msgstr ""
-
-msgid "en-GB"
-msgstr ""
-
-msgid "00813B4E"
-msgstr ""
-
-msgid "Gruppenrollen"
-msgstr ""
-
-msgid "00DA3FCD"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
-
-msgid "008C27A5"
-msgstr ""
-
-msgid "00C96397"
-msgstr ""
-
-msgid "00046462"
+msgid "Manage lists in CoreData"
 msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
-msgid "Company"
-msgstr "Compania"
-
-msgid "Internal Contacts"
-msgstr "Contacte Interne"
-
-msgid "All contacts I have read grants for"
+msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
-
-msgid "My company"
-msgstr "Compania mea"
-
-msgid "All coworkers in my company"
-msgstr "Toţi colegii din compania mea"
 
-msgid "My contacts"
-msgstr "Contactele mele"
-
-msgid "All contacts in my Addressbooks"
-msgstr "Toate contactele din my Addressbooks"
-
-msgid "Last modified by me"
-msgstr "Ultima modificată de mine"
-
-msgid "All contacts that I have last modified"
-msgstr "Toate contactele pe care le-am modificat ultima data"
-
-msgid "Company Communication"
-msgstr "Comunicare Companie"
-
-msgid "E-Mail (private)"
-msgstr "E-Mail (privat)"
-
-msgid "Private Communication"
-msgstr "Comunicare Privată"
-
-msgid "Matrix-ID"
+msgid "Manage list functions in CoreData"
 msgstr ""
-
-msgid "Assistant"
-msgstr "Asistent"
 
-msgid "Car"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
-msgid "Other"
+msgid "Manage list email options"
 msgstr ""
 
-msgid "Prefer"
+msgid "Manage list email options like mailing lists"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -662,6 +126,12 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Contact"
+msgstr[1] "Contacte"
+msgstr[2] "Contacte"
+
 msgid "Email Account"
 msgstr ""
 
@@ -676,6 +146,9 @@ msgstr "Dl"
 
 msgid "Ms"
 msgstr "Dna"
+
+msgid "Company"
+msgstr "Compania"
 
 msgid "Person"
 msgstr ""
@@ -735,16 +208,525 @@ msgstr ""
 msgid "Maximum number of role members reached"
 msgstr ""
 
-msgid "Group Function"
-msgid_plural "Group Functions"
+#, python-format
+msgid "%s's personal addressbook"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "Group Functions"
+msgstr ""
+
+msgid "Industries"
+msgstr ""
+
+msgid "3CX CSV export"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "VCard Report"
+msgstr ""
+
+msgid "Export multiple addressbooks to vcf files"
+msgstr ""
+
+msgid "VCard/VCF"
+msgstr ""
+
+msgid "Export contact data into vcf file"
+msgstr ""
+
+msgid "Word letter"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Addressbooks to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "All Contacts"
+msgstr "Toate contactele"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+msgid "Contact import from Google address book"
+msgstr "Import Contact din Google address book"
+
+msgid "Import vCard formated contacts"
+msgstr ""
+
+msgid "Contact VCARD import"
+msgstr "Import Contact VCARD"
+
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+msgid "Contact CSV import from mac address book"
+msgstr "Import Contact CSV din mac address book"
+
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2007 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2010 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+msgid "Contact CSV import from Outlook address book"
+msgstr "Import Contact CSV din  Outlook address book"
+
+msgid "Tine contact CSV import"
+msgstr ""
+
+msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+msgid "New Contact"
+msgstr "Contact nou"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "GENDER_Group Function"
+msgid "ID"
 msgstr ""
 
-msgid "Maximum Members"
+msgid "Name"
+msgstr "Nume"
+
+msgid "Description"
+msgstr "Descriere"
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "The grant to access contacts private information"
+msgstr ""
+
+msgid "Preferred Address"
+msgstr ""
+
+msgid "Street"
+msgstr "Strada"
+
+msgid "Street 2"
+msgstr "Strada 2"
+
+msgid "Region"
+msgstr "Regiune"
+
+msgid "Postal Code"
+msgstr "Cod Poştal"
+
+msgid "City"
+msgstr "Oraş"
+
+msgid "Country"
+msgstr "Ţara"
+
+msgid "Contact Properties"
+msgstr ""
+
+msgid "CardDAV URL"
+msgstr "URL CardDAV "
+
+msgid "Map"
+msgstr "Harta"
+
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Personal Information"
+msgstr "Informaţii Personale"
+
+msgid "Salutation"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Short Name"
+msgstr ""
+
+msgid "First Name"
+msgstr "Prenume"
+
+msgid "Middle Name"
+msgstr ""
+
+msgid "Last Name"
+msgstr "Nume"
+
+msgid "Company / Organisation"
+msgstr ""
+
+msgid "Unit"
+msgstr "Unit"
+
+msgid "Sites"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Display Name"
+msgstr "Nume Afişat"
+
+msgid "Job Title"
+msgstr "Titlu Job"
+
+msgid "Birthday (private)"
+msgstr ""
+
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Contact Information"
+msgstr "Informaţii Contact"
+
+msgid "Note"
+msgstr "Notă"
+
+msgid "Enter Note"
+msgstr ""
+
+msgid "Parse address"
+msgstr ""
+
+msgid "Print contact"
+msgstr ""
+
+msgid "Paste address"
+msgstr ""
+
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr ""
+
+msgid "Failed to parse address!"
+msgstr ""
+
+msgid "The address could not be read."
+msgstr ""
+
+msgid "End token mode"
+msgstr ""
+
+msgid "You do not have the required private grant to view history."
+msgstr ""
+
+msgid "Business"
+msgstr ""
+
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Import contacts"
+msgstr "Import contacte"
+
+msgid "Contact of a user account"
+msgstr "Contact al unui cont de utilizator"
+
+msgid "Email Account Contact"
+msgstr ""
+
+msgid "No name"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "Type"
+msgstr "Tip"
+
+msgid "Contact Image"
+msgstr ""
+
+msgid "Tags"
+msgstr "Taguri"
+
+msgid "Full Name"
+msgstr "Nume Complet"
+
+msgid "Job Role"
+msgstr "Rol Job"
+
+msgid "Room"
+msgstr "Camera"
+
+msgid "Postalcode"
+msgstr "CodPoştal"
+
+msgid "Street (private)"
+msgstr "Strada (privată)"
+
+msgid "City (private)"
+msgstr "Oraş (privat)"
+
+msgid "Region (private)"
+msgstr "Regiune (privată)"
+
+msgid "Postalcode (private)"
+msgstr "Cod Poştal (privat)"
+
+msgid "Country (private)"
+msgstr "Ţara (privată)"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Car phone"
+msgstr "Telefon maşină"
+
+msgid "Pager"
+msgstr "Pager"
+
+msgid "Phone (private)"
+msgstr "Telefon (privat)"
+
+msgid "Fax (private)"
+msgstr "Fax (privat)"
+
+msgid "Mobile (private)"
+msgstr "Mobil (privat)"
+
+msgid "Email (private)"
+msgstr "Email (privat)"
+
+msgid "URL (private)"
+msgstr "URL (privat)"
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr ""
+
+msgid "Geo"
+msgstr "Geo"
+
+msgid "Birthday"
+msgstr "Data naşterii"
+
+msgid "Set as preferred E-Mail"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "Search for Contacts ..."
+msgstr ""
+
+msgid "Group Information"
+msgstr ""
+
+msgid "List type"
+msgstr ""
+
+msgid "System accounts only"
+msgstr ""
+
+msgid "Enter description"
+msgstr "Introducere Descriere"
+
+#, python-brace-format
+msgid "{0} must be given"
+msgstr ""
+
+msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Select Group"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Search for members ..."
+msgstr ""
+
+msgid "List Roles"
+msgstr ""
+
+msgid "Search for system groups ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Mailing List"
+msgstr ""
+
+msgid "This group is a mailing list"
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender and Distributor"
+msgstr ""
+
+msgid "Keep copy of group mails"
+msgstr ""
+
+msgid "Forward external mails"
+msgstr ""
+
+msgid "Only forward member mails"
+msgstr ""
+
+msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Company address"
+msgstr "Adresă Companie"
+
+msgid "Private address"
+msgstr "Adresă privată"
+
+msgid "Contact Personal Grant"
+msgid_plural "Contact Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Addressbooks"
+msgstr ""
+
+msgid "Quick search"
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "List Personal Grant"
+msgid_plural "List Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Company Address"
+msgstr "Adresă Companie"
+
+msgid "Private Address"
+msgstr "Adresă Privată"
+
+msgid "Related to"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "System Group"
+msgstr ""
+
+msgid "Select record to see its details"
+msgstr ""
+
+msgid "This module visualises hierarchically depended relations between records of different types."
+msgstr ""
+
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
+msgstr ""
+
+msgid "Loading Structure data..."
 msgstr ""
 
 msgid "GENDER_Addressbook"
@@ -755,6 +737,12 @@ msgstr ""
 
 msgid "Show Disabled"
 msgstr ""
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Phone Numbers"
 msgstr ""
@@ -804,21 +792,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "GENDER_Group"
-msgstr ""
-
-msgid "Name/Email"
-msgstr ""
-
-msgid "Site"
-msgid_plural "Sites"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "GENDER_Email"
-msgstr ""
-
 msgid "GENDER_Address"
 msgstr ""
 
@@ -864,16 +837,7 @@ msgstr ""
 msgid "Last Error"
 msgstr ""
 
-msgid "GENDER_URL"
-msgstr ""
-
-msgid "URL"
-msgid_plural "URLs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "GENDER_Phone"
+msgid "GENDER_Email"
 msgstr ""
 
 msgid "GENDER_Instant Messenger"
@@ -885,128 +849,164 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Addressbooks to export"
+msgid "GENDER_Phone"
 msgstr ""
 
-msgid "Export target"
+msgid "GENDER_URL"
 msgstr ""
 
-msgid "Excel overview"
+msgid "URL"
+msgid_plural "URLs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Group"
 msgstr ""
 
-msgid "Word details"
+msgid "Name/Email"
 msgstr ""
 
-msgid "Relations"
+msgid "GENDER_Group Function"
 msgstr ""
 
-msgid "CSV all data"
+msgid "Maximum Members"
 msgstr ""
 
-msgid "VCard Report"
+msgid "All contacts"
+msgstr "Toate contactele"
+
+msgid "Default Addressbook"
 msgstr ""
 
-msgid "Export multiple addressbooks to vcf files"
+msgid "The default addressbook for new contacts"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Default Favorite"
+msgstr "Favorite Implicit"
+
+msgid "The default favorite which is loaded on addressbook startup"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Contacts ODS export configuration"
+msgstr "Configurare export Contacte ODS"
+
+msgid "Use this configuration for the contact ODS export."
 msgstr ""
 
-msgid "VCard/VCF"
+msgid "Contacts XLS export configuration"
+msgstr "Configurare export Contacte XLS"
+
+msgid "Use this configuration for the contact XLS export."
 msgstr ""
 
-msgid "Export contact data into vcf file"
+msgid "Contact Title Template"
 msgstr ""
 
-msgid "3CX CSV export"
+msgid "How to build contact titles."
 msgstr ""
 
-msgid "Word letter"
+msgid "default"
+msgstr "implicit"
+
+msgid "All contacts I have read grants for"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "My company"
+msgstr "Compania mea"
+
+msgid "All coworkers in my company"
+msgstr "Toţi colegii din compania mea"
+
+msgid "My contacts"
+msgstr "Contactele mele"
+
+msgid "All contacts in my Addressbooks"
+msgstr "Toate contactele din my Addressbooks"
+
+msgid "Last modified by me"
+msgstr "Ultima modificată de mine"
+
+msgid "All contacts that I have last modified"
+msgstr "Toate contactele pe care le-am modificat ultima data"
+
+msgid "Company Communication"
+msgstr "Comunicare Companie"
+
+msgid "E-Mail (private)"
+msgstr "E-Mail (privat)"
+
+msgid "Private Communication"
+msgstr "Comunicare Privată"
+
+msgid "Matrix-ID"
 msgstr ""
 
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgid "Assistant"
+msgstr "Asistent"
+
+msgid "Car"
 msgstr ""
 
-msgid "Contact CSV import from Outlook address book"
-msgstr "Import Contact CSV din  Outlook address book"
-
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgid "Other"
 msgstr ""
 
-msgid "CSV Outlook 2007 German"
+msgid "Prefer"
 msgstr ""
 
-msgid "Import CSV formated contacts from Google address book"
+msgid "Internal Contacts"
+msgstr "Contacte Interne"
+
+msgid "Account"
 msgstr ""
 
-msgid "Contact import from Google address book"
-msgstr "Import Contact din Google address book"
-
-msgid "Tine contact CSV import"
+msgid "Exporttime"
 msgstr ""
 
-msgid "Import CSV formated contacts from tine address book"
+msgid "28"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
+msgid "20"
 msgstr ""
 
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid "00877546"
 msgstr ""
 
-msgid "LX-Office CSV Contact import"
+msgid "en-GB"
 msgstr ""
 
-msgid "Import CSV formated contacts from LX-Office"
+msgid "00813B4E"
 msgstr ""
 
-msgid "Import vCard formated contacts"
+msgid "Gruppenrollen"
 msgstr ""
 
-msgid "Contact VCARD import"
-msgstr "Import Contact VCARD"
-
-msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgid "00DA3FCD"
 msgstr ""
 
-msgid "CSV Outlook 2010 German"
+msgid "00997199"
 msgstr ""
 
-msgid "Contact CSV import from mac address book"
-msgstr "Import Contact CSV din mac address book"
-
-msgid "manage shared addressbooks"
+msgid "0009326B"
 msgstr ""
 
-msgid "Create new shared addressbook folders"
+msgid "008C27A5"
 msgstr ""
 
-msgid "manage shared addressbook favorites"
+msgid "00C96397"
 msgstr ""
 
-msgid "Create or update shared addressbook favorites"
+msgid "00046462"
 msgstr ""
 
-msgid "Manage lists in CoreData"
-msgstr ""
-
-msgid "View, create, delete or update lists in CoreData application"
-msgstr ""
-
-msgid "Manage list functions in CoreData"
-msgstr ""
-
-msgid "View, create, delete or update list functions in CoreData application"
-msgstr ""
-
-msgid "Manage list email options"
-msgstr ""
-
-msgid "Manage list email options like mailing lists"
-msgstr ""
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""

@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Nikolay Parukhin <parukhin@gmail.com>, 2012\n"
 "Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -34,20 +34,12 @@ msgstr "Внутренний"
 msgid "Public"
 msgstr "Общедоступный"
 
-msgid "All my FAQs"
-msgstr "Все мои ЧаВО"
-
-msgid "Default Favorite"
-msgstr "Избранный по умолчанию"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Статья, которая откроется при запуске ЧАВО по умолчанию"
-
-msgid "Default FAQ List"
-msgstr "Список ЧаВО по умолчанию"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Пример ЧаВО для создания новых листов ЧаВО"
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Статус ЧаВО"
+msgstr[1] "Статусы ЧаВО"
+msgstr[2] "Статусы ЧаВО"
+msgstr[3] "Статусы ЧаВО"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
@@ -56,15 +48,8 @@ msgstr[1] "Типы ЧаВО"
 msgstr[2] "Типы ЧаВО"
 msgstr[3] "Типы ЧаВО"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "Статус ЧаВО"
-msgstr[1] "Статусы ЧаВО"
-msgstr[2] "Статусы ЧаВО"
-msgstr[3] "Статусы ЧаВО"
-
-msgid "Add a new FAQ Status..."
-msgstr "Добавить новый статус ЧаВО"
+msgid "Defaults"
+msgstr "По умолчанию"
 
 msgid "Question"
 msgstr "Вопрос"
@@ -84,33 +69,11 @@ msgstr "Тип"
 msgid "Status"
 msgstr "Состояние"
 
-msgid "Defaults"
-msgstr "По умолчанию"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "ЧаВО"
-msgstr[1] "ЧаВО"
-msgstr[2] "ЧаВО"
-msgstr[3] "ЧаВО"
-
-msgid "Find Question"
-msgstr "Найти вопрос"
-
-msgid "Search question"
-msgstr "Найти вопрос"
-
-msgid "FAQ id"
-msgstr "ID ЧаВО"
+msgid "FAQ Infos"
+msgstr "ЧаВО Иформация"
 
 msgid "Tags"
 msgstr "Теги"
-
-msgid "Add a new FAQ Type..."
-msgstr "Добавить новый тип ЧаВО..."
-
-msgid "FAQ Infos"
-msgstr "ЧаВО Иформация"
 
 msgid "Creation Time"
 msgstr "Время создания"
@@ -121,8 +84,21 @@ msgstr "Создан"
 msgid "No answer yet"
 msgstr "Нет ответа"
 
-msgid "Search FAQ"
-msgstr "Найти FAQ"
+msgid "FAQ id"
+msgstr "ID ЧаВО"
+
+msgid "Add a new FAQ Status..."
+msgstr "Добавить новый статус ЧаВО"
+
+msgid "Add a new FAQ Type..."
+msgstr "Добавить новый тип ЧаВО..."
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "ЧаВО"
+msgstr[1] "ЧаВО"
+msgstr[2] "ЧаВО"
+msgstr[3] "ЧаВО"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -136,6 +112,30 @@ msgstr "Списки ЧаВО"
 
 msgid "Quick Search"
 msgstr "Быстрый поиск"
+
+msgid "Search FAQ"
+msgstr "Найти FAQ"
+
+msgid "Find Question"
+msgstr "Найти вопрос"
+
+msgid "Search question"
+msgstr "Найти вопрос"
+
+msgid "All my FAQs"
+msgstr "Все мои ЧаВО"
+
+msgid "Default Favorite"
+msgstr "Избранный по умолчанию"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Статья, которая откроется при запуске ЧАВО по умолчанию"
+
+msgid "Default FAQ List"
+msgstr "Список ЧаВО по умолчанию"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Пример ЧаВО для создания новых листов ЧаВО"
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Все ЧаВО из моих списков ЧаВО"

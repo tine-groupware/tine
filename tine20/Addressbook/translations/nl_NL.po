@@ -11,568 +11,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: Whatsek <Whatsek@gmail.com>, 2015\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/tine/groupware/language/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s's persoonlijke adresboek"
+msgid "manage shared addressbooks"
+msgstr "beheer gedeelde adresboeken"
 
-msgid "Groups"
-msgstr ""
-
-msgid "Group Functions"
-msgstr ""
-
-msgid "Industries"
-msgstr ""
-
-msgid "All Contacts"
-msgstr "Alle contacten"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Dit contact is automatisch toegevoegd door het systeem als een gebeurtenis genodigde "
-
-msgid "All contacts"
-msgstr "Alle contacten"
-
-msgid "Default Addressbook"
-msgstr "Standaard adresboek"
-
-msgid "The default addressbook for new contacts"
-msgstr "Standaard adresboek voor nieuwe contacten"
-
-msgid "Default Favorite"
-msgstr "Standaard favoriet"
-
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Standaard favoriet bij opstarten adresboek"
-
-msgid "Contacts ODS export configuration"
-msgstr "Contacten ODS export configuratie"
-
-msgid "Use this configuration for the contact ODS export."
-msgstr "Gebruik deze configuratie voor de contactpersoon ODS export."
-
-msgid "Contacts XLS export configuration"
-msgstr "Contacten XLS export configuratie"
-
-msgid "Use this configuration for the contact XLS export."
-msgstr "Gebruik deze configuratie voor de contactpersoon XLS export."
-
-msgid "Contact Title Template"
-msgstr ""
-
-msgid "How to build contact titles."
-msgstr ""
-
-msgid "default"
-msgstr "standaard"
-
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Contact"
-msgstr[1] "Contacten"
-
-msgid "Set as preferred E-Mail"
-msgstr ""
-
-msgid "Preferred Address"
-msgstr ""
-
-msgid "Street"
-msgstr "Straat"
-
-msgid "Street 2"
-msgstr "Straat 2"
-
-msgid "Region"
-msgstr "Provincie"
-
-msgid "Postal Code"
-msgstr "Postcode"
-
-msgid "City"
-msgstr "Plaats"
-
-msgid "Country"
-msgstr "Land"
-
-msgid "System Group"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Group Information"
-msgstr ""
-
-msgid "Name"
-msgstr "Naam"
-
-msgid "E-Mail"
-msgstr "E-mail"
-
-msgid "List type"
-msgstr ""
-
-msgid "System accounts only"
-msgstr ""
-
-msgid "Description"
-msgstr "Omschrijving"
-
-msgid "Enter description"
-msgstr "Voer omschrijving in"
-
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
-
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr ""
-
-msgid "Search for system groups ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Contact Properties"
-msgstr ""
-
-msgid "Contact Information"
-msgstr "Contact informatie"
-
-msgid "Company Address"
-msgstr "Bedrijfsadres"
-
-msgid "Private Address"
-msgstr "Prive adres"
-
-msgid "Related to"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "New Contact"
-msgstr "Nieuw contact"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Adresboek"
-msgstr[1] "Adresboeken"
-
-msgid "ID"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Private"
-msgstr "Prive"
-
-msgid "The grant to access contacts private information"
-msgstr ""
-
-msgid "Map"
-msgstr "Map"
-
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr ""
-
-msgid "Personal Information"
-msgstr "Persoonlijke informatie"
-
-msgid "Salutation"
-msgstr "Begroeting"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "Short Name"
-msgstr ""
-
-msgid "First Name"
-msgstr "Voornaam"
-
-msgid "Middle Name"
-msgstr "Tussenvoegsel"
-
-msgid "Last Name"
-msgstr "Achternaam"
-
-msgid "Company / Organisation"
-msgstr ""
-
-msgid "Unit"
-msgstr "Afdeling"
-
-msgid "Sites"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Display Name"
-msgstr "Weergavenaam"
-
-msgid "Job Title"
-msgstr "Titel werk"
-
-msgid "Birthday (private)"
-msgstr ""
-
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Note"
-msgstr "Notitie"
-
-msgid "Enter Note"
-msgstr ""
-
-msgid "Parse address"
-msgstr "ontleden adres"
-
-msgid "Print contact"
-msgstr ""
-
-msgid "Paste address"
-msgstr "Plak adres"
-
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr "Plak een adres of een URI naar een Vcard dat verwerkt moet worden:"
-
-msgid "Failed to parse address!"
-msgstr "Adres verwerken mislukt!"
-
-msgid "The address could not be read."
-msgstr "Het adres kon niet gelezen worden"
-
-msgid "End token mode"
-msgstr "Einde token mode"
-
-msgid "You do not have the required private grant to view history."
-msgstr ""
-
-msgid "Import contacts"
-msgstr "Importeer contacten"
-
-msgid "Contact of a user account"
-msgstr "Contact van gebruikersaccount"
-
-msgid "Email Account Contact"
-msgstr ""
-
-msgid "No name"
-msgstr ""
-
-msgid "Business"
-msgstr ""
-
-msgid "Not set"
-msgstr ""
-
-msgid "Type"
-msgstr "Type"
+msgid "Create new shared addressbook folders"
+msgstr "Maak nieuwe gedeelde adresboek folders"
 
-msgid "Contact Image"
-msgstr ""
-
-msgid "Tags"
-msgstr "Labels"
-
-msgid "Full Name"
-msgstr "Volledige naam"
-
-msgid "Job Role"
-msgstr "Functie"
-
-msgid "Room"
-msgstr "Kamer"
-
-msgid "Postalcode"
-msgstr "Postcode"
-
-msgid "Street (private)"
-msgstr "Straat (prive)"
-
-msgid "City (private)"
-msgstr "Plaats (prive)"
-
-msgid "Region (private)"
-msgstr "Provincie (prive)"
-
-msgid "Postalcode (private)"
-msgstr "Postcode (prive)"
-
-msgid "Country (private)"
-msgstr "Land (prive)"
-
-msgid "Preferred E-Mail"
-msgstr ""
-
-msgid "Email"
-msgid_plural "Emails"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Mobile"
-msgstr "Mobiel"
-
-msgid "Fax"
-msgstr "Fax (prive)"
-
-msgid "Car phone"
-msgstr "Auto telefoon"
-
-msgid "Pager"
-msgstr "Buzzer"
-
-msgid "Phone (private)"
-msgstr "Telefoon (prive)"
-
-msgid "Fax (private)"
-msgstr "Fax (prive)"
-
-msgid "Mobile (private)"
-msgstr "Mobiel (prive)"
-
-msgid "Email (private)"
-msgstr "Email (prive)"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "URL (private)"
-msgstr "Url (prive)"
-
-msgid "Language"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Tijdzone"
-
-msgid "Geo"
-msgstr "Geo"
-
-msgid "Birthday"
-msgstr "Geboortedatum"
-
-msgid "Select record to see its details"
-msgstr ""
-
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-msgid "Loading Structure data..."
-msgstr ""
-
-msgid "Company address"
-msgstr "Bedrijfsadres"
-
-msgid "Private address"
-msgstr "Prive adres"
-
-msgid "CardDAV URL"
-msgstr "CardDAV URL"
-
-msgid "List Personal Grant"
-msgid_plural "List Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Contact Personal Grant"
-msgid_plural "Contact Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Search for members ..."
-msgstr ""
-
-msgid "List Roles"
-msgstr ""
-
-msgid "Select Group"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "Search for Contacts ..."
-msgstr ""
-
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Email Addresses"
-msgstr ""
-
-msgid "Addressbooks"
-msgstr "Adresboeken"
-
-msgid "Quick search"
-msgstr ""
-
-msgid "Structures"
-msgstr ""
-
-msgid "Mailing List"
-msgstr ""
-
-msgid "This group is a mailing list"
-msgstr ""
-
-msgid "Reply to"
-msgstr ""
-
-msgid "Distribution list"
-msgstr ""
-
-msgid "Sender"
-msgstr ""
-
-msgid "Sender and Distributor"
-msgstr ""
-
-msgid "Keep copy of group mails"
-msgstr ""
-
-msgid "Forward external mails"
-msgstr ""
-
-msgid "Only forward member mails"
-msgstr ""
-
-msgid "Only forward to system email accounts"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "28"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00877546"
-msgstr ""
-
-msgid "en-GB"
-msgstr ""
-
-msgid "00813B4E"
-msgstr ""
-
-msgid "Gruppenrollen"
-msgstr ""
-
-msgid "00DA3FCD"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
+msgid "manage shared addressbook favorites"
+msgstr "beheer gedeelde adresboek favorieten"
 
-msgid "008C27A5"
-msgstr ""
+msgid "Create or update shared addressbook favorites"
+msgstr "controleer of update gedeelde adresboek favorieten"
 
-msgid "00C96397"
+msgid "Manage lists in CoreData"
 msgstr ""
 
-msgid "00046462"
+msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Company"
-msgstr "Bedrijf"
-
-msgid "Internal Contacts"
-msgstr "Interne contacten"
-
-msgid "All contacts I have read grants for"
-msgstr "Alle contacten waar ik toestemming voor heb"
-
-msgid "My company"
-msgstr "Mijn bedrijf"
-
-msgid "All coworkers in my company"
-msgstr "Alle medewerkers in mijn bedrijf"
 
-msgid "My contacts"
-msgstr "Mijn contacten"
-
-msgid "All contacts in my Addressbooks"
-msgstr "Alle contacten in mijn adresboek"
-
-msgid "Last modified by me"
-msgstr "Laatst aangepast door mij"
-
-msgid "All contacts that I have last modified"
-msgstr "Alle contacten die ik heb aangepast"
-
-msgid "Company Communication"
-msgstr "Bedrijfs communicatie"
-
-msgid "E-Mail (private)"
-msgstr "E-mail (prive)"
-
-msgid "Private Communication"
-msgstr "Prive communicatie"
-
-msgid "Matrix-ID"
+msgid "Manage list functions in CoreData"
 msgstr ""
-
-msgid "Assistant"
-msgstr "Assistent"
 
-msgid "Car"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
-msgid "Other"
+msgid "Manage list email options"
 msgstr ""
 
-msgid "Prefer"
+msgid "Manage list email options like mailing lists"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -653,6 +128,11 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Contact"
+msgstr[1] "Contacten"
+
 msgid "Email Account"
 msgstr ""
 
@@ -667,6 +147,9 @@ msgstr "Mr"
 
 msgid "Ms"
 msgstr "Mvr"
+
+msgid "Company"
+msgstr "Bedrijf"
 
 msgid "Person"
 msgstr ""
@@ -726,15 +209,516 @@ msgstr ""
 msgid "Maximum number of role members reached"
 msgstr ""
 
-msgid "Group Function"
-msgid_plural "Group Functions"
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s's persoonlijke adresboek"
+
+msgid "Groups"
+msgstr ""
+
+msgid "Group Functions"
+msgstr ""
+
+msgid "Industries"
+msgstr ""
+
+msgid "3CX CSV export"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "VCard Report"
+msgstr ""
+
+msgid "Export multiple addressbooks to vcf files"
+msgstr ""
+
+msgid "VCard/VCF"
+msgstr ""
+
+msgid "Export contact data into vcf file"
+msgstr ""
+
+msgid "Word letter"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Addressbooks to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "All Contacts"
+msgstr "Alle contacten"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Dit contact is automatisch toegevoegd door het systeem als een gebeurtenis genodigde "
+
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+msgid "Contact import from Google address book"
+msgstr "Contact importeren van Google adresboek"
+
+msgid "Import vCard formated contacts"
+msgstr ""
+
+msgid "Contact VCARD import"
+msgstr "Contact VCARD importeren"
+
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+msgid "Contact CSV import from mac address book"
+msgstr "Contact CSV importeren van Apple adresboek"
+
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 Nederlands"
+
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2010 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+msgid "Contact CSV import from Outlook address book"
+msgstr "Contact CSV importeren uit Outlook adresboek"
+
+msgid "Tine contact CSV import"
+msgstr ""
+
+msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Import lijst(###CURRENTDATE###)"
+
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Geïmporteerd op ###CURRENTDATE### op ###CURRENTTIME### door ###USERFULLNAME###"
+
+msgid "New Contact"
+msgstr "Nieuw contact"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Adresboek"
+msgstr[1] "Adresboeken"
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr "Naam"
+
+msgid "Description"
+msgstr "Omschrijving"
+
+msgid "Structure"
+msgid_plural "Structures"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "GENDER_Group Function"
+msgid "Resources"
 msgstr ""
 
-msgid "Maximum Members"
+msgid "Private"
+msgstr "Prive"
+
+msgid "The grant to access contacts private information"
+msgstr ""
+
+msgid "Preferred Address"
+msgstr ""
+
+msgid "Street"
+msgstr "Straat"
+
+msgid "Street 2"
+msgstr "Straat 2"
+
+msgid "Region"
+msgstr "Provincie"
+
+msgid "Postal Code"
+msgstr "Postcode"
+
+msgid "City"
+msgstr "Plaats"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Contact Properties"
+msgstr ""
+
+msgid "CardDAV URL"
+msgstr "CardDAV URL"
+
+msgid "Map"
+msgstr "Map"
+
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Personal Information"
+msgstr "Persoonlijke informatie"
+
+msgid "Salutation"
+msgstr "Begroeting"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Short Name"
+msgstr ""
+
+msgid "First Name"
+msgstr "Voornaam"
+
+msgid "Middle Name"
+msgstr "Tussenvoegsel"
+
+msgid "Last Name"
+msgstr "Achternaam"
+
+msgid "Company / Organisation"
+msgstr ""
+
+msgid "Unit"
+msgstr "Afdeling"
+
+msgid "Sites"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Display Name"
+msgstr "Weergavenaam"
+
+msgid "Job Title"
+msgstr "Titel werk"
+
+msgid "Birthday (private)"
+msgstr ""
+
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Contact Information"
+msgstr "Contact informatie"
+
+msgid "Note"
+msgstr "Notitie"
+
+msgid "Enter Note"
+msgstr ""
+
+msgid "Parse address"
+msgstr "ontleden adres"
+
+msgid "Print contact"
+msgstr ""
+
+msgid "Paste address"
+msgstr "Plak adres"
+
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr "Plak een adres of een URI naar een Vcard dat verwerkt moet worden:"
+
+msgid "Failed to parse address!"
+msgstr "Adres verwerken mislukt!"
+
+msgid "The address could not be read."
+msgstr "Het adres kon niet gelezen worden"
+
+msgid "End token mode"
+msgstr "Einde token mode"
+
+msgid "You do not have the required private grant to view history."
+msgstr ""
+
+msgid "Business"
+msgstr ""
+
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Mobile"
+msgstr "Mobiel"
+
+msgid "Fax"
+msgstr "Fax (prive)"
+
+msgid "E-Mail"
+msgstr "E-mail"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Import contacts"
+msgstr "Importeer contacten"
+
+msgid "Contact of a user account"
+msgstr "Contact van gebruikersaccount"
+
+msgid "Email Account Contact"
+msgstr ""
+
+msgid "No name"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Contact Image"
+msgstr ""
+
+msgid "Tags"
+msgstr "Labels"
+
+msgid "Full Name"
+msgstr "Volledige naam"
+
+msgid "Job Role"
+msgstr "Functie"
+
+msgid "Room"
+msgstr "Kamer"
+
+msgid "Postalcode"
+msgstr "Postcode"
+
+msgid "Street (private)"
+msgstr "Straat (prive)"
+
+msgid "City (private)"
+msgstr "Plaats (prive)"
+
+msgid "Region (private)"
+msgstr "Provincie (prive)"
+
+msgid "Postalcode (private)"
+msgstr "Postcode (prive)"
+
+msgid "Country (private)"
+msgstr "Land (prive)"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Car phone"
+msgstr "Auto telefoon"
+
+msgid "Pager"
+msgstr "Buzzer"
+
+msgid "Phone (private)"
+msgstr "Telefoon (prive)"
+
+msgid "Fax (private)"
+msgstr "Fax (prive)"
+
+msgid "Mobile (private)"
+msgstr "Mobiel (prive)"
+
+msgid "Email (private)"
+msgstr "Email (prive)"
+
+msgid "URL (private)"
+msgstr "Url (prive)"
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr "Tijdzone"
+
+msgid "Geo"
+msgstr "Geo"
+
+msgid "Birthday"
+msgstr "Geboortedatum"
+
+msgid "Set as preferred E-Mail"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "Search for Contacts ..."
+msgstr ""
+
+msgid "Group Information"
+msgstr ""
+
+msgid "List type"
+msgstr ""
+
+msgid "System accounts only"
+msgstr ""
+
+msgid "Enter description"
+msgstr "Voer omschrijving in"
+
+#, python-brace-format
+msgid "{0} must be given"
+msgstr ""
+
+msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Select Group"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Search for members ..."
+msgstr ""
+
+msgid "List Roles"
+msgstr ""
+
+msgid "Search for system groups ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Mailing List"
+msgstr ""
+
+msgid "This group is a mailing list"
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender and Distributor"
+msgstr ""
+
+msgid "Keep copy of group mails"
+msgstr ""
+
+msgid "Forward external mails"
+msgstr ""
+
+msgid "Only forward member mails"
+msgstr ""
+
+msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Company address"
+msgstr "Bedrijfsadres"
+
+msgid "Private address"
+msgstr "Prive adres"
+
+msgid "Contact Personal Grant"
+msgid_plural "Contact Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Addressbooks"
+msgstr "Adresboeken"
+
+msgid "Quick search"
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "List Personal Grant"
+msgid_plural "List Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Company Address"
+msgstr "Bedrijfsadres"
+
+msgid "Private Address"
+msgstr "Prive adres"
+
+msgid "Related to"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "System Group"
+msgstr ""
+
+msgid "Select record to see its details"
+msgstr ""
+
+msgid "This module visualises hierarchically depended relations between records of different types."
+msgstr ""
+
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
+msgstr ""
+
+msgid "Loading Structure data..."
 msgstr ""
 
 msgid "GENDER_Addressbook"
@@ -745,6 +729,11 @@ msgstr ""
 
 msgid "Show Disabled"
 msgstr ""
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Phone Numbers"
 msgstr ""
@@ -794,20 +783,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "GENDER_Group"
-msgstr ""
-
-msgid "Name/Email"
-msgstr ""
-
-msgid "Site"
-msgid_plural "Sites"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Email"
-msgstr ""
-
 msgid "GENDER_Address"
 msgstr ""
 
@@ -851,15 +826,7 @@ msgstr ""
 msgid "Last Error"
 msgstr ""
 
-msgid "GENDER_URL"
-msgstr ""
-
-msgid "URL"
-msgid_plural "URLs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Phone"
+msgid "GENDER_Email"
 msgstr ""
 
 msgid "GENDER_Instant Messenger"
@@ -870,128 +837,161 @@ msgid_plural "Instant Messengers"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Addressbooks to export"
+msgid "GENDER_Phone"
 msgstr ""
 
-msgid "Export target"
+msgid "GENDER_URL"
 msgstr ""
 
-msgid "Excel overview"
+msgid "URL"
+msgid_plural "URLs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Group"
 msgstr ""
 
-msgid "Word details"
+msgid "Name/Email"
 msgstr ""
 
-msgid "Relations"
+msgid "GENDER_Group Function"
 msgstr ""
 
-msgid "CSV all data"
+msgid "Maximum Members"
 msgstr ""
 
-msgid "VCard Report"
+msgid "All contacts"
+msgstr "Alle contacten"
+
+msgid "Default Addressbook"
+msgstr "Standaard adresboek"
+
+msgid "The default addressbook for new contacts"
+msgstr "Standaard adresboek voor nieuwe contacten"
+
+msgid "Default Favorite"
+msgstr "Standaard favoriet"
+
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Standaard favoriet bij opstarten adresboek"
+
+msgid "Contacts ODS export configuration"
+msgstr "Contacten ODS export configuratie"
+
+msgid "Use this configuration for the contact ODS export."
+msgstr "Gebruik deze configuratie voor de contactpersoon ODS export."
+
+msgid "Contacts XLS export configuration"
+msgstr "Contacten XLS export configuratie"
+
+msgid "Use this configuration for the contact XLS export."
+msgstr "Gebruik deze configuratie voor de contactpersoon XLS export."
+
+msgid "Contact Title Template"
 msgstr ""
 
-msgid "Export multiple addressbooks to vcf files"
+msgid "How to build contact titles."
 msgstr ""
 
-msgid "Excel current columns"
+msgid "default"
+msgstr "standaard"
+
+msgid "All contacts I have read grants for"
+msgstr "Alle contacten waar ik toestemming voor heb"
+
+msgid "My company"
+msgstr "Mijn bedrijf"
+
+msgid "All coworkers in my company"
+msgstr "Alle medewerkers in mijn bedrijf"
+
+msgid "My contacts"
+msgstr "Mijn contacten"
+
+msgid "All contacts in my Addressbooks"
+msgstr "Alle contacten in mijn adresboek"
+
+msgid "Last modified by me"
+msgstr "Laatst aangepast door mij"
+
+msgid "All contacts that I have last modified"
+msgstr "Alle contacten die ik heb aangepast"
+
+msgid "Company Communication"
+msgstr "Bedrijfs communicatie"
+
+msgid "E-Mail (private)"
+msgstr "E-mail (prive)"
+
+msgid "Private Communication"
+msgstr "Prive communicatie"
+
+msgid "Matrix-ID"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Assistant"
+msgstr "Assistent"
+
+msgid "Car"
 msgstr ""
 
-msgid "VCard/VCF"
+msgid "Other"
 msgstr ""
 
-msgid "Export contact data into vcf file"
+msgid "Prefer"
 msgstr ""
 
-msgid "3CX CSV export"
+msgid "Internal Contacts"
+msgstr "Interne contacten"
+
+msgid "Account"
 msgstr ""
 
-msgid "Word letter"
+msgid "Exporttime"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "28"
 msgstr ""
 
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgid "20"
 msgstr ""
 
-msgid "Contact CSV import from Outlook address book"
-msgstr "Contact CSV importeren uit Outlook adresboek"
-
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgid "00877546"
 msgstr ""
 
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 Nederlands"
-
-msgid "Import CSV formated contacts from Google address book"
+msgid "en-GB"
 msgstr ""
 
-msgid "Contact import from Google address book"
-msgstr "Contact importeren van Google adresboek"
-
-msgid "Tine contact CSV import"
+msgid "00813B4E"
 msgstr ""
 
-msgid "Import CSV formated contacts from tine address book"
+msgid "Gruppenrollen"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Import lijst(###CURRENTDATE###)"
-
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Geïmporteerd op ###CURRENTDATE### op ###CURRENTTIME### door ###USERFULLNAME###"
-
-msgid "LX-Office CSV Contact import"
+msgid "00DA3FCD"
 msgstr ""
 
-msgid "Import CSV formated contacts from LX-Office"
+msgid "00997199"
 msgstr ""
 
-msgid "Import vCard formated contacts"
+msgid "0009326B"
 msgstr ""
 
-msgid "Contact VCARD import"
-msgstr "Contact VCARD importeren"
-
-msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgid "008C27A5"
 msgstr ""
 
-msgid "CSV Outlook 2010 German"
+msgid "00C96397"
 msgstr ""
 
-msgid "Contact CSV import from mac address book"
-msgstr "Contact CSV importeren van Apple adresboek"
-
-msgid "manage shared addressbooks"
-msgstr "beheer gedeelde adresboeken"
-
-msgid "Create new shared addressbook folders"
-msgstr "Maak nieuwe gedeelde adresboek folders"
-
-msgid "manage shared addressbook favorites"
-msgstr "beheer gedeelde adresboek favorieten"
-
-msgid "Create or update shared addressbook favorites"
-msgstr "controleer of update gedeelde adresboek favorieten"
-
-msgid "Manage lists in CoreData"
+msgid "00046462"
 msgstr ""
 
-msgid "View, create, delete or update lists in CoreData application"
-msgstr ""
-
-msgid "Manage list functions in CoreData"
-msgstr ""
-
-msgid "View, create, delete or update list functions in CoreData application"
-msgstr ""
-
-msgid "Manage list email options"
-msgstr ""
-
-msgid "Manage list email options like mailing lists"
-msgstr ""
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+msgstr[1] ""

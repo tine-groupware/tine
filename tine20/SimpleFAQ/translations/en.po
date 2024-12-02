@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,33 +29,18 @@ msgstr "Internal"
 msgid "Public"
 msgstr "Public"
 
-msgid "All my FAQs"
-msgstr "All my FAQs"
-
-msgid "Default Favorite"
-msgstr "Default Favorite"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "The default favorite which is loaded on FAQ startup"
-
-msgid "Default FAQ List"
-msgstr "Default FAQ List"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "The default FAQ list to create new FAQ in."
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "FAQ Type"
 msgstr[1] "FAQ Types"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ Status"
-msgstr[1] "FAQ Status"
-
-msgid "Add a new FAQ Status..."
-msgstr "Add a new FAQ Status..."
+msgid "Defaults"
+msgstr "Defaults"
 
 msgid "Question"
 msgstr "Question"
@@ -74,31 +60,11 @@ msgstr "Type"
 msgid "Status"
 msgstr "Status"
 
-msgid "Defaults"
-msgstr "Defaults"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-msgid "Find Question"
-msgstr "Find Question"
-
-msgid "Search question"
-msgstr "Search question"
-
-msgid "FAQ id"
-msgstr "FAQ id"
+msgid "FAQ Infos"
+msgstr "FAQ Infos"
 
 msgid "Tags"
 msgstr "Tags"
-
-msgid "Add a new FAQ Type..."
-msgstr "Add a new FAQ Type..."
-
-msgid "FAQ Infos"
-msgstr "FAQ Infos"
 
 msgid "Creation Time"
 msgstr "Creation Time"
@@ -109,8 +75,19 @@ msgstr "Created By"
 msgid "No answer yet"
 msgstr "No answer yet"
 
-msgid "Search FAQ"
-msgstr "Search FAQ"
+msgid "FAQ id"
+msgstr "FAQ id"
+
+msgid "Add a new FAQ Status..."
+msgstr "Add a new FAQ Status..."
+
+msgid "Add a new FAQ Type..."
+msgstr "Add a new FAQ Type..."
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -122,6 +99,30 @@ msgstr "FAQ Lists"
 
 msgid "Quick Search"
 msgstr "Quick Search"
+
+msgid "Search FAQ"
+msgstr "Search FAQ"
+
+msgid "Find Question"
+msgstr "Find Question"
+
+msgid "Search question"
+msgstr "Search question"
+
+msgid "All my FAQs"
+msgstr "All my FAQs"
+
+msgid "Default Favorite"
+msgstr "Default Favorite"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "The default favorite which is loaded on FAQ startup"
+
+msgid "Default FAQ List"
+msgstr "Default FAQ List"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "The default FAQ list to create new FAQ in."
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "All FAQs of my FAQ Lists"

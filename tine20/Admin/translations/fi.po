@@ -9,961 +9,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Tommi Turkia <sahkari@saunalahti.fi>, 2012\n"
 "Language-Team: Finnish (http://app.transifex.com/tine/groupware/language/fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr "Aktivoi ohjelma"
-
-msgid "Disable Application"
-msgstr "Poista ohjelma käytöstä"
-
-msgid "Settings"
-msgstr "Asetukset"
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "{0} Asetukset"
-
-msgid "Search:"
-msgstr "Hae:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Näytetään ohjelmat {0} - {1} - {2}"
-
-msgid "No applications to display"
-msgstr "Ei ohjelmia näytettäväksi"
-
-msgid "Order"
-msgstr "Järjestys"
-
-msgid "Name"
-msgstr "Nimi"
-
-msgid "Status"
-msgstr "Tila"
-
-msgid "Version"
-msgstr "Versio"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Vahvista"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Haluatko poistaa valitut ryhmät?"
-
-msgid "Deleting group(s)..."
-msgstr "Poistetaan ryhmiä..."
-
-msgid "Add Group"
-msgstr "Lisää ryhmä"
-
-msgid "Edit Group"
-msgstr "Muokkaa ryhmää"
-
-msgid "Delete Group"
-msgstr "Poista ryhmä"
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Näytetään ryhmät {0} - {1} - {2}"
-
-msgid "No groups to display"
-msgstr "Ei ryhmiä"
-
-msgid "ID"
-msgstr "Tunnus"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Kuvaus"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Virheet"
-
-msgid "Please configure store for this field type"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Ohjelma"
-msgstr[1] "Ohjelmat"
-
-msgid "Record Class"
-msgstr ""
-
-msgid "Given record class not found"
-msgstr ""
-
-msgid "Cancel"
-msgstr "Peruuta"
-
-msgid "OK"
-msgstr "Ok"
-
-msgid "Configure store"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "Use"
-msgstr ""
-
-msgid "Model"
-msgstr "Malli"
-
-msgid "Custom field definition"
-msgstr "Muokattavan kentän kuvaus"
-
-msgid "Text"
-msgstr "Teksti"
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr "Numero"
-
-msgid "Date"
-msgstr "Päivä"
-
-msgid "DateTime"
-msgstr "PäiväAika"
-
-msgid "Time"
-msgstr "Aika"
-
-msgid "Boolean"
-msgstr "Boolean"
-
-msgid "Search Combo"
-msgstr ""
-
-msgid "Key Field"
-msgstr ""
-
-msgid "Record"
-msgstr ""
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr "Tyyppi"
-
-msgid "Label"
-msgstr ""
-
-msgid "Length"
-msgstr "Pituus"
-
-msgid "Required"
-msgstr "Vaaditaan"
-
-msgid "Custom field additional properties"
-msgstr ""
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Ryhmä"
-msgstr[1] "Ryhmät"
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Muokattava kenttä"
-msgstr[1] "Muokattavat kentät"
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Value"
-msgstr "Arvo"
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "Tietokoneen nimi"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Oletus osoitekirja uusille yhteystiedoille ja ryhmille"
-
-msgid "Please wait"
-msgstr "Odota hetki"
-
-msgid "Updating Tag"
-msgstr ""
-
-msgid "Failed"
-msgstr "Epäonnistui"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr "Korjaa löytyneet virheet."
-
-msgid "Allowed Contexts"
-msgstr ""
-
-msgid "Context"
-msgstr ""
-
-msgid "Account Rights"
-msgstr ""
-
-msgid "Tag Name"
-msgstr ""
-
-msgid "Color"
-msgstr "Väri"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Siirretään {0}..."
-
-msgid "Tag"
-msgstr ""
-
-msgid "Add New Tag"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr ""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr ""
-
-msgid "Deleting tag(s)..."
-msgstr ""
-
-msgid "Add Tag"
-msgstr ""
-
-msgid "Edit Tag"
-msgstr ""
-
-msgid "Delete Tag"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
-
-msgid "No tags to display"
-msgstr ""
-
-msgid "Usage:&#160;"
-msgstr ""
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr ""
-
-msgid "Could not save role."
-msgstr "Roolin tallennus ei onnistunut."
-
-msgid "Deleting role..."
-msgstr "Poistetaan rooli..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr ""
-
-msgid "Rights"
-msgstr "Oikeudet"
-
-msgid "Members"
-msgstr "Jäsenet"
-
-msgid "Role Name"
-msgstr "Roolin nimi"
-
-msgid "Role"
-msgstr "Rooli"
-
-msgid "Add New Role"
-msgstr "Lisää uusi rooli"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr ""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr ""
-
-msgid "Deleting role(s)..."
-msgstr ""
-
-msgid "Add Role"
-msgstr "Lisää rooli"
-
-msgid "Edit Role"
-msgstr "Muokkaa roolia"
-
-msgid "Delete Role"
-msgstr "Poista rooli"
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
-
-msgid "No roles to display"
-msgstr ""
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Kirjautumisloki"
-msgstr[1] "Kirjautumislokit"
-
-msgid "Groups"
-msgstr "Ryhmät"
-
-msgid "Applications"
-msgstr "Ohjelmat"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "Tila"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Sähköposti käyttäjä"
-msgstr[1] "Sähköposti käyttäjät"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr "Nykyinen sähköpostilaatikon koko"
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr ""
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr ""
-
-msgid "Passwords match!"
-msgstr ""
-
-msgid "Primary group"
-msgstr ""
-
-msgid "Unix"
-msgstr ""
-
-msgid "Home Directory"
-msgstr ""
-
-msgid "Login Shell"
-msgstr ""
-
-msgid "Windows"
-msgstr ""
-
-msgid "Home Drive"
-msgstr ""
-
-msgid "Login Time"
-msgstr "Kirjautumisaika"
-
-msgid "never logged in"
-msgstr "ei koskaan kirjautunut sisään"
-
-msgid "Home Path"
-msgstr "Kotipolku"
-
-msgid "Logout Time"
-msgstr "Ulos kirjautumisaika"
-
-msgid "never logged off"
-msgstr "ei koskaan kirjautunut ulos"
-
-msgid "Profile Path"
-msgstr "Profiilin polku"
-
-msgid "Password Last Set"
-msgstr "Salasana asetettu viimeksi"
-
-msgid "never"
-msgstr "ei koskaan"
-
-msgid "Logon Script"
-msgstr ""
-
-msgid "Password Can Change"
-msgstr "Salasana voidaan vaihtaa"
-
-msgid "not set"
-msgstr "ei asetettu"
-
-msgid "Password Must Change"
-msgstr "Salasana on vaihdettava"
-
-msgid "Kick Off Time"
-msgstr ""
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr "tilaa ei asetettu"
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Tiedot"
-
-msgid "Last Login"
-msgstr "Edellinen kirjautuminen"
-
-msgid "Forward Only"
-msgstr "Uudelleen ohjaus ainoastaan"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr ""
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr ""
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Salasanan vahvistaminen"
-
-msgid "Repeat password"
-msgstr "Toista salasana"
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Käyttäjätili"
-
-msgid "First name"
-msgstr "Etunimi"
-
-msgid "Last name"
-msgstr "Sukunimi"
-
-msgid "Display name"
-msgstr "Näyttönimi"
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr "Kirjautumisnimi"
-
-msgid "Password"
-msgstr "Salasana"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr ""
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "käytössä"
-
-msgid "disabled"
-msgstr "pois käytöstä"
-
-msgid "expired"
-msgstr "päättynyt"
-
-msgid "blocked"
-msgstr "estetty"
-
-msgid "Invalid Status"
-msgstr "Virheellinen tila"
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr ""
-
-msgid "Expires"
-msgstr "Päättynyt"
-
-msgid "Last login at"
-msgstr "Viimeksi kirjautunut"
-
-msgid "don't know"
-msgstr "ei tiedossa"
-
-msgid "Last login from"
-msgstr "Viimeksi kirjautunut "
-
-msgid "Password set"
-msgstr ""
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr "Käyttäjä ryhmät"
-
-msgid "User roles"
-msgstr ""
-
-msgid "Fileserver"
-msgstr "Tiedostopalvelin"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Näkyvyys"
-
-msgid "Display in addressbook"
-msgstr "Näytä osoitekirjassa"
-
-msgid "Hide from addressbook"
-msgstr "Älä näytä osoitekirjassa"
-
-msgid "Saved in Addressbook"
-msgstr "Tallennettu osoitekirjaan"
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Käyttäjä"
-msgstr[1] "Käyttäjät"
-
-msgid "Users"
-msgstr "Käyttäjät"
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba käyttäjä"
-msgstr[1] "Samba käyttäjät"
-
-msgid "Enable Account"
-msgstr "Aktivoi käyttäjätili"
-
-msgid "Disable Account"
-msgstr "Poista käyttäjätili käytöstä"
-
-msgid "Reset Password"
-msgstr "Nollaa salasana"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "Salasanan muuttaminen"
-
-msgid "Set new password"
-msgstr "Aseta uusi salasana"
-
-msgid "Please enter the new password:"
-msgstr "Kirjoita uusi salasana: "
-
-msgid "Group Name"
-msgstr "Ryhmän nimi"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Ryhmän jäsenet"
-
-msgid "personal"
-msgstr "henkilökohtainen"
-
-msgid "shared"
-msgstr "jaettu"
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr "Huomautus käytäjälle"
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Container Name"
-msgstr ""
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Tietokone"
-msgstr[1] "Tietokoneet"
-
-msgid "Roles"
-msgstr "Roolit"
-
-msgid "Containers"
-msgstr ""
-
-msgid "Shared Tags"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "Computers"
-msgstr "Tietokoneet"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "Palvelimen tiedot"
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Ylläpitäjä"
-
-msgid "Refresh"
-msgstr "Päivitä"
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "IP Osoite"
-
-msgid "Client Type"
-msgstr "Asiakas tyyppi"
-
-msgid "Session ID"
-msgstr "Yhteyden tunnus"
-
-msgid "Login Name"
-msgstr "Kirjautumis nimi"
-
-msgid "Result"
-msgstr "Tulokset"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr "käyttäjä estetty"
-
-msgid "password expired"
-msgstr "salasana umpeutunut"
-
-msgid "user disabled"
-msgstr "käyttäjä poistettu"
-
-msgid "invalid password"
-msgstr "virheellinen salasana"
-
-msgid "ambiguous username"
-msgstr ""
-
-msgid "user not found"
-msgstr "käyttäjää ei löydy"
-
-msgid "failure"
-msgstr "virhe"
-
-msgid "success"
-msgstr "onnistui"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr "Oletus IMAP käyttäjä asetukset"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr "Tallennustilaasi on muokattu "
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Tallennustilaasi on muutettu %1$s %2$sHuom: %3$s"
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1110,4 +163,951 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr "Oletus IMAP käyttäjä asetukset"
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr "Tallennustilaasi on muokattu "
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Tallennustilaasi on muutettu %1$s %2$sHuom: %3$s"
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Kirjautumisloki"
+msgstr[1] "Kirjautumislokit"
+
+msgid "IP Address"
+msgstr "IP Osoite"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Käyttäjä"
+msgstr[1] "Käyttäjät"
+
+msgid "Login Time"
+msgstr "Kirjautumisaika"
+
+msgid "Logout Time"
+msgstr "Ulos kirjautumisaika"
+
+msgid "Client Type"
+msgstr "Asiakas tyyppi"
+
+msgid "Session ID"
+msgstr "Yhteyden tunnus"
+
+msgid "Login Name"
+msgstr "Kirjautumis nimi"
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "Result"
+msgstr "Tulokset"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr "käyttäjä estetty"
+
+msgid "password expired"
+msgstr "salasana umpeutunut"
+
+msgid "user disabled"
+msgstr "käyttäjä poistettu"
+
+msgid "invalid password"
+msgstr "virheellinen salasana"
+
+msgid "ambiguous username"
+msgstr ""
+
+msgid "user not found"
+msgstr "käyttäjää ei löydy"
+
+msgid "failure"
+msgstr "virhe"
+
+msgid "success"
+msgstr "onnistui"
+
+msgid "Groups"
+msgstr "Ryhmät"
+
+msgid "Roles"
+msgstr "Roolit"
+
+msgid "Applications"
+msgstr "Ohjelmat"
+
+msgid "Containers"
+msgstr ""
+
+msgid "Shared Tags"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "Computers"
+msgstr "Tietokoneet"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "Palvelimen tiedot"
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Ylläpitäjä"
+
+msgid "Refresh"
+msgstr "Päivitä"
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Oletus osoitekirja uusille yhteystiedoille ja ryhmille"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Ohjelma"
+msgstr[1] "Ohjelmat"
+
+msgid "Enable Application"
+msgstr "Aktivoi ohjelma"
+
+msgid "Disable Application"
+msgstr "Poista ohjelma käytöstä"
+
+msgid "Settings"
+msgstr "Asetukset"
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Asetukset"
+
+msgid "Search:"
+msgstr "Hae:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Näytetään ohjelmat {0} - {1} - {2}"
+
+msgid "No applications to display"
+msgstr "Ei ohjelmia näytettäväksi"
+
+msgid "Order"
+msgstr "Järjestys"
+
+msgid "Status"
+msgstr "Tila"
+
+msgid "Version"
+msgstr "Versio"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Description"
+msgstr "Kuvaus"
+
+msgid "Label"
+msgstr ""
+
+msgid "Value"
+msgstr "Arvo"
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Model"
+msgstr "Malli"
+
+msgid "Type"
+msgstr "Tyyppi"
+
+msgid "personal"
+msgstr "henkilökohtainen"
+
+msgid "shared"
+msgstr "jaettu"
+
+msgid "Color"
+msgstr "Väri"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr "Huomautus käytäjälle"
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "Tunnus"
+
+msgid "Container Name"
+msgstr ""
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Muokattava kenttä"
+msgstr[1] "Muokattavat kentät"
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Virheet"
+
+msgid "Please configure store for this field type"
+msgstr ""
+
+msgid "Record Class"
+msgstr ""
+
+msgid "Given record class not found"
+msgstr ""
+
+msgid "Cancel"
+msgstr "Peruuta"
+
+msgid "OK"
+msgstr "Ok"
+
+msgid "Configure store"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Use"
+msgstr ""
+
+msgid "Custom field definition"
+msgstr "Muokattavan kentän kuvaus"
+
+msgid "Text"
+msgstr "Teksti"
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr "Numero"
+
+msgid "Date"
+msgstr "Päivä"
+
+msgid "DateTime"
+msgstr "PäiväAika"
+
+msgid "Time"
+msgstr "Aika"
+
+msgid "Boolean"
+msgstr "Boolean"
+
+msgid "Search Combo"
+msgstr ""
+
+msgid "Key Field"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr "Pituus"
+
+msgid "Required"
+msgstr "Vaaditaan"
+
+msgid "Custom field additional properties"
+msgstr ""
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Ryhmä"
+msgstr[1] "Ryhmät"
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Ryhmän nimi"
+
+msgid "Visibility"
+msgstr "Näkyvyys"
+
+msgid "Display in addressbook"
+msgstr "Näytä osoitekirjassa"
+
+msgid "Hide from addressbook"
+msgstr "Älä näytä osoitekirjassa"
+
+msgid "Saved in Addressbook"
+msgstr "Tallennettu osoitekirjaan"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Ryhmän jäsenet"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+msgid "Confirm"
+msgstr "Vahvista"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Haluatko poistaa valitut ryhmät?"
+
+msgid "Deleting group(s)..."
+msgstr "Poistetaan ryhmiä..."
+
+msgid "Add Group"
+msgstr "Lisää ryhmä"
+
+msgid "Edit Group"
+msgstr "Muokkaa ryhmää"
+
+msgid "Delete Group"
+msgstr "Poista ryhmä"
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Näytetään ryhmät {0} - {1} - {2}"
+
+msgid "No groups to display"
+msgstr "Ei ryhmiä"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "Tila"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Sähköposti käyttäjä"
+msgstr[1] "Sähköposti käyttäjät"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr "Nykyinen sähköpostilaatikon koko"
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr "tilaa ei asetettu"
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Odota hetki"
+
+msgid "Updating Memberships"
+msgstr ""
+
+msgid "Failed"
+msgstr "Epäonnistui"
+
+msgid "Could not save role."
+msgstr "Roolin tallennus ei onnistunut."
+
+msgid "Please fix the errors noted."
+msgstr "Korjaa löytyneet virheet."
+
+msgid "Deleting role..."
+msgstr "Poistetaan rooli..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr ""
+
+msgid "Rights"
+msgstr "Oikeudet"
+
+msgid "Members"
+msgstr "Jäsenet"
+
+msgid "Role Name"
+msgstr "Roolin nimi"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Siirretään {0}..."
+
+msgid "Role"
+msgstr "Rooli"
+
+msgid "Add New Role"
+msgstr "Lisää uusi rooli"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr ""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr ""
+
+msgid "Deleting role(s)..."
+msgstr ""
+
+msgid "Add Role"
+msgstr "Lisää rooli"
+
+msgid "Edit Role"
+msgstr "Muokkaa roolia"
+
+msgid "Delete Role"
+msgstr "Poista rooli"
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr ""
+
+msgid "No roles to display"
+msgstr ""
+
+msgid "Computer Name"
+msgstr "Tietokoneen nimi"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Tietokone"
+msgstr[1] "Tietokoneet"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr ""
+
+msgid "Context"
+msgstr ""
+
+msgid "Account Rights"
+msgstr ""
+
+msgid "Tag Name"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Add New Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr ""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr ""
+
+msgid "Deleting tag(s)..."
+msgstr ""
+
+msgid "Add Tag"
+msgstr ""
+
+msgid "Edit Tag"
+msgstr ""
+
+msgid "Delete Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr ""
+
+msgid "No tags to display"
+msgstr ""
+
+msgid "Usage:&#160;"
+msgstr ""
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr ""
+
+msgid "Passwords match!"
+msgstr ""
+
+msgid "Primary group"
+msgstr ""
+
+msgid "Unix"
+msgstr ""
+
+msgid "Home Directory"
+msgstr ""
+
+msgid "Login Shell"
+msgstr ""
+
+msgid "Windows"
+msgstr ""
+
+msgid "Home Drive"
+msgstr ""
+
+msgid "never logged in"
+msgstr "ei koskaan kirjautunut sisään"
+
+msgid "Home Path"
+msgstr "Kotipolku"
+
+msgid "never logged off"
+msgstr "ei koskaan kirjautunut ulos"
+
+msgid "Profile Path"
+msgstr "Profiilin polku"
+
+msgid "Password Last Set"
+msgstr "Salasana asetettu viimeksi"
+
+msgid "never"
+msgstr "ei koskaan"
+
+msgid "Logon Script"
+msgstr ""
+
+msgid "Password Can Change"
+msgstr "Salasana voidaan vaihtaa"
+
+msgid "not set"
+msgstr "ei asetettu"
+
+msgid "Password Must Change"
+msgstr "Salasana on vaihdettava"
+
+msgid "Kick Off Time"
+msgstr ""
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Tiedot"
+
+msgid "Last Login"
+msgstr "Edellinen kirjautuminen"
+
+msgid "Forward Only"
+msgstr "Uudelleen ohjaus ainoastaan"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr ""
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr ""
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Salasanan vahvistaminen"
+
+msgid "Repeat password"
+msgstr "Toista salasana"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Käyttäjätili"
+
+msgid "First name"
+msgstr "Etunimi"
+
+msgid "Last name"
+msgstr "Sukunimi"
+
+msgid "Display name"
+msgstr "Näyttönimi"
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr "Kirjautumisnimi"
+
+msgid "Password"
+msgstr "Salasana"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr ""
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "käytössä"
+
+msgid "disabled"
+msgstr "pois käytöstä"
+
+msgid "expired"
+msgstr "päättynyt"
+
+msgid "blocked"
+msgstr "estetty"
+
+msgid "Invalid Status"
+msgstr "Virheellinen tila"
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr ""
+
+msgid "Expires"
+msgstr "Päättynyt"
+
+msgid "Last login at"
+msgstr "Viimeksi kirjautunut"
+
+msgid "don't know"
+msgstr "ei tiedossa"
+
+msgid "Last login from"
+msgstr "Viimeksi kirjautunut "
+
+msgid "Password set"
+msgstr ""
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr "Käyttäjä ryhmät"
+
+msgid "User roles"
+msgstr ""
+
+msgid "Fileserver"
+msgstr "Tiedostopalvelin"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr "Aktivoi käyttäjätili"
+
+msgid "Disable Account"
+msgstr "Poista käyttäjätili käytöstä"
+
+msgid "Reset Password"
+msgstr "Nollaa salasana"
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "Salasanan muuttaminen"
+
+msgid "Set new password"
+msgstr "Aseta uusi salasana"
+
+msgid "Please enter the new password:"
+msgstr "Kirjoita uusi salasana: "
+
+msgid "Users"
+msgstr "Käyttäjät"
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba käyttäjä"
+msgstr[1] "Samba käyttäjät"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

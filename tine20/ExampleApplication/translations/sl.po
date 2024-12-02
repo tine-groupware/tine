@@ -5,44 +5,14 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2024-11-25 17:06+0000\n"
 "Language-Team: Slovenian (https://app.transifex.com/tine/teams/16133/sl/)\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sl\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Default Example Record Container"
-msgstr ""
-
-msgid "The default container for new records"
-msgstr ""
-
-msgid "ExampleRecord"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Reason"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Total Example Records"
-msgstr ""
-
-msgid "New Example"
-msgstr ""
-
-msgid "ExampleApplication"
-msgstr ""
 
 msgid "Status Available"
 msgstr ""
@@ -101,6 +71,27 @@ msgstr ""
 msgid "Just an example string for test purpose"
 msgstr ""
 
+msgid "Total Example Records"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "New Example"
+msgstr ""
+
+msgid "ExampleRecord"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] ""
@@ -121,4 +112,13 @@ msgid "Number"
 msgstr ""
 
 msgid "datetime"
+msgstr ""
+
+msgid "Default Example Record Container"
+msgstr ""
+
+msgid "The default container for new records"
+msgstr ""
+
+msgid "ExampleApplication"
 msgstr ""

@@ -10,190 +10,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Whatsek <Whatsek@gmail.com>, 2015\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/tine/groupware/language/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s's persoonlijke taken"
+msgid "manage shared task lists"
+msgstr "Beheer gedeelde taken lijst"
 
-msgid "All my tasks"
-msgstr "Al mijn taken"
+msgid "Create new shared tasks lists"
+msgstr "Maak nieuwe gedeelde taken lijst"
 
-msgid "Default Favorite"
-msgstr "Standaard favoriet"
+msgid "manage shared tasks favorites"
+msgstr "Beheer gedeelde taak favorieten"
 
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "De standaard favoriet die bij het opstarten van Taken wordt geladen"
-
-msgid "Default Task List"
-msgstr "Standaard taken lijst"
-
-msgid "The default task list to create new tasks in."
-msgstr "De standaard taken lijst voor nieuwe taken."
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New task get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the task ends"
-msgstr ""
-
-msgid "Task Title Template"
-msgstr ""
-
-msgid "How to build task titles."
-msgstr ""
-
-msgid "Filter: To be done for"
-msgstr ""
-
-msgid "Show all tasks matching all the following criteria:"
-msgstr ""
-
-msgid "Tasks has an open status."
-msgstr ""
-
-msgid "Filtered person is either:"
-msgstr ""
-
-msgid "Organizer and no coworker with open status is assigned."
-msgstr ""
-
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr ""
-
-msgid "Coworker with an open status assigned."
-msgstr ""
-
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr ""
-
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "Status"
-msgstr[1] "Statussen"
-
-msgid "New Task"
-msgstr "Nieuwe taak"
-
-msgid "Create from Template"
-msgstr ""
-
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Wil je deze taak echt verwijderen?"
-msgstr[1] "Wil je deze taken echt verwijderen?"
-
-msgid "Tags"
-msgstr "Labels"
-
-msgid "Summary"
-msgstr "Overzicht"
-
-msgid "Add a task..."
-msgstr "Voeg een taak toe..."
-
-msgid "Due Date"
-msgstr "Vervaldag"
-
-msgid "Priority"
-msgstr "Prioriteit"
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Percent"
-msgstr "Procent"
-
-msgid "Completed"
-msgstr "Afgerond"
-
-msgid "Organizer / Responsible"
-msgstr ""
-
-msgid "Responsible"
-msgstr "Verantwoordlijk"
-
-msgid "My open tasks"
-msgstr "Mijn open taken"
-
-msgid "Use show all button bellow to search for all tasks"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Invalid selection"
-msgstr ""
-
-msgid "A task cannot depend on itself"
-msgstr ""
-
-msgid "Add New Task"
-msgstr "Nieuwe  taak toevoegen"
-
-msgid "This Task is part of:"
-msgstr ""
-
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Je moet een vervaldatum opgeven, omdat er een alarm is ingesteld!"
-
-msgid "Due date"
-msgstr "Vervaldag"
-
-msgid "Add Responsible ..."
-msgstr "Voeg verantwoordelijke ..."
-
-msgid "Notes"
-msgstr "Notities"
-
-msgid "Enter description..."
-msgstr "Voer beschrijving in..."
-
-msgid "Percentage"
-msgstr "Percentage"
-
-msgid "Attention: This due date is in the past!"
-msgstr ""
-
-msgid "My responsibility"
-msgstr ""
-
-msgid "All tasks that I am responsible for"
-msgstr "Alle taken waar ik verantwoordelijk voor ben"
-
-msgid "All tasks for me"
-msgstr "Alle taken voor mij"
-
-msgid "To be done for me this week"
-msgstr ""
-
-msgid "Tasks"
-msgstr "Taken"
-
-msgid "All tasks of my taskslists"
-msgstr "Alle taken van mijn takenlijst"
-
-msgid "Last modified by me"
-msgstr "Laatst aangepast door mij"
-
-msgid "All tasks that I have last modified"
-msgstr "Alle taken die die ik als laatst heb aangepast"
-
-msgid "Tasks without responsible"
-msgstr "Taken zonder verantwoordelijke"
+msgid "Create or update shared tasks favorites"
+msgstr "Maak of update gedeelde taak favorieten"
 
 msgid "Tasks status available"
 msgstr "Taak status beschikbaar"
@@ -203,6 +39,9 @@ msgstr ""
 
 msgid "No response"
 msgstr "Geen reactie"
+
+msgid "Completed"
+msgstr "Afgerond"
 
 msgid "Cancelled"
 msgstr "Geannuleerd"
@@ -252,8 +91,137 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s's persoonlijke taken"
+
 msgid "Notification for Task %1$s"
 msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Create from Template"
+msgstr ""
+
+msgid "Use show all button bellow to search for all tasks"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Invalid selection"
+msgstr ""
+
+msgid "A task cannot depend on itself"
+msgstr ""
+
+msgid "Summary"
+msgstr "Overzicht"
+
+msgid "Add a task..."
+msgstr "Voeg een taak toe..."
+
+msgid "Due Date"
+msgstr "Vervaldag"
+
+msgid "Priority"
+msgstr "Prioriteit"
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Percent"
+msgstr "Procent"
+
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Status"
+msgstr[1] "Statussen"
+
+msgid "Responsible"
+msgstr "Verantwoordlijk"
+
+msgid "My open tasks"
+msgstr "Mijn open taken"
+
+msgid "Add New Task"
+msgstr "Nieuwe  taak toevoegen"
+
+msgid "This Task is part of:"
+msgstr ""
+
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Je moet een vervaldatum opgeven, omdat er een alarm is ingesteld!"
+
+msgid "Due date"
+msgstr "Vervaldag"
+
+msgid "Organizer / Responsible"
+msgstr ""
+
+msgid "Add Responsible ..."
+msgstr "Voeg verantwoordelijke ..."
+
+msgid "Notes"
+msgstr "Notities"
+
+msgid "Enter description..."
+msgstr "Voer beschrijving in..."
+
+msgid "Percentage"
+msgstr "Percentage"
+
+msgid "Attention: This due date is in the past!"
+msgstr ""
+
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Wil je deze taak echt verwijderen?"
+msgstr[1] "Wil je deze taken echt verwijderen?"
+
+msgid "Tags"
+msgstr "Labels"
+
+msgid "Filter: To be done for"
+msgstr ""
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr ""
+
+msgid "Tasks has an open status."
+msgstr ""
+
+msgid "Filtered person is either:"
+msgstr ""
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr ""
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr ""
+
+msgid "Coworker with an open status assigned."
+msgstr ""
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr ""
+
+msgid "New Task"
+msgstr "Nieuwe taak"
+
+msgid "GENDER_Collaborator"
+msgstr ""
+
+msgid "Collaborator"
+msgid_plural "Collaborators"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Taak"
+msgstr[1] "Taken"
 
 msgid "GENDER_Task Dependency"
 msgstr ""
@@ -263,21 +231,8 @@ msgid_plural "Task Dependencies"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Taak"
-msgstr[1] "Taken"
-
 msgid "Depends on Task"
 msgstr ""
-
-msgid "GENDER_Collaborator"
-msgstr ""
-
-msgid "Collaborator"
-msgid_plural "Collaborators"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "GENDER_Task"
 msgstr ""
@@ -324,17 +279,62 @@ msgstr "Telefoon"
 msgid "Email"
 msgstr "Email"
 
-msgid "Excel all data"
+msgid "All my tasks"
+msgstr "Al mijn taken"
+
+msgid "Default Favorite"
+msgstr "Standaard favoriet"
+
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "De standaard favoriet die bij het opstarten van Taken wordt geladen"
+
+msgid "Default Task List"
+msgstr "Standaard taken lijst"
+
+msgid "The default task list to create new tasks in."
+msgstr "De standaard taken lijst voor nieuwe taken."
+
+msgid "Enable Standard Alarm"
 msgstr ""
 
-msgid "manage shared task lists"
-msgstr "Beheer gedeelde taken lijst"
+msgid "New task get a standard alarm as defined below"
+msgstr ""
 
-msgid "Create new shared tasks lists"
-msgstr "Maak nieuwe gedeelde taken lijst"
+msgid "Standard Alarm Time"
+msgstr ""
 
-msgid "manage shared tasks favorites"
-msgstr "Beheer gedeelde taak favorieten"
+msgid "Minutes before the task ends"
+msgstr ""
 
-msgid "Create or update shared tasks favorites"
-msgstr "Maak of update gedeelde taak favorieten"
+msgid "Task Title Template"
+msgstr ""
+
+msgid "How to build task titles."
+msgstr ""
+
+msgid "All tasks of my taskslists"
+msgstr "Alle taken van mijn takenlijst"
+
+msgid "My responsibility"
+msgstr ""
+
+msgid "All tasks that I am responsible for"
+msgstr "Alle taken waar ik verantwoordelijk voor ben"
+
+msgid "All tasks for me"
+msgstr "Alle taken voor mij"
+
+msgid "To be done for me this week"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr "Laatst aangepast door mij"
+
+msgid "All tasks that I have last modified"
+msgstr "Alle taken die die ik als laatst heb aangepast"
+
+msgid "Tasks without responsible"
+msgstr "Taken zonder verantwoordelijke"
+
+msgid "Tasks"
+msgstr "Taken"

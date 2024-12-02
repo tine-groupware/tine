@@ -18,61 +18,21 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:149
 msgid "Draft"
 msgstr "Taslak"
 
-#: Controller.php:150
 msgid "released"
 msgstr "Yayınlanmış"
 
-#: Controller.php:151
 msgid "obsolete"
 msgstr "Eskimiş"
 
-#: Controller.php:154
 msgid "Internal"
 msgstr "Sistem İçi"
 
-#: Controller.php:155
 msgid "Public"
 msgstr "Açık"
 
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr "Bütün FAQlarım"
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr ""
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr "Standart FAQ Listesi"
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr ""
-
-#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] ""
-"one: FAQ Tipi\n"
-"\n"
-"other: FAQ Tipleri"
-msgstr[1] ""
-"one: FAQ Tipi\n"
-"\n"
-"other: FAQ Tipleri"
-
-#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] ""
@@ -84,40 +44,62 @@ msgstr[1] ""
 "\n"
 "other: FAQ Durumu"
 
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Yeni FAQ Durumu Ekle"
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] ""
+"one: FAQ Tipi\n"
+"\n"
+"other: FAQ Tipleri"
+msgstr[1] ""
+"one: FAQ Tipi\n"
+"\n"
+"other: FAQ Tipleri"
 
-#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Soru"
-
-#: js/FaqEditDialog.js:66
-msgid "Enter a question..."
-msgstr "Soru Gir"
-
-#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Cevap"
-
-#: js/FaqEditDialog.js:73
-msgid "Enter a answer..."
-msgstr "Cevap Gir"
-
-#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
-msgid "Type"
-msgstr "Tip"
-
-#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
-msgid "Status"
-msgstr "Durum"
-
-#: js/AdminPanel.js:105
 msgid "Defaults"
 msgstr "Standartlar"
 
-#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "Question"
+msgstr "Soru"
+
+msgid "Enter a question..."
+msgstr "Soru Gir"
+
+msgid "Answer"
+msgstr "Cevap"
+
+msgid "Enter a answer..."
+msgstr "Cevap Gir"
+
+msgid "Type"
+msgstr "Tip"
+
+msgid "Status"
+msgstr "Durum"
+
+msgid "FAQ Infos"
+msgstr "FAQ Bilgileri"
+
+msgid "Tags"
+msgstr ""
+
+msgid "Creation Time"
+msgstr "Oluşturum Vakti"
+
+msgid "Created By"
+msgstr "Oluşturan"
+
+msgid "No answer yet"
+msgstr "Şu An Cevap Yok"
+
+msgid "FAQ id"
+msgstr "FAQ ID"
+
+msgid "Add a new FAQ Status..."
+msgstr "Yeni FAQ Durumu Ekle"
+
+msgid "Add a new FAQ Type..."
+msgstr "Yeni FAQ Tipi Ekle"
+
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] ""
@@ -129,47 +111,6 @@ msgstr[1] ""
 "\n"
 "other: FAQs"
 
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr ""
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr ""
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr "FAQ ID"
-
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr ""
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Yeni FAQ Tipi Ekle"
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "FAQ Bilgileri"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Oluşturum Vakti"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Oluşturan"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Şu An Cevap Yok"
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr ""
-
-#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] ""
@@ -181,22 +122,41 @@ msgstr[1] ""
 "\n"
 "other: FAQ Listeleri"
 
-#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr "FAQ Listeleri"
 
-#: js/Model.js:74
 msgid "Quick Search"
 msgstr ""
 
-#: Setup/Initialize.php:33
+msgid "Search FAQ"
+msgstr ""
+
+msgid "Find Question"
+msgstr ""
+
+msgid "Search question"
+msgstr ""
+
+msgid "All my FAQs"
+msgstr "Bütün FAQlarım"
+
+msgid "Default Favorite"
+msgstr ""
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr ""
+
+msgid "Default FAQ List"
+msgstr "Standart FAQ Listesi"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr ""
+
 msgid "All FAQs of my FAQ Lists"
 msgstr "FAQ Listemdeki FAQlar"
 
-#: Setup/Initialize.php:40
 msgid "Last modified by me"
 msgstr "Son düzenlediğim"
 
-#: Setup/Initialize.php:41
 msgid "All FAQs that I have last modified"
 msgstr "Son düzenlediğim FAQlar"

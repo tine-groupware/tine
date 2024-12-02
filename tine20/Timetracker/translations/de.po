@@ -26,26 +26,101 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
-msgstr "Stundenzettel ODS-Export Konfiguration"
+msgid "Manage timeaccounts"
+msgstr "Zeitkonten verwalten"
 
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Hiermit können Sie die zu verwendende ODS-Export Konfiguration einstellen."
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Zeitkonten anlegen, bearbeiten und löschen (beinhaltet alle Stundenzettel-Rechte)"
 
-msgid "A Tag which is available in context menu for fast assignment"
-msgstr "Ein Tag, das im Kontextmenü zur schnellen Zuordnung verfügbar ist"
+msgid "Add timeaccounts"
+msgstr "Zeitkonten hinzufügen"
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
-msgstr "Ein Schnell-Tag kann einfach per Kontext-Menü angehängt werden."
+msgid "Manage shared timeaccount favorites"
+msgstr "Gemeinsame Zeitkonten-Favoriten verwalten"
 
-msgid "default"
-msgstr "Standard"
+msgid "Create or update shared timeaccount favorites"
+msgstr "Gemeinsame Zeitkonten-Favoriten erstellen oder bearbeiten"
 
-msgid "Bookmark Timeaccount"
-msgstr "Zeitkonto merken"
+msgid "Manage shared timesheet favorites"
+msgstr "Gemeinsame Stundenzettel-Favoriten verwalten"
 
-msgid "Close Timeaccount"
-msgstr "Zeitkonten schließen"
+msgid "Create or update shared timesheet favorites"
+msgstr "Gemeinsame Stundenzettel-Favoriten erstellen oder bearbeiten"
+
+msgid "Enabled Features"
+msgstr "Feature aktivieren"
+
+msgid "Enabled Features in Timetracker Application."
+msgstr "Feature in der Zeiterfassungs Applikation aktivieren."
+
+msgid "Timeaccount Bookmarks"
+msgstr "Zeitkonten Lesezeichen"
+
+msgid "none"
+msgstr "keine"
+
+msgid "last week"
+msgstr "letzte Woche"
+
+msgid "not yet billed"
+msgstr "noch nicht abgerechnet"
+
+msgid "status to bill"
+msgstr "abzurechnen Status"
+
+msgid "billed"
+msgstr "abgerechnet"
+
+msgid "Requested"
+msgstr "Angefragt"
+
+msgid "Accepted"
+msgstr "Angenommen"
+
+msgid "Declined"
+msgstr "Abgelehnt"
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr "Zeitkonten als Favorit zufügen um Stundenzettel Erzeugung zu Beschleunigen."
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr "Zeitkonten sind noch in Benutzung!, Sind Sie sicher, dass Sie sie löschen möchten?"
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr "Die Rechnung die sie versucht haben zu bearbeiten ist bereits abgerechnet. Datumsänderungen führen zu erneuter Abrechnung. Wollen sie diese Aktion wirklich ausführen?"
+
+msgid "Add Timesheet"
+msgstr "Stundenzettel hinzufügen"
+
+msgid "Timesheets of this Task:"
+msgstr "Stundenzettel dieser Aufgabe:"
+
+msgid "Time Account - Billed"
+msgstr "Zeitkonto - in Rechnung"
+
+msgid "to bill"
+msgstr "abzurechnen"
+
+msgid "Contract"
+msgstr "Vertrag"
+
+msgid "without contract"
+msgstr "ohne Vertrag"
+
+msgid "Unit"
+msgstr "Einheit"
+
+msgid "Unit Price"
+msgstr "Preis einer Einheit"
+
+msgid "Factor"
+msgstr "Faktor"
+
+msgid "Budget in hours"
+msgstr "Budget in Stunden"
+
+msgid "Status"
+msgstr "Status"
 
 msgid "closed"
 msgstr "geschlossen"
@@ -53,17 +128,70 @@ msgstr "geschlossen"
 msgid "open"
 msgstr "offen"
 
-msgid "Timesheets of this Task:"
-msgstr "Stundenzettel dieser Aufgabe:"
+msgid "Cleared at"
+msgstr "Abgerechnet am"
 
-msgid "Add Timesheet"
-msgstr "Stundenzettel hinzufügen"
+msgid "Responsible Person"
+msgstr "Verantwortlicher"
+
+msgid "Timesheets are billable"
+msgstr "Stundenzettel sind abrechenbar"
+
+msgid "Invoice"
+msgstr "Rechnung"
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Zeitkonto"
+msgstr[1] "Zeitkonten"
+
+msgid "Number"
+msgstr "Nummer"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Select invoice"
+msgstr "Rechnung auswählen"
+
+msgid "Update Timesheets?"
+msgstr "Stundenzettel aktualisieren?"
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr "Achtung: Es gibt Stundenzettel, die noch nicht abgerechnet worden sind. Wenn Sie fortfahren, werden sie auf abgerechnet gesetzt. Diese Aktion kann nicht rückgängig gemacht werden. Wollen Sie trotzdem fortfahren?"
+
+msgid "Timeaccount Favorites"
+msgstr "Zeitkonten Favoriten"
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Lösche {0}"
+msgstr[1] "Lösche {0}"
+
+msgid "Favorite"
+msgstr "Favorit"
+
+msgid "Bookmark Timeaccount"
+msgstr "Zeitkonto merken"
+
+msgid "Close Timeaccount"
+msgstr "Zeitkonten schließen"
+
+msgid "Show closed"
+msgstr "Geschlossene anzeigen"
 
 msgid "Responsible"
 msgstr "Verantwortlich"
 
 msgid "without responsible"
 msgstr "ohne Verantwortlichen"
+
+msgid "Time Account - Status"
+msgstr "Zeitkonto - Status"
 
 msgid "End Time Change"
 msgstr "Ende wurde geändert"
@@ -88,9 +216,6 @@ msgstr "Das Ende darf nicht vor dem Start liegen."
 msgid "Accounting"
 msgstr "Abrechnung"
 
-msgid "Factor"
-msgstr "Faktor"
-
 msgid "Accounting time"
 msgstr "Abrechenbare Zeit"
 
@@ -98,9 +223,6 @@ msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] "Zeitkonto"
 msgstr[1] "Zeitkonten"
-
-msgid "Description"
-msgstr "Beschreibung"
 
 msgid "Failed"
 msgstr "Fehlgeschlagen"
@@ -120,21 +242,6 @@ msgstr "Das ausgewählte Zeitkonto ist bereits geschlossen."
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr "Das ausgewählte Zeitkonto ist bereits geschlossen. Wollen Sie dennoch fortfahren?"
-
-msgid "Time Account - Status"
-msgstr "Zeitkonto - Status"
-
-msgid "Time Account - Billed"
-msgstr "Zeitkonto - in Rechnung"
-
-msgid "not yet billed"
-msgstr "noch nicht abgerechnet"
-
-msgid "to bill"
-msgstr "abzurechnen"
-
-msgid "billed"
-msgstr "abgerechnet"
 
 msgid "Workingtime:"
 msgstr "Arbeitszeit:"
@@ -184,137 +291,6 @@ msgstr "Als CSV exportieren"
 
 msgid "Export as ..."
 msgstr "Als ... exportieren"
-
-msgid "Timeaccount Favorites"
-msgstr "Zeitkonten Favoriten"
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Lösche {0}"
-msgstr[1] "Lösche {0}"
-
-msgid "Favorite"
-msgstr "Favorit"
-
-msgid "Contract"
-msgstr "Vertrag"
-
-msgid "without contract"
-msgstr "ohne Vertrag"
-
-msgid "Show closed"
-msgstr "Geschlossene anzeigen"
-
-msgid "Unit"
-msgstr "Einheit"
-
-msgid "Unit Price"
-msgstr "Preis einer Einheit"
-
-msgid "Budget in hours"
-msgstr "Budget in Stunden"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Cleared at"
-msgstr "Abgerechnet am"
-
-msgid "Responsible Person"
-msgstr "Verantwortlicher"
-
-msgid "Timesheets are billable"
-msgstr "Stundenzettel sind abrechenbar"
-
-msgid "Invoice"
-msgstr "Rechnung"
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Zeitkonto"
-msgstr[1] "Zeitkonten"
-
-msgid "Number"
-msgstr "Nummer"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "Select invoice"
-msgstr "Rechnung auswählen"
-
-msgid "Update Timesheets?"
-msgstr "Stundenzettel aktualisieren?"
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr "Achtung: Es gibt Stundenzettel, die noch nicht abgerechnet worden sind. Wenn Sie fortfahren, werden sie auf abgerechnet gesetzt. Diese Aktion kann nicht rückgängig gemacht werden. Wollen Sie trotzdem fortfahren?"
-
-msgid "Timetracker"
-msgstr "Zeiterfassung"
-
-msgid "Requested Timesheets"
-msgstr "Beantragte Stundenzettel"
-
-msgid "My Timesheets today"
-msgstr "Meine Stundenzettel von heute"
-
-msgid "My Timesheets this week"
-msgstr "Meine Stundenzettel dieser Woche"
-
-msgid "My Timesheets last week"
-msgstr "Meine Stundenzettel letzter Woche"
-
-msgid "My Timesheets this month"
-msgstr "Meine Stundenzettel dieses Monats"
-
-msgid "My Timesheets last month"
-msgstr "Meine Stundenzettel letzten Monats"
-
-msgid "Timeaccounts to bill"
-msgstr "Abzurechnende Zeitkonten"
-
-msgid "Timeaccounts not yet billed"
-msgstr "Nicht abgerechnete Zeitkonten"
-
-msgid "Timeaccounts already billed"
-msgstr "Abgerechnete Zeitkonten"
-
-msgid "Enabled Features"
-msgstr "Feature aktivieren"
-
-msgid "Enabled Features in Timetracker Application."
-msgstr "Feature in der Zeiterfassungs Applikation aktivieren."
-
-msgid "Timeaccount Bookmarks"
-msgstr "Zeitkonten Lesezeichen"
-
-msgid "none"
-msgstr "keine"
-
-msgid "last week"
-msgstr "letzte Woche"
-
-msgid "status to bill"
-msgstr "abzurechnen Status"
-
-msgid "Requested"
-msgstr "Angefragt"
-
-msgid "Accepted"
-msgstr "Angenommen"
-
-msgid "Declined"
-msgstr "Abgelehnt"
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr "Zeitkonten als Favorit zufügen um Stundenzettel Erzeugung zu Beschleunigen."
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr "Zeitkonten sind noch in Benutzung!, Sind Sie sicher, dass Sie sie löschen möchten?"
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr "Die Rechnung die sie versucht haben zu bearbeiten ist bereits abgerechnet. Datumsänderungen führen zu erneuter Abrechnung. Wollen sie diese Aktion wirklich ausführen?"
 
 msgid "Read Own"
 msgstr "Eigene lesen"
@@ -430,23 +406,47 @@ msgstr "Prozess-Status"
 msgid "Source"
 msgstr "Quelle"
 
-msgid "Manage timeaccounts"
-msgstr "Zeitkonten verwalten"
+msgid "Timesheets ODS export configuration"
+msgstr "Stundenzettel ODS-Export Konfiguration"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Zeitkonten anlegen, bearbeiten und löschen (beinhaltet alle Stundenzettel-Rechte)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Hiermit können Sie die zu verwendende ODS-Export Konfiguration einstellen."
 
-msgid "Add timeaccounts"
-msgstr "Zeitkonten hinzufügen"
+msgid "A Tag which is available in context menu for fast assignment"
+msgstr "Ein Tag, das im Kontextmenü zur schnellen Zuordnung verfügbar ist"
 
-msgid "Manage shared timeaccount favorites"
-msgstr "Gemeinsame Zeitkonten-Favoriten verwalten"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgstr "Ein Schnell-Tag kann einfach per Kontext-Menü angehängt werden."
 
-msgid "Create or update shared timeaccount favorites"
-msgstr "Gemeinsame Zeitkonten-Favoriten erstellen oder bearbeiten"
+msgid "default"
+msgstr "Standard"
 
-msgid "Manage shared timesheet favorites"
-msgstr "Gemeinsame Stundenzettel-Favoriten verwalten"
+msgid "Requested Timesheets"
+msgstr "Beantragte Stundenzettel"
 
-msgid "Create or update shared timesheet favorites"
-msgstr "Gemeinsame Stundenzettel-Favoriten erstellen oder bearbeiten"
+msgid "My Timesheets today"
+msgstr "Meine Stundenzettel von heute"
+
+msgid "My Timesheets this week"
+msgstr "Meine Stundenzettel dieser Woche"
+
+msgid "My Timesheets last week"
+msgstr "Meine Stundenzettel letzter Woche"
+
+msgid "My Timesheets this month"
+msgstr "Meine Stundenzettel dieses Monats"
+
+msgid "My Timesheets last month"
+msgstr "Meine Stundenzettel letzten Monats"
+
+msgid "Timeaccounts to bill"
+msgstr "Abzurechnende Zeitkonten"
+
+msgid "Timeaccounts not yet billed"
+msgstr "Nicht abgerechnete Zeitkonten"
+
+msgid "Timeaccounts already billed"
+msgstr "Abgerechnete Zeitkonten"
+
+msgid "Timetracker"
+msgstr "Zeiterfassung"

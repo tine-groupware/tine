@@ -8,10 +8,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012,2015\n"
 "Language-Team: Polish (http://app.transifex.com/tine/groupware/language/pl/)\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -32,20 +32,12 @@ msgstr "Wewnętrzny"
 msgid "Public"
 msgstr "Publiczny"
 
-msgid "All my FAQs"
-msgstr "Wszystkie moje pytania"
-
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Domyślne ulubione ładowane wraz z uruchomieniem FAQ"
-
-msgid "Default FAQ List"
-msgstr "Domyślna lista pytań"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Domyślna lista pytań, do której można dodawać pytania"
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "Status pytań"
+msgstr[1] "Statusy pytań"
+msgstr[2] "Statusów pytań"
+msgstr[3] "Statusów pytań"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
@@ -54,15 +46,8 @@ msgstr[1] "Typy FAQ"
 msgstr[2] "Typy FAQ"
 msgstr[3] "Typy FAQ"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "Status pytań"
-msgstr[1] "Statusy pytań"
-msgstr[2] "Statusów pytań"
-msgstr[3] "Statusów pytań"
-
-msgid "Add a new FAQ Status..."
-msgstr "Nowy status pytania..."
+msgid "Defaults"
+msgstr "Domyślne"
 
 msgid "Question"
 msgstr "Pytanie"
@@ -82,33 +67,11 @@ msgstr "Typ"
 msgid "Status"
 msgstr "Status"
 
-msgid "Defaults"
-msgstr "Domyślne"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "Pytanie"
-msgstr[1] "Pytania"
-msgstr[2] "Pytania"
-msgstr[3] "Pytania"
-
-msgid "Find Question"
-msgstr "Znajdź pytanie"
-
-msgid "Search question"
-msgstr "Wyszukaj pytanie"
-
-msgid "FAQ id"
-msgstr "Id FAQ"
+msgid "FAQ Infos"
+msgstr "Informacje o FAQ"
 
 msgid "Tags"
 msgstr "Znaczniki"
-
-msgid "Add a new FAQ Type..."
-msgstr "Dodaj nowy typ FAQ"
-
-msgid "FAQ Infos"
-msgstr "Informacje o FAQ"
 
 msgid "Creation Time"
 msgstr "Czas użytkownika"
@@ -119,8 +82,21 @@ msgstr "Utworzone przez"
 msgid "No answer yet"
 msgstr "Na razie brak odpowiedzi"
 
-msgid "Search FAQ"
-msgstr "Przeszukaj FAQ"
+msgid "FAQ id"
+msgstr "Id FAQ"
+
+msgid "Add a new FAQ Status..."
+msgstr "Nowy status pytania..."
+
+msgid "Add a new FAQ Type..."
+msgstr "Dodaj nowy typ FAQ"
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "Pytanie"
+msgstr[1] "Pytania"
+msgstr[2] "Pytania"
+msgstr[3] "Pytania"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -134,6 +110,30 @@ msgstr "listy pytań"
 
 msgid "Quick Search"
 msgstr "Szybkie wyszukiwanie"
+
+msgid "Search FAQ"
+msgstr "Przeszukaj FAQ"
+
+msgid "Find Question"
+msgstr "Znajdź pytanie"
+
+msgid "Search question"
+msgstr "Wyszukaj pytanie"
+
+msgid "All my FAQs"
+msgstr "Wszystkie moje pytania"
+
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Domyślne ulubione ładowane wraz z uruchomieniem FAQ"
+
+msgid "Default FAQ List"
+msgstr "Domyślna lista pytań"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Domyślna lista pytań, do której można dodawać pytania"
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Wszystkie pytania z mojej listy pytań"

@@ -10,557 +10,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014\n"
 "Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "จำนวน %s ของสมุดรายชื่อส่วนบุคคล"
+msgid "manage shared addressbooks"
+msgstr "จัดการ สมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
 
-msgid "Groups"
-msgstr ""
-
-msgid "Group Functions"
-msgstr ""
-
-msgid "Industries"
-msgstr ""
-
-msgid "All Contacts"
-msgstr "การติดต่อทั้งหมด"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-msgid "All contacts"
-msgstr "การติดต่อทั้งหมด"
-
-msgid "Default Addressbook"
-msgstr "สมุดรายชื่อหลัก"
-
-msgid "The default addressbook for new contacts"
-msgstr "สมุดรายชื่อหลักสำหรับการติดต่อใหม่"
-
-msgid "Default Favorite"
-msgstr "ค่าที่ชอบหลัก"
-
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "ค่าที่ชอบหลักที่จะโหลดทันทีเมื่อเริ่มเปิดสมุดที่อยู่"
-
-msgid "Contacts ODS export configuration"
-msgstr "การกำหนดค่าส่งออกการติดต่อแบบ ODS"
-
-msgid "Use this configuration for the contact ODS export."
-msgstr "ใช้ค่าติดตั้งนี้สำหรับการส่งออกการติดต่อแบบ ODS"
-
-msgid "Contacts XLS export configuration"
-msgstr "การกำหนดค่าการส่งออกการติดต่อแบบ XLS"
-
-msgid "Use this configuration for the contact XLS export."
-msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกการติดต่อแบบ XLS"
-
-msgid "Contact Title Template"
-msgstr ""
-
-msgid "How to build contact titles."
-msgstr ""
-
-msgid "default"
-msgstr "ค่าหลัก"
-
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "การติดต่อ"
-
-msgid "Set as preferred E-Mail"
-msgstr ""
-
-msgid "Preferred Address"
-msgstr ""
-
-msgid "Street"
-msgstr "ถนน"
-
-msgid "Street 2"
-msgstr "ถนน 2"
-
-msgid "Region"
-msgstr "เขต"
-
-msgid "Postal Code"
-msgstr "รหัสไปรษณีย์"
-
-msgid "City"
-msgstr "เมือง"
-
-msgid "Country"
-msgstr "ประเทศ"
-
-msgid "System Group"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-
-msgid "Group Information"
-msgstr ""
-
-msgid "Name"
-msgstr "ชื่อ"
-
-msgid "E-Mail"
-msgstr "อีเมล"
-
-msgid "List type"
-msgstr ""
-
-msgid "System accounts only"
-msgstr ""
-
-msgid "Description"
-msgstr "การอธิบาย"
-
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
-
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
-
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr ""
-
-msgid "Search for system groups ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Contact Properties"
-msgstr ""
-
-msgid "Contact Information"
-msgstr "ข้อมูลที่ใช้ในการติดต่อ"
-
-msgid "Company Address"
-msgstr "ที่อยู่ของบริษัท"
-
-msgid "Private Address"
-msgstr "ที่อยู่ส่วนบุคคล"
-
-msgid "Related to"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "New Contact"
-msgstr "การติดต่อใหม่"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "สมุดรายชื่อ"
-
-msgid "ID"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Private"
-msgstr "ส่วนตัว"
-
-msgid "The grant to access contacts private information"
-msgstr ""
-
-msgid "Map"
-msgstr "แผนที่"
-
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr ""
-
-msgid "Personal Information"
-msgstr "ข้อมุลส่วนบุคคล"
-
-msgid "Salutation"
-msgstr "คำขึ้นต้น"
-
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-msgid "Short Name"
-msgstr ""
-
-msgid "First Name"
-msgstr "ชื่อตัว"
-
-msgid "Middle Name"
-msgstr "ชื่อกลาง"
-
-msgid "Last Name"
-msgstr "นามสกุล"
-
-msgid "Company / Organisation"
-msgstr ""
-
-msgid "Unit"
-msgstr "หน่วย/ แผนก"
-
-msgid "Sites"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Display Name"
-msgstr "ชื่อที่ใช้"
-
-msgid "Job Title"
-msgstr "ตำแหน่งงาน"
-
-msgid "Birthday (private)"
-msgstr ""
-
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] ""
-
-msgid "Note"
-msgstr "บันทึก"
-
-msgid "Enter Note"
-msgstr ""
-
-msgid "Parse address"
-msgstr "วิเคราะห์ ที่อยู่"
-
-msgid "Print contact"
-msgstr ""
-
-msgid "Paste address"
-msgstr "ใส่ ที่อยู่"
-
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr ""
-
-msgid "Failed to parse address!"
-msgstr ""
-
-msgid "The address could not be read."
-msgstr ""
-
-msgid "End token mode"
-msgstr "จบโหมดสัญลักษณ์"
-
-msgid "You do not have the required private grant to view history."
-msgstr ""
-
-msgid "Import contacts"
-msgstr "นำเข้า การติดต่อ"
-
-msgid "Contact of a user account"
-msgstr "การติดต่อของ บัญชี ผู้ใช้"
-
-msgid "Email Account Contact"
-msgstr ""
-
-msgid "No name"
-msgstr ""
-
-msgid "Business"
-msgstr ""
-
-msgid "Not set"
-msgstr ""
-
-msgid "Type"
-msgstr "ประเภท"
-
-msgid "Contact Image"
-msgstr ""
-
-msgid "Tags"
-msgstr "ป้ายกำกับ"
-
-msgid "Full Name"
-msgstr "ชื่อเต็ม"
-
-msgid "Job Role"
-msgstr "หน้าที่งาน"
-
-msgid "Room"
-msgstr "ห้อง"
-
-msgid "Postalcode"
-msgstr "รหัสไปรษณีย์"
-
-msgid "Street (private)"
-msgstr "ถนน (ส่วนตัว)"
-
-msgid "City (private)"
-msgstr "จังหวัด (ส่วนตัว)"
-
-msgid "Region (private)"
-msgstr "เขต (ส่วนตัว)"
-
-msgid "Postalcode (private)"
-msgstr "รหัสไปรษณีย์ (ส่วนตัว)"
-
-msgid "Country (private)"
-msgstr "ประเทศ (ส่วนตัว)"
-
-msgid "Preferred E-Mail"
-msgstr ""
-
-msgid "Email"
-msgid_plural "Emails"
-msgstr[0] ""
-
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] ""
-
-msgid "Mobile"
-msgstr "โทรศัพท์เคลื่อนที่"
-
-msgid "Fax"
-msgstr "โทรสาร"
-
-msgid "Car phone"
-msgstr "โทรศัพท์ในรถ"
-
-msgid "Pager"
-msgstr "เพจเจอร์"
-
-msgid "Phone (private)"
-msgstr "โทรศัพท์ (ส่วนตัว)"
-
-msgid "Fax (private)"
-msgstr "โทรสาร (ส่วนตัว)"
-
-msgid "Mobile (private)"
-msgstr "โทรศัพท์เคลื่อนที่ (ส่วนตัว)"
-
-msgid "Email (private)"
-msgstr " อีเมล (ส่วนตัว)"
-
-msgid "Web"
-msgstr "เวบไซด์"
-
-msgid "URL (private)"
-msgstr "รหัสสืบค้นข้อมูลทางอินเตอร์เนต (ส่วนตัว)"
-
-msgid "Language"
-msgstr ""
-
-msgid "Timezone"
-msgstr "เส้นแบ่งเวลา"
-
-msgid "Geo"
-msgstr "ภูมิศาสตร์"
-
-msgid "Birthday"
-msgstr "วันเกิด"
-
-msgid "Select record to see its details"
-msgstr ""
-
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-msgid "Loading Structure data..."
-msgstr ""
-
-msgid "Company address"
-msgstr "ที่อยู่ของบริษัท"
-
-msgid "Private address"
-msgstr "ที่อยู่ส่วนบุคคล"
-
-msgid "CardDAV URL"
-msgstr "CalDAV URL"
-
-msgid "List Personal Grant"
-msgid_plural "List Personal Grants"
-msgstr[0] ""
-
-msgid "Contact Personal Grant"
-msgid_plural "Contact Personal Grants"
-msgstr[0] ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Search for members ..."
-msgstr ""
-
-msgid "List Roles"
-msgstr ""
-
-msgid "Select Group"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "Search for Contacts ..."
-msgstr ""
-
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] ""
-
-msgid "Email Addresses"
-msgstr ""
+msgid "Create new shared addressbook folders"
+msgstr "สร้าง แฟ้มใหม่สำหรับสมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
 
-msgid "Addressbooks"
-msgstr "สมุดที่อยู่"
+msgid "manage shared addressbook favorites"
+msgstr "จัดการ สมุดรายชื่อร่วมที่ใช้บ่อย"
 
-msgid "Quick search"
-msgstr ""
-
-msgid "Structures"
-msgstr ""
-
-msgid "Mailing List"
-msgstr ""
-
-msgid "This group is a mailing list"
-msgstr ""
-
-msgid "Reply to"
-msgstr ""
-
-msgid "Distribution list"
-msgstr ""
-
-msgid "Sender"
-msgstr ""
-
-msgid "Sender and Distributor"
-msgstr ""
-
-msgid "Keep copy of group mails"
-msgstr ""
-
-msgid "Forward external mails"
-msgstr ""
-
-msgid "Only forward member mails"
-msgstr ""
-
-msgid "Only forward to system email accounts"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "28"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00877546"
-msgstr ""
-
-msgid "en-GB"
-msgstr ""
-
-msgid "00813B4E"
-msgstr ""
-
-msgid "Gruppenrollen"
-msgstr ""
-
-msgid "00DA3FCD"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
+msgid "Create or update shared addressbook favorites"
+msgstr "สร้าง หรือ ปรับปรุง สมุดรายชื่อร่วมที่ใช้บ่อย"
 
-msgid "008C27A5"
+msgid "Manage lists in CoreData"
 msgstr ""
 
-msgid "00C96397"
+msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
 
-msgid "00046462"
+msgid "Manage list functions in CoreData"
 msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-
-msgid "Company"
-msgstr "บริษัท"
-
-msgid "Internal Contacts"
-msgstr "การติดต่อภายใน"
-
-msgid "All contacts I have read grants for"
-msgstr "การติดต่อทั้งหมดที่ฉันได้อ่านแล้วอนุญาตสำหรับ"
-
-msgid "My company"
-msgstr "บริษัทของฉัน"
-
-msgid "All coworkers in my company"
-msgstr "ผู้ร่วมงานทั้งหมดในบริษัทของฉัน"
-
-msgid "My contacts"
-msgstr "ข้อมูลการติดต่อของฉัน"
-
-msgid "All contacts in my Addressbooks"
-msgstr "ข้อมูลการติดต่อทั้งหมดในสมุดที่อยู่ของฉัน"
-
-msgid "Last modified by me"
-msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
-
-msgid "All contacts that I have last modified"
-msgstr "การติดต่อทั้งหมดที่ฉันได้ปรับปรุงครั้งล่าสุด"
-
-msgid "Company Communication"
-msgstr "การติดต่อสื่อสารของบริษัท"
-
-msgid "E-Mail (private)"
-msgstr " อีเมล (ส่วนตัว)"
-
-msgid "Private Communication"
-msgstr "การติดต่อสื่อสารส่วนบุคคล"
-
-msgid "Matrix-ID"
-msgstr ""
-
-msgid "Assistant"
-msgstr "ผู้ช่วย"
 
-msgid "Car"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
-msgid "Other"
+msgid "Manage list email options"
 msgstr ""
 
-msgid "Prefer"
+msgid "Manage list email options like mailing lists"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -641,6 +127,10 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "การติดต่อ"
+
 msgid "Email Account"
 msgstr ""
 
@@ -655,6 +145,9 @@ msgstr "นาย"
 
 msgid "Ms"
 msgstr "นาง"
+
+msgid "Company"
+msgstr "บริษัท"
 
 msgid "Person"
 msgstr ""
@@ -714,14 +207,507 @@ msgstr ""
 msgid "Maximum number of role members reached"
 msgstr ""
 
-msgid "Group Function"
-msgid_plural "Group Functions"
-msgstr[0] ""
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "จำนวน %s ของสมุดรายชื่อส่วนบุคคล"
 
-msgid "GENDER_Group Function"
+msgid "Groups"
 msgstr ""
 
-msgid "Maximum Members"
+msgid "Group Functions"
+msgstr ""
+
+msgid "Industries"
+msgstr ""
+
+msgid "3CX CSV export"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "VCard Report"
+msgstr ""
+
+msgid "Export multiple addressbooks to vcf files"
+msgstr ""
+
+msgid "VCard/VCF"
+msgstr ""
+
+msgid "Export contact data into vcf file"
+msgstr ""
+
+msgid "Word letter"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Addressbooks to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "All Contacts"
+msgstr "การติดต่อทั้งหมด"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+msgid "Contact import from Google address book"
+msgstr "รายชื่อติดต่อนำเข้ามาจากสมุดรายชื่อของกูเกิล"
+
+msgid "Import vCard formated contacts"
+msgstr ""
+
+msgid "Contact VCARD import"
+msgstr "นำเข้ารายชื่อติดต่อ VCARD"
+
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+msgid "Contact CSV import from mac address book"
+msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของแมค"
+
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 ภาษาเยอรมัน"
+
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2010 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+msgid "Contact CSV import from Outlook address book"
+msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของโปรแกรม Outlook"
+
+msgid "Tine contact CSV import"
+msgstr ""
+
+msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
+
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "รายชื่อติดต่อถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
+
+msgid "New Contact"
+msgstr "การติดต่อใหม่"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "สมุดรายชื่อ"
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr "ชื่อ"
+
+msgid "Description"
+msgstr "การอธิบาย"
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Private"
+msgstr "ส่วนตัว"
+
+msgid "The grant to access contacts private information"
+msgstr ""
+
+msgid "Preferred Address"
+msgstr ""
+
+msgid "Street"
+msgstr "ถนน"
+
+msgid "Street 2"
+msgstr "ถนน 2"
+
+msgid "Region"
+msgstr "เขต"
+
+msgid "Postal Code"
+msgstr "รหัสไปรษณีย์"
+
+msgid "City"
+msgstr "เมือง"
+
+msgid "Country"
+msgstr "ประเทศ"
+
+msgid "Contact Properties"
+msgstr ""
+
+msgid "CardDAV URL"
+msgstr "CalDAV URL"
+
+msgid "Map"
+msgstr "แผนที่"
+
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Personal Information"
+msgstr "ข้อมุลส่วนบุคคล"
+
+msgid "Salutation"
+msgstr "คำขึ้นต้น"
+
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+msgid "Short Name"
+msgstr ""
+
+msgid "First Name"
+msgstr "ชื่อตัว"
+
+msgid "Middle Name"
+msgstr "ชื่อกลาง"
+
+msgid "Last Name"
+msgstr "นามสกุล"
+
+msgid "Company / Organisation"
+msgstr ""
+
+msgid "Unit"
+msgstr "หน่วย/ แผนก"
+
+msgid "Sites"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Display Name"
+msgstr "ชื่อที่ใช้"
+
+msgid "Job Title"
+msgstr "ตำแหน่งงาน"
+
+msgid "Birthday (private)"
+msgstr ""
+
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] ""
+
+msgid "Contact Information"
+msgstr "ข้อมูลที่ใช้ในการติดต่อ"
+
+msgid "Note"
+msgstr "บันทึก"
+
+msgid "Enter Note"
+msgstr ""
+
+msgid "Parse address"
+msgstr "วิเคราะห์ ที่อยู่"
+
+msgid "Print contact"
+msgstr ""
+
+msgid "Paste address"
+msgstr "ใส่ ที่อยู่"
+
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr ""
+
+msgid "Failed to parse address!"
+msgstr ""
+
+msgid "The address could not be read."
+msgstr ""
+
+msgid "End token mode"
+msgstr "จบโหมดสัญลักษณ์"
+
+msgid "You do not have the required private grant to view history."
+msgstr ""
+
+msgid "Business"
+msgstr ""
+
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+
+msgid "Mobile"
+msgstr "โทรศัพท์เคลื่อนที่"
+
+msgid "Fax"
+msgstr "โทรสาร"
+
+msgid "E-Mail"
+msgstr "อีเมล"
+
+msgid "Web"
+msgstr "เวบไซด์"
+
+msgid "Import contacts"
+msgstr "นำเข้า การติดต่อ"
+
+msgid "Contact of a user account"
+msgstr "การติดต่อของ บัญชี ผู้ใช้"
+
+msgid "Email Account Contact"
+msgstr ""
+
+msgid "No name"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "Type"
+msgstr "ประเภท"
+
+msgid "Contact Image"
+msgstr ""
+
+msgid "Tags"
+msgstr "ป้ายกำกับ"
+
+msgid "Full Name"
+msgstr "ชื่อเต็ม"
+
+msgid "Job Role"
+msgstr "หน้าที่งาน"
+
+msgid "Room"
+msgstr "ห้อง"
+
+msgid "Postalcode"
+msgstr "รหัสไปรษณีย์"
+
+msgid "Street (private)"
+msgstr "ถนน (ส่วนตัว)"
+
+msgid "City (private)"
+msgstr "จังหวัด (ส่วนตัว)"
+
+msgid "Region (private)"
+msgstr "เขต (ส่วนตัว)"
+
+msgid "Postalcode (private)"
+msgstr "รหัสไปรษณีย์ (ส่วนตัว)"
+
+msgid "Country (private)"
+msgstr "ประเทศ (ส่วนตัว)"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+
+msgid "Car phone"
+msgstr "โทรศัพท์ในรถ"
+
+msgid "Pager"
+msgstr "เพจเจอร์"
+
+msgid "Phone (private)"
+msgstr "โทรศัพท์ (ส่วนตัว)"
+
+msgid "Fax (private)"
+msgstr "โทรสาร (ส่วนตัว)"
+
+msgid "Mobile (private)"
+msgstr "โทรศัพท์เคลื่อนที่ (ส่วนตัว)"
+
+msgid "Email (private)"
+msgstr " อีเมล (ส่วนตัว)"
+
+msgid "URL (private)"
+msgstr "รหัสสืบค้นข้อมูลทางอินเตอร์เนต (ส่วนตัว)"
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr "เส้นแบ่งเวลา"
+
+msgid "Geo"
+msgstr "ภูมิศาสตร์"
+
+msgid "Birthday"
+msgstr "วันเกิด"
+
+msgid "Set as preferred E-Mail"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "Search for Contacts ..."
+msgstr ""
+
+msgid "Group Information"
+msgstr ""
+
+msgid "List type"
+msgstr ""
+
+msgid "System accounts only"
+msgstr ""
+
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+#, python-brace-format
+msgid "{0} must be given"
+msgstr ""
+
+msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Select Group"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+
+msgid "Search for members ..."
+msgstr ""
+
+msgid "List Roles"
+msgstr ""
+
+msgid "Search for system groups ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Mailing List"
+msgstr ""
+
+msgid "This group is a mailing list"
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender and Distributor"
+msgstr ""
+
+msgid "Keep copy of group mails"
+msgstr ""
+
+msgid "Forward external mails"
+msgstr ""
+
+msgid "Only forward member mails"
+msgstr ""
+
+msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Company address"
+msgstr "ที่อยู่ของบริษัท"
+
+msgid "Private address"
+msgstr "ที่อยู่ส่วนบุคคล"
+
+msgid "Contact Personal Grant"
+msgid_plural "Contact Personal Grants"
+msgstr[0] ""
+
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] ""
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Addressbooks"
+msgstr "สมุดที่อยู่"
+
+msgid "Quick search"
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "List Personal Grant"
+msgid_plural "List Personal Grants"
+msgstr[0] ""
+
+msgid "Company Address"
+msgstr "ที่อยู่ของบริษัท"
+
+msgid "Private Address"
+msgstr "ที่อยู่ส่วนบุคคล"
+
+msgid "Related to"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "System Group"
+msgstr ""
+
+msgid "Select record to see its details"
+msgstr ""
+
+msgid "This module visualises hierarchically depended relations between records of different types."
+msgstr ""
+
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
+msgstr ""
+
+msgid "Loading Structure data..."
 msgstr ""
 
 msgid "GENDER_Addressbook"
@@ -732,6 +718,10 @@ msgstr ""
 
 msgid "Show Disabled"
 msgstr ""
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] ""
 
 msgid "Phone Numbers"
 msgstr ""
@@ -781,19 +771,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "GENDER_Group"
-msgstr ""
-
-msgid "Name/Email"
-msgstr ""
-
-msgid "Site"
-msgid_plural "Sites"
-msgstr[0] ""
-
-msgid "GENDER_Email"
-msgstr ""
-
 msgid "GENDER_Address"
 msgstr ""
 
@@ -835,14 +812,7 @@ msgstr ""
 msgid "Last Error"
 msgstr ""
 
-msgid "GENDER_URL"
-msgstr ""
-
-msgid "URL"
-msgid_plural "URLs"
-msgstr[0] ""
-
-msgid "GENDER_Phone"
+msgid "GENDER_Email"
 msgstr ""
 
 msgid "GENDER_Instant Messenger"
@@ -852,128 +822,158 @@ msgid "Instant Messenger"
 msgid_plural "Instant Messengers"
 msgstr[0] ""
 
-msgid "Addressbooks to export"
+msgid "GENDER_Phone"
 msgstr ""
 
-msgid "Export target"
+msgid "GENDER_URL"
 msgstr ""
 
-msgid "Excel overview"
+msgid "URL"
+msgid_plural "URLs"
+msgstr[0] ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+
+msgid "GENDER_Group"
 msgstr ""
 
-msgid "Word details"
+msgid "Name/Email"
 msgstr ""
 
-msgid "Relations"
+msgid "GENDER_Group Function"
 msgstr ""
 
-msgid "CSV all data"
+msgid "Maximum Members"
 msgstr ""
 
-msgid "VCard Report"
+msgid "All contacts"
+msgstr "การติดต่อทั้งหมด"
+
+msgid "Default Addressbook"
+msgstr "สมุดรายชื่อหลัก"
+
+msgid "The default addressbook for new contacts"
+msgstr "สมุดรายชื่อหลักสำหรับการติดต่อใหม่"
+
+msgid "Default Favorite"
+msgstr "ค่าที่ชอบหลัก"
+
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "ค่าที่ชอบหลักที่จะโหลดทันทีเมื่อเริ่มเปิดสมุดที่อยู่"
+
+msgid "Contacts ODS export configuration"
+msgstr "การกำหนดค่าส่งออกการติดต่อแบบ ODS"
+
+msgid "Use this configuration for the contact ODS export."
+msgstr "ใช้ค่าติดตั้งนี้สำหรับการส่งออกการติดต่อแบบ ODS"
+
+msgid "Contacts XLS export configuration"
+msgstr "การกำหนดค่าการส่งออกการติดต่อแบบ XLS"
+
+msgid "Use this configuration for the contact XLS export."
+msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกการติดต่อแบบ XLS"
+
+msgid "Contact Title Template"
 msgstr ""
 
-msgid "Export multiple addressbooks to vcf files"
+msgid "How to build contact titles."
 msgstr ""
 
-msgid "Excel current columns"
+msgid "default"
+msgstr "ค่าหลัก"
+
+msgid "All contacts I have read grants for"
+msgstr "การติดต่อทั้งหมดที่ฉันได้อ่านแล้วอนุญาตสำหรับ"
+
+msgid "My company"
+msgstr "บริษัทของฉัน"
+
+msgid "All coworkers in my company"
+msgstr "ผู้ร่วมงานทั้งหมดในบริษัทของฉัน"
+
+msgid "My contacts"
+msgstr "ข้อมูลการติดต่อของฉัน"
+
+msgid "All contacts in my Addressbooks"
+msgstr "ข้อมูลการติดต่อทั้งหมดในสมุดที่อยู่ของฉัน"
+
+msgid "Last modified by me"
+msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
+
+msgid "All contacts that I have last modified"
+msgstr "การติดต่อทั้งหมดที่ฉันได้ปรับปรุงครั้งล่าสุด"
+
+msgid "Company Communication"
+msgstr "การติดต่อสื่อสารของบริษัท"
+
+msgid "E-Mail (private)"
+msgstr " อีเมล (ส่วนตัว)"
+
+msgid "Private Communication"
+msgstr "การติดต่อสื่อสารส่วนบุคคล"
+
+msgid "Matrix-ID"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Assistant"
+msgstr "ผู้ช่วย"
+
+msgid "Car"
 msgstr ""
 
-msgid "VCard/VCF"
+msgid "Other"
 msgstr ""
 
-msgid "Export contact data into vcf file"
+msgid "Prefer"
 msgstr ""
 
-msgid "3CX CSV export"
+msgid "Internal Contacts"
+msgstr "การติดต่อภายใน"
+
+msgid "Account"
 msgstr ""
 
-msgid "Word letter"
+msgid "Exporttime"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "28"
 msgstr ""
 
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgid "20"
 msgstr ""
 
-msgid "Contact CSV import from Outlook address book"
-msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของโปรแกรม Outlook"
-
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgid "00877546"
 msgstr ""
 
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 ภาษาเยอรมัน"
-
-msgid "Import CSV formated contacts from Google address book"
+msgid "en-GB"
 msgstr ""
 
-msgid "Contact import from Google address book"
-msgstr "รายชื่อติดต่อนำเข้ามาจากสมุดรายชื่อของกูเกิล"
-
-msgid "Tine contact CSV import"
+msgid "00813B4E"
 msgstr ""
 
-msgid "Import CSV formated contacts from tine address book"
+msgid "Gruppenrollen"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
-
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "รายชื่อติดต่อถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
-
-msgid "LX-Office CSV Contact import"
+msgid "00DA3FCD"
 msgstr ""
 
-msgid "Import CSV formated contacts from LX-Office"
+msgid "00997199"
 msgstr ""
 
-msgid "Import vCard formated contacts"
+msgid "0009326B"
 msgstr ""
 
-msgid "Contact VCARD import"
-msgstr "นำเข้ารายชื่อติดต่อ VCARD"
-
-msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgid "008C27A5"
 msgstr ""
 
-msgid "CSV Outlook 2010 German"
+msgid "00C96397"
 msgstr ""
 
-msgid "Contact CSV import from mac address book"
-msgstr "นำเข้ารายชื่อติดต่อ CSV จากสมุดรายชื่อของแมค"
-
-msgid "manage shared addressbooks"
-msgstr "จัดการ สมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
-
-msgid "Create new shared addressbook folders"
-msgstr "สร้าง แฟ้มใหม่สำหรับสมุดรายชื่อที่ใช้ในการติดต่อร่วมกัน"
-
-msgid "manage shared addressbook favorites"
-msgstr "จัดการ สมุดรายชื่อร่วมที่ใช้บ่อย"
-
-msgid "Create or update shared addressbook favorites"
-msgstr "สร้าง หรือ ปรับปรุง สมุดรายชื่อร่วมที่ใช้บ่อย"
-
-msgid "Manage lists in CoreData"
+msgid "00046462"
 msgstr ""
 
-msgid "View, create, delete or update lists in CoreData application"
-msgstr ""
-
-msgid "Manage list functions in CoreData"
-msgstr ""
-
-msgid "View, create, delete or update list functions in CoreData application"
-msgstr ""
-
-msgid "Manage list email options"
-msgstr ""
-
-msgid "Manage list email options like mailing lists"
-msgstr ""
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""

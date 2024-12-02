@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +16,18 @@ msgstr ""
 
 msgid "Manual page not found"
 msgstr "Manual page not found"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "Show Canonical Path"
+msgstr "Show Canonical Path"
+
+msgid "Canonical Path"
+msgstr "Canonical Path"
+
+msgid "User Manual"
+msgstr "User Manual"
 
 msgid "Previous"
 msgstr "Previous"
@@ -37,17 +50,25 @@ msgstr "Close"
 msgid "Loading Manual Page..."
 msgstr "Loading Manual Page..."
 
-msgid "User Manual"
-msgstr "User Manual"
+msgid "ManualContext"
+msgid_plural "ManualContexts"
+msgstr[0] "ManualContext"
+msgstr[1] "ManualContexts"
 
-msgid "Help"
-msgstr "Help"
+msgid "Context"
+msgstr "Context"
 
-msgid "Show Canonical Path"
-msgstr "Show Canonical Path"
+msgid "Filename"
+msgstr "Filename"
 
-msgid "Canonical Path"
-msgstr "Canonical Path"
+msgid "Title"
+msgstr "Title"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "Chapter"
+msgstr "Chapter"
 
 msgid "ManualPage"
 msgid_plural "ManualPages"
@@ -59,25 +80,5 @@ msgid_plural "ManualPages lists"
 msgstr[0] "ManualPages list"
 msgstr[1] "ManualPages lists"
 
-msgid "Title"
-msgstr "Title"
-
-msgid "Filename"
-msgstr "Filename"
-
 msgid "Content"
 msgstr "Content"
-
-msgid "ManualContext"
-msgid_plural "ManualContexts"
-msgstr[0] "ManualContext"
-msgstr[1] "ManualContexts"
-
-msgid "Context"
-msgstr "Context"
-
-msgid "Target"
-msgstr "Target"
-
-msgid "Chapter"
-msgstr "Chapter"

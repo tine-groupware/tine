@@ -8,23 +8,68 @@ msgstr ""
 "PO-Revision-Date: 2012-10-04 15:23+0000\n"
 "Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
 "Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Inventory Status Available"
+msgstr "Trạng thái sẵn sàng của kho"
+
+msgid "Possible status."
+msgstr "Trạng thái có thể"
+
+msgid "Ordered"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Defect"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "Removed"
+msgstr "Đã xóa"
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Stored"
+msgstr ""
+
+msgid "Sold"
+msgstr ""
+
+msgid "Destroyed"
+msgstr ""
+
 msgid "Types"
 msgstr ""
 
-msgid "Default Inventory Item Container"
-msgstr "Bộ chưa kho hàng mặc định"
+msgid "Tine 2.0 inventory CSV import"
+msgstr ""
 
-msgid "The default container for new items"
-msgstr "Bộ chứa mặc định cho mục mới"
+msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Nhập danh sách (###CURRENTDATE###)"
+
+msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+msgid "Inventory CSV import"
+msgstr "Nhập dữ liệu kiểm kê CSV"
+
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Mục được nhập trong ###CURRENTDATE### tại ###CURRENTTIME### bởi ###USERFULLNAME###"
 
 msgid "The active number must be less than or equal total number."
 msgstr "Số luân chuyển phải nhỏ hơn hoặc bằng tổng số"
@@ -62,9 +107,6 @@ msgstr "Đã thêm"
 msgid "Warranty"
 msgstr "Bảo hành"
 
-msgid "Removed"
-msgstr "Đã xóa"
-
 msgid "Total number"
 msgstr "Số tổng"
 
@@ -86,45 +128,6 @@ msgstr "Ngày hóa đơn"
 msgid "Depreciate"
 msgstr "Giảm giá"
 
-msgid "Inventory"
-msgstr "Kho"
-
-msgid "All Inventory Items"
-msgstr "Tất cả hàng trong kho"
-
-msgid "All existing Inventory Items"
-msgstr "Tất cả hàng còn lại trong kho"
-
-msgid "Inventory Status Available"
-msgstr "Trạng thái sẵn sàng của kho"
-
-msgid "Possible status."
-msgstr "Trạng thái có thể"
-
-msgid "Ordered"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Defect"
-msgstr ""
-
-msgid "Missing"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Stored"
-msgstr ""
-
-msgid "Sold"
-msgstr ""
-
-msgid "Destroyed"
-msgstr ""
-
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "Quản lý kho"
@@ -143,20 +146,17 @@ msgid "Inventory type"
 msgid_plural "Inventory types"
 msgstr[0] ""
 
-msgid "Tine 2.0 inventory CSV import"
-msgstr ""
+msgid "Default Inventory Item Container"
+msgstr "Bộ chưa kho hàng mặc định"
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
-msgstr ""
+msgid "The default container for new items"
+msgstr "Bộ chứa mặc định cho mục mới"
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Nhập danh sách (###CURRENTDATE###)"
+msgid "All Inventory Items"
+msgstr "Tất cả hàng trong kho"
 
-msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgid "All existing Inventory Items"
+msgstr "Tất cả hàng còn lại trong kho"
 
-msgid "Inventory CSV import"
-msgstr "Nhập dữ liệu kiểm kê CSV"
-
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Mục được nhập trong ###CURRENTDATE### tại ###CURRENTTIME### bởi ###USERFULLNAME###"
+msgid "Inventory"
+msgstr "Kho"

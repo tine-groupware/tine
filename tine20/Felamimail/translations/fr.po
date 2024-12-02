@@ -11,14 +11,323 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Etienne <inscription@arrakeen.net>, 2012-2013\n"
 "Language-Team: French (http://app.transifex.com/tine/groupware/language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+msgid "Manage personal email accounts"
+msgstr ""
+
+msgid "Edit and delete personal email accounts"
+msgstr ""
+
+msgid "Add personal email accounts"
+msgstr ""
+
+msgid "Create new personal email accounts"
+msgstr ""
+
+msgid "Mail Type"
+msgstr ""
+
+msgid "Possible mail types."
+msgstr ""
+
+msgid "Additional Personal External Account"
+msgstr ""
+
+msgid "Shared System Account"
+msgstr ""
+
+msgid "Additional Personal System Account"
+msgstr ""
+
+msgid "Default Personal System Account"
+msgstr ""
+
+msgid "Mailinglist"
+msgstr ""
+
+msgid "Mailinglist Reject Reason"
+msgstr ""
+
+msgid "Your email has been rejected"
+msgstr ""
+
+msgid "Vacation Templates Node ID"
+msgstr ""
+
+msgid "Email Notification Templates Node ID"
+msgstr ""
+
+msgid "Email Notification from E-Mailadress"
+msgstr ""
+
+msgid "Custom Vacation Message"
+msgstr "Message d'absence personnalisé"
+
+msgid "User is allowed to set custom vacation message for system account"
+msgstr "L'utilisateur est autorisé à changer son message d'absence"
+
+msgid "Cache email body"
+msgstr "Mettre en cache le corps du message"
+
+msgid "Should the email body be cached (recommended for slow IMAP server connections)"
+msgstr "Si la connexion au serveur IMAP est lente, il est recommandé de mettre le corps du message en cache"
+
+msgid "Delete Archived Mail"
+msgstr ""
+
+msgid "Prevent copying mails in the same account"
+msgstr ""
+
+msgid "Attachment cache TTL in seconds"
+msgstr ""
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Felamimail Application."
+msgstr ""
+
+msgid "Account Migration"
+msgstr ""
+
+msgid "Shows context menu for system accounts to approve migration"
+msgstr ""
+
+msgid "Move notifications"
+msgstr ""
+
+msgid "Move notifications to a subfolder via sieve"
+msgstr ""
+
+msgid "Auto-Save Drafts"
+msgstr ""
+
+msgid "Save drafts automatically while editing an email"
+msgstr ""
+
+msgid "Only password download link"
+msgstr ""
+
+msgid "Allow only password download link"
+msgstr ""
+
+msgid "Tine 2.0 Flag"
+msgstr ""
+
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
+msgid "Show Reply-To"
+msgstr ""
+
+msgid "Show Reply-To field in message compose dialog"
+msgstr ""
+
+msgid "Auto-Create Folders"
+msgstr ""
+
+msgid "Create template, trash, sent, draft and junks folders for system accounts"
+msgstr ""
+
+msgid "Enable Spam Suspicion Strategy"
+msgstr ""
+
+msgid "Spam Suspicion Strategy"
+msgstr ""
+
+msgid "Spam Suspicion Strategy Config"
+msgstr ""
+
+msgid "Spam User Processing Pipeline"
+msgstr ""
+
+msgid "Confirm SPAM Suspicion Message"
+msgstr ""
+
+msgid "Message for users when they press the info button in a SPAM suspicion toolbar."
+msgstr ""
+
+msgid "Filter E-Mail URIs"
+msgstr ""
+
+msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
+msgstr ""
+
+msgid "System Account Folder Defaults"
+msgstr ""
+
+msgid "Paths of the special folders (like Sent, Trash, ...)"
+msgstr ""
+
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr ""
+
+msgid "Sieve Redirect Only Internal"
+msgstr ""
+
+msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
+msgstr ""
+
+msgid "Sieve Notification Bounces Reporting Email"
+msgstr ""
+
+msgid "URL icon path for own domain"
+msgstr ""
+
+msgid "Used to mark messages from configured primary and secondary domains"
+msgstr ""
+
+msgid "URL icon path for other domains"
+msgstr ""
+
+msgid "Used to mark messages from all other domains"
+msgstr ""
+
+msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "shared / adb_list accounts need to have a password set"
+msgstr ""
+
+msgid "shared / adb_list accounts need to have an email set"
+msgstr ""
+
+msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
+msgstr ""
+
+msgid "Internal user accounts need an email address"
+msgstr ""
+
+msgid "Internal user accounts need to be assigned to a user"
+msgstr ""
+
+msgid "Please choose a new email address for internal user account"
+msgstr ""
+
+msgid "system account for user does not exist"
+msgstr ""
+
+#, python-brace-format
+msgid "Account type cannot be changed from {0} to {1}"
+msgstr ""
+
+msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
+msgstr ""
+
+msgid "Migration of this account has not been approved!"
+msgstr ""
+
+msgid "Could not find email user xprops!"
+msgstr ""
+
+msgid "Internal user accounts need a valid user"
+msgstr ""
+
+msgid "System account of user is missing"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+#, python-brace-format
+msgid "Folder with name {0} already exists!"
+msgstr ""
+
+msgid "Failure on create folder"
+msgstr ""
+
+msgid "still unanswered: "
+msgstr ""
+
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgstr ""
+
+msgid "It is not possible to file the message in this record (might be a recurring event)."
+msgstr ""
+
+msgid "Passed"
+msgstr ""
+
+msgid "Answered"
+msgstr "Répondu"
+
+msgid "Seen"
+msgstr "Vu"
+
+msgid "Deleted"
+msgstr "Supprimé"
+
+msgid "Draft"
+msgstr "Brouillon"
+
+msgid "Flagged"
+msgstr "Marqué"
+
+msgid "It is not allowed to copy e-mails in the same account."
+msgstr ""
+
+msgid "Bad recipient address syntax"
+msgstr ""
+
+msgid "Recipient address rejected"
+msgstr ""
+
+msgid "Original message not found, email was moved or deleted"
+msgstr ""
+
+msgid "Invalid address format"
+msgstr ""
+
+#, python-format
+msgid "Error: %s"
+msgstr "Erreur : %s"
+
+msgid "Could not send message"
+msgstr "Impossible d'envoyer le message"
+
+msgid "My Mail Download Links"
+msgstr ""
+
+msgid "Out of Office reply from %1$s"
+msgstr "Réponse \"Je suis absent\" de %1$s"
+
+msgid "Sieve vacation has been updated:"
+msgstr ""
+
+msgid "Vacation message is now active."
+msgstr ""
+
+msgid "Vacation message is now inactive."
+msgstr ""
+
+msgid "Sieve rules have been updated."
+msgstr ""
+
+msgid "It is not allowed to redirect emails to self! Please change the recipient."
+msgstr ""
+
+msgid "Redirects to external email domains are not allowed."
+msgstr ""
+
+msgid "You have new mail from "
+msgstr ""
 
 msgid "IMAP Hostname missing"
 msgstr ""
@@ -31,54 +340,6 @@ msgstr ""
 
 msgid "SMTP Credentials missing"
 msgstr ""
-
-msgid "All inboxes"
-msgstr "Tous les boîtes de réception"
-
-msgid "Default Email Account"
-msgstr "Compte messagerie par défaut"
-
-msgid "The default email account to use when sending mails."
-msgstr "Compte par défaut pour l'envoi des messages."
-
-msgid "Mark Email Automatically As Read"
-msgstr ""
-
-msgid "Is email marked as read automatically or by user action"
-msgstr ""
-
-msgid "Email Update Interval"
-msgstr "Intervalle de mise à jour des messages"
-
-msgid "How often should Felamimail check for new Emails (in minutes)."
-msgstr "Felamimail récupèrera les nouveaux messages automatiquement (toutes les x minutes)."
-
-msgid "Use for mailto links"
-msgstr ""
-
-msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr ""
-
-msgid "Confirm Delete"
-msgstr "Confirmer la suppression"
-
-msgid "Show confirmation dialog when deleting mails."
-msgstr "Demander confirmation avant de supprimer des messages."
-
-msgid ".eml file Attachment in forwarded mails"
-msgstr ""
-
-msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
-msgstr ""
-
-msgid "Default Font"
-msgstr ""
-
-msgid "Setting the default font in the E-Mail app"
-msgstr ""
-
-msgid "Message not available."
-msgstr "Message indisponible"
 
 msgid "Add New Account"
 msgstr ""
@@ -338,6 +599,15 @@ msgstr ""
 msgid "User Name (From) cannot contain a comma."
 msgstr ""
 
+msgid "Edit Vacation Message"
+msgstr "Message d’absence"
+
+msgid "Edit Filter Rules"
+msgstr "Modifier les règles de filtrage"
+
+msgid "E-mail usage"
+msgstr ""
+
 msgid "Save As"
 msgstr ""
 
@@ -357,424 +627,6 @@ msgid "Save as Record Attachment"
 msgstr ""
 
 msgid "Download"
-msgstr ""
-
-msgid "Loading Mail Addresses"
-msgstr "Chargement des adresses électroniques"
-
-msgid "To:"
-msgstr "À :"
-
-msgid "Cc:"
-msgstr "Cc:"
-
-msgid "Bcc:"
-msgstr "Bcc:"
-
-msgid "A separate mail is send to each recipient."
-msgstr ""
-
-msgid "Mass"
-msgstr ""
-
-msgid "Click here to set To/CC/BCC."
-msgstr "Cliquer ici pour définir le type de destinataire"
-
-msgid "Send message to individual list members instead"
-msgstr ""
-
-msgid "Resolve to single contact"
-msgstr ""
-
-msgid "from"
-msgstr ""
-
-msgid "Remove"
-msgstr "Retirer"
-
-msgid "The following recipients will be removed from this mass mail"
-msgstr ""
-
-msgid "Compose email"
-msgstr "Écrire un message"
-
-msgid "To"
-msgstr "Destinataire"
-
-msgid "CC"
-msgstr ""
-
-msgid "BCC"
-msgstr ""
-
-msgid "Mass Mailing"
-msgstr ""
-
-msgid "Loading Recipients..."
-msgstr ""
-
-msgid "Signatures"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Is Default"
-msgstr ""
-
-msgid "Add Signature"
-msgstr ""
-
-msgid "Edit Signature"
-msgstr ""
-
-msgid "Delete Signature"
-msgstr ""
-
-msgid "Selected E-Mail"
-msgstr ""
-
-msgid "Add as \"To\""
-msgstr "Ajouter au(x) destinataire(s)"
-
-msgid "Add as \"Cc\""
-msgstr "Ajouter en copie conforme"
-
-msgid "Add as \"Bcc\""
-msgstr "Ajouter en copie cachée"
-
-msgid "Remove from recipients"
-msgstr "Supprimer des destinataires"
-
-msgid "Edit Vacation Message"
-msgstr "Message d’absence"
-
-msgid "Edit Filter Rules"
-msgstr "Modifier les règles de filtrage"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Open in Felamimail"
-msgstr ""
-
-msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
-msgstr ""
-
-msgid "Yes, it is SPAM"
-msgstr ""
-
-msgid "No, it is not"
-msgstr ""
-
-msgid "Attachments"
-msgstr "P.J."
-
-msgid "{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}"
-msgstr ""
-
-msgid "Open"
-msgstr ""
-
-msgid "Preview"
-msgstr ""
-
-msgid "Confirm SPAM Suspicion"
-msgstr ""
-
-msgid "Show or hide header information"
-msgstr "Afficher/Masquer l'entête de message"
-
-msgid "Recipient filter"
-msgstr "Filtre destinataire"
-
-msgid "All recipients"
-msgstr "Tous les destinataires"
-
-#, python-brace-format
-msgid "\"{0}\" recipients"
-msgstr "\"{0}\" destinataires"
-
-msgid "Total Messages:"
-msgstr "Total des messages :"
-
-msgid "Unread Messages:"
-msgstr "Messages non lus :"
-
-msgid "Name on Server:"
-msgstr "Nom sur le serveur :"
-
-msgid "Last update:"
-msgstr "Dernière modification"
-
-#, python-brace-format
-msgid "Fetching messages... ({0} done)"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} unread message"
-msgid_plural "{0} unread messages"
-msgstr[0] "{0} message non lu"
-msgstr[1] "{0} messages non lus"
-msgstr[2] "{0} messages non lus"
-
-msgid "(new message)"
-msgstr "(nouveau message)"
-
-#, python-brace-format
-msgid "Select recipients for \"{0}\""
-msgstr "Sélectionner le destinataire pour \"{0}\""
-
-#, python-brace-format
-msgid "Mailvelope decryption Error [{0}]"
-msgstr ""
-
-#, python-brace-format
-msgid "To decrypt this message please install {0} with API support enabled"
-msgstr ""
-
-msgid "PGP encrypted Message"
-msgstr ""
-
-msgid "Delete"
-msgstr "Effacer"
-
-msgid "Reply"
-msgstr "Répondre"
-
-msgid "Reply To All"
-msgstr "Répondre à tous"
-
-msgid "Forward"
-msgstr "Transférer"
-
-msgid "Print Message"
-msgstr "Imprimer le message"
-
-msgid "Print Preview"
-msgstr "Aperçu avant impression"
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} is not found"
-msgstr ""
-
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "un dossier"
-msgstr[1] "des dossiers"
-msgstr[2] "des dossiers"
-
-msgid "Only custom scripts can be modified."
-msgstr ""
-
-msgid "Cancel"
-msgstr "Annuler"
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "Errors"
-msgstr ""
-
-#, python-brace-format
-msgid "Notification for {0}"
-msgstr ""
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Notification Email"
-msgstr ""
-
-msgid "Add a new email ..."
-msgstr ""
-
-msgid "Edit Filter Rule"
-msgstr "Éditer la règle de filtrage"
-
-msgid "Apply filter if"
-msgstr ""
-
-msgid "all conditions match"
-msgstr ""
-
-msgid "any condition matches"
-msgstr ""
-
-msgid "Do this action:"
-msgstr "Effectuer cette action :"
-
-msgid "Keep a copy"
-msgstr ""
-
-msgid "Move mail to folder"
-msgstr "Déplacer le message dans le dossier"
-
-msgid "Redirect mail to address"
-msgstr "Rediriger le message vers l'adresse"
-
-msgid "Reject mail with this text"
-msgstr "Rejeter le message avec ce message"
-
-msgid "Discard mail"
-msgstr "Refuser le message"
-
-msgid "Auto-Reply mail with this text"
-msgstr ""
-
-msgid "Keep mail"
-msgstr "Garder le message"
-
-msgid "Sieve Filter Rules"
-msgstr "Enregistrer les règles Sieve"
-
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr "Règles de filtrage Sieve pour {0}"
-
-msgid "General"
-msgstr "Général"
-
-msgid "Advanced"
-msgstr "Avancé"
-
-msgid "Only send all X days to the same sender"
-msgstr "Attendre X jours avant de renvoyer l'alerte à un même contact."
-
-msgid "Incoming mails will be answered with this text:"
-msgstr "La réponse aux messages reçus sera :"
-
-msgid "Status"
-msgstr "Statut"
-
-msgid "I am available (vacation message disabled)"
-msgstr "Je suis disponible (message d'absence désactivé)"
-
-msgid "I am not available (vacation message enabled)"
-msgstr "Je ne suis pas disponible (message d'absence activé)"
-
-msgid "Start Date"
-msgstr "Date de début"
-
-msgid "Set vacation start date ..."
-msgstr "Date de début d'absence"
-
-msgid "End Date"
-msgstr "Date de fin"
-
-msgid "Set vacation end date ..."
-msgstr "Date de fin d'absence"
-
-msgid "Representative #1"
-msgstr "Réprésentant #1"
-
-msgid "Choose first Representative ..."
-msgstr "Sélectionner le premier représentant"
-
-msgid "Representative #2"
-msgstr "Réprésentant #2"
-
-msgid "Choose second Representative ..."
-msgstr "Sélectionner le second représentant"
-
-msgid "Message Template"
-msgstr "Modèle de message"
-
-msgid "Choose Template ..."
-msgstr "Choisir le modèle ..."
-
-msgid "Move up"
-msgstr "Monter"
-
-msgid "Move down"
-msgstr "Descendre"
-
-msgid "Enable"
-msgstr "Activer"
-
-msgid "Disable"
-msgstr "Désactiver"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Conditions"
-msgstr "Conditions"
-
-msgid "Action"
-msgstr "Action"
-
-msgid "is greater than"
-msgstr "est supérieur à"
-
-msgid "is less than"
-msgstr "est inférieur à"
-
-#, python-brace-format
-msgid "Header \"{0}\" contains \"{1}\""
-msgstr "L'entete \"{0}\" contient \"{1}\""
-
-#, python-brace-format
-msgid "Header \"{0}\" matches \"{1}\""
-msgstr "En-tête \"{0}\" correspond à \"{1}\""
-
-#, python-brace-format
-msgid "Vacation Message for {0}"
-msgstr "Message d'absence pour {0}"
-
-msgid "From (Email)"
-msgstr "De (adresse)"
-
-msgid "From (Email and Name)"
-msgstr "De (adresse et nom)"
-
-msgid "To (Email)"
-msgstr "Destinataire (adresse)"
-
-msgid "To (Email CC)"
-msgstr ""
-
-msgid "Subject"
-msgstr "Sujet"
-
-msgid "Size (in byte)"
-msgstr ""
-
-msgid "Header contains"
-msgstr "L'entête contient"
-
-msgid "Header name"
-msgstr "Nom d'en-tête"
-
-msgid "Header value"
-msgstr "Header value"
-
-msgid "Header regex"
-msgstr "Header regex"
-
-msgid "Expected Answer"
-msgstr ""
-
-msgid "Tomorrow"
-msgstr ""
-
-msgid "In two days"
-msgstr ""
-
-msgid "In a week"
-msgstr ""
-
-msgid "In two weeks"
-msgstr ""
-
-msgid "In a month"
-msgstr ""
-
-msgid "Custom"
 msgstr ""
 
 msgid "Attachment"
@@ -806,6 +658,299 @@ msgstr ""
 
 msgid "type"
 msgstr ""
+
+msgid "Selected E-Mail"
+msgstr ""
+
+msgid "Add as \"To\""
+msgstr "Ajouter au(x) destinataire(s)"
+
+msgid "Add as \"Cc\""
+msgstr "Ajouter en copie conforme"
+
+msgid "Add as \"Bcc\""
+msgstr "Ajouter en copie cachée"
+
+msgid "Remove from recipients"
+msgstr "Supprimer des destinataires"
+
+msgid "Loading Mail Addresses"
+msgstr "Chargement des adresses électroniques"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "New Mail"
+msgstr "Nouveau message"
+
+msgid "Email"
+msgstr "Messagerie"
+
+msgid "Active Vacation Message"
+msgstr "Message d'absence actuel"
+
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "L'alerte absence est activée sur le compte messagerie \"{0}\"."
+
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr ""
+
+msgid "New mails"
+msgstr "Nouveaux messages"
+
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "Vous avez {0} nouveau(x) message(s) dans le dossier {1} ({2})."
+
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr "Authentification IMAP de {0}"
+
+msgid "Credentials"
+msgstr "Identifiants"
+
+msgid "IMAP Error"
+msgstr "Erreur IMAP"
+
+msgid "No connection to IMAP server."
+msgstr "Pas de connexion au serveur IMAP."
+
+msgid "IMAP Credentials Error"
+msgstr "Erreur dans les identifiants IMAP"
+
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Vos identifiants sont invalides. Merci de contacter votre administrateur."
+
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr "La structure des dossiers a été modifiée par un autre programme et doit être mise à jour."
+
+msgid "SMTP Error"
+msgstr "Erreur SMTP"
+
+msgid "No connection to SMTP server."
+msgstr "Pas de connexion au serveur SMTP."
+
+msgid "Sieve Error"
+msgstr "Erreur Sieve"
+
+msgid "No connection to Sieve server."
+msgstr "Pas de connexion au serveur Sieve."
+
+msgid "Save Sieve Script Error"
+msgstr "Enregistrer les erreurs de script Sieve"
+
+msgid "Could not save script on Sieve server."
+msgstr "Impossible d'enregistrer le script Sieve"
+
+#, python-brace-format
+msgid "Selected  {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} is not found"
+msgstr ""
+
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "un dossier"
+msgstr[1] "des dossiers"
+msgstr[2] "des dossiers"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Ok"
+msgstr "Ok"
+
+#, python-brace-format
+msgid "Folders of account {0}"
+msgstr "Dossiers du compte {0}"
+
+msgid "Folders of all accounts"
+msgstr "Dossiers de tous les comptes"
+
+msgid "Message not available."
+msgstr "Message indisponible"
+
+msgid "Compose email"
+msgstr "Écrire un message"
+
+msgid "To"
+msgstr "Destinataire"
+
+msgid "CC"
+msgstr ""
+
+msgid "BCC"
+msgstr ""
+
+msgid "Mass Mailing"
+msgstr ""
+
+msgid "Loading Recipients..."
+msgstr ""
+
+msgid "No Messages found."
+msgstr ""
+
+msgid "It is SPAM"
+msgstr ""
+
+msgid "It is not SPAM"
+msgstr ""
+
+msgid "Compose"
+msgstr "Écrire"
+
+msgid "Reply"
+msgstr "Répondre"
+
+msgid "Reply To All"
+msgstr "Répondre à tous"
+
+msgid "Forward"
+msgstr "Transférer"
+
+msgid "Toggle highlighting"
+msgstr "Important"
+
+msgid "Mark read/unread"
+msgstr "Marquer comme lu / non-lu"
+
+msgid "Move"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Import Messages"
+msgstr ""
+
+msgid "Add Account"
+msgstr "Ajouter un compte"
+
+msgid "Print Preview"
+msgstr "Aperçu avant impression"
+
+msgid "Print Message"
+msgstr "Imprimer le message"
+
+msgid "Create New Task"
+msgstr ""
+
+msgid "Delete"
+msgstr "Effacer"
+
+msgid "No target folder selected"
+msgstr ""
+
+msgid "You need to select a target folder for the messages."
+msgstr ""
+
+msgid "Wrong File Type"
+msgstr ""
+
+msgid "Files of type eml, emltpl and msg allowed only."
+msgstr ""
+
+msgid "Importing Messages..."
+msgstr ""
+
+msgid "Id"
+msgstr "Id"
+
+msgid "Flags"
+msgstr "Marqueurs"
+
+msgid "Tags"
+msgstr ""
+
+msgid "Subject"
+msgstr "Sujet"
+
+msgid "From (Email)"
+msgstr "De (adresse)"
+
+msgid "From (Name)"
+msgstr "Expéditeur"
+
+msgid "Sender"
+msgstr "Envoyé par"
+
+msgid "Sent"
+msgstr "Envoyés"
+
+msgid "Received"
+msgstr "Reçu"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Filed as:"
+msgstr ""
+
+msgid "Select Message File Location"
+msgstr ""
+
+msgid "Filing Messages"
+msgstr ""
+
+msgid "Error Filing Message"
+msgstr ""
+
+msgid "Could not file message."
+msgstr ""
+
+msgid "Send Reading Confirmation"
+msgstr "Envoyer un accusé de réception"
+
+msgid "Do you want to send a reading confirmation message?"
+msgstr "Voulez vous envoyer un accusé de réception ?"
+
+msgid "Creating new Task..."
+msgstr ""
+
+msgid "New Task"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Open in Felamimail"
+msgstr ""
+
+msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
+msgstr ""
+
+msgid "Yes, it is SPAM"
+msgstr ""
+
+msgid "No, it is not"
+msgstr ""
+
+msgid "Attachments"
+msgstr "P.J."
+
+msgid "{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Confirm SPAM Suspicion"
+msgstr ""
+
+msgid "Show or hide header information"
+msgstr "Afficher/Masquer l'entête de message"
 
 msgid "Send"
 msgstr "Envoyer"
@@ -926,6 +1071,42 @@ msgstr ""
 msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
 msgstr ""
 
+msgid "Expected Answer"
+msgstr ""
+
+msgid "Tomorrow"
+msgstr ""
+
+msgid "In two days"
+msgstr ""
+
+msgid "In a week"
+msgstr ""
+
+msgid "In two weeks"
+msgstr ""
+
+msgid "In a month"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Save Message as"
+msgstr ""
+
+msgid "Save To All Recipients"
+msgstr ""
+
+msgid "Select other IMAP folder"
+msgstr ""
+
+msgid "{messageCount, plural, one {Message was saved} other {# messages where saved}}"
+msgstr ""
+
+msgid "Save Messages as Attachment"
+msgstr ""
+
 msgid "GENDER_Message"
 msgstr ""
 
@@ -941,9 +1122,6 @@ msgstr ""
 msgid "This message might be SPAM"
 msgstr ""
 
-msgid "Answered"
-msgstr "Répondu"
-
 msgid "Forwarded"
 msgstr "Transféré"
 
@@ -956,29 +1134,20 @@ msgstr ""
 msgid "Subject/From/To"
 msgstr ""
 
-msgid "From (Name)"
-msgstr "Expéditeur"
-
 msgid "Cc"
 msgstr "Cc"
 
 msgid "Bcc"
 msgstr "Bcc"
 
-msgid "Flags"
-msgstr "Marqueurs"
-
-msgid "Received"
-msgstr "Reçu"
+msgid "Size (in byte)"
+msgstr ""
 
 msgid "INBOX"
 msgstr "Boîte de réception"
 
 msgid "Drafts"
 msgstr "Brouillons"
-
-msgid "Sent"
-msgstr "Envoyés"
 
 msgid "Templates"
 msgstr "Modèles"
@@ -1015,189 +1184,6 @@ msgid_plural "Flag lists"
 msgstr[0] "Liste d'indicateurs"
 msgstr[1] "Listes d'indicateurs"
 msgstr[2] "Listes d'indicateurs"
-
-msgid "No Messages found."
-msgstr ""
-
-msgid "It is SPAM"
-msgstr ""
-
-msgid "It is not SPAM"
-msgstr ""
-
-msgid "Compose"
-msgstr "Écrire"
-
-msgid "Toggle highlighting"
-msgstr "Important"
-
-msgid "Mark read/unread"
-msgstr "Marquer comme lu / non-lu"
-
-msgid "Move"
-msgstr ""
-
-msgid "Copy"
-msgstr ""
-
-msgid "Import Messages"
-msgstr ""
-
-msgid "Add Account"
-msgstr "Ajouter un compte"
-
-msgid "Create New Task"
-msgstr ""
-
-msgid "No target folder selected"
-msgstr ""
-
-msgid "You need to select a target folder for the messages."
-msgstr ""
-
-msgid "Wrong File Type"
-msgstr ""
-
-msgid "Files of type eml, emltpl and msg allowed only."
-msgstr ""
-
-msgid "Importing Messages..."
-msgstr ""
-
-msgid "Id"
-msgstr "Id"
-
-msgid "Tags"
-msgstr ""
-
-msgid "Sender"
-msgstr "Envoyé par"
-
-msgid "Size"
-msgstr "Taille"
-
-msgid "Filed as:"
-msgstr ""
-
-msgid "Select Message File Location"
-msgstr ""
-
-msgid "Filing Messages"
-msgstr ""
-
-msgid "Error Filing Message"
-msgstr ""
-
-msgid "Could not file message."
-msgstr ""
-
-msgid "Send Reading Confirmation"
-msgstr "Envoyer un accusé de réception"
-
-msgid "Do you want to send a reading confirmation message?"
-msgstr "Voulez vous envoyer un accusé de réception ?"
-
-msgid "Creating new Task..."
-msgstr ""
-
-msgid "New Task"
-msgstr ""
-
-msgid "Error"
-msgstr ""
-
-msgid "New Mail"
-msgstr "Nouveau message"
-
-msgid "Email"
-msgstr "Messagerie"
-
-msgid "Active Vacation Message"
-msgstr "Message d'absence actuel"
-
-#, python-brace-format
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "L'alerte absence est activée sur le compte messagerie \"{0}\"."
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} as default mailer"
-msgstr ""
-
-msgid "New mails"
-msgstr "Nouveaux messages"
-
-#, python-brace-format
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "Vous avez {0} nouveau(x) message(s) dans le dossier {1} ({2})."
-
-#, python-brace-format
-msgid "IMAP Credentials for {0}"
-msgstr "Authentification IMAP de {0}"
-
-msgid "Credentials"
-msgstr "Identifiants"
-
-msgid "IMAP Error"
-msgstr "Erreur IMAP"
-
-msgid "No connection to IMAP server."
-msgstr "Pas de connexion au serveur IMAP."
-
-msgid "IMAP Credentials Error"
-msgstr "Erreur dans les identifiants IMAP"
-
-msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Vos identifiants sont invalides. Merci de contacter votre administrateur."
-
-msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
-msgstr "La structure des dossiers a été modifiée par un autre programme et doit être mise à jour."
-
-msgid "SMTP Error"
-msgstr "Erreur SMTP"
-
-msgid "No connection to SMTP server."
-msgstr "Pas de connexion au serveur SMTP."
-
-msgid "Sieve Error"
-msgstr "Erreur Sieve"
-
-msgid "No connection to Sieve server."
-msgstr "Pas de connexion au serveur Sieve."
-
-msgid "Save Sieve Script Error"
-msgstr "Enregistrer les erreurs de script Sieve"
-
-msgid "Could not save script on Sieve server."
-msgstr "Impossible d'enregistrer le script Sieve"
-
-msgid "Save Message as"
-msgstr ""
-
-msgid "Save To All Recipients"
-msgstr ""
-
-msgid "Select other IMAP folder"
-msgstr ""
-
-msgid "{messageCount, plural, one {Message was saved} other {# messages where saved}}"
-msgstr ""
-
-msgid "Save Messages as Attachment"
-msgstr ""
-
-#, python-brace-format
-msgid "Folders of account {0}"
-msgstr "Dossiers du compte {0}"
-
-msgid "Folders of all accounts"
-msgstr "Dossiers de tous les comptes"
-
-msgid "Preferred E-Mail"
-msgstr ""
 
 msgid "Empty Folder"
 msgstr "Vider le dossier"
@@ -1258,359 +1244,277 @@ msgstr ""
 msgid "Folder cache has been cleared!"
 msgstr ""
 
-msgid "All folders of my email accounts"
-msgstr ""
-
-msgid "All inboxes of my email accounts"
-msgstr "Tous les boîtes de réception de mes comptes"
-
-msgid "All unread mail"
-msgstr "Tous les messages non lus"
-
-msgid "All unread mail of my email accounts"
-msgstr "Tous les messages non lus de mes comptes"
-
-msgid "All highlighted mail"
-msgstr "Tous les messages importants"
-
-msgid "All highlighted mail of my email accounts"
-msgstr "Tous les messages importants de mes comptes"
-
-msgid "All drafts"
-msgstr "Tous les brouillons"
-
-msgid "All mails with the draft flag"
-msgstr "Tous les brouillons"
-
-msgid "Mail Type"
-msgstr ""
-
-msgid "Possible mail types."
-msgstr ""
-
-msgid "Additional Personal External Account"
-msgstr ""
-
-msgid "Shared System Account"
-msgstr ""
-
-msgid "Additional Personal System Account"
-msgstr ""
-
-msgid "Default Personal System Account"
-msgstr ""
-
-msgid "Mailinglist"
-msgstr ""
-
-msgid "Mailinglist Reject Reason"
-msgstr ""
-
-msgid "Your email has been rejected"
-msgstr ""
-
-msgid "Vacation Templates Node ID"
-msgstr ""
-
-msgid "Email Notification Templates Node ID"
-msgstr ""
-
-msgid "Email Notification from E-Mailadress"
-msgstr ""
-
-msgid "Custom Vacation Message"
-msgstr "Message d'absence personnalisé"
-
-msgid "User is allowed to set custom vacation message for system account"
-msgstr "L'utilisateur est autorisé à changer son message d'absence"
-
-msgid "Cache email body"
-msgstr "Mettre en cache le corps du message"
-
-msgid "Should the email body be cached (recommended for slow IMAP server connections)"
-msgstr "Si la connexion au serveur IMAP est lente, il est recommandé de mettre le corps du message en cache"
-
-msgid "Delete Archived Mail"
-msgstr ""
-
-msgid "Prevent copying mails in the same account"
-msgstr ""
-
-msgid "Attachment cache TTL in seconds"
-msgstr ""
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Felamimail Application."
-msgstr ""
-
-msgid "Account Migration"
-msgstr ""
-
-msgid "Shows context menu for system accounts to approve migration"
-msgstr ""
-
-msgid "Move notifications"
-msgstr ""
-
-msgid "Move notifications to a subfolder via sieve"
-msgstr ""
-
-msgid "Auto-Save Drafts"
-msgstr ""
-
-msgid "Save drafts automatically while editing an email"
-msgstr ""
-
-msgid "Only password download link"
-msgstr ""
-
-msgid "Allow only password download link"
-msgstr ""
-
-msgid "Tine 2.0 Flag"
-msgstr ""
-
-msgid "Add a Tine 2.0 flag to sent messages"
-msgstr ""
-
-msgid "Show Reply-To"
-msgstr ""
-
-msgid "Show Reply-To field in message compose dialog"
-msgstr ""
-
-msgid "Auto-Create Folders"
-msgstr ""
-
-msgid "Create template, trash, sent, draft and junks folders for system accounts"
-msgstr ""
-
-msgid "Enable Spam Suspicion Strategy"
-msgstr ""
-
-msgid "Spam Suspicion Strategy"
-msgstr ""
-
-msgid "Spam Suspicion Strategy Config"
-msgstr ""
-
-msgid "Spam User Processing Pipeline"
-msgstr ""
-
-msgid "Confirm SPAM Suspicion Message"
-msgstr ""
-
-msgid "Message for users when they press the info button in a SPAM suspicion toolbar."
-msgstr ""
-
-msgid "Filter E-Mail URIs"
-msgstr ""
-
-msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
-msgstr ""
-
-msgid "System Account Folder Defaults"
-msgstr ""
-
-msgid "Paths of the special folders (like Sent, Trash, ...)"
-msgstr ""
-
-msgid "Allow self signed TLS cert for IMAP connection"
-msgstr ""
-
-msgid "Sieve Redirect Only Internal"
-msgstr ""
-
-msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
-msgstr ""
-
-msgid "Sieve Notification Bounces Reporting Email"
-msgstr ""
-
-msgid "URL icon path for own domain"
-msgstr ""
-
-msgid "Used to mark messages from configured primary and secondary domains"
-msgstr ""
-
-msgid "URL icon path for other domains"
-msgstr ""
-
-msgid "Used to mark messages from all other domains"
-msgstr ""
-
-msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Inactive"
-msgstr ""
-
-msgid "It is not possible to file the message in this record (might be a recurring event)."
-msgstr ""
-
-msgid "shared / adb_list accounts need to have a password set"
-msgstr ""
-
-msgid "shared / adb_list accounts need to have an email set"
-msgstr ""
-
-msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
-msgstr ""
-
-msgid "Internal user accounts need an email address"
-msgstr ""
-
-msgid "Internal user accounts need to be assigned to a user"
-msgstr ""
-
-msgid "Please choose a new email address for internal user account"
-msgstr ""
-
-msgid "system account for user does not exist"
+#, python-brace-format
+msgid "Mailvelope decryption Error [{0}]"
 msgstr ""
 
 #, python-brace-format
-msgid "Account type cannot be changed from {0} to {1}"
+msgid "To decrypt this message please install {0} with API support enabled"
 msgstr ""
 
-msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
+msgid "PGP encrypted Message"
 msgstr ""
 
-msgid "Migration of this account has not been approved!"
+msgid "To:"
+msgstr "À :"
+
+msgid "Cc:"
+msgstr "Cc:"
+
+msgid "Bcc:"
+msgstr "Bcc:"
+
+msgid "A separate mail is send to each recipient."
 msgstr ""
 
-msgid "Could not find email user xprops!"
+msgid "Mass"
 msgstr ""
 
-msgid "Internal user accounts need a valid user"
+msgid "Click here to set To/CC/BCC."
+msgstr "Cliquer ici pour définir le type de destinataire"
+
+msgid "Send message to individual list members instead"
 msgstr ""
 
-msgid "System account of user is missing"
+msgid "Resolve to single contact"
 msgstr ""
 
-msgid "It is not allowed to copy e-mails in the same account."
+msgid "from"
 msgstr ""
 
-msgid "Passed"
+msgid "Remove"
+msgstr "Retirer"
+
+msgid "The following recipients will be removed from this mass mail"
 msgstr ""
 
-msgid "Seen"
-msgstr "Vu"
+msgid "(new message)"
+msgstr "(nouveau message)"
 
-msgid "Deleted"
-msgstr "Supprimé"
+#, python-brace-format
+msgid "Select recipients for \"{0}\""
+msgstr "Sélectionner le destinataire pour \"{0}\""
 
-msgid "Draft"
-msgstr "Brouillon"
+msgid "Recipient filter"
+msgstr "Filtre destinataire"
 
-msgid "Flagged"
-msgstr "Marqué"
+msgid "All recipients"
+msgstr "Tous les destinataires"
 
-msgid "Bad recipient address syntax"
+#, python-brace-format
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" destinataires"
+
+msgid "Only custom scripts can be modified."
 msgstr ""
 
-msgid "Recipient address rejected"
-msgstr ""
-
-msgid "Original message not found, email was moved or deleted"
-msgstr ""
-
-msgid "Invalid address format"
-msgstr ""
-
-#, python-format
-msgid "Error: %s"
-msgstr "Erreur : %s"
-
-msgid "Could not send message"
-msgstr "Impossible d'envoyer le message"
-
-msgid "My Mail Download Links"
-msgstr ""
-
-msgid "Out of Office reply from %1$s"
-msgstr "Réponse \"Je suis absent\" de %1$s"
-
-msgid "Sieve vacation has been updated:"
-msgstr ""
-
-msgid "Vacation message is now active."
-msgstr ""
-
-msgid "Vacation message is now inactive."
-msgstr ""
-
-msgid "Sieve rules have been updated."
-msgstr ""
-
-msgid "It is not allowed to redirect emails to self! Please change the recipient."
-msgstr ""
-
-msgid "Redirects to external email domains are not allowed."
-msgstr ""
-
-msgid "You have new mail from "
+msgid "Errors"
 msgstr ""
 
 #, python-brace-format
-msgid "Folder with name {0} already exists!"
+msgid "Notification for {0}"
 msgstr ""
 
-msgid "Failure on create folder"
+msgid "Notification Email"
 msgstr ""
 
-msgid "still unanswered: "
+msgid "Add a new email ..."
 msgstr ""
 
-msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgid "From (Email and Name)"
+msgstr "De (adresse et nom)"
+
+msgid "To (Email)"
+msgstr "Destinataire (adresse)"
+
+msgid "To (Email CC)"
 msgstr ""
 
-msgid "Can not combine \"allow external\" and \"allow only members\""
+msgid "Header contains"
+msgstr "L'entête contient"
+
+msgid "Header name"
+msgstr "Nom d'en-tête"
+
+msgid "Header value"
+msgstr "Header value"
+
+msgid "Header regex"
+msgstr "Header regex"
+
+msgid "Edit Filter Rule"
+msgstr "Éditer la règle de filtrage"
+
+msgid "Apply filter if"
 msgstr ""
 
-msgid "Message File Suggestion"
-msgid_plural "Message File Suggestions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Message File Suggestions"
+msgid "all conditions match"
 msgstr ""
 
-msgid "Message File Location"
-msgid_plural "Message File Locations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Message File Locations"
+msgid "any condition matches"
 msgstr ""
 
-msgid "Message ID Hash"
+msgid "Do this action:"
+msgstr "Effectuer cette action :"
+
+msgid "Keep a copy"
 msgstr ""
 
-msgid "Message ID"
+msgid "Move mail to folder"
+msgstr "Déplacer le message dans le dossier"
+
+msgid "Redirect mail to address"
+msgstr "Rediriger le message vers l'adresse"
+
+msgid "Reject mail with this text"
+msgstr "Rejeter le message avec ce message"
+
+msgid "Discard mail"
+msgstr "Refuser le message"
+
+msgid "Auto-Reply mail with this text"
 msgstr ""
 
-msgid "Model"
+msgid "Keep mail"
+msgstr "Garder le message"
+
+msgid "Sieve Filter Rules"
+msgstr "Enregistrer les règles Sieve"
+
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
+msgstr "Règles de filtrage Sieve pour {0}"
+
+msgid "Move up"
+msgstr "Monter"
+
+msgid "Move down"
+msgstr "Descendre"
+
+msgid "Enable"
+msgstr "Activer"
+
+msgid "Disable"
+msgstr "Désactiver"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Conditions"
+msgstr "Conditions"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "is greater than"
+msgstr "est supérieur à"
+
+msgid "is less than"
+msgstr "est inférieur à"
+
+#, python-brace-format
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "L'entete \"{0}\" contient \"{1}\""
+
+#, python-brace-format
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "En-tête \"{0}\" correspond à \"{1}\""
+
+#, python-brace-format
+msgid "Vacation Message for {0}"
+msgstr "Message d'absence pour {0}"
+
+msgid "General"
+msgstr "Général"
+
+msgid "Advanced"
+msgstr "Avancé"
+
+msgid "Only send all X days to the same sender"
+msgstr "Attendre X jours avant de renvoyer l'alerte à un même contact."
+
+msgid "Incoming mails will be answered with this text:"
+msgstr "La réponse aux messages reçus sera :"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "I am available (vacation message disabled)"
+msgstr "Je suis disponible (message d'absence désactivé)"
+
+msgid "I am not available (vacation message enabled)"
+msgstr "Je ne suis pas disponible (message d'absence activé)"
+
+msgid "Start Date"
+msgstr "Date de début"
+
+msgid "Set vacation start date ..."
+msgstr "Date de début d'absence"
+
+msgid "End Date"
+msgstr "Date de fin"
+
+msgid "Set vacation end date ..."
+msgstr "Date de fin d'absence"
+
+msgid "Representative #1"
+msgstr "Réprésentant #1"
+
+msgid "Choose first Representative ..."
+msgstr "Sélectionner le premier représentant"
+
+msgid "Representative #2"
+msgstr "Réprésentant #2"
+
+msgid "Choose second Representative ..."
+msgstr "Sélectionner le second représentant"
+
+msgid "Message Template"
+msgstr "Modèle de message"
+
+msgid "Choose Template ..."
+msgstr "Choisir le modèle ..."
+
+msgid "Signatures"
 msgstr ""
 
-msgid "Record ID"
+msgid "Name"
 msgstr ""
 
-msgid "Record Title"
+msgid "Is Default"
 msgstr ""
 
-msgid "Node ID"
+msgid "Add Signature"
 msgstr ""
+
+msgid "Edit Signature"
+msgstr ""
+
+msgid "Delete Signature"
+msgstr ""
+
+msgid "Total Messages:"
+msgstr "Total des messages :"
+
+msgid "Unread Messages:"
+msgstr "Messages non lus :"
+
+msgid "Name on Server:"
+msgstr "Nom sur le serveur :"
+
+msgid "Last update:"
+msgstr "Dernière modification"
+
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} message non lu"
+msgstr[1] "{0} messages non lus"
+msgstr[2] "{0} messages non lus"
 
 msgid "Email Account"
 msgid_plural "Email Accounts"
@@ -1669,6 +1573,42 @@ msgstr ""
 msgid "Sieve SSL"
 msgstr ""
 
+msgid "Message File Location"
+msgid_plural "Message File Locations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Message File Locations"
+msgstr ""
+
+msgid "Message ID Hash"
+msgstr ""
+
+msgid "Message ID"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Record ID"
+msgstr ""
+
+msgid "Record Title"
+msgstr ""
+
+msgid "Node ID"
+msgstr ""
+
+msgid "Message File Suggestion"
+msgid_plural "Message File Suggestions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Message File Suggestions"
+msgstr ""
+
 msgid "Reading Confirmation:"
 msgstr "Accusé de réception :"
 
@@ -1687,14 +1627,74 @@ msgstr "le"
 msgid "Is default"
 msgstr ""
 
-msgid "Manage personal email accounts"
+msgid "All inboxes"
+msgstr "Tous les boîtes de réception"
+
+msgid "Default Email Account"
+msgstr "Compte messagerie par défaut"
+
+msgid "The default email account to use when sending mails."
+msgstr "Compte par défaut pour l'envoi des messages."
+
+msgid "Mark Email Automatically As Read"
 msgstr ""
 
-msgid "Edit and delete personal email accounts"
+msgid "Is email marked as read automatically or by user action"
 msgstr ""
 
-msgid "Add personal email accounts"
+msgid "Email Update Interval"
+msgstr "Intervalle de mise à jour des messages"
+
+msgid "How often should Felamimail check for new Emails (in minutes)."
+msgstr "Felamimail récupèrera les nouveaux messages automatiquement (toutes les x minutes)."
+
+msgid "Use for mailto links"
 msgstr ""
 
-msgid "Create new personal email accounts"
+msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
+msgstr ""
+
+msgid "Confirm Delete"
+msgstr "Confirmer la suppression"
+
+msgid "Show confirmation dialog when deleting mails."
+msgstr "Demander confirmation avant de supprimer des messages."
+
+msgid ".eml file Attachment in forwarded mails"
+msgstr ""
+
+msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgstr ""
+
+msgid "Default Font"
+msgstr ""
+
+msgid "Setting the default font in the E-Mail app"
+msgstr ""
+
+msgid "All folders of my email accounts"
+msgstr ""
+
+msgid "All inboxes of my email accounts"
+msgstr "Tous les boîtes de réception de mes comptes"
+
+msgid "All unread mail"
+msgstr "Tous les messages non lus"
+
+msgid "All unread mail of my email accounts"
+msgstr "Tous les messages non lus de mes comptes"
+
+msgid "All highlighted mail"
+msgstr "Tous les messages importants"
+
+msgid "All highlighted mail of my email accounts"
+msgstr "Tous les messages importants de mes comptes"
+
+msgid "All drafts"
+msgstr "Tous les brouillons"
+
+msgid "All mails with the draft flag"
+msgstr "Tous les brouillons"
+
+msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr ""

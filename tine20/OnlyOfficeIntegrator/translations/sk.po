@@ -5,14 +5,50 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2024-11-25 17:08+0000\n"
 "Language-Team: Slovak (https://app.transifex.com/tine/teams/16133/sk/)\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sk\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+msgid "Public OnlyOffice document server url"
+msgstr ""
+
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr ""
+
+msgid "Internal/Server OnlyOffice document server url"
+msgstr ""
+
+msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgstr ""
+
+msgid "Server url of this installation"
+msgstr ""
+
+msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgstr ""
+
+msgid "Enable oo jwt tokens"
+msgstr ""
+
+msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgstr ""
+
+msgid "OnlyOffice jwt secret string"
+msgstr ""
+
+msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgstr ""
+
+msgid "Interval in seconds to force save"
+msgstr ""
+
+msgid "Live time of token subscriptions"
+msgstr ""
 
 msgid "conflict"
 msgstr ""
@@ -42,6 +78,33 @@ msgid "node has no revision, it might be a partial upload"
 msgstr ""
 
 msgid "this revision currently can't be opened as a different revision is already open"
+msgstr ""
+
+msgid "Only Office Integrator"
+msgstr ""
+
+msgid "Add Document"
+msgstr ""
+
+msgid "Add Text"
+msgstr ""
+
+msgid "Add Spreadsheet"
+msgstr ""
+
+msgid "Add Presentation"
+msgstr ""
+
+msgid "Open Document"
+msgstr ""
+
+msgid "Preparing Attachment..."
+msgstr ""
+
+msgid "Is edited by"
+msgstr ""
+
+msgid "Who is currently editing this document"
 msgstr ""
 
 msgid "Absence detected"
@@ -85,71 +148,8 @@ msgstr ""
 msgid "Saving Document ..."
 msgstr ""
 
-msgid "Is edited by"
-msgstr ""
-
-msgid "Who is currently editing this document"
-msgstr ""
-
-msgid "Only Office Integrator"
-msgstr ""
-
-msgid "Open Document"
-msgstr ""
-
-msgid "Preparing Attachment..."
-msgstr ""
-
-msgid "Add Document"
-msgstr ""
-
-msgid "Add Text"
-msgstr ""
-
-msgid "Add Spreadsheet"
-msgstr ""
-
-msgid "Add Presentation"
-msgstr ""
-
 msgid "Editing"
 msgstr ""
 
 msgid "Current Editors"
-msgstr ""
-
-msgid "Public OnlyOffice document server url"
-msgstr ""
-
-msgid "OnlyOffice document server url accessible by the users browser"
-msgstr ""
-
-msgid "Internal/Server OnlyOffice document server url"
-msgstr ""
-
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-msgstr ""
-
-msgid "Server url of this installation"
-msgstr ""
-
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr ""
-
-msgid "Enable oo jwt tokens"
-msgstr ""
-
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr ""
-
-msgid "OnlyOffice jwt secret string"
-msgstr ""
-
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr ""
-
-msgid "Interval in seconds to force save"
-msgstr ""
-
-msgid "Live time of token subscriptions"
 msgstr ""

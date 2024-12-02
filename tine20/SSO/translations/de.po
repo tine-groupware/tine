@@ -18,6 +18,18 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "PasswordLess Login"
+msgstr ""
+
+msgid "Oauth2"
+msgstr ""
+
+msgid "SAML2"
+msgstr ""
+
+msgid "SAML2 bindings"
+msgstr ""
+
 msgid "Relying Parties"
 msgstr ""
 
@@ -31,46 +43,6 @@ msgstr ""
 msgid "After successful login you will be redirected to {0}"
 msgstr "Nach der erfolgreichen Anmeldung werden sie zu {0} weitergeleitet"
 
-msgid "PasswordLess Login"
-msgstr ""
-
-msgid "Oauth2"
-msgstr ""
-
-msgid "SAML2"
-msgstr ""
-
-msgid "SAML2 bindings"
-msgstr ""
-
-msgid "OAuth2 Relying Party Config"
-msgid_plural "OAuth2 Relying Party Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Redirect URLs"
-msgstr "Weiterleitungs URLs"
-
-msgid "Secret"
-msgstr "Geheimnis"
-
-msgid "OAuth2 Access Token"
-msgid_plural "OAuth2 Access Tokens"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Token"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "TTL"
-msgstr ""
-
 msgid "External Identity Provider Domain"
 msgid_plural "External Identity Provider Domains"
 msgstr[0] ""
@@ -78,25 +50,6 @@ msgstr[1] ""
 
 msgid "Name"
 msgstr "Name"
-
-msgid "Relying Party"
-msgid_plural "Relying Parties"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Label"
-msgstr "Bezeichnung"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Logo"
-msgstr "Logo"
-
-msgid "External Identity Provider"
-msgid_plural "External Identity Providers"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "External Identity Provider Config"
 msgid_plural "External Identity Provider Configs"
@@ -114,6 +67,36 @@ msgstr ""
 
 msgid "Client Secret"
 msgstr ""
+
+msgid "External Identity Provider"
+msgid_plural "External Identity Providers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "OAuth2 Relying Party Config"
+msgid_plural "OAuth2 Relying Party Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Redirect URLs"
+msgstr "Weiterleitungs URLs"
+
+msgid "Secret"
+msgstr "Geheimnis"
+
+msgid "Relying Party"
+msgid_plural "Relying Parties"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Label"
+msgstr "Bezeichnung"
+
+msgid "Logo"
+msgstr "Logo"
 
 msgid "SAML2 Relying Party Config"
 msgid_plural "SAML2 Relying Party Configs"
@@ -136,4 +119,21 @@ msgid "Logout Service Binding"
 msgstr ""
 
 msgid "Logout Service Location"
+msgstr ""
+
+msgid "OAuth2 Access Token"
+msgid_plural "OAuth2 Access Tokens"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Token"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "TTL"
 msgstr ""

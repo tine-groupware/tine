@@ -13,98 +13,37 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "All courses"
+msgid "Add new user"
 msgstr ""
 
-msgid "The default favorite which is loaded on Classes startup"
+msgid "Add new user as member to a course"
 msgstr ""
 
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Quick Search"
+msgid "Add existing user"
 msgstr ""
 
-msgid "Name"
+msgid "Add existing user as member to a course"
 msgstr ""
 
-msgid "Internet Access"
+msgid "Manage shared courses favorites"
 msgstr ""
 
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Import course members"
+msgid "Create or update shared courses favorites"
 msgstr ""
 
-msgid "Add new member"
+msgid "Set additional memberships"
 msgstr ""
 
-msgid "Course Name"
-msgstr ""
-
-msgid "Course / School Type"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-msgid "Reset Password"
-msgstr ""
-
-msgid "Please enter the new Password."
-msgstr ""
-
-msgid "First Name"
-msgstr ""
-
-msgid "Last Name"
-msgstr ""
-
-msgid "Add new member to course"
-msgstr ""
-
-msgid "Errors"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Failed"
-msgstr ""
-
-msgid "Some error occured while trying to update the courses."
-msgstr ""
-
-msgid "Courses"
-msgstr ""
-
-msgid "School"
-msgstr ""
-
-msgid "Defaul school for Courses application"
+msgid "Set additional course member group memberships"
 msgstr ""
 
 msgid "Additional Group Memberships"
 msgstr ""
 
 msgid "Array of IDs of Groups students can be members of"
+msgstr ""
+
+msgid "Internet Access"
 msgstr ""
 
 msgid "Internet access options."
@@ -158,6 +97,11 @@ msgstr ""
 msgid "Course -> Department Mapping"
 msgstr ""
 
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Teacher"
 msgstr ""
 
@@ -167,26 +111,82 @@ msgstr ""
 msgid "My course"
 msgstr ""
 
-msgid "Add new user"
+msgid "First Name"
 msgstr ""
 
-msgid "Add new user as member to a course"
+msgid "Last Name"
 msgstr ""
 
-msgid "Add existing user"
+msgid "Add new member to course"
 msgstr ""
 
-msgid "Add existing user as member to a course"
+msgid "Errors"
 msgstr ""
 
-msgid "Manage shared courses favorites"
+msgid "Please fix the errors noted."
 msgstr ""
 
-msgid "Create or update shared courses favorites"
+msgid "Import course members"
 msgstr ""
 
-msgid "Set additional memberships"
+msgid "Add new member"
 msgstr ""
 
-msgid "Set additional course member group memberships"
+msgid "Course Name"
+msgstr ""
+
+msgid "Course / School Type"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "Reset Password"
+msgstr ""
+
+msgid "Please enter the new Password."
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "All courses"
+msgstr ""
+
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+msgid "School"
+msgstr ""
+
+msgid "Defaul school for Courses application"
+msgstr ""
+
+msgid "Courses"
 msgstr ""

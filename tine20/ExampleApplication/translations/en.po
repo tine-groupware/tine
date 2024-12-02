@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,36 +13,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-msgid "Default Example Record Container"
-msgstr "Default Example Record Container"
-
-msgid "The default container for new records"
-msgstr "The default container for new records"
-
-msgid "ExampleRecord"
-msgstr "ExampleRecord"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Reason"
-msgstr "Reason"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Total Example Records"
-msgstr "Total Example Records"
-
-msgid "New Example"
-msgstr "New Example"
-
-msgid "ExampleApplication"
-msgstr "ExampleApplication"
 
 msgid "Status Available"
 msgstr "Status Available"
@@ -100,6 +71,27 @@ msgstr "Example String"
 msgid "Just an example string for test purpose"
 msgstr "Just an example string for test purpose"
 
+msgid "Total Example Records"
+msgstr "Total Example Records"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "New Example"
+msgstr "New Example"
+
+msgid "ExampleRecord"
+msgstr "ExampleRecord"
+
+msgid "Reason"
+msgstr "Reason"
+
+msgid "Description"
+msgstr "Description"
+
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "example record"
@@ -119,3 +111,12 @@ msgstr "Number"
 
 msgid "datetime"
 msgstr "datetime"
+
+msgid "Default Example Record Container"
+msgstr "Default Example Record Container"
+
+msgid "The default container for new records"
+msgstr "The default container for new records"
+
+msgid "ExampleApplication"
+msgstr "ExampleApplication"

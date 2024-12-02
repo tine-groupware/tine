@@ -9,22 +9,67 @@ msgstr ""
 "PO-Revision-Date: 2012-10-04 15:23+0000\n"
 "Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2014\n"
 "Language-Team: Romanian (Romania) (http://app.transifex.com/tine/groupware/language/ro_RO/)\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro_RO\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Inventory Status Available"
+msgstr ""
+
+msgid "Possible status."
+msgstr "Status posibil."
+
+msgid "Ordered"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Defect"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "Removed"
+msgstr "Înlăturat"
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Stored"
+msgstr ""
+
+msgid "Sold"
+msgstr ""
+
+msgid "Destroyed"
+msgstr ""
+
 msgid "Types"
 msgstr ""
 
-msgid "Default Inventory Item Container"
+msgid "Tine 2.0 inventory CSV import"
 msgstr ""
 
-msgid "The default container for new items"
+msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+msgid "Inventory CSV import"
+msgstr "Import Inventar CSV "
+
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 msgid "The active number must be less than or equal total number."
@@ -63,9 +108,6 @@ msgstr "Adăugat"
 msgid "Warranty"
 msgstr "Garanţie"
 
-msgid "Removed"
-msgstr "Înlăturat"
-
 msgid "Total number"
 msgstr "Număr total"
 
@@ -86,45 +128,6 @@ msgstr "Dată factură"
 
 msgid "Depreciate"
 msgstr "Depreciat"
-
-msgid "Inventory"
-msgstr "Inventar"
-
-msgid "All Inventory Items"
-msgstr "Toate elementele Inventarului"
-
-msgid "All existing Inventory Items"
-msgstr "Toate elementele existente"
-
-msgid "Inventory Status Available"
-msgstr ""
-
-msgid "Possible status."
-msgstr "Status posibil."
-
-msgid "Ordered"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Defect"
-msgstr ""
-
-msgid "Missing"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Stored"
-msgstr ""
-
-msgid "Sold"
-msgstr ""
-
-msgid "Destroyed"
-msgstr ""
 
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -150,20 +153,17 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Tine 2.0 inventory CSV import"
+msgid "Default Inventory Item Container"
 msgstr ""
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgid "The default container for new items"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgid "All Inventory Items"
+msgstr "Toate elementele Inventarului"
 
-msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgid "All existing Inventory Items"
+msgstr "Toate elementele existente"
 
-msgid "Inventory CSV import"
-msgstr "Import Inventar CSV "
-
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgid "Inventory"
+msgstr "Inventar"

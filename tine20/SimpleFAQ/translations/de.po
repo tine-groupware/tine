@@ -34,33 +34,18 @@ msgstr "Intern"
 msgid "Public"
 msgstr "Öffentlich"
 
-msgid "All my FAQs"
-msgstr "Alle meine FAQs"
-
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Der Standart Favorit der beim öffnen der FAQ Listen  geladen wird"
-
-msgid "Default FAQ List"
-msgstr "Standard FAQ List"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "FAQ Typ"
 msgstr[1] "FAQ Typen"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ Status"
-msgstr[1] "FAQ Status"
-
-msgid "Add a new FAQ Status..."
-msgstr "Neuen FAQ Status hinzufügen"
+msgid "Defaults"
+msgstr "Standardeinstellungen"
 
 msgid "Question"
 msgstr "Frage"
@@ -80,31 +65,11 @@ msgstr "Typ"
 msgid "Status"
 msgstr "Status"
 
-msgid "Defaults"
-msgstr "Standardeinstellungen"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-msgid "Find Question"
-msgstr "Finde Frage"
-
-msgid "Search question"
-msgstr "Suche Frage"
-
-msgid "FAQ id"
-msgstr "FAQ Id"
+msgid "FAQ Infos"
+msgstr "FAQ  Infos"
 
 msgid "Tags"
 msgstr "Tags"
-
-msgid "Add a new FAQ Type..."
-msgstr "Neuen FAQ Typ hinzufügen"
-
-msgid "FAQ Infos"
-msgstr "FAQ  Infos"
 
 msgid "Creation Time"
 msgstr "Angelegt am"
@@ -115,8 +80,19 @@ msgstr "Angelegt von"
 msgid "No answer yet"
 msgstr "Noch keine Antwort vorhanden"
 
-msgid "Search FAQ"
-msgstr "FAQ durchsuchen"
+msgid "FAQ id"
+msgstr "FAQ Id"
+
+msgid "Add a new FAQ Status..."
+msgstr "Neuen FAQ Status hinzufügen"
+
+msgid "Add a new FAQ Type..."
+msgstr "Neuen FAQ Typ hinzufügen"
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -128,6 +104,30 @@ msgstr "FAQ Listen"
 
 msgid "Quick Search"
 msgstr "Schnellsuche"
+
+msgid "Search FAQ"
+msgstr "FAQ durchsuchen"
+
+msgid "Find Question"
+msgstr "Finde Frage"
+
+msgid "Search question"
+msgstr "Suche Frage"
+
+msgid "All my FAQs"
+msgstr "Alle meine FAQs"
+
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Der Standart Favorit der beim öffnen der FAQ Listen  geladen wird"
+
+msgid "Default FAQ List"
+msgstr "Standard FAQ List"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Alle FAQs meiner FAQ Listen"

@@ -9,961 +9,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Enri Mullai <enri_mullai@albnet.net>, 2013\n"
 "Language-Team: Albanian (http://app.transifex.com/tine/groupware/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr "Aktivizo Aplikacionin"
-
-msgid "Disable Application"
-msgstr "Ç'aktivizo Aplikacionin"
-
-msgid "Settings"
-msgstr "Konfigurime"
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "{0} Konfigurime"
-
-msgid "Search:"
-msgstr "Kërko:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Duke shfaqur aplikacionin  {0} - {1} nga {2}"
-
-msgid "No applications to display"
-msgstr "Nuk ka aplikacione për tu shfaqur"
-
-msgid "Order"
-msgstr "Renditje"
-
-msgid "Name"
-msgstr "Emri"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Version"
-msgstr "Versioni"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Konfirmo"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Doni vërtet të fshini grupet e zgjedhur?"
-
-msgid "Deleting group(s)..."
-msgstr "Duke fshirë grup(et)..."
-
-msgid "Add Group"
-msgstr "Shto Grup"
-
-msgid "Edit Group"
-msgstr "Modifiko Grupin"
-
-msgid "Delete Group"
-msgstr "Fshij Grupin"
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Duke shfaqur grupet {0} - {1} nga {2}"
-
-msgid "No groups to display"
-msgstr "Nuk ka grupe për tu shfaqur"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Përshkrimi"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Gabime"
-
-msgid "Please configure store for this field type"
-msgstr "Ju lutem konfiguroni vend-ruajtien për këtë tip fushe"
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Aplikacion"
-msgstr[1] "Apliakcione"
-
-msgid "Record Class"
-msgstr "Klasa regjistrimit"
-
-msgid "Given record class not found"
-msgstr "Klasa e dhëne e regjistrimit nuk u gjet"
-
-msgid "Cancel"
-msgstr "Anullo"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Configure store"
-msgstr "Konfiguro vend-ruajtien"
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "Shiko"
-
-msgid "Use"
-msgstr "Përdor"
-
-msgid "Model"
-msgstr "Modeli"
-
-msgid "Custom field definition"
-msgstr "Përcaktimi i fushës së personalizuar"
-
-msgid "Text"
-msgstr "Tekst"
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr "Numër"
-
-msgid "Date"
-msgstr "Datë"
-
-msgid "DateTime"
-msgstr "DatëKohë"
-
-msgid "Time"
-msgstr "Kohë"
-
-msgid "Boolean"
-msgstr "Boolean"
-
-msgid "Search Combo"
-msgstr "Kërkim Combo"
-
-msgid "Key Field"
-msgstr "Fusha e Çelësit"
-
-msgid "Record"
-msgstr "E dhënë"
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr "Tipi"
-
-msgid "Label"
-msgstr "EtiketV"
-
-msgid "Length"
-msgstr "Gjatësi"
-
-msgid "Required"
-msgstr "Kërkohet"
-
-msgid "Custom field additional properties"
-msgstr "Të dhëna shtesë për fushat e personalizuara"
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grup"
-msgstr[1] "Grupe"
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr "Fusha e personalizuar ekziston. Ju lutem zgjidhni një emër tjetër"
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Fushë e personalizuar"
-msgstr[1] "Fusha të personalizuara"
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Value"
-msgstr "Vlera"
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "Emri i Kompjuterit"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Blloku i paracaktuar i adresave për kontakte dhe grupe te rinj"
-
-msgid "Please wait"
-msgstr "Ju lutem prisni"
-
-msgid "Updating Tag"
-msgstr "Duke përditesuar etiketën"
-
-msgid "Failed"
-msgstr "Dështoi"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr "Ju lutem riparoni gabimet e shënuara"
-
-msgid "Allowed Contexts"
-msgstr "Kontekst i lejuar"
-
-msgid "Context"
-msgstr "Kontekst"
-
-msgid "Account Rights"
-msgstr "Të drejtat e llogarisë"
-
-msgid "Tag Name"
-msgstr "Emri i Etiketës"
-
-msgid "Color"
-msgstr "Ngjyrë"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Duke transferuar {0}... "
-
-msgid "Tag"
-msgstr "Etiketë"
-
-msgid "Add New Tag"
-msgstr "Shto një etiketë të re"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Modifiko Etiketen \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "Doni vërtet të fshini etiketat e zgjedhura"
-
-msgid "Deleting tag(s)..."
-msgstr "Duke fshirë etiketën(at)"
-
-msgid "Add Tag"
-msgstr "Shto Etiketë"
-
-msgid "Edit Tag"
-msgstr "Modifiko Etiketën"
-
-msgid "Delete Tag"
-msgstr "Fshij Etiketën"
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Duke shfaqur etiketat {0} - {1} nga {2}"
-
-msgid "No tags to display"
-msgstr "Nuk ka etiketa për tu shfaqur"
-
-msgid "Usage:&#160;"
-msgstr "Përdorimi:&#160;"
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "Duke përditësuar Anëtarësimet"
-
-msgid "Could not save role."
-msgstr "Roli nuk u ruajt dot"
-
-msgid "Deleting role..."
-msgstr "Duke fshir rolin..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "Ndodhën disa gabime ndërkohe që po fshihej roli"
-
-msgid "Rights"
-msgstr "Të drejta"
-
-msgid "Members"
-msgstr "Pjesëtarë"
-
-msgid "Role Name"
-msgstr "Emri i Rolit"
-
-msgid "Role"
-msgstr "Roli"
-
-msgid "Add New Role"
-msgstr "Shto një rol të ri"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Modifiko Rolin \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "Doni vërtetë të fshini rolet e zgjedhur?"
-
-msgid "Deleting role(s)..."
-msgstr "Duke fshirë rolin(et)"
-
-msgid "Add Role"
-msgstr "Shto Rol"
-
-msgid "Edit Role"
-msgstr "Modifiko Rolin"
-
-msgid "Delete Role"
-msgstr "Fshij Rolin"
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Duke shfaqur rolin {0} - {1} nga {2}"
-
-msgid "No roles to display"
-msgstr "Nuk ka role për tu shfaqur"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Ditari i hyrjeve"
-msgstr[1] "Ditarët e hyrjeve"
-
-msgid "Groups"
-msgstr "Grupe"
-
-msgid "Applications"
-msgstr "Aplikacione"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "Kuota"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Përdorues E-Poste"
-msgstr[1] "Perdorues E-Poste"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr "Madhësia aktuale e Kutisë së Postës"
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr "Madhësia aktuale e Sieve"
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domain nuk lejohet, Kontrolloni konfigurimet e domain-it SMTP"
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr "Fjalëkalimet nuk përkojne"
-
-msgid "Passwords match!"
-msgstr "Fjalëkalimet përkojne"
-
-msgid "Primary group"
-msgstr "Grupi primar"
-
-msgid "Unix"
-msgstr "Unix"
-
-msgid "Home Directory"
-msgstr "Skedari Kryesor"
-
-msgid "Login Shell"
-msgstr "Hapësira Hyrjes"
-
-msgid "Windows"
-msgstr "Windows"
-
-msgid "Home Drive"
-msgstr "Arkiva Kryesore"
-
-msgid "Login Time"
-msgstr "Koha e hyrjes"
-
-msgid "never logged in"
-msgstr "Nuk ka hyrë asnjëhere"
-
-msgid "Home Path"
-msgstr "Rruga kryesore"
-
-msgid "Logout Time"
-msgstr "Koha e daljes"
-
-msgid "never logged off"
-msgstr "Nuk ka dalë asnjëhere"
-
-msgid "Profile Path"
-msgstr "Rruga e profilit"
-
-msgid "Password Last Set"
-msgstr "Fjalëkalimi i funidit i vendosur më"
-
-msgid "never"
-msgstr "asnjëhere"
-
-msgid "Logon Script"
-msgstr "Shkrimi i hyrjes"
-
-msgid "Password Can Change"
-msgstr "Fjalëkalimi mund të ndryshojë"
-
-msgid "not set"
-msgstr "nuk është vendosur"
-
-msgid "Password Must Change"
-msgstr "Fjalëkalimi Duhet ndryshuar"
-
-msgid "Kick Off Time"
-msgstr "Koha e përjashtimit"
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr "nuk është vendosur kuotë"
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Informacion"
-
-msgid "Last Login"
-msgstr "Hyrja e Fundit"
-
-msgid "Forward Only"
-msgstr "Vetëm Ridrejtim"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr "Shtoni një pseudonim adrese..."
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr "Domain nuk lejohet"
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr "Ridrejtuar tek vetja"
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Konfirmim Fjalëkalimi"
-
-msgid "Repeat password"
-msgstr "Përsërisni Fjalëkalimin"
-
-msgid "Ok"
-msgstr "OK"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Llogari"
-
-msgid "First name"
-msgstr "Emri"
-
-msgid "Last name"
-msgstr "Mbiemri"
-
-msgid "Display name"
-msgstr "Emri i Shfaqur"
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr "Emrii Hyrjes"
-
-msgid "Password"
-msgstr "Fjalëkalimi"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "OpenID"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "aktivizuar"
-
-msgid "disabled"
-msgstr "ç'aktivizuar"
-
-msgid "expired"
-msgstr "skaduar"
-
-msgid "blocked"
-msgstr "bllokuar"
-
-msgid "Invalid Status"
-msgstr "Status i Gabuar"
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "Statusi i bllokuar është i vlefshëm vetëm nëse përdoruesi provoi të hynte shumë shpeshme fjalëkalim të gabuar. Nuk është e mundur të vendoset ky status këtu"
-
-msgid "Expires"
-msgstr "Skadon"
-
-msgid "Last login at"
-msgstr "Hyrja e fundit më"
-
-msgid "don't know"
-msgstr "nuk e di"
-
-msgid "Last login from"
-msgstr "Hyrja e fundit nga"
-
-msgid "Password set"
-msgstr "Fjalëkalimi u vendos"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr "Grupet e përdoruesëve"
-
-msgid "User roles"
-msgstr "Rolet e përdoruesëve"
-
-msgid "Fileserver"
-msgstr "Serveri Skedarëve"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Dukshmëria"
-
-msgid "Display in addressbook"
-msgstr "Shfaqni në bllokun e adresave"
-
-msgid "Hide from addressbook"
-msgstr "Fshihni nga blloku i adresave"
-
-msgid "Saved in Addressbook"
-msgstr "U ruajt në bllokun e adresave"
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Përdorues"
-msgstr[1] "Përdoruesa"
-
-msgid "Users"
-msgstr "Përdorues"
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Perdorues Samba"
-msgstr[1] "Perdorues Samba"
-
-msgid "Enable Account"
-msgstr "Aktivizoni Llogarinë"
-
-msgid "Disable Account"
-msgstr "Ç'aktivizoni Llogarinë"
-
-msgid "Reset Password"
-msgstr "Rivendosni Fjalëkalimin"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "Fjalëkalimi ndryshoi"
-
-msgid "Set new password"
-msgstr "Vendosni Fjalëkalimin e ri"
-
-msgid "Please enter the new password:"
-msgstr "Ju lutem fusni fjalëkalimin e ri"
-
-msgid "Group Name"
-msgstr "Emër Grupi"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Pjesëtarë  Grupi"
-
-msgid "personal"
-msgstr "personal"
-
-msgid "shared"
-msgstr "ndarë"
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr "Shënim për zoteruesin"
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Konteiner"
-msgstr[1] "Konteinerë"
-
-msgid "Container Name"
-msgstr "Emri i Konteinerit"
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Kompjuter"
-msgstr[1] "Kompjutera"
-
-msgid "Roles"
-msgstr "Role"
-
-msgid "Containers"
-msgstr "Konteinerë"
-
-msgid "Shared Tags"
-msgstr "Etiketa të ndara"
-
-msgid "Customfields"
-msgstr "Fusha‎ të personifikuara"
-
-msgid "Computers"
-msgstr "Kompjutera"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "Informacion i serverit"
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Admin"
-
-msgid "Refresh"
-msgstr "Rifresko"
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "Adresa IP"
-
-msgid "Client Type"
-msgstr "Tipi i Klientit"
-
-msgid "Session ID"
-msgstr "ID e seances"
-
-msgid "Login Name"
-msgstr "Emri i Hyrjes"
-
-msgid "Result"
-msgstr "Reziltati"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr "përdoruesi i bllokuar"
-
-msgid "password expired"
-msgstr "fjalëkalimi ka skaduar"
-
-msgid "user disabled"
-msgstr "përdoruesi i ç'aktivizuar"
-
-msgid "invalid password"
-msgstr "fjalëkalim jo i saktë"
-
-msgid "ambiguous username"
-msgstr "Emër përdoruesi jo i qartë"
-
-msgid "user not found"
-msgstr "përdouresi nuk u gjend"
-
-msgid "failure"
-msgstr "dështim"
-
-msgid "success"
-msgstr "sukses"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr "Konfigurimet e Paracaktuara IMAP të përdoruesit"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr "Konteineri Juaj është ndryshuar"
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Konteineri juaj është ndryshuar nga %1$s %2$sShenim: %3$s"
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1110,4 +163,951 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr "Konfigurimet e Paracaktuara IMAP të përdoruesit"
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr "Konteineri Juaj është ndryshuar"
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Konteineri juaj është ndryshuar nga %1$s %2$sShenim: %3$s"
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Ditari i hyrjeve"
+msgstr[1] "Ditarët e hyrjeve"
+
+msgid "IP Address"
+msgstr "Adresa IP"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Përdorues"
+msgstr[1] "Përdoruesa"
+
+msgid "Login Time"
+msgstr "Koha e hyrjes"
+
+msgid "Logout Time"
+msgstr "Koha e daljes"
+
+msgid "Client Type"
+msgstr "Tipi i Klientit"
+
+msgid "Session ID"
+msgstr "ID e seances"
+
+msgid "Login Name"
+msgstr "Emri i Hyrjes"
+
+msgid "Name"
+msgstr "Emri"
+
+msgid "Result"
+msgstr "Reziltati"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr "përdoruesi i bllokuar"
+
+msgid "password expired"
+msgstr "fjalëkalimi ka skaduar"
+
+msgid "user disabled"
+msgstr "përdoruesi i ç'aktivizuar"
+
+msgid "invalid password"
+msgstr "fjalëkalim jo i saktë"
+
+msgid "ambiguous username"
+msgstr "Emër përdoruesi jo i qartë"
+
+msgid "user not found"
+msgstr "përdouresi nuk u gjend"
+
+msgid "failure"
+msgstr "dështim"
+
+msgid "success"
+msgstr "sukses"
+
+msgid "Groups"
+msgstr "Grupe"
+
+msgid "Roles"
+msgstr "Role"
+
+msgid "Applications"
+msgstr "Aplikacione"
+
+msgid "Containers"
+msgstr "Konteinerë"
+
+msgid "Shared Tags"
+msgstr "Etiketa të ndara"
+
+msgid "Customfields"
+msgstr "Fusha‎ të personifikuara"
+
+msgid "Computers"
+msgstr "Kompjutera"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "Informacion i serverit"
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Refresh"
+msgstr "Rifresko"
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Blloku i paracaktuar i adresave për kontakte dhe grupe te rinj"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Aplikacion"
+msgstr[1] "Apliakcione"
+
+msgid "Enable Application"
+msgstr "Aktivizo Aplikacionin"
+
+msgid "Disable Application"
+msgstr "Ç'aktivizo Aplikacionin"
+
+msgid "Settings"
+msgstr "Konfigurime"
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Konfigurime"
+
+msgid "Search:"
+msgstr "Kërko:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Duke shfaqur aplikacionin  {0} - {1} nga {2}"
+
+msgid "No applications to display"
+msgstr "Nuk ka aplikacione për tu shfaqur"
+
+msgid "Order"
+msgstr "Renditje"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Version"
+msgstr "Versioni"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Description"
+msgstr "Përshkrimi"
+
+msgid "Label"
+msgstr "EtiketV"
+
+msgid "Value"
+msgstr "Vlera"
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Konteiner"
+msgstr[1] "Konteinerë"
+
+msgid "Model"
+msgstr "Modeli"
+
+msgid "Type"
+msgstr "Tipi"
+
+msgid "personal"
+msgstr "personal"
+
+msgid "shared"
+msgstr "ndarë"
+
+msgid "Color"
+msgstr "Ngjyrë"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr "Shënim për zoteruesin"
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Container Name"
+msgstr "Emri i Konteinerit"
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Fushë e personalizuar"
+msgstr[1] "Fusha të personalizuara"
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Gabime"
+
+msgid "Please configure store for this field type"
+msgstr "Ju lutem konfiguroni vend-ruajtien për këtë tip fushe"
+
+msgid "Record Class"
+msgstr "Klasa regjistrimit"
+
+msgid "Given record class not found"
+msgstr "Klasa e dhëne e regjistrimit nuk u gjet"
+
+msgid "Cancel"
+msgstr "Anullo"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Configure store"
+msgstr "Konfiguro vend-ruajtien"
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "Shiko"
+
+msgid "Use"
+msgstr "Përdor"
+
+msgid "Custom field definition"
+msgstr "Përcaktimi i fushës së personalizuar"
+
+msgid "Text"
+msgstr "Tekst"
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr "Numër"
+
+msgid "Date"
+msgstr "Datë"
+
+msgid "DateTime"
+msgstr "DatëKohë"
+
+msgid "Time"
+msgstr "Kohë"
+
+msgid "Boolean"
+msgstr "Boolean"
+
+msgid "Search Combo"
+msgstr "Kërkim Combo"
+
+msgid "Key Field"
+msgstr "Fusha e Çelësit"
+
+msgid "Record"
+msgstr "E dhënë"
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr "Gjatësi"
+
+msgid "Required"
+msgstr "Kërkohet"
+
+msgid "Custom field additional properties"
+msgstr "Të dhëna shtesë për fushat e personalizuara"
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grup"
+msgstr[1] "Grupe"
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr "Fusha e personalizuar ekziston. Ju lutem zgjidhni një emër tjetër"
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Emër Grupi"
+
+msgid "Visibility"
+msgstr "Dukshmëria"
+
+msgid "Display in addressbook"
+msgstr "Shfaqni në bllokun e adresave"
+
+msgid "Hide from addressbook"
+msgstr "Fshihni nga blloku i adresave"
+
+msgid "Saved in Addressbook"
+msgstr "U ruajt në bllokun e adresave"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Pjesëtarë  Grupi"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domain nuk lejohet, Kontrolloni konfigurimet e domain-it SMTP"
+
+msgid "Confirm"
+msgstr "Konfirmo"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Doni vërtet të fshini grupet e zgjedhur?"
+
+msgid "Deleting group(s)..."
+msgstr "Duke fshirë grup(et)..."
+
+msgid "Add Group"
+msgstr "Shto Grup"
+
+msgid "Edit Group"
+msgstr "Modifiko Grupin"
+
+msgid "Delete Group"
+msgstr "Fshij Grupin"
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Duke shfaqur grupet {0} - {1} nga {2}"
+
+msgid "No groups to display"
+msgstr "Nuk ka grupe për tu shfaqur"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "Kuota"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Përdorues E-Poste"
+msgstr[1] "Perdorues E-Poste"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr "Madhësia aktuale e Kutisë së Postës"
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr "Madhësia aktuale e Sieve"
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr "nuk është vendosur kuotë"
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Ju lutem prisni"
+
+msgid "Updating Memberships"
+msgstr "Duke përditësuar Anëtarësimet"
+
+msgid "Failed"
+msgstr "Dështoi"
+
+msgid "Could not save role."
+msgstr "Roli nuk u ruajt dot"
+
+msgid "Please fix the errors noted."
+msgstr "Ju lutem riparoni gabimet e shënuara"
+
+msgid "Deleting role..."
+msgstr "Duke fshir rolin..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "Ndodhën disa gabime ndërkohe që po fshihej roli"
+
+msgid "Rights"
+msgstr "Të drejta"
+
+msgid "Members"
+msgstr "Pjesëtarë"
+
+msgid "Role Name"
+msgstr "Emri i Rolit"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Duke transferuar {0}... "
+
+msgid "Role"
+msgstr "Roli"
+
+msgid "Add New Role"
+msgstr "Shto një rol të ri"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Modifiko Rolin \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "Doni vërtetë të fshini rolet e zgjedhur?"
+
+msgid "Deleting role(s)..."
+msgstr "Duke fshirë rolin(et)"
+
+msgid "Add Role"
+msgstr "Shto Rol"
+
+msgid "Edit Role"
+msgstr "Modifiko Rolin"
+
+msgid "Delete Role"
+msgstr "Fshij Rolin"
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Duke shfaqur rolin {0} - {1} nga {2}"
+
+msgid "No roles to display"
+msgstr "Nuk ka role për tu shfaqur"
+
+msgid "Computer Name"
+msgstr "Emri i Kompjuterit"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Kompjuter"
+msgstr[1] "Kompjutera"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "Duke përditesuar etiketën"
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr "Kontekst i lejuar"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "Account Rights"
+msgstr "Të drejtat e llogarisë"
+
+msgid "Tag Name"
+msgstr "Emri i Etiketës"
+
+msgid "Tag"
+msgstr "Etiketë"
+
+msgid "Add New Tag"
+msgstr "Shto një etiketë të re"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Modifiko Etiketen \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "Doni vërtet të fshini etiketat e zgjedhura"
+
+msgid "Deleting tag(s)..."
+msgstr "Duke fshirë etiketën(at)"
+
+msgid "Add Tag"
+msgstr "Shto Etiketë"
+
+msgid "Edit Tag"
+msgstr "Modifiko Etiketën"
+
+msgid "Delete Tag"
+msgstr "Fshij Etiketën"
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Duke shfaqur etiketat {0} - {1} nga {2}"
+
+msgid "No tags to display"
+msgstr "Nuk ka etiketa për tu shfaqur"
+
+msgid "Usage:&#160;"
+msgstr "Përdorimi:&#160;"
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr "Fjalëkalimet nuk përkojne"
+
+msgid "Passwords match!"
+msgstr "Fjalëkalimet përkojne"
+
+msgid "Primary group"
+msgstr "Grupi primar"
+
+msgid "Unix"
+msgstr "Unix"
+
+msgid "Home Directory"
+msgstr "Skedari Kryesor"
+
+msgid "Login Shell"
+msgstr "Hapësira Hyrjes"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "Home Drive"
+msgstr "Arkiva Kryesore"
+
+msgid "never logged in"
+msgstr "Nuk ka hyrë asnjëhere"
+
+msgid "Home Path"
+msgstr "Rruga kryesore"
+
+msgid "never logged off"
+msgstr "Nuk ka dalë asnjëhere"
+
+msgid "Profile Path"
+msgstr "Rruga e profilit"
+
+msgid "Password Last Set"
+msgstr "Fjalëkalimi i funidit i vendosur më"
+
+msgid "never"
+msgstr "asnjëhere"
+
+msgid "Logon Script"
+msgstr "Shkrimi i hyrjes"
+
+msgid "Password Can Change"
+msgstr "Fjalëkalimi mund të ndryshojë"
+
+msgid "not set"
+msgstr "nuk është vendosur"
+
+msgid "Password Must Change"
+msgstr "Fjalëkalimi Duhet ndryshuar"
+
+msgid "Kick Off Time"
+msgstr "Koha e përjashtimit"
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Informacion"
+
+msgid "Last Login"
+msgstr "Hyrja e Fundit"
+
+msgid "Forward Only"
+msgstr "Vetëm Ridrejtim"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr "Shtoni një pseudonim adrese..."
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr "Domain nuk lejohet"
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr "Ridrejtuar tek vetja"
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Konfirmim Fjalëkalimi"
+
+msgid "Repeat password"
+msgstr "Përsërisni Fjalëkalimin"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Llogari"
+
+msgid "First name"
+msgstr "Emri"
+
+msgid "Last name"
+msgstr "Mbiemri"
+
+msgid "Display name"
+msgstr "Emri i Shfaqur"
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr "Emrii Hyrjes"
+
+msgid "Password"
+msgstr "Fjalëkalimi"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "OpenID"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "aktivizuar"
+
+msgid "disabled"
+msgstr "ç'aktivizuar"
+
+msgid "expired"
+msgstr "skaduar"
+
+msgid "blocked"
+msgstr "bllokuar"
+
+msgid "Invalid Status"
+msgstr "Status i Gabuar"
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr "Statusi i bllokuar është i vlefshëm vetëm nëse përdoruesi provoi të hynte shumë shpeshme fjalëkalim të gabuar. Nuk është e mundur të vendoset ky status këtu"
+
+msgid "Expires"
+msgstr "Skadon"
+
+msgid "Last login at"
+msgstr "Hyrja e fundit më"
+
+msgid "don't know"
+msgstr "nuk e di"
+
+msgid "Last login from"
+msgstr "Hyrja e fundit nga"
+
+msgid "Password set"
+msgstr "Fjalëkalimi u vendos"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr "Grupet e përdoruesëve"
+
+msgid "User roles"
+msgstr "Rolet e përdoruesëve"
+
+msgid "Fileserver"
+msgstr "Serveri Skedarëve"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr "Aktivizoni Llogarinë"
+
+msgid "Disable Account"
+msgstr "Ç'aktivizoni Llogarinë"
+
+msgid "Reset Password"
+msgstr "Rivendosni Fjalëkalimin"
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "Fjalëkalimi ndryshoi"
+
+msgid "Set new password"
+msgstr "Vendosni Fjalëkalimin e ri"
+
+msgid "Please enter the new password:"
+msgstr "Ju lutem fusni fjalëkalimin e ri"
+
+msgid "Users"
+msgstr "Përdorues"
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Perdorues Samba"
+msgstr[1] "Perdorues Samba"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

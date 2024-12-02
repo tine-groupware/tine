@@ -19,234 +19,6 @@ msgstr ""
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr ""
 
-msgid "I have read the license agreement and accept it"
-msgstr ""
-
-msgid "License Agreement"
-msgstr ""
-
-msgid "I have read the privacy agreement and accept it"
-msgstr ""
-
-msgid "Privacy Agreement"
-msgstr ""
-
-msgid "Accept Terms and Conditions"
-msgstr ""
-
-msgid "Delete current Subscription"
-msgstr ""
-
-msgid "Your Subscription is not valid."
-msgstr ""
-
-msgid "Subscription Configuration"
-msgstr ""
-
-msgid "Upload from disk"
-msgstr ""
-
-msgid "Select file containing your Subscription key"
-msgstr ""
-
-msgid "No valid Subscription"
-msgstr ""
-
-msgid "Contract ID"
-msgstr ""
-
-msgid "Organization"
-msgstr ""
-
-msgid "Activation Key"
-msgstr ""
-
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-msgid "Valid from"
-msgstr ""
-
-msgid "Valid to"
-msgstr ""
-
-msgid "Subscription Information"
-msgstr ""
-
-msgid "Backend"
-msgstr ""
-
-msgid "Standard IMAP"
-msgstr ""
-
-msgid "Standard SMTP"
-msgstr ""
-
-msgid "Imap"
-msgstr ""
-
-msgid "Hostname"
-msgstr ""
-
-msgid "Username"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Port"
-msgstr ""
-
-msgid "Secure Connection"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
-msgid "TLS"
-msgstr ""
-
-msgid "SSL"
-msgstr ""
-
-msgid "Verify peer Certificate"
-msgstr ""
-
-msgid "Use system account"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "Append domain to login name"
-msgstr ""
-
-msgid "Use email address as login name"
-msgstr ""
-
-msgid "Cyrus Admin"
-msgstr ""
-
-msgid "Cyrus Admin Password"
-msgstr ""
-
-msgid "Use proxy auth"
-msgstr ""
-
-msgid "Smtp"
-msgstr ""
-
-msgid "Authentication"
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "Plain"
-msgstr ""
-
-msgid "Primary Domain"
-msgstr ""
-
-msgid "Secondary Domains (comma separated)"
-msgstr ""
-
-msgid "Aditional Domains (comma separated)"
-msgstr ""
-
-msgid "Notifications service address"
-msgstr ""
-
-msgid "Notification Username"
-msgstr ""
-
-msgid "Notification Password"
-msgstr ""
-
-msgid "Notifications local client (hostname or IP address)"
-msgstr ""
-
-msgid "SIEVE"
-msgstr ""
-
-msgid "MySql Hostname"
-msgstr ""
-
-msgid "MySql Database"
-msgstr ""
-
-msgid "MySql User"
-msgstr ""
-
-msgid "MySql Password"
-msgstr ""
-
-msgid "MySql Port"
-msgstr ""
-
-msgid "User or UID"
-msgstr ""
-
-msgid "Group or GID"
-msgstr ""
-
-msgid "Home Template"
-msgstr ""
-
-msgid "Password Scheme"
-msgstr ""
-
-msgid "PLAIN-MD5"
-msgstr ""
-
-msgid "MD5-CRYPT"
-msgstr ""
-
-msgid "SHA1"
-msgstr ""
-
-msgid "SHA256"
-msgstr ""
-
-msgid "SSHA256"
-msgstr ""
-
-msgid "SHA512"
-msgstr ""
-
-msgid "SSHA512"
-msgstr ""
-
-msgid "PLAIN"
-msgstr ""
-
-msgid "Terms and Conditions"
-msgstr ""
-
-msgid "Setup Checks"
-msgstr ""
-
-msgid "Config Manager"
-msgstr ""
-
-msgid "Authentication/Accounts"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Application Manager"
-msgstr ""
-
-msgid "Subscription"
-msgstr ""
-
-msgid "Setup"
-msgstr ""
-
 msgid "Name"
 msgstr ""
 
@@ -302,6 +74,9 @@ msgstr ""
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr ""
 
+msgid "Backend"
+msgstr ""
+
 msgid "TLS client certificate"
 msgstr ""
 
@@ -323,6 +98,12 @@ msgstr ""
 msgid "Try to split username"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
 msgid "Account canonical form"
 msgstr ""
 
@@ -338,16 +119,40 @@ msgstr ""
 msgid "Login name"
 msgstr ""
 
+msgid "Password"
+msgstr ""
+
 msgid "Bind requires DN"
 msgstr ""
 
 msgid "Start TLS"
 msgstr ""
 
+msgid "SSL"
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
 msgid "Base DN"
 msgstr ""
 
 msgid "Search filter"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid "Secure Connection"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "TLS"
+msgstr ""
+
+msgid "Append domain to login name"
 msgstr ""
 
 msgid "Certificate validation"
@@ -518,37 +323,13 @@ msgstr ""
 msgid "Should not be empty"
 msgstr ""
 
-msgid "Performing Environment Checks..."
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr ""
-
-msgid "Check"
-msgstr ""
-
-msgid "Result"
-msgstr ""
-
-msgid "Message"
-msgstr ""
-
-msgid "Run setup tests"
-msgstr ""
-
-msgid "Ignore setup tests"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "File"
 msgstr ""
 
 msgid "Setup Authentication"
+msgstr ""
+
+msgid "Username"
 msgstr ""
 
 msgid "Database"
@@ -616,4 +397,223 @@ msgstr ""
 
 #, python-brace-format
 msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgstr ""
+
+msgid "Standard IMAP"
+msgstr ""
+
+msgid "Standard SMTP"
+msgstr ""
+
+msgid "Imap"
+msgstr ""
+
+msgid "Verify peer Certificate"
+msgstr ""
+
+msgid "Use system account"
+msgstr ""
+
+msgid "Use email address as login name"
+msgstr ""
+
+msgid "Cyrus Admin"
+msgstr ""
+
+msgid "Cyrus Admin Password"
+msgstr ""
+
+msgid "Use proxy auth"
+msgstr ""
+
+msgid "Smtp"
+msgstr ""
+
+msgid "Authentication"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Plain"
+msgstr ""
+
+msgid "Primary Domain"
+msgstr ""
+
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+msgid "Aditional Domains (comma separated)"
+msgstr ""
+
+msgid "Notifications service address"
+msgstr ""
+
+msgid "Notification Username"
+msgstr ""
+
+msgid "Notification Password"
+msgstr ""
+
+msgid "Notifications local client (hostname or IP address)"
+msgstr ""
+
+msgid "SIEVE"
+msgstr ""
+
+msgid "MySql Hostname"
+msgstr ""
+
+msgid "MySql Database"
+msgstr ""
+
+msgid "MySql User"
+msgstr ""
+
+msgid "MySql Password"
+msgstr ""
+
+msgid "MySql Port"
+msgstr ""
+
+msgid "User or UID"
+msgstr ""
+
+msgid "Group or GID"
+msgstr ""
+
+msgid "Home Template"
+msgstr ""
+
+msgid "Password Scheme"
+msgstr ""
+
+msgid "PLAIN-MD5"
+msgstr ""
+
+msgid "MD5-CRYPT"
+msgstr ""
+
+msgid "SHA1"
+msgstr ""
+
+msgid "SHA256"
+msgstr ""
+
+msgid "SSHA256"
+msgstr ""
+
+msgid "SHA512"
+msgstr ""
+
+msgid "SSHA512"
+msgstr ""
+
+msgid "PLAIN"
+msgstr ""
+
+msgid "Performing Environment Checks..."
+msgstr ""
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr ""
+
+msgid "Check"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Run setup tests"
+msgstr ""
+
+msgid "Ignore setup tests"
+msgstr ""
+
+msgid "Setup"
+msgstr ""
+
+msgid "Delete current Subscription"
+msgstr ""
+
+msgid "Your Subscription is not valid."
+msgstr ""
+
+msgid "Subscription Configuration"
+msgstr ""
+
+msgid "Upload from disk"
+msgstr ""
+
+msgid "Select file containing your Subscription key"
+msgstr ""
+
+msgid "No valid Subscription"
+msgstr ""
+
+msgid "Contract ID"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Subscription Information"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "I have read the license agreement and accept it"
+msgstr ""
+
+msgid "License Agreement"
+msgstr ""
+
+msgid "I have read the privacy agreement and accept it"
+msgstr ""
+
+msgid "Privacy Agreement"
+msgstr ""
+
+msgid "Accept Terms and Conditions"
+msgstr ""
+
+msgid "Terms and Conditions"
+msgstr ""
+
+msgid "Setup Checks"
+msgstr ""
+
+msgid "Config Manager"
+msgstr ""
+
+msgid "Authentication/Accounts"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Application Manager"
+msgstr ""
+
+msgid "Subscription"
 msgstr ""
