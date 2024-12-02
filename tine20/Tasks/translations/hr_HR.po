@@ -9,192 +9,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: brankablag <brankablag@gmail.com>, 2012\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/tine/groupware/language/hr_HR/)\n"
+"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s osobni zadaci"
+msgid "manage shared task lists"
+msgstr "upravljanje dijeljenim listama zadataka"
 
-msgid "All my tasks"
-msgstr "Zadaci koje sam kreirao"
+msgid "Create new shared tasks lists"
+msgstr "Kreiraj nove dijeljene liste zadataka"
 
-msgid "Default Favorite"
-msgstr "Zadani favorit"
+msgid "manage shared tasks favorites"
+msgstr "upravljanje favoritima dijeljenih zadataka"
 
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Zadani favorit postavljen prilikom pokretanja Zadataka"
-
-msgid "Default Task List"
-msgstr "Zadana lista zadataka"
-
-msgid "The default task list to create new tasks in."
-msgstr "Zadana lista zadataka za kreiranje novih."
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New task get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the task ends"
-msgstr ""
-
-msgid "Task Title Template"
-msgstr ""
-
-msgid "How to build task titles."
-msgstr ""
-
-msgid "Filter: To be done for"
-msgstr ""
-
-msgid "Show all tasks matching all the following criteria:"
-msgstr ""
-
-msgid "Tasks has an open status."
-msgstr ""
-
-msgid "Filtered person is either:"
-msgstr ""
-
-msgid "Organizer and no coworker with open status is assigned."
-msgstr ""
-
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr ""
-
-msgid "Coworker with an open status assigned."
-msgstr ""
-
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr ""
-
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "Status"
-msgstr[1] "Statusa"
-msgstr[2] "Statusa"
-
-msgid "New Task"
-msgstr "Novi zadatak"
-
-msgid "Create from Template"
-msgstr ""
-
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Želite li obrisati odabrani zadatak?"
-msgstr[1] "Želite li obrisati odabrane zadatke?"
-msgstr[2] "Želite li obrisati odabrane zadatke?"
-
-msgid "Tags"
-msgstr "Oznake"
-
-msgid "Summary"
-msgstr "Sumarno"
-
-msgid "Add a task..."
-msgstr "Dodaj zadatak.."
-
-msgid "Due Date"
-msgstr "Rok izvršenja"
-
-msgid "Priority"
-msgstr "Prioritet"
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Percent"
-msgstr "Postotak"
-
-msgid "Completed"
-msgstr "Završeno"
-
-msgid "Organizer / Responsible"
-msgstr ""
-
-msgid "Responsible"
-msgstr "Zadužen"
-
-msgid "My open tasks"
-msgstr "Moji otvoreni zadaci"
-
-msgid "Use show all button bellow to search for all tasks"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Invalid selection"
-msgstr ""
-
-msgid "A task cannot depend on itself"
-msgstr ""
-
-msgid "Add New Task"
-msgstr ""
-
-msgid "This Task is part of:"
-msgstr ""
-
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Potrebno je navesti rok izvršenja radi postavljenog alarma."
-
-msgid "Due date"
-msgstr "Rok izvršenja"
-
-msgid "Add Responsible ..."
-msgstr "Dodaj zaduženog.."
-
-msgid "Notes"
-msgstr "Bilješke"
-
-msgid "Enter description..."
-msgstr "Unesite opis.."
-
-msgid "Percentage"
-msgstr "Postotak"
-
-msgid "Attention: This due date is in the past!"
-msgstr ""
-
-msgid "My responsibility"
-msgstr ""
-
-msgid "All tasks that I am responsible for"
-msgstr "Zadaci za koje sam zadužen"
-
-msgid "All tasks for me"
-msgstr "Zadaci za koje sam zadužen"
-
-msgid "To be done for me this week"
-msgstr ""
-
-msgid "Tasks"
-msgstr "Zadaci"
-
-msgid "All tasks of my taskslists"
-msgstr "Zadaci s moje liste"
-
-msgid "Last modified by me"
-msgstr "Zadaci koje sam zadnje izmijenio"
-
-msgid "All tasks that I have last modified"
-msgstr "Zadaci koje sam zadnji izmijenio"
-
-msgid "Tasks without responsible"
-msgstr "Zadaci bez zaduženog"
+msgid "Create or update shared tasks favorites"
+msgstr "Kreiraj ili ažuriraj favorite dijeljenih zadataka"
 
 msgid "Tasks status available"
 msgstr "Raspoloživi status zadataka"
@@ -204,6 +38,9 @@ msgstr ""
 
 msgid "No response"
 msgstr "Nema odgovora"
+
+msgid "Completed"
+msgstr "Završeno"
 
 msgid "Cancelled"
 msgstr "Prekinuto"
@@ -253,14 +90,132 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s osobni zadaci"
+
 msgid "Notification for Task %1$s"
 msgstr ""
 
-msgid "GENDER_Task Dependency"
+msgid "Excel all data"
 msgstr ""
 
-msgid "Task Dependency"
-msgid_plural "Task Dependencies"
+msgid "Create from Template"
+msgstr ""
+
+msgid "Use show all button bellow to search for all tasks"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Invalid selection"
+msgstr ""
+
+msgid "A task cannot depend on itself"
+msgstr ""
+
+msgid "Summary"
+msgstr "Sumarno"
+
+msgid "Add a task..."
+msgstr "Dodaj zadatak.."
+
+msgid "Due Date"
+msgstr "Rok izvršenja"
+
+msgid "Priority"
+msgstr "Prioritet"
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Percent"
+msgstr "Postotak"
+
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Status"
+msgstr[1] "Statusa"
+msgstr[2] "Statusa"
+
+msgid "Responsible"
+msgstr "Zadužen"
+
+msgid "My open tasks"
+msgstr "Moji otvoreni zadaci"
+
+msgid "Add New Task"
+msgstr ""
+
+msgid "This Task is part of:"
+msgstr ""
+
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Potrebno je navesti rok izvršenja radi postavljenog alarma."
+
+msgid "Due date"
+msgstr "Rok izvršenja"
+
+msgid "Organizer / Responsible"
+msgstr ""
+
+msgid "Add Responsible ..."
+msgstr "Dodaj zaduženog.."
+
+msgid "Notes"
+msgstr "Bilješke"
+
+msgid "Enter description..."
+msgstr "Unesite opis.."
+
+msgid "Percentage"
+msgstr "Postotak"
+
+msgid "Attention: This due date is in the past!"
+msgstr ""
+
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Želite li obrisati odabrani zadatak?"
+msgstr[1] "Želite li obrisati odabrane zadatke?"
+msgstr[2] "Želite li obrisati odabrane zadatke?"
+
+msgid "Tags"
+msgstr "Oznake"
+
+msgid "Filter: To be done for"
+msgstr ""
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr ""
+
+msgid "Tasks has an open status."
+msgstr ""
+
+msgid "Filtered person is either:"
+msgstr ""
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr ""
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr ""
+
+msgid "Coworker with an open status assigned."
+msgstr ""
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr ""
+
+msgid "New Task"
+msgstr "Novi zadatak"
+
+msgid "GENDER_Collaborator"
+msgstr ""
+
+msgid "Collaborator"
+msgid_plural "Collaborators"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -271,17 +226,17 @@ msgstr[0] "Zadatak"
 msgstr[1] "Zadatka"
 msgstr[2] "Zadataka"
 
-msgid "Depends on Task"
+msgid "GENDER_Task Dependency"
 msgstr ""
 
-msgid "GENDER_Collaborator"
-msgstr ""
-
-msgid "Collaborator"
-msgid_plural "Collaborators"
+msgid "Task Dependency"
+msgid_plural "Task Dependencies"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgid "Depends on Task"
+msgstr ""
 
 msgid "GENDER_Task"
 msgstr ""
@@ -328,17 +283,62 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "Email"
 
-msgid "Excel all data"
+msgid "All my tasks"
+msgstr "Zadaci koje sam kreirao"
+
+msgid "Default Favorite"
+msgstr "Zadani favorit"
+
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Zadani favorit postavljen prilikom pokretanja Zadataka"
+
+msgid "Default Task List"
+msgstr "Zadana lista zadataka"
+
+msgid "The default task list to create new tasks in."
+msgstr "Zadana lista zadataka za kreiranje novih."
+
+msgid "Enable Standard Alarm"
 msgstr ""
 
-msgid "manage shared task lists"
-msgstr "upravljanje dijeljenim listama zadataka"
+msgid "New task get a standard alarm as defined below"
+msgstr ""
 
-msgid "Create new shared tasks lists"
-msgstr "Kreiraj nove dijeljene liste zadataka"
+msgid "Standard Alarm Time"
+msgstr ""
 
-msgid "manage shared tasks favorites"
-msgstr "upravljanje favoritima dijeljenih zadataka"
+msgid "Minutes before the task ends"
+msgstr ""
 
-msgid "Create or update shared tasks favorites"
-msgstr "Kreiraj ili ažuriraj favorite dijeljenih zadataka"
+msgid "Task Title Template"
+msgstr ""
+
+msgid "How to build task titles."
+msgstr ""
+
+msgid "All tasks of my taskslists"
+msgstr "Zadaci s moje liste"
+
+msgid "My responsibility"
+msgstr ""
+
+msgid "All tasks that I am responsible for"
+msgstr "Zadaci za koje sam zadužen"
+
+msgid "All tasks for me"
+msgstr "Zadaci za koje sam zadužen"
+
+msgid "To be done for me this week"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr "Zadaci koje sam zadnje izmijenio"
+
+msgid "All tasks that I have last modified"
+msgstr "Zadaci koje sam zadnji izmijenio"
+
+msgid "Tasks without responsible"
+msgstr "Zadaci bez zaduženog"
+
+msgid "Tasks"
+msgstr "Zadaci"

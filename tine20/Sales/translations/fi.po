@@ -9,787 +9,85 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Tommi Turkia <sahkari@saunalahti.fi>, 2012\n"
 "Language-Team: Finnish (http://app.transifex.com/tine/groupware/language/fi/)\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "You do not have admin rights on Sales"
-msgstr "Sinulla ei ole ylläpitäjän oikeuksia myyntiin"
-
-msgid "Electronic Address Schema"
-msgid_plural "Electronic Address Schemas"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Divisions"
-msgstr ""
-
-msgid "Categories"
-msgstr ""
-
-msgid "Boilerplate"
-msgid_plural "Boilerplates"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "You have to set a customer!"
-msgstr ""
-
-msgid "Add New Offer"
-msgstr ""
-
-msgid "Number"
-msgstr "Numero"
-
-msgid "Title"
-msgstr "Otsikko"
-
-msgid "Customer"
-msgid_plural "Customers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Description"
-msgstr "Kuvaus"
-
-msgid "Enter description"
-msgstr ""
-
-msgid "Approver"
-msgstr ""
-
-msgid "without approver"
-msgstr ""
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Invoice"
-msgid_plural "Invoices"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Invoice Number"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Supplier"
-msgid_plural "Suppliers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Billing Address"
-msgstr ""
-
-msgid "Miscellaneous"
-msgstr ""
-
-msgid "Credit Term"
-msgstr ""
-
-msgid "Cleared"
-msgstr ""
-
-msgid "Price Net"
-msgstr ""
-
-msgid "Taxes (VAT)"
-msgstr ""
-
-msgid "Total Price"
-msgstr ""
-
-msgid "Add New Order Confirmation"
-msgstr ""
-
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Sopimus"
-msgstr[1] "Sopimukset"
-
-msgid "Offer"
-msgid_plural "Offers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Clipboard"
-msgstr ""
-
-msgid "Copy address to the clipboard"
-msgstr ""
-
-msgid "Select supplier"
-msgstr ""
-
-msgid "Core Data"
-msgstr ""
-
-msgid "Supplier Number"
-msgstr ""
-
-msgid "Name"
-msgstr "Nimi"
-
-msgid "Web"
-msgstr ""
-
-msgid "Contact Person (external)"
-msgstr ""
-
-msgid "Contact Person (internal)"
-msgstr ""
-
-msgid "Accounting"
-msgstr ""
-
-msgid "IBAN"
-msgstr ""
-
-msgid "BIC"
-msgstr ""
-
-msgid "VAT ID"
-msgstr ""
-
-msgid "Currency"
-msgstr ""
-
-msgid "Currency Translation Rate"
-msgstr ""
-
-msgid "Either postalcode or postbox is required!"
-msgstr ""
-
-msgid "Copy Supplier"
-msgstr ""
-
-msgid "Add New Supplier"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Supplier \"{0}\""
-msgstr ""
-
-msgid "Credit Term (days)"
-msgstr ""
-
-msgid "Postal Address"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Street"
-msgstr ""
-
-msgid "Postbox"
-msgstr ""
-
-msgid "Postalcode"
-msgstr ""
-
-msgid "Locality"
-msgstr ""
-
-msgid "Region"
-msgstr ""
-
-msgid "Country"
-msgstr ""
-
-msgid "Prefix"
-msgstr ""
-
-msgid "Additional Prefix"
-msgstr ""
-
-msgid "Cancel"
-msgstr "Peruuta"
-
-msgid "Ok"
-msgstr ""
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr ""
-
-msgid "Price Gross"
-msgstr ""
-
-msgid "Export Records from these Positions"
-msgstr ""
-
-msgid "Select customer"
-msgstr ""
-
-msgid "Customer Number"
-msgstr ""
-
-msgid "Order Confirmation"
-msgid_plural "Order Confirmations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "without order confirmation"
-msgstr ""
-
-msgid "Bill Contract"
-msgstr ""
-
-msgid "Billing Contract..."
-msgstr ""
-
-#, python-brace-format
-msgid "Bill Contract \"{0} - {1}\""
-msgstr ""
-
-msgid "Select the date to generate the bill for"
-msgstr ""
-
-msgid "Set as accountable"
-msgstr ""
-
-msgid "Choose product for accountable"
-msgstr ""
-
-msgid "Please use a decimal number here!"
-msgstr "Käytä desimaalinumeroita tässä!."
-
-msgid "Positions"
-msgstr ""
-
-msgid "Start Date"
-msgstr ""
-
-msgid "End Date"
-msgstr ""
-
-msgid "Enter description..."
-msgstr "Lisää kuvaus..."
-
-msgid "Show closed"
-msgstr ""
-
-msgid "Confirm Status Change"
-msgstr ""
-
-msgid "Changing this workflow status might not be revertible. Proceed anyway?"
-msgstr ""
-
-msgid "Change Document Date?"
-msgstr ""
-
-msgid "Change document date from { date } to today?"
-msgstr ""
-
-msgid "Service Start Extended"
-msgstr ""
-
-msgid "The service period of the invoice has been extended so that it now includes the service periods of all items."
-msgstr ""
-
-msgid "No Matching Debitor"
-msgstr ""
-
-#, python-brace-format
-msgid "The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category."
-msgstr ""
-
-#, python-brace-format
-msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>."
-msgstr ""
-
-msgid "Please wait..."
-msgstr ""
-
-msgid "Set { recordName } dispatched"
-msgstr ""
-
-msgid "Dispatch Document"
-msgstr ""
-
-msgid "Generated when dispatched"
-msgstr ""
-
-msgid "Paperslip ({ filename })"
-msgstr ""
-
-msgid "eDocument ({ filename })"
-msgstr ""
-
-msgid "Please Select Files to Dispatch"
-msgstr ""
-
-msgid "Please select the files which should be dispatched."
-msgstr ""
-
-msgid "Manual Dispatch"
-msgstr ""
-
-msgid "Dispatch documents where created, please download and dispatch manually."
-msgstr ""
-
-msgid "There where Errors:"
-msgstr ""
-
-msgid "Show Dispatch History"
-msgstr ""
-
-msgid "Include to Dispatch Document"
-msgstr ""
-
-msgid "Exclude from Dispatch Document"
-msgstr ""
-
-msgid "More Boilerplates"
-msgstr ""
-
-msgid "Choose Boilerplate"
-msgstr ""
-
-msgid "Please choose which boilerplate you want to use as { name }"
-msgstr ""
-
-msgid "Existing:"
-msgstr ""
-
-msgid "Applicable:"
-msgstr ""
-
-msgid "Send as Email to Datev"
-msgstr ""
-
-msgid "Confirm"
-msgstr ""
-
-msgid "Datev email has been sent before , continue anyway?"
-msgstr ""
-
-msgid "Track Document"
-msgstr ""
-
-msgid "Paper Slip"
-msgstr ""
-
-msgid "eDocument"
-msgstr ""
-
-msgid "Creating { recordName } { typeName }"
-msgstr ""
-
-msgid "Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }"
-msgstr ""
-
-msgid "Print Paper Slip"
-msgstr ""
-
-msgid "Send by E-Mail"
-msgstr ""
-
-msgid "Book Document"
-msgstr ""
-
-msgid "Please select the { sourceRecordsName } where you want to change the document date to today."
-msgstr ""
-
-msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"
-msgstr ""
-
-msgid "Trac Document { title }"
-msgstr ""
-
-msgid "Expand Positions"
-msgstr ""
-
-msgid "Reversal"
-msgstr ""
-
-msgid "Reversals"
-msgstr ""
-
-msgid "Create { targetRecordName }"
-msgstr ""
-
-msgid "Creating { targetRecordsName }"
-msgstr ""
-
-msgid "Create new { targetRecordName }?"
-msgstr ""
-
-msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
-msgstr ""
-
-msgid "Book unbooked { sourceRecordsName }"
-msgstr ""
-
-msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?"
-msgstr ""
-
-msgid "Nothing to do"
-msgstr ""
-
-msgid "{ document } has no open positions left."
-msgstr ""
-
-msgid "Choose { sourceRecordsName }"
-msgstr ""
-
-msgid "Please choose which { sourceRecordsName } should be included in shared { targetRecordName }"
-msgstr ""
-
-msgid "Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }"
-msgstr ""
-
-msgid "Documents Created:"
-msgstr ""
-
-msgid "without customer"
-msgstr ""
-
-msgid "without contract"
-msgstr ""
-
-msgid "Copy Customer"
-msgstr ""
-
-msgid "Add New Customer"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Customer \"{0}\""
-msgstr ""
-
-msgid "Discount (%)"
-msgstr ""
-
-msgid "Debitors"
-msgstr ""
-
-msgid "Name shorthand"
-msgstr ""
-
-msgid "Language"
-msgstr ""
-
-msgid "Prefix 1"
-msgstr ""
-
-msgid "Prefix 2"
-msgstr ""
-
-msgid "Prefix 3"
-msgstr ""
-
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Tuote"
-msgstr[1] "Tuotteet"
-
-msgid "Quantity"
-msgstr ""
-
-msgid "Interval"
-msgstr ""
-
-msgid "Billing Point"
-msgstr ""
-
-msgid "begin"
-msgstr ""
-
-msgid "end"
-msgstr ""
-
-msgid "Attributes"
-msgstr ""
-
-msgid "Last Autobill"
-msgstr ""
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Edit Attributes"
-msgstr ""
-
-msgid "Attribute"
-msgstr ""
-
-msgid "Value"
-msgstr ""
-
-msgid "Add a New Value..."
-msgstr ""
-
-msgid "OK"
-msgstr "Ok"
-
-msgid "Apply postal address"
-msgstr ""
-
-msgid "Number Debit"
-msgstr ""
-
-msgid "Address"
-msgid_plural "Addresss"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Copy Purchase Invoice"
-msgstr ""
-
-msgid "Add New Purchase Invoice"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Purchase Invoice \"{0}\""
-msgstr ""
-
-msgid "Date of invoice"
-msgstr ""
-
-msgid "Due in"
-msgstr ""
-
-msgid "Due date"
-msgstr ""
-
-msgid "Additional Price Gross"
-msgstr ""
-
-msgid "Sales Tax (percent)"
-msgstr ""
-
-msgid "Purchase Invoice"
-msgid_plural "Purchase Invoices"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "automatically set..."
-msgstr ""
-
-msgid "Overdue date"
-msgstr ""
-
-msgid "Discount until"
-msgstr ""
-
-msgid "Dun date"
-msgstr ""
-
-msgid "Payed at"
-msgstr ""
-
-msgid "Method of payment"
-msgstr ""
-
-msgid "without supplier"
-msgstr ""
-
-msgid "Select Debitor"
-msgstr ""
-
-msgid "Please select debitor"
-msgstr ""
-
-msgid "Products"
-msgstr ""
-
-msgid "Accountable"
-msgstr ""
-
-msgid "Category"
-msgid_plural "Categories"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Generic"
-msgstr ""
-
-msgid "Price"
-msgstr ""
-
-msgid "Discount"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid "Create Reversal Invoice"
-msgstr ""
-
-msgid "Copy Invoice"
-msgstr ""
-
-msgid "Add New Invoice"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Invoice \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "Positions ({0})"
-msgstr ""
-
-msgid "No customer assigned"
-msgstr ""
-
-msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
-msgstr ""
-
-msgid "No cost center assigned"
-msgstr ""
-
-msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
-msgstr ""
-
-msgid "Inventory Change"
-msgstr ""
-
-msgid "Interval Begins"
-msgstr ""
-
-msgid "Interval Ends"
-msgstr ""
-
-msgid "Rebilling Invoice..."
-msgstr ""
-
-msgid "Rebill Invoice"
-msgstr ""
-
-msgid "Merge Invoices"
-msgstr ""
-
-msgid "Arial"
-msgstr ""
-
-msgid "Active Contracts"
-msgstr ""
-
-msgid "Contracts that are still running"
-msgstr ""
-
-msgid "My Products"
-msgstr "Omat tuotteet"
-
-msgid "Products created by me"
-msgstr ""
-
-msgid "My Contracts"
-msgstr "Omat sopimukset"
-
-msgid "Contracts created by myself"
-msgstr "Omat sopimukseni"
-
-msgid "All Customers"
-msgstr ""
-
-msgid "All customer records"
-msgstr ""
-
-msgid "All Offers"
-msgstr ""
-
-msgid "All offer records"
-msgstr ""
-
-msgid "Limit to Sales Divisions"
-msgstr ""
-
-msgid "Inactive Contracts"
-msgstr ""
-
-msgid "Contracts that have already been terminated"
+msgid "Manage Products"
 msgstr ""
 
-msgid "All Suppliers"
+msgid "Add, edit and delete products."
 msgstr ""
 
-msgid "All supplier records"
+msgid "Manage Contracts"
 msgstr ""
 
-msgid "All Purchase Imvoices"
+msgid "Add, edit and delete contracts."
 msgstr ""
 
-msgid "All purchase invoices"
+msgid "Manage Cost Centers"
 msgstr ""
 
-msgid "All Products"
+msgid "Add, edit and delete cost centers."
 msgstr ""
 
-msgid "All product records"
+msgid "Manage Customers"
 msgstr ""
 
-msgid "All Contracts"
+msgid "Add, edit and delete customers."
 msgstr ""
 
-msgid "All contract records"
+msgid "Manage Suppliers"
 msgstr ""
 
-msgid "All Invoices"
+msgid "Add, edit and delete suppliers."
 msgstr ""
 
-msgid "All invoice records"
+msgid "manage invoices"
 msgstr ""
 
-msgid "All Order Confirmations"
+msgid "Add, edit and delete invoices."
 msgstr ""
 
-msgid "All order confirmation records"
+msgid "Manage Order Confirmations"
 msgstr ""
 
-msgid "Default Division"
+msgid "Add, edit and delete order confirmations."
 msgstr ""
 
-msgid "Fill with name"
+msgid "Manage Offers"
 msgstr ""
 
-msgid "Fill with address"
+msgid "Add, edit and delete offers."
 msgstr ""
 
-msgid "Fill with postal"
+msgid "Manage Purchase Invoices"
 msgstr ""
 
-msgid "Fill with locality"
+msgid "Add, edit and delete purchase invoices."
 msgstr ""
 
-msgid "Fill with country"
+msgid "Change number of an order confirmations"
 msgstr ""
 
-msgid "Fill with contact name"
+msgid "Allow changing the number of an order confirmation during the update."
 msgstr ""
 
-msgid "Fill with contact email"
+msgid "Set number of invoices"
 msgstr ""
 
-msgid "Fill with contact phone"
+msgid "Allow to set the number of an invoice."
 msgstr ""
 
-msgid "Fill with vat number"
+msgid "Manage Divisions"
 msgstr ""
 
-msgid "Standard"
+msgid "Add, edit and delete divisions"
 msgstr ""
 
 msgid "Auto Invoice Contract Interval"
@@ -951,6 +249,9 @@ msgstr "Sopimusnumeron vahvistaminen"
 msgid "The Number can be validated as text or number."
 msgstr "Numero voi olla tekstiä tai numeroita"
 
+msgid "Number"
+msgstr "Numero"
+
 msgid "Text"
 msgstr "Teksti"
 
@@ -970,6 +271,14 @@ msgid "Invoice Type"
 msgstr ""
 
 msgid "Possible Invoice Types."
+msgstr ""
+
+msgid "Invoice"
+msgid_plural "Invoices"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Reversal"
 msgstr ""
 
 msgid "Credit"
@@ -998,6 +307,11 @@ msgstr ""
 
 msgid "Document Position Type"
 msgstr ""
+
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Tuote"
+msgstr[1] "Tuotteet"
 
 msgid "Heading"
 msgstr ""
@@ -1143,6 +457,9 @@ msgstr ""
 msgid "Enabled Features in Sales Application."
 msgstr ""
 
+msgid "Default Division"
+msgstr ""
+
 msgid "Default Payment Terms"
 msgstr ""
 
@@ -1173,27 +490,817 @@ msgstr ""
 msgid "Legacy (non-document) Offers)"
 msgstr ""
 
-msgid "The number you have tried to set is already in use!"
-msgstr "Numero jota koitit lisätä on jo käytössä"
-
 msgid "Name needs to be unique."
 msgstr ""
 
 msgid "Dates \""
 msgstr ""
 
-msgid "GENDER_Order Confirmation"
-msgstr ""
+msgid "The number you have tried to set is already in use!"
+msgstr "Numero jota koitit lisätä on jo käytössä"
 
-msgid "Invoice Position"
-msgid_plural "Invoice Positions"
+msgid "You do not have admin rights on Sales"
+msgstr "Sinulla ei ole ylläpitäjän oikeuksia myyntiin"
+
+msgid "Electronic Address Schema"
+msgid_plural "Electronic Address Schemas"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Month"
+msgid "Divisions"
 msgstr ""
 
-msgid "Unit"
+msgid "Categories"
+msgstr ""
+
+msgid "Boilerplate"
+msgid_plural "Boilerplates"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No Right to alter the Number"
+msgstr ""
+
+msgid "You are not allowed to alter the number afterwards!"
+msgstr ""
+
+msgid "Following Invoices Found"
+msgstr ""
+
+msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
+msgstr ""
+
+msgid "Address as Billing Address in Use"
+msgstr ""
+
+msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
+msgstr ""
+
+msgid "Number duplicate"
+msgstr ""
+
+msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
+msgstr ""
+
+msgid "Invoice is cleared already"
+msgstr ""
+
+msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
+msgstr ""
+
+msgid "Unknown Currency Code"
+msgstr ""
+
+msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Invoice Timesheet"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "CLEARED"
+msgstr ""
+
+msgid "INVOICE"
+msgstr ""
+
+msgid "You have to set a customer!"
+msgstr ""
+
+msgid "Name shorthand"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Apply postal address"
+msgstr ""
+
+msgid "Street"
+msgstr ""
+
+msgid "Postbox"
+msgstr ""
+
+msgid "Postalcode"
+msgstr ""
+
+msgid "Locality"
+msgstr ""
+
+msgid "Region"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Number Debit"
+msgstr ""
+
+msgid "Address"
+msgid_plural "Addresss"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Select Debitor"
+msgstr ""
+
+msgid "Please select debitor"
+msgstr ""
+
+msgid "Cancel"
+msgstr "Peruuta"
+
+msgid "Ok"
+msgstr ""
+
+msgid "Set as accountable"
+msgstr ""
+
+msgid "Choose product for accountable"
+msgstr ""
+
+msgid "Please use a decimal number here!"
+msgstr "Käytä desimaalinumeroita tässä!."
+
+msgid "Positions"
+msgstr ""
+
+msgid "Title"
+msgstr "Otsikko"
+
+msgid "Customer"
+msgid_plural "Customers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Billing Address"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "End Date"
+msgstr ""
+
+msgid "Contact Person (external)"
+msgstr ""
+
+msgid "Contact Person (internal)"
+msgstr ""
+
+msgid "Description"
+msgstr "Kuvaus"
+
+msgid "Enter description..."
+msgstr "Lisää kuvaus..."
+
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Sopimus"
+msgstr[1] "Sopimukset"
+
+msgid "without contract"
+msgstr ""
+
+msgid "Bill Contract"
+msgstr ""
+
+msgid "Billing Contract..."
+msgstr ""
+
+#, python-brace-format
+msgid "Bill Contract \"{0} - {1}\""
+msgstr ""
+
+msgid "Select the date to generate the bill for"
+msgstr ""
+
+msgid "Products"
+msgstr ""
+
+msgid "without customer"
+msgstr ""
+
+msgid "Show closed"
+msgstr ""
+
+msgid "Select customer"
+msgstr ""
+
+msgid "Core Data"
+msgstr ""
+
+msgid "Customer Number"
+msgstr ""
+
+msgid "Name"
+msgstr "Nimi"
+
+msgid "Web"
+msgstr ""
+
+msgid "Accounting"
+msgstr ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "VAT ID"
+msgstr ""
+
+msgid "Currency"
+msgstr ""
+
+msgid "Currency Translation Rate"
+msgstr ""
+
+msgid "Copy Customer"
+msgstr ""
+
+msgid "Add New Customer"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Customer \"{0}\""
+msgstr ""
+
+msgid "Copy address to the clipboard"
+msgstr ""
+
+msgid "Discount (%)"
+msgstr ""
+
+msgid "Credit Term (days)"
+msgstr ""
+
+msgid "Debitors"
+msgstr ""
+
+msgid "Postal Address"
+msgstr ""
+
+msgid "Prefix 1"
+msgstr ""
+
+msgid "Prefix 2"
+msgstr ""
+
+msgid "Prefix 3"
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Please wait..."
+msgstr ""
+
+msgid "Confirm Status Change"
+msgstr ""
+
+msgid "Changing this workflow status might not be revertible. Proceed anyway?"
+msgstr ""
+
+msgid "Change Document Date?"
+msgstr ""
+
+msgid "Change document date from { date } to today?"
+msgstr ""
+
+msgid "Service Start Extended"
+msgstr ""
+
+msgid "The service period of the invoice has been extended so that it now includes the service periods of all items."
+msgstr ""
+
+msgid "No Matching Debitor"
+msgstr ""
+
+#, python-brace-format
+msgid "The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category."
+msgstr ""
+
+#, python-brace-format
+msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>."
+msgstr ""
+
+msgid "Include to Dispatch Document"
+msgstr ""
+
+msgid "Exclude from Dispatch Document"
+msgstr ""
+
+msgid "Show Dispatch History"
+msgstr ""
+
+msgid "More Boilerplates"
+msgstr ""
+
+msgid "Choose Boilerplate"
+msgstr ""
+
+msgid "Please choose which boilerplate you want to use as { name }"
+msgstr ""
+
+msgid "Existing:"
+msgstr ""
+
+msgid "Applicable:"
+msgstr ""
+
+msgid "Book Document"
+msgstr ""
+
+msgid "Please select the { sourceRecordsName } where you want to change the document date to today."
+msgstr ""
+
+msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"
+msgstr ""
+
+msgid "There where Errors:"
+msgstr ""
+
+msgid "Reversals"
+msgstr ""
+
+msgid "Create { targetRecordName }"
+msgstr ""
+
+msgid "Creating { targetRecordsName }"
+msgstr ""
+
+msgid "Create new { targetRecordName }?"
+msgstr ""
+
+msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
+msgstr ""
+
+msgid "Book unbooked { sourceRecordsName }"
+msgstr ""
+
+msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?"
+msgstr ""
+
+msgid "Nothing to do"
+msgstr ""
+
+msgid "{ document } has no open positions left."
+msgstr ""
+
+msgid "Choose { sourceRecordsName }"
+msgstr ""
+
+msgid "Please choose which { sourceRecordsName } should be included in shared { targetRecordName }"
+msgstr ""
+
+msgid "Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }"
+msgstr ""
+
+msgid "Documents Created:"
+msgstr ""
+
+msgid "Paper Slip"
+msgstr ""
+
+msgid "eDocument"
+msgstr ""
+
+msgid "Creating { recordName } { typeName }"
+msgstr ""
+
+msgid "Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }"
+msgstr ""
+
+msgid "Print Paper Slip"
+msgstr ""
+
+msgid "Send by E-Mail"
+msgstr ""
+
+msgid "Set { recordName } dispatched"
+msgstr ""
+
+msgid "Dispatch Document"
+msgstr ""
+
+msgid "Generated when dispatched"
+msgstr ""
+
+msgid "Paperslip ({ filename })"
+msgstr ""
+
+msgid "eDocument ({ filename })"
+msgstr ""
+
+msgid "Please Select Files to Dispatch"
+msgstr ""
+
+msgid "Please select the files which should be dispatched."
+msgstr ""
+
+msgid "Manual Dispatch"
+msgstr ""
+
+msgid "Dispatch documents where created, please download and dispatch manually."
+msgstr ""
+
+msgid "Generic"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Discount"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Category"
+msgid_plural "Categories"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Send as Email to Datev"
+msgstr ""
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Datev email has been sent before , continue anyway?"
+msgstr ""
+
+msgid "Track Document"
+msgstr ""
+
+msgid "Trac Document { title }"
+msgstr ""
+
+msgid "Expand Positions"
+msgstr ""
+
+msgid "Invoice Number"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Credit Term"
+msgstr ""
+
+msgid "Cleared"
+msgstr ""
+
+msgid "Price Net"
+msgstr ""
+
+msgid "Taxes (VAT)"
+msgstr ""
+
+msgid "Price Gross"
+msgstr ""
+
+msgid "Create Reversal Invoice"
+msgstr ""
+
+msgid "Copy Invoice"
+msgstr ""
+
+msgid "Add New Invoice"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Invoice \"{0}\""
+msgstr ""
+
+#, python-brace-format
+msgid "Positions ({0})"
+msgstr ""
+
+msgid "No customer assigned"
+msgstr ""
+
+msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
+msgstr ""
+
+msgid "No cost center assigned"
+msgstr ""
+
+msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
+msgstr ""
+
+msgid "Sales Tax (percent)"
+msgstr ""
+
+msgid "Inventory Change"
+msgstr ""
+
+msgid "automatically set..."
+msgstr ""
+
+msgid "Interval Begins"
+msgstr ""
+
+msgid "Interval Ends"
+msgstr ""
+
+msgid "Rebilling Invoice..."
+msgstr ""
+
+msgid "Rebill Invoice"
+msgstr ""
+
+msgid "Merge Invoices"
+msgstr ""
+
+msgid "Export Records from these Positions"
+msgstr ""
+
+msgid "Add New Offer"
+msgstr ""
+
+msgid "Add New Order Confirmation"
+msgstr ""
+
+msgid "Offer"
+msgid_plural "Offers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Order Confirmation"
+msgid_plural "Order Confirmations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "without order confirmation"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Billing Point"
+msgstr ""
+
+msgid "begin"
+msgstr ""
+
+msgid "end"
+msgstr ""
+
+msgid "Attributes"
+msgstr ""
+
+msgid "Last Autobill"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "Edit Attributes"
+msgstr ""
+
+msgid "Attribute"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Add a New Value..."
+msgstr ""
+
+msgid "OK"
+msgstr "Ok"
+
+#, python-brace-format
+msgid "Selected  {0}"
+msgstr ""
+
+msgid "Accountable"
+msgstr ""
+
+msgid "Approver"
+msgstr ""
+
+msgid "without approver"
+msgstr ""
+
+msgid "Supplier"
+msgid_plural "Suppliers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Total Price"
+msgstr ""
+
+msgid "Copy Purchase Invoice"
+msgstr ""
+
+msgid "Add New Purchase Invoice"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Purchase Invoice \"{0}\""
+msgstr ""
+
+msgid "Date of invoice"
+msgstr ""
+
+msgid "Due in"
+msgstr ""
+
+msgid "Due date"
+msgstr ""
+
+msgid "Additional Price Gross"
+msgstr ""
+
+msgid "Purchase Invoice"
+msgid_plural "Purchase Invoices"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Overdue date"
+msgstr ""
+
+msgid "Discount until"
+msgstr ""
+
+msgid "Dun date"
+msgstr ""
+
+msgid "Payed at"
+msgstr ""
+
+msgid "Method of payment"
+msgstr ""
+
+msgid "Clipboard"
+msgstr ""
+
+msgid "Select supplier"
+msgstr ""
+
+msgid "Supplier Number"
+msgstr ""
+
+msgid "Either postalcode or postbox is required!"
+msgstr ""
+
+msgid "Copy Supplier"
+msgstr ""
+
+msgid "Add New Supplier"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Supplier \"{0}\""
+msgstr ""
+
+msgid "Prefix"
+msgstr ""
+
+msgid "Additional Prefix"
+msgstr ""
+
+msgid "without supplier"
+msgstr ""
+
+msgid "GENDER_Address"
+msgstr ""
+
+msgid "Debitor Number"
+msgstr ""
+
+msgid "Customer Name"
+msgstr ""
+
+msgid "Company / Organisation (Prefix 1)"
+msgstr ""
+
+msgid "Unit (Prefix 2)"
+msgstr ""
+
+msgid "Recipient Name (Prefix 3)"
+msgstr ""
+
+msgid "Invoice Item"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "Until"
+msgstr ""
+
+msgid "GENDER_Contract"
+msgstr ""
+
+msgid "Responsible"
+msgstr ""
+
+msgid "Partner"
+msgstr ""
+
+msgid "Time Account"
+msgstr ""
+
+msgid "GENDER_Customer"
+msgstr ""
+
+msgid "Has Offers"
+msgstr ""
+
+msgid "Has Orders"
+msgstr ""
+
+msgid "Has Invoices"
+msgstr ""
+
+msgid "Has Deliveries"
+msgstr ""
+
+msgid "VAT Procedure"
+msgstr ""
+
+msgid "GENDER_Debitor"
+msgstr ""
+
+msgid "Debitor"
+msgid_plural "Debitors"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Division"
+msgid_plural "Divisions"
+msgstr[0] "Osasto"
+msgstr[1] "Osastot"
+
+msgid "Delivery Addresses"
+msgstr ""
+
+msgid "Billing Addresses"
+msgstr ""
+
+msgid "Buyer Reference"
+msgstr ""
+
+msgid "Electronic Invoice Type"
+msgstr ""
+
+msgid "Electronic Invoice Config"
+msgstr ""
+
+msgid "Electronic Address"
+msgstr ""
+
+msgid "Electronic Document Transport Method"
+msgstr ""
+
+msgid "Bank Account"
+msgstr ""
+
+msgid "GENDER_Division"
 msgstr ""
 
 msgid "Read Debitors"
@@ -1262,118 +1369,187 @@ msgstr ""
 msgid "The grant to administrate this division (implies all other grants and the grant to set grants as well)."
 msgstr ""
 
-msgid "GENDER_Offer"
+msgid "Address Prefix 1"
 msgstr ""
 
-msgid "GTIN"
+msgid "Address Prefix 2"
 msgstr ""
 
-msgid "Shortcut"
+msgid "Address Prefix 3"
 msgstr ""
 
-msgid "Default Grouping"
+msgid "Address Postal Code"
 msgstr ""
 
-msgid "Default Sorting"
+msgid "Address Region"
 msgstr ""
 
-msgid "Purchaseprice"
+msgid "Address Locality"
 msgstr ""
 
-msgid "Salesprice Type"
+msgid "Address Country"
 msgstr ""
 
-msgid "Salesprice"
+msgid "Contact Name"
 msgstr ""
 
-msgid "Sales Tax Rate"
+msgid "Contact EMail"
 msgstr ""
 
-msgid "Manufacturer"
-msgstr "Valmistaja"
-
-msgid "Subproducts"
+msgid "Contact Phone"
 msgstr ""
 
-msgid "Is Sales Product"
+msgid "Tax Registration Id"
 msgstr ""
 
-msgid "Is active"
+msgid "VAT Number"
 msgstr ""
 
-msgid "Valid from"
+msgid "Bank Accounts"
 msgstr ""
 
-msgid "Valid until"
-msgstr ""
-
-msgid "GENDER_Subproduct"
-msgstr ""
-
-msgid "Subproduct"
-msgid_plural "Subproducts"
+msgid "Document"
+msgid_plural "Documents"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Variable Position Flag"
+msgid "GENDER_Document"
 msgstr ""
 
-msgid "Amount"
+msgid "Document Number"
 msgstr ""
 
-msgid "Sorting"
+msgid "Boilerplates"
 msgstr ""
 
-msgid "GENDER_Address"
+msgid "Document Date"
 msgstr ""
 
-msgid "Debitor Number"
+msgid "Service Period Start"
 msgstr ""
 
-msgid "Customer Name"
+msgid "Service Period End"
 msgstr ""
 
-msgid "Company / Organisation (Prefix 1)"
+msgid "Recipient"
 msgstr ""
 
-msgid "Unit (Prefix 2)"
+msgid "Reference Person"
 msgstr ""
 
-msgid "Recipient Name (Prefix 3)"
+msgid "Positions Net Sum"
 msgstr ""
 
-msgid "Invoice Item"
+msgid "Positions Gross Sum"
 msgstr ""
 
-msgid "Billing Interval"
+msgid "Positions Discount Sum"
 msgstr ""
 
-msgid "XRechnung"
-msgid_plural "XRechnungen"
+msgid "Invoice Discount Percentage"
+msgstr ""
+
+msgid "Invoice Discount Sum"
+msgstr ""
+
+msgid "Net Sum"
+msgstr ""
+
+msgid "Sales Tax"
+msgstr ""
+
+msgid "Sales Tax by Rate"
+msgstr ""
+
+msgid "Gross Sum"
+msgstr ""
+
+msgid "Internal Note"
+msgstr ""
+
+msgid "Project Reference"
+msgstr ""
+
+msgid "Purchase Order Reference"
+msgstr ""
+
+msgid "Attached Documents"
+msgstr ""
+
+msgid "GENDER_Attached Document"
+msgstr ""
+
+msgid "Attached Document"
+msgid_plural "Attached Documents"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "GENDER_XRechnung"
+msgid "Created for Version"
 msgstr ""
 
-msgid "GENDER_Electronic Address Schema"
-msgstr ""
-
-msgid "Code"
-msgstr ""
-
-msgid "Remark"
+msgid "Dispatch History"
 msgstr ""
 
 msgid "GENDER_Category"
 msgstr ""
 
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] "Osasto"
-msgstr[1] "Osastot"
+msgid "GENDER_Delivery"
+msgstr ""
+
+msgid "Delivery"
+msgid_plural "Deliveries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Status"
+msgstr ""
+
+msgid "Proforma Number"
+msgstr ""
+
+msgid "PD-"
+msgstr ""
+
+msgid "Shared Document"
+msgstr ""
+
+msgid "DN-"
+msgstr ""
+
+msgid "GENDER_Dispatch Report"
+msgstr ""
+
+msgid "Dispatch Report"
+msgid_plural "Dispatch Reports"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Dispatch Date"
+msgstr ""
+
+msgid "Dispatch Transport Method"
+msgstr ""
+
+msgid "GENDER_Invoice"
+msgstr ""
+
+msgid "PI-"
+msgstr ""
+
+msgid "Last Datev send date"
+msgstr ""
+
+msgid "IN-"
+msgstr ""
+
+msgid "Payable immediately without deduction."
+msgstr ""
+
+#, python-brace-format
+msgid "Payable within {days} days without deduction."
+msgstr ""
+
+msgid "GENDER_Offer"
 msgstr ""
 
 msgid "Order Created"
@@ -1426,246 +1602,151 @@ msgstr ""
 msgid "OR-"
 msgstr ""
 
-msgid "Document"
-msgid_plural "Documents"
+msgid "Position"
+msgid_plural "Positions"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "GENDER_Document"
+msgid "GENDER_Position"
 msgstr ""
 
-msgid "Document Number"
+msgid "Pos."
 msgstr ""
 
-msgid "Boilerplates"
+msgid "Grouping"
 msgstr ""
 
-msgid "Document Date"
+msgid "Sorting"
 msgstr ""
 
-msgid "Service Period Start"
+msgid "Product / Service"
 msgstr ""
 
-msgid "Service Period End"
+msgid "Use Actual Quantity"
 msgstr ""
 
-msgid "Buyer Reference"
+msgid "Unit"
 msgstr ""
 
-msgid "Debitor"
-msgid_plural "Debitors"
+msgid "Unit Price"
+msgstr ""
+
+msgid "Position Discount Type"
+msgstr ""
+
+msgid "Position Discount Percentage"
+msgstr ""
+
+msgid "Position Discount Sum"
+msgstr ""
+
+msgid "Net price"
+msgstr ""
+
+msgid "Sales Tax Rate"
+msgstr ""
+
+msgid "Gross Price"
+msgstr ""
+
+msgid "Delivery Position"
+msgid_plural "Delivery Positions"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Recipient"
+msgid "GENDER_Delivery Position"
 msgstr ""
 
-msgid "Reference Person"
-msgstr ""
-
-msgid "Positions Net Sum"
-msgstr ""
-
-msgid "Positions Gross Sum"
-msgstr ""
-
-msgid "Positions Discount Sum"
-msgstr ""
-
-msgid "Invoice Discount Percentage"
-msgstr ""
-
-msgid "Invoice Discount Sum"
-msgstr ""
-
-msgid "Net Sum"
-msgstr ""
-
-msgid "VAT Procedure"
-msgstr ""
-
-msgid "Sales Tax"
-msgstr ""
-
-msgid "Sales Tax by Rate"
-msgstr ""
-
-msgid "Gross Sum"
-msgstr ""
-
-msgid "Internal Note"
-msgstr ""
-
-msgid "Project Reference"
-msgstr ""
-
-msgid "Purchase Order Reference"
-msgstr ""
-
-msgid "Attached Documents"
-msgstr ""
-
-msgid "GENDER_Delivery"
-msgstr ""
-
-msgid "Delivery"
-msgid_plural "Deliveries"
+msgid "Invoice Position"
+msgid_plural "Invoice Positions"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Proforma Number"
+msgid "GENDER_Invoice Position"
 msgstr ""
 
-msgid "PD-"
-msgstr ""
-
-msgid "Shared Document"
-msgstr ""
-
-msgid "DN-"
-msgstr ""
-
-msgid "GENDER_Dispatch Report"
-msgstr ""
-
-msgid "Dispatch Report"
-msgid_plural "Dispatch Reports"
+msgid "Offer Position"
+msgid_plural "Offer Positions"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Dispatch Date"
+msgid "GENDER_Offer Position"
 msgstr ""
 
-msgid "Dispatch Transport Method"
-msgstr ""
-
-msgid "GENDER_Invoice"
-msgstr ""
-
-msgid "PI-"
-msgstr ""
-
-msgid "Last Datev send date"
-msgstr ""
-
-msgid "IN-"
-msgstr ""
-
-msgid "Payable immediately without deduction."
-msgstr ""
-
-#, python-brace-format
-msgid "Payable within {days} days without deduction."
-msgstr ""
-
-msgid "GENDER_Attached Document"
-msgstr ""
-
-msgid "Attached Document"
-msgid_plural "Attached Documents"
+msgid "Order Position"
+msgid_plural "Order Positions"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Created for Version"
+msgid "GENDER_Order Position"
 msgstr ""
 
-msgid "Dispatch History"
+msgid "GENDER_Electronic Address Schema"
 msgstr ""
 
-msgid "GENDER_Division"
+msgid "Code"
 msgstr ""
 
-msgid "Address Prefix 1"
+msgid "Remark"
 msgstr ""
 
-msgid "Address Prefix 2"
-msgstr ""
+msgid "XRechnung"
+msgid_plural "XRechnungen"
+msgstr[0] ""
+msgstr[1] ""
 
-msgid "Address Prefix 3"
-msgstr ""
-
-msgid "Address Postal Code"
-msgstr ""
-
-msgid "Address Region"
-msgstr ""
-
-msgid "Address Locality"
-msgstr ""
-
-msgid "Address Country"
-msgstr ""
-
-msgid "Contact Name"
-msgstr ""
-
-msgid "Contact EMail"
-msgstr ""
-
-msgid "Contact Phone"
-msgstr ""
-
-msgid "Tax Registration Id"
-msgstr ""
-
-msgid "VAT Number"
-msgstr ""
-
-msgid "Bank Accounts"
-msgstr ""
-
-msgid "Electronic Address"
-msgstr ""
-
-msgid "GENDER_Customer"
-msgstr ""
-
-msgid "Has Offers"
-msgstr ""
-
-msgid "Has Orders"
-msgstr ""
-
-msgid "Has Invoices"
-msgstr ""
-
-msgid "Has Deliveries"
+msgid "GENDER_XRechnung"
 msgstr ""
 
 msgid "Reversal Invoice"
 msgstr ""
 
-msgid "GENDER_Supplier"
+msgid "Month"
 msgstr ""
 
-msgid "GENDER_Debitor"
+msgid "GENDER_Order Confirmation"
 msgstr ""
 
-msgid "Delivery Addresses"
+msgid "Billing Interval"
 msgstr ""
 
-msgid "Billing Addresses"
+msgid "GTIN"
 msgstr ""
 
-msgid "Electronic Invoice Type"
+msgid "Shortcut"
 msgstr ""
 
-msgid "Electronic Invoice Config"
+msgid "Default Grouping"
 msgstr ""
 
-msgid "Electronic Document Transport Method"
+msgid "Default Sorting"
 msgstr ""
 
-msgid "Model"
+msgid "Purchaseprice"
 msgstr ""
 
-msgid "From"
+msgid "Salesprice Type"
 msgstr ""
 
-msgid "Until"
+msgid "Salesprice"
 msgstr ""
 
-msgid "Bank Account"
+msgid "Manufacturer"
+msgstr "Valmistaja"
+
+msgid "Subproducts"
+msgstr ""
+
+msgid "Is Sales Product"
+msgstr ""
+
+msgid "Is active"
+msgstr ""
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid until"
 msgstr ""
 
 msgid "Due at"
@@ -1686,99 +1767,129 @@ msgstr ""
 msgid "Is approved"
 msgstr ""
 
-msgid "GENDER_Contract"
+msgid "GENDER_Subproduct"
 msgstr ""
 
-msgid "Responsible"
-msgstr ""
-
-msgid "Partner"
-msgstr ""
-
-msgid "Time Account"
-msgstr ""
-
-msgid "Offer Position"
-msgid_plural "Offer Positions"
+msgid "Subproduct"
+msgid_plural "Subproducts"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "GENDER_Offer Position"
+msgid "Variable Position Flag"
 msgstr ""
 
-msgid "Order Position"
-msgid_plural "Order Positions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Order Position"
+msgid "Amount"
 msgstr ""
 
-msgid "Position"
-msgid_plural "Positions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Position"
+msgid "GENDER_Supplier"
 msgstr ""
 
-msgid "Pos."
+msgid "My Products"
+msgstr "Omat tuotteet"
+
+msgid "Products created by me"
 msgstr ""
 
-msgid "Grouping"
+msgid "My Contracts"
+msgstr "Omat sopimukset"
+
+msgid "Contracts created by myself"
+msgstr "Omat sopimukseni"
+
+msgid "All Customers"
 msgstr ""
 
-msgid "Product / Service"
+msgid "All customer records"
 msgstr ""
 
-msgid "Use Actual Quantity"
+msgid "All Offers"
 msgstr ""
 
-msgid "Unit Price"
+msgid "All offer records"
 msgstr ""
 
-msgid "Position Discount Type"
+msgid "Limit to Sales Divisions"
 msgstr ""
 
-msgid "Position Discount Percentage"
+msgid "Inactive Contracts"
 msgstr ""
 
-msgid "Position Discount Sum"
+msgid "Contracts that have already been terminated"
 msgstr ""
 
-msgid "Net price"
+msgid "Active Contracts"
 msgstr ""
 
-msgid "Gross Price"
+msgid "Contracts that are still running"
 msgstr ""
 
-msgid "Delivery Position"
-msgid_plural "Delivery Positions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Delivery Position"
+msgid "All Suppliers"
 msgstr ""
 
-msgid "GENDER_Invoice Position"
+msgid "All supplier records"
 msgstr ""
 
-msgid "CLEARED"
+msgid "All Purchase Imvoices"
 msgstr ""
 
-msgid "INVOICE"
+msgid "All purchase invoices"
 msgstr ""
 
-msgid "Excel all data"
+msgid "All Products"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "All product records"
 msgstr ""
 
-msgid "Invoice Timesheet"
+msgid "All Contracts"
 msgstr ""
 
-msgid "CSV all data"
+msgid "All contract records"
+msgstr ""
+
+msgid "All Invoices"
+msgstr ""
+
+msgid "All invoice records"
+msgstr ""
+
+msgid "All Order Confirmations"
+msgstr ""
+
+msgid "All order confirmation records"
+msgstr ""
+
+msgid "Fill with name"
+msgstr ""
+
+msgid "Fill with address"
+msgstr ""
+
+msgid "Fill with postal"
+msgstr ""
+
+msgid "Fill with locality"
+msgstr ""
+
+msgid "Fill with country"
+msgstr ""
+
+msgid "Fill with contact name"
+msgstr ""
+
+msgid "Fill with contact email"
+msgstr ""
+
+msgid "Fill with contact phone"
+msgstr ""
+
+msgid "Fill with vat number"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Arial"
 msgstr ""
 
 msgid "Can't create eDocument (XRechnungs) view. Possible reasons:"
@@ -1791,115 +1902,4 @@ msgid "eDocument type is not supported"
 msgstr ""
 
 msgid "Service disruption of view service"
-msgstr ""
-
-msgid "No Right to alter the Number"
-msgstr ""
-
-msgid "You are not allowed to alter the number afterwards!"
-msgstr ""
-
-msgid "Invoice is cleared already"
-msgstr ""
-
-msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
-msgstr ""
-
-msgid "Following Invoices Found"
-msgstr ""
-
-msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
-msgstr ""
-
-msgid "Number duplicate"
-msgstr ""
-
-msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
-msgstr ""
-
-msgid "Unknown Currency Code"
-msgstr ""
-
-msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
-msgstr ""
-
-msgid "Address as Billing Address in Use"
-msgstr ""
-
-msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
-msgstr ""
-
-msgid "Manage Products"
-msgstr ""
-
-msgid "Add, edit and delete products."
-msgstr ""
-
-msgid "Manage Contracts"
-msgstr ""
-
-msgid "Add, edit and delete contracts."
-msgstr ""
-
-msgid "Manage Cost Centers"
-msgstr ""
-
-msgid "Add, edit and delete cost centers."
-msgstr ""
-
-msgid "Manage Customers"
-msgstr ""
-
-msgid "Add, edit and delete customers."
-msgstr ""
-
-msgid "Manage Suppliers"
-msgstr ""
-
-msgid "Add, edit and delete suppliers."
-msgstr ""
-
-msgid "manage invoices"
-msgstr ""
-
-msgid "Add, edit and delete invoices."
-msgstr ""
-
-msgid "Manage Order Confirmations"
-msgstr ""
-
-msgid "Add, edit and delete order confirmations."
-msgstr ""
-
-msgid "Manage Offers"
-msgstr ""
-
-msgid "Add, edit and delete offers."
-msgstr ""
-
-msgid "Manage Purchase Invoices"
-msgstr ""
-
-msgid "Add, edit and delete purchase invoices."
-msgstr ""
-
-msgid "Change number of an order confirmations"
-msgstr ""
-
-msgid "Allow changing the number of an order confirmation during the update."
-msgstr ""
-
-msgid "Set number of invoices"
-msgstr ""
-
-msgid "Allow to set the number of an invoice."
-msgstr ""
-
-msgid "Manage Divisions"
-msgstr ""
-
-msgid "Add, edit and delete divisions"
 msgstr ""

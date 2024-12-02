@@ -8,1377 +8,44 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 12:18+0000\n"
 "Last-Translator: Tamás Faragó <>, 2012-2013\n"
 "Language-Team: Hungarian (http://app.transifex.com/tine/groupware/language/hu/)\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal calendar"
-msgstr "%s személyes naptára"
+msgid "manage shared calendars"
+msgstr "megosztott naptárak kezelése"
 
-msgid "Resources"
-msgstr "Források"
+msgid "Create new shared calendars"
+msgstr "Új megosztott naptár készítése"
 
-msgid "Event Types"
+msgid "manage shared calendars favorites"
+msgstr "kedvenc megosztott naptárak kezelése"
+
+msgid "Create or update shared calendars favorites"
+msgstr "Kedvenc megosztott naptárak készítése vagy frissítése"
+
+msgid "manage resources"
+msgstr "források kezelése"
+
+msgid "All Rights to administrate resources"
+msgstr "Minden jog a rendszergazdai forrásokhoz"
+
+msgid "manage event types"
 msgstr ""
 
-msgid "All my events"
-msgstr "Minden eseményem"
-
-msgid "Start Time"
-msgstr "Kezdési idő"
-
-msgid "Position on the left time axis, day and week view should start with"
-msgstr "Pozíció a bal időtengelyen, amivel a napi és a heti nézet kezdődjön"
-
-msgid "End Time"
-msgstr "Befejezési idő"
-
-msgid "Position on the left time axis, day and week view should end with"
+msgid "The Right to manage event types"
 msgstr ""
 
-msgid "Default Start Time"
-msgstr ""
-
-msgid "Scroll position on the left time axis, day and week view should start with"
-msgstr ""
-
-msgid "Visible Time"
-msgstr ""
-
-msgid "Time to be displayed at once"
-msgstr ""
-
-msgid "Default Calendar"
-msgstr "Alapértelmezett naptár"
-
-msgid "The default calendar for invitations and new events"
-msgstr "Meghívások és új események alapértelmezett naptára"
-
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-msgid "The default favorite which is loaded on calendar startup"
-msgstr "Az alapértelmezett kedvenc, ami betöltődik a naptár indulásakor"
-
-msgid "Web Event Title Template"
-msgstr ""
-
-msgid "How to build event titles in web ui."
-msgstr ""
-
-msgid "Get Notification Emails"
-msgstr "Értesítő emailek fogadása"
-
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést kapnak ameddig a beállítás nem \"Soha\""
-
-msgid "Send Notifications Emails of own Actions"
-msgstr "Értesítő emailek küldése saját tevékenységekről"
-
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Értesítő emailek fogadása saját magadnak készített tevékenységekről"
-
-msgid "Send Notifications Emails of tentative events"
-msgstr ""
-
-msgid "Get notifications emails of tentative events"
-msgstr ""
-
-msgid "Send Alarm Notifications Emails"
-msgstr ""
-
-msgid "Get event alarms via email"
-msgstr ""
-
-msgid "Enable Standard Alarm"
-msgstr "Normál riasztás engedélyezése"
-
-msgid "New events get a standard alarm as defined below"
-msgstr "Az új események az alábbi normál riasztást kapják"
-
-msgid "Standard Alarm Time"
-msgstr "Normál riasztási ideje"
-
-msgid "Minutes before the event starts"
-msgstr "Esemény kezdése előtt ennyi perccel"
-
-msgid "Default Attendee Strategy"
-msgstr ""
-
-msgid "Default Attendee Strategy for new events"
-msgstr ""
-
-msgid "Time Increment"
-msgstr ""
-
-msgid "Increment of event time steps"
-msgstr ""
-
-msgid "Default set Events to privat"
-msgstr ""
-
-msgid "If enabled every created event is always privat"
-msgstr ""
-
-msgid "First Day of Week"
-msgstr ""
-
-msgid "On what day the week should be starting"
-msgstr ""
-
-msgid "Default calendar strategy"
-msgstr ""
-
-msgid "The calendar for new events if no container is selected"
-msgstr ""
-
-msgid "Remove all filters on change selection"
-msgstr ""
-
-msgid "On Calendar Change will remove all filters"
+msgid "You can not have more than one grants filter"
 msgstr ""
 
 msgid "Fixed Calendars"
 msgstr "Fix Naptárak"
-
-msgid "Calendars always selected regardless of all filter parameters."
-msgstr ""
-
-msgid "Never"
-msgstr "Sosem"
-
-msgid "On invitation and cancellation only"
-msgstr "Csak meghíváskor és lemondáskor"
-
-msgid "On time changes"
-msgstr "Időpont változtatáskor"
-
-msgid "On all updates but attendee responses"
-msgstr "Minden frissítéskor de résztvevő visszajelzéskor nem"
-
-msgid "On attendee responses too"
-msgstr "Résztvevő visszajelzésekor is"
-
-msgid "Events"
-msgstr "Események"
-
-msgid "Summary"
-msgstr "Összegzés"
-
-msgid "Status"
-msgstr "Állapot"
-
-msgid "No Information"
-msgstr "Nincs információ"
-
-msgid "recurring event"
-msgstr "ismétlődő esemény"
-
-msgid "recurring event exception"
-msgstr "ismétlődő esemény kivétel"
-
-msgid "Blocking"
-msgstr "Blokkolva"
-
-msgid "Tentative"
-msgstr "Bizonytalan"
-
-msgid "Event Location"
-msgstr ""
-
-msgid "Organizer"
-msgstr "Szervező"
-
-msgid "Attendee"
-msgid_plural "Attendees"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "URL"
-msgstr ""
-
-msgid "Add attendee"
-msgstr ""
-
-msgid "Sort Attendee"
-msgstr ""
-
-msgid "Check to filter for this attendee"
-msgstr ""
-
-msgid "Private"
-msgstr "Privát"
-
-msgid "Tags"
-msgstr "Címkék"
-
-msgid "whole day"
-msgstr "egész nap"
-
-msgid "Location"
-msgstr "Hely"
-
-msgid "Description"
-msgstr "Leírás"
-
-msgid "Attendee/Resources"
-msgstr ""
-
-msgid "Additional Attendees ..."
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Ok"
-msgstr ""
-
-msgid "This event is originally stored in a calendar you don't have access to."
-msgstr "Ez az esemény eredetileg egy olyan naptárban van, amelyhez nincs jogosultságod."
-
-#, python-brace-format
-msgid "This event is originally stored in {0}"
-msgstr "Ez az esemény eredetileg ide került mentésre: {0}"
-
-#, python-brace-format
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr "Ez az esemény továbbá megjelenik a személyes naptáradban: {0}"
-
-msgid "Set as definite event"
-msgstr ""
-
-msgid "Set This Date as Definite Event?"
-msgstr ""
-
-msgid "Do you want to close the poll and remove all other alternatives?"
-msgstr ""
-
-msgid "Please choose the Event to add the contacts to"
-msgstr "Kérlek válaszd ki az eseményt a kapcsolatok hozzáadásához"
-
-msgid "Role"
-msgstr "Szerep"
-
-msgid "Select Role"
-msgstr "Szerep kiválasztása"
-
-msgid "Select Status"
-msgstr "Állapot kiválasztása"
-
-#, python-brace-format
-msgid "Adding {0} Attendee to event"
-msgstr "{0} résztvevő hozzáadása az eseményhez"
-
-msgid "Checking Calendar Data..."
-msgstr "Naptár adatok ellenőrzése..."
-
-msgid "Reply to Recurring Event"
-msgstr "Válasz az ismétlődő eseményre"
-
-msgid "You are responding to an recurring event. What would you like to do?"
-msgstr "Válaszolni szeretnél egy ismétlődő eseményre. Mit szeretnél csinálni?"
-
-msgid "Respond to whole series"
-msgstr "Válaszolni az egész sorozatra"
-
-msgid "Do not respond"
-msgstr "Nem válaszolni"
-
-msgid "Save"
-msgstr ""
-
-msgid "Save in calendar without response"
-msgstr ""
-
-msgid "The event of this message does not exist"
-msgstr "Az üzenet eseménye nem létezik"
-
-msgid "The sender is not authorised to update the event"
-msgstr "A küldő nem jogosult az esemény frissítésére"
-
-msgid "This message is already processed"
-msgstr "Az üzenet már feldolgozott"
-
-msgid "You are not an attendee of this event"
-msgstr "Nem vagy résztvevője az eseménynek"
-
-msgid "This event has been deleted by the organizer"
-msgstr ""
-
-msgid "This event has been canceled."
-msgstr ""
-
-msgid "Unsupported message"
-msgstr "Nem támogatott üzenet"
-
-msgid "This is an event invitation for someone else."
-msgstr "Ez egy esemény meghívás valaki másnak."
-
-msgid "You have already replied to this event invitation."
-msgstr "Már válaszoltál erre az esemény meghívásra."
-
-msgid "The event got rescheduled. Set your response to:"
-msgstr ""
-
-msgid "You received an event invitation. Set your response to:"
-msgstr "Egy esemény meghívást kaptál. Állítsd be a válaszodat erre:"
-
-msgid "An invited attendee responded to the invitation."
-msgstr "Egy meghívott résztvevő válaszolt a meghívásra."
-
-msgid "Unsupported method"
-msgstr "Nem támogatott eljárás"
-
-msgid "Loading events, please wait..."
-msgstr "Események betöltése, kérem várjion"
-
-msgid "Cut event"
-msgstr ""
-
-msgid "Copy Event to clipboard"
-msgstr ""
-
-msgid "Stop cut / copy & paste"
-msgstr ""
-
-msgid "Print Page"
-msgstr "Oldal nyomtatása"
-
-msgid "Loose-Leaf"
-msgstr ""
-
-msgid "Sheet"
-msgstr "Naptár"
-
-msgid "Grid"
-msgstr "Táblázat"
-
-msgid "Timeline"
-msgstr ""
-
-msgid "Day"
-msgstr "Nap"
-
-msgid "Week"
-msgstr "Hét"
-
-msgid "Month"
-msgstr "Hónap"
-
-msgid "Year"
-msgstr ""
-
-msgid "Custom Selection"
-msgstr ""
-
-msgid "Import Events"
-msgstr ""
-
-#, python-brace-format
-msgid "Paste event \"{0}\""
-msgstr ""
-
-msgid "Set my response"
-msgstr "Visszajelzésem beállítása"
-
-#, python-brace-format
-msgid "Copy {0}"
-msgstr "{0} másolása"
-
-msgid "Set event status"
-msgstr ""
-
-msgid "Updating event in the past"
-msgstr "Múltbéli esemény frissítése"
-
-msgid "Update this event"
-msgstr "Esemény frissítése"
-
-msgid "Do not update this event"
-msgstr "Ne frissítse az eseményt"
-
-msgid "Creating event in the past"
-msgstr "Múltbéli esemény készítése"
-
-msgid "Create this event"
-msgstr "Esemény készítése"
-
-msgid "Do not create this event"
-msgstr "Ne készítse el az eseményt"
-
-msgid "Update this event only"
-msgstr "Mostani esemény frissítése"
-
-msgid "Update this and all future events"
-msgstr "Mostani és az összes jövőbeni esemény frissítése"
-
-msgid "Update nothing"
-msgstr "Semmi frissítése"
-
-msgid "Update Event"
-msgstr "Esemény frissítése"
-
-msgid "Please Change Selection"
-msgstr "Kérlek változtasd a kiválasztást"
-
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "A választásod ismétlődő eseményeket tartalmaz. Az ismétlődő eseményeket egyesével kell törölni!"
-
-msgid "Delete Event"
-msgstr "Esemény törlése"
-
-msgid "Delete this event only"
-msgstr "Csak a mostani esemény törlése"
-
-msgid "Delete this and all future events"
-msgstr "Mostani és az összes jövőbeni esemény törlése"
-
-msgid "Delete whole series"
-msgstr "Egész sorozat törlése"
-
-msgid "Delete nothing"
-msgstr "Semmi törlése"
-
-#, python-brace-format
-msgid "Do you really want to delete this event?"
-msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] "Biztosan törlöd ezt az eseményt?"
-msgstr[1] "Biztosan törlöd a(z) {0} kiválasztott eseményt?"
-
-msgid "Could not Print"
-msgstr "Nem lehet nyomtatni"
-
-msgid "Sorry, your current view does not support printing."
-msgstr "Bocsánat, a mostani nézeted nem támogatja a nyomtatást."
-
-msgid "Scheduling Conflict"
-msgstr "Ütemezési hiba"
-
-msgid "The following attendee are busy at the requested time:"
-msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
-
-msgid "Ignore Conflict"
-msgstr "Hiba figyelmen kívűl hagyása"
-
-msgid "Edit Event"
-msgstr "Esemény szerkesztése"
-
-msgid "Cancel this action"
-msgstr "Esemény megszakítása"
-
-msgid "Update Status for all Attendee?"
-msgstr ""
-
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
-msgstr ""
-
-msgid "Manage Resources"
-msgstr "Források kezelése"
-
-msgid "External organizer"
-msgstr ""
-
-msgid "Internal organizer"
-msgstr ""
-
-msgid "Import Definition Success!"
-msgstr ""
-
-msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
-msgstr ""
-
-msgid "Choose Import File"
-msgstr ""
-
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr ""
-
-msgid "once"
-msgstr ""
-
-msgid "hourly"
-msgstr ""
-
-msgid "daily"
-msgstr ""
-
-msgid "weekly"
-msgstr ""
-
-msgid "Choose Remote Location"
-msgstr ""
-
-msgid "Please choose a remote location you want to add to Tine 2.0"
-msgstr ""
-
-msgid "Username"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Refresh time"
-msgstr ""
-
-msgid "General Settings"
-msgstr ""
-
-msgid "Calendar name (you need permissions to add events)"
-msgstr ""
-
-msgid "What should the file you upload look like?"
-msgstr ""
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr ""
-
-msgid "Please select the import format of the file you want to upload"
-msgstr ""
-
-msgid "Download example file"
-msgstr ""
-
-msgid "Remote ICS File"
-msgstr ""
-
-msgid "Remote CalDAV Server"
-msgstr ""
-
-msgid "Upload Local File"
-msgstr ""
-
-msgid "Choose File and Format"
-msgstr ""
-
-msgid "Select type of source"
-msgstr ""
-
-msgid "Event Import Options"
-msgstr ""
-
-msgid "Update Existing Events"
-msgstr ""
-
-msgid "Update already existing events"
-msgstr ""
-
-msgid "Force Update Existing Events"
-msgstr ""
-
-msgid "Update exiting events even if imported sequence number isn't higher"
-msgstr ""
-
-msgid "Delete Missing Events"
-msgstr ""
-
-msgid "Delete events missing in import data (future only)"
-msgstr ""
-
-msgid "Basic Data Only"
-msgstr ""
-
-msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
-msgstr ""
-
-msgid "Add Attendee to Import Data"
-msgstr ""
-
-msgid "Ignore Import Data and Replace Attendee"
-msgstr ""
-
-msgid "Keep Existing Attendee"
-msgstr ""
-
-msgid "Do not remove attendee of existing events which are not in the import data"
-msgstr ""
-
-msgid "Force Organizer for new Events"
-msgstr ""
-
-#, python-brace-format
-msgid "Importing {0}"
-msgstr ""
-
-msgid "Back"
-msgstr ""
-
-msgid "Next"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "Free Time Search"
-msgstr ""
-
-msgid "Searching for Free Time..."
-msgstr ""
-
-msgid "No Free Time found"
-msgstr ""
-
-#, python-brace-format
-msgid "No free timeslot could be found Until {0}. Do you want to continue?"
-msgstr ""
-
-msgid "Continue"
-msgstr ""
-
-msgid "Give up"
-msgstr ""
-
-msgid "Free Time Search Options"
-msgstr ""
-
-msgid "Event Type"
-msgid_plural "Event Types"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Site"
-msgstr ""
-
-msgid "View"
-msgstr "Nézet"
-
-msgid "Details"
-msgstr "Részletek"
-
-msgid "Saved in"
-msgstr "Mentve ide"
-
-msgid "non-blocking"
-msgstr "nem-blokkolt"
-
-msgid "Enter description"
-msgstr "Leírás bevitele..."
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Print Event"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "End date is not valid"
-msgstr "Befejező időpont érvénytelen"
-
-msgid "End date must be after start date"
-msgstr "Befejező időpontnak a kezdő időpont után kell lennie"
-
-msgid "End time is not allowed to be after the configured time."
-msgstr ""
-
-msgid "Start date is not valid"
-msgstr "Kezdő időpont érvénytelen"
-
-msgid "Start date is not allowed to be before the configured time."
-msgstr ""
-
-#, python-brace-format
-msgid "Week {0} :"
-msgstr "{0} Hét:"
-
-msgid "Originally"
-msgstr "Eredetileg"
-
-msgid "Poll"
-msgid_plural "Polls"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Alternative Dates"
-msgstr ""
-
-msgid "Create Poll for this Event"
-msgstr ""
-
-msgid "Name for poll"
-msgstr ""
-
-msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
-msgstr ""
-
-msgid "Share the link below to poll for attendee status feedback."
-msgstr ""
-
-msgid "Public URL"
-msgstr ""
-
-msgid "Protect poll with a password"
-msgstr ""
-
-msgid "Only invited attendee can reply"
-msgstr ""
-
-msgid "Start Date"
-msgstr ""
-
-msgid "Info"
-msgstr ""
-
-msgid "loading alternative dates"
-msgstr ""
-
-msgid "Select one Event Only"
-msgstr ""
-
-msgid "You need to select exactly one event as the definite event."
-msgstr ""
-
-msgid "Setting definite event"
-msgstr ""
-
-msgid "Event finder options"
-msgstr ""
-
-msgid "Unavailable"
-msgstr ""
-
-msgid "Edit Resource"
-msgstr ""
-
-msgid "View Resource"
-msgstr ""
-
-msgid "WK"
-msgstr "HÉT"
-
-msgid "From"
-msgstr ""
-
-msgid "until"
-msgstr ""
-
-msgid "Rrule"
-msgstr ""
-
-msgid "Daily"
-msgstr "Napi"
-
-msgid "Weekly"
-msgstr "Heti"
-
-msgid "Monthly"
-msgstr "Havi"
-
-msgid "Yearly"
-msgstr "Éves"
-
-msgid "Name"
-msgstr "Név"
-
-msgid "Calendar Hierarchy/Name"
-msgstr ""
-
-msgid "Email"
-msgstr "Email"
-
-msgid "Type"
-msgstr "Típus"
-
-msgid "Maximum number of attendee"
-msgstr ""
-
-msgid "Default Status"
-msgstr ""
-
-msgid "Default Status with status grant"
-msgstr ""
-
-msgid "Busy Type"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "No Access"
-msgstr ""
-
-msgid "Additional Tags ..."
-msgstr ""
-
-msgid "New Event"
-msgstr "Új esemény"
-
-#, python-brace-format
-msgid "{0} more..."
-msgstr "Még {0}..."
-
-msgid "private classification"
-msgstr "személyes besorolás"
-
-msgid "has alarm"
-msgstr "riasztást tartalmaz"
-
-msgid "has attachments"
-msgstr ""
-
-msgid "is part of an open poll"
-msgstr ""
-
-#, python-brace-format
-msgid "{0}, the {1}. of {2}"
-msgstr "{2} {1}., {0}"
-
-msgid "Click here to invite another attender..."
-msgstr "Kattints ide másik résztvevő meghívásához..."
-
-msgid "User"
-msgstr "Felhasználó"
-
-msgid "Group"
-msgstr "Csoport"
-
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Forrás"
-msgstr[1] "Források"
-
-msgid "Member of group"
-msgstr "Csoport tagja"
-
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Ebben a naptárban mentette el a résztvevő ezt az eseményt"
-
-msgid "Click icon to change"
-msgstr ""
-
-msgid "Availability of Attendee"
-msgstr ""
-
-msgid "Whole Group or each Member of Group"
-msgstr ""
-
-msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
-msgstr ""
-
-msgid "Member of Group"
-msgstr ""
-
-msgid "Loading Groupmembers..."
-msgstr ""
-
-msgid "Remove Attender"
-msgstr "Résztvevő eltávolítása"
-
-msgid "Use as event location"
-msgstr ""
-
-msgid "Compose email"
-msgstr ""
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "(as a group member)"
-msgstr "(csoporttagként)"
-
-msgid "External Attendee"
-msgstr ""
-
-#, python-brace-format
-msgid "Reserve Resource: {name}"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
-msgstr ""
-
-#, python-brace-format
-msgid "Resource: {name} reserved by you"
-msgstr ""
-
-msgid "Floorplan"
-msgstr ""
-
-msgid "Resource Grant"
-msgid_plural "Resource Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Invite Resource"
-msgstr ""
-
-msgid "The grant to invite the resource to an event"
-msgstr ""
-
-msgid "Resource status"
-msgstr ""
-
-msgid "The grant to set the resource attendee status"
-msgstr ""
-
-msgid "Resource notification"
-msgstr ""
-
-msgid "The grant to receive notifications for this resource"
-msgstr ""
-
-msgid "Read Resource"
-msgstr ""
-
-msgid "The grant to read the resource itself"
-msgstr ""
-
-msgid "The grant to edit the resource itself"
-msgstr ""
-
-msgid "Export Resource"
-msgstr ""
-
-msgid "The grant to export the resource itself"
-msgstr ""
-
-msgid "Sync Resource"
-msgstr ""
-
-msgid "The grant to synchronise the resource itself"
-msgstr ""
-
-msgid "Resource Admin"
-msgstr ""
-
-msgid "The grant to administrate the resource itself"
-msgstr ""
-
-msgid "Add Events"
-msgstr ""
-
-msgid "The grant to directly add events into this resource calendar"
-msgstr ""
-
-msgid "Read Events"
-msgstr ""
-
-msgid "The grant to read events from this resource calendar"
-msgstr ""
-
-msgid "Export Events"
-msgstr ""
-
-msgid "The grant to export events from this resource calendar"
-msgstr ""
-
-msgid "Sync Events"
-msgstr ""
-
-msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
-msgstr ""
-
-msgid "Events Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events from this resource calendar"
-msgstr ""
-
-msgid "Edit Events"
-msgstr ""
-
-msgid "The grant to edit events directly saved in this resource calendar"
-msgstr ""
-
-msgid "Delete Events"
-msgstr ""
-
-msgid "The grant to delete events directly stored in this resource calendar"
-msgstr ""
-
-msgid "Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events in this calendar"
-msgstr ""
-
-msgid "The grant to access events marked as private in this calendar"
-msgstr ""
-
-msgid "no events found"
-msgstr "nem található esemény"
-
-msgid "Searching..."
-msgstr "Keresés..."
-
-msgid "Search Event"
-msgstr "Esemény keresése"
-
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Esemény"
-msgstr[1] "Események"
-
-msgid "Switch to public poll"
-msgstr ""
-
-#, python-brace-format
-msgid "Welcome {name}"
-msgstr ""
-
-msgid "This is a closed poll. No Attendee can be added."
-msgstr ""
-
-msgid "This poll is closed already"
-msgstr ""
-
-#, python-brace-format
-msgid "I am not {name}"
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "{headerDate, date, full} {headerDate, time, short}"
-msgstr ""
-
-msgid "By using this service you agree to our terms and conditions"
-msgstr ""
-
-msgid "Please wait..."
-msgstr ""
-
-msgid "Use your personal link please."
-msgstr ""
-
-msgid "We have sent it to your E-Mail account again."
-msgstr ""
-
-msgid "If you did not receive the link, please contact the organiser."
-msgstr ""
-
-msgid "Submit"
-msgstr ""
-
-msgid "Wrong password!"
-msgstr ""
-
-msgid "Please log in"
-msgstr ""
-
-msgid "User name"
-msgstr ""
-
-#, python-brace-format
-msgid "Calendar of {name}"
-msgstr ""
-
-msgid "An unexpected error occurred."
-msgstr ""
-
-msgid "Mini Calendar"
-msgstr "Mini naptár"
-
-msgid "Colors"
-msgstr ""
-
-msgid "Side bar color"
-msgstr ""
-
-msgid "Color by Calendar"
-msgstr ""
-
-msgid "Color by Attendee Calendar"
-msgstr ""
-
-msgid "Color by Tags"
-msgstr ""
-
-msgid "Color by Attendee Role"
-msgstr ""
-
-msgid "Colors by response"
-msgstr ""
-
-msgid "Colors by tags"
-msgstr ""
-
-msgid "Colors by attendee"
-msgstr ""
-
-msgid "Colors by resource"
-msgstr ""
-
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Naptár"
-msgstr[1] "Naptárak"
-
-msgid "Calendars"
-msgstr "Naptárak"
-
-msgid "Quick Search"
-msgstr ""
-
-msgid "Location Contact"
-msgstr ""
-
-msgid "GENDER_Calendar"
-msgstr ""
-
-msgid "Attendee Status"
-msgstr "Résztvevők állapota"
-
-msgid "GENDER_Attendee Status"
-msgstr ""
-
-msgid "Attendee Role"
-msgstr "Résztvevő szerep"
-
-msgid "GENDER_Attendee Role"
-msgstr ""
-
-msgid "GENDER_Status"
-msgstr ""
-
-msgid "GENDER_Blocking"
-msgstr ""
-
-msgid "Classification"
-msgstr "Besorolás"
-
-msgid "GENDER_Classification"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Unknown date"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} o'clock"
-msgstr "{0} {1} óra"
-
-msgid "Event (as attendee)"
-msgstr "Esemény (résztvevőként)"
-
-msgid "Event (as organizer)"
-msgstr "Esemény (szervezőként)"
-
-msgid "Event attendee"
-msgstr "Esemény résztvevő"
-
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Résztvevő"
-msgstr[1] "Résztvevők"
-
-msgid "Default attendee status"
-msgstr ""
-
-msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
-msgstr ""
-
-msgid "Default attendee status with status grant"
-msgstr ""
-
-msgid "Resource Location"
-msgstr ""
-
-msgid "Suppress notification"
-msgstr ""
-
-msgid "Enter description..."
-msgstr "Leírás bevitele..."
-
-msgid "Grants"
-msgstr ""
-
-msgid "Displayed in"
-msgstr ""
-
-msgid "Event not found"
-msgstr ""
-
-msgid "The Event was deleted in the meantime or you don't have access rights to it."
-msgstr ""
-
-msgid "GENDER_Attendee"
-msgstr ""
-
-msgid "Select Attendee"
-msgstr "Résztvevők kiválasztása"
-
-msgid "The summary must not be longer than 255 characters."
-msgstr "Az összefoglalás nem lehet 255 karakternél hosszabb."
-
-msgid "The summary must have at least 1 character."
-msgstr "Az összefoglalásnak 1 karakternél többnek kell lennie."
-
-msgid "Summary too Long"
-msgstr "Összefoglalás túl hosszú."
-
-msgid "Summary too Short"
-msgstr "Összefoglalás túl rövid."
-
-msgid "Recurrances"
-msgstr "Ismétlődések"
-
-msgid "No recurring rule defined"
-msgstr "Nincs ismétlődési szabály beállítva"
-
-msgid "None"
-msgstr "Semmi"
-
-msgid "Individual"
-msgstr ""
-
-msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr "Az ismétlődő események kivétele nem tartalmaz ismétlődést."
-
-msgid "at"
-msgstr "ekkor:"
-
-msgid "never"
-msgstr "soha"
-
-#, python-brace-format
-msgid "after {0} occurrences"
-msgstr "{0} esemény után"
-
-msgid "Except"
-msgstr ""
-
-msgid "during events in the calendars"
-msgstr ""
-
-msgid "End"
-msgstr "Befejezés"
-
-msgid "Until has to be after event start"
-msgstr "Az esemény indulása utánig"
-
-msgid "The event is longer than the recurring interval"
-msgstr ""
-
-#, python-brace-format
-msgid "Every {0}. Day"
-msgstr "Minden {0}. napon"
-
-#, python-brace-format
-msgid "Every {0}. Week at"
-msgstr "Minden {0}. héten ekkor:"
-
-#, python-brace-format
-msgid "Every {0}. Month"
-msgstr "Minden {0}. hónapban"
-
-msgid "at the"
-msgstr "ekkor:"
-
-msgid "first"
-msgstr "első"
-
-msgid "second"
-msgstr "második"
-
-msgid "third"
-msgstr "harmadik"
-
-msgid "fourth"
-msgstr "negyedik"
-
-msgid "last"
-msgstr "utolsó"
-
-#, python-brace-format
-msgid "Every {0}. Year"
-msgstr "Minden {0}. évben"
-
-msgid "of"
-msgstr "hónap"
-
-msgid "Date"
-msgstr ""
-
-msgid "First name, ĺast name"
-msgstr ""
-
-msgid "E-Mail address"
-msgstr ""
-
-msgid "General terms and conditions"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00B359B9"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "All events I attend"
-msgstr "Minden esemény, amiben résztveszek"
-
-msgid "Awaiting response"
-msgstr "Visszajelzésre vár"
-
-msgid "Events I have not yet responded to"
-msgstr "Események amire még nem jeleztem vissza"
-
-msgid "Declined events"
-msgstr "Lemondott esemének"
-
-msgid "Events I have declined"
-msgstr "Események amiket lemondtam"
-
-msgid "I'm organizer"
-msgstr "Szervező vagyok"
-
-msgid "Events I'm the organizer of"
-msgstr "Események amiket én szerveztem"
-
-msgid "You can not have more than one grants filter"
-msgstr ""
 
 msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
 msgstr "Naptár mindig van kiválasztva az összes szűrő paramétertől függetlenül. Érvényes használat esetén egy bizonyos ünnepi naptár megjelenítését kényszerítheti."
@@ -1401,6 +68,14 @@ msgstr ""
 msgid "Default View for Events"
 msgstr ""
 
+msgid "Attendee"
+msgid_plural "Attendees"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Organizer"
+msgstr "Szervező"
+
 msgid "Event Status Available"
 msgstr ""
 
@@ -1409,6 +84,9 @@ msgstr ""
 
 msgid "Confirmed"
 msgstr ""
+
+msgid "Tentative"
+msgstr "Bizonytalan"
 
 msgid "Canceled"
 msgstr ""
@@ -1421,6 +99,9 @@ msgstr ""
 
 msgid "Public"
 msgstr ""
+
+msgid "Private"
+msgstr "Privát"
 
 msgid "Confidential"
 msgstr ""
@@ -1473,6 +154,11 @@ msgstr ""
 msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
 msgstr ""
 
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Forrás"
+msgstr[1] "Források"
+
 msgid "Room"
 msgstr ""
 
@@ -1516,6 +202,9 @@ msgid "Free"
 msgstr ""
 
 msgid "Busy"
+msgstr ""
+
+msgid "Unavailable"
 msgstr ""
 
 msgid "Filter timeslot for CalDAV events"
@@ -1680,12 +369,6 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
-msgid "No RRULE found in base event!"
-msgstr ""
-
-msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
-msgstr ""
-
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Riasztás \"%1$s\" eseményhez ekkor: %2$s"
 
@@ -1731,6 +414,22 @@ msgstr ""
 msgid "Resource Management"
 msgstr ""
 
+msgid "No RRULE found in base event!"
+msgstr ""
+
+msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
+msgstr ""
+
+#, python-format
+msgid "%s's personal calendar"
+msgstr "%s személyes naptára"
+
+msgid "Resources"
+msgstr "Források"
+
+msgid "Event Types"
+msgstr ""
+
 msgid "Polls for recurring events are not supported"
 msgstr ""
 
@@ -1741,6 +440,1230 @@ msgid "Attendance Confirmation for Poll \"%1$s\""
 msgstr ""
 
 msgid "%1$s is scheduled for %2$s"
+msgstr ""
+
+msgid "Different Calendar"
+msgstr ""
+
+msgid "Exdate container move are not allowed"
+msgstr ""
+
+msgid "Invalid URL given"
+msgstr ""
+
+msgid "The URL you used is invalid. Please use a valid one!"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "The right Resource Admin must be set once."
+msgstr ""
+
+msgid "Word event sheet"
+msgstr ""
+
+msgid "Export Events as Calendar Sheet"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "Export event data into ods spreadsheet"
+msgstr ""
+
+msgid "VCalendar Report"
+msgstr ""
+
+msgid "Export multiple calendars to ics files"
+msgstr ""
+
+msgid "VCalendar/ICS"
+msgstr ""
+
+msgid "Export visible events to ics file"
+msgstr ""
+
+msgid "Resource CSV"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Shared Calendar CSV"
+msgstr ""
+
+msgid "Calendars to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "Import iCal-files"
+msgstr ""
+
+msgid "Please choose the Event to add the contacts to"
+msgstr "Kérlek válaszd ki az eseményt a kapcsolatok hozzáadásához"
+
+msgid "Role"
+msgstr "Szerep"
+
+msgid "Select Role"
+msgstr "Szerep kiválasztása"
+
+msgid "Status"
+msgstr "Állapot"
+
+msgid "Select Status"
+msgstr "Állapot kiválasztása"
+
+#, python-brace-format
+msgid "Adding {0} Attendee to event"
+msgstr "{0} résztvevő hozzáadása az eseményhez"
+
+msgid "Manage Resources"
+msgstr "Források kezelése"
+
+msgid "New Event"
+msgstr "Új esemény"
+
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Naptár"
+msgstr[1] "Naptárak"
+
+msgid "Event not found"
+msgstr ""
+
+msgid "The Event was deleted in the meantime or you don't have access rights to it."
+msgstr ""
+
+msgid "Add attendee"
+msgstr ""
+
+msgid "Sort Attendee"
+msgstr ""
+
+msgid "Check to filter for this attendee"
+msgstr ""
+
+msgid "GENDER_Attendee"
+msgstr ""
+
+msgid "Select Attendee"
+msgstr "Résztvevők kiválasztása"
+
+msgid "Click here to invite another attender..."
+msgstr "Kattints ide másik résztvevő meghívásához..."
+
+msgid "User"
+msgstr "Felhasználó"
+
+msgid "Group"
+msgstr "Csoport"
+
+msgid "Member of group"
+msgstr "Csoport tagja"
+
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Ebben a naptárban mentette el a résztvevő ezt az eseményt"
+
+msgid "Type"
+msgstr "Típus"
+
+msgid "Click icon to change"
+msgstr ""
+
+msgid "Name"
+msgstr "Név"
+
+msgid "Availability of Attendee"
+msgstr ""
+
+msgid "Whole Group or each Member of Group"
+msgstr ""
+
+msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
+msgstr ""
+
+msgid "Member of Group"
+msgstr ""
+
+msgid "Loading Groupmembers..."
+msgstr ""
+
+msgid "Remove Attender"
+msgstr "Résztvevő eltávolítása"
+
+msgid "Use as event location"
+msgstr ""
+
+msgid "Compose email"
+msgstr ""
+
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+msgid "Edit Resource"
+msgstr ""
+
+msgid "View Resource"
+msgstr ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "No Information"
+msgstr "Nincs információ"
+
+msgid "(as a group member)"
+msgstr "(csoporttagként)"
+
+msgid "External Attendee"
+msgstr ""
+
+msgid "This event is originally stored in a calendar you don't have access to."
+msgstr "Ez az esemény eredetileg egy olyan naptárban van, amelyhez nincs jogosultságod."
+
+#, python-brace-format
+msgid "This event is originally stored in {0}"
+msgstr "Ez az esemény eredetileg ide került mentésre: {0}"
+
+#, python-brace-format
+msgid "This event is additionally displayed in your personal calendar {0}"
+msgstr "Ez az esemény továbbá megjelenik a személyes naptáradban: {0}"
+
+msgid "Originally"
+msgstr "Eredetileg"
+
+msgid "Colors"
+msgstr ""
+
+msgid "Side bar color"
+msgstr ""
+
+msgid "Color by Calendar"
+msgstr ""
+
+msgid "Color by Attendee Calendar"
+msgstr ""
+
+msgid "Color by Tags"
+msgstr ""
+
+msgid "Color by Attendee Role"
+msgstr ""
+
+msgid "Colors by response"
+msgstr ""
+
+msgid "Colors by tags"
+msgstr ""
+
+msgid "Colors by attendee"
+msgstr ""
+
+msgid "Colors by resource"
+msgstr ""
+
+msgid "Events"
+msgstr "Események"
+
+msgid "Summary"
+msgstr "Összegzés"
+
+msgid "Start Time"
+msgstr "Kezdési idő"
+
+#, python-brace-format
+msgid "{0}, the {1}. of {2}"
+msgstr "{2} {1}., {0}"
+
+msgid "The summary must not be longer than 255 characters."
+msgstr "Az összefoglalás nem lehet 255 karakternél hosszabb."
+
+msgid "The summary must have at least 1 character."
+msgstr "Az összefoglalásnak 1 karakternél többnek kell lennie."
+
+msgid "Summary too Long"
+msgstr "Összefoglalás túl hosszú."
+
+msgid "Summary too Short"
+msgstr "Összefoglalás túl rövid."
+
+msgid "Attendee/Resources"
+msgstr ""
+
+msgid "Additional Attendees ..."
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Additional Tags ..."
+msgstr ""
+
+msgid "recurring event"
+msgstr "ismétlődő esemény"
+
+msgid "recurring event exception"
+msgstr "ismétlődő esemény kivétel"
+
+msgid "End Time"
+msgstr "Befejezési idő"
+
+msgid "Blocking"
+msgstr "Blokkolva"
+
+msgid "Event Location"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Event Type"
+msgid_plural "Event Types"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Site"
+msgstr ""
+
+msgid "View"
+msgstr "Nézet"
+
+msgid "Details"
+msgstr "Részletek"
+
+msgid "whole day"
+msgstr "egész nap"
+
+msgid "Saved in"
+msgstr "Mentve ide"
+
+msgid "Update Status for all Attendee?"
+msgstr ""
+
+msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
+msgstr ""
+
+msgid "non-blocking"
+msgstr "nem-blokkolt"
+
+msgid "Description"
+msgstr "Leírás"
+
+msgid "Enter description"
+msgstr "Leírás bevitele..."
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Free Time Search"
+msgstr ""
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Print Event"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "End date is not valid"
+msgstr "Befejező időpont érvénytelen"
+
+msgid "End date must be after start date"
+msgstr "Befejező időpontnak a kezdő időpont után kell lennie"
+
+msgid "End time is not allowed to be after the configured time."
+msgstr ""
+
+msgid "Start date is not valid"
+msgstr "Kezdő időpont érvénytelen"
+
+msgid "Start date is not allowed to be before the configured time."
+msgstr ""
+
+msgid "Event finder options"
+msgstr ""
+
+msgid "private classification"
+msgstr "személyes besorolás"
+
+msgid "has alarm"
+msgstr "riasztást tartalmaz"
+
+msgid "has attachments"
+msgstr ""
+
+msgid "is part of an open poll"
+msgstr ""
+
+#, python-brace-format
+msgid "Reserve Resource: {name}"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
+msgstr ""
+
+#, python-brace-format
+msgid "Resource: {name} reserved by you"
+msgstr ""
+
+msgid "Floorplan"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Searching for Free Time..."
+msgstr ""
+
+msgid "No Free Time found"
+msgstr ""
+
+#, python-brace-format
+msgid "No free timeslot could be found Until {0}. Do you want to continue?"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Give up"
+msgstr ""
+
+msgid "Free Time Search Options"
+msgstr ""
+
+msgid "Tags"
+msgstr "Címkék"
+
+msgid "Location"
+msgstr "Hely"
+
+msgid "Checking Calendar Data..."
+msgstr "Naptár adatok ellenőrzése..."
+
+msgid "Reply to Recurring Event"
+msgstr "Válasz az ismétlődő eseményre"
+
+msgid "You are responding to an recurring event. What would you like to do?"
+msgstr "Válaszolni szeretnél egy ismétlődő eseményre. Mit szeretnél csinálni?"
+
+msgid "Respond to whole series"
+msgstr "Válaszolni az egész sorozatra"
+
+msgid "Do not respond"
+msgstr "Nem válaszolni"
+
+msgid "Save"
+msgstr ""
+
+msgid "Save in calendar without response"
+msgstr ""
+
+msgid "The event of this message does not exist"
+msgstr "Az üzenet eseménye nem létezik"
+
+msgid "The sender is not authorised to update the event"
+msgstr "A küldő nem jogosult az esemény frissítésére"
+
+msgid "This message is already processed"
+msgstr "Az üzenet már feldolgozott"
+
+msgid "You are not an attendee of this event"
+msgstr "Nem vagy résztvevője az eseménynek"
+
+msgid "This event has been deleted by the organizer"
+msgstr ""
+
+msgid "This event has been canceled."
+msgstr ""
+
+msgid "Unsupported message"
+msgstr "Nem támogatott üzenet"
+
+msgid "This is an event invitation for someone else."
+msgstr "Ez egy esemény meghívás valaki másnak."
+
+msgid "You have already replied to this event invitation."
+msgstr "Már válaszoltál erre az esemény meghívásra."
+
+msgid "The event got rescheduled. Set your response to:"
+msgstr ""
+
+msgid "You received an event invitation. Set your response to:"
+msgstr "Egy esemény meghívást kaptál. Állítsd be a válaszodat erre:"
+
+msgid "An invited attendee responded to the invitation."
+msgstr "Egy meghívott résztvevő válaszolt a meghívásra."
+
+msgid "Unsupported method"
+msgstr "Nem támogatott eljárás"
+
+msgid "Import Definition Success!"
+msgstr ""
+
+msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
+msgstr ""
+
+msgid "Choose Import File"
+msgstr ""
+
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr ""
+
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr ""
+
+msgid "once"
+msgstr ""
+
+msgid "hourly"
+msgstr ""
+
+msgid "daily"
+msgstr ""
+
+msgid "weekly"
+msgstr ""
+
+msgid "Choose Remote Location"
+msgstr ""
+
+msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Refresh time"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "Calendar name (you need permissions to add events)"
+msgstr ""
+
+msgid "What should the file you upload look like?"
+msgstr ""
+
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgstr ""
+
+msgid "Please select the import format of the file you want to upload"
+msgstr ""
+
+msgid "Download example file"
+msgstr ""
+
+msgid "Remote ICS File"
+msgstr ""
+
+msgid "Remote CalDAV Server"
+msgstr ""
+
+msgid "Upload Local File"
+msgstr ""
+
+msgid "Choose File and Format"
+msgstr ""
+
+msgid "Select type of source"
+msgstr ""
+
+msgid "Event Import Options"
+msgstr ""
+
+msgid "Update Existing Events"
+msgstr ""
+
+msgid "Update already existing events"
+msgstr ""
+
+msgid "Force Update Existing Events"
+msgstr ""
+
+msgid "Update exiting events even if imported sequence number isn't higher"
+msgstr ""
+
+msgid "Delete Missing Events"
+msgstr ""
+
+msgid "Delete events missing in import data (future only)"
+msgstr ""
+
+msgid "Basic Data Only"
+msgstr ""
+
+msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
+msgstr ""
+
+msgid "Add Attendee to Import Data"
+msgstr ""
+
+msgid "Ignore Import Data and Replace Attendee"
+msgstr ""
+
+msgid "Keep Existing Attendee"
+msgstr ""
+
+msgid "Do not remove attendee of existing events which are not in the import data"
+msgstr ""
+
+msgid "Force Organizer for new Events"
+msgstr ""
+
+#, python-brace-format
+msgid "Importing {0}"
+msgstr ""
+
+msgid "Loading events, please wait..."
+msgstr "Események betöltése, kérem várjion"
+
+msgid "Cut event"
+msgstr ""
+
+msgid "Copy Event to clipboard"
+msgstr ""
+
+msgid "Stop cut / copy & paste"
+msgstr ""
+
+msgid "Print Page"
+msgstr "Oldal nyomtatása"
+
+msgid "Loose-Leaf"
+msgstr ""
+
+msgid "Sheet"
+msgstr "Naptár"
+
+msgid "Grid"
+msgstr "Táblázat"
+
+msgid "Timeline"
+msgstr ""
+
+msgid "Day"
+msgstr "Nap"
+
+msgid "Week"
+msgstr "Hét"
+
+msgid "Month"
+msgstr "Hónap"
+
+msgid "Year"
+msgstr ""
+
+msgid "Custom Selection"
+msgstr ""
+
+msgid "Import Events"
+msgstr ""
+
+#, python-brace-format
+msgid "Paste event \"{0}\""
+msgstr ""
+
+msgid "Set as definite event"
+msgstr ""
+
+msgid "Set my response"
+msgstr "Visszajelzésem beállítása"
+
+#, python-brace-format
+msgid "Copy {0}"
+msgstr "{0} másolása"
+
+msgid "Set event status"
+msgstr ""
+
+msgid "Updating event in the past"
+msgstr "Múltbéli esemény frissítése"
+
+msgid "Update this event"
+msgstr "Esemény frissítése"
+
+msgid "Do not update this event"
+msgstr "Ne frissítse az eseményt"
+
+msgid "Creating event in the past"
+msgstr "Múltbéli esemény készítése"
+
+msgid "Create this event"
+msgstr "Esemény készítése"
+
+msgid "Do not create this event"
+msgstr "Ne készítse el az eseményt"
+
+msgid "Update this event only"
+msgstr "Mostani esemény frissítése"
+
+msgid "Update this and all future events"
+msgstr "Mostani és az összes jövőbeni esemény frissítése"
+
+msgid "Update nothing"
+msgstr "Semmi frissítése"
+
+msgid "Update Event"
+msgstr "Esemény frissítése"
+
+msgid "Please Change Selection"
+msgstr "Kérlek változtasd a kiválasztást"
+
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "A választásod ismétlődő eseményeket tartalmaz. Az ismétlődő eseményeket egyesével kell törölni!"
+
+msgid "Delete Event"
+msgstr "Esemény törlése"
+
+msgid "Delete this event only"
+msgstr "Csak a mostani esemény törlése"
+
+msgid "Delete this and all future events"
+msgstr "Mostani és az összes jövőbeni esemény törlése"
+
+msgid "Delete whole series"
+msgstr "Egész sorozat törlése"
+
+msgid "Delete nothing"
+msgstr "Semmi törlése"
+
+#, python-brace-format
+msgid "Do you really want to delete this event?"
+msgid_plural "Do you really want to delete the {0} selected events?"
+msgstr[0] "Biztosan törlöd ezt az eseményt?"
+msgstr[1] "Biztosan törlöd a(z) {0} kiválasztott eseményt?"
+
+msgid "Could not Print"
+msgstr "Nem lehet nyomtatni"
+
+msgid "Sorry, your current view does not support printing."
+msgstr "Bocsánat, a mostani nézeted nem támogatja a nyomtatást."
+
+msgid "Scheduling Conflict"
+msgstr "Ütemezési hiba"
+
+msgid "The following attendee are busy at the requested time:"
+msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
+
+msgid "Ignore Conflict"
+msgstr "Hiba figyelmen kívűl hagyása"
+
+msgid "Edit Event"
+msgstr "Esemény szerkesztése"
+
+msgid "Cancel this action"
+msgstr "Esemény megszakítása"
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Esemény"
+msgstr[1] "Események"
+
+msgid "Calendars"
+msgstr "Naptárak"
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Location Contact"
+msgstr ""
+
+msgid "GENDER_Calendar"
+msgstr ""
+
+msgid "Attendee Status"
+msgstr "Résztvevők állapota"
+
+msgid "GENDER_Attendee Status"
+msgstr ""
+
+msgid "Attendee Role"
+msgstr "Résztvevő szerep"
+
+msgid "GENDER_Attendee Role"
+msgstr ""
+
+msgid "GENDER_Status"
+msgstr ""
+
+msgid "GENDER_Blocking"
+msgstr ""
+
+msgid "Classification"
+msgstr "Besorolás"
+
+msgid "GENDER_Classification"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Unknown date"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} {1} o'clock"
+msgstr "{0} {1} óra"
+
+msgid "Event (as attendee)"
+msgstr "Esemény (résztvevőként)"
+
+msgid "Event (as organizer)"
+msgstr "Esemény (szervezőként)"
+
+msgid "Event attendee"
+msgstr "Esemény résztvevő"
+
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Résztvevő"
+msgstr[1] "Résztvevők"
+
+msgid "Calendar Hierarchy/Name"
+msgstr ""
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Maximum number of attendee"
+msgstr ""
+
+msgid "Default attendee status"
+msgstr ""
+
+msgid "Busy Type"
+msgstr ""
+
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Invite Resource"
+msgstr ""
+
+msgid "The grant to invite the resource to an event"
+msgstr ""
+
+msgid "Resource status"
+msgstr ""
+
+msgid "The grant to set the resource attendee status"
+msgstr ""
+
+msgid "Resource notification"
+msgstr ""
+
+msgid "The grant to receive notifications for this resource"
+msgstr ""
+
+msgid "Read Resource"
+msgstr ""
+
+msgid "The grant to read the resource itself"
+msgstr ""
+
+msgid "The grant to edit the resource itself"
+msgstr ""
+
+msgid "Export Resource"
+msgstr ""
+
+msgid "The grant to export the resource itself"
+msgstr ""
+
+msgid "Sync Resource"
+msgstr ""
+
+msgid "The grant to synchronise the resource itself"
+msgstr ""
+
+msgid "Resource Admin"
+msgstr ""
+
+msgid "The grant to administrate the resource itself"
+msgstr ""
+
+msgid "Add Events"
+msgstr ""
+
+msgid "The grant to directly add events into this resource calendar"
+msgstr ""
+
+msgid "Read Events"
+msgstr ""
+
+msgid "The grant to read events from this resource calendar"
+msgstr ""
+
+msgid "Export Events"
+msgstr ""
+
+msgid "The grant to export events from this resource calendar"
+msgstr ""
+
+msgid "Sync Events"
+msgstr ""
+
+msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
+msgstr ""
+
+msgid "Events Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events from this resource calendar"
+msgstr ""
+
+msgid "Edit Events"
+msgstr ""
+
+msgid "The grant to edit events directly saved in this resource calendar"
+msgstr ""
+
+msgid "Delete Events"
+msgstr ""
+
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr ""
+
+msgid "Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr ""
+
+msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+
+msgid "WK"
+msgstr "HÉT"
+
+#, python-brace-format
+msgid "{0} more..."
+msgstr "Még {0}..."
+
+msgid "External organizer"
+msgstr ""
+
+msgid "Internal organizer"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "until"
+msgstr ""
+
+msgid "Displayed in"
+msgstr ""
+
+msgid "Switch to public poll"
+msgstr ""
+
+#, python-brace-format
+msgid "Welcome {name}"
+msgstr ""
+
+msgid "This is a closed poll. No Attendee can be added."
+msgstr ""
+
+msgid "This poll is closed already"
+msgstr ""
+
+#, python-brace-format
+msgid "I am not {name}"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "{headerDate, date, full} {headerDate, time, short}"
+msgstr ""
+
+msgid "By using this service you agree to our terms and conditions"
+msgstr ""
+
+msgid "Please wait..."
+msgstr ""
+
+msgid "Use your personal link please."
+msgstr ""
+
+msgid "We have sent it to your E-Mail account again."
+msgstr ""
+
+msgid "If you did not receive the link, please contact the organiser."
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Wrong password!"
+msgstr ""
+
+msgid "Please log in"
+msgstr ""
+
+msgid "User name"
+msgstr ""
+
+#, python-brace-format
+msgid "Calendar of {name}"
+msgstr ""
+
+msgid "An unexpected error occurred."
+msgstr ""
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Alternative Dates"
+msgstr ""
+
+msgid "Create Poll for this Event"
+msgstr ""
+
+msgid "Name for poll"
+msgstr ""
+
+msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
+msgstr ""
+
+msgid "Share the link below to poll for attendee status feedback."
+msgstr ""
+
+msgid "Public URL"
+msgstr ""
+
+msgid "Protect poll with a password"
+msgstr ""
+
+msgid "Only invited attendee can reply"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "loading alternative dates"
+msgstr ""
+
+msgid "Select one Event Only"
+msgstr ""
+
+msgid "You need to select exactly one event as the definite event."
+msgstr ""
+
+msgid "Setting definite event"
+msgstr ""
+
+msgid "Set This Date as Definite Event?"
+msgstr ""
+
+msgid "Do you want to close the poll and remove all other alternatives?"
+msgstr ""
+
+#, python-brace-format
+msgid "Week {0} :"
+msgstr "{0} Hét:"
+
+msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
+msgstr ""
+
+msgid "Default attendee status with status grant"
+msgstr ""
+
+msgid "Resource Location"
+msgstr ""
+
+msgid "Suppress notification"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Enter description..."
+msgstr "Leírás bevitele..."
+
+msgid "Grants"
+msgstr ""
+
+msgid "Default Status"
+msgstr ""
+
+msgid "Default Status with status grant"
+msgstr ""
+
+msgid "No Access"
+msgstr ""
+
+msgid "Rrule"
+msgstr ""
+
+msgid "Daily"
+msgstr "Napi"
+
+msgid "Weekly"
+msgstr "Heti"
+
+msgid "Monthly"
+msgstr "Havi"
+
+msgid "Yearly"
+msgstr "Éves"
+
+msgid "Recurrances"
+msgstr "Ismétlődések"
+
+msgid "No recurring rule defined"
+msgstr "Nincs ismétlődési szabály beállítva"
+
+msgid "None"
+msgstr "Semmi"
+
+msgid "Individual"
+msgstr ""
+
+msgid "Exceptions of reccuring events can't have recurrences themselves."
+msgstr "Az ismétlődő események kivétele nem tartalmaz ismétlődést."
+
+msgid "at"
+msgstr "ekkor:"
+
+msgid "never"
+msgstr "soha"
+
+#, python-brace-format
+msgid "after {0} occurrences"
+msgstr "{0} esemény után"
+
+msgid "Except"
+msgstr ""
+
+msgid "during events in the calendars"
+msgstr ""
+
+msgid "End"
+msgstr "Befejezés"
+
+msgid "Until has to be after event start"
+msgstr "Az esemény indulása utánig"
+
+msgid "The event is longer than the recurring interval"
+msgstr ""
+
+#, python-brace-format
+msgid "Every {0}. Day"
+msgstr "Minden {0}. napon"
+
+#, python-brace-format
+msgid "Every {0}. Week at"
+msgstr "Minden {0}. héten ekkor:"
+
+#, python-brace-format
+msgid "Every {0}. Month"
+msgstr "Minden {0}. hónapban"
+
+msgid "at the"
+msgstr "ekkor:"
+
+msgid "first"
+msgstr "első"
+
+msgid "second"
+msgstr "második"
+
+msgid "third"
+msgstr "harmadik"
+
+msgid "fourth"
+msgstr "negyedik"
+
+msgid "last"
+msgstr "utolsó"
+
+#, python-brace-format
+msgid "Every {0}. Year"
+msgstr "Minden {0}. évben"
+
+msgid "of"
+msgstr "hónap"
+
+msgid "Date"
+msgstr ""
+
+msgid "no events found"
+msgstr "nem található esemény"
+
+msgid "Searching..."
+msgstr "Keresés..."
+
+msgid "Search Event"
+msgstr "Esemény keresése"
+
+msgid "Mini Calendar"
+msgstr "Mini naptár"
+
+msgid "Event Id"
+msgstr ""
+
+msgid "unknown"
+msgstr "ismeretlen"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
+
+msgid "The email address has been shortened:"
 msgstr ""
 
 msgid "GENDER_Event"
@@ -1767,16 +1690,13 @@ msgstr "Mindennapos esemény"
 msgid "Organizer timezone"
 msgstr "Szervező időzónája"
 
-msgid "Event Id"
+msgid "Short Name"
 msgstr ""
 
-msgid "unknown"
-msgstr "ismeretlen"
+msgid "Locked"
+msgstr ""
 
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
-
-msgid "The email address has been shortened:"
+msgid "Closed"
 msgstr ""
 
 #, python-format
@@ -1829,64 +1749,186 @@ msgstr ""
 msgid "th"
 msgstr ""
 
-msgid "Locked"
+msgid "All my events"
+msgstr "Minden eseményem"
+
+msgid "Position on the left time axis, day and week view should start with"
+msgstr "Pozíció a bal időtengelyen, amivel a napi és a heti nézet kezdődjön"
+
+msgid "Position on the left time axis, day and week view should end with"
 msgstr ""
 
-msgid "Closed"
+msgid "Default Start Time"
 msgstr ""
 
-msgid "Short Name"
+msgid "Scroll position on the left time axis, day and week view should start with"
 msgstr ""
 
-msgid "Calendars to export"
+msgid "Visible Time"
 msgstr ""
 
-msgid "Export target"
+msgid "Time to be displayed at once"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Default Calendar"
+msgstr "Alapértelmezett naptár"
+
+msgid "The default calendar for invitations and new events"
+msgstr "Meghívások és új események alapértelmezett naptára"
+
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
+
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "Az alapértelmezett kedvenc, ami betöltődik a naptár indulásakor"
+
+msgid "Web Event Title Template"
 msgstr ""
 
-msgid "Word details"
+msgid "How to build event titles in web ui."
 msgstr ""
 
-msgid "Excel overview"
+msgid "Get Notification Emails"
+msgstr "Értesítő emailek fogadása"
+
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést kapnak ameddig a beállítás nem \"Soha\""
+
+msgid "Send Notifications Emails of own Actions"
+msgstr "Értesítő emailek küldése saját tevékenységekről"
+
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Értesítő emailek fogadása saját magadnak készített tevékenységekről"
+
+msgid "Send Notifications Emails of tentative events"
 msgstr ""
 
-msgid "VCalendar/ICS"
+msgid "Get notifications emails of tentative events"
 msgstr ""
 
-msgid "Export visible events to ics file"
+msgid "Send Alarm Notifications Emails"
 msgstr ""
 
-msgid "Resource CSV"
+msgid "Get event alarms via email"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "Enable Standard Alarm"
+msgstr "Normál riasztás engedélyezése"
+
+msgid "New events get a standard alarm as defined below"
+msgstr "Az új események az alábbi normál riasztást kapják"
+
+msgid "Standard Alarm Time"
+msgstr "Normál riasztási ideje"
+
+msgid "Minutes before the event starts"
+msgstr "Esemény kezdése előtt ennyi perccel"
+
+msgid "Default Attendee Strategy"
 msgstr ""
 
-msgid "Export event data into ods spreadsheet"
+msgid "Default Attendee Strategy for new events"
 msgstr ""
 
-msgid "Shared Calendar CSV"
+msgid "Time Increment"
 msgstr ""
 
-msgid "Word event sheet"
+msgid "Increment of event time steps"
 msgstr ""
 
-msgid "Export Events as Calendar Sheet"
+msgid "Default set Events to privat"
 msgstr ""
 
-msgid "VCalendar Report"
+msgid "If enabled every created event is always privat"
 msgstr ""
 
-msgid "Export multiple calendars to ics files"
+msgid "First Day of Week"
 msgstr ""
 
-msgid "Excel all data"
+msgid "On what day the week should be starting"
 msgstr ""
 
-msgid "Import iCal-files"
+msgid "Default calendar strategy"
+msgstr ""
+
+msgid "The calendar for new events if no container is selected"
+msgstr ""
+
+msgid "Remove all filters on change selection"
+msgstr ""
+
+msgid "On Calendar Change will remove all filters"
+msgstr ""
+
+msgid "Calendars always selected regardless of all filter parameters."
+msgstr ""
+
+msgid "Never"
+msgstr "Sosem"
+
+msgid "On invitation and cancellation only"
+msgstr "Csak meghíváskor és lemondáskor"
+
+msgid "On time changes"
+msgstr "Időpont változtatáskor"
+
+msgid "On all updates but attendee responses"
+msgstr "Minden frissítéskor de résztvevő visszajelzéskor nem"
+
+msgid "On attendee responses too"
+msgstr "Résztvevő visszajelzésekor is"
+
+msgid "All events I attend"
+msgstr "Minden esemény, amiben résztveszek"
+
+msgid "Awaiting response"
+msgstr "Visszajelzésre vár"
+
+msgid "Events I have not yet responded to"
+msgstr "Események amire még nem jeleztem vissza"
+
+msgid "Declined events"
+msgstr "Lemondott esemének"
+
+msgid "Events I have declined"
+msgstr "Események amiket lemondtam"
+
+msgid "I'm organizer"
+msgstr "Szervező vagyok"
+
+msgid "Events I'm the organizer of"
+msgstr "Események amiket én szerveztem"
+
+msgid "Account"
+msgstr ""
+
+msgid "Exporttime"
+msgstr ""
+
+msgid "0009326B"
+msgstr ""
+
+msgid "20"
+msgstr ""
+
+msgid "00B359B9"
+msgstr ""
+
+msgid "00997199"
+msgstr ""
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "First name, ĺast name"
+msgstr ""
+
+msgid "E-Mail address"
+msgstr ""
+
+msgid "General terms and conditions"
 msgstr ""
 
 msgid "Updates from"
@@ -1925,6 +1967,12 @@ msgstr ""
 msgid "Event details"
 msgstr "Esemény részletei"
 
+msgid "Thank you for attendening the poll \"%1$s\""
+msgstr ""
+
+msgid "To review or edit your status please use your personal link:"
+msgstr ""
+
 msgid "The poll \"%1$s\" has been closed."
 msgstr ""
 
@@ -1932,52 +1980,4 @@ msgid "The definite event is scheduled for \"%1$s\""
 msgstr ""
 
 msgid "You can review the poll results here:"
-msgstr ""
-
-msgid "Thank you for attendening the poll \"%1$s\""
-msgstr ""
-
-msgid "To review or edit your status please use your personal link:"
-msgstr ""
-
-msgid "Different Calendar"
-msgstr ""
-
-msgid "Exdate container move are not allowed"
-msgstr ""
-
-msgid "Failed"
-msgstr ""
-
-msgid "The right Resource Admin must be set once."
-msgstr ""
-
-msgid "Invalid URL given"
-msgstr ""
-
-msgid "The URL you used is invalid. Please use a valid one!"
-msgstr ""
-
-msgid "manage shared calendars"
-msgstr "megosztott naptárak kezelése"
-
-msgid "Create new shared calendars"
-msgstr "Új megosztott naptár készítése"
-
-msgid "manage shared calendars favorites"
-msgstr "kedvenc megosztott naptárak kezelése"
-
-msgid "Create or update shared calendars favorites"
-msgstr "Kedvenc megosztott naptárak készítése vagy frissítése"
-
-msgid "manage resources"
-msgstr "források kezelése"
-
-msgid "All Rights to administrate resources"
-msgstr "Minden jog a rendszergazdai forrásokhoz"
-
-msgid "manage event types"
-msgstr ""
-
-msgid "The Right to manage event types"
 msgstr ""

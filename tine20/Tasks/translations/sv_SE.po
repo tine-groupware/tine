@@ -11,190 +11,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>, 2012\n"
 "Language-Team: Swedish (Sweden) (http://app.transifex.com/tine/groupware/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%s personliga uppgifter"
+msgid "manage shared task lists"
+msgstr "hantera delade uppgifts listor"
 
-msgid "All my tasks"
-msgstr "Alla mina uppgifter"
+msgid "Create new shared tasks lists"
+msgstr "Skapa nya delade uppgifts listor"
 
-msgid "Default Favorite"
-msgstr "Standard Favorit"
+msgid "manage shared tasks favorites"
+msgstr "hantera delade uppgifter favoriter"
 
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Standard favorit som är laddad på Uppgifts start"
-
-msgid "Default Task List"
-msgstr "Standard Uppgift Lista"
-
-msgid "The default task list to create new tasks in."
-msgstr "Standard uppgift lista för att skapa nya uppgifter i."
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New task get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the task ends"
-msgstr ""
-
-msgid "Task Title Template"
-msgstr ""
-
-msgid "How to build task titles."
-msgstr ""
-
-msgid "Filter: To be done for"
-msgstr ""
-
-msgid "Show all tasks matching all the following criteria:"
-msgstr ""
-
-msgid "Tasks has an open status."
-msgstr ""
-
-msgid "Filtered person is either:"
-msgstr ""
-
-msgid "Organizer and no coworker with open status is assigned."
-msgstr ""
-
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr ""
-
-msgid "Coworker with an open status assigned."
-msgstr ""
-
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr ""
-
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] "Status"
-msgstr[1] "statusar"
-
-msgid "New Task"
-msgstr "Ny Uppgift"
-
-msgid "Create from Template"
-msgstr ""
-
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Vill du verkligen radera den valda uppgiften?"
-msgstr[1] "Vill du verkligen radera dem valda uppgifterna?"
-
-msgid "Tags"
-msgstr "Taggar"
-
-msgid "Summary"
-msgstr "Summa"
-
-msgid "Add a task..."
-msgstr "Lägg till en uppgift..."
-
-msgid "Due Date"
-msgstr "Förfallo datum"
-
-msgid "Priority"
-msgstr "Prioritet"
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Percent"
-msgstr "Procent"
-
-msgid "Completed"
-msgstr "Avslutande"
-
-msgid "Organizer / Responsible"
-msgstr ""
-
-msgid "Responsible"
-msgstr "Ansvarig"
-
-msgid "My open tasks"
-msgstr "Mina öppna uppgifter"
-
-msgid "Use show all button bellow to search for all tasks"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Invalid selection"
-msgstr ""
-
-msgid "A task cannot depend on itself"
-msgstr ""
-
-msgid "Add New Task"
-msgstr ""
-
-msgid "This Task is part of:"
-msgstr ""
-
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Du måste ange ett förfallodatum, för ett alarm är ställt"
-
-msgid "Due date"
-msgstr "Förfallo datum"
-
-msgid "Add Responsible ..."
-msgstr "Lägg till Ansvarig ..."
-
-msgid "Notes"
-msgstr "Noteringar"
-
-msgid "Enter description..."
-msgstr "Ange beskrivning"
-
-msgid "Percentage"
-msgstr "Procent"
-
-msgid "Attention: This due date is in the past!"
-msgstr ""
-
-msgid "My responsibility"
-msgstr ""
-
-msgid "All tasks that I am responsible for"
-msgstr "Alla uppgifter som Jag är ansvarig för"
-
-msgid "All tasks for me"
-msgstr "Alla uppgifter för mig"
-
-msgid "To be done for me this week"
-msgstr ""
-
-msgid "Tasks"
-msgstr "Uppgifter"
-
-msgid "All tasks of my taskslists"
-msgstr "Alla uppgifter av min uppgiftslista"
-
-msgid "Last modified by me"
-msgstr "Senast ändrad av mig"
-
-msgid "All tasks that I have last modified"
-msgstr "Alla uppgifter som jag senast har ändrat"
-
-msgid "Tasks without responsible"
-msgstr "Uppgifter utan ansvar"
+msgid "Create or update shared tasks favorites"
+msgstr "Skapa eller uppdatera delade uppgifter favoriter"
 
 msgid "Tasks status available"
 msgstr "uppgifter status tillgänglig"
@@ -204,6 +40,9 @@ msgstr ""
 
 msgid "No response"
 msgstr "inget svar"
+
+msgid "Completed"
+msgstr "Avslutande"
 
 msgid "Cancelled"
 msgstr "Avbruten"
@@ -253,8 +92,137 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%s personliga uppgifter"
+
 msgid "Notification for Task %1$s"
 msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Create from Template"
+msgstr ""
+
+msgid "Use show all button bellow to search for all tasks"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Invalid selection"
+msgstr ""
+
+msgid "A task cannot depend on itself"
+msgstr ""
+
+msgid "Summary"
+msgstr "Summa"
+
+msgid "Add a task..."
+msgstr "Lägg till en uppgift..."
+
+msgid "Due Date"
+msgstr "Förfallo datum"
+
+msgid "Priority"
+msgstr "Prioritet"
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Percent"
+msgstr "Procent"
+
+msgid "Status"
+msgid_plural "Status"
+msgstr[0] "Status"
+msgstr[1] "statusar"
+
+msgid "Responsible"
+msgstr "Ansvarig"
+
+msgid "My open tasks"
+msgstr "Mina öppna uppgifter"
+
+msgid "Add New Task"
+msgstr ""
+
+msgid "This Task is part of:"
+msgstr ""
+
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Du måste ange ett förfallodatum, för ett alarm är ställt"
+
+msgid "Due date"
+msgstr "Förfallo datum"
+
+msgid "Organizer / Responsible"
+msgstr ""
+
+msgid "Add Responsible ..."
+msgstr "Lägg till Ansvarig ..."
+
+msgid "Notes"
+msgstr "Noteringar"
+
+msgid "Enter description..."
+msgstr "Ange beskrivning"
+
+msgid "Percentage"
+msgstr "Procent"
+
+msgid "Attention: This due date is in the past!"
+msgstr ""
+
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Vill du verkligen radera den valda uppgiften?"
+msgstr[1] "Vill du verkligen radera dem valda uppgifterna?"
+
+msgid "Tags"
+msgstr "Taggar"
+
+msgid "Filter: To be done for"
+msgstr ""
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr ""
+
+msgid "Tasks has an open status."
+msgstr ""
+
+msgid "Filtered person is either:"
+msgstr ""
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr ""
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr ""
+
+msgid "Coworker with an open status assigned."
+msgstr ""
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr ""
+
+msgid "New Task"
+msgstr "Ny Uppgift"
+
+msgid "GENDER_Collaborator"
+msgstr ""
+
+msgid "Collaborator"
+msgid_plural "Collaborators"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Uppgift"
+msgstr[1] "Uppgifter"
 
 msgid "GENDER_Task Dependency"
 msgstr ""
@@ -264,21 +232,8 @@ msgid_plural "Task Dependencies"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Uppgift"
-msgstr[1] "Uppgifter"
-
 msgid "Depends on Task"
 msgstr ""
-
-msgid "GENDER_Collaborator"
-msgstr ""
-
-msgid "Collaborator"
-msgid_plural "Collaborators"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "GENDER_Task"
 msgstr ""
@@ -325,17 +280,62 @@ msgstr "Telefon"
 msgid "Email"
 msgstr "Email"
 
-msgid "Excel all data"
+msgid "All my tasks"
+msgstr "Alla mina uppgifter"
+
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Standard favorit som är laddad på Uppgifts start"
+
+msgid "Default Task List"
+msgstr "Standard Uppgift Lista"
+
+msgid "The default task list to create new tasks in."
+msgstr "Standard uppgift lista för att skapa nya uppgifter i."
+
+msgid "Enable Standard Alarm"
 msgstr ""
 
-msgid "manage shared task lists"
-msgstr "hantera delade uppgifts listor"
+msgid "New task get a standard alarm as defined below"
+msgstr ""
 
-msgid "Create new shared tasks lists"
-msgstr "Skapa nya delade uppgifts listor"
+msgid "Standard Alarm Time"
+msgstr ""
 
-msgid "manage shared tasks favorites"
-msgstr "hantera delade uppgifter favoriter"
+msgid "Minutes before the task ends"
+msgstr ""
 
-msgid "Create or update shared tasks favorites"
-msgstr "Skapa eller uppdatera delade uppgifter favoriter"
+msgid "Task Title Template"
+msgstr ""
+
+msgid "How to build task titles."
+msgstr ""
+
+msgid "All tasks of my taskslists"
+msgstr "Alla uppgifter av min uppgiftslista"
+
+msgid "My responsibility"
+msgstr ""
+
+msgid "All tasks that I am responsible for"
+msgstr "Alla uppgifter som Jag är ansvarig för"
+
+msgid "All tasks for me"
+msgstr "Alla uppgifter för mig"
+
+msgid "To be done for me this week"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr "Senast ändrad av mig"
+
+msgid "All tasks that I have last modified"
+msgstr "Alla uppgifter som jag senast har ändrat"
+
+msgid "Tasks without responsible"
+msgstr "Uppgifter utan ansvar"
+
+msgid "Tasks"
+msgstr "Uppgifter"

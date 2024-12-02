@@ -8,100 +8,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013,2015\n"
 "Language-Team: Polish (http://app.transifex.com/tine/groupware/language/pl/)\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Wszystkie moje projekty"
+msgid "Manage shared project favorites"
+msgstr "zarządzanie wspólnymi ulubionymi projektu"
 
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
-
-msgid "Attendee"
-msgstr "Uczestnik"
-
-msgid "Role"
-msgstr "Rola"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "projekty"
-msgstr[2] "projekty"
-msgstr[3] "projekty"
-
-msgid "Title"
-msgstr "Tytuł"
-
-msgid "Number"
-msgstr "Ilość"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "Opis"
-
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
-
-msgid "Please select the attenders' role"
-msgstr "Proszę wybrać rolę uczestnika"
-
-msgid "Select Project"
-msgstr "Wybierz projekt"
-
-msgid "Select Role"
-msgstr "Wybierz rolę"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Dodawanie {0} uczestników do projektu"
-
-msgid "Attendee Role"
-msgstr "Rola uczestnika"
-
-msgid "Projects"
-msgstr "Projekty"
-
-msgid "All my open projects"
-msgstr "Wszystkie moje projekty"
-
-msgid "My projects that I'm responsible for"
-msgstr "Projekty, za które odpowiadam"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Wszystkie otwarte projekty, za które odpowiadam"
-
-msgid "My waiting projects"
-msgstr "Moje, oczekujące projekty"
-
-msgid "My projects that are on hold"
-msgstr "Moje, wstrzymane projekty"
+msgid "Create new shared project favorites"
+msgstr "Utwórz nowe, wspólne ulubione projektu"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -154,6 +74,71 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "projekty"
+msgstr[2] "projekty"
+msgstr[3] "projekty"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Proszę wybrać projekt, do którego należy dodać kontakty"
+
+msgid "Please select the attenders' role"
+msgstr "Proszę wybrać rolę uczestnika"
+
+msgid "Select Project"
+msgstr "Wybierz projekt"
+
+msgid "Role"
+msgstr "Rola"
+
+msgid "Select Role"
+msgstr "Wybierz rolę"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Dodawanie {0} uczestników do projektu"
+
+msgid "Attendee"
+msgstr "Uczestnik"
+
+msgid "Attendee Role"
+msgstr "Rola uczestnika"
+
+msgid "Title"
+msgstr "Tytuł"
+
+msgid "Number"
+msgstr "Ilość"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Lista projektów"
@@ -167,14 +152,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "Wszystkie moje projekty"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
 
-msgid "Manage shared project favorites"
-msgstr "zarządzanie wspólnymi ulubionymi projektu"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Domyślny ulubiony, ładowany podczas uruchamiania projektów"
 
-msgid "Create new shared project favorites"
-msgstr "Utwórz nowe, wspólne ulubione projektu"
+msgid "All my open projects"
+msgstr "Wszystkie moje projekty"
+
+msgid "My projects that I'm responsible for"
+msgstr "Projekty, za które odpowiadam"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Wszystkie otwarte projekty, za które odpowiadam"
+
+msgid "My waiting projects"
+msgstr "Moje, oczekujące projekty"
+
+msgid "My projects that are on hold"
+msgstr "Moje, wstrzymane projekty"
+
+msgid "Projects"
+msgstr "Projekty"

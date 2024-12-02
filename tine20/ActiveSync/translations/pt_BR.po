@@ -10,35 +10,100 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: Miguel Mucio Santos Moreira <miglinux@yahoo.com.br>, 2015\n"
 "Language-Team: Portuguese (Brazil) (http://app.transifex.com/tine/groupware/language/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Default Address book"
-msgstr "Catálogo de Endereços Padrão"
+msgid "Manage ActiveSync devices"
+msgstr "Gerenciamento de dispositivos de Sincronização Ativa"
 
-msgid "The default address book to create new contacts in."
-msgstr "O catálogo de endereços padrão para criar novos contatos"
+msgid "See, edit and delete ActiveSync devices"
+msgstr "Ver, editar e apagar dispositivos de Sincronização Ativa"
 
-msgid "Default Calendar"
-msgstr "Calendário Padrão"
+msgid "Reset ActiveSync devices"
+msgstr "Reinicializar dispositivos de Sincronização Ativa"
 
-msgid "The default calendar to create new events in."
-msgstr "O calendário padrão para criar novos eventos em."
+msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
+msgstr "Reinicializar remotamente dispositivos para o estado de fábrica, apagando todos os dados"
 
-msgid "Default Task List"
-msgstr "Lista de Tarefas Padrão"
+msgid "Default policy for new devices"
+msgstr "Política padrão para novos dispositivos"
 
-msgid "The default task list to create new tasks in."
-msgstr "A lista de tarefa padrão para criar novas tarefas em."
+msgid "Enter the id of the policy to apply to newly created devices."
+msgstr "Informe o id da política para aplicar aos mais recentes dispositivos criados"
+
+msgid "Device Model Agent Deny List"
+msgstr "Lista de Bloqueio de Agentes de Modelo de Dispositivo"
+
+msgid "Array of regular expressions of Device-Model strings"
+msgstr "Lista de expressões regulares de cadeias de caracteres de Modelos de Dispositivo"
+
+msgid "User Agent Deny List"
+msgstr "Lista de Bloqueio de User Agent"
+
+msgid "Array of regular expressions of User-Agent strings"
+msgstr "Lista de expressões regulares de cadeias de caracteres de User-Agent"
+
+msgid "Disable Remote Reset Action"
+msgstr ""
+
+msgid "Disable Remote Reset Action AdminPanel"
+msgstr ""
+
+msgid "Disable Access Log"
+msgstr "Desabilitar log de acesso"
+
+msgid "Disable ActiveSync Access Log creation."
+msgstr "Desabilitar criação de Log de Acesso de Sincronização Ativa"
+
+msgid "Filter timeslot for e-mails"
+msgstr "Filtra intervalo de tempo para e-mails"
+
+msgid "For how long in the past the e-mails should be synchronized."
+msgstr "Por quanto tempo no passado os e-mails devem ser sincronizados"
+
+msgid "Filter timeslot for events"
+msgstr "Filtra intervalo de tempo para eventos"
+
+msgid "For how long in the past the events should be synchronized."
+msgstr "Por quanto tempo no passado os eventos devem ser sincronizados."
+
+msgid "%1$s ActiveSync failure"
+msgstr "%1$sFalha de ActiveSync"
 
 msgid "Sync Devices"
 msgstr "Dispositivos de Sincronização"
+
+msgid "Active Sync"
+msgstr "Syncronização Ativa"
+
+msgid "Select a Device"
+msgstr "Selecione o Dispositivo"
+
+msgid "No ActiveSync Device registered"
+msgstr "Nenhum dispositivo de sincronização ativa registrado"
+
+#, python-brace-format
+msgid "Set as {0} Filter"
+msgstr "Atribuir como {0} Filtro"
+
+msgid "Resetted Sync Filter"
+msgstr "Filtro de Sincronização Reestabelecido"
+
+#, python-brace-format
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
+
+msgid "resetted"
+msgstr "Reestabelecido"
+
+msgid "Set Sync Filter"
+msgstr "Atribuir Filtro de Sincronização"
 
 msgid "Device ID"
 msgstr "ID do dispositivo"
@@ -76,12 +141,6 @@ msgstr "Linguagem do Sistema Operacional"
 msgid "Phonenumber"
 msgstr "Número de Telefone"
 
-msgid "Sync Device"
-msgid_plural "Sync Devices"
-msgstr[0] "Dispositivo Sincronizado"
-msgstr[1] "Dispositivos Sincronizados"
-msgstr[2] "Dispositivos Sincronizados"
-
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Dispositivo"
@@ -90,32 +149,6 @@ msgstr[2] "Dispositivos"
 
 msgid "Devices"
 msgstr "Dispositivos"
-
-msgid "Active Sync"
-msgstr "Syncronização Ativa"
-
-msgid "Select a Device"
-msgstr "Selecione o Dispositivo"
-
-msgid "No ActiveSync Device registered"
-msgstr "Nenhum dispositivo de sincronização ativa registrado"
-
-#, python-brace-format
-msgid "Set as {0} Filter"
-msgstr "Atribuir como {0} Filtro"
-
-msgid "Resetted Sync Filter"
-msgstr "Filtro de Sincronização Reestabelecido"
-
-#, python-brace-format
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} filtro para o dispositivo \"{1}\" está agora \"{2}\""
-
-msgid "resetted"
-msgstr "Reestabelecido"
-
-msgid "Set Sync Filter"
-msgstr "Atribuir Filtro de Sincronização"
 
 msgid "ID"
 msgstr "ID"
@@ -168,56 +201,35 @@ msgstr "Você quer realmente limpar os dispositivos selecionados? Todos os dados
 msgid "Quicksearch"
 msgstr "Pesquisa Rápida"
 
+msgid "Sync Device"
+msgid_plural "Sync Devices"
+msgstr[0] "Dispositivo Sincronizado"
+msgstr[1] "Dispositivos Sincronizados"
+msgstr[2] "Dispositivos Sincronizados"
+
+msgid "Default Address book"
+msgstr "Catálogo de Endereços Padrão"
+
+msgid "The default address book to create new contacts in."
+msgstr "O catálogo de endereços padrão para criar novos contatos"
+
+msgid "Default Calendar"
+msgstr "Calendário Padrão"
+
+msgid "The default calendar to create new events in."
+msgstr "O calendário padrão para criar novos eventos em."
+
+msgid "Default Task List"
+msgstr "Lista de Tarefas Padrão"
+
+msgid "The default task list to create new tasks in."
+msgstr "A lista de tarefa padrão para criar novas tarefas em."
+
 msgid "Default Policy"
 msgstr "Política Padrão"
 
 msgid "Default Policy installed during setup"
 msgstr "Política Padrão instalada durante a configuração"
-
-msgid "Default policy for new devices"
-msgstr "Política padrão para novos dispositivos"
-
-msgid "Enter the id of the policy to apply to newly created devices."
-msgstr "Informe o id da política para aplicar aos mais recentes dispositivos criados"
-
-msgid "Device Model Agent Deny List"
-msgstr "Lista de Bloqueio de Agentes de Modelo de Dispositivo"
-
-msgid "Array of regular expressions of Device-Model strings"
-msgstr "Lista de expressões regulares de cadeias de caracteres de Modelos de Dispositivo"
-
-msgid "User Agent Deny List"
-msgstr "Lista de Bloqueio de User Agent"
-
-msgid "Array of regular expressions of User-Agent strings"
-msgstr "Lista de expressões regulares de cadeias de caracteres de User-Agent"
-
-msgid "Disable Remote Reset Action"
-msgstr ""
-
-msgid "Disable Remote Reset Action AdminPanel"
-msgstr ""
-
-msgid "Disable Access Log"
-msgstr "Desabilitar log de acesso"
-
-msgid "Disable ActiveSync Access Log creation."
-msgstr "Desabilitar criação de Log de Acesso de Sincronização Ativa"
-
-msgid "Filter timeslot for e-mails"
-msgstr "Filtra intervalo de tempo para e-mails"
-
-msgid "For how long in the past the e-mails should be synchronized."
-msgstr "Por quanto tempo no passado os e-mails devem ser sincronizados"
-
-msgid "Filter timeslot for events"
-msgstr "Filtra intervalo de tempo para eventos"
-
-msgid "For how long in the past the events should be synchronized."
-msgstr "Por quanto tempo no passado os eventos devem ser sincronizados."
-
-msgid "%1$s ActiveSync failure"
-msgstr "%1$sFalha de ActiveSync"
 
 msgid "Dear user,"
 msgstr "Caro(a) usuário(a),"
@@ -230,15 +242,3 @@ msgstr "Obrigado."
 
 msgid "Your %1$s Team"
 msgstr "Seu time %1$s"
-
-msgid "Manage ActiveSync devices"
-msgstr "Gerenciamento de dispositivos de Sincronização Ativa"
-
-msgid "See, edit and delete ActiveSync devices"
-msgstr "Ver, editar e apagar dispositivos de Sincronização Ativa"
-
-msgid "Reset ActiveSync devices"
-msgstr "Reinicializar dispositivos de Sincronização Ativa"
-
-msgid "Remotely reset ActiveSync devices to factory state, deleting all data"
-msgstr "Reinicializar remotamente dispositivos para o estado de fábrica, apagando todos os dados"

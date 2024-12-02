@@ -9,22 +9,67 @@ msgstr ""
 "PO-Revision-Date: 2012-10-04 15:23+0000\n"
 "Last-Translator: S P <sebbe088@gmail.com>, 2018\n"
 "Language-Team: Swedish (Sweden) (http://app.transifex.com/tine/groupware/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Inventory Status Available"
+msgstr ""
+
+msgid "Possible status."
+msgstr ""
+
+msgid "Ordered"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Defect"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "Removed"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Stored"
+msgstr ""
+
+msgid "Sold"
+msgstr ""
+
+msgid "Destroyed"
+msgstr ""
+
 msgid "Types"
 msgstr ""
 
-msgid "Default Inventory Item Container"
+msgid "Tine 2.0 inventory CSV import"
 msgstr ""
 
-msgid "The default container for new items"
+msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+msgid "Inventory CSV import"
+msgstr ""
+
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 msgid "The active number must be less than or equal total number."
@@ -63,9 +108,6 @@ msgstr ""
 msgid "Warranty"
 msgstr "Garanti"
 
-msgid "Removed"
-msgstr ""
-
 msgid "Total number"
 msgstr ""
 
@@ -85,45 +127,6 @@ msgid "Invoice date"
 msgstr "Fakturadatum"
 
 msgid "Depreciate"
-msgstr ""
-
-msgid "Inventory"
-msgstr "Lager"
-
-msgid "All Inventory Items"
-msgstr "Alla lagerobjekt"
-
-msgid "All existing Inventory Items"
-msgstr "Alla befintliga lagerobjekt"
-
-msgid "Inventory Status Available"
-msgstr ""
-
-msgid "Possible status."
-msgstr ""
-
-msgid "Ordered"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Defect"
-msgstr ""
-
-msgid "Missing"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Stored"
-msgstr ""
-
-msgid "Sold"
-msgstr ""
-
-msgid "Destroyed"
 msgstr ""
 
 msgid "Inventory item"
@@ -147,20 +150,17 @@ msgid_plural "Inventory types"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Tine 2.0 inventory CSV import"
+msgid "Default Inventory Item Container"
 msgstr ""
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgid "The default container for new items"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
+msgid "All Inventory Items"
+msgstr "Alla lagerobjekt"
 
-msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgid "All existing Inventory Items"
+msgstr "Alla befintliga lagerobjekt"
 
-msgid "Inventory CSV import"
-msgstr ""
-
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgid "Inventory"
+msgstr "Lager"

@@ -13,6 +13,42 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+msgid "Public OnlyOffice document server url"
+msgstr ""
+
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr ""
+
+msgid "Internal/Server OnlyOffice document server url"
+msgstr ""
+
+msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgstr ""
+
+msgid "Server url of this installation"
+msgstr ""
+
+msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgstr ""
+
+msgid "Enable oo jwt tokens"
+msgstr ""
+
+msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgstr ""
+
+msgid "OnlyOffice jwt secret string"
+msgstr ""
+
+msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgstr ""
+
+msgid "Interval in seconds to force save"
+msgstr ""
+
+msgid "Live time of token subscriptions"
+msgstr ""
+
 msgid "conflict"
 msgstr ""
 
@@ -41,6 +77,33 @@ msgid "node has no revision, it might be a partial upload"
 msgstr ""
 
 msgid "this revision currently can't be opened as a different revision is already open"
+msgstr ""
+
+msgid "Only Office Integrator"
+msgstr ""
+
+msgid "Add Document"
+msgstr ""
+
+msgid "Add Text"
+msgstr ""
+
+msgid "Add Spreadsheet"
+msgstr ""
+
+msgid "Add Presentation"
+msgstr ""
+
+msgid "Open Document"
+msgstr ""
+
+msgid "Preparing Attachment..."
+msgstr ""
+
+msgid "Is edited by"
+msgstr ""
+
+msgid "Who is currently editing this document"
 msgstr ""
 
 msgid "Absence detected"
@@ -84,71 +147,8 @@ msgstr ""
 msgid "Saving Document ..."
 msgstr ""
 
-msgid "Is edited by"
-msgstr ""
-
-msgid "Who is currently editing this document"
-msgstr ""
-
-msgid "Only Office Integrator"
-msgstr ""
-
-msgid "Open Document"
-msgstr ""
-
-msgid "Preparing Attachment..."
-msgstr ""
-
-msgid "Add Document"
-msgstr ""
-
-msgid "Add Text"
-msgstr ""
-
-msgid "Add Spreadsheet"
-msgstr ""
-
-msgid "Add Presentation"
-msgstr ""
-
 msgid "Editing"
 msgstr ""
 
 msgid "Current Editors"
-msgstr ""
-
-msgid "Public OnlyOffice document server url"
-msgstr ""
-
-msgid "OnlyOffice document server url accessible by the users browser"
-msgstr ""
-
-msgid "Internal/Server OnlyOffice document server url"
-msgstr ""
-
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-msgstr ""
-
-msgid "Server url of this installation"
-msgstr ""
-
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr ""
-
-msgid "Enable oo jwt tokens"
-msgstr ""
-
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr ""
-
-msgid "OnlyOffice jwt secret string"
-msgstr ""
-
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr ""
-
-msgid "Interval in seconds to force save"
-msgstr ""
-
-msgid "Live time of token subscriptions"
 msgstr ""

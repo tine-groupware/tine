@@ -19,238 +19,180 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
-msgid "All courses"
-msgstr "Alla Kurser"
+msgid "Add new user"
+msgstr "Lägg till ny användare"
 
-#: Preference.php:61
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "Standard favoriten som laddas på lektionsstart"
+msgid "Add new user as member to a course"
+msgstr "Lägg till ny användare som medlem i en kurs"
 
-#: js/Models.js:43 js/CourseEditDialog.js:215 Controller/Course.php:105
+msgid "Add existing user"
+msgstr "Lägg till befintlig användare"
+
+msgid "Add existing user as member to a course"
+msgstr "Lägg till befintlig användare som medlem i en kurs"
+
+msgid "Manage shared courses favorites"
+msgstr ""
+
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+msgid "Set additional memberships"
+msgstr ""
+
+msgid "Set additional course member group memberships"
+msgstr ""
+
+msgid "Additional Group Memberships"
+msgstr ""
+
+msgid "Array of IDs of Groups students can be members of"
+msgstr ""
+
+msgid "Internet Access"
+msgstr "Internet Tillgängligt"
+
+msgid "Internet access options."
+msgstr "Inställningar för internettillgänglighet."
+
+msgid "On"
+msgstr "På"
+
+msgid "Off"
+msgstr "Av"
+
+msgid "Filtered"
+msgstr "Filtrerad"
+
+msgid "Internet Access Group (ON)"
+msgstr "Internetåtkomsts-grupp (ON)"
+
+msgid "Internet Access Group (FILTERED)"
+msgstr "Internetåkomsts-grupp (FILTERED)"
+
+msgid "Students Group"
+msgstr "Studentgrupp"
+
+msgid "Students Import Definition"
+msgstr "Studentimports-definition"
+
+msgid "Students login name prefix"
+msgstr "Prefix för studenters inloggningsnamn"
+
+msgid "Students password suffix"
+msgstr ""
+
+msgid "Teacher password"
+msgstr ""
+
+msgid "Student username schema"
+msgstr ""
+
+msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
+msgstr ""
+
+msgid "Samba user settings"
+msgstr "Samba användarinställningar"
+
+msgid "Default department"
+msgstr ""
+
+msgid "The default department for new Courses"
+msgstr ""
+
+msgid "Course -> Department Mapping"
+msgstr ""
+
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
 msgstr[1] "Kurser"
 
-#: js/Models.js:67
-msgid "Quick Search"
+msgid "Teacher"
+msgstr "Lärare"
+
+msgid "Teacher Account"
+msgstr "Lärar Konto"
+
+msgid "My course"
+msgstr "Min kurs"
+
+msgid "First Name"
+msgstr "Förnamn"
+
+msgid "Last Name"
+msgstr "Efternamn"
+
+msgid "Add new member to course"
+msgstr "Lägg till ny medlem till kurs"
+
+msgid "Errors"
+msgstr "Fel"
+
+msgid "Please fix the errors noted."
+msgstr "Vänligen åtgärda de fel som noterats."
+
+msgid "Import course members"
+msgstr "Importera kurs medlemmar"
+
+msgid "Add new member"
+msgstr "Lägg till ny medlem"
+
+msgid "Course Name"
+msgstr "Kurs namn "
+
+msgid "Course / School Type"
+msgstr "Kurs / Skol Typ"
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Members"
+msgstr "Medlemmar"
+
+msgid "Login"
+msgstr "Logga in"
+
+msgid "unknown"
+msgstr "Okänd"
+
+msgid "Reset Password"
+msgstr "Återställ lösenord"
+
+msgid "Please enter the new Password."
 msgstr ""
 
-#: js/Models.js:68 js/CourseGridPanel.js:43
 msgid "Name"
 msgstr "Namn"
 
-#: js/Models.js:70 js/CourseEditDialog.js:254 Config.php:124
-msgid "Internet Access"
-msgstr "Internet Tillgängligt"
+msgid "Type"
+msgstr "Typ"
 
-#: js/Models.js:105
+msgid "Failed"
+msgstr "Misslyckades"
+
+msgid "Some error occured while trying to update the courses."
+msgstr "Fel uppstod vid försök att uppdatera kurserna"
+
+msgid "Quick Search"
+msgstr ""
+
 msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] "Kurs Typ"
 msgstr[1] "Kurs Typer"
 
-#: js/CourseEditDialog.js:40
-msgid "Import course members"
-msgstr "Importera kurs medlemmar"
+msgid "All courses"
+msgstr "Alla Kurser"
 
-#: js/CourseEditDialog.js:49
-msgid "Add new member"
-msgstr "Lägg till ny medlem"
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "Standard favoriten som laddas på lektionsstart"
 
-#: js/CourseEditDialog.js:231
-msgid "Course Name"
-msgstr "Kurs namn "
-
-#: js/CourseEditDialog.js:238
-msgid "Course / School Type"
-msgstr "Kurs / Skol Typ"
-
-#: js/CourseEditDialog.js:248
-msgid "Description"
-msgstr "Beskrivning"
-
-#: js/CourseEditDialog.js:283
-msgid "Members"
-msgstr "Medlemmar"
-
-#: js/CourseEditDialog.js:312
-msgid "Login"
-msgstr "Logga in"
-
-#: js/CourseEditDialog.js:315
-msgid "unknown"
-msgstr "Okänd"
-
-#: js/CourseEditDialog.js:339
-msgid "Reset Password"
-msgstr "Återställ lösenord"
-
-#: js/CourseEditDialog.js:359
-msgid "Please enter the new Password."
-msgstr ""
-
-#: js/AddMemberDialog.js:63
-msgid "First Name"
-msgstr "Förnamn"
-
-#: js/AddMemberDialog.js:67
-msgid "Last Name"
-msgstr "Efternamn"
-
-#: js/AddMemberDialog.js:86
-msgid "Add new member to course"
-msgstr "Lägg till ny medlem till kurs"
-
-#: js/AddMemberDialog.js:121
-msgid "Errors"
-msgstr "Fel"
-
-#: js/AddMemberDialog.js:121
-msgid "Please fix the errors noted."
-msgstr "Vänligen åtgärda de fel som noterats."
-
-#: js/CourseGridPanel.js:44
-msgid "Type"
-msgstr "Typ"
-
-#: js/CourseGridPanel.js:85
-msgid "Failed"
-msgstr "Misslyckades"
-
-#: js/CourseGridPanel.js:86
-msgid "Some error occured while trying to update the courses."
-msgstr "Fel uppstod vid försök att uppdatera kurserna"
-
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurser"
-
-#: Setup/Initialize.php:57
 msgid "School"
 msgstr ""
 
-#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""
 
-#: Config.php:114
-msgid "Additional Group Memberships"
-msgstr ""
-
-#: Config.php:116
-msgid "Array of IDs of Groups students can be members of"
-msgstr ""
-
-#: Config.php:126
-msgid "Internet access options."
-msgstr "Inställningar för internettillgänglighet."
-
-#: Config.php:133
-msgid "On"
-msgstr "På"
-
-#: Config.php:134
-msgid "Off"
-msgstr "Av"
-
-#: Config.php:135
-msgid "Filtered"
-msgstr "Filtrerad"
-
-#: Config.php:140 Config.php:142
-msgid "Internet Access Group (ON)"
-msgstr "Internetåtkomsts-grupp (ON)"
-
-#: Config.php:148 Config.php:150
-msgid "Internet Access Group (FILTERED)"
-msgstr "Internetåkomsts-grupp (FILTERED)"
-
-#: Config.php:156 Config.php:158
-msgid "Students Group"
-msgstr "Studentgrupp"
-
-#: Config.php:164 Config.php:166
-msgid "Students Import Definition"
-msgstr "Studentimports-definition"
-
-#: Config.php:172
-msgid "Students login name prefix"
-msgstr "Prefix för studenters inloggningsnamn"
-
-#: Config.php:179
-msgid "Students password suffix"
-msgstr ""
-
-#: Config.php:186
-msgid "Teacher password"
-msgstr ""
-
-#: Config.php:203
-msgid "Student username schema"
-msgstr ""
-
-#: Config.php:205
-msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
-msgstr ""
-
-#: Config.php:212 Config.php:214
-msgid "Samba user settings"
-msgstr "Samba användarinställningar"
-
-#: Config.php:223
-msgid "Default department"
-msgstr ""
-
-#: Config.php:225
-msgid "The default department for new Courses"
-msgstr ""
-
-#: Config.php:233 Config.php:235
-msgid "Course -> Department Mapping"
-msgstr ""
-
-#: Controller/Course.php:340 Controller/Course.php:385
-msgid "Teacher"
-msgstr "Lärare"
-
-#: Controller/Course.php:341
-msgid "Teacher Account"
-msgstr "Lärar Konto"
-
-#: Controller/Course.php:406
-msgid "My course"
-msgstr "Min kurs"
-
-#: Acl/Rights.php:116
-msgid "Add new user"
-msgstr "Lägg till ny användare"
-
-#: Acl/Rights.php:117
-msgid "Add new user as member to a course"
-msgstr "Lägg till ny användare som medlem i en kurs"
-
-#: Acl/Rights.php:120
-msgid "Add existing user"
-msgstr "Lägg till befintlig användare"
-
-#: Acl/Rights.php:121
-msgid "Add existing user as member to a course"
-msgstr "Lägg till befintlig användare som medlem i en kurs"
-
-#: Acl/Rights.php:124
-msgid "Manage shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:125
-msgid "Create or update shared courses favorites"
-msgstr ""
-
-#: Acl/Rights.php:128
-msgid "Set additional memberships"
-msgstr ""
-
-#: Acl/Rights.php:129
-msgid "Set additional course member group memberships"
-msgstr ""
+msgid "Courses"
+msgstr "Kurser"

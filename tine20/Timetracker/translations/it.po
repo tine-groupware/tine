@@ -9,35 +9,110 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Samuel Barbera <samuel.barbera@email.it>, 2013\n"
 "Language-Team: Italian (http://app.transifex.com/tine/groupware/language/it/)\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
-msgstr "Configurazione esportazione schede attività ODS"
+msgid "Manage timeaccounts"
+msgstr "Gestisci rendiconto ore"
 
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Usa questa configurazione per l'esportazione delle schede attività ODS"
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Aggiungere, modificare ed eliminare i rendiconto ore (include tutte i permessi della scheda attività)"
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Add timeaccounts"
+msgstr "Aggiungi rendiconto ore"
+
+msgid "Manage shared timeaccount favorites"
+msgstr "Gestisci i rendiconto ore condivisi preferiti"
+
+msgid "Create or update shared timeaccount favorites"
+msgstr "Crea o aggiorna i rendiconto ore condivisi preferiti"
+
+msgid "Manage shared timesheet favorites"
+msgstr "gestisci le schede attività condivise preferite"
+
+msgid "Create or update shared timesheet favorites"
+msgstr "Crea o aggiorna le schede attività condivise preferite"
+
+msgid "Enabled Features"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Enabled Features in Timetracker Application."
 msgstr ""
 
-msgid "default"
-msgstr "default"
-
-msgid "Bookmark Timeaccount"
+msgid "Timeaccount Bookmarks"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "none"
+msgstr "nessuno"
+
+msgid "last week"
+msgstr "la scorsa settimana"
+
+msgid "not yet billed"
+msgstr "non ancora fatturata"
+
+msgid "status to bill"
 msgstr ""
+
+msgid "billed"
+msgstr "fatturata"
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr "Rendiconto Ore - Fatturato"
+
+msgid "to bill"
+msgstr "da fatturare"
+
+msgid "Contract"
+msgstr "Contratto"
+
+msgid "without contract"
+msgstr "senza contratto"
+
+msgid "Unit"
+msgstr "Unità"
+
+msgid "Unit Price"
+msgstr "Prezzo unitario"
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
+msgstr "Stato"
 
 msgid "closed"
 msgstr "chiuso"
@@ -45,17 +120,72 @@ msgstr "chiuso"
 msgid "open"
 msgstr "aperto"
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
+msgstr "Approvata in data"
+
+msgid "Responsible Person"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Timesheets are billable"
+msgstr "Le schede attività sono fatturabili"
+
+msgid "Invoice"
 msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Account di Tempo"
+msgstr[1] "Rendiconti Ore"
+msgstr[2] "Rendiconti Ore"
+
+msgid "Number"
+msgstr "Numero"
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
+msgstr "Mostra completati"
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
 msgstr ""
+
+msgid "Time Account - Status"
+msgstr "Rendiconto Ore - Stato"
 
 msgid "End Time Change"
 msgstr ""
@@ -81,9 +211,6 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
@@ -92,9 +219,6 @@ msgid_plural "Timeaccounts"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-msgid "Description"
-msgstr "Descrizione"
 
 msgid "Failed"
 msgstr "Fallita"
@@ -114,21 +238,6 @@ msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
-
-msgid "Time Account - Status"
-msgstr "Rendiconto Ore - Stato"
-
-msgid "Time Account - Billed"
-msgstr "Rendiconto Ore - Fatturato"
-
-msgid "not yet billed"
-msgstr "non ancora fatturata"
-
-msgid "to bill"
-msgstr "da fatturare"
-
-msgid "billed"
-msgstr "fatturata"
 
 msgid "Workingtime:"
 msgstr ""
@@ -178,139 +287,6 @@ msgstr "Esporta come CSV"
 
 msgid "Export as ..."
 msgstr "Esporta come ..."
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr "Contratto"
-
-msgid "without contract"
-msgstr "senza contratto"
-
-msgid "Show closed"
-msgstr "Mostra completati"
-
-msgid "Unit"
-msgstr "Unità"
-
-msgid "Unit Price"
-msgstr "Prezzo unitario"
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr "Stato"
-
-msgid "Cleared at"
-msgstr "Approvata in data"
-
-msgid "Responsible Person"
-msgstr ""
-
-msgid "Timesheets are billable"
-msgstr "Le schede attività sono fatturabili"
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Account di Tempo"
-msgstr[1] "Rendiconti Ore"
-msgstr[2] "Rendiconti Ore"
-
-msgid "Number"
-msgstr "Numero"
-
-msgid "Title"
-msgstr "Titolo"
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr "Indicatore del tempo"
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr "La mia schede attività di oggi"
-
-msgid "My Timesheets this week"
-msgstr "La mia scheda attività di questa settimana"
-
-msgid "My Timesheets last week"
-msgstr "La mia scheda attività della scorsa settimana"
-
-msgid "My Timesheets this month"
-msgstr "La mia scheda attività di questo mese"
-
-msgid "My Timesheets last month"
-msgstr "La mia scheda attività dello scorso mese"
-
-msgid "Timeaccounts to bill"
-msgstr "Rendiconto ore da fatturare"
-
-msgid "Timeaccounts not yet billed"
-msgstr "Rendiconto ore non ancora fatturati"
-
-msgid "Timeaccounts already billed"
-msgstr "Rendiconto ore già fatturati"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr "nessuno"
-
-msgid "last week"
-msgstr "la scorsa settimana"
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr ""
 
 msgid "Read Own"
 msgstr ""
@@ -426,23 +402,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "Gestisci rendiconto ore"
+msgid "Timesheets ODS export configuration"
+msgstr "Configurazione esportazione schede attività ODS"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Aggiungere, modificare ed eliminare i rendiconto ore (include tutte i permessi della scheda attività)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Usa questa configurazione per l'esportazione delle schede attività ODS"
 
-msgid "Add timeaccounts"
-msgstr "Aggiungi rendiconto ore"
+msgid "A Tag which is available in context menu for fast assignment"
+msgstr ""
 
-msgid "Manage shared timeaccount favorites"
-msgstr "Gestisci i rendiconto ore condivisi preferiti"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
-msgstr "Crea o aggiorna i rendiconto ore condivisi preferiti"
+msgid "default"
+msgstr "default"
 
-msgid "Manage shared timesheet favorites"
-msgstr "gestisci le schede attività condivise preferite"
+msgid "Requested Timesheets"
+msgstr ""
 
-msgid "Create or update shared timesheet favorites"
-msgstr "Crea o aggiorna le schede attività condivise preferite"
+msgid "My Timesheets today"
+msgstr "La mia schede attività di oggi"
+
+msgid "My Timesheets this week"
+msgstr "La mia scheda attività di questa settimana"
+
+msgid "My Timesheets last week"
+msgstr "La mia scheda attività della scorsa settimana"
+
+msgid "My Timesheets this month"
+msgstr "La mia scheda attività di questo mese"
+
+msgid "My Timesheets last month"
+msgstr "La mia scheda attività dello scorso mese"
+
+msgid "Timeaccounts to bill"
+msgstr "Rendiconto ore da fatturare"
+
+msgid "Timeaccounts not yet billed"
+msgstr "Rendiconto ore non ancora fatturati"
+
+msgid "Timeaccounts already billed"
+msgstr "Rendiconto ore già fatturati"
+
+msgid "Timetracker"
+msgstr "Indicatore del tempo"

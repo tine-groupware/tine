@@ -13,13 +13,58 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+msgid "Inventory Status Available"
+msgstr ""
+
+msgid "Possible status."
+msgstr ""
+
+msgid "Ordered"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Defect"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "Removed"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Stored"
+msgstr ""
+
+msgid "Sold"
+msgstr ""
+
+msgid "Destroyed"
+msgstr ""
+
 msgid "Types"
 msgstr ""
 
-msgid "Default Inventory Item Container"
+msgid "Tine 2.0 inventory CSV import"
 msgstr ""
 
-msgid "The default container for new items"
+msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+msgid "Inventory CSV import"
+msgstr ""
+
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
 msgid "The active number must be less than or equal total number."
@@ -58,9 +103,6 @@ msgstr ""
 msgid "Warranty"
 msgstr ""
 
-msgid "Removed"
-msgstr ""
-
 msgid "Total number"
 msgstr ""
 
@@ -80,45 +122,6 @@ msgid "Invoice date"
 msgstr ""
 
 msgid "Depreciate"
-msgstr ""
-
-msgid "Inventory"
-msgstr ""
-
-msgid "All Inventory Items"
-msgstr ""
-
-msgid "All existing Inventory Items"
-msgstr ""
-
-msgid "Inventory Status Available"
-msgstr ""
-
-msgid "Possible status."
-msgstr ""
-
-msgid "Ordered"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Defect"
-msgstr ""
-
-msgid "Missing"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Stored"
-msgstr ""
-
-msgid "Sold"
-msgstr ""
-
-msgid "Destroyed"
 msgstr ""
 
 msgid "Inventory item"
@@ -142,20 +145,17 @@ msgid_plural "Inventory types"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Tine 2.0 inventory CSV import"
+msgid "Default Inventory Item Container"
 msgstr ""
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgid "The default container for new items"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
+msgid "All Inventory Items"
 msgstr ""
 
-msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid "All existing Inventory Items"
 msgstr ""
 
-msgid "Inventory CSV import"
-msgstr ""
-
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid "Inventory"
 msgstr ""

@@ -9,310 +9,25 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Doru  DEACONU <dumitrudeaconu@yahoo.com>, 2014\n"
 "Language-Team: Romanian (Romania) (http://app.transifex.com/tine/groupware/language/ro_RO/)\n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ro_RO\n"
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All leads"
+msgid "manage shared lead folders"
 msgstr ""
 
-msgid "Default Lead List"
+msgid "Create new shared lead folders"
 msgstr ""
 
-msgid "The default list for new leads"
+msgid "manage shared leads favorites"
 msgstr ""
 
-msgid "Get Notification E-mails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about."
-msgstr ""
-
-msgid "Send Notifications e-mails for own actions"
-msgstr ""
-
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "Favorite Implicit"
-
-msgid "The default favorite which is loaded on crm startup"
-msgstr ""
-
-msgid "New Lead"
-msgstr ""
-
-msgid "Tags"
-msgstr "Taguri"
-
-msgid "Lead name"
-msgstr ""
-
-msgid "Responsible"
-msgstr "Responsabil"
-
-msgid "Partner"
-msgstr "Partener"
-
-msgid "Customer"
-msgstr "Client"
-
-msgid "Leadstate"
-msgstr ""
-
-msgid "Leadtype"
-msgstr ""
-
-msgid "Leadsource"
-msgstr ""
-
-msgid "Probability"
-msgstr "Probabilitate"
-
-msgid "Turnover"
-msgstr "Cifra de afaceri"
-
-msgid "Estimated end"
-msgstr ""
-
-msgid "End"
-msgstr "Final"
-
-msgid "Start"
-msgstr "Start"
-
-msgid "Probable Turnover"
-msgstr ""
-
-msgid "Resubmission Date"
-msgstr ""
-
-msgid "Import leads"
-msgstr ""
-
-msgid "Contact"
-msgstr "Contact"
-
-msgid "CRM Role"
-msgstr "Rol CRM"
-
-msgid "Tasks"
-msgstr "Taskuri"
-
-msgid "No Tasks to display"
-msgstr "Niciun Task de afişat"
-
-msgid "Summary"
-msgstr "Sumar"
-
-msgid "Add a task..."
-msgstr "Adaugă un task..."
-
-msgid "Due Date"
-msgstr ""
-
-msgid "Priority"
-msgstr "Prioritate"
-
-msgid "Percent"
-msgstr "Procent"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Organizer"
-msgstr "Organizează"
-
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "Adaugă Nou {0}"
-
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Editează {0}"
-
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Editează selectat {0}"
-
-msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-
-msgid "Please select the attenders' role"
-msgstr ""
-
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Select Lead"
-msgstr ""
-
-msgid "Role"
-msgstr "Rol"
-
-msgid "Select Role"
-msgstr "Selectează Rol"
-
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr ""
-
-msgid "Phone"
-msgstr "Telefon"
-
-msgid "Mobile"
-msgstr "Mobil"
-
-msgid "Fax"
-msgstr "Fax"
-
-msgid "E-Mail"
-msgstr "E-Mail"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "Address"
-msgstr "Addresă"
-
-msgid "Change type to Customer"
-msgstr "Schimbă tip la Client"
-
-msgid "Change type to Responsible"
-msgstr "Schimbă tip la Responsabil"
-
-msgid "Change type to Partner"
-msgstr "Schimbă tip la Partener"
-
-msgid "Change contact type"
-msgstr "Schimbă tip contact"
-
-msgid "Search for Contacts to add ..."
-msgstr "Caută Contacte pentru adăugare ..."
-
-msgid "Name"
-msgstr "Nume"
-
-msgid "Data"
-msgstr "Data"
-
-msgid "Cellphone"
-msgstr "Celular"
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr ""
-
-msgid "Products"
-msgstr "Produse"
-
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr ""
-
-msgid "Enter lead name"
-msgstr ""
-
-msgid "Expected turnover"
-msgstr ""
-
-msgid "Description"
-msgstr "Descriere"
-
-msgid "Enter description"
-msgstr ""
-
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "lead lists"
-msgstr ""
-
-msgid "Quick Search"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr "Creat de"
-
-msgid "X Lead"
-msgstr ""
-
-msgid "read-only"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Product"
-msgstr "Produs"
-
-msgid "Price"
-msgstr "Preţ"
-
-msgid "Quantity"
-msgstr "Cantitate"
-
-msgid "Search for Products to add ..."
-msgstr ""
-
-msgid "All leads I have read grants for"
-msgstr ""
-
-msgid "Last modified by me"
-msgstr "Ultima modificată de mine"
-
-msgid "All leads that I have last modified"
-msgstr ""
-
-msgid "My leads"
-msgstr ""
-
-msgid "All leads that I am responsible for"
-msgstr ""
-
-msgid "Leads with overdue tasks"
+msgid "Create or update shared leads favorites"
 msgstr ""
 
 msgid "controls sending notification of Leads"
@@ -360,6 +75,9 @@ msgstr "acceptat"
 msgid "lost"
 msgstr "pierdut"
 
+msgid "read-only"
+msgstr ""
+
 msgid "Lead Sources Available"
 msgstr ""
 
@@ -371,6 +89,12 @@ msgstr ""
 
 msgid "Possible lead types."
 msgstr ""
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "Partner"
+msgstr "Partener"
 
 msgid "Reseller"
 msgstr "Revânzător"
@@ -408,11 +132,26 @@ msgstr ""
 msgid "State"
 msgstr "Stat"
 
+msgid "Role"
+msgstr "Rol"
+
 msgid "Source"
 msgstr "Soursă"
 
+msgid "Start"
+msgstr "Start"
+
 msgid "Scheduled end"
 msgstr ""
+
+msgid "End"
+msgstr "Final"
+
+msgid "Turnover"
+msgstr "Cifra de afaceri"
+
+msgid "Probability"
+msgstr "Probabilitate"
 
 msgid "Folder"
 msgstr "Folder"
@@ -426,6 +165,9 @@ msgstr "Câmpuri actualizate:"
 #, python-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
+
+msgid "Tags"
+msgstr "Taguri"
 
 #, python-format
 msgid "Lead %s has been changed"
@@ -442,13 +184,19 @@ msgstr ""
 msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
 msgstr ""
 
-msgid "GENDER_Lead"
-msgstr ""
-
-msgid "Show Closed"
+msgid "CSV all data"
 msgstr ""
 
 msgid "Lead Data"
+msgstr ""
+
+msgid "Leadstate"
+msgstr ""
+
+msgid "Leadtype"
+msgstr ""
+
+msgid "Leadsource"
 msgstr ""
 
 msgid "End Scheduled"
@@ -457,11 +205,26 @@ msgstr "Final Programat"
 msgid "Contacts"
 msgstr "Contacte"
 
+msgid "Address"
+msgstr "Addresă"
+
 msgid "Telephone"
 msgstr "Telefon"
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Tasks"
+msgstr "Taskuri"
+
+msgid "Due Date"
+msgstr ""
+
+msgid "Priority"
+msgstr "Prioritate"
+
+msgid "Products"
+msgstr "Produse"
 
 msgid "low"
 msgstr "scăzut"
@@ -475,18 +238,6 @@ msgstr "înalt"
 msgid "urgent"
 msgstr "urgent"
 
-msgid "CSV all data"
-msgstr ""
-
-msgid "Lead CSV import"
-msgstr ""
-
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
 msgid "Edit new lead"
 msgstr ""
 
@@ -498,14 +249,263 @@ msgstr ""
 msgid "%s new leads have been imported"
 msgstr ""
 
-msgid "manage shared lead folders"
+msgid "Lead CSV import"
 msgstr ""
 
-msgid "Create new shared lead folders"
+msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
-msgid "manage shared leads favorites"
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-msgid "Create or update shared leads favorites"
+msgid "Please choose the Lead to add the contacts to"
+msgstr ""
+
+msgid "Please select the attenders' role"
+msgstr ""
+
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Select Lead"
+msgstr ""
+
+msgid "Select Role"
+msgstr "Selectează Rol"
+
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr ""
+
+msgid "Change type to Customer"
+msgstr "Schimbă tip la Client"
+
+msgid "Responsible"
+msgstr "Responsabil"
+
+msgid "Change type to Responsible"
+msgstr "Schimbă tip la Responsabil"
+
+msgid "Change type to Partner"
+msgstr "Schimbă tip la Partener"
+
+msgid "Change contact type"
+msgstr "Schimbă tip contact"
+
+msgid "Search for Contacts to add ..."
+msgstr "Caută Contacte pentru adăugare ..."
+
+msgid "Name"
+msgstr "Nume"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Cellphone"
+msgstr "Celular"
+
+msgid "New Lead"
+msgstr ""
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr ""
+
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr ""
+
+msgid "Enter lead name"
+msgstr ""
+
+msgid "Expected turnover"
+msgstr ""
+
+msgid "Resubmission Date"
+msgstr ""
+
+msgid "Estimated end"
+msgstr ""
+
+msgid "Description"
+msgstr "Descriere"
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "CRM Role"
+msgstr "Rol CRM"
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Lead name"
+msgstr ""
+
+msgid "Probable Turnover"
+msgstr ""
+
+msgid "Import leads"
+msgstr ""
+
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Adaugă Nou {0}"
+
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Editează {0}"
+
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Editează selectat {0}"
+
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "lead lists"
+msgstr ""
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr "Creat de"
+
+msgid "X Lead"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Product"
+msgstr "Produs"
+
+msgid "Price"
+msgstr "Preţ"
+
+msgid "Quantity"
+msgstr "Cantitate"
+
+msgid "Search for Products to add ..."
+msgstr ""
+
+msgid "No Tasks to display"
+msgstr "Niciun Task de afişat"
+
+msgid "Summary"
+msgstr "Sumar"
+
+msgid "Add a task..."
+msgstr "Adaugă un task..."
+
+msgid "Percent"
+msgstr "Procent"
+
+msgid "Organizer"
+msgstr "Organizează"
+
+msgid "GENDER_Lead"
+msgstr ""
+
+msgid "Show Closed"
+msgstr ""
+
+msgid "All leads"
+msgstr ""
+
+msgid "Default Lead List"
+msgstr ""
+
+msgid "The default list for new leads"
+msgstr ""
+
+msgid "Get Notification E-mails"
+msgstr ""
+
+msgid "The level of actions you want to be notified about."
+msgstr ""
+
+msgid "Send Notifications e-mails for own actions"
+msgstr ""
+
+msgid "Get notifications e-mails for actions you did yourself"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr "Favorite Implicit"
+
+msgid "The default favorite which is loaded on crm startup"
+msgstr ""
+
+msgid "All leads I have read grants for"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr "Ultima modificată de mine"
+
+msgid "All leads that I have last modified"
+msgstr ""
+
+msgid "My leads"
+msgstr ""
+
+msgid "All leads that I am responsible for"
+msgstr ""
+
+msgid "Leads with overdue tasks"
 msgstr ""

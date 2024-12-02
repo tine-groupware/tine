@@ -16,57 +16,21 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:149
 msgid "Draft"
 msgstr ""
 
-#: Controller.php:150
 msgid "released"
 msgstr ""
 
-#: Controller.php:151
 msgid "obsolete"
 msgstr ""
 
-#: Controller.php:154
 msgid "Internal"
 msgstr ""
 
-#: Controller.php:155
 msgid "Public"
 msgstr ""
 
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr ""
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr ""
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr ""
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr ""
-
-#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
-#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:204
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-#: js/FaqStatus.js:26 js/AdminPanel.js:93 js/AdminPanel.js:125
-#: js/FaqGridDetailsPanel.js:199 js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] ""
@@ -74,40 +38,58 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr ""
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
-#: js/FaqEditDialog.js:65 js/FaqGridPanel.js:95 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr ""
-
-#: js/FaqEditDialog.js:66
-msgid "Enter a question..."
-msgstr ""
-
-#: js/FaqEditDialog.js:72 js/SimpleFAQ.js:46 js/FaqGridPanel.js:102
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr ""
-
-#: js/FaqEditDialog.js:73
-msgid "Enter a answer..."
-msgstr ""
-
-#: js/FaqEditDialog.js:81 js/FaqGridPanel.js:89
-msgid "Type"
-msgstr ""
-
-#: js/FaqEditDialog.js:93 js/FaqGridPanel.js:83
-msgid "Status"
-msgstr ""
-
-#: js/AdminPanel.js:105
 msgid "Defaults"
 msgstr ""
 
-#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "Question"
+msgstr ""
+
+msgid "Enter a question..."
+msgstr ""
+
+msgid "Answer"
+msgstr ""
+
+msgid "Enter a answer..."
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "FAQ Infos"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "No answer yet"
+msgstr ""
+
+msgid "FAQ id"
+msgstr ""
+
+msgid "Add a new FAQ Status..."
+msgstr ""
+
+msgid "Add a new FAQ Type..."
+msgstr ""
+
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] ""
@@ -115,47 +97,6 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr ""
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr ""
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr ""
-
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr ""
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr ""
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr ""
-
-#: js/Model.js:39
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] ""
@@ -163,22 +104,41 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/Model.js:39
 msgid "FAQ Lists"
 msgstr ""
 
-#: js/Model.js:74
 msgid "Quick Search"
 msgstr ""
 
-#: Setup/Initialize.php:33
+msgid "Search FAQ"
+msgstr ""
+
+msgid "Find Question"
+msgstr ""
+
+msgid "Search question"
+msgstr ""
+
+msgid "All my FAQs"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr ""
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr ""
+
+msgid "Default FAQ List"
+msgstr ""
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr ""
+
 msgid "All FAQs of my FAQ Lists"
 msgstr ""
 
-#: Setup/Initialize.php:40
 msgid "Last modified by me"
 msgstr ""
 
-#: Setup/Initialize.php:41
 msgid "All FAQs that I have last modified"
 msgstr ""

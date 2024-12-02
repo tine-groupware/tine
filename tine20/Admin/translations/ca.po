@@ -7,961 +7,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Catalan (http://app.transifex.com/tine/groupware/language/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr ""
-
-msgid "Disable Application"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "Paràmetres {0}"
-
-msgid "Search:"
-msgstr "Cerca:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Es mostren les aplicacions {0} - {1} de {2}"
-
-msgid "No applications to display"
-msgstr "Cap aplicació a mostrar"
-
-msgid "Order"
-msgstr "Ordre"
-
-msgid "Name"
-msgstr "Nom"
-
-msgid "Status"
-msgstr "Estat"
-
-msgid "Version"
-msgstr "Versió"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Confirma"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Esteu segur que voleu eliminar els grups seleccionats?"
-
-msgid "Deleting group(s)..."
-msgstr "Eliminant grup(s)..."
-
-msgid "Add Group"
-msgstr ""
-
-msgid "Edit Group"
-msgstr ""
-
-msgid "Delete Group"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Es mostren els grups {0} - {1} de {2}"
-
-msgid "No groups to display"
-msgstr "Cap grup a mostrar"
-
-msgid "ID"
-msgstr "Identificador"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Descripció"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Errors"
-
-msgid "Please configure store for this field type"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Record Class"
-msgstr ""
-
-msgid "Given record class not found"
-msgstr ""
-
-msgid "Cancel"
-msgstr "Cancel·la"
-
-msgid "OK"
-msgstr ""
-
-msgid "Configure store"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "Visualitza"
-
-msgid "Use"
-msgstr "Utilitza"
-
-msgid "Model"
-msgstr ""
-
-msgid "Custom field definition"
-msgstr ""
-
-msgid "Text"
-msgstr ""
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "DateTime"
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "Boolean"
-msgstr ""
-
-msgid "Search Combo"
-msgstr ""
-
-msgid "Key Field"
-msgstr ""
-
-msgid "Record"
-msgstr ""
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Label"
-msgstr ""
-
-msgid "Length"
-msgstr ""
-
-msgid "Required"
-msgstr ""
-
-msgid "Custom field additional properties"
-msgstr ""
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Value"
-msgstr ""
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "Nom de l'ordinador"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-msgid "Please wait"
-msgstr "Espereu"
-
-msgid "Updating Tag"
-msgstr "Actualitzant etiqueta"
-
-msgid "Failed"
-msgstr "Ha fallat"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr "Solventeu els errors citats."
-
-msgid "Allowed Contexts"
-msgstr "Contextos permesos"
-
-msgid "Context"
-msgstr "Context"
-
-msgid "Account Rights"
-msgstr "Permisos del compte"
-
-msgid "Tag Name"
-msgstr "Nom d'etiqueta"
-
-msgid "Color"
-msgstr "Color"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr ""
-
-msgid "Tag"
-msgstr "Etiqueta"
-
-msgid "Add New Tag"
-msgstr "Afegeix una nova etiqueta"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Edita l'etiqueta \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "Esteu segur que voleu eliminar les etiquetes seleccionades?"
-
-msgid "Deleting tag(s)..."
-msgstr "Eliminant etiqueta(es)..."
-
-msgid "Add Tag"
-msgstr ""
-
-msgid "Edit Tag"
-msgstr ""
-
-msgid "Delete Tag"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Es mostren les etiquetes {0} - {1} de {2}"
-
-msgid "No tags to display"
-msgstr "Cap etiqueta a mostrar"
-
-msgid "Usage:&#160;"
-msgstr ""
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "S'actualitzen les pertanyences com a membres"
-
-msgid "Could not save role."
-msgstr "No s'ha pogut desar el rol."
-
-msgid "Deleting role..."
-msgstr "Eliminant el rol..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "S'ha produït un error quan s'intentava eliminar el rol."
-
-msgid "Rights"
-msgstr "Permisos"
-
-msgid "Members"
-msgstr "Membres"
-
-msgid "Role Name"
-msgstr "Nom del rol"
-
-msgid "Role"
-msgstr "Rol"
-
-msgid "Add New Role"
-msgstr "Afegeix un nou rol"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Edita el rol \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "Esteu segur que voleu eliminar els rols seleccionats?"
-
-msgid "Deleting role(s)..."
-msgstr "Eliminant el(s) rol(s)..."
-
-msgid "Add Role"
-msgstr ""
-
-msgid "Edit Role"
-msgstr ""
-
-msgid "Delete Role"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Es mostren els rols {0} - {1} de {2}"
-
-msgid "No roles to display"
-msgstr "Cap rol a mostrar"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Groups"
-msgstr "Grups"
-
-msgid "Applications"
-msgstr "Aplicacions"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "Quota"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Usuari de correu electrònic"
-msgstr[1] "Usuaris de correu electrònic"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr ""
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr ""
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr "Les contrasenyes no coincideixen!"
-
-msgid "Passwords match!"
-msgstr ""
-
-msgid "Primary group"
-msgstr "Grup primari"
-
-msgid "Unix"
-msgstr "Unix"
-
-msgid "Home Directory"
-msgstr "Directori \"home\""
-
-msgid "Login Shell"
-msgstr "intèrpret d'ordres"
-
-msgid "Windows"
-msgstr "Windows"
-
-msgid "Home Drive"
-msgstr "Unitat \"home\""
-
-msgid "Login Time"
-msgstr "Hora de l'inici de sessió"
-
-msgid "never logged in"
-msgstr "no ha iniciat sessió mai"
-
-msgid "Home Path"
-msgstr "Camí \"home\""
-
-msgid "Logout Time"
-msgstr "Hora de la finalització de sessió"
-
-msgid "never logged off"
-msgstr "no ha finalitzat la sessió mai"
-
-msgid "Profile Path"
-msgstr "Camí del perfil"
-
-msgid "Password Last Set"
-msgstr "Contrasenya establerta per darrera vegada"
-
-msgid "never"
-msgstr "mai"
-
-msgid "Logon Script"
-msgstr "Script d'inici de sessió"
-
-msgid "Password Can Change"
-msgstr "La contrasenya pot canviar"
-
-msgid "not set"
-msgstr "no establerta"
-
-msgid "Password Must Change"
-msgstr "La contrasenya s'ha de canviar"
-
-msgid "Kick Off Time"
-msgstr "Hora d'expulsió"
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr ""
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Informació"
-
-msgid "Last Login"
-msgstr "Darrer inici de sessió"
-
-msgid "Forward Only"
-msgstr "Reenvia només"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr "Afegeix una adreça àlies..."
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr ""
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Confirmació de contrasenya"
-
-msgid "Repeat password"
-msgstr "Repetiu la contrasenya"
-
-msgid "Ok"
-msgstr "D'acord"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Compte"
-
-msgid "First name"
-msgstr "Nom"
-
-msgid "Last name"
-msgstr "Cognom"
-
-msgid "Display name"
-msgstr ""
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr ""
-
-msgid "Password"
-msgstr "Contrasenya"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "OpenID"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "habilitat"
-
-msgid "disabled"
-msgstr "inhabilitat"
-
-msgid "expired"
-msgstr "caducat"
-
-msgid "blocked"
-msgstr ""
-
-msgid "Invalid Status"
-msgstr ""
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr ""
-
-msgid "Expires"
-msgstr "Caduca"
-
-msgid "Last login at"
-msgstr "Darrer inici de sessió a"
-
-msgid "don't know"
-msgstr "no se sap"
-
-msgid "Last login from"
-msgstr "Darrer inici de sessió des de"
-
-msgid "Password set"
-msgstr "S'ha establert contrasenya"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr ""
-
-msgid "User roles"
-msgstr ""
-
-msgid "Fileserver"
-msgstr "Servidor de fitxers"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Visibilitat"
-
-msgid "Display in addressbook"
-msgstr "Mostra a la llibreta d'adreces"
-
-msgid "Hide from addressbook"
-msgstr "Amaga a la llibreta d'adreces"
-
-msgid "Saved in Addressbook"
-msgstr ""
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Usuari"
-msgstr[1] "Usuaris"
-
-msgid "Users"
-msgstr ""
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Usuari de samba"
-msgstr[1] "Usuaris de samba"
-
-msgid "Enable Account"
-msgstr ""
-
-msgid "Disable Account"
-msgstr ""
-
-msgid "Reset Password"
-msgstr ""
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "S'ha canviat la contrasenya"
-
-msgid "Set new password"
-msgstr "Estableix una nova contrasenya"
-
-msgid "Please enter the new password:"
-msgstr "Introduïu la nova contrasenya:"
-
-msgid "Group Name"
-msgstr "Nom del grup"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Membres de grup"
-
-msgid "personal"
-msgstr ""
-
-msgid "shared"
-msgstr ""
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr ""
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Container Name"
-msgstr ""
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Ordinador"
-msgstr[1] "Ordinadors"
-
-msgid "Roles"
-msgstr "Rols"
-
-msgid "Containers"
-msgstr ""
-
-msgid "Shared Tags"
-msgstr "Etiquetes compartides"
-
-msgid "Customfields"
-msgstr ""
-
-msgid "Computers"
-msgstr "Ordinadors"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr ""
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Administració"
-
-msgid "Refresh"
-msgstr ""
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "Adreça IP"
-
-msgid "Client Type"
-msgstr ""
-
-msgid "Session ID"
-msgstr "Identificador de sessió"
-
-msgid "Login Name"
-msgstr "Nom d'usuari d'inici de sessió"
-
-msgid "Result"
-msgstr "Resultat"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr ""
-
-msgid "password expired"
-msgstr ""
-
-msgid "user disabled"
-msgstr ""
-
-msgid "invalid password"
-msgstr "contrasenya incorrecta"
-
-msgid "ambiguous username"
-msgstr "nom d'usuari ambigu"
-
-msgid "user not found"
-msgstr "no s'ha trobat l'usuari"
-
-msgid "failure"
-msgstr "errada"
-
-msgid "success"
-msgstr "èxit"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr ""
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr ""
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1108,4 +161,951 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr ""
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr ""
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "IP Address"
+msgstr "Adreça IP"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Usuari"
+msgstr[1] "Usuaris"
+
+msgid "Login Time"
+msgstr "Hora de l'inici de sessió"
+
+msgid "Logout Time"
+msgstr "Hora de la finalització de sessió"
+
+msgid "Client Type"
+msgstr ""
+
+msgid "Session ID"
+msgstr "Identificador de sessió"
+
+msgid "Login Name"
+msgstr "Nom d'usuari d'inici de sessió"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr ""
+
+msgid "password expired"
+msgstr ""
+
+msgid "user disabled"
+msgstr ""
+
+msgid "invalid password"
+msgstr "contrasenya incorrecta"
+
+msgid "ambiguous username"
+msgstr "nom d'usuari ambigu"
+
+msgid "user not found"
+msgstr "no s'ha trobat l'usuari"
+
+msgid "failure"
+msgstr "errada"
+
+msgid "success"
+msgstr "èxit"
+
+msgid "Groups"
+msgstr "Grups"
+
+msgid "Roles"
+msgstr "Rols"
+
+msgid "Applications"
+msgstr "Aplicacions"
+
+msgid "Containers"
+msgstr ""
+
+msgid "Shared Tags"
+msgstr "Etiquetes compartides"
+
+msgid "Customfields"
+msgstr ""
+
+msgid "Computers"
+msgstr "Ordinadors"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr ""
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Administració"
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Enable Application"
+msgstr ""
+
+msgid "Disable Application"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "Paràmetres {0}"
+
+msgid "Search:"
+msgstr "Cerca:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Es mostren les aplicacions {0} - {1} de {2}"
+
+msgid "No applications to display"
+msgstr "Cap aplicació a mostrar"
+
+msgid "Order"
+msgstr "Ordre"
+
+msgid "Status"
+msgstr "Estat"
+
+msgid "Version"
+msgstr "Versió"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Description"
+msgstr "Descripció"
+
+msgid "Label"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "personal"
+msgstr ""
+
+msgid "shared"
+msgstr ""
+
+msgid "Color"
+msgstr "Color"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "Identificador"
+
+msgid "Container Name"
+msgstr ""
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Errors"
+
+msgid "Please configure store for this field type"
+msgstr ""
+
+msgid "Record Class"
+msgstr ""
+
+msgid "Given record class not found"
+msgstr ""
+
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgid "OK"
+msgstr ""
+
+msgid "Configure store"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "Visualitza"
+
+msgid "Use"
+msgstr "Utilitza"
+
+msgid "Custom field definition"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "DateTime"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Boolean"
+msgstr ""
+
+msgid "Search Combo"
+msgstr ""
+
+msgid "Key Field"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Custom field additional properties"
+msgstr ""
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Nom del grup"
+
+msgid "Visibility"
+msgstr "Visibilitat"
+
+msgid "Display in addressbook"
+msgstr "Mostra a la llibreta d'adreces"
+
+msgid "Hide from addressbook"
+msgstr "Amaga a la llibreta d'adreces"
+
+msgid "Saved in Addressbook"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Membres de grup"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+msgid "Confirm"
+msgstr "Confirma"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Esteu segur que voleu eliminar els grups seleccionats?"
+
+msgid "Deleting group(s)..."
+msgstr "Eliminant grup(s)..."
+
+msgid "Add Group"
+msgstr ""
+
+msgid "Edit Group"
+msgstr ""
+
+msgid "Delete Group"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Es mostren els grups {0} - {1} de {2}"
+
+msgid "No groups to display"
+msgstr "Cap grup a mostrar"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "Quota"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Usuari de correu electrònic"
+msgstr[1] "Usuaris de correu electrònic"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr ""
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr ""
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Espereu"
+
+msgid "Updating Memberships"
+msgstr "S'actualitzen les pertanyences com a membres"
+
+msgid "Failed"
+msgstr "Ha fallat"
+
+msgid "Could not save role."
+msgstr "No s'ha pogut desar el rol."
+
+msgid "Please fix the errors noted."
+msgstr "Solventeu els errors citats."
+
+msgid "Deleting role..."
+msgstr "Eliminant el rol..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "S'ha produït un error quan s'intentava eliminar el rol."
+
+msgid "Rights"
+msgstr "Permisos"
+
+msgid "Members"
+msgstr "Membres"
+
+msgid "Role Name"
+msgstr "Nom del rol"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr ""
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Add New Role"
+msgstr "Afegeix un nou rol"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Edita el rol \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "Esteu segur que voleu eliminar els rols seleccionats?"
+
+msgid "Deleting role(s)..."
+msgstr "Eliminant el(s) rol(s)..."
+
+msgid "Add Role"
+msgstr ""
+
+msgid "Edit Role"
+msgstr ""
+
+msgid "Delete Role"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Es mostren els rols {0} - {1} de {2}"
+
+msgid "No roles to display"
+msgstr "Cap rol a mostrar"
+
+msgid "Computer Name"
+msgstr "Nom de l'ordinador"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Ordinador"
+msgstr[1] "Ordinadors"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "Actualitzant etiqueta"
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr "Contextos permesos"
+
+msgid "Context"
+msgstr "Context"
+
+msgid "Account Rights"
+msgstr "Permisos del compte"
+
+msgid "Tag Name"
+msgstr "Nom d'etiqueta"
+
+msgid "Tag"
+msgstr "Etiqueta"
+
+msgid "Add New Tag"
+msgstr "Afegeix una nova etiqueta"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Edita l'etiqueta \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "Esteu segur que voleu eliminar les etiquetes seleccionades?"
+
+msgid "Deleting tag(s)..."
+msgstr "Eliminant etiqueta(es)..."
+
+msgid "Add Tag"
+msgstr ""
+
+msgid "Edit Tag"
+msgstr ""
+
+msgid "Delete Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Es mostren les etiquetes {0} - {1} de {2}"
+
+msgid "No tags to display"
+msgstr "Cap etiqueta a mostrar"
+
+msgid "Usage:&#160;"
+msgstr ""
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr "Les contrasenyes no coincideixen!"
+
+msgid "Passwords match!"
+msgstr ""
+
+msgid "Primary group"
+msgstr "Grup primari"
+
+msgid "Unix"
+msgstr "Unix"
+
+msgid "Home Directory"
+msgstr "Directori \"home\""
+
+msgid "Login Shell"
+msgstr "intèrpret d'ordres"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "Home Drive"
+msgstr "Unitat \"home\""
+
+msgid "never logged in"
+msgstr "no ha iniciat sessió mai"
+
+msgid "Home Path"
+msgstr "Camí \"home\""
+
+msgid "never logged off"
+msgstr "no ha finalitzat la sessió mai"
+
+msgid "Profile Path"
+msgstr "Camí del perfil"
+
+msgid "Password Last Set"
+msgstr "Contrasenya establerta per darrera vegada"
+
+msgid "never"
+msgstr "mai"
+
+msgid "Logon Script"
+msgstr "Script d'inici de sessió"
+
+msgid "Password Can Change"
+msgstr "La contrasenya pot canviar"
+
+msgid "not set"
+msgstr "no establerta"
+
+msgid "Password Must Change"
+msgstr "La contrasenya s'ha de canviar"
+
+msgid "Kick Off Time"
+msgstr "Hora d'expulsió"
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Informació"
+
+msgid "Last Login"
+msgstr "Darrer inici de sessió"
+
+msgid "Forward Only"
+msgstr "Reenvia només"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr "Afegeix una adreça àlies..."
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr ""
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Confirmació de contrasenya"
+
+msgid "Repeat password"
+msgstr "Repetiu la contrasenya"
+
+msgid "Ok"
+msgstr "D'acord"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Compte"
+
+msgid "First name"
+msgstr "Nom"
+
+msgid "Last name"
+msgstr "Cognom"
+
+msgid "Display name"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr ""
+
+msgid "Password"
+msgstr "Contrasenya"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "OpenID"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "habilitat"
+
+msgid "disabled"
+msgstr "inhabilitat"
+
+msgid "expired"
+msgstr "caducat"
+
+msgid "blocked"
+msgstr ""
+
+msgid "Invalid Status"
+msgstr ""
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr ""
+
+msgid "Expires"
+msgstr "Caduca"
+
+msgid "Last login at"
+msgstr "Darrer inici de sessió a"
+
+msgid "don't know"
+msgstr "no se sap"
+
+msgid "Last login from"
+msgstr "Darrer inici de sessió des de"
+
+msgid "Password set"
+msgstr "S'ha establert contrasenya"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr ""
+
+msgid "User roles"
+msgstr ""
+
+msgid "Fileserver"
+msgstr "Servidor de fitxers"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr ""
+
+msgid "Disable Account"
+msgstr ""
+
+msgid "Reset Password"
+msgstr ""
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "S'ha canviat la contrasenya"
+
+msgid "Set new password"
+msgstr "Estableix una nova contrasenya"
+
+msgid "Please enter the new password:"
+msgstr "Introduïu la nova contrasenya:"
+
+msgid "Users"
+msgstr ""
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Usuari de samba"
+msgstr[1] "Usuaris de samba"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

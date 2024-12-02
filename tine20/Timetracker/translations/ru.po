@@ -12,35 +12,110 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Artur Mudrykh <arturmon82@gmail.com>, 2012\n"
 "Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
+msgid "Manage timeaccounts"
+msgstr "Управлять счетами времени"
+
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
 msgstr ""
 
-msgid "Use this configuration for the timesheet ODS export."
+msgid "Add timeaccounts"
+msgstr "Добавить временную учётную запись"
+
+msgid "Manage shared timeaccount favorites"
 msgstr ""
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Create or update shared timeaccount favorites"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Manage shared timesheet favorites"
+msgstr "Управление общими избранными расписаниями"
+
+msgid "Create or update shared timesheet favorites"
+msgstr "Создать или обновить общие временные расписания"
+
+msgid "Enabled Features"
 msgstr ""
 
-msgid "default"
-msgstr "по умолчанию"
-
-msgid "Bookmark Timeaccount"
+msgid "Enabled Features in Timetracker Application."
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "Timeaccount Bookmarks"
 msgstr ""
+
+msgid "none"
+msgstr "Нет"
+
+msgid "last week"
+msgstr "На прошлой неделе"
+
+msgid "not yet billed"
+msgstr "еще не оплачено"
+
+msgid "status to bill"
+msgstr ""
+
+msgid "billed"
+msgstr "оплачено"
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr ""
+
+msgid "to bill"
+msgstr "оплатить"
+
+msgid "Contract"
+msgstr "Договор"
+
+msgid "without contract"
+msgstr "без договора"
+
+msgid "Unit"
+msgstr "Часть"
+
+msgid "Unit Price"
+msgstr "Цена на части"
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
+msgstr "Статус"
 
 msgid "closed"
 msgstr "Закрыто"
@@ -48,17 +123,74 @@ msgstr "Закрыто"
 msgid "open"
 msgstr "Открыто"
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
+msgstr "Создано"
+
+msgid "Responsible Person"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Timesheets are billable"
+msgstr "Табели оплачиваемы"
+
+msgid "Invoice"
 msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "Временный счет"
+msgstr[1] "Временных счета"
+msgstr[2] "Временных счетов"
+msgstr[3] "Временных счетов"
+
+msgid "Number"
+msgstr "Номер"
+
+msgid "Title"
+msgstr "Заголовок"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
+msgstr "Показать закрытые"
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
 msgstr ""
+
+msgid "Time Account - Status"
+msgstr "Статус временного счета"
 
 msgid "End Time Change"
 msgstr ""
@@ -85,9 +217,6 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
@@ -97,9 +226,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
-
-msgid "Description"
-msgstr "Описание"
 
 msgid "Failed"
 msgstr "Не удалось"
@@ -119,21 +245,6 @@ msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
-
-msgid "Time Account - Status"
-msgstr "Статус временного счета"
-
-msgid "Time Account - Billed"
-msgstr ""
-
-msgid "not yet billed"
-msgstr "еще не оплачено"
-
-msgid "to bill"
-msgstr "оплатить"
-
-msgid "billed"
-msgstr "оплачено"
 
 msgid "Workingtime:"
 msgstr ""
@@ -183,141 +294,6 @@ msgstr "Экспорт как CSV"
 
 msgid "Export as ..."
 msgstr "Экспорт в ..."
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr "Договор"
-
-msgid "without contract"
-msgstr "без договора"
-
-msgid "Show closed"
-msgstr "Показать закрытые"
-
-msgid "Unit"
-msgstr "Часть"
-
-msgid "Unit Price"
-msgstr "Цена на части"
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr "Статус"
-
-msgid "Cleared at"
-msgstr "Создано"
-
-msgid "Responsible Person"
-msgstr ""
-
-msgid "Timesheets are billable"
-msgstr "Табели оплачиваемы"
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "Временный счет"
-msgstr[1] "Временных счета"
-msgstr[2] "Временных счетов"
-msgstr[3] "Временных счетов"
-
-msgid "Number"
-msgstr "Номер"
-
-msgid "Title"
-msgstr "Заголовок"
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr "Хронометраж"
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr "Моё расписание на сегодня"
-
-msgid "My Timesheets this week"
-msgstr "Моё расписание на эту неделю"
-
-msgid "My Timesheets last week"
-msgstr "Моё расписание на последнюю неделю"
-
-msgid "My Timesheets this month"
-msgstr "Моё расписание на этот месяц"
-
-msgid "My Timesheets last month"
-msgstr "Моё расписание на прошлый месяц"
-
-msgid "Timeaccounts to bill"
-msgstr "Расписание на оплату"
-
-msgid "Timeaccounts not yet billed"
-msgstr "Расписание не оплачено"
-
-msgid "Timeaccounts already billed"
-msgstr "Расписание оплачено"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr "Нет"
-
-msgid "last week"
-msgstr "На прошлой неделе"
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr ""
 
 msgid "Read Own"
 msgstr ""
@@ -433,23 +409,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "Управлять счетами времени"
-
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgid "Timesheets ODS export configuration"
 msgstr ""
 
-msgid "Add timeaccounts"
-msgstr "Добавить временную учётную запись"
-
-msgid "Manage shared timeaccount favorites"
+msgid "Use this configuration for the timesheet ODS export."
 msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
+msgid "A Tag which is available in context menu for fast assignment"
 msgstr ""
 
-msgid "Manage shared timesheet favorites"
-msgstr "Управление общими избранными расписаниями"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgstr ""
 
-msgid "Create or update shared timesheet favorites"
-msgstr "Создать или обновить общие временные расписания"
+msgid "default"
+msgstr "по умолчанию"
+
+msgid "Requested Timesheets"
+msgstr ""
+
+msgid "My Timesheets today"
+msgstr "Моё расписание на сегодня"
+
+msgid "My Timesheets this week"
+msgstr "Моё расписание на эту неделю"
+
+msgid "My Timesheets last week"
+msgstr "Моё расписание на последнюю неделю"
+
+msgid "My Timesheets this month"
+msgstr "Моё расписание на этот месяц"
+
+msgid "My Timesheets last month"
+msgstr "Моё расписание на прошлый месяц"
+
+msgid "Timeaccounts to bill"
+msgstr "Расписание на оплату"
+
+msgid "Timeaccounts not yet billed"
+msgstr "Расписание не оплачено"
+
+msgid "Timeaccounts already billed"
+msgstr "Расписание оплачено"
+
+msgid "Timetracker"
+msgstr "Хронометраж"

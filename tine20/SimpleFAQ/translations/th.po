@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: 1a8e3140e5b8a374784ecdfdf83f7d9e_5e6d67c <d882eac74045deada33a9c470758040d_143165>, 2014\n"
 "Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -34,31 +34,16 @@ msgstr "ภายใน"
 msgid "Public"
 msgstr "สาธารณะ"
 
-msgid "All my FAQs"
-msgstr "คำถามที่ถามบ่อยของฉันทั้งหมด"
-
-msgid "Default Favorite"
-msgstr "ค่าที่ชอบหลัก"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด FAQ"
-
-msgid "Default FAQ List"
-msgstr "รายการคำถามหลักที่ถามบ่อย"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "รายการ FAQ ค่าหลัก ที่จะสร้าง FAQ ใหม่เข้าไป"
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "สถานะ คำถามที่ถามบ่อย"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "ประเภทของคำถามที่ถามบ่อย"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "สถานะ คำถามที่ถามบ่อย"
-
-msgid "Add a new FAQ Status..."
-msgstr "ใส่สถานะคำถามที่ถามบ่อยใหม่"
+msgid "Defaults"
+msgstr "ค่าหลัก"
 
 msgid "Question"
 msgstr "คำถาม"
@@ -78,30 +63,11 @@ msgstr "ประเภท"
 msgid "Status"
 msgstr "สถานะ"
 
-msgid "Defaults"
-msgstr "ค่าหลัก"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "คำถามที่ถามบ่อย"
-
-msgid "Find Question"
-msgstr "หาคำถาม"
-
-msgid "Search question"
-msgstr "ค้นหาคำถาม"
-
-msgid "FAQ id"
-msgstr "รหัสของคำถามที่ถามบ่อย"
+msgid "FAQ Infos"
+msgstr "ข้อมูลเกี่ยวกับคำถามที่ถามบ่อย"
 
 msgid "Tags"
 msgstr "ป้ายกำกับ"
-
-msgid "Add a new FAQ Type..."
-msgstr "ใส่ประเภทคำถามที่ถามบ่อยใหม่"
-
-msgid "FAQ Infos"
-msgstr "ข้อมูลเกี่ยวกับคำถามที่ถามบ่อย"
 
 msgid "Creation Time"
 msgstr "เวลาที่สร้างขึ้น"
@@ -112,8 +78,18 @@ msgstr "สร้าง โดย"
 msgid "No answer yet"
 msgstr "ยังไม่มีคำตอบ"
 
-msgid "Search FAQ"
-msgstr "ค้นหาคำถามที่ถามบ่อย"
+msgid "FAQ id"
+msgstr "รหัสของคำถามที่ถามบ่อย"
+
+msgid "Add a new FAQ Status..."
+msgstr "ใส่สถานะคำถามที่ถามบ่อยใหม่"
+
+msgid "Add a new FAQ Type..."
+msgstr "ใส่ประเภทคำถามที่ถามบ่อยใหม่"
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "คำถามที่ถามบ่อย"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -124,6 +100,30 @@ msgstr "รายการคำถามที่ถามบ่อย"
 
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
+
+msgid "Search FAQ"
+msgstr "ค้นหาคำถามที่ถามบ่อย"
+
+msgid "Find Question"
+msgstr "หาคำถาม"
+
+msgid "Search question"
+msgstr "ค้นหาคำถาม"
+
+msgid "All my FAQs"
+msgstr "คำถามที่ถามบ่อยของฉันทั้งหมด"
+
+msgid "Default Favorite"
+msgstr "ค่าที่ชอบหลัก"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด FAQ"
+
+msgid "Default FAQ List"
+msgstr "รายการคำถามหลักที่ถามบ่อย"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "รายการ FAQ ค่าหลัก ที่จะสร้าง FAQ ใหม่เข้าไป"
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "คำถามที่ถามบ่อยทั้งหมดของรายการคำถามที่ถามบ่อยของฉัน"

@@ -8,98 +8,112 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 12:12+0000\n"
 "Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
 "Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "node name must not contain the character /"
+msgid "admin"
+msgstr "quản trị"
+
+msgid "admin right description"
+msgstr "mô tả quyền quản trị"
+
+msgid "run"
+msgstr "chạy"
+
+msgid "run right description"
+msgstr "chạy mô tả quyền"
+
+msgid "Use Mainscreen"
 msgstr ""
 
-msgid "Personal container"
+msgid "App mainscreen is available in UI"
 msgstr ""
 
-#, python-format
-msgid "%s's personal container"
-msgstr "Bộ chứa cá nhân của %s"
-
-msgid "You are not allowed to delete your default container!"
+msgid "Personal tags"
 msgstr ""
 
-msgid "You are not allowed to remove all (admin) grants for this container."
+msgid "Use and see personal tags"
 msgstr ""
 
-msgid "Personal containers can have only one owner!"
+msgid "Report bugs"
+msgstr "Báo cáo lỗi"
+
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr "Bao cáo lỗi cho nhà cung cấp phần mềm khi có lỗi xảy ra"
+
+msgid "Check version"
+msgstr "Kiểm tra phiên bản"
+
+msgid "Check for new versions of this software."
+msgstr "Kiểm tra phiên bản mới cho phần mềm này"
+
+msgid "Manage bank accounts"
 msgstr ""
 
-msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
-msgstr "Bạn không được phép xóa bộ chứa này. Xin hãy định nghĩa một bộ chứa khác là sổ địa chỉ mặc định cho các liên hệ nội bộ!"
-
-msgid "A container with this name already exists."
+msgid "The right to manage bank accounts."
 msgstr ""
 
-msgid "Maximum number of users reached."
+msgid "Manage own profile"
+msgstr "Quản lý hồ sơ của tôi"
+
+msgid "The right to manage the own profile (selected contact data)."
+msgstr "Quyền quản lý hồ sơ của tôi (dữ liệu liên hệ được chọn)"
+
+msgid "Manage Numberables"
 msgstr ""
 
-msgid "The new password must be different from the old one."
+msgid "The right to manage numberables."
 msgstr ""
 
-msgid "Old pin is wrong."
+msgid "Manage own client state"
+msgstr "Quản lý trạng thái của chính người dùng"
+
+msgid "The right to manage the own client state."
+msgstr "Quyền để quản lý trạng thái của chính người dùng"
+
+msgid "Manage evaluation dimensions"
+msgstr ""
+
+msgid "The right to manage evaluation dimensions."
+msgstr ""
+
+msgid "Maintenance"
+msgstr ""
+
+msgid "The right to use the installation in maintenance mode."
+msgstr ""
+
+msgid "Show License Info"
+msgstr ""
+
+msgid "The right to be able to see license information (expiry, ...)."
+msgstr ""
+
+msgid "Replication"
+msgstr ""
+
+msgid "The right to access the replication data of all applications."
+msgstr ""
+
+msgid "unknown"
+msgstr "không rõ"
+
+msgid "Invalid authentication"
+msgstr ""
+
+msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr ""
 
 msgid "MFA send out failed, please try again or check with your system administrator"
 msgstr ""
 
-msgid "Municipality Key"
-msgid_plural "Municipality Keys"
-msgstr[0] ""
-
-msgid "Bank Holiday Calendar"
-msgid_plural "Bank Holiday Calendars"
-msgstr[0] ""
-
-msgid "GENDER_Text"
-msgstr ""
-
-msgid "Text"
-msgid_plural "Texts"
-msgstr[0] ""
-
-msgid "Anyone"
-msgstr "Bất kỳ ai"
-
-msgid "added"
-msgstr "đã thêm"
-
-msgid "removed"
-msgstr "đã xóa"
-
-msgid "modified"
-msgstr "được sửa"
-
-msgid "Number of distinct users"
-msgstr ""
-
-msgid "Number of users"
-msgstr ""
-
-msgid "  User Accounts:\n"
-msgstr ""
-
-msgid "MFA password wrong"
-msgstr ""
-
-msgid "MFA send out triggered"
-msgstr ""
-
-msgid "Email account already exists"
-msgstr ""
-
-msgid "Invalid authentication"
+msgid "MFA validation failed, please try again or check with your system administrator"
 msgstr ""
 
 msgid "GENDER_Key Field Record"
@@ -122,2659 +136,6 @@ msgid "System"
 msgstr ""
 
 msgid "Disabled"
-msgstr ""
-
-msgid "Page size"
-msgstr ""
-
-msgid "Page size in grids"
-msgstr ""
-
-msgid "Grid stripe rows"
-msgstr ""
-
-msgid "Stripe rows in grids"
-msgstr ""
-
-msgid "Grid load mask"
-msgstr ""
-
-msgid "Show load mask in grids"
-msgstr ""
-
-msgid "Grid resizing strategy"
-msgstr ""
-
-msgid "How to resize grid columns"
-msgstr ""
-
-msgid "Auto search on filter change"
-msgstr ""
-
-msgid "Perform auto search when filter is changed"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Múi giờ"
-
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "The timezone in which dates are shown in Tine 2.0."
-
-msgid "Language"
-msgstr "Ngôn ngữ"
-
-msgid "The language of the Tine 2.0 GUI."
-msgstr "The language of the Tine 2.0 GUI."
-
-msgid "Default Application"
-msgstr "Ứng dụng mặc định"
-
-msgid "The default application to show after login."
-msgstr "Ứng dụng mặc định được mở sau khi bạn đăng nhập"
-
-msgid "Window Type"
-msgstr "Loại cửa sổ"
-
-msgid "You can choose between modal windows or normal browser popup windows."
-msgstr "Bạn có thể chọn giữa cửa sổ mở trong (popup) hoặc cửa sổ popup thông thường của trình duyệt."
-
-msgid "Confirm Logout"
-msgstr "Xác nhận thoát"
-
-msgid "Show confirmation dialog on logout."
-msgstr "Hiển thị màn hình dialog khi thoát"
-
-msgid "Enable advanced search"
-msgstr ""
-
-msgid "If enabled quickfilter searches through relations as well."
-msgstr ""
-
-msgid "File double-clicking action"
-msgstr ""
-
-msgid "Which action should be executed by default when a file is double-clicked."
-msgstr ""
-
-msgid "MFA validation failed, please try again or check with your system administrator"
-msgstr ""
-
-msgid "{{ code }} is your {{ app.branding.title }} security code."
-msgstr ""
-
-msgid "unknown"
-msgstr "không rõ"
-
-msgid "Search for Application ..."
-msgstr ""
-
-#, python-brace-format
-msgid "About {0}"
-msgstr "Về {0}"
-
-#, python-brace-format
-msgid "Learn more about {0}"
-msgstr ""
-
-msgid "Ok"
-msgstr "OK"
-
-msgid "Released under different"
-msgstr "Được phát hành dưới mặt khác"
-
-msgid "Open Source Licenses"
-msgstr "Open Source Licenses"
-
-msgid "with the help of our"
-msgstr "với sự trợ giúp của chúng tôi"
-
-msgid "Contributors"
-msgstr "Contributors"
-
-msgid "Subscription"
-msgstr ""
-
-msgid "Add new Element..."
-msgstr ""
-
-msgid "Search for Municipality Keys ..."
-msgstr ""
-
-msgid "Choose MFA Deivce"
-msgstr ""
-
-msgid "This area is locked. Which device should be used to unlock?"
-msgstr ""
-
-msgid "Unlocking ..."
-msgstr ""
-
-msgid "Click here to unlock this area."
-msgstr ""
-
-msgid "MFA device missing"
-msgstr ""
-
-msgid "No matching MFA device for this area found. Configure a matching device please."
-msgstr ""
-
-msgid "Try again?"
-msgstr ""
-
-msgid "Filesystem Mounts"
-msgstr ""
-
-msgid "Profile Information"
-msgstr "Thông tin hồ sơ"
-
-msgid "Apply"
-msgstr "Áp dụng"
-
-msgid "Please Wait"
-msgstr "Xin hãy đợi"
-
-msgid "Read"
-msgstr "Đọc"
-
-msgid "The field is readable part of the profile"
-msgstr "Trường là phần có thể đọc của hồ sơ"
-
-msgid "Edit"
-msgstr "Sửa"
-
-msgid "The field is editable part of the profile"
-msgstr "Trường là phần có thể sửa của hồ sơ"
-
-msgid "Field Name"
-msgstr "Tên trường"
-
-msgid "Outdated Browser"
-msgstr ""
-
-msgid "You need a current Browser to use this program."
-msgstr ""
-
-#, python-brace-format
-msgid "User: {0}"
-msgstr "Người dùng: {0}"
-
-msgid "Return to original user account"
-msgstr ""
-
-msgid "Help"
-msgstr ""
-
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Cửa sổ gỡ lỗi (Ctrl + F11)"
-
-msgid "Preferences"
-msgstr "Thông số"
-
-msgid "Edit Profile"
-msgstr "Sửa hồ sơ"
-
-msgid "Change password"
-msgstr "Đổi mật khẩu"
-
-msgid "Manage MFA Devices"
-msgstr ""
-
-msgid "Logout"
-msgstr "Thoát"
-
-#, python-brace-format
-msgid "Logout from {0}"
-msgstr "Thoát từ {0}"
-
-#, python-brace-format
-msgid "The license expires in {0} days"
-msgstr ""
-
-#, python-brace-format
-msgid "Please visit the shop at {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license expired."
-msgstr ""
-
-msgid "Allow desktop notifications"
-msgstr "Cho phép thông báo từ desktop"
-
-msgid "Request permissions for webkit desktop notifications."
-msgstr "Yêu cầu quyền cho thông báo webkit desktop"
-
-msgid "Reload the application"
-msgstr ""
-
-msgid "Reloads the application and clears caches."
-msgstr ""
-
-msgid "Confirm"
-msgstr "Xác nhận"
-
-msgid "Are you sure you want to logout?"
-msgstr "Bạn có chắc chắn muốn thoát?"
-
-msgid "Logging you out..."
-msgstr "Thoát khỏi hệ thống"
-
-msgid "Please wait!"
-msgstr "Xin hãy đợi"
-
-msgid "Abnormal End"
-msgstr "Abnormal End"
-
-msgid "Cancel"
-msgstr "Hủy bỏ"
-
-msgid "Send Report"
-msgstr "Gửi báo cáo"
-
-msgid "An error occurred, the program ended abnormal."
-msgstr "An error occurred, the program ended abnormal."
-
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Hoạt động cuối của bạn đã làm có thể không được thực hiện một cách chính xác."
-
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "Xin hãy giúp nâng cao chất lượng phần mềm này và thông báo với nhà cung cấp. Bao gồm mô tả ngắn gọn bạn làm gì ở đâu khi có lỗi xảy ra"
-
-msgid "Description"
-msgstr "Mô tả"
-
-msgid "Send Contact Information"
-msgstr "Gửi thông tin liên hệ"
-
-msgid "Details:"
-msgstr "Chi tiết:"
-
-msgid "Sending report..."
-msgstr "Đang gửi báo cáo..."
-
-msgid "Please wait a moment"
-msgstr "Xin đợi trong giây l"
-
-msgid "Transmission Completed"
-msgstr "Việc chuyển phát đã hoàn thành"
-
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Báo cáo của bạn đã được gửi. Cảm ơn bạn đã đóng góp."
-
-msgid "Please restart your browser now!"
-msgstr "Xin khởi động lại trình duyệt của bạn ngay!"
-
-msgid "Fraction of the day"
-msgstr ""
-
-msgid "One quarter of the day"
-msgstr ""
-
-msgid "One third of the day"
-msgstr ""
-
-msgid "Half of the day"
-msgstr ""
-
-msgid "Two third of the day"
-msgstr ""
-
-msgid "Three quarters of the day"
-msgstr ""
-
-msgid "Whole day"
-msgstr ""
-
-msgid "Login"
-msgstr "Đăng nhập"
-
-msgid "Username"
-msgstr "Tên truy cập"
-
-msgid "Password"
-msgstr "Mật khẩu"
-
-msgid "Certificate detected. Please, press Login button to proceed."
-msgstr ""
-
-msgid "Login via OpenID Connect"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is made for you"
-msgstr "{0} được phát triển cho bạn"
-
-#, python-brace-format
-msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Homepage"
-msgstr "{0} Trang chủ"
-
-msgid "Translations"
-msgstr "Chuyển ngữ"
-
-#, python-brace-format
-msgid "Translation state of {0}: {1}%."
-msgstr ""
-
-#, python-brace-format
-msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Translation Howto"
-msgstr "{0} Cách chuyển ngữ"
-
-msgid "Detailed Language Statistics"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} trial"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr ""
-
-msgid "Powered by:"
-msgstr ""
-
-msgid "online open source groupware and crm"
-msgstr ""
-
-#, python-brace-format
-msgid "about {0} minutes"
-msgstr "khoảng {0} phút"
-
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 cần sự giúp đỡ của bạn"
-
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-
-msgid "participate!"
-msgstr "tham dự!"
-
-msgid "Languages"
-msgstr "Ngôn ngữ"
-
-msgid "Duration"
-msgstr "Thời lượng"
-
-msgid "Browser incompatible"
-msgstr "Trình duyệt không tương thích"
-
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Trình duyệt của bạn không được hỗ trợ bởi Tine 2.0"
-
-msgid "Browser incompatible?"
-msgstr "Trình duyệt không tương thích?"
-
-msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-msgstr "Bạn đang sử dụng trình duyệt không được nhận dạng. Điều này có thể gây ra các hoạt động không như mong muốn."
-
-msgid "You might try one of these browsers:"
-msgstr "Bạn nên thử một trong các trình duyệt:"
-
-#, python-brace-format
-msgid "Login successful. Loading {0}..."
-msgstr "Đăng nhập thành công. Đang tải {0}..."
-
-msgid "There was an error verifying your certificate!"
-msgstr ""
-
-msgid "Your username and/or your password are wrong!"
-msgstr ""
-
-msgid "Login failure"
-msgstr "Đăng nhập thất bại"
-
-msgid "Logging you in..."
-msgstr "Bạn đang đăng nhập ..."
-
-msgid "Please wait"
-msgstr "Xin hãy đợi"
-
-msgid "Errors"
-msgstr "Lỗi"
-
-msgid "Please fix the errors noted."
-msgstr "Xin hãy sửa lại các lỗi đã được ghi chú."
-
-msgid "Redirecting to SSO Identity Provider"
-msgstr ""
-
-msgid "Please enter your login data"
-msgstr "Xin nhập thông tin đăng nhập của bạn"
-
-msgid "Country"
-msgid_plural "Countries"
-msgstr[0] ""
-
-msgid "Grant"
-msgid_plural "Grants"
-msgstr[0] ""
-
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] ""
-"one: Thẻ\n"
-"other: Thẻ"
-
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] ""
-"one: Báo thức\n"
-"other: Báo thức"
-
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] ""
-"one: Nhập dữ liệu\n"
-"other: Nhập dữ liệu"
-
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] ""
-"one: Xuất dữ liệu\n"
-"other: Xuất dữ liệu"
-
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] ""
-"one:Chi tiết\n"
-"other:Chi tiết"
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-"one:Quan hệ\n"
-"other:Quan hệ"
-
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] ""
-"one:Bộ phận\n"
-"one:Bộ phận"
-
-msgid "Name"
-msgstr "Tên"
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-"one: Cấu hình\n"
-"other: Cấu hình"
-
-msgid "Configs"
-msgstr "Cấu hình"
-
-msgid "Query"
-msgstr ""
-
-msgid "Path"
-msgid_plural "Paths"
-msgstr[0] ""
-
-msgid "You need to set a new password."
-msgstr ""
-
-msgid "Multi Factor Authentication"
-msgstr ""
-
-msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
-msgstr ""
-
-msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
-msgstr ""
-
-msgid "Multi Factor Authentication Device Configuration"
-msgstr ""
-
-msgid "Secret Key"
-msgstr ""
-
-msgid "Please note: After saving you can not view this autogenerated secret key again!"
-msgstr ""
-
-msgid "Generating secret key ..."
-msgstr ""
-
-msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
-msgstr ""
-
-msgid "for"
-msgstr ""
-
-msgid "FIDO2 WebAuthn Device"
-msgid_plural "FIDO2 WebAuthn Devices"
-msgstr[0] ""
-
-msgid "Please open the following URL in your Browser for more security key options"
-msgstr ""
-
-msgid "Configuring FIDO2 WebAuthn Device ..."
-msgstr ""
-
-msgid "FIDO2 WebAuthn Device is configured."
-msgstr ""
-
-msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
-msgstr ""
-
-msgid "Unsupported Configuration"
-msgstr ""
-
-#, python-brace-format
-msgid "see {url} for details"
-msgstr ""
-
-#, python-brace-format
-msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
-msgstr ""
-
-msgid "Error"
-msgstr "Lỗi"
-
-msgid "FIDO2 WebAuthn registration failed. Try again?"
-msgstr ""
-
-msgid "MFA secret required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Secret from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "Password required"
-msgstr ""
-
-msgid "This area is locked. To unlock it you need to provide your password."
-msgstr ""
-
-msgid "Authenticator code required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Authenticator code from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "Yubico OTP required"
-msgstr ""
-
-msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
-msgstr ""
-
-msgid "Yubico OTP"
-msgid_plural "Yubico OTPs"
-msgstr[0] ""
-
-msgid "PIN required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
-msgstr ""
-
-#, python-brace-format
-msgid "{mfaDevice.device_name} secret"
-msgstr ""
-
-msgid "Token required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Token from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "SMS security code required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Security code from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
-msgstr ""
-
-msgid "Add new MFA Device"
-msgstr ""
-
-msgid "Click here to add note"
-msgstr ""
-
-msgid "Remove"
-msgstr "Xóa"
-
-msgid "Total    Uploads"
-msgstr ""
-
-msgid "Complete Uploads"
-msgstr ""
-
-msgid "Failed   Uploads"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is not a valid unit"
-msgstr ""
-
-msgid "Select Image"
-msgstr ""
-
-msgid "Insert an image with the selected size"
-msgstr ""
-
-msgid "Convert to pure text"
-msgstr ""
-
-#, python-brace-format
-msgid "choose other {0}..."
-msgstr "chọn {0} khác ..."
-
-msgid "Not a valid time"
-msgstr ""
-
-msgid "no decimals allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "max decimals allowed: {0}"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Week"
-msgstr ""
-
-msgid "Month"
-msgstr ""
-
-msgid "Quarter"
-msgstr ""
-
-msgid "Year"
-msgstr ""
-
-msgid "When preference is locked, normal user can not edit the preference anymore."
-msgstr ""
-
-msgid "Loading"
-msgstr "Đang tải"
-
-msgid "Click to edit"
-msgstr "Click để sửa"
-
-msgid "Image Failed"
-msgstr "Ảnh bị hỏng"
-
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Không thể nạp ảnh. Xin thông báo với người quản trị hệ thống"
-
-msgid "Not An Image"
-msgstr "Không phải là ảnh"
-
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Xin chọn 1 file ảnh (gif/png/jpeg)"
-
-msgid "Upload Failed"
-msgstr "Upload không thành công"
-
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Không thể upload ảnh. Xin hãy thông báo với người quản trị hệ thống"
-
-msgid "Change Image"
-msgstr "Đổi ảnh"
-
-msgid "Crop Image"
-msgstr "Xén ảnh"
-
-msgid "Delete Image"
-msgstr "Xóa ảnh"
-
-msgid "Show Original Image"
-msgstr "Hiển thị ảnh gốc"
-
-msgid "Software Version"
-msgstr "Phiên bản phần mềm"
-
-msgid "Job Title"
-msgstr ""
-
-msgid "Yes"
-msgstr "Có"
-
-msgid "No"
-msgstr "Không"
-
-#, python-brace-format
-msgid "Error while uploading \"{fileName}\". Please try again later."
-msgstr ""
-
-msgid "Uploads Monitor"
-msgstr ""
-
-msgid "Empty List"
-msgstr ""
-
-msgid "Not all uploads are finished yet. What would you to do?"
-msgstr ""
-
-msgid "Remove finished uploads from this list only"
-msgstr ""
-
-msgid "Cancel all unfinished uploads before"
-msgstr ""
-
-msgid "Removing files..."
-msgstr ""
-
-msgid "Total Uploads : "
-msgstr ""
-
-msgid "Upload progress"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} available (total: {1})"
-msgstr ""
-
-msgid "Tags"
-msgstr "Thẻ"
-
-msgid "Related to"
-msgstr "Liên quan tới"
-
-msgid "Preparing print, please wait..."
-msgstr ""
-
-msgid "Printing Error"
-msgstr ""
-
-msgid "Cannot open new window"
-msgstr ""
-
-#, python-brace-format
-msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
-msgstr ""
-
-msgid "Window can be closed"
-msgstr ""
-
-#, python-brace-format
-msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
-msgstr ""
-
-msgid "enter searchfilter"
-msgstr "nhập bộ lọc tìm kiếm"
-
-msgid "Leave site?"
-msgstr ""
-
-msgid "Changes you made may not be saved."
-msgstr ""
-
-msgid "online"
-msgstr "trực tuyến"
-
-msgid "offline"
-msgstr "đoạn tuyến"
-
-msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
-msgstr "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
-
-msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
-msgstr ""
-
-msgid "quarantined"
-msgstr ""
-
-msgid "(paused)"
-msgstr "(đã dừng)"
-
-#, python-brace-format
-msgid "Please Sort by \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "To use manual sorting, you need to sort by column \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "{0} selected"
-msgstr "{0} được chọn"
-
-msgid "Unselect all"
-msgstr "Bỏ chọn hết"
-
-#, python-brace-format
-msgid "Select all pages ({0} records)"
-msgstr "Chọn mọi trang ({0} biểu ghi)"
-
-msgid "Toggle selection"
-msgstr "Đổi chọn"
-
-msgid "Export Records from these Positions"
-msgstr ""
-
-msgid "Select all"
-msgstr ""
-
-msgid "Deselect all"
-msgstr ""
-
-msgid "Missing Applications"
-msgstr "Ứng dụng lỗi"
-
-msgid "There are no applications enabled for you. Please contact your administrator."
-msgstr "Không có ựng dụng nào được mở cho bạn. Xin hãy liên hệ với quản trị hệ thống."
-
-msgid "Follow System"
-msgstr ""
-
-msgid "Dark Mode"
-msgstr ""
-
-msgid "Light Mode"
-msgstr ""
-
-msgid "Create Contact"
-msgstr ""
-
-msgid "Copy to Clipboard"
-msgstr ""
-
-msgid "Compose Message To"
-msgstr ""
-
-msgid "Session Timed Out"
-msgstr ""
-
-msgid "You can close this window."
-msgstr ""
-
-msgid "Your Client is Outdated"
-msgstr ""
-
-msgid "A new client is available, press OK to get this version"
-msgstr ""
-
-msgid "tine needs to be updated or is not installed yet."
-msgstr ""
-
-msgid "Please wait or contact your administrator"
-msgstr "Xin hãy đợi hoặc liên hệ với quản trị hệ thống của bạn"
-
-msgid "Insufficient Rights"
-msgstr "Thiếu quyền"
-
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Rất tiếc, bạn không được phép thực hiện hành động này."
-
-msgid "Not Found"
-msgstr "Không thấy"
-
-msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
-msgstr "Rất tiếc, yêu cầu của bạn không được hoàn thành vì không tìm thây dữ liệu. Điều này phần lớn là do ai đó đã xóa dữ liệu. Xin hãy làm mới màn hình hiện tại của bạn."
-
-msgid "Concurrent Updates"
-msgstr "Cập nhật đồng thời"
-
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-msgstr "Ai đó đã lưu biểu ghi này trong khi bạn sửa dữ liệu. Bạn cần nạp lại và thực hiện thay đổi lại lần nữa."
-
-msgid "Rate-Limit"
-msgstr ""
-
-msgid "This method is rate-limited and you sent too many requests."
-msgstr ""
-
-msgid "Service Unavailable"
-msgstr "Dịch vụ không sẵn sàng"
-
-msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
-msgstr "Máy chủ đang không thể đáp ứng yêu cầu của bạn vì tạm thời quá tải, ở chế độ duy trì hoặc bị cấu hình sai. Xin hãy thử lại hoặc liên hệ với quản trị hệ thống."
-
-msgid "Server Message:"
-msgstr "Lời nhắn máy chủ:"
-
-msgid "Invalid Data"
-msgstr "Dữ liệu không hợp lệ"
-
-msgid "Your input data is not valid. Please provide valid data."
-msgstr "Dữ liệu nhập vào của bạn không hợp lệ. Xin hãy cung cấp dữ liệu chính xác."
-
-msgid "Connection lost, please check your network!"
-msgstr "Mất kết nối, xin hãy kiểm tra mạng của bạn!"
-
-msgid "Timeout"
-msgstr "Quá thời gian"
-
-msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-msgstr "Rất tiếc, việc truy cập của bạn đã vượt quá thời gian quy định. Xin hãy nạp lại từ trình duyệt của bạn và thử lại, hoặc liên hệ với quản trị hệ thống."
-
-msgid "No Response"
-msgstr "Không trả lời"
-
-msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-msgstr "Rất tiếc, máy chủ không trả lời bất kỳ dữ liệu nào. Xin hãy nạp lại trình duyệt, thử lại hoặc liên hệ với quản trị hệ thống."
-
-msgid "Out of Resources"
-msgstr "Hết tài nguyên"
-
-msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
-msgstr "Rất tiếc, máy chủ đã hết bộ nhớ. Xin liên hệ với quản trị hệ thống."
-
-msgid "No Role Memberships"
-msgstr "Không có vai trò thành viên"
-
-msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr "Tài khoản người dùng của bạn không có vai trò thành viên. Xin liên hệ với quản trị hệ thống."
-
-msgid "Method Not Found / Insufficent Permissions"
-msgstr ""
-
-msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
-msgstr ""
-
-msgid "License"
-msgstr "License"
-
-msgid "Valid from"
-msgstr ""
-
-msgid "Valid to"
-msgstr ""
-
-msgid "Activation Key"
-msgstr ""
-
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-msgid "Organization"
-msgstr ""
-
-msgid "Activated Features"
-msgstr ""
-
-msgid "Your Subscription is unavailable"
-msgstr ""
-
-msgid "Your Subscription is not valid"
-msgstr ""
-
-msgid "Outdent Text"
-msgstr "Nội dung thò ra"
-
-msgid "Indent Text"
-msgstr "Nội dung thụt vào"
-
-msgid "Remove Formatting"
-msgstr "Xóa định dạng"
-
-msgid "Usage:&#160;"
-msgstr "Sử dụng:&#160;"
-
-msgid "personal"
-msgstr "cá nhân"
-
-msgid "No Information"
-msgstr "Không có thông tin"
-
-msgid "No Access"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} second"
-msgid_plural "{0} seconds"
-msgstr[0] ""
-"one: {0} giây\n"
-"other: {0} giây"
-
-msgid "Restart application to apply new configuration?"
-msgstr ""
-
-#, python-brace-format
-msgid "All {0}"
-msgstr "Tất cả{0}"
-
-#, python-brace-format
-msgid "Shared {0}"
-msgstr "Chia sẻ {0}"
-
-#, python-brace-format
-msgid "Other Users {0}"
-msgstr "Người dùng khác {0}"
-
-#, python-brace-format
-msgid "My {0}"
-msgstr "Của tôi {0}"
-
-msgid "Credits"
-msgstr "Credits"
-
-msgid "Not Supported"
-msgstr ""
-
-msgid "Your request is not supported by this version."
-msgstr ""
-
-msgid "Translation not found"
-msgstr ""
-
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] ""
-"one: Công việc\n"
-"other: Công việc"
-
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] ""
-"one: việc cần làm\n"
-"other: việc cần làm"
-
-#, python-brace-format
-msgid "Add {0}"
-msgstr "Thêm {0}"
-
-#, python-brace-format
-msgid "Rename {0}"
-msgstr "Đổi tên {0}"
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-"one: Xóa {0}\n"
-"other: Xóa {0}"
-
-#, python-brace-format
-msgid "Manage {0} Permissions"
-msgstr "Quản lý quyền {0}"
-
-#, python-brace-format
-msgid "{0} Properties"
-msgstr "Thuộc tính {0}"
-
-#, python-brace-format
-msgid "Set {0} color"
-msgstr "Đặt màu {0}"
-
-#, python-brace-format
-msgid "Reload {0}"
-msgstr "Nạp lại {0}"
-
-msgid "Resume upload"
-msgstr "Tiếp tục upload"
-
-msgid "Pause upload"
-msgstr "Tạm dừng upload"
-
-msgid "Download"
-msgstr "Download"
-
-msgid "Publish"
-msgstr ""
-
-msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
-msgstr ""
-
-msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
-msgstr ""
-
-#, python-brace-format
-msgid "No {0} added"
-msgstr "Không {0} nào được thêm"
-
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "Bạn phải cung cấp 1 tên {0}!"
-
-msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
-msgstr ""
-
-msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Creating {0}..."
-msgstr "Đang tạo {0} ...."
-
-msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
-msgstr ""
-
-msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "Chưa đổi tên {0}"
-
-#, python-brace-format
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Bạn có muốn thật sự xóa {0} \"{1}\"?"
-
-#, python-brace-format
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Quản lý quyền cho {0} \"{1}\""
-
-#, python-brace-format
-msgid "Properties for {0} \"{1}\""
-msgstr "Thuộc tính cho {0} \"{1}\""
-
-msgid "Setting new language..."
-msgstr ""
-
-msgid "Save current view as favorite"
-msgstr "Lưu khung xem hiện tại thành lối tắt"
-
-msgid "Gets assigned automatically"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-
-msgid "No record"
-msgstr ""
-
-msgid "Cleartext/Hidden"
-msgstr ""
-
-msgid "Searching..."
-msgstr "Đang tìm ..."
-
-msgid "Search for Model..."
-msgstr ""
-
-msgid "GENDER_Model"
-msgstr ""
-
-msgid "Model"
-msgid_plural "Models"
-msgstr[0] ""
-
-msgid "Search for records ..."
-msgstr "Tìm biểu ghi..."
-
-msgid "Wrong File Type"
-msgstr "Sai kiểu file"
-
-msgid "Please select a file with one of the following extensions:"
-msgstr "Hãy chọn 1 file với 1 trong các phần mở rộng sau:"
-
-msgid "Configuration Problem"
-msgstr "Vấn đề cấu hình"
-
-msgid "Invalid configuration"
-msgstr "Cấu hình lỗi"
-
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "Bạn cần sửa các trường đánh dấu đỏ trước khi lưu lại cấu hình"
-
-msgid "Transferring Configuration..."
-msgstr "Đang truyền cấu hình"
-
-msgid "Save config"
-msgstr "Lưu cấu hình"
-
-msgid "Reload config"
-msgstr "Nạp lại cấu hình"
-
-msgid "Some fields are  multilingual. Click here to select language to display."
-msgstr ""
-
-msgid "Edit copy"
-msgstr ""
-
-#, python-brace-format
-msgid "Search for {0} ..."
-msgstr ""
-
-msgid "Record"
-msgstr "Biểu ghi"
-
-msgid "Failure"
-msgstr "Thất bại"
-
-msgid "You tried to link a record with itself. This is not allowed!"
-msgstr "Bạn cố liên kết 1 biểu ghi với chính nó. Việc này không được phép!"
-
-msgid "containers"
-msgstr "bộ chứa"
-
-msgid "Favorites"
-msgstr "Lối tắt"
-
-msgid "Edit record"
-msgstr "Sửa biểu ghi"
-
-msgid "Sibling"
-msgstr "Sibling"
-
-msgid "Parent"
-msgstr "Cha"
-
-msgid "Child"
-msgstr "Con"
-
-#, python-brace-format
-msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
-msgstr ""
-
-#, python-brace-format
-msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
-msgstr ""
-
-msgid "Contents of Related Folder"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "No Dialog"
-msgstr "Không hộp thoại"
-
-msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
-msgstr ""
-
-msgid "Attachments: Anyone who has access to the record can see the data"
-msgstr ""
-
-msgid "Links: Rights of the respective application are respected"
-msgstr ""
-
-msgid "Remark"
-msgstr "Nhận xét"
-
-msgid "Dependency"
-msgstr "Phần phụ thuộc"
-
-msgid "Type"
-msgstr "Loại"
-
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#, python-brace-format
-msgid "No access to {0}"
-msgstr ""
-
-msgid "The record you tried to link is already linked. Please edit the existing link."
-msgstr "Biểu ghi bạn có liên kết đã được liên kết. Xin sửa liên kết đã tồn tại."
-
-msgid "Defined by ..."
-msgstr "Định nghĩa bởi ..."
-
-msgid "select a operator"
-msgstr "chọn toán tử"
-
-msgid "Define ..."
-msgstr "Định nghĩa ..."
-
-msgid "Delete { ownRecordName }?"
-msgstr ""
-
-msgid "What do you want to delete?"
-msgstr ""
-
-msgid "Delete { ownRecordName }"
-msgstr ""
-
-msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
-msgstr ""
-
-#, python-brace-format
-msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
-msgstr "{1} \"{2}\" đã được dùng trong trường \"{0}\" và chỉ được liên kết một lần!"
-
-msgid "Select files"
-msgstr ""
-
-msgid "Select file"
-msgstr ""
-
-msgid "Select folders"
-msgstr ""
-
-msgid "Select folder"
-msgstr ""
-
-msgid "Select items"
-msgstr ""
-
-msgid "Select item"
-msgstr ""
-
-msgid "Places"
-msgstr ""
-
-msgid "My Device"
-msgstr ""
-
-msgid "Download file and save on my local device."
-msgstr ""
-
-msgid "Select or drop file to upload"
-msgstr ""
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Favorite not saved"
-msgstr "Lối tắt không được lưu"
-
-msgid "Title"
-msgstr "Tiêu đề"
-
-msgid "Shared Favorite (visible by other users)"
-msgstr ""
-
-msgid "The grant to see and use this filter"
-msgstr ""
-
-msgid "The grant to edit this filter"
-msgstr ""
-
-msgid "Delete"
-msgstr "Xóa"
-
-msgid "The grant to delete this filter"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "My favorites"
-msgstr "Lối tắt của tôi"
-
-msgid "Delete Favorite"
-msgstr "Xóa lối tắt"
-
-msgid "Edit Favorite"
-msgstr "Sửa lối tắt"
-
-msgid "Overwrite Favorite"
-msgstr "Ghi đè lối tắt"
-
-#, python-brace-format
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr "Bạn có thực sự muốn ghi đè lối tắt \"{0}\"?"
-
-#, python-brace-format
-msgid "Deleting Favorite \"{0}\""
-msgstr "Đang xóa lối tắt \"{0}\""
-
-msgid "Overwrite?"
-msgstr "Ghi đè?"
-
-#, python-brace-format
-msgid "Do you want to overwrite the favorite \"{0}\"?"
-msgstr "Bạn có muốn ghi đè lối tắt \"{0}\"?"
-
-#, python-brace-format
-msgid "Overwriting Favorite \"{0}\""
-msgstr "Ghi đè lối tắt \"{0}\""
-
-msgid "Could not save Favorite"
-msgstr "Không thể lưu lối tắt"
-
-msgid "Your current view does not support favorites"
-msgstr "Màn hình hiện tại của bạn không hỗ trợ lối tắt"
-
-msgid "Create Favorite"
-msgstr "Tạo lối tắt"
-
-#, python-brace-format
-msgid "Saving Favorite \"{0}\""
-msgstr "Lưu lối tắt \"{0}\""
-
-msgid "(shared)"
-msgstr "(chia sẻ)"
-
-msgid "New version of tine available"
-msgstr ""
-
-#, python-brace-format
-msgid "Version \"{0}\" of tine is available."
-msgstr ""
-
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Đây là bản vá lỗi nghiêm trọng và phải được cập nhật ngay tức thì!"
-
-msgid "Please consider updating!"
-msgstr "Hãy cân nhắc việc cập nhật!"
-
-msgid "Notes"
-msgstr "Ghi chép"
-
-msgid "Note"
-msgid_plural "Notes"
-msgstr[0] ""
-
-msgid "Created By"
-msgstr "Tạo bởi"
-
-msgid "Creation time"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] ""
-"one:Sửa {0}\n"
-"other:Sửa {0}"
-
-#, python-brace-format
-msgid "Remove {0}"
-msgstr ""
-
-msgid "Enter new note:"
-msgstr "Nhập ghi chép mới:"
-
-msgid "Add Note"
-msgstr "Thêm ghi chép"
-
-msgid "Setting new timezone..."
-msgstr ""
-
-msgid "Modules"
-msgstr ""
-
-msgid "Detach Tags"
-msgstr "Gỡ từ khóa"
-
-msgid "Attach Tags"
-msgstr "Gắn từ khóa"
-
-msgid "No Tags to detach found in the selected records"
-msgstr "Không có từ khóa nào để gỡ trong các biểu ghi được ch"
-
-msgid "Please Wait..."
-msgstr "Xin hãy đợi ..."
-
-msgid "Detaching Tags"
-msgstr "Gỡ từ khóa"
-
-msgid "Add a new personal tag"
-msgstr "Thêm 1 từ khóa cá nhân"
-
-msgid "Add New Personal Tag"
-msgstr "Thêm mới từ khóa cá nhân"
-
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Ghi chú: Bạn tạo 1 từ khóa cá nhân. Chỉ bạn mới có thể nhìn thấy nó."
-
-msgid "Enter tag name:"
-msgstr "Nhập tên từ khóa:"
-
-msgid "No Tags to display"
-msgstr "Không có từ khóa nào"
-
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] ""
-"one: Gỡ từ khóa\n"
-"other: Gỡ từ khóa"
-
-msgid "Edit tag"
-msgstr "Sửa từ khóa"
-
-msgid "Rename Tag"
-msgstr "Đổi tên từ khóa"
-
-msgid "Please enter a new name:"
-msgstr "Xin nhập 1 tên mới:"
-
-msgid "Edit Description"
-msgstr "Sửa mô tả"
-
-msgid "Description for tag"
-msgstr "Mô tả cho từ khóa"
-
-msgid "Please enter new description:"
-msgstr "Xin nhập mô tả mới:"
-
-msgid "Change Color"
-msgstr "Đổi màu"
-
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] ""
-"one: Xóa từ khóa\n"
-"other: Xóa từ khóa"
-
-msgid "Really delete selected tag?"
-msgid_plural "Really delete selected tags?"
-msgstr[0] ""
-
-msgid "The selected tag will be deleted and disappear for all entries"
-msgid_plural "The selected tags will be removed and disappear for all entries"
-msgstr[0] ""
-
-msgid "Please wait a moment..."
-msgstr "Xin đợi trong giaay lát"
-
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] ""
-"one: Đang xóa từ khóa\n"
-"other: Đang xóa từ khóa"
-
-msgid "Failed"
-msgstr "Thất bại"
-
-msgid "Could not delete Tag(s)."
-msgstr "Không thể xóa từ khóa."
-
-msgid "Notice"
-msgstr "Cảnh báo"
-
-msgid "The minimum tag length is three."
-msgstr "Độ dài tối thiểu cho từ khóa là 3"
-
-msgid "Could not create tag."
-msgstr "Không thể tạo từ khóa"
-
-msgid "Could not update tag."
-msgstr "Không thể cập nhật từ khóa"
-
-msgid "tag name"
-msgstr "tên từ khóa"
-
-msgid "Add Tags"
-msgstr ""
-
-msgid "Select Tags"
-msgstr ""
-
-msgid "Attaching Tag"
-msgstr "Đang gắn từ khóa"
-
-msgid "Detach tag(s)"
-msgstr "Gỡ bỏ từ khóa"
-
-msgid "Select Tag(s) to detach"
-msgstr "Chọn từ khóa để gỡ bỏ"
-
-msgid "Set password"
-msgstr ""
-
-msgid "Generate password"
-msgstr ""
-
-msgid "What would you like to do?"
-msgstr "Bạn muốn làm gì?"
-
-msgid "You need to select an option!"
-msgstr "Bạn cần chọn 1 tùy chọn!"
-
-msgid "There are no preferences for this application."
-msgstr "Không có thông số nào cho ứng dụng này."
-
-msgid "Back"
-msgstr "Quay lại"
-
-msgid "Next"
-msgstr "Tiếp tục"
-
-msgid "Finish"
-msgstr "Kết thúc"
-
-#, python-brace-format
-msgid "Change settings for application {0}"
-msgstr "Thay đổi thiết lập cho ứng dụng {0}"
-
-msgid "Defaults"
-msgstr "Mặc định"
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-
-msgid "Following you find a list of all supported import formats."
-msgstr ""
-
-msgid "Choose File and Format"
-msgstr "Chọn File và định dạng"
-
-msgid "Choose Import File"
-msgstr "Chọn file để nhập liệu"
-
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr "Xin hãy chọn file chứa biểu ghi bạn muốn thêm vào Tine 2.0"
-
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr "Chọn file chứa {0} của bạn"
-
-msgid "What should the file you upload look like?"
-msgstr "File bạn muốn upload sẽ giống thứ gì?"
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr "Tine 2.0 không hiểu mọi kiểu file bạn có thể upload. Bạn phải upload từng file và xem lại các file của bạn để Tine 2.0 có thể hiểu được."
-
-msgid "Please select the import format of the file you want to upload"
-msgstr "Please select the import format of the file you want to upload"
-
-msgid "Download example file"
-msgstr "Download file ví dụ"
-
-#, python-brace-format
-msgid "Select {0} to add you {1} to:"
-msgstr "Chọn {0} để thêm bạn {1} vào:"
-
-msgid "Set Import Options"
-msgstr "Đặt tùy chọn nhập dữ liệu"
-
-msgid "Checking Import"
-msgstr "Đang kiểm tra nhập liệu"
-
-msgid "Resolve Conflicts"
-msgstr "Giải quyết xung đột"
-
-msgid "Conflict"
-msgstr "Xung đột"
-
-msgid "First Conflict"
-msgstr "Xung đột đầu tiên"
-
-msgid "Previous Conflict"
-msgstr "Xung đột trước đó"
-
-msgid "Next Conflict"
-msgstr "Xung đột tiếp theo"
-
-msgid "Last Conflict"
-msgstr "Xung đột cuối cùng"
-
-msgid "Resolve this conflict"
-msgstr ""
-
-msgid "Resolve all conflicts"
-msgstr "Giải quyết mọi xung đột"
-
-msgid "Processing Conflict Data"
-msgstr "Đang xử lý dữ liệu xung đột"
-
-msgid "No conflict to resolve"
-msgstr "Không có xung đột nào để giải quyết"
-
-#, python-brace-format
-msgid "(This is record {0} in your import file)"
-msgstr "(Đây là biểu ghi {0} trong file nhập liệu của bạn)"
-
-msgid "No Detail Informations"
-msgstr "Không có thông tin chi tiết"
-
-msgid "Summary"
-msgstr "Tóm tắt"
-
-msgid "Index"
-msgstr "Mục lục"
-
-#, python-brace-format
-msgid "Importing {0}"
-msgstr "Đang nhập dữ liệu {0}"
-
-#, python-brace-format
-msgid "{0} records had failures and where discarded."
-msgstr "{0} biểu ghi có lỗi và nơi bị hủy bỏ"
-
-#, python-brace-format
-msgid "In total we found {0} records in your import file."
-msgstr "Có tổng số {0} biểu ghi trong file nhập liệu"
-
-#, python-brace-format
-msgid "{0} of them will be added as new records into: \"{1}\"."
-msgstr "{0} trong số chung sẽ được thêm như biểu ghi mới vào: \"{1}\":"
-
-#, python-brace-format
-msgid "{0} of them where identified as duplicates."
-msgstr "{0} trong số chúng được nhận dạng là trùng lặp."
-
-#, python-brace-format
-msgid "From the identified duplicates {0} will be merged into the existing records."
-msgstr "From the identified duplicates {0} will be merged into the existing records."
-
-#, python-brace-format
-msgid "From the identified duplicates {0} will be discarded."
-msgstr "From the identified duplicates {0} will be discarded."
-
-#, python-brace-format
-msgid "All records will be tagged with: \"{0}\" so you can find them easily."
-msgstr "All records will be tagged with: \"{0}\" so you can find them easily."
-
-#, python-brace-format
-msgid "{0} records have failures and will be discarded."
-msgstr "{0} biểu ghi có lỗi hoặc sẽ bị hủy bỏ"
-
-msgid "Attachments"
-msgstr "Đính kèm"
-
-msgid "Attachment"
-msgstr "Đính kèm"
-
-msgid "Size"
-msgstr "Kích thước"
-
-msgid "Content Type"
-msgstr "Kiểu nội dung"
-
-msgid "Second Factor Password Required"
-msgstr ""
-
-msgid "Validating password..."
-msgstr ""
-
-msgid "Wrong Password"
-msgstr ""
-
-msgid "Invalid second factor password given"
-msgstr ""
-
-msgid "PIN"
-msgid_plural "PINs"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "Change {0} For \"{1}\""
-msgstr ""
-
-#, python-brace-format
-msgid "Changing {0}"
-msgstr ""
-
-msgid "Success"
-msgstr "Thành công"
-
-#, python-brace-format
-msgid "Your {0} has been changed."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} mismatch, please correct."
-msgstr ""
-
-msgid "Enter description"
-msgstr ""
-
-msgid "delete"
-msgstr "xóa"
-
-#, python-brace-format
-msgid "Print {0}"
-msgstr ""
-
-msgid "Saved in"
-msgstr "Đã lưu trong"
-
-#, python-brace-format
-msgid "{0} (copy)"
-msgstr ""
-
-#, python-brace-format
-msgid "Copy {0}"
-msgstr "Sao chép {0}"
-
-msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0} \"{1}\""
-msgstr "Sửa {0} \"(1}\""
-
-msgid "Files are still uploading."
-msgstr ""
-
-msgid "Please review the fields marked red. They contain invalid values."
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete this {0}?"
-msgstr "Bạn có thật sự muốn xóa {0} này?"
-
-#, python-brace-format
-msgid "Deleting {0}"
-msgstr "Đang xóa {0}"
-
-#, python-brace-format
-msgid "Could not delete {0}."
-msgstr "Không thể xóa {0}"
-
-#, python-brace-format
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr "Giải quyết trùng lặp {0}"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Đang truyền {0} ..."
-
-msgid "Please enter your credentials"
-msgstr "Xin nhập thông tin của bạn"
-
-msgid "Delete value from all selected records"
-msgstr "Xóa giá trị từ tất cả biểu ghi được chọn."
-
-msgid "Undo change for all selected records"
-msgstr "Hủy bỏ thay đổi với mọi biểu ghi được chọn."
-
-#, python-brace-format
-msgid "Edit {0} {1}"
-msgstr "Sửa {0} {1}"
-
-msgid "Different Values"
-msgstr "Giá trị khác"
-
-msgid "This field has different values. Editing this field will overwrite the old values."
-msgstr "Trường này đã có giá trị khác. Sửa trường này sẽ ghi đè giá trị cũ."
-
-#, python-brace-format
-msgid "Add {0} Relation"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to change these {0} records?"
-msgstr "Bạn có muốn thay đổi các biểu ghi {0} này?"
-
-msgid "Applying changes"
-msgstr "Thực hiện thay đổi"
-
-#, python-brace-format
-msgid "{1} - Exception {0}"
-msgstr "{1} - Loại trừ {0}"
-
-#, python-brace-format
-msgid "{0} - Unknown Exception"
-msgstr ""
-
-msgid "Select Export Definition ..."
-msgstr "Chọn các định nghĩa để xuất dữ liệu...."
-
-#, python-brace-format
-msgid "Export {0}"
-msgid_plural "Export {0}"
-msgstr[0] ""
-
-msgid "Filemanager"
-msgstr ""
-
-msgid "Open"
-msgstr ""
-
-msgid "Choose Export Location"
-msgstr ""
-
-msgid "How would you like to save your export?"
-msgstr ""
-
-msgid "Exporting..."
-msgstr ""
-
-msgid "Export created successfully."
-msgstr ""
-
-msgid "Please check your computers downloads folder!"
-msgstr ""
-
-msgid "Export could not be created. Please try again later"
-msgstr ""
-
-msgid "Alarms"
-msgstr "Nhắc nhở"
-
-msgid "0 minutes before"
-msgstr "0 phút trước"
-
-msgid "5 minutes before"
-msgstr "5 phút trước"
-
-msgid "15 minutes before"
-msgstr "15 phút trước"
-
-msgid "30 minutes before"
-msgstr "30 phút trước"
-
-msgid "1 hour before"
-msgstr "1 giờ phút trước"
-
-msgid "2 hours before"
-msgstr "2 giờ phút trước"
-
-msgid "12 hours before"
-msgstr "12 giờ phút trước"
-
-msgid "1 day before"
-msgstr "1 ngày phút trước"
-
-msgid "2 days before"
-msgstr "2 ngày phút trước"
-
-msgid "Custom Datetime"
-msgstr "Ngày giờ tùy chọn"
-
-msgid "Alarm Time"
-msgstr "Thời gian báo thức"
-
-#, python-brace-format
-msgid "{0} minutes before"
-msgstr "Trước {0} phút"
-
-msgid "Create xprop"
-msgstr ""
-
-msgid "xprop Name"
-msgstr ""
-
-msgid "Please enter the name of the new xprop"
-msgstr ""
-
-msgid "Delete xprop"
-msgstr ""
-
-msgid "Merging Records..."
-msgstr "Gộp biểu ghi"
-
-msgid "Merge Failed"
-msgstr "Gộp không thành công"
-
-#, python-brace-format
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
-msgstr "Gộm thành công nhưng trùng lặp {0} không được xóa."
-
-#, python-brace-format
-msgid "Merge {0}, prefer First"
-msgstr "Gộp {0}, prefer First"
-
-#, python-brace-format
-msgid "Merge {0}, prefer Second"
-msgstr "Gộp {0}, prefer Second"
-
-#, python-brace-format
-msgid "Merge {0}"
-msgstr "Gộp {0}"
-
-#, python-brace-format
-msgid "First {0}"
-msgstr "Đầu tiên {0}"
-
-#, python-brace-format
-msgid "Second {0}"
-msgstr "Thứ hai {0}"
-
-#, python-brace-format
-msgid "Final {0}"
-msgstr "Cuối cùng {0}"
-
-msgid "The record you try to add might already exist."
-msgstr "Biểu ghi bạn cố thêm có thể đã tồn tại"
-
-msgid "Field Group"
-msgstr "Nhóm trường"
-
-msgid "My Value"
-msgstr "Giá trị của tôi"
-
-msgid "Existing Value"
-msgstr "Giá trị đã tồn tại"
-
-msgid "Final Value"
-msgstr "Giá trị cuối cùng"
-
-msgid "Keep both records"
-msgstr "Giữ cả hai biểu ghi"
-
-msgid "Merge, keeping existing details"
-msgstr "Gộp, giữ chi tiết đã có"
-
-msgid "Merge, keeping my details"
-msgstr "Gộp, giữ chi tiết của tôi"
-
-msgid "Keep existing record and discard mine"
-msgstr "Giữ kiểu ghi đã tồn tại và bỏ qua tôi"
-
-msgid "Action:"
-msgstr "Chức năng:"
-
-msgid "All Settings"
-msgstr ""
-
-msgid "General Preferences"
-msgstr "Thông số chung"
-
-msgid "Application Settings"
-msgstr ""
-
-msgid "My Profile"
-msgstr "Hồ sơ của tôi"
-
-msgid "Admin Mode"
-msgstr "Chế độ admin"
-
-msgid "All Users"
-msgstr ""
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] ""
-
-msgid "Applications"
-msgstr "Ứng dụng"
-
-msgid "Edit Preferences"
-msgstr "Sửa thông số"
-
-msgid "Loading ..."
-msgstr "Đang tải"
-
-msgid "Saving of preferences failed."
-msgstr "Lưu thông số không thành công."
-
-#, python-brace-format
-msgid "You edited {0} {1}."
-msgstr "Bạn đã sửa {0} {1}"
-
-#, python-brace-format
-msgid "{0} {1} have been updated properly."
-msgstr "{0} {1} đã được cập nhật chính xác"
-
-#, python-brace-format
-msgid "{0} {1} has been updated properly."
-msgstr "{0} {1} đã được cập nhật chính xác"
-
-#, python-brace-format
-msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr "{0} {1} bị sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
-
-#, python-brace-format
-msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr "{0} {1} sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
-
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-
-msgid "Updating Grants"
-msgstr "Cập nhật quyền"
-
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Bạn không được phép xóa mọi quyền quản trị của mục này!"
-
-msgid "is personal of"
-msgstr "là cá nhân của"
-
-msgid "is equal to"
-msgstr "bằng"
-
-#, python-brace-format
-msgid "Selected {0}"
-msgstr ""
-
-msgid "container"
-msgid_plural "containers"
-msgstr[0] ""
-"one: bộ chứa\n"
-"other: bộ chứa"
-
-#, python-brace-format
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Bạn không được phép chọn {0} '{1}':"
-
-#, python-brace-format
-msgid "{0} grant is required for desired action"
-msgstr "{0} quyền được yêu cầu cho hành động bạn muốn"
-
-msgid "Insufficient Grants"
-msgstr "Thiếu quyền"
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "please select a {0}"
-msgstr "hãy chọn 1 {0}"
-
-#, python-brace-format
-msgid "Select a {0}"
-msgstr "Chọn 1 {0}"
-
-msgid "Properties"
-msgstr "Thuộc tính"
-
-msgid "Hierarchy/Name"
-msgstr ""
-
-msgid "My Grants"
-msgstr "Quyền của tôi"
-
-msgid "CalDAV URL"
-msgstr ""
-
-msgid "The grant to read records of this container"
-msgstr "Quyền đọc biểu ghi của bộ chứa này"
-
-msgid "Add"
-msgstr "Thêm"
-
-msgid "The grant to add records to this container"
-msgstr "Quyền thêm biểu ghi cho bộ chứa này"
-
-msgid "The grant to edit records in this container"
-msgstr "Quyền sửa biểu ghi trong bộ chứa này"
-
-msgid "The grant to delete records in this container"
-msgstr "Quyền xóa biểu ghi trong bộ chứa này"
-
-msgid "The grant to export records from this container"
-msgstr "Quyền xuất biểu ghi từ bộ chứa này"
-
-msgid "Sync"
-msgstr "Đồng bộ"
-
-msgid "The grant to synchronise records with this container"
-msgstr "Quyền để đồng bộ biểu ghi với bộ chứa này"
-
-msgid "Admin"
-msgstr "Quản trị"
-
-msgid "The grant to administrate this container"
-msgstr "Quyền quản trị bộ chứa này"
-
-msgid "Timestamp"
-msgstr "Định dạng thời gian"
-
-#, python-brace-format
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Hiển thị lịch sử, biểu ghi {0}-{1) của {2}"
-
-msgid "No history to display"
-msgstr "Không có lịch sử nào"
-
-msgid "History"
-msgstr "Lịch sử"
-
-msgid "Quick Search"
-msgstr ""
-
-msgid "Time"
-msgstr "Thời gian"
-
-msgid "Key Field Records"
-msgstr ""
-
-#, python-brace-format
-msgid "Transition from {current} to {target} is not allowed."
-msgstr ""
-
-msgid "Not Allowed"
-msgstr "Không được phép"
-
-msgid "Default"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Add a New ID..."
-msgstr ""
-
-msgid "Add a New Value..."
-msgstr ""
-
-msgid "ID already exists"
-msgstr ""
-
-msgid "ID needs to follow the syntax PARENTID:ID"
-msgstr ""
-
-msgid "Custom Fields"
-msgstr "Trường tùy biến"
-
-msgid "Select a country..."
-msgstr "Chọn 1 quốc gia ..."
-
-msgid "Export as ..."
-msgstr ""
-
-msgid "Change user account"
-msgstr ""
-
-msgid "Switch to another user's account"
-msgstr ""
-
-msgid "Switch to this user account:"
-msgstr ""
-
-msgid "Select Account"
-msgstr ""
-
-msgid "Changing user account ..."
-msgstr ""
-
-msgid "Search User"
-msgstr "Tìm người dùng"
-
-msgid "Search Group"
-msgstr "Tìm nhóm"
-
-msgid "Search Role"
-msgstr ""
-
-msgid "Add Anyone"
-msgstr "Thêm bất kỳ ai"
-
-msgid "Add Myself"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr "Tìm người dùng ..."
-
-msgid "Search for groups ..."
-msgstr "Tìm nhóm người dùng ..."
-
-msgid "Search for roles ..."
-msgstr ""
-
-msgid "Site"
-msgstr ""
-
-msgid "no site association"
-msgstr ""
-
-msgid "this month"
-msgstr "tháng này"
-
-msgid "last month"
-msgstr "thánh trước"
-
-msgid "this quarter"
-msgstr "quý này"
-
-msgid "last quarter"
-msgstr "quý trước"
-
-msgid "this year"
-msgstr "năm nay"
-
-msgid "last year"
-msgstr "năm ngoái"
-
-msgid "Image"
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
-msgstr ""
-
-msgid "Quota usage"
-msgstr ""
-
-msgid "today"
-msgstr "hôm nay"
-
-msgid "yesterday"
-msgstr "hôm qua"
-
-msgid "this week"
-msgstr "tuần này"
-
-msgid "last week"
-msgstr "tuần trước"
-
-msgid "the week before last"
-msgstr "tuần trước nữa"
-
-msgid "last three months"
-msgstr ""
-
-msgid "last six months"
-msgstr ""
-
-msgid "anytime"
-msgstr ""
-
-msgid "tomorrow"
-msgstr "ngay mai"
-
-msgid "next week"
-msgstr "tuần sau"
-
-msgid "next month"
-msgstr "tháng sau"
-
-msgid "next quarter"
-msgstr "quý sau"
-
-msgid "next year"
-msgstr "năm sau"
-
-msgid "contains"
-msgstr "chứa"
-
-msgid "contains word starting with"
-msgstr ""
-
-msgid "contains not"
-msgstr ""
-
-msgid "reg. exp."
-msgstr "reg. exp."
-
-msgid "is equal to without (-, )"
-msgstr ""
-
-msgid "is greater than"
-msgstr "lớn hơn"
-
-msgid "is less than"
-msgstr "ít hơn"
-
-msgid "is not"
-msgstr "không"
-
-msgid "{gender, select, male {one of} female {one of} other {one of}}"
-msgstr ""
-
-msgid "{gender, select, male {all of} female {all of} other {all of}}"
-msgstr ""
-
-msgid "{gender, select, male {none of} female {none of} other {none of}}"
-msgstr ""
-
-msgid "is before"
-msgstr "trước"
-
-msgid "is after"
-msgstr "sau"
-
-msgid "is within"
-msgstr "trong"
-
-msgid "is in week no."
-msgstr "tại tuần số"
-
-msgid "starts with"
-msgstr "bắt đầu với"
-
-msgid "ends with"
-msgstr "kết thúc với"
-
-msgid "defined by"
-msgstr "định nghĩa bởi"
-
-msgid "Search Account ..."
-msgstr "Tìm tài khoản ..."
-
-msgid "Period ..."
-msgstr ""
-
-msgid "show details"
-msgstr "xem chi tiết"
-
-msgid "Always show advanced filters"
-msgstr "Luôn hiện bộ lọc nâng cao"
-
-msgid "hide details"
-msgstr ""
-
-msgid "show"
-msgstr ""
-
-#, python-brace-format
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] ""
-"one: Màn hình của bạn giới hạn {0} điều kiện:\n"
-"other: Màn hình của bạn giới hạn {0} điều kiện:"
-
-#, python-brace-format
-msgid "Create {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Loading {0} ..."
-msgstr ""
-
-msgid "Edit definition"
-msgstr "Sửa định nghĩa"
-
-msgid "Start definition"
-msgstr "Bắt đầu định nghĩa"
-
-msgid "File"
-msgid_plural "Files"
-msgstr[0] ""
-
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
-msgstr ""
-
-msgid "Send by E-Mail"
-msgstr ""
-
-msgid "name"
-msgstr "Tên"
-
-msgid "size"
-msgstr "dung lượng"
-
-msgid "type"
-msgstr "kiểu"
-
-msgid "via"
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Có thể tìm thấy bất kỳ {0}. Xin thay đổi điều kiện lọc, tùy chọn xem hoặc {1} bạn tìm kiếm."
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
-msgstr ""
-
-msgid "Move Details Panel To"
-msgstr ""
-
-msgid "Bottom"
-msgstr ""
-
-msgid "Right"
-msgstr ""
-
-msgid "Print Page"
-msgstr "Trang in"
-
-#, python-brace-format
-msgid "Move {0}"
-msgid_plural "Move {0}"
-msgstr[0] ""
-
-#, python-brace-format
-msgid "Export as {0}"
-msgstr ""
-
-msgid "Import items"
-msgstr ""
-
-msgid "No data to display"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Hiển thị biểu ghi {0} - {1} của {2}"
-
-#, python-brace-format
-msgid "No {0} to display"
-msgstr "Không {0} để hiển thị"
-
-msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
-msgstr ""
-
-msgid "Records"
-msgstr ""
-
-msgid "New..."
-msgstr "Mới..."
-
-msgid "Add to..."
-msgstr "Thêm vào..."
-
-msgid "Last Modified Time"
-msgstr "Thời gian sửa cuối"
-
-msgid "Last Modified By"
-msgstr "Sửa cuối bởi"
-
-msgid "Grid Panel Key Bindings"
-msgstr ""
-
-#, python-brace-format
-msgid "Moving {0}"
-msgstr ""
-
-msgid "You are not allowed to delete all pages at once"
-msgstr "Bạn không được phép xóa mọi trang cùng 1 lúc"
-
-#, python-brace-format
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] ""
-"one: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?\n"
-"other: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?"
-
-msgid "... This may take a long time!"
-msgstr ""
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr "{0] đã chọn "
-
-msgid "has notes"
-msgstr "có ghi chép"
-
-msgid "This is a multilingual field:"
-msgstr ""
-
-msgid "Show records that match to one of the following filters"
-msgstr "Hiển thị biểu ghi phù hợp với 1 trong các bộ lọc sau"
-
-msgid "or alternatively"
-msgstr "hoặc khác"
-
-msgid "Add alternative filter"
-msgstr "Thêm bộ lọc khác"
-
-msgid "Remove Filter"
-msgstr "Xóa bộ lọc"
-
-msgid "Show"
-msgstr "Hiển thị"
-
-msgid "and"
-msgstr ""
-
-msgid "or"
-msgstr ""
-
-msgid "add new filter"
-msgstr "thêm bộ lọc mới"
-
-msgid "reset all filters"
-msgstr "khởi tạo lại mọi bộ lọc"
-
-msgid "start search"
-msgstr "bắt đầu tìm"
-
-msgid "save as favorite"
-msgstr "lưu như lối tắt"
-
-msgid "Load a favorite"
-msgstr "Nạp 1 lối tắt"
-
-msgid "select a field"
-msgstr "chọn 1 trường"
-
-msgid "Delete this filter"
-msgstr "Xóa bộ lọc này"
-
-#, python-brace-format
-msgid "Old {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "New {0}"
-msgstr "Thêm {0}"
-
-#, python-brace-format
-msgid "Repeat new {0}"
-msgstr ""
-
-msgid "New "
-msgstr ""
-
-msgid "The following files have changed:"
-msgstr ""
-
-msgid "has been created."
-msgstr ""
-
-msgid "has been changed."
-msgstr ""
-
-msgid "has been deleted."
-msgstr ""
-
-msgid "filemanager notification"
-msgstr ""
-
-msgid "email quota notification"
-msgstr ""
-
-msgid "email soft quota notification"
-msgstr ""
-
-msgid "email "
-msgstr ""
-
-msgid "filemanager quota notification"
-msgstr ""
-
-msgid "filemanager soft quota notification"
-msgstr ""
-
-msgid "MFA configs are not valid:"
-msgstr ""
-
-msgid "Your Tine 2.0 account has been deactivated"
-msgstr ""
-
-msgid "Password failed to match the following policy requirements: "
 msgstr ""
 
 msgid "Accesslog rotation in days"
@@ -3001,6 +362,10 @@ msgstr ""
 
 msgid "Autodiscover mail config"
 msgstr ""
+
+msgid "Municipality Key"
+msgid_plural "Municipality Keys"
+msgstr[0] ""
 
 msgid "Show the Municipality Key in the Coredata"
 msgstr ""
@@ -3650,6 +1015,10 @@ msgstr ""
 msgid "Available Note types for modlog history"
 msgstr ""
 
+msgid "Note"
+msgid_plural "Notes"
+msgstr[0] ""
+
 msgid "Telephone"
 msgstr ""
 
@@ -3677,6 +1046,10 @@ msgstr ""
 msgid "System User"
 msgstr ""
 
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+
 msgid "Volunteer"
 msgstr ""
 
@@ -3701,15 +1074,47 @@ msgstr ""
 msgid "Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter."
 msgstr ""
 
-msgid "by"
-msgstr "bởi"
+msgid "Personal container"
+msgstr ""
 
-msgid "Changed fields:"
-msgstr "Thay đổi trường:"
+#, python-format
+msgid "%s's personal container"
+msgstr "Bộ chứa cá nhân của %s"
+
+msgid "You are not allowed to delete your default container!"
+msgstr ""
+
+msgid "You are not allowed to remove all (admin) grants for this container."
+msgstr ""
+
+msgid "Personal containers can have only one owner!"
+msgstr ""
+
+msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
+msgstr "Bạn không được phép xóa bộ chứa này. Xin hãy định nghĩa một bộ chứa khác là sổ địa chỉ mặc định cho các liên hệ nội bộ!"
+
+msgid "A container with this name already exists."
+msgstr ""
+
+msgid "renaming is currently only possible if no models are assigned"
+msgstr ""
 
 #, python-format
 msgid "%s's personal files"
 msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "The new password must be different from the old one."
+msgstr ""
+
+msgid "Old pin is wrong."
+msgstr ""
+
+msgid "Bank Holiday Calendar"
+msgid_plural "Bank Holiday Calendars"
+msgstr[0] ""
 
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
@@ -3719,33 +1124,2807 @@ msgstr ""
 msgid "Status %s is not valid."
 msgstr ""
 
-msgid "renaming is currently only possible if no models are assigned"
-msgstr ""
-
-msgid "Personal default"
-msgstr ""
-
-msgid "default"
-msgstr "mặc định"
-
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr ""
 
-msgid "Scheduler task failed"
+msgid "Email account already exists"
 msgstr ""
+
+msgid "Area is locked"
+msgstr ""
+
+msgid "Area could not be unlocked"
+msgstr ""
+
+msgid "Confirmation is required"
+msgstr ""
+
+msgid "Invalid Relations"
+msgstr ""
+
+msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
+msgstr ""
+
+msgid "Wrong month format!"
+msgstr ""
+
+msgid "The month must have the format YYYY-MM!"
+msgstr ""
+
+msgid "Password Policy Violation"
+msgstr "Xung đột chính sách mật khẩu."
+
+#, python-brace-format
+msgid "Exception ({0})"
+msgstr ""
+
+msgid "Quota is exceeded"
+msgstr ""
+
+msgid "System Container"
+msgstr "Bộ chứa hệ thống"
+
+msgid "This is a system container which could not be deleted!"
+msgstr "Đây là bộ chứa hệ thống nên sẽ không thể xóa được"
+
+msgid "Generic System Exception"
+msgstr "Generic System Exception"
+
+msgid "Exporttime"
+msgstr ""
+
+msgid "Export only currently shown columns"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Tags"
+msgstr "Thẻ"
+
+msgid "Created by"
+msgstr "Tạo bởi"
+
+msgid "Activities"
+msgstr "Hoạt động"
+
+msgid "Total: "
+msgstr ""
+
+msgid "Data"
+msgstr "Dữ liệu"
+
+msgid "The following files have changed:"
+msgstr ""
+
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+
+msgid "has been created."
+msgstr ""
+
+msgid "has been changed."
+msgstr ""
+
+msgid "has been deleted."
+msgstr ""
+
+msgid "filemanager notification"
+msgstr ""
+
+msgid "email quota notification"
+msgstr ""
+
+msgid "email soft quota notification"
+msgstr ""
+
+msgid "email "
+msgstr ""
+
+msgid "filemanager quota notification"
+msgstr ""
+
+msgid "filemanager soft quota notification"
+msgstr ""
+
+msgid "Number of distinct users"
+msgstr ""
+
+msgid "Number of users"
+msgstr ""
+
+msgid "  User Accounts:\n"
+msgstr ""
+
+msgid "MFA password wrong"
+msgstr ""
+
+msgid "MFA send out triggered"
+msgstr ""
+
+msgid "Anyone"
+msgstr "Bất kỳ ai"
 
 #, python-format
-msgid "Your scheduler task %s has failed %d times."
+msgid "The following fields weren't imported: %s"
+msgstr "Trường sau không được phép nhập vào: %s"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Import Community identification Numbers"
 msgstr ""
 
-msgid "- The last filter I used -"
+msgid "Municipality Key Import"
+msgstr ""
+
+#, python-brace-format
+msgid "About {0}"
+msgstr "Về {0}"
+
+#, python-brace-format
+msgid "Learn more about {0}"
+msgstr ""
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Released under different"
+msgstr "Được phát hành dưới mặt khác"
+
+msgid "Open Source Licenses"
+msgstr "Open Source Licenses"
+
+msgid "with the help of our"
+msgstr "với sự trợ giúp của chúng tôi"
+
+msgid "Contributors"
+msgstr "Contributors"
+
+msgid "Subscription"
+msgstr ""
+
+msgid "Filesystem Mounts"
+msgstr ""
+
+msgid "Profile Information"
+msgstr "Thông tin hồ sơ"
+
+msgid "Apply"
+msgstr "Áp dụng"
+
+msgid "Please Wait"
+msgstr "Xin hãy đợi"
+
+msgid "Read"
+msgstr "Đọc"
+
+msgid "The field is readable part of the profile"
+msgstr "Trường là phần có thể đọc của hồ sơ"
+
+msgid "Edit"
+msgstr "Sửa"
+
+msgid "The field is editable part of the profile"
+msgstr "Trường là phần có thể sửa của hồ sơ"
+
+msgid "Field Name"
+msgstr "Tên trường"
+
+msgid "Not Supported"
+msgstr ""
+
+msgid "Your request is not supported by this version."
+msgstr ""
+
+msgid "Attachment"
+msgstr "Đính kèm"
+
+msgid "New "
+msgstr ""
+
+msgid "Missing Applications"
+msgstr "Ứng dụng lỗi"
+
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Không có ựng dụng nào được mở cho bạn. Xin hãy liên hệ với quản trị hệ thống."
+
+msgid "Search for Application ..."
+msgstr ""
+
+msgid "Choose MFA Deivce"
+msgstr ""
+
+msgid "This area is locked. Which device should be used to unlock?"
+msgstr ""
+
+msgid "Unlocking ..."
+msgstr ""
+
+msgid "Click here to unlock this area."
+msgstr ""
+
+msgid "MFA device missing"
+msgstr ""
+
+msgid "No matching MFA device for this area found. Configure a matching device please."
+msgstr ""
+
+msgid "Try again?"
+msgstr ""
+
+msgid "Fraction of the day"
+msgstr ""
+
+msgid "One quarter of the day"
+msgstr ""
+
+msgid "One third of the day"
+msgstr ""
+
+msgid "Half of the day"
+msgstr ""
+
+msgid "Two third of the day"
+msgstr ""
+
+msgid "Three quarters of the day"
+msgstr ""
+
+msgid "Whole day"
+msgstr ""
+
+msgid "Add new Element..."
+msgstr ""
+
+msgid "Usage:&#160;"
+msgstr "Sử dụng:&#160;"
+
+msgid "personal"
+msgstr "cá nhân"
+
+msgid "No Information"
+msgstr "Không có thông tin"
+
+msgid "No Access"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} second"
+msgid_plural "{0} seconds"
+msgstr[0] ""
+"one: {0} giây\n"
+"other: {0} giây"
+
+msgid "Confirm"
+msgstr "Xác nhận"
+
+msgid "Restart application to apply new configuration?"
+msgstr ""
+
+#, python-brace-format
+msgid "All {0}"
+msgstr "Tất cả{0}"
+
+#, python-brace-format
+msgid "Shared {0}"
+msgstr "Chia sẻ {0}"
+
+#, python-brace-format
+msgid "Other Users {0}"
+msgstr "Người dùng khác {0}"
+
+#, python-brace-format
+msgid "My {0}"
+msgstr "Của tôi {0}"
+
+msgid "Credits"
+msgstr "Credits"
+
+msgid "Translation not found"
+msgstr ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+"one: Công việc\n"
+"other: Công việc"
+
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] ""
+"one: việc cần làm\n"
+"other: việc cần làm"
+
+msgid "Abnormal End"
+msgstr "Abnormal End"
+
+msgid "Cancel"
+msgstr "Hủy bỏ"
+
+msgid "Send Report"
+msgstr "Gửi báo cáo"
+
+msgid "An error occurred, the program ended abnormal."
+msgstr "An error occurred, the program ended abnormal."
+
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Hoạt động cuối của bạn đã làm có thể không được thực hiện một cách chính xác."
+
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Xin hãy giúp nâng cao chất lượng phần mềm này và thông báo với nhà cung cấp. Bao gồm mô tả ngắn gọn bạn làm gì ở đâu khi có lỗi xảy ra"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Send Contact Information"
+msgstr "Gửi thông tin liên hệ"
+
+msgid "Details:"
+msgstr "Chi tiết:"
+
+msgid "Sending report..."
+msgstr "Đang gửi báo cáo..."
+
+msgid "Please wait a moment"
+msgstr "Xin đợi trong giây l"
+
+msgid "Transmission Completed"
+msgstr "Việc chuyển phát đã hoàn thành"
+
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Báo cáo của bạn đã được gửi. Cảm ơn bạn đã đóng góp."
+
+msgid "Please restart your browser now!"
+msgstr "Xin khởi động lại trình duyệt của bạn ngay!"
+
+msgid "Insufficient Rights"
+msgstr "Thiếu quyền"
+
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Rất tiếc, bạn không được phép thực hiện hành động này."
+
+msgid "Not Found"
+msgstr "Không thấy"
+
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Rất tiếc, yêu cầu của bạn không được hoàn thành vì không tìm thây dữ liệu. Điều này phần lớn là do ai đó đã xóa dữ liệu. Xin hãy làm mới màn hình hiện tại của bạn."
+
+msgid "Concurrent Updates"
+msgstr "Cập nhật đồng thời"
+
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Ai đó đã lưu biểu ghi này trong khi bạn sửa dữ liệu. Bạn cần nạp lại và thực hiện thay đổi lại lần nữa."
+
+msgid "Rate-Limit"
+msgstr ""
+
+msgid "This method is rate-limited and you sent too many requests."
+msgstr ""
+
+msgid "Service Unavailable"
+msgstr "Dịch vụ không sẵn sàng"
+
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
+msgstr "Máy chủ đang không thể đáp ứng yêu cầu của bạn vì tạm thời quá tải, ở chế độ duy trì hoặc bị cấu hình sai. Xin hãy thử lại hoặc liên hệ với quản trị hệ thống."
+
+msgid "Server Message:"
+msgstr "Lời nhắn máy chủ:"
+
+msgid "Invalid Data"
+msgstr "Dữ liệu không hợp lệ"
+
+msgid "Your input data is not valid. Please provide valid data."
+msgstr "Dữ liệu nhập vào của bạn không hợp lệ. Xin hãy cung cấp dữ liệu chính xác."
+
+msgid "Connection lost, please check your network!"
+msgstr "Mất kết nối, xin hãy kiểm tra mạng của bạn!"
+
+msgid "Timeout"
+msgstr "Quá thời gian"
+
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "Rất tiếc, việc truy cập của bạn đã vượt quá thời gian quy định. Xin hãy nạp lại từ trình duyệt của bạn và thử lại, hoặc liên hệ với quản trị hệ thống."
+
+msgid "No Response"
+msgstr "Không trả lời"
+
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "Rất tiếc, máy chủ không trả lời bất kỳ dữ liệu nào. Xin hãy nạp lại trình duyệt, thử lại hoặc liên hệ với quản trị hệ thống."
+
+msgid "Out of Resources"
+msgstr "Hết tài nguyên"
+
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
+msgstr "Rất tiếc, máy chủ đã hết bộ nhớ. Xin liên hệ với quản trị hệ thống."
+
+msgid "No Role Memberships"
+msgstr "Không có vai trò thành viên"
+
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "Tài khoản người dùng của bạn không có vai trò thành viên. Xin liên hệ với quản trị hệ thống."
+
+msgid "Method Not Found / Insufficent Permissions"
+msgstr ""
+
+msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Outdated Browser"
+msgstr ""
+
+msgid "You need a current Browser to use this program."
+msgstr ""
+
+msgid "License"
+msgstr "License"
+
+msgid "Login"
+msgstr "Đăng nhập"
+
+msgid "Username"
+msgstr "Tên truy cập"
+
+msgid "Password"
+msgstr "Mật khẩu"
+
+msgid "Certificate detected. Please, press Login button to proceed."
+msgstr ""
+
+msgid "Login via OpenID Connect"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} is made for you"
+msgstr "{0} được phát triển cho bạn"
+
+#, python-brace-format
+msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Homepage"
+msgstr "{0} Trang chủ"
+
+msgid "Translations"
+msgstr "Chuyển ngữ"
+
+#, python-brace-format
+msgid "Translation state of {0}: {1}%."
+msgstr ""
+
+#, python-brace-format
+msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Translation Howto"
+msgstr "{0} Cách chuyển ngữ"
+
+msgid "Detailed Language Statistics"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license expired."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} trial"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+
+msgid "Powered by:"
+msgstr ""
+
+msgid "online open source groupware and crm"
+msgstr ""
+
+#, python-brace-format
+msgid "about {0} minutes"
+msgstr "khoảng {0} phút"
+
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 cần sự giúp đỡ của bạn"
+
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+
+msgid "participate!"
+msgstr "tham dự!"
+
+msgid "Languages"
+msgstr "Ngôn ngữ"
+
+msgid "Duration"
+msgstr "Thời lượng"
+
+msgid "Browser incompatible"
+msgstr "Trình duyệt không tương thích"
+
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Trình duyệt của bạn không được hỗ trợ bởi Tine 2.0"
+
+msgid "Browser incompatible?"
+msgstr "Trình duyệt không tương thích?"
+
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr "Bạn đang sử dụng trình duyệt không được nhận dạng. Điều này có thể gây ra các hoạt động không như mong muốn."
+
+msgid "You might try one of these browsers:"
+msgstr "Bạn nên thử một trong các trình duyệt:"
+
+#, python-brace-format
+msgid "Login successful. Loading {0}..."
+msgstr "Đăng nhập thành công. Đang tải {0}..."
+
+msgid "Please wait!"
+msgstr "Xin hãy đợi"
+
+msgid "There was an error verifying your certificate!"
+msgstr ""
+
+msgid "Your username and/or your password are wrong!"
+msgstr ""
+
+msgid "Login failure"
+msgstr "Đăng nhập thất bại"
+
+msgid "Logging you in..."
+msgstr "Bạn đang đăng nhập ..."
+
+msgid "Please wait"
+msgstr "Xin hãy đợi"
+
+msgid "Errors"
+msgstr "Lỗi"
+
+msgid "Please fix the errors noted."
+msgstr "Xin hãy sửa lại các lỗi đã được ghi chú."
+
+msgid "Redirecting to SSO Identity Provider"
+msgstr ""
+
+msgid "Please enter your login data"
+msgstr "Xin nhập thông tin đăng nhập của bạn"
+
+#, python-brace-format
+msgid "User: {0}"
+msgstr "Người dùng: {0}"
+
+msgid "Return to original user account"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Cửa sổ gỡ lỗi (Ctrl + F11)"
+
+msgid "Preferences"
+msgstr "Thông số"
+
+msgid "Edit Profile"
+msgstr "Sửa hồ sơ"
+
+msgid "Change password"
+msgstr "Đổi mật khẩu"
+
+msgid "Manage MFA Devices"
+msgstr ""
+
+msgid "Logout"
+msgstr "Thoát"
+
+#, python-brace-format
+msgid "Logout from {0}"
+msgstr "Thoát từ {0}"
+
+#, python-brace-format
+msgid "The license expires in {0} days"
+msgstr ""
+
+#, python-brace-format
+msgid "Please visit the shop at {0}"
+msgstr ""
+
+msgid "Allow desktop notifications"
+msgstr "Cho phép thông báo từ desktop"
+
+msgid "Request permissions for webkit desktop notifications."
+msgstr "Yêu cầu quyền cho thông báo webkit desktop"
+
+msgid "Reload the application"
+msgstr ""
+
+msgid "Reloads the application and clears caches."
+msgstr ""
+
+msgid "Are you sure you want to logout?"
+msgstr "Bạn có chắc chắn muốn thoát?"
+
+msgid "Logging you out..."
+msgstr "Thoát khỏi hệ thống"
+
+msgid "You need to set a new password."
+msgstr ""
+
+msgid "Multi Factor Authentication"
+msgstr ""
+
+msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
+msgstr ""
+
+msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
+msgstr ""
+
+msgid "Multi Factor Authentication Device Configuration"
+msgstr ""
+
+msgid "Secret Key"
+msgstr ""
+
+msgid "Please note: After saving you can not view this autogenerated secret key again!"
+msgstr ""
+
+msgid "Generating secret key ..."
+msgstr ""
+
+msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
+msgstr ""
+
+msgid "for"
+msgstr ""
+
+msgid "MFA secret required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Secret from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Authenticator code required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Authenticator code from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "PIN required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
+msgstr ""
+
+#, python-brace-format
+msgid "{mfaDevice.device_name} secret"
+msgstr ""
+
+msgid "SMS security code required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Security code from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Token required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Token from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Password required"
+msgstr ""
+
+msgid "This area is locked. To unlock it you need to provide your password."
+msgstr ""
+
+msgid "Error"
+msgstr "Lỗi"
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr ""
+
+msgid "Yubico OTP required"
+msgstr ""
+
+msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
+msgstr ""
+
+msgid "Yubico OTP"
+msgid_plural "Yubico OTPs"
+msgstr[0] ""
+
+msgid "Add new MFA Device"
+msgstr ""
+
+msgid "Click here to add note"
+msgstr ""
+
+msgid "FIDO2 WebAuthn Device"
+msgid_plural "FIDO2 WebAuthn Devices"
+msgstr[0] ""
+
+msgid "Please open the following URL in your Browser for more security key options"
+msgstr ""
+
+msgid "Configuring FIDO2 WebAuthn Device ..."
+msgstr ""
+
+msgid "FIDO2 WebAuthn Device is configured."
+msgstr ""
+
+msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
+msgstr ""
+
+msgid "Unsupported Configuration"
+msgstr ""
+
+#, python-brace-format
+msgid "see {url} for details"
+msgstr ""
+
+#, python-brace-format
+msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
+msgstr ""
+
+msgid "FIDO2 WebAuthn registration failed. Try again?"
+msgstr ""
+
+msgid "Country"
+msgid_plural "Countries"
+msgstr[0] ""
+
+msgid "Grant"
+msgid_plural "Grants"
+msgstr[0] ""
+
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] ""
+"one: Thẻ\n"
+"other: Thẻ"
+
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] ""
+"one: Báo thức\n"
+"other: Báo thức"
+
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] ""
+"one: Nhập dữ liệu\n"
+"other: Nhập dữ liệu"
+
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] ""
+"one: Xuất dữ liệu\n"
+"other: Xuất dữ liệu"
+
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] ""
+"one:Chi tiết\n"
+"other:Chi tiết"
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+"one:Quan hệ\n"
+"other:Quan hệ"
+
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] ""
+"one:Bộ phận\n"
+"one:Bộ phận"
+
+msgid "Name"
+msgstr "Tên"
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+"one: Cấu hình\n"
+"other: Cấu hình"
+
+msgid "Configs"
+msgstr "Cấu hình"
+
+msgid "Query"
+msgstr ""
+
+msgid "Path"
+msgid_plural "Paths"
+msgstr[0] ""
+
+msgid "Search for Municipality Keys ..."
+msgstr ""
+
+msgid "PIN"
+msgid_plural "PINs"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Change {0} For \"{1}\""
+msgstr ""
+
+#, python-brace-format
+msgid "Old {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "New {0}"
+msgstr "Thêm {0}"
+
+#, python-brace-format
+msgid "Repeat new {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Changing {0}"
+msgstr ""
+
+msgid "Success"
+msgstr "Thành công"
+
+#, python-brace-format
+msgid "Your {0} has been changed."
+msgstr ""
+
+msgid "Failure"
+msgstr "Thất bại"
+
+#, python-brace-format
+msgid "{0} mismatch, please correct."
+msgstr ""
+
+msgid "Outdent Text"
+msgstr "Nội dung thò ra"
+
+msgid "Indent Text"
+msgstr "Nội dung thụt vào"
+
+msgid "Remove Formatting"
+msgstr "Xóa định dạng"
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activated Features"
+msgstr ""
+
+msgid "Your Subscription is unavailable"
+msgstr ""
+
+msgid "Your Subscription is not valid"
+msgstr ""
+
+msgid "Remove"
+msgstr "Xóa"
+
+msgid "Follow System"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Light Mode"
+msgstr ""
+
+msgid "Create Contact"
+msgstr ""
+
+msgid "Copy to Clipboard"
+msgstr ""
+
+msgid "Compose Message To"
+msgstr ""
+
+msgid "Session Timed Out"
+msgstr ""
+
+msgid "You can close this window."
+msgstr ""
+
+msgid "Your Client is Outdated"
+msgstr ""
+
+msgid "A new client is available, press OK to get this version"
+msgstr ""
+
+msgid "tine needs to be updated or is not installed yet."
+msgstr ""
+
+msgid "Please wait or contact your administrator"
+msgstr "Xin hãy đợi hoặc liên hệ với quản trị hệ thống của bạn"
+
+msgid "Total    Uploads"
+msgstr ""
+
+msgid "Complete Uploads"
+msgstr ""
+
+msgid "Failed   Uploads"
+msgstr ""
+
+msgid "online"
+msgstr "trực tuyến"
+
+msgid "offline"
+msgstr "đoạn tuyến"
+
+msgid "Upload progress"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} available (total: {1})"
+msgstr ""
+
+#, python-brace-format
+msgid "Error while uploading \"{fileName}\". Please try again later."
+msgstr ""
+
+msgid "Upload Failed"
+msgstr "Upload không thành công"
+
+msgid "Uploads Monitor"
+msgstr ""
+
+msgid "Empty List"
+msgstr ""
+
+msgid "Not all uploads are finished yet. What would you to do?"
+msgstr ""
+
+msgid "Remove finished uploads from this list only"
+msgstr ""
+
+msgid "Cancel all unfinished uploads before"
+msgstr ""
+
+msgid "Removing files..."
+msgstr ""
+
+msgid "Total Uploads : "
+msgstr ""
+
+msgid "Yes"
+msgstr "Có"
+
+msgid "No"
+msgstr "Không"
+
+#, python-brace-format
+msgid "{0} is not a valid unit"
+msgstr ""
+
+#, python-brace-format
+msgid "choose other {0}..."
+msgstr "chọn {0} khác ..."
+
+msgid "Not a valid time"
+msgstr ""
+
+msgid "Job Title"
+msgstr ""
+
+msgid "Select Image"
+msgstr ""
+
+msgid "Insert an image with the selected size"
+msgstr ""
+
+msgid "Convert to pure text"
+msgstr ""
+
+msgid "Loading"
+msgstr "Đang tải"
+
+msgid "Click to edit"
+msgstr "Click để sửa"
+
+msgid "Image Failed"
+msgstr "Ảnh bị hỏng"
+
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Không thể nạp ảnh. Xin thông báo với người quản trị hệ thống"
+
+msgid "Not An Image"
+msgstr "Không phải là ảnh"
+
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Xin chọn 1 file ảnh (gif/png/jpeg)"
+
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Không thể upload ảnh. Xin hãy thông báo với người quản trị hệ thống"
+
+msgid "Change Image"
+msgstr "Đổi ảnh"
+
+msgid "Crop Image"
+msgstr "Xén ảnh"
+
+msgid "Delete Image"
+msgstr "Xóa ảnh"
+
+msgid "Show Original Image"
+msgstr "Hiển thị ảnh gốc"
+
+msgid "When preference is locked, normal user can not edit the preference anymore."
+msgstr ""
+
+msgid "no decimals allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "max decimals allowed: {0}"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Quarter"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Software Version"
+msgstr "Phiên bản phần mềm"
+
+msgid "Select all"
+msgstr ""
+
+msgid "Deselect all"
+msgstr ""
+
+#, python-brace-format
+msgid "Please Sort by \"{0}\""
+msgstr ""
+
+#, python-brace-format
+msgid "To use manual sorting, you need to sort by column \"{0}\""
+msgstr ""
+
+msgid "Export Records from these Positions"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} selected"
+msgstr "{0} được chọn"
+
+msgid "Unselect all"
+msgstr "Bỏ chọn hết"
+
+#, python-brace-format
+msgid "Select all pages ({0} records)"
+msgstr "Chọn mọi trang ({0} biểu ghi)"
+
+msgid "Toggle selection"
+msgstr "Đổi chọn"
+
+msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
+msgstr ""
+
+msgid "quarantined"
+msgstr ""
+
+msgid "(paused)"
+msgstr "(đã dừng)"
+
+msgid "Cannot open new window"
+msgstr ""
+
+#, python-brace-format
+msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
+msgstr ""
+
+msgid "Window can be closed"
+msgstr ""
+
+#, python-brace-format
+msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
+msgstr ""
+
+msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+msgstr "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+
+msgid "Preparing print, please wait..."
+msgstr ""
+
+msgid "Printing Error"
+msgstr ""
+
+msgid "Related to"
+msgstr "Liên quan tới"
+
+msgid "enter searchfilter"
+msgstr "nhập bộ lọc tìm kiếm"
+
+msgid "Leave site?"
+msgstr ""
+
+msgid "Changes you made may not be saved."
+msgstr ""
+
+msgid "Change user account"
+msgstr ""
+
+msgid "Switch to another user's account"
+msgstr ""
+
+msgid "Switch to this user account:"
+msgstr ""
+
+msgid "Select Account"
+msgstr ""
+
+msgid "Changing user account ..."
+msgstr ""
+
+msgid "Search User"
+msgstr "Tìm người dùng"
+
+msgid "Search Group"
+msgstr "Tìm nhóm"
+
+msgid "Search Role"
+msgstr ""
+
+msgid "Add Anyone"
+msgstr "Thêm bất kỳ ai"
+
+msgid "Add Myself"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr "Tìm người dùng ..."
+
+msgid "Search for groups ..."
+msgstr "Tìm nhóm người dùng ..."
+
+msgid "Search for roles ..."
+msgstr ""
+
+msgid "Notes"
+msgstr "Ghi chép"
+
+msgid "Type"
+msgstr "Loại"
+
+msgid "Created By"
+msgstr "Tạo bởi"
+
+msgid "Creation time"
+msgstr ""
+
+#, python-brace-format
+msgid "Add {0}"
+msgstr "Thêm {0}"
+
+#, python-brace-format
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] ""
+"one:Sửa {0}\n"
+"other:Sửa {0}"
+
+#, python-brace-format
+msgid "Remove {0}"
+msgstr ""
+
+msgid "Enter new note:"
+msgstr "Nhập ghi chép mới:"
+
+msgid "Add Note"
+msgstr "Thêm ghi chép"
+
+msgid "Timestamp"
+msgstr "Định dạng thời gian"
+
+#, python-brace-format
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Hiển thị lịch sử, biểu ghi {0}-{1) của {2}"
+
+msgid "No history to display"
+msgstr "Không có lịch sử nào"
+
+msgid "History"
+msgstr "Lịch sử"
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Time"
+msgstr "Thời gian"
+
+msgid "CalDAV URL"
+msgstr ""
+
+msgid "is personal of"
+msgstr "là cá nhân của"
+
+msgid "is equal to"
+msgstr "bằng"
+
+#, python-brace-format
+msgid "Selected {0}"
+msgstr ""
+
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+
+msgid "Updating Grants"
+msgstr "Cập nhật quyền"
+
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Bạn không được phép xóa mọi quyền quản trị của mục này!"
+
+msgid "The grant to read records of this container"
+msgstr "Quyền đọc biểu ghi của bộ chứa này"
+
+msgid "Add"
+msgstr "Thêm"
+
+msgid "The grant to add records to this container"
+msgstr "Quyền thêm biểu ghi cho bộ chứa này"
+
+msgid "The grant to edit records in this container"
+msgstr "Quyền sửa biểu ghi trong bộ chứa này"
+
+msgid "Delete"
+msgstr "Xóa"
+
+msgid "The grant to delete records in this container"
+msgstr "Quyền xóa biểu ghi trong bộ chứa này"
+
+msgid "The grant to export records from this container"
+msgstr "Quyền xuất biểu ghi từ bộ chứa này"
+
+msgid "Sync"
+msgstr "Đồng bộ"
+
+msgid "The grant to synchronise records with this container"
+msgstr "Quyền để đồng bộ biểu ghi với bộ chứa này"
+
+msgid "Admin"
+msgstr "Quản trị"
+
+msgid "The grant to administrate this container"
+msgstr "Quyền quản trị bộ chứa này"
+
+msgid "Properties"
+msgstr "Thuộc tính"
+
+msgid "Hierarchy/Name"
+msgstr ""
+
+msgid "My Grants"
+msgstr "Quyền của tôi"
+
+#, python-brace-format
+msgid "Select a {0}"
+msgstr "Chọn 1 {0}"
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "please select a {0}"
+msgstr "hãy chọn 1 {0}"
+
+msgid "container"
+msgid_plural "containers"
+msgstr[0] ""
+"one: bộ chứa\n"
+"other: bộ chứa"
+
+#, python-brace-format
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Bạn không được phép chọn {0} '{1}':"
+
+#, python-brace-format
+msgid "{0} grant is required for desired action"
+msgstr "{0} quyền được yêu cầu cho hành động bạn muốn"
+
+msgid "Insufficient Grants"
+msgstr "Thiếu quyền"
+
+msgid "Modules"
+msgstr ""
+
+msgid "Select a country..."
+msgstr "Chọn 1 quốc gia ..."
+
+msgid "Custom Fields"
+msgstr "Trường tùy biến"
+
+#, python-brace-format
+msgid "Change settings for application {0}"
+msgstr "Thay đổi thiết lập cho ứng dụng {0}"
+
+msgid "Defaults"
+msgstr "Mặc định"
+
+msgid "Alarms"
+msgstr "Nhắc nhở"
+
+msgid "0 minutes before"
+msgstr "0 phút trước"
+
+msgid "5 minutes before"
+msgstr "5 phút trước"
+
+msgid "15 minutes before"
+msgstr "15 phút trước"
+
+msgid "30 minutes before"
+msgstr "30 phút trước"
+
+msgid "1 hour before"
+msgstr "1 giờ phút trước"
+
+msgid "2 hours before"
+msgstr "2 giờ phút trước"
+
+msgid "12 hours before"
+msgstr "12 giờ phút trước"
+
+msgid "1 day before"
+msgstr "1 ngày phút trước"
+
+msgid "2 days before"
+msgstr "2 ngày phút trước"
+
+msgid "Custom Datetime"
+msgstr "Ngày giờ tùy chọn"
+
+msgid "Alarm Time"
+msgstr "Thời gian báo thức"
+
+#, python-brace-format
+msgid "{0} minutes before"
+msgstr "Trước {0} phút"
+
+msgid "Attachments"
+msgstr "Đính kèm"
+
+msgid "Size"
+msgstr "Kích thước"
+
+msgid "Content Type"
+msgstr "Kiểu nội dung"
+
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+msgid "Please enter your credentials"
+msgstr "Xin nhập thông tin của bạn"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Merging Records..."
+msgstr "Gộp biểu ghi"
+
+msgid "Merge Failed"
+msgstr "Gộp không thành công"
+
+#, python-brace-format
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr "Gộm thành công nhưng trùng lặp {0} không được xóa."
+
+#, python-brace-format
+msgid "Merge {0}, prefer First"
+msgstr "Gộp {0}, prefer First"
+
+#, python-brace-format
+msgid "Merge {0}, prefer Second"
+msgstr "Gộp {0}, prefer Second"
+
+#, python-brace-format
+msgid "Merge {0}"
+msgstr "Gộp {0}"
+
+#, python-brace-format
+msgid "First {0}"
+msgstr "Đầu tiên {0}"
+
+#, python-brace-format
+msgid "Second {0}"
+msgstr "Thứ hai {0}"
+
+#, python-brace-format
+msgid "Final {0}"
+msgstr "Cuối cùng {0}"
+
+msgid "The record you try to add might already exist."
+msgstr "Biểu ghi bạn cố thêm có thể đã tồn tại"
+
+msgid "Field Group"
+msgstr "Nhóm trường"
+
+msgid "My Value"
+msgstr "Giá trị của tôi"
+
+msgid "Existing Value"
+msgstr "Giá trị đã tồn tại"
+
+msgid "Final Value"
+msgstr "Giá trị cuối cùng"
+
+msgid "Keep both records"
+msgstr "Giữ cả hai biểu ghi"
+
+msgid "Merge, keeping existing details"
+msgstr "Gộp, giữ chi tiết đã có"
+
+msgid "Merge, keeping my details"
+msgstr "Gộp, giữ chi tiết của tôi"
+
+msgid "Keep existing record and discard mine"
+msgstr "Giữ kiểu ghi đã tồn tại và bỏ qua tôi"
+
+msgid "Action:"
+msgstr "Chức năng:"
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "delete"
+msgstr "xóa"
+
+#, python-brace-format
+msgid "Print {0}"
+msgstr ""
+
+msgid "Saved in"
+msgstr "Đã lưu trong"
+
+#, python-brace-format
+msgid "{0} (copy)"
+msgstr ""
+
+#, python-brace-format
+msgid "Copy {0}"
+msgstr "Sao chép {0}"
+
+msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr "Sửa {0} \"(1}\""
+
+msgid "Files are still uploading."
+msgstr ""
+
+msgid "Please review the fields marked red. They contain invalid values."
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete this {0}?"
+msgstr "Bạn có thật sự muốn xóa {0} này?"
+
+#, python-brace-format
+msgid "Deleting {0}"
+msgstr "Đang xóa {0}"
+
+msgid "Failed"
+msgstr "Thất bại"
+
+#, python-brace-format
+msgid "Could not delete {0}."
+msgstr "Không thể xóa {0}"
+
+#, python-brace-format
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr "Giải quyết trùng lặp {0}"
+
+msgid "Permissions"
+msgstr ""
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Đang truyền {0} ..."
+
+#, python-brace-format
+msgid "{1} - Exception {0}"
+msgstr "{1} - Loại trừ {0}"
+
+#, python-brace-format
+msgid "{0} - Unknown Exception"
+msgstr ""
+
+msgid "Select Export Definition ..."
+msgstr "Chọn các định nghĩa để xuất dữ liệu...."
+
+#, python-brace-format
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] ""
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Filemanager"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Choose Export Location"
+msgstr ""
+
+msgid "How would you like to save your export?"
+msgstr ""
+
+msgid "Exporting..."
+msgstr ""
+
+msgid "Export created successfully."
+msgstr ""
+
+msgid "Please check your computers downloads folder!"
+msgstr ""
+
+msgid "Export could not be created. Please try again later"
+msgstr ""
+
+msgid "What would you like to do?"
+msgstr "Bạn muốn làm gì?"
+
+msgid "You need to select an option!"
+msgstr "Bạn cần chọn 1 tùy chọn!"
+
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgstr "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+
+msgid "Following you find a list of all supported import formats."
+msgstr ""
+
+msgid "Choose File and Format"
+msgstr "Chọn File và định dạng"
+
+msgid "Choose Import File"
+msgstr "Chọn file để nhập liệu"
+
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr "Xin hãy chọn file chứa biểu ghi bạn muốn thêm vào Tine 2.0"
+
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr "Chọn file chứa {0} của bạn"
+
+msgid "What should the file you upload look like?"
+msgstr "File bạn muốn upload sẽ giống thứ gì?"
+
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr "Tine 2.0 không hiểu mọi kiểu file bạn có thể upload. Bạn phải upload từng file và xem lại các file của bạn để Tine 2.0 có thể hiểu được."
+
+msgid "Please select the import format of the file you want to upload"
+msgstr "Please select the import format of the file you want to upload"
+
+msgid "Download example file"
+msgstr "Download file ví dụ"
+
+#, python-brace-format
+msgid "Select {0} to add you {1} to:"
+msgstr "Chọn {0} để thêm bạn {1} vào:"
+
+msgid "Set Import Options"
+msgstr "Đặt tùy chọn nhập dữ liệu"
+
+msgid "Checking Import"
+msgstr "Đang kiểm tra nhập liệu"
+
+msgid "Resolve Conflicts"
+msgstr "Giải quyết xung đột"
+
+msgid "Conflict"
+msgstr "Xung đột"
+
+msgid "First Conflict"
+msgstr "Xung đột đầu tiên"
+
+msgid "Previous Conflict"
+msgstr "Xung đột trước đó"
+
+msgid "Next Conflict"
+msgstr "Xung đột tiếp theo"
+
+msgid "Last Conflict"
+msgstr "Xung đột cuối cùng"
+
+msgid "Resolve this conflict"
+msgstr ""
+
+msgid "Resolve all conflicts"
+msgstr "Giải quyết mọi xung đột"
+
+msgid "Processing Conflict Data"
+msgstr "Đang xử lý dữ liệu xung đột"
+
+msgid "No conflict to resolve"
+msgstr "Không có xung đột nào để giải quyết"
+
+#, python-brace-format
+msgid "(This is record {0} in your import file)"
+msgstr "(Đây là biểu ghi {0} trong file nhập liệu của bạn)"
+
+msgid "No Detail Informations"
+msgstr "Không có thông tin chi tiết"
+
+msgid "Summary"
+msgstr "Tóm tắt"
+
+msgid "Index"
+msgstr "Mục lục"
+
+msgid "Record"
+msgstr "Biểu ghi"
+
+#, python-brace-format
+msgid "Importing {0}"
+msgstr "Đang nhập dữ liệu {0}"
+
+#, python-brace-format
+msgid "{0} records had failures and where discarded."
+msgstr "{0} biểu ghi có lỗi và nơi bị hủy bỏ"
+
+#, python-brace-format
+msgid "In total we found {0} records in your import file."
+msgstr "Có tổng số {0} biểu ghi trong file nhập liệu"
+
+#, python-brace-format
+msgid "{0} of them will be added as new records into: \"{1}\"."
+msgstr "{0} trong số chung sẽ được thêm như biểu ghi mới vào: \"{1}\":"
+
+#, python-brace-format
+msgid "{0} of them where identified as duplicates."
+msgstr "{0} trong số chúng được nhận dạng là trùng lặp."
+
+#, python-brace-format
+msgid "From the identified duplicates {0} will be merged into the existing records."
+msgstr "From the identified duplicates {0} will be merged into the existing records."
+
+#, python-brace-format
+msgid "From the identified duplicates {0} will be discarded."
+msgstr "From the identified duplicates {0} will be discarded."
+
+#, python-brace-format
+msgid "All records will be tagged with: \"{0}\" so you can find them easily."
+msgstr "All records will be tagged with: \"{0}\" so you can find them easily."
+
+#, python-brace-format
+msgid "{0} records have failures and will be discarded."
+msgstr "{0} biểu ghi có lỗi hoặc sẽ bị hủy bỏ"
+
+msgid "Delete value from all selected records"
+msgstr "Xóa giá trị từ tất cả biểu ghi được chọn."
+
+msgid "Undo change for all selected records"
+msgstr "Hủy bỏ thay đổi với mọi biểu ghi được chọn."
+
+#, python-brace-format
+msgid "Edit {0} {1}"
+msgstr "Sửa {0} {1}"
+
+msgid "Different Values"
+msgstr "Giá trị khác"
+
+msgid "This field has different values. Editing this field will overwrite the old values."
+msgstr "Trường này đã có giá trị khác. Sửa trường này sẽ ghi đè giá trị cũ."
+
+#, python-brace-format
+msgid "Add {0} Relation"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to change these {0} records?"
+msgstr "Bạn có muốn thay đổi các biểu ghi {0} này?"
+
+msgid "Applying changes"
+msgstr "Thực hiện thay đổi"
+
+#, python-brace-format
+msgid "You edited {0} {1}."
+msgstr "Bạn đã sửa {0} {1}"
+
+#, python-brace-format
+msgid "{0} {1} have been updated properly."
+msgstr "{0} {1} đã được cập nhật chính xác"
+
+#, python-brace-format
+msgid "{0} {1} has been updated properly."
+msgstr "{0} {1} đã được cập nhật chính xác"
+
+#, python-brace-format
+msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr "{0} {1} bị sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
+
+#, python-brace-format
+msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr "{0} {1} sai dữ liệu sau khi cập nhật. {1} này đã không được thay đổi."
+
+msgid "Set password"
+msgstr ""
+
+msgid "Generate password"
+msgstr ""
+
+msgid "Admin Mode"
+msgstr "Chế độ admin"
+
+msgid "All Users"
+msgstr ""
+
+msgid "Applications"
+msgstr "Ứng dụng"
+
+msgid "Edit Preferences"
+msgstr "Sửa thông số"
+
+msgid "Loading ..."
+msgstr "Đang tải"
+
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "Bạn cần sửa các trường đánh dấu đỏ trước khi lưu lại cấu hình"
+
+msgid "Saving of preferences failed."
+msgstr "Lưu thông số không thành công."
+
+msgid "There are no preferences for this application."
+msgstr "Không có thông số nào cho ứng dụng này."
+
+msgid "All Settings"
+msgstr ""
+
+msgid "General Preferences"
+msgstr "Thông số chung"
+
+msgid "Application Settings"
+msgstr ""
+
+msgid "My Profile"
+msgstr "Hồ sơ của tôi"
+
+msgid "Second Factor Password Required"
+msgstr ""
+
+msgid "Validating password..."
+msgstr ""
+
+msgid "Wrong Password"
+msgstr ""
+
+msgid "Invalid second factor password given"
+msgstr ""
+
+msgid "Back"
+msgstr "Quay lại"
+
+msgid "Next"
+msgstr "Tiếp tục"
+
+msgid "Finish"
+msgstr "Kết thúc"
+
+msgid "Create xprop"
+msgstr ""
+
+msgid "xprop Name"
+msgstr ""
+
+msgid "Please enter the name of the new xprop"
+msgstr ""
+
+msgid "Delete xprop"
+msgstr ""
+
+msgid "Export as ..."
+msgstr ""
+
+msgid "My Device"
+msgstr ""
+
+msgid "Download file and save on my local device."
+msgstr ""
+
+msgid "Select or drop file to upload"
+msgstr ""
+
+msgid "Select files"
+msgstr ""
+
+msgid "Select file"
+msgstr ""
+
+msgid "Select folders"
+msgstr ""
+
+msgid "Select folder"
+msgstr ""
+
+msgid "Select items"
+msgstr ""
+
+msgid "Select item"
+msgstr ""
+
+msgid "Places"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+
+msgid "Configuration Problem"
+msgstr "Vấn đề cấu hình"
+
+msgid "Invalid configuration"
+msgstr "Cấu hình lỗi"
+
+msgid "Transferring Configuration..."
+msgstr "Đang truyền cấu hình"
+
+msgid "Save config"
+msgstr "Lưu cấu hình"
+
+msgid "Reload config"
+msgstr "Nạp lại cấu hình"
+
+msgid "Gets assigned automatically"
+msgstr ""
+
+msgid "Wrong File Type"
+msgstr "Sai kiểu file"
+
+msgid "Please select a file with one of the following extensions:"
+msgstr "Hãy chọn 1 file với 1 trong các phần mở rộng sau:"
+
+msgid "Some fields are  multilingual. Click here to select language to display."
+msgstr ""
+
+msgid "Search for Model..."
+msgstr ""
+
+msgid "GENDER_Model"
+msgstr ""
+
+msgid "Model"
+msgid_plural "Models"
+msgstr[0] ""
+
+msgid "Cleartext/Hidden"
+msgstr ""
+
+msgid "No record"
+msgstr ""
+
+msgid "Edit copy"
+msgstr ""
+
+#, python-brace-format
+msgid "Search for {0} ..."
+msgstr ""
+
+msgid "Searching..."
+msgstr "Đang tìm ..."
+
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr "Bạn cố liên kết 1 biểu ghi với chính nó. Việc này không được phép!"
+
+msgid "Search for records ..."
+msgstr "Tìm biểu ghi..."
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
+msgstr ""
+
+msgid "Pause upload"
+msgstr "Tạm dừng upload"
+
+msgid "Resume upload"
+msgstr "Tiếp tục upload"
+
+msgid "Send by E-Mail"
+msgstr ""
+
+msgid "name"
+msgstr "Tên"
+
+msgid "size"
+msgstr "dung lượng"
+
+msgid "type"
+msgstr "kiểu"
+
+msgid "today"
+msgstr "hôm nay"
+
+msgid "yesterday"
+msgstr "hôm qua"
+
+msgid "this week"
+msgstr "tuần này"
+
+msgid "last week"
+msgstr "tuần trước"
+
+msgid "the week before last"
+msgstr "tuần trước nữa"
+
+msgid "this month"
+msgstr "tháng này"
+
+msgid "last month"
+msgstr "thánh trước"
+
+msgid "last three months"
+msgstr ""
+
+msgid "last six months"
+msgstr ""
+
+msgid "anytime"
+msgstr ""
+
+msgid "this quarter"
+msgstr "quý này"
+
+msgid "last quarter"
+msgstr "quý trước"
+
+msgid "this year"
+msgstr "năm nay"
+
+msgid "last year"
+msgstr "năm ngoái"
+
+msgid "tomorrow"
+msgstr "ngay mai"
+
+msgid "next week"
+msgstr "tuần sau"
+
+msgid "next month"
+msgstr "tháng sau"
+
+msgid "next quarter"
+msgstr "quý sau"
+
+msgid "next year"
+msgstr "năm sau"
+
+msgid "contains"
+msgstr "chứa"
+
+msgid "contains word starting with"
+msgstr ""
+
+msgid "contains not"
+msgstr ""
+
+msgid "reg. exp."
+msgstr "reg. exp."
+
+msgid "is equal to without (-, )"
+msgstr ""
+
+msgid "is greater than"
+msgstr "lớn hơn"
+
+msgid "is less than"
+msgstr "ít hơn"
+
+msgid "is not"
+msgstr "không"
+
+msgid "{gender, select, male {one of} female {one of} other {one of}}"
+msgstr ""
+
+msgid "{gender, select, male {all of} female {all of} other {all of}}"
+msgstr ""
+
+msgid "{gender, select, male {none of} female {none of} other {none of}}"
+msgstr ""
+
+msgid "is before"
+msgstr "trước"
+
+msgid "is after"
+msgstr "sau"
+
+msgid "is within"
+msgstr "trong"
+
+msgid "is in week no."
+msgstr "tại tuần số"
+
+msgid "starts with"
+msgstr "bắt đầu với"
+
+msgid "ends with"
+msgstr "kết thúc với"
+
+msgid "defined by"
+msgstr "định nghĩa bởi"
+
+msgid "select a operator"
+msgstr "chọn toán tử"
+
+msgid "Search Account ..."
+msgstr "Tìm tài khoản ..."
+
+msgid "Period ..."
+msgstr ""
+
+#, python-brace-format
+msgid "Selected  {0}"
+msgstr "{0] đã chọn "
+
+msgid "Show records that match to one of the following filters"
+msgstr "Hiển thị biểu ghi phù hợp với 1 trong các bộ lọc sau"
+
+msgid "or alternatively"
+msgstr "hoặc khác"
+
+msgid "Add alternative filter"
+msgstr "Thêm bộ lọc khác"
+
+msgid "Remove Filter"
+msgstr "Xóa bộ lọc"
+
+msgid "Show"
+msgstr "Hiển thị"
+
+msgid "and"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "add new filter"
+msgstr "thêm bộ lọc mới"
+
+msgid "reset all filters"
+msgstr "khởi tạo lại mọi bộ lọc"
+
+msgid "start search"
+msgstr "bắt đầu tìm"
+
+msgid "save as favorite"
+msgstr "lưu như lối tắt"
+
+msgid "Load a favorite"
+msgstr "Nạp 1 lối tắt"
+
+msgid "select a field"
+msgstr "chọn 1 trường"
+
+msgid "Delete this filter"
+msgstr "Xóa bộ lọc này"
+
+msgid "show details"
+msgstr "xem chi tiết"
+
+msgid "Always show advanced filters"
+msgstr "Luôn hiện bộ lọc nâng cao"
+
+msgid "hide details"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+#, python-brace-format
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] ""
+"one: Màn hình của bạn giới hạn {0} điều kiện:\n"
+"other: Màn hình của bạn giới hạn {0} điều kiện:"
+
+msgid "Edit definition"
+msgstr "Sửa định nghĩa"
+
+msgid "Start definition"
+msgstr "Bắt đầu định nghĩa"
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Có thể tìm thấy bất kỳ {0}. Xin thay đổi điều kiện lọc, tùy chọn xem hoặc {1} bạn tìm kiếm."
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
+msgstr ""
+
+msgid "Move Details Panel To"
+msgstr ""
+
+msgid "Bottom"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Print Page"
+msgstr "Trang in"
+
+#, python-brace-format
+msgid "Move {0}"
+msgid_plural "Move {0}"
+msgstr[0] ""
+
+#, python-brace-format
+msgid "Export as {0}"
+msgstr ""
+
+msgid "Import items"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+"one: Xóa {0}\n"
+"other: Xóa {0}"
+
+msgid "No data to display"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Hiển thị biểu ghi {0} - {1} của {2}"
+
+#, python-brace-format
+msgid "No {0} to display"
+msgstr "Không {0} để hiển thị"
+
+msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
+msgstr ""
+
+msgid "Records"
+msgstr ""
+
+msgid "New..."
+msgstr "Mới..."
+
+msgid "Add to..."
+msgstr "Thêm vào..."
+
+msgid "Last Modified Time"
+msgstr "Thời gian sửa cuối"
+
+msgid "Last Modified By"
+msgstr "Sửa cuối bởi"
+
+msgid "Grid Panel Key Bindings"
+msgstr ""
+
+#, python-brace-format
+msgid "Moving {0}"
+msgstr ""
+
+msgid "Not Allowed"
+msgstr "Không được phép"
+
+msgid "You are not allowed to delete all pages at once"
+msgstr "Bạn không được phép xóa mọi trang cùng 1 lúc"
+
+#, python-brace-format
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
+"one: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?\n"
+"other: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?"
+
+msgid "... This may take a long time!"
+msgstr ""
+
+msgid "via"
+msgstr ""
+
+#, python-brace-format
+msgid "Create {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Loading {0} ..."
+msgstr ""
+
+msgid "Quota usage"
+msgstr ""
+
+msgid "has notes"
+msgstr "có ghi chép"
+
+msgid "This is a multilingual field:"
+msgstr ""
+
+#, python-brace-format
+msgid "Transition from {current} to {target} is not allowed."
+msgstr ""
+
+msgid "Key Field Records"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Add a New ID..."
+msgstr ""
+
+msgid "Add a New Value..."
+msgstr ""
+
+msgid "ID already exists"
+msgstr ""
+
+msgid "ID needs to follow the syntax PARENTID:ID"
+msgstr ""
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "Setting new language..."
+msgstr ""
+
+msgid "Save current view as favorite"
+msgstr "Lưu khung xem hiện tại thành lối tắt"
+
+msgid "containers"
+msgstr "bộ chứa"
+
+msgid "Favorites"
+msgstr "Lối tắt"
+
+msgid "Favorite not saved"
+msgstr "Lối tắt không được lưu"
+
+msgid "Title"
+msgstr "Tiêu đề"
+
+msgid "Shared Favorite (visible by other users)"
+msgstr ""
+
+msgid "The grant to see and use this filter"
+msgstr ""
+
+msgid "The grant to edit this filter"
+msgstr ""
+
+msgid "The grant to delete this filter"
+msgstr ""
+
+msgid "My favorites"
+msgstr "Lối tắt của tôi"
+
+msgid "Delete Favorite"
+msgstr "Xóa lối tắt"
+
+msgid "Edit Favorite"
+msgstr "Sửa lối tắt"
+
+msgid "Overwrite Favorite"
+msgstr "Ghi đè lối tắt"
+
+#, python-brace-format
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr "Bạn có thực sự muốn ghi đè lối tắt \"{0}\"?"
+
+#, python-brace-format
+msgid "Deleting Favorite \"{0}\""
+msgstr "Đang xóa lối tắt \"{0}\""
+
+msgid "Overwrite?"
+msgstr "Ghi đè?"
+
+#, python-brace-format
+msgid "Do you want to overwrite the favorite \"{0}\"?"
+msgstr "Bạn có muốn ghi đè lối tắt \"{0}\"?"
+
+#, python-brace-format
+msgid "Overwriting Favorite \"{0}\""
+msgstr "Ghi đè lối tắt \"{0}\""
+
+msgid "Could not save Favorite"
+msgstr "Không thể lưu lối tắt"
+
+msgid "Your current view does not support favorites"
+msgstr "Màn hình hiện tại của bạn không hỗ trợ lối tắt"
+
+msgid "Create Favorite"
+msgstr "Tạo lối tắt"
+
+#, python-brace-format
+msgid "Saving Favorite \"{0}\""
+msgstr "Lưu lối tắt \"{0}\""
+
+msgid "(shared)"
+msgstr "(chia sẻ)"
+
+msgid "Defined by ..."
+msgstr "Định nghĩa bởi ..."
+
+msgid "Define ..."
+msgstr "Định nghĩa ..."
+
+msgid "Edit record"
+msgstr "Sửa biểu ghi"
+
+msgid "Sibling"
+msgstr "Sibling"
+
+msgid "Parent"
+msgstr "Cha"
+
+msgid "Child"
+msgstr "Con"
+
+#, python-brace-format
+msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
+msgstr ""
+
+#, python-brace-format
+msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
+msgstr ""
+
+msgid "Contents of Related Folder"
+msgstr ""
+
+msgid "No Dialog"
+msgstr "Không hộp thoại"
+
+msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
+msgstr ""
+
+msgid "Attachments: Anyone who has access to the record can see the data"
+msgstr ""
+
+msgid "Links: Rights of the respective application are respected"
+msgstr ""
+
+msgid "Remark"
+msgstr "Nhận xét"
+
+msgid "Dependency"
+msgstr "Phần phụ thuộc"
+
+#, python-brace-format
+msgid "No access to {0}"
+msgstr ""
+
+msgid "The record you tried to link is already linked. Please edit the existing link."
+msgstr "Biểu ghi bạn có liên kết đã được liên kết. Xin sửa liên kết đã tồn tại."
+
+#, python-brace-format
+msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
+msgstr "{1} \"{2}\" đã được dùng trong trường \"{0}\" và chỉ được liên kết một lần!"
+
+msgid "Delete { ownRecordName }?"
+msgstr ""
+
+msgid "What do you want to delete?"
+msgstr ""
+
+msgid "Delete { ownRecordName }"
+msgstr ""
+
+msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
+msgstr ""
+
+msgid "Site"
+msgstr ""
+
+msgid "no site association"
+msgstr ""
+
+msgid "tag name"
+msgstr "tên từ khóa"
+
+msgid "Add Tags"
+msgstr ""
+
+msgid "Select Tags"
+msgstr ""
+
+msgid "Attaching Tag"
+msgstr "Đang gắn từ khóa"
+
+msgid "Detach tag(s)"
+msgstr "Gỡ bỏ từ khóa"
+
+msgid "Select Tag(s) to detach"
+msgstr "Chọn từ khóa để gỡ bỏ"
+
+msgid "Add a new personal tag"
+msgstr "Thêm 1 từ khóa cá nhân"
+
+msgid "Add New Personal Tag"
+msgstr "Thêm mới từ khóa cá nhân"
+
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Ghi chú: Bạn tạo 1 từ khóa cá nhân. Chỉ bạn mới có thể nhìn thấy nó."
+
+msgid "Enter tag name:"
+msgstr "Nhập tên từ khóa:"
+
+msgid "No Tags to display"
+msgstr "Không có từ khóa nào"
+
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] ""
+"one: Gỡ từ khóa\n"
+"other: Gỡ từ khóa"
+
+msgid "Edit tag"
+msgstr "Sửa từ khóa"
+
+msgid "Rename Tag"
+msgstr "Đổi tên từ khóa"
+
+msgid "Please enter a new name:"
+msgstr "Xin nhập 1 tên mới:"
+
+msgid "Edit Description"
+msgstr "Sửa mô tả"
+
+msgid "Description for tag"
+msgstr "Mô tả cho từ khóa"
+
+msgid "Please enter new description:"
+msgstr "Xin nhập mô tả mới:"
+
+msgid "Change Color"
+msgstr "Đổi màu"
+
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] ""
+"one: Xóa từ khóa\n"
+"other: Xóa từ khóa"
+
+msgid "Really delete selected tag?"
+msgid_plural "Really delete selected tags?"
+msgstr[0] ""
+
+msgid "The selected tag will be deleted and disappear for all entries"
+msgid_plural "The selected tags will be removed and disappear for all entries"
+msgstr[0] ""
+
+msgid "Please wait a moment..."
+msgstr "Xin đợi trong giaay lát"
+
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] ""
+"one: Đang xóa từ khóa\n"
+"other: Đang xóa từ khóa"
+
+msgid "Could not delete Tag(s)."
+msgstr "Không thể xóa từ khóa."
+
+msgid "Notice"
+msgstr "Cảnh báo"
+
+msgid "The minimum tag length is three."
+msgstr "Độ dài tối thiểu cho từ khóa là 3"
+
+msgid "Could not create tag."
+msgstr "Không thể tạo từ khóa"
+
+msgid "Could not update tag."
+msgstr "Không thể cập nhật từ khóa"
+
+msgid "Detach Tags"
+msgstr "Gỡ từ khóa"
+
+msgid "Attach Tags"
+msgstr "Gắn từ khóa"
+
+msgid "No Tags to detach found in the selected records"
+msgstr "Không có từ khóa nào để gỡ trong các biểu ghi được ch"
+
+msgid "Please Wait..."
+msgstr "Xin hãy đợi ..."
+
+msgid "Detaching Tags"
+msgstr "Gỡ từ khóa"
+
+msgid "Timezone"
+msgstr "Múi giờ"
+
+msgid "Setting new timezone..."
+msgstr ""
+
+#, python-brace-format
+msgid "Rename {0}"
+msgstr "Đổi tên {0}"
+
+#, python-brace-format
+msgid "Manage {0} Permissions"
+msgstr "Quản lý quyền {0}"
+
+#, python-brace-format
+msgid "{0} Properties"
+msgstr "Thuộc tính {0}"
+
+#, python-brace-format
+msgid "Set {0} color"
+msgstr "Đặt màu {0}"
+
+#, python-brace-format
+msgid "Reload {0}"
+msgstr "Nạp lại {0}"
+
+msgid "Publish"
+msgstr ""
+
+msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
+msgstr ""
+
+msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} added"
+msgstr "Không {0} nào được thêm"
+
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "Bạn phải cung cấp 1 tên {0}!"
+
+msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
+msgstr ""
+
+msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Creating {0}..."
+msgstr "Đang tạo {0} ...."
+
+msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
+msgstr ""
+
+msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Chưa đổi tên {0}"
+
+#, python-brace-format
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Bạn có muốn thật sự xóa {0} \"{1}\"?"
+
+#, python-brace-format
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Quản lý quyền cho {0} \"{1}\""
+
+#, python-brace-format
+msgid "Properties for {0} \"{1}\""
+msgstr "Thuộc tính cho {0} \"{1}\""
+
+msgid "New version of tine available"
+msgstr ""
+
+#, python-brace-format
+msgid "Version \"{0}\" of tine is available."
+msgstr ""
+
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Đây là bản vá lỗi nghiêm trọng và phải được cập nhật ngay tức thì!"
+
+msgid "Please consider updating!"
+msgstr "Hãy cân nhắc việc cập nhật!"
+
+msgid "ActionLog"
+msgid_plural "ActionLogs"
+msgstr[0] ""
+
+msgid "Action type"
+msgstr ""
+
+msgid "Datetime"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Area Lock Configuration"
+msgid_plural "Area Lock Configurations"
+msgstr[0] ""
+
+msgid "Area name"
+msgstr ""
+
+msgid "Areas"
+msgstr ""
+
+msgid "MFAs"
+msgstr ""
+
+msgid "Validity"
+msgstr ""
+
+msgid "Lifetime in Minutes"
+msgstr ""
+
+msgid "Policy"
+msgstr ""
+
+msgid "Area Lock State"
+msgid_plural "Area Lock States"
+msgstr[0] ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Bank Account"
+msgid_plural "Bank Accounts"
+msgstr[0] ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "GENDER_Bank Holiday Calendar"
+msgstr ""
+
+msgid "Bank Holidays"
+msgstr ""
+
+msgid "Data Source Url"
+msgstr ""
+
+msgid "Target Calendar"
+msgstr ""
+
+msgid "GENDER_Bank Holiday"
+msgstr ""
+
+msgid "Bank Holiday"
+msgid_plural "Bank Holidays"
+msgstr[0] ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Fraction"
+msgstr ""
+
+msgid "Record Name"
+msgid_plural "Records Name"
+msgstr[0] ""
+
+msgid "Group"
+msgstr ""
+
+msgid "New Car"
+msgstr ""
+
+msgid "Hierarchy"
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "UUID"
+msgstr ""
+
+msgid "GENDER_Item"
+msgstr ""
+
+msgid "Item"
+msgid_plural "Items"
+msgstr[0] ""
+
+msgid "Number"
+msgstr ""
+
+msgid "GENDER_Evaluation Dimension"
+msgstr ""
+
+msgid "Evaluation Dimension"
+msgid_plural "Evaluation Dimensions"
+msgstr[0] ""
+
+msgid "Dimension Items"
+msgstr ""
+
+msgid "Configured Models"
+msgstr ""
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Sorting"
 msgstr ""
 
 msgid "Area lock configurations"
 msgstr ""
 
 msgid "Your password expired."
+msgstr ""
+
+msgid "GENDER_Grant"
 msgstr ""
 
 msgid "ImportExportDefinition"
@@ -3756,9 +3935,6 @@ msgid "Label"
 msgstr ""
 
 msgid "Favorite"
-msgstr ""
-
-msgid "Order"
 msgstr ""
 
 msgid "Icon Class"
@@ -3788,34 +3964,87 @@ msgstr ""
 msgid "Skip Upstream Updates"
 msgstr ""
 
-msgid "WebDAV Mount"
-msgid_plural "WebDAV Mounts"
+msgid "LogEntry"
+msgid_plural "LogEntries"
 msgstr[0] ""
 
-msgid "Local Filesystem"
-msgid_plural "Local Filesystems"
+msgid "LogEntries"
+msgstr ""
+
+msgid "Client Requestid"
+msgstr ""
+
+msgid "Server Requestid"
+msgstr ""
+
+msgid "Logtime"
+msgstr ""
+
+msgid "Difftime"
+msgstr ""
+
+msgid "Loglevel"
+msgstr ""
+
+msgid "GENDER_Counter based OTP (HOTP)"
+msgstr ""
+
+msgid "Counter based OTP (HOTP)"
+msgid_plural "Counter based OTPs (HOTP)"
 msgstr[0] ""
 
-msgid "Flysystem Mount"
-msgid_plural "Flysystem Mounts"
+msgid "Counter based OTP (HOTP) is configured"
+msgstr ""
+
+msgid "GENDER_PIN"
+msgstr ""
+
+msgid "{% true %}Static PIN for user: ●●●●●●"
+msgstr ""
+
+msgid "New PIN"
+msgstr ""
+
+msgid "GENDER_SMS"
+msgstr ""
+
+msgid "SMS"
+msgid_plural "SMSs"
 msgstr[0] ""
 
-msgid "File Contents"
+msgid "Security codes are send to: {{ cellphonenumber }}."
 msgstr ""
 
-msgid "Indexed"
+msgid "Cell Phone Number"
 msgstr ""
 
-msgid "Content type"
+msgid "GENDER_Time based OTP (TOTP)"
 msgstr ""
 
-msgid "MD5 Hash"
+msgid "Time based OTP (TOTP)"
+msgid_plural "Time based OTPs (TOTP)"
+msgstr[0] ""
+
+msgid "Time based OTP (TOPT) is configured"
 msgstr ""
 
-msgid "Revision Size"
+msgid "MFA Device Config"
+msgid_plural "MFA Device Configs"
+msgstr[0] ""
+
+msgid "MFA Device Type"
 msgstr ""
 
-msgid "Status"
+msgid "GENDER_FIDO2 WebAuthn Device"
+msgstr ""
+
+msgid "Yubico OTP public id"
+msgstr ""
+
+msgid "Yubico OTP privat id"
+msgstr ""
+
+msgid "Yubico privat key"
 msgstr ""
 
 msgid "GENDER_Municipality Key"
@@ -3860,69 +4089,6 @@ msgstr ""
 msgid "Bevölkerungsstand"
 msgstr ""
 
-msgid "Hierarchy"
-msgstr ""
-
-msgid "Owner"
-msgstr ""
-
-msgid "UUID"
-msgstr ""
-
-msgid "GENDER_Bank Holiday Calendar"
-msgstr ""
-
-msgid "Bank Holidays"
-msgstr ""
-
-msgid "Data Source Url"
-msgstr ""
-
-msgid "Target Calendar"
-msgstr ""
-
-msgid "GENDER_Item"
-msgstr ""
-
-msgid "Item"
-msgid_plural "Items"
-msgstr[0] ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Area Lock State"
-msgid_plural "Area Lock States"
-msgstr[0] ""
-
-msgid "Area"
-msgstr ""
-
-msgid "Expires"
-msgstr ""
-
-msgid "LogEntry"
-msgid_plural "LogEntries"
-msgstr[0] ""
-
-msgid "LogEntries"
-msgstr ""
-
-msgid "Client Requestid"
-msgstr ""
-
-msgid "Server Requestid"
-msgstr ""
-
-msgid "Logtime"
-msgstr ""
-
-msgid "Difftime"
-msgstr ""
-
-msgid "Loglevel"
-msgstr ""
-
 msgid "GENDER_Numbering Range"
 msgstr ""
 
@@ -3948,66 +4114,6 @@ msgstr ""
 msgid "Number is Editable"
 msgstr ""
 
-msgid "GENDER_Bank Holiday"
-msgstr ""
-
-msgid "Bank Holiday"
-msgid_plural "Bank Holidays"
-msgstr[0] ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Fraction"
-msgstr ""
-
-msgid "SMS Adapter Type"
-msgstr ""
-
-msgid "SMS Adapter Config"
-msgstr ""
-
-msgid "GENDER_Evaluation Dimension"
-msgstr ""
-
-msgid "Evaluation Dimension"
-msgid_plural "Evaluation Dimensions"
-msgstr[0] ""
-
-msgid "Dimension Items"
-msgstr ""
-
-msgid "Configured Models"
-msgstr ""
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Sorting"
-msgstr ""
-
-msgid "Area Lock Configuration"
-msgid_plural "Area Lock Configurations"
-msgstr[0] ""
-
-msgid "Area name"
-msgstr ""
-
-msgid "Areas"
-msgstr ""
-
-msgid "MFAs"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Lifetime in Minutes"
-msgstr ""
-
-msgid "Policy"
-msgstr ""
-
 msgid "RoleMember"
 msgid_plural "RoleMembers"
 msgstr[0] ""
@@ -4029,83 +4135,6 @@ msgid "Rights"
 msgstr ""
 
 msgid "Members"
-msgstr ""
-
-msgid "ActionLog"
-msgid_plural "ActionLogs"
-msgstr[0] ""
-
-msgid "Action type"
-msgstr ""
-
-msgid "Datetime"
-msgstr ""
-
-msgid "Data"
-msgstr "Dữ liệu"
-
-msgid "MFA Device Config"
-msgid_plural "MFA Device Configs"
-msgstr[0] ""
-
-msgid "MFA Device Type"
-msgstr ""
-
-msgid "GENDER_PIN"
-msgstr ""
-
-msgid "{% true %}Static PIN for user: ●●●●●●"
-msgstr ""
-
-msgid "New PIN"
-msgstr ""
-
-msgid "GENDER_FIDO2 WebAuthn Device"
-msgstr ""
-
-msgid "Yubico OTP public id"
-msgstr ""
-
-msgid "Yubico OTP privat id"
-msgstr ""
-
-msgid "Yubico privat key"
-msgstr ""
-
-msgid "GENDER_SMS"
-msgstr ""
-
-msgid "SMS"
-msgid_plural "SMSs"
-msgstr[0] ""
-
-msgid "Security codes are send to: {{ cellphonenumber }}."
-msgstr ""
-
-msgid "Cell Phone Number"
-msgstr ""
-
-msgid "GENDER_Time based OTP (TOTP)"
-msgstr ""
-
-msgid "Time based OTP (TOTP)"
-msgid_plural "Time based OTPs (TOTP)"
-msgstr[0] ""
-
-msgid "Time based OTP (TOPT) is configured"
-msgstr ""
-
-msgid "GENDER_Counter based OTP (HOTP)"
-msgstr ""
-
-msgid "Counter based OTP (HOTP)"
-msgid_plural "Counter based OTPs (HOTP)"
-msgstr[0] ""
-
-msgid "Counter based OTP (HOTP) is configured"
-msgstr ""
-
-msgid "GENDER_Grant"
 msgstr ""
 
 msgid "RoleRight"
@@ -4137,61 +4166,153 @@ msgstr ""
 msgid "Failure count"
 msgstr ""
 
-msgid "Bank Account"
-msgid_plural "Bank Accounts"
+msgid "SMS Adapter Type"
+msgstr ""
+
+msgid "SMS Adapter Config"
+msgstr ""
+
+msgid "Local Filesystem"
+msgid_plural "Local Filesystems"
 msgstr[0] ""
 
-msgid "IBAN"
+msgid "WebDAV Mount"
+msgid_plural "WebDAV Mounts"
+msgstr[0] ""
+
+msgid "Flysystem Mount"
+msgid_plural "Flysystem Mounts"
+msgstr[0] ""
+
+msgid "File Contents"
 msgstr ""
 
-msgid "BIC"
+msgid "Indexed"
 msgstr ""
 
-msgid "Shared folders"
+msgid "Content type"
 msgstr ""
 
-msgid "Group"
+msgid "MD5 Hash"
 msgstr ""
 
-msgid "Total: "
+msgid "Revision Size"
 msgstr ""
 
-msgid "Exporttime"
+msgid "by"
+msgstr "bởi"
+
+msgid "Changed fields:"
+msgstr "Thay đổi trường:"
+
+msgid "- The last filter I used -"
 msgstr ""
 
-msgid "Export only currently shown columns"
+msgid "Personal default"
 msgstr ""
 
-msgid "Created by"
-msgstr "Tạo bởi"
+msgid "default"
+msgstr "mặc định"
 
-msgid "Activities"
-msgstr "Hoạt động"
-
-msgid "Excel all data"
+msgid "Page size"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Page size in grids"
+msgstr ""
+
+msgid "Grid stripe rows"
+msgstr ""
+
+msgid "Stripe rows in grids"
+msgstr ""
+
+msgid "Grid load mask"
+msgstr ""
+
+msgid "Show load mask in grids"
+msgstr ""
+
+msgid "Grid resizing strategy"
+msgstr ""
+
+msgid "How to resize grid columns"
+msgstr ""
+
+msgid "Auto search on filter change"
+msgstr ""
+
+msgid "Perform auto search when filter is changed"
+msgstr ""
+
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "The timezone in which dates are shown in Tine 2.0."
+
+msgid "The language of the Tine 2.0 GUI."
+msgstr "The language of the Tine 2.0 GUI."
+
+msgid "Default Application"
+msgstr "Ứng dụng mặc định"
+
+msgid "The default application to show after login."
+msgstr "Ứng dụng mặc định được mở sau khi bạn đăng nhập"
+
+msgid "Window Type"
+msgstr "Loại cửa sổ"
+
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr "Bạn có thể chọn giữa cửa sổ mở trong (popup) hoặc cửa sổ popup thông thường của trình duyệt."
+
+msgid "Confirm Logout"
+msgstr "Xác nhận thoát"
+
+msgid "Show confirmation dialog on logout."
+msgstr "Hiển thị màn hình dialog khi thoát"
+
+msgid "Enable advanced search"
+msgstr ""
+
+msgid "If enabled quickfilter searches through relations as well."
+msgstr ""
+
+msgid "File double-clicking action"
+msgstr ""
+
+msgid "Which action should be executed by default when a file is double-clicked."
+msgstr ""
+
+msgid "GENDER_Text"
+msgstr ""
+
+msgid "Text"
+msgid_plural "Texts"
+msgstr[0] ""
+
+msgid "added"
+msgstr "đã thêm"
+
+msgid "removed"
+msgstr "đã xóa"
+
+msgid "modified"
+msgstr "được sửa"
+
+msgid "Scheduler task failed"
 msgstr ""
 
 #, python-format
-msgid "The following fields weren't imported: %s"
-msgstr "Trường sau không được phép nhập vào: %s"
-
-msgid "N/A"
-msgstr "N/A"
-
-msgid "Import Community identification Numbers"
+msgid "Your scheduler task %s has failed %d times."
 msgstr ""
 
-msgid "Municipality Key Import"
+msgid "node name must not contain the character /"
 msgstr ""
 
-msgid "Record Name"
-msgid_plural "Records Name"
-msgstr[0] ""
+msgid "Password failed to match the following policy requirements: "
+msgstr ""
 
-msgid "New Car"
+msgid "MFA configs are not valid:"
+msgstr ""
+
+msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
 msgid "Your user account has been deactivated"
@@ -4203,126 +4324,5 @@ msgstr ""
 msgid "Tine 2.0 URL"
 msgstr ""
 
-#, python-brace-format
-msgid "Exception ({0})"
-msgstr ""
-
-msgid "Area could not be unlocked"
-msgstr ""
-
-msgid "Quota is exceeded"
-msgstr ""
-
-msgid "Area is locked"
-msgstr ""
-
-msgid "System Container"
-msgstr "Bộ chứa hệ thống"
-
-msgid "This is a system container which could not be deleted!"
-msgstr "Đây là bộ chứa hệ thống nên sẽ không thể xóa được"
-
-msgid "Invalid Relations"
-msgstr ""
-
-msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
-msgstr ""
-
-msgid "Confirmation is required"
-msgstr ""
-
-msgid "Generic System Exception"
-msgstr "Generic System Exception"
-
-msgid "Wrong month format!"
-msgstr ""
-
-msgid "The month must have the format YYYY-MM!"
-msgstr ""
-
-msgid "Password Policy Violation"
-msgstr "Xung đột chính sách mật khẩu."
-
-msgid "admin"
-msgstr "quản trị"
-
-msgid "admin right description"
-msgstr "mô tả quyền quản trị"
-
-msgid "run"
-msgstr "chạy"
-
-msgid "run right description"
-msgstr "chạy mô tả quyền"
-
-msgid "Use Mainscreen"
-msgstr ""
-
-msgid "App mainscreen is available in UI"
-msgstr ""
-
-msgid "Personal tags"
-msgstr ""
-
-msgid "Use and see personal tags"
-msgstr ""
-
-msgid "Report bugs"
-msgstr "Báo cáo lỗi"
-
-msgid "Report bugs to the software vendor directly when they occur."
-msgstr "Bao cáo lỗi cho nhà cung cấp phần mềm khi có lỗi xảy ra"
-
-msgid "Check version"
-msgstr "Kiểm tra phiên bản"
-
-msgid "Check for new versions of this software."
-msgstr "Kiểm tra phiên bản mới cho phần mềm này"
-
-msgid "Manage bank accounts"
-msgstr ""
-
-msgid "The right to manage bank accounts."
-msgstr ""
-
-msgid "Manage own profile"
-msgstr "Quản lý hồ sơ của tôi"
-
-msgid "The right to manage the own profile (selected contact data)."
-msgstr "Quyền quản lý hồ sơ của tôi (dữ liệu liên hệ được chọn)"
-
-msgid "Manage Numberables"
-msgstr ""
-
-msgid "The right to manage numberables."
-msgstr ""
-
-msgid "Manage own client state"
-msgstr "Quản lý trạng thái của chính người dùng"
-
-msgid "The right to manage the own client state."
-msgstr "Quyền để quản lý trạng thái của chính người dùng"
-
-msgid "Manage evaluation dimensions"
-msgstr ""
-
-msgid "The right to manage evaluation dimensions."
-msgstr ""
-
-msgid "Maintenance"
-msgstr ""
-
-msgid "The right to use the installation in maintenance mode."
-msgstr ""
-
-msgid "Show License Info"
-msgstr ""
-
-msgid "The right to be able to see license information (expiry, ...)."
-msgstr ""
-
-msgid "Replication"
-msgstr ""
-
-msgid "The right to access the replication data of all applications."
+msgid "Shared folders"
 msgstr ""

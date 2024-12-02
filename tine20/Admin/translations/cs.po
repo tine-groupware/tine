@@ -8,987 +8,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Tomáš Spisar <tomas.spisar@seznam.cz>, 2015\n"
 "Language-Team: Czech (http://app.transifex.com/tine/groupware/language/cs/)\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: cs\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr ""
-
-msgid "Disable Application"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "Nastavení {0}"
-
-msgid "Search:"
-msgstr "Hledat:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Zobrazuji aplikace {0} - {1} z {2}"
-
-msgid "No applications to display"
-msgstr "Žádné aplikace ke zobrazení"
-
-msgid "Order"
-msgstr "Pořadí"
-
-msgid "Name"
-msgstr "Jméno"
-
-msgid "Status"
-msgstr "Stav"
-
-msgid "Version"
-msgstr "Verze"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Potvrdit"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Opravdu chcete smazat vybrané skupiny?"
-
-msgid "Deleting group(s)..."
-msgstr "Mažu skupinu(y)..."
-
-msgid "Add Group"
-msgstr ""
-
-msgid "Edit Group"
-msgstr ""
-
-msgid "Delete Group"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Zobrazuji skupiny {0} - {1} z {2}"
-
-msgid "No groups to display"
-msgstr "Žádné skupiny ke zobrazení"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Popis"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Chyby"
-
-msgid "Please configure store for this field type"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Record Class"
-msgstr ""
-
-msgid "Given record class not found"
-msgstr ""
-
-msgid "Cancel"
-msgstr "Storno"
-
-msgid "OK"
-msgstr ""
-
-msgid "Configure store"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "Prohlížet"
-
-msgid "Use"
-msgstr "Používat"
-
-msgid "Model"
-msgstr ""
-
-msgid "Custom field definition"
-msgstr ""
-
-msgid "Text"
-msgstr ""
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "DateTime"
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "Boolean"
-msgstr ""
-
-msgid "Search Combo"
-msgstr ""
-
-msgid "Key Field"
-msgstr ""
-
-msgid "Record"
-msgstr ""
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Label"
-msgstr ""
-
-msgid "Length"
-msgstr ""
-
-msgid "Required"
-msgstr ""
-
-msgid "Custom field additional properties"
-msgstr ""
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Value"
-msgstr ""
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "Název počítače"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-msgid "Please wait"
-msgstr "Čekejte prosím"
-
-msgid "Updating Tag"
-msgstr "Aktualizuji štítek..."
-
-msgid "Failed"
-msgstr "Nepodařilo se"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr "Opravte prosím vyznačené chyby."
-
-msgid "Allowed Contexts"
-msgstr "Povolené kontexty"
-
-msgid "Context"
-msgstr "Kontext"
-
-msgid "Account Rights"
-msgstr "Práva účtu"
-
-msgid "Tag Name"
-msgstr "Název štítku"
-
-msgid "Color"
-msgstr "Barva"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr ""
-
-msgid "Tag"
-msgstr "Štítek"
-
-msgid "Add New Tag"
-msgstr "Přidat nový štítek"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Editovat štítek \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "Opravdu chcete smazat vybrané štítky?"
-
-msgid "Deleting tag(s)..."
-msgstr "Mažu štítek(ky)..."
-
-msgid "Add Tag"
-msgstr ""
-
-msgid "Edit Tag"
-msgstr ""
-
-msgid "Delete Tag"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Zobrazuji štítky {0} - {1} of {2}"
-
-msgid "No tags to display"
-msgstr "Žádné štítky ke zobrazení"
-
-msgid "Usage:&#160;"
-msgstr ""
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "Aktualizuji členství"
-
-msgid "Could not save role."
-msgstr "Nepodařilo se uložit roli."
-
-msgid "Deleting role..."
-msgstr "Mažu roli..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "Během mazání role došlo k chybě."
-
-msgid "Rights"
-msgstr "Práva"
-
-msgid "Members"
-msgstr "Členové"
-
-msgid "Role Name"
-msgstr "Název role"
-
-msgid "Role"
-msgstr "Role"
-
-msgid "Add New Role"
-msgstr "Přidat novou roli"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Editovat roli \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "Určitě chcete smazat vybrané role?"
-
-msgid "Deleting role(s)..."
-msgstr "Mažu roli(e)..."
-
-msgid "Add Role"
-msgstr ""
-
-msgid "Edit Role"
-msgstr ""
-
-msgid "Delete Role"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Zobrazuji role  {0} - {1} z {2}"
-
-msgid "No roles to display"
-msgstr "Žádné role ke zobrazení"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Groups"
-msgstr "Skupiny"
-
-msgid "Applications"
-msgstr "Aplikace"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "Kvóta"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Uživatel emailu"
-msgstr[1] "Uživatelé emailu"
-msgstr[2] "Uživatelů emailu"
-msgstr[3] "Uživatelů emailu"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr ""
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr ""
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr "Hesla se neshodují!"
-
-msgid "Passwords match!"
-msgstr ""
-
-msgid "Primary group"
-msgstr "Primární skupina"
-
-msgid "Unix"
-msgstr "Unix"
-
-msgid "Home Directory"
-msgstr "Domovský adresář"
-
-msgid "Login Shell"
-msgstr "Přihlašovací shell"
-
-msgid "Windows"
-msgstr "Windows"
-
-msgid "Home Drive"
-msgstr "Domovský disk"
-
-msgid "Login Time"
-msgstr "Čas přihlášení"
-
-msgid "never logged in"
-msgstr "nikdy nepřihlášen"
-
-msgid "Home Path"
-msgstr "Domovská cesta"
-
-msgid "Logout Time"
-msgstr "Čas odhlášení"
-
-msgid "never logged off"
-msgstr "nikdy neodhlášen"
-
-msgid "Profile Path"
-msgstr "Cesta k profilu"
-
-msgid "Password Last Set"
-msgstr "Heslo naposledy nastaveno"
-
-msgid "never"
-msgstr "nikdy"
-
-msgid "Logon Script"
-msgstr "Přihlašovací skript"
-
-msgid "Password Can Change"
-msgstr "Může změnit heslo"
-
-msgid "not set"
-msgstr "není nastaveno"
-
-msgid "Password Must Change"
-msgstr "Musí změnit heslo"
-
-msgid "Kick Off Time"
-msgstr "Čas automatického odhlášení"
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr ""
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Informace"
-
-msgid "Last Login"
-msgstr "Poslední přihlášení"
-
-msgid "Forward Only"
-msgstr "Jen přesměrovat"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr "Přidat alias..."
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr ""
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Potvrzení hesla"
-
-msgid "Repeat password"
-msgstr "Zopakujte heslo"
-
-msgid "Ok"
-msgstr "OK"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Účet"
-
-msgid "First name"
-msgstr "Křestní jméno"
-
-msgid "Last name"
-msgstr "Příjmení"
-
-msgid "Display name"
-msgstr ""
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr ""
-
-msgid "Password"
-msgstr "Heslo"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "OpenID"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "povoleno"
-
-msgid "disabled"
-msgstr "zakázáno"
-
-msgid "expired"
-msgstr "vypršel"
-
-msgid "blocked"
-msgstr ""
-
-msgid "Invalid Status"
-msgstr ""
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr ""
-
-msgid "Expires"
-msgstr "Vyprší"
-
-msgid "Last login at"
-msgstr "Poslední přihlášení"
-
-msgid "don't know"
-msgstr "nevím"
-
-msgid "Last login from"
-msgstr "Poslední přihlášení z"
-
-msgid "Password set"
-msgstr "Heslo nastaveno"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr ""
-
-msgid "User roles"
-msgstr ""
-
-msgid "Fileserver"
-msgstr "Souborový server"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Viditelnost"
-
-msgid "Display in addressbook"
-msgstr "Zobrazit v adresáři"
-
-msgid "Hide from addressbook"
-msgstr "Nezobrazovat v adresáři"
-
-msgid "Saved in Addressbook"
-msgstr ""
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Uživatel"
-msgstr[1] "Uživatelé"
-msgstr[2] "Uživatelů"
-msgstr[3] "Uživatelů"
-
-msgid "Users"
-msgstr ""
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Uživatel Samby"
-msgstr[1] "Uživatelé Samby"
-msgstr[2] "Uživatelů Samby"
-msgstr[3] "Uživatelů Samby"
-
-msgid "Enable Account"
-msgstr ""
-
-msgid "Disable Account"
-msgstr ""
-
-msgid "Reset Password"
-msgstr ""
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "Heslo změněno"
-
-msgid "Set new password"
-msgstr "Nastavit nové heslo"
-
-msgid "Please enter the new password:"
-msgstr "Zadejte prosím nové heslo:"
-
-msgid "Group Name"
-msgstr "Název skupiny"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Členové skupiny"
-
-msgid "personal"
-msgstr ""
-
-msgid "shared"
-msgstr ""
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr ""
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Container Name"
-msgstr ""
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Počítač"
-msgstr[1] "Počítače"
-msgstr[2] "Počítačů"
-msgstr[3] "Počítačů"
-
-msgid "Roles"
-msgstr "Role"
-
-msgid "Containers"
-msgstr ""
-
-msgid "Shared Tags"
-msgstr "Sdílené štítky"
-
-msgid "Customfields"
-msgstr ""
-
-msgid "Computers"
-msgstr "Počítače"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "Informace o serveru"
-
-msgid "ActiveSync Devices"
-msgstr "Zařízení ActiveSync"
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Administrátor"
-
-msgid "Refresh"
-msgstr ""
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "IP adresa"
-
-msgid "Client Type"
-msgstr ""
-
-msgid "Session ID"
-msgstr "ID relace"
-
-msgid "Login Name"
-msgstr "Přihlašovací jméno"
-
-msgid "Result"
-msgstr "Výsledek"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr ""
-
-msgid "password expired"
-msgstr ""
-
-msgid "user disabled"
-msgstr ""
-
-msgid "invalid password"
-msgstr "neplatné heslo"
-
-msgid "ambiguous username"
-msgstr "nejednoznačné uživatelské jméno"
-
-msgid "user not found"
-msgstr "uživatel nebyl nalezen"
-
-msgid "failure"
-msgstr "chyba"
-
-msgid "success"
-msgstr "úspěch"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr ""
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr ""
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1135,4 +162,977 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr ""
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr ""
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "IP Address"
+msgstr "IP adresa"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Uživatel"
+msgstr[1] "Uživatelé"
+msgstr[2] "Uživatelů"
+msgstr[3] "Uživatelů"
+
+msgid "Login Time"
+msgstr "Čas přihlášení"
+
+msgid "Logout Time"
+msgstr "Čas odhlášení"
+
+msgid "Client Type"
+msgstr ""
+
+msgid "Session ID"
+msgstr "ID relace"
+
+msgid "Login Name"
+msgstr "Přihlašovací jméno"
+
+msgid "Name"
+msgstr "Jméno"
+
+msgid "Result"
+msgstr "Výsledek"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr ""
+
+msgid "password expired"
+msgstr ""
+
+msgid "user disabled"
+msgstr ""
+
+msgid "invalid password"
+msgstr "neplatné heslo"
+
+msgid "ambiguous username"
+msgstr "nejednoznačné uživatelské jméno"
+
+msgid "user not found"
+msgstr "uživatel nebyl nalezen"
+
+msgid "failure"
+msgstr "chyba"
+
+msgid "success"
+msgstr "úspěch"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "Roles"
+msgstr "Role"
+
+msgid "Applications"
+msgstr "Aplikace"
+
+msgid "Containers"
+msgstr ""
+
+msgid "Shared Tags"
+msgstr "Sdílené štítky"
+
+msgid "Customfields"
+msgstr ""
+
+msgid "Computers"
+msgstr "Počítače"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "Informace o serveru"
+
+msgid "ActiveSync Devices"
+msgstr "Zařízení ActiveSync"
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Administrátor"
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Enable Application"
+msgstr ""
+
+msgid "Disable Application"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "Nastavení {0}"
+
+msgid "Search:"
+msgstr "Hledat:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Zobrazuji aplikace {0} - {1} z {2}"
+
+msgid "No applications to display"
+msgstr "Žádné aplikace ke zobrazení"
+
+msgid "Order"
+msgstr "Pořadí"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Version"
+msgstr "Verze"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Description"
+msgstr "Popis"
+
+msgid "Label"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "personal"
+msgstr ""
+
+msgid "shared"
+msgstr ""
+
+msgid "Color"
+msgstr "Barva"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Container Name"
+msgstr ""
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Chyby"
+
+msgid "Please configure store for this field type"
+msgstr ""
+
+msgid "Record Class"
+msgstr ""
+
+msgid "Given record class not found"
+msgstr ""
+
+msgid "Cancel"
+msgstr "Storno"
+
+msgid "OK"
+msgstr ""
+
+msgid "Configure store"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "Prohlížet"
+
+msgid "Use"
+msgstr "Používat"
+
+msgid "Custom field definition"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "DateTime"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Boolean"
+msgstr ""
+
+msgid "Search Combo"
+msgstr ""
+
+msgid "Key Field"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Custom field additional properties"
+msgstr ""
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Název skupiny"
+
+msgid "Visibility"
+msgstr "Viditelnost"
+
+msgid "Display in addressbook"
+msgstr "Zobrazit v adresáři"
+
+msgid "Hide from addressbook"
+msgstr "Nezobrazovat v adresáři"
+
+msgid "Saved in Addressbook"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Členové skupiny"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+msgid "Confirm"
+msgstr "Potvrdit"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Opravdu chcete smazat vybrané skupiny?"
+
+msgid "Deleting group(s)..."
+msgstr "Mažu skupinu(y)..."
+
+msgid "Add Group"
+msgstr ""
+
+msgid "Edit Group"
+msgstr ""
+
+msgid "Delete Group"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Zobrazuji skupiny {0} - {1} z {2}"
+
+msgid "No groups to display"
+msgstr "Žádné skupiny ke zobrazení"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "Kvóta"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Uživatel emailu"
+msgstr[1] "Uživatelé emailu"
+msgstr[2] "Uživatelů emailu"
+msgstr[3] "Uživatelů emailu"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr ""
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr ""
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Čekejte prosím"
+
+msgid "Updating Memberships"
+msgstr "Aktualizuji členství"
+
+msgid "Failed"
+msgstr "Nepodařilo se"
+
+msgid "Could not save role."
+msgstr "Nepodařilo se uložit roli."
+
+msgid "Please fix the errors noted."
+msgstr "Opravte prosím vyznačené chyby."
+
+msgid "Deleting role..."
+msgstr "Mažu roli..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "Během mazání role došlo k chybě."
+
+msgid "Rights"
+msgstr "Práva"
+
+msgid "Members"
+msgstr "Členové"
+
+msgid "Role Name"
+msgstr "Název role"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr ""
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Add New Role"
+msgstr "Přidat novou roli"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Editovat roli \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "Určitě chcete smazat vybrané role?"
+
+msgid "Deleting role(s)..."
+msgstr "Mažu roli(e)..."
+
+msgid "Add Role"
+msgstr ""
+
+msgid "Edit Role"
+msgstr ""
+
+msgid "Delete Role"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Zobrazuji role  {0} - {1} z {2}"
+
+msgid "No roles to display"
+msgstr "Žádné role ke zobrazení"
+
+msgid "Computer Name"
+msgstr "Název počítače"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Počítač"
+msgstr[1] "Počítače"
+msgstr[2] "Počítačů"
+msgstr[3] "Počítačů"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "Aktualizuji štítek..."
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr "Povolené kontexty"
+
+msgid "Context"
+msgstr "Kontext"
+
+msgid "Account Rights"
+msgstr "Práva účtu"
+
+msgid "Tag Name"
+msgstr "Název štítku"
+
+msgid "Tag"
+msgstr "Štítek"
+
+msgid "Add New Tag"
+msgstr "Přidat nový štítek"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Editovat štítek \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "Opravdu chcete smazat vybrané štítky?"
+
+msgid "Deleting tag(s)..."
+msgstr "Mažu štítek(ky)..."
+
+msgid "Add Tag"
+msgstr ""
+
+msgid "Edit Tag"
+msgstr ""
+
+msgid "Delete Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Zobrazuji štítky {0} - {1} of {2}"
+
+msgid "No tags to display"
+msgstr "Žádné štítky ke zobrazení"
+
+msgid "Usage:&#160;"
+msgstr ""
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr "Hesla se neshodují!"
+
+msgid "Passwords match!"
+msgstr ""
+
+msgid "Primary group"
+msgstr "Primární skupina"
+
+msgid "Unix"
+msgstr "Unix"
+
+msgid "Home Directory"
+msgstr "Domovský adresář"
+
+msgid "Login Shell"
+msgstr "Přihlašovací shell"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "Home Drive"
+msgstr "Domovský disk"
+
+msgid "never logged in"
+msgstr "nikdy nepřihlášen"
+
+msgid "Home Path"
+msgstr "Domovská cesta"
+
+msgid "never logged off"
+msgstr "nikdy neodhlášen"
+
+msgid "Profile Path"
+msgstr "Cesta k profilu"
+
+msgid "Password Last Set"
+msgstr "Heslo naposledy nastaveno"
+
+msgid "never"
+msgstr "nikdy"
+
+msgid "Logon Script"
+msgstr "Přihlašovací skript"
+
+msgid "Password Can Change"
+msgstr "Může změnit heslo"
+
+msgid "not set"
+msgstr "není nastaveno"
+
+msgid "Password Must Change"
+msgstr "Musí změnit heslo"
+
+msgid "Kick Off Time"
+msgstr "Čas automatického odhlášení"
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Informace"
+
+msgid "Last Login"
+msgstr "Poslední přihlášení"
+
+msgid "Forward Only"
+msgstr "Jen přesměrovat"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr "Přidat alias..."
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr ""
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Potvrzení hesla"
+
+msgid "Repeat password"
+msgstr "Zopakujte heslo"
+
+msgid "Ok"
+msgstr "OK"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Účet"
+
+msgid "First name"
+msgstr "Křestní jméno"
+
+msgid "Last name"
+msgstr "Příjmení"
+
+msgid "Display name"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr ""
+
+msgid "Password"
+msgstr "Heslo"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "OpenID"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "povoleno"
+
+msgid "disabled"
+msgstr "zakázáno"
+
+msgid "expired"
+msgstr "vypršel"
+
+msgid "blocked"
+msgstr ""
+
+msgid "Invalid Status"
+msgstr ""
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr ""
+
+msgid "Expires"
+msgstr "Vyprší"
+
+msgid "Last login at"
+msgstr "Poslední přihlášení"
+
+msgid "don't know"
+msgstr "nevím"
+
+msgid "Last login from"
+msgstr "Poslední přihlášení z"
+
+msgid "Password set"
+msgstr "Heslo nastaveno"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr ""
+
+msgid "User roles"
+msgstr ""
+
+msgid "Fileserver"
+msgstr "Souborový server"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr ""
+
+msgid "Disable Account"
+msgstr ""
+
+msgid "Reset Password"
+msgstr ""
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "Heslo změněno"
+
+msgid "Set new password"
+msgstr "Nastavit nové heslo"
+
+msgid "Please enter the new password:"
+msgstr "Zadejte prosím nové heslo:"
+
+msgid "Users"
+msgstr ""
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Uživatel Samby"
+msgstr[1] "Uživatelé Samby"
+msgstr[2] "Uživatelů Samby"
+msgstr[3] "Uživatelů Samby"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

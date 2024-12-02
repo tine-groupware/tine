@@ -13,9 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Transponder Id"
-msgstr ""
-
 msgid "Device List Status"
 msgstr ""
 
@@ -85,6 +82,12 @@ msgstr ""
 msgid "New Device"
 msgstr ""
 
+msgid "Absence Reasons Device List"
+msgstr ""
+
+msgid "Employee Device List"
+msgstr ""
+
 msgid "Device list"
 msgid_plural "Device lists"
 msgstr[0] ""
@@ -108,25 +111,6 @@ msgid "List status"
 msgstr ""
 
 msgid "Control Commands on List Feedback"
-msgstr ""
-
-msgid "Device Record"
-msgid_plural "Device Records"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Device Records Container"
-msgid_plural "Device Records Containers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Device Table"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "Processed by"
 msgstr ""
 
 msgid "Type"
@@ -177,14 +161,30 @@ msgstr ""
 msgid "Control Commands"
 msgstr ""
 
-msgid "Absence Reasons Device List"
+msgid "Device Record"
+msgid_plural "Device Records"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Device Records Container"
+msgid_plural "Device Records Containers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Device Table"
 msgstr ""
 
-msgid "Employee Device List"
+msgid "Data"
+msgstr ""
+
+msgid "Processed by"
 msgstr ""
 
 msgid "Clock in: %1$s"
 msgstr ""
 
 msgid "Clock out: %1$s"
+msgstr ""
+
+msgid "Transponder Id"
 msgstr ""
