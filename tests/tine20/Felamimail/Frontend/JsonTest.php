@@ -3463,7 +3463,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $messageToSend = $this->_getMessageData();
         $date = Tinebase_DateTime::now()->addHour(1)->setTimezone(Tinebase_Core::getUserTimezone())->format(Tinebase_Record_Abstract::ISO8601LONG);
         $messageToSend['expected_answer'] = $date;
-        $messageToSend['subject'] = Tinebase_Record_Abstract::generateUID();
+        $messageToSend['subject'] = Tinebase_Record_Abstract::generateUID() . ' / test';
         $message = $this->_sendMessage(_messageToSend: $messageToSend);
 
         // get complete message

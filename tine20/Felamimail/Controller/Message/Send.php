@@ -1522,9 +1522,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $path = Tinebase_TempFile::getTempPath();
             // TODO maybe we should save only the mail body without attachments?
             file_put_contents($path, $transport->getRawMessage());
+
+            $fileName = Tinebase_Model_Tree_Node::sanitizeName($_message->subject);
             $expected_answer->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
                 array(
-                    'name'      => $_message->subject . '.eml',
+                    'name'      => $fileName . '.eml',
                     'contenttype' => 'message/rfc822',
                     'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
                 )
