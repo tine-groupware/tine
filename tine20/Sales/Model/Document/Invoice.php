@@ -214,7 +214,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $isStorno = false;
         }
 
-        $allowances = 0.0;
         $ublInvoice = (new UBL21\Invoice\Invoice())
             // BT-24: Specification identifier
             ->setCustomizationID(new \UBL21\Common\CommonBasicComponents\CustomizationID('urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0'))
@@ -324,20 +323,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     ->setCurrencyID(('EUR'))
                 )
             )
-            ->setAllowanceCharge(
-                $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} && $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM} ? [
-                    (new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
-                        ->setChargeIndicator(false)
-                        ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
-                        ->setAmount((new \UBL21\Common\CommonBasicComponents\Amount($allowances += (
-                        Sales_Config::PRICE_TYPE_GROSS === $documentPriceType ?
-                            $this->{Sales_Model_Document_Invoice::FLD_POSITIONS_NET_SUM}  - $this->{Sales_Model_Document_Invoice::FLD_NET_SUM}
-                            : $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}))
-                        )
-                            ->setCurrencyID('EUR')
-                        )
-                ] : null
-            )
         ;
         /*
          * // BT-6: VAT accounting currency code 'cbc:TaxCurrencyCode'
@@ -441,13 +426,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         $lineCounter = 0;
-        $defaultRate = 19;
         /** @var Sales_Model_DocumentPosition_Invoice $position */
         foreach ($this->{self::FLD_POSITIONS} as $position) {
             if (Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE}) {
                 continue;
             }
-            $defaultRate = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE};
             $ublInvoice->addToInvoiceLine((new \UBL21\Common\CommonAggregateComponents\InvoiceLine)
                 ->setID(new \UBL21\Common\CommonBasicComponents\ID(++$lineCounter))
                 //->setUUID($position->getId() ? new \UBL21\Common\CommonBasicComponents\UUID($position->getId()) : null)
@@ -457,11 +440,19 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 ->setLineExtensionAmount((new \UBL21\Common\CommonBasicComponents\LineExtensionAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}))
                     ->setCurrencyID('EUR')
                 )
-                /*->addToTaxTotal((new \UBL21\Common\CommonAggregateComponents\TaxTotal)
-                    ->setTaxAmount((new \UBL21\Common\CommonBasicComponents\TaxAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX}))
-                        ->setCurrencyID('EUR')
-                    )
-                )*/
+                ->setAllowanceCharge(
+                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_TYPE} && $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM} ? [
+                        (new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
+                            ->setChargeIndicator(false)
+                            ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
+                            ->setAmount((new \UBL21\Common\CommonBasicComponents\Amount($allowance = (
+                            Sales_Config::PRICE_TYPE_GROSS === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
+                                round(($position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE} * 100) / (100 + (float)$position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}) - $position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}, 2)
+                                : $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM})))
+                                ->setCurrencyID('EUR')
+                            )
+                    ] : null
+                )
                 ->setItem((new \UBL21\Common\CommonAggregateComponents\Item)
                     ->setName($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE} ?
                         new \UBL21\Common\CommonBasicComponents\Name($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE})
@@ -476,7 +467,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                 )
                 ->setPrice((new \UBL21\Common\CommonAggregateComponents\Price)
-                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount($position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}))
+                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount(round($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY} *
+                        (Sales_Config::PRICE_TYPE_NET === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
+                            $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE}
+                            : $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE} * 100 / (100 + $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})), 2)))
                         ->setCurrencyID('EUR')
                     )
                 )
@@ -484,25 +478,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     [new \UBL21\Common\CommonBasicComponents\Note($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION})]
                     : null
                 )
-                ->setAllowanceCharge(
-                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_TYPE} && $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM} ? [
-                        (new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
-                            ->setChargeIndicator(false)
-                            ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
-                            ->setAmount((new \UBL21\Common\CommonBasicComponents\Amount(/*$allowances +=*/ (
-                                    Sales_Config::PRICE_TYPE_GROSS === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
-                                        round(($position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE} * 100) / (100 + (float)$position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}), 2) - $position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}
-                                    : $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM})))
-                                ->setCurrencyID('EUR')
-                            )
-                    ] : null
-                )
-            );
-        }
-
-        if ($allowances !== 0.0) {
-            $legalMonetaryTotal->setAllowanceTotalAmount((new \UBL21\Common\CommonBasicComponents\AllowanceTotalAmount($allowances))
-                ->setCurrencyID('EUR')
             );
         }
 
@@ -530,9 +505,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
                 self::NET_SUM => 0,
                 self::TAX_SUM => 0,
-                self::TAX_RATE => $defaultRate,
+                self::TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ];
         }
+        $allowances = 0.0;
         foreach ($this->xprops(self::FLD_SALES_TAX_BY_RATE) as $taxRate) {
             $taxTotal->addToTaxSubtotal((new \UBL21\Common\CommonAggregateComponents\TaxSubtotal)
                 ->setTaxableAmount((new \UBL21\Common\CommonBasicComponents\TaxableAmount($taxRate[self::NET_SUM]))
@@ -548,6 +524,33 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                     )
                 )
+            );
+            if ($this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} && $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}) {
+                $modifier = $taxRate[self::NET_SUM] / $this->{Sales_Model_Document_Invoice::FLD_POSITIONS_NET_SUM};
+                $ublInvoice->addToAllowanceCharge((new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
+                    ->setChargeIndicator(false)
+                    ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
+                    ->setAmount((new \UBL21\Common\CommonBasicComponents\Amount($allowance = round((
+                            Sales_Config::PRICE_TYPE_GROSS === $documentPriceType ?
+                                $this->{Sales_Model_Document_Invoice::FLD_POSITIONS_NET_SUM}  - $this->{Sales_Model_Document_Invoice::FLD_NET_SUM}
+                                : $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}
+                            ) * $modifier, 2)))
+                        ->setCurrencyID('EUR')
+                    )
+                    ->addToTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
+                        ->setID(new \UBL21\Common\CommonBasicComponents\ID('S'))
+                        ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
+                        ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
+                            ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
+                        )
+                    ));
+                $allowances += $allowance;
+            }
+        }
+
+        if ($allowances !== 0.0) {
+            $legalMonetaryTotal->setAllowanceTotalAmount((new \UBL21\Common\CommonBasicComponents\AllowanceTotalAmount(round($allowances, 2)))
+                ->setCurrencyID('EUR')
             );
         }
 
