@@ -12,961 +12,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>, 2012\n"
 "Language-Team: Swedish (Sweden) (http://app.transifex.com/tine/groupware/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr "Aktivera applikation"
-
-msgid "Disable Application"
-msgstr "Avaktivera applikation"
-
-msgid "Settings"
-msgstr "Inställningar"
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "{0} Inställningar"
-
-msgid "Search:"
-msgstr "Sök:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Visar tillämpning {0} - {1} av {2}"
-
-msgid "No applications to display"
-msgstr "Inga tillämpningar att visa"
-
-msgid "Order"
-msgstr "Beställ"
-
-msgid "Name"
-msgstr "Namn"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Version"
-msgstr "Version"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Bekräfta"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Vill du verkligen ta bort valda grupper?"
-
-msgid "Deleting group(s)..."
-msgstr "Ta bort grupp(er)..."
-
-msgid "Add Group"
-msgstr "Lägg till grupp"
-
-msgid "Edit Group"
-msgstr "Editera grupp"
-
-msgid "Delete Group"
-msgstr "Radera grupp"
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Visar grupper {0} - {1} av {2}"
-
-msgid "No groups to display"
-msgstr "Inga grupper att visa"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Beskrivning"
-
-msgid "Creation Time"
-msgstr "Skapad tid"
-
-msgid "Created By"
-msgstr "Skapad av"
-
-msgid "Last Modified Time"
-msgstr "Senast ändrad tid"
-
-msgid "Last Modified By"
-msgstr "Senast ändrad av"
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Fel"
-
-msgid "Please configure store for this field type"
-msgstr "Konfigurera butiken för denna filtyp"
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Tillämpning"
-msgstr[1] "Tillämpningar"
-
-msgid "Record Class"
-msgstr "Post Klass"
-
-msgid "Given record class not found"
-msgstr "Given post klass inte funnen"
-
-msgid "Cancel"
-msgstr "Avbryt"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Configure store"
-msgstr "Konfigurations butik"
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "Visa "
-
-msgid "Use"
-msgstr "Använda"
-
-msgid "Model"
-msgstr "Modell"
-
-msgid "Custom field definition"
-msgstr "Eget fält betydelse"
-
-msgid "Text"
-msgstr "Text"
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr "Nummer"
-
-msgid "Date"
-msgstr "Datum"
-
-msgid "DateTime"
-msgstr "Datumtid"
-
-msgid "Time"
-msgstr "Tid"
-
-msgid "Boolean"
-msgstr "Boolean"
-
-msgid "Search Combo"
-msgstr "Sökkombination"
-
-msgid "Key Field"
-msgstr "Nyckelfält"
-
-msgid "Record"
-msgstr "Record"
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr "Typ"
-
-msgid "Label"
-msgstr "Märke"
-
-msgid "Length"
-msgstr "Längd"
-
-msgid "Required"
-msgstr "Krävs"
-
-msgid "Custom field additional properties"
-msgstr "Ytterligare inställningar för anpassade fält"
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grupp"
-msgstr[1] "Grupper"
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr "Anpassade fältet existerar redan. Vänligen välj ett annat namn."
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Eget fält"
-msgstr[1] "Egna fält"
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr "Ja"
-
-msgid "No"
-msgstr "Nej"
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Value"
-msgstr "Värde"
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "Dator Namn"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Standard Adressbok för nya kontakter och grupper"
-
-msgid "Please wait"
-msgstr "Vänligen vänta"
-
-msgid "Updating Tag"
-msgstr "Updaterings Tagg"
-
-msgid "Failed"
-msgstr "Misslyckades"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr "Åtgärda felen som noterats."
-
-msgid "Allowed Contexts"
-msgstr "Tillåtna Sammanhang"
-
-msgid "Context"
-msgstr "Sammanhang"
-
-msgid "Account Rights"
-msgstr "Konto Rättigheter"
-
-msgid "Tag Name"
-msgstr "Tagg Namn"
-
-msgid "Color"
-msgstr "Färg"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Överför {0}..."
-
-msgid "Tag"
-msgstr "Tagg"
-
-msgid "Add New Tag"
-msgstr "Lägg till ny tagg"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Ändra Tagg \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "Vill du verkligen ta bort valda taggar?"
-
-msgid "Deleting tag(s)..."
-msgstr "Tar bort tagg(ar)..."
-
-msgid "Add Tag"
-msgstr "Lägg till tagg"
-
-msgid "Edit Tag"
-msgstr "Editera tagg"
-
-msgid "Delete Tag"
-msgstr "Radera tagg"
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Visar taggar {0} - {1} av {2}"
-
-msgid "No tags to display"
-msgstr "Inga taggar att visa"
-
-msgid "Usage:&#160;"
-msgstr "Användande:&#160;"
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "Uppdatera medlemsskap"
-
-msgid "Could not save role."
-msgstr "Kunde inte spara roll."
-
-msgid "Deleting role..."
-msgstr "Tar bort roll..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "Några fel uppstod vid försök att ta bort gruppen."
-
-msgid "Rights"
-msgstr "Rättigheter"
-
-msgid "Members"
-msgstr "Medlemmar"
-
-msgid "Role Name"
-msgstr "Roll Namn"
-
-msgid "Role"
-msgstr "Roll"
-
-msgid "Add New Role"
-msgstr "Lägg Till Ny Roll"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Ändra Roll \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "Vill du verkligen ta bort dom valda rollerna?"
-
-msgid "Deleting role(s)..."
-msgstr "tar bort roll(er)..."
-
-msgid "Add Role"
-msgstr "Lägg till roll"
-
-msgid "Edit Role"
-msgstr "Editera roll"
-
-msgid "Delete Role"
-msgstr "Radera roll"
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Visar roller {0} - {1} av {2}"
-
-msgid "No roles to display"
-msgstr "Inga roller att visa"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Åtkomst Logg"
-msgstr[1] "Åtkomsts Loggar"
-
-msgid "Groups"
-msgstr "Grupper"
-
-msgid "Applications"
-msgstr "Tillämpningar"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "Kvot"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "E-post Användare"
-msgstr[1] "E-post Användare"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr "Nuvarande storlek på e-postmappen"
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr "Nuvarande kvot"
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domän ej tillåten. Kontrollera konfigurationen för SMTP-domänen."
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr "Specialtecken är inte tillåtna i inloggningsnamn."
-
-msgid "Passwords do not match!"
-msgstr "Lösenorden matchar inte!"
-
-msgid "Passwords match!"
-msgstr "Lösenorden matchar!"
-
-msgid "Primary group"
-msgstr "Primär grupp"
-
-msgid "Unix"
-msgstr "Unix"
-
-msgid "Home Directory"
-msgstr "Hemmamapp"
-
-msgid "Login Shell"
-msgstr "Inloggningsskal"
-
-msgid "Windows"
-msgstr "Windows"
-
-msgid "Home Drive"
-msgstr "Hemmadisk"
-
-msgid "Login Time"
-msgstr "Inloggningstid Tid"
-
-msgid "never logged in"
-msgstr "loggade inte in"
-
-msgid "Home Path"
-msgstr "Sökväg för hem"
-
-msgid "Logout Time"
-msgstr "Utloggningstid Tid"
-
-msgid "never logged off"
-msgstr "loggade inte av"
-
-msgid "Profile Path"
-msgstr "Sökväg för profil"
-
-msgid "Password Last Set"
-msgstr "Ändrade lösenord senast"
-
-msgid "never"
-msgstr "aldrig"
-
-msgid "Logon Script"
-msgstr "Inloggningsscript"
-
-msgid "Password Can Change"
-msgstr "Lösenordet kan ändras"
-
-msgid "not set"
-msgstr "inte inställt"
-
-msgid "Password Must Change"
-msgstr "Lösenord måste ändras"
-
-msgid "Kick Off Time"
-msgstr "Tid för avspark"
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr "ingen kvot satt"
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Information"
-
-msgid "Last Login"
-msgstr "Senast inloggad"
-
-msgid "Forward Only"
-msgstr "Vidarebefordra endast"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr "Lägg till ett alias.."
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr "Domän inte tillåten"
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr "Vidarebefodran till sig själv"
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Lösenordskonfirmation"
-
-msgid "Repeat password"
-msgstr "Repetera lösenord"
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Konto"
-
-msgid "First name"
-msgstr "Förnamn"
-
-msgid "Last name"
-msgstr "Efternamn"
-
-msgid "Display name"
-msgstr "Visningsnamn"
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr "Inloggningsnamn"
-
-msgid "Password"
-msgstr "Lösenord"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "ÖppnaID"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "aktiverad"
-
-msgid "disabled"
-msgstr "avaktiverad"
-
-msgid "expired"
-msgstr "utgången"
-
-msgid "blocked"
-msgstr "blockerad"
-
-msgid "Invalid Status"
-msgstr "Ogiltig Status"
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "Blockerade status är endast giltigt om användaren försökte logga in med fel lösenord för ofta. Det är inte möjligt att ställa in denna status här."
-
-msgid "Expires"
-msgstr "Utgår"
-
-msgid "Last login at"
-msgstr "Senaste Inloggning"
-
-msgid "don't know"
-msgstr "vet inte"
-
-msgid "Last login from"
-msgstr "Senaste Inloggning från"
-
-msgid "Password set"
-msgstr "Lösenord Satt"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr "Användar grupper"
-
-msgid "User roles"
-msgstr "Användar roller"
-
-msgid "Fileserver"
-msgstr "Filserver"
-
-msgid "Filesystem"
-msgstr "Filsystem"
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Synlighet"
-
-msgid "Display in addressbook"
-msgstr "Visa i adressbok"
-
-msgid "Hide from addressbook"
-msgstr "Dölj från adressbok"
-
-msgid "Saved in Addressbook"
-msgstr "Spara i Adressbok"
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Användare"
-msgstr[1] "Användare"
-
-msgid "Users"
-msgstr "Användare"
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Samba Användare"
-msgstr[1] "Samba Användare"
-
-msgid "Enable Account"
-msgstr "Aktivera konto"
-
-msgid "Disable Account"
-msgstr "Avaktivera konto"
-
-msgid "Reset Password"
-msgstr "Återställ lösenord"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "Lösenord ändrat"
-
-msgid "Set new password"
-msgstr "Välj nytt lösenord"
-
-msgid "Please enter the new password:"
-msgstr "Ange nytt lösenord"
-
-msgid "Group Name"
-msgstr "Grupp Namn"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Grupp Medlemmar"
-
-msgid "personal"
-msgstr "personlig"
-
-msgid "shared"
-msgstr "Delad"
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr "Notering för Ägare"
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Behållare"
-msgstr[1] "Behållare"
-
-msgid "Container Name"
-msgstr "Behållare Namn"
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Dator"
-msgstr[1] "Datorer"
-
-msgid "Roles"
-msgstr "Roller"
-
-msgid "Containers"
-msgstr "Behållare"
-
-msgid "Shared Tags"
-msgstr "Delade Taggar"
-
-msgid "Customfields"
-msgstr "Egna fält"
-
-msgid "Computers"
-msgstr "Datorer"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "Serverinformation"
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Administratör"
-
-msgid "Refresh"
-msgstr "Uppdatera"
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "IP Adress"
-
-msgid "Client Type"
-msgstr "Klient Typ"
-
-msgid "Session ID"
-msgstr "Sessions ID"
-
-msgid "Login Name"
-msgstr "Inloggnings Namn"
-
-msgid "Result"
-msgstr "Resultat"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr "Användare blockad"
-
-msgid "password expired"
-msgstr "lösenord utgått"
-
-msgid "user disabled"
-msgstr "användare inatkiverad"
-
-msgid "invalid password"
-msgstr "ogiltligt lösenord"
-
-msgid "ambiguous username"
-msgstr "tvetydligt användarnamn"
-
-msgid "user not found"
-msgstr "användare inte hittad"
-
-msgid "failure"
-msgstr "misslyckande"
-
-msgid "success"
-msgstr "framsteg"
-
-msgid "Size"
-msgstr "Storlek"
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr "Standard IMAP-inställningar för användare"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr "Din behållare har blivit ändrad"
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Din behållare har blivit ändrad av %1$s %2$sNotering: %3$s"
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1113,4 +166,951 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr "Standard IMAP-inställningar för användare"
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr "Din behållare har blivit ändrad"
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Din behållare har blivit ändrad av %1$s %2$sNotering: %3$s"
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Åtkomst Logg"
+msgstr[1] "Åtkomsts Loggar"
+
+msgid "IP Address"
+msgstr "IP Adress"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Användare"
+msgstr[1] "Användare"
+
+msgid "Login Time"
+msgstr "Inloggningstid Tid"
+
+msgid "Logout Time"
+msgstr "Utloggningstid Tid"
+
+msgid "Client Type"
+msgstr "Klient Typ"
+
+msgid "Session ID"
+msgstr "Sessions ID"
+
+msgid "Login Name"
+msgstr "Inloggnings Namn"
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Result"
+msgstr "Resultat"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr "Användare blockad"
+
+msgid "password expired"
+msgstr "lösenord utgått"
+
+msgid "user disabled"
+msgstr "användare inatkiverad"
+
+msgid "invalid password"
+msgstr "ogiltligt lösenord"
+
+msgid "ambiguous username"
+msgstr "tvetydligt användarnamn"
+
+msgid "user not found"
+msgstr "användare inte hittad"
+
+msgid "failure"
+msgstr "misslyckande"
+
+msgid "success"
+msgstr "framsteg"
+
+msgid "Groups"
+msgstr "Grupper"
+
+msgid "Roles"
+msgstr "Roller"
+
+msgid "Applications"
+msgstr "Tillämpningar"
+
+msgid "Containers"
+msgstr "Behållare"
+
+msgid "Shared Tags"
+msgstr "Delade Taggar"
+
+msgid "Customfields"
+msgstr "Egna fält"
+
+msgid "Computers"
+msgstr "Datorer"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "Serverinformation"
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Administratör"
+
+msgid "Refresh"
+msgstr "Uppdatera"
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Standard Adressbok för nya kontakter och grupper"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Tillämpning"
+msgstr[1] "Tillämpningar"
+
+msgid "Enable Application"
+msgstr "Aktivera applikation"
+
+msgid "Disable Application"
+msgstr "Avaktivera applikation"
+
+msgid "Settings"
+msgstr "Inställningar"
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Inställningar"
+
+msgid "Search:"
+msgstr "Sök:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Visar tillämpning {0} - {1} av {2}"
+
+msgid "No applications to display"
+msgstr "Inga tillämpningar att visa"
+
+msgid "Order"
+msgstr "Beställ"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nej"
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Label"
+msgstr "Märke"
+
+msgid "Value"
+msgstr "Värde"
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Behållare"
+msgstr[1] "Behållare"
+
+msgid "Model"
+msgstr "Modell"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "personal"
+msgstr "personlig"
+
+msgid "shared"
+msgstr "Delad"
+
+msgid "Color"
+msgstr "Färg"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr "Notering för Ägare"
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Container Name"
+msgstr "Behållare Namn"
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Eget fält"
+msgstr[1] "Egna fält"
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Fel"
+
+msgid "Please configure store for this field type"
+msgstr "Konfigurera butiken för denna filtyp"
+
+msgid "Record Class"
+msgstr "Post Klass"
+
+msgid "Given record class not found"
+msgstr "Given post klass inte funnen"
+
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Configure store"
+msgstr "Konfigurations butik"
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "Visa "
+
+msgid "Use"
+msgstr "Använda"
+
+msgid "Custom field definition"
+msgstr "Eget fält betydelse"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr "Nummer"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "DateTime"
+msgstr "Datumtid"
+
+msgid "Time"
+msgstr "Tid"
+
+msgid "Boolean"
+msgstr "Boolean"
+
+msgid "Search Combo"
+msgstr "Sökkombination"
+
+msgid "Key Field"
+msgstr "Nyckelfält"
+
+msgid "Record"
+msgstr "Record"
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr "Längd"
+
+msgid "Required"
+msgstr "Krävs"
+
+msgid "Custom field additional properties"
+msgstr "Ytterligare inställningar för anpassade fält"
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grupp"
+msgstr[1] "Grupper"
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr "Anpassade fältet existerar redan. Vänligen välj ett annat namn."
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Grupp Namn"
+
+msgid "Visibility"
+msgstr "Synlighet"
+
+msgid "Display in addressbook"
+msgstr "Visa i adressbok"
+
+msgid "Hide from addressbook"
+msgstr "Dölj från adressbok"
+
+msgid "Saved in Addressbook"
+msgstr "Spara i Adressbok"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Grupp Medlemmar"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domän ej tillåten. Kontrollera konfigurationen för SMTP-domänen."
+
+msgid "Confirm"
+msgstr "Bekräfta"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Vill du verkligen ta bort valda grupper?"
+
+msgid "Deleting group(s)..."
+msgstr "Ta bort grupp(er)..."
+
+msgid "Add Group"
+msgstr "Lägg till grupp"
+
+msgid "Edit Group"
+msgstr "Editera grupp"
+
+msgid "Delete Group"
+msgstr "Radera grupp"
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Visar grupper {0} - {1} av {2}"
+
+msgid "No groups to display"
+msgstr "Inga grupper att visa"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr "Skapad tid"
+
+msgid "Created By"
+msgstr "Skapad av"
+
+msgid "Last Modified Time"
+msgstr "Senast ändrad tid"
+
+msgid "Last Modified By"
+msgstr "Senast ändrad av"
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "Kvot"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "E-post Användare"
+msgstr[1] "E-post Användare"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr "Nuvarande storlek på e-postmappen"
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr "Nuvarande kvot"
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr "Storlek"
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr "ingen kvot satt"
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Vänligen vänta"
+
+msgid "Updating Memberships"
+msgstr "Uppdatera medlemsskap"
+
+msgid "Failed"
+msgstr "Misslyckades"
+
+msgid "Could not save role."
+msgstr "Kunde inte spara roll."
+
+msgid "Please fix the errors noted."
+msgstr "Åtgärda felen som noterats."
+
+msgid "Deleting role..."
+msgstr "Tar bort roll..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "Några fel uppstod vid försök att ta bort gruppen."
+
+msgid "Rights"
+msgstr "Rättigheter"
+
+msgid "Members"
+msgstr "Medlemmar"
+
+msgid "Role Name"
+msgstr "Roll Namn"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Överför {0}..."
+
+msgid "Role"
+msgstr "Roll"
+
+msgid "Add New Role"
+msgstr "Lägg Till Ny Roll"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Ändra Roll \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "Vill du verkligen ta bort dom valda rollerna?"
+
+msgid "Deleting role(s)..."
+msgstr "tar bort roll(er)..."
+
+msgid "Add Role"
+msgstr "Lägg till roll"
+
+msgid "Edit Role"
+msgstr "Editera roll"
+
+msgid "Delete Role"
+msgstr "Radera roll"
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Visar roller {0} - {1} av {2}"
+
+msgid "No roles to display"
+msgstr "Inga roller att visa"
+
+msgid "Computer Name"
+msgstr "Dator Namn"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Dator"
+msgstr[1] "Datorer"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "Updaterings Tagg"
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr "Tillåtna Sammanhang"
+
+msgid "Context"
+msgstr "Sammanhang"
+
+msgid "Account Rights"
+msgstr "Konto Rättigheter"
+
+msgid "Tag Name"
+msgstr "Tagg Namn"
+
+msgid "Tag"
+msgstr "Tagg"
+
+msgid "Add New Tag"
+msgstr "Lägg till ny tagg"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Ändra Tagg \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "Vill du verkligen ta bort valda taggar?"
+
+msgid "Deleting tag(s)..."
+msgstr "Tar bort tagg(ar)..."
+
+msgid "Add Tag"
+msgstr "Lägg till tagg"
+
+msgid "Edit Tag"
+msgstr "Editera tagg"
+
+msgid "Delete Tag"
+msgstr "Radera tagg"
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Visar taggar {0} - {1} av {2}"
+
+msgid "No tags to display"
+msgstr "Inga taggar att visa"
+
+msgid "Usage:&#160;"
+msgstr "Användande:&#160;"
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr "Specialtecken är inte tillåtna i inloggningsnamn."
+
+msgid "Passwords do not match!"
+msgstr "Lösenorden matchar inte!"
+
+msgid "Passwords match!"
+msgstr "Lösenorden matchar!"
+
+msgid "Primary group"
+msgstr "Primär grupp"
+
+msgid "Unix"
+msgstr "Unix"
+
+msgid "Home Directory"
+msgstr "Hemmamapp"
+
+msgid "Login Shell"
+msgstr "Inloggningsskal"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "Home Drive"
+msgstr "Hemmadisk"
+
+msgid "never logged in"
+msgstr "loggade inte in"
+
+msgid "Home Path"
+msgstr "Sökväg för hem"
+
+msgid "never logged off"
+msgstr "loggade inte av"
+
+msgid "Profile Path"
+msgstr "Sökväg för profil"
+
+msgid "Password Last Set"
+msgstr "Ändrade lösenord senast"
+
+msgid "never"
+msgstr "aldrig"
+
+msgid "Logon Script"
+msgstr "Inloggningsscript"
+
+msgid "Password Can Change"
+msgstr "Lösenordet kan ändras"
+
+msgid "not set"
+msgstr "inte inställt"
+
+msgid "Password Must Change"
+msgstr "Lösenord måste ändras"
+
+msgid "Kick Off Time"
+msgstr "Tid för avspark"
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Last Login"
+msgstr "Senast inloggad"
+
+msgid "Forward Only"
+msgstr "Vidarebefordra endast"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr "Lägg till ett alias.."
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr "Domän inte tillåten"
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr "Vidarebefodran till sig själv"
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Lösenordskonfirmation"
+
+msgid "Repeat password"
+msgstr "Repetera lösenord"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Konto"
+
+msgid "First name"
+msgstr "Förnamn"
+
+msgid "Last name"
+msgstr "Efternamn"
+
+msgid "Display name"
+msgstr "Visningsnamn"
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr "Inloggningsnamn"
+
+msgid "Password"
+msgstr "Lösenord"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "ÖppnaID"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "aktiverad"
+
+msgid "disabled"
+msgstr "avaktiverad"
+
+msgid "expired"
+msgstr "utgången"
+
+msgid "blocked"
+msgstr "blockerad"
+
+msgid "Invalid Status"
+msgstr "Ogiltig Status"
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr "Blockerade status är endast giltigt om användaren försökte logga in med fel lösenord för ofta. Det är inte möjligt att ställa in denna status här."
+
+msgid "Expires"
+msgstr "Utgår"
+
+msgid "Last login at"
+msgstr "Senaste Inloggning"
+
+msgid "don't know"
+msgstr "vet inte"
+
+msgid "Last login from"
+msgstr "Senaste Inloggning från"
+
+msgid "Password set"
+msgstr "Lösenord Satt"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr "Användar grupper"
+
+msgid "User roles"
+msgstr "Användar roller"
+
+msgid "Fileserver"
+msgstr "Filserver"
+
+msgid "Filesystem"
+msgstr "Filsystem"
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr "Aktivera konto"
+
+msgid "Disable Account"
+msgstr "Avaktivera konto"
+
+msgid "Reset Password"
+msgstr "Återställ lösenord"
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "Lösenord ändrat"
+
+msgid "Set new password"
+msgstr "Välj nytt lösenord"
+
+msgid "Please enter the new password:"
+msgstr "Ange nytt lösenord"
+
+msgid "Users"
+msgstr "Användare"
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Samba Användare"
+msgstr[1] "Samba Användare"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

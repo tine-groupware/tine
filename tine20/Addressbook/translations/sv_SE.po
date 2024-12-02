@@ -11,568 +11,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>, 2012\n"
 "Language-Team: Swedish (Sweden) (http://app.transifex.com/tine/groupware/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s personliga adressbok"
+msgid "manage shared addressbooks"
+msgstr "hantera delade adressböcker"
 
-msgid "Groups"
-msgstr "Grupper"
+msgid "Create new shared addressbook folders"
+msgstr "Skapa nya delade adressböcker-mappar"
 
-msgid "Group Functions"
-msgstr "Lista funktioner"
+msgid "manage shared addressbook favorites"
+msgstr "hantera delade adressboks favoriter"
 
-msgid "Industries"
-msgstr ""
-
-msgid "All Contacts"
-msgstr "Alla kontakter"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-msgid "All contacts"
-msgstr "Alla kontakter"
-
-msgid "Default Addressbook"
-msgstr "Standard Adressbok"
-
-msgid "The default addressbook for new contacts"
-msgstr "Standard adressboken för nya kontakter"
-
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Standardinställningen favoriten som laddas vid addressbook start"
-
-msgid "Contacts ODS export configuration"
-msgstr ""
-
-msgid "Use this configuration for the contact ODS export."
-msgstr ""
-
-msgid "Contacts XLS export configuration"
-msgstr ""
-
-msgid "Use this configuration for the contact XLS export."
-msgstr ""
-
-msgid "Contact Title Template"
-msgstr ""
-
-msgid "How to build contact titles."
-msgstr ""
-
-msgid "default"
-msgstr ""
-
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Kontakt"
-msgstr[1] "Kontakter"
-
-msgid "Set as preferred E-Mail"
-msgstr ""
-
-msgid "Preferred Address"
-msgstr ""
-
-msgid "Street"
-msgstr "Gata"
-
-msgid "Street 2"
-msgstr "Gata 2"
-
-msgid "Region"
-msgstr "Region"
-
-msgid "Postal Code"
-msgstr "Postkod"
-
-msgid "City"
-msgstr "Stad"
-
-msgid "Country"
-msgstr "Land"
-
-msgid "System Group"
-msgstr "Systemgrupp"
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Group Information"
-msgstr ""
-
-msgid "Name"
-msgstr "Namn"
-
-msgid "E-Mail"
-msgstr "E-Post"
-
-msgid "List type"
-msgstr ""
-
-msgid "System accounts only"
-msgstr ""
-
-msgid "Description"
-msgstr "Beskrivning"
-
-msgid "Enter description"
-msgstr "Skriv beskrivning"
-
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
-
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr ""
-
-msgid "Search for system groups ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr "Sök efter grupper ..."
-
-msgid "Contact Properties"
-msgstr ""
-
-msgid "Contact Information"
-msgstr "Kontakt Information"
-
-msgid "Company Address"
-msgstr "Företags Adress"
-
-msgid "Private Address"
-msgstr "Privat Adress"
-
-msgid "Related to"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "New Contact"
-msgstr "Ny Kontakt"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Adressbok"
-msgstr[1] "Adressböcker"
-
-msgid "ID"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Private"
-msgstr "Privat"
-
-msgid "The grant to access contacts private information"
-msgstr ""
-
-msgid "Map"
-msgstr "Karta"
-
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr ""
-
-msgid "Personal Information"
-msgstr "Personlig Information"
-
-msgid "Salutation"
-msgstr "Hälsning"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "Short Name"
-msgstr ""
-
-msgid "First Name"
-msgstr "Första Namn"
-
-msgid "Middle Name"
-msgstr "Mellan Namn"
-
-msgid "Last Name"
-msgstr "Efternamn"
-
-msgid "Company / Organisation"
-msgstr ""
-
-msgid "Unit"
-msgstr "Enhet"
-
-msgid "Sites"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Display Name"
-msgstr "Visnings Namn"
-
-msgid "Job Title"
-msgstr "Arbets namn"
-
-msgid "Birthday (private)"
-msgstr ""
-
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Note"
-msgstr "Notifiering"
-
-msgid "Enter Note"
-msgstr ""
-
-msgid "Parse address"
-msgstr "Analysera adress"
-
-msgid "Print contact"
-msgstr "Skriv ut kontakt"
-
-msgid "Paste address"
-msgstr "Analysera adress"
-
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr "Infoga en adress eller URI till ett vCard som ska importeras: "
-
-msgid "Failed to parse address!"
-msgstr "Import av adress misslyckades!"
-
-msgid "The address could not be read."
-msgstr "Adressen kunde inte läsas."
-
-msgid "End token mode"
-msgstr "Avsluta tecken läge"
-
-msgid "You do not have the required private grant to view history."
-msgstr ""
-
-msgid "Import contacts"
-msgstr "Importera kontakter"
-
-msgid "Contact of a user account"
-msgstr ""
-
-msgid "Email Account Contact"
-msgstr ""
-
-msgid "No name"
-msgstr ""
-
-msgid "Business"
-msgstr ""
-
-msgid "Not set"
-msgstr ""
+msgid "Create or update shared addressbook favorites"
+msgstr "Skapa eller uppdatera delade adressboks favoriter"
 
-msgid "Type"
-msgstr "Typ"
-
-msgid "Contact Image"
-msgstr ""
-
-msgid "Tags"
-msgstr "Taggar"
-
-msgid "Full Name"
-msgstr "Helt Namn"
-
-msgid "Job Role"
-msgstr "Arbetar Roll"
-
-msgid "Room"
-msgstr "Rum"
-
-msgid "Postalcode"
-msgstr "Postkod"
-
-msgid "Street (private)"
-msgstr "Gata (Privat)"
-
-msgid "City (private)"
-msgstr "Stad (Privat)"
-
-msgid "Region (private)"
-msgstr "Region (Privat)"
-
-msgid "Postalcode (private)"
-msgstr "Postkod (Privat)"
-
-msgid "Country (private)"
-msgstr "Land (Privat)"
-
-msgid "Preferred E-Mail"
-msgstr ""
-
-msgid "Email"
-msgid_plural "Emails"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Mobile"
-msgstr "Mobil"
-
-msgid "Fax"
-msgstr "Fax"
-
-msgid "Car phone"
-msgstr "Bil telefon"
-
-msgid "Pager"
-msgstr "Personsökare"
-
-msgid "Phone (private)"
-msgstr "Telefon (Privat)"
-
-msgid "Fax (private)"
-msgstr "Fax (Privat)"
-
-msgid "Mobile (private)"
-msgstr "Mobil (Privat)"
-
-msgid "Email (private)"
-msgstr "E-post (privat)"
-
-msgid "Web"
-msgstr "Webb"
-
-msgid "URL (private)"
-msgstr "URL (privat)"
-
-msgid "Language"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Tidszon"
-
-msgid "Geo"
-msgstr "Geografisk"
-
-msgid "Birthday"
-msgstr "Födelsedag"
-
-msgid "Select record to see its details"
-msgstr ""
-
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-msgid "Loading Structure data..."
-msgstr ""
-
-msgid "Company address"
-msgstr "Företags adress"
-
-msgid "Private address"
-msgstr "Privat adress"
-
-msgid "CardDAV URL"
-msgstr "CardDAV URL"
-
-msgid "List Personal Grant"
-msgid_plural "List Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Contact Personal Grant"
-msgid_plural "Contact Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Members"
-msgstr "Medlemmar"
-
-msgid "Search for members ..."
-msgstr ""
-
-msgid "List Roles"
-msgstr ""
-
-msgid "Select Group"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr "Sök efter användare ..."
-
-msgid "Search for Contacts ..."
-msgstr "Sök efter kontakter ..."
-
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] "E-postadress"
-msgstr[1] "E-postadresser"
-
-msgid "Email Addresses"
-msgstr "E-postadresser"
-
-msgid "Addressbooks"
-msgstr "Adressböcker"
-
-msgid "Quick search"
-msgstr "Snabb sök"
-
-msgid "Structures"
-msgstr ""
-
-msgid "Mailing List"
-msgstr ""
-
-msgid "This group is a mailing list"
-msgstr ""
-
-msgid "Reply to"
-msgstr ""
-
-msgid "Distribution list"
-msgstr ""
-
-msgid "Sender"
-msgstr ""
-
-msgid "Sender and Distributor"
-msgstr ""
-
-msgid "Keep copy of group mails"
-msgstr ""
-
-msgid "Forward external mails"
-msgstr ""
-
-msgid "Only forward member mails"
-msgstr ""
-
-msgid "Only forward to system email accounts"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "28"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00877546"
+msgid "Manage lists in CoreData"
 msgstr ""
 
-msgid "en-GB"
+msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
 
-msgid "00813B4E"
+msgid "Manage list functions in CoreData"
 msgstr ""
-
-msgid "Gruppenrollen"
-msgstr ""
-
-msgid "00DA3FCD"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
-
-msgid "008C27A5"
-msgstr ""
-
-msgid "00C96397"
-msgstr ""
-
-msgid "00046462"
-msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Company"
-msgstr "Företag"
-
-msgid "Internal Contacts"
-msgstr "Interna Kontakter"
-
-msgid "All contacts I have read grants for"
-msgstr "Alla kontakter Jag har Läsrättigheter för"
-
-msgid "My company"
-msgstr "Mitt företag"
-
-msgid "All coworkers in my company"
-msgstr "Alla medarbetare i mitt företag"
-
-msgid "My contacts"
-msgstr "Mina kontakter"
-
-msgid "All contacts in my Addressbooks"
-msgstr "Alla kontakter i mina Adressböcker"
-
-msgid "Last modified by me"
-msgstr "Senast ändrad av mig"
-
-msgid "All contacts that I have last modified"
-msgstr "Alla kontakter som Jag senast har ändrat"
-
-msgid "Company Communication"
-msgstr "Företags Kommunikation"
-
-msgid "E-Mail (private)"
-msgstr "E-Post (Privat)"
-
-msgid "Private Communication"
-msgstr "Privat Kommunikation"
-
-msgid "Matrix-ID"
-msgstr ""
-
-msgid "Assistant"
-msgstr "Assistent"
 
-msgid "Car"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
-msgid "Other"
+msgid "Manage list email options"
 msgstr ""
 
-msgid "Prefer"
+msgid "Manage list email options like mailing lists"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -653,6 +128,11 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakter"
+
 msgid "Email Account"
 msgstr ""
 
@@ -667,6 +147,9 @@ msgstr "Mr"
 
 msgid "Ms"
 msgstr "Ms"
+
+msgid "Company"
+msgstr "Företag"
 
 msgid "Person"
 msgstr ""
@@ -726,15 +209,516 @@ msgstr ""
 msgid "Maximum number of role members reached"
 msgstr ""
 
-msgid "Group Function"
-msgid_plural "Group Functions"
-msgstr[0] "Lista funktion"
-msgstr[1] "Lista funktioner"
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s personliga adressbok"
 
-msgid "GENDER_Group Function"
+msgid "Groups"
+msgstr "Grupper"
+
+msgid "Group Functions"
+msgstr "Lista funktioner"
+
+msgid "Industries"
 msgstr ""
 
-msgid "Maximum Members"
+msgid "3CX CSV export"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "VCard Report"
+msgstr ""
+
+msgid "Export multiple addressbooks to vcf files"
+msgstr ""
+
+msgid "VCard/VCF"
+msgstr ""
+
+msgid "Export contact data into vcf file"
+msgstr ""
+
+msgid "Word letter"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Addressbooks to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "All Contacts"
+msgstr "Alla kontakter"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+msgid "Contact import from Google address book"
+msgstr "Importera kontakter från Google adressbok"
+
+msgid "Import vCard formated contacts"
+msgstr ""
+
+msgid "Contact VCARD import"
+msgstr "Kontakt VCARD import"
+
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+msgid "Contact CSV import from mac address book"
+msgstr "Kontakt CSV import"
+
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 Tyska"
+
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2010 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+msgid "Contact CSV import from Outlook address book"
+msgstr "Kontakt CSV import från Outlook adress bok"
+
+msgid "Tine contact CSV import"
+msgstr ""
+
+msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Import lista (###CURRENTDATE###)"
+
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Kontakter importerade på  ###CURRENTDATE### vid ###CURRENTTIME### av ###USERFULLNAME###"
+
+msgid "New Contact"
+msgstr "Ny Kontakt"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Adressbok"
+msgstr[1] "Adressböcker"
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr "Namn"
+
+msgid "Description"
+msgstr "Beskrivning"
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "The grant to access contacts private information"
+msgstr ""
+
+msgid "Preferred Address"
+msgstr ""
+
+msgid "Street"
+msgstr "Gata"
+
+msgid "Street 2"
+msgstr "Gata 2"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Postal Code"
+msgstr "Postkod"
+
+msgid "City"
+msgstr "Stad"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Contact Properties"
+msgstr ""
+
+msgid "CardDAV URL"
+msgstr "CardDAV URL"
+
+msgid "Map"
+msgstr "Karta"
+
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Personal Information"
+msgstr "Personlig Information"
+
+msgid "Salutation"
+msgstr "Hälsning"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Short Name"
+msgstr ""
+
+msgid "First Name"
+msgstr "Första Namn"
+
+msgid "Middle Name"
+msgstr "Mellan Namn"
+
+msgid "Last Name"
+msgstr "Efternamn"
+
+msgid "Company / Organisation"
+msgstr ""
+
+msgid "Unit"
+msgstr "Enhet"
+
+msgid "Sites"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Display Name"
+msgstr "Visnings Namn"
+
+msgid "Job Title"
+msgstr "Arbets namn"
+
+msgid "Birthday (private)"
+msgstr ""
+
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Contact Information"
+msgstr "Kontakt Information"
+
+msgid "Note"
+msgstr "Notifiering"
+
+msgid "Enter Note"
+msgstr ""
+
+msgid "Parse address"
+msgstr "Analysera adress"
+
+msgid "Print contact"
+msgstr "Skriv ut kontakt"
+
+msgid "Paste address"
+msgstr "Analysera adress"
+
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr "Infoga en adress eller URI till ett vCard som ska importeras: "
+
+msgid "Failed to parse address!"
+msgstr "Import av adress misslyckades!"
+
+msgid "The address could not be read."
+msgstr "Adressen kunde inte läsas."
+
+msgid "End token mode"
+msgstr "Avsluta tecken läge"
+
+msgid "You do not have the required private grant to view history."
+msgstr ""
+
+msgid "Business"
+msgstr ""
+
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "E-Mail"
+msgstr "E-Post"
+
+msgid "Web"
+msgstr "Webb"
+
+msgid "Import contacts"
+msgstr "Importera kontakter"
+
+msgid "Contact of a user account"
+msgstr ""
+
+msgid "Email Account Contact"
+msgstr ""
+
+msgid "No name"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Contact Image"
+msgstr ""
+
+msgid "Tags"
+msgstr "Taggar"
+
+msgid "Full Name"
+msgstr "Helt Namn"
+
+msgid "Job Role"
+msgstr "Arbetar Roll"
+
+msgid "Room"
+msgstr "Rum"
+
+msgid "Postalcode"
+msgstr "Postkod"
+
+msgid "Street (private)"
+msgstr "Gata (Privat)"
+
+msgid "City (private)"
+msgstr "Stad (Privat)"
+
+msgid "Region (private)"
+msgstr "Region (Privat)"
+
+msgid "Postalcode (private)"
+msgstr "Postkod (Privat)"
+
+msgid "Country (private)"
+msgstr "Land (Privat)"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Car phone"
+msgstr "Bil telefon"
+
+msgid "Pager"
+msgstr "Personsökare"
+
+msgid "Phone (private)"
+msgstr "Telefon (Privat)"
+
+msgid "Fax (private)"
+msgstr "Fax (Privat)"
+
+msgid "Mobile (private)"
+msgstr "Mobil (Privat)"
+
+msgid "Email (private)"
+msgstr "E-post (privat)"
+
+msgid "URL (private)"
+msgstr "URL (privat)"
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr "Tidszon"
+
+msgid "Geo"
+msgstr "Geografisk"
+
+msgid "Birthday"
+msgstr "Födelsedag"
+
+msgid "Set as preferred E-Mail"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr "Sök efter användare ..."
+
+msgid "Search for Contacts ..."
+msgstr "Sök efter kontakter ..."
+
+msgid "Group Information"
+msgstr ""
+
+msgid "List type"
+msgstr ""
+
+msgid "System accounts only"
+msgstr ""
+
+msgid "Enter description"
+msgstr "Skriv beskrivning"
+
+#, python-brace-format
+msgid "{0} must be given"
+msgstr ""
+
+msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
+msgstr ""
+
+msgid "Members"
+msgstr "Medlemmar"
+
+msgid "Select Group"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Search for members ..."
+msgstr ""
+
+msgid "List Roles"
+msgstr ""
+
+msgid "Search for system groups ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr "Sök efter grupper ..."
+
+msgid "Mailing List"
+msgstr ""
+
+msgid "This group is a mailing list"
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender and Distributor"
+msgstr ""
+
+msgid "Keep copy of group mails"
+msgstr ""
+
+msgid "Forward external mails"
+msgstr ""
+
+msgid "Only forward member mails"
+msgstr ""
+
+msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Company address"
+msgstr "Företags adress"
+
+msgid "Private address"
+msgstr "Privat adress"
+
+msgid "Contact Personal Grant"
+msgid_plural "Contact Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] "E-postadress"
+msgstr[1] "E-postadresser"
+
+msgid "Email Addresses"
+msgstr "E-postadresser"
+
+msgid "Addressbooks"
+msgstr "Adressböcker"
+
+msgid "Quick search"
+msgstr "Snabb sök"
+
+msgid "Structures"
+msgstr ""
+
+msgid "List Personal Grant"
+msgid_plural "List Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Company Address"
+msgstr "Företags Adress"
+
+msgid "Private Address"
+msgstr "Privat Adress"
+
+msgid "Related to"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "System Group"
+msgstr "Systemgrupp"
+
+msgid "Select record to see its details"
+msgstr ""
+
+msgid "This module visualises hierarchically depended relations between records of different types."
+msgstr ""
+
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
+msgstr ""
+
+msgid "Loading Structure data..."
 msgstr ""
 
 msgid "GENDER_Addressbook"
@@ -745,6 +729,11 @@ msgstr ""
 
 msgid "Show Disabled"
 msgstr ""
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] "Lista funktion"
+msgstr[1] "Lista funktioner"
 
 msgid "Phone Numbers"
 msgstr ""
@@ -794,20 +783,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "GENDER_Group"
-msgstr ""
-
-msgid "Name/Email"
-msgstr ""
-
-msgid "Site"
-msgid_plural "Sites"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Email"
-msgstr ""
-
 msgid "GENDER_Address"
 msgstr ""
 
@@ -851,15 +826,7 @@ msgstr ""
 msgid "Last Error"
 msgstr ""
 
-msgid "GENDER_URL"
-msgstr ""
-
-msgid "URL"
-msgid_plural "URLs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Phone"
+msgid "GENDER_Email"
 msgstr ""
 
 msgid "GENDER_Instant Messenger"
@@ -870,128 +837,161 @@ msgid_plural "Instant Messengers"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Addressbooks to export"
+msgid "GENDER_Phone"
 msgstr ""
 
-msgid "Export target"
+msgid "GENDER_URL"
 msgstr ""
 
-msgid "Excel overview"
+msgid "URL"
+msgid_plural "URLs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Group"
 msgstr ""
 
-msgid "Word details"
+msgid "Name/Email"
 msgstr ""
 
-msgid "Relations"
+msgid "GENDER_Group Function"
 msgstr ""
 
-msgid "CSV all data"
+msgid "Maximum Members"
 msgstr ""
 
-msgid "VCard Report"
+msgid "All contacts"
+msgstr "Alla kontakter"
+
+msgid "Default Addressbook"
+msgstr "Standard Adressbok"
+
+msgid "The default addressbook for new contacts"
+msgstr "Standard adressboken för nya kontakter"
+
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Standardinställningen favoriten som laddas vid addressbook start"
+
+msgid "Contacts ODS export configuration"
 msgstr ""
 
-msgid "Export multiple addressbooks to vcf files"
+msgid "Use this configuration for the contact ODS export."
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Contacts XLS export configuration"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Use this configuration for the contact XLS export."
 msgstr ""
 
-msgid "VCard/VCF"
+msgid "Contact Title Template"
 msgstr ""
 
-msgid "Export contact data into vcf file"
+msgid "How to build contact titles."
 msgstr ""
 
-msgid "3CX CSV export"
+msgid "default"
 msgstr ""
 
-msgid "Word letter"
+msgid "All contacts I have read grants for"
+msgstr "Alla kontakter Jag har Läsrättigheter för"
+
+msgid "My company"
+msgstr "Mitt företag"
+
+msgid "All coworkers in my company"
+msgstr "Alla medarbetare i mitt företag"
+
+msgid "My contacts"
+msgstr "Mina kontakter"
+
+msgid "All contacts in my Addressbooks"
+msgstr "Alla kontakter i mina Adressböcker"
+
+msgid "Last modified by me"
+msgstr "Senast ändrad av mig"
+
+msgid "All contacts that I have last modified"
+msgstr "Alla kontakter som Jag senast har ändrat"
+
+msgid "Company Communication"
+msgstr "Företags Kommunikation"
+
+msgid "E-Mail (private)"
+msgstr "E-Post (Privat)"
+
+msgid "Private Communication"
+msgstr "Privat Kommunikation"
+
+msgid "Matrix-ID"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "Assistant"
+msgstr "Assistent"
+
+msgid "Car"
 msgstr ""
 
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgid "Other"
 msgstr ""
 
-msgid "Contact CSV import from Outlook address book"
-msgstr "Kontakt CSV import från Outlook adress bok"
-
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgid "Prefer"
 msgstr ""
 
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 Tyska"
+msgid "Internal Contacts"
+msgstr "Interna Kontakter"
 
-msgid "Import CSV formated contacts from Google address book"
+msgid "Account"
 msgstr ""
 
-msgid "Contact import from Google address book"
-msgstr "Importera kontakter från Google adressbok"
-
-msgid "Tine contact CSV import"
+msgid "Exporttime"
 msgstr ""
 
-msgid "Import CSV formated contacts from tine address book"
+msgid "28"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Import lista (###CURRENTDATE###)"
-
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Kontakter importerade på  ###CURRENTDATE### vid ###CURRENTTIME### av ###USERFULLNAME###"
-
-msgid "LX-Office CSV Contact import"
+msgid "20"
 msgstr ""
 
-msgid "Import CSV formated contacts from LX-Office"
+msgid "00877546"
 msgstr ""
 
-msgid "Import vCard formated contacts"
+msgid "en-GB"
 msgstr ""
 
-msgid "Contact VCARD import"
-msgstr "Kontakt VCARD import"
-
-msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgid "00813B4E"
 msgstr ""
 
-msgid "CSV Outlook 2010 German"
+msgid "Gruppenrollen"
 msgstr ""
 
-msgid "Contact CSV import from mac address book"
-msgstr "Kontakt CSV import"
-
-msgid "manage shared addressbooks"
-msgstr "hantera delade adressböcker"
-
-msgid "Create new shared addressbook folders"
-msgstr "Skapa nya delade adressböcker-mappar"
-
-msgid "manage shared addressbook favorites"
-msgstr "hantera delade adressboks favoriter"
-
-msgid "Create or update shared addressbook favorites"
-msgstr "Skapa eller uppdatera delade adressboks favoriter"
-
-msgid "Manage lists in CoreData"
+msgid "00DA3FCD"
 msgstr ""
 
-msgid "View, create, delete or update lists in CoreData application"
+msgid "00997199"
 msgstr ""
 
-msgid "Manage list functions in CoreData"
+msgid "0009326B"
 msgstr ""
 
-msgid "View, create, delete or update list functions in CoreData application"
+msgid "008C27A5"
 msgstr ""
 
-msgid "Manage list email options"
+msgid "00C96397"
 msgstr ""
 
-msgid "Manage list email options like mailing lists"
+msgid "00046462"
 msgstr ""
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+msgstr[1] ""

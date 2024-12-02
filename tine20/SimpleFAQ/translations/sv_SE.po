@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: BrianLuckBad <tulken_hultan@hotmail.com>, 2012\n"
 "Language-Team: Swedish (Sweden) (http://app.transifex.com/tine/groupware/language/sv_SE/)\n"
+"Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv_SE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -36,33 +36,18 @@ msgstr "Interna"
 msgid "Public"
 msgstr "Publik"
 
-msgid "All my FAQs"
-msgstr "Alla mina FAQs"
-
-msgid "Default Favorite"
-msgstr "Standardfavorit"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Standard favoriten som är ladad i FAQ start"
-
-msgid "Default FAQ List"
-msgstr "Standard FAQ lista"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Standard FAQ lista för att skapa ny FAQ i."
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ-status"
+msgstr[1] "FAQ-status"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "FAQ typ"
 msgstr[1] "FAQ typer"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ-status"
-msgstr[1] "FAQ-status"
-
-msgid "Add a new FAQ Status..."
-msgstr "Lägg till en ny FAQ-status"
+msgid "Defaults"
+msgstr "Standard"
 
 msgid "Question"
 msgstr "Fråga"
@@ -82,31 +67,11 @@ msgstr "Typ"
 msgid "Status"
 msgstr "Status"
 
-msgid "Defaults"
-msgstr "Standard"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQ:er"
-
-msgid "Find Question"
-msgstr "Hitta fråga"
-
-msgid "Search question"
-msgstr "Sök fråga"
-
-msgid "FAQ id"
-msgstr "FAQ id"
+msgid "FAQ Infos"
+msgstr "FAQ info"
 
 msgid "Tags"
 msgstr "Taggar"
-
-msgid "Add a new FAQ Type..."
-msgstr "Lägg till en ny FAQ-typ"
-
-msgid "FAQ Infos"
-msgstr "FAQ info"
 
 msgid "Creation Time"
 msgstr "Skapelsedatum"
@@ -117,8 +82,19 @@ msgstr "Skapad av"
 msgid "No answer yet"
 msgstr "Inget svar ännu"
 
-msgid "Search FAQ"
-msgstr "Sök FAQ"
+msgid "FAQ id"
+msgstr "FAQ id"
+
+msgid "Add a new FAQ Status..."
+msgstr "Lägg till en ny FAQ-status"
+
+msgid "Add a new FAQ Type..."
+msgstr "Lägg till en ny FAQ-typ"
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQ:er"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -130,6 +106,30 @@ msgstr "FAQ-listor"
 
 msgid "Quick Search"
 msgstr "Snabbsök"
+
+msgid "Search FAQ"
+msgstr "Sök FAQ"
+
+msgid "Find Question"
+msgstr "Hitta fråga"
+
+msgid "Search question"
+msgstr "Sök fråga"
+
+msgid "All my FAQs"
+msgstr "Alla mina FAQs"
+
+msgid "Default Favorite"
+msgstr "Standardfavorit"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Standard favoriten som är ladad i FAQ start"
+
+msgid "Default FAQ List"
+msgstr "Standard FAQ lista"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Standard FAQ lista för att skapa ny FAQ i."
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Alla FAQ:er av mina FAQ Listor"

@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,89 +14,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "All my projects"
-msgstr "All my projects"
+msgid "Manage shared project favorites"
+msgstr "Manage shared project favorites"
 
-msgid "Default Favorite"
-msgstr "Default Favorite"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "The default favorite which is loaded on Projects startup"
-
-msgid "Attendee"
-msgstr "Attendee"
-
-msgid "Role"
-msgstr "Role"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Project"
-msgstr[1] "Projects"
-
-msgid "Title"
-msgstr "Title"
-
-msgid "Number"
-msgstr "Number"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Start"
-msgstr "Start"
-
-msgid "End"
-msgstr "End"
-
-msgid "Scope"
-msgstr "Scope"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Enter description"
-msgstr "Enter description"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Please choose the Project to add the contacts to"
-
-msgid "Please select the attenders' role"
-msgstr "Please select the attenders' role"
-
-msgid "Select Project"
-msgstr "Select Project"
-
-msgid "Select Role"
-msgstr "Select Role"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Adding {0} Participants to project"
-
-msgid "Attendee Role"
-msgstr "Attendee Role"
-
-msgid "Projects"
-msgstr "Projects"
-
-msgid "All my open projects"
-msgstr "All my open projects"
-
-msgid "My projects that I'm responsible for"
-msgstr "My projects that I'm responsible for"
-
-msgid "All my open projects that I am responsible for"
-msgstr "All my open projects that I am responsible for"
-
-msgid "My waiting projects"
-msgstr "My waiting projects"
-
-msgid "My projects that are on hold"
-msgstr "My projects that are on hold"
+msgid "Create new shared project favorites"
+msgstr "Create new shared project favorites"
 
 msgid "Available Project Attendee Role"
 msgstr "Available Project Attendee Role"
@@ -148,6 +71,69 @@ msgstr "Activity"
 msgid "Contract"
 msgstr "Contract"
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Project"
+msgstr[1] "Projects"
+
+msgid "Excel current columns"
+msgstr "Excel current columns"
+
+msgid "Excel all data"
+msgstr "Excel all data"
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Please choose the Project to add the contacts to"
+
+msgid "Please select the attenders' role"
+msgstr "Please select the attenders' role"
+
+msgid "Select Project"
+msgstr "Select Project"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Select Role"
+msgstr "Select Role"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Adding {0} Participants to project"
+
+msgid "Attendee"
+msgstr "Attendee"
+
+msgid "Attendee Role"
+msgstr "Attendee Role"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "Number"
+msgstr "Number"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "End"
+msgstr "End"
+
+msgid "Scope"
+msgstr "Scope"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Enter description"
+msgstr "Enter description"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Project list"
@@ -159,14 +145,29 @@ msgstr "Name"
 msgid "Tasks"
 msgstr "Tasks"
 
-msgid "Excel current columns"
-msgstr "Excel current columns"
+msgid "All my projects"
+msgstr "All my projects"
 
-msgid "Excel all data"
-msgstr "Excel all data"
+msgid "Default Favorite"
+msgstr "Default Favorite"
 
-msgid "Manage shared project favorites"
-msgstr "Manage shared project favorites"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "The default favorite which is loaded on Projects startup"
 
-msgid "Create new shared project favorites"
-msgstr "Create new shared project favorites"
+msgid "All my open projects"
+msgstr "All my open projects"
+
+msgid "My projects that I'm responsible for"
+msgstr "My projects that I'm responsible for"
+
+msgid "All my open projects that I am responsible for"
+msgstr "All my open projects that I am responsible for"
+
+msgid "My waiting projects"
+msgstr "My waiting projects"
+
+msgid "My projects that are on hold"
+msgstr "My projects that are on hold"
+
+msgid "Projects"
+msgstr "Projects"

@@ -8,309 +8,26 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Enri Mullai <enri_mullai@albnet.net>, 2013\n"
 "Language-Team: Albanian (http://app.transifex.com/tine/groupware/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All leads"
-msgstr "Të gjithë drejtimet"
+msgid "manage shared lead folders"
+msgstr "menaxho dosjet e ndara drejtuese "
 
-msgid "Default Lead List"
-msgstr "Lista e Paracaktuar e Drejtimeve"
+msgid "Create new shared lead folders"
+msgstr "Krijo dosje drejtuese të ndara të reja"
 
-msgid "The default list for new leads"
-msgstr "Lista e paracaktuar për drejtime të reja"
+msgid "manage shared leads favorites"
+msgstr "menaxho preferencialet drejtuese të ndara"
 
-msgid "Get Notification E-mails"
-msgstr ""
-
-msgid "The level of actions you want to be notified about."
-msgstr "Niveli i veprimeve për të cilët doni të njoftoheni"
-
-msgid "Send Notifications e-mails for own actions"
-msgstr ""
-
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr ""
-
-msgid "Default Favorite"
-msgstr "Të Preferuarat e Paracaktuara"
-
-msgid "The default favorite which is loaded on crm startup"
-msgstr "Preferenca e paracaktar që ngarkohet ne fillimin e crm"
-
-msgid "New Lead"
-msgstr "Drejtim i ri"
-
-msgid "Tags"
-msgstr "Etiketime"
-
-msgid "Lead name"
-msgstr "Emri Drejtues"
-
-msgid "Responsible"
-msgstr "Përgjegjës"
-
-msgid "Partner"
-msgstr "Partner"
-
-msgid "Customer"
-msgstr "Klient"
-
-msgid "Leadstate"
-msgstr "Statusi Drejtues"
-
-msgid "Leadtype"
-msgstr "Tipi Drejtues"
-
-msgid "Leadsource"
-msgstr "Burimi Drejtues"
-
-msgid "Probability"
-msgstr "Probabiliteti"
-
-msgid "Turnover"
-msgstr "Xhiro"
-
-msgid "Estimated end"
-msgstr "Fundi i pritshëm "
-
-msgid "End"
-msgstr "Fund"
-
-msgid "Start"
-msgstr "Fillo"
-
-msgid "Probable Turnover"
-msgstr "Xhiro e mundshme"
-
-msgid "Resubmission Date"
-msgstr ""
-
-msgid "Import leads"
-msgstr ""
-
-msgid "Contact"
-msgstr "Kontakt"
-
-msgid "CRM Role"
-msgstr "Roli CRM"
-
-msgid "Tasks"
-msgstr "Detyrë"
-
-msgid "No Tasks to display"
-msgstr "Nuk ka Detyra për tu shfaqur"
-
-msgid "Summary"
-msgstr "Përmbledhje"
-
-msgid "Add a task..."
-msgstr "Shto detyrë..."
-
-msgid "Due Date"
-msgstr "Data e caktuar"
-
-msgid "Priority"
-msgstr "Prioriteti"
-
-msgid "Percent"
-msgstr "Përqind"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Organizer"
-msgstr ""
-
-#, python-brace-format
-msgid "Add new {0}"
-msgstr "Shto të ri {0}"
-
-#, python-brace-format
-msgid "Unlink {0}"
-msgstr "Ç'lidh"
-
-#, python-brace-format
-msgid "Unlink selected {0}"
-msgstr "Ç'lidh {0} të zgjedhur "
-
-#, python-brace-format
-msgid "Edit {0}"
-msgstr "Modifiko {0}"
-
-#, python-brace-format
-msgid "Edit selected {0}"
-msgstr "Modifiko {0} të zgjedhur"
-
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Ju lutem zgjidhni Drejtimin ku të shtohen kontaktet"
-
-msgid "Please select the attenders' role"
-msgstr "Ju lutem zgjidhni rolin e vijuesve"
-
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Drejtim"
-msgstr[1] "Drejtime"
-
-msgid "Select Lead"
-msgstr "Zgjidh Drejtimin"
-
-msgid "Role"
-msgstr "Roli"
-
-msgid "Select Role"
-msgstr "Zgjidh Rolin"
-
-#, python-brace-format
-msgid "Adding {0} contacts to lead"
-msgstr "Duke i shtuar drejtimit {0} kontakte"
-
-msgid "Phone"
-msgstr "Telefon"
-
-msgid "Mobile"
-msgstr "Celular"
-
-msgid "Fax"
-msgstr "Faks"
-
-msgid "E-Mail"
-msgstr "E-Postë"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "Address"
-msgstr "Adresë"
-
-msgid "Change type to Customer"
-msgstr "Ndrysho tipin Klientit"
-
-msgid "Change type to Responsible"
-msgstr "Ndysho tipin Përgjegjësit"
-
-msgid "Change type to Partner"
-msgstr "Ndrysho tipin Partnerit"
-
-msgid "Change contact type"
-msgstr "Ndrysho tipin e kontaktit"
-
-msgid "Search for Contacts to add ..."
-msgstr "Kërko Kontakte për tu shtuar"
-
-msgid "Name"
-msgstr "Emri"
-
-msgid "Data"
-msgstr "Data"
-
-msgid "Cellphone"
-msgstr "Celular"
-
-msgid "Notifications are enabled"
-msgstr ""
-
-msgid "Notifications are disabled"
-msgstr ""
-
-msgid "Send Notification?"
-msgstr ""
-
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr ""
-
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "Ju nuk keni të drejtën e ekzekutimit të aplikacionit të Detyrave ose nuk është i aktivizuar. "
-
-msgid "Products"
-msgstr "Produkte"
-
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "Ju nuk keni të drejtën e ekzekutimit të aplikacionit të Shitjeve ose nuk është i aktivizuar."
-
-msgid "Enter lead name"
-msgstr ""
-
-msgid "Expected turnover"
-msgstr "Xhiroja e pritshme"
-
-msgid "Description"
-msgstr "Përshkrim"
-
-msgid "Enter description"
-msgstr "Vendosni përshkrimin"
-
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "listë drejtimi"
-msgstr[1] "lista drejtimi"
-
-msgid "lead lists"
-msgstr "lista drejtimi"
-
-msgid "Quick Search"
-msgstr "Kërkim i Shpejtë"
-
-msgid "Last Modified Time"
-msgstr "Koha e ndryshimit të fundit"
-
-msgid "Last Modified By"
-msgstr "Ndryshimi i fundit nga"
-
-msgid "Creation Time"
-msgstr "Koha e krijimit"
-
-msgid "Created By"
-msgstr "Krijuar nga"
-
-msgid "X Lead"
-msgstr ""
-
-msgid "read-only"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "Archived"
-msgstr ""
-
-msgid "Product"
-msgstr "Produkt"
-
-msgid "Price"
-msgstr "Çmim"
-
-msgid "Quantity"
-msgstr "Sasi"
-
-msgid "Search for Products to add ..."
-msgstr "Kërko për produkte për të shtuar... "
-
-msgid "All leads I have read grants for"
-msgstr "Të gjithë drejtimet qe kam të drejtë leximi"
-
-msgid "Last modified by me"
-msgstr "E fundit e ndryshuar nga Unë"
-
-msgid "All leads that I have last modified"
-msgstr "Të gjithë drejtimet qe unë kam ndryshuar së fundmi"
-
-msgid "My leads"
-msgstr "Drejtimet e mia"
-
-msgid "All leads that I am responsible for"
-msgstr "Të gjithe Drejtimet që unë jam përgjegjës"
-
-msgid "Leads with overdue tasks"
-msgstr "Drejtime me detyra të vonuara"
+msgid "Create or update shared leads favorites"
+msgstr "Krijo ose përditëso preferencialet drejtuese të ndara"
 
 msgid "controls sending notification of Leads"
 msgstr ""
@@ -357,6 +74,9 @@ msgstr "i pranuar"
 msgid "lost"
 msgstr "humbur"
 
+msgid "read-only"
+msgstr ""
+
 msgid "Lead Sources Available"
 msgstr ""
 
@@ -368,6 +88,12 @@ msgstr ""
 
 msgid "Possible lead types."
 msgstr ""
+
+msgid "Customer"
+msgstr "Klient"
+
+msgid "Partner"
+msgstr "Partner"
 
 msgid "Reseller"
 msgstr "RiShitës"
@@ -405,11 +131,26 @@ msgstr ""
 msgid "State"
 msgstr "Gjendja"
 
+msgid "Role"
+msgstr "Roli"
+
 msgid "Source"
 msgstr "Burimi"
 
+msgid "Start"
+msgstr "Fillo"
+
 msgid "Scheduled end"
 msgstr "Fundi i planifikuar"
+
+msgid "End"
+msgstr "Fund"
+
+msgid "Turnover"
+msgstr "Xhiro"
+
+msgid "Probability"
+msgstr "Probabiliteti"
 
 msgid "Folder"
 msgstr "Dosje"
@@ -423,6 +164,9 @@ msgstr "Përditësimet dështuan"
 #, python-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
+
+msgid "Tags"
+msgstr "Etiketime"
 
 #, python-format
 msgid "Lead %s has been changed"
@@ -439,14 +183,20 @@ msgstr "Drejtimi %s u krijua"
 msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
 msgstr ""
 
-msgid "GENDER_Lead"
-msgstr ""
-
-msgid "Show Closed"
+msgid "CSV all data"
 msgstr ""
 
 msgid "Lead Data"
 msgstr "Të dhëna Drejtuese"
+
+msgid "Leadstate"
+msgstr "Statusi Drejtues"
+
+msgid "Leadtype"
+msgstr "Tipi Drejtues"
+
+msgid "Leadsource"
+msgstr "Burimi Drejtues"
 
 msgid "End Scheduled"
 msgstr "Përfundo planifikimet"
@@ -454,11 +204,26 @@ msgstr "Përfundo planifikimet"
 msgid "Contacts"
 msgstr "Kontakte"
 
+msgid "Address"
+msgstr "Adresë"
+
 msgid "Telephone"
 msgstr "Telefon"
 
 msgid "Email"
 msgstr "E-Postë"
+
+msgid "Tasks"
+msgstr "Detyrë"
+
+msgid "Due Date"
+msgstr "Data e caktuar"
+
+msgid "Priority"
+msgstr "Prioriteti"
+
+msgid "Products"
+msgstr "Produkte"
 
 msgid "low"
 msgstr "ulët"
@@ -472,18 +237,6 @@ msgstr "lartë"
 msgid "urgent"
 msgstr "urgjent"
 
-msgid "CSV all data"
-msgstr ""
-
-msgid "Lead CSV import"
-msgstr ""
-
-msgid "Import list (###CURRENTDATE###)"
-msgstr ""
-
-msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
-
 msgid "Edit new lead"
 msgstr ""
 
@@ -495,14 +248,261 @@ msgstr ""
 msgid "%s new leads have been imported"
 msgstr ""
 
-msgid "manage shared lead folders"
-msgstr "menaxho dosjet e ndara drejtuese "
+msgid "Lead CSV import"
+msgstr ""
 
-msgid "Create new shared lead folders"
-msgstr "Krijo dosje drejtuese të ndara të reja"
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
 
-msgid "manage shared leads favorites"
-msgstr "menaxho preferencialet drejtuese të ndara"
+msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
 
-msgid "Create or update shared leads favorites"
-msgstr "Krijo ose përditëso preferencialet drejtuese të ndara"
+msgid "Please choose the Lead to add the contacts to"
+msgstr "Ju lutem zgjidhni Drejtimin ku të shtohen kontaktet"
+
+msgid "Please select the attenders' role"
+msgstr "Ju lutem zgjidhni rolin e vijuesve"
+
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Drejtim"
+msgstr[1] "Drejtime"
+
+msgid "Select Lead"
+msgstr "Zgjidh Drejtimin"
+
+msgid "Select Role"
+msgstr "Zgjidh Rolin"
+
+#, python-brace-format
+msgid "Adding {0} contacts to lead"
+msgstr "Duke i shtuar drejtimit {0} kontakte"
+
+msgid "Change type to Customer"
+msgstr "Ndrysho tipin Klientit"
+
+msgid "Responsible"
+msgstr "Përgjegjës"
+
+msgid "Change type to Responsible"
+msgstr "Ndysho tipin Përgjegjësit"
+
+msgid "Change type to Partner"
+msgstr "Ndrysho tipin Partnerit"
+
+msgid "Change contact type"
+msgstr "Ndrysho tipin e kontaktit"
+
+msgid "Search for Contacts to add ..."
+msgstr "Kërko Kontakte për tu shtuar"
+
+msgid "Name"
+msgstr "Emri"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Cellphone"
+msgstr "Celular"
+
+msgid "New Lead"
+msgstr "Drejtim i ri"
+
+msgid "Notifications are enabled"
+msgstr ""
+
+msgid "Notifications are disabled"
+msgstr ""
+
+msgid "Send Notification?"
+msgstr ""
+
+msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgstr ""
+
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "Ju nuk keni të drejtën e ekzekutimit të aplikacionit të Detyrave ose nuk është i aktivizuar. "
+
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "Ju nuk keni të drejtën e ekzekutimit të aplikacionit të Shitjeve ose nuk është i aktivizuar."
+
+msgid "Enter lead name"
+msgstr ""
+
+msgid "Expected turnover"
+msgstr "Xhiroja e pritshme"
+
+msgid "Resubmission Date"
+msgstr ""
+
+msgid "Estimated end"
+msgstr "Fundi i pritshëm "
+
+msgid "Description"
+msgstr "Përshkrim"
+
+msgid "Enter description"
+msgstr "Vendosni përshkrimin"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "CRM Role"
+msgstr "Roli CRM"
+
+msgid "Mobile"
+msgstr "Celular"
+
+msgid "Fax"
+msgstr "Faks"
+
+msgid "E-Mail"
+msgstr "E-Postë"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Lead name"
+msgstr "Emri Drejtues"
+
+msgid "Probable Turnover"
+msgstr "Xhiro e mundshme"
+
+msgid "Import leads"
+msgstr ""
+
+#, python-brace-format
+msgid "Add new {0}"
+msgstr "Shto të ri {0}"
+
+#, python-brace-format
+msgid "Unlink {0}"
+msgstr "Ç'lidh"
+
+#, python-brace-format
+msgid "Unlink selected {0}"
+msgstr "Ç'lidh {0} të zgjedhur "
+
+#, python-brace-format
+msgid "Edit {0}"
+msgstr "Modifiko {0}"
+
+#, python-brace-format
+msgid "Edit selected {0}"
+msgstr "Modifiko {0} të zgjedhur"
+
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "listë drejtimi"
+msgstr[1] "lista drejtimi"
+
+msgid "lead lists"
+msgstr "lista drejtimi"
+
+msgid "Quick Search"
+msgstr "Kërkim i Shpejtë"
+
+msgid "Last Modified Time"
+msgstr "Koha e ndryshimit të fundit"
+
+msgid "Last Modified By"
+msgstr "Ndryshimi i fundit nga"
+
+msgid "Creation Time"
+msgstr "Koha e krijimit"
+
+msgid "Created By"
+msgstr "Krijuar nga"
+
+msgid "X Lead"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "Archived"
+msgstr ""
+
+msgid "Product"
+msgstr "Produkt"
+
+msgid "Price"
+msgstr "Çmim"
+
+msgid "Quantity"
+msgstr "Sasi"
+
+msgid "Search for Products to add ..."
+msgstr "Kërko për produkte për të shtuar... "
+
+msgid "No Tasks to display"
+msgstr "Nuk ka Detyra për tu shfaqur"
+
+msgid "Summary"
+msgstr "Përmbledhje"
+
+msgid "Add a task..."
+msgstr "Shto detyrë..."
+
+msgid "Percent"
+msgstr "Përqind"
+
+msgid "Organizer"
+msgstr ""
+
+msgid "GENDER_Lead"
+msgstr ""
+
+msgid "Show Closed"
+msgstr ""
+
+msgid "All leads"
+msgstr "Të gjithë drejtimet"
+
+msgid "Default Lead List"
+msgstr "Lista e Paracaktuar e Drejtimeve"
+
+msgid "The default list for new leads"
+msgstr "Lista e paracaktuar për drejtime të reja"
+
+msgid "Get Notification E-mails"
+msgstr ""
+
+msgid "The level of actions you want to be notified about."
+msgstr "Niveli i veprimeve për të cilët doni të njoftoheni"
+
+msgid "Send Notifications e-mails for own actions"
+msgstr ""
+
+msgid "Get notifications e-mails for actions you did yourself"
+msgstr ""
+
+msgid "Default Favorite"
+msgstr "Të Preferuarat e Paracaktuara"
+
+msgid "The default favorite which is loaded on crm startup"
+msgstr "Preferenca e paracaktar që ngarkohet ne fillimin e crm"
+
+msgid "All leads I have read grants for"
+msgstr "Të gjithë drejtimet qe kam të drejtë leximi"
+
+msgid "Last modified by me"
+msgstr "E fundit e ndryshuar nga Unë"
+
+msgid "All leads that I have last modified"
+msgstr "Të gjithë drejtimet qe unë kam ndryshuar së fundmi"
+
+msgid "My leads"
+msgstr "Drejtimet e mia"
+
+msgid "All leads that I am responsible for"
+msgstr "Të gjithe Drejtimet që unë jam përgjegjës"
+
+msgid "Leads with overdue tasks"
+msgstr "Drejtime me detyra të vonuara"

@@ -9,10 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Juan Fortuna <jfortuna@antel.com.uy>, 2014\n"
 "Language-Team: Spanish (http://app.transifex.com/tine/groupware/language/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -33,20 +33,11 @@ msgstr "Interna"
 msgid "Public"
 msgstr "Pública"
 
-msgid "All my FAQs"
-msgstr "Todas mis FAQs"
-
-msgid "Default Favorite"
-msgstr "Favorito por defecto"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "El favorito por defecto se carga al iniciar las FAQ"
-
-msgid "Default FAQ List"
-msgstr "Lista de FAQ por defecto"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Lista de FAQs por defecto para crear nuevas FAQ en élla."
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ estado"
+msgstr[1] "FAQs Estados"
+msgstr[2] "FAQs Estados"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
@@ -54,14 +45,8 @@ msgstr[0] "Tipo de FAQ"
 msgstr[1] "Tipos de FAQ's"
 msgstr[2] "Tipos de FAQ's"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ estado"
-msgstr[1] "FAQs Estados"
-msgstr[2] "FAQs Estados"
-
-msgid "Add a new FAQ Status..."
-msgstr "Añadir un Nuevo Estado a las FAQ"
+msgid "Defaults"
+msgstr "Por defecto"
 
 msgid "Question"
 msgstr "Pregunta"
@@ -81,32 +66,11 @@ msgstr "Tipo"
 msgid "Status"
 msgstr "Estado"
 
-msgid "Defaults"
-msgstr "Por defecto"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQs"
-msgstr[1] "FAQs"
-msgstr[2] "FAQs"
-
-msgid "Find Question"
-msgstr "Encontrar pregunta"
-
-msgid "Search question"
-msgstr "Buscar pregunta"
-
-msgid "FAQ id"
-msgstr "FAQ id"
+msgid "FAQ Infos"
+msgstr "Información de las FAQ"
 
 msgid "Tags"
 msgstr "Etiquetas"
-
-msgid "Add a new FAQ Type..."
-msgstr "Añadir un Nuevo Tipo a las FAQ"
-
-msgid "FAQ Infos"
-msgstr "Información de las FAQ"
 
 msgid "Creation Time"
 msgstr "Fecha de Creación"
@@ -117,8 +81,20 @@ msgstr "Creada Por"
 msgid "No answer yet"
 msgstr "Sin respuestas todavia"
 
-msgid "Search FAQ"
-msgstr "Buscar FAQ"
+msgid "FAQ id"
+msgstr "FAQ id"
+
+msgid "Add a new FAQ Status..."
+msgstr "Añadir un Nuevo Estado a las FAQ"
+
+msgid "Add a new FAQ Type..."
+msgstr "Añadir un Nuevo Tipo a las FAQ"
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQs"
+msgstr[1] "FAQs"
+msgstr[2] "FAQs"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -131,6 +107,30 @@ msgstr "Listas de FAQs"
 
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
+
+msgid "Search FAQ"
+msgstr "Buscar FAQ"
+
+msgid "Find Question"
+msgstr "Encontrar pregunta"
+
+msgid "Search question"
+msgstr "Buscar pregunta"
+
+msgid "All my FAQs"
+msgstr "Todas mis FAQs"
+
+msgid "Default Favorite"
+msgstr "Favorito por defecto"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "El favorito por defecto se carga al iniciar las FAQ"
+
+msgid "Default FAQ List"
+msgstr "Lista de FAQ por defecto"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Lista de FAQs por defecto para crear nuevas FAQ en élla."
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Todas mis FAQs en mis listas de FAQ"

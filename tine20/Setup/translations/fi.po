@@ -18,847 +18,609 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:762
 msgid "Maximum number of users reached. "
 msgstr ""
 
-#: Controller.php:765
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr ""
 
-#: js/TermsPanel.js:32
-msgid "I have read the license agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:41
-msgid "License Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:60
-msgid "I have read the privacy agreement and accept it"
-msgstr ""
-
-#: js/TermsPanel.js:69
-msgid "Privacy Agreement"
-msgstr ""
-
-#: js/TermsPanel.js:86
-msgid "Accept Terms and Conditions"
-msgstr "Hyväksy käyttöehdot ja säännöt"
-
-#: js/LicensePanel.js:70
-msgid "Delete current Subscription"
-msgstr ""
-
-#: js/LicensePanel.js:141
-msgid "Your Subscription is not valid."
-msgstr ""
-
-#: js/LicensePanel.js:194
-msgid "Subscription Configuration"
-msgstr ""
-
-#: js/LicensePanel.js:203
-msgid "Upload from disk"
-msgstr ""
-
-#: js/LicensePanel.js:205
-msgid "Select file containing your Subscription key"
-msgstr ""
-
-#: js/LicensePanel.js:216
-msgid "No valid Subscription"
-msgstr ""
-
-#: js/LicensePanel.js:218
-msgid "Contract ID"
-msgstr ""
-
-#: js/LicensePanel.js:223
-msgid "Organization"
-msgstr ""
-
-#: js/LicensePanel.js:228
-msgid "Activation Key"
-msgstr ""
-
-#: js/LicensePanel.js:233
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-#: js/LicensePanel.js:238
-msgid "Valid from"
-msgstr ""
-
-#: js/LicensePanel.js:244
-msgid "Valid to"
-msgstr ""
-
-#: js/LicensePanel.js:261
-msgid "Subscription Information"
-msgstr ""
-
-#: js/EmailPanel.js:146 js/EmailPanel.js:480 js/AuthenticationPanel.js:203
-#: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
-msgid "Backend"
-msgstr ""
-
-#: js/EmailPanel.js:150
-msgid "Standard IMAP"
-msgstr "Standardi IMAP"
-
-#: js/EmailPanel.js:161
-msgid "Standard SMTP"
-msgstr "Standardi SMTP"
-
-#: js/EmailPanel.js:182
-msgid "Imap"
-msgstr "Imap"
-
-#: js/EmailPanel.js:190 js/EmailPanel.js:312 js/EmailPanel.js:445
-#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
-#: js/ConfigManagerPanel.js:325 js/ConfigManagerPanel.js:345
-#: js/ConfigManagerPanel.js:386 js/ConfigManagerPanel.js:445
-msgid "Hostname"
-msgstr ""
-
-#: js/EmailPanel.js:194 js/ConfigManagerPanel.js:203
-msgid "Username"
-msgstr ""
-
-#: js/EmailPanel.js:198 js/AuthenticationPanel.js:317
-#: js/AuthenticationPanel.js:609 js/ConfigManagerPanel.js:212
-#: js/ConfigManagerPanel.js:243
-msgid "Password"
-msgstr "Salasana"
-
-#: js/EmailPanel.js:204 js/EmailPanel.js:316 js/EmailPanel.js:449
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
-#: js/AuthenticationPanel.js:633 js/ConfigManagerPanel.js:232
-#: js/ConfigManagerPanel.js:329 js/ConfigManagerPanel.js:349
-#: js/ConfigManagerPanel.js:390 js/ConfigManagerPanel.js:449
-msgid "Port"
-msgstr "Portti"
-
-#: js/EmailPanel.js:208 js/EmailPanel.js:320 js/EmailPanel.js:453
-#: js/AuthenticationPanel.js:387
-msgid "Secure Connection"
-msgstr ""
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:334
-#: js/EmailPanel.js:456 js/AuthenticationPanel.js:389
-msgid "None"
-msgstr "Ei mitään"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:389
-msgid "TLS"
-msgstr ""
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
-#: js/AuthenticationPanel.js:627
-msgid "SSL"
-msgstr ""
-
-#: js/EmailPanel.js:214 js/EmailPanel.js:326
-msgid "Verify peer Certificate"
-msgstr ""
-
-#: js/EmailPanel.js:220
-msgid "Use system account"
-msgstr ""
-
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
-msgid "No"
-msgstr "Ei"
-
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
-msgid "Yes"
-msgstr "Kyllä"
-
-#: js/EmailPanel.js:226 js/AuthenticationPanel.js:394
-msgid "Append domain to login name"
-msgstr ""
-
-#: js/EmailPanel.js:231
-msgid "Use email address as login name"
-msgstr ""
-
-#: js/EmailPanel.js:267
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:270
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:276
-msgid "Use proxy auth"
-msgstr ""
-
-#: js/EmailPanel.js:304
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:331
-msgid "Authentication"
-msgstr ""
-
-#: js/EmailPanel.js:334
-msgid "Login"
-msgstr ""
-
-#: js/EmailPanel.js:334
-msgid "Plain"
-msgstr ""
-
-#: js/EmailPanel.js:338
-msgid "Primary Domain"
-msgstr ""
-
-#: js/EmailPanel.js:342
-msgid "Secondary Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:346
-msgid "Aditional Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:350
-msgid "Notifications service address"
-msgstr ""
-
-#: js/EmailPanel.js:354
-msgid "Notification Username"
-msgstr ""
-
-#: js/EmailPanel.js:358
-msgid "Notification Password"
-msgstr ""
-
-#: js/EmailPanel.js:363
-msgid "Notifications local client (hostname or IP address)"
-msgstr ""
-
-#: js/EmailPanel.js:439
-msgid "SIEVE"
-msgstr ""
-
-#: js/EmailPanel.js:507
-msgid "MySql Hostname"
-msgstr ""
-
-#: js/EmailPanel.js:510
-msgid "MySql Database"
-msgstr "MySql Tietokanta"
-
-#: js/EmailPanel.js:513
-msgid "MySql User"
-msgstr "MySql Käyttäjätunnus"
-
-#: js/EmailPanel.js:516
-msgid "MySql Password"
-msgstr "MySql Salasana"
-
-#: js/EmailPanel.js:521
-msgid "MySql Port"
-msgstr "MySql Portti"
-
-#: js/EmailPanel.js:537
-msgid "User or UID"
-msgstr ""
-
-#: js/EmailPanel.js:540
-msgid "Group or GID"
-msgstr ""
-
-#: js/EmailPanel.js:543
-msgid "Home Template"
-msgstr ""
-
-#: js/EmailPanel.js:545
-msgid "Password Scheme"
-msgstr ""
-
-#: js/EmailPanel.js:556
-msgid "PLAIN-MD5"
-msgstr ""
-
-#: js/EmailPanel.js:557
-msgid "MD5-CRYPT"
-msgstr ""
-
-#: js/EmailPanel.js:558
-msgid "SHA1"
-msgstr ""
-
-#: js/EmailPanel.js:559
-msgid "SHA256"
-msgstr ""
-
-#: js/EmailPanel.js:560
-msgid "SSHA256"
-msgstr ""
-
-#: js/EmailPanel.js:561
-msgid "SHA512"
-msgstr ""
-
-#: js/EmailPanel.js:562
-msgid "SSHA512"
-msgstr ""
-
-#: js/EmailPanel.js:563
-msgid "PLAIN"
-msgstr ""
-
-#: js/TreePanel.js:53
-msgid "Terms and Conditions"
-msgstr ""
-
-#: js/TreePanel.js:58
-msgid "Setup Checks"
-msgstr ""
-
-#: js/TreePanel.js:64
-msgid "Config Manager"
-msgstr ""
-
-#: js/TreePanel.js:70
-msgid "Authentication/Accounts"
-msgstr ""
-
-#: js/TreePanel.js:76
-msgid "Email"
-msgstr ""
-
-#: js/TreePanel.js:82
-msgid "Application Manager"
-msgstr ""
-
-#: js/TreePanel.js:88
-msgid "Subscription"
-msgstr ""
-
-#: js/init.js:76
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
 msgid "Name"
 msgstr "Nimi"
 
-#: js/ApplicationGridPanel.js:64
 msgid "Enabled"
 msgstr "Käytössä"
 
-#: js/ApplicationGridPanel.js:65
 msgid "Order"
 msgstr "Järjestys"
 
-#: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
 msgstr "Asennettu versio"
 
-#: js/ApplicationGridPanel.js:67
 msgid "Available Version"
 msgstr "Saatavilla oleva versio"
 
-#: js/ApplicationGridPanel.js:68
 msgid "Status"
 msgstr "Tila"
 
-#: js/ApplicationGridPanel.js:69
 msgid "Depends on"
 msgstr "Riippuu"
 
-#: js/ApplicationGridPanel.js:79 js/EnvCheckGridPanel.js:205
 msgid "Install application"
 msgstr "Asenna ohjelma"
 
-#: js/ApplicationGridPanel.js:88
 msgid "Uninstall application"
 msgstr "Poista ohjelma"
 
-#: js/ApplicationGridPanel.js:97
 msgid "Update applications"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:105
 #, python-brace-format
 msgid "Go to {0} login"
 msgstr "Siirry {0} kirjautumissivulle"
 
-#: js/ApplicationGridPanel.js:183
 msgid "uninstall"
 msgstr "poista asennus"
 
-#: js/ApplicationGridPanel.js:183
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Haluatko poistaa ohjelmat?"
 
-#: js/ApplicationGridPanel.js:246
 msgid "This may take a while"
 msgstr "Tämä voi kestää hetken"
 
-#: js/ApplicationGridPanel.js:280
 msgid "Dependency Violation"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:289
 msgid "CLI Required"
 msgstr ""
 
-#: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Poista kaikki käyttäjät ja ryhmät"
 
-#: js/AuthenticationPanel.js:126
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr ""
 
-#: js/AuthenticationPanel.js:204
+msgid "Backend"
+msgstr ""
+
 msgid "TLS client certificate"
 msgstr ""
 
-#: js/AuthenticationPanel.js:232
 msgid "Initial Admin User"
 msgstr "Alustava ylläpitäjä"
 
-#: js/AuthenticationPanel.js:244
 msgid "Initial admin login name"
 msgstr "Alustava ylläpitäjän kirjautumisnimi"
 
-#: js/AuthenticationPanel.js:249
 msgid "Initial admin Password"
 msgstr "Alustava ylläpitäjän salasana"
 
-#: js/AuthenticationPanel.js:253
 msgid "Password confirmation"
 msgstr "Salasanan vahvistus"
 
-#: js/AuthenticationPanel.js:261
 msgid "Authentication provider"
 msgstr ""
 
-#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:352
-#: js/AuthenticationPanel.js:414
 msgid "Try to split username"
 msgstr ""
 
-#: js/AuthenticationPanel.js:288 js/AuthenticationPanel.js:358
+msgid "Yes"
+msgstr "Kyllä"
+
+msgid "No"
+msgstr "Ei"
+
 msgid "Account canonical form"
 msgstr ""
 
-#: js/AuthenticationPanel.js:294 js/AuthenticationPanel.js:364
 msgid "Account domain name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:297 js/AuthenticationPanel.js:367
 msgid "Account domain short name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:311 js/AuthenticationPanel.js:603
 msgid "Host"
 msgstr "Host"
 
-#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:606
 msgid "Login name"
 msgstr "Kirjautumisnimi"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:615
+msgid "Password"
+msgstr "Salasana"
+
 msgid "Bind requires DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:621
 msgid "Start TLS"
 msgstr ""
 
-#: js/AuthenticationPanel.js:345
+msgid "SSL"
+msgstr ""
+
+msgid "Port"
+msgstr "Portti"
+
 msgid "Base DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:348
 msgid "Search filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:407
+msgid "Hostname"
+msgstr ""
+
+msgid "Secure Connection"
+msgstr ""
+
+msgid "None"
+msgstr "Ei mitään"
+
+msgid "TLS"
+msgstr ""
+
+msgid "Append domain to login name"
+msgstr ""
+
 msgid "Certificate validation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:420
 msgid "CA file"
 msgstr ""
 
-#: js/AuthenticationPanel.js:423
 msgid "CRL directory"
 msgstr ""
 
-#: js/AuthenticationPanel.js:433
 msgid "Accounts storage"
 msgstr ""
 
-#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:721
 msgid "Default user group name"
 msgstr "Oletus käyttäjän ryhmän nimi"
 
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:724
 msgid "Default admin group name"
 msgstr "Oletus ylläpitäjän ryhmän nimi"
 
-#: js/AuthenticationPanel.js:470
 msgid "Login panel"
 msgstr ""
 
-#: js/AuthenticationPanel.js:485
 msgid "Reuse last username logged"
 msgstr ""
 
-#: js/AuthenticationPanel.js:494
 msgid "Password Settings"
 msgstr "Salasana asetukset"
 
-#: js/AuthenticationPanel.js:509
 msgid "User can change password"
 msgstr "Käyttäjä voi vaihtaa salasanan"
 
-#: js/AuthenticationPanel.js:515
 msgid "Enable password policy"
 msgstr "Aktivoi salasana määritykset"
 
-#: js/AuthenticationPanel.js:521
 msgid "Only ASCII"
 msgstr "Vain ASCII"
 
-#: js/AuthenticationPanel.js:526
 msgid "Minimum length"
 msgstr "Minimi pituus"
 
-#: js/AuthenticationPanel.js:529
 msgid "Minimum word chars"
 msgstr "Minimimäärä pieniä kirjaimia"
 
-#: js/AuthenticationPanel.js:532
 msgid "Minimum uppercase chars"
 msgstr "Minimimäärä isoja kirjaimia"
 
-#: js/AuthenticationPanel.js:535
 msgid "Minimum special chars"
 msgstr "Minimimäärä erikoismerkkejä"
 
-#: js/AuthenticationPanel.js:538
 msgid "Minimum numbers"
 msgstr "Minimimäärä numeroita"
 
-#: js/AuthenticationPanel.js:541
 msgid "Change password after ... days"
 msgstr ""
 
-#: js/AuthenticationPanel.js:550
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:559
 msgid "Redirect Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:567
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:571
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr ""
 
-#: js/AuthenticationPanel.js:577
 msgid "Redirect to referring site, if exists"
 msgstr ""
 
-#: js/AuthenticationPanel.js:638
 msgid "Password encoding"
 msgstr ""
 
-#: js/AuthenticationPanel.js:640
 msgid "des"
 msgstr ""
 
-#: js/AuthenticationPanel.js:641
 msgid "crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:642
 msgid "blowfish_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:643
 msgid "md5_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:644
 msgid "ext_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:645
 msgid "md5"
 msgstr ""
 
-#: js/AuthenticationPanel.js:646
 msgid "smd5"
 msgstr ""
 
-#: js/AuthenticationPanel.js:647
 msgid "sha"
 msgstr ""
 
-#: js/AuthenticationPanel.js:648
 msgid "ssha"
 msgstr ""
 
-#: js/AuthenticationPanel.js:649
 msgid "ntpassword"
 msgstr ""
 
-#: js/AuthenticationPanel.js:650
 msgid "plain"
 msgstr ""
 
-#: js/AuthenticationPanel.js:656
 msgid "User DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:659
 msgid "User Filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:662
 msgid "E-Mail Attribute"
 msgstr ""
 
-#: js/AuthenticationPanel.js:667
 msgid "Write Password to SQL backend"
 msgstr ""
 
-#: js/AuthenticationPanel.js:673
 msgid "User Search Scope"
 msgstr ""
 
-#: js/AuthenticationPanel.js:679
 msgid "Groups DN"
 msgstr ""
 
-#: js/AuthenticationPanel.js:682
 msgid "Group Filter"
 msgstr ""
 
-#: js/AuthenticationPanel.js:686
 msgid "Group Search Scope"
 msgstr ""
 
-#: js/AuthenticationPanel.js:692
 msgid "Use Rfc 2307 bis"
 msgstr ""
 
-#: js/AuthenticationPanel.js:692
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-#: js/AuthenticationPanel.js:698
 msgid "Min User Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:701
 msgid "Max User Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:704
 msgid "Min Group Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:707
 msgid "Max Group Id"
 msgstr ""
 
-#: js/AuthenticationPanel.js:711
 msgid "Group UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:716
 msgid "User UUID Attribute name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:728
 msgid "Readonly access"
 msgstr ""
 
-#: js/AuthenticationPanel.js:742
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:744 js/ConfigManagerPanel.js:507
 msgid "Save config"
 msgstr ""
 
-#: js/AuthenticationPanel.js:769
 msgid "Passwords don't match"
 msgstr ""
 
-#: js/AuthenticationPanel.js:782 js/AuthenticationPanel.js:789
-#: js/AuthenticationPanel.js:793 js/AuthenticationPanel.js:805
-#: js/AuthenticationPanel.js:816
 msgid "Should not be empty"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:89
+msgid "File"
+msgstr ""
+
+msgid "Setup Authentication"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Database"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Prefix"
+msgstr ""
+
+msgid "Logging"
+msgstr ""
+
+msgid "Filename"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Caching"
+msgstr ""
+
+msgid "Lifetime (seconds)"
+msgstr ""
+
+msgid "Path"
+msgstr "Polku"
+
+msgid "Queue"
+msgstr ""
+
+msgid "Session"
+msgstr "Sessio"
+
+msgid "Temporary files"
+msgstr ""
+
+msgid "Temporary Files Path"
+msgstr ""
+
+msgid "Filestore directory"
+msgstr ""
+
+msgid "Filestore Path"
+msgstr ""
+
+msgid "Addressbook Map panel"
+msgstr ""
+
+msgid "Map panel"
+msgstr ""
+
+msgid "disabled"
+msgstr "pois käytöstä"
+
+msgid "enabled"
+msgstr "ei käytössä"
+
+msgid "Config file is not writable"
+msgstr "Config tiedostoon ei voida kirjoittaa"
+
+msgid "Download config file"
+msgstr "Lataa config tiedosto"
+
+#, python-brace-format
+msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgstr ""
+
+msgid "Standard IMAP"
+msgstr "Standardi IMAP"
+
+msgid "Standard SMTP"
+msgstr "Standardi SMTP"
+
+msgid "Imap"
+msgstr "Imap"
+
+msgid "Verify peer Certificate"
+msgstr ""
+
+msgid "Use system account"
+msgstr ""
+
+msgid "Use email address as login name"
+msgstr ""
+
+msgid "Cyrus Admin"
+msgstr ""
+
+msgid "Cyrus Admin Password"
+msgstr ""
+
+msgid "Use proxy auth"
+msgstr ""
+
+msgid "Smtp"
+msgstr "Smtp"
+
+msgid "Authentication"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Plain"
+msgstr ""
+
+msgid "Primary Domain"
+msgstr ""
+
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+msgid "Aditional Domains (comma separated)"
+msgstr ""
+
+msgid "Notifications service address"
+msgstr ""
+
+msgid "Notification Username"
+msgstr ""
+
+msgid "Notification Password"
+msgstr ""
+
+msgid "Notifications local client (hostname or IP address)"
+msgstr ""
+
+msgid "SIEVE"
+msgstr ""
+
+msgid "MySql Hostname"
+msgstr ""
+
+msgid "MySql Database"
+msgstr "MySql Tietokanta"
+
+msgid "MySql User"
+msgstr "MySql Käyttäjätunnus"
+
+msgid "MySql Password"
+msgstr "MySql Salasana"
+
+msgid "MySql Port"
+msgstr "MySql Portti"
+
+msgid "User or UID"
+msgstr ""
+
+msgid "Group or GID"
+msgstr ""
+
+msgid "Home Template"
+msgstr ""
+
+msgid "Password Scheme"
+msgstr ""
+
+msgid "PLAIN-MD5"
+msgstr ""
+
+msgid "MD5-CRYPT"
+msgstr ""
+
+msgid "SHA1"
+msgstr ""
+
+msgid "SHA256"
+msgstr ""
+
+msgid "SSHA256"
+msgstr ""
+
+msgid "SHA512"
+msgstr ""
+
+msgid "SSHA512"
+msgstr ""
+
+msgid "PLAIN"
+msgstr ""
+
 msgid "Performing Environment Checks..."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:130
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:160
 msgid "Check"
 msgstr "Tarkista"
 
-#: js/EnvCheckGridPanel.js:161
 msgid "Result"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:162
 msgid "Message"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:181
 msgid "Run setup tests"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:190
 msgid "Ignore setup tests"
 msgstr ""
 
-#: js/Model.js:33
+msgid "Setup"
+msgstr ""
+
+msgid "Delete current Subscription"
+msgstr ""
+
+msgid "Your Subscription is not valid."
+msgstr ""
+
+msgid "Subscription Configuration"
+msgstr ""
+
+msgid "Upload from disk"
+msgstr ""
+
+msgid "Select file containing your Subscription key"
+msgstr ""
+
+msgid "No valid Subscription"
+msgstr ""
+
+msgid "Contract ID"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Subscription Information"
+msgstr ""
+
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
+msgid "I have read the license agreement and accept it"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:196
-msgid "Setup Authentication"
+msgid "License Agreement"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:217 js/ConfigManagerPanel.js:235
-msgid "Database"
+msgid "I have read the privacy agreement and accept it"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:239
-msgid "User"
+msgid "Privacy Agreement"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:248
-msgid "Prefix"
+msgid "Accept Terms and Conditions"
+msgstr "Hyväksy käyttöehdot ja säännöt"
+
+msgid "Terms and Conditions"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:252
-msgid "Logging"
+msgid "Setup Checks"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:262
-msgid "Filename"
+msgid "Config Manager"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:265
-msgid "Priority"
+msgid "Authentication/Accounts"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:278
-msgid "Caching"
+msgid "Email"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:289 js/ConfigManagerPanel.js:406
-msgid "Lifetime (seconds)"
+msgid "Application Manager"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:312 js/ConfigManagerPanel.js:431
-msgid "Path"
-msgstr "Polku"
-
-#: js/ConfigManagerPanel.js:357
-msgid "Queue"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:398
-msgid "Session"
-msgstr "Sessio"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary files"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:465
-msgid "Temporary Files Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore directory"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:478
-msgid "Filestore Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:483
-msgid "Addressbook Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:491
-msgid "Map panel"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:493
-msgid "disabled"
-msgstr "pois käytöstä"
-
-#: js/ConfigManagerPanel.js:493
-msgid "enabled"
-msgstr "ei käytössä"
-
-#: js/ConfigManagerPanel.js:505
-msgid "Config file is not writable"
-msgstr "Config tiedostoon ei voida kirjoittaa"
-
-#: js/ConfigManagerPanel.js:524
-msgid "Download config file"
-msgstr "Lataa config tiedosto"
-
-#: js/ConfigManagerPanel.js:565
-#, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid "Subscription"
 msgstr ""
 
 #~ msgid "Update application"

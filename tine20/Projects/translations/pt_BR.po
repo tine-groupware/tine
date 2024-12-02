@@ -10,99 +10,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>, 2017\n"
 "Language-Team: Portuguese (Brazil) (http://app.transifex.com/tine/groupware/language/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Todos os meus projetos"
+msgid "Manage shared project favorites"
+msgstr "Gerenciar favoritos em projetos compartilhados"
 
-msgid "Default Favorite"
-msgstr "Valor Padrão"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "O favorito padrão que será carregado na inicialização dos Projetos"
-
-msgid "Attendee"
-msgstr "Participante"
-
-msgid "Role"
-msgstr "Perfil"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projeto"
-msgstr[1] "Projetos"
-msgstr[2] "Projetos"
-
-msgid "Title"
-msgstr "Título"
-
-msgid "Number"
-msgstr "Número"
-
-msgid "Status"
-msgstr "Situação"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "Descrição"
-
-msgid "Enter description"
-msgstr "Digitar a Descrição"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Selecione o Projeto onde serão adicionados os contatos"
-
-msgid "Please select the attenders' role"
-msgstr "Selecione o perfil do participante"
-
-msgid "Select Project"
-msgstr "Selecione o Projeto"
-
-msgid "Select Role"
-msgstr "Selecione o Perfil"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Adicionando {0} Participantes ao projeto"
-
-msgid "Attendee Role"
-msgstr "Perfil do participante"
-
-msgid "Projects"
-msgstr "Projetos"
-
-msgid "All my open projects"
-msgstr "Todos os meus projetos ativos"
-
-msgid "My projects that I'm responsible for"
-msgstr "Projetos sob minha responsabilidade"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Todos os projetos abertos pelos quais sou responsável"
-
-msgid "My waiting projects"
-msgstr "Meus projetos em espera"
-
-msgid "My projects that are on hold"
-msgstr "Meus projetos que estão retidos"
+msgid "Create new shared project favorites"
+msgstr "Criar novos favoritos em projetos compartilhados"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -155,6 +76,70 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projeto"
+msgstr[1] "Projetos"
+msgstr[2] "Projetos"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Selecione o Projeto onde serão adicionados os contatos"
+
+msgid "Please select the attenders' role"
+msgstr "Selecione o perfil do participante"
+
+msgid "Select Project"
+msgstr "Selecione o Projeto"
+
+msgid "Role"
+msgstr "Perfil"
+
+msgid "Select Role"
+msgstr "Selecione o Perfil"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Adicionando {0} Participantes ao projeto"
+
+msgid "Attendee"
+msgstr "Participante"
+
+msgid "Attendee Role"
+msgstr "Perfil do participante"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Number"
+msgstr "Número"
+
+msgid "Status"
+msgstr "Situação"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Enter description"
+msgstr "Digitar a Descrição"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Lista do Projeto"
@@ -167,14 +152,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "Todos os meus projetos"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "Valor Padrão"
 
-msgid "Manage shared project favorites"
-msgstr "Gerenciar favoritos em projetos compartilhados"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "O favorito padrão que será carregado na inicialização dos Projetos"
 
-msgid "Create new shared project favorites"
-msgstr "Criar novos favoritos em projetos compartilhados"
+msgid "All my open projects"
+msgstr "Todos os meus projetos ativos"
+
+msgid "My projects that I'm responsible for"
+msgstr "Projetos sob minha responsabilidade"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Todos os projetos abertos pelos quais sou responsável"
+
+msgid "My waiting projects"
+msgstr "Meus projetos em espera"
+
+msgid "My projects that are on hold"
+msgstr "Meus projetos que estão retidos"
+
+msgid "Projects"
+msgstr "Projetos"

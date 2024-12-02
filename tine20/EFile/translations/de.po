@@ -18,77 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "EFile node names may not contain:"
-msgstr ""
-
-msgid "Jump to File"
-msgstr "Zur Akte springen"
-
-msgid "Metadata entered here is automatically inherited in newly created e-files."
-msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
-
-msgid "eFile"
-msgstr "eAkte"
-
-msgid "Enter contents"
-msgstr "Inhalt hinzufügen"
-
-msgid "Contents"
-msgstr "Inhalt"
-
-#, python-brace-format
-msgid "Create new {0} Folder"
-msgstr "Neuen {0} Ordner anlegen"
-
-#, python-brace-format
-msgid "Name of the new {0} folder:"
-msgstr "Name des neuen {0} Ordners"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Note: A number prefix will be automatically assigned when creating this folder."
-msgstr "Hinweis: Beim Anlegen des Ordners wird wird automatisch eine Ebenen-Nummer vorangestellt."
-
-msgid "Electronic File"
-msgstr "eAkte"
-
-msgid "Master Plan"
-msgstr "Rahmenaktenplan"
-
-msgid "File Group"
-msgstr "Aktengruppe"
-
-msgid "File"
-msgstr "Akte"
-
-msgid "Sub File"
-msgstr "Teilakte"
-
-msgid "Case"
-msgstr "Vorgang"
-
-msgid "Document Directory"
-msgstr "Dokumentenordner"
-
-msgid "Document"
-msgstr "Dokument"
-
-msgid "eFile Tier Type"
-msgstr "eAkten Ebenen-Typ"
-
-msgid "eFile File Metadata"
-msgstr "eAkten Metadaten"
-
-msgid "eFile Tier Token"
-msgstr "eAkten Ebenen-Nummer"
-
-msgid "eFile Tier Reference Number"
-msgstr "Aktenzeichen"
-
-msgid "eFile Tier Counter"
-msgstr "eAkten Ebenen-Zähler"
-
 msgid "Base paths"
 msgstr ""
 
@@ -124,6 +53,65 @@ msgstr "eAkten Ebenen-Nummer Präfix"
 
 msgid "eFile Token Template"
 msgstr "eAkten Ebenen-Nummer Vorlage"
+
+msgid "eFile Tier Type"
+msgstr "eAkten Ebenen-Typ"
+
+msgid "Case"
+msgstr "Vorgang"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Document Directory"
+msgstr "Dokumentenordner"
+
+msgid "File"
+msgstr "Akte"
+
+msgid "File Group"
+msgstr "Aktengruppe"
+
+msgid "Master Plan"
+msgstr "Rahmenaktenplan"
+
+msgid "Sub File"
+msgstr "Teilakte"
+
+msgid "EFile node names may not contain:"
+msgstr ""
+
+msgid "Electronic File"
+msgstr "eAkte"
+
+#, python-brace-format
+msgid "Create new {0} Folder"
+msgstr "Neuen {0} Ordner anlegen"
+
+#, python-brace-format
+msgid "Name of the new {0} folder:"
+msgstr "Name des neuen {0} Ordners"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Note: A number prefix will be automatically assigned when creating this folder."
+msgstr "Hinweis: Beim Anlegen des Ordners wird wird automatisch eine Ebenen-Nummer vorangestellt."
+
+msgid "eFile"
+msgstr "eAkte"
+
+msgid "Enter contents"
+msgstr "Inhalt hinzufügen"
+
+msgid "Contents"
+msgstr "Inhalt"
+
+msgid "Jump to File"
+msgstr "Zur Akte springen"
+
+msgid "Metadata entered here is automatically inherited in newly created e-files."
+msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
 
 msgid "Duration Start"
 msgstr "Laufzeit von"
@@ -169,3 +157,15 @@ msgstr "Aussonderungsdatum"
 
 msgid "Archive Name"
 msgstr "Archivname"
+
+msgid "eFile File Metadata"
+msgstr "eAkten Metadaten"
+
+msgid "eFile Tier Token"
+msgstr "eAkten Ebenen-Nummer"
+
+msgid "eFile Tier Reference Number"
+msgstr "Aktenzeichen"
+
+msgid "eFile Tier Counter"
+msgstr "eAkten Ebenen-Zähler"

@@ -13,180 +13,16 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#, python-format
-msgid "%s's personal tasks"
+msgid "manage shared task lists"
 msgstr ""
 
-msgid "All my tasks"
+msgid "Create new shared tasks lists"
 msgstr ""
 
-msgid "Default Favorite"
+msgid "manage shared tasks favorites"
 msgstr ""
 
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-msgid "Default Task List"
-msgstr ""
-
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-msgid "Enable Standard Alarm"
-msgstr ""
-
-msgid "New task get a standard alarm as defined below"
-msgstr ""
-
-msgid "Standard Alarm Time"
-msgstr ""
-
-msgid "Minutes before the task ends"
-msgstr ""
-
-msgid "Task Title Template"
-msgstr ""
-
-msgid "How to build task titles."
-msgstr ""
-
-msgid "Filter: To be done for"
-msgstr ""
-
-msgid "Show all tasks matching all the following criteria:"
-msgstr ""
-
-msgid "Tasks has an open status."
-msgstr ""
-
-msgid "Filtered person is either:"
-msgstr ""
-
-msgid "Organizer and no coworker with open status is assigned."
-msgstr ""
-
-msgid "Organizer and the task is over due date, regardless of assigned coworkers."
-msgstr ""
-
-msgid "Coworker with an open status assigned."
-msgstr ""
-
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
-msgstr ""
-
-msgid "Status"
-msgid_plural "Status"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "New Task"
-msgstr ""
-
-msgid "Create from Template"
-msgstr ""
-
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Tags"
-msgstr ""
-
-msgid "Summary"
-msgstr ""
-
-msgid "Add a task..."
-msgstr ""
-
-msgid "Due Date"
-msgstr ""
-
-msgid "Priority"
-msgstr ""
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Percent"
-msgstr ""
-
-msgid "Completed"
-msgstr ""
-
-msgid "Organizer / Responsible"
-msgstr ""
-
-msgid "Responsible"
-msgstr ""
-
-msgid "My open tasks"
-msgstr ""
-
-msgid "Use show all button bellow to search for all tasks"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Invalid selection"
-msgstr ""
-
-msgid "A task cannot depend on itself"
-msgstr ""
-
-msgid "Add New Task"
-msgstr ""
-
-msgid "This Task is part of:"
-msgstr ""
-
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-
-msgid "Due date"
-msgstr ""
-
-msgid "Add Responsible ..."
-msgstr ""
-
-msgid "Notes"
-msgstr ""
-
-msgid "Enter description..."
-msgstr ""
-
-msgid "Percentage"
-msgstr ""
-
-msgid "Attention: This due date is in the past!"
-msgstr ""
-
-msgid "My responsibility"
-msgstr ""
-
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-msgid "All tasks for me"
-msgstr ""
-
-msgid "To be done for me this week"
-msgstr ""
-
-msgid "Tasks"
-msgstr ""
-
-msgid "All tasks of my taskslists"
-msgstr ""
-
-msgid "Last modified by me"
-msgstr ""
-
-msgid "All tasks that I have last modified"
-msgstr ""
-
-msgid "Tasks without responsible"
+msgid "Create or update shared tasks favorites"
 msgstr ""
 
 msgid "Tasks status available"
@@ -196,6 +32,9 @@ msgid "Possible tasks status. Please note that additional attendee status might 
 msgstr ""
 
 msgid "No response"
+msgstr ""
+
+msgid "Completed"
 msgstr ""
 
 msgid "Cancelled"
@@ -246,23 +85,123 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
+#, python-format
+msgid "%s's personal tasks"
+msgstr ""
+
 msgid "Notification for Task %1$s"
 msgstr ""
 
-msgid "GENDER_Task Dependency"
+msgid "Excel all data"
 msgstr ""
 
-msgid "Task Dependency"
-msgid_plural "Task Dependencies"
+msgid "Create from Template"
+msgstr ""
+
+msgid "Use show all button bellow to search for all tasks"
+msgstr ""
+
+msgid "Show all"
+msgstr ""
+
+msgid "Invalid selection"
+msgstr ""
+
+msgid "A task cannot depend on itself"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Add a task..."
+msgstr ""
+
+msgid "Due Date"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Percent"
+msgstr ""
+
+msgid "Status"
+msgid_plural "Status"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Task"
-msgid_plural "Tasks"
+msgid "Responsible"
+msgstr ""
+
+msgid "My open tasks"
+msgstr ""
+
+msgid "Add New Task"
+msgstr ""
+
+msgid "This Task is part of:"
+msgstr ""
+
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+msgid "Due date"
+msgstr ""
+
+msgid "Organizer / Responsible"
+msgstr ""
+
+msgid "Add Responsible ..."
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Enter description..."
+msgstr ""
+
+msgid "Percentage"
+msgstr ""
+
+msgid "Attention: This due date is in the past!"
+msgstr ""
+
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Depends on Task"
+msgid "Tags"
+msgstr ""
+
+msgid "Filter: To be done for"
+msgstr ""
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr ""
+
+msgid "Tasks has an open status."
+msgstr ""
+
+msgid "Filtered person is either:"
+msgstr ""
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr ""
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr ""
+
+msgid "Coworker with an open status assigned."
+msgstr ""
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr ""
+
+msgid "New Task"
 msgstr ""
 
 msgid "GENDER_Collaborator"
@@ -272,6 +211,22 @@ msgid "Collaborator"
 msgid_plural "Collaborators"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Task Dependency"
+msgstr ""
+
+msgid "Task Dependency"
+msgid_plural "Task Dependencies"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Depends on Task"
+msgstr ""
 
 msgid "GENDER_Task"
 msgstr ""
@@ -318,17 +273,62 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-msgid "Excel all data"
+msgid "All my tasks"
 msgstr ""
 
-msgid "manage shared task lists"
+msgid "Default Favorite"
 msgstr ""
 
-msgid "Create new shared tasks lists"
+msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
-msgid "manage shared tasks favorites"
+msgid "Default Task List"
 msgstr ""
 
-msgid "Create or update shared tasks favorites"
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+msgid "Enable Standard Alarm"
+msgstr ""
+
+msgid "New task get a standard alarm as defined below"
+msgstr ""
+
+msgid "Standard Alarm Time"
+msgstr ""
+
+msgid "Minutes before the task ends"
+msgstr ""
+
+msgid "Task Title Template"
+msgstr ""
+
+msgid "How to build task titles."
+msgstr ""
+
+msgid "All tasks of my taskslists"
+msgstr ""
+
+msgid "My responsibility"
+msgstr ""
+
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+msgid "All tasks for me"
+msgstr ""
+
+msgid "To be done for me this week"
+msgstr ""
+
+msgid "Last modified by me"
+msgstr ""
+
+msgid "All tasks that I have last modified"
+msgstr ""
+
+msgid "Tasks without responsible"
+msgstr ""
+
+msgid "Tasks"
 msgstr ""

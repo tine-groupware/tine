@@ -23,89 +23,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "Alle meine Projekte"
+msgid "Manage shared project favorites"
+msgstr "Gemeinsame Projekt-Favoriten verwalten"
 
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Standard Favorit, der beim starten von Projekten geladen wird"
-
-msgid "Attendee"
-msgstr "Teilnehmer"
-
-msgid "Role"
-msgstr "Rolle"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projekte"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "Number"
-msgstr "Projektnummer"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Start"
-msgstr "Start"
-
-msgid "End"
-msgstr "Ende"
-
-msgid "Scope"
-msgstr "Projekt-Art"
-
-msgid "Type"
-msgstr "Projekt-Typ"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
-
-msgid "Please select the attenders' role"
-msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
-
-msgid "Select Project"
-msgstr "Projekt auswählen"
-
-msgid "Select Role"
-msgstr "Rolle auswählen"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
-
-msgid "Attendee Role"
-msgstr "Teilnehmerrolle"
-
-msgid "Projects"
-msgstr "Projekte"
-
-msgid "All my open projects"
-msgstr "Alle meine offenen Projekte"
-
-msgid "My projects that I'm responsible for"
-msgstr "Alle Projekte für die ich verantwortlich bin"
-
-msgid "All my open projects that I am responsible for"
-msgstr "Alle offenen Projekte für die ich verantwortlich bin"
-
-msgid "My waiting projects"
-msgstr "Meine wartenden Projekte"
-
-msgid "My projects that are on hold"
-msgstr "Meine pausierten Projekte"
+msgid "Create new shared project favorites"
+msgstr "Neuen gemeinsamen Projekt-Favoriten anlegen"
 
 msgid "Available Project Attendee Role"
 msgstr "Verfügbare Teilnehmerrollen"
@@ -158,6 +80,69 @@ msgstr "Aktivität"
 msgid "Contract"
 msgstr "Auftrag"
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekte"
+
+msgid "Excel current columns"
+msgstr "Excel angezeigte Spalten"
+
+msgid "Excel all data"
+msgstr "Excel Alle Daten"
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
+
+msgid "Please select the attenders' role"
+msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
+
+msgid "Select Project"
+msgstr "Projekt auswählen"
+
+msgid "Role"
+msgstr "Rolle"
+
+msgid "Select Role"
+msgstr "Rolle auswählen"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
+
+msgid "Attendee"
+msgstr "Teilnehmer"
+
+msgid "Attendee Role"
+msgstr "Teilnehmerrolle"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Number"
+msgstr "Projektnummer"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "End"
+msgstr "Ende"
+
+msgid "Scope"
+msgstr "Projekt-Art"
+
+msgid "Type"
+msgstr "Projekt-Typ"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] "Projektliste"
@@ -169,14 +154,29 @@ msgstr "Name"
 msgid "Tasks"
 msgstr "Aufgaben"
 
-msgid "Excel current columns"
-msgstr "Excel angezeigte Spalten"
+msgid "All my projects"
+msgstr "Alle meine Projekte"
 
-msgid "Excel all data"
-msgstr "Excel Alle Daten"
+msgid "Default Favorite"
+msgstr "Standard Favorit"
 
-msgid "Manage shared project favorites"
-msgstr "Gemeinsame Projekt-Favoriten verwalten"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Standard Favorit, der beim starten von Projekten geladen wird"
 
-msgid "Create new shared project favorites"
-msgstr "Neuen gemeinsamen Projekt-Favoriten anlegen"
+msgid "All my open projects"
+msgstr "Alle meine offenen Projekte"
+
+msgid "My projects that I'm responsible for"
+msgstr "Alle Projekte für die ich verantwortlich bin"
+
+msgid "All my open projects that I am responsible for"
+msgstr "Alle offenen Projekte für die ich verantwortlich bin"
+
+msgid "My waiting projects"
+msgstr "Meine wartenden Projekte"
+
+msgid "My projects that are on hold"
+msgstr "Meine pausierten Projekte"
+
+msgid "Projects"
+msgstr "Projekte"

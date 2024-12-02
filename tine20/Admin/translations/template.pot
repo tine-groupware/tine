@@ -13,953 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr ""
-
-msgid "Disable Application"
-msgstr ""
-
-msgid "Settings"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr ""
-
-msgid "Search:"
-msgstr ""
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr ""
-
-msgid "No applications to display"
-msgstr ""
-
-msgid "Order"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr ""
-
-msgid "Do you really want to delete the selected groups?"
-msgstr ""
-
-msgid "Deleting group(s)..."
-msgstr ""
-
-msgid "Add Group"
-msgstr ""
-
-msgid "Edit Group"
-msgstr ""
-
-msgid "Delete Group"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr ""
-
-msgid "No groups to display"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr ""
-
-msgid "Please configure store for this field type"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Record Class"
-msgstr ""
-
-msgid "Given record class not found"
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "OK"
-msgstr ""
-
-msgid "Configure store"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr ""
-
-msgid "Use"
-msgstr ""
-
-msgid "Model"
-msgstr ""
-
-msgid "Custom field definition"
-msgstr ""
-
-msgid "Text"
-msgstr ""
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "DateTime"
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "Boolean"
-msgstr ""
-
-msgid "Search Combo"
-msgstr ""
-
-msgid "Key Field"
-msgstr ""
-
-msgid "Record"
-msgstr ""
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Label"
-msgstr ""
-
-msgid "Length"
-msgstr ""
-
-msgid "Required"
-msgstr ""
-
-msgid "Custom field additional properties"
-msgstr ""
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Value"
-msgstr ""
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr ""
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-msgid "Please wait"
-msgstr ""
-
-msgid "Updating Tag"
-msgstr ""
-
-msgid "Failed"
-msgstr ""
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr ""
-
-msgid "Please fix the errors noted."
-msgstr ""
-
-msgid "Allowed Contexts"
-msgstr ""
-
-msgid "Context"
-msgstr ""
-
-msgid "Account Rights"
-msgstr ""
-
-msgid "Tag Name"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr ""
-
-msgid "Tag"
-msgstr ""
-
-msgid "Add New Tag"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr ""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr ""
-
-msgid "Deleting tag(s)..."
-msgstr ""
-
-msgid "Add Tag"
-msgstr ""
-
-msgid "Edit Tag"
-msgstr ""
-
-msgid "Delete Tag"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr ""
-
-msgid "No tags to display"
-msgstr ""
-
-msgid "Usage:&#160;"
-msgstr ""
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr ""
-
-msgid "Could not save role."
-msgstr ""
-
-msgid "Deleting role..."
-msgstr ""
-
-msgid "Some error occurred while trying to delete the role."
-msgstr ""
-
-msgid "Rights"
-msgstr ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Role Name"
-msgstr ""
-
-msgid "Role"
-msgstr ""
-
-msgid "Add New Role"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr ""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr ""
-
-msgid "Deleting role(s)..."
-msgstr ""
-
-msgid "Add Role"
-msgstr ""
-
-msgid "Edit Role"
-msgstr ""
-
-msgid "Delete Role"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr ""
-
-msgid "No roles to display"
-msgstr ""
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Groups"
-msgstr ""
-
-msgid "Applications"
-msgstr ""
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr ""
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr ""
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr ""
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr ""
-
-msgid "Passwords match!"
-msgstr ""
-
-msgid "Primary group"
-msgstr ""
-
-msgid "Unix"
-msgstr ""
-
-msgid "Home Directory"
-msgstr ""
-
-msgid "Login Shell"
-msgstr ""
-
-msgid "Windows"
-msgstr ""
-
-msgid "Home Drive"
-msgstr ""
-
-msgid "Login Time"
-msgstr ""
-
-msgid "never logged in"
-msgstr ""
-
-msgid "Home Path"
-msgstr ""
-
-msgid "Logout Time"
-msgstr ""
-
-msgid "never logged off"
-msgstr ""
-
-msgid "Profile Path"
-msgstr ""
-
-msgid "Password Last Set"
-msgstr ""
-
-msgid "never"
-msgstr ""
-
-msgid "Logon Script"
-msgstr ""
-
-msgid "Password Can Change"
-msgstr ""
-
-msgid "not set"
-msgstr ""
-
-msgid "Password Must Change"
-msgstr ""
-
-msgid "Kick Off Time"
-msgstr ""
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr ""
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr ""
-
-msgid "Last Login"
-msgstr ""
-
-msgid "Forward Only"
-msgstr ""
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr ""
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr ""
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr ""
-
-msgid "Repeat password"
-msgstr ""
-
-msgid "Ok"
-msgstr ""
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "First name"
-msgstr ""
-
-msgid "Last name"
-msgstr ""
-
-msgid "Display name"
-msgstr ""
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr ""
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr ""
-
-msgid "disabled"
-msgstr ""
-
-msgid "expired"
-msgstr ""
-
-msgid "blocked"
-msgstr ""
-
-msgid "Invalid Status"
-msgstr ""
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr ""
-
-msgid "Expires"
-msgstr ""
-
-msgid "Last login at"
-msgstr ""
-
-msgid "don't know"
-msgstr ""
-
-msgid "Last login from"
-msgstr ""
-
-msgid "Password set"
-msgstr ""
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr ""
-
-msgid "User roles"
-msgstr ""
-
-msgid "Fileserver"
-msgstr ""
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr ""
-
-msgid "SMTP"
-msgstr ""
-
-msgid "Visibility"
-msgstr ""
-
-msgid "Display in addressbook"
-msgstr ""
-
-msgid "Hide from addressbook"
-msgstr ""
-
-msgid "Saved in Addressbook"
-msgstr ""
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Users"
-msgstr ""
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Enable Account"
-msgstr ""
-
-msgid "Disable Account"
-msgstr ""
-
-msgid "Reset Password"
-msgstr ""
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr ""
-
-msgid "Set new password"
-msgstr ""
-
-msgid "Please enter the new password:"
-msgstr ""
-
-msgid "Group Name"
-msgstr ""
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr ""
-
-msgid "personal"
-msgstr ""
-
-msgid "shared"
-msgstr ""
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr ""
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Container Name"
-msgstr ""
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Roles"
-msgstr ""
-
-msgid "Containers"
-msgstr ""
-
-msgid "Shared Tags"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "Computers"
-msgstr ""
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr ""
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr ""
-
-msgid "Refresh"
-msgstr ""
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr ""
-
-msgid "Client Type"
-msgstr ""
-
-msgid "Session ID"
-msgstr ""
-
-msgid "Login Name"
-msgstr ""
-
-msgid "Result"
-msgstr ""
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr ""
-
-msgid "password expired"
-msgstr ""
-
-msgid "user disabled"
-msgstr ""
-
-msgid "invalid password"
-msgstr ""
-
-msgid "ambiguous username"
-msgstr ""
-
-msgid "user not found"
-msgstr ""
-
-msgid "failure"
-msgstr ""
-
-msgid "success"
-msgstr ""
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr ""
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr ""
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr ""
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
-
 msgid "Manage access log"
 msgstr ""
 
@@ -1105,4 +158,951 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr ""
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr ""
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "IP Address"
+msgstr ""
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Login Time"
+msgstr ""
+
+msgid "Logout Time"
+msgstr ""
+
+msgid "Client Type"
+msgstr ""
+
+msgid "Session ID"
+msgstr ""
+
+msgid "Login Name"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr ""
+
+msgid "password expired"
+msgstr ""
+
+msgid "user disabled"
+msgstr ""
+
+msgid "invalid password"
+msgstr ""
+
+msgid "ambiguous username"
+msgstr ""
+
+msgid "user not found"
+msgstr ""
+
+msgid "failure"
+msgstr ""
+
+msgid "success"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Containers"
+msgstr ""
+
+msgid "Shared Tags"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "Computers"
+msgstr ""
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr ""
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Enable Application"
+msgstr ""
+
+msgid "Disable Application"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr ""
+
+msgid "Search:"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr ""
+
+msgid "No applications to display"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "personal"
+msgstr ""
+
+msgid "shared"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Container Name"
+msgstr ""
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr ""
+
+msgid "Please configure store for this field type"
+msgstr ""
+
+msgid "Record Class"
+msgstr ""
+
+msgid "Given record class not found"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Configure store"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Use"
+msgstr ""
+
+msgid "Custom field definition"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "DateTime"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Boolean"
+msgstr ""
+
+msgid "Search Combo"
+msgstr ""
+
+msgid "Key Field"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Custom field additional properties"
+msgstr ""
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr ""
+
+msgid "Visibility"
+msgstr ""
+
+msgid "Display in addressbook"
+msgstr ""
+
+msgid "Hide from addressbook"
+msgstr ""
+
+msgid "Saved in Addressbook"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr ""
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Do you really want to delete the selected groups?"
+msgstr ""
+
+msgid "Deleting group(s)..."
+msgstr ""
+
+msgid "Add Group"
+msgstr ""
+
+msgid "Edit Group"
+msgstr ""
+
+msgid "Delete Group"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr ""
+
+msgid "No groups to display"
+msgstr ""
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr ""
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr ""
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr ""
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr ""
+
+msgid "Updating Memberships"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Could not save role."
+msgstr ""
+
+msgid "Please fix the errors noted."
+msgstr ""
+
+msgid "Deleting role..."
+msgstr ""
+
+msgid "Some error occurred while trying to delete the role."
+msgstr ""
+
+msgid "Rights"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Role Name"
+msgstr ""
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Add New Role"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr ""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr ""
+
+msgid "Deleting role(s)..."
+msgstr ""
+
+msgid "Add Role"
+msgstr ""
+
+msgid "Edit Role"
+msgstr ""
+
+msgid "Delete Role"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr ""
+
+msgid "No roles to display"
+msgstr ""
+
+msgid "Computer Name"
+msgstr ""
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr ""
+
+msgid "Allowed Contexts"
+msgstr ""
+
+msgid "Context"
+msgstr ""
+
+msgid "Account Rights"
+msgstr ""
+
+msgid "Tag Name"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Add New Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr ""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr ""
+
+msgid "Deleting tag(s)..."
+msgstr ""
+
+msgid "Add Tag"
+msgstr ""
+
+msgid "Edit Tag"
+msgstr ""
+
+msgid "Delete Tag"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr ""
+
+msgid "No tags to display"
+msgstr ""
+
+msgid "Usage:&#160;"
+msgstr ""
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr ""
+
+msgid "Passwords match!"
+msgstr ""
+
+msgid "Primary group"
+msgstr ""
+
+msgid "Unix"
+msgstr ""
+
+msgid "Home Directory"
+msgstr ""
+
+msgid "Login Shell"
+msgstr ""
+
+msgid "Windows"
+msgstr ""
+
+msgid "Home Drive"
+msgstr ""
+
+msgid "never logged in"
+msgstr ""
+
+msgid "Home Path"
+msgstr ""
+
+msgid "never logged off"
+msgstr ""
+
+msgid "Profile Path"
+msgstr ""
+
+msgid "Password Last Set"
+msgstr ""
+
+msgid "never"
+msgstr ""
+
+msgid "Logon Script"
+msgstr ""
+
+msgid "Password Can Change"
+msgstr ""
+
+msgid "not set"
+msgstr ""
+
+msgid "Password Must Change"
+msgstr ""
+
+msgid "Kick Off Time"
+msgstr ""
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "Last Login"
+msgstr ""
+
+msgid "Forward Only"
+msgstr ""
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr ""
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr ""
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr ""
+
+msgid "Repeat password"
+msgstr ""
+
+msgid "Ok"
+msgstr ""
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+msgid "First name"
+msgstr ""
+
+msgid "Last name"
+msgstr ""
+
+msgid "Display name"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr ""
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "expired"
+msgstr ""
+
+msgid "blocked"
+msgstr ""
+
+msgid "Invalid Status"
+msgstr ""
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Last login at"
+msgstr ""
+
+msgid "don't know"
+msgstr ""
+
+msgid "Last login from"
+msgstr ""
+
+msgid "Password set"
+msgstr ""
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr ""
+
+msgid "User roles"
+msgstr ""
+
+msgid "Fileserver"
+msgstr ""
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr ""
+
+msgid "SMTP"
+msgstr ""
+
+msgid "Enable Account"
+msgstr ""
+
+msgid "Disable Account"
+msgstr ""
+
+msgid "Reset Password"
+msgstr ""
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr ""
+
+msgid "Set new password"
+msgstr ""
+
+msgid "Please enter the new password:"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

@@ -10,23 +10,68 @@ msgstr ""
 "PO-Revision-Date: 2012-10-04 15:23+0000\n"
 "Last-Translator: Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>, 2017\n"
 "Language-Team: Portuguese (Brazil) (http://app.transifex.com/tine/groupware/language/pt_BR/)\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Inventory Status Available"
+msgstr "Situação do Inventário Disponível"
+
+msgid "Possible status."
+msgstr "Situação possível."
+
+msgid "Ordered"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Defect"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "Removed"
+msgstr "Removido"
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Stored"
+msgstr ""
+
+msgid "Sold"
+msgstr ""
+
+msgid "Destroyed"
+msgstr ""
+
 msgid "Types"
 msgstr ""
 
-msgid "Default Inventory Item Container"
-msgstr "Repositório Padrão de Item de Inventário"
+msgid "Tine 2.0 inventory CSV import"
+msgstr ""
 
-msgid "The default container for new items"
-msgstr "O repositório padrão para novos ítens"
+msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Lista de Importação (###CURRENTDATE###)"
+
+msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr ""
+
+msgid "Inventory CSV import"
+msgstr "Importar arquivo CVS de Inventário"
+
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Ítens importados  em ###CURRENTDATE### às ###CURRENTTIME### por ###USERFULLNAME###"
 
 msgid "The active number must be less than or equal total number."
 msgstr "O número ativo deve ser menor ou igual ao número total"
@@ -64,9 +109,6 @@ msgstr "Adicionado"
 msgid "Warranty"
 msgstr "Garantia"
 
-msgid "Removed"
-msgstr "Removido"
-
 msgid "Total number"
 msgstr "Número total"
 
@@ -87,45 +129,6 @@ msgstr "Data da fatura"
 
 msgid "Depreciate"
 msgstr "Depreciar"
-
-msgid "Inventory"
-msgstr "Inventário"
-
-msgid "All Inventory Items"
-msgstr "Todos os ítens do inventário"
-
-msgid "All existing Inventory Items"
-msgstr "Todos os ítens de inventário existentes"
-
-msgid "Inventory Status Available"
-msgstr "Situação do Inventário Disponível"
-
-msgid "Possible status."
-msgstr "Situação possível."
-
-msgid "Ordered"
-msgstr ""
-
-msgid "Available"
-msgstr ""
-
-msgid "Defect"
-msgstr ""
-
-msgid "Missing"
-msgstr ""
-
-msgid "Unknown"
-msgstr ""
-
-msgid "Stored"
-msgstr ""
-
-msgid "Sold"
-msgstr ""
-
-msgid "Destroyed"
-msgstr ""
 
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -151,20 +154,17 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Tine 2.0 inventory CSV import"
-msgstr ""
+msgid "Default Inventory Item Container"
+msgstr "Repositório Padrão de Item de Inventário"
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
-msgstr ""
+msgid "The default container for new items"
+msgstr "O repositório padrão para novos ítens"
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Lista de Importação (###CURRENTDATE###)"
+msgid "All Inventory Items"
+msgstr "Todos os ítens do inventário"
 
-msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgid "All existing Inventory Items"
+msgstr "Todos os ítens de inventário existentes"
 
-msgid "Inventory CSV import"
-msgstr "Importar arquivo CVS de Inventário"
-
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Ítens importados  em ###CURRENTDATE### às ###CURRENTTIME### por ###USERFULLNAME###"
+msgid "Inventory"
+msgstr "Inventário"

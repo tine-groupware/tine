@@ -8,561 +8,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: sao sang <saosangmo@yahoo.com>, 2013\n"
 "Language-Team: Vietnamese (http://app.transifex.com/tine/groupware/language/vi/)\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "sổ địa chỉ cá nhân của %s"
+msgid "manage shared addressbooks"
+msgstr "quản lý sổ địa chỉ dùng chung"
 
-msgid "Groups"
-msgstr ""
-
-msgid "Group Functions"
-msgstr ""
-
-msgid "Industries"
-msgstr ""
-
-msgid "All Contacts"
-msgstr "Mọi liên hệ"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-msgid "All contacts"
-msgstr "Mọi liên hệ"
-
-msgid "Default Addressbook"
-msgstr "Sổ địa chỉ mặc đ"
-
-msgid "The default addressbook for new contacts"
-msgstr "Sổ địa chỉ mặc định cho liên hệ mới"
-
-msgid "Default Favorite"
-msgstr "Lối tắt mặc định"
-
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Lối tắt mặc định sẽ được nạp khi sổ địa chỉ khởi động"
-
-msgid "Contacts ODS export configuration"
-msgstr ""
-
-msgid "Use this configuration for the contact ODS export."
-msgstr ""
-
-msgid "Contacts XLS export configuration"
-msgstr ""
-
-msgid "Use this configuration for the contact XLS export."
-msgstr ""
-
-msgid "Contact Title Template"
-msgstr ""
-
-msgid "How to build contact titles."
-msgstr ""
-
-msgid "default"
-msgstr ""
-
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] ""
-"one: Liên hệ\n"
-"other: Liên hệ"
-
-msgid "Set as preferred E-Mail"
-msgstr ""
-
-msgid "Preferred Address"
-msgstr ""
-
-msgid "Street"
-msgstr "Phố"
-
-msgid "Street 2"
-msgstr "Phố 2"
-
-msgid "Region"
-msgstr "Miền"
-
-msgid "Postal Code"
-msgstr "Mã vùng"
-
-msgid "City"
-msgstr "Thành phố"
-
-msgid "Country"
-msgstr "Quốc gia"
-
-msgid "System Group"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-
-msgid "Group Information"
-msgstr ""
-
-msgid "Name"
-msgstr "Tên"
-
-msgid "E-Mail"
-msgstr "E-Mail"
-
-msgid "List type"
-msgstr ""
-
-msgid "System accounts only"
-msgstr ""
-
-msgid "Description"
-msgstr "Mô tả"
-
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
-
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr ""
-
-msgid "Search for system groups ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Contact Properties"
-msgstr ""
-
-msgid "Contact Information"
-msgstr "Thông tin liên hệ"
-
-msgid "Company Address"
-msgstr "Địa chỉ công ty"
-
-msgid "Private Address"
-msgstr "Địa chỉ nhà riêng"
-
-msgid "Related to"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "New Contact"
-msgstr "Thêm liên lạc"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] ""
-"one: Sổ địa chỉ\n"
-"other: Sổ địa chỉ"
-
-msgid "ID"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Private"
-msgstr "Riêng tư"
-
-msgid "The grant to access contacts private information"
-msgstr ""
-
-msgid "Map"
-msgstr "Bản đồ"
-
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr ""
-
-msgid "Personal Information"
-msgstr "Thông tin cá nhân"
-
-msgid "Salutation"
-msgstr "Lời chào"
-
-msgid "Title"
-msgstr "Tiêu đề"
-
-msgid "Short Name"
-msgstr ""
-
-msgid "First Name"
-msgstr "Họ"
-
-msgid "Middle Name"
-msgstr "Đệm"
-
-msgid "Last Name"
-msgstr "Tên"
-
-msgid "Company / Organisation"
-msgstr ""
-
-msgid "Unit"
-msgstr "Đơn vị"
-
-msgid "Sites"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Display Name"
-msgstr "Tên hiển thị"
-
-msgid "Job Title"
-msgstr "Chức danh"
-
-msgid "Birthday (private)"
-msgstr ""
-
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] ""
-
-msgid "Note"
-msgstr "Ghi chép"
-
-msgid "Enter Note"
-msgstr ""
-
-msgid "Parse address"
-msgstr "Địa chỉ"
-
-msgid "Print contact"
-msgstr ""
-
-msgid "Paste address"
-msgstr "Dán địa chỉ"
-
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr ""
-
-msgid "Failed to parse address!"
-msgstr ""
-
-msgid "The address could not be read."
-msgstr ""
-
-msgid "End token mode"
-msgstr "Kết thúc chế độ token"
-
-msgid "You do not have the required private grant to view history."
-msgstr ""
-
-msgid "Import contacts"
-msgstr "Nhập liên lạc"
-
-msgid "Contact of a user account"
-msgstr "Thông tin liên lạc của 1 tài khoản"
-
-msgid "Email Account Contact"
-msgstr ""
-
-msgid "No name"
-msgstr ""
-
-msgid "Business"
-msgstr ""
-
-msgid "Not set"
-msgstr ""
-
-msgid "Type"
-msgstr "Kiểu"
-
-msgid "Contact Image"
-msgstr ""
-
-msgid "Tags"
-msgstr "Thẻ"
-
-msgid "Full Name"
-msgstr "Tên đầy đủ"
-
-msgid "Job Role"
-msgstr "Vai trò công việc"
-
-msgid "Room"
-msgstr "Phòng"
-
-msgid "Postalcode"
-msgstr "Mã vùng"
-
-msgid "Street (private)"
-msgstr "Phố (riêng tư)"
-
-msgid "City (private)"
-msgstr "Thành phố (riêng tư)"
-
-msgid "Region (private)"
-msgstr "Vùng (riêng tư)"
-
-msgid "Postalcode (private)"
-msgstr "Mã vùng (riêng tư)"
-
-msgid "Country (private)"
-msgstr "Quốc gia (riêng tư)"
-
-msgid "Preferred E-Mail"
-msgstr ""
-
-msgid "Email"
-msgid_plural "Emails"
-msgstr[0] ""
-
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] ""
-
-msgid "Mobile"
-msgstr "Di động"
-
-msgid "Fax"
-msgstr "Fax"
-
-msgid "Car phone"
-msgstr "Điện thoại trên xe"
-
-msgid "Pager"
-msgstr "Phân trang"
-
-msgid "Phone (private)"
-msgstr "Điện thoại (cá nhân)"
-
-msgid "Fax (private)"
-msgstr "Fax (cá nhân)"
-
-msgid "Mobile (private)"
-msgstr "Di động (cá nhân)"
-
-msgid "Email (private)"
-msgstr "Email (riêng tư)"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "URL (private)"
-msgstr "URL (riêng tư)"
-
-msgid "Language"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Múi giờ"
-
-msgid "Geo"
-msgstr "Geo"
-
-msgid "Birthday"
-msgstr "Ngày sinh"
-
-msgid "Select record to see its details"
-msgstr ""
-
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-msgid "Loading Structure data..."
-msgstr ""
-
-msgid "Company address"
-msgstr "Địa chỉ cơ quan"
-
-msgid "Private address"
-msgstr "Địa chỉ nhà riêng"
-
-msgid "CardDAV URL"
-msgstr "URL CardDAV"
-
-msgid "List Personal Grant"
-msgid_plural "List Personal Grants"
-msgstr[0] ""
-
-msgid "Contact Personal Grant"
-msgid_plural "Contact Personal Grants"
-msgstr[0] ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Search for members ..."
-msgstr ""
-
-msgid "List Roles"
-msgstr ""
-
-msgid "Select Group"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "Search for Contacts ..."
-msgstr ""
-
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] ""
-
-msgid "Email Addresses"
-msgstr ""
-
-msgid "Addressbooks"
-msgstr "Sổ địa chỉ"
-
-msgid "Quick search"
-msgstr ""
-
-msgid "Structures"
-msgstr ""
-
-msgid "Mailing List"
-msgstr ""
-
-msgid "This group is a mailing list"
-msgstr ""
-
-msgid "Reply to"
-msgstr ""
-
-msgid "Distribution list"
-msgstr ""
-
-msgid "Sender"
-msgstr ""
-
-msgid "Sender and Distributor"
-msgstr ""
-
-msgid "Keep copy of group mails"
-msgstr ""
-
-msgid "Forward external mails"
-msgstr ""
-
-msgid "Only forward member mails"
-msgstr ""
-
-msgid "Only forward to system email accounts"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "28"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00877546"
-msgstr ""
-
-msgid "en-GB"
-msgstr ""
-
-msgid "00813B4E"
-msgstr ""
-
-msgid "Gruppenrollen"
-msgstr ""
-
-msgid "00DA3FCD"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
+msgid "Create new shared addressbook folders"
+msgstr "Tạo thư mục sổ địa chỉ dùng chung"
 
-msgid "0009326B"
-msgstr ""
+msgid "manage shared addressbook favorites"
+msgstr "quản lý lối tắt dùng chung"
 
-msgid "008C27A5"
-msgstr ""
+msgid "Create or update shared addressbook favorites"
+msgstr "Tạo, cập nhật lối tắt dùng chung"
 
-msgid "00C96397"
+msgid "Manage lists in CoreData"
 msgstr ""
 
-msgid "00046462"
+msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-
-msgid "Company"
-msgstr "Công ty"
-
-msgid "Internal Contacts"
-msgstr "Liên hệ nội bộ"
-
-msgid "All contacts I have read grants for"
-msgstr "Mọi liên hệ tôi đã đọc quyền cho"
-
-msgid "My company"
-msgstr "Công ty tôi"
-
-msgid "All coworkers in my company"
-msgstr "Tất cả đồng nghiệp trong công ty tôi"
 
-msgid "My contacts"
-msgstr "Liên hệ của tôi"
-
-msgid "All contacts in my Addressbooks"
-msgstr "Mọi liên hệ trong sổ địa chỉ của tôi"
-
-msgid "Last modified by me"
-msgstr "Sửa lần cuối bởi tôi"
-
-msgid "All contacts that I have last modified"
-msgstr "Mọi liên hệ tôi đã sửa gần đây"
-
-msgid "Company Communication"
-msgstr "Truyền thông công ty"
-
-msgid "E-Mail (private)"
-msgstr "E-Mail (cá nhân)"
-
-msgid "Private Communication"
-msgstr "Truyền thông cá nhân"
-
-msgid "Matrix-ID"
+msgid "Manage list functions in CoreData"
 msgstr ""
-
-msgid "Assistant"
-msgstr "Trợ lý"
 
-msgid "Car"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
-msgid "Other"
+msgid "Manage list email options"
 msgstr ""
 
-msgid "Prefer"
+msgid "Manage list email options like mailing lists"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -643,6 +125,12 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] ""
+"one: Liên hệ\n"
+"other: Liên hệ"
+
 msgid "Email Account"
 msgstr ""
 
@@ -657,6 +145,9 @@ msgstr "Ông"
 
 msgid "Ms"
 msgstr "Cô"
+
+msgid "Company"
+msgstr "Công ty"
 
 msgid "Person"
 msgstr ""
@@ -716,14 +207,509 @@ msgstr ""
 msgid "Maximum number of role members reached"
 msgstr ""
 
-msgid "Group Function"
-msgid_plural "Group Functions"
-msgstr[0] ""
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "sổ địa chỉ cá nhân của %s"
 
-msgid "GENDER_Group Function"
+msgid "Groups"
 msgstr ""
 
-msgid "Maximum Members"
+msgid "Group Functions"
+msgstr ""
+
+msgid "Industries"
+msgstr ""
+
+msgid "3CX CSV export"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "VCard Report"
+msgstr ""
+
+msgid "Export multiple addressbooks to vcf files"
+msgstr ""
+
+msgid "VCard/VCF"
+msgstr ""
+
+msgid "Export contact data into vcf file"
+msgstr ""
+
+msgid "Word letter"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Addressbooks to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "All Contacts"
+msgstr "Mọi liên hệ"
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+msgid "Contact import from Google address book"
+msgstr "Nhập dữ liệu từ sổ địa chỉ google"
+
+msgid "Import vCard formated contacts"
+msgstr ""
+
+msgid "Contact VCARD import"
+msgstr "Nhập dữ liệu liên hệ VCARD"
+
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+msgid "Contact CSV import from mac address book"
+msgstr "Nhập dữ liệu liên hệ CSV từ sổ địa chỉ Mac"
+
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 German"
+
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2010 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+msgid "Contact CSV import from Outlook address book"
+msgstr "Nhập dữ liệu CSV từ Outlook address book"
+
+msgid "Tine contact CSV import"
+msgstr ""
+
+msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Nhập danh sách (###CURRENTDATE###)"
+
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Liên lạc đã được nhập vào ###CURRENTDATE### lúc ###CURRENTTIME### bởi ###USERFULLNAME###"
+
+msgid "New Contact"
+msgstr "Thêm liên lạc"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] ""
+"one: Sổ địa chỉ\n"
+"other: Sổ địa chỉ"
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr "Tên"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "Private"
+msgstr "Riêng tư"
+
+msgid "The grant to access contacts private information"
+msgstr ""
+
+msgid "Preferred Address"
+msgstr ""
+
+msgid "Street"
+msgstr "Phố"
+
+msgid "Street 2"
+msgstr "Phố 2"
+
+msgid "Region"
+msgstr "Miền"
+
+msgid "Postal Code"
+msgstr "Mã vùng"
+
+msgid "City"
+msgstr "Thành phố"
+
+msgid "Country"
+msgstr "Quốc gia"
+
+msgid "Contact Properties"
+msgstr ""
+
+msgid "CardDAV URL"
+msgstr "URL CardDAV"
+
+msgid "Map"
+msgstr "Bản đồ"
+
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Personal Information"
+msgstr "Thông tin cá nhân"
+
+msgid "Salutation"
+msgstr "Lời chào"
+
+msgid "Title"
+msgstr "Tiêu đề"
+
+msgid "Short Name"
+msgstr ""
+
+msgid "First Name"
+msgstr "Họ"
+
+msgid "Middle Name"
+msgstr "Đệm"
+
+msgid "Last Name"
+msgstr "Tên"
+
+msgid "Company / Organisation"
+msgstr ""
+
+msgid "Unit"
+msgstr "Đơn vị"
+
+msgid "Sites"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Display Name"
+msgstr "Tên hiển thị"
+
+msgid "Job Title"
+msgstr "Chức danh"
+
+msgid "Birthday (private)"
+msgstr ""
+
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] ""
+
+msgid "Contact Information"
+msgstr "Thông tin liên hệ"
+
+msgid "Note"
+msgstr "Ghi chép"
+
+msgid "Enter Note"
+msgstr ""
+
+msgid "Parse address"
+msgstr "Địa chỉ"
+
+msgid "Print contact"
+msgstr ""
+
+msgid "Paste address"
+msgstr "Dán địa chỉ"
+
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr ""
+
+msgid "Failed to parse address!"
+msgstr ""
+
+msgid "The address could not be read."
+msgstr ""
+
+msgid "End token mode"
+msgstr "Kết thúc chế độ token"
+
+msgid "You do not have the required private grant to view history."
+msgstr ""
+
+msgid "Business"
+msgstr ""
+
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+
+msgid "Mobile"
+msgstr "Di động"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Import contacts"
+msgstr "Nhập liên lạc"
+
+msgid "Contact of a user account"
+msgstr "Thông tin liên lạc của 1 tài khoản"
+
+msgid "Email Account Contact"
+msgstr ""
+
+msgid "No name"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "Type"
+msgstr "Kiểu"
+
+msgid "Contact Image"
+msgstr ""
+
+msgid "Tags"
+msgstr "Thẻ"
+
+msgid "Full Name"
+msgstr "Tên đầy đủ"
+
+msgid "Job Role"
+msgstr "Vai trò công việc"
+
+msgid "Room"
+msgstr "Phòng"
+
+msgid "Postalcode"
+msgstr "Mã vùng"
+
+msgid "Street (private)"
+msgstr "Phố (riêng tư)"
+
+msgid "City (private)"
+msgstr "Thành phố (riêng tư)"
+
+msgid "Region (private)"
+msgstr "Vùng (riêng tư)"
+
+msgid "Postalcode (private)"
+msgstr "Mã vùng (riêng tư)"
+
+msgid "Country (private)"
+msgstr "Quốc gia (riêng tư)"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+
+msgid "Car phone"
+msgstr "Điện thoại trên xe"
+
+msgid "Pager"
+msgstr "Phân trang"
+
+msgid "Phone (private)"
+msgstr "Điện thoại (cá nhân)"
+
+msgid "Fax (private)"
+msgstr "Fax (cá nhân)"
+
+msgid "Mobile (private)"
+msgstr "Di động (cá nhân)"
+
+msgid "Email (private)"
+msgstr "Email (riêng tư)"
+
+msgid "URL (private)"
+msgstr "URL (riêng tư)"
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr "Múi giờ"
+
+msgid "Geo"
+msgstr "Geo"
+
+msgid "Birthday"
+msgstr "Ngày sinh"
+
+msgid "Set as preferred E-Mail"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "Search for Contacts ..."
+msgstr ""
+
+msgid "Group Information"
+msgstr ""
+
+msgid "List type"
+msgstr ""
+
+msgid "System accounts only"
+msgstr ""
+
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#, python-brace-format
+msgid "{0} must be given"
+msgstr ""
+
+msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Select Group"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+
+msgid "Search for members ..."
+msgstr ""
+
+msgid "List Roles"
+msgstr ""
+
+msgid "Search for system groups ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Mailing List"
+msgstr ""
+
+msgid "This group is a mailing list"
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender and Distributor"
+msgstr ""
+
+msgid "Keep copy of group mails"
+msgstr ""
+
+msgid "Forward external mails"
+msgstr ""
+
+msgid "Only forward member mails"
+msgstr ""
+
+msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Company address"
+msgstr "Địa chỉ cơ quan"
+
+msgid "Private address"
+msgstr "Địa chỉ nhà riêng"
+
+msgid "Contact Personal Grant"
+msgid_plural "Contact Personal Grants"
+msgstr[0] ""
+
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] ""
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Addressbooks"
+msgstr "Sổ địa chỉ"
+
+msgid "Quick search"
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "List Personal Grant"
+msgid_plural "List Personal Grants"
+msgstr[0] ""
+
+msgid "Company Address"
+msgstr "Địa chỉ công ty"
+
+msgid "Private Address"
+msgstr "Địa chỉ nhà riêng"
+
+msgid "Related to"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "System Group"
+msgstr ""
+
+msgid "Select record to see its details"
+msgstr ""
+
+msgid "This module visualises hierarchically depended relations between records of different types."
+msgstr ""
+
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
+msgstr ""
+
+msgid "Loading Structure data..."
 msgstr ""
 
 msgid "GENDER_Addressbook"
@@ -734,6 +720,10 @@ msgstr ""
 
 msgid "Show Disabled"
 msgstr ""
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] ""
 
 msgid "Phone Numbers"
 msgstr ""
@@ -783,19 +773,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "GENDER_Group"
-msgstr ""
-
-msgid "Name/Email"
-msgstr ""
-
-msgid "Site"
-msgid_plural "Sites"
-msgstr[0] ""
-
-msgid "GENDER_Email"
-msgstr ""
-
 msgid "GENDER_Address"
 msgstr ""
 
@@ -837,14 +814,7 @@ msgstr ""
 msgid "Last Error"
 msgstr ""
 
-msgid "GENDER_URL"
-msgstr ""
-
-msgid "URL"
-msgid_plural "URLs"
-msgstr[0] ""
-
-msgid "GENDER_Phone"
+msgid "GENDER_Email"
 msgstr ""
 
 msgid "GENDER_Instant Messenger"
@@ -854,128 +824,158 @@ msgid "Instant Messenger"
 msgid_plural "Instant Messengers"
 msgstr[0] ""
 
-msgid "Addressbooks to export"
+msgid "GENDER_Phone"
 msgstr ""
 
-msgid "Export target"
+msgid "GENDER_URL"
 msgstr ""
 
-msgid "Excel overview"
+msgid "URL"
+msgid_plural "URLs"
+msgstr[0] ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+
+msgid "GENDER_Group"
 msgstr ""
 
-msgid "Word details"
+msgid "Name/Email"
 msgstr ""
 
-msgid "Relations"
+msgid "GENDER_Group Function"
 msgstr ""
 
-msgid "CSV all data"
+msgid "Maximum Members"
 msgstr ""
 
-msgid "VCard Report"
+msgid "All contacts"
+msgstr "Mọi liên hệ"
+
+msgid "Default Addressbook"
+msgstr "Sổ địa chỉ mặc đ"
+
+msgid "The default addressbook for new contacts"
+msgstr "Sổ địa chỉ mặc định cho liên hệ mới"
+
+msgid "Default Favorite"
+msgstr "Lối tắt mặc định"
+
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Lối tắt mặc định sẽ được nạp khi sổ địa chỉ khởi động"
+
+msgid "Contacts ODS export configuration"
 msgstr ""
 
-msgid "Export multiple addressbooks to vcf files"
+msgid "Use this configuration for the contact ODS export."
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Contacts XLS export configuration"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Use this configuration for the contact XLS export."
 msgstr ""
 
-msgid "VCard/VCF"
+msgid "Contact Title Template"
 msgstr ""
 
-msgid "Export contact data into vcf file"
+msgid "How to build contact titles."
 msgstr ""
 
-msgid "3CX CSV export"
+msgid "default"
 msgstr ""
 
-msgid "Word letter"
+msgid "All contacts I have read grants for"
+msgstr "Mọi liên hệ tôi đã đọc quyền cho"
+
+msgid "My company"
+msgstr "Công ty tôi"
+
+msgid "All coworkers in my company"
+msgstr "Tất cả đồng nghiệp trong công ty tôi"
+
+msgid "My contacts"
+msgstr "Liên hệ của tôi"
+
+msgid "All contacts in my Addressbooks"
+msgstr "Mọi liên hệ trong sổ địa chỉ của tôi"
+
+msgid "Last modified by me"
+msgstr "Sửa lần cuối bởi tôi"
+
+msgid "All contacts that I have last modified"
+msgstr "Mọi liên hệ tôi đã sửa gần đây"
+
+msgid "Company Communication"
+msgstr "Truyền thông công ty"
+
+msgid "E-Mail (private)"
+msgstr "E-Mail (cá nhân)"
+
+msgid "Private Communication"
+msgstr "Truyền thông cá nhân"
+
+msgid "Matrix-ID"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "Assistant"
+msgstr "Trợ lý"
+
+msgid "Car"
 msgstr ""
 
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgid "Other"
 msgstr ""
 
-msgid "Contact CSV import from Outlook address book"
-msgstr "Nhập dữ liệu CSV từ Outlook address book"
-
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgid "Prefer"
 msgstr ""
 
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 German"
+msgid "Internal Contacts"
+msgstr "Liên hệ nội bộ"
 
-msgid "Import CSV formated contacts from Google address book"
+msgid "Account"
 msgstr ""
 
-msgid "Contact import from Google address book"
-msgstr "Nhập dữ liệu từ sổ địa chỉ google"
-
-msgid "Tine contact CSV import"
+msgid "Exporttime"
 msgstr ""
 
-msgid "Import CSV formated contacts from tine address book"
+msgid "28"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Nhập danh sách (###CURRENTDATE###)"
-
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Liên lạc đã được nhập vào ###CURRENTDATE### lúc ###CURRENTTIME### bởi ###USERFULLNAME###"
-
-msgid "LX-Office CSV Contact import"
+msgid "20"
 msgstr ""
 
-msgid "Import CSV formated contacts from LX-Office"
+msgid "00877546"
 msgstr ""
 
-msgid "Import vCard formated contacts"
+msgid "en-GB"
 msgstr ""
 
-msgid "Contact VCARD import"
-msgstr "Nhập dữ liệu liên hệ VCARD"
-
-msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgid "00813B4E"
 msgstr ""
 
-msgid "CSV Outlook 2010 German"
+msgid "Gruppenrollen"
 msgstr ""
 
-msgid "Contact CSV import from mac address book"
-msgstr "Nhập dữ liệu liên hệ CSV từ sổ địa chỉ Mac"
-
-msgid "manage shared addressbooks"
-msgstr "quản lý sổ địa chỉ dùng chung"
-
-msgid "Create new shared addressbook folders"
-msgstr "Tạo thư mục sổ địa chỉ dùng chung"
-
-msgid "manage shared addressbook favorites"
-msgstr "quản lý lối tắt dùng chung"
-
-msgid "Create or update shared addressbook favorites"
-msgstr "Tạo, cập nhật lối tắt dùng chung"
-
-msgid "Manage lists in CoreData"
+msgid "00DA3FCD"
 msgstr ""
 
-msgid "View, create, delete or update lists in CoreData application"
+msgid "00997199"
 msgstr ""
 
-msgid "Manage list functions in CoreData"
+msgid "0009326B"
 msgstr ""
 
-msgid "View, create, delete or update list functions in CoreData application"
+msgid "008C27A5"
 msgstr ""
 
-msgid "Manage list email options"
+msgid "00C96397"
 msgstr ""
 
-msgid "Manage list email options like mailing lists"
+msgid "00046462"
 msgstr ""
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""

@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,99 +14,38 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "All courses"
-msgstr "All courses"
+msgid "Add new user"
+msgstr "Add new user"
 
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "The default favorite which is loaded on Classes startup"
+msgid "Add new user as member to a course"
+msgstr "Add new user as member to a course"
 
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Course"
-msgstr[1] "Courses"
+msgid "Add existing user"
+msgstr "Add existing user"
 
-msgid "Quick Search"
-msgstr "Quick Search"
+msgid "Add existing user as member to a course"
+msgstr "Add existing user as member to a course"
 
-msgid "Name"
-msgstr "Name"
+msgid "Manage shared courses favorites"
+msgstr "Manage shared courses favorites"
 
-msgid "Internet Access"
-msgstr "Internet Access"
+msgid "Create or update shared courses favorites"
+msgstr "Create or update shared courses favorites"
 
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Course Type"
-msgstr[1] "Course Types"
+msgid "Set additional memberships"
+msgstr "Set additional memberships"
 
-msgid "Import course members"
-msgstr "Import course members"
-
-msgid "Add new member"
-msgstr "Add new member"
-
-msgid "Course Name"
-msgstr "Course Name"
-
-msgid "Course / School Type"
-msgstr "Course / School Type"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Members"
-msgstr "Members"
-
-msgid "Login"
-msgstr "Login"
-
-msgid "unknown"
-msgstr "unknown"
-
-msgid "Reset Password"
-msgstr "Reset Password"
-
-msgid "Please enter the new Password."
-msgstr "Please enter the new Password."
-
-msgid "First Name"
-msgstr "First Name"
-
-msgid "Last Name"
-msgstr "Last Name"
-
-msgid "Add new member to course"
-msgstr "Add new member to course"
-
-msgid "Errors"
-msgstr "Errors"
-
-msgid "Please fix the errors noted."
-msgstr "Please fix the errors noted."
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Failed"
-msgstr "Failed"
-
-msgid "Some error occured while trying to update the courses."
-msgstr "Some error occured while trying to update the courses."
-
-msgid "Courses"
-msgstr "Courses"
-
-msgid "School"
-msgstr "School"
-
-msgid "Defaul school for Courses application"
-msgstr "Defaul school for Courses application"
+msgid "Set additional course member group memberships"
+msgstr "Set additional course member group memberships"
 
 msgid "Additional Group Memberships"
 msgstr "Additional Group Memberships"
 
 msgid "Array of IDs of Groups students can be members of"
 msgstr "Array of IDs of Groups students can be members of"
+
+msgid "Internet Access"
+msgstr "Internet Access"
 
 msgid "Internet access options."
 msgstr "Internet access options."
@@ -158,6 +98,11 @@ msgstr "The default department for new Courses"
 msgid "Course -> Department Mapping"
 msgstr "Course -> Department Mapping"
 
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Course"
+msgstr[1] "Courses"
+
 msgid "Teacher"
 msgstr "Teacher"
 
@@ -167,26 +112,82 @@ msgstr "Teacher Account"
 msgid "My course"
 msgstr "My course"
 
-msgid "Add new user"
-msgstr "Add new user"
+msgid "First Name"
+msgstr "First Name"
 
-msgid "Add new user as member to a course"
-msgstr "Add new user as member to a course"
+msgid "Last Name"
+msgstr "Last Name"
 
-msgid "Add existing user"
-msgstr "Add existing user"
+msgid "Add new member to course"
+msgstr "Add new member to course"
 
-msgid "Add existing user as member to a course"
-msgstr "Add existing user as member to a course"
+msgid "Errors"
+msgstr "Errors"
 
-msgid "Manage shared courses favorites"
-msgstr "Manage shared courses favorites"
+msgid "Please fix the errors noted."
+msgstr "Please fix the errors noted."
 
-msgid "Create or update shared courses favorites"
-msgstr "Create or update shared courses favorites"
+msgid "Import course members"
+msgstr "Import course members"
 
-msgid "Set additional memberships"
-msgstr "Set additional memberships"
+msgid "Add new member"
+msgstr "Add new member"
 
-msgid "Set additional course member group memberships"
-msgstr "Set additional course member group memberships"
+msgid "Course Name"
+msgstr "Course Name"
+
+msgid "Course / School Type"
+msgstr "Course / School Type"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "unknown"
+msgstr "unknown"
+
+msgid "Reset Password"
+msgstr "Reset Password"
+
+msgid "Please enter the new Password."
+msgstr "Please enter the new Password."
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Failed"
+msgstr "Failed"
+
+msgid "Some error occured while trying to update the courses."
+msgstr "Some error occured while trying to update the courses."
+
+msgid "Quick Search"
+msgstr "Quick Search"
+
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Course Type"
+msgstr[1] "Course Types"
+
+msgid "All courses"
+msgstr "All courses"
+
+msgid "The default favorite which is loaded on Classes startup"
+msgstr "The default favorite which is loaded on Classes startup"
+
+msgid "School"
+msgstr "School"
+
+msgid "Defaul school for Courses application"
+msgstr "Defaul school for Courses application"
+
+msgid "Courses"
+msgstr "Courses"

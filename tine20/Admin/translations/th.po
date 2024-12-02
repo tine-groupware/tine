@@ -11,948 +11,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Phinitnan Chanasabaeng <crackerizer@gmail.com>, 2013\n"
 "Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr "อนุญาตให้ใช้แอพลิเคชั่น"
-
-msgid "Disable Application"
-msgstr "ยกเลิกการใช้แอพลิเคชั่น"
-
-msgid "Settings"
-msgstr "ค่าติดตั้ง"
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "ค่าติดตั้ง {0}"
-
-msgid "Search:"
-msgstr "ค้นหา:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "แสดงการใช้ {0} - {1} จาก {2}"
-
-msgid "No applications to display"
-msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
-
-msgid "Order"
-msgstr "คำสั่ง"
-
-msgid "Name"
-msgstr "ชื่อ"
-
-msgid "Status"
-msgstr "สถานะ"
-
-msgid "Version"
-msgstr "ภาค"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "ยืนยัน"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "คุณแน่ใจว่าต้องการลบกลุ่มที่เลือกไว้นี้?"
-
-msgid "Deleting group(s)..."
-msgstr "กำลังลบ กลุ่ม"
-
-msgid "Add Group"
-msgstr "เพิ่มกลุ่ม"
-
-msgid "Edit Group"
-msgstr "แก้ไขกลุ่ม"
-
-msgid "Delete Group"
-msgstr "ลบกลุ่ม"
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "กำลังแสดงกลุ่ม {0} - {1} จาก {2}"
-
-msgid "No groups to display"
-msgstr "ไม่มีกลุ่มใด ๆ ให้แสดง"
-
-msgid "ID"
-msgstr "รหัส"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "การอธิบาย"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "ข้อผิดพลาด"
-
-msgid "Please configure store for this field type"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "การประยุกต์ใช้"
-
-msgid "Record Class"
-msgstr "บันทึก ชั้น"
-
-msgid "Given record class not found"
-msgstr "ที่ให้บันทึกชั้นมานั้นหาไม่พบ"
-
-msgid "Cancel"
-msgstr "ยกเลิก"
-
-msgid "OK"
-msgstr "ตกลง"
-
-msgid "Configure store"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "ดู"
-
-msgid "Use"
-msgstr "ใช้"
-
-msgid "Model"
-msgstr "รุ่น"
-
-msgid "Custom field definition"
-msgstr ""
-
-msgid "Text"
-msgstr "ข้อความ"
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr "ลำดับ"
-
-msgid "Date"
-msgstr "วันที่"
-
-msgid "DateTime"
-msgstr "วันเวลา"
-
-msgid "Time"
-msgstr "เวลา"
-
-msgid "Boolean"
-msgstr ""
-
-msgid "Search Combo"
-msgstr ""
-
-msgid "Key Field"
-msgstr ""
-
-msgid "Record"
-msgstr "บันทึก"
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr "ประเภท"
-
-msgid "Label"
-msgstr "ป้าย"
-
-msgid "Length"
-msgstr "ความยาว"
-
-msgid "Required"
-msgstr "ได้ต้องการ"
-
-msgid "Custom field additional properties"
-msgstr ""
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "กลุ่ม"
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr ""
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] ""
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
-msgstr ""
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] ""
-
-msgid "Value"
-msgstr "ค่า"
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr ""
-
-msgid "Computer Name"
-msgstr "ชื่อของคอมพิวเตอร์"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr "สมุดรายชื่อหลักสำหรับการติดต่อและกลุ่มใหม่"
-
-msgid "Please wait"
-msgstr "กรุณารอ"
-
-msgid "Updating Tag"
-msgstr "กำลังปรับปรุงป้ายกำกับ"
-
-msgid "Failed"
-msgstr "ได้ล้มเหลว"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr "ไม่สามารถจัดเก็บป้ายกำกับ ({0}) ได้"
-
-msgid "Please fix the errors noted."
-msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
-
-msgid "Allowed Contexts"
-msgstr "เนื้อหาที่อนุญาต"
-
-msgid "Context"
-msgstr "เนื้อหา"
-
-msgid "Account Rights"
-msgstr "สิทธิ์เกี่ยวกับบัญชี"
-
-msgid "Tag Name"
-msgstr "ชื่อป้ายกำกับ"
-
-msgid "Color"
-msgstr "สี"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "กำลังโอนย้าย {0}..."
-
-msgid "Tag"
-msgstr "ป้ายกำกับ"
-
-msgid "Add New Tag"
-msgstr "เพิ่มป้ายกำกับใหม่"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "แก้ไขป้ายกำกับ \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "คุณแน่ใจว่าคุณต้องการลบป้ายกำกับที่เลือก?"
-
-msgid "Deleting tag(s)..."
-msgstr "กำลังลบ ป้ายกำกับ(s)..."
-
-msgid "Add Tag"
-msgstr "เพิ่มป้ายกำกับ"
-
-msgid "Edit Tag"
-msgstr "แก้ไขป้ายกำกับ"
-
-msgid "Delete Tag"
-msgstr "ลบป้ายกำกับ"
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "กำกังแสดงป้ายกำกับ {0} - {1} จาก {2}"
-
-msgid "No tags to display"
-msgstr "ไม่มีป้ายกำกับใด ๆ ให้แสดง"
-
-msgid "Usage:&#160;"
-msgstr "การใช้:&#160;"
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "กำลังปรับปรุงการเป็นสมาชิก"
-
-msgid "Could not save role."
-msgstr "ไม่สามารถจัดเก็บหน้าที่ได้"
-
-msgid "Deleting role..."
-msgstr "กำลังลบ หน้าที่..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบหน้าที่"
-
-msgid "Rights"
-msgstr "สิทธิ์"
-
-msgid "Members"
-msgstr "สมาชิก"
-
-msgid "Role Name"
-msgstr "ชื่อหน้าที่"
-
-msgid "Role"
-msgstr "หน้าที่"
-
-msgid "Add New Role"
-msgstr "เพิ่มหน้าที่ใหม่"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "แก้ไขหน้าที่ \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "คุณแน่ใจว่าต้องการลบหน้าที่ที่เลือกไว้นี้?"
-
-msgid "Deleting role(s)..."
-msgstr "กำลังลบ หน้าที่(s)..."
-
-msgid "Add Role"
-msgstr "เพิ่มหน้าที่"
-
-msgid "Edit Role"
-msgstr "แก้ไขหน้าที่"
-
-msgid "Delete Role"
-msgstr "ลบหน้าที่"
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "กำลังแสดงหน้าที่ {0} - {1} จาก {2}"
-
-msgid "No roles to display"
-msgstr "ไม่มีหน้าที่ใด ๆ ให้แสดง"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "บันทึกการใช้งาน"
-
-msgid "Groups"
-msgstr "กลุ่ม"
-
-msgid "Applications"
-msgstr "การประยุกต์ใช้"
-
-msgid "Configs"
-msgstr ""
-
-msgid "Quota"
-msgstr "โควต้า"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "ผู้ใช้อีเมล"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr "ขนาดของกล่องจดหมายตอนนี้"
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr "ขนาดของกรองปัจจุบัน"
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr "รหัสผ่านไม่ตรง"
-
-msgid "Passwords match!"
-msgstr "รหัสผ่านตรง!"
-
-msgid "Primary group"
-msgstr "กลุ่มหลัก"
-
-msgid "Unix"
-msgstr "ยูนิกซ์"
-
-msgid "Home Directory"
-msgstr "โฮมไดเรคทอรี่"
-
-msgid "Login Shell"
-msgstr ""
-
-msgid "Windows"
-msgstr ""
-
-msgid "Home Drive"
-msgstr ""
-
-msgid "Login Time"
-msgstr "เวลาเข้าใช้"
-
-msgid "never logged in"
-msgstr "ไม่เคยได้เข้าใช้"
-
-msgid "Home Path"
-msgstr ""
-
-msgid "Logout Time"
-msgstr "เวลาเลิกใช้"
-
-msgid "never logged off"
-msgstr "ไม่เคยเลิกใช้"
-
-msgid "Profile Path"
-msgstr ""
-
-msgid "Password Last Set"
-msgstr "รหัสผ่านที่ตั้งครั้งสุดท้าย"
-
-msgid "never"
-msgstr "ไม่เลย"
-
-msgid "Logon Script"
-msgstr ""
-
-msgid "Password Can Change"
-msgstr "รหัสผ่านสามารถเปลี่ยน"
-
-msgid "not set"
-msgstr "ยังไม่ได้กำหนด"
-
-msgid "Password Must Change"
-msgstr "รหัสผ่านต้องเปลี่ยน"
-
-msgid "Kick Off Time"
-msgstr ""
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr "ไม่ได้ตั้งโควต้า"
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "ข้อมูล"
-
-msgid "Last Login"
-msgstr "ลงบันทึกเข้าครั้งล่าสุด"
-
-msgid "Forward Only"
-msgstr "ส่งต่อเท่านั้น"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr ""
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr "โดเมนไม่ได้รับอนุญาต"
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr ""
-
-msgid "Forwarding to self"
-msgstr "ส่งต่อให้ตัวเอง"
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "การยืนยันรหัสผ่าน"
-
-msgid "Repeat password"
-msgstr "ใส่รหัสผ่านอีกครั้ง"
-
-msgid "Ok"
-msgstr "ตกลง"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "บัญชี"
-
-msgid "First name"
-msgstr "ชื่อตัว"
-
-msgid "Last name"
-msgstr "นามสกุล"
-
-msgid "Display name"
-msgstr "ชื่อที่ใช้"
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr "ชื่อที่เข้าใช้"
-
-msgid "Password"
-msgstr "รหัสผ่าน"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "รหัสเปิด"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "เปิดใช้งานแล้ว"
-
-msgid "disabled"
-msgstr "ปิดใช้งานแล้ว"
-
-msgid "expired"
-msgstr "หมดอายุแล้ว"
-
-msgid "blocked"
-msgstr "ถูกล็อก"
-
-msgid "Invalid Status"
-msgstr "สถานะใช้ไม่ได้"
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "สถานะ ถูกล็อก จะใช้ต่อเมื่อผู้ใช้พยายามลงชื่อเข้าใช้ด้วยรหัสผ่านที่ผิดบ่อย ๆ ณ ที่นี่ไม่สามารถตั้งค่าสถานะนี้ได้"
-
-msgid "Expires"
-msgstr "หมดอายุ"
-
-msgid "Last login at"
-msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด เมื่อ"
-
-msgid "don't know"
-msgstr "ไม่ทราบ"
-
-msgid "Last login from"
-msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด จาก"
-
-msgid "Password set"
-msgstr "ตั้งรหัสผ่าน"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr "กลุ่มผู้ใช้"
-
-msgid "User roles"
-msgstr ""
-
-msgid "Fileserver"
-msgstr "ตัวจัดเก็บไฟล์"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "การมองเห็นได้"
-
-msgid "Display in addressbook"
-msgstr "แสดงในสมุดรายชื่อ"
-
-msgid "Hide from addressbook"
-msgstr "ซ่อนจากสมุดรายชื่อ"
-
-msgid "Saved in Addressbook"
-msgstr "บันทึกแล้วในสมุดรายชื่อ"
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "ผู้ใช้"
-
-msgid "Users"
-msgstr "ผู้ใช้"
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "ผู้ใช้ Samba"
-
-msgid "Enable Account"
-msgstr "อนุญาตใช้บัญชี"
-
-msgid "Disable Account"
-msgstr "เลิกบัญชี"
-
-msgid "Reset Password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "รหัสผ่านได้เปลี่ยนแล้ว"
-
-msgid "Set new password"
-msgstr "ตั้งรหัสผ่านใหม่"
-
-msgid "Please enter the new password:"
-msgstr "กรุณาใส่รหัสผ่านใหม่:"
-
-msgid "Group Name"
-msgstr "ชื่อกลุ่ม"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "สมาชิกของกลุ่ม"
-
-msgid "personal"
-msgstr "ส่วนตัว"
-
-msgid "shared"
-msgstr "ใช้ร่วมกัน"
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr "บันทึกสำหรับเจ้าของ"
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "ที่จัดเก็บ"
-
-msgid "Container Name"
-msgstr "ชื่อที่จัดเก็บ"
-
-msgid "Container Order"
-msgstr ""
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "คอมพิวเตอร์"
-
-msgid "Roles"
-msgstr "หน้าที่"
-
-msgid "Containers"
-msgstr "ที่จัดเก็บ"
-
-msgid "Shared Tags"
-msgstr "ป้ายกำกับที่ใช้ร่วมกัน"
-
-msgid "Customfields"
-msgstr ""
-
-msgid "Computers"
-msgstr "คอมพิวเตอร์"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "ข้อมูลระบบ"
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "ผู้ดูแลระบบ"
-
-msgid "Refresh"
-msgstr ""
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "หมายเลขไอพี"
-
-msgid "Client Type"
-msgstr "ประเภทลูกค้า"
-
-msgid "Session ID"
-msgstr "รหัสเซสชัน"
-
-msgid "Login Name"
-msgstr "ชื่อที่เข้าใช้"
-
-msgid "Result"
-msgstr "ผลลัพธ์"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr "ผู้ใช้ถูกล็อก"
-
-msgid "password expired"
-msgstr "รหัสผ่านหมดอายุแล้ว"
-
-msgid "user disabled"
-msgstr "ผู้ใช้ปิดใช้งานแล้ว"
-
-msgid "invalid password"
-msgstr "รหัสผ่านไม่ถูกต้อง"
-
-msgid "ambiguous username"
-msgstr "ชื่อผู้ใช้คลุมเครือ"
-
-msgid "user not found"
-msgstr "ผู้ใช้ไม่พบ"
-
-msgid "failure"
-msgstr "ความล้มเหลว"
-
-msgid "success"
-msgstr "ความสำเร็จ"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr "ค่าตั้งตั้งของผู้ใช้ IMAP หลัก "
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr "เปลี่ยนแปลงตู้ใส่ของของคุณแล้ว"
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "มีการเปลี่ยนแปลงตู้ใส่ของของคุณ โดย %1$s %2$sหมายเหตุ: %3$s"
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1099,4 +165,938 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr "ค่าตั้งตั้งของผู้ใช้ IMAP หลัก "
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr "เปลี่ยนแปลงตู้ใส่ของของคุณแล้ว"
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "มีการเปลี่ยนแปลงตู้ใส่ของของคุณ โดย %1$s %2$sหมายเหตุ: %3$s"
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "บันทึกการใช้งาน"
+
+msgid "IP Address"
+msgstr "หมายเลขไอพี"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "ผู้ใช้"
+
+msgid "Login Time"
+msgstr "เวลาเข้าใช้"
+
+msgid "Logout Time"
+msgstr "เวลาเลิกใช้"
+
+msgid "Client Type"
+msgstr "ประเภทลูกค้า"
+
+msgid "Session ID"
+msgstr "รหัสเซสชัน"
+
+msgid "Login Name"
+msgstr "ชื่อที่เข้าใช้"
+
+msgid "Name"
+msgstr "ชื่อ"
+
+msgid "Result"
+msgstr "ผลลัพธ์"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr "ผู้ใช้ถูกล็อก"
+
+msgid "password expired"
+msgstr "รหัสผ่านหมดอายุแล้ว"
+
+msgid "user disabled"
+msgstr "ผู้ใช้ปิดใช้งานแล้ว"
+
+msgid "invalid password"
+msgstr "รหัสผ่านไม่ถูกต้อง"
+
+msgid "ambiguous username"
+msgstr "ชื่อผู้ใช้คลุมเครือ"
+
+msgid "user not found"
+msgstr "ผู้ใช้ไม่พบ"
+
+msgid "failure"
+msgstr "ความล้มเหลว"
+
+msgid "success"
+msgstr "ความสำเร็จ"
+
+msgid "Groups"
+msgstr "กลุ่ม"
+
+msgid "Roles"
+msgstr "หน้าที่"
+
+msgid "Applications"
+msgstr "การประยุกต์ใช้"
+
+msgid "Containers"
+msgstr "ที่จัดเก็บ"
+
+msgid "Shared Tags"
+msgstr "ป้ายกำกับที่ใช้ร่วมกัน"
+
+msgid "Customfields"
+msgstr ""
+
+msgid "Computers"
+msgstr "คอมพิวเตอร์"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "ข้อมูลระบบ"
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "ผู้ดูแลระบบ"
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr "สมุดรายชื่อหลักสำหรับการติดต่อและกลุ่มใหม่"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "การประยุกต์ใช้"
+
+msgid "Enable Application"
+msgstr "อนุญาตให้ใช้แอพลิเคชั่น"
+
+msgid "Disable Application"
+msgstr "ยกเลิกการใช้แอพลิเคชั่น"
+
+msgid "Settings"
+msgstr "ค่าติดตั้ง"
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "ค่าติดตั้ง {0}"
+
+msgid "Search:"
+msgstr "ค้นหา:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "แสดงการใช้ {0} - {1} จาก {2}"
+
+msgid "No applications to display"
+msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
+
+msgid "Order"
+msgstr "คำสั่ง"
+
+msgid "Status"
+msgstr "สถานะ"
+
+msgid "Version"
+msgstr "ภาค"
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+
+msgid "Description"
+msgstr "การอธิบาย"
+
+msgid "Label"
+msgstr "ป้าย"
+
+msgid "Value"
+msgstr "ค่า"
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr ""
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "ที่จัดเก็บ"
+
+msgid "Model"
+msgstr "รุ่น"
+
+msgid "Type"
+msgstr "ประเภท"
+
+msgid "personal"
+msgstr "ส่วนตัว"
+
+msgid "shared"
+msgstr "ใช้ร่วมกัน"
+
+msgid "Color"
+msgstr "สี"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr "บันทึกสำหรับเจ้าของ"
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "รหัส"
+
+msgid "Container Name"
+msgstr "ชื่อที่จัดเก็บ"
+
+msgid "Container Order"
+msgstr ""
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "ข้อผิดพลาด"
+
+msgid "Please configure store for this field type"
+msgstr ""
+
+msgid "Record Class"
+msgstr "บันทึก ชั้น"
+
+msgid "Given record class not found"
+msgstr "ที่ให้บันทึกชั้นมานั้นหาไม่พบ"
+
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+msgid "OK"
+msgstr "ตกลง"
+
+msgid "Configure store"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "ดู"
+
+msgid "Use"
+msgstr "ใช้"
+
+msgid "Custom field definition"
+msgstr ""
+
+msgid "Text"
+msgstr "ข้อความ"
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr "ลำดับ"
+
+msgid "Date"
+msgstr "วันที่"
+
+msgid "DateTime"
+msgstr "วันเวลา"
+
+msgid "Time"
+msgstr "เวลา"
+
+msgid "Boolean"
+msgstr ""
+
+msgid "Search Combo"
+msgstr ""
+
+msgid "Key Field"
+msgstr ""
+
+msgid "Record"
+msgstr "บันทึก"
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr "ความยาว"
+
+msgid "Required"
+msgstr "ได้ต้องการ"
+
+msgid "Custom field additional properties"
+msgstr ""
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "กลุ่ม"
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr ""
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "ชื่อกลุ่ม"
+
+msgid "Visibility"
+msgstr "การมองเห็นได้"
+
+msgid "Display in addressbook"
+msgstr "แสดงในสมุดรายชื่อ"
+
+msgid "Hide from addressbook"
+msgstr "ซ่อนจากสมุดรายชื่อ"
+
+msgid "Saved in Addressbook"
+msgstr "บันทึกแล้วในสมุดรายชื่อ"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "สมาชิกของกลุ่ม"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+msgid "Confirm"
+msgstr "ยืนยัน"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "คุณแน่ใจว่าต้องการลบกลุ่มที่เลือกไว้นี้?"
+
+msgid "Deleting group(s)..."
+msgstr "กำลังลบ กลุ่ม"
+
+msgid "Add Group"
+msgstr "เพิ่มกลุ่ม"
+
+msgid "Edit Group"
+msgstr "แก้ไขกลุ่ม"
+
+msgid "Delete Group"
+msgstr "ลบกลุ่ม"
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "กำลังแสดงกลุ่ม {0} - {1} จาก {2}"
+
+msgid "No groups to display"
+msgstr "ไม่มีกลุ่มใด ๆ ให้แสดง"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+
+msgid "Configs"
+msgstr ""
+
+msgid "Quota"
+msgstr "โควต้า"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "ผู้ใช้อีเมล"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr "ขนาดของกล่องจดหมายตอนนี้"
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr "ขนาดของกรองปัจจุบัน"
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr "ไม่ได้ตั้งโควต้า"
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "กรุณารอ"
+
+msgid "Updating Memberships"
+msgstr "กำลังปรับปรุงการเป็นสมาชิก"
+
+msgid "Failed"
+msgstr "ได้ล้มเหลว"
+
+msgid "Could not save role."
+msgstr "ไม่สามารถจัดเก็บหน้าที่ได้"
+
+msgid "Please fix the errors noted."
+msgstr "กรุณาแก้ไขข้อผิดพลาดที่ได้บันทึกไว้"
+
+msgid "Deleting role..."
+msgstr "กำลังลบ หน้าที่..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "มีข้อผิดพลาดบางอย่างเกิดขึ้น ขณะที่พยายามลบหน้าที่"
+
+msgid "Rights"
+msgstr "สิทธิ์"
+
+msgid "Members"
+msgstr "สมาชิก"
+
+msgid "Role Name"
+msgstr "ชื่อหน้าที่"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "กำลังโอนย้าย {0}..."
+
+msgid "Role"
+msgstr "หน้าที่"
+
+msgid "Add New Role"
+msgstr "เพิ่มหน้าที่ใหม่"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "แก้ไขหน้าที่ \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "คุณแน่ใจว่าต้องการลบหน้าที่ที่เลือกไว้นี้?"
+
+msgid "Deleting role(s)..."
+msgstr "กำลังลบ หน้าที่(s)..."
+
+msgid "Add Role"
+msgstr "เพิ่มหน้าที่"
+
+msgid "Edit Role"
+msgstr "แก้ไขหน้าที่"
+
+msgid "Delete Role"
+msgstr "ลบหน้าที่"
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "กำลังแสดงหน้าที่ {0} - {1} จาก {2}"
+
+msgid "No roles to display"
+msgstr "ไม่มีหน้าที่ใด ๆ ให้แสดง"
+
+msgid "Computer Name"
+msgstr "ชื่อของคอมพิวเตอร์"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "คอมพิวเตอร์"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "กำลังปรับปรุงป้ายกำกับ"
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr "ไม่สามารถจัดเก็บป้ายกำกับ ({0}) ได้"
+
+msgid "Allowed Contexts"
+msgstr "เนื้อหาที่อนุญาต"
+
+msgid "Context"
+msgstr "เนื้อหา"
+
+msgid "Account Rights"
+msgstr "สิทธิ์เกี่ยวกับบัญชี"
+
+msgid "Tag Name"
+msgstr "ชื่อป้ายกำกับ"
+
+msgid "Tag"
+msgstr "ป้ายกำกับ"
+
+msgid "Add New Tag"
+msgstr "เพิ่มป้ายกำกับใหม่"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "แก้ไขป้ายกำกับ \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "คุณแน่ใจว่าคุณต้องการลบป้ายกำกับที่เลือก?"
+
+msgid "Deleting tag(s)..."
+msgstr "กำลังลบ ป้ายกำกับ(s)..."
+
+msgid "Add Tag"
+msgstr "เพิ่มป้ายกำกับ"
+
+msgid "Edit Tag"
+msgstr "แก้ไขป้ายกำกับ"
+
+msgid "Delete Tag"
+msgstr "ลบป้ายกำกับ"
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "กำกังแสดงป้ายกำกับ {0} - {1} จาก {2}"
+
+msgid "No tags to display"
+msgstr "ไม่มีป้ายกำกับใด ๆ ให้แสดง"
+
+msgid "Usage:&#160;"
+msgstr "การใช้:&#160;"
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr "รหัสผ่านไม่ตรง"
+
+msgid "Passwords match!"
+msgstr "รหัสผ่านตรง!"
+
+msgid "Primary group"
+msgstr "กลุ่มหลัก"
+
+msgid "Unix"
+msgstr "ยูนิกซ์"
+
+msgid "Home Directory"
+msgstr "โฮมไดเรคทอรี่"
+
+msgid "Login Shell"
+msgstr ""
+
+msgid "Windows"
+msgstr ""
+
+msgid "Home Drive"
+msgstr ""
+
+msgid "never logged in"
+msgstr "ไม่เคยได้เข้าใช้"
+
+msgid "Home Path"
+msgstr ""
+
+msgid "never logged off"
+msgstr "ไม่เคยเลิกใช้"
+
+msgid "Profile Path"
+msgstr ""
+
+msgid "Password Last Set"
+msgstr "รหัสผ่านที่ตั้งครั้งสุดท้าย"
+
+msgid "never"
+msgstr "ไม่เลย"
+
+msgid "Logon Script"
+msgstr ""
+
+msgid "Password Can Change"
+msgstr "รหัสผ่านสามารถเปลี่ยน"
+
+msgid "not set"
+msgstr "ยังไม่ได้กำหนด"
+
+msgid "Password Must Change"
+msgstr "รหัสผ่านต้องเปลี่ยน"
+
+msgid "Kick Off Time"
+msgstr ""
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "ข้อมูล"
+
+msgid "Last Login"
+msgstr "ลงบันทึกเข้าครั้งล่าสุด"
+
+msgid "Forward Only"
+msgstr "ส่งต่อเท่านั้น"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr ""
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr "โดเมนไม่ได้รับอนุญาต"
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr ""
+
+msgid "Forwarding to self"
+msgstr "ส่งต่อให้ตัวเอง"
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "การยืนยันรหัสผ่าน"
+
+msgid "Repeat password"
+msgstr "ใส่รหัสผ่านอีกครั้ง"
+
+msgid "Ok"
+msgstr "ตกลง"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "บัญชี"
+
+msgid "First name"
+msgstr "ชื่อตัว"
+
+msgid "Last name"
+msgstr "นามสกุล"
+
+msgid "Display name"
+msgstr "ชื่อที่ใช้"
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr "ชื่อที่เข้าใช้"
+
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "รหัสเปิด"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "เปิดใช้งานแล้ว"
+
+msgid "disabled"
+msgstr "ปิดใช้งานแล้ว"
+
+msgid "expired"
+msgstr "หมดอายุแล้ว"
+
+msgid "blocked"
+msgstr "ถูกล็อก"
+
+msgid "Invalid Status"
+msgstr "สถานะใช้ไม่ได้"
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr "สถานะ ถูกล็อก จะใช้ต่อเมื่อผู้ใช้พยายามลงชื่อเข้าใช้ด้วยรหัสผ่านที่ผิดบ่อย ๆ ณ ที่นี่ไม่สามารถตั้งค่าสถานะนี้ได้"
+
+msgid "Expires"
+msgstr "หมดอายุ"
+
+msgid "Last login at"
+msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด เมื่อ"
+
+msgid "don't know"
+msgstr "ไม่ทราบ"
+
+msgid "Last login from"
+msgstr "ลงชื่อเข้าใช้ครั้งล่าสุด จาก"
+
+msgid "Password set"
+msgstr "ตั้งรหัสผ่าน"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr "กลุ่มผู้ใช้"
+
+msgid "User roles"
+msgstr ""
+
+msgid "Fileserver"
+msgstr "ตัวจัดเก็บไฟล์"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr "อนุญาตใช้บัญชี"
+
+msgid "Disable Account"
+msgstr "เลิกบัญชี"
+
+msgid "Reset Password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "รหัสผ่านได้เปลี่ยนแล้ว"
+
+msgid "Set new password"
+msgstr "ตั้งรหัสผ่านใหม่"
+
+msgid "Please enter the new password:"
+msgstr "กรุณาใส่รหัสผ่านใหม่:"
+
+msgid "Users"
+msgstr "ผู้ใช้"
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "ผู้ใช้ Samba"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

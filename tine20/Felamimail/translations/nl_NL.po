@@ -12,14 +12,323 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Whatsek <Whatsek@gmail.com>, 2015\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/tine/groupware/language/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+msgid "Manage personal email accounts"
+msgstr ""
+
+msgid "Edit and delete personal email accounts"
+msgstr ""
+
+msgid "Add personal email accounts"
+msgstr ""
+
+msgid "Create new personal email accounts"
+msgstr ""
+
+msgid "Mail Type"
+msgstr ""
+
+msgid "Possible mail types."
+msgstr ""
+
+msgid "Additional Personal External Account"
+msgstr ""
+
+msgid "Shared System Account"
+msgstr ""
+
+msgid "Additional Personal System Account"
+msgstr ""
+
+msgid "Default Personal System Account"
+msgstr ""
+
+msgid "Mailinglist"
+msgstr ""
+
+msgid "Mailinglist Reject Reason"
+msgstr ""
+
+msgid "Your email has been rejected"
+msgstr ""
+
+msgid "Vacation Templates Node ID"
+msgstr ""
+
+msgid "Email Notification Templates Node ID"
+msgstr ""
+
+msgid "Email Notification from E-Mailadress"
+msgstr ""
+
+msgid "Custom Vacation Message"
+msgstr "Aangepast Vakantie Bericht"
+
+msgid "User is allowed to set custom vacation message for system account"
+msgstr "Gebruiker mag een eigen vakantiebericht instellen voor het systeem account"
+
+msgid "Cache email body"
+msgstr "Cache email bericht"
+
+msgid "Should the email body be cached (recommended for slow IMAP server connections)"
+msgstr "Moet het email bericht worden gecached (aangeraden voor langzame IMAP verbindingen)"
+
+msgid "Delete Archived Mail"
+msgstr ""
+
+msgid "Prevent copying mails in the same account"
+msgstr ""
+
+msgid "Attachment cache TTL in seconds"
+msgstr ""
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Felamimail Application."
+msgstr ""
+
+msgid "Account Migration"
+msgstr ""
+
+msgid "Shows context menu for system accounts to approve migration"
+msgstr ""
+
+msgid "Move notifications"
+msgstr ""
+
+msgid "Move notifications to a subfolder via sieve"
+msgstr ""
+
+msgid "Auto-Save Drafts"
+msgstr ""
+
+msgid "Save drafts automatically while editing an email"
+msgstr ""
+
+msgid "Only password download link"
+msgstr ""
+
+msgid "Allow only password download link"
+msgstr ""
+
+msgid "Tine 2.0 Flag"
+msgstr ""
+
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
+msgid "Show Reply-To"
+msgstr ""
+
+msgid "Show Reply-To field in message compose dialog"
+msgstr ""
+
+msgid "Auto-Create Folders"
+msgstr ""
+
+msgid "Create template, trash, sent, draft and junks folders for system accounts"
+msgstr ""
+
+msgid "Enable Spam Suspicion Strategy"
+msgstr ""
+
+msgid "Spam Suspicion Strategy"
+msgstr ""
+
+msgid "Spam Suspicion Strategy Config"
+msgstr ""
+
+msgid "Spam User Processing Pipeline"
+msgstr ""
+
+msgid "Confirm SPAM Suspicion Message"
+msgstr ""
+
+msgid "Message for users when they press the info button in a SPAM suspicion toolbar."
+msgstr ""
+
+msgid "Filter E-Mail URIs"
+msgstr ""
+
+msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
+msgstr ""
+
+msgid "System Account Folder Defaults"
+msgstr ""
+
+msgid "Paths of the special folders (like Sent, Trash, ...)"
+msgstr ""
+
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr ""
+
+msgid "Sieve Redirect Only Internal"
+msgstr ""
+
+msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
+msgstr ""
+
+msgid "Sieve Notification Bounces Reporting Email"
+msgstr ""
+
+msgid "URL icon path for own domain"
+msgstr ""
+
+msgid "Used to mark messages from configured primary and secondary domains"
+msgstr ""
+
+msgid "URL icon path for other domains"
+msgstr ""
+
+msgid "Used to mark messages from all other domains"
+msgstr ""
+
+msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Auto"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "shared / adb_list accounts need to have a password set"
+msgstr ""
+
+msgid "shared / adb_list accounts need to have an email set"
+msgstr ""
+
+msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
+msgstr ""
+
+msgid "Internal user accounts need an email address"
+msgstr ""
+
+msgid "Internal user accounts need to be assigned to a user"
+msgstr ""
+
+msgid "Please choose a new email address for internal user account"
+msgstr ""
+
+msgid "system account for user does not exist"
+msgstr ""
+
+#, python-brace-format
+msgid "Account type cannot be changed from {0} to {1}"
+msgstr ""
+
+msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
+msgstr ""
+
+msgid "Migration of this account has not been approved!"
+msgstr ""
+
+msgid "Could not find email user xprops!"
+msgstr ""
+
+msgid "Internal user accounts need a valid user"
+msgstr ""
+
+msgid "System account of user is missing"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+#, python-brace-format
+msgid "Folder with name {0} already exists!"
+msgstr ""
+
+msgid "Failure on create folder"
+msgstr ""
+
+msgid "still unanswered: "
+msgstr ""
+
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgstr ""
+
+msgid "It is not possible to file the message in this record (might be a recurring event)."
+msgstr ""
+
+msgid "Passed"
+msgstr ""
+
+msgid "Answered"
+msgstr "Beantwoord"
+
+msgid "Seen"
+msgstr "Gelezen"
+
+msgid "Deleted"
+msgstr "Verwijderd"
+
+msgid "Draft"
+msgstr "Concept"
+
+msgid "Flagged"
+msgstr "Gemarkeerd"
+
+msgid "It is not allowed to copy e-mails in the same account."
+msgstr ""
+
+msgid "Bad recipient address syntax"
+msgstr ""
+
+msgid "Recipient address rejected"
+msgstr ""
+
+msgid "Original message not found, email was moved or deleted"
+msgstr ""
+
+msgid "Invalid address format"
+msgstr ""
+
+#, python-format
+msgid "Error: %s"
+msgstr "Fout: %s"
+
+msgid "Could not send message"
+msgstr "Bericht kon niet verzonden worden."
+
+msgid "My Mail Download Links"
+msgstr ""
+
+msgid "Out of Office reply from %1$s"
+msgstr "Out of Office bericht %1$s"
+
+msgid "Sieve vacation has been updated:"
+msgstr ""
+
+msgid "Vacation message is now active."
+msgstr ""
+
+msgid "Vacation message is now inactive."
+msgstr ""
+
+msgid "Sieve rules have been updated."
+msgstr ""
+
+msgid "It is not allowed to redirect emails to self! Please change the recipient."
+msgstr ""
+
+msgid "Redirects to external email domains are not allowed."
+msgstr ""
+
+msgid "You have new mail from "
+msgstr ""
 
 msgid "IMAP Hostname missing"
 msgstr ""
@@ -32,54 +341,6 @@ msgstr ""
 
 msgid "SMTP Credentials missing"
 msgstr ""
-
-msgid "All inboxes"
-msgstr "Alle postvakken I"
-
-msgid "Default Email Account"
-msgstr "Standaard Email Account"
-
-msgid "The default email account to use when sending mails."
-msgstr "Het standaard email account in email te sturen."
-
-msgid "Mark Email Automatically As Read"
-msgstr ""
-
-msgid "Is email marked as read automatically or by user action"
-msgstr ""
-
-msgid "Email Update Interval"
-msgstr "Email update interval"
-
-msgid "How often should Felamimail check for new Emails (in minutes)."
-msgstr "Hoe vaak moet Felamimail op nieuwe email controleren (in minuten)."
-
-msgid "Use for mailto links"
-msgstr "Gebruik voor mailto links"
-
-msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr "Gebruik Felamimail in mailto links, anders gebruik de standaard desktop client."
-
-msgid "Confirm Delete"
-msgstr "Bevestig verwijderen"
-
-msgid "Show confirmation dialog when deleting mails."
-msgstr "Geef confirmatie dialoog bij verwijderen emails."
-
-msgid ".eml file Attachment in forwarded mails"
-msgstr ""
-
-msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
-msgstr ""
-
-msgid "Default Font"
-msgstr ""
-
-msgid "Setting the default font in the E-Mail app"
-msgstr ""
-
-msgid "Message not available."
-msgstr "Bericht niet beschikbaar"
 
 msgid "Add New Account"
 msgstr "Nieuw account toevoegen "
@@ -337,6 +598,15 @@ msgstr ""
 msgid "User Name (From) cannot contain a comma."
 msgstr ""
 
+msgid "Edit Vacation Message"
+msgstr "Bewerk Vakantie Bericht"
+
+msgid "Edit Filter Rules"
+msgstr "Bewerk Filter Regels"
+
+msgid "E-mail usage"
+msgstr ""
+
 msgid "Save As"
 msgstr ""
 
@@ -358,41 +628,152 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+msgid "Attachment"
+msgid_plural "Attachments"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Filemanager (Download link)"
+msgstr ""
+
+msgid "Filemanager (Download link, password)"
+msgstr ""
+
+msgid "Filemanager (Systemlink)"
+msgstr ""
+
+msgid "Attachment Type"
+msgstr ""
+
+msgid "Click icon to change"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "size"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "Selected E-Mail"
+msgstr ""
+
+msgid "Add as \"To\""
+msgstr "Voeg toe aan \"Aan\""
+
+msgid "Add as \"Cc\""
+msgstr "Voeg toe aan \"Cc\""
+
+msgid "Add as \"Bcc\""
+msgstr "Voeg toe aan \"Bcc\""
+
+msgid "Remove from recipients"
+msgstr "Verwijder van ontvangers"
+
 msgid "Loading Mail Addresses"
 msgstr "Laden email adressen"
 
-msgid "To:"
-msgstr "Aan:"
-
-msgid "Cc:"
-msgstr "Cc:"
-
-msgid "Bcc:"
-msgstr "Bcc:"
-
-msgid "A separate mail is send to each recipient."
+msgid "Preferred E-Mail"
 msgstr ""
 
-msgid "Mass"
+msgid "New Mail"
+msgstr "Nieuwe mail"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Active Vacation Message"
+msgstr "Actief vakantie bericht"
+
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "Email account \"{0}\" heeft een actief vakantie bericht"
+
+#, python-brace-format
+msgid "Poll URL: {0}"
 msgstr ""
 
-msgid "Click here to set To/CC/BCC."
-msgstr "Klik hier voor een Aan/CC/BCC"
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr "{0} als standaard mailer"
 
-msgid "Send message to individual list members instead"
+msgid "New mails"
+msgstr "Nieuwe mails"
+
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "U heeft {0} nieuwe email(s) in map {1} ({2})."
+
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP gegevens voor {0}"
+
+msgid "Credentials"
+msgstr "Gegevens"
+
+msgid "IMAP Error"
+msgstr "IMAP Fout"
+
+msgid "No connection to IMAP server."
+msgstr "Geen verbinding met de IMAP server. "
+
+msgid "IMAP Credentials Error"
+msgstr "IMAP gegevens fout"
+
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Uw email gegevens zijn verkeerd. Neem contact op met de beheerder."
+
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr "Een van uw mappen was verwijderd of hernoemd door een andere client. Update de mappenlijst van dit account."
+
+msgid "SMTP Error"
+msgstr "SMTP Fout"
+
+msgid "No connection to SMTP server."
+msgstr "Geen verbinding met de SMTP server. "
+
+msgid "Sieve Error"
+msgstr "Sieve fout"
+
+msgid "No connection to Sieve server."
+msgstr "Geen verbinding met de Sieve server. "
+
+msgid "Save Sieve Script Error"
+msgstr "Error in Sieve script"
+
+msgid "Could not save script on Sieve server."
+msgstr "Kan script niet op de Sieve server opslaan. "
+
+#, python-brace-format
+msgid "Selected  {0}"
 msgstr ""
 
-msgid "Resolve to single contact"
+#, python-brace-format
+msgid "{0} {1} is not found"
 msgstr ""
 
-msgid "from"
-msgstr ""
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
 
-msgid "Remove"
-msgstr "Verwijder"
+msgid "Cancel"
+msgstr "Annuleer"
 
-msgid "The following recipients will be removed from this mass mail"
-msgstr ""
+msgid "Ok"
+msgstr "Ok"
+
+#, python-brace-format
+msgid "Folders of account {0}"
+msgstr "Mappen van account {0}"
+
+msgid "Folders of all accounts"
+msgstr "Mappen van alle accounts"
+
+msgid "Message not available."
+msgstr "Bericht niet beschikbaar"
 
 msgid "Compose email"
 msgstr "Maak email"
@@ -412,46 +793,130 @@ msgstr ""
 msgid "Loading Recipients..."
 msgstr ""
 
-msgid "Signatures"
+msgid "No Messages found."
 msgstr ""
 
-msgid "Name"
+msgid "It is SPAM"
 msgstr ""
 
-msgid "Is Default"
+msgid "It is not SPAM"
 msgstr ""
 
-msgid "Add Signature"
+msgid "Compose"
+msgstr "Opstellen"
+
+msgid "Reply"
+msgstr "Beantwoorden"
+
+msgid "Reply To All"
+msgstr "Allen beantwoorden"
+
+msgid "Forward"
+msgstr "Doorsturen"
+
+msgid "Toggle highlighting"
+msgstr "Wissel markering"
+
+msgid "Mark read/unread"
+msgstr "Markeer gelezen/ongelezen"
+
+msgid "Move"
 msgstr ""
 
-msgid "Edit Signature"
+msgid "Copy"
 msgstr ""
 
-msgid "Delete Signature"
+msgid "Import Messages"
 msgstr ""
 
-msgid "Selected E-Mail"
+msgid "Add Account"
+msgstr "Account toevoegen"
+
+msgid "Print Preview"
+msgstr "Print voorbeeld"
+
+msgid "Print Message"
+msgstr "Print bericht"
+
+msgid "Create New Task"
 msgstr ""
 
-msgid "Add as \"To\""
-msgstr "Voeg toe aan \"Aan\""
+msgid "Delete"
+msgstr "Verwijderen"
 
-msgid "Add as \"Cc\""
-msgstr "Voeg toe aan \"Cc\""
+msgid "No target folder selected"
+msgstr ""
 
-msgid "Add as \"Bcc\""
-msgstr "Voeg toe aan \"Bcc\""
+msgid "You need to select a target folder for the messages."
+msgstr ""
 
-msgid "Remove from recipients"
-msgstr "Verwijder van ontvangers"
+msgid "Wrong File Type"
+msgstr ""
 
-msgid "Edit Vacation Message"
-msgstr "Bewerk Vakantie Bericht"
+msgid "Files of type eml, emltpl and msg allowed only."
+msgstr ""
 
-msgid "Edit Filter Rules"
-msgstr "Bewerk Filter Regels"
+msgid "Importing Messages..."
+msgstr ""
 
-msgid "E-mail usage"
+msgid "Id"
+msgstr "Id"
+
+msgid "Flags"
+msgstr "Markeringen"
+
+msgid "Tags"
+msgstr ""
+
+msgid "Subject"
+msgstr "Onderwerp"
+
+msgid "From (Email)"
+msgstr "Van (Email)"
+
+msgid "From (Name)"
+msgstr "Van (Naam)"
+
+msgid "Sender"
+msgstr "Verzender"
+
+msgid "Sent"
+msgstr "Verzonden items"
+
+msgid "Received"
+msgstr "Ontvangen"
+
+msgid "Size"
+msgstr "Grootte"
+
+msgid "Filed as:"
+msgstr ""
+
+msgid "Select Message File Location"
+msgstr ""
+
+msgid "Filing Messages"
+msgstr ""
+
+msgid "Error Filing Message"
+msgstr ""
+
+msgid "Could not file message."
+msgstr ""
+
+msgid "Send Reading Confirmation"
+msgstr "Stuur leesbevestiging"
+
+msgid "Do you want to send a reading confirmation message?"
+msgstr "Wilt u een leesbevestiging sturen?"
+
+msgid "Creating new Task..."
+msgstr ""
+
+msgid "New Task"
+msgstr ""
+
+msgid "Error"
 msgstr ""
 
 msgid "Open in Felamimail"
@@ -483,325 +948,6 @@ msgstr ""
 
 msgid "Show or hide header information"
 msgstr "Toon of verberg header informatie"
-
-msgid "Recipient filter"
-msgstr "Ontvangers filter"
-
-msgid "All recipients"
-msgstr "Alle ontvangers"
-
-#, python-brace-format
-msgid "\"{0}\" recipients"
-msgstr "\"{0}\" ontvangers"
-
-msgid "Total Messages:"
-msgstr "Totaal aantal berichten:"
-
-msgid "Unread Messages:"
-msgstr "Ongelezen Berichten:"
-
-msgid "Name on Server:"
-msgstr "Naan op Server:"
-
-msgid "Last update:"
-msgstr "Laatste update:"
-
-#, python-brace-format
-msgid "Fetching messages... ({0} done)"
-msgstr "Berichten ophalen... ({0} klaar)"
-
-#, python-brace-format
-msgid "{0} unread message"
-msgid_plural "{0} unread messages"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "(new message)"
-msgstr "(Nieuw bericht)"
-
-#, python-brace-format
-msgid "Select recipients for \"{0}\""
-msgstr "Selecteen ontvangers voor \"{0}\""
-
-#, python-brace-format
-msgid "Mailvelope decryption Error [{0}]"
-msgstr ""
-
-#, python-brace-format
-msgid "To decrypt this message please install {0} with API support enabled"
-msgstr ""
-
-msgid "PGP encrypted Message"
-msgstr ""
-
-msgid "Delete"
-msgstr "Verwijderen"
-
-msgid "Reply"
-msgstr "Beantwoorden"
-
-msgid "Reply To All"
-msgstr "Allen beantwoorden"
-
-msgid "Forward"
-msgstr "Doorsturen"
-
-msgid "Print Message"
-msgstr "Print bericht"
-
-msgid "Print Preview"
-msgstr "Print voorbeeld"
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} {1} is not found"
-msgstr ""
-
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Only custom scripts can be modified."
-msgstr ""
-
-msgid "Cancel"
-msgstr "Annuleer"
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "Errors"
-msgstr ""
-
-#, python-brace-format
-msgid "Notification for {0}"
-msgstr ""
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Notification Email"
-msgstr ""
-
-msgid "Add a new email ..."
-msgstr ""
-
-msgid "Edit Filter Rule"
-msgstr "Bewerk Filter Regel"
-
-msgid "Apply filter if"
-msgstr "Filter toepassen als"
-
-msgid "all conditions match"
-msgstr "alle condities matchen"
-
-msgid "any condition matches"
-msgstr "iedere conditie matched"
-
-msgid "Do this action:"
-msgstr "Doe deze actie:"
-
-msgid "Keep a copy"
-msgstr ""
-
-msgid "Move mail to folder"
-msgstr "Verplaats mail naar map"
-
-msgid "Redirect mail to address"
-msgstr "Doorsturen naar email adres"
-
-msgid "Reject mail with this text"
-msgstr "Weiger mail met deze tekst"
-
-msgid "Discard mail"
-msgstr "Gooi mail weg"
-
-msgid "Auto-Reply mail with this text"
-msgstr ""
-
-msgid "Keep mail"
-msgstr "Bewaar mail"
-
-msgid "Sieve Filter Rules"
-msgstr "Sieve filter regels"
-
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr "Sieve Filter regels voor {0}"
-
-msgid "General"
-msgstr "Algemeen"
-
-msgid "Advanced"
-msgstr "Geavanceerd"
-
-msgid "Only send all X days to the same sender"
-msgstr "Stuur alleen per X dagen naar dezelfde ontvanger"
-
-msgid "Incoming mails will be answered with this text:"
-msgstr "Inkomende emails zullen beantwoord worden met deze tekst:"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "I am available (vacation message disabled)"
-msgstr "Ik ben beschikbaar (vakantiebericht uitgeschakeld)"
-
-msgid "I am not available (vacation message enabled)"
-msgstr "Ik ben niet beschikbaar (vakantiebericht ingeschakeld)"
-
-msgid "Start Date"
-msgstr "Start datum"
-
-msgid "Set vacation start date ..."
-msgstr "Start vakantiedatum ..."
-
-msgid "End Date"
-msgstr "Eind datum"
-
-msgid "Set vacation end date ..."
-msgstr "Stel vakantie einddatum in ..."
-
-msgid "Representative #1"
-msgstr "Vertegenwoordiger #1"
-
-msgid "Choose first Representative ..."
-msgstr "Kies de eerste vertegenwoordiger"
-
-msgid "Representative #2"
-msgstr "Vertegenwoordiger #2"
-
-msgid "Choose second Representative ..."
-msgstr "Kies de 2e vertegenwoordiger ..."
-
-msgid "Message Template"
-msgstr "Bericht Template"
-
-msgid "Choose Template ..."
-msgstr "Kies Template"
-
-msgid "Move up"
-msgstr "Omhoog"
-
-msgid "Move down"
-msgstr "Omlaag"
-
-msgid "Enable"
-msgstr "Schakel in"
-
-msgid "Disable"
-msgstr "Schakel uit"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Conditions"
-msgstr "Condities"
-
-msgid "Action"
-msgstr "Actie"
-
-msgid "is greater than"
-msgstr "is groter dan"
-
-msgid "is less than"
-msgstr "is kleiner dan"
-
-#, python-brace-format
-msgid "Header \"{0}\" contains \"{1}\""
-msgstr "Header \"{0}\" bevat \"{1}\""
-
-#, python-brace-format
-msgid "Header \"{0}\" matches \"{1}\""
-msgstr "Header \"{0}\" matched \"{1}\""
-
-#, python-brace-format
-msgid "Vacation Message for {0}"
-msgstr "Vakantie bericht voor {0}"
-
-msgid "From (Email)"
-msgstr "Van (Email)"
-
-msgid "From (Email and Name)"
-msgstr "Van (Email en Naam)"
-
-msgid "To (Email)"
-msgstr "Naar (Email)"
-
-msgid "To (Email CC)"
-msgstr "Naar (Email CC)"
-
-msgid "Subject"
-msgstr "Onderwerp"
-
-msgid "Size (in byte)"
-msgstr ""
-
-msgid "Header contains"
-msgstr "Header bevat"
-
-msgid "Header name"
-msgstr "Header naam"
-
-msgid "Header value"
-msgstr "Header waarde"
-
-msgid "Header regex"
-msgstr "Header regex"
-
-msgid "Expected Answer"
-msgstr ""
-
-msgid "Tomorrow"
-msgstr ""
-
-msgid "In two days"
-msgstr ""
-
-msgid "In a week"
-msgstr ""
-
-msgid "In two weeks"
-msgstr ""
-
-msgid "In a month"
-msgstr ""
-
-msgid "Custom"
-msgstr ""
-
-msgid "Attachment"
-msgid_plural "Attachments"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Filemanager (Download link)"
-msgstr ""
-
-msgid "Filemanager (Download link, password)"
-msgstr ""
-
-msgid "Filemanager (Systemlink)"
-msgstr ""
-
-msgid "Attachment Type"
-msgstr ""
-
-msgid "Click icon to change"
-msgstr ""
-
-msgid "name"
-msgstr ""
-
-msgid "size"
-msgstr ""
-
-msgid "type"
-msgstr ""
 
 msgid "Send"
 msgstr "Verzonden"
@@ -921,6 +1067,42 @@ msgstr ""
 msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
 msgstr ""
 
+msgid "Expected Answer"
+msgstr ""
+
+msgid "Tomorrow"
+msgstr ""
+
+msgid "In two days"
+msgstr ""
+
+msgid "In a week"
+msgstr ""
+
+msgid "In two weeks"
+msgstr ""
+
+msgid "In a month"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Save Message as"
+msgstr ""
+
+msgid "Save To All Recipients"
+msgstr ""
+
+msgid "Select other IMAP folder"
+msgstr ""
+
+msgid "{messageCount, plural, one {Message was saved} other {# messages where saved}}"
+msgstr ""
+
+msgid "Save Messages as Attachment"
+msgstr ""
+
 msgid "GENDER_Message"
 msgstr ""
 
@@ -935,9 +1117,6 @@ msgstr ""
 msgid "This message might be SPAM"
 msgstr ""
 
-msgid "Answered"
-msgstr "Beantwoord"
-
 msgid "Forwarded"
 msgstr "Doorgestuurd"
 
@@ -950,29 +1129,20 @@ msgstr ""
 msgid "Subject/From/To"
 msgstr ""
 
-msgid "From (Name)"
-msgstr "Van (Naam)"
-
 msgid "Cc"
 msgstr "Cc"
 
 msgid "Bcc"
 msgstr "Bcc"
 
-msgid "Flags"
-msgstr "Markeringen"
-
-msgid "Received"
-msgstr "Ontvangen"
+msgid "Size (in byte)"
+msgstr ""
 
 msgid "INBOX"
 msgstr "Postvak IN"
 
 msgid "Drafts"
 msgstr "Concepten"
-
-msgid "Sent"
-msgstr "Verzonden items"
 
 msgid "Templates"
 msgstr "Templates"
@@ -1005,189 +1175,6 @@ msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "No Messages found."
-msgstr ""
-
-msgid "It is SPAM"
-msgstr ""
-
-msgid "It is not SPAM"
-msgstr ""
-
-msgid "Compose"
-msgstr "Opstellen"
-
-msgid "Toggle highlighting"
-msgstr "Wissel markering"
-
-msgid "Mark read/unread"
-msgstr "Markeer gelezen/ongelezen"
-
-msgid "Move"
-msgstr ""
-
-msgid "Copy"
-msgstr ""
-
-msgid "Import Messages"
-msgstr ""
-
-msgid "Add Account"
-msgstr "Account toevoegen"
-
-msgid "Create New Task"
-msgstr ""
-
-msgid "No target folder selected"
-msgstr ""
-
-msgid "You need to select a target folder for the messages."
-msgstr ""
-
-msgid "Wrong File Type"
-msgstr ""
-
-msgid "Files of type eml, emltpl and msg allowed only."
-msgstr ""
-
-msgid "Importing Messages..."
-msgstr ""
-
-msgid "Id"
-msgstr "Id"
-
-msgid "Tags"
-msgstr ""
-
-msgid "Sender"
-msgstr "Verzender"
-
-msgid "Size"
-msgstr "Grootte"
-
-msgid "Filed as:"
-msgstr ""
-
-msgid "Select Message File Location"
-msgstr ""
-
-msgid "Filing Messages"
-msgstr ""
-
-msgid "Error Filing Message"
-msgstr ""
-
-msgid "Could not file message."
-msgstr ""
-
-msgid "Send Reading Confirmation"
-msgstr "Stuur leesbevestiging"
-
-msgid "Do you want to send a reading confirmation message?"
-msgstr "Wilt u een leesbevestiging sturen?"
-
-msgid "Creating new Task..."
-msgstr ""
-
-msgid "New Task"
-msgstr ""
-
-msgid "Error"
-msgstr ""
-
-msgid "New Mail"
-msgstr "Nieuwe mail"
-
-msgid "Email"
-msgstr "Email"
-
-msgid "Active Vacation Message"
-msgstr "Actief vakantie bericht"
-
-#, python-brace-format
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "Email account \"{0}\" heeft een actief vakantie bericht"
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} as default mailer"
-msgstr "{0} als standaard mailer"
-
-msgid "New mails"
-msgstr "Nieuwe mails"
-
-#, python-brace-format
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "U heeft {0} nieuwe email(s) in map {1} ({2})."
-
-#, python-brace-format
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP gegevens voor {0}"
-
-msgid "Credentials"
-msgstr "Gegevens"
-
-msgid "IMAP Error"
-msgstr "IMAP Fout"
-
-msgid "No connection to IMAP server."
-msgstr "Geen verbinding met de IMAP server. "
-
-msgid "IMAP Credentials Error"
-msgstr "IMAP gegevens fout"
-
-msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Uw email gegevens zijn verkeerd. Neem contact op met de beheerder."
-
-msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
-msgstr "Een van uw mappen was verwijderd of hernoemd door een andere client. Update de mappenlijst van dit account."
-
-msgid "SMTP Error"
-msgstr "SMTP Fout"
-
-msgid "No connection to SMTP server."
-msgstr "Geen verbinding met de SMTP server. "
-
-msgid "Sieve Error"
-msgstr "Sieve fout"
-
-msgid "No connection to Sieve server."
-msgstr "Geen verbinding met de Sieve server. "
-
-msgid "Save Sieve Script Error"
-msgstr "Error in Sieve script"
-
-msgid "Could not save script on Sieve server."
-msgstr "Kan script niet op de Sieve server opslaan. "
-
-msgid "Save Message as"
-msgstr ""
-
-msgid "Save To All Recipients"
-msgstr ""
-
-msgid "Select other IMAP folder"
-msgstr ""
-
-msgid "{messageCount, plural, one {Message was saved} other {# messages where saved}}"
-msgstr ""
-
-msgid "Save Messages as Attachment"
-msgstr ""
-
-#, python-brace-format
-msgid "Folders of account {0}"
-msgstr "Mappen van account {0}"
-
-msgid "Folders of all accounts"
-msgstr "Mappen van alle accounts"
-
-msgid "Preferred E-Mail"
-msgstr ""
 
 msgid "Empty Folder"
 msgstr "Lege Map"
@@ -1248,357 +1235,276 @@ msgstr ""
 msgid "Folder cache has been cleared!"
 msgstr ""
 
-msgid "All folders of my email accounts"
-msgstr ""
-
-msgid "All inboxes of my email accounts"
-msgstr "Alle postvakken IN van al mijn email accounts"
-
-msgid "All unread mail"
-msgstr "Alle ongelezen email"
-
-msgid "All unread mail of my email accounts"
-msgstr "Alle ongelezen email van al mijn accounts"
-
-msgid "All highlighted mail"
-msgstr "Alle gemarkeerde emails"
-
-msgid "All highlighted mail of my email accounts"
-msgstr "Alle gemarkeerde emails van al mijn accounts"
-
-msgid "All drafts"
-msgstr "Alle concepten"
-
-msgid "All mails with the draft flag"
-msgstr "Alle concepts mails"
-
-msgid "Mail Type"
-msgstr ""
-
-msgid "Possible mail types."
-msgstr ""
-
-msgid "Additional Personal External Account"
-msgstr ""
-
-msgid "Shared System Account"
-msgstr ""
-
-msgid "Additional Personal System Account"
-msgstr ""
-
-msgid "Default Personal System Account"
-msgstr ""
-
-msgid "Mailinglist"
-msgstr ""
-
-msgid "Mailinglist Reject Reason"
-msgstr ""
-
-msgid "Your email has been rejected"
-msgstr ""
-
-msgid "Vacation Templates Node ID"
-msgstr ""
-
-msgid "Email Notification Templates Node ID"
-msgstr ""
-
-msgid "Email Notification from E-Mailadress"
-msgstr ""
-
-msgid "Custom Vacation Message"
-msgstr "Aangepast Vakantie Bericht"
-
-msgid "User is allowed to set custom vacation message for system account"
-msgstr "Gebruiker mag een eigen vakantiebericht instellen voor het systeem account"
-
-msgid "Cache email body"
-msgstr "Cache email bericht"
-
-msgid "Should the email body be cached (recommended for slow IMAP server connections)"
-msgstr "Moet het email bericht worden gecached (aangeraden voor langzame IMAP verbindingen)"
-
-msgid "Delete Archived Mail"
-msgstr ""
-
-msgid "Prevent copying mails in the same account"
-msgstr ""
-
-msgid "Attachment cache TTL in seconds"
-msgstr ""
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Felamimail Application."
-msgstr ""
-
-msgid "Account Migration"
-msgstr ""
-
-msgid "Shows context menu for system accounts to approve migration"
-msgstr ""
-
-msgid "Move notifications"
-msgstr ""
-
-msgid "Move notifications to a subfolder via sieve"
-msgstr ""
-
-msgid "Auto-Save Drafts"
-msgstr ""
-
-msgid "Save drafts automatically while editing an email"
-msgstr ""
-
-msgid "Only password download link"
-msgstr ""
-
-msgid "Allow only password download link"
-msgstr ""
-
-msgid "Tine 2.0 Flag"
-msgstr ""
-
-msgid "Add a Tine 2.0 flag to sent messages"
-msgstr ""
-
-msgid "Show Reply-To"
-msgstr ""
-
-msgid "Show Reply-To field in message compose dialog"
-msgstr ""
-
-msgid "Auto-Create Folders"
-msgstr ""
-
-msgid "Create template, trash, sent, draft and junks folders for system accounts"
-msgstr ""
-
-msgid "Enable Spam Suspicion Strategy"
-msgstr ""
-
-msgid "Spam Suspicion Strategy"
-msgstr ""
-
-msgid "Spam Suspicion Strategy Config"
-msgstr ""
-
-msgid "Spam User Processing Pipeline"
-msgstr ""
-
-msgid "Confirm SPAM Suspicion Message"
-msgstr ""
-
-msgid "Message for users when they press the info button in a SPAM suspicion toolbar."
-msgstr ""
-
-msgid "Filter E-Mail URIs"
-msgstr ""
-
-msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
-msgstr ""
-
-msgid "System Account Folder Defaults"
-msgstr ""
-
-msgid "Paths of the special folders (like Sent, Trash, ...)"
-msgstr ""
-
-msgid "Allow self signed TLS cert for IMAP connection"
-msgstr ""
-
-msgid "Sieve Redirect Only Internal"
-msgstr ""
-
-msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
-msgstr ""
-
-msgid "Sieve Notification Bounces Reporting Email"
-msgstr ""
-
-msgid "URL icon path for own domain"
-msgstr ""
-
-msgid "Used to mark messages from configured primary and secondary domains"
-msgstr ""
-
-msgid "URL icon path for other domains"
-msgstr ""
-
-msgid "Used to mark messages from all other domains"
-msgstr ""
-
-msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "Auto"
-msgstr ""
-
-msgid "Inactive"
-msgstr ""
-
-msgid "It is not possible to file the message in this record (might be a recurring event)."
-msgstr ""
-
-msgid "shared / adb_list accounts need to have a password set"
-msgstr ""
-
-msgid "shared / adb_list accounts need to have an email set"
-msgstr ""
-
-msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
-msgstr ""
-
-msgid "Internal user accounts need an email address"
-msgstr ""
-
-msgid "Internal user accounts need to be assigned to a user"
-msgstr ""
-
-msgid "Please choose a new email address for internal user account"
-msgstr ""
-
-msgid "system account for user does not exist"
+#, python-brace-format
+msgid "Mailvelope decryption Error [{0}]"
 msgstr ""
 
 #, python-brace-format
-msgid "Account type cannot be changed from {0} to {1}"
+msgid "To decrypt this message please install {0} with API support enabled"
 msgstr ""
 
-msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
+msgid "PGP encrypted Message"
 msgstr ""
 
-msgid "Migration of this account has not been approved!"
+msgid "To:"
+msgstr "Aan:"
+
+msgid "Cc:"
+msgstr "Cc:"
+
+msgid "Bcc:"
+msgstr "Bcc:"
+
+msgid "A separate mail is send to each recipient."
 msgstr ""
 
-msgid "Could not find email user xprops!"
+msgid "Mass"
 msgstr ""
 
-msgid "Internal user accounts need a valid user"
+msgid "Click here to set To/CC/BCC."
+msgstr "Klik hier voor een Aan/CC/BCC"
+
+msgid "Send message to individual list members instead"
 msgstr ""
 
-msgid "System account of user is missing"
+msgid "Resolve to single contact"
 msgstr ""
 
-msgid "It is not allowed to copy e-mails in the same account."
+msgid "from"
 msgstr ""
 
-msgid "Passed"
+msgid "Remove"
+msgstr "Verwijder"
+
+msgid "The following recipients will be removed from this mass mail"
 msgstr ""
 
-msgid "Seen"
-msgstr "Gelezen"
+msgid "(new message)"
+msgstr "(Nieuw bericht)"
 
-msgid "Deleted"
-msgstr "Verwijderd"
+#, python-brace-format
+msgid "Select recipients for \"{0}\""
+msgstr "Selecteen ontvangers voor \"{0}\""
 
-msgid "Draft"
-msgstr "Concept"
+msgid "Recipient filter"
+msgstr "Ontvangers filter"
 
-msgid "Flagged"
-msgstr "Gemarkeerd"
+msgid "All recipients"
+msgstr "Alle ontvangers"
 
-msgid "Bad recipient address syntax"
+#, python-brace-format
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" ontvangers"
+
+msgid "Only custom scripts can be modified."
 msgstr ""
 
-msgid "Recipient address rejected"
-msgstr ""
-
-msgid "Original message not found, email was moved or deleted"
-msgstr ""
-
-msgid "Invalid address format"
-msgstr ""
-
-#, python-format
-msgid "Error: %s"
-msgstr "Fout: %s"
-
-msgid "Could not send message"
-msgstr "Bericht kon niet verzonden worden."
-
-msgid "My Mail Download Links"
-msgstr ""
-
-msgid "Out of Office reply from %1$s"
-msgstr "Out of Office bericht %1$s"
-
-msgid "Sieve vacation has been updated:"
-msgstr ""
-
-msgid "Vacation message is now active."
-msgstr ""
-
-msgid "Vacation message is now inactive."
-msgstr ""
-
-msgid "Sieve rules have been updated."
-msgstr ""
-
-msgid "It is not allowed to redirect emails to self! Please change the recipient."
-msgstr ""
-
-msgid "Redirects to external email domains are not allowed."
-msgstr ""
-
-msgid "You have new mail from "
+msgid "Errors"
 msgstr ""
 
 #, python-brace-format
-msgid "Folder with name {0} already exists!"
+msgid "Notification for {0}"
 msgstr ""
 
-msgid "Failure on create folder"
+msgid "Notification Email"
 msgstr ""
 
-msgid "still unanswered: "
+msgid "Add a new email ..."
 msgstr ""
 
-msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgid "From (Email and Name)"
+msgstr "Van (Email en Naam)"
+
+msgid "To (Email)"
+msgstr "Naar (Email)"
+
+msgid "To (Email CC)"
+msgstr "Naar (Email CC)"
+
+msgid "Header contains"
+msgstr "Header bevat"
+
+msgid "Header name"
+msgstr "Header naam"
+
+msgid "Header value"
+msgstr "Header waarde"
+
+msgid "Header regex"
+msgstr "Header regex"
+
+msgid "Edit Filter Rule"
+msgstr "Bewerk Filter Regel"
+
+msgid "Apply filter if"
+msgstr "Filter toepassen als"
+
+msgid "all conditions match"
+msgstr "alle condities matchen"
+
+msgid "any condition matches"
+msgstr "iedere conditie matched"
+
+msgid "Do this action:"
+msgstr "Doe deze actie:"
+
+msgid "Keep a copy"
 msgstr ""
 
-msgid "Can not combine \"allow external\" and \"allow only members\""
+msgid "Move mail to folder"
+msgstr "Verplaats mail naar map"
+
+msgid "Redirect mail to address"
+msgstr "Doorsturen naar email adres"
+
+msgid "Reject mail with this text"
+msgstr "Weiger mail met deze tekst"
+
+msgid "Discard mail"
+msgstr "Gooi mail weg"
+
+msgid "Auto-Reply mail with this text"
 msgstr ""
 
-msgid "Message File Suggestion"
-msgid_plural "Message File Suggestions"
+msgid "Keep mail"
+msgstr "Bewaar mail"
+
+msgid "Sieve Filter Rules"
+msgstr "Sieve filter regels"
+
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
+msgstr "Sieve Filter regels voor {0}"
+
+msgid "Move up"
+msgstr "Omhoog"
+
+msgid "Move down"
+msgstr "Omlaag"
+
+msgid "Enable"
+msgstr "Schakel in"
+
+msgid "Disable"
+msgstr "Schakel uit"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Conditions"
+msgstr "Condities"
+
+msgid "Action"
+msgstr "Actie"
+
+msgid "is greater than"
+msgstr "is groter dan"
+
+msgid "is less than"
+msgstr "is kleiner dan"
+
+#, python-brace-format
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Header \"{0}\" bevat \"{1}\""
+
+#, python-brace-format
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "Header \"{0}\" matched \"{1}\""
+
+#, python-brace-format
+msgid "Vacation Message for {0}"
+msgstr "Vakantie bericht voor {0}"
+
+msgid "General"
+msgstr "Algemeen"
+
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+msgid "Only send all X days to the same sender"
+msgstr "Stuur alleen per X dagen naar dezelfde ontvanger"
+
+msgid "Incoming mails will be answered with this text:"
+msgstr "Inkomende emails zullen beantwoord worden met deze tekst:"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "I am available (vacation message disabled)"
+msgstr "Ik ben beschikbaar (vakantiebericht uitgeschakeld)"
+
+msgid "I am not available (vacation message enabled)"
+msgstr "Ik ben niet beschikbaar (vakantiebericht ingeschakeld)"
+
+msgid "Start Date"
+msgstr "Start datum"
+
+msgid "Set vacation start date ..."
+msgstr "Start vakantiedatum ..."
+
+msgid "End Date"
+msgstr "Eind datum"
+
+msgid "Set vacation end date ..."
+msgstr "Stel vakantie einddatum in ..."
+
+msgid "Representative #1"
+msgstr "Vertegenwoordiger #1"
+
+msgid "Choose first Representative ..."
+msgstr "Kies de eerste vertegenwoordiger"
+
+msgid "Representative #2"
+msgstr "Vertegenwoordiger #2"
+
+msgid "Choose second Representative ..."
+msgstr "Kies de 2e vertegenwoordiger ..."
+
+msgid "Message Template"
+msgstr "Bericht Template"
+
+msgid "Choose Template ..."
+msgstr "Kies Template"
+
+msgid "Signatures"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Is Default"
+msgstr ""
+
+msgid "Add Signature"
+msgstr ""
+
+msgid "Edit Signature"
+msgstr ""
+
+msgid "Delete Signature"
+msgstr ""
+
+msgid "Total Messages:"
+msgstr "Totaal aantal berichten:"
+
+msgid "Unread Messages:"
+msgstr "Ongelezen Berichten:"
+
+msgid "Name on Server:"
+msgstr "Naan op Server:"
+
+msgid "Last update:"
+msgstr "Laatste update:"
+
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
+msgstr "Berichten ophalen... ({0} klaar)"
+
+#, python-brace-format
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Message File Suggestions"
-msgstr ""
-
-msgid "Message File Location"
-msgid_plural "Message File Locations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Message File Locations"
-msgstr ""
-
-msgid "Message ID Hash"
-msgstr ""
-
-msgid "Message ID"
-msgstr ""
-
-msgid "Model"
-msgstr ""
-
-msgid "Record ID"
-msgstr ""
-
-msgid "Record Title"
-msgstr ""
-
-msgid "Node ID"
-msgstr ""
 
 msgid "Email Account"
 msgid_plural "Email Accounts"
@@ -1656,6 +1562,40 @@ msgstr ""
 msgid "Sieve SSL"
 msgstr ""
 
+msgid "Message File Location"
+msgid_plural "Message File Locations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Message File Locations"
+msgstr ""
+
+msgid "Message ID Hash"
+msgstr ""
+
+msgid "Message ID"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Record ID"
+msgstr ""
+
+msgid "Record Title"
+msgstr ""
+
+msgid "Node ID"
+msgstr ""
+
+msgid "Message File Suggestion"
+msgid_plural "Message File Suggestions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Message File Suggestions"
+msgstr ""
+
 msgid "Reading Confirmation:"
 msgstr "Leesbevestiging:"
 
@@ -1674,14 +1614,74 @@ msgstr "op"
 msgid "Is default"
 msgstr ""
 
-msgid "Manage personal email accounts"
+msgid "All inboxes"
+msgstr "Alle postvakken I"
+
+msgid "Default Email Account"
+msgstr "Standaard Email Account"
+
+msgid "The default email account to use when sending mails."
+msgstr "Het standaard email account in email te sturen."
+
+msgid "Mark Email Automatically As Read"
 msgstr ""
 
-msgid "Edit and delete personal email accounts"
+msgid "Is email marked as read automatically or by user action"
 msgstr ""
 
-msgid "Add personal email accounts"
+msgid "Email Update Interval"
+msgstr "Email update interval"
+
+msgid "How often should Felamimail check for new Emails (in minutes)."
+msgstr "Hoe vaak moet Felamimail op nieuwe email controleren (in minuten)."
+
+msgid "Use for mailto links"
+msgstr "Gebruik voor mailto links"
+
+msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
+msgstr "Gebruik Felamimail in mailto links, anders gebruik de standaard desktop client."
+
+msgid "Confirm Delete"
+msgstr "Bevestig verwijderen"
+
+msgid "Show confirmation dialog when deleting mails."
+msgstr "Geef confirmatie dialoog bij verwijderen emails."
+
+msgid ".eml file Attachment in forwarded mails"
 msgstr ""
 
-msgid "Create new personal email accounts"
+msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgstr ""
+
+msgid "Default Font"
+msgstr ""
+
+msgid "Setting the default font in the E-Mail app"
+msgstr ""
+
+msgid "All folders of my email accounts"
+msgstr ""
+
+msgid "All inboxes of my email accounts"
+msgstr "Alle postvakken IN van al mijn email accounts"
+
+msgid "All unread mail"
+msgstr "Alle ongelezen email"
+
+msgid "All unread mail of my email accounts"
+msgstr "Alle ongelezen email van al mijn accounts"
+
+msgid "All highlighted mail"
+msgstr "Alle gemarkeerde emails"
+
+msgid "All highlighted mail of my email accounts"
+msgstr "Alle gemarkeerde emails van al mijn accounts"
+
+msgid "All drafts"
+msgstr "Alle concepten"
+
+msgid "All mails with the draft flag"
+msgstr "Alle concepts mails"
+
+msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr ""

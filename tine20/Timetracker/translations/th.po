@@ -9,35 +9,110 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: jaruwan <luca.ingianni@gmail.com>, 2014\n"
 "Language-Team: Thai (http://app.transifex.com/tine/groupware/language/th/)\n"
+"Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
-msgstr "การกำหนดค่าส่งออกตารางเวลา ODS"
+msgid "Manage timeaccounts"
+msgstr "จัดการบัญชีเวลา"
 
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกตารางเวลา ODS"
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "เพิ่ม แก้ไข และลบบัญชีเวลา (รวมถึงการอนุญาตเรื่องตารางเวลาทั้งหมด)"
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Add timeaccounts"
+msgstr "เพิ่มบัญชีเวลา"
+
+msgid "Manage shared timeaccount favorites"
+msgstr "จัดการ บัญชีเวลาร่วมที่ใช้บ่อย"
+
+msgid "Create or update shared timeaccount favorites"
+msgstr "สร้าง หรือ ปรับปรุง บัญชีเวลาร่วมที่ใช้บ่อย"
+
+msgid "Manage shared timesheet favorites"
+msgstr "จัดการ ตารางเวลาร่วมที่ใช้บ่อย"
+
+msgid "Create or update shared timesheet favorites"
+msgstr "สร้าง หรือ ปรับปรุงตารางเวลาร่วมที่ใช้บ่อย"
+
+msgid "Enabled Features"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Enabled Features in Timetracker Application."
 msgstr ""
 
-msgid "default"
-msgstr "ค่าหลัก"
-
-msgid "Bookmark Timeaccount"
+msgid "Timeaccount Bookmarks"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "none"
+msgstr "ไม่มีเลย"
+
+msgid "last week"
+msgstr "สัปดาห์ที่แล้ว"
+
+msgid "not yet billed"
+msgstr "ยังไม่ได้เรียกเก็บเงิบ"
+
+msgid "status to bill"
 msgstr ""
+
+msgid "billed"
+msgstr "เรียกเก็บเงินแล้ว"
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr "บัญชีเวลา - เรียกเก็บเงินแล้ว"
+
+msgid "to bill"
+msgstr "ที่จะต้องเรียกเก็บเงิน"
+
+msgid "Contract"
+msgstr "สัญญา"
+
+msgid "without contract"
+msgstr "ปราศจากสัญญา"
+
+msgid "Unit"
+msgstr "หน่วย/ แผนก"
+
+msgid "Unit Price"
+msgstr "ราคาต่อหน่วย"
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
+msgstr "สถานะ"
 
 msgid "closed"
 msgstr "ปิดแล้ว"
@@ -45,17 +120,68 @@ msgstr "ปิดแล้ว"
 msgid "open"
 msgstr "เปิด"
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
+msgstr "เคลียร์แล้วเมื่อ"
+
+msgid "Responsible Person"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Timesheets are billable"
+msgstr "เป็นตารางเวลาที่เรียกเก็บเงินได้"
+
+msgid "Invoice"
 msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "บัญชีเวลา"
+
+msgid "Number"
+msgstr "ลำดับ"
+
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+msgid "Description"
+msgstr "คำอธิบาย"
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
+msgstr "แสดงที่ปิดแล้ว"
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
 msgstr ""
+
+msgid "Time Account - Status"
+msgstr "บัญชีเวลา - สถานะ"
 
 msgid "End Time Change"
 msgstr ""
@@ -79,18 +205,12 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
 msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] ""
-
-msgid "Description"
-msgstr "คำอธิบาย"
 
 msgid "Failed"
 msgstr "ได้ล้มเหลว"
@@ -110,21 +230,6 @@ msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
-
-msgid "Time Account - Status"
-msgstr "บัญชีเวลา - สถานะ"
-
-msgid "Time Account - Billed"
-msgstr "บัญชีเวลา - เรียกเก็บเงินแล้ว"
-
-msgid "not yet billed"
-msgstr "ยังไม่ได้เรียกเก็บเงิบ"
-
-msgid "to bill"
-msgstr "ที่จะต้องเรียกเก็บเงิน"
-
-msgid "billed"
-msgstr "เรียกเก็บเงินแล้ว"
 
 msgid "Workingtime:"
 msgstr ""
@@ -174,135 +279,6 @@ msgstr "ส่งออก เป็นไฟล์ CSV"
 
 msgid "Export as ..."
 msgstr "ส่งออก เป็น ..."
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr "สัญญา"
-
-msgid "without contract"
-msgstr "ปราศจากสัญญา"
-
-msgid "Show closed"
-msgstr "แสดงที่ปิดแล้ว"
-
-msgid "Unit"
-msgstr "หน่วย/ แผนก"
-
-msgid "Unit Price"
-msgstr "ราคาต่อหน่วย"
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr "สถานะ"
-
-msgid "Cleared at"
-msgstr "เคลียร์แล้วเมื่อ"
-
-msgid "Responsible Person"
-msgstr ""
-
-msgid "Timesheets are billable"
-msgstr "เป็นตารางเวลาที่เรียกเก็บเงินได้"
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "บัญชีเวลา"
-
-msgid "Number"
-msgstr "ลำดับ"
-
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr "ตัวติดตามเวลา"
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr "ตารางเวลาของฉัน วันนี้"
-
-msgid "My Timesheets this week"
-msgstr "ตารางเวลาของฉัน สัปดาห์นี้"
-
-msgid "My Timesheets last week"
-msgstr "ตารางเวลาของฉัน สัปดาห์ที่แล้ว"
-
-msgid "My Timesheets this month"
-msgstr "ตารางเวลาของฉัน เดือนนี้"
-
-msgid "My Timesheets last month"
-msgstr "ตารางเวลาของฉัน เดือนที่แล้ว"
-
-msgid "Timeaccounts to bill"
-msgstr "บัญชีเวลาที่จะต้องเรียกเก็บเงิน"
-
-msgid "Timeaccounts not yet billed"
-msgstr "บัญชีเวลาที่ยังไม่ได้เรียกเก็บเงิน"
-
-msgid "Timeaccounts already billed"
-msgstr "บัญชีเวลาที่ได้เรียกเก็บเงินแล้ว"
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr "ไม่มีเลย"
-
-msgid "last week"
-msgstr "สัปดาห์ที่แล้ว"
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
-msgstr ""
 
 msgid "Read Own"
 msgstr ""
@@ -418,23 +394,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "จัดการบัญชีเวลา"
+msgid "Timesheets ODS export configuration"
+msgstr "การกำหนดค่าส่งออกตารางเวลา ODS"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "เพิ่ม แก้ไข และลบบัญชีเวลา (รวมถึงการอนุญาตเรื่องตารางเวลาทั้งหมด)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกตารางเวลา ODS"
 
-msgid "Add timeaccounts"
-msgstr "เพิ่มบัญชีเวลา"
+msgid "A Tag which is available in context menu for fast assignment"
+msgstr ""
 
-msgid "Manage shared timeaccount favorites"
-msgstr "จัดการ บัญชีเวลาร่วมที่ใช้บ่อย"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
-msgstr "สร้าง หรือ ปรับปรุง บัญชีเวลาร่วมที่ใช้บ่อย"
+msgid "default"
+msgstr "ค่าหลัก"
 
-msgid "Manage shared timesheet favorites"
-msgstr "จัดการ ตารางเวลาร่วมที่ใช้บ่อย"
+msgid "Requested Timesheets"
+msgstr ""
 
-msgid "Create or update shared timesheet favorites"
-msgstr "สร้าง หรือ ปรับปรุงตารางเวลาร่วมที่ใช้บ่อย"
+msgid "My Timesheets today"
+msgstr "ตารางเวลาของฉัน วันนี้"
+
+msgid "My Timesheets this week"
+msgstr "ตารางเวลาของฉัน สัปดาห์นี้"
+
+msgid "My Timesheets last week"
+msgstr "ตารางเวลาของฉัน สัปดาห์ที่แล้ว"
+
+msgid "My Timesheets this month"
+msgstr "ตารางเวลาของฉัน เดือนนี้"
+
+msgid "My Timesheets last month"
+msgstr "ตารางเวลาของฉัน เดือนที่แล้ว"
+
+msgid "Timeaccounts to bill"
+msgstr "บัญชีเวลาที่จะต้องเรียกเก็บเงิน"
+
+msgid "Timeaccounts not yet billed"
+msgstr "บัญชีเวลาที่ยังไม่ได้เรียกเก็บเงิน"
+
+msgid "Timeaccounts already billed"
+msgstr "บัญชีเวลาที่ได้เรียกเก็บเงินแล้ว"
+
+msgid "Timetracker"
+msgstr "ตัวติดตามเวลา"

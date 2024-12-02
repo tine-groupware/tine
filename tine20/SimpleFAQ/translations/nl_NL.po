@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: BJ, 2012\n"
 "Language-Team: Dutch (Netherlands) (http://app.transifex.com/tine/groupware/language/nl_NL/)\n"
+"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -35,33 +35,18 @@ msgstr "Intern"
 msgid "Public"
 msgstr "Openbaar"
 
-msgid "All my FAQs"
-msgstr "Al mijn FAQs"
-
-msgid "Default Favorite"
-msgstr "Standaard favoriet"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "De standaard favoriet bij het starten van de FAQ"
-
-msgid "Default FAQ List"
-msgstr "Standaard FAQ overzicht"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Het standaard FAQ overzich waar nieuwe FAQs komen"
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "FAQ Type"
 msgstr[1] "FAQ Types"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ Status"
-msgstr[1] "FAQ Status"
-
-msgid "Add a new FAQ Status..."
-msgstr "Voer een nieuwe FAQ status in..."
+msgid "Defaults"
+msgstr "Standaarden"
 
 msgid "Question"
 msgstr "Vraag"
@@ -81,31 +66,11 @@ msgstr "Type"
 msgid "Status"
 msgstr "Status"
 
-msgid "Defaults"
-msgstr "Standaarden"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQs"
-
-msgid "Find Question"
-msgstr "Vind vraag"
-
-msgid "Search question"
-msgstr "Zoek vraag"
-
-msgid "FAQ id"
-msgstr "FAQ id"
+msgid "FAQ Infos"
+msgstr "FAQ Infos"
 
 msgid "Tags"
 msgstr "Tags"
-
-msgid "Add a new FAQ Type..."
-msgstr "Voer een nieuw FAQ type in..."
-
-msgid "FAQ Infos"
-msgstr "FAQ Infos"
 
 msgid "Creation Time"
 msgstr "Tijdstip aanmaken"
@@ -116,8 +81,19 @@ msgstr "Aangemaakt door"
 msgid "No answer yet"
 msgstr "Nog geen antwoord"
 
-msgid "Search FAQ"
-msgstr "Zoek FAQ"
+msgid "FAQ id"
+msgstr "FAQ id"
+
+msgid "Add a new FAQ Status..."
+msgstr "Voer een nieuwe FAQ status in..."
+
+msgid "Add a new FAQ Type..."
+msgstr "Voer een nieuw FAQ type in..."
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -129,6 +105,30 @@ msgstr "FAQ Overzichten"
 
 msgid "Quick Search"
 msgstr "Snel zoeken"
+
+msgid "Search FAQ"
+msgstr "Zoek FAQ"
+
+msgid "Find Question"
+msgstr "Vind vraag"
+
+msgid "Search question"
+msgstr "Zoek vraag"
+
+msgid "All my FAQs"
+msgstr "Al mijn FAQs"
+
+msgid "Default Favorite"
+msgstr "Standaard favoriet"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "De standaard favoriet bij het starten van de FAQ"
+
+msgid "Default FAQ List"
+msgstr "Standaard FAQ overzicht"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Het standaard FAQ overzich waar nieuwe FAQs komen"
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Al mijn FAQs"

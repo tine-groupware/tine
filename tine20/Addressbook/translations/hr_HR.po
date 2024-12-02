@@ -15,579 +15,43 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:30+0000\n"
 "Last-Translator: fvisic <visicfilip@gmail.com>, 2012-2013\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/tine/groupware/language/hr_HR/)\n"
+"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s osobni adresar"
+msgid "manage shared addressbooks"
+msgstr "upravljanje djeljenim adresarom"
 
-msgid "Groups"
-msgstr ""
-
-msgid "Group Functions"
-msgstr ""
-
-msgid "Industries"
-msgstr ""
-
-msgid "All Contacts"
-msgstr ""
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-msgid "All contacts"
-msgstr "Svi kontakti"
-
-msgid "Default Addressbook"
-msgstr "Zadani adresar"
-
-msgid "The default addressbook for new contacts"
-msgstr "Zadani adresar za nove kontakte"
-
-msgid "Default Favorite"
-msgstr "Zadani favorit"
-
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Zadani favorit koji je učitan pri pokretanju adresara"
-
-msgid "Contacts ODS export configuration"
-msgstr ""
-
-msgid "Use this configuration for the contact ODS export."
-msgstr ""
-
-msgid "Contacts XLS export configuration"
-msgstr ""
-
-msgid "Use this configuration for the contact XLS export."
-msgstr ""
-
-msgid "Contact Title Template"
-msgstr ""
-
-msgid "How to build contact titles."
-msgstr ""
-
-msgid "default"
-msgstr ""
-
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Kontakt"
-msgstr[1] "Kontakta"
-msgstr[2] "Kontakata"
-
-msgid "Set as preferred E-Mail"
-msgstr ""
-
-msgid "Preferred Address"
-msgstr ""
-
-msgid "Street"
-msgstr "Ulica"
-
-msgid "Street 2"
-msgstr "Ulica 2"
-
-msgid "Region"
-msgstr "Regija"
-
-msgid "Postal Code"
-msgstr "Poštanski broj"
-
-msgid "City"
-msgstr "Grad"
-
-msgid "Country"
-msgstr "Država"
-
-msgid "System Group"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Group Information"
-msgstr ""
-
-msgid "Name"
-msgstr "Naziv"
-
-msgid "E-Mail"
-msgstr "E-mail"
-
-msgid "List type"
-msgstr ""
-
-msgid "System accounts only"
-msgstr ""
-
-msgid "Description"
-msgstr "Opis"
-
-msgid "Enter description"
-msgstr "Unesi opis"
-
-#, python-brace-format
-msgid "{0} must be given"
-msgstr ""
-
-msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr ""
-
-msgid "Search for system groups ..."
-msgstr ""
-
-msgid "Search for groups ..."
-msgstr ""
-
-msgid "Contact Properties"
-msgstr ""
-
-msgid "Contact Information"
-msgstr "Kontakt informacije"
-
-msgid "Company Address"
-msgstr "Adresa tvrtke"
-
-msgid "Private Address"
-msgstr "Privatna adresa"
-
-msgid "Related to"
-msgstr ""
-
-msgid "Customfields"
-msgstr ""
-
-msgid "New Contact"
-msgstr "Dodaj Kontakt"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Adresar"
-msgstr[1] "Adresari"
-msgstr[2] "Adresara"
-
-msgid "ID"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Resources"
-msgstr ""
-
-msgid "Private"
-msgstr "Privatno"
-
-msgid "The grant to access contacts private information"
-msgstr ""
-
-msgid "Map"
-msgstr "Karta"
-
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr ""
-
-msgid "Personal Information"
-msgstr "Osobne informacije"
-
-msgid "Salutation"
-msgstr "Oslovljavanje"
-
-msgid "Title"
-msgstr "Naslov"
-
-msgid "Short Name"
-msgstr ""
-
-msgid "First Name"
-msgstr "Ime"
-
-msgid "Middle Name"
-msgstr "Srednje ime"
-
-msgid "Last Name"
-msgstr "Prezime"
-
-msgid "Company / Organisation"
-msgstr ""
-
-msgid "Unit"
-msgstr "Organizacijska jedinica"
-
-msgid "Sites"
-msgstr ""
-
-msgid "Color"
-msgstr ""
-
-msgid "Display Name"
-msgstr "Naziv klijenta/ puno ime"
-
-msgid "Job Title"
-msgstr "Naziv radnog mjesta"
-
-msgid "Birthday (private)"
-msgstr ""
-
-msgid "Industry"
-msgid_plural "Industries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Note"
-msgstr "Bilješka"
-
-msgid "Enter Note"
-msgstr ""
-
-msgid "Parse address"
-msgstr "Raščlanjena adresa"
-
-msgid "Print contact"
-msgstr ""
-
-msgid "Paste address"
-msgstr "Unesi adresu"
-
-msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr ""
-
-msgid "Failed to parse address!"
-msgstr ""
-
-msgid "The address could not be read."
-msgstr ""
-
-msgid "End token mode"
-msgstr "Kraj tokena"
-
-msgid "You do not have the required private grant to view history."
-msgstr ""
-
-msgid "Import contacts"
-msgstr "Uvezi kontakte"
-
-msgid "Contact of a user account"
-msgstr "Kontakt za korisnika računa"
-
-msgid "Email Account Contact"
-msgstr ""
-
-msgid "No name"
-msgstr ""
+msgid "Create new shared addressbook folders"
+msgstr "Kreiraj nove zajedničke mape adresara"
 
-msgid "Business"
-msgstr ""
-
-msgid "Not set"
-msgstr ""
-
-msgid "Type"
-msgstr "Tip"
-
-msgid "Contact Image"
-msgstr ""
-
-msgid "Tags"
-msgstr "Oznake"
-
-msgid "Full Name"
-msgstr "Puno ime"
-
-msgid "Job Role"
-msgstr "Poslovna uloga"
-
-msgid "Room"
-msgstr "Soba"
-
-msgid "Postalcode"
-msgstr "Poštanski broj"
-
-msgid "Street (private)"
-msgstr "Ulica (privatno)"
-
-msgid "City (private)"
-msgstr "Grad (privatno)"
-
-msgid "Region (private)"
-msgstr "Regija (privatno)"
-
-msgid "Postalcode (private)"
-msgstr "Poštanski broj (privatno)"
-
-msgid "Country (private)"
-msgstr "Država (privatno)"
-
-msgid "Preferred E-Mail"
-msgstr ""
-
-msgid "Email"
-msgid_plural "Emails"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Phone"
-msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Mobile"
-msgstr "Mobitel"
-
-msgid "Fax"
-msgstr "Faks"
-
-msgid "Car phone"
-msgstr "Telefon u vozilu"
-
-msgid "Pager"
-msgstr "Pager"
-
-msgid "Phone (private)"
-msgstr "Telefon (privatni)"
-
-msgid "Fax (private)"
-msgstr "Fax (privatni)"
-
-msgid "Mobile (private)"
-msgstr "Mobitel (privatni)"
-
-msgid "Email (private)"
-msgstr "E-mail (privatni)"
-
-msgid "Web"
-msgstr "Web"
-
-msgid "URL (private)"
-msgstr "URL (privatno)"
-
-msgid "Language"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Vremenska zona"
-
-msgid "Geo"
-msgstr "Geo"
-
-msgid "Birthday"
-msgstr "Datum rođenja"
-
-msgid "Select record to see its details"
-msgstr ""
-
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr ""
-
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr ""
-
-msgid "Loading Structure data..."
-msgstr ""
-
-msgid "Company address"
-msgstr "Adresa tvrtke"
-
-msgid "Private address"
-msgstr "Privatna adresa"
-
-msgid "CardDAV URL"
-msgstr "CardDAV URL"
-
-msgid "List Personal Grant"
-msgid_plural "List Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Contact Personal Grant"
-msgid_plural "Contact Personal Grants"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Members"
-msgstr ""
-
-msgid "Search for members ..."
-msgstr ""
-
-msgid "List Roles"
-msgstr ""
-
-msgid "Select Group"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr ""
-
-msgid "Search for Contacts ..."
-msgstr ""
-
-msgid "Email Address"
-msgid_plural "Email Addresses"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Email Addresses"
-msgstr ""
-
-msgid "Addressbooks"
-msgstr "Adresari"
-
-msgid "Quick search"
-msgstr ""
-
-msgid "Structures"
-msgstr ""
-
-msgid "Mailing List"
-msgstr ""
-
-msgid "This group is a mailing list"
-msgstr ""
-
-msgid "Reply to"
-msgstr ""
-
-msgid "Distribution list"
-msgstr ""
-
-msgid "Sender"
-msgstr ""
-
-msgid "Sender and Distributor"
-msgstr ""
-
-msgid "Keep copy of group mails"
-msgstr ""
-
-msgid "Forward external mails"
-msgstr ""
-
-msgid "Only forward member mails"
-msgstr ""
-
-msgid "Only forward to system email accounts"
-msgstr ""
-
-msgid "Account"
-msgstr ""
-
-msgid "Exporttime"
-msgstr ""
-
-msgid "28"
-msgstr ""
-
-msgid "20"
-msgstr ""
-
-msgid "00877546"
-msgstr ""
-
-msgid "en-GB"
-msgstr ""
-
-msgid "00813B4E"
-msgstr ""
-
-msgid "Gruppenrollen"
-msgstr ""
-
-msgid "00DA3FCD"
-msgstr ""
-
-msgid "00997199"
-msgstr ""
-
-msgid "0009326B"
-msgstr ""
+msgid "manage shared addressbook favorites"
+msgstr "upravljaj favoritima u zajedničkim adresarima"
 
-msgid "008C27A5"
-msgstr ""
+msgid "Create or update shared addressbook favorites"
+msgstr "Kreiraj ili ažuriraj zajedničke favorite adresara"
 
-msgid "00C96397"
+msgid "Manage lists in CoreData"
 msgstr ""
 
-msgid "00046462"
+msgid "View, create, delete or update lists in CoreData application"
 msgstr ""
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Company"
-msgstr "Tvrtka"
-
-msgid "Internal Contacts"
-msgstr "Interni kontakti"
-
-msgid "All contacts I have read grants for"
-msgstr "Svi kontakti na koje imam pravo uvida"
-
-msgid "My company"
-msgstr "CPM Korisnici"
-
-msgid "All coworkers in my company"
-msgstr "Svi CPM korisnici"
 
-msgid "My contacts"
-msgstr "Moji kontakti"
-
-msgid "All contacts in my Addressbooks"
-msgstr "Svi kontakti u mojim adresarima"
-
-msgid "Last modified by me"
-msgstr "Koje sam ja zadnje izmijenio"
-
-msgid "All contacts that I have last modified"
-msgstr "Svi kontakti koje sam ja zadnje izmijenio"
-
-msgid "Company Communication"
-msgstr "Kompanija"
-
-msgid "E-Mail (private)"
-msgstr "E-mail (privatni)"
-
-msgid "Private Communication"
-msgstr "Privatan"
-
-msgid "Matrix-ID"
+msgid "Manage list functions in CoreData"
 msgstr ""
-
-msgid "Assistant"
-msgstr "Asistent"
 
-msgid "Car"
+msgid "View, create, delete or update list functions in CoreData application"
 msgstr ""
 
-msgid "Other"
+msgid "Manage list email options"
 msgstr ""
 
-msgid "Prefer"
+msgid "Manage list email options like mailing lists"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -668,6 +132,12 @@ msgstr ""
 msgid "User"
 msgstr ""
 
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kontakt"
+msgstr[1] "Kontakta"
+msgstr[2] "Kontakata"
+
 msgid "Email Account"
 msgstr ""
 
@@ -682,6 +152,9 @@ msgstr "Gospodin"
 
 msgid "Ms"
 msgstr "Gospođa/ica"
+
+msgid "Company"
+msgstr "Tvrtka"
 
 msgid "Person"
 msgstr ""
@@ -741,16 +214,525 @@ msgstr ""
 msgid "Maximum number of role members reached"
 msgstr ""
 
-msgid "Group Function"
-msgid_plural "Group Functions"
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s osobni adresar"
+
+msgid "Groups"
+msgstr ""
+
+msgid "Group Functions"
+msgstr ""
+
+msgid "Industries"
+msgstr ""
+
+msgid "3CX CSV export"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "OpenDocument all data"
+msgstr ""
+
+msgid "VCard Report"
+msgstr ""
+
+msgid "Export multiple addressbooks to vcf files"
+msgstr ""
+
+msgid "VCard/VCF"
+msgstr ""
+
+msgid "Export contact data into vcf file"
+msgstr ""
+
+msgid "Word letter"
+msgstr ""
+
+msgid "Word details"
+msgstr ""
+
+msgid "Relations"
+msgstr ""
+
+msgid "Excel overview"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Addressbooks to export"
+msgstr ""
+
+msgid "Export target"
+msgstr ""
+
+msgid "All Contacts"
+msgstr ""
+
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr ""
+
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+msgid "Contact import from Google address book"
+msgstr "Učitavanje kontakta iz Google adresara"
+
+msgid "Import vCard formated contacts"
+msgstr ""
+
+msgid "Contact VCARD import"
+msgstr "Učitavanje VCARD Kontakta"
+
+msgid "LX-Office CSV Contact import"
+msgstr ""
+
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+msgid "Contact CSV import from mac address book"
+msgstr "Učitavanje kontakta CSV datotekom iz mac adresara"
+
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2007 German"
+msgstr "CSV Outlook 2007 German"
+
+msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgstr ""
+
+msgid "CSV Outlook 2010 German"
+msgstr ""
+
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+msgid "Contact CSV import from Outlook address book"
+msgstr "Učitavanje kontakta CSV datotekom iz Outlook adresara"
+
+msgid "Tine contact CSV import"
+msgstr ""
+
+msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Lista za učitavanje (###CURRENTDATE###)"
+
+msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Kontakti učitani ###CURRENTDATE### u ###CURRENTTIME### sa ###USERFULLNAME###"
+
+msgid "New Contact"
+msgstr "Dodaj Kontakt"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Adresar"
+msgstr[1] "Adresari"
+msgstr[2] "Adresara"
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr "Naziv"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Structure"
+msgid_plural "Structures"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "GENDER_Group Function"
+msgid "Resources"
 msgstr ""
 
-msgid "Maximum Members"
+msgid "Private"
+msgstr "Privatno"
+
+msgid "The grant to access contacts private information"
+msgstr ""
+
+msgid "Preferred Address"
+msgstr ""
+
+msgid "Street"
+msgstr "Ulica"
+
+msgid "Street 2"
+msgstr "Ulica 2"
+
+msgid "Region"
+msgstr "Regija"
+
+msgid "Postal Code"
+msgstr "Poštanski broj"
+
+msgid "City"
+msgstr "Grad"
+
+msgid "Country"
+msgstr "Država"
+
+msgid "Contact Properties"
+msgstr ""
+
+msgid "CardDAV URL"
+msgstr "CardDAV URL"
+
+msgid "Map"
+msgstr "Karta"
+
+msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Personal Information"
+msgstr "Osobne informacije"
+
+msgid "Salutation"
+msgstr "Oslovljavanje"
+
+msgid "Title"
+msgstr "Naslov"
+
+msgid "Short Name"
+msgstr ""
+
+msgid "First Name"
+msgstr "Ime"
+
+msgid "Middle Name"
+msgstr "Srednje ime"
+
+msgid "Last Name"
+msgstr "Prezime"
+
+msgid "Company / Organisation"
+msgstr ""
+
+msgid "Unit"
+msgstr "Organizacijska jedinica"
+
+msgid "Sites"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Display Name"
+msgstr "Naziv klijenta/ puno ime"
+
+msgid "Job Title"
+msgstr "Naziv radnog mjesta"
+
+msgid "Birthday (private)"
+msgstr ""
+
+msgid "Industry"
+msgid_plural "Industries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Contact Information"
+msgstr "Kontakt informacije"
+
+msgid "Note"
+msgstr "Bilješka"
+
+msgid "Enter Note"
+msgstr ""
+
+msgid "Parse address"
+msgstr "Raščlanjena adresa"
+
+msgid "Print contact"
+msgstr ""
+
+msgid "Paste address"
+msgstr "Unesi adresu"
+
+msgid "Please paste an address or a URI to a vcard that should be parsed:"
+msgstr ""
+
+msgid "Failed to parse address!"
+msgstr ""
+
+msgid "The address could not be read."
+msgstr ""
+
+msgid "End token mode"
+msgstr "Kraj tokena"
+
+msgid "You do not have the required private grant to view history."
+msgstr ""
+
+msgid "Business"
+msgstr ""
+
+msgid "Phone"
+msgid_plural "Phones"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Mobile"
+msgstr "Mobitel"
+
+msgid "Fax"
+msgstr "Faks"
+
+msgid "E-Mail"
+msgstr "E-mail"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "Import contacts"
+msgstr "Uvezi kontakte"
+
+msgid "Contact of a user account"
+msgstr "Kontakt za korisnika računa"
+
+msgid "Email Account Contact"
+msgstr ""
+
+msgid "No name"
+msgstr ""
+
+msgid "Not set"
+msgstr ""
+
+msgid "Type"
+msgstr "Tip"
+
+msgid "Contact Image"
+msgstr ""
+
+msgid "Tags"
+msgstr "Oznake"
+
+msgid "Full Name"
+msgstr "Puno ime"
+
+msgid "Job Role"
+msgstr "Poslovna uloga"
+
+msgid "Room"
+msgstr "Soba"
+
+msgid "Postalcode"
+msgstr "Poštanski broj"
+
+msgid "Street (private)"
+msgstr "Ulica (privatno)"
+
+msgid "City (private)"
+msgstr "Grad (privatno)"
+
+msgid "Region (private)"
+msgstr "Regija (privatno)"
+
+msgid "Postalcode (private)"
+msgstr "Poštanski broj (privatno)"
+
+msgid "Country (private)"
+msgstr "Država (privatno)"
+
+msgid "Preferred E-Mail"
+msgstr ""
+
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Car phone"
+msgstr "Telefon u vozilu"
+
+msgid "Pager"
+msgstr "Pager"
+
+msgid "Phone (private)"
+msgstr "Telefon (privatni)"
+
+msgid "Fax (private)"
+msgstr "Fax (privatni)"
+
+msgid "Mobile (private)"
+msgstr "Mobitel (privatni)"
+
+msgid "Email (private)"
+msgstr "E-mail (privatni)"
+
+msgid "URL (private)"
+msgstr "URL (privatno)"
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr "Vremenska zona"
+
+msgid "Geo"
+msgstr "Geo"
+
+msgid "Birthday"
+msgstr "Datum rođenja"
+
+msgid "Set as preferred E-Mail"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr ""
+
+msgid "Search for Contacts ..."
+msgstr ""
+
+msgid "Group Information"
+msgstr ""
+
+msgid "List type"
+msgstr ""
+
+msgid "System accounts only"
+msgstr ""
+
+msgid "Enter description"
+msgstr "Unesi opis"
+
+#, python-brace-format
+msgid "{0} must be given"
+msgstr ""
+
+msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Select Group"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Search for members ..."
+msgstr ""
+
+msgid "List Roles"
+msgstr ""
+
+msgid "Search for system groups ..."
+msgstr ""
+
+msgid "Search for groups ..."
+msgstr ""
+
+msgid "Mailing List"
+msgstr ""
+
+msgid "This group is a mailing list"
+msgstr ""
+
+msgid "Reply to"
+msgstr ""
+
+msgid "Distribution list"
+msgstr ""
+
+msgid "Sender"
+msgstr ""
+
+msgid "Sender and Distributor"
+msgstr ""
+
+msgid "Keep copy of group mails"
+msgstr ""
+
+msgid "Forward external mails"
+msgstr ""
+
+msgid "Only forward member mails"
+msgstr ""
+
+msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Company address"
+msgstr "Adresa tvrtke"
+
+msgid "Private address"
+msgstr "Privatna adresa"
+
+msgid "Contact Personal Grant"
+msgid_plural "Contact Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Email Addresses"
+msgstr ""
+
+msgid "Addressbooks"
+msgstr "Adresari"
+
+msgid "Quick search"
+msgstr ""
+
+msgid "Structures"
+msgstr ""
+
+msgid "List Personal Grant"
+msgid_plural "List Personal Grants"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Company Address"
+msgstr "Adresa tvrtke"
+
+msgid "Private Address"
+msgstr "Privatna adresa"
+
+msgid "Related to"
+msgstr ""
+
+msgid "Customfields"
+msgstr ""
+
+msgid "System Group"
+msgstr ""
+
+msgid "Select record to see its details"
+msgstr ""
+
+msgid "This module visualises hierarchically depended relations between records of different types."
+msgstr ""
+
+msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
+msgstr ""
+
+msgid "Loading Structure data..."
 msgstr ""
 
 msgid "GENDER_Addressbook"
@@ -761,6 +743,12 @@ msgstr ""
 
 msgid "Show Disabled"
 msgstr ""
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Phone Numbers"
 msgstr ""
@@ -810,21 +798,6 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-msgid "GENDER_Group"
-msgstr ""
-
-msgid "Name/Email"
-msgstr ""
-
-msgid "Site"
-msgid_plural "Sites"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "GENDER_Email"
-msgstr ""
-
 msgid "GENDER_Address"
 msgstr ""
 
@@ -870,16 +843,7 @@ msgstr ""
 msgid "Last Error"
 msgstr ""
 
-msgid "GENDER_URL"
-msgstr ""
-
-msgid "URL"
-msgid_plural "URLs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "GENDER_Phone"
+msgid "GENDER_Email"
 msgstr ""
 
 msgid "GENDER_Instant Messenger"
@@ -891,128 +855,164 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Addressbooks to export"
+msgid "GENDER_Phone"
 msgstr ""
 
-msgid "Export target"
+msgid "GENDER_URL"
 msgstr ""
 
-msgid "Excel overview"
+msgid "URL"
+msgid_plural "URLs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Group"
 msgstr ""
 
-msgid "Word details"
+msgid "Name/Email"
 msgstr ""
 
-msgid "Relations"
+msgid "GENDER_Group Function"
 msgstr ""
 
-msgid "CSV all data"
+msgid "Maximum Members"
 msgstr ""
 
-msgid "VCard Report"
+msgid "All contacts"
+msgstr "Svi kontakti"
+
+msgid "Default Addressbook"
+msgstr "Zadani adresar"
+
+msgid "The default addressbook for new contacts"
+msgstr "Zadani adresar za nove kontakte"
+
+msgid "Default Favorite"
+msgstr "Zadani favorit"
+
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Zadani favorit koji je učitan pri pokretanju adresara"
+
+msgid "Contacts ODS export configuration"
 msgstr ""
 
-msgid "Export multiple addressbooks to vcf files"
+msgid "Use this configuration for the contact ODS export."
 msgstr ""
 
-msgid "Excel current columns"
+msgid "Contacts XLS export configuration"
 msgstr ""
 
-msgid "Excel all data"
+msgid "Use this configuration for the contact XLS export."
 msgstr ""
 
-msgid "VCard/VCF"
+msgid "Contact Title Template"
 msgstr ""
 
-msgid "Export contact data into vcf file"
+msgid "How to build contact titles."
 msgstr ""
 
-msgid "3CX CSV export"
+msgid "default"
 msgstr ""
 
-msgid "Word letter"
+msgid "All contacts I have read grants for"
+msgstr "Svi kontakti na koje imam pravo uvida"
+
+msgid "My company"
+msgstr "CPM Korisnici"
+
+msgid "All coworkers in my company"
+msgstr "Svi CPM korisnici"
+
+msgid "My contacts"
+msgstr "Moji kontakti"
+
+msgid "All contacts in my Addressbooks"
+msgstr "Svi kontakti u mojim adresarima"
+
+msgid "Last modified by me"
+msgstr "Koje sam ja zadnje izmijenio"
+
+msgid "All contacts that I have last modified"
+msgstr "Svi kontakti koje sam ja zadnje izmijenio"
+
+msgid "Company Communication"
+msgstr "Kompanija"
+
+msgid "E-Mail (private)"
+msgstr "E-mail (privatni)"
+
+msgid "Private Communication"
+msgstr "Privatan"
+
+msgid "Matrix-ID"
 msgstr ""
 
-msgid "OpenDocument all data"
+msgid "Assistant"
+msgstr "Asistent"
+
+msgid "Car"
 msgstr ""
 
-msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgid "Other"
 msgstr ""
 
-msgid "Contact CSV import from Outlook address book"
-msgstr "Učitavanje kontakta CSV datotekom iz Outlook adresara"
-
-msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgid "Prefer"
 msgstr ""
 
-msgid "CSV Outlook 2007 German"
-msgstr "CSV Outlook 2007 German"
+msgid "Internal Contacts"
+msgstr "Interni kontakti"
 
-msgid "Import CSV formated contacts from Google address book"
+msgid "Account"
 msgstr ""
 
-msgid "Contact import from Google address book"
-msgstr "Učitavanje kontakta iz Google adresara"
-
-msgid "Tine contact CSV import"
+msgid "Exporttime"
 msgstr ""
 
-msgid "Import CSV formated contacts from tine address book"
+msgid "28"
 msgstr ""
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Lista za učitavanje (###CURRENTDATE###)"
-
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Kontakti učitani ###CURRENTDATE### u ###CURRENTTIME### sa ###USERFULLNAME###"
-
-msgid "LX-Office CSV Contact import"
+msgid "20"
 msgstr ""
 
-msgid "Import CSV formated contacts from LX-Office"
+msgid "00877546"
 msgstr ""
 
-msgid "Import vCard formated contacts"
+msgid "en-GB"
 msgstr ""
 
-msgid "Contact VCARD import"
-msgstr "Učitavanje VCARD Kontakta"
-
-msgid "Import CSV formated contacts from Outlook 2010 German address book"
+msgid "00813B4E"
 msgstr ""
 
-msgid "CSV Outlook 2010 German"
+msgid "Gruppenrollen"
 msgstr ""
 
-msgid "Contact CSV import from mac address book"
-msgstr "Učitavanje kontakta CSV datotekom iz mac adresara"
-
-msgid "manage shared addressbooks"
-msgstr "upravljanje djeljenim adresarom"
-
-msgid "Create new shared addressbook folders"
-msgstr "Kreiraj nove zajedničke mape adresara"
-
-msgid "manage shared addressbook favorites"
-msgstr "upravljaj favoritima u zajedničkim adresarima"
-
-msgid "Create or update shared addressbook favorites"
-msgstr "Kreiraj ili ažuriraj zajedničke favorite adresara"
-
-msgid "Manage lists in CoreData"
+msgid "00DA3FCD"
 msgstr ""
 
-msgid "View, create, delete or update lists in CoreData application"
+msgid "00997199"
 msgstr ""
 
-msgid "Manage list functions in CoreData"
+msgid "0009326B"
 msgstr ""
 
-msgid "View, create, delete or update list functions in CoreData application"
+msgid "008C27A5"
 msgstr ""
 
-msgid "Manage list email options"
+msgid "00C96397"
 msgstr ""
 
-msgid "Manage list email options like mailing lists"
+msgid "00046462"
 msgstr ""
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""

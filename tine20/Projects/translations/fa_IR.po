@@ -11,104 +11,20 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: ninja2006 <ninja2006@gmail.com>, 2013\n"
 "Language-Team: Persian (Iran) (http://app.transifex.com/tine/groupware/language/fa_IR/)\n"
+"Language: fa_IR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "All my projects"
-msgstr "همه پروژه های من"
+msgid "Manage shared project favorites"
+msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
 
-msgid "Default Favorite"
-msgstr "علاقه مندی مورد علاقه"
-
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "علاقه مندی پیش فرض که هنگام راه اندازی پروژه بارگذاری شده است"
-
-msgid "Attendee"
-msgstr "شرکت کنندگان"
-
-msgid "Role"
-msgstr "سِمَت"
-
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] ""
-"Pluralized Translations\n"
-"one: پروژه\n"
-"other: پروژه"
-msgstr[1] ""
-"Pluralized Translations\n"
-"one: پروژه\n"
-"other: پروژه"
-
-msgid "Title"
-msgstr "عنوان"
-
-msgid "Number"
-msgstr "شماره"
-
-msgid "Status"
-msgstr "وضعیت"
-
-msgid "Start"
-msgstr ""
-
-msgid "End"
-msgstr ""
-
-msgid "Scope"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "Description"
-msgstr "توضیحات"
-
-msgid "Enter description"
-msgstr "توضیحات"
-
-msgid "Please choose the Project to add the contacts to"
-msgstr "لطفا پروژه را برای اضافه کردن مخاطب انتخاب کنید"
-
-msgid "Please select the attenders' role"
-msgstr "لطفا نقش حاضرین در پروژه را انتخاب نمایید"
-
-msgid "Select Project"
-msgstr "انتخاب پروژه"
-
-msgid "Select Role"
-msgstr "انتخاب سِمَت"
-
-#, python-brace-format
-msgid "Adding {0} Participants to project"
-msgstr "افزودن {0} شرکت کننده به پروژه"
-
-msgid "Attendee Role"
-msgstr "نقش شرکت کنندگان"
-
-msgid "Projects"
-msgstr "پروژه ها"
-
-msgid "All my open projects"
-msgstr "همه پروژه های باز"
-
-msgid "My projects that I'm responsible for"
-msgstr "پروژه هایی که من در آن مسئولیت دارم"
-
-msgid "All my open projects that I am responsible for"
-msgstr "همه پروژه های باز که من در آن مسئولیت دارم"
-
-msgid "My waiting projects"
-msgstr "پروژه های در انتظار من"
-
-msgid "My projects that are on hold"
-msgstr "پروژه های در انتظار من"
+msgid "Create new shared project favorites"
+msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
 
 msgid "Available Project Attendee Role"
 msgstr ""
@@ -161,6 +77,75 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] ""
+"Pluralized Translations\n"
+"one: پروژه\n"
+"other: پروژه"
+msgstr[1] ""
+"Pluralized Translations\n"
+"one: پروژه\n"
+"other: پروژه"
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Please choose the Project to add the contacts to"
+msgstr "لطفا پروژه را برای اضافه کردن مخاطب انتخاب کنید"
+
+msgid "Please select the attenders' role"
+msgstr "لطفا نقش حاضرین در پروژه را انتخاب نمایید"
+
+msgid "Select Project"
+msgstr "انتخاب پروژه"
+
+msgid "Role"
+msgstr "سِمَت"
+
+msgid "Select Role"
+msgstr "انتخاب سِمَت"
+
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "افزودن {0} شرکت کننده به پروژه"
+
+msgid "Attendee"
+msgstr "شرکت کنندگان"
+
+msgid "Attendee Role"
+msgstr "نقش شرکت کنندگان"
+
+msgid "Title"
+msgstr "عنوان"
+
+msgid "Number"
+msgstr "شماره"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Start"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Description"
+msgstr "توضیحات"
+
+msgid "Enter description"
+msgstr "توضیحات"
+
 msgid "Project list"
 msgid_plural "Project lists"
 msgstr[0] ""
@@ -180,14 +165,29 @@ msgstr ""
 msgid "Tasks"
 msgstr ""
 
-msgid "Excel current columns"
-msgstr ""
+msgid "All my projects"
+msgstr "همه پروژه های من"
 
-msgid "Excel all data"
-msgstr ""
+msgid "Default Favorite"
+msgstr "علاقه مندی مورد علاقه"
 
-msgid "Manage shared project favorites"
-msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "علاقه مندی پیش فرض که هنگام راه اندازی پروژه بارگذاری شده است"
 
-msgid "Create new shared project favorites"
-msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
+msgid "All my open projects"
+msgstr "همه پروژه های باز"
+
+msgid "My projects that I'm responsible for"
+msgstr "پروژه هایی که من در آن مسئولیت دارم"
+
+msgid "All my open projects that I am responsible for"
+msgstr "همه پروژه های باز که من در آن مسئولیت دارم"
+
+msgid "My waiting projects"
+msgstr "پروژه های در انتظار من"
+
+msgid "My projects that are on hold"
+msgstr "پروژه های در انتظار من"
+
+msgid "Projects"
+msgstr "پروژه ها"

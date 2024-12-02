@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,14 +14,59 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+msgid "Inventory Status Available"
+msgstr "Inventory Status Available"
+
+msgid "Possible status."
+msgstr "Possible status."
+
+msgid "Ordered"
+msgstr "Ordered"
+
+msgid "Available"
+msgstr "Available"
+
+msgid "Defect"
+msgstr "Defect"
+
+msgid "Missing"
+msgstr "Missing"
+
+msgid "Removed"
+msgstr "Removed"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "Stored"
+msgstr "Stored"
+
+msgid "Sold"
+msgstr "Sold"
+
+msgid "Destroyed"
+msgstr "Destroyed"
+
 msgid "Types"
 msgstr "Types"
 
-msgid "Default Inventory Item Container"
-msgstr "Default Inventory Item Container"
+msgid "Tine 2.0 inventory CSV import"
+msgstr "Tine 2.0 inventory CSV import"
 
-msgid "The default container for new items"
-msgstr "The default container for new items"
+msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgstr "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Import list (###CURRENTDATE###)"
+
+msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+
+msgid "Inventory CSV import"
+msgstr "Inventory CSV import"
+
+msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgstr "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 
 msgid "The active number must be less than or equal total number."
 msgstr "The active number must be less than or equal total number."
@@ -58,9 +104,6 @@ msgstr "Added"
 msgid "Warranty"
 msgstr "Warranty"
 
-msgid "Removed"
-msgstr "Removed"
-
 msgid "Total number"
 msgstr "Total number"
 
@@ -81,45 +124,6 @@ msgstr "Invoice date"
 
 msgid "Depreciate"
 msgstr "Depreciate"
-
-msgid "Inventory"
-msgstr "Inventory"
-
-msgid "All Inventory Items"
-msgstr "All Inventory Items"
-
-msgid "All existing Inventory Items"
-msgstr "All existing Inventory Items"
-
-msgid "Inventory Status Available"
-msgstr "Inventory Status Available"
-
-msgid "Possible status."
-msgstr "Possible status."
-
-msgid "Ordered"
-msgstr "Ordered"
-
-msgid "Available"
-msgstr "Available"
-
-msgid "Defect"
-msgstr "Defect"
-
-msgid "Missing"
-msgstr "Missing"
-
-msgid "Unknown"
-msgstr "Unknown"
-
-msgid "Stored"
-msgstr "Stored"
-
-msgid "Sold"
-msgstr "Sold"
-
-msgid "Destroyed"
-msgstr "Destroyed"
 
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -142,20 +146,17 @@ msgid_plural "Inventory types"
 msgstr[0] "Inventory type"
 msgstr[1] "Inventory types"
 
-msgid "Tine 2.0 inventory CSV import"
-msgstr "Tine 2.0 inventory CSV import"
+msgid "Default Inventory Item Container"
+msgstr "Default Inventory Item Container"
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
-msgstr "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgid "The default container for new items"
+msgstr "The default container for new items"
 
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Import list (###CURRENTDATE###)"
+msgid "All Inventory Items"
+msgstr "All Inventory Items"
 
-msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid "All existing Inventory Items"
+msgstr "All existing Inventory Items"
 
-msgid "Inventory CSV import"
-msgstr "Inventory CSV import"
-
-msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
+msgid "Inventory"
+msgstr "Inventory"

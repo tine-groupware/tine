@@ -9,34 +9,109 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: Ingo Ratsdorf, 2015\n"
 "Language-Team: English (New Zealand) (http://app.transifex.com/tine/groupware/language/en_NZ/)\n"
+"Language: en_NZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_NZ\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Timesheets ODS export configuration"
+msgid "Manage timeaccounts"
+msgstr "Manage timeaccounts"
+
+msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgstr "Add, edit and delete timeaccounts (includes all timesheet grants)"
+
+msgid "Add timeaccounts"
+msgstr "Add timeaccounts"
+
+msgid "Manage shared timeaccount favorites"
+msgstr "Manage shared timeaccount favorites"
+
+msgid "Create or update shared timeaccount favorites"
+msgstr "Create or update shared timeaccount favourites"
+
+msgid "Manage shared timesheet favorites"
+msgstr "Manage shared timesheet favourites"
+
+msgid "Create or update shared timesheet favorites"
+msgstr "Create or update shared timesheet favourites"
+
+msgid "Enabled Features"
 msgstr ""
 
-msgid "Use this configuration for the timesheet ODS export."
+msgid "Enabled Features in Timetracker Application."
 msgstr ""
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "Timeaccount Bookmarks"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "none"
 msgstr ""
 
-msgid "default"
+msgid "last week"
 msgstr ""
 
-msgid "Bookmark Timeaccount"
+msgid "not yet billed"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "status to bill"
+msgstr ""
+
+msgid "billed"
+msgstr ""
+
+msgid "Requested"
+msgstr ""
+
+msgid "Accepted"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+msgstr ""
+
+msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgstr ""
+
+msgid "Add Timesheet"
+msgstr ""
+
+msgid "Timesheets of this Task:"
+msgstr ""
+
+msgid "Time Account - Billed"
+msgstr ""
+
+msgid "to bill"
+msgstr ""
+
+msgid "Contract"
+msgstr ""
+
+msgid "without contract"
+msgstr ""
+
+msgid "Unit"
+msgstr ""
+
+msgid "Unit Price"
+msgstr ""
+
+msgid "Factor"
+msgstr ""
+
+msgid "Budget in hours"
+msgstr ""
+
+msgid "Status"
 msgstr ""
 
 msgid "closed"
@@ -45,16 +120,69 @@ msgstr ""
 msgid "open"
 msgstr ""
 
-msgid "Timesheets of this Task:"
+msgid "Cleared at"
 msgstr ""
 
-msgid "Add Timesheet"
+msgid "Responsible Person"
+msgstr "Responsible Person"
+
+msgid "Timesheets are billable"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Select invoice"
+msgstr ""
+
+msgid "Update Timesheets?"
+msgstr ""
+
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr ""
+
+msgid "Timeaccount Favorites"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Bookmark Timeaccount"
+msgstr ""
+
+msgid "Close Timeaccount"
+msgstr ""
+
+msgid "Show closed"
 msgstr ""
 
 msgid "Responsible"
 msgstr ""
 
 msgid "without responsible"
+msgstr ""
+
+msgid "Time Account - Status"
 msgstr ""
 
 msgid "End Time Change"
@@ -80,9 +208,6 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Factor"
-msgstr ""
-
 msgid "Accounting time"
 msgstr ""
 
@@ -90,9 +215,6 @@ msgid "Timeaccount"
 msgid_plural "Timeaccounts"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Description"
-msgstr ""
 
 msgid "Failed"
 msgstr ""
@@ -111,21 +233,6 @@ msgid "The selected Time Account is already closed."
 msgstr ""
 
 msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
-msgstr ""
-
-msgid "Time Account - Status"
-msgstr ""
-
-msgid "Time Account - Billed"
-msgstr ""
-
-msgid "not yet billed"
-msgstr ""
-
-msgid "to bill"
-msgstr ""
-
-msgid "billed"
 msgstr ""
 
 msgid "Workingtime:"
@@ -175,137 +282,6 @@ msgid "Export as CSV"
 msgstr ""
 
 msgid "Export as ..."
-msgstr ""
-
-msgid "Timeaccount Favorites"
-msgstr ""
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Favorite"
-msgstr ""
-
-msgid "Contract"
-msgstr ""
-
-msgid "without contract"
-msgstr ""
-
-msgid "Show closed"
-msgstr ""
-
-msgid "Unit"
-msgstr ""
-
-msgid "Unit Price"
-msgstr ""
-
-msgid "Budget in hours"
-msgstr ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Cleared at"
-msgstr ""
-
-msgid "Responsible Person"
-msgstr "Responsible Person"
-
-msgid "Timesheets are billable"
-msgstr ""
-
-msgid "Invoice"
-msgstr ""
-
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "Select invoice"
-msgstr ""
-
-msgid "Update Timesheets?"
-msgstr ""
-
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
-msgstr ""
-
-msgid "Timetracker"
-msgstr ""
-
-msgid "Requested Timesheets"
-msgstr ""
-
-msgid "My Timesheets today"
-msgstr ""
-
-msgid "My Timesheets this week"
-msgstr ""
-
-msgid "My Timesheets last week"
-msgstr ""
-
-msgid "My Timesheets this month"
-msgstr ""
-
-msgid "My Timesheets last month"
-msgstr ""
-
-msgid "Timeaccounts to bill"
-msgstr ""
-
-msgid "Timeaccounts not yet billed"
-msgstr ""
-
-msgid "Timeaccounts already billed"
-msgstr ""
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Timetracker Application."
-msgstr ""
-
-msgid "Timeaccount Bookmarks"
-msgstr ""
-
-msgid "none"
-msgstr ""
-
-msgid "last week"
-msgstr ""
-
-msgid "status to bill"
-msgstr ""
-
-msgid "Requested"
-msgstr ""
-
-msgid "Accepted"
-msgstr ""
-
-msgid "Declined"
-msgstr ""
-
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr ""
-
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
 msgstr ""
 
 msgid "Read Own"
@@ -422,23 +398,47 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-msgid "Manage timeaccounts"
-msgstr "Manage timeaccounts"
+msgid "Timesheets ODS export configuration"
+msgstr ""
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgid "Use this configuration for the timesheet ODS export."
+msgstr ""
 
-msgid "Add timeaccounts"
-msgstr "Add timeaccounts"
+msgid "A Tag which is available in context menu for fast assignment"
+msgstr ""
 
-msgid "Manage shared timeaccount favorites"
-msgstr "Manage shared timeaccount favorites"
+msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
-msgstr "Create or update shared timeaccount favourites"
+msgid "default"
+msgstr ""
 
-msgid "Manage shared timesheet favorites"
-msgstr "Manage shared timesheet favourites"
+msgid "Requested Timesheets"
+msgstr ""
 
-msgid "Create or update shared timesheet favorites"
-msgstr "Create or update shared timesheet favourites"
+msgid "My Timesheets today"
+msgstr ""
+
+msgid "My Timesheets this week"
+msgstr ""
+
+msgid "My Timesheets last week"
+msgstr ""
+
+msgid "My Timesheets this month"
+msgstr ""
+
+msgid "My Timesheets last month"
+msgstr ""
+
+msgid "Timeaccounts to bill"
+msgstr ""
+
+msgid "Timeaccounts not yet billed"
+msgstr ""
+
+msgid "Timeaccounts already billed"
+msgstr ""
+
+msgid "Timetracker"
+msgstr ""

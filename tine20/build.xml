@@ -315,6 +315,25 @@
     <target name="mimetypes">
         <build-mimetypes appName="${name}" />
     </target>
+
+    <!-- ============================================  -->
+    <!-- Target: translation-test                      -->
+    <!-- ============================================  -->
+    <target name="translation-test">
+        <echo msg="find duplicates or syntax errors" />
+        <exec command="for i in `ls ./*/translations/*.po`; do msgfmt -o - --strict $i 1>/dev/null || exit 1; done"
+              passthru="true" returnProperty="return"/>
+        <if>
+            <equals arg1="${return}" arg2="0" />
+            <then>
+                <echo message="Translation test successful" />
+            </then>
+            <else>
+                <fail message="Translation test failed" />
+            </else>
+        </if>
+    </target>
+
     <!-- ============================================  -->
     <!-- Target: tine-install                               -->
     <!-- ============================================  -->

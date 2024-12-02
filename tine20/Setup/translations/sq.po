@@ -18,847 +18,609 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:762
 msgid "Maximum number of users reached. "
 msgstr ""
 
-#: Controller.php:765
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a "
 msgstr ""
 
-#: js/TermsPanel.js:32
-msgid "I have read the license agreement and accept it"
-msgstr "Unë e kam lexuar marrveshjen e licensave dhe e kam pranuar atë"
-
-#: js/TermsPanel.js:41
-msgid "License Agreement"
-msgstr "Marveshje Licensash"
-
-#: js/TermsPanel.js:60
-msgid "I have read the privacy agreement and accept it"
-msgstr "Unë e kam lexuar marrveshjen e fshehtësive dhe e kam pranuar atë"
-
-#: js/TermsPanel.js:69
-msgid "Privacy Agreement"
-msgstr "Marrveshje e Fshehtësive"
-
-#: js/TermsPanel.js:86
-msgid "Accept Terms and Conditions"
-msgstr "Prano Kushtet dhe Konditat"
-
-#: js/LicensePanel.js:70
-msgid "Delete current Subscription"
-msgstr ""
-
-#: js/LicensePanel.js:141
-msgid "Your Subscription is not valid."
-msgstr ""
-
-#: js/LicensePanel.js:194
-msgid "Subscription Configuration"
-msgstr ""
-
-#: js/LicensePanel.js:203
-msgid "Upload from disk"
-msgstr ""
-
-#: js/LicensePanel.js:205
-msgid "Select file containing your Subscription key"
-msgstr ""
-
-#: js/LicensePanel.js:216
-msgid "No valid Subscription"
-msgstr ""
-
-#: js/LicensePanel.js:218
-msgid "Contract ID"
-msgstr ""
-
-#: js/LicensePanel.js:223
-msgid "Organization"
-msgstr ""
-
-#: js/LicensePanel.js:228
-msgid "Activation Key"
-msgstr ""
-
-#: js/LicensePanel.js:233
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-#: js/LicensePanel.js:238
-msgid "Valid from"
-msgstr ""
-
-#: js/LicensePanel.js:244
-msgid "Valid to"
-msgstr ""
-
-#: js/LicensePanel.js:261
-msgid "Subscription Information"
-msgstr ""
-
-#: js/EmailPanel.js:146 js/EmailPanel.js:480 js/AuthenticationPanel.js:203
-#: js/AuthenticationPanel.js:216 js/ConfigManagerPanel.js:147
-#: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
-#: js/ConfigManagerPanel.js:183
-msgid "Backend"
-msgstr "Fundori"
-
-#: js/EmailPanel.js:150
-msgid "Standard IMAP"
-msgstr "IMAP standart"
-
-#: js/EmailPanel.js:161
-msgid "Standard SMTP"
-msgstr "SMPT standarte"
-
-#: js/EmailPanel.js:182
-msgid "Imap"
-msgstr "Imap"
-
-#: js/EmailPanel.js:190 js/EmailPanel.js:312 js/EmailPanel.js:445
-#: js/AuthenticationPanel.js:380 js/ConfigManagerPanel.js:227
-#: js/ConfigManagerPanel.js:325 js/ConfigManagerPanel.js:345
-#: js/ConfigManagerPanel.js:386 js/ConfigManagerPanel.js:445
-msgid "Hostname"
-msgstr "Emri i Pritësit(Host)"
-
-#: js/EmailPanel.js:194 js/ConfigManagerPanel.js:203
-msgid "Username"
-msgstr "Emri Përdoruesit"
-
-#: js/EmailPanel.js:198 js/AuthenticationPanel.js:317
-#: js/AuthenticationPanel.js:609 js/ConfigManagerPanel.js:212
-#: js/ConfigManagerPanel.js:243
-msgid "Password"
-msgstr "Fjalëkalimi"
-
-#: js/EmailPanel.js:204 js/EmailPanel.js:316 js/EmailPanel.js:449
-#: js/AuthenticationPanel.js:341 js/AuthenticationPanel.js:383
-#: js/AuthenticationPanel.js:633 js/ConfigManagerPanel.js:232
-#: js/ConfigManagerPanel.js:329 js/ConfigManagerPanel.js:349
-#: js/ConfigManagerPanel.js:390 js/ConfigManagerPanel.js:449
-msgid "Port"
-msgstr "Porta"
-
-#: js/EmailPanel.js:208 js/EmailPanel.js:320 js/EmailPanel.js:453
-#: js/AuthenticationPanel.js:387
-msgid "Secure Connection"
-msgstr "Lidhje e sigurtë"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:334
-#: js/EmailPanel.js:456 js/AuthenticationPanel.js:389
-msgid "None"
-msgstr "Asnjë"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:389
-msgid "TLS"
-msgstr "TLS"
-
-#: js/EmailPanel.js:211 js/EmailPanel.js:323 js/EmailPanel.js:456
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:389
-#: js/AuthenticationPanel.js:627
-msgid "SSL"
-msgstr "SSL"
-
-#: js/EmailPanel.js:214 js/EmailPanel.js:326
-msgid "Verify peer Certificate"
-msgstr ""
-
-#: js/EmailPanel.js:220
-msgid "Use system account"
-msgstr "Përdor llogarinë e sistemit"
-
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
-msgid "No"
-msgstr "Jo"
-
-#: js/EmailPanel.js:221 js/EmailPanel.js:277 js/AuthenticationPanel.js:283
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:330
-#: js/AuthenticationPanel.js:336 js/AuthenticationPanel.js:353
-#: js/AuthenticationPanel.js:415 js/AuthenticationPanel.js:486
-#: js/AuthenticationPanel.js:510 js/AuthenticationPanel.js:516
-#: js/AuthenticationPanel.js:522 js/AuthenticationPanel.js:551
-#: js/AuthenticationPanel.js:572 js/AuthenticationPanel.js:578
-#: js/AuthenticationPanel.js:616 js/AuthenticationPanel.js:622
-#: js/AuthenticationPanel.js:628 js/AuthenticationPanel.js:668
-#: js/AuthenticationPanel.js:693 js/AuthenticationPanel.js:729
-msgid "Yes"
-msgstr "Po"
-
-#: js/EmailPanel.js:226 js/AuthenticationPanel.js:394
-msgid "Append domain to login name"
-msgstr "Bashkangjit domain me emrin e hyrjes"
-
-#: js/EmailPanel.js:231
-msgid "Use email address as login name"
-msgstr ""
-
-#: js/EmailPanel.js:267
-msgid "Cyrus Admin"
-msgstr "Administrator Cyrus"
-
-#: js/EmailPanel.js:270
-msgid "Cyrus Admin Password"
-msgstr "Fjalëkalimi i administratorit Cyrus"
-
-#: js/EmailPanel.js:276
-msgid "Use proxy auth"
-msgstr "Përdor autentifikim proxy"
-
-#: js/EmailPanel.js:304
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:331
-msgid "Authentication"
-msgstr "Autentifikim"
-
-#: js/EmailPanel.js:334
-msgid "Login"
-msgstr "Hyrje"
-
-#: js/EmailPanel.js:334
-msgid "Plain"
-msgstr "E thjeshtë"
-
-#: js/EmailPanel.js:338
-msgid "Primary Domain"
-msgstr "Domain parësor"
-
-#: js/EmailPanel.js:342
-msgid "Secondary Domains (comma separated)"
-msgstr "Domain dytësor (e ndare me presje)"
-
-#: js/EmailPanel.js:346
-msgid "Aditional Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:350
-msgid "Notifications service address"
-msgstr "Adresa e shërbimit të njoftimeve"
-
-#: js/EmailPanel.js:354
-msgid "Notification Username"
-msgstr "Emër përdoruesi i njoftuesit"
-
-#: js/EmailPanel.js:358
-msgid "Notification Password"
-msgstr "Fjalëkalimi i njoftuesit"
-
-#: js/EmailPanel.js:363
-msgid "Notifications local client (hostname or IP address)"
-msgstr "Klienti lokal i njoftimeve ( emri pritesit(host) ose adresa IP)"
-
-#: js/EmailPanel.js:439
-msgid "SIEVE"
-msgstr "SIEVE"
-
-#: js/EmailPanel.js:507
-msgid "MySql Hostname"
-msgstr "Emri Pritësit(host) MySql"
-
-#: js/EmailPanel.js:510
-msgid "MySql Database"
-msgstr "Databaza MySql"
-
-#: js/EmailPanel.js:513
-msgid "MySql User"
-msgstr "Përdoruesi MySql"
-
-#: js/EmailPanel.js:516
-msgid "MySql Password"
-msgstr "Fjalëkalimi MySql"
-
-#: js/EmailPanel.js:521
-msgid "MySql Port"
-msgstr "Porta MySql"
-
-#: js/EmailPanel.js:537
-msgid "User or UID"
-msgstr "Përdorues ose UID"
-
-#: js/EmailPanel.js:540
-msgid "Group or GID"
-msgstr "Grup ose GID"
-
-#: js/EmailPanel.js:543
-msgid "Home Template"
-msgstr "Shablloni kryesor"
-
-#: js/EmailPanel.js:545
-msgid "Password Scheme"
-msgstr "Skema e Fjalëkalimit"
-
-#: js/EmailPanel.js:556
-msgid "PLAIN-MD5"
-msgstr "PLAIN-MD5"
-
-#: js/EmailPanel.js:557
-msgid "MD5-CRYPT"
-msgstr "MD5-CRYPT"
-
-#: js/EmailPanel.js:558
-msgid "SHA1"
-msgstr "SHA1"
-
-#: js/EmailPanel.js:559
-msgid "SHA256"
-msgstr "SHA256"
-
-#: js/EmailPanel.js:560
-msgid "SSHA256"
-msgstr "SSHA256"
-
-#: js/EmailPanel.js:561
-msgid "SHA512"
-msgstr "SHA512"
-
-#: js/EmailPanel.js:562
-msgid "SSHA512"
-msgstr "SSHA512"
-
-#: js/EmailPanel.js:563
-msgid "PLAIN"
-msgstr "PLAIN"
-
-#: js/TreePanel.js:53
-msgid "Terms and Conditions"
-msgstr "Kushtet dhe Konditat"
-
-#: js/TreePanel.js:58
-msgid "Setup Checks"
-msgstr "Kontrolle Konfigurimi"
-
-#: js/TreePanel.js:64
-msgid "Config Manager"
-msgstr "Menaxhuesi i Konfigurimeve"
-
-#: js/TreePanel.js:70
-msgid "Authentication/Accounts"
-msgstr "Autentifikimi/Llogaritë"
-
-#: js/TreePanel.js:76
-msgid "Email"
-msgstr "E-Postë"
-
-#: js/TreePanel.js:82
-msgid "Application Manager"
-msgstr "Menaxheri i Aplikacioneve"
-
-#: js/TreePanel.js:88
-msgid "Subscription"
-msgstr ""
-
-#: js/init.js:76
-msgid "Setup"
-msgstr ""
-
-#: js/ApplicationGridPanel.js:63
 msgid "Name"
 msgstr "Emër"
 
-#: js/ApplicationGridPanel.js:64
 msgid "Enabled"
 msgstr "Aktivizuar"
 
-#: js/ApplicationGridPanel.js:65
 msgid "Order"
 msgstr "Porosi"
 
-#: js/ApplicationGridPanel.js:66
 msgid "Installed Version"
 msgstr "Versioni i Instaluar"
 
-#: js/ApplicationGridPanel.js:67
 msgid "Available Version"
 msgstr "Version i disponueshëm"
 
-#: js/ApplicationGridPanel.js:68
 msgid "Status"
 msgstr "Status"
 
-#: js/ApplicationGridPanel.js:69
 msgid "Depends on"
 msgstr "Varet nga"
 
-#: js/ApplicationGridPanel.js:79 js/EnvCheckGridPanel.js:205
 msgid "Install application"
 msgstr "Instalo aplikacionin"
 
-#: js/ApplicationGridPanel.js:88
 msgid "Uninstall application"
 msgstr "Ç'instalo aplikacionin"
 
-#: js/ApplicationGridPanel.js:97
 msgid "Update applications"
 msgstr ""
 
-#: js/ApplicationGridPanel.js:105
 #, python-brace-format
 msgid "Go to {0} login"
 msgstr "Shko tek hyrja {0}"
 
-#: js/ApplicationGridPanel.js:183
 msgid "uninstall"
 msgstr "Ç'instalo"
 
-#: js/ApplicationGridPanel.js:183
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Doni vërtet të ç'instaloni aplikacionin(et)?"
 
-#: js/ApplicationGridPanel.js:246
 msgid "This may take a while"
 msgstr "Kjo mund të dojë pak kohë"
 
-#: js/ApplicationGridPanel.js:280
 msgid "Dependency Violation"
 msgstr "Shkelje të Varësive"
 
-#: js/ApplicationGridPanel.js:289
 msgid "CLI Required"
 msgstr ""
 
-#: js/AuthenticationPanel.js:126
 msgid "Delete all existing users and groups"
 msgstr "Fshij të gjithë Grupet dhe Përdoruesit"
 
-#: js/AuthenticationPanel.js:126
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "Ndryshimi nga SQL në LDAP do të fshijë të gjitha Logaritë e Përdoruesëve, Grupet, dhe RoletDoni vërtetë të ndryshoni arkivën fundore të përdoruesve në LDAP?"
 
-#: js/AuthenticationPanel.js:204
+msgid "Backend"
+msgstr "Fundori"
+
 msgid "TLS client certificate"
 msgstr "Certifikata TSL e klientit"
 
-#: js/AuthenticationPanel.js:232
 msgid "Initial Admin User"
 msgstr "Administratori Fillestar"
 
-#: js/AuthenticationPanel.js:244
 msgid "Initial admin login name"
 msgstr "Emri fillestar hyrës i administratorit"
 
-#: js/AuthenticationPanel.js:249
 msgid "Initial admin Password"
 msgstr "Fjalëkalimi fillestar i administratorit"
 
-#: js/AuthenticationPanel.js:253
 msgid "Password confirmation"
 msgstr "Konfirmim i fjalëkalimit"
 
-#: js/AuthenticationPanel.js:261
 msgid "Authentication provider"
 msgstr "Dhënësi i autentifikimit"
 
-#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:352
-#: js/AuthenticationPanel.js:414
 msgid "Try to split username"
 msgstr "Mundohu të ndash Emrin e përdoruesit"
 
-#: js/AuthenticationPanel.js:288 js/AuthenticationPanel.js:358
+msgid "Yes"
+msgstr "Po"
+
+msgid "No"
+msgstr "Jo"
+
 msgid "Account canonical form"
 msgstr "Llogari e autorizuar nga"
 
-#: js/AuthenticationPanel.js:294 js/AuthenticationPanel.js:364
 msgid "Account domain name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:297 js/AuthenticationPanel.js:367
 msgid "Account domain short name"
 msgstr "Emri i shkurtër i llogarisë domain"
 
-#: js/AuthenticationPanel.js:311 js/AuthenticationPanel.js:603
 msgid "Host"
 msgstr "Pritësi(Host)"
 
-#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:606
 msgid "Login name"
 msgstr "Emri i Hyrjes"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:615
+msgid "Password"
+msgstr "Fjalëkalimi"
+
 msgid "Bind requires DN"
 msgstr "Bind kërkon DN"
 
-#: js/AuthenticationPanel.js:329 js/AuthenticationPanel.js:621
 msgid "Start TLS"
 msgstr "Nis TSL"
 
-#: js/AuthenticationPanel.js:345
+msgid "SSL"
+msgstr "SSL"
+
+msgid "Port"
+msgstr "Porta"
+
 msgid "Base DN"
 msgstr "DN bazë"
 
-#: js/AuthenticationPanel.js:348
 msgid "Search filter"
 msgstr "Filtri i kërkimit"
 
-#: js/AuthenticationPanel.js:407
+msgid "Hostname"
+msgstr "Emri i Pritësit(Host)"
+
+msgid "Secure Connection"
+msgstr "Lidhje e sigurtë"
+
+msgid "None"
+msgstr "Asnjë"
+
+msgid "TLS"
+msgstr "TLS"
+
+msgid "Append domain to login name"
+msgstr "Bashkangjit domain me emrin e hyrjes"
+
 msgid "Certificate validation"
 msgstr "Vertetimi i certifikates"
 
-#: js/AuthenticationPanel.js:420
 msgid "CA file"
 msgstr "Skedari CA"
 
-#: js/AuthenticationPanel.js:423
 msgid "CRL directory"
 msgstr "Dosja e CRL"
 
-#: js/AuthenticationPanel.js:433
 msgid "Accounts storage"
 msgstr "Vëndruajtja e Llogarive"
 
-#: js/AuthenticationPanel.js:455 js/AuthenticationPanel.js:721
 msgid "Default user group name"
 msgstr "Emri i paracaktuar i grupit të përdoruesve"
 
-#: js/AuthenticationPanel.js:458 js/AuthenticationPanel.js:724
 msgid "Default admin group name"
 msgstr "Emri i paracaktuar i grupit të administratorëve"
 
-#: js/AuthenticationPanel.js:470
 msgid "Login panel"
 msgstr "Paneli Hyrjes"
 
-#: js/AuthenticationPanel.js:485
 msgid "Reuse last username logged"
 msgstr "Ri-përdor emrin e përdoruesit të fundit "
 
-#: js/AuthenticationPanel.js:494
 msgid "Password Settings"
 msgstr "Konfigurimet e Fjalëkalimit"
 
-#: js/AuthenticationPanel.js:509
 msgid "User can change password"
 msgstr "Përdoruesi mund të ndryshojë fjalëkalimin"
 
-#: js/AuthenticationPanel.js:515
 msgid "Enable password policy"
 msgstr "Aktivizo politikën e fjalëkalimit"
 
-#: js/AuthenticationPanel.js:521
 msgid "Only ASCII"
 msgstr "Vetëm ASCII"
 
-#: js/AuthenticationPanel.js:526
 msgid "Minimum length"
 msgstr "Gjatësia minimale"
 
-#: js/AuthenticationPanel.js:529
 msgid "Minimum word chars"
 msgstr "minimumi i karaktereve në fjalë"
 
-#: js/AuthenticationPanel.js:532
 msgid "Minimum uppercase chars"
 msgstr "Minimumi i karaktereve të mëdha"
 
-#: js/AuthenticationPanel.js:535
 msgid "Minimum special chars"
 msgstr "Minimumi i karaktereve të vecanta"
 
-#: js/AuthenticationPanel.js:538
 msgid "Minimum numbers"
 msgstr "Minimumi i numrave"
 
-#: js/AuthenticationPanel.js:541
 msgid "Change password after ... days"
 msgstr ""
 
-#: js/AuthenticationPanel.js:550
 msgid "Forbid part of username in password"
 msgstr "Mos lejo një pjesë të emirt të përdoruesit në fjalëkalim"
 
-#: js/AuthenticationPanel.js:559
 msgid "Redirect Settings"
 msgstr "Ridrejto konfigurimet"
 
-#: js/AuthenticationPanel.js:567
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr "Ridrejto URL(ridrejto tek pamja e hyrjes nëse është bosh)"
 
-#: js/AuthenticationPanel.js:571
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Ridrejto gjithmonë (nëse Jo, ridrejto pas daljes)"
 
-#: js/AuthenticationPanel.js:577
 msgid "Redirect to referring site, if exists"
 msgstr "Ridrejto tek faqja referuese, nëse ekziton"
 
-#: js/AuthenticationPanel.js:638
 msgid "Password encoding"
 msgstr "Kodim i Fjalëkalimit"
 
-#: js/AuthenticationPanel.js:640
 msgid "des"
 msgstr "des"
 
-#: js/AuthenticationPanel.js:641
 msgid "crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:642
 msgid "blowfish_crypt"
 msgstr "blowfish_crypt"
 
-#: js/AuthenticationPanel.js:643
 msgid "md5_crypt"
 msgstr "md5_crypt"
 
-#: js/AuthenticationPanel.js:644
 msgid "ext_crypt"
 msgstr "ext_crypt"
 
-#: js/AuthenticationPanel.js:645
 msgid "md5"
 msgstr "md5"
 
-#: js/AuthenticationPanel.js:646
 msgid "smd5"
 msgstr "smd5"
 
-#: js/AuthenticationPanel.js:647
 msgid "sha"
 msgstr "sha"
 
-#: js/AuthenticationPanel.js:648
 msgid "ssha"
 msgstr "ssha"
 
-#: js/AuthenticationPanel.js:649
 msgid "ntpassword"
 msgstr "ntpassword"
 
-#: js/AuthenticationPanel.js:650
 msgid "plain"
 msgstr "i thjeshtë"
 
-#: js/AuthenticationPanel.js:656
 msgid "User DN"
 msgstr "DN e Përdoruesit"
 
-#: js/AuthenticationPanel.js:659
 msgid "User Filter"
 msgstr "Filtri i Përdoruesit"
 
-#: js/AuthenticationPanel.js:662
 msgid "E-Mail Attribute"
 msgstr ""
 
-#: js/AuthenticationPanel.js:667
 msgid "Write Password to SQL backend"
 msgstr ""
 
-#: js/AuthenticationPanel.js:673
 msgid "User Search Scope"
 msgstr "Qëllimi i kërkimit të përdoruesit"
 
-#: js/AuthenticationPanel.js:679
 msgid "Groups DN"
 msgstr "DN e Grupeve"
 
-#: js/AuthenticationPanel.js:682
 msgid "Group Filter"
 msgstr "Filtri i Grupeve"
 
-#: js/AuthenticationPanel.js:686
 msgid "Group Search Scope"
 msgstr "Qëllimi i Kerkimit të Grupeve"
 
-#: js/AuthenticationPanel.js:692
 msgid "Use Rfc 2307 bis"
 msgstr "Përdor Rfc 2307 bis"
 
-#: js/AuthenticationPanel.js:692
 msgid "Maintain RFC 2307 attributes"
 msgstr "Ruaj atributet RFC 2307"
 
-#: js/AuthenticationPanel.js:698
 msgid "Min User Id"
 msgstr "ID minimale e Përdoruesit"
 
-#: js/AuthenticationPanel.js:701
 msgid "Max User Id"
 msgstr "ID maksimale e Përdoruesit"
 
-#: js/AuthenticationPanel.js:704
 msgid "Min Group Id"
 msgstr "ID minimale e Grupit"
 
-#: js/AuthenticationPanel.js:707
 msgid "Max Group Id"
 msgstr "ID maksimale e Grupit"
 
-#: js/AuthenticationPanel.js:711
 msgid "Group UUID Attribute name"
 msgstr "Emiri i atributit UUID të Grupit"
 
-#: js/AuthenticationPanel.js:716
 msgid "User UUID Attribute name"
 msgstr "Emri i atrubutit UUID të përdoruesit"
 
-#: js/AuthenticationPanel.js:728
 msgid "Readonly access"
 msgstr "E drejtë vetëm për të lexuar"
 
-#: js/AuthenticationPanel.js:742
 msgid "Save config and install"
 msgstr "Ruaj konfigurimin dhe instalo"
 
-#: js/AuthenticationPanel.js:744 js/ConfigManagerPanel.js:507
 msgid "Save config"
 msgstr "Ruaj konfigurimin"
 
-#: js/AuthenticationPanel.js:769
 msgid "Passwords don't match"
 msgstr "Fajlëkalimet nuk përkojnë"
 
-#: js/AuthenticationPanel.js:782 js/AuthenticationPanel.js:789
-#: js/AuthenticationPanel.js:793 js/AuthenticationPanel.js:805
-#: js/AuthenticationPanel.js:816
 msgid "Should not be empty"
 msgstr "Nuk duhet të jetë bosh"
 
-#: js/EnvCheckGridPanel.js:89
+msgid "File"
+msgstr "Skedar"
+
+msgid "Setup Authentication"
+msgstr "Autentifikimi i Konfigurimit"
+
+msgid "Username"
+msgstr "Emri Përdoruesit"
+
+msgid "Database"
+msgstr "Databaza"
+
+msgid "User"
+msgstr "Përdorues"
+
+msgid "Prefix"
+msgstr "Prefiks"
+
+msgid "Logging"
+msgstr "Hyrje"
+
+msgid "Filename"
+msgstr "Emri i Skedarit"
+
+msgid "Priority"
+msgstr "Prioriteti"
+
+msgid "Caching"
+msgstr "Duke Fshehur(caching)"
+
+msgid "Lifetime (seconds)"
+msgstr "Kohzgjatja (seconda)"
+
+msgid "Path"
+msgstr "Rruga"
+
+msgid "Queue"
+msgstr "Rradhë"
+
+msgid "Session"
+msgstr "Seksion"
+
+msgid "Temporary files"
+msgstr "Skedarë të përkohshëm"
+
+msgid "Temporary Files Path"
+msgstr "Rrugë e përkohshme e skedarëve"
+
+msgid "Filestore directory"
+msgstr "Vendruajtja e skedarëve"
+
+msgid "Filestore Path"
+msgstr "Rruga e vendruajtjes së skedarëve"
+
+msgid "Addressbook Map panel"
+msgstr "Paneli i hartës së Bllokut të adresave"
+
+msgid "Map panel"
+msgstr "Paneli hartës"
+
+msgid "disabled"
+msgstr "ç'aktivizuar"
+
+msgid "enabled"
+msgstr "aktivizuar"
+
+msgid "Config file is not writable"
+msgstr "Skedari i konfigurimit nuk është i shkruajtshëm "
+
+msgid "Download config file"
+msgstr "Shkarko skedarin e konfigurimit"
+
+#, python-brace-format
+msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgstr ""
+
+msgid "Standard IMAP"
+msgstr "IMAP standart"
+
+msgid "Standard SMTP"
+msgstr "SMPT standarte"
+
+msgid "Imap"
+msgstr "Imap"
+
+msgid "Verify peer Certificate"
+msgstr ""
+
+msgid "Use system account"
+msgstr "Përdor llogarinë e sistemit"
+
+msgid "Use email address as login name"
+msgstr ""
+
+msgid "Cyrus Admin"
+msgstr "Administrator Cyrus"
+
+msgid "Cyrus Admin Password"
+msgstr "Fjalëkalimi i administratorit Cyrus"
+
+msgid "Use proxy auth"
+msgstr "Përdor autentifikim proxy"
+
+msgid "Smtp"
+msgstr "Smtp"
+
+msgid "Authentication"
+msgstr "Autentifikim"
+
+msgid "Login"
+msgstr "Hyrje"
+
+msgid "Plain"
+msgstr "E thjeshtë"
+
+msgid "Primary Domain"
+msgstr "Domain parësor"
+
+msgid "Secondary Domains (comma separated)"
+msgstr "Domain dytësor (e ndare me presje)"
+
+msgid "Aditional Domains (comma separated)"
+msgstr ""
+
+msgid "Notifications service address"
+msgstr "Adresa e shërbimit të njoftimeve"
+
+msgid "Notification Username"
+msgstr "Emër përdoruesi i njoftuesit"
+
+msgid "Notification Password"
+msgstr "Fjalëkalimi i njoftuesit"
+
+msgid "Notifications local client (hostname or IP address)"
+msgstr "Klienti lokal i njoftimeve ( emri pritesit(host) ose adresa IP)"
+
+msgid "SIEVE"
+msgstr "SIEVE"
+
+msgid "MySql Hostname"
+msgstr "Emri Pritësit(host) MySql"
+
+msgid "MySql Database"
+msgstr "Databaza MySql"
+
+msgid "MySql User"
+msgstr "Përdoruesi MySql"
+
+msgid "MySql Password"
+msgstr "Fjalëkalimi MySql"
+
+msgid "MySql Port"
+msgstr "Porta MySql"
+
+msgid "User or UID"
+msgstr "Përdorues ose UID"
+
+msgid "Group or GID"
+msgstr "Grup ose GID"
+
+msgid "Home Template"
+msgstr "Shablloni kryesor"
+
+msgid "Password Scheme"
+msgstr "Skema e Fjalëkalimit"
+
+msgid "PLAIN-MD5"
+msgstr "PLAIN-MD5"
+
+msgid "MD5-CRYPT"
+msgstr "MD5-CRYPT"
+
+msgid "SHA1"
+msgstr "SHA1"
+
+msgid "SHA256"
+msgstr "SHA256"
+
+msgid "SSHA256"
+msgstr "SSHA256"
+
+msgid "SHA512"
+msgstr "SHA512"
+
+msgid "SSHA512"
+msgstr "SSHA512"
+
+msgid "PLAIN"
+msgstr "PLAIN"
+
 msgid "Performing Environment Checks..."
 msgstr "Duke kryer kontrollet e ambientit..."
 
-#: js/EnvCheckGridPanel.js:130
 #, python-brace-format
 msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Nuk u gjet ndonje {0}. Ju lutem provoni të ndryshoni kërkesat e fitrave tuaj, mundësite e shfaqesose {1} ku kërkoni"
 
-#: js/EnvCheckGridPanel.js:160
 msgid "Check"
 msgstr "Kontrollo"
 
-#: js/EnvCheckGridPanel.js:161
 msgid "Result"
 msgstr "Rezultati"
 
-#: js/EnvCheckGridPanel.js:162
 msgid "Message"
 msgstr ""
 
-#: js/EnvCheckGridPanel.js:181
 msgid "Run setup tests"
 msgstr "Kryej teste konfigurimi"
 
-#: js/EnvCheckGridPanel.js:190
 msgid "Ignore setup tests"
 msgstr "Injoro testet e konfigurimit"
 
-#: js/Model.js:33
+msgid "Setup"
+msgstr ""
+
+msgid "Delete current Subscription"
+msgstr ""
+
+msgid "Your Subscription is not valid."
+msgstr ""
+
+msgid "Subscription Configuration"
+msgstr ""
+
+msgid "Upload from disk"
+msgstr ""
+
+msgid "Select file containing your Subscription key"
+msgstr ""
+
+msgid "No valid Subscription"
+msgstr ""
+
+msgid "Contract ID"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Subscription Information"
+msgstr ""
+
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Aplikacion"
 msgstr[1] "Aplikacione"
 
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:161
-msgid "File"
-msgstr "Skedar"
+msgid "I have read the license agreement and accept it"
+msgstr "Unë e kam lexuar marrveshjen e licensave dhe e kam pranuar atë"
 
-#: js/ConfigManagerPanel.js:196
-msgid "Setup Authentication"
-msgstr "Autentifikimi i Konfigurimit"
+msgid "License Agreement"
+msgstr "Marveshje Licensash"
 
-#: js/ConfigManagerPanel.js:217 js/ConfigManagerPanel.js:235
-msgid "Database"
-msgstr "Databaza"
+msgid "I have read the privacy agreement and accept it"
+msgstr "Unë e kam lexuar marrveshjen e fshehtësive dhe e kam pranuar atë"
 
-#: js/ConfigManagerPanel.js:239
-msgid "User"
-msgstr "Përdorues"
+msgid "Privacy Agreement"
+msgstr "Marrveshje e Fshehtësive"
 
-#: js/ConfigManagerPanel.js:248
-msgid "Prefix"
-msgstr "Prefiks"
+msgid "Accept Terms and Conditions"
+msgstr "Prano Kushtet dhe Konditat"
 
-#: js/ConfigManagerPanel.js:252
-msgid "Logging"
-msgstr "Hyrje"
+msgid "Terms and Conditions"
+msgstr "Kushtet dhe Konditat"
 
-#: js/ConfigManagerPanel.js:262
-msgid "Filename"
-msgstr "Emri i Skedarit"
+msgid "Setup Checks"
+msgstr "Kontrolle Konfigurimi"
 
-#: js/ConfigManagerPanel.js:265
-msgid "Priority"
-msgstr "Prioriteti"
+msgid "Config Manager"
+msgstr "Menaxhuesi i Konfigurimeve"
 
-#: js/ConfigManagerPanel.js:278
-msgid "Caching"
-msgstr "Duke Fshehur(caching)"
+msgid "Authentication/Accounts"
+msgstr "Autentifikimi/Llogaritë"
 
-#: js/ConfigManagerPanel.js:289 js/ConfigManagerPanel.js:406
-msgid "Lifetime (seconds)"
-msgstr "Kohzgjatja (seconda)"
+msgid "Email"
+msgstr "E-Postë"
 
-#: js/ConfigManagerPanel.js:312 js/ConfigManagerPanel.js:431
-msgid "Path"
-msgstr "Rruga"
+msgid "Application Manager"
+msgstr "Menaxheri i Aplikacioneve"
 
-#: js/ConfigManagerPanel.js:357
-msgid "Queue"
-msgstr "Rradhë"
-
-#: js/ConfigManagerPanel.js:398
-msgid "Session"
-msgstr "Seksion"
-
-#: js/ConfigManagerPanel.js:457
-msgid "Temporary files"
-msgstr "Skedarë të përkohshëm"
-
-#: js/ConfigManagerPanel.js:465
-msgid "Temporary Files Path"
-msgstr "Rrugë e përkohshme e skedarëve"
-
-#: js/ConfigManagerPanel.js:470
-msgid "Filestore directory"
-msgstr "Vendruajtja e skedarëve"
-
-#: js/ConfigManagerPanel.js:478
-msgid "Filestore Path"
-msgstr "Rruga e vendruajtjes së skedarëve"
-
-#: js/ConfigManagerPanel.js:483
-msgid "Addressbook Map panel"
-msgstr "Paneli i hartës së Bllokut të adresave"
-
-#: js/ConfigManagerPanel.js:491
-msgid "Map panel"
-msgstr "Paneli hartës"
-
-#: js/ConfigManagerPanel.js:493
-msgid "disabled"
-msgstr "ç'aktivizuar"
-
-#: js/ConfigManagerPanel.js:493
-msgid "enabled"
-msgstr "aktivizuar"
-
-#: js/ConfigManagerPanel.js:505
-msgid "Config file is not writable"
-msgstr "Skedari i konfigurimit nuk është i shkruajtshëm "
-
-#: js/ConfigManagerPanel.js:524
-msgid "Download config file"
-msgstr "Shkarko skedarin e konfigurimit"
-
-#: js/ConfigManagerPanel.js:565
-#, python-brace-format
-msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
+msgid "Subscription"
 msgstr ""
 
 #~ msgid "Update application"

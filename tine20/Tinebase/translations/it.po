@@ -9,104 +9,112 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 12:12+0000\n"
 "Last-Translator: Samuel Barbera <samuel.barbera@email.it>, 2013\n"
 "Language-Team: Italian (http://app.transifex.com/tine/groupware/language/it/)\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "node name must not contain the character /"
+msgid "admin"
+msgstr "admin"
+
+msgid "admin right description"
+msgstr "descrizione permessi amministratore"
+
+msgid "run"
+msgstr "esegui"
+
+msgid "run right description"
+msgstr "descrizione permessi esecuzione"
+
+msgid "Use Mainscreen"
 msgstr ""
 
-msgid "Personal container"
+msgid "App mainscreen is available in UI"
 msgstr ""
 
-#, python-format
-msgid "%s's personal container"
-msgstr "contenitore personale di %s"
-
-msgid "You are not allowed to delete your default container!"
+msgid "Personal tags"
 msgstr ""
 
-msgid "You are not allowed to remove all (admin) grants for this container."
+msgid "Use and see personal tags"
 msgstr ""
 
-msgid "Personal containers can have only one owner!"
+msgid "Report bugs"
+msgstr "Rapporto errori"
+
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr "Rapporto errori al fornitore del software quando si verificano."
+
+msgid "Check version"
+msgstr "Verifica versione"
+
+msgid "Check for new versions of this software."
+msgstr "Verificare la presenza di nuove versioni di questo software."
+
+msgid "Manage bank accounts"
 msgstr ""
 
-msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
-msgstr "Non sei autorizzato ad eliminare questa contenitore. Si prega di definire un altro contenitore come rubrica predefinita per i contatti interni!"
-
-msgid "A container with this name already exists."
+msgid "The right to manage bank accounts."
 msgstr ""
 
-msgid "Maximum number of users reached."
+msgid "Manage own profile"
+msgstr "Gestione profilo"
+
+msgid "The right to manage the own profile (selected contact data)."
+msgstr "Permessi di gestione per il proprio profilo (contatto selezionato)."
+
+msgid "Manage Numberables"
 msgstr ""
 
-msgid "The new password must be different from the old one."
+msgid "The right to manage numberables."
 msgstr ""
 
-msgid "Old pin is wrong."
+msgid "Manage own client state"
+msgstr "Gestione proprio stato cliente"
+
+msgid "The right to manage the own client state."
+msgstr "Permessi di gestione per il proprio stato cliente."
+
+msgid "Manage evaluation dimensions"
+msgstr ""
+
+msgid "The right to manage evaluation dimensions."
+msgstr ""
+
+msgid "Maintenance"
+msgstr ""
+
+msgid "The right to use the installation in maintenance mode."
+msgstr ""
+
+msgid "Show License Info"
+msgstr ""
+
+msgid "The right to be able to see license information (expiry, ...)."
+msgstr ""
+
+msgid "Replication"
+msgstr ""
+
+msgid "The right to access the replication data of all applications."
+msgstr ""
+
+msgid "unknown"
+msgstr "sconosciuto"
+
+msgid "Invalid authentication"
+msgstr ""
+
+msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr ""
 
 msgid "MFA send out failed, please try again or check with your system administrator"
 msgstr ""
 
-msgid "Municipality Key"
-msgid_plural "Municipality Keys"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Bank Holiday Calendar"
-msgid_plural "Bank Holiday Calendars"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "GENDER_Text"
-msgstr ""
-
-msgid "Text"
-msgid_plural "Texts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Anyone"
-msgstr "Chiunque"
-
-msgid "added"
-msgstr ""
-
-msgid "removed"
-msgstr ""
-
-msgid "modified"
-msgstr ""
-
-msgid "Number of distinct users"
-msgstr ""
-
-msgid "Number of users"
-msgstr ""
-
-msgid "  User Accounts:\n"
-msgstr ""
-
-msgid "MFA password wrong"
-msgstr ""
-
-msgid "MFA send out triggered"
-msgstr ""
-
-msgid "Email account already exists"
-msgstr ""
-
-msgid "Invalid authentication"
+msgid "MFA validation failed, please try again or check with your system administrator"
 msgstr ""
 
 msgid "GENDER_Key Field Record"
@@ -131,2693 +139,6 @@ msgid "System"
 msgstr ""
 
 msgid "Disabled"
-msgstr ""
-
-msgid "Page size"
-msgstr "Dimensione della pagina"
-
-msgid "Page size in grids"
-msgstr ""
-
-msgid "Grid stripe rows"
-msgstr ""
-
-msgid "Stripe rows in grids"
-msgstr ""
-
-msgid "Grid load mask"
-msgstr ""
-
-msgid "Show load mask in grids"
-msgstr ""
-
-msgid "Grid resizing strategy"
-msgstr ""
-
-msgid "How to resize grid columns"
-msgstr ""
-
-msgid "Auto search on filter change"
-msgstr ""
-
-msgid "Perform auto search when filter is changed"
-msgstr ""
-
-msgid "Timezone"
-msgstr "Fuso Orario"
-
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "Fuso orario con cui sono indicate le date in Tine 2.0."
-
-msgid "Language"
-msgstr "Lingua"
-
-msgid "The language of the Tine 2.0 GUI."
-msgstr "Il linguaggio 2.0 Tine GUI."
-
-msgid "Default Application"
-msgstr "Applicazione predefinita"
-
-msgid "The default application to show after login."
-msgstr "Applicazione predefinita da visualizzare dopo il login."
-
-msgid "Window Type"
-msgstr "Tipo di finestra"
-
-msgid "You can choose between modal windows or normal browser popup windows."
-msgstr "Si può scegliere tra finestre modali e le finestre popup dei browser."
-
-msgid "Confirm Logout"
-msgstr "Conferma Disconnessione"
-
-msgid "Show confirmation dialog on logout."
-msgstr "Visualizza finestra di conferma alla disconnessione."
-
-msgid "Enable advanced search"
-msgstr ""
-
-msgid "If enabled quickfilter searches through relations as well."
-msgstr ""
-
-msgid "File double-clicking action"
-msgstr ""
-
-msgid "Which action should be executed by default when a file is double-clicked."
-msgstr ""
-
-msgid "MFA validation failed, please try again or check with your system administrator"
-msgstr ""
-
-msgid "{{ code }} is your {{ app.branding.title }} security code."
-msgstr ""
-
-msgid "unknown"
-msgstr "sconosciuto"
-
-msgid "Search for Application ..."
-msgstr ""
-
-#, python-brace-format
-msgid "About {0}"
-msgstr "Circa {0}"
-
-#, python-brace-format
-msgid "Learn more about {0}"
-msgstr ""
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "Released under different"
-msgstr "Rilasciato sotto diversi"
-
-msgid "Open Source Licenses"
-msgstr "Licenze Open Source"
-
-msgid "with the help of our"
-msgstr "con l'aiuto del nostro"
-
-msgid "Contributors"
-msgstr "Collaboratori"
-
-msgid "Subscription"
-msgstr ""
-
-msgid "Add new Element..."
-msgstr ""
-
-msgid "Search for Municipality Keys ..."
-msgstr ""
-
-msgid "Choose MFA Deivce"
-msgstr ""
-
-msgid "This area is locked. Which device should be used to unlock?"
-msgstr ""
-
-msgid "Unlocking ..."
-msgstr ""
-
-msgid "Click here to unlock this area."
-msgstr ""
-
-msgid "MFA device missing"
-msgstr ""
-
-msgid "No matching MFA device for this area found. Configure a matching device please."
-msgstr ""
-
-msgid "Try again?"
-msgstr ""
-
-msgid "Filesystem Mounts"
-msgstr ""
-
-msgid "Profile Information"
-msgstr "Informazione Profilo"
-
-msgid "Apply"
-msgstr "Applica"
-
-msgid "Please Wait"
-msgstr "Prego Attendere"
-
-msgid "Read"
-msgstr "Letto"
-
-msgid "The field is readable part of the profile"
-msgstr "Il campo è una parte leggibile del profilo"
-
-msgid "Edit"
-msgstr "Modifica"
-
-msgid "The field is editable part of the profile"
-msgstr "Il campo è una parte modificabile del profilo"
-
-msgid "Field Name"
-msgstr "Nome campo"
-
-msgid "Outdated Browser"
-msgstr ""
-
-msgid "You need a current Browser to use this program."
-msgstr ""
-
-#, python-brace-format
-msgid "User: {0}"
-msgstr "Utente {0}"
-
-msgid "Return to original user account"
-msgstr ""
-
-msgid "Help"
-msgstr ""
-
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Console di Debug (Ctrl + F11)"
-
-msgid "Preferences"
-msgstr "Preferenze"
-
-msgid "Edit Profile"
-msgstr "Modifica Profilo"
-
-msgid "Change password"
-msgstr "Cambia Password"
-
-msgid "Manage MFA Devices"
-msgstr ""
-
-msgid "Logout"
-msgstr "Disconnetti"
-
-#, python-brace-format
-msgid "Logout from {0}"
-msgstr "Disconnetti da {0}"
-
-#, python-brace-format
-msgid "The license expires in {0} days"
-msgstr ""
-
-#, python-brace-format
-msgid "Please visit the shop at {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license expired."
-msgstr ""
-
-msgid "Allow desktop notifications"
-msgstr "Consenti notifiche desktop"
-
-msgid "Request permissions for webkit desktop notifications."
-msgstr "Richiesta di autorizzazioni per le notifiche desktop webkit."
-
-msgid "Reload the application"
-msgstr ""
-
-msgid "Reloads the application and clears caches."
-msgstr ""
-
-msgid "Confirm"
-msgstr "Conferma"
-
-msgid "Are you sure you want to logout?"
-msgstr "Sei sicuro di voler uscire?"
-
-msgid "Logging you out..."
-msgstr "Disconnessione..."
-
-msgid "Please wait!"
-msgstr "Si prega di attendere!"
-
-msgid "Abnormal End"
-msgstr "Chiusura anomala"
-
-msgid "Cancel"
-msgstr "Cancella"
-
-msgid "Send Report"
-msgstr "Invia Rapporto"
-
-msgid "An error occurred, the program ended abnormal."
-msgstr "È verificato un errore, il programma è terminato in modo anomalo."
-
-msgid "The last action you made was potentially not performed correctly."
-msgstr "L'ultima operazione che hai fatto non è stata eseguita correttamente."
-
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "Contribuisci per migliorare questo software e informa il venditore. Includere una breve descrizione di ciò che stavi facendo quando si è verificato l'errore."
-
-msgid "Description"
-msgstr "Descrizione"
-
-msgid "Send Contact Information"
-msgstr "Invia Informazioni Contatto"
-
-msgid "Details:"
-msgstr "Dettagli:"
-
-msgid "Sending report..."
-msgstr "Invio rapporto..."
-
-msgid "Please wait a moment"
-msgstr "Si prega di attendere un momento"
-
-msgid "Transmission Completed"
-msgstr "Trasmissione completata"
-
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "La tua segnalazione è stata inviata. Grazie per il tuo contributo"
-
-msgid "Please restart your browser now!"
-msgstr "Si prega di riavviare il browser ora!"
-
-msgid "Fraction of the day"
-msgstr ""
-
-msgid "One quarter of the day"
-msgstr ""
-
-msgid "One third of the day"
-msgstr ""
-
-msgid "Half of the day"
-msgstr ""
-
-msgid "Two third of the day"
-msgstr ""
-
-msgid "Three quarters of the day"
-msgstr ""
-
-msgid "Whole day"
-msgstr ""
-
-msgid "Login"
-msgstr "Login"
-
-msgid "Username"
-msgstr "Nome utente"
-
-msgid "Password"
-msgstr "Password"
-
-msgid "Certificate detected. Please, press Login button to proceed."
-msgstr ""
-
-msgid "Login via OpenID Connect"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is made for you"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Homepage"
-msgstr ""
-
-msgid "Translations"
-msgstr "Traduzioni"
-
-#, python-brace-format
-msgid "Translation state of {0}: {1}%."
-msgstr "Stato della traduzione di {0}: {1}%"
-
-#, python-brace-format
-msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Translation Howto"
-msgstr ""
-
-msgid "Detailed Language Statistics"
-msgstr "Statistiche dettagliate dei linguaggi"
-
-#, python-brace-format
-msgid "{0} trial"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr ""
-
-msgid "Powered by:"
-msgstr ""
-
-msgid "online open source groupware and crm"
-msgstr ""
-
-#, python-brace-format
-msgid "about {0} minutes"
-msgstr "circa {0} minuti"
-
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 ha bisogno del tuo aiuto"
-
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr "Abbiamo bisogno dei vostri commenti in modo che le prossime versioni di Tine 2,0 siano più vicini alle vostre esigenze. Aiutaci partecipando:"
-
-msgid "participate!"
-msgstr "partecipare!"
-
-msgid "Languages"
-msgstr "Lingue"
-
-msgid "Duration"
-msgstr "Durata"
-
-msgid "Browser incompatible"
-msgstr "Browser incompatibile"
-
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Il tuo browser non è supportato da Tine 2.0."
-
-msgid "Browser incompatible?"
-msgstr "Browser incompatibile?"
-
-msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-msgstr "Stai utilizzando un browser non riconosciuto. Ciò potrebbe causare un comportamento imprevisto."
-
-msgid "You might try one of these browsers:"
-msgstr "Potresti provare uno dei seguenti browser:"
-
-#, python-brace-format
-msgid "Login successful. Loading {0}..."
-msgstr "Accesso riuscito. {0} Caricamento in corso..."
-
-msgid "There was an error verifying your certificate!"
-msgstr ""
-
-msgid "Your username and/or your password are wrong!"
-msgstr ""
-
-msgid "Login failure"
-msgstr "Accesso fallito"
-
-msgid "Logging you in..."
-msgstr "Accesso in corso..."
-
-msgid "Please wait"
-msgstr "Si prega di attendere"
-
-msgid "Errors"
-msgstr "Errori"
-
-msgid "Please fix the errors noted."
-msgstr "Si prega di correggere gli errori rilevati."
-
-msgid "Redirecting to SSO Identity Provider"
-msgstr ""
-
-msgid "Please enter your login data"
-msgstr "Inserisci i tuoi dati di accesso"
-
-msgid "Country"
-msgid_plural "Countries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Grant"
-msgid_plural "Grants"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Tag"
-msgid_plural "Tags"
-msgstr[0] "Tag"
-msgstr[1] "Tags"
-msgstr[2] "Tags"
-
-msgid "Alarm"
-msgid_plural "Alarms"
-msgstr[0] "Avviso"
-msgstr[1] "Avvisi"
-msgstr[2] "Avvisi"
-
-msgid "Import"
-msgid_plural "Imports"
-msgstr[0] "Importazione"
-msgstr[1] "Importazioni"
-msgstr[2] "Importazioni"
-
-msgid "Export"
-msgid_plural "Export"
-msgstr[0] "Esporta"
-msgstr[1] "Esporta"
-msgstr[2] "Esporta"
-
-msgid "Credentials"
-msgid_plural "Credentials"
-msgstr[0] "Credenziali"
-msgstr[1] "Credenziali"
-msgstr[2] "Credenziali"
-
-msgid "Relation"
-msgid_plural "Relations"
-msgstr[0] "Relazione"
-msgstr[1] "Relazioni"
-msgstr[2] "Relazioni"
-
-msgid "Department"
-msgid_plural "Departments"
-msgstr[0] "Dipartimento"
-msgstr[1] "Dipartimenti"
-msgstr[2] "Dipartimenti"
-
-msgid "Name"
-msgstr "Nome"
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "configurazione"
-msgstr[1] "Configurazioni"
-msgstr[2] "Configurazioni"
-
-msgid "Configs"
-msgstr "Configurazioni"
-
-msgid "Query"
-msgstr ""
-
-msgid "Path"
-msgid_plural "Paths"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "You need to set a new password."
-msgstr ""
-
-msgid "Multi Factor Authentication"
-msgstr ""
-
-msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
-msgstr ""
-
-msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
-msgstr ""
-
-msgid "Multi Factor Authentication Device Configuration"
-msgstr ""
-
-msgid "Secret Key"
-msgstr ""
-
-msgid "Please note: After saving you can not view this autogenerated secret key again!"
-msgstr ""
-
-msgid "Generating secret key ..."
-msgstr ""
-
-msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
-msgstr ""
-
-msgid "for"
-msgstr ""
-
-msgid "FIDO2 WebAuthn Device"
-msgid_plural "FIDO2 WebAuthn Devices"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Please open the following URL in your Browser for more security key options"
-msgstr ""
-
-msgid "Configuring FIDO2 WebAuthn Device ..."
-msgstr ""
-
-msgid "FIDO2 WebAuthn Device is configured."
-msgstr ""
-
-msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
-msgstr ""
-
-msgid "Unsupported Configuration"
-msgstr ""
-
-#, python-brace-format
-msgid "see {url} for details"
-msgstr ""
-
-#, python-brace-format
-msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
-msgstr ""
-
-msgid "Error"
-msgstr "Errore"
-
-msgid "FIDO2 WebAuthn registration failed. Try again?"
-msgstr ""
-
-msgid "MFA secret required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Secret from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "Password required"
-msgstr ""
-
-msgid "This area is locked. To unlock it you need to provide your password."
-msgstr ""
-
-msgid "Authenticator code required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Authenticator code from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "Yubico OTP required"
-msgstr ""
-
-msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
-msgstr ""
-
-msgid "Yubico OTP"
-msgid_plural "Yubico OTPs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "PIN required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
-msgstr ""
-
-#, python-brace-format
-msgid "{mfaDevice.device_name} secret"
-msgstr ""
-
-msgid "Token required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Token from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "SMS security code required"
-msgstr ""
-
-#, python-brace-format
-msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
-msgstr ""
-
-#, python-brace-format
-msgid "Security code from {mfaDevice.device_name}"
-msgstr ""
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
-msgstr ""
-
-msgid "Add new MFA Device"
-msgstr ""
-
-msgid "Click here to add note"
-msgstr ""
-
-msgid "Remove"
-msgstr "Rimuovi"
-
-msgid "Total    Uploads"
-msgstr ""
-
-msgid "Complete Uploads"
-msgstr ""
-
-msgid "Failed   Uploads"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is not a valid unit"
-msgstr ""
-
-msgid "Select Image"
-msgstr ""
-
-msgid "Insert an image with the selected size"
-msgstr ""
-
-msgid "Convert to pure text"
-msgstr ""
-
-#, python-brace-format
-msgid "choose other {0}..."
-msgstr "scegli altri {0}..."
-
-msgid "Not a valid time"
-msgstr ""
-
-msgid "no decimals allowed"
-msgstr ""
-
-#, python-brace-format
-msgid "max decimals allowed: {0}"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Week"
-msgstr ""
-
-msgid "Month"
-msgstr ""
-
-msgid "Quarter"
-msgstr ""
-
-msgid "Year"
-msgstr ""
-
-msgid "When preference is locked, normal user can not edit the preference anymore."
-msgstr ""
-
-msgid "Loading"
-msgstr "Caricamento"
-
-msgid "Click to edit"
-msgstr "Fare clic per modificare"
-
-msgid "Image Failed"
-msgstr "Immagine non riuscita"
-
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Impossibile caricare l'immagine. Si prega di avvisare l'amministratore"
-
-msgid "Not An Image"
-msgstr "Non è un'immagine"
-
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Si prega di selezionare un file di immagine (gif / png / jpeg)"
-
-msgid "Upload Failed"
-msgstr "Caricamento fallito"
-
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "Impossibile caricare l'immagine. Si prega di avvisare l'amministratore"
-
-msgid "Change Image"
-msgstr "Cambia immagine"
-
-msgid "Crop Image"
-msgstr "Ritaglia immagine"
-
-msgid "Delete Image"
-msgstr "Cancella Immagine"
-
-msgid "Show Original Image"
-msgstr "Visualizza immagine originale"
-
-msgid "Software Version"
-msgstr "Versione software"
-
-msgid "Job Title"
-msgstr ""
-
-msgid "Yes"
-msgstr "Si"
-
-msgid "No"
-msgstr "No"
-
-#, python-brace-format
-msgid "Error while uploading \"{fileName}\". Please try again later."
-msgstr ""
-
-msgid "Uploads Monitor"
-msgstr ""
-
-msgid "Empty List"
-msgstr ""
-
-msgid "Not all uploads are finished yet. What would you to do?"
-msgstr ""
-
-msgid "Remove finished uploads from this list only"
-msgstr ""
-
-msgid "Cancel all unfinished uploads before"
-msgstr ""
-
-msgid "Removing files..."
-msgstr ""
-
-msgid "Total Uploads : "
-msgstr ""
-
-msgid "Upload progress"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} available (total: {1})"
-msgstr ""
-
-msgid "Tags"
-msgstr "Tags"
-
-msgid "Related to"
-msgstr "Relativo a"
-
-msgid "Preparing print, please wait..."
-msgstr ""
-
-msgid "Printing Error"
-msgstr ""
-
-msgid "Cannot open new window"
-msgstr ""
-
-#, python-brace-format
-msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
-msgstr ""
-
-msgid "Window can be closed"
-msgstr ""
-
-#, python-brace-format
-msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
-msgstr ""
-
-msgid "enter searchfilter"
-msgstr "Inserisci filtro di ricerca"
-
-msgid "Leave site?"
-msgstr ""
-
-msgid "Changes you made may not be saved."
-msgstr ""
-
-msgid "online"
-msgstr "online"
-
-msgid "offline"
-msgstr "offline"
-
-msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
-msgstr "La finestra che si desidera utilizzare è in background. Il tuo browser non contempla la funzione di mettere automaticamnte in primo piano la finestra, quindi è necessario utilizzare la finestra di funzionamento dei sistemi di commutazione. Si prega di inviare eventuali reclami al fornitore browser!"
-
-msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
-msgstr ""
-
-msgid "quarantined"
-msgstr ""
-
-msgid "(paused)"
-msgstr "(in pausa)"
-
-#, python-brace-format
-msgid "Please Sort by \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "To use manual sorting, you need to sort by column \"{0}\""
-msgstr ""
-
-#, python-brace-format
-msgid "{0} selected"
-msgstr "{0} selezionati"
-
-msgid "Unselect all"
-msgstr "Deseleziona tutto"
-
-#, python-brace-format
-msgid "Select all pages ({0} records)"
-msgstr "Seleziona tutte le pagine ({0} record)"
-
-msgid "Toggle selection"
-msgstr "Selezione commutatore"
-
-msgid "Export Records from these Positions"
-msgstr ""
-
-msgid "Select all"
-msgstr ""
-
-msgid "Deselect all"
-msgstr ""
-
-msgid "Missing Applications"
-msgstr "Applicazioni mancanti"
-
-msgid "There are no applications enabled for you. Please contact your administrator."
-msgstr "Non ci sono applicazioni abilitate per te. Si prega di contattare l'amministratore."
-
-msgid "Follow System"
-msgstr ""
-
-msgid "Dark Mode"
-msgstr ""
-
-msgid "Light Mode"
-msgstr ""
-
-msgid "Create Contact"
-msgstr ""
-
-msgid "Copy to Clipboard"
-msgstr ""
-
-msgid "Compose Message To"
-msgstr ""
-
-msgid "Session Timed Out"
-msgstr ""
-
-msgid "You can close this window."
-msgstr ""
-
-msgid "Your Client is Outdated"
-msgstr ""
-
-msgid "A new client is available, press OK to get this version"
-msgstr ""
-
-msgid "tine needs to be updated or is not installed yet."
-msgstr ""
-
-msgid "Please wait or contact your administrator"
-msgstr "Si prega di attendere o contattare l'amministratore"
-
-msgid "Insufficient Rights"
-msgstr "Permessi Insufficienti"
-
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Siamo spiacenti, non è consentito eseguire questa azione"
-
-msgid "Not Found"
-msgstr "Nessun Risultato"
-
-msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
-msgstr "Spiacente, la tua richiesta non può essere completata perché i dati richiesti non sono stati trovati. Nella maggior parte dei casi questo significa che qualcuno ha già cancellato i dati. Si prega di aggiornare la visualizzazione corrente."
-
-msgid "Concurrent Updates"
-msgstr "Aggiornamenti Simultanei"
-
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-msgstr "Qualcuno altro ha salvato questo record mentre stavi modificando dei dati. È necessario ricaricare e apportare nuovamente le modifiche."
-
-msgid "Rate-Limit"
-msgstr ""
-
-msgid "This method is rate-limited and you sent too many requests."
-msgstr ""
-
-msgid "Service Unavailable"
-msgstr "Servizio non disponibile"
-
-msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
-msgstr "Il server non è attualmente in grado di gestire la richiesta a causa di un temporaneo sovraccarico, manutenzione o errore di configurazione del server. Riprovare o contattare l'amministratore."
-
-msgid "Server Message:"
-msgstr "Messaggio Server:"
-
-msgid "Invalid Data"
-msgstr "Dati non validi"
-
-msgid "Your input data is not valid. Please provide valid data."
-msgstr "I dati inseriti non sono validi. Si prega di fornire dati validi."
-
-msgid "Connection lost, please check your network!"
-msgstr "Connessione persa, controlla la tua rete!"
-
-msgid "Timeout"
-msgstr "Timeout"
-
-msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-msgstr "Spiacenti, si è verificato un timeout durante l'elaborazione della richiesta. Si prega di ricaricare il vostro browser, riprovare o contattare l'amministratore."
-
-msgid "No Response"
-msgstr "Nessuna risposta"
-
-msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-msgstr "Spiacenti, il server non ha fornito alcuna risposta. Si prega di ricaricare il vostro browser, riprovare o contattare l'amministratore."
-
-msgid "Out of Resources"
-msgstr "Oltre le risorse"
-
-msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
-msgstr "Oltre le Risorse, Spiacenti ma il server ha indicato una condizione di \"memoria esaurita\". Si prega di contattare l'amministratore."
-
-msgid "No Role Memberships"
-msgstr "Nessun ruolo di Appartenenze"
-
-msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr "L'account utente non ha alcun ruolo di appartenenza. Si prega di contattare l'amministratore."
-
-msgid "Method Not Found / Insufficent Permissions"
-msgstr "Metodo non trovato / Permessi insufficienti"
-
-msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
-msgstr "Tentativo di accesso a una funzione non disponibile. Rilanciare il browser e riprovare, oppure contattare l'amministratore."
-
-msgid "License"
-msgstr "Licenza"
-
-msgid "Valid from"
-msgstr ""
-
-msgid "Valid to"
-msgstr ""
-
-msgid "Activation Key"
-msgstr ""
-
-msgid "Maximum Users (0=unlimited)"
-msgstr ""
-
-msgid "Organization"
-msgstr ""
-
-msgid "Activated Features"
-msgstr ""
-
-msgid "Your Subscription is unavailable"
-msgstr ""
-
-msgid "Your Subscription is not valid"
-msgstr ""
-
-msgid "Outdent Text"
-msgstr "Rientra Testo a sinistra"
-
-msgid "Indent Text"
-msgstr "Rientra Testo a destra"
-
-msgid "Remove Formatting"
-msgstr "Rimuovi formattazione"
-
-msgid "Usage:&#160;"
-msgstr "Utilizzo:&#160;"
-
-msgid "personal"
-msgstr "personale"
-
-msgid "No Information"
-msgstr "Nessuna informazione"
-
-msgid "No Access"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} second"
-msgid_plural "{0} seconds"
-msgstr[0] "{0} secondi"
-msgstr[1] "{0} secondi"
-msgstr[2] "{0} secondi"
-
-msgid "Restart application to apply new configuration?"
-msgstr ""
-
-#, python-brace-format
-msgid "All {0}"
-msgstr "Tutti {0}"
-
-#, python-brace-format
-msgid "Shared {0}"
-msgstr "Condivisi {0}"
-
-#, python-brace-format
-msgid "Other Users {0}"
-msgstr "Altri Utenti {0}"
-
-#, python-brace-format
-msgid "My {0}"
-msgstr "Mio {0}"
-
-msgid "Credits"
-msgstr "Credits"
-
-msgid "Not Supported"
-msgstr ""
-
-msgid "Your request is not supported by this version."
-msgstr ""
-
-msgid "Translation not found"
-msgstr ""
-
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Attività"
-msgstr[1] "Attività"
-msgstr[2] "Attività"
-
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "lista cose da fare"
-msgstr[1] "liste cose da fare"
-msgstr[2] "liste cose da fare"
-
-#, python-brace-format
-msgid "Add {0}"
-msgstr "Aggiungi {0}"
-
-#, python-brace-format
-msgid "Rename {0}"
-msgstr "Rinomina {0}"
-
-#, python-brace-format
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "Cancella {0}"
-msgstr[1] "Cancella {0}"
-msgstr[2] "Cancella {0}"
-
-#, python-brace-format
-msgid "Manage {0} Permissions"
-msgstr "Gestisci {0} Autorizzazioni"
-
-#, python-brace-format
-msgid "{0} Properties"
-msgstr "{0} Proprietà"
-
-#, python-brace-format
-msgid "Set {0} color"
-msgstr "Imposta {0} colore"
-
-#, python-brace-format
-msgid "Reload {0}"
-msgstr "Ricarica {0}"
-
-msgid "Resume upload"
-msgstr "Riprendi caricamento"
-
-msgid "Pause upload"
-msgstr "Pausa caricamento"
-
-msgid "Download"
-msgstr "Download"
-
-msgid "Publish"
-msgstr ""
-
-msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
-msgstr ""
-
-msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
-msgstr ""
-
-#, python-brace-format
-msgid "No {0} added"
-msgstr "Nessun {0} aggiunto"
-
-#, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "Hai inserito il nome {0}!"
-
-msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
-msgstr ""
-
-msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Creating {0}..."
-msgstr "Creazione di {0} in corso..."
-
-msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
-msgstr ""
-
-msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "Non rinominato {0}"
-
-#, python-brace-format
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Vuoi veramente cancellare {0} \"{1}\"?"
-
-#, python-brace-format
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Gestisci autorizzazioni per {0} \"{1}\""
-
-#, python-brace-format
-msgid "Properties for {0} \"{1}\""
-msgstr "Proprietà per {0} \"{1}\""
-
-msgid "Setting new language..."
-msgstr ""
-
-msgid "Save current view as favorite"
-msgstr "Salva visualizzazione corrente come preferita"
-
-msgid "Gets assigned automatically"
-msgstr ""
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "No record"
-msgstr ""
-
-msgid "Cleartext/Hidden"
-msgstr ""
-
-msgid "Searching..."
-msgstr "Ricerca..."
-
-msgid "Search for Model..."
-msgstr ""
-
-msgid "GENDER_Model"
-msgstr ""
-
-msgid "Model"
-msgid_plural "Models"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Search for records ..."
-msgstr "Ricerca per dati ..."
-
-msgid "Wrong File Type"
-msgstr "Tipo di file errato"
-
-msgid "Please select a file with one of the following extensions:"
-msgstr "Si prega di selezionare un file con una delle seguenti estensioni:"
-
-msgid "Configuration Problem"
-msgstr "Problema di configurazione"
-
-msgid "Invalid configuration"
-msgstr "Configurazione non valida"
-
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "È necessario correggere i campi contrassegnati  in rosso prima di salvare la configurazione "
-
-msgid "Transferring Configuration..."
-msgstr "Trasferimento di configurazione ..."
-
-msgid "Save config"
-msgstr "Salva configurazione"
-
-msgid "Reload config"
-msgstr "Ricarica configurazione"
-
-msgid "Some fields are  multilingual. Click here to select language to display."
-msgstr ""
-
-msgid "Edit copy"
-msgstr ""
-
-#, python-brace-format
-msgid "Search for {0} ..."
-msgstr ""
-
-msgid "Record"
-msgstr "Dato"
-
-msgid "Failure"
-msgstr "Errore"
-
-msgid "You tried to link a record with itself. This is not allowed!"
-msgstr "Si è tentato di collegare un dato con se stesso. Ciò non è consentito!"
-
-msgid "containers"
-msgstr "contenitori"
-
-msgid "Favorites"
-msgstr "Preferiti"
-
-msgid "Edit record"
-msgstr "Modifica dato"
-
-msgid "Sibling"
-msgstr "Fratello"
-
-msgid "Parent"
-msgstr "Parente"
-
-msgid "Child"
-msgstr "Figlio"
-
-#, python-brace-format
-msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
-msgstr ""
-
-#, python-brace-format
-msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
-msgstr ""
-
-msgid "Contents of Related Folder"
-msgstr ""
-
-msgid "Close"
-msgstr ""
-
-msgid "No Dialog"
-msgstr ""
-
-msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
-msgstr ""
-
-msgid "Attachments: Anyone who has access to the record can see the data"
-msgstr ""
-
-msgid "Links: Rights of the respective application are respected"
-msgstr ""
-
-msgid "Remark"
-msgstr "Osservazione"
-
-msgid "Dependency"
-msgstr "Dipendenza"
-
-msgid "Type"
-msgstr "Tipo"
-
-msgid "Creation Time"
-msgstr "Data di creazione"
-
-#, python-brace-format
-msgid "No access to {0}"
-msgstr ""
-
-msgid "The record you tried to link is already linked. Please edit the existing link."
-msgstr "Il dato che si è tentato di collegare è già collegato. Si prega di modificare il collegamento esistente."
-
-msgid "Defined by ..."
-msgstr "definito da"
-
-msgid "select a operator"
-msgstr "Seleziona un operatore"
-
-msgid "Define ..."
-msgstr "Definizione ..."
-
-msgid "Delete { ownRecordName }?"
-msgstr ""
-
-msgid "What do you want to delete?"
-msgstr ""
-
-msgid "Delete { ownRecordName }"
-msgstr ""
-
-msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
-msgstr ""
-
-#, python-brace-format
-msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
-msgstr "Il {1} \"{2}\" è già utilizzato nel campo \"{0}\", e può essere collegato una sola volta!"
-
-msgid "Select files"
-msgstr ""
-
-msgid "Select file"
-msgstr ""
-
-msgid "Select folders"
-msgstr ""
-
-msgid "Select folder"
-msgstr ""
-
-msgid "Select items"
-msgstr ""
-
-msgid "Select item"
-msgstr ""
-
-msgid "Places"
-msgstr ""
-
-msgid "My Device"
-msgstr ""
-
-msgid "Download file and save on my local device."
-msgstr ""
-
-msgid "Select or drop file to upload"
-msgstr ""
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Favorite not saved"
-msgstr ""
-
-msgid "Title"
-msgstr "Titolo"
-
-msgid "Shared Favorite (visible by other users)"
-msgstr ""
-
-msgid "The grant to see and use this filter"
-msgstr ""
-
-msgid "The grant to edit this filter"
-msgstr ""
-
-msgid "Delete"
-msgstr "Cancella"
-
-msgid "The grant to delete this filter"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "My favorites"
-msgstr "Miei preferiti"
-
-msgid "Delete Favorite"
-msgstr "Cancella Preferiti"
-
-msgid "Edit Favorite"
-msgstr "Modifica Preferito"
-
-msgid "Overwrite Favorite"
-msgstr "Sovrascrivi Preferito"
-
-#, python-brace-format
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr "Vuoi veramente cancellare questo preferito \"{0}\"?"
-
-#, python-brace-format
-msgid "Deleting Favorite \"{0}\""
-msgstr "Cancella Preferito \"{0}\""
-
-msgid "Overwrite?"
-msgstr "Sovrascrivere?"
-
-#, python-brace-format
-msgid "Do you want to overwrite the favorite \"{0}\"?"
-msgstr "Vuoi sovrascrivere il preferito \"{0}\"?"
-
-#, python-brace-format
-msgid "Overwriting Favorite \"{0}\""
-msgstr "Sovrascrittura preferito \"{0}\""
-
-msgid "Could not save Favorite"
-msgstr "Impossibile salvare Preferito"
-
-msgid "Your current view does not support favorites"
-msgstr "La tua visualizzazione corrente non supporta i preferiti."
-
-msgid "Create Favorite"
-msgstr "Crea Preferito"
-
-#, python-brace-format
-msgid "Saving Favorite \"{0}\""
-msgstr "Salvataggio preferito \"{0}\""
-
-msgid "(shared)"
-msgstr "(condiviso)"
-
-msgid "New version of tine available"
-msgstr ""
-
-#, python-brace-format
-msgid "Version \"{0}\" of tine is available."
-msgstr ""
-
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Si tratta di un aggiornamento critico e deve essere installato il più presto possibile!"
-
-msgid "Please consider updating!"
-msgstr "Ti consigliamo di aggiornare!"
-
-msgid "Notes"
-msgstr "Note"
-
-msgid "Note"
-msgid_plural "Notes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Created By"
-msgstr "Creata da"
-
-msgid "Creation time"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "Modifica {0}"
-msgstr[1] "Modifica {0}"
-msgstr[2] "Modifica {0}"
-
-#, python-brace-format
-msgid "Remove {0}"
-msgstr ""
-
-msgid "Enter new note:"
-msgstr "Inserisci nuova nota:"
-
-msgid "Add Note"
-msgstr "Aggiungi Nota"
-
-msgid "Setting new timezone..."
-msgstr ""
-
-msgid "Modules"
-msgstr ""
-
-msgid "Detach Tags"
-msgstr "Rimuovi tags"
-
-msgid "Attach Tags"
-msgstr "Allega Tag"
-
-msgid "No Tags to detach found in the selected records"
-msgstr "Nessun Tags da rimuovere è stato trovato nei dati selezionati"
-
-msgid "Please Wait..."
-msgstr "Prego Attendere..."
-
-msgid "Detaching Tags"
-msgstr "Rimozione Tags"
-
-msgid "Add a new personal tag"
-msgstr "Aggiungi un nuovo tag personale"
-
-msgid "Add New Personal Tag"
-msgstr "Aggiungi nuovo tag personale"
-
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Nota bene: È possibile creare un tag personale. Solo tu puoi vedere!"
-
-msgid "Enter tag name:"
-msgstr "Inserisci nome tag:"
-
-msgid "No Tags to display"
-msgstr "Nessun Tags da visualizzare"
-
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Rimuovi tag"
-msgstr[1] "Rimuovi tags"
-msgstr[2] "Rimuovi tags"
-
-msgid "Edit tag"
-msgstr "Modifica tag"
-
-msgid "Rename Tag"
-msgstr "Rinomina Tag"
-
-msgid "Please enter a new name:"
-msgstr "Inserisci un nuovo nome:"
-
-msgid "Edit Description"
-msgstr "Modifica Descrizione"
-
-msgid "Description for tag"
-msgstr "Descrizione tag"
-
-msgid "Please enter new description:"
-msgstr "Inserisci la nuova descrizione:"
-
-msgid "Change Color"
-msgstr "Cambia Colore"
-
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Cancella Tag"
-msgstr[1] "Cancella Tags"
-msgstr[2] "Cancella Tags"
-
-msgid "Really delete selected tag?"
-msgid_plural "Really delete selected tags?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "The selected tag will be deleted and disappear for all entries"
-msgid_plural "The selected tags will be removed and disappear for all entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Please wait a moment..."
-msgstr "Si prega di attendere..."
-
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Cancellazione Tag"
-msgstr[1] "Cancellazione Tags"
-msgstr[2] "Cancellazione Tags"
-
-msgid "Failed"
-msgstr "Fallita"
-
-msgid "Could not delete Tag(s)."
-msgstr "Impossibile cancellare Tag(s)."
-
-msgid "Notice"
-msgstr "Notare"
-
-msgid "The minimum tag length is three."
-msgstr "La lunghezza minima dei tag  è tre."
-
-msgid "Could not create tag."
-msgstr "Impossibile creare tag."
-
-msgid "Could not update tag."
-msgstr "Impossibile aggiornare tag."
-
-msgid "tag name"
-msgstr "nome tag"
-
-msgid "Add Tags"
-msgstr ""
-
-msgid "Select Tags"
-msgstr ""
-
-msgid "Attaching Tag"
-msgstr "Allego Tag"
-
-msgid "Detach tag(s)"
-msgstr "Rimozione tag(s)"
-
-msgid "Select Tag(s) to detach"
-msgstr "Selezionare Tag(s) da rimuovere"
-
-msgid "Set password"
-msgstr ""
-
-msgid "Generate password"
-msgstr ""
-
-msgid "What would you like to do?"
-msgstr "Cosa vuoi fare?"
-
-msgid "You need to select an option!"
-msgstr "È necessario selezionare un'opzione!"
-
-msgid "There are no preferences for this application."
-msgstr "Non ci sono preferenze per questa applicazione."
-
-msgid "Back"
-msgstr "Indietro"
-
-msgid "Next"
-msgstr "Successivo"
-
-msgid "Finish"
-msgstr "Completare"
-
-#, python-brace-format
-msgid "Change settings for application {0}"
-msgstr "Modificare le impostazioni per l'applicazione {0}"
-
-msgid "Defaults"
-msgstr "Predefiniti"
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr "Di seguito puoi trovare un elenco di tutti i formati di importazione supportati e un file di esempio di come Tine 2.0 si aspetta di trovare."
-
-msgid "Following you find a list of all supported import formats."
-msgstr ""
-
-msgid "Choose File and Format"
-msgstr "Scegliere File e formato"
-
-msgid "Choose Import File"
-msgstr "Scegliere file di importazione"
-
-msgid "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr "Si prega di scegliere il file che contiene i dati che si desiderano aggiungere a Tine 2.0"
-
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr "Selezionare il file contenente il {0}"
-
-msgid "What should the file you upload look like?"
-msgstr "Quale dovrebbe essere il file caricato?"
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr "Tine 2.0 non gestice tutti i tipi di file che si potrebbe desiderare di caricare. Sarà necessario regolare manualmente il file in modo che Tine 2.0 sia in grado di gestirlo."
-
-msgid "Please select the import format of the file you want to upload"
-msgstr "Si prega di selezionare il formato di importazione del file che si desidera caricare"
-
-msgid "Download example file"
-msgstr "Scarica file di esempio"
-
-#, python-brace-format
-msgid "Select {0} to add you {1} to:"
-msgstr "Selezionare {0} per aggiungere {1} a:"
-
-msgid "Set Import Options"
-msgstr "configura le opzioni di importazione"
-
-msgid "Checking Import"
-msgstr "Verifica importazione"
-
-msgid "Resolve Conflicts"
-msgstr "Risolvi Conflitti"
-
-msgid "Conflict"
-msgstr "Conflitto"
-
-msgid "First Conflict"
-msgstr "Primo Conflitto"
-
-msgid "Previous Conflict"
-msgstr "Conflitto Precedente"
-
-msgid "Next Conflict"
-msgstr "Conflitto Successivo"
-
-msgid "Last Conflict"
-msgstr "Ultimo Conflitto"
-
-msgid "Resolve this conflict"
-msgstr ""
-
-msgid "Resolve all conflicts"
-msgstr "Tutti i conflitti sono stati risolti"
-
-msgid "Processing Conflict Data"
-msgstr "Sto processando i dati in conflitto"
-
-msgid "No conflict to resolve"
-msgstr "Nessun conflitto da risolvere"
-
-#, python-brace-format
-msgid "(This is record {0} in your import file)"
-msgstr "(Questo è un dato {0} nel file di importazione)"
-
-msgid "No Detail Informations"
-msgstr "Nessun dettaglio di informazioni"
-
-msgid "Summary"
-msgstr "Sommario"
-
-msgid "Index"
-msgstr "Indice"
-
-#, python-brace-format
-msgid "Importing {0}"
-msgstr "Importazione di {0}"
-
-#, python-brace-format
-msgid "{0} records had failures and where discarded."
-msgstr "{0} dati contengono errori e saranno scartati."
-
-#, python-brace-format
-msgid "In total we found {0} records in your import file."
-msgstr "In totale abbiamo trovato {0} dati nel file di importazione."
-
-#, python-brace-format
-msgid "{0} of them will be added as new records into: \"{1}\"."
-msgstr "{0} di loro saranno aggiunti come nuovi dati in: \"{1}\"."
-
-#, python-brace-format
-msgid "{0} of them where identified as duplicates."
-msgstr "{0} di loro sono stati individuati come duplicati."
-
-#, python-brace-format
-msgid "From the identified duplicates {0} will be merged into the existing records."
-msgstr "I duplicati individuati {0} saranno uniti con i dati esistenti."
-
-#, python-brace-format
-msgid "From the identified duplicates {0} will be discarded."
-msgstr "I duplicati individuati {0} saranno scartati."
-
-#, python-brace-format
-msgid "All records will be tagged with: \"{0}\" so you can find them easily."
-msgstr "Tutti i dati saranno etichettati come: \"{0}\" in modo da poterli trovare facilmente."
-
-#, python-brace-format
-msgid "{0} records have failures and will be discarded."
-msgstr "{0} dati contengono errori e saranno scartati."
-
-msgid "Attachments"
-msgstr ""
-
-msgid "Attachment"
-msgstr ""
-
-msgid "Size"
-msgstr ""
-
-msgid "Content Type"
-msgstr ""
-
-msgid "Second Factor Password Required"
-msgstr ""
-
-msgid "Validating password..."
-msgstr ""
-
-msgid "Wrong Password"
-msgstr ""
-
-msgid "Invalid second factor password given"
-msgstr ""
-
-msgid "PIN"
-msgid_plural "PINs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#, python-brace-format
-msgid "Change {0} For \"{1}\""
-msgstr ""
-
-#, python-brace-format
-msgid "Changing {0}"
-msgstr ""
-
-msgid "Success"
-msgstr "Successo"
-
-#, python-brace-format
-msgid "Your {0} has been changed."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} mismatch, please correct."
-msgstr ""
-
-msgid "Enter description"
-msgstr ""
-
-msgid "delete"
-msgstr "Cancella"
-
-#, python-brace-format
-msgid "Print {0}"
-msgstr ""
-
-msgid "Saved in"
-msgstr "Salvato in"
-
-#, python-brace-format
-msgid "{0} (copy)"
-msgstr ""
-
-#, python-brace-format
-msgid "Copy {0}"
-msgstr "Copia {0}"
-
-msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
-msgstr ""
-
-#, python-brace-format
-msgid "Edit {0} \"{1}\""
-msgstr "Modifica {0} \"{1}\""
-
-msgid "Files are still uploading."
-msgstr ""
-
-msgid "Please review the fields marked red. They contain invalid values."
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to delete this {0}?"
-msgstr "Vuoi veramente cancellare questo {0}?"
-
-#, python-brace-format
-msgid "Deleting {0}"
-msgstr "Cancellazione {0}"
-
-#, python-brace-format
-msgid "Could not delete {0}."
-msgstr "Impossibile cancellare {0}."
-
-#, python-brace-format
-msgid "Resolve Duplicate {0} Suspicion"
-msgstr "Risolvere ogni sospetto di dati duplicati {0}"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Trasferimento {0}..."
-
-msgid "Please enter your credentials"
-msgstr "Inserisci le tue credenziali"
-
-msgid "Delete value from all selected records"
-msgstr "Eliminare il valore di tutti i dati selezionati"
-
-msgid "Undo change for all selected records"
-msgstr "Annulla modifiche per tutti i dati selezionati"
-
-#, python-brace-format
-msgid "Edit {0} {1}"
-msgstr "Modifica {0} {1}"
-
-msgid "Different Values"
-msgstr "Valori Diversi"
-
-msgid "This field has different values. Editing this field will overwrite the old values."
-msgstr "Questo campo ha valori diversi. Modifica questo campo sovrascrive i vecchi valori."
-
-#, python-brace-format
-msgid "Add {0} Relation"
-msgstr ""
-
-#, python-brace-format
-msgid "Do you really want to change these {0} records?"
-msgstr "Sei sicuro di voler modificare i dati {0}?"
-
-msgid "Applying changes"
-msgstr "Applicare modifiche"
-
-#, python-brace-format
-msgid "{1} - Exception {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} - Unknown Exception"
-msgstr ""
-
-msgid "Select Export Definition ..."
-msgstr "Seleziona un definizione di esportazione ..."
-
-#, python-brace-format
-msgid "Export {0}"
-msgid_plural "Export {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Filemanager"
-msgstr ""
-
-msgid "Open"
-msgstr ""
-
-msgid "Choose Export Location"
-msgstr ""
-
-msgid "How would you like to save your export?"
-msgstr ""
-
-msgid "Exporting..."
-msgstr ""
-
-msgid "Export created successfully."
-msgstr ""
-
-msgid "Please check your computers downloads folder!"
-msgstr ""
-
-msgid "Export could not be created. Please try again later"
-msgstr ""
-
-msgid "Alarms"
-msgstr "Avvisi"
-
-msgid "0 minutes before"
-msgstr "0 minuti prima"
-
-msgid "5 minutes before"
-msgstr "5 minuti prima"
-
-msgid "15 minutes before"
-msgstr "15 minuti prima"
-
-msgid "30 minutes before"
-msgstr "30 minuti prima"
-
-msgid "1 hour before"
-msgstr "1 ora prima"
-
-msgid "2 hours before"
-msgstr "2 ore prima"
-
-msgid "12 hours before"
-msgstr "12 ore prima"
-
-msgid "1 day before"
-msgstr "1 giorno prima"
-
-msgid "2 days before"
-msgstr "2 giorni prima"
-
-msgid "Custom Datetime"
-msgstr "Data e ora personalizzata"
-
-msgid "Alarm Time"
-msgstr "Ora Avviso"
-
-#, python-brace-format
-msgid "{0} minutes before"
-msgstr "0 minuti prima"
-
-msgid "Create xprop"
-msgstr ""
-
-msgid "xprop Name"
-msgstr ""
-
-msgid "Please enter the name of the new xprop"
-msgstr ""
-
-msgid "Delete xprop"
-msgstr ""
-
-msgid "Merging Records..."
-msgstr "Unione dei dati..."
-
-msgid "Merge Failed"
-msgstr "Unione Fallita"
-
-#, python-brace-format
-msgid "The merge succeeded, but the duplicate {0} could not be deleted."
-msgstr "L'unione è riuscita, ma il duplicato {0} non può essere cancellato."
-
-#, python-brace-format
-msgid "Merge {0}, prefer First"
-msgstr "Unione {0}, preferenza Prima"
-
-#, python-brace-format
-msgid "Merge {0}, prefer Second"
-msgstr "Unione {0}, preferenza Seconda"
-
-#, python-brace-format
-msgid "Merge {0}"
-msgstr "Unione {0}"
-
-#, python-brace-format
-msgid "First {0}"
-msgstr "Primo {0}"
-
-#, python-brace-format
-msgid "Second {0}"
-msgstr "Secondo {0}"
-
-#, python-brace-format
-msgid "Final {0}"
-msgstr "Finale {0}"
-
-msgid "The record you try to add might already exist."
-msgstr "Il dato che si tenta di aggiungere potrebbe già essere disponibili."
-
-msgid "Field Group"
-msgstr "Campo Gruppo"
-
-msgid "My Value"
-msgstr "Mio Valore"
-
-msgid "Existing Value"
-msgstr "Valore Esistente"
-
-msgid "Final Value"
-msgstr "Valore Finale"
-
-msgid "Keep both records"
-msgstr "Mantenere entrambi i dati"
-
-msgid "Merge, keeping existing details"
-msgstr "Unisci, mantenendo i dettagli esistenti"
-
-msgid "Merge, keeping my details"
-msgstr "Unisci, mantenendo i miei dettagli"
-
-msgid "Keep existing record and discard mine"
-msgstr "Mantenere il dato esistente e scartare il mio"
-
-msgid "Action:"
-msgstr "Azione:"
-
-msgid "All Settings"
-msgstr ""
-
-msgid "General Preferences"
-msgstr "Preferenze generali"
-
-msgid "Application Settings"
-msgstr ""
-
-msgid "My Profile"
-msgstr "Mio Profilo"
-
-msgid "Admin Mode"
-msgstr "Modalità Amministratore"
-
-msgid "All Users"
-msgstr ""
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Applications"
-msgstr "Applicazioni"
-
-msgid "Edit Preferences"
-msgstr "Modifica Preferenze"
-
-msgid "Loading ..."
-msgstr "Caricamento..."
-
-msgid "Saving of preferences failed."
-msgstr "Salvataggio delle preferenze non riuscito."
-
-#, python-brace-format
-msgid "You edited {0} {1}."
-msgstr "Hai modificato {0} {1}."
-
-#, python-brace-format
-msgid "{0} {1} have been updated properly."
-msgstr "{0} {1} sono stati aggiornati correttamente."
-
-#, python-brace-format
-msgid "{0} {1} has been updated properly."
-msgstr "{0} {1} è stato aggiornato correttamente."
-
-#, python-brace-format
-msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
-msgstr "{0} {1} dispone di dati non validi dopo l'aggiornamento. Questi {1} non sono stati modificati."
-
-#, python-brace-format
-msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
-msgstr "{0} {1} contiene dati non validi dopo l'aggiornamento. Questo {1} non è stato modificato."
-
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Updating Grants"
-msgstr "Aggiornamento Permessi"
-
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Non sei autorizzato a rimuovere tutti gli amministratori per questo contenitore!"
-
-msgid "is personal of"
-msgstr "è personale di"
-
-msgid "is equal to"
-msgstr "è uguale a"
-
-#, python-brace-format
-msgid "Selected {0}"
-msgstr ""
-
-msgid "container"
-msgid_plural "containers"
-msgstr[0] "contenitore"
-msgstr[1] "contenitori"
-msgstr[2] "contenitori"
-
-#, python-brace-format
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Non ti è permesso di selezionare il {0} '{1}':"
-
-#, python-brace-format
-msgid "{0} grant is required for desired action"
-msgstr "{0} è necessario l'autorizzazione per l'azione desiderata"
-
-msgid "Insufficient Grants"
-msgstr "Permessi Insufficienti"
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#, python-brace-format
-msgid "please select a {0}"
-msgstr "Seleziona un {0}"
-
-#, python-brace-format
-msgid "Select a {0}"
-msgstr "Seleziona un {0}"
-
-msgid "Properties"
-msgstr "Proprietà"
-
-msgid "Hierarchy/Name"
-msgstr ""
-
-msgid "My Grants"
-msgstr "Miei Permessi"
-
-msgid "CalDAV URL"
-msgstr ""
-
-msgid "The grant to read records of this container"
-msgstr "Il permesso di leggere dati in questo contenitore"
-
-msgid "Add"
-msgstr "Aggiungi"
-
-msgid "The grant to add records to this container"
-msgstr "Il diritto di aggiungere dati in questo contenitore"
-
-msgid "The grant to edit records in this container"
-msgstr "Il diritto di modificare dati in questo contenitore"
-
-msgid "The grant to delete records in this container"
-msgstr "Il diritto di cancellare dati in questo contenitore"
-
-msgid "The grant to export records from this container"
-msgstr "Il diritto di esportare dati da questo contenitore"
-
-msgid "Sync"
-msgstr "Sincronizza"
-
-msgid "The grant to synchronise records with this container"
-msgstr "Il diritto di sincronizzare dati con questo contenitore"
-
-msgid "Admin"
-msgstr "Amministratore"
-
-msgid "The grant to administrate this container"
-msgstr "Il diritto per amministrare le risorse"
-
-msgid "Timestamp"
-msgstr "data e ora"
-
-#, python-brace-format
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Visualizzazione dei record della cronologia  {0} - {1} di {2}"
-
-msgid "No history to display"
-msgstr "Nessuna cronologia da visualizzare"
-
-msgid "History"
-msgstr "Storico"
-
-msgid "Quick Search"
-msgstr ""
-
-msgid "Time"
-msgstr "Ora"
-
-msgid "Key Field Records"
-msgstr ""
-
-#, python-brace-format
-msgid "Transition from {current} to {target} is not allowed."
-msgstr ""
-
-msgid "Not Allowed"
-msgstr "Non Autorizzato"
-
-msgid "Default"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Add a New ID..."
-msgstr ""
-
-msgid "Add a New Value..."
-msgstr ""
-
-msgid "ID already exists"
-msgstr ""
-
-msgid "ID needs to follow the syntax PARENTID:ID"
-msgstr ""
-
-msgid "Custom Fields"
-msgstr "Campi Personalizzati"
-
-msgid "Select a country..."
-msgstr "Seleziona un paese..."
-
-msgid "Export as ..."
-msgstr ""
-
-msgid "Change user account"
-msgstr ""
-
-msgid "Switch to another user's account"
-msgstr ""
-
-msgid "Switch to this user account:"
-msgstr ""
-
-msgid "Select Account"
-msgstr ""
-
-msgid "Changing user account ..."
-msgstr ""
-
-msgid "Search User"
-msgstr "Cerca utente"
-
-msgid "Search Group"
-msgstr "Cerca Gruppo"
-
-msgid "Search Role"
-msgstr ""
-
-msgid "Add Anyone"
-msgstr "Aggiungi Chiunque"
-
-msgid "Add Myself"
-msgstr ""
-
-msgid "Search for users ..."
-msgstr "Cerca per utenti..."
-
-msgid "Search for groups ..."
-msgstr "Cerca per gruppi..."
-
-msgid "Search for roles ..."
-msgstr ""
-
-msgid "Site"
-msgstr ""
-
-msgid "no site association"
-msgstr ""
-
-msgid "this month"
-msgstr "questo mese"
-
-msgid "last month"
-msgstr "scorso mese"
-
-msgid "this quarter"
-msgstr "questo trimestre"
-
-msgid "last quarter"
-msgstr "scorso trimestre"
-
-msgid "this year"
-msgstr "quest'anno"
-
-msgid "last year"
-msgstr "scorso anno"
-
-msgid "Image"
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
-msgstr ""
-
-msgid "Quota usage"
-msgstr ""
-
-msgid "today"
-msgstr "oggi"
-
-msgid "yesterday"
-msgstr "ieri"
-
-msgid "this week"
-msgstr "questa settimana"
-
-msgid "last week"
-msgstr "la scorsa settimana"
-
-msgid "the week before last"
-msgstr "due settimane fa"
-
-msgid "last three months"
-msgstr ""
-
-msgid "last six months"
-msgstr ""
-
-msgid "anytime"
-msgstr ""
-
-msgid "tomorrow"
-msgstr "domani"
-
-msgid "next week"
-msgstr "prossima settimana"
-
-msgid "next month"
-msgstr "prossimo mese"
-
-msgid "next quarter"
-msgstr "prossimo trimestre"
-
-msgid "next year"
-msgstr "prossimo anno"
-
-msgid "contains"
-msgstr "contenitori"
-
-msgid "contains word starting with"
-msgstr ""
-
-msgid "contains not"
-msgstr ""
-
-msgid "reg. exp."
-msgstr "reg. exp."
-
-msgid "is equal to without (-, )"
-msgstr ""
-
-msgid "is greater than"
-msgstr "è maggiore di"
-
-msgid "is less than"
-msgstr "è minore di"
-
-msgid "is not"
-msgstr "non è"
-
-msgid "{gender, select, male {one of} female {one of} other {one of}}"
-msgstr ""
-
-msgid "{gender, select, male {all of} female {all of} other {all of}}"
-msgstr ""
-
-msgid "{gender, select, male {none of} female {none of} other {none of}}"
-msgstr ""
-
-msgid "is before"
-msgstr "è prima"
-
-msgid "is after"
-msgstr "è dopo"
-
-msgid "is within"
-msgstr "è all'interno"
-
-msgid "is in week no."
-msgstr "è in alcun settimana."
-
-msgid "starts with"
-msgstr "inizia con"
-
-msgid "ends with"
-msgstr "termina con"
-
-msgid "defined by"
-msgstr "definito da"
-
-msgid "Search Account ..."
-msgstr "Cerca Account ..."
-
-msgid "Period ..."
-msgstr ""
-
-msgid "show details"
-msgstr "mostra dettagli"
-
-msgid "Always show advanced filters"
-msgstr "Mostra sempre filtri avanzati"
-
-msgid "hide details"
-msgstr ""
-
-msgid "show"
-msgstr ""
-
-#, python-brace-format
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "La visualizzazione è limitata da {0} criterio:"
-msgstr[1] "La visualizzazione è limitata da {0} criteri:"
-msgstr[2] "La visualizzazione è limitata da {0} criteri:"
-
-#, python-brace-format
-msgid "Create {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "Loading {0} ..."
-msgstr ""
-
-msgid "Edit definition"
-msgstr "Modifica definizione"
-
-msgid "Start definition"
-msgstr "Inizio definizione"
-
-msgid "File"
-msgid_plural "Files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
-msgstr ""
-
-msgid "Send by E-Mail"
-msgstr ""
-
-msgid "name"
-msgstr "nome"
-
-msgid "size"
-msgstr "dimensione"
-
-msgid "type"
-msgstr "Tipo"
-
-msgid "via"
-msgstr ""
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Non è stato trovato alcun {0}. Prova a cambiare i criteri del filtro, le opzioni di visualizzazione o {1} nella tua ricerca"
-
-#, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
-msgstr ""
-
-msgid "Move Details Panel To"
-msgstr ""
-
-msgid "Bottom"
-msgstr ""
-
-msgid "Right"
-msgstr ""
-
-msgid "Print Page"
-msgstr "Stampa Pagina"
-
-#, python-brace-format
-msgid "Move {0}"
-msgid_plural "Move {0}"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#, python-brace-format
-msgid "Export as {0}"
-msgstr ""
-
-msgid "Import items"
-msgstr ""
-
-msgid "No data to display"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Visualizzazione dati {0} - {1} di {2}"
-
-#, python-brace-format
-msgid "No {0} to display"
-msgstr "Nessun {0} da visualizzare"
-
-msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
-msgstr ""
-
-msgid "Records"
-msgstr ""
-
-msgid "New..."
-msgstr "Nuovo..."
-
-msgid "Add to..."
-msgstr "Aggiungi a..."
-
-msgid "Last Modified Time"
-msgstr "Ultima modifica"
-
-msgid "Last Modified By"
-msgstr "Ultima modifica di"
-
-msgid "Grid Panel Key Bindings"
-msgstr ""
-
-#, python-brace-format
-msgid "Moving {0}"
-msgstr ""
-
-msgid "You are not allowed to delete all pages at once"
-msgstr "Non sei autorizzato a cancellare tutte le pagine in una sola volta"
-
-#, python-brace-format
-msgid "Do you really want to delete the selected record ({0})?"
-msgid_plural "Do you really want to delete the selected records ({0})?"
-msgstr[0] "Vuoi davvero eliminare il dato selezionato ({0})?"
-msgstr[1] "Vuoi davvero eliminare i dati selezionati ({0})?"
-msgstr[2] "Vuoi davvero eliminare i dati selezionati ({0})?"
-
-msgid "... This may take a long time!"
-msgstr ""
-
-#, python-brace-format
-msgid "Selected  {0}"
-msgstr "Selezionati {0}"
-
-msgid "has notes"
-msgstr "con note"
-
-msgid "This is a multilingual field:"
-msgstr ""
-
-msgid "Show records that match to one of the following filters"
-msgstr "Visualizza i dati che corrispondono ad uno dei seguenti filtri"
-
-msgid "or alternatively"
-msgstr "o in alternativa"
-
-msgid "Add alternative filter"
-msgstr "Aggiungi filtro alternativo"
-
-msgid "Remove Filter"
-msgstr "Rimuovi Filtro"
-
-msgid "Show"
-msgstr "Visualizza"
-
-msgid "and"
-msgstr ""
-
-msgid "or"
-msgstr ""
-
-msgid "add new filter"
-msgstr "Aggiungi nuovo filtro"
-
-msgid "reset all filters"
-msgstr "azzera tutti i filtri"
-
-msgid "start search"
-msgstr "iniziare la ricerca"
-
-msgid "save as favorite"
-msgstr "salva tra i preferiti"
-
-msgid "Load a favorite"
-msgstr "Caricare un preferito"
-
-msgid "select a field"
-msgstr "Seleziona un campo"
-
-msgid "Delete this filter"
-msgstr "Cancella questo filtro"
-
-#, python-brace-format
-msgid "Old {0}"
-msgstr ""
-
-#, python-brace-format
-msgid "New {0}"
-msgstr "Nuova {0}"
-
-#, python-brace-format
-msgid "Repeat new {0}"
-msgstr ""
-
-msgid "New "
-msgstr ""
-
-msgid "The following files have changed:"
-msgstr ""
-
-msgid "has been created."
-msgstr ""
-
-msgid "has been changed."
-msgstr ""
-
-msgid "has been deleted."
-msgstr ""
-
-msgid "filemanager notification"
-msgstr ""
-
-msgid "email quota notification"
-msgstr ""
-
-msgid "email soft quota notification"
-msgstr ""
-
-msgid "email "
-msgstr ""
-
-msgid "filemanager quota notification"
-msgstr ""
-
-msgid "filemanager soft quota notification"
-msgstr ""
-
-msgid "MFA configs are not valid:"
-msgstr ""
-
-msgid "Your Tine 2.0 account has been deactivated"
-msgstr ""
-
-msgid "Password failed to match the following policy requirements: "
 msgstr ""
 
 msgid "Accesslog rotation in days"
@@ -3044,6 +365,12 @@ msgstr ""
 
 msgid "Autodiscover mail config"
 msgstr ""
+
+msgid "Municipality Key"
+msgid_plural "Municipality Keys"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Show the Municipality Key in the Coredata"
 msgstr ""
@@ -3693,6 +1020,12 @@ msgstr ""
 msgid "Available Note types for modlog history"
 msgstr ""
 
+msgid "Note"
+msgid_plural "Notes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Telephone"
 msgstr ""
 
@@ -3720,6 +1053,12 @@ msgstr ""
 msgid "System User"
 msgstr ""
 
+msgid "User"
+msgid_plural "Users"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Volunteer"
 msgstr ""
 
@@ -3744,15 +1083,49 @@ msgstr ""
 msgid "Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter."
 msgstr ""
 
-msgid "by"
-msgstr "da"
+msgid "Personal container"
+msgstr ""
 
-msgid "Changed fields:"
-msgstr "Campi modificati:"
+#, python-format
+msgid "%s's personal container"
+msgstr "contenitore personale di %s"
+
+msgid "You are not allowed to delete your default container!"
+msgstr ""
+
+msgid "You are not allowed to remove all (admin) grants for this container."
+msgstr ""
+
+msgid "Personal containers can have only one owner!"
+msgstr ""
+
+msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
+msgstr "Non sei autorizzato ad eliminare questa contenitore. Si prega di definire un altro contenitore come rubrica predefinita per i contatti interni!"
+
+msgid "A container with this name already exists."
+msgstr ""
+
+msgid "renaming is currently only possible if no models are assigned"
+msgstr ""
 
 #, python-format
 msgid "%s's personal files"
 msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "The new password must be different from the old one."
+msgstr ""
+
+msgid "Old pin is wrong."
+msgstr ""
+
+msgid "Bank Holiday Calendar"
+msgid_plural "Bank Holiday Calendars"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
@@ -3762,33 +1135,2853 @@ msgstr ""
 msgid "Status %s is not valid."
 msgstr ""
 
-msgid "renaming is currently only possible if no models are assigned"
-msgstr ""
-
-msgid "Personal default"
-msgstr ""
-
-msgid "default"
-msgstr "default"
-
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr ""
 
-msgid "Scheduler task failed"
+msgid "Email account already exists"
 msgstr ""
+
+msgid "Area is locked"
+msgstr ""
+
+msgid "Area could not be unlocked"
+msgstr ""
+
+msgid "Confirmation is required"
+msgstr ""
+
+msgid "Invalid Relations"
+msgstr ""
+
+msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
+msgstr ""
+
+msgid "Wrong month format!"
+msgstr ""
+
+msgid "The month must have the format YYYY-MM!"
+msgstr ""
+
+msgid "Password Policy Violation"
+msgstr "Criterio di violazione dele password"
+
+#, python-brace-format
+msgid "Exception ({0})"
+msgstr ""
+
+msgid "Quota is exceeded"
+msgstr ""
+
+msgid "System Container"
+msgstr "Sistema Contenitore"
+
+msgid "This is a system container which could not be deleted!"
+msgstr "Questo è un sistema di contenitore che non può essere cancellato!"
+
+msgid "Generic System Exception"
+msgstr "Eccezione generica del Sistema"
+
+msgid "Exporttime"
+msgstr ""
+
+msgid "Export only currently shown columns"
+msgstr ""
+
+msgid "Excel current columns"
+msgstr ""
+
+msgid "Excel all data"
+msgstr ""
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Created by"
+msgstr "Creata da"
+
+msgid "Activities"
+msgstr "Attività"
+
+msgid "Total: "
+msgstr ""
+
+msgid "Data"
+msgstr "Dati"
+
+msgid "The following files have changed:"
+msgstr ""
+
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "has been created."
+msgstr ""
+
+msgid "has been changed."
+msgstr ""
+
+msgid "has been deleted."
+msgstr ""
+
+msgid "filemanager notification"
+msgstr ""
+
+msgid "email quota notification"
+msgstr ""
+
+msgid "email soft quota notification"
+msgstr ""
+
+msgid "email "
+msgstr ""
+
+msgid "filemanager quota notification"
+msgstr ""
+
+msgid "filemanager soft quota notification"
+msgstr ""
+
+msgid "Number of distinct users"
+msgstr ""
+
+msgid "Number of users"
+msgstr ""
+
+msgid "  User Accounts:\n"
+msgstr ""
+
+msgid "MFA password wrong"
+msgstr ""
+
+msgid "MFA send out triggered"
+msgstr ""
+
+msgid "Anyone"
+msgstr "Chiunque"
 
 #, python-format
-msgid "Your scheduler task %s has failed %d times."
+msgid "The following fields weren't imported: %s"
+msgstr "I seguenti campi non sono stati importati:% s"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Import Community identification Numbers"
 msgstr ""
 
-msgid "- The last filter I used -"
+msgid "Municipality Key Import"
+msgstr ""
+
+#, python-brace-format
+msgid "About {0}"
+msgstr "Circa {0}"
+
+#, python-brace-format
+msgid "Learn more about {0}"
+msgstr ""
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Released under different"
+msgstr "Rilasciato sotto diversi"
+
+msgid "Open Source Licenses"
+msgstr "Licenze Open Source"
+
+msgid "with the help of our"
+msgstr "con l'aiuto del nostro"
+
+msgid "Contributors"
+msgstr "Collaboratori"
+
+msgid "Subscription"
+msgstr ""
+
+msgid "Filesystem Mounts"
+msgstr ""
+
+msgid "Profile Information"
+msgstr "Informazione Profilo"
+
+msgid "Apply"
+msgstr "Applica"
+
+msgid "Please Wait"
+msgstr "Prego Attendere"
+
+msgid "Read"
+msgstr "Letto"
+
+msgid "The field is readable part of the profile"
+msgstr "Il campo è una parte leggibile del profilo"
+
+msgid "Edit"
+msgstr "Modifica"
+
+msgid "The field is editable part of the profile"
+msgstr "Il campo è una parte modificabile del profilo"
+
+msgid "Field Name"
+msgstr "Nome campo"
+
+msgid "Not Supported"
+msgstr ""
+
+msgid "Your request is not supported by this version."
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "New "
+msgstr ""
+
+msgid "Missing Applications"
+msgstr "Applicazioni mancanti"
+
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Non ci sono applicazioni abilitate per te. Si prega di contattare l'amministratore."
+
+msgid "Search for Application ..."
+msgstr ""
+
+msgid "Choose MFA Deivce"
+msgstr ""
+
+msgid "This area is locked. Which device should be used to unlock?"
+msgstr ""
+
+msgid "Unlocking ..."
+msgstr ""
+
+msgid "Click here to unlock this area."
+msgstr ""
+
+msgid "MFA device missing"
+msgstr ""
+
+msgid "No matching MFA device for this area found. Configure a matching device please."
+msgstr ""
+
+msgid "Try again?"
+msgstr ""
+
+msgid "Fraction of the day"
+msgstr ""
+
+msgid "One quarter of the day"
+msgstr ""
+
+msgid "One third of the day"
+msgstr ""
+
+msgid "Half of the day"
+msgstr ""
+
+msgid "Two third of the day"
+msgstr ""
+
+msgid "Three quarters of the day"
+msgstr ""
+
+msgid "Whole day"
+msgstr ""
+
+msgid "Add new Element..."
+msgstr ""
+
+msgid "Usage:&#160;"
+msgstr "Utilizzo:&#160;"
+
+msgid "personal"
+msgstr "personale"
+
+msgid "No Information"
+msgstr "Nessuna informazione"
+
+msgid "No Access"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} second"
+msgid_plural "{0} seconds"
+msgstr[0] "{0} secondi"
+msgstr[1] "{0} secondi"
+msgstr[2] "{0} secondi"
+
+msgid "Confirm"
+msgstr "Conferma"
+
+msgid "Restart application to apply new configuration?"
+msgstr ""
+
+#, python-brace-format
+msgid "All {0}"
+msgstr "Tutti {0}"
+
+#, python-brace-format
+msgid "Shared {0}"
+msgstr "Condivisi {0}"
+
+#, python-brace-format
+msgid "Other Users {0}"
+msgstr "Altri Utenti {0}"
+
+#, python-brace-format
+msgid "My {0}"
+msgstr "Mio {0}"
+
+msgid "Credits"
+msgstr "Credits"
+
+msgid "Translation not found"
+msgstr ""
+
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Attività"
+msgstr[1] "Attività"
+msgstr[2] "Attività"
+
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "lista cose da fare"
+msgstr[1] "liste cose da fare"
+msgstr[2] "liste cose da fare"
+
+msgid "Abnormal End"
+msgstr "Chiusura anomala"
+
+msgid "Cancel"
+msgstr "Cancella"
+
+msgid "Send Report"
+msgstr "Invia Rapporto"
+
+msgid "An error occurred, the program ended abnormal."
+msgstr "È verificato un errore, il programma è terminato in modo anomalo."
+
+msgid "The last action you made was potentially not performed correctly."
+msgstr "L'ultima operazione che hai fatto non è stata eseguita correttamente."
+
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Contribuisci per migliorare questo software e informa il venditore. Includere una breve descrizione di ciò che stavi facendo quando si è verificato l'errore."
+
+msgid "Description"
+msgstr "Descrizione"
+
+msgid "Send Contact Information"
+msgstr "Invia Informazioni Contatto"
+
+msgid "Details:"
+msgstr "Dettagli:"
+
+msgid "Sending report..."
+msgstr "Invio rapporto..."
+
+msgid "Please wait a moment"
+msgstr "Si prega di attendere un momento"
+
+msgid "Transmission Completed"
+msgstr "Trasmissione completata"
+
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "La tua segnalazione è stata inviata. Grazie per il tuo contributo"
+
+msgid "Please restart your browser now!"
+msgstr "Si prega di riavviare il browser ora!"
+
+msgid "Insufficient Rights"
+msgstr "Permessi Insufficienti"
+
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Siamo spiacenti, non è consentito eseguire questa azione"
+
+msgid "Not Found"
+msgstr "Nessun Risultato"
+
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Spiacente, la tua richiesta non può essere completata perché i dati richiesti non sono stati trovati. Nella maggior parte dei casi questo significa che qualcuno ha già cancellato i dati. Si prega di aggiornare la visualizzazione corrente."
+
+msgid "Concurrent Updates"
+msgstr "Aggiornamenti Simultanei"
+
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Qualcuno altro ha salvato questo record mentre stavi modificando dei dati. È necessario ricaricare e apportare nuovamente le modifiche."
+
+msgid "Rate-Limit"
+msgstr ""
+
+msgid "This method is rate-limited and you sent too many requests."
+msgstr ""
+
+msgid "Service Unavailable"
+msgstr "Servizio non disponibile"
+
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
+msgstr "Il server non è attualmente in grado di gestire la richiesta a causa di un temporaneo sovraccarico, manutenzione o errore di configurazione del server. Riprovare o contattare l'amministratore."
+
+msgid "Server Message:"
+msgstr "Messaggio Server:"
+
+msgid "Invalid Data"
+msgstr "Dati non validi"
+
+msgid "Your input data is not valid. Please provide valid data."
+msgstr "I dati inseriti non sono validi. Si prega di fornire dati validi."
+
+msgid "Connection lost, please check your network!"
+msgstr "Connessione persa, controlla la tua rete!"
+
+msgid "Timeout"
+msgstr "Timeout"
+
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "Spiacenti, si è verificato un timeout durante l'elaborazione della richiesta. Si prega di ricaricare il vostro browser, riprovare o contattare l'amministratore."
+
+msgid "No Response"
+msgstr "Nessuna risposta"
+
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "Spiacenti, il server non ha fornito alcuna risposta. Si prega di ricaricare il vostro browser, riprovare o contattare l'amministratore."
+
+msgid "Out of Resources"
+msgstr "Oltre le risorse"
+
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
+msgstr "Oltre le Risorse, Spiacenti ma il server ha indicato una condizione di \"memoria esaurita\". Si prega di contattare l'amministratore."
+
+msgid "No Role Memberships"
+msgstr "Nessun ruolo di Appartenenze"
+
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "L'account utente non ha alcun ruolo di appartenenza. Si prega di contattare l'amministratore."
+
+msgid "Method Not Found / Insufficent Permissions"
+msgstr "Metodo non trovato / Permessi insufficienti"
+
+msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
+msgstr "Tentativo di accesso a una funzione non disponibile. Rilanciare il browser e riprovare, oppure contattare l'amministratore."
+
+msgid "Outdated Browser"
+msgstr ""
+
+msgid "You need a current Browser to use this program."
+msgstr ""
+
+msgid "License"
+msgstr "Licenza"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Username"
+msgstr "Nome utente"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Certificate detected. Please, press Login button to proceed."
+msgstr ""
+
+msgid "Login via OpenID Connect"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} is made for you"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Homepage"
+msgstr ""
+
+msgid "Translations"
+msgstr "Traduzioni"
+
+#, python-brace-format
+msgid "Translation state of {0}: {1}%."
+msgstr "Stato della traduzione di {0}: {1}%"
+
+#, python-brace-format
+msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} Translation Howto"
+msgstr ""
+
+msgid "Detailed Language Statistics"
+msgstr "Statistiche dettagliate dei linguaggi"
+
+#, python-brace-format
+msgid "Your {0} license expired."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} trial"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+
+msgid "Powered by:"
+msgstr ""
+
+msgid "online open source groupware and crm"
+msgstr ""
+
+#, python-brace-format
+msgid "about {0} minutes"
+msgstr "circa {0} minuti"
+
+msgid "Tine 2.0 needs your help"
+msgstr "Tine 2.0 ha bisogno del tuo aiuto"
+
+msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
+msgstr "Abbiamo bisogno dei vostri commenti in modo che le prossime versioni di Tine 2,0 siano più vicini alle vostre esigenze. Aiutaci partecipando:"
+
+msgid "participate!"
+msgstr "partecipare!"
+
+msgid "Languages"
+msgstr "Lingue"
+
+msgid "Duration"
+msgstr "Durata"
+
+msgid "Browser incompatible"
+msgstr "Browser incompatibile"
+
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Il tuo browser non è supportato da Tine 2.0."
+
+msgid "Browser incompatible?"
+msgstr "Browser incompatibile?"
+
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr "Stai utilizzando un browser non riconosciuto. Ciò potrebbe causare un comportamento imprevisto."
+
+msgid "You might try one of these browsers:"
+msgstr "Potresti provare uno dei seguenti browser:"
+
+#, python-brace-format
+msgid "Login successful. Loading {0}..."
+msgstr "Accesso riuscito. {0} Caricamento in corso..."
+
+msgid "Please wait!"
+msgstr "Si prega di attendere!"
+
+msgid "There was an error verifying your certificate!"
+msgstr ""
+
+msgid "Your username and/or your password are wrong!"
+msgstr ""
+
+msgid "Login failure"
+msgstr "Accesso fallito"
+
+msgid "Logging you in..."
+msgstr "Accesso in corso..."
+
+msgid "Please wait"
+msgstr "Si prega di attendere"
+
+msgid "Errors"
+msgstr "Errori"
+
+msgid "Please fix the errors noted."
+msgstr "Si prega di correggere gli errori rilevati."
+
+msgid "Redirecting to SSO Identity Provider"
+msgstr ""
+
+msgid "Please enter your login data"
+msgstr "Inserisci i tuoi dati di accesso"
+
+#, python-brace-format
+msgid "User: {0}"
+msgstr "Utente {0}"
+
+msgid "Return to original user account"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Console di Debug (Ctrl + F11)"
+
+msgid "Preferences"
+msgstr "Preferenze"
+
+msgid "Edit Profile"
+msgstr "Modifica Profilo"
+
+msgid "Change password"
+msgstr "Cambia Password"
+
+msgid "Manage MFA Devices"
+msgstr ""
+
+msgid "Logout"
+msgstr "Disconnetti"
+
+#, python-brace-format
+msgid "Logout from {0}"
+msgstr "Disconnetti da {0}"
+
+#, python-brace-format
+msgid "The license expires in {0} days"
+msgstr ""
+
+#, python-brace-format
+msgid "Please visit the shop at {0}"
+msgstr ""
+
+msgid "Allow desktop notifications"
+msgstr "Consenti notifiche desktop"
+
+msgid "Request permissions for webkit desktop notifications."
+msgstr "Richiesta di autorizzazioni per le notifiche desktop webkit."
+
+msgid "Reload the application"
+msgstr ""
+
+msgid "Reloads the application and clears caches."
+msgstr ""
+
+msgid "Are you sure you want to logout?"
+msgstr "Sei sicuro di voler uscire?"
+
+msgid "Logging you out..."
+msgstr "Disconnessione..."
+
+msgid "You need to set a new password."
+msgstr ""
+
+msgid "Multi Factor Authentication"
+msgstr ""
+
+msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
+msgstr ""
+
+msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
+msgstr ""
+
+msgid "Multi Factor Authentication Device Configuration"
+msgstr ""
+
+msgid "Secret Key"
+msgstr ""
+
+msgid "Please note: After saving you can not view this autogenerated secret key again!"
+msgstr ""
+
+msgid "Generating secret key ..."
+msgstr ""
+
+msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
+msgstr ""
+
+msgid "for"
+msgstr ""
+
+msgid "MFA secret required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Secret from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Authenticator code required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Authenticator code from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "PIN required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
+msgstr ""
+
+#, python-brace-format
+msgid "{mfaDevice.device_name} secret"
+msgstr ""
+
+msgid "SMS security code required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Security code from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Token required"
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "Token from {mfaDevice.device_name}"
+msgstr ""
+
+msgid "Password required"
+msgstr ""
+
+msgid "This area is locked. To unlock it you need to provide your password."
+msgstr ""
+
+msgid "Error"
+msgstr "Errore"
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr ""
+
+msgid "Yubico OTP required"
+msgstr ""
+
+msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
+msgstr ""
+
+msgid "Yubico OTP"
+msgid_plural "Yubico OTPs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Add new MFA Device"
+msgstr ""
+
+msgid "Click here to add note"
+msgstr ""
+
+msgid "FIDO2 WebAuthn Device"
+msgid_plural "FIDO2 WebAuthn Devices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Please open the following URL in your Browser for more security key options"
+msgstr ""
+
+msgid "Configuring FIDO2 WebAuthn Device ..."
+msgstr ""
+
+msgid "FIDO2 WebAuthn Device is configured."
+msgstr ""
+
+msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
+msgstr ""
+
+msgid "Unsupported Configuration"
+msgstr ""
+
+#, python-brace-format
+msgid "see {url} for details"
+msgstr ""
+
+#, python-brace-format
+msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
+msgstr ""
+
+msgid "FIDO2 WebAuthn registration failed. Try again?"
+msgstr ""
+
+msgid "Country"
+msgid_plural "Countries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Grant"
+msgid_plural "Grants"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Tag"
+msgid_plural "Tags"
+msgstr[0] "Tag"
+msgstr[1] "Tags"
+msgstr[2] "Tags"
+
+msgid "Alarm"
+msgid_plural "Alarms"
+msgstr[0] "Avviso"
+msgstr[1] "Avvisi"
+msgstr[2] "Avvisi"
+
+msgid "Import"
+msgid_plural "Imports"
+msgstr[0] "Importazione"
+msgstr[1] "Importazioni"
+msgstr[2] "Importazioni"
+
+msgid "Export"
+msgid_plural "Export"
+msgstr[0] "Esporta"
+msgstr[1] "Esporta"
+msgstr[2] "Esporta"
+
+msgid "Credentials"
+msgid_plural "Credentials"
+msgstr[0] "Credenziali"
+msgstr[1] "Credenziali"
+msgstr[2] "Credenziali"
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Relazione"
+msgstr[1] "Relazioni"
+msgstr[2] "Relazioni"
+
+msgid "Department"
+msgid_plural "Departments"
+msgstr[0] "Dipartimento"
+msgstr[1] "Dipartimenti"
+msgstr[2] "Dipartimenti"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "configurazione"
+msgstr[1] "Configurazioni"
+msgstr[2] "Configurazioni"
+
+msgid "Configs"
+msgstr "Configurazioni"
+
+msgid "Query"
+msgstr ""
+
+msgid "Path"
+msgid_plural "Paths"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Search for Municipality Keys ..."
+msgstr ""
+
+msgid "PIN"
+msgid_plural "PINs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Change {0} For \"{1}\""
+msgstr ""
+
+#, python-brace-format
+msgid "Old {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "New {0}"
+msgstr "Nuova {0}"
+
+#, python-brace-format
+msgid "Repeat new {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Changing {0}"
+msgstr ""
+
+msgid "Success"
+msgstr "Successo"
+
+#, python-brace-format
+msgid "Your {0} has been changed."
+msgstr ""
+
+msgid "Failure"
+msgstr "Errore"
+
+#, python-brace-format
+msgid "{0} mismatch, please correct."
+msgstr ""
+
+msgid "Outdent Text"
+msgstr "Rientra Testo a sinistra"
+
+msgid "Indent Text"
+msgstr "Rientra Testo a destra"
+
+msgid "Remove Formatting"
+msgstr "Rimuovi formattazione"
+
+msgid "Valid from"
+msgstr ""
+
+msgid "Valid to"
+msgstr ""
+
+msgid "Activation Key"
+msgstr ""
+
+msgid "Maximum Users (0=unlimited)"
+msgstr ""
+
+msgid "Organization"
+msgstr ""
+
+msgid "Activated Features"
+msgstr ""
+
+msgid "Your Subscription is unavailable"
+msgstr ""
+
+msgid "Your Subscription is not valid"
+msgstr ""
+
+msgid "Remove"
+msgstr "Rimuovi"
+
+msgid "Follow System"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Light Mode"
+msgstr ""
+
+msgid "Create Contact"
+msgstr ""
+
+msgid "Copy to Clipboard"
+msgstr ""
+
+msgid "Compose Message To"
+msgstr ""
+
+msgid "Session Timed Out"
+msgstr ""
+
+msgid "You can close this window."
+msgstr ""
+
+msgid "Your Client is Outdated"
+msgstr ""
+
+msgid "A new client is available, press OK to get this version"
+msgstr ""
+
+msgid "tine needs to be updated or is not installed yet."
+msgstr ""
+
+msgid "Please wait or contact your administrator"
+msgstr "Si prega di attendere o contattare l'amministratore"
+
+msgid "Total    Uploads"
+msgstr ""
+
+msgid "Complete Uploads"
+msgstr ""
+
+msgid "Failed   Uploads"
+msgstr ""
+
+msgid "online"
+msgstr "online"
+
+msgid "offline"
+msgstr "offline"
+
+msgid "Upload progress"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} available (total: {1})"
+msgstr ""
+
+#, python-brace-format
+msgid "Error while uploading \"{fileName}\". Please try again later."
+msgstr ""
+
+msgid "Upload Failed"
+msgstr "Caricamento fallito"
+
+msgid "Uploads Monitor"
+msgstr ""
+
+msgid "Empty List"
+msgstr ""
+
+msgid "Not all uploads are finished yet. What would you to do?"
+msgstr ""
+
+msgid "Remove finished uploads from this list only"
+msgstr ""
+
+msgid "Cancel all unfinished uploads before"
+msgstr ""
+
+msgid "Removing files..."
+msgstr ""
+
+msgid "Total Uploads : "
+msgstr ""
+
+msgid "Yes"
+msgstr "Si"
+
+msgid "No"
+msgstr "No"
+
+#, python-brace-format
+msgid "{0} is not a valid unit"
+msgstr ""
+
+#, python-brace-format
+msgid "choose other {0}..."
+msgstr "scegli altri {0}..."
+
+msgid "Not a valid time"
+msgstr ""
+
+msgid "Job Title"
+msgstr ""
+
+msgid "Select Image"
+msgstr ""
+
+msgid "Insert an image with the selected size"
+msgstr ""
+
+msgid "Convert to pure text"
+msgstr ""
+
+msgid "Loading"
+msgstr "Caricamento"
+
+msgid "Click to edit"
+msgstr "Fare clic per modificare"
+
+msgid "Image Failed"
+msgstr "Immagine non riuscita"
+
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Impossibile caricare l'immagine. Si prega di avvisare l'amministratore"
+
+msgid "Not An Image"
+msgstr "Non è un'immagine"
+
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Si prega di selezionare un file di immagine (gif / png / jpeg)"
+
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "Impossibile caricare l'immagine. Si prega di avvisare l'amministratore"
+
+msgid "Change Image"
+msgstr "Cambia immagine"
+
+msgid "Crop Image"
+msgstr "Ritaglia immagine"
+
+msgid "Delete Image"
+msgstr "Cancella Immagine"
+
+msgid "Show Original Image"
+msgstr "Visualizza immagine originale"
+
+msgid "When preference is locked, normal user can not edit the preference anymore."
+msgstr ""
+
+msgid "no decimals allowed"
+msgstr ""
+
+#, python-brace-format
+msgid "max decimals allowed: {0}"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "Quarter"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Software Version"
+msgstr "Versione software"
+
+msgid "Select all"
+msgstr ""
+
+msgid "Deselect all"
+msgstr ""
+
+#, python-brace-format
+msgid "Please Sort by \"{0}\""
+msgstr ""
+
+#, python-brace-format
+msgid "To use manual sorting, you need to sort by column \"{0}\""
+msgstr ""
+
+msgid "Export Records from these Positions"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} selected"
+msgstr "{0} selezionati"
+
+msgid "Unselect all"
+msgstr "Deseleziona tutto"
+
+#, python-brace-format
+msgid "Select all pages ({0} records)"
+msgstr "Seleziona tutte le pagine ({0} record)"
+
+msgid "Toggle selection"
+msgstr "Selezione commutatore"
+
+msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
+msgstr ""
+
+msgid "quarantined"
+msgstr ""
+
+msgid "(paused)"
+msgstr "(in pausa)"
+
+msgid "Cannot open new window"
+msgstr ""
+
+#, python-brace-format
+msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
+msgstr ""
+
+msgid "Window can be closed"
+msgstr ""
+
+#, python-brace-format
+msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
+msgstr ""
+
+msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+msgstr "La finestra che si desidera utilizzare è in background. Il tuo browser non contempla la funzione di mettere automaticamnte in primo piano la finestra, quindi è necessario utilizzare la finestra di funzionamento dei sistemi di commutazione. Si prega di inviare eventuali reclami al fornitore browser!"
+
+msgid "Preparing print, please wait..."
+msgstr ""
+
+msgid "Printing Error"
+msgstr ""
+
+msgid "Related to"
+msgstr "Relativo a"
+
+msgid "enter searchfilter"
+msgstr "Inserisci filtro di ricerca"
+
+msgid "Leave site?"
+msgstr ""
+
+msgid "Changes you made may not be saved."
+msgstr ""
+
+msgid "Change user account"
+msgstr ""
+
+msgid "Switch to another user's account"
+msgstr ""
+
+msgid "Switch to this user account:"
+msgstr ""
+
+msgid "Select Account"
+msgstr ""
+
+msgid "Changing user account ..."
+msgstr ""
+
+msgid "Search User"
+msgstr "Cerca utente"
+
+msgid "Search Group"
+msgstr "Cerca Gruppo"
+
+msgid "Search Role"
+msgstr ""
+
+msgid "Add Anyone"
+msgstr "Aggiungi Chiunque"
+
+msgid "Add Myself"
+msgstr ""
+
+msgid "Search for users ..."
+msgstr "Cerca per utenti..."
+
+msgid "Search for groups ..."
+msgstr "Cerca per gruppi..."
+
+msgid "Search for roles ..."
+msgstr ""
+
+msgid "Notes"
+msgstr "Note"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Created By"
+msgstr "Creata da"
+
+msgid "Creation time"
+msgstr ""
+
+#, python-brace-format
+msgid "Add {0}"
+msgstr "Aggiungi {0}"
+
+#, python-brace-format
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Modifica {0}"
+msgstr[1] "Modifica {0}"
+msgstr[2] "Modifica {0}"
+
+#, python-brace-format
+msgid "Remove {0}"
+msgstr ""
+
+msgid "Enter new note:"
+msgstr "Inserisci nuova nota:"
+
+msgid "Add Note"
+msgstr "Aggiungi Nota"
+
+msgid "Timestamp"
+msgstr "data e ora"
+
+#, python-brace-format
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Visualizzazione dei record della cronologia  {0} - {1} di {2}"
+
+msgid "No history to display"
+msgstr "Nessuna cronologia da visualizzare"
+
+msgid "History"
+msgstr "Storico"
+
+msgid "Quick Search"
+msgstr ""
+
+msgid "Time"
+msgstr "Ora"
+
+msgid "CalDAV URL"
+msgstr ""
+
+msgid "is personal of"
+msgstr "è personale di"
+
+msgid "is equal to"
+msgstr "è uguale a"
+
+#, python-brace-format
+msgid "Selected {0}"
+msgstr ""
+
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Updating Grants"
+msgstr "Aggiornamento Permessi"
+
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Non sei autorizzato a rimuovere tutti gli amministratori per questo contenitore!"
+
+msgid "The grant to read records of this container"
+msgstr "Il permesso di leggere dati in questo contenitore"
+
+msgid "Add"
+msgstr "Aggiungi"
+
+msgid "The grant to add records to this container"
+msgstr "Il diritto di aggiungere dati in questo contenitore"
+
+msgid "The grant to edit records in this container"
+msgstr "Il diritto di modificare dati in questo contenitore"
+
+msgid "Delete"
+msgstr "Cancella"
+
+msgid "The grant to delete records in this container"
+msgstr "Il diritto di cancellare dati in questo contenitore"
+
+msgid "The grant to export records from this container"
+msgstr "Il diritto di esportare dati da questo contenitore"
+
+msgid "Sync"
+msgstr "Sincronizza"
+
+msgid "The grant to synchronise records with this container"
+msgstr "Il diritto di sincronizzare dati con questo contenitore"
+
+msgid "Admin"
+msgstr "Amministratore"
+
+msgid "The grant to administrate this container"
+msgstr "Il diritto per amministrare le risorse"
+
+msgid "Properties"
+msgstr "Proprietà"
+
+msgid "Hierarchy/Name"
+msgstr ""
+
+msgid "My Grants"
+msgstr "Miei Permessi"
+
+#, python-brace-format
+msgid "Select a {0}"
+msgstr "Seleziona un {0}"
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "please select a {0}"
+msgstr "Seleziona un {0}"
+
+msgid "container"
+msgid_plural "containers"
+msgstr[0] "contenitore"
+msgstr[1] "contenitori"
+msgstr[2] "contenitori"
+
+#, python-brace-format
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Non ti è permesso di selezionare il {0} '{1}':"
+
+#, python-brace-format
+msgid "{0} grant is required for desired action"
+msgstr "{0} è necessario l'autorizzazione per l'azione desiderata"
+
+msgid "Insufficient Grants"
+msgstr "Permessi Insufficienti"
+
+msgid "Modules"
+msgstr ""
+
+msgid "Select a country..."
+msgstr "Seleziona un paese..."
+
+msgid "Custom Fields"
+msgstr "Campi Personalizzati"
+
+#, python-brace-format
+msgid "Change settings for application {0}"
+msgstr "Modificare le impostazioni per l'applicazione {0}"
+
+msgid "Defaults"
+msgstr "Predefiniti"
+
+msgid "Alarms"
+msgstr "Avvisi"
+
+msgid "0 minutes before"
+msgstr "0 minuti prima"
+
+msgid "5 minutes before"
+msgstr "5 minuti prima"
+
+msgid "15 minutes before"
+msgstr "15 minuti prima"
+
+msgid "30 minutes before"
+msgstr "30 minuti prima"
+
+msgid "1 hour before"
+msgstr "1 ora prima"
+
+msgid "2 hours before"
+msgstr "2 ore prima"
+
+msgid "12 hours before"
+msgstr "12 ore prima"
+
+msgid "1 day before"
+msgstr "1 giorno prima"
+
+msgid "2 days before"
+msgstr "2 giorni prima"
+
+msgid "Custom Datetime"
+msgstr "Data e ora personalizzata"
+
+msgid "Alarm Time"
+msgstr "Ora Avviso"
+
+#, python-brace-format
+msgid "{0} minutes before"
+msgstr "0 minuti prima"
+
+msgid "Attachments"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Content Type"
+msgstr ""
+
+msgid "Creation Time"
+msgstr "Data di creazione"
+
+msgid "Please enter your credentials"
+msgstr "Inserisci le tue credenziali"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Merging Records..."
+msgstr "Unione dei dati..."
+
+msgid "Merge Failed"
+msgstr "Unione Fallita"
+
+#, python-brace-format
+msgid "The merge succeeded, but the duplicate {0} could not be deleted."
+msgstr "L'unione è riuscita, ma il duplicato {0} non può essere cancellato."
+
+#, python-brace-format
+msgid "Merge {0}, prefer First"
+msgstr "Unione {0}, preferenza Prima"
+
+#, python-brace-format
+msgid "Merge {0}, prefer Second"
+msgstr "Unione {0}, preferenza Seconda"
+
+#, python-brace-format
+msgid "Merge {0}"
+msgstr "Unione {0}"
+
+#, python-brace-format
+msgid "First {0}"
+msgstr "Primo {0}"
+
+#, python-brace-format
+msgid "Second {0}"
+msgstr "Secondo {0}"
+
+#, python-brace-format
+msgid "Final {0}"
+msgstr "Finale {0}"
+
+msgid "The record you try to add might already exist."
+msgstr "Il dato che si tenta di aggiungere potrebbe già essere disponibili."
+
+msgid "Field Group"
+msgstr "Campo Gruppo"
+
+msgid "My Value"
+msgstr "Mio Valore"
+
+msgid "Existing Value"
+msgstr "Valore Esistente"
+
+msgid "Final Value"
+msgstr "Valore Finale"
+
+msgid "Keep both records"
+msgstr "Mantenere entrambi i dati"
+
+msgid "Merge, keeping existing details"
+msgstr "Unisci, mantenendo i dettagli esistenti"
+
+msgid "Merge, keeping my details"
+msgstr "Unisci, mantenendo i miei dettagli"
+
+msgid "Keep existing record and discard mine"
+msgstr "Mantenere il dato esistente e scartare il mio"
+
+msgid "Action:"
+msgstr "Azione:"
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "delete"
+msgstr "Cancella"
+
+#, python-brace-format
+msgid "Print {0}"
+msgstr ""
+
+msgid "Saved in"
+msgstr "Salvato in"
+
+#, python-brace-format
+msgid "{0} (copy)"
+msgstr ""
+
+#, python-brace-format
+msgid "Copy {0}"
+msgstr "Copia {0}"
+
+msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr "Modifica {0} \"{1}\""
+
+msgid "Files are still uploading."
+msgstr ""
+
+msgid "Please review the fields marked red. They contain invalid values."
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete this {0}?"
+msgstr "Vuoi veramente cancellare questo {0}?"
+
+#, python-brace-format
+msgid "Deleting {0}"
+msgstr "Cancellazione {0}"
+
+msgid "Failed"
+msgstr "Fallita"
+
+#, python-brace-format
+msgid "Could not delete {0}."
+msgstr "Impossibile cancellare {0}."
+
+#, python-brace-format
+msgid "Resolve Duplicate {0} Suspicion"
+msgstr "Risolvere ogni sospetto di dati duplicati {0}"
+
+msgid "Permissions"
+msgstr ""
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Trasferimento {0}..."
+
+#, python-brace-format
+msgid "{1} - Exception {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} - Unknown Exception"
+msgstr ""
+
+msgid "Select Export Definition ..."
+msgstr "Seleziona un definizione di esportazione ..."
+
+#, python-brace-format
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Filemanager"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Choose Export Location"
+msgstr ""
+
+msgid "How would you like to save your export?"
+msgstr ""
+
+msgid "Exporting..."
+msgstr ""
+
+msgid "Export created successfully."
+msgstr ""
+
+msgid "Please check your computers downloads folder!"
+msgstr ""
+
+msgid "Export could not be created. Please try again later"
+msgstr ""
+
+msgid "What would you like to do?"
+msgstr "Cosa vuoi fare?"
+
+msgid "You need to select an option!"
+msgstr "È necessario selezionare un'opzione!"
+
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgstr "Di seguito puoi trovare un elenco di tutti i formati di importazione supportati e un file di esempio di come Tine 2.0 si aspetta di trovare."
+
+msgid "Following you find a list of all supported import formats."
+msgstr ""
+
+msgid "Choose File and Format"
+msgstr "Scegliere File e formato"
+
+msgid "Choose Import File"
+msgstr "Scegliere file di importazione"
+
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
+msgstr "Si prega di scegliere il file che contiene i dati che si desiderano aggiungere a Tine 2.0"
+
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr "Selezionare il file contenente il {0}"
+
+msgid "What should the file you upload look like?"
+msgstr "Quale dovrebbe essere il file caricato?"
+
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr "Tine 2.0 non gestice tutti i tipi di file che si potrebbe desiderare di caricare. Sarà necessario regolare manualmente il file in modo che Tine 2.0 sia in grado di gestirlo."
+
+msgid "Please select the import format of the file you want to upload"
+msgstr "Si prega di selezionare il formato di importazione del file che si desidera caricare"
+
+msgid "Download example file"
+msgstr "Scarica file di esempio"
+
+#, python-brace-format
+msgid "Select {0} to add you {1} to:"
+msgstr "Selezionare {0} per aggiungere {1} a:"
+
+msgid "Set Import Options"
+msgstr "configura le opzioni di importazione"
+
+msgid "Checking Import"
+msgstr "Verifica importazione"
+
+msgid "Resolve Conflicts"
+msgstr "Risolvi Conflitti"
+
+msgid "Conflict"
+msgstr "Conflitto"
+
+msgid "First Conflict"
+msgstr "Primo Conflitto"
+
+msgid "Previous Conflict"
+msgstr "Conflitto Precedente"
+
+msgid "Next Conflict"
+msgstr "Conflitto Successivo"
+
+msgid "Last Conflict"
+msgstr "Ultimo Conflitto"
+
+msgid "Resolve this conflict"
+msgstr ""
+
+msgid "Resolve all conflicts"
+msgstr "Tutti i conflitti sono stati risolti"
+
+msgid "Processing Conflict Data"
+msgstr "Sto processando i dati in conflitto"
+
+msgid "No conflict to resolve"
+msgstr "Nessun conflitto da risolvere"
+
+#, python-brace-format
+msgid "(This is record {0} in your import file)"
+msgstr "(Questo è un dato {0} nel file di importazione)"
+
+msgid "No Detail Informations"
+msgstr "Nessun dettaglio di informazioni"
+
+msgid "Summary"
+msgstr "Sommario"
+
+msgid "Index"
+msgstr "Indice"
+
+msgid "Record"
+msgstr "Dato"
+
+#, python-brace-format
+msgid "Importing {0}"
+msgstr "Importazione di {0}"
+
+#, python-brace-format
+msgid "{0} records had failures and where discarded."
+msgstr "{0} dati contengono errori e saranno scartati."
+
+#, python-brace-format
+msgid "In total we found {0} records in your import file."
+msgstr "In totale abbiamo trovato {0} dati nel file di importazione."
+
+#, python-brace-format
+msgid "{0} of them will be added as new records into: \"{1}\"."
+msgstr "{0} di loro saranno aggiunti come nuovi dati in: \"{1}\"."
+
+#, python-brace-format
+msgid "{0} of them where identified as duplicates."
+msgstr "{0} di loro sono stati individuati come duplicati."
+
+#, python-brace-format
+msgid "From the identified duplicates {0} will be merged into the existing records."
+msgstr "I duplicati individuati {0} saranno uniti con i dati esistenti."
+
+#, python-brace-format
+msgid "From the identified duplicates {0} will be discarded."
+msgstr "I duplicati individuati {0} saranno scartati."
+
+#, python-brace-format
+msgid "All records will be tagged with: \"{0}\" so you can find them easily."
+msgstr "Tutti i dati saranno etichettati come: \"{0}\" in modo da poterli trovare facilmente."
+
+#, python-brace-format
+msgid "{0} records have failures and will be discarded."
+msgstr "{0} dati contengono errori e saranno scartati."
+
+msgid "Delete value from all selected records"
+msgstr "Eliminare il valore di tutti i dati selezionati"
+
+msgid "Undo change for all selected records"
+msgstr "Annulla modifiche per tutti i dati selezionati"
+
+#, python-brace-format
+msgid "Edit {0} {1}"
+msgstr "Modifica {0} {1}"
+
+msgid "Different Values"
+msgstr "Valori Diversi"
+
+msgid "This field has different values. Editing this field will overwrite the old values."
+msgstr "Questo campo ha valori diversi. Modifica questo campo sovrascrive i vecchi valori."
+
+#, python-brace-format
+msgid "Add {0} Relation"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to change these {0} records?"
+msgstr "Sei sicuro di voler modificare i dati {0}?"
+
+msgid "Applying changes"
+msgstr "Applicare modifiche"
+
+#, python-brace-format
+msgid "You edited {0} {1}."
+msgstr "Hai modificato {0} {1}."
+
+#, python-brace-format
+msgid "{0} {1} have been updated properly."
+msgstr "{0} {1} sono stati aggiornati correttamente."
+
+#, python-brace-format
+msgid "{0} {1} has been updated properly."
+msgstr "{0} {1} è stato aggiornato correttamente."
+
+#, python-brace-format
+msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
+msgstr "{0} {1} dispone di dati non validi dopo l'aggiornamento. Questi {1} non sono stati modificati."
+
+#, python-brace-format
+msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
+msgstr "{0} {1} contiene dati non validi dopo l'aggiornamento. Questo {1} non è stato modificato."
+
+msgid "Set password"
+msgstr ""
+
+msgid "Generate password"
+msgstr ""
+
+msgid "Admin Mode"
+msgstr "Modalità Amministratore"
+
+msgid "All Users"
+msgstr ""
+
+msgid "Applications"
+msgstr "Applicazioni"
+
+msgid "Edit Preferences"
+msgstr "Modifica Preferenze"
+
+msgid "Loading ..."
+msgstr "Caricamento..."
+
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "È necessario correggere i campi contrassegnati  in rosso prima di salvare la configurazione "
+
+msgid "Saving of preferences failed."
+msgstr "Salvataggio delle preferenze non riuscito."
+
+msgid "There are no preferences for this application."
+msgstr "Non ci sono preferenze per questa applicazione."
+
+msgid "All Settings"
+msgstr ""
+
+msgid "General Preferences"
+msgstr "Preferenze generali"
+
+msgid "Application Settings"
+msgstr ""
+
+msgid "My Profile"
+msgstr "Mio Profilo"
+
+msgid "Second Factor Password Required"
+msgstr ""
+
+msgid "Validating password..."
+msgstr ""
+
+msgid "Wrong Password"
+msgstr ""
+
+msgid "Invalid second factor password given"
+msgstr ""
+
+msgid "Back"
+msgstr "Indietro"
+
+msgid "Next"
+msgstr "Successivo"
+
+msgid "Finish"
+msgstr "Completare"
+
+msgid "Create xprop"
+msgstr ""
+
+msgid "xprop Name"
+msgstr ""
+
+msgid "Please enter the name of the new xprop"
+msgstr ""
+
+msgid "Delete xprop"
+msgstr ""
+
+msgid "Export as ..."
+msgstr ""
+
+msgid "My Device"
+msgstr ""
+
+msgid "Download file and save on my local device."
+msgstr ""
+
+msgid "Select or drop file to upload"
+msgstr ""
+
+msgid "Select files"
+msgstr ""
+
+msgid "Select file"
+msgstr ""
+
+msgid "Select folders"
+msgstr ""
+
+msgid "Select folder"
+msgstr ""
+
+msgid "Select items"
+msgstr ""
+
+msgid "Select item"
+msgstr ""
+
+msgid "Places"
+msgstr ""
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Configuration Problem"
+msgstr "Problema di configurazione"
+
+msgid "Invalid configuration"
+msgstr "Configurazione non valida"
+
+msgid "Transferring Configuration..."
+msgstr "Trasferimento di configurazione ..."
+
+msgid "Save config"
+msgstr "Salva configurazione"
+
+msgid "Reload config"
+msgstr "Ricarica configurazione"
+
+msgid "Gets assigned automatically"
+msgstr ""
+
+msgid "Wrong File Type"
+msgstr "Tipo di file errato"
+
+msgid "Please select a file with one of the following extensions:"
+msgstr "Si prega di selezionare un file con una delle seguenti estensioni:"
+
+msgid "Some fields are  multilingual. Click here to select language to display."
+msgstr ""
+
+msgid "Search for Model..."
+msgstr ""
+
+msgid "GENDER_Model"
+msgstr ""
+
+msgid "Model"
+msgid_plural "Models"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Cleartext/Hidden"
+msgstr ""
+
+msgid "No record"
+msgstr ""
+
+msgid "Edit copy"
+msgstr ""
+
+#, python-brace-format
+msgid "Search for {0} ..."
+msgstr ""
+
+msgid "Searching..."
+msgstr "Ricerca..."
+
+msgid "You tried to link a record with itself. This is not allowed!"
+msgstr "Si è tentato di collegare un dato con se stesso. Ciò non è consentito!"
+
+msgid "Search for records ..."
+msgstr "Ricerca per dati ..."
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
+msgstr ""
+
+msgid "Pause upload"
+msgstr "Pausa caricamento"
+
+msgid "Resume upload"
+msgstr "Riprendi caricamento"
+
+msgid "Send by E-Mail"
+msgstr ""
+
+msgid "name"
+msgstr "nome"
+
+msgid "size"
+msgstr "dimensione"
+
+msgid "type"
+msgstr "Tipo"
+
+msgid "today"
+msgstr "oggi"
+
+msgid "yesterday"
+msgstr "ieri"
+
+msgid "this week"
+msgstr "questa settimana"
+
+msgid "last week"
+msgstr "la scorsa settimana"
+
+msgid "the week before last"
+msgstr "due settimane fa"
+
+msgid "this month"
+msgstr "questo mese"
+
+msgid "last month"
+msgstr "scorso mese"
+
+msgid "last three months"
+msgstr ""
+
+msgid "last six months"
+msgstr ""
+
+msgid "anytime"
+msgstr ""
+
+msgid "this quarter"
+msgstr "questo trimestre"
+
+msgid "last quarter"
+msgstr "scorso trimestre"
+
+msgid "this year"
+msgstr "quest'anno"
+
+msgid "last year"
+msgstr "scorso anno"
+
+msgid "tomorrow"
+msgstr "domani"
+
+msgid "next week"
+msgstr "prossima settimana"
+
+msgid "next month"
+msgstr "prossimo mese"
+
+msgid "next quarter"
+msgstr "prossimo trimestre"
+
+msgid "next year"
+msgstr "prossimo anno"
+
+msgid "contains"
+msgstr "contenitori"
+
+msgid "contains word starting with"
+msgstr ""
+
+msgid "contains not"
+msgstr ""
+
+msgid "reg. exp."
+msgstr "reg. exp."
+
+msgid "is equal to without (-, )"
+msgstr ""
+
+msgid "is greater than"
+msgstr "è maggiore di"
+
+msgid "is less than"
+msgstr "è minore di"
+
+msgid "is not"
+msgstr "non è"
+
+msgid "{gender, select, male {one of} female {one of} other {one of}}"
+msgstr ""
+
+msgid "{gender, select, male {all of} female {all of} other {all of}}"
+msgstr ""
+
+msgid "{gender, select, male {none of} female {none of} other {none of}}"
+msgstr ""
+
+msgid "is before"
+msgstr "è prima"
+
+msgid "is after"
+msgstr "è dopo"
+
+msgid "is within"
+msgstr "è all'interno"
+
+msgid "is in week no."
+msgstr "è in alcun settimana."
+
+msgid "starts with"
+msgstr "inizia con"
+
+msgid "ends with"
+msgstr "termina con"
+
+msgid "defined by"
+msgstr "definito da"
+
+msgid "select a operator"
+msgstr "Seleziona un operatore"
+
+msgid "Search Account ..."
+msgstr "Cerca Account ..."
+
+msgid "Period ..."
+msgstr ""
+
+#, python-brace-format
+msgid "Selected  {0}"
+msgstr "Selezionati {0}"
+
+msgid "Show records that match to one of the following filters"
+msgstr "Visualizza i dati che corrispondono ad uno dei seguenti filtri"
+
+msgid "or alternatively"
+msgstr "o in alternativa"
+
+msgid "Add alternative filter"
+msgstr "Aggiungi filtro alternativo"
+
+msgid "Remove Filter"
+msgstr "Rimuovi Filtro"
+
+msgid "Show"
+msgstr "Visualizza"
+
+msgid "and"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "add new filter"
+msgstr "Aggiungi nuovo filtro"
+
+msgid "reset all filters"
+msgstr "azzera tutti i filtri"
+
+msgid "start search"
+msgstr "iniziare la ricerca"
+
+msgid "save as favorite"
+msgstr "salva tra i preferiti"
+
+msgid "Load a favorite"
+msgstr "Caricare un preferito"
+
+msgid "select a field"
+msgstr "Seleziona un campo"
+
+msgid "Delete this filter"
+msgstr "Cancella questo filtro"
+
+msgid "show details"
+msgstr "mostra dettagli"
+
+msgid "Always show advanced filters"
+msgstr "Mostra sempre filtri avanzati"
+
+msgid "hide details"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+#, python-brace-format
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] "La visualizzazione è limitata da {0} criterio:"
+msgstr[1] "La visualizzazione è limitata da {0} criteri:"
+msgstr[2] "La visualizzazione è limitata da {0} criteri:"
+
+msgid "Edit definition"
+msgstr "Modifica definizione"
+
+msgid "Start definition"
+msgstr "Inizio definizione"
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Non è stato trovato alcun {0}. Prova a cambiare i criteri del filtro, le opzioni di visualizzazione o {1} nella tua ricerca"
+
+#, python-brace-format
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
+msgstr ""
+
+msgid "Move Details Panel To"
+msgstr ""
+
+msgid "Bottom"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Print Page"
+msgstr "Stampa Pagina"
+
+#, python-brace-format
+msgid "Move {0}"
+msgid_plural "Move {0}"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, python-brace-format
+msgid "Export as {0}"
+msgstr ""
+
+msgid "Import items"
+msgstr ""
+
+#, python-brace-format
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "Cancella {0}"
+msgstr[1] "Cancella {0}"
+msgstr[2] "Cancella {0}"
+
+msgid "No data to display"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Visualizzazione dati {0} - {1} di {2}"
+
+#, python-brace-format
+msgid "No {0} to display"
+msgstr "Nessun {0} da visualizzare"
+
+msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
+msgstr ""
+
+msgid "Records"
+msgstr ""
+
+msgid "New..."
+msgstr "Nuovo..."
+
+msgid "Add to..."
+msgstr "Aggiungi a..."
+
+msgid "Last Modified Time"
+msgstr "Ultima modifica"
+
+msgid "Last Modified By"
+msgstr "Ultima modifica di"
+
+msgid "Grid Panel Key Bindings"
+msgstr ""
+
+#, python-brace-format
+msgid "Moving {0}"
+msgstr ""
+
+msgid "Not Allowed"
+msgstr "Non Autorizzato"
+
+msgid "You are not allowed to delete all pages at once"
+msgstr "Non sei autorizzato a cancellare tutte le pagine in una sola volta"
+
+#, python-brace-format
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] "Vuoi davvero eliminare il dato selezionato ({0})?"
+msgstr[1] "Vuoi davvero eliminare i dati selezionati ({0})?"
+msgstr[2] "Vuoi davvero eliminare i dati selezionati ({0})?"
+
+msgid "... This may take a long time!"
+msgstr ""
+
+msgid "via"
+msgstr ""
+
+#, python-brace-format
+msgid "Create {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Loading {0} ..."
+msgstr ""
+
+msgid "Quota usage"
+msgstr ""
+
+msgid "has notes"
+msgstr "con note"
+
+msgid "This is a multilingual field:"
+msgstr ""
+
+#, python-brace-format
+msgid "Transition from {current} to {target} is not allowed."
+msgstr ""
+
+msgid "Key Field Records"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Add a New ID..."
+msgstr ""
+
+msgid "Add a New Value..."
+msgstr ""
+
+msgid "ID already exists"
+msgstr ""
+
+msgid "ID needs to follow the syntax PARENTID:ID"
+msgstr ""
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Setting new language..."
+msgstr ""
+
+msgid "Save current view as favorite"
+msgstr "Salva visualizzazione corrente come preferita"
+
+msgid "containers"
+msgstr "contenitori"
+
+msgid "Favorites"
+msgstr "Preferiti"
+
+msgid "Favorite not saved"
+msgstr ""
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Shared Favorite (visible by other users)"
+msgstr ""
+
+msgid "The grant to see and use this filter"
+msgstr ""
+
+msgid "The grant to edit this filter"
+msgstr ""
+
+msgid "The grant to delete this filter"
+msgstr ""
+
+msgid "My favorites"
+msgstr "Miei preferiti"
+
+msgid "Delete Favorite"
+msgstr "Cancella Preferiti"
+
+msgid "Edit Favorite"
+msgstr "Modifica Preferito"
+
+msgid "Overwrite Favorite"
+msgstr "Sovrascrivi Preferito"
+
+#, python-brace-format
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr "Vuoi veramente cancellare questo preferito \"{0}\"?"
+
+#, python-brace-format
+msgid "Deleting Favorite \"{0}\""
+msgstr "Cancella Preferito \"{0}\""
+
+msgid "Overwrite?"
+msgstr "Sovrascrivere?"
+
+#, python-brace-format
+msgid "Do you want to overwrite the favorite \"{0}\"?"
+msgstr "Vuoi sovrascrivere il preferito \"{0}\"?"
+
+#, python-brace-format
+msgid "Overwriting Favorite \"{0}\""
+msgstr "Sovrascrittura preferito \"{0}\""
+
+msgid "Could not save Favorite"
+msgstr "Impossibile salvare Preferito"
+
+msgid "Your current view does not support favorites"
+msgstr "La tua visualizzazione corrente non supporta i preferiti."
+
+msgid "Create Favorite"
+msgstr "Crea Preferito"
+
+#, python-brace-format
+msgid "Saving Favorite \"{0}\""
+msgstr "Salvataggio preferito \"{0}\""
+
+msgid "(shared)"
+msgstr "(condiviso)"
+
+msgid "Defined by ..."
+msgstr "definito da"
+
+msgid "Define ..."
+msgstr "Definizione ..."
+
+msgid "Edit record"
+msgstr "Modifica dato"
+
+msgid "Sibling"
+msgstr "Fratello"
+
+msgid "Parent"
+msgstr "Parente"
+
+msgid "Child"
+msgstr "Figlio"
+
+#, python-brace-format
+msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
+msgstr ""
+
+#, python-brace-format
+msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
+msgstr ""
+
+msgid "Contents of Related Folder"
+msgstr ""
+
+msgid "No Dialog"
+msgstr ""
+
+msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
+msgstr ""
+
+msgid "Attachments: Anyone who has access to the record can see the data"
+msgstr ""
+
+msgid "Links: Rights of the respective application are respected"
+msgstr ""
+
+msgid "Remark"
+msgstr "Osservazione"
+
+msgid "Dependency"
+msgstr "Dipendenza"
+
+#, python-brace-format
+msgid "No access to {0}"
+msgstr ""
+
+msgid "The record you tried to link is already linked. Please edit the existing link."
+msgstr "Il dato che si è tentato di collegare è già collegato. Si prega di modificare il collegamento esistente."
+
+#, python-brace-format
+msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
+msgstr "Il {1} \"{2}\" è già utilizzato nel campo \"{0}\", e può essere collegato una sola volta!"
+
+msgid "Delete { ownRecordName }?"
+msgstr ""
+
+msgid "What do you want to delete?"
+msgstr ""
+
+msgid "Delete { ownRecordName }"
+msgstr ""
+
+msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
+msgstr ""
+
+msgid "Site"
+msgstr ""
+
+msgid "no site association"
+msgstr ""
+
+msgid "tag name"
+msgstr "nome tag"
+
+msgid "Add Tags"
+msgstr ""
+
+msgid "Select Tags"
+msgstr ""
+
+msgid "Attaching Tag"
+msgstr "Allego Tag"
+
+msgid "Detach tag(s)"
+msgstr "Rimozione tag(s)"
+
+msgid "Select Tag(s) to detach"
+msgstr "Selezionare Tag(s) da rimuovere"
+
+msgid "Add a new personal tag"
+msgstr "Aggiungi un nuovo tag personale"
+
+msgid "Add New Personal Tag"
+msgstr "Aggiungi nuovo tag personale"
+
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Nota bene: È possibile creare un tag personale. Solo tu puoi vedere!"
+
+msgid "Enter tag name:"
+msgstr "Inserisci nome tag:"
+
+msgid "No Tags to display"
+msgstr "Nessun Tags da visualizzare"
+
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Rimuovi tag"
+msgstr[1] "Rimuovi tags"
+msgstr[2] "Rimuovi tags"
+
+msgid "Edit tag"
+msgstr "Modifica tag"
+
+msgid "Rename Tag"
+msgstr "Rinomina Tag"
+
+msgid "Please enter a new name:"
+msgstr "Inserisci un nuovo nome:"
+
+msgid "Edit Description"
+msgstr "Modifica Descrizione"
+
+msgid "Description for tag"
+msgstr "Descrizione tag"
+
+msgid "Please enter new description:"
+msgstr "Inserisci la nuova descrizione:"
+
+msgid "Change Color"
+msgstr "Cambia Colore"
+
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Cancella Tag"
+msgstr[1] "Cancella Tags"
+msgstr[2] "Cancella Tags"
+
+msgid "Really delete selected tag?"
+msgid_plural "Really delete selected tags?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "The selected tag will be deleted and disappear for all entries"
+msgid_plural "The selected tags will be removed and disappear for all entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Please wait a moment..."
+msgstr "Si prega di attendere..."
+
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Cancellazione Tag"
+msgstr[1] "Cancellazione Tags"
+msgstr[2] "Cancellazione Tags"
+
+msgid "Could not delete Tag(s)."
+msgstr "Impossibile cancellare Tag(s)."
+
+msgid "Notice"
+msgstr "Notare"
+
+msgid "The minimum tag length is three."
+msgstr "La lunghezza minima dei tag  è tre."
+
+msgid "Could not create tag."
+msgstr "Impossibile creare tag."
+
+msgid "Could not update tag."
+msgstr "Impossibile aggiornare tag."
+
+msgid "Detach Tags"
+msgstr "Rimuovi tags"
+
+msgid "Attach Tags"
+msgstr "Allega Tag"
+
+msgid "No Tags to detach found in the selected records"
+msgstr "Nessun Tags da rimuovere è stato trovato nei dati selezionati"
+
+msgid "Please Wait..."
+msgstr "Prego Attendere..."
+
+msgid "Detaching Tags"
+msgstr "Rimozione Tags"
+
+msgid "Timezone"
+msgstr "Fuso Orario"
+
+msgid "Setting new timezone..."
+msgstr ""
+
+#, python-brace-format
+msgid "Rename {0}"
+msgstr "Rinomina {0}"
+
+#, python-brace-format
+msgid "Manage {0} Permissions"
+msgstr "Gestisci {0} Autorizzazioni"
+
+#, python-brace-format
+msgid "{0} Properties"
+msgstr "{0} Proprietà"
+
+#, python-brace-format
+msgid "Set {0} color"
+msgstr "Imposta {0} colore"
+
+#, python-brace-format
+msgid "Reload {0}"
+msgstr "Ricarica {0}"
+
+msgid "Publish"
+msgstr ""
+
+msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
+msgstr ""
+
+msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} added"
+msgstr "Nessun {0} aggiunto"
+
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "Hai inserito il nome {0}!"
+
+msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
+msgstr ""
+
+msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Creating {0}..."
+msgstr "Creazione di {0} in corso..."
+
+msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
+msgstr ""
+
+msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
+msgstr ""
+
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Non rinominato {0}"
+
+#, python-brace-format
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Vuoi veramente cancellare {0} \"{1}\"?"
+
+#, python-brace-format
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Gestisci autorizzazioni per {0} \"{1}\""
+
+#, python-brace-format
+msgid "Properties for {0} \"{1}\""
+msgstr "Proprietà per {0} \"{1}\""
+
+msgid "New version of tine available"
+msgstr ""
+
+#, python-brace-format
+msgid "Version \"{0}\" of tine is available."
+msgstr ""
+
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Si tratta di un aggiornamento critico e deve essere installato il più presto possibile!"
+
+msgid "Please consider updating!"
+msgstr "Ti consigliamo di aggiornare!"
+
+msgid "ActionLog"
+msgid_plural "ActionLogs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Action type"
+msgstr ""
+
+msgid "Datetime"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Area Lock Configuration"
+msgid_plural "Area Lock Configurations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Area name"
+msgstr ""
+
+msgid "Areas"
+msgstr ""
+
+msgid "MFAs"
+msgstr ""
+
+msgid "Validity"
+msgstr ""
+
+msgid "Lifetime in Minutes"
+msgstr ""
+
+msgid "Policy"
+msgstr ""
+
+msgid "Area Lock State"
+msgid_plural "Area Lock States"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Expires"
+msgstr ""
+
+msgid "Bank Account"
+msgid_plural "Bank Accounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "GENDER_Bank Holiday Calendar"
+msgstr ""
+
+msgid "Bank Holidays"
+msgstr ""
+
+msgid "Data Source Url"
+msgstr ""
+
+msgid "Target Calendar"
+msgstr ""
+
+msgid "GENDER_Bank Holiday"
+msgstr ""
+
+msgid "Bank Holiday"
+msgid_plural "Bank Holidays"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Fraction"
+msgstr ""
+
+msgid "Record Name"
+msgid_plural "Records Name"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Group"
+msgstr "Gruppo"
+
+msgid "New Car"
+msgstr "Nuova auto"
+
+msgid "Hierarchy"
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "UUID"
+msgstr ""
+
+msgid "GENDER_Item"
+msgstr ""
+
+msgid "Item"
+msgid_plural "Items"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Number"
+msgstr ""
+
+msgid "GENDER_Evaluation Dimension"
+msgstr ""
+
+msgid "Evaluation Dimension"
+msgid_plural "Evaluation Dimensions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Dimension Items"
+msgstr ""
+
+msgid "Configured Models"
+msgstr ""
+
+msgid "Depends on"
+msgstr ""
+
+msgid "Sorting"
 msgstr ""
 
 msgid "Area lock configurations"
 msgstr ""
 
 msgid "Your password expired."
+msgstr ""
+
+msgid "GENDER_Grant"
 msgstr ""
 
 msgid "ImportExportDefinition"
@@ -3801,9 +3994,6 @@ msgid "Label"
 msgstr ""
 
 msgid "Favorite"
-msgstr ""
-
-msgid "Order"
 msgstr ""
 
 msgid "Icon Class"
@@ -3833,40 +4023,97 @@ msgstr ""
 msgid "Skip Upstream Updates"
 msgstr ""
 
-msgid "WebDAV Mount"
-msgid_plural "WebDAV Mounts"
+msgid "LogEntry"
+msgid_plural "LogEntries"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Local Filesystem"
-msgid_plural "Local Filesystems"
+msgid "LogEntries"
+msgstr ""
+
+msgid "Client Requestid"
+msgstr ""
+
+msgid "Server Requestid"
+msgstr ""
+
+msgid "Logtime"
+msgstr ""
+
+msgid "Difftime"
+msgstr ""
+
+msgid "Loglevel"
+msgstr ""
+
+msgid "GENDER_Counter based OTP (HOTP)"
+msgstr ""
+
+msgid "Counter based OTP (HOTP)"
+msgid_plural "Counter based OTPs (HOTP)"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Flysystem Mount"
-msgid_plural "Flysystem Mounts"
+msgid "Counter based OTP (HOTP) is configured"
+msgstr ""
+
+msgid "GENDER_PIN"
+msgstr ""
+
+msgid "{% true %}Static PIN for user: ●●●●●●"
+msgstr ""
+
+msgid "New PIN"
+msgstr ""
+
+msgid "GENDER_SMS"
+msgstr ""
+
+msgid "SMS"
+msgid_plural "SMSs"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "File Contents"
+msgid "Security codes are send to: {{ cellphonenumber }}."
 msgstr ""
 
-msgid "Indexed"
+msgid "Cell Phone Number"
 msgstr ""
 
-msgid "Content type"
+msgid "GENDER_Time based OTP (TOTP)"
 msgstr ""
 
-msgid "MD5 Hash"
+msgid "Time based OTP (TOTP)"
+msgid_plural "Time based OTPs (TOTP)"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Time based OTP (TOPT) is configured"
 msgstr ""
 
-msgid "Revision Size"
+msgid "MFA Device Config"
+msgid_plural "MFA Device Configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "MFA Device Type"
 msgstr ""
 
-msgid "Status"
+msgid "GENDER_FIDO2 WebAuthn Device"
+msgstr ""
+
+msgid "Yubico OTP public id"
+msgstr ""
+
+msgid "Yubico OTP privat id"
+msgstr ""
+
+msgid "Yubico privat key"
 msgstr ""
 
 msgid "GENDER_Municipality Key"
@@ -3911,75 +4158,6 @@ msgstr ""
 msgid "Bevölkerungsstand"
 msgstr ""
 
-msgid "Hierarchy"
-msgstr ""
-
-msgid "Owner"
-msgstr ""
-
-msgid "UUID"
-msgstr ""
-
-msgid "GENDER_Bank Holiday Calendar"
-msgstr ""
-
-msgid "Bank Holidays"
-msgstr ""
-
-msgid "Data Source Url"
-msgstr ""
-
-msgid "Target Calendar"
-msgstr ""
-
-msgid "GENDER_Item"
-msgstr ""
-
-msgid "Item"
-msgid_plural "Items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Number"
-msgstr ""
-
-msgid "Area Lock State"
-msgid_plural "Area Lock States"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Area"
-msgstr ""
-
-msgid "Expires"
-msgstr ""
-
-msgid "LogEntry"
-msgid_plural "LogEntries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "LogEntries"
-msgstr ""
-
-msgid "Client Requestid"
-msgstr ""
-
-msgid "Server Requestid"
-msgstr ""
-
-msgid "Logtime"
-msgstr ""
-
-msgid "Difftime"
-msgstr ""
-
-msgid "Loglevel"
-msgstr ""
-
 msgid "GENDER_Numbering Range"
 msgstr ""
 
@@ -4007,72 +4185,6 @@ msgstr ""
 msgid "Number is Editable"
 msgstr ""
 
-msgid "GENDER_Bank Holiday"
-msgstr ""
-
-msgid "Bank Holiday"
-msgid_plural "Bank Holidays"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Fraction"
-msgstr ""
-
-msgid "SMS Adapter Type"
-msgstr ""
-
-msgid "SMS Adapter Config"
-msgstr ""
-
-msgid "GENDER_Evaluation Dimension"
-msgstr ""
-
-msgid "Evaluation Dimension"
-msgid_plural "Evaluation Dimensions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Dimension Items"
-msgstr ""
-
-msgid "Configured Models"
-msgstr ""
-
-msgid "Depends on"
-msgstr ""
-
-msgid "Sorting"
-msgstr ""
-
-msgid "Area Lock Configuration"
-msgid_plural "Area Lock Configurations"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Area name"
-msgstr ""
-
-msgid "Areas"
-msgstr ""
-
-msgid "MFAs"
-msgstr ""
-
-msgid "Validity"
-msgstr ""
-
-msgid "Lifetime in Minutes"
-msgstr ""
-
-msgid "Policy"
-msgstr ""
-
 msgid "RoleMember"
 msgid_plural "RoleMembers"
 msgstr[0] ""
@@ -4098,93 +4210,6 @@ msgid "Rights"
 msgstr ""
 
 msgid "Members"
-msgstr ""
-
-msgid "ActionLog"
-msgid_plural "ActionLogs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Action type"
-msgstr ""
-
-msgid "Datetime"
-msgstr ""
-
-msgid "Data"
-msgstr "Dati"
-
-msgid "MFA Device Config"
-msgid_plural "MFA Device Configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "MFA Device Type"
-msgstr ""
-
-msgid "GENDER_PIN"
-msgstr ""
-
-msgid "{% true %}Static PIN for user: ●●●●●●"
-msgstr ""
-
-msgid "New PIN"
-msgstr ""
-
-msgid "GENDER_FIDO2 WebAuthn Device"
-msgstr ""
-
-msgid "Yubico OTP public id"
-msgstr ""
-
-msgid "Yubico OTP privat id"
-msgstr ""
-
-msgid "Yubico privat key"
-msgstr ""
-
-msgid "GENDER_SMS"
-msgstr ""
-
-msgid "SMS"
-msgid_plural "SMSs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Security codes are send to: {{ cellphonenumber }}."
-msgstr ""
-
-msgid "Cell Phone Number"
-msgstr ""
-
-msgid "GENDER_Time based OTP (TOTP)"
-msgstr ""
-
-msgid "Time based OTP (TOTP)"
-msgid_plural "Time based OTPs (TOTP)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Time based OTP (TOPT) is configured"
-msgstr ""
-
-msgid "GENDER_Counter based OTP (HOTP)"
-msgstr ""
-
-msgid "Counter based OTP (HOTP)"
-msgid_plural "Counter based OTPs (HOTP)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-msgid "Counter based OTP (HOTP) is configured"
-msgstr ""
-
-msgid "GENDER_Grant"
 msgstr ""
 
 msgid "RoleRight"
@@ -4220,66 +4245,162 @@ msgstr ""
 msgid "Failure count"
 msgstr ""
 
-msgid "Bank Account"
-msgid_plural "Bank Accounts"
+msgid "SMS Adapter Type"
+msgstr ""
+
+msgid "SMS Adapter Config"
+msgstr ""
+
+msgid "Local Filesystem"
+msgid_plural "Local Filesystems"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "IBAN"
+msgid "WebDAV Mount"
+msgid_plural "WebDAV Mounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Flysystem Mount"
+msgid_plural "Flysystem Mounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "File Contents"
 msgstr ""
 
-msgid "BIC"
+msgid "Indexed"
 msgstr ""
 
-msgid "Shared folders"
+msgid "Content type"
 msgstr ""
 
-msgid "Group"
-msgstr "Gruppo"
-
-msgid "Total: "
+msgid "MD5 Hash"
 msgstr ""
 
-msgid "Exporttime"
+msgid "Revision Size"
 msgstr ""
 
-msgid "Export only currently shown columns"
+msgid "by"
+msgstr "da"
+
+msgid "Changed fields:"
+msgstr "Campi modificati:"
+
+msgid "- The last filter I used -"
 msgstr ""
 
-msgid "Created by"
-msgstr "Creata da"
-
-msgid "Activities"
-msgstr "Attività"
-
-msgid "Excel all data"
+msgid "Personal default"
 msgstr ""
 
-msgid "Excel current columns"
+msgid "default"
+msgstr "default"
+
+msgid "Page size"
+msgstr "Dimensione della pagina"
+
+msgid "Page size in grids"
+msgstr ""
+
+msgid "Grid stripe rows"
+msgstr ""
+
+msgid "Stripe rows in grids"
+msgstr ""
+
+msgid "Grid load mask"
+msgstr ""
+
+msgid "Show load mask in grids"
+msgstr ""
+
+msgid "Grid resizing strategy"
+msgstr ""
+
+msgid "How to resize grid columns"
+msgstr ""
+
+msgid "Auto search on filter change"
+msgstr ""
+
+msgid "Perform auto search when filter is changed"
+msgstr ""
+
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "Fuso orario con cui sono indicate le date in Tine 2.0."
+
+msgid "The language of the Tine 2.0 GUI."
+msgstr "Il linguaggio 2.0 Tine GUI."
+
+msgid "Default Application"
+msgstr "Applicazione predefinita"
+
+msgid "The default application to show after login."
+msgstr "Applicazione predefinita da visualizzare dopo il login."
+
+msgid "Window Type"
+msgstr "Tipo di finestra"
+
+msgid "You can choose between modal windows or normal browser popup windows."
+msgstr "Si può scegliere tra finestre modali e le finestre popup dei browser."
+
+msgid "Confirm Logout"
+msgstr "Conferma Disconnessione"
+
+msgid "Show confirmation dialog on logout."
+msgstr "Visualizza finestra di conferma alla disconnessione."
+
+msgid "Enable advanced search"
+msgstr ""
+
+msgid "If enabled quickfilter searches through relations as well."
+msgstr ""
+
+msgid "File double-clicking action"
+msgstr ""
+
+msgid "Which action should be executed by default when a file is double-clicked."
+msgstr ""
+
+msgid "GENDER_Text"
+msgstr ""
+
+msgid "Text"
+msgid_plural "Texts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "added"
+msgstr ""
+
+msgid "removed"
+msgstr ""
+
+msgid "modified"
+msgstr ""
+
+msgid "Scheduler task failed"
 msgstr ""
 
 #, python-format
-msgid "The following fields weren't imported: %s"
-msgstr "I seguenti campi non sono stati importati:% s"
-
-msgid "N/A"
-msgstr "N/A"
-
-msgid "Import Community identification Numbers"
+msgid "Your scheduler task %s has failed %d times."
 msgstr ""
 
-msgid "Municipality Key Import"
+msgid "node name must not contain the character /"
 msgstr ""
 
-msgid "Record Name"
-msgid_plural "Records Name"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgid "Password failed to match the following policy requirements: "
+msgstr ""
 
-msgid "New Car"
-msgstr "Nuova auto"
+msgid "MFA configs are not valid:"
+msgstr ""
+
+msgid "Your Tine 2.0 account has been deactivated"
+msgstr ""
 
 msgid "Your user account has been deactivated"
 msgstr ""
@@ -4290,126 +4411,5 @@ msgstr ""
 msgid "Tine 2.0 URL"
 msgstr ""
 
-#, python-brace-format
-msgid "Exception ({0})"
-msgstr ""
-
-msgid "Area could not be unlocked"
-msgstr ""
-
-msgid "Quota is exceeded"
-msgstr ""
-
-msgid "Area is locked"
-msgstr ""
-
-msgid "System Container"
-msgstr "Sistema Contenitore"
-
-msgid "This is a system container which could not be deleted!"
-msgstr "Questo è un sistema di contenitore che non può essere cancellato!"
-
-msgid "Invalid Relations"
-msgstr ""
-
-msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
-msgstr ""
-
-msgid "Confirmation is required"
-msgstr ""
-
-msgid "Generic System Exception"
-msgstr "Eccezione generica del Sistema"
-
-msgid "Wrong month format!"
-msgstr ""
-
-msgid "The month must have the format YYYY-MM!"
-msgstr ""
-
-msgid "Password Policy Violation"
-msgstr "Criterio di violazione dele password"
-
-msgid "admin"
-msgstr "admin"
-
-msgid "admin right description"
-msgstr "descrizione permessi amministratore"
-
-msgid "run"
-msgstr "esegui"
-
-msgid "run right description"
-msgstr "descrizione permessi esecuzione"
-
-msgid "Use Mainscreen"
-msgstr ""
-
-msgid "App mainscreen is available in UI"
-msgstr ""
-
-msgid "Personal tags"
-msgstr ""
-
-msgid "Use and see personal tags"
-msgstr ""
-
-msgid "Report bugs"
-msgstr "Rapporto errori"
-
-msgid "Report bugs to the software vendor directly when they occur."
-msgstr "Rapporto errori al fornitore del software quando si verificano."
-
-msgid "Check version"
-msgstr "Verifica versione"
-
-msgid "Check for new versions of this software."
-msgstr "Verificare la presenza di nuove versioni di questo software."
-
-msgid "Manage bank accounts"
-msgstr ""
-
-msgid "The right to manage bank accounts."
-msgstr ""
-
-msgid "Manage own profile"
-msgstr "Gestione profilo"
-
-msgid "The right to manage the own profile (selected contact data)."
-msgstr "Permessi di gestione per il proprio profilo (contatto selezionato)."
-
-msgid "Manage Numberables"
-msgstr ""
-
-msgid "The right to manage numberables."
-msgstr ""
-
-msgid "Manage own client state"
-msgstr "Gestione proprio stato cliente"
-
-msgid "The right to manage the own client state."
-msgstr "Permessi di gestione per il proprio stato cliente."
-
-msgid "Manage evaluation dimensions"
-msgstr ""
-
-msgid "The right to manage evaluation dimensions."
-msgstr ""
-
-msgid "Maintenance"
-msgstr ""
-
-msgid "The right to use the installation in maintenance mode."
-msgstr ""
-
-msgid "Show License Info"
-msgstr ""
-
-msgid "The right to be able to see license information (expiry, ...)."
-msgstr ""
-
-msgid "Replication"
-msgstr ""
-
-msgid "The right to access the replication data of all applications."
+msgid "Shared folders"
 msgstr ""

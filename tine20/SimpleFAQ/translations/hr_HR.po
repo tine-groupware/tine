@@ -9,10 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:32+0000\n"
 "Last-Translator: AirMike <AirMike23@gmail.com>, 2012\n"
 "Language-Team: Croatian (Croatia) (http://app.transifex.com/tine/groupware/language/hr_HR/)\n"
+"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hr_HR\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -33,20 +33,11 @@ msgstr "Interno"
 msgid "Public"
 msgstr "Javno"
 
-msgid "All my FAQs"
-msgstr "Svi moji FAQ-ovi"
-
-msgid "Default Favorite"
-msgstr "Zadani favorit"
-
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr "Zadani favorit koji se učitava prilikom startanja aplikacije"
-
-msgid "Default FAQ List"
-msgstr "Zadana FAQ lista"
-
-msgid "The default FAQ list to create new FAQ in."
-msgstr "Zadana FAQ lista za nove FAQ-ove"
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ status"
+msgstr[1] "FAQ statusa"
+msgstr[2] "FAQ statusa"
 
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
@@ -54,14 +45,8 @@ msgstr[0] "Tip FAQ-a"
 msgstr[1] "Tipa FAQ-a"
 msgstr[2] "Tipova FAQ-a"
 
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ status"
-msgstr[1] "FAQ statusa"
-msgstr[2] "FAQ statusa"
-
-msgid "Add a new FAQ Status..."
-msgstr "Dodaj novi FAQ status..."
+msgid "Defaults"
+msgstr "Početne postavke"
 
 msgid "Question"
 msgstr "Pitanje"
@@ -81,32 +66,11 @@ msgstr "Tip"
 msgid "Status"
 msgstr "Status"
 
-msgid "Defaults"
-msgstr "Početne postavke"
-
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQ-a"
-msgstr[2] "FAQ-ova"
-
-msgid "Find Question"
-msgstr ""
-
-msgid "Search question"
-msgstr ""
-
-msgid "FAQ id"
-msgstr "FAQ ID"
+msgid "FAQ Infos"
+msgstr "Informacije o FAQ-u"
 
 msgid "Tags"
 msgstr "Oznake"
-
-msgid "Add a new FAQ Type..."
-msgstr "Dodaj novi FAQ tip..."
-
-msgid "FAQ Infos"
-msgstr "Informacije o FAQ-u"
 
 msgid "Creation Time"
 msgstr "Vrijeme kreiranja"
@@ -117,8 +81,20 @@ msgstr "Kreirao"
 msgid "No answer yet"
 msgstr "Nema još odgovora"
 
-msgid "Search FAQ"
-msgstr ""
+msgid "FAQ id"
+msgstr "FAQ ID"
+
+msgid "Add a new FAQ Status..."
+msgstr "Dodaj novi FAQ status..."
+
+msgid "Add a new FAQ Type..."
+msgstr "Dodaj novi FAQ tip..."
+
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQ-a"
+msgstr[2] "FAQ-ova"
 
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
@@ -131,6 +107,30 @@ msgstr "FAQ liste"
 
 msgid "Quick Search"
 msgstr ""
+
+msgid "Search FAQ"
+msgstr ""
+
+msgid "Find Question"
+msgstr ""
+
+msgid "Search question"
+msgstr ""
+
+msgid "All my FAQs"
+msgstr "Svi moji FAQ-ovi"
+
+msgid "Default Favorite"
+msgstr "Zadani favorit"
+
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "Zadani favorit koji se učitava prilikom startanja aplikacije"
+
+msgid "Default FAQ List"
+msgstr "Zadana FAQ lista"
+
+msgid "The default FAQ list to create new FAQ in."
+msgstr "Zadana FAQ lista za nove FAQ-ove"
 
 msgid "All FAQs of my FAQ Lists"
 msgstr "Svi FAQ-ovi iz moje liste"

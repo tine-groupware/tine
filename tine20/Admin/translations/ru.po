@@ -14,987 +14,14 @@ msgstr ""
 "PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Artur Mudrykh <arturmon82@gmail.com>, 2012\n"
 "Language-Team: Russian (http://app.transifex.com/tine/groupware/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-msgid "Notifications"
-msgstr ""
-
-msgid "Enable Application"
-msgstr "Включить приложение"
-
-msgid "Disable Application"
-msgstr "Отключить приложение"
-
-msgid "Settings"
-msgstr "Настройки"
-
-#, python-brace-format
-msgid "{0} Settings"
-msgstr "{0} Настройки"
-
-msgid "Search:"
-msgstr "Поиск:"
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Enabled"
-msgstr ""
-
-#, python-brace-format
-msgid "Unknown status ({0})"
-msgstr ""
-
-#, python-brace-format
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Показаны приложения {0} - {1} из {2}"
-
-msgid "No applications to display"
-msgstr "Нет приложений"
-
-msgid "Order"
-msgstr "Порядок"
-
-msgid "Name"
-msgstr "Имя"
-
-msgid "Status"
-msgstr "Статус"
-
-msgid "Version"
-msgstr "Версия"
-
-msgid "Built in configs"
-msgstr ""
-
-msgid "Confirm"
-msgstr "Подтвердить"
-
-msgid "Do you really want to delete the selected groups?"
-msgstr "Вы уверены что хотите удалить выбранные группы?"
-
-msgid "Deleting group(s)..."
-msgstr "Удаление групп(ы)..."
-
-msgid "Add Group"
-msgstr "Добавить группу"
-
-msgid "Edit Group"
-msgstr "Изменить группу"
-
-msgid "Delete Group"
-msgstr "Удалить группу"
-
-#, python-brace-format
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Показаны группы {0} - {1} из {2}"
-
-msgid "No groups to display"
-msgstr "Нет групп"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Account only"
-msgstr ""
-
-msgid "Description"
-msgstr "Описание"
-
-msgid "Creation Time"
-msgstr ""
-
-msgid "Created By"
-msgstr ""
-
-msgid "Last Modified Time"
-msgstr ""
-
-msgid "Last Modified By"
-msgstr ""
-
-msgid "Scheduler"
-msgstr ""
-
-msgid "Errors"
-msgstr "Ошибки"
-
-msgid "Please configure store for this field type"
-msgstr "Пожалуйста, настройте хранилище для этого типа поля"
-
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Приложение"
-msgstr[1] "Приложения"
-msgstr[2] "Приложения"
-msgstr[3] "Приложения"
-
-msgid "Record Class"
-msgstr "Класс записей"
-
-msgid "Given record class not found"
-msgstr "Данный класс записи не найден"
-
-msgid "Cancel"
-msgstr "Отмена"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Configure store"
-msgstr "Настроить хранилище"
-
-msgid "Permissions"
-msgstr ""
-
-msgid "View"
-msgstr "Представление"
-
-msgid "Use"
-msgstr "Использовать"
-
-msgid "Model"
-msgstr "Модель"
-
-msgid "Custom field definition"
-msgstr "Пользовательское поле определений"
-
-msgid "Text"
-msgstr "Текст"
-
-msgid "Textarea"
-msgstr ""
-
-msgid "Number"
-msgstr "Номер"
-
-msgid "Date"
-msgstr "Дата"
-
-msgid "DateTime"
-msgstr "Время"
-
-msgid "Time"
-msgstr "Время"
-
-msgid "Boolean"
-msgstr "Булево"
-
-msgid "Search Combo"
-msgstr "Составной поиск"
-
-msgid "Key Field"
-msgstr "Ключевое поле"
-
-msgid "Record"
-msgstr "Запись"
-
-msgid "Record List"
-msgstr ""
-
-msgid "Type"
-msgstr "Тип"
-
-msgid "Label"
-msgstr "Метка"
-
-msgid "Length"
-msgstr "Длина"
-
-msgid "Required"
-msgstr "Требуется"
-
-msgid "Custom field additional properties"
-msgstr "Пользовательские поля дополнительных свойств"
-
-msgid "Tab Panel"
-msgstr ""
-
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Группа"
-msgstr[1] "Группы"
-msgstr[2] "Группы"
-msgstr[3] "Группы"
-
-msgid "Key"
-msgstr ""
-
-msgid "Customfield already exists. Please choose another name."
-msgstr "Это настраиваемое поле уже существует. Пожалуйста, используйте другое имя."
-
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Настраиваемые поля"
-msgstr[1] "Настраиваемые поля"
-msgstr[2] "Настраиваемые поля"
-msgstr[3] "Настраиваемые поля"
-
-msgid "Anyone"
-msgstr ""
-
-msgid "UI Config"
-msgstr ""
-
-msgid "This custom field is still in use!"
-msgstr ""
-
-msgid "Are you sure you want to delete them?"
-msgstr ""
-
-msgid "Yes"
-msgstr "Да"
-
-msgid "No"
-msgstr "Нет"
-
-msgid "Config"
-msgid_plural "Configs"
-msgstr[0] "Настройка"
-msgstr[1] "Настройки"
-msgstr[2] "Настройки"
-msgstr[3] "Настройки"
-
-msgid "Value"
-msgstr "Значение"
-
-#, python-brace-format
-msgid "Default ({0})"
-msgstr "По умолчанию ({0})"
-
-msgid "Computer Name"
-msgstr "Имя компьютера"
-
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Адресная книга по умолчанию для новых контактов и групп"
-
-msgid "Please wait"
-msgstr "Пожалуйста, подождите"
-
-msgid "Updating Tag"
-msgstr "Обновление тега"
-
-msgid "Failed"
-msgstr "Неудача"
-
-#, python-brace-format
-msgid "Could not save tag ({0})"
-msgstr "Тег ({0}) не сохранён"
-
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, устраните отмеченные ошибки."
-
-msgid "Allowed Contexts"
-msgstr "Разрешённый контекст"
-
-msgid "Context"
-msgstr "Контекст"
-
-msgid "Account Rights"
-msgstr "Права учётной записи"
-
-msgid "Tag Name"
-msgstr "Название тэга"
-
-msgid "Color"
-msgstr "Цвет"
-
-#, python-brace-format
-msgid "Transferring {0}..."
-msgstr "Передано {0}..."
-
-msgid "Tag"
-msgstr "Тег"
-
-msgid "Add New Tag"
-msgstr "Добавить новый тэг"
-
-#, python-brace-format
-msgid "Edit Tag \"{0}\""
-msgstr "Изменить тэг \"{0}\""
-
-msgid "ImportExportDefinition"
-msgid_plural "ImportExportDefinitions"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Do you really want to delete the selected tags?"
-msgstr "Вы действительно хотите удалить выбранные тэги?"
-
-msgid "Deleting tag(s)..."
-msgstr "Удаление тэга(ов)..."
-
-msgid "Add Tag"
-msgstr "Добавить тег"
-
-msgid "Edit Tag"
-msgstr "Изменить тег"
-
-msgid "Delete Tag"
-msgstr "Удалить тег"
-
-#, python-brace-format
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Показаны тэги {0} - {1} из {2}"
-
-msgid "No tags to display"
-msgstr "Нет тэгов"
-
-msgid "Usage:&#160;"
-msgstr "Использование:&#160;"
-
-msgid "System Tag"
-msgstr ""
-
-msgid "Updating Memberships"
-msgstr "Обновить членство"
-
-msgid "Could not save role."
-msgstr "Не удалось сохранить роль."
-
-msgid "Deleting role..."
-msgstr "Удаление роли..."
-
-msgid "Some error occurred while trying to delete the role."
-msgstr "При удаление роли произошла ошибка."
-
-msgid "Rights"
-msgstr "Права"
-
-msgid "Members"
-msgstr "Участники"
-
-msgid "Role Name"
-msgstr "Название роли"
-
-msgid "Role"
-msgstr "Роль"
-
-msgid "Add New Role"
-msgstr "Добавьте новую роль"
-
-#, python-brace-format
-msgid "Edit Role \"{0}\""
-msgstr "Изменить роль \"{0}\""
-
-msgid "Do you really want to delete the selected roles?"
-msgstr "Вы действительно хотите удалить выбранные роли?"
-
-msgid "Deleting role(s)..."
-msgstr "Удаление роли(ей)..."
-
-msgid "Add Role"
-msgstr "Добавить роль"
-
-msgid "Edit Role"
-msgstr "Изменить роль"
-
-msgid "Delete Role"
-msgstr "Удалить роль"
-
-#, python-brace-format
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Показаны роли {0} - {1} из {2}"
-
-msgid "No roles to display"
-msgstr "Нет ролей"
-
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "Журнал доступа"
-msgstr[1] "Журналы доступа"
-msgstr[2] "Журналы доступа"
-msgstr[3] "Журналы доступа"
-
-msgid "Groups"
-msgstr "Группы"
-
-msgid "Applications"
-msgstr "Приложения"
-
-msgid "Configs"
-msgstr "Настройки"
-
-msgid "Quota"
-msgstr "Квота"
-
-msgid "Email User"
-msgid_plural "Email Users"
-msgstr[0] "Электронные адреса пользователей"
-msgstr[1] "Электронные адреса пользователей"
-msgstr[2] "Электронные адреса пользователей"
-msgstr[3] "Электронные адреса пользователей"
-
-msgid "IMAP Quota"
-msgstr ""
-
-msgid "Current Mailbox size"
-msgstr "Размер почтового ящика"
-
-msgid "Sieve Quota"
-msgstr ""
-
-msgid "Current Sieve size"
-msgstr "Размер Sieve"
-
-msgid "path"
-msgstr ""
-
-msgid "This folder has own quota"
-msgstr ""
-
-msgid "No quota set (examples: 10 GB, 900 MB)"
-msgstr ""
-
-msgid "Current Usage"
-msgstr ""
-
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Домен недопустим. Пожалуйста, проверьте настройки домена в конфигурации SMTP"
-
-msgid "Allowed Domains"
-msgstr ""
-
-msgid "Special characters are not allowed in login name."
-msgstr ""
-
-msgid "Passwords do not match!"
-msgstr "Пароли не совпадают!"
-
-msgid "Passwords match!"
-msgstr "Пароли совпадают!"
-
-msgid "Primary group"
-msgstr "Основная группа"
-
-msgid "Unix"
-msgstr "Unix"
-
-msgid "Home Directory"
-msgstr "Домашний каталог"
-
-msgid "Login Shell"
-msgstr "Оболочка"
-
-msgid "Windows"
-msgstr "Windows"
-
-msgid "Home Drive"
-msgstr "Домашний диск"
-
-msgid "Login Time"
-msgstr "Время регистрации"
-
-msgid "never logged in"
-msgstr "никогда не регистрировался"
-
-msgid "Home Path"
-msgstr "Домашний путь"
-
-msgid "Logout Time"
-msgstr "Время выхода из системы"
-
-msgid "never logged off"
-msgstr "никогда не регистрировался"
-
-msgid "Profile Path"
-msgstr "Путь профиля"
-
-msgid "Password Last Set"
-msgstr "Последняя установка пароля"
-
-msgid "never"
-msgstr "никогда"
-
-msgid "Logon Script"
-msgstr "Скрипт входа"
-
-msgid "Password Can Change"
-msgstr "Пароль может быть изменен"
-
-msgid "not set"
-msgstr "не задан"
-
-msgid "Password Must Change"
-msgstr "Пароль должен быть изменен"
-
-msgid "Kick Off Time"
-msgstr "Время начала"
-
-msgid "Filesystem Quota"
-msgstr ""
-
-msgid "no quota set"
-msgstr "квота не задана"
-
-msgid "Current Filesystem usage"
-msgstr ""
-
-msgid "Information"
-msgstr "Информация"
-
-msgid "Last Login"
-msgstr "Последний вход"
-
-msgid "Forward Only"
-msgstr "Только пересылка"
-
-msgid "E-mail Alias"
-msgstr ""
-
-msgid "Add an alias address..."
-msgstr "Добавить псевдоним..."
-
-msgid "This alias can be used for sending e-mails."
-msgstr ""
-
-msgid "Domain not allowed"
-msgstr "Домен недопустим"
-
-#, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr "Домен {0} псевдонима {1}, который вы пытаетесь добавить, не является ни основным, ни дополнительным. Пожалуйста добавьте этот домен во второстепенные домены в настройках SMTP или используйте другой домен."
-
-msgid "Forwarding to self"
-msgstr "Пересылка себе"
-
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
-msgstr ""
-
-msgid "E-mail Forward"
-msgstr ""
-
-msgid "Add a forwarding address..."
-msgstr ""
-
-msgid "Password confirmation"
-msgstr "Подтверждение пароля"
-
-msgid "Repeat password"
-msgstr "Повтор пароля"
-
-msgid "Ok"
-msgstr "Ok"
-
-msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
-msgid "Account"
-msgstr "Учётная запись"
-
-msgid "First name"
-msgstr "Имя"
-
-msgid "Last name"
-msgstr "Фамилия"
-
-msgid "Display name"
-msgstr "Отображать как"
-
-msgid "Full Name"
-msgstr ""
-
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr ""
-
-msgid "Login name"
-msgstr "Имя пользователя"
-
-msgid "Password"
-msgstr "Пароль"
-
-msgid "Multi Factor Authentication Config"
-msgstr ""
-
-msgid "OpenID"
-msgstr "OpenID"
-
-msgid "User Type"
-msgstr ""
-
-msgid "enabled"
-msgstr "включено"
-
-msgid "disabled"
-msgstr "отключено"
-
-msgid "expired"
-msgstr "завершённый"
-
-msgid "blocked"
-msgstr "заблокирован"
-
-msgid "Invalid Status"
-msgstr "Некорректный статус"
-
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "Статус \"заблокировано\" будет стоять только в том случае, если пользователь часто ошибался с вводом пароля. Выставить этот статус здесь невозможно."
-
-msgid "Expires"
-msgstr "Истекает"
-
-msgid "Last login at"
-msgstr "Последний регистрировался в"
-
-msgid "don't know"
-msgstr "неизвестно"
-
-msgid "Last login from"
-msgstr "Последняя регистрация от"
-
-msgid "Password set"
-msgstr "Пароль установлен"
-
-msgid "Account ID"
-msgstr ""
-
-msgid "User groups"
-msgstr "Группы пользователей"
-
-msgid "User roles"
-msgstr "Роли пользователей"
-
-msgid "Fileserver"
-msgstr "Файловый сервер"
-
-msgid "Filesystem"
-msgstr ""
-
-msgid "IMAP"
-msgstr "IMAP"
-
-msgid "SMTP"
-msgstr "SMTP"
-
-msgid "Visibility"
-msgstr "Видимость"
-
-msgid "Display in addressbook"
-msgstr "Отображать в адресной книге"
-
-msgid "Hide from addressbook"
-msgstr "Скрыть в адресной книги"
-
-msgid "Saved in Addressbook"
-msgstr "Сохранено в адресную книгу"
-
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Пользователь"
-msgstr[1] "Пользователя"
-msgstr[2] "Пользователей"
-msgstr[3] "Пользователей"
-
-msgid "Users"
-msgstr "Пользователи"
-
-msgid "Samba User"
-msgid_plural "Samba Users"
-msgstr[0] "Пользователь Samba"
-msgstr[1] "Пользователя Samba"
-msgstr[2] "Пользователей Samba"
-msgstr[3] "Пользователей Samba"
-
-msgid "Enable Account"
-msgstr "включить учётную запись"
-
-msgid "Disable Account"
-msgstr "отключить учётную запись"
-
-msgid "Reset Password"
-msgstr "Сбросить пароль"
-
-msgid "E-mail usage"
-msgstr ""
-
-msgid "Filesystem usage"
-msgstr ""
-
-msgid "MFA Configured"
-msgstr ""
-
-msgid "Password changed"
-msgstr "Пароль изменен"
-
-msgid "Set new password"
-msgstr "Задать новый пароль"
-
-msgid "Please enter the new password:"
-msgstr "Пожалуйста, введите новый пароль:"
-
-msgid "Group Name"
-msgstr "Название группы"
-
-msgid "Only system accounts can be added to Addressbook group"
-msgstr ""
-
-msgid "Group Members"
-msgstr "Члены группы"
-
-msgid "personal"
-msgstr "личный"
-
-msgid "shared"
-msgstr "общий"
-
-msgid "Container Hierarchy/Name"
-msgstr ""
-
-msgid "Note for Owner"
-msgstr "Примечание владельца"
-
-msgid "Info"
-msgstr ""
-
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr ""
-
-msgid "Container"
-msgid_plural "Containers"
-msgstr[0] "Контейнер"
-msgstr[1] "Контейнеры"
-msgstr[2] "Контейнеры"
-msgstr[3] "Контейнеры"
-
-msgid "Container Name"
-msgstr "Имя контейнера"
-
-msgid "Container Order"
-msgstr "Порядок контейнеров"
-
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Компьютер"
-msgstr[1] "Компьютера"
-msgstr[2] "Компьютеров"
-msgstr[3] "Компьютеров"
-
-msgid "Roles"
-msgstr "Роли"
-
-msgid "Containers"
-msgstr "Контейнеры"
-
-msgid "Shared Tags"
-msgstr "Общие тэги"
-
-msgid "Customfields"
-msgstr "Настраиваемые поля"
-
-msgid "Computers"
-msgstr "Компьютеры"
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr "Информация о сервере"
-
-msgid "ActiveSync Devices"
-msgstr "Устройства с поддержкой Active Sync"
-
-msgid "E-mail Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr "Администратор"
-
-msgid "Refresh"
-msgstr "Обновить"
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
-msgid "IP Address"
-msgstr "IP адрес"
-
-msgid "Client Type"
-msgstr "Тип клиента"
-
-msgid "Session ID"
-msgstr "ID сессии"
-
-msgid "Login Name"
-msgstr "Имя для регистрации"
-
-msgid "Result"
-msgstr "Результат"
-
-msgid "User Agent"
-msgstr ""
-
-msgid "user blocked"
-msgstr "пользователь заблокирован"
-
-msgid "password expired"
-msgstr "истек срок пароля"
-
-msgid "user disabled"
-msgstr "пользователь отключен"
-
-msgid "invalid password"
-msgstr "неверный пароль"
-
-msgid "ambiguous username"
-msgstr "Имя пользователя многозначно"
-
-msgid "user not found"
-msgstr "пользователь не найден"
-
-msgid "failure"
-msgstr "неудачно"
-
-msgid "success"
-msgstr "успешно"
-
-msgid "Size"
-msgstr ""
-
-msgid "Revision Size"
-msgstr ""
-
-msgid "Total size of all available revisions"
-msgstr ""
-
-msgid "Edit Quota"
-msgstr ""
-
-msgid "Manage Total Quota"
-msgstr ""
-
-msgid "Total quota"
-msgstr ""
-
-msgid "Quota Management"
-msgstr ""
-
-msgid "Apps to show"
-msgstr ""
-
-msgid "Applications to show in quota, defaults null means all apps"
-msgstr ""
-
-msgid "Modules to show"
-msgstr ""
-
-msgid "Allow total quota in MB management"
-msgstr ""
-
-msgid "Default password must change for new user"
-msgstr ""
-
-msgid "Default IMAP user settings"
-msgstr "Пользовательские настройки IMAP по-умолчанию."
-
-msgid "Enabled Features"
-msgstr ""
-
-msgid "Enabled Features in Admin Application."
-msgstr ""
-
-msgid "Prevent special chars in login name"
-msgstr ""
-
-msgid "Force retype of new password in user edit dialog"
-msgstr ""
-
-msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
-
-msgid "Prevent applications disable in front end"
-msgstr ""
-
-msgid "Allow to change user type"
-msgstr ""
-
-msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
-
-msgid "Your container has been changed"
-msgstr "Ваш контейнер изменён"
-
-msgid "Your container has been changed by %1$s %2$sNote: %3$s"
-msgstr "Ваш контейнер изменён %1$s %2$sПримечание: %3$s"
-
-msgid "A group with this name already exists"
-msgstr ""
-
-msgid "Password is needed for system account creation"
-msgstr ""
-
-msgid "Maximum number of users reached."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
-msgstr ""
-
-msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr ""
-
-msgid "Record data needs to be set!"
-msgstr ""
-
-msgid "Account E-Mail needs to be set!"
-msgstr ""
-
-msgid "E-Mail account not found."
-msgstr ""
-
-msgid "Email address is already in use"
-msgstr ""
-
-msgid "GENDER_Scheduled Import Task config"
-msgstr ""
-
-msgid "Scheduled Import Task config"
-msgid_plural "Scheduled Import Task configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Plugin"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "GENDER_Task config"
-msgstr ""
-
-msgid "Task config"
-msgid_plural "Task configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "Period"
-msgstr ""
-
-msgid "Task type"
-msgstr ""
-
-msgid "Emails"
-msgstr ""
-
-msgid "CSV all data"
-msgstr ""
 
 msgid "Manage access log"
 msgstr ""
@@ -1141,4 +168,977 @@ msgid "Manage SSO"
 msgstr ""
 
 msgid "Manage relying parties for single sign on"
+msgstr ""
+
+msgid "Apps to show"
+msgstr ""
+
+msgid "Applications to show in quota, defaults null means all apps"
+msgstr ""
+
+msgid "Modules to show"
+msgstr ""
+
+msgid "Allow total quota in MB management"
+msgstr ""
+
+msgid "Default password must change for new user"
+msgstr ""
+
+msgid "Default IMAP user settings"
+msgstr "Пользовательские настройки IMAP по-умолчанию."
+
+msgid "Enabled Features"
+msgstr ""
+
+msgid "Enabled Features in Admin Application."
+msgstr ""
+
+msgid "Prevent special chars in login name"
+msgstr ""
+
+msgid "Force retype of new password in user edit dialog"
+msgstr ""
+
+msgid "Enable XProps Editor in Edit-Dialogs"
+msgstr ""
+
+msgid "Prevent applications disable in front end"
+msgstr ""
+
+msgid "Allow to change user type"
+msgstr ""
+
+msgid "Modules to show in admin app, default value null means all modules."
+msgstr ""
+
+msgid "Your container has been changed"
+msgstr "Ваш контейнер изменён"
+
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr "Ваш контейнер изменён %1$s %2$sПримечание: %3$s"
+
+msgid "Email address is already in use"
+msgstr ""
+
+msgid "A group with this name already exists"
+msgstr ""
+
+msgid "Record data needs to be set!"
+msgstr ""
+
+msgid "Account E-Mail needs to be set!"
+msgstr ""
+
+msgid "E-Mail account not found."
+msgstr ""
+
+msgid "Password is needed for system account creation"
+msgstr ""
+
+msgid "Maximum number of users reached."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr ""
+
+msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
+msgstr ""
+
+msgid "CSV all data"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "Журнал доступа"
+msgstr[1] "Журналы доступа"
+msgstr[2] "Журналы доступа"
+msgstr[3] "Журналы доступа"
+
+msgid "IP Address"
+msgstr "IP адрес"
+
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Пользователь"
+msgstr[1] "Пользователя"
+msgstr[2] "Пользователей"
+msgstr[3] "Пользователей"
+
+msgid "Login Time"
+msgstr "Время регистрации"
+
+msgid "Logout Time"
+msgstr "Время выхода из системы"
+
+msgid "Client Type"
+msgstr "Тип клиента"
+
+msgid "Session ID"
+msgstr "ID сессии"
+
+msgid "Login Name"
+msgstr "Имя для регистрации"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "User Agent"
+msgstr ""
+
+msgid "user blocked"
+msgstr "пользователь заблокирован"
+
+msgid "password expired"
+msgstr "истек срок пароля"
+
+msgid "user disabled"
+msgstr "пользователь отключен"
+
+msgid "invalid password"
+msgstr "неверный пароль"
+
+msgid "ambiguous username"
+msgstr "Имя пользователя многозначно"
+
+msgid "user not found"
+msgstr "пользователь не найден"
+
+msgid "failure"
+msgstr "неудачно"
+
+msgid "success"
+msgstr "успешно"
+
+msgid "Groups"
+msgstr "Группы"
+
+msgid "Roles"
+msgstr "Роли"
+
+msgid "Applications"
+msgstr "Приложения"
+
+msgid "Containers"
+msgstr "Контейнеры"
+
+msgid "Shared Tags"
+msgstr "Общие тэги"
+
+msgid "Customfields"
+msgstr "Настраиваемые поля"
+
+msgid "Computers"
+msgstr "Компьютеры"
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr "Информация о сервере"
+
+msgid "ActiveSync Devices"
+msgstr "Устройства с поддержкой Active Sync"
+
+msgid "E-mail Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr "Администратор"
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
+
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Адресная книга по умолчанию для новых контактов и групп"
+
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Приложение"
+msgstr[1] "Приложения"
+msgstr[2] "Приложения"
+msgstr[3] "Приложения"
+
+msgid "Enable Application"
+msgstr "Включить приложение"
+
+msgid "Disable Application"
+msgstr "Отключить приложение"
+
+msgid "Settings"
+msgstr "Настройки"
+
+#, python-brace-format
+msgid "{0} Settings"
+msgstr "{0} Настройки"
+
+msgid "Search:"
+msgstr "Поиск:"
+
+msgid "Enabled"
+msgstr ""
+
+#, python-brace-format
+msgid "Unknown status ({0})"
+msgstr ""
+
+#, python-brace-format
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Показаны приложения {0} - {1} из {2}"
+
+msgid "No applications to display"
+msgstr "Нет приложений"
+
+msgid "Order"
+msgstr "Порядок"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] "Настройка"
+msgstr[1] "Настройки"
+msgstr[2] "Настройки"
+msgstr[3] "Настройки"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Label"
+msgstr "Метка"
+
+msgid "Value"
+msgstr "Значение"
+
+#, python-brace-format
+msgid "Default ({0})"
+msgstr "По умолчанию ({0})"
+
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Контейнер"
+msgstr[1] "Контейнеры"
+msgstr[2] "Контейнеры"
+msgstr[3] "Контейнеры"
+
+msgid "Model"
+msgstr "Модель"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "personal"
+msgstr "личный"
+
+msgid "shared"
+msgstr "общий"
+
+msgid "Color"
+msgstr "Цвет"
+
+msgid "Container Hierarchy/Name"
+msgstr ""
+
+msgid "Note for Owner"
+msgstr "Примечание владельца"
+
+msgid "Info"
+msgstr ""
+
+msgid "Please create Resources in Addressbook or CoreData."
+msgstr ""
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Container Name"
+msgstr "Имя контейнера"
+
+msgid "Container Order"
+msgstr "Порядок контейнеров"
+
+msgid "Customfield"
+msgid_plural "Customfields"
+msgstr[0] "Настраиваемые поля"
+msgstr[1] "Настраиваемые поля"
+msgstr[2] "Настраиваемые поля"
+msgstr[3] "Настраиваемые поля"
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Errors"
+msgstr "Ошибки"
+
+msgid "Please configure store for this field type"
+msgstr "Пожалуйста, настройте хранилище для этого типа поля"
+
+msgid "Record Class"
+msgstr "Класс записей"
+
+msgid "Given record class not found"
+msgstr "Данный класс записи не найден"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Configure store"
+msgstr "Настроить хранилище"
+
+msgid "Permissions"
+msgstr ""
+
+msgid "View"
+msgstr "Представление"
+
+msgid "Use"
+msgstr "Использовать"
+
+msgid "Custom field definition"
+msgstr "Пользовательское поле определений"
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "Textarea"
+msgstr ""
+
+msgid "Number"
+msgstr "Номер"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "DateTime"
+msgstr "Время"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Boolean"
+msgstr "Булево"
+
+msgid "Search Combo"
+msgstr "Составной поиск"
+
+msgid "Key Field"
+msgstr "Ключевое поле"
+
+msgid "Record"
+msgstr "Запись"
+
+msgid "Record List"
+msgstr ""
+
+msgid "Length"
+msgstr "Длина"
+
+msgid "Required"
+msgstr "Требуется"
+
+msgid "Custom field additional properties"
+msgstr "Пользовательские поля дополнительных свойств"
+
+msgid "Tab Panel"
+msgstr ""
+
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Группа"
+msgstr[1] "Группы"
+msgstr[2] "Группы"
+msgstr[3] "Группы"
+
+msgid "Key"
+msgstr ""
+
+msgid "Customfield already exists. Please choose another name."
+msgstr "Это настраиваемое поле уже существует. Пожалуйста, используйте другое имя."
+
+msgid "UI Config"
+msgstr ""
+
+msgid "This custom field is still in use!"
+msgstr ""
+
+msgid "Are you sure you want to delete them?"
+msgstr ""
+
+msgid "Group Name"
+msgstr "Название группы"
+
+msgid "Visibility"
+msgstr "Видимость"
+
+msgid "Display in addressbook"
+msgstr "Отображать в адресной книге"
+
+msgid "Hide from addressbook"
+msgstr "Скрыть в адресной книги"
+
+msgid "Saved in Addressbook"
+msgstr "Сохранено в адресную книгу"
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Only system accounts can be added to Addressbook group"
+msgstr ""
+
+msgid "Group Members"
+msgstr "Члены группы"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Домен недопустим. Пожалуйста, проверьте настройки домена в конфигурации SMTP"
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "Do you really want to delete the selected groups?"
+msgstr "Вы уверены что хотите удалить выбранные группы?"
+
+msgid "Deleting group(s)..."
+msgstr "Удаление групп(ы)..."
+
+msgid "Add Group"
+msgstr "Добавить группу"
+
+msgid "Edit Group"
+msgstr "Изменить группу"
+
+msgid "Delete Group"
+msgstr "Удалить группу"
+
+#, python-brace-format
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Показаны группы {0} - {1} из {2}"
+
+msgid "No groups to display"
+msgstr "Нет групп"
+
+msgid "Account only"
+msgstr ""
+
+msgid "Creation Time"
+msgstr ""
+
+msgid "Created By"
+msgstr ""
+
+msgid "Last Modified Time"
+msgstr ""
+
+msgid "Last Modified By"
+msgstr ""
+
+msgid "ImportExportDefinition"
+msgid_plural "ImportExportDefinitions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Configs"
+msgstr "Настройки"
+
+msgid "Quota"
+msgstr "Квота"
+
+msgid "Email User"
+msgid_plural "Email Users"
+msgstr[0] "Электронные адреса пользователей"
+msgstr[1] "Электронные адреса пользователей"
+msgstr[2] "Электронные адреса пользователей"
+msgstr[3] "Электронные адреса пользователей"
+
+msgid "IMAP Quota"
+msgstr ""
+
+msgid "Current Mailbox size"
+msgstr "Размер почтового ящика"
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr "Размер Sieve"
+
+msgid "path"
+msgstr ""
+
+msgid "This folder has own quota"
+msgstr ""
+
+msgid "No quota set (examples: 10 GB, 900 MB)"
+msgstr ""
+
+msgid "Current Usage"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Revision Size"
+msgstr ""
+
+msgid "Total size of all available revisions"
+msgstr ""
+
+msgid "Edit Quota"
+msgstr ""
+
+msgid "Manage Total Quota"
+msgstr ""
+
+msgid "Total quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr "квота не задана"
+
+msgid "Quota Management"
+msgstr ""
+
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
+
+msgid "Updating Memberships"
+msgstr "Обновить членство"
+
+msgid "Failed"
+msgstr "Неудача"
+
+msgid "Could not save role."
+msgstr "Не удалось сохранить роль."
+
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, устраните отмеченные ошибки."
+
+msgid "Deleting role..."
+msgstr "Удаление роли..."
+
+msgid "Some error occurred while trying to delete the role."
+msgstr "При удаление роли произошла ошибка."
+
+msgid "Rights"
+msgstr "Права"
+
+msgid "Members"
+msgstr "Участники"
+
+msgid "Role Name"
+msgstr "Название роли"
+
+#, python-brace-format
+msgid "Transferring {0}..."
+msgstr "Передано {0}..."
+
+msgid "Role"
+msgstr "Роль"
+
+msgid "Add New Role"
+msgstr "Добавьте новую роль"
+
+#, python-brace-format
+msgid "Edit Role \"{0}\""
+msgstr "Изменить роль \"{0}\""
+
+msgid "Do you really want to delete the selected roles?"
+msgstr "Вы действительно хотите удалить выбранные роли?"
+
+msgid "Deleting role(s)..."
+msgstr "Удаление роли(ей)..."
+
+msgid "Add Role"
+msgstr "Добавить роль"
+
+msgid "Edit Role"
+msgstr "Изменить роль"
+
+msgid "Delete Role"
+msgstr "Удалить роль"
+
+#, python-brace-format
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Показаны роли {0} - {1} из {2}"
+
+msgid "No roles to display"
+msgstr "Нет ролей"
+
+msgid "Computer Name"
+msgstr "Имя компьютера"
+
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Компьютер"
+msgstr[1] "Компьютера"
+msgstr[2] "Компьютеров"
+msgstr[3] "Компьютеров"
+
+msgid "Built in configs"
+msgstr ""
+
+msgid "Scheduler"
+msgstr ""
+
+msgid "Updating Tag"
+msgstr "Обновление тега"
+
+#, python-brace-format
+msgid "Could not save tag ({0})"
+msgstr "Тег ({0}) не сохранён"
+
+msgid "Allowed Contexts"
+msgstr "Разрешённый контекст"
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Account Rights"
+msgstr "Права учётной записи"
+
+msgid "Tag Name"
+msgstr "Название тэга"
+
+msgid "Tag"
+msgstr "Тег"
+
+msgid "Add New Tag"
+msgstr "Добавить новый тэг"
+
+#, python-brace-format
+msgid "Edit Tag \"{0}\""
+msgstr "Изменить тэг \"{0}\""
+
+msgid "Do you really want to delete the selected tags?"
+msgstr "Вы действительно хотите удалить выбранные тэги?"
+
+msgid "Deleting tag(s)..."
+msgstr "Удаление тэга(ов)..."
+
+msgid "Add Tag"
+msgstr "Добавить тег"
+
+msgid "Edit Tag"
+msgstr "Изменить тег"
+
+msgid "Delete Tag"
+msgstr "Удалить тег"
+
+#, python-brace-format
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Показаны тэги {0} - {1} из {2}"
+
+msgid "No tags to display"
+msgstr "Нет тэгов"
+
+msgid "Usage:&#160;"
+msgstr "Использование:&#160;"
+
+msgid "System Tag"
+msgstr ""
+
+msgid "Allowed Domains"
+msgstr ""
+
+msgid "Special characters are not allowed in login name."
+msgstr ""
+
+msgid "Passwords do not match!"
+msgstr "Пароли не совпадают!"
+
+msgid "Passwords match!"
+msgstr "Пароли совпадают!"
+
+msgid "Primary group"
+msgstr "Основная группа"
+
+msgid "Unix"
+msgstr "Unix"
+
+msgid "Home Directory"
+msgstr "Домашний каталог"
+
+msgid "Login Shell"
+msgstr "Оболочка"
+
+msgid "Windows"
+msgstr "Windows"
+
+msgid "Home Drive"
+msgstr "Домашний диск"
+
+msgid "never logged in"
+msgstr "никогда не регистрировался"
+
+msgid "Home Path"
+msgstr "Домашний путь"
+
+msgid "never logged off"
+msgstr "никогда не регистрировался"
+
+msgid "Profile Path"
+msgstr "Путь профиля"
+
+msgid "Password Last Set"
+msgstr "Последняя установка пароля"
+
+msgid "never"
+msgstr "никогда"
+
+msgid "Logon Script"
+msgstr "Скрипт входа"
+
+msgid "Password Can Change"
+msgstr "Пароль может быть изменен"
+
+msgid "not set"
+msgstr "не задан"
+
+msgid "Password Must Change"
+msgstr "Пароль должен быть изменен"
+
+msgid "Kick Off Time"
+msgstr "Время начала"
+
+msgid "Filesystem Quota"
+msgstr ""
+
+msgid "Current Filesystem usage"
+msgstr ""
+
+msgid "Information"
+msgstr "Информация"
+
+msgid "Last Login"
+msgstr "Последний вход"
+
+msgid "Forward Only"
+msgstr "Только пересылка"
+
+msgid "E-mail Alias"
+msgstr ""
+
+msgid "Add an alias address..."
+msgstr "Добавить псевдоним..."
+
+msgid "This alias can be used for sending e-mails."
+msgstr ""
+
+msgid "Domain not allowed"
+msgstr "Домен недопустим"
+
+#, python-brace-format
+msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
+msgstr "Домен {0} псевдонима {1}, который вы пытаетесь добавить, не является ни основным, ни дополнительным. Пожалуйста добавьте этот домен во второстепенные домены в настройках SMTP или используйте другой домен."
+
+msgid "Forwarding to self"
+msgstr "Пересылка себе"
+
+msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgstr ""
+
+msgid "E-mail Forward"
+msgstr ""
+
+msgid "Add a forwarding address..."
+msgstr ""
+
+msgid "Password confirmation"
+msgstr "Подтверждение пароля"
+
+msgid "Repeat password"
+msgstr "Повтор пароля"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Account"
+msgstr "Учётная запись"
+
+msgid "First name"
+msgstr "Имя"
+
+msgid "Last name"
+msgstr "Фамилия"
+
+msgid "Display name"
+msgstr "Отображать как"
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgstr ""
+
+msgid "Login name"
+msgstr "Имя пользователя"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Multi Factor Authentication Config"
+msgstr ""
+
+msgid "OpenID"
+msgstr "OpenID"
+
+msgid "User Type"
+msgstr ""
+
+msgid "enabled"
+msgstr "включено"
+
+msgid "disabled"
+msgstr "отключено"
+
+msgid "expired"
+msgstr "завершённый"
+
+msgid "blocked"
+msgstr "заблокирован"
+
+msgid "Invalid Status"
+msgstr "Некорректный статус"
+
+msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgstr "Статус \"заблокировано\" будет стоять только в том случае, если пользователь часто ошибался с вводом пароля. Выставить этот статус здесь невозможно."
+
+msgid "Expires"
+msgstr "Истекает"
+
+msgid "Last login at"
+msgstr "Последний регистрировался в"
+
+msgid "don't know"
+msgstr "неизвестно"
+
+msgid "Last login from"
+msgstr "Последняя регистрация от"
+
+msgid "Password set"
+msgstr "Пароль установлен"
+
+msgid "Account ID"
+msgstr ""
+
+msgid "User groups"
+msgstr "Группы пользователей"
+
+msgid "User roles"
+msgstr "Роли пользователей"
+
+msgid "Fileserver"
+msgstr "Файловый сервер"
+
+msgid "Filesystem"
+msgstr ""
+
+msgid "IMAP"
+msgstr "IMAP"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Enable Account"
+msgstr "включить учётную запись"
+
+msgid "Disable Account"
+msgstr "отключить учётную запись"
+
+msgid "Reset Password"
+msgstr "Сбросить пароль"
+
+msgid "E-mail usage"
+msgstr ""
+
+msgid "Filesystem usage"
+msgstr ""
+
+msgid "MFA Configured"
+msgstr ""
+
+msgid "Password changed"
+msgstr "Пароль изменен"
+
+msgid "Set new password"
+msgstr "Задать новый пароль"
+
+msgid "Please enter the new password:"
+msgstr "Пожалуйста, введите новый пароль:"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Samba User"
+msgid_plural "Samba Users"
+msgstr[0] "Пользователь Samba"
+msgstr[1] "Пользователя Samba"
+msgstr[2] "Пользователей Samba"
+msgstr[3] "Пользователей Samba"
+
+msgid "GENDER_Task config"
+msgstr ""
+
+msgid "Task config"
+msgid_plural "Task configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "GENDER_Scheduled Import Task config"
+msgstr ""
+
+msgid "Scheduled Import Task config"
+msgid_plural "Scheduled Import Task configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Task type"
+msgstr ""
+
+msgid "Emails"
 msgstr ""

@@ -289,7 +289,7 @@ function generatePOTFiles($opts)
         `find . -type f -iname "*.vue" -exec sed "s/\"formatMessage/formatMessage/g" {} \; > $tempExtractDir/vueStrings.js`;
 
         `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.vue" -or -type f -iname "*.xml" -or -iname "*.twig" \
-        | grep -v node_modules | \
+        | grep -v node_modules | sort -d -f | \
         xgettext \
           --no-wrap \
           --force-po \
