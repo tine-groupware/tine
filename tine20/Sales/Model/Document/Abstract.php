@@ -742,8 +742,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     {
         /** @var Sales_Model_DocumentPosition_Abstract $position */
         foreach ($this->{self::FLD_POSITIONS} ?? [] as $position) {
-            if ($this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE
-                && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
+            if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE
+                    && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
             }
             $position->computePrice();
