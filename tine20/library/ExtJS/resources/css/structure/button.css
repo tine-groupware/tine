@@ -26,11 +26,6 @@
     width:1px;
 }
 
-.ext-gecko .x-btn button {
-    padding-left:0;
-    padding-right:0;
-}
-
 .ext-gecko .x-btn button::-moz-focus-inner {
     padding:0;
 }
