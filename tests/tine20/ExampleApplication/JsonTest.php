@@ -61,6 +61,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
             // TODO create this automatically?
             Tinebase_Numberable::BUCKETKEY => ExampleApplication_Model_ExampleRecord::class .
                 '#number_int#' . $container->getId(),
+            Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => $container->getId(),
             Tinebase_Numberable::START => 100,
         ];
         $updatedContainer = Tinebase_Container::getInstance()->update($container);
