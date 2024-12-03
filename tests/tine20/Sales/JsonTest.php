@@ -379,6 +379,31 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals('', $result['filter'][1]['value']);
     }
 
+    public function testChangeCustomersDebitorNumber(): void
+    {
+        $customer = $this->_instance->saveCustomer([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        ]);
+
+        $this->assertSame('DEB-1', $customer[Sales_Model_Customer::FLD_DEBITORS][0][Sales_Model_Debitor::FLD_NUMBER]);
+        $customer[Sales_Model_Customer::FLD_DEBITORS][0][Sales_Model_Debitor::FLD_NUMBER] = 'DEB-3';
+        $customer = $this->_instance->saveCustomer($customer);
+        $this->assertSame('DEB-3', $customer[Sales_Model_Customer::FLD_DEBITORS][0][Sales_Model_Debitor::FLD_NUMBER]);
+        $customer = $this->_instance->saveCustomer([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        ]);
+        $this->assertSame('DEB-4', $customer[Sales_Model_Customer::FLD_DEBITORS][0][Sales_Model_Debitor::FLD_NUMBER]);
+        $customer[Sales_Model_Customer::FLD_DEBITORS][0][Sales_Model_Debitor::FLD_NUMBER] = 'DEB-3';
+        $this->expectException(Tinebase_Exception_UnexpectedValue::class);
+        $this->_instance->saveCustomer($customer);
+    }
+
     /**
      * testSearchCustomers
      *

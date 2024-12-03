@@ -12,6 +12,7 @@
  * this is 2024.11 (ONLY!)
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
 use Tinebase_Model_Filter_Abstract as TMFA;
 
 class Sales_Setup_Update_17 extends Setup_Update_Abstract
@@ -44,6 +45,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE024 = __CLASS__ . '::update024';
     protected const RELEASE017_UPDATE025 = __CLASS__ . '::update025';
     protected const RELEASE017_UPDATE026 = __CLASS__ . '::update026';
+    protected const RELEASE017_UPDATE027 = __CLASS__ . '::update027';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -140,6 +142,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE026 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update026',
+            ],
+            self::RELEASE017_UPDATE027 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update027',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -751,5 +757,62 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.26', self::RELEASE017_UPDATE026);
+    }
+
+    public function update027()
+    {
+        /** @var Sales_Model_Division $division */
+        foreach (Sales_Controller_Division::getInstance()->getAll() as $division) {
+
+
+            /**
+             * @var Tinebase_Record_Interface $model
+             * @var array<string> $properties
+             */
+            foreach([
+                        Sales_Model_Document_Delivery::class => [Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER, Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER],
+                        Sales_Model_Document_Invoice::class => [Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER, Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER],
+                        Sales_Model_Document_Offer::class => [Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER],
+                        Sales_Model_Document_Order::class => [Sales_Model_Document_Order::FLD_DOCUMENT_NUMBER],
+                    ] as $model => $properties) {
+                $fields = $model::getConfiguration()->getFields();
+                foreach ($properties as $property) {
+                    $config = $fields[$property];
+                    $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::NO_AUTOCREATE] = true;
+                    $record = new $model([
+                        Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => new Sales_Model_Document_Category([
+                            Sales_Model_Document_Category::FLD_DIVISION_ID => $division,
+                        ], true),
+                    ], true);
+
+                    list($objectClass, $method) = explode('::', $config[TMCC::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE]);
+                    $object = call_user_func($objectClass . '::getInstance');
+                    $configOverride = call_user_func_array([$object, $method], [$record]);
+                    $config[TMCC::CONFIG] = array_merge($config[TMCC::CONFIG], $configOverride);
+                    $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] = 'Division - ' . $division->getTitle();
+
+                    if ($numCfg = Tinebase_Numberable::getCreateUpdateNumberableConfig($model, $property, $config)) {
+                        $numCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} = 'Division - ' . $division->getId();
+                        Tinebase_Controller_NumberableConfig::getInstance()->update($numCfg);
+                    }
+                }
+            }
+
+
+            $config = Sales_Model_Debitor::getConfiguration()->getFields()[Sales_Model_Debitor::FLD_NUMBER];
+            $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::NO_AUTOCREATE] = true;
+            $record = new Sales_Model_Debitor([
+                Sales_Model_Debitor::FLD_DIVISION_ID => $division,
+            ], true);
+            $config[TMCC::CONFIG] = array_merge($config[TMCC::CONFIG], Sales_Controller_Debitor::getInstance()->numberConfigOverride($record));
+            $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] = 'Division - ' . $division->getTitle();
+
+            if ($numCfg = Tinebase_Numberable::getCreateUpdateNumberableConfig(Sales_Model_Debitor::class, Sales_Model_Debitor::FLD_NUMBER, $config)) {
+                $numCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} = 'Division - ' . $division->getId();
+                Tinebase_Controller_NumberableConfig::getInstance()->update($numCfg);
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.27', self::RELEASE017_UPDATE027);
     }
 }

@@ -6,7 +6,7 @@
  * @subpackage  Numberable
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -59,6 +59,16 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
         }
         $this->_numberableColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::NUMCOLUMN];
 
+        if (!isset($_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETCOLUMN])) {
+            throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' is missing "' . Tinebase_Numberable_Abstract::BUCKETCOLUMN . '" configuration.');
+        }
+        $this->_bucketColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETCOLUMN];
+
+        if (!isset($_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETKEY])) {
+            throw new Tinebase_Exception_UnexpectedValue(__CLASS__ . ' is missing "' . Tinebase_Numberable_Abstract::BUCKETKEY . '" configuration.');
+        }
+        $this->_bucketKey = $_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETKEY];
+
 
         parent::__construct($_dbAdapter, $_options);
 
@@ -69,13 +79,7 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
             $this->_stepSize = $_numberableConfiguration[Tinebase_Numberable_Abstract::STEPSIZE];
         }
 
-        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETCOLUMN])) {
-            $this->_bucketColumn = $_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETCOLUMN];
-        }
 
-        if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETKEY])) {
-            $this->_bucketKey = $_numberableConfiguration[Tinebase_Numberable_Abstract::BUCKETKEY];
-        }
 
         if (isset($_numberableConfiguration[Tinebase_Numberable_Abstract::START])) {
             if (!is_int($_numberableConfiguration[Tinebase_Numberable_Abstract::START])) {
@@ -153,8 +157,8 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
      */
     public function insert($value)
     {
-        $rowCount = $this->_db->insert($this->_tablePrefix . $this->_tableName, array($this->_bucketColumn => $this->_bucketKey, $this->_numberableColumn => $value));
-        if ( $rowCount !== 1 ) {
+        $stmt = $this->_db->query('INSERT IGNORE INTO ' . $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) . ' (' . $this->_db->quoteIdentifier($this->_bucketColumn) . ', ' . $this->_db->quoteIdentifier($this->_numberableColumn) . ') VALUES (?, ?)', [$this->_bucketKey, $value]);
+        if ( $stmt->rowCount() !== 1 ) {
             return false;
         }
         return true;

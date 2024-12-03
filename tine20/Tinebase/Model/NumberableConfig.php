@@ -38,7 +38,7 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION               => 1,
+        self::VERSION               => 2,
         self::APP_NAME              => Tinebase_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE         => true,
@@ -51,9 +51,20 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
             'allowCreateNew'            => false,
             'allowDelete'               => false,
         ],
+        self::HAS_DELETED_TIME_UNIQUE => true,
 
         self::TABLE                 => [
             self::NAME                  => self::TABLE_NAME,
+            self::UNIQUE_CONSTRAINTS    => [
+                self::FLD_MODEL             => [
+                    self::COLUMNS               => [
+                        self::FLD_MODEL, self::FLD_PROPERTY, self::FLD_ADDITIONAL_KEY, self::FLD_DELETED_TIME,
+                    ],
+                ],
+                self::FLD_BUCKET_KEY    => [
+                    self::COLUMNS           => [self::FLD_BUCKET_KEY, self::FLD_DELETED_TIME],
+                ],
+            ],
         ],
 
         self::FIELDS                => [

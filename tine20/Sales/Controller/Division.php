@@ -155,7 +155,7 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Container
                 list($objectClass, $method) = explode('::', $config[TMCC::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE]);
                 $object = call_user_func($objectClass . '::getInstance');
                 $configOverride = call_user_func_array([$object, $method], [$record]);
-                $config['config'] = array_merge($config['config'], $configOverride);
+                $config[TMCC::CONFIG] = array_merge($config[TMCC::CONFIG], $configOverride);
 
                 Tinebase_Numberable::getCreateUpdateNumberableConfig($model, $property, $config);
             }
@@ -166,7 +166,7 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Container
         $record = new Sales_Model_Debitor([
             Sales_Model_Debitor::FLD_DIVISION_ID => $division,
         ], true);
-        $config['config'] = array_merge($config['config'], Sales_Controller_Debitor::getInstance()->numberConfigOverride($record));
+        $config[TMCC::CONFIG] = array_merge($config[TMCC::CONFIG], Sales_Controller_Debitor::getInstance()->numberConfigOverride($record));
         Tinebase_Numberable::getCreateUpdateNumberableConfig(Sales_Model_Debitor::class, Sales_Model_Debitor::FLD_NUMBER, $config);
     }
 

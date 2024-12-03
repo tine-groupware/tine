@@ -33,6 +33,8 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE012 = __CLASS__ . '::update012';
     protected const RELEASE017_UPDATE013 = __CLASS__ . '::update013';
     protected const RELEASE017_UPDATE014 = __CLASS__ . '::update014';
+    protected const RELEASE017_UPDATE015 = __CLASS__ . '::update015';
+    protected const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
 
 
     static protected $_allUpdates = [
@@ -50,6 +52,14 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE005 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update005',
+            ],
+            self::RELEASE017_UPDATE015 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update015',
+            ],
+            self::RELEASE017_UPDATE016 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update016',
             ],
         ],
         self::PRIO_TINEBASE_STRUCTURE => [
@@ -366,5 +376,36 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '17.14', self::RELEASE017_UPDATE014);
+    }
+
+    public function update015(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $backend = Tinebase_Controller_NumberableConfig::getInstance()->getBackend();
+        $this->_db->query('UPDATE ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
+
+        $this->updateSchema(Tinebase_Config::APP_NAME, [
+            Tinebase_Model_NumberableConfig::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.15', self::RELEASE017_UPDATE015);
+    }
+
+    public function update016(): void
+    {
+        $numCtrl = Tinebase_Controller_NumberableConfig::getInstance();
+        foreach ($numCtrl->getAll() as $numCfg) {
+            $newNumCfg = $numCtrl->update(clone $numCfg);
+            if ($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} !== $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}) {
+                $this->_db->update(
+                    SQL_TABLE_PREFIX . 'numberable',
+                    ['bucket' => $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}],
+                    $this->_db->quoteInto('bucket = ?', $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY})
+                );
+            }
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.16', self::RELEASE017_UPDATE016);
     }
 }
