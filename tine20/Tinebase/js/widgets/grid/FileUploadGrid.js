@@ -62,7 +62,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     i18nFileString: null,
 
-
     fileSelectionDialog: null,
 
     /**
@@ -439,25 +438,29 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} event
      */
     onDownload: function (button, event) {
-        var _ = window.lodash,
-            selectedRows = this.getSelectionModel().getSelections(),
-            fileRow = selectedRows[0],
-            recordId = _.get(this.record, 'id', false),
-            tempFile = fileRow.get('tempFile');
+        const selectedRows = this.getSelectionModel().getSelections();
+        const fileRow = selectedRows[0];
 
-        if (recordId !== false && (!recordId || (Ext.isObject(tempFile && tempFile.status !== 'complete')))) {
-            Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - file not yet available for download');
+        if (!fileRow) return;
+
+        Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - selected file:' + fileRow);
+
+        const tempFile = fileRow.get('tempFile');
+
+        if (Ext.isObject(tempFile)) {
+            if (fileRow.get('status') !== 'complete') {
+                Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - file not yet available for download');
+                return;
+            }
+            this.downloadTempFile(tempFile.id);
             return;
         }
 
-        Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - selected file:');
-        Tine.log.debug(fileRow);
-
-        if (Ext.isObject(tempFile)) {
-            this.downloadTempFile(tempFile.id);
-        } else {
-            this.downloadRecordAttachment(recordId, fileRow.id)
+        if (!this.record?.id) {
+            Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - it is not allowed to download record attachment without record id');
+            return;
         }
+        this.downloadRecordAttachment(this.record.id, fileRow.get('id'));
     },
 
     onSendByEmail: function (button, event) {
@@ -513,15 +516,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     loadRecord: function (record) {
         if (record && record.get(this.filesProperty)) {
-            var files = record.get(this.filesProperty);
-            for (var i = 0; i < files.length; i += 1) {
+            const files = record.get(this.filesProperty);
+            for (let i = 0; i < files.length; i += 1) {
                 const existing = this.store.getById(files[i].id);
                 if (existing) {
                     _.each(files[i], (value, key) => {
                         existing.set(value, key);
                     });
                 } else {
-                    var file = new Ext.ux.file.Upload.file(files[i]);
+                    const file = new Ext.ux.file.Upload.file(files[i]);
                     file.data.status = 'complete';
                     this.store.addUnique(file, 'name');
                 }
