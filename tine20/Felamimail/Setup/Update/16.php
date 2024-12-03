@@ -23,6 +23,7 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE016_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE016_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE016_UPDATE010 = __CLASS__ . '::update010';
 
 
     static protected $_allUpdates = [
@@ -68,6 +69,10 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE016_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
             ],
         ],
     ];
@@ -331,5 +336,14 @@ sieveFile
             'state where `state_id` like "Felamimail-Message-GridPanel%" or `state_id` = "Felamimail_detailspanelregion"');
 
         $this->addApplicationUpdate('Felamimail', '16.9', self::RELEASE016_UPDATE009);
+    }
+
+    public function update010()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'felamimail_account SET creation_time = NOW() WHERE creation_time IS NULL');
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'felamimail_account SET created_by = "' .
+            Tinebase_Core::getUser()->getId() . '" WHERE created_by IS NULL');
+
+        $this->addApplicationUpdate('Felamimail', '16.10', self::RELEASE016_UPDATE010);
     }
 }
