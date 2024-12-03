@@ -5,10 +5,10 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
     Tine.Sales.DebitorEditDialog.registerCheckStateProvider('number', function (editDialog, record) {
         const configsAvailable = _.get(record.constructor.getField('number'), 'fieldDefinition.config.configsAvailable', []);
-        const bucket_key = `Sales_Model_Debitor#number#${record.get('division_id')}`;
-        const bucketConfig = _.find(configsAvailable, { bucket_key });
-        if (bucketConfig) {
-            this.setDisabled(! bucketConfig.editable);
+        const additional_key = `Division - ${record.get('division_id')}`;
+        const numberableConfig = _.find(configsAvailable, { additional_key });
+        if (numberableConfig) {
+            this.setDisabled(! numberableConfig.editable);
         }
     });
 
@@ -17,10 +17,10 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             Tine.Sales[`Document_${type}EditDialog`].registerCheckStateProvider(fieldName, function (editDialog, record) {
                 const configsAvailable = _.get(record.constructor.getField(fieldName), 'fieldDefinition.config.configsAvailable', []);
                 const division = _.get(editDialog.getForm().findField('document_category'), 'selectedRecord.data.division_id', '404');
-                const bucket_key = `Sales_Model_Document_${type}#${fieldName}#${_.get(division, 'id', division)}`;
-                const bucketConfig = _.find(configsAvailable, { bucket_key });
-                if (bucketConfig) {
-                    this.setDisabled(! bucketConfig.editable);
+                const additional_key = `Division - ${record.get('division_id')}`;
+                const numberableConfig = _.find(configsAvailable, { additional_key });
+                if (numberableConfig) {
+                    this.setDisabled(! numberableConfig.editable);
                 }
             });
         });

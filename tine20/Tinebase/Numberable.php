@@ -55,7 +55,7 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_NumberableConfig::class, [
                     [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $model],
                     [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_PROPERTY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $property],
-                    [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $config[TMCC::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY] ?? ''],
+                    [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? ''],
                 ]))->getFirstRecord())) {
             if ($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::NO_AUTOCREATE] ?? false) {
                 return null;
@@ -70,13 +70,6 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
                 Tinebase_Model_NumberableConfig::FLD_ZEROFILL => $config[TMCC::CONFIG][Tinebase_Numberable_String::ZEROFILL] ?? 0,
                 Tinebase_Model_NumberableConfig::FLD_START => $config[TMCC::CONFIG][Tinebase_Numberable_Abstract::START] ?? 1,
             ]));
-            unset($raii);
-        } elseif ($numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} !==
-                ($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '')) {
-            $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} =
-                $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '';
-            $raii = new Tinebase_RAII(Tinebase_Controller_NumberableConfig::getInstance()->assertPublicUsage());
-            $numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->update($numberableCfg);
             unset($raii);
         }
 

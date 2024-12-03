@@ -56,7 +56,7 @@ class Sales_Controller_Debitor extends Tinebase_Controller_Record_Abstract
         }
         return [
             Tinebase_Numberable::BUCKETKEY => $this->_modelName . '#' . Sales_Model_Debitor::FLD_NUMBER . '#' . $division->getId(),
-            Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->{Sales_Model_Division::FLD_TITLE},
+            Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->getId(),
         ];
     }
 }
