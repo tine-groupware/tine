@@ -897,19 +897,11 @@ abstract class Tinebase_Controller_Record_Abstract
 
             if (true === $checkValue) {
                 if (false === $numberable->insert($_record->{$fieldDef['fieldName']})) {
-                    // if the check failed and we have an old value, we keep on using the old value
-                    if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
-                        $_record->{$fieldDef['fieldName']} = $_oldRecord->{$fieldDef['fieldName']};
-                    // else we create a new one
-                    } else {
-                        $createNewValue = true;
-                    }
+                    throw new Tinebase_Exception_UnexpectedValue($fieldDef['fieldName'] . ' can\'t save value: "' . $_record->{$fieldDef['fieldName']} . '"');
                 } elseif ($_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
                     $freeOldValue = true;
                 }
             }
-
-            $createNewValue = $this->_inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue);
 
             if (true === $createNewValue) {
                 $_record->{$fieldDef['fieldName']} = $numberable->getNext();
@@ -937,21 +929,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 $numberable->free($record->{$fieldDef['fieldName']});
             }
         }
-    }
-
-    /**
-     * allows to override default autoincrement handling
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param Tinebase_Record_Interface $_oldRecord
-     * @param Tinebase_Numberable_Abstract $numberable
-     * @param array $fieldDef
-     * @param boolean $createNewValue
-     * @return mixed
-     */
-    protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)
-    {
-        return $createNewValue;
     }
 
     /**

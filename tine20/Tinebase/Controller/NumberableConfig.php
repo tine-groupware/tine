@@ -52,4 +52,33 @@ class Tinebase_Controller_NumberableConfig extends Tinebase_Controller_Record_Ab
             throw new Tinebase_Exception_AccessDenied('no right to ' . $_action . ' ' . Tinebase_Model_NumberableConfig::class);
         }
     }
+
+    /**
+     * @param Tinebase_Model_NumberableConfig $_record
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+        $this->_inspectBucketKey($_record);
+    }
+
+    /**
+     * @param Tinebase_Model_NumberableConfig $_record
+     * @param Tinebase_Model_NumberableConfig $_oldRecord
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        $this->_inspectBucketKey($_record, $_oldRecord);
+    }
+
+    protected function _inspectBucketKey(Tinebase_Model_NumberableConfig $numCfg, ?Tinebase_Model_NumberableConfig $oldNumCfg = null)
+    {
+        if (str_ends_with($numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . ($oldNumCfg ?: $numCfg)->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
+            $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} = substr($numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
+                strrpos($numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . ($oldNumCfg ?: $numCfg)->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
+        }
+        $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} =
+            $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} . '#' . $numCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX};
+    }
 }

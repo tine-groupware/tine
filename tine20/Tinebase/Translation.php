@@ -285,7 +285,7 @@ class Tinebase_Translation
     {
         $locale = $_locale
             ?: Tinebase_Core::getLocale()
-            ?: self::getDefaultTranslation($_applicationName);
+            ?: Tinebase_Translation::getLocale();
         
         $cacheId = (string) $locale . $_applicationName;
         

@@ -15,7 +15,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             text: app.i18n._('Send as Email to Datev'),
             iconCls: `action_export`,
             actionUpdater(action, grants, records, isFilterSelect, filteredContainers) {
-                let enabled = records.length === 1
+                let enabled = records.length === 1 && Boolean(records[0]['id']);
+                action.setDisabled(!enabled)
                 action.setDisabled(!enabled)
                 action.baseAction.setDisabled(!enabled) // WTF?
             },
