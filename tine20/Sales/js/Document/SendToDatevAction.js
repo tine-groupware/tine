@@ -16,7 +16,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             iconCls: `action_export`,
             allowMultiple: true,
             actionUpdater(action, grants, records, isFilterSelect, filteredContainers) {
-                const enabled = records.length > 0;
+                const enabled = records.length > 0 && Boolean(records[0]['id']);
                 action.setDisabled(!enabled)
                 action.baseAction.setDisabled(!enabled) // WTF?
             },
