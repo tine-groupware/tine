@@ -12,15 +12,16 @@
   <BModal v-model="showModal"
           :title="modalProps.title"
           :title-class="'title'"
-          :modal-class="'bootstrap-scope dark-reverse'"
+          :modal-class="'bootstrap-scope'"
           :hide-header-close="!modalProps.closable"
           :hide-footer="!modalProps.buttons"
           :centered="true"
           :no-fade="true"
           :lazy="true"
           :noCloseOnBackdrop="true"
+          v-bind:data-bs-theme="darkmode"
           :noCloseOnEsc="true"
-          class="no-dark-invert"
+          class="dark-reverse"
           @close="handleModalClose" :style="{'z-index': modalProps.zIndex}"
           :id="modalProps.injectKey"
   >
@@ -84,6 +85,8 @@ watch(() => props.modalProps.maskModal, (newVal) => {
 })
 
 const contentCompRef = ref()
+
+const darkmode = document.getElementsByTagName('body')[0].classList.contains('dark-mode') ? ref('dark') : ref('light')
 
 const { eventBus: EventBus } = inject(props.modalProps.injectKey)
 
@@ -169,7 +172,6 @@ onBeforeUnmount(() => {
 .container {
   --skin-color: #FFFFFF;
 }
-
 .vue-button.x-tool-close {
   background-image: none !important;
 }
