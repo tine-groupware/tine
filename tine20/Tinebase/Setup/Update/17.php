@@ -384,6 +384,14 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
         $backend = Tinebase_Controller_NumberableConfig::getInstance()->getBackend();
         $this->_db->query('UPDATE ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
+        $this->_db->query('DELETE FROM ' . $backend->getTablePrefix() . $backend->getTableName() . ' WHERE model = MeetingManager_Model_Top AND property = "decision_number"');
+
+        foreach ($this->_db->query('SELECT id, bucket_key FROM ' . $backend->getTablePrefix() . $backend->getTableName() .
+            ' WHERE model = "MeetingManager_Model_Meeting" AND property = "meeting_number"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+            if (empty($row['bucket_key'])) continue;
+            $buckets = explode('#', $row['bucket_key']);
+            $this->_db->update($backend->getTablePrefix() . $backend->getTableName(), ['additional_key' => $buckets[count($buckets)-1]], 'id = "' . $row['id'] . '"');
+        }
 
         $this->updateSchema(Tinebase_Config::APP_NAME, [
             Tinebase_Model_NumberableConfig::class,
