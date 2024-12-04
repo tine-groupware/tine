@@ -72,17 +72,10 @@ packaging_gitlab_get_version_for_pipeline_id() {
     fi
 }
 
-packaging_version() {
-    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-    version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-
-    echo $version
-}
-
 packaging() {
-    version=$(packaging_version)
+    version=$(release_get_package_version)
 
-    echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+    echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
     if ! release_determin_customer; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"

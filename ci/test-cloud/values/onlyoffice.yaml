@@ -1,0 +1,5 @@
+tine:
+  features:
+    onlyoffice:
+      active: true
+      onlyOfficePublicUrl: https://onlyoffice2.tine20.net

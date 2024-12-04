@@ -65,3 +65,9 @@ release_determin_customer () {
         fi 
     fi
 }
+
+release_get_package_version() {
+    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+
+    echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
+}
