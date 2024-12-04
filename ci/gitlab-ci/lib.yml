@@ -214,7 +214,7 @@
       
           if [ -z "$CI_COMMIT_TAG" ]; then
               echo "pushing nightly"
-              docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags 2> /dev/null || git fetch --unshallow --quiet && git describe --tags)"
+              docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
               return
           fi
       
@@ -492,17 +492,10 @@
           fi
       }
       
-      packaging_version() {
-          CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-          version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-      
-          echo $version
-      }
-      
       packaging() {
-          version=$(packaging_version)
+          version=$(release_get_package_version)
       
-          echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+          echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
       
           if ! release_determin_customer; then
               echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -663,6 +656,12 @@
               fi 
           fi
       }
+      
+      release_get_package_version() {
+          CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+      
+          echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
+      }
 
       # lib/scripts/release_packages.sh
       release_packages_github_create_release() {
@@ -691,7 +690,7 @@
           matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
       
           if [ "${RELEASE_TYPE}" == "be" ]; then
-              matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+              matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" "We just released the new version \"${CODENAME}\" ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
           fi
       }
       
@@ -981,6 +980,36 @@
           echo -e "\033[0;34m"$@"\033[0m"
       }
 
+      # lib/scripts/test_cloud.sh
+      test_cloud_generate_deployment_name() {
+          deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
+      
+          if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
+              # remove trailing /
+              deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
+          fi
+      
+          if [ "$RELEASE_TYPE" == "nightly" ]; then
+              deployment_name=nightly-$deployment_name
+          fi
+      
+          echo -n $deployment_name | sed 's/\./-/g'
+      }
+      
+      test_cloud_deploy() {
+          export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
+          export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
+      
+          # todo: but later (is not mvp)
+          # if [ "$RELEASE_TYPE" == "nightly" ]; then
+          #     helmfile -f path/to/helmfile.yaml destroy
+          #     # remove jobs 
+          #     # fail for pvc to be deleted
+          # fi
+      
+          helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
+      }
+
       # lib/scripts/version_check.sh
       version_check_update () {
           version_check_update_file htdocs%2FversionCheck%2Fversion.json
@@ -1214,7 +1243,7 @@
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags 2> /dev/null || git fetch --unshallow --quiet && git describe --tags)"
+                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
@@ -1492,17 +1521,10 @@
             fi
         }
         
-        packaging_version() {
-            CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-            version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-        
-            echo $version
-        }
-        
         packaging() {
-            version=$(packaging_version)
+            version=$(release_get_package_version)
         
-            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! release_determin_customer; then
                 echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -1663,6 +1685,12 @@
                 fi 
             fi
         }
+        
+        release_get_package_version() {
+            CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+        
+            echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -1691,7 +1719,7 @@
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
             if [ "${RELEASE_TYPE}" == "be" ]; then
-                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" "We just released the new version \"${CODENAME}\" ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
             fi
         }
         
@@ -1979,6 +2007,36 @@
         # log in blue
         log() {
             echo -e "\033[0;34m"$@"\033[0m"
+        }
+
+        # lib/scripts/test_cloud.sh
+        test_cloud_generate_deployment_name() {
+            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
+        
+            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
+                # remove trailing /
+                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
+            fi
+        
+            if [ "$RELEASE_TYPE" == "nightly" ]; then
+                deployment_name=nightly-$deployment_name
+            fi
+        
+            echo -n $deployment_name | sed 's/\./-/g'
+        }
+        
+        test_cloud_deploy() {
+            export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
+            export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
+        
+            # todo: but later (is not mvp)
+            # if [ "$RELEASE_TYPE" == "nightly" ]; then
+            #     helmfile -f path/to/helmfile.yaml destroy
+            #     # remove jobs 
+            #     # fail for pvc to be deleted
+            # fi
+        
+            helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
         }
 
         # lib/scripts/version_check.sh
@@ -2260,7 +2318,7 @@
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags 2> /dev/null || git fetch --unshallow --quiet && git describe --tags)"
+                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
@@ -2538,17 +2596,10 @@
             fi
         }
         
-        packaging_version() {
-            CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-            version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-        
-            echo $version
-        }
-        
         packaging() {
-            version=$(packaging_version)
+            version=$(release_get_package_version)
         
-            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! release_determin_customer; then
                 echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -2709,6 +2760,12 @@
                 fi 
             fi
         }
+        
+        release_get_package_version() {
+            CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+        
+            echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -2737,7 +2794,7 @@
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
             if [ "${RELEASE_TYPE}" == "be" ]; then
-                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" "We just released the new version \"${CODENAME}\" ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
             fi
         }
         
@@ -3025,6 +3082,36 @@
         # log in blue
         log() {
             echo -e "\033[0;34m"$@"\033[0m"
+        }
+
+        # lib/scripts/test_cloud.sh
+        test_cloud_generate_deployment_name() {
+            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
+        
+            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
+                # remove trailing /
+                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
+            fi
+        
+            if [ "$RELEASE_TYPE" == "nightly" ]; then
+                deployment_name=nightly-$deployment_name
+            fi
+        
+            echo -n $deployment_name | sed 's/\./-/g'
+        }
+        
+        test_cloud_deploy() {
+            export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
+            export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
+        
+            # todo: but later (is not mvp)
+            # if [ "$RELEASE_TYPE" == "nightly" ]; then
+            #     helmfile -f path/to/helmfile.yaml destroy
+            #     # remove jobs 
+            #     # fail for pvc to be deleted
+            # fi
+        
+            helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
         }
 
         # lib/scripts/version_check.sh
