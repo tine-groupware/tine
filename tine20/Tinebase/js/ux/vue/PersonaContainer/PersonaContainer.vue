@@ -8,7 +8,7 @@
  */
 -->
 <template>
-  <div v-html="rawSvg" class="dark-reverse vue-msg-box-svg-container" :style="`--skin-color: ${skinColor}`"></div>
+  <div v-html="rawSvg" class="vue-msg-box-svg-container" :style="`--skin-color: ${skinColor}`"></div>
 </template>
 
 <script setup>
