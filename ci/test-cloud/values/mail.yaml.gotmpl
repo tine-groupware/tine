@@ -1,0 +1,45 @@
+tine:
+  features:
+    mail:
+      enabled: true
+      imap:
+        active: true
+        host: dev-mailstack-dovecot
+        port: 143
+        useSystemAccount: 1
+        ssl: tls
+        verifyPeer: 0
+        backend: dovecot_imap
+        domain: {{ .Values.mailDomain }}
+        instanceName: {{ .Values.domain }}
+        dovecot:
+          host: dev-db-mariadb
+          dbname: devdovecot
+          uid: vmail
+          gid: vmail
+          home: /var/vmail/%d/%u
+          scheme: SSHA256
+      smtp:
+        active: true
+        backend: postfix
+        hostname: dev-mailstack-postfix
+        port: 25
+        ssl: none
+        auth: none
+        name: postfix
+        primarydomain: {{ .Values.mailDomain }}
+        instanceName: {{ .Values.domain }}
+        from: {{ .Values.domain }}
+        postfix:
+          host: dev-db-mariadb
+          dbname: devpostfix
+      sieve:
+        active: true
+        hostname: dev-mailstack-dovecot
+        port: 4190
+        ssl: none
+      virt:
+        active: true
+        domain: {{ .Values.mailDomain }}
+        host: dev-db-mariadb
+        database: devpostfix
