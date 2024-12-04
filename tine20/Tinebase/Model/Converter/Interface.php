@@ -21,7 +21,7 @@
 
 interface Tinebase_Model_Converter_Interface
 {
-    function convertToRecord($record, $fieldName, $blob);
+    public function convertToRecord($record, $fieldName, $blob);
 
-    function convertToData($record, $fieldName, $fieldValue);
+    public function convertToData($record, $fieldName, $fieldValue);
 }

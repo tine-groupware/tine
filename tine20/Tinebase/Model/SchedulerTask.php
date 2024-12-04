@@ -1,11 +1,12 @@
 <?php
+
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -15,15 +16,17 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  *
- * @property string                     $name
- * @property Tinebase_Scheduler_Task    $config
- * @property Tinebase_DateTime          $last_run
- * @property int                        $last_duration
- * @property string                     $lock_id
- * @property Tinebase_DateTime          $next_run
- * @property Tinebase_DateTime          $last_failure
- * @property int                        $failure_count
- * @property Tinebase_DateTime          $server_time
+ * @property bool $active
+ * @property string $name
+ * @property Tinebase_Scheduler_Task $config
+ * @property bool $is_system
+ * @property Tinebase_DateTime $last_run
+ * @property int $last_duration
+ * @property string $lock_id
+ * @property Tinebase_DateTime $next_run
+ * @property Tinebase_DateTime $last_failure
+ * @property int $failure_count
+ * @property Tinebase_DateTime $server_time
  */
 
 class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
@@ -33,6 +36,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
     public const FLD_IS_SYSTEM = 'is_system';
     public const FLD_NAME = 'name';
     public const FLD_NEXT_RUN = 'next_run';
+    public const FLD_ACTIVE = 'active';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,7 +44,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version'           => 3,
+        'version'           => 4,
         'recordName'        => 'Scheduler task',
         'recordsName'       => 'Scheduler tasks', // ngettext('Scheduler task', 'Scheduler tasks', n)
         //'containerProperty' => 'container_id',
@@ -148,21 +152,25 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
             'server_time' => [
                 'type'          => 'virtual',
                 'config'        => ['type' => 'datetime'],
-                self::CONVERTERS=> [Tinebase_Model_Converter_DateTime::class],
+                self::CONVERTERS => [Tinebase_Model_Converter_DateTime::class],
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
             ],
+            self::FLD_ACTIVE => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL => true,
+            ],
             self::FLD_IS_SYSTEM => [
-                self::TYPE          => self::TYPE_BOOLEAN,
-                self::DEFAULT_VAL   => false,
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL => false,
+                self::UI_CONFIG => [
+                    self::DISABLED => true,
                 ],
             ],
             self::FLD_ACCOUNT_ID => [
-                self::TYPE          => self::TYPE_USER,
-                self::NULLABLE      => true,
+                self::TYPE => self::TYPE_USER,
+                self::NULLABLE => true,
             ],
         ]
     ];
@@ -172,7 +180,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
      *
      * @var Tinebase_ModelConfiguration
      */
-    protected static $_configurationObject = NULL;
+    protected static $_configurationObject = null;
 
     /**
      * @return bool

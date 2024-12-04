@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  */
@@ -36,8 +36,11 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
      */
     public function hasTask($_name)
     {
-        $select = $this->_getSelect()->where($this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?',
-            $_name));
+        $select = $this->_getSelect()->where($this->_db->quoteInto(
+            $this->_db->quoteIdentifier('name')
+            . ' = ?',
+            $_name
+        ));
 
         $stmt = $this->_db->query($select);
         $result = !empty($stmt->fetchAll());
@@ -52,7 +55,8 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
      */
     public function getTaskForUpdate($_id)
     {
-        $select = $this->_getSelect()->where($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_id))
+        $select = $this->_getSelect()->where($this->_db->quoteInto($this->_db->quoteIdentifier('id')
+            . ' = ?', $_id))
             ->forUpdate();
 
         $stmt = $this->_db->query($select);
@@ -70,12 +74,13 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
     /**
      * @return Tinebase_Model_SchedulerTask|null
      */
-    public function getDueTask()
+    public function getDueTask(): ?Tinebase_Model_SchedulerTask
     {
         $select = $this->_getSelect()->where($this->_db->quoteIdentifier('next_run') . ' <= NOW() AND ' .
-            $this->_db->quoteIdentifier('lock_id') . ' IS NULL')->order(new Zend_Db_Expr(
-                $this->_dbCommand->getRnd()))->limit(1);
-
+            $this->_db->quoteIdentifier('lock_id') . ' IS NULL AND ' .
+            $this->_db->quoteIdentifier('active') . ' = 1')->order(new Zend_Db_Expr(
+                $this->_dbCommand->getRnd()
+            ))->limit(1);
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();

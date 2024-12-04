@@ -15,6 +15,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
 {
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
 
 
     static protected $_allUpdates = [
@@ -22,6 +23,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE001 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update001',
+            ],
+            self::RELEASE018_UPDATE002 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -55,5 +60,13 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET login_failures = ' .
             'JSON_OBJECT("JSON-RPC", CAST(login_failures AS INTEGER)) WHERE login_failures IS NOT NULL');
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.1', self::RELEASE018_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_SchedulerTask::class,
+        ]);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
     }
 }

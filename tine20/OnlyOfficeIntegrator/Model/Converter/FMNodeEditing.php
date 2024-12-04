@@ -17,7 +17,7 @@ class OnlyOfficeIntegrator_Model_Converter_FMNodeEditing implements Tinebase_Mod
      * @param $blob
      * @return bool
      */
-    function convertToRecord($record, $fieldName, $blob)
+    public function convertToRecord($record, $fieldName, $blob)
     {
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $record->type) {
             return false;
@@ -34,7 +34,7 @@ class OnlyOfficeIntegrator_Model_Converter_FMNodeEditing implements Tinebase_Mod
         return false;
     }
 
-    function convertToData($record, $fieldName, $fieldValue)
+    public function convertToData($record, $fieldName, $fieldValue)
     {
         return $fieldValue;
     }

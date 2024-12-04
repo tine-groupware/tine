@@ -29,7 +29,7 @@ class Tinebase_Model_Converter_HashPassword implements Tinebase_Model_Converter_
         return '';
     }
 
-    function convertToRecord($record, $fieldName, $blob)
+    public function convertToRecord($record, $fieldName, $blob)
     {
         return $blob;
     }

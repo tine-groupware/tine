@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -18,23 +19,25 @@
 
 class Tinebase_Scheduler_TaskConverter implements Tinebase_Model_Converter_Interface
 {
-
     /**
-     * @param string $blob
+     * @param Tinebase_Record_Interface $record
+     * @param string $key
+     * @param string|array $blob
      * @return Tinebase_Scheduler_Task
      */
-    function convertToRecord($record, $key, $blob)
+    public function convertToRecord($record, $key, $blob)
     {
-        $data = json_decode($blob, true);
-        return new Tinebase_Scheduler_Task($data ?: []);
+        $data = is_array($blob) ? $blob : json_decode($blob, true);
+        return new Tinebase_Scheduler_Task(is_array($data) ? $data : []);
     }
 
     /**
      * @param Tinebase_Scheduler_Task $fieldValue
      * @return string
      */
-    function convertToData($record, $key, $fieldValue)
+    public function convertToData($record, $key, $fieldValue)
     {
-        return json_encode($fieldValue ? $fieldValue->toArray() : []);
+        $value = $fieldValue ? (is_array($fieldValue) ? $fieldValue : $fieldValue->toArray()) : [];
+        return json_encode($value);
     }
 }
