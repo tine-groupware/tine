@@ -1,0 +1,12 @@
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+persistence:
+  storageClass: csi-cephfs-sc
+database:
+  username: tine
+  name: {{ .Values.instance }}
+  host: dev-db-mariadb
+redis:
+  host: dev-redis-master
+  prefix: {{ .Values.instance }}
