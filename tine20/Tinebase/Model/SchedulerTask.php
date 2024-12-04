@@ -1,4 +1,5 @@
 <?php
+
 /**
  * tine Groupware
  *
@@ -151,7 +152,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
             'server_time' => [
                 'type'          => 'virtual',
                 'config'        => ['type' => 'datetime'],
-                self::CONVERTERS=> [Tinebase_Model_Converter_DateTime::class],
+                self::CONVERTERS => [Tinebase_Model_Converter_DateTime::class],
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
@@ -179,7 +180,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
      *
      * @var Tinebase_ModelConfiguration
      */
-    protected static $_configurationObject = NULL;
+    protected static $_configurationObject = null;
 
     /**
      * @return bool

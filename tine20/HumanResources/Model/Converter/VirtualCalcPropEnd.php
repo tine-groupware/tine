@@ -26,7 +26,7 @@ class HumanResources_Model_Converter_VirtualCalcPropEnd implements Tinebase_Mode
      * @param mixed $blob
      * @return mixed
      */
-    function convertToRecord($record, $fieldName, $blob)
+    public function convertToRecord($record, $fieldName, $blob)
     {
         if ($record->{StreamModality::FLD_NUM_INTERVAL} && $record->{StreamModality::FLD_INTERVAL} && ($start = $record
                 ->{StreamModality::FLD_START})) {
@@ -36,7 +36,7 @@ class HumanResources_Model_Converter_VirtualCalcPropEnd implements Tinebase_Mode
         return $blob;
     }
 
-    function convertToData($record, $fieldName, $fieldValue)
+    public function convertToData($record, $fieldName, $fieldValue)
     {
         return $fieldValue;
     }

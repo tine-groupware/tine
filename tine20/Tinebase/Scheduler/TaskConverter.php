@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -24,7 +25,7 @@ class Tinebase_Scheduler_TaskConverter implements Tinebase_Model_Converter_Inter
      * @param string|array $blob
      * @return Tinebase_Scheduler_Task
      */
-    function convertToRecord($record, $key, $blob)
+    public function convertToRecord($record, $key, $blob)
     {
         $data = is_array($blob) ? $blob : json_decode($blob, true);
         return new Tinebase_Scheduler_Task(is_array($data) ? $data : []);
@@ -34,7 +35,7 @@ class Tinebase_Scheduler_TaskConverter implements Tinebase_Model_Converter_Inter
      * @param Tinebase_Scheduler_Task $fieldValue
      * @return string
      */
-    function convertToData($record, $key, $fieldValue)
+    public function convertToData($record, $key, $fieldValue)
     {
         $value = $fieldValue ? (is_array($fieldValue) ? $fieldValue : $fieldValue->toArray()) : [];
         return json_encode($value);

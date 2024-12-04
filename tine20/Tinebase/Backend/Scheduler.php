@@ -36,9 +36,11 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
      */
     public function hasTask($_name)
     {
-        $select = $this->_getSelect()->where($this->_db->quoteInto($this->_db->quoteIdentifier('name')
+        $select = $this->_getSelect()->where($this->_db->quoteInto(
+            $this->_db->quoteIdentifier('name')
             . ' = ?',
-            $_name));
+            $_name
+        ));
 
         $stmt = $this->_db->query($select);
         $result = !empty($stmt->fetchAll());
@@ -77,7 +79,8 @@ class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
         $select = $this->_getSelect()->where($this->_db->quoteIdentifier('next_run') . ' <= NOW() AND ' .
             $this->_db->quoteIdentifier('lock_id') . ' IS NULL AND ' .
             $this->_db->quoteIdentifier('active') . ' = 1')->order(new Zend_Db_Expr(
-                $this->_dbCommand->getRnd()))->limit(1);
+                $this->_dbCommand->getRnd()
+            ))->limit(1);
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
