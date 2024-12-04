@@ -1,0 +1,5 @@
+tine:
+  features:
+    document_preview:
+      active: true
+      previewServiceUrl: https://preview.tine20.net/v2/documentPreviewService

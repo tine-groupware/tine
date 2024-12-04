@@ -74,6 +74,20 @@ deploy-built-image-to-dockerhub:
   timeout: 20m
   interruptible: false
 
+release-image-to-mw-registry:
+  extends: .abstract_jobs.docker
+  stage: deploy
+  script:
+    - !reference [.lib, script]
+    - docker login -u "tine+gitlabci " -p "${REGISTRY_RZ1_METAWAYS_NET_PASSWORD}" "registry.rz1.metaways.net"
+    - docker_registry_release_image built registry.rz1.metaways.net/tine/tine false
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-image-to-mw-registry/
+      when: manual
+    - !reference [deploy-test-cloud, rules]
+  timeout: 20m
+  interruptible: false
+
 deploy-customer-image-to-registry:
   extends: .abstract_jobs.docker
   stage: deploy
@@ -265,3 +279,30 @@ update-version-check:
     - version_check_update
   rules:
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
+
+deploy-test-cloud:
+  image: ghcr.io/helmfile/helmfile:v0.162.0
+  stage: deploy
+  needs:
+    - release-image-to-mw-registry
+  before_script:
+    - apk add coreutils
+  script:
+    - !reference [.lib, script]
+    - test_cloud_deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud/
+      variables:
+        RELEASE_TYPE: nightly
+      when: manual
+    - if: $PIPELINE_TYPE =~ /deploy-test-cloud-nightly(,|$)/
+      variables:
+        RELEASE_TYPE: nightly
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
+      variables:
+        RELEASE_TYPE: be
+    - if: $PIPELINE_TYPE =~ /release-monthly(,|$)/
+      variables:
+        RELEASE_TYPE: monthly
+  timeout: 20m
+  interruptible: false
