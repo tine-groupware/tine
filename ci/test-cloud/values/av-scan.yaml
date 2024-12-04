@@ -1,0 +1,5 @@
+tine:
+  features:
+    av_scan:
+      active: false
+      avscanURL: tcp://clamav-shared.mws-hosting.net:3310
