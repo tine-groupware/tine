@@ -54,3 +54,4 @@ RUN if [ "COMPOSER_LOCK_REWRITE" == "true" ]; then \
         php ${TINE20ROOT}/scripts/packaging/composer/composerLockRewrite.php ${TINE20ROOT}/tine20/composer.lock satis.default.svc.cluster.local; \
     fi
 RUN cd ${TINE20ROOT}/tine20 && COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
+RUN rm -f /etc/crontabs/tine20
