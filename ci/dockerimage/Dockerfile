@@ -322,7 +322,8 @@ COPY --from=source-copy ${TINE20ROOT}/tine20/composer.json ${TINE20ROOT}/tine20/
 COPY --from=source-copy ${TINE20ROOT}/tine20/composer.lock ${TINE20ROOT}/tine20/composer.lock
 COPY --from=source-copy ${TINE20ROOT}/tine20/Tinebase/js/Locale/static ${TINE20ROOT}/tine20/Tinebase/js/Locale/static
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest -d ${TINE20ROOT}/tine20
-
+# delete cron jobs
+RUN echo '' | /bin/crontab -u tine20 -
 
 
 
