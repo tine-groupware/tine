@@ -77,13 +77,22 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param  string  $messageId
      * @param  array  $partIds
      */
-    protected function _downloadAttachments($messageId, $partIds = [])
+    protected function _downloadAttachments($messageId, $partIds = []): void
     {
         if (empty($partIds)) {
             return;
         }
 
-        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
+        try {
+            $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tenf->getMessage());
+            }
+            $this->_handleFailure(404);
+            return;
+        }
 
         // collect all parts and build zip for download
         $zip = new ZipArchive();
@@ -91,9 +100,12 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $opened = $zip->open($zipfilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
 
         if ($opened !== true) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not open zip ' . $zipfilename);
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not open zip ' . $zipfilename);
+            }
             $this->_handleFailure(404);
+            return;
         }
 
         foreach ($message['attachments'] as $attachment) {

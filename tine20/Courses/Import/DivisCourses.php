@@ -481,6 +481,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 'accountLastName' => $raw[1],
             ], true);
             $tmpUser->applyTwigTemplates();
+            $tmpUser->accountLoginName = $tmpUser->shortenUsername();
             $username = $tmpUser->accountLoginName;
 
             if (isset($this->uidnumbers[$uid])) {
@@ -630,6 +631,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             if ($updateAccount) {
 
                 $count = 1;
+                $account->accountLoginName = $account->shortenUsername();
                 $shortUsername = $account->shortenUsername(2);
                 while ($count < 100) {
                     try {
