@@ -919,11 +919,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         /*
         $config->set('Attr.EnableID', true);
         $config->set('Attr.ClassUseCDATA', true);
-        $config->set('CSS.AllowTricky', true);
         $config->set('Attr.ID.HTML5', TRUE);
         $config->set('AutoFormat.Linkify', TRUE);
         $config->set('Core.LexerImpl', 'DirectLex');
         */
+        $config->set('CSS.AllowTricky', true);
         $config->set('Cache.SerializerPath', $path);
         $config->set('URI.AllowedSchemes', array(
             'http' => true,
