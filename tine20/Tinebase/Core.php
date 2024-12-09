@@ -2562,14 +2562,19 @@ class Tinebase_Core
             self::setupBuildConstants();
         }
 
+        $env = $tinebaseConfig->{Tinebase_Config::SENTRY_ENVIRONMENT};
+        if ($env == 'AUTODETECT') {
+            $env = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT'
+                ? 'DEVELOPMENT'
+                : 'PRODUCTION';
+        }
+
         Sentry\init([
             'dsn' => $sentryServerUri,
             'max_breadcrumbs' => 50,
             'error_types' => Tinebase_Config::getInstance()->{Tinebase_Config::SENTRY_LOGLEVL},
             'release' => TINE20_CODENAME . ' ' . TINE20_PACKAGESTRING,
-            'environment' => defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT'
-                ? 'development'
-                : 'production',
+            'environment' => $env,
             'tags' => [
                 'php_version' => phpversion(),
                 'tine_url' => Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL) ?: 'unknown',
