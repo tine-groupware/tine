@@ -1231,11 +1231,18 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param Tinebase_DateTime $currentDate
      * @param Sales_Model_Contract $contract
      * @param boolean $merge
+     * @param boolean $checkUpdate
+     * @return array
      */
     public function createAutoInvoices(Tinebase_DateTime $currentDate = NULL, Sales_Model_Contract $contract = NULL, $merge = false, $checkUpdate = false)
     {
         if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
-            return false;
+            return [
+                'failures'       => 0,
+                'failures_count' => 0,
+                'created'        => 0,
+                'created_count'  => 0,
+            ];
         }
         
         if (!$currentDate) {
@@ -1956,11 +1963,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         return $mergedPdf;
     }
 
-    public function createAutoInvoicesTask() {
-        if ($this->createAutoInvoices(null, null, false, true)) {
-            return true;
-        } else {
+    public function createAutoInvoicesTask()
+    {
+        try {
+            $this->createAutoInvoices(checkUpdate: true);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
             return false;
         }
+
+        return true;
     }
 }
