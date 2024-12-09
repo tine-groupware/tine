@@ -438,7 +438,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const SENTRY_URI = 'sentryUri';
+    public const SENTRY_URI = 'sentryUri';
 
     /**
      * PHP error log level constant, like E_ALL, E_ERROR etc. E_ERROR | E_WARNING (error und warning),
@@ -448,7 +448,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const SENTRY_LOGLEVL = 'sentryLoglevel';
+    public const SENTRY_LOGLEVL = 'sentryLoglevel';
+
+    /**
+     * Sentry "environment" tag - default: AUTODETECT
+     *
+     * @var string
+     */
+    public const SENTRY_ENVIRONMENT = 'sentry_env';
 
     /**
      * configure if user account status data should be synced from sync backend, default no
@@ -2193,6 +2200,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => E_ALL,
         ],
+        self::SENTRY_ENVIRONMENT => array(
+            //_('Sentry Environment')
+            self::LABEL => 'Sentry Environment',
+            //_('One of: AUTODETECT, PRODUCTION, TEST, DEVELOPMENT')
+            self::DESCRIPTION => 'One of: AUTODETECT, PRODUCTION, TEST, DEVELOPMENT',
+            self::TYPE => 'string',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+            self::DEFAULT_STR => 'AUTODETECT',
+        ),
         self::STATUS_API_KEY => array(
             //_('API key to access status URI')
             self::LABEL => 'API key to access status URI',
