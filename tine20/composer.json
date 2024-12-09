@@ -34,6 +34,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/sddl-parser.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/OpenDocument.git"
     },
     {
@@ -147,6 +151,7 @@
     "symfony/http-client": "5.2 - 7",
     "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
+    "tine-groupware/sddl-parser": "0.0.2",
     "tine-groupware/ubl-invoice": "^0.1",
     "tine20/composerapploader": "1.0.*",
     "twig/cssinliner-extra": "^3.7",
