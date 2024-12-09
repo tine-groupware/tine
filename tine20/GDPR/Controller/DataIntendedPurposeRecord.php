@@ -242,7 +242,11 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         $assertAclUsage = $this->assertPublicUsage();
         $response = new \Laminas\Diactoros\Response();
         try {
-            $allDataIntendedPurposes = GDPR_Controller_DataIntendedPurpose::getInstance()->search();
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(GDPR_Model_DataIntendedPurpose::class, [
+                ['field' => GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE, 'operator' => 'equals', 'value' => false]
+            ]);
+            $allDataIntendedPurposes = GDPR_Controller_DataIntendedPurpose::getInstance()->search($filter);
+
             $expander = new Tinebase_Record_Expander(GDPR_Model_DataIntendedPurpose::class, [
                 Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                     GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
@@ -250,17 +254,18 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 ],
             ]);
             $expander->expand($allDataIntendedPurposes);
-            
-            $result = array_merge(Tinebase_Core::getCoreRegistryData(), [
-                'manageConsentPageExplainText'  => GDPR_Config::getInstance()->{GDPR_Config::MANAGE_CONSENT_PAGE_EXPLAIN_TEXT} ?? '',
-                'GDPR_default_lang'    => GDPR_Config::getInstance()->{GDPR_Config::LANGUAGES_AVAILABLE}->default,
-                'allDataIntendedPurposes'   =>  $allDataIntendedPurposes->toArray(),
-            ]);
+            $result = Tinebase_Core::getCoreRegistryData();
 
             if ($contactId && $contactId !== 'manageConsent') {
                 $contact = Addressbook_Controller_Contact::getInstance()->get($contactId, null, true, false, false);
                 if (isset($contact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME]) && $contact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] instanceof Tinebase_Record_RecordSet) {
-                    $contact->{GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME}->sort('agreeDate', 'DESC');
+                    $contactDips = $contact->{GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME}->sort('agreeDate', 'DESC');
+                    $dipIds = array_map(function ($dip) { return $dip->getId(); }, $contactDips->intendedPurpose);
+                    foreach ($allDataIntendedPurposes as $dataIntendedPurpose) {
+                        if ($dataIntendedPurpose->{GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_REGISTRATION} && !in_array($dataIntendedPurpose->getId(), $dipIds)) {
+                            $allDataIntendedPurposes->removeRecord($dataIntendedPurpose);
+                        }
+                    }
                 }
                 $user = Tinebase_Core::getUser();
                 $result = array_merge($result, [
@@ -268,6 +273,12 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                     'isCurrentUser'     => $user['accountId'] === $contact['account_id'],
                 ]);
             }
+
+            $result = array_merge($result, [
+                'manageConsentPageExplainText'  => GDPR_Config::getInstance()->{GDPR_Config::MANAGE_CONSENT_PAGE_EXPLAIN_TEXT} ?? '',
+                'GDPR_default_lang'    => GDPR_Config::getInstance()->{GDPR_Config::LANGUAGES_AVAILABLE}->default,
+                'allDataIntendedPurposes'   =>  $allDataIntendedPurposes->toArray(),
+            ]);
             $response->getBody()->write(json_encode($result));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);

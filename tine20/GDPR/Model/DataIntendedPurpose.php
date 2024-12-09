@@ -22,6 +22,8 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'DataIntendedPurpose';
     public const FLD_NAME = 'name';
     public const FLD_DESCRIPTION = 'description';
+    public const FLD_IS_SELF_REGISTRATION = 'is_self_registration';
+    public const FLD_IS_SELF_SERVICE = 'is_self_service';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -99,6 +101,24 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ]
+            ],
+            self::FLD_IS_SELF_REGISTRATION => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::NULLABLE => true,
+                self::LABEL => 'Hide from self registration', // _('Hide from self registration')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false
+                ],
+            ],
+            self::FLD_IS_SELF_SERVICE => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::NULLABLE => true,
+                self::LABEL => 'Hide from self service', // _('Hide from self service')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false
+                ],
             ],
         ]
     ];

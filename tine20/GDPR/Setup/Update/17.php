@@ -14,8 +14,16 @@
 class GDPR_Setup_Update_17 extends Setup_Update_Abstract
 {
     const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
+    const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
+
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE017_UPDATE001          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update001',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -27,5 +35,10 @@ class GDPR_Setup_Update_17 extends Setup_Update_Abstract
     public function update000()
     {
         $this->addApplicationUpdate(GDPR_Config::APP_NAME, '17.0', self::RELEASE017_UPDATE000);
+    }
+
+    public function update001()
+    {
+        $this->addApplicationUpdate(GDPR_Config::APP_NAME, '17.1', self::RELEASE017_UPDATE001);
     }
 }
