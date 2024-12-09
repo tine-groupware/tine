@@ -12894,6 +12894,34 @@
             "time": "2023-12-08T13:03:43+00:00"
         },
         {
+            "name": "tine-groupware/sddl-parser",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tine-groupware/sddl-parser.git",
+                "reference": "bf6eaf9ea094394f9c15fb4dd3ad0ccdff320ea4"
+            },
+            "require": {
+                "php": "8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tine\\SDDL_Parser\\": "src/"
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Mehrer",
+                    "email": "p.mehrer@metaways.de"
+                }
+            ],
+            "time": "2024-12-09T14:46:38+00:00"
+        },
+        {
             "name": "tine-groupware/ubl-common",
             "version": "0.1.3",
             "source": {
@@ -15693,5 +15721,5 @@
         "ext-xmlwriter": "8.1",
         "ext-zip": "8.1"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
