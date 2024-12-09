@@ -215,6 +215,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             ratiomode: 0
         });
         this.setValue(value);
+        this.fireEvent('uploadcomplete', this)
     },
     
     /**
