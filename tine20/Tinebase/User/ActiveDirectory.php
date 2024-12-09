@@ -5,9 +5,14 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
+
+use Tine\SDDL_Parser\ACE;
+use Tine\SDDL_Parser\GUID;
+use Tine\SDDL_Parser\SDDL;
+use Tine\SDDL_Parser\SID;
 
 /**
  * User Samba4 ldap backend
@@ -111,6 +116,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $this->_rowNameMapping['accountHomeDirectory'] = 'unixhomedirectory';
             $this->_rowNameMapping['accountLoginShell']    = 'loginshell';
         }
+
+        $this->_additionalLdapAttributesToFetch[] = 'ntsecuritydescriptor';
     }
     
     /**
@@ -164,6 +171,11 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
 
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
+
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}) {
+            $this->updateUserInSyncBackend($user);
+            $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
+        }
 
         return $user;
     }
@@ -557,8 +569,69 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $ldapData = array(
             'useraccountcontrol' => isset($_ldapEntry['useraccountcontrol']) ? $_ldapEntry['useraccountcontrol'][0] : self::NORMAL_ACCOUNT
         );
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}) {
-            $ldapData['useraccountcontrol'] |= self::PASSWD_CANT_CHANGE;
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}
+                && ($_ldapEntry['ntsecuritydescriptor'][0] ?? false)) {
+            try {
+                $sddl = SDDL::fromBytes($_ldapEntry['ntsecuritydescriptor'][0]);
+                $foundSelf = false;
+                $foundEveryone = false;
+                $setAceData = function(ACE\ObjectAccess $ace): void {
+                    $ace->setType(ACE::ACETYPE_ACCESS_DENIED_OBJECT);
+                    $ace->setAccessMask(ACE::ACCESS_MASK_ADS_RIGHT_DS_CONTROL_ACCESS);
+                    $ace->setInheritedObject(null);
+                    $ace->setFlags(0);
+                    $ace->setUniqueFlags(ACE::ACE_OBJECT_TYPE_PRESENT);
+                };
+
+                foreach ($sddl->getDACL()->getACEs() as $offset => $ace) {
+                    if ($ace instanceof ACE\ObjectAccess && $ace->getObject()?->getStringForm() === GUID::CHANGE_PASSWORD_GUID) {
+                        if ($ace->getSID()->getStringForm() === SID::SID_EVERYONE) {
+                            if ($foundEveryone) {
+                                $sddl->getDACL()->removeACE($offset);
+                            } else {
+                                $foundEveryone = true;
+                                $setAceData($ace);
+                            }
+                        } elseif ($ace->getSID()->getStringForm() === SID::SID_NT_AUTHORITY_SELF) {
+                            if ($foundSelf) {
+                                $sddl->getDACL()->removeACE($offset);
+                            } else {
+                                $foundSelf = true;
+                                $setAceData($ace);
+                            }
+                        }
+                    }
+                }
+
+                if (!$foundSelf) {
+                    $sddl->getDACL()->addACE(new ACE\ObjectAccess(
+                        binaryForm: '',
+                        flags: 0,
+                        type: ACE::ACETYPE_ACCESS_DENIED_OBJECT,
+                        accessMask: ACE::ACCESS_MASK_ADS_RIGHT_DS_CONTROL_ACCESS,
+                        uniqueFlags: ACE::ACE_OBJECT_TYPE_PRESENT,
+                        object: GUID::fromString(GUID::CHANGE_PASSWORD_GUID),
+                        inheritedObject: null,
+                        sid: SID::fromString(SID::SID_NT_AUTHORITY_SELF)
+                    ));
+                }
+                if (!$foundEveryone) {
+                    $sddl->getDACL()->addACE(new ACE\ObjectAccess(
+                        binaryForm: '',
+                        flags: 0,
+                        type: ACE::ACETYPE_ACCESS_DENIED_OBJECT,
+                        accessMask: ACE::ACCESS_MASK_ADS_RIGHT_DS_CONTROL_ACCESS,
+                        uniqueFlags:ACE::ACE_OBJECT_TYPE_PRESENT,
+                        object: GUID::fromString(GUID::CHANGE_PASSWORD_GUID),
+                        inheritedObject: null,
+                        sid: SID::fromString(SID::SID_EVERYONE)
+                    ));
+                }
+
+                $ldapData['ntsecuritydescriptor'] = $sddl->toBytes();
+            } catch (\Tine\SDDL_Parser\ParserException $e) {
+                Tinebase_Exception::log($e);
+            }
         }
 
         if (isset($_user->xprops()['uidnumber'])) {
