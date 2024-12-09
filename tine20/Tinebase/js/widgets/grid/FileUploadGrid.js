@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -76,7 +76,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
              */
             'filesSelected'
         );
-        
+
         this.i18nFileString = this.i18nFileString ? this.i18nFileString : i18n._('File');
 
         this.record = this.record || null;
@@ -102,7 +102,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.enableHdMenu = false;
 
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
-        
+
         this.on('rowcontextmenu', function (grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -138,7 +138,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
         return Tine.widgets.grid.FileUploadGrid.superclass.onDestroy.call(this);
     },
-    
+
     /**
      * bus notified about record changes
      */
@@ -200,7 +200,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} event
      */
     onRemove: async function (button, event) {
-    
+
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i += 1) {
             this.store.remove(selectedRows[i]);
@@ -218,7 +218,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} event
      */
     onPause: async function (button, event) {
-    
+
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i++) {
             var upload = await Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
@@ -236,7 +236,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} event
      */
     onResume: async function (button, event) {
-    
+
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i++) {
             var upload = await Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
@@ -405,7 +405,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 xhr.onload = function (e) {
 //                    attachment.set('type', xhr.response.type);
 //                    attachment.set('size', xhr.response.size);
-                    
+
                     const upload = new Ext.ux.file.Upload({
                         file: new File([xhr.response], name),
                         type: xhr.response.type,
@@ -414,7 +414,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     });
                     // work around chrome bug which dosn't take type from blob
                     upload.file.fileType = xhr.response.type;
-                    
+
                     upload.on('uploadfailure', me.onUploadFail, me);
                     upload.on('uploadcomplete', me.onUploadComplete, upload.fileRecord);
                     upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, me);
@@ -460,7 +460,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - it is not allowed to download record attachment without record id');
             return;
         }
-        this.downloadRecordAttachment(this.record.id, fileRow.get('id'));
+
+        Ext.ux.file.Download.start({ url: Tine.Filemanager.Model.Node.getDownloadUrl(fileRow)});
     },
 
     onSendByEmail: function (button, event) {
@@ -576,7 +577,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     id: Tine.Tinebase.uploadManager.generateUploadId(),
                     isFolder: false
                 });
-                
+
                 upload.on('uploadfailure', this.onUploadFail, this);
                 upload.on('uploadcomplete', this.onUploadComplete, upload.fileRecord);
                 upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
@@ -709,18 +710,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
 
         }
-    },
-
-    downloadRecordAttachment: function (recordId, id) {
-        new Ext.ux.file.Download({
-            params: {
-                method: 'Tinebase.downloadRecordAttachment',
-                requestType: 'HTTP',
-                nodeId: id,
-                recordId: recordId,
-                modelName: this.app.name + '_Model_' + this.editDialog.modelName
-            }
-        }).start();
     },
 
     downloadTempFile: function (id) {
