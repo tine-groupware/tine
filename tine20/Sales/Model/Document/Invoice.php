@@ -364,7 +364,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if ($this->{self::FLD_PROJECT_REFERENCE}) {
             $ublInvoice->setProjectReference([
                 (new \UBL21\Common\CommonAggregateComponents\ProjectReference())
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_ID}->number))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PROJECT_REFERENCE}))
             ]);
         }
         // BT-12: Contract reference
