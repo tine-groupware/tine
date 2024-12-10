@@ -103,7 +103,7 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
                 GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiSearchManageConsent', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-            $routeCollector->get('/manageConsent/{contactId}', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->get('/manageConsent[/{contactId}]', (new Tinebase_Expressive_RouteHandler(
                 GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetManageConsent', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
