@@ -826,6 +826,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Sales_Model_Invoice::class,
+            Sales_Model_Contract::class,
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.28', self::RELEASE017_UPDATE028);
