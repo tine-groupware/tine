@@ -46,6 +46,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE025 = __CLASS__ . '::update025';
     protected const RELEASE017_UPDATE026 = __CLASS__ . '::update026';
     protected const RELEASE017_UPDATE027 = __CLASS__ . '::update027';
+    protected const RELEASE017_UPDATE028 = __CLASS__ . '::update028';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -146,6 +147,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE027 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update027',
+            ],
+            self::RELEASE017_UPDATE028 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update028',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -472,7 +477,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         $numConf = Tinebase_Controller_NumberableConfig::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_NumberableConfig::class, [
-                [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Customer::class . '#number']
+                [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Customer::class],
+                [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_PROPERTY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'number']
             ]))->getFirstRecord();
 
         $numConf->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL} = 0;
@@ -814,5 +820,15 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.27', self::RELEASE017_UPDATE027);
+    }
+
+    public function update028(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Invoice::class,
+            Sales_Model_Contract::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.28', self::RELEASE017_UPDATE028);
     }
 }

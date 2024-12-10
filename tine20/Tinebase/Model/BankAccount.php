@@ -65,7 +65,8 @@ class Tinebase_Model_BankAccount extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
-                self::LABEL                 => 'Name' // _('Name')
+                self::LABEL                 => 'Name', // _('Name')
+                self::QUERY_FILTER              => true,
             ],
             self::FLD_IBAN         => [
                 self::TYPE                  => self::TYPE_STRING,
@@ -89,6 +90,7 @@ class Tinebase_Model_BankAccount extends Tinebase_Record_Abstract
                 self::TYPE                      => self::TYPE_FULLTEXT,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
+                self::QUERY_FILTER              => true,
             ],
         ]
     ];

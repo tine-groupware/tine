@@ -59,7 +59,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     createReversal: false,
 
     windowWidth: 800,
-    windowHeight: 700,
+    windowHeight: 750,
 
     displayNotes: true,
 
@@ -566,6 +566,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             readOnly: true,
                             name: 'customer'
                         }],[
+                            this.fieldManager('buyer_reference', { columnWidth: 0.5 }),
+                            this.fieldManager('purchase_order_reference', { columnWidth: 0.25 }),
+                            this.fieldManager('project_reference', { columnWidth: 0.25 })
+                        ],[
                             Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
                                 fieldLabel: this.app.i18n._('Billing Address'),
                                 name: 'address_id',

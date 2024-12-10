@@ -409,6 +409,27 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         $createdContact = Addressbook_Controller_Contact::getInstance()->create($contact);
         $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsent($createdContact->getId());
         $responseData = json_decode($response->getBody(), true);
-        static::assertEquals(2, sizeof($responseData['allDataIntendedPurposes']), 'expect to find 2 data intended purpose records for this contact');
+        $dipCount = $responseData['allDataIntendedPurposes'];
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(GDPR_Model_DataIntendedPurpose::class, [
+            ['field' => GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE, 'operator' => 'equals', 'value' => false]
+        ]);
+        $allDips = GDPR_Controller_DataIntendedPurpose::getInstance()->search($filter);
+        $expander = new Tinebase_Record_Expander(GDPR_Model_DataIntendedPurpose::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+            ],
+        ]);
+        $expander->expand($allDips);
+        $dataIntendedPurpose = $allDips->getFirstRecord();
+        $dataIntendedPurpose[GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE] = true;
+        $dataIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->update($dataIntendedPurpose);
+
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsent($createdContact->getId());
+        $responseData = json_decode($response->getBody(), true);
+        $dipCountNew = $responseData['allDataIntendedPurposes'];
+
+        static::assertEquals(count($dipCount), count($dipCountNew) + 1, 'dip with self service enabled should not be shown');
     }
 }

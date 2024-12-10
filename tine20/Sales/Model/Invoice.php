@@ -45,6 +45,10 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
     public const FLD_DEBITOR_ID = 'debitor_id';
     public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
 
+    public const FLD_BUYER_REFERENCE = 'buyer_reference'; // varchar 255
+    public const FLD_PURCHASE_ORDER_REFERENCE = 'purchase_order_reference';
+    public const FLD_PROJECT_REFERENCE = 'project_reference';
+
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -59,7 +63,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 11,
+        self::VERSION       => 12,
         'recordName'        => 'Invoice', // gettext('GENDER_Invoice')
         'recordsName'       => 'Invoices', // ngettext('Invoice', 'Invoices', n)
         'hasRelations'      => TRUE,
@@ -301,6 +305,28 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 self::NULLABLE              => true,
                 self::SHY                   => true,
+            ],
+            self::FLD_BUYER_REFERENCE        => [
+                self::LABEL                         => 'Buyer Reference', //_('Buyer Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+                self::SHY                           => true,
+            ],
+            self::FLD_PURCHASE_ORDER_REFERENCE  => [
+                self::LABEL                         => 'Purchase Order Reference', // _('Purchase Order Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_PROJECT_REFERENCE         => [
+                self::LABEL                         => 'Project Reference', // _('Project Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
             ],
         )
     );
