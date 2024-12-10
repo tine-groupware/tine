@@ -150,11 +150,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
         }
 
-        $loginEvent = new Tinebase_Event_User_Login();
-        $loginEvent->password = $password;
-        $loginEvent->user = $user;
-        Tinebase_Event::fireEvent($loginEvent);
-
         return true;
     }
 
@@ -772,7 +767,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                     }
                 }
                 break;
-
             case Tinebase_Event_User_Login::class:
                 if (($userCtrl = Tinebase_User::getInstance()) instanceof Tinebase_User_Interface_SyncAble
                         && Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}

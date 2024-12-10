@@ -449,6 +449,67 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'     => count($userRoles)
         );
         
+        
+        if (!empty($password) && isset($recordData['sms_phone_number'])) {
+            $smsAdapterConfigs = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}
+                ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS};
+
+            if (!$smsAdapterConfigs || count($smsAdapterConfigs) === 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' sms adapter configs is not found , skip sending new password message');
+            } else {
+                $smsAdapterConfig = $smsAdapterConfigs->getFirstRecord();
+                $smsAdapterConfig = $smsAdapterConfig->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG};
+
+                if (empty($smsAdapterConfig->getHttpClientConfig())) {
+                    $smsAdapterConfig->setHttpClientConfig([
+                        'adapter' => ($genericHttpAdapter = new Tinebase_ZendHttpClientAdapter())
+                    ]);
+
+                    $genericHttpAdapter->writeBodyCallBack = function($body) {
+                        $colorGreen = "\033[43m";
+                        $colorReset = "\033[0m";
+                        Tinebase_Core::getLogger()->warn($colorGreen . __METHOD__ . '::' . __LINE__ . ' sms request body: ' . $body . $colorReset . PHP_EOL);
+                    };
+                    $genericHttpAdapter->setResponse(new Zend_Http_Response(200, []));
+                }
+
+                $template = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_MESSAGE_TEMPLATES}->get(Tinebase_Config::SMS_TEMPLATE_NEW_PASSWORD);
+                $locale = Tinebase_Core::getLocale();
+                if (! $locale) {
+                    $locale = Tinebase_Translation::getLocale();
+                }
+                $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
+                    Tinebase_Twig::TWIG_LOADER =>
+                        new Tinebase_Twig_CallBackLoader(__METHOD__ . 'password', time() - 1, function () use ($template) {
+                            return $template;
+                        })
+                ]);
+                $message = $twig->load(__METHOD__ . 'password')->render([
+                    'instanceName'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+                    'password'  => $password,
+                ]);
+
+                $smsSendConfig = new Tinebase_Model_Sms_SendConfig([
+                    Tinebase_Model_Sms_SendConfig::FLD_MESSAGE => $message,
+                    Tinebase_Model_Sms_SendConfig::FLD_RECIPIENT_NUMBER => $recordData['sms_phone_number'],
+                    Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                    Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG => $smsAdapterConfig,
+                ]);
+
+                if (Tinebase_Sms::send($smsSendConfig)) {
+                    try {
+                        $result['sms'] = [
+                            $recordData['sms_phone_number']  => true,
+                        ];
+                    } catch (Zend_Session_Exception $zse) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage()) ;
+                    }
+                }
+            }
+        }
+        
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $result;

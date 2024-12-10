@@ -685,6 +685,8 @@ class Tinebase_Application
         );
         
         foreach ($dataToDelete as $dataType => $info) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . $dataType . ' for app'
+                . $_application->name . ' ...');
             switch ($dataType) {
                 case 'container':
                     $count = Tinebase_Container::getInstance()->dropContainerByApplicationId($_application->getId());
