@@ -321,6 +321,37 @@ class Admin_Controller_UserTest extends TestCase
             Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->getIdFromProperty('container_id'));
     }
 
+    public function testAddUserUpdateContact()
+    {
+        $userToCreate = TestCase::getTestUser();
+        $pw = Tinebase_Record_Abstract::generateUID(12);
+
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        
+        $newContact =  Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'n_given'           => 'foo',
+            'n_family'          => 'test',
+            'email'             => 'foo@tine20.org',
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
+        ]));
+        
+        $oldContactId = $user->contact_id;
+        $user->contact_id = $newContact->getId();
+        $user = Admin_Controller_User::getInstance()->update($user, $pw, $pw);
+        static::assertEquals($newContact->getId(), $user->contact_id);
+        
+        $oldContact = Addressbook_Controller_Contact::getInstance()->get($oldContactId);
+        static::assertEquals($oldContact->type, Addressbook_Model_Contact::CONTACTTYPE_CONTACT, 'old user contact should switch type to contact');
+
+        $newContact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
+        static::assertEquals($newContact->type, Addressbook_Model_Contact::CONTACTTYPE_USER, 'new user contact should switch type to user');
+        static::assertEquals($newContact->email, $user->accountEmailAddress, 'new contact email should be the same as user email');
+        static::assertEquals($newContact->n_fn, $user->accountFullName);
+        static::assertEquals($newContact->n_fileas, $user->accountDisplayName);
+
+    }
+
     public function testUpdateUserWithEmailButNoPassword()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
