@@ -267,7 +267,11 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             modelUnique: true,
             ref: '../../../../../customerPicker',
             fieldLabel: this.app.i18n._('Customer')
-        }], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
+        }], [
+            this.fieldManager('buyer_reference', { columnWidth: 0.5 }),
+            this.fieldManager('purchase_order_reference', { columnWidth: 0.25 }),
+            this.fieldManager('project_reference', { columnWidth: 0.25 })
+        ], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
                 fieldLabel: this.app.i18n._('Billing Address'),
                 name: 'billing_address_id',
                 ref: '../../../../../addressPicker',
