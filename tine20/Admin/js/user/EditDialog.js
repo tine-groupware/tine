@@ -54,7 +54,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     initComponent: function () {
-        const accountBackend = Tine.Tinebase.registry.get('accountBackend');
+        var accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend === 'Ldap' || accountBackend === 'ActiveDirectory');
 
         this.twingEnv = getTwingEnv();
@@ -62,7 +62,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
             loader.setTemplate(fieldName, template);
         }
-        this.hasSmsAdapters = Tine.Tinebase.registry.get('hasSmsAdapters');
 
         Tine.Admin.UserEditDialog.superclass.initComponent.call(this);
     },
@@ -135,13 +134,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.getForm().findField('personalFSQuota').setValue(xprops.personalFSQuota);
         }
 
-        this.defaultContainer = this.record.get('container_id');
-
-        if (this.hasSmsAdapters) {
-            const contact = this.record.get('contact_id');
-            this.loadSMSContactPhoneNumbers(contact);
-        }
-
         this.mustChangePasswordCheck()
 
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
@@ -167,17 +159,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         mustChangeField.disable()
 
         this.mustChangeTriggerPlugin.setVisible(true)
-    },
-
-
-    loadSMSContactPhoneNumbers(contact) {
-        const phoneFields = _.sortBy(_.filter(Tine.Addressbook.Model.Contact.getModelConfiguration().fields, (field) => {
-            return field?.specialType === 'Addressbook_Model_ContactProperties_Phone' && contact?.[field.fieldName];
-        }), (field) => {return _.get(field, 'uiconfig.sort')});
-        const mobilePhones = phoneFields.map((phoneField) => {
-            return [phoneField.fieldName, contact?.[phoneField.fieldName], `${contact?.[phoneField.fieldName]} [${phoneField.label}]`];
-        });
-        this.phoneCombo.store.loadData(mobilePhones);
     },
 
     /**
@@ -239,21 +220,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.set('password_must_change', this.record.get('password_must_change_actual'))
         }
 
-        let xprops = this.record.get('xprops');
-        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
-
-        const sendPwdViaSMS = this.getForm().findField('send_password_via_sms').getValue();
-        const smsPhoneNumber = this.getForm().findField('sms_phone_number').getValue();
-
-        if (sendPwdViaSMS && smsPhoneNumber) {
-            this.record.set('sms_phone_number', smsPhoneNumber);
-        }
-
+        var xprops = this.record.get('xprops');
         xprops = Ext.isObject(xprops) ? xprops : {};
         xprops.personalFSQuota = this.getForm().findField('personalFSQuota').getValue();
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
-
     },
     /**
      * need to unset localized datetime fields before saving
@@ -952,43 +923,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
             preserveElStyle: true
         })
-    
         this.saveInaddressbookFields = this.getSaveInAddessbookFields(this);
-        this.saveInaddressbookFields.push({
-            hideLabel: true,
-            xtype: 'checkbox',
-            boxLabel: this.app.i18n.gettext('Send password via SMS'),
-            hidden: !this.hasSmsAdapters,
-            disabled: true,
-            ctCls: 'admin-checkbox',
-            fieldClass: 'admin-checkbox-box',
-            name: 'send_password_via_sms',
-            listeners: {
-                scope: this,
-                check: function(cb, checked) {
-                    const checkbox = this.getForm().findField('sms_phone_number');
-                    checkbox.setDisabled(!checked);
-                }
-            }
-        },{
-            xtype: 'combo',
-            fieldLabel: this.app.i18n.gettext('Mobile Phone'),
-            name: 'sms_phone_number',
-            hidden: !this.hasSmsAdapters,
-            disabled: true,
-            ref: '../../../../../phoneCombo',
-            store: new Ext.data.ArrayStore({
-                idIndex: 0,
-                fields: ['name', 'value', 'display_value']
-            }),
-            mode: 'local',
-            triggerAction: 'all',
-            editable: true,
-            valueField: 'value',
-            displayField: 'display_value',
-            forceSelection: false,
-        });
-
         this.saveInaddressbookFields.push({
             hideLabel: true,
             xtype: 'checkbox',
@@ -1089,8 +1024,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 if (this.passwordConfirmWindow) {
                                     field.passwordsMatch = false;
                                 }
-                                const checkbox = this.getForm().findField('send_password_via_sms');
-                                if (checkbox) checkbox.setDisabled(false);
                             }
                         },
                         validateValue: function (value) {
@@ -1103,7 +1036,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         checkboxToggle: false,
                         columnWidth: 1,
                         layout: 'hfit',
-                        style: 'margin-bottom: 8px',
                         items: [this.MFAPanel]
                     }],  [{
                         vtype: 'email',
@@ -1120,7 +1052,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('OpenID'),
                         emptyText: '(' + this.app.i18n.gettext('Login name') + ')',
                         name: 'openid',
-                        columnWidth: 0.5,
+                        columnWidth: 0.5
                     }], [{
                         xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Primary group'),
@@ -1308,10 +1240,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     validateLoginName: function (value) {
         return value.match(/^[a-z\d._-]+$/i) !== null;
     },
-
+    
     getSaveInAddessbookFields(scope, hidden) {
         this.app = Tine.Tinebase.appMgr.get('Admin');
-
+        
         return [{
             xtype: 'combo',
             fieldLabel: this.app.i18n.gettext('Visibility'),
@@ -1327,17 +1259,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: scope,
                 select: function (combo, record) {
                     // disable container_id combo if hidden
-                    const hidden = record.data.field1 === 'hidden';
-                    const addressbookContainerCombo = scope.getForm().findField('container_id');
-                    addressbookContainerCombo.setDisabled(hidden);
+                    var addressbookContainerCombo = scope.getForm().findField('container_id');
+                    addressbookContainerCombo.setDisabled(record.data.field1 === 'hidden');
                     if (addressbookContainerCombo.getValue() === '') {
                         addressbookContainerCombo.setValue(null);
-                    }
-                    // disable container_id combo if hidden
-                    const addressbookContactCombo = scope.getForm().findField('contact_id');
-                    addressbookContactCombo.setDisabled(hidden);
-                    if (addressbookContactCombo.getValue() === '') {
-                        addressbookContactCombo.setValue(null);
                     }
                 }
             }
@@ -1354,18 +1279,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hidden: hidden ?? false,
             recordProxy: Tine.Admin.sharedAddressbookBackend,
             listeners: {
-                beforeselect: (combo, status, index) => {
-                    Ext.MessageBox.confirm(
-                        scope.app.i18n._('Confirm'),
-                        scope.app.i18n._('Do you want to move the contact to this addressbook?'),
-                        (btn) => {
-                            if (btn === 'yes') {
-                                combo.setValue(status.id);
-                            }
-                        },
-                    );
-                    return false;
-                },
                 specialkey: function(combo, e) {
                     if (e.getKey() == e.TAB && ! e.shiftKey) {
                         // move cursor to first input field (skip display fields)
@@ -1377,43 +1290,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 scope: scope
             }
-        }, {
-            xtype: 'addressbookcontactpicker',
-            disabled: scope.record.get('visibility') === 'hidden',
-            hidden: hidden ?? false,
-            name: 'contact_id',
-            filter: [{field: 'type', operator: 'equals', value: 'contact'}],
-            listeners: {
-                scope: scope,
-                beforeselect: (combo, status, index) => {
-                    const addressbookContainerCombo = scope.getForm().findField('container_id');
-                    const selectedContainer = addressbookContainerCombo.selectedRecord;
-
-                    let msg = scope.app.i18n._('The selected contact will be updated') + ` : <br><br><b>${status.data.n_fileas}</b><br>`
-                        + '<br>' + this.app.i18n.gettext('Saved in Addressbook') + ` : <b>${selectedContainer.data.name}</b><br>`;
-
-                    Ext.MessageBox.confirm(
-                        scope.app.i18n._('Confirm'),
-                        scope.app.i18n._(msg),
-                        (btn) => {
-                            if (btn === 'yes') {
-                                combo.setValue(status.id);
-                                if (scope.hasSmsAdapters) {
-                                    scope.loadSMSContactPhoneNumbers(status.data);
-                                }
-                            }
-                        },
-                    );
-                    return false;
-                },
-                select: (combo, status, index) => {
-                    if (scope.hasSmsAdapters && status === '') {
-                        scope.loadSMSContactPhoneNumbers('');
-                    }
-                },
-            }
-        }
-        ];
+        }];
     }
 });
 

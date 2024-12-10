@@ -129,7 +129,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
     },
 
     noteRenderer: function(note) {
-        const editDialog = this.findParentBy(function(c){return !!c.record}),
+        var editDialog = this.findParentBy(function(c){return !!c.record}),
             record = editDialog ? editDialog.record : {},
             recordClass = Tine.Tinebase.data.RecordMgr.get(this.record_model) || Tine.Tinebase.data.RecordMgr.get(this.app + '_Model_' + this.record_model),
             appName = recordClass.getMeta('appName'),
@@ -142,13 +142,14 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
-                const i18nLabel = field.label ? i18n._hidden(field.label) : field.name;
-                const renderer = Tine.widgets.grid.RendererManager.get(appName, recordClass, field.name, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
-                let regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + `) \\((.*?) (-&gt;) ([^)]*)\\)`);
-                let struct = regexp.exec(note);
-                let label = struct && struct.length === 5 ? struct[1] : null;
-                let oldValue = label ? struct[2] : null;
-                let newValue = label ? struct[4] : null;
+                var _ = window.lodash,
+                    i18nLabel = field.label ? i18n._hidden(field.label) : field.name,
+                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + `) \\((.*?) (-&gt;) ([^)]*)\\)`),
+                    struct = regexp.exec(note),
+                    label = struct && struct.length == 5 ? struct[1] : null,
+                    oldValue = label ? struct[2] : null,
+                    newValue = label ? struct[4] : null,
+                    renderer = Tine.widgets.grid.RendererManager.get(appName, recordClass, field.name, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
 
                 if (label) {
                     if (['record', 'records'].indexOf(_.get(field, 'fieldDefinition.type')) < 0) {
@@ -162,8 +163,8 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                     regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.[^)])\\)');
 
                     struct = regexp.exec(note);
-                    label = struct && struct.length === 3 ? struct[1] : null;
-                    const value = label ? struct[2] : null;
+                    label = struct && struct.length == 3 ? struct[1] : null;
+                    var value = label ? struct[2] : null;
 
                     note = note.replace(regexp, '<br> \u00A0\u2022\u00A0 ' + i18nLabel + ' (' + value + ')');
                 }

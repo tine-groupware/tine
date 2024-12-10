@@ -31,7 +31,11 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      *
      */
     const RELATION_TYPE_RESPONSIBLE = 'RESPONSIBLE';
-    
+
+    public const FLD_BUYER_REFERENCE = 'buyer_reference'; // varchar 255
+    public const FLD_PURCHASE_ORDER_REFERENCE = 'purchase_order_reference';
+    public const FLD_PROJECT_REFERENCE = 'project_reference';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -45,7 +49,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 11,
+        self::VERSION       => 12,
         'recordName'        => 'Contract', // gettext('GENDER_Contract')
         'recordsName'       => 'Contracts', // ngettext('Contract', 'Contracts', n)
         'hasRelations'      => TRUE,
@@ -214,6 +218,28 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     )
                 )
             ),
+            self::FLD_BUYER_REFERENCE        => [
+                self::LABEL                         => 'Buyer Reference', //_('Buyer Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+                self::SHY                           => true,
+            ],
+            self::FLD_PURCHASE_ORDER_REFERENCE  => [
+                self::LABEL                         => 'Purchase Order Reference', // _('Purchase Order Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_PROJECT_REFERENCE         => [
+                self::LABEL                         => 'Project Reference', // _('Project Reference')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+            ],
             'contact_external' => array(
                 'type' => 'virtual',
                 'config' => array(

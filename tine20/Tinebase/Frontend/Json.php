@@ -839,10 +839,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $smtpConfig = $manageSmtpEmailUser
             ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
             : [];
-        $smsAdapterConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS} ?? [];
-        if ($smsAdapterConfig instanceof Tinebase_Record_RecordSet) {
-            $smsAdapterConfig = $smsAdapterConfig->toArray();
-        }
+
         // be license class for setting some license registry data
         $license = Tinebase_License::getInstance();
 
@@ -869,7 +866,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
             'allowExternalEmail' => ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail,
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
-            'hasSmsAdapters'   => count($smsAdapterConfig) > 0,
         );
 
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
