@@ -222,6 +222,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         foreach ($this->_currentBillingContract->relations as $relation) {
             if ($relation->type == 'CUSTOMER' && $relation->related_model == 'Sales_Model_Customer') {
                 $this->_currentBillingCustomer = $relation->related_record;
+                Tinebase_Record_Expander::expandRecord($this->_currentBillingContract);
+                break;
             }
         }
 
@@ -1143,6 +1145,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         }
                     }
                 }
+
+                $debitor = $this->_currentBillingContract->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
+
                 // prepare invoice
                 $invoice = new Sales_Model_Invoice(array(
                     'is_auto'       => TRUE,
@@ -1157,6 +1162,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'positions'     => $invoicePositions->toArray(),
                     'date'          => clone $this->_currentMonthToBill,
                     'sales_tax'     => Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
+                    Sales_Model_Invoice::FLD_BUYER_REFERENCE => $debitor->{Sales_Model_Debitor::FLD_BUYER_REFERENCE},
                 ));
                 
                 $invoice->relations = $relations;
@@ -1512,13 +1518,16 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
                 Sales_Model_Document_Invoice::FLD_DEBITOR_ID => $debitor,
                 Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+                Sales_Model_Document_Invoice::FLD_CONTRACT_ID => $contract->number,
                 Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
                     $debitor->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
                 ),
                 // TODO FIXME do we have a FLD_CONTACT_ID?
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
                 Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
-                Sales_Model_Document_Invoice::FLD_BUYER_REFERENCE => $customer->number,
+                Sales_Model_Document_Invoice::FLD_BUYER_REFERENCE => $invoice->{Sales_Model_Invoice::FLD_BUYER_REFERENCE},
+                Sales_Model_Document_Invoice::FLD_PURCHASE_ORDER_REFERENCE => $invoice->{Sales_Model_Invoice::FLD_PURCHASE_ORDER_REFERENCE},
+                Sales_Model_Document_Invoice::FLD_PROJECT_REFERENCE => $invoice->{Sales_Model_Invoice::FLD_PROJECT_REFERENCE},
                 Sales_Model_Document_Invoice::FLD_POSITIONS => [
                     new Sales_Model_DocumentPosition_Invoice([
                         Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'Gesamtbetrag gem. Anlage',
@@ -1530,10 +1539,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     ], true),
                 ],
             ]);
-
-            if ($contract) {
-                $ublInvoice->{Sales_Model_Document_Invoice::FLD_CONTRACT_ID} = $contract;
-            }
 
             if (is_numeric($invoice->credit_term)) {
                 $ublInvoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS} = $invoice->credit_term;
