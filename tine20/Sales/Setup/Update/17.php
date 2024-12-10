@@ -472,7 +472,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         $numConf = Tinebase_Controller_NumberableConfig::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_NumberableConfig::class, [
-                [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Customer::class . '#number']
+                [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Customer::class],
+                [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_PROPERTY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'number']
             ]))->getFirstRecord();
 
         $numConf->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL} = 0;

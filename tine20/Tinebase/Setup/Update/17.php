@@ -383,6 +383,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
 
         $backend = Tinebase_Controller_NumberableConfig::getInstance()->getBackend();
+        if (!$this->_backend->tableExists($backend->getTableName())) {
+            $this->updateSchema(Tinebase_Config::APP_NAME, [
+                Tinebase_Model_NumberableConfig::class,
+            ]);
+        }
+
         $this->_db->query('UPDATE ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         $this->_db->query('DELETE FROM ' . $backend->getTablePrefix() . $backend->getTableName() . ' WHERE model = "MeetingManager_Model_Top" AND property = "decision_number"');
 
