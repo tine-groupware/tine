@@ -1,8 +1,8 @@
 // custom ext definition
 
 /* pkg: Ext Base (adapter/ext/ext-base.js)*/
-require('./src/core/core/Ext');
-require('./src/core/Ext-more');
+(typeof window !== "undefined" ? window : global)['Ext'] = require('./src/core/core/Ext');
+Object.assign(Ext, require('./src/core/Ext-more'));
 require('./src/util/core/TaskMgr');
 require('./src/adapter/ext-core');
 
@@ -12,8 +12,8 @@ require('./src/core/DomHelper-more');
 require('./src/core/core/Template');
 require('./src/core/Template-more');
 require('./src/core/core/DomQuery');
-require('./src/util/core/DelayedTask');
-require('./src/util/core/Observable');
+Ext.util.DelayedTask = require('./src/util/core/DelayedTask');
+Object.assign(Ext.util, require('./src/util/core/Observable'));
 require('./src/util/Observable-more');
 require('./src/core/core/EventManager');
 require('./src/core/EventManager-more');
@@ -40,9 +40,9 @@ require('./src/core/CompositeElement');
 require('./src/data/core/Connection');
 require('./src/util/UpdateManager');
 require('./src/util/Date');
-require('./src/util/MixedCollection');
+Ext.util.MixedCollection = require('./src/util/MixedCollection');
 require('./src/util/core/JSON');
-require('./src/util/Format');
+Ext.util.Format = require('./src/util/Format');
 require('./src/util/XTemplate');
 require('./src/util/CSS');
 require('./src/util/ClickRepeater');
@@ -50,7 +50,7 @@ require('./src/util/KeyNav');
 require('./src/util/KeyMap');
 require('./src/util/TextMetrics');
 require('./src/util/Cookies');
-require('./src/core/Error');
+Ext.Error = require('./src/core/Error');
 
 /* pkg: Component Foundation (pkgs/cmp-foundation.js)*/
 require('./src/widgets/ComponentMgr');
@@ -98,23 +98,23 @@ require('./src/core/Element.dd');
 
 /* pkg: Data Foundation (pkgs/data-foundation.js)*/
 require('./src/data/Api');
-require('./src/data/SortTypes');
-require('./src/data/Record');
+Ext.data.SortTypes = require('./src/data/SortTypes');
+Ext.data.Record = require('./src/data/Record');
 require('./src/data/StoreMgr');
 require('./src/data/Store');
-require('./src/data/DataField');
-require('./src/data/DataReader');
+Ext.data.Field = require('./src/data/DataField');
+Ext.data.DataReader = require('./src/data/DataReader');
 require('./src/data/DataWriter');
 require('./src/data/DataProxy');
 require('./src/data/Request');
-require('./src/data/Response');
+Ext.data.Response = require('./src/data/Response');
 require('./src/data/ScriptTagProxy');
 require('./src/data/HttpProxy');
 require('./src/data/MemoryProxy');
 
 /* pkg: Data - Json (pkgs/data-json.js)*/
 require('./src/data/JsonWriter');
-require('./src/data/JsonReader');
+Ext.data.JsonReader = require('./src/data/JsonReader');
 require('./src/data/ArrayReader');
 require('./src/data/ArrayStore');
 require('./src/data/JsonStore');

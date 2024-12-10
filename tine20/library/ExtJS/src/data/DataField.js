@@ -4,6 +4,11 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+const { apply, isDate } = require("Ext/core/core/Ext");
+const SortTypes = require("Ext/data/SortTypes");
+const isObject = require("lodash/isObject");
+
 /**
  * @class Ext.data.Field
  * <p>This class encapsulates the field definition information specified in the field definition objects
@@ -11,17 +16,17 @@
  * <p>Developers do not need to instantiate this class. Instances are created by {@link Ext.data.Record.create}
  * and cached in the {@link Ext.data.Record#fields fields} property of the created Record constructor's <b>prototype.</b></p>
  */
-Ext.data.Field = function(config){
+const Field = function(config){
     if(typeof config == "string"){
         config = {name: config};
     }
-    Ext.apply(this, config);
+    apply(this, config);
 
     if(!this.type){
         this.type = "auto";
     }
 
-    var st = Ext.data.SortTypes;
+    var st = SortTypes;
     // named sortTypes are supported, here we look them up
     if(typeof this.sortType == "string"){
         this.sortType = st[this.sortType];
@@ -55,7 +60,7 @@ Ext.data.Field = function(config){
                 cv = function(v){ return v; };
                 break;
             case "string":
-                cv = function(v){ return (v === undefined || v === null) ? '' : (_.isObject(v) ? JSON.stringify(v) : String(v)); };
+                cv = function(v){ return (v === undefined || v === null) ? '' : (isObject(v) ? JSON.stringify(v) : String(v)); };
                 break;
             case "int":
                 cv = function(v){
@@ -73,7 +78,7 @@ Ext.data.Field = function(config){
                 cv = function(v){ return v === true || v === "true" || v == 1; };
                 break;
             case "date":
-                cv = function(v){
+                var c1 = function(v){
                     if(!v){
                         return '';
                     }
@@ -83,7 +88,7 @@ Ext.data.Field = function(config){
                     if (v === 'CURRENT_TIME') {
                         return new Date().clearTime();
                     }
-                    if(Ext.isDate(v)){
+                    if(isDate(v)){
                         return v;
                     }
                     if(dateFormat){
@@ -98,6 +103,15 @@ Ext.data.Field = function(config){
                     var parsed = Date.parse(v);
                     return parsed ? new Date(parsed) : null;
                 };
+                cv = function(v) {
+                    var d = c1(v);
+                    if (isDate(d)) {
+                        d.toJSON = function() {
+                            return this.format(config.dateFormat);
+                        }
+                    }
+                    return d;
+                };
                 break;
             default:
                 cv = function(v){ return v; };
@@ -108,7 +122,7 @@ Ext.data.Field = function(config){
     }
 };
 
-Ext.data.Field.prototype = {
+Field.prototype = {
     /**
      * @cfg {String} name
      * The name by which the field is referenced within the Record. This is referenced by, for example,
@@ -255,3 +269,5 @@ sortType: function(value) {
      */
     allowBlank : true
 };
+
+module.exports = Field;

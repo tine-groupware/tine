@@ -5,8 +5,7 @@
  * http://www.extjs.com/license
  */
 
-// for old browsers
-window.undefined = window.undefined;
+const isFunction = require("lodash/isFunction")
 
 /**
  * @class Ext
@@ -14,7 +13,7 @@ window.undefined = window.undefined;
  * @singleton
  */
 
-Ext = {
+const Ext = {
     /**
      * The version of the framework
      * @type String
@@ -44,14 +43,16 @@ Ext.apply = function(o, c, defaults){
 };
 
 (function(){
-    var idSeed = 0,
+    var DOC = typeof document !== 'undefined' ? document : {},
+        NAV = typeof navigator !== 'undefined' ? navigator : { userAgent: 'other' },
+        WIN = typeof window !== 'undefined' ? window : { location: '', matchMedia: () => { return '' } },
+        idSeed = 0,
         toString = Object.prototype.toString,
-        ua = navigator.userAgent.toLowerCase(),
+        ua = NAV.userAgent.toLowerCase(),
         check = function(r){
             return r.test(ua);
         },
-        docMode = document.documentMode,
-        DOC = document,
+        docMode = DOC.documentMode,
         isStrict = DOC.compatMode == "CSS1Compat",
         isOpera = check(/opera/),
         isChrome = check(/\bchrome\b/),
@@ -76,17 +77,17 @@ Ext.apply = function(o, c, defaults){
         isMac = check(/macintosh|mac os x/),
         isAir = check(/adobeair/),
         isLinux = check(/linux/),
-        isSecure = /^https/i.test(window.location.protocol),
-        isIOS = check(/iphone/) || /* iPadOS pre v13 */ check(/ipad/) || (isMac && navigator.maxTouchPoints && navigator.maxTouchPoints > 2),
+        isSecure = /^https/i.test(WIN.location.protocol),
+        isIOS = check(/iphone/) || /* iPadOS pre v13 */ check(/ipad/) || (isMac && NAV.maxTouchPoints && NAV.maxTouchPoints > 2),
         isAndroid = check(/android/),
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
-            'ontouchstart' in window        // works on most browsers
-            || navigator.maxTouchPoints,    // works on IE10/11 and Surface
+            'ontouchstart' in WIN     // works on most browsers
+            || NAV.maxTouchPoints,    // works on IE10/11 and Surface
         isWebApp =
             // @see https://stackoverflow.com/questions/17989777/detect-if-ios-is-using-webapp/40932301#40932301
-            (window.navigator.standalone == true)                           // iOS safari
-            || (window.matchMedia('(display-mode: standalone)').matches),   // android chrome
+            (NAV.standalone == true)                                              // iOS safari
+            || (WIN.matchMedia('(display-mode: standalone)').matches),   // android chrome
         // NOTE: some browsers require user interaction (like click events)
         //       for focus to work (e.g. iOS dosn't show keyborad)
         supportsUserFocus = ! (isTouchDevice && !isWebApp),
@@ -327,10 +328,11 @@ Company.data.CustomStore = function(config) { ... }
          * @method namespace
          */
         namespace : function(){
-            var o, d;
+            var o, d, scope = (typeof window !== "undefined" ? window : global);
             Ext.each(arguments, function(v) {
                 d = v.split(".");
-                o = window[d[0]] = window[d[0]] || {};
+                o = d[0] === 'Ext' ? Ext : scope[d[0]]; // use 'interna' Ext we create and export here
+                if (!o) return; // don't polute global namspace if no one else did
                 Ext.each(d.slice(1), function(v2){
                     o = o[v2] = o[v2] || {};
                 });
@@ -426,17 +428,11 @@ Ext.urlDecode("foo=1&bar=2&bar=3&bar=4", false); // returns {foo: "1", bar: ["2"
          }(),
 
         isIterable : function(v){
-            //check for array or arguments
-            if(Ext.isArray(v) || v.callee){
-                return true;
+            // checks for null and undefined
+            if (v == null) {
+                return false;
             }
-            //check for node list type
-            if(/NodeList|HTMLCollection/.test(toString.call(v))){
-                return true;
-            }
-            //NodeList has an item and length property
-            //IXMLDOMNodeList has nextNode method, needs to be checked first.
-            return ((typeof v.nextNode != 'undefined' || v.item) && Ext.isNumber(v.length));
+            return typeof v[Symbol.iterator] === 'function';
         },
 
         /**
@@ -656,9 +652,7 @@ function(el){
          * @param {Mixed} value The value to test
          * @return {Boolean}
          */
-        isFunction : function(v){
-            return _.isFunction(v); // cope with async functions
-        },
+        isFunction,
 
         /**
          * Returns true if the passed value is a number. Returns false for non-finite numbers.
@@ -1060,3 +1054,36 @@ Ext.applyIf(Array.prototype, {
         return this;
     }
 });
+
+// NOTE: we can't use export / import syntax as es6 modules require strict mode and this code can't cope with it
+module.exports = Ext
+/*
+export const apply = Ext.apply;
+export const applyIf = Ext.applyIf;
+export const id = Ext.id;
+export const extend = Ext.extend;
+export const override = Ext.override;
+export const namespace = Ext.namespace;
+export const urlEncode = Ext.urlEncode;
+export const urlDecode = Ext.urlDecode;
+export const urlAppend = Ext.urlAppend;
+export const toArray = Ext.toArray;
+export const isIterable = Ext.isIterable;
+export const each = Ext.each;
+export const iterate = Ext.iterate;
+// export const getDom = Ext.getDom;
+// export const getBody = Ext.getBody;
+// export const removeNode = Ext.removeNode;
+export const isEmpty = Ext.isEmpty;
+export const isArray = Ext.isArray;
+export const isDate = Ext.isDate;
+export const isObject = Ext.isObject;
+export const isPrimitive = Ext.isPrimitive;
+export const isFunction = Ext.isFunction;
+export const isNumber = Ext.isNumber;
+export const isString = Ext.isString;
+export const isBoolean = Ext.isBoolean;
+export const isElement = Ext.isElement;
+export const isDefined = Ext.isDefined;
+export const ns = Ext.ns;
+*/

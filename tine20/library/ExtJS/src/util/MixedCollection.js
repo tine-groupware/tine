@@ -4,6 +4,14 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+const { extend, isArray, isFunction, isEmpty } = require("Ext/core/core/Ext");
+const { Observable } = require("Ext/util/core/Observable");
+const { escapeRe } = require("Ext/core/Ext-more");
+const cloneDeep = require("lodash/cloneDeep");
+
+
+
 /**
  * @class Ext.util.MixedCollection
  * @extends Ext.util.Observable
@@ -17,7 +25,7 @@
  * were passed without an explicit key parameter to a MixedCollection method.  Passing this parameter is
  * equivalent to providing an implementation for the {@link #getKey} method.
  */
-Ext.util.MixedCollection = function(allowFunctions, keyFn, returnClones){
+const MixedCollection = function(allowFunctions, keyFn, returnClones){
     this.items = [];
     this.map = {};
     this.keys = [];
@@ -58,10 +66,10 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn, returnClones){
     if(keyFn){
         this.getKey = keyFn;
     }
-    Ext.util.MixedCollection.superclass.constructor.call(this);
+    MixedCollection.superclass.constructor.call(this);
 };
 
-Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
+extend(MixedCollection, Observable, {
 
     /**
      * @cfg {Boolean} allowFunctions Specify <tt>true</tt> if the {@link #addAll}
@@ -81,7 +89,7 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
     },
     
     getAll: function() {
-        return this.returnClones ? _.cloneDeep(this.map) : this.map;
+        return this.returnClones ? cloneDeep(this.map) : this.map;
     },
 
     /**
@@ -187,7 +195,7 @@ mc.add(otherEl);
      * @param suppressEvent
      */
     addAll : function(objs, suppressEvent){
-        if(arguments.length > 2 || Ext.isArray(objs)){
+        if(arguments.length > 2 || isArray(objs)){
             var args = arguments.length > 1 ? arguments : objs;
             for(var i = 0, len = args.length; i < len; i++){
                 this.add(args[i]);
@@ -355,10 +363,10 @@ mc.add(otherEl);
     item : function(key){
         var mk = this.map[key],
             item = mk !== undefined ? mk : (typeof key == 'number') ? this.items[key] : undefined;
-        if (this.returnClones && !Ext.isFunction(item)) {
-            item = _.cloneDeep(item);
+        if (this.returnClones && !isFunction(item)) {
+            item = cloneDeep(item);
         }
-        return !Ext.isFunction(item) || this.allowFunctions ? item : null; // for prototype!
+        return !isFunction(item) || this.allowFunctions ? item : null; // for prototype!
     },
 
     /**
@@ -368,8 +376,8 @@ mc.add(otherEl);
      */
     itemAt : function(index){
         let item = this.items[index];
-        if (this.returnClones && !Ext.isFunction(item)) {
-            item = _.cloneDeep(item);
+        if (this.returnClones && !isFunction(item)) {
+            item = cloneDeep(item);
         }
         return item;
     },
@@ -418,8 +426,8 @@ mc.add(otherEl);
      */
     first : function(){
         let item = this.items[0];
-        if (this.returnClones && !Ext.isFunction(item)) {
-            item = _.cloneDeep(item);
+        if (this.returnClones && !isFunction(item)) {
+            item = cloneDeep(item);
         }
         return item;
 
@@ -431,8 +439,8 @@ mc.add(otherEl);
      */
     last : function(){
         let item = this.items[this.length-1];
-        if (this.returnClones && !Ext.isFunction(item)) {
-            item = _.cloneDeep(item);
+        if (this.returnClones && !isFunction(item)) {
+            item = cloneDeep(item);
         }
         return item;
     },
@@ -517,7 +525,7 @@ mc.add(otherEl);
             }
         }
         if (this.returnClones) {
-            r = _.cloneDeep(r);
+            r = cloneDeep(r);
         }
         return r;
     },
@@ -533,7 +541,7 @@ mc.add(otherEl);
      * @return {MixedCollection} The new filtered collection
      */
     filter : function(property, value, anyMatch, caseSensitive){
-        if(Ext.isEmpty(value, false)){
+        if(isEmpty(value, false)){
             return this.clone();
         }
         value = this.createValueMatcher(value, anyMatch, caseSensitive);
@@ -551,7 +559,7 @@ mc.add(otherEl);
      * @return {MixedCollection} The new filtered collection
      */
     filterBy : function(fn, scope){
-        var r = new Ext.util.MixedCollection();
+        var r = new MixedCollection();
         r.getKey = this.getKey;
         var k = this.keys, it = this.items;
         for(var i = 0, len = it.length; i < len; i++){
@@ -560,7 +568,7 @@ mc.add(otherEl);
             }
         }
         if (this.returnClones) {
-            r = _.cloneDeep(r);
+            r = cloneDeep(r);
         }
         return r;
     },
@@ -576,7 +584,7 @@ mc.add(otherEl);
      * @return {Number} The matched index or -1
      */
     findIndex : function(property, value, start, anyMatch, caseSensitive){
-        if(Ext.isEmpty(value, false)){
+        if(isEmpty(value, false)){
             return -1;
         }
         value = this.createValueMatcher(value, anyMatch, caseSensitive);
@@ -606,7 +614,7 @@ mc.add(otherEl);
     // private
     createValueMatcher : function(value, anyMatch, caseSensitive, exactMatch) {
         if (!value.exec) { // not a regex
-            var er = Ext.escapeRe;
+            var er = escapeRe;
             value = String(value);
             if (anyMatch === true) {
                 value = er(value);
@@ -626,7 +634,7 @@ mc.add(otherEl);
      * @return {MixedCollection}
      */
     clone : function(){
-        var r = new Ext.util.MixedCollection();
+        var r = new MixedCollection();
         var k = this.keys, it = this.items;
         for(var i = 0, len = it.length; i < len; i++){
             r.add(k[i], it[i]);
@@ -645,4 +653,6 @@ mc.add(otherEl);
  * not found, returns <tt>undefined</tt>. If an item was found, but is a Class,
  * returns <tt>null</tt>.
  */
-Ext.util.MixedCollection.prototype.get = Ext.util.MixedCollection.prototype.item;
+MixedCollection.prototype.get = MixedCollection.prototype.item;
+
+module.exports = MixedCollection

@@ -4,14 +4,10 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-(function(){
 
-var EXTUTIL = Ext.util,
-    TOARRAY = Ext.toArray,
-    EACH = Ext.each,
-    ISOBJECT = Ext.isObject,
-    TRUE = true,
-    FALSE = false;
+const { toArray, each, isObject, isString, applyIf, isFunction, isBoolean } = require("Ext/core/core/Ext");
+const DelayedTask = require("Ext/util/core/DelayedTask");
+
 /**
  * @class Ext.util.Observable
  * Base class that provides a common interface for publishing events. Subclasses are expected to
@@ -48,7 +44,7 @@ var newEmployee = new Employee({
 });
 </code></pre>
  */
-EXTUTIL.Observable = function(){
+const Observable = function(){
     /**
      * @cfg {Object} listeners (optional) <p>A config object containing one or more event handlers to be added to this
      * object during initialization.  This should be a valid listeners config object as specified in the
@@ -116,7 +112,7 @@ var combo = new Ext.form.ComboBox({
     me.events = e || {};
 };
 
-EXTUTIL.Observable.prototype = {
+Observable.prototype = {
     // private
     filterOptRe : /^(?:scope|delay|buffer|single)$/,
 
@@ -129,32 +125,32 @@ EXTUTIL.Observable.prototype = {
      * @return {Boolean} returns false if any of the handlers return false otherwise it returns true.
      */
     fireEvent : function(){
-        var a = TOARRAY(arguments),
+        var a = toArray(arguments),
             ename = a[0].toLowerCase(),
             me = this,
-            ret = TRUE,
+            ret = true,
             ce = me.events[ename],
             q,
             c;
-        if (me.eventsSuspended === TRUE) {
+        if (me.eventsSuspended === true) {
             if (q = me.eventQueue) {
                 q.push(a);
             }
         }
-        else if(ISOBJECT(ce) && ce.bubble){
-            if(ce.fire.apply(ce, a.slice(1)) === FALSE) {
-                return FALSE;
+        else if(isObject(ce) && ce.bubble){
+            if(ce.fire.apply(ce, a.slice(1)) === false) {
+                return false;
             }
             c = me.getBubbleTarget && me.getBubbleTarget();
             if(c && c.enableBubble) {
-                if(!c.events[ename] || !Ext.isObject(c.events[ename]) || !c.events[ename].bubble) {
+                if(!c.events[ename] || !isObject(c.events[ename]) || !c.events[ename].bubble) {
                     c.enableBubble(ename);
                 }
                 return c.fireEvent.apply(c, a);
             }
         }
         else {
-            if (ISOBJECT(ce)) {
+            if (isObject(ce)) {
                 a.shift();
                 ret = ce.fire.apply(ce, a);
             }
@@ -167,7 +163,7 @@ EXTUTIL.Observable.prototype = {
         ce.isAsync = true;
         const r = this.fireEvent.apply(this, arguments);
         ce.isAsync = false;
-        return !r || r === true ? Promise.resolve() : (Ext.isFunction(r.then) ? r : Promise.reject());
+        return !r || r === true ? Promise.resolve() : (isFunction(r.then) ? r : Promise.reject());
     },
     
     /**
@@ -235,7 +231,7 @@ myGridPanel.on({
             oe,
             isF,
         ce;
-        if (ISOBJECT(eventName)) {
+        if (isObject(eventName)) {
             o = eventName;
             for (e in o){
                 oe = o[e];
@@ -245,11 +241,11 @@ myGridPanel.on({
             }
         } else {
             eventName = eventName.toLowerCase();
-            ce = me.events[eventName] || TRUE;
-            if (Ext.isBoolean(ce)) {
-                me.events[eventName] = ce = new EXTUTIL.Event(me, eventName);
+            ce = me.events[eventName] || true;
+            if (isBoolean(ce)) {
+                me.events[eventName] = ce = new Event(me, eventName);
             }
-            ce.addListener(fn, scope, ISOBJECT(o) ? o : {});
+            ce.addListener(fn, scope, isObject(o) ? o : {});
         }
     },
 
@@ -261,7 +257,7 @@ myGridPanel.on({
      */
     removeListener : function(eventName, fn, scope){
         var ce = this.events[eventName.toLowerCase()];
-        if (ISOBJECT(ce)) {
+        if (isObject(ce)) {
             ce.removeListener(fn, scope);
         }
     },
@@ -275,7 +271,7 @@ myGridPanel.on({
             key;
         for(key in events){
             evt = events[key];
-            if(ISOBJECT(evt)){
+            if(isObject(evt)){
                 evt.clearListeners();
             }
         }
@@ -293,14 +289,14 @@ this.addEvents('storeloaded', 'storecleared');
     addEvents : function(o){
         var me = this;
         me.events = me.events || {};
-        if (Ext.isString(o)) {
+        if (isString(o)) {
             var a = arguments,
                 i = a.length;
             while(i--) {
-                me.events[a[i]] = me.events[a[i]] || TRUE;
+                me.events[a[i]] = me.events[a[i]] || true;
             }
         } else {
-            Ext.applyIf(me.events, o);
+            applyIf(me.events, o);
         }
     },
 
@@ -311,7 +307,7 @@ this.addEvents('storeloaded', 'storecleared');
      */
     hasListener : function(eventName){
         var e = this.events[eventName];
-        return ISOBJECT(e) && e.listeners.length > 0;
+        return isObject(e) && e.listeners.length > 0;
     },
 
     /**
@@ -320,7 +316,7 @@ this.addEvents('storeloaded', 'storecleared');
      * after the {@link #resumeEvents} call instead of discarding all suspended events;
      */
     suspendEvents : function(queueSuspended){
-        this.eventsSuspended = TRUE;
+        this.eventsSuspended = true;
         if(queueSuspended && !this.eventQueue){
             this.eventQueue = [];
         }
@@ -334,15 +330,14 @@ this.addEvents('storeloaded', 'storecleared');
     resumeEvents : function(){
         var me = this,
             queued = me.eventQueue || [];
-        me.eventsSuspended = FALSE;
+        me.eventsSuspended = false;
         delete me.eventQueue;
-        EACH(queued, function(e) {
+        each(queued, function(e) {
             me.fireEvent.apply(me, e);
         });
     }
 };
 
-var OBSERVABLE = EXTUTIL.Observable.prototype;
 /**
  * Appends an event handler to this object (shorthand for {@link #addListener}.)
  * @param {String}   eventName     The type of event to listen for
@@ -352,7 +347,7 @@ var OBSERVABLE = EXTUTIL.Observable.prototype;
  * @param {Object}   options       (optional) An object containing handler configuration.
  * @method
  */
-OBSERVABLE.on = OBSERVABLE.addListener;
+Observable.prototype.on = Observable.prototype.addListener;
 /**
  * Removes an event handler (shorthand for {@link #removeListener}.)
  * @param {String}   eventName     The type of event the handler was associated with.
@@ -360,29 +355,29 @@ OBSERVABLE.on = OBSERVABLE.addListener;
  * @param {Object}   scope         (optional) The scope originally specified for the handler.
  * @method
  */
-OBSERVABLE.un = OBSERVABLE.removeListener;
+Observable.prototype.un = Observable.prototype.removeListener;
 
 /**
  * Removes <b>all</b> added captures from the Observable.
  * @param {Observable} o The Observable to release
  * @static
  */
-EXTUTIL.Observable.releaseCapture = function(o){
-    o.fireEvent = OBSERVABLE.fireEvent;
+Observable.releaseCapture = function(o){
+    o.fireEvent = Observable.prototype.fireEvent;
 };
 
 function createTargeted(h, o, scope){
     return function(){
         if(o.target == arguments[0]){
-            h.apply(scope, TOARRAY(arguments));
+            h.apply(scope, toArray(arguments));
         }
     };
 };
 
 function createBuffered(h, o, l, scope){
-    l.task = new EXTUTIL.DelayedTask();
+    l.task = new DelayedTask();
     return function(){
-        l.task.delay(o.buffer, h, scope, TOARRAY(arguments));
+        l.task.delay(o.buffer, h, scope, toArray(arguments));
     };
 };
 
@@ -395,23 +390,23 @@ function createSingle(h, e, fn, scope){
 
 function createDelayed(h, o, l, scope){
     return function(){
-        var task = new EXTUTIL.DelayedTask();
+        var task = new DelayedTask();
         if(!l.tasks) {
             l.tasks = [];
         }
         l.tasks.push(task);
-        task.delay(o.delay || 10, h, scope, TOARRAY(arguments));
+        task.delay(o.delay || 10, h, scope, toArray(arguments));
     };
 };
 
-EXTUTIL.Event = function(obj, name){
+const Event = function(obj, name){
     this.name = name;
     this.obj = obj;
     this.listeners = [];
     this.isAsync = false;
 };
 
-EXTUTIL.Event.prototype = {
+Event.prototype = {
     addListener : function(fn, scope, options){
         var me = this,
             l;
@@ -474,7 +469,7 @@ EXTUTIL.Event.prototype = {
             l,
             k,
             me = this,
-            ret = FALSE;
+            ret = false;
         if((index = me.findListener(fn, scope)) != -1){
             if (me.firing) {
                 me.listeners = me.listeners.slice(0);
@@ -492,7 +487,7 @@ EXTUTIL.Event.prototype = {
                 delete l.tasks;
             }
             me.listeners.splice(index, 1);
-            ret = TRUE;
+            ret = true;
         }
         return ret;
     },
@@ -511,31 +506,31 @@ EXTUTIL.Event.prototype = {
         if (this.isAsync) return this.fireAsync.apply(this, arguments);
 
         var me = this,
-            args = TOARRAY(arguments),
+            args = toArray(arguments),
             listeners = me.listeners,
             len = listeners.length,
             i = 0,
             l;
 
         if(len > 0){
-            me.firing = TRUE;
+            me.firing = true;
             for (; i < len; i++) {
                 l = listeners[i];
-                if(l && l.fireFn.apply(l.scope || me.obj || window, args) === FALSE) {
-                    return (me.firing = FALSE);
+                if(l && l.fireFn.apply(l.scope || me.obj || window, args) === false) {
+                    return (me.firing = false);
                 }
             }
         }
-        me.firing = FALSE;
-        return TRUE;
+        me.firing = false;
+        return true;
     },
 
     fireAsync : async function() {
-        const args = TOARRAY(arguments);
+        const args = toArray(arguments);
         let result = Promise.resolve();
 
         if (this.listeners.length) {
-            this.firing = TRUE;
+            this.firing = true;
 
             for (let listener of this.listeners) {
                 try {
@@ -548,9 +543,10 @@ EXTUTIL.Event.prototype = {
                 }
             }
 
-            this.firing = FALSE;
+            this.firing = false;
         }
         return result;
     }
 };
-})();
+
+module.exports = { Observable, Event }

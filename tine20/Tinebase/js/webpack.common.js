@@ -208,6 +208,7 @@ module.exports = {
         alias: {
             // convinence alias
             "tine-vue$": path.resolve(__dirname, "node_modules/vue/dist/vue.runtime.esm-bundler.js"),
+            "Ext": path.resolve(__dirname, "../../library/ExtJS/src/"),
         }
     }
 };

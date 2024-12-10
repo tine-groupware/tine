@@ -33,7 +33,7 @@ Ext.get('myInputField').on('keypress', function(){
  * function is called. If not specified, <code>this</code> will refer to the browser window.
  * @param {Array} args (optional) The default Array of arguments.
  */
-Ext.util.DelayedTask = function(fn, scope, args){
+const DelayedTask = function(fn, scope, args){
     var me = this,
     	id,    	
     	call = function(){
@@ -68,3 +68,5 @@ Ext.util.DelayedTask = function(fn, scope, args){
         }
     };
 };
+
+module.exports = DelayedTask;

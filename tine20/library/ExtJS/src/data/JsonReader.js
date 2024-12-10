@@ -4,15 +4,21 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+const { applyIf, extend, isDefined, isEmpty, isArray, isFunction, apply } = require("Ext/core/core/Ext");
+const ExtError = require('Ext/core/Error');
+const DataReader = require('./DataReader');
+const Response = require('./Response');
+
 /**
- * @class Ext.data.JsonReader
+ * @class JsonReader
  * @extends Ext.data.DataReader
  * <p>Data reader class to create an Array of {@link Ext.data.Record} objects
  * from a JSON packet based on mappings in a provided {@link Ext.data.Record}
  * constructor.</p>
  * <p>Example code:</p>
  * <pre><code>
-var myReader = new Ext.data.JsonReader({
+var myReader = new JsonReader({
     // metadata configuration options:
     {@link #idProperty}: 'id'
     {@link #root}: 'rows',
@@ -51,7 +57,7 @@ var myReader = new Ext.data.JsonReader({
  * <p>Note that reconfiguring a Store potentially invalidates objects which may
  * refer to Fields or Records which no longer exist.</p>
  * <p>To use this facility you would create the JsonReader like this:</p><pre><code>
-var myReader = new Ext.data.JsonReader();
+var myReader = new JsonReader();
 </code></pre>
  * <p>The first data packet from the server would configure the reader by
  * containing a <b><tt>metaData</tt></b> property <b>and</b> the data. For
@@ -110,7 +116,7 @@ var myReader = new Ext.data.JsonReader();
  * will be passed to {@link Ext.data.Record#create}, or a {@link Ext.data.Record Record}
  * constructor created from {@link Ext.data.Record#create}.</p>
  */
-Ext.data.JsonReader = function(meta, recordType){
+const JsonReader = function(meta, recordType){
     meta = meta || {};
     /**
      * @cfg {String} idProperty [id] Name of the property within a row object
@@ -135,15 +141,15 @@ Ext.data.JsonReader = function(meta, recordType){
      * packet value for this property should be an empty array to clear the data
      * or show no data.
      */
-    Ext.applyIf(meta, {
+    applyIf(meta, {
         idProperty: 'id',
         successProperty: 'success',
         totalProperty: 'total'
     });
 
-    Ext.data.JsonReader.superclass.constructor.call(this, meta, recordType || meta.fields);
+    JsonReader.superclass.constructor.call(this, meta, recordType || meta.fields);
 };
-Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
+extend(JsonReader, DataReader, {
     /**
      * This JsonReader's metadata as passed to the constructor, or as passed in
      * the last data packet's <b><tt>metaData</tt></b> property.
@@ -158,7 +164,7 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
      */
     read : function(response){
         var json = response.responseText;
-        var o = Ext.decode(json);
+        var o = JSON.parse(json);
         if(!o) {
             throw {message: 'JsonReader.read: Json object not found'};
         }
@@ -173,24 +179,24 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
      * there's ugly duplication going on due to maintaining backwards compat. with 2.0.  It's time to do this.
      */
     readResponse : function(action, response) {
-        var o = (response.responseText !== undefined) ? Ext.decode(response.responseText) : response;
+        var o = (response.responseText !== undefined) ? JSON.parse(response.responseText) : response;
         if(!o) {
-            throw new Ext.data.JsonReader.Error('response');
+            throw new JsonReader.Error('response');
         }
 
         var root = this.getRoot(o);
-        if (action === Ext.data.Api.actions.create) {
-            var def = Ext.isDefined(root);
-            if (def && Ext.isEmpty(root)) {
-                throw new Ext.data.JsonReader.Error('root-empty', this.meta.root);
+        if (action === 'create') {
+            var def = isDefined(root);
+            if (def && isEmpty(root)) {
+                throw new JsonReader.Error('root-empty', this.meta.root);
             }
             else if (!def) {
-                throw new Ext.data.JsonReader.Error('root-undefined-response', this.meta.root);
+                throw new JsonReader.Error('root-undefined-response', this.meta.root);
             }
         }
 
         // instantiate response object
-        var res = new Ext.data.Response({
+        var res = new Response({
             action: action,
             success: this.getSuccess(o),
             data: (root) ? this.extractData(root, false) : [],
@@ -199,8 +205,8 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
         });
 
         // blow up if no successProperty
-        if (Ext.isEmpty(res.success)) {
-            throw new Ext.data.JsonReader.Error('successProperty-response', this.meta.successProperty);
+        if (isEmpty(res.success)) {
+            throw new JsonReader.Error('successProperty-response', this.meta.successProperty);
         }
         return res;
     },
@@ -298,10 +304,10 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
     createAccessor : function(){
         var re = /[\[\.]/;
         return function(expr) {
-            if(Ext.isEmpty(expr)){
-                return Ext.emptyFn;
+            if(isEmpty(expr)){
+                return () => {};
             }
-            if(Ext.isFunction(expr)){
+            if(isFunction(expr)){
                 return expr;
             }
             var i = String(expr).search(re);
@@ -310,7 +316,7 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
             }
             return function(obj){
                 // support array as roots
-                return Ext.isArray(obj) && obj.length > 0 ? obj : obj[expr];
+                return isArray(obj) && obj.length > 0 ? obj : obj[expr];
             };
 
         };
@@ -335,17 +341,17 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
 });
 
 /**
- * @class Ext.data.JsonReader.Error
+ * @class JsonReader.Error
  * Error class for JsonReader
  */
-Ext.data.JsonReader.Error = Ext.extend(Ext.Error, {
+JsonReader.Error = extend(ExtError, {
     constructor : function(message, arg) {
         this.arg = arg;
-        Ext.Error.call(this, message);
+        ExtError.call(this, message);
     },
-    name : 'Ext.data.JsonReader'
+    name : 'JsonReader'
 });
-Ext.apply(Ext.data.JsonReader.Error.prototype, {
+apply(JsonReader.Error.prototype, {
     lang: {
         'response': 'An error occurred while json-decoding your server response',
         'successProperty-response': 'Could not locate your "successProperty" in your server response.  Please review your JsonReader config to ensure the config-property "successProperty" matches the property in your server-response.  See the JsonReader docs.',
@@ -354,3 +360,5 @@ Ext.apply(Ext.data.JsonReader.Error.prototype, {
         'root-empty': 'Data was expected to be returned by the server in the "root" property of the response.  Please review your JsonReader configuration to ensure the "root" property matches that returned in the server-response.  See JsonReader docs.'
     }
 });
+
+module.exports = JsonReader;

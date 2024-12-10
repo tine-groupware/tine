@@ -24,9 +24,11 @@ class Expression extends String {
 
 let proxyId = 0
 const replaceProxyFns = {}
-const proxyDocuments = [
-  document
-]
+const proxyDocuments = []
+if (typeof window !== 'undefined') {
+  proxyDocuments.push(document)
+}
+
 const proxyPromisesCollections = []
 
 /**

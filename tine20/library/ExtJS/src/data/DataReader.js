@@ -4,8 +4,14 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+const { extend, isObject, isEmpty, isArray, apply } = require("Ext/core/core/Ext");
+const Record = require("Ext/data/Record");
+const ExtError = require('Ext/core/Error');
+const emptyFn = () => {};
+
 /**
- * @class Ext.data.DataReader
+ * @class DataReader
  * Abstract base class for reading structured data from a data source and converting
  * it into an object containing {@link Ext.data.Record} objects and metadata for use
  * by an {@link Ext.data.Store}.  This class is intended to be extended and should not
@@ -18,7 +24,7 @@
  * will be passed to {@link Ext.data.Record#create}, or a {@link Ext.data.Record Record}
  * constructor created using {@link Ext.data.Record#create}.</p>
  */
-Ext.data.DataReader = function(meta, recordType){
+const DataReader = function(meta, recordType){
     /**
      * This DataReader's configured metadata as passed to the constructor.
      * @type Mixed
@@ -31,8 +37,8 @@ Ext.data.DataReader = function(meta, recordType){
      * will be passed to {@link Ext.data.Record#create}, or a {@link Ext.data.Record Record}
      * constructor created from {@link Ext.data.Record#create}.</p>
      */
-    this.recordType = Ext.isArray(recordType) ?
-        Ext.data.Record.create(recordType) : recordType;
+    this.recordType = isArray(recordType) ?
+        Record.create(recordType) : recordType;
 
     // if recordType defined make sure extraction functions are defined
     if (this.recordType){
@@ -42,42 +48,43 @@ Ext.data.DataReader = function(meta, recordType){
     }
 };
 
-Ext.data.DataReader.prototype = {
+DataReader.prototype = {
+    readerType: 'json',
     /**
      * @cfg {String} messageProperty [undefined] Optional name of a property within a server-response that represents a user-feedback message.
      */
     /**
      * Abstract method created in extension's buildExtractors impl.
      */
-    getTotal: Ext.emptyFn,
+    getTotal: emptyFn,
     /**
      * Abstract method created in extension's buildExtractors impl.
      */
-    getRoot: Ext.emptyFn,
+    getRoot: emptyFn,
     /**
      * Abstract method created in extension's buildExtractors impl.
      */
-    getMessage: Ext.emptyFn,
+    getMessage: emptyFn,
     /**
      * Abstract method created in extension's buildExtractors impl.
      */
-    getSuccess: Ext.emptyFn,
+    getSuccess: emptyFn,
     /**
      * Abstract method created in extension's buildExtractors impl.
      */
-    getId: Ext.emptyFn,
+    getId: emptyFn,
     /**
      * Abstract method, overridden in DataReader extensions such as {@link Ext.data.JsonReader} and {@link Ext.data.XmlReader}
      */
-    buildExtractors : Ext.emptyFn,
+    buildExtractors : emptyFn,
     /**
      * Abstract method overridden in DataReader extensions such as {@link Ext.data.JsonReader} and {@link Ext.data.XmlReader}
      */
-    extractData : Ext.emptyFn,
+    extractData : emptyFn,
     /**
      * Abstract method overridden in DataReader extensions such as {@link Ext.data.JsonReader} and {@link Ext.data.XmlReader}
      */
-    extractValues : Ext.emptyFn,
+    extractValues : emptyFn,
 
     /**
      * Used for un-phantoming a record after a successful database insert.  Sets the records pk along with new data from server.
@@ -89,10 +96,10 @@ Ext.data.DataReader.prototype = {
      * @param {Object/Object[]} data The new record data to apply.  Must include the primary-key from database defined in idProperty field.
      */
     realize: function(rs, data){
-        if (Ext.isArray(rs)) {
+        if (isArray(rs)) {
             for (var i = rs.length - 1; i >= 0; i--) {
                 // recurse
-                if (Ext.isArray(data)) {
+                if (isArray(data)) {
                     this.realize(rs.splice(i,1).shift(), data.splice(i,1).shift());
                 }
                 else {
@@ -104,13 +111,13 @@ Ext.data.DataReader.prototype = {
         }
         else {
             // If rs is NOT an array but data IS, see if data contains just 1 record.  If so extract it and carry on.
-            if (Ext.isArray(data) && data.length == 1) {
+            if (isArray(data) && data.length == 1) {
                 data = data.shift();
             }
             if (!this.isData(data)) {
                 // TODO: Let exception-handler choose to commit or not rather than blindly rs.commit() here.
                 //rs.commit();
-                throw new Ext.data.DataReader.Error('realize', rs);
+                throw new DataReader.Error('realize', rs);
             }
             rs.phantom = false; // <-- That's what it's all about
             rs._phid = rs.id;  // <-- copy phantom-id -> _phid, so we can remap in Store#onCreateRecords
@@ -134,9 +141,9 @@ Ext.data.DataReader.prototype = {
      * @param {Object/Object[]} data
      */
     update : function(rs, data) {
-        if (Ext.isArray(rs)) {
+        if (isArray(rs)) {
             for (var i=rs.length-1; i >= 0; i--) {
-                if (Ext.isArray(data)) {
+                if (isArray(data)) {
                     this.update(rs.splice(i,1).shift(), data.splice(i,1).shift());
                 }
                 else {
@@ -148,7 +155,7 @@ Ext.data.DataReader.prototype = {
         }
         else {
             // If rs is NOT an array but data IS, see if data contains just 1 record.  If so extract it and carry on.
-            if (Ext.isArray(data) && data.length == 1) {
+            if (isArray(data) && data.length == 1) {
                 data = data.shift();
             }
             if (this.isData(data)) {
@@ -170,13 +177,13 @@ Ext.data.DataReader.prototype = {
      */
     extractData : function(root, returnRecords) {
         // A bit ugly this, too bad the Record's raw data couldn't be saved in a common property named "raw" or something.
-        var rawName = (this instanceof Ext.data.JsonReader) ? 'json' : 'node';
+        var rawName = (this.readerType === 'json') ? 'json' : 'node';
 
         var rs = [];
 
         // Had to add Check for XmlReader, #isData returns true if root is an Xml-object.  Want to check in order to re-factor
         // #extractData into DataReader base, since the implementations are almost identical for JsonReader, XmlReader
-        if (this.isData(root) && !(this instanceof Ext.data.XmlReader)) {
+        if (this.isData(root) && !(this.readerType === 'xml')) {
             root = [root];
         }
         var f       = this.recordType.prototype.fields,
@@ -210,7 +217,7 @@ Ext.data.DataReader.prototype = {
      * @return {Boolean}
      */
     isData : function(data) {
-        return (data && Ext.isObject(data) && !Ext.isEmpty(this.getId(data))) ? true : false;
+        return (data && isObject(data) && !isEmpty(this.getId(data))) ? true : false;
     },
 
     // private function a store will createSequence upon
@@ -218,28 +225,30 @@ Ext.data.DataReader.prototype = {
         delete this.ef;
         if (meta) {
             this.meta = meta;
-            this.recordType = Ext.data.Record.create(meta.fields);
+            this.recordType = Record.create(meta.fields);
         }
         this.buildExtractors();
     }
 };
 
 /**
- * @class Ext.data.DataReader.Error
+ * @class DataReader.Error
  * @extends Ext.Error
- * General error class for Ext.data.DataReader
+ * General error class for DataReader
  */
-Ext.data.DataReader.Error = Ext.extend(Ext.Error, {
+DataReader.Error = extend(ExtError, {
     constructor : function(message, arg) {
         this.arg = arg;
-        Ext.Error.call(this, message);
+        ExtError.call(this, message);
     },
-    name: 'Ext.data.DataReader'
+    name: 'DataReader'
 });
-Ext.apply(Ext.data.DataReader.Error.prototype, {
+apply(DataReader.Error.prototype, {
     lang : {
         'update': "#update received invalid data from server.  Please see docs for DataReader#update and review your DataReader configuration.",
         'realize': "#realize was called with invalid remote-data.  Please see the docs for DataReader#realize and review your DataReader configuration.",
         'invalid-response': "#readResponse received an invalid response from the server."
     }
 });
+
+module.exports = DataReader;

@@ -8,10 +8,10 @@
  * @class Ext.data.Response
  * A generic response class to normalize response-handling internally to the framework.
  */
-Ext.data.Response = function(params) {
-    Ext.apply(this, params);
+const Response = function(params) {
+    Object.assign(this, params);
 };
-Ext.data.Response.prototype = {
+Response.prototype = {
     /**
      * @cfg {String} action {@link Ext.data.Api#actions}
      */
@@ -37,3 +37,5 @@ Ext.data.Response.prototype = {
      */
     records: undefined
 };
+
+module.exports = Response;

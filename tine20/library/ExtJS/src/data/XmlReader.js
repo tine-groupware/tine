@@ -68,6 +68,8 @@ Ext.data.XmlReader = function(meta, recordType){
     Ext.data.XmlReader.superclass.constructor.call(this, meta, recordType || meta.fields);
 };
 Ext.extend(Ext.data.XmlReader, Ext.data.DataReader, {
+    readerType: 'xml',
+
     /**
      * This method is only used by a DataProxy which has retrieved data from a remote server.
      * @param {Object} response The XHR object which contains the parsed XML document.  The response is expected

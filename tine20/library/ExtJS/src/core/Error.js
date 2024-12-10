@@ -5,16 +5,6 @@
  * http://www.extjs.com/license
  */
 /**
- * Framework-wide error-handler.  Developers can override this method to provide
- * custom exception-handling.  Framework errors will often extend from the base
- * Ext.Error class.
- * @param {Object/Error} e The thrown exception object.
- */
-Ext.handleError = function(e) {
-    throw e;
-};
-
-/**
  * @class Ext.Error
  * @extends Error
  * <p>A base error class. Future implementations are intended to provide more
@@ -46,12 +36,12 @@ function generateError(data) {
  * </code></pre>
  * @param {String} message
  */
-Ext.Error = function(message) {
+const ExtError = function(message) {
     // Try to read the message from Ext.Error.lang
     this.message = (this.lang[message]) ? this.lang[message] : message;
 }
-Ext.Error.prototype = new Error();
-Ext.apply(Ext.Error.prototype, {
+ExtError.prototype = new Error();
+Object.assign(ExtError.prototype, {
     // protected.  Extensions place their error-strings here.
     lang: {},
 
@@ -79,3 +69,4 @@ Ext.apply(Ext.Error.prototype, {
     }
 });
 
+module.exports = ExtError;
