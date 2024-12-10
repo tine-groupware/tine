@@ -88,6 +88,16 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
+            case Admin_Event_UpdateAccount::class:
+                /** @var Admin_Event_UpdateAccount $_eventObject */
+                if ($_eventObject->account->contact_id !== $_eventObject->oldAccount->contact_id) {
+                    $contact = Addressbook_Controller_Contact::getInstance()->get($_eventObject->oldAccount->contact_id);
+                    $contact->type = Addressbook_Model_Contact::CONTACTTYPE_CONTACT;
+                    $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                        . ' switch deprecated user contact type to contact : ' . $contact->getId());
+                }
+                break;
             case 'Tinebase_Event_User_DeleteAccount':
                 /**
                  * @var Tinebase_Event_User_DeleteAccount $_eventObject

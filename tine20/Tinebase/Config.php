@@ -736,6 +736,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const SMS = 'sms';
 
     public const SMS_ADAPTERS = 'sms_adapters';
+    public const SMS_MESSAGE_TEMPLATES = 'sms_message_templates';
+    public const SMS_TEMPLATE_NEW_PASSWORD = 'sms_template_new_password';
     
     /**
      * max username length
@@ -3587,6 +3589,27 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::CLASSNAME             => Tinebase_Config_Struct::class,
                     self::CONTENT_CLASS         => Tinebase_Model_Sms_AdapterConfigs::class,
                     self::DEFAULT_STR           => [],
+                ],
+                self::SMS_MESSAGE_TEMPLATES          => [
+                    self::LABEL                 => 'SMS Message Templates', //_('SMS Message Templates')
+                    self::DESCRIPTION           => 'SMS Message Templates', //_('SMS Message Templates')
+                    self::TYPE                  => self::TYPE_OBJECT,
+                    self::CLASSNAME             => Tinebase_Config_Struct::class,
+                    self::CONTENT           => [
+                        self::SMS_TEMPLATE_NEW_PASSWORD          => [
+                            //_('Template for SMS New Password')
+                            self::LABEL                 => 'Template for SMS New Password',
+                            //_('Template for SMS New Password with parameters: instanceName, password')
+                            self::DESCRIPTION           => 'Template for SMS New Password with parameters: instanceName, password',
+                            self::TYPE                  => self::TYPE_STRING,
+                            //_('Instance: {{ instanceName }} , new password: {{ password }}')
+                            self::DEFAULT_STR           => 'Instance: {{ instanceName }} , new password: {{ password }}',
+                            self::CLIENTREGISTRYINCLUDE => true,
+                            self::SETBYADMINMODULE      => true,
+                            self::SETBYSETUPMODULE      => false,
+                        ]
+                    ],
+                    self::DEFAULT_STR => [],
                 ],
             ],
             self::DEFAULT_STR           => [],
