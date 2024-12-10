@@ -274,53 +274,6 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     }
 
     /**
-     * testUpdateUserSendSMS
-     *
-     */
-    public function testUpdateUserSendSMS()
-    {
-        Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS} = [
-            Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS => [
-                [
-                    Tinebase_Model_Sms_AdapterConfig::FLD_NAME => 'sms1',
-                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
-                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG => [
-                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL => 'https://shoo.tld/restapi/message',
-                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_BODY => '{"encoding":"auto","body":"{{ message }}","originator":"{{ app.branding.title }}","recipients":["{{ cellphonenumber }}"],"route":"2345"}',
-                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_METHOD => 'POST',
-                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_HEADERS => [
-                            'Auth-Bearer' => 'unittesttokenshaaaaalalala'
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $userArray = $this->_originalTestUser->toArray();
-
-        $userArray['send_password_via_sms'] = true;
-        $userArray['sms_phone_number'] = '777777777';
-        $userArray['accountPassword'] = 'tine20admin';
-        
-        $smsConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}
-            ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS}->getFirstRecord();
-        $smsAdapterConfig = $smsConfig ? $smsConfig->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG} : null;
-        $smsAdapterConfig->setHttpClientConfig([
-            'adapter' => ($httpClientTestAdapter = new Tinebase_ZendHttpClientAdapter())
-        ]);
-        $httpClientTestAdapter->writeBodyCallBack = function($body) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' sms request body: ' . $body);
-        };
-        $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
-
-        $result = $this->_json->saveUser($userArray);
-
-        $this->assertStringContainsString('Instance: ' . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) . ' , new password: ' . $userArray['accountPassword'],
-            $httpClientTestAdapter->lastRequestBody);
-        $this->assertTrue($result['sms']['777777777']);
-    }
-
-    /**
      * @param Tinebase_Model_FullUser $account
      * @return Tinebase_Model_Container
      */

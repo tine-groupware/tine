@@ -142,11 +142,6 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                     self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG             => [
-                    'recordEditPluginConfig'    => [
-                        'allowCreateNew'            => true,
-                    ],
-                ],
             ],
             'accountLastLogin'              => [
                 'type'                          => 'datetime',

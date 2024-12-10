@@ -20,7 +20,7 @@ class Tinebase_Sms
     public static function send(Tinebase_Model_Sms_SendConfig $config): bool
     {
         if (!$config->{Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG}) {
-            throw new Tinebase_Exception_UnexpectedValue('sms send config needs to be set');
+            // TODO get default sms adapter config or throw
         }
 
         return $config->{Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG}->send($config);

@@ -1039,18 +1039,6 @@ msgstr ""
 msgid "SMS Adapter Configs"
 msgstr ""
 
-msgid "SMS Message Templates"
-msgstr ""
-
-msgid "Template for SMS New Password"
-msgstr ""
-
-msgid "Template for SMS New Password with parameters: instanceName, password"
-msgstr ""
-
-msgid "Instance: {{ instanceName }} , new password: {{ password }}"
-msgstr ""
-
 msgid "User type"
 msgstr ""
 
