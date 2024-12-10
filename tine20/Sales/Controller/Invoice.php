@@ -897,13 +897,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $oldPositions[$invoice->getId()] = $invoicePositionController->search($filter);
 
             try {
-                $this->delete(array($invoice));
-            } catch (Sales_Exception_DeletePreviousInvoice $sedpi) {
+                $this->delete([$invoice]);
+            } catch (Sales_Exception_DeletePreviousInvoice | Sales_Exception_InvoiceAlreadyClearedDelete $se) {
                 $failed = true;
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete invoice with id: ' . $id);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not delete invoice with id: ' . $id
+                    . ' Error: ' . $se->getMessage());
                 break;
             }
-            //is $invoice still valid?!?!?
+            // is $invoice still valid?!?!?
         }
 
         if (true === $failed) {
