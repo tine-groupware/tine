@@ -291,7 +291,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $tsController->update($timesheets[0]);
             self::fail('should throw Tinebase_Exception_Confirmation!');
         } catch (Tinebase_Exception_Confirmation $seiace) {
-            self::assertEquals('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?', $seiace->getMessage());
+            self::assertEquals(Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?'), $seiace->getMessage());
         }
     }
 

@@ -222,7 +222,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         foreach ($this->_currentBillingContract->relations as $relation) {
             if ($relation->type == 'CUSTOMER' && $relation->related_model == 'Sales_Model_Customer') {
                 $this->_currentBillingCustomer = $relation->related_record;
-                Tinebase_Record_Expander::expandRecord($this->_currentBillingContract);
+                Tinebase_Record_Expander::expandRecord($this->_currentBillingCustomer);
                 break;
             }
         }
@@ -1146,7 +1146,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                 }
 
-                $debitor = $this->_currentBillingContract->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
+                $debitor = $this->_currentBillingCustomer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
 
                 // prepare invoice
                 $invoice = new Sales_Model_Invoice(array(
