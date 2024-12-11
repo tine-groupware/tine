@@ -522,7 +522,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
             return Tine.HumanResources.Model.FreeTimeType.getAbbreviation(freeTimeType) === char;
         });
         
-        if (freeTimeType && !e.shiftKey && !e.ctrlKey) {
+        if (String(e.target.tagName).toLowerCase() !== 'input' && freeTimeType && !e.shiftKey && !e.ctrlKey) {
             this.freeTimeType = freeTimeType;
             window.setTimeout(() => {
                 this.freeTimeType = null
