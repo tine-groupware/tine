@@ -45,7 +45,7 @@ docker_build_image_built() {
         --build-arg CUSTOM_APP_NAME \
         --build-arg CUSTOM_APP_GIT_URL \
         --build-arg CUSTOM_APP_VERSION \
-        --build-arg RELEASE=$(packaging_version) \
+        --build-arg RELEASE=$(release_get_package_version) \
         --build-arg CODENAME \
         --build-arg REVISION=0 \
         .
@@ -70,7 +70,7 @@ docker_build_image_built_test() {
         --build-arg CUSTOM_APP_NAME \
         --build-arg CUSTOM_APP_GIT_URL \
         --build-arg CUSTOM_APP_VERSION \
-        --build-arg RELEASE=$(packaging_version) \
+        --build-arg RELEASE=$(release_get_package_version) \
         --build-arg CODENAME \
         --build-arg REVISION=0 \
         .
@@ -89,7 +89,7 @@ docker_build_image_packages() {
         --file ./ci/dockerimage/Dockerfile \
         --build-arg BUILT_IMAGE \
         --build-arg ZIP_PACKAGES \
-        --build-arg RELEASE=$(packaging_version) \
+        --build-arg RELEASE=$(release_get_package_version) \
         --build-arg CODENAME \
         --build-arg REVISION=0 \
         -o type=tar,dest=${outputPath} \
