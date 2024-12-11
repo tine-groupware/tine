@@ -48,11 +48,6 @@ class Tinebase_TransactionManager
     protected $_afterCommitCallbacks = array();
 
     /**
-     * @var array list of callbacks to call after "afterCommitCallbacks" have been processed
-     */
-    protected $_afterAfterCommitCallbacks = array();
-
-    /**
      * @var array list of callbacks to call just before rollback
      */
     protected $_onRollbackCallbacks = array();
@@ -157,91 +152,87 @@ class Tinebase_TransactionManager
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . "  commitTransaction request for $_transactionId");
-         $transactionIdx = array_search($_transactionId, $this->_openTransactions);
-         if ($transactionIdx !== false) {
-             unset($this->_openTransactions[$transactionIdx]);
-         }
+        $transactionIdx = array_search($_transactionId, $this->_openTransactions);
+        if ($transactionIdx !== false) {
+         unset($this->_openTransactions[$transactionIdx]);
+        }
 
-         // inside a pre commit callback we don't want to really commit, as this will happen after and outside
-         // the callback
-         if (static::$_insideCallBack) {
-             return;
-         }
+        // inside a pre commit callback we don't want to really commit, as this will happen after and outside
+        // the callback
+        if (static::$_insideCallBack) {
+            return;
+        }
 
-         $numOpenTransactions = count($this->_openTransactions);
-         if ($numOpenTransactions === 0) {
-             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                 __METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
+        $numOpenTransactions = count($this->_openTransactions);
+        if ($numOpenTransactions === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
 
-             // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
-             $callbacks = $this->_onCommitCallbacks;
-             $afterCallbacks = $this->_afterCommitCallbacks;
-             $this->_onCommitCallbacks = array();
-             $this->_afterCommitCallbacks = array();
-             $this->_afterAfterCommitCallbacks = [];
+            // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+            $callbacks = $this->_onCommitCallbacks;
+            $afterCallbacks = $this->_afterCommitCallbacks;
+            $this->_onCommitCallbacks = [];
+            $this->_afterCommitCallbacks = [];
 
-             static::$_rollBackOccurred = false;
-             try {
-                 static::$_insideCallBack = true;
-                 foreach ($callbacks as $callable) {
-                     call_user_func_array($callable[0], $callable[1]);
-                     // if a rollback happened we don't want to continue (the rollback method cleanup already)
-                     // it would be better if the code issuing a rollback throws an exception anyway
-                     if (static::$_rollBackOccurred) {
-                         return;
-                     }
-                 }
-             } finally {
-                 static::$_insideCallBack = false;
-             }
+            static::$_rollBackOccurred = false;
+            try {
+                static::$_insideCallBack = true;
+                do {
+                    if (null === $callbacks) {
+                        $callbacks = $this->_onCommitCallbacks;
+                        $this->_onCommitCallbacks = [];
+                    }
+                    foreach ($callbacks as $callable) {
+                        call_user_func_array($callable[0], $callable[1]);
+                        // if a rollback happened we don't want to continue (the rollback method cleanup already)
+                        // it would be better if the code issuing a rollback throws an exception anyway
+                        if (static::$_rollBackOccurred) {
+                            return;
+                        }
+                    }
+                    $callbacks = null;
+                } while ($this->_onCommitCallbacks);
+            } finally {
+                static::$_insideCallBack = false;
+            }
 
-             foreach ($this->_openTransactionables as $transactionable) {
-                 if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
-                     $transactionable->commit();
-                 }
-             }
-             // prevent call back issues. The callback may start and commit/rollback more transactions
-             $this->_openTransactionables = array();
-             $this->_onRollbackCallbacks = array();
+            foreach ($this->_openTransactionables as $transactionable) {
+                if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
+                    $transactionable->commit();
+                }
+            }
+            // prevent call back issues. The callback may start and commit/rollback more transactions
+            $this->_openTransactionables = array();
+            $this->_onRollbackCallbacks = array();
 
-             foreach ($afterCallbacks as $callable) {
-                 try {
-                     call_user_func_array($callable[0], $callable[1]);
-                 } catch (Tinebase_Exception_AccessDenied $tead) {
-                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                         __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
-                 } catch (Tinebase_Exception_NotFound $tenf) {
-                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                         __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
-                 } catch (Exception $e) {
-                     // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
-                     // actually can't roll back anything anymore as we already committed.
-                     // So afterCommitCallbacks will fail "silently", they only log and go to sentry
-                     Tinebase_Exception::log($e, false);
-                 }
-             }
+            do {
+                if (null === $afterCallbacks) {
+                    $afterCallbacks = $this->_afterCommitCallbacks;
+                    $this->_afterCommitCallbacks = [];
+                }
+                foreach ($afterCallbacks as $callable) {
+                    try {
+                        call_user_func_array($callable[0], $callable[1]);
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    } catch (Exception $e) {
+                        // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
+                        // actually can't roll back anything anymore as we already committed.
+                        // So afterCommitCallbacks will fail "silently", they only log and go to sentry
+                        Tinebase_Exception::log($e, false);
+                    }
+                }
+                $afterCallbacks = null;
+            } while (0 === count($this->_openTransactionables) && $this->_afterCommitCallbacks);
 
-             foreach ($this->_afterAfterCommitCallbacks as $callable) {
-                 try {
-                     call_user_func_array($callable[0], $callable[1]);
-                 } catch (Tinebase_Exception_AccessDenied $tead) {
-                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                         __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
-                 } catch (Tinebase_Exception_NotFound $tenf) {
-                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                         __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
-                 } catch (Exception $e) {
-                     // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
-                     // actually can't roll back anything anymore as we already committed.
-                     // So afterCommitCallbacks will fail "silently", they only log and go to sentry
-                     Tinebase_Exception::log($e, false);
-                 }
-             }
-
-         } else if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                 . " Committing deferred, as there are still $numOpenTransactions in the queue");
-         }
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . " Committing deferred, as there are still $numOpenTransactions in the queue");
+        }
     }
     
     /**
@@ -262,15 +253,16 @@ class Tinebase_TransactionManager
         static::$_insideCallBack = false;
 
         try {
-            foreach ($this->_openTransactionables as $transactionable) {
+            // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+            $callbacks = $this->_onRollbackCallbacks;
+            $transactionables = $this->_openTransactionables;
+            $this->resetTransactions();
+
+            foreach ($transactionables as $transactionable) {
                 if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
                     $transactionable->rollBack();
                 }
             }
-
-            // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
-            $callbacks = $this->_onRollbackCallbacks;
-            $this->resetTransactions();
 
             foreach ($callbacks as $callable) {
                 call_user_func_array($callable[0], $callable[1]);
@@ -307,17 +299,6 @@ class Tinebase_TransactionManager
     }
 
     /**
-     * register a callable to call after "afterCommitCallbacks" have been processed
-     *
-     * @param array|callable $callable
-     * @param array $param
-     */
-    public function registerAfterAfterCommitCallback($callable, array $param = array())
-    {
-        $this->_afterAfterCommitCallbacks[] = array($callable, $param);
-    }
-
-    /**
      * register a callable to call just before the rollback happens
      *
      * @param array|callable $callable
@@ -342,7 +323,6 @@ class Tinebase_TransactionManager
     {
         $this->_onCommitCallbacks = [];
         $this->_afterCommitCallbacks = [];
-        $this->_afterAfterCommitCallbacks = [];
         $this->_onRollbackCallbacks = [];
         $this->_openTransactionables = [];
         $this->_openTransactions = [];

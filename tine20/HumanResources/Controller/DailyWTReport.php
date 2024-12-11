@@ -935,7 +935,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                     static $earliestDeletionDate = [];
                     if (!isset($earliestDeletionDate[$accountId])) {
                         $earliestDeletionDate[$accountId] = $_eventObject->observable->start_date;
-                        Tinebase_TransactionManager::getInstance()->registerAfterAfterCommitCallback(function() use(&$earliestDeletionDate) {
+                        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function() use(&$earliestDeletionDate) {
                             // context async / sync
                             $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
                             if (isset($context['tsSyncron'])) {
