@@ -11,7 +11,7 @@
 <template>
   <div>
     <div v-if="questionText?.trim?.().startsWith('<')" v-html="questionText" class="mb-3"></div>
-    <BAlert v-else-if="questionText != ''" :variant="props.alertVariant ?? 'info'" :model-value="true">{{questionText}}</BAlert>
+    <BAlert v-else-if="questionText != null && questionText?.trim?.().length != 0" :variant="props.alertVariant ?? 'info'" :model-value="true">{{questionText}}</BAlert>
     <BFormRadioGroup v-if="!props.allowMultiple" v-model="selectedOption" stacked>
       <BFormRadio v-for="option in _options" :value="option.value" :key="option.value" :disabled="option.disabled">
         <span v-if="option.text.trim().startsWith('<')" v-html="option.text"/>
