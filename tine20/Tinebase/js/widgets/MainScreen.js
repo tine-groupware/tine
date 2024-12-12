@@ -109,6 +109,18 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         const isSmall = width < 1024;
         this.westRegionPanel.afterIsRendered().then((panel) => { panel[isSmall ? 'collapse' : 'expand']() });
         this.northCardPanel.afterIsRendered().then((panel) => {panel.setVisible(!isSmall) });
+
+        const qfp = this.getCenterPanel()?.filterToolbar.quickFilterPlugin;
+
+        if (qfp != null) {
+            if (isSmall) {
+                qfp.setDetailsHidden(true);
+            } else {
+                //restore state before resize
+                qfp.setDetailsHidden(qfp.detailsToggleBtn.pressed);
+            }
+        }
+        
         this.westRegionPanel.on('click', () => { })
 
         this.getTopToolbar().setVisible(isSmall);
