@@ -1503,6 +1503,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
     public function createXRechnungsAttachment(Sales_Model_Invoice $invoice): void
     {
+        $remove = null;
+        foreach ($invoice->attachments?->filter(fn ($rec) => str_ends_with($rec->name, '-xrechnung.xml')) ?? [] as $remove) {
+            $invoice->attachments->removeRecord($remove);
+        }
+        if (null !== $remove) {
+            Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($invoice);
+        }
         try {
             $customer = $this->_getCustomerFromInvoiceRelations($invoice) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
             /** @var Sales_Model_Contract $contract */
@@ -1569,10 +1576,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
 
             $attachmentName = str_replace('/', '-', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml');
-            if (null !== ($remove = $invoice->attachments?->find('name', $attachmentName))) {
-                $invoice->attachments->removeRecord($remove);
-                Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($invoice);
-            }
             Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($invoice, $attachmentName, $stream);
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
         } catch (Exception $e) {
