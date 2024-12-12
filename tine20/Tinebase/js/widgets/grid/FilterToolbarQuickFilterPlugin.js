@@ -193,6 +193,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             var stateId = this.ftb.recordClass.getMeta('appName') + '-' + this.ftb.recordClass.getMeta('recordName') + '-FilterToolbar-QuickfilterPlugin';
         }
         
+        const ftqfp = this;
+
         this.detailsToggleBtn = new Ext.Button(Ext.apply({
             style: {'margin-top': '2px'},
             enableToggle: true,
@@ -203,12 +205,12 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             stateful: stateful,
             stateId : stateful ? stateId : null,
             getState: function () {
-                return {detailsButtonPressed: this.pressed};
+                return {filterPanelShow: ftqfp.filterPanel.isVisible()};
             },
             applyState: function(state) {
-                if (state?.detailsButtonPressed) {
+                if (!state?.filterPanelShow) {
                     this.setText( i18n._('hide details'));
-                    this.toggle(state.detailsButtonPressed);
+                    this.toggle(true);
                 }
             },
             stateEvents: ['toggle'],
@@ -244,9 +246,19 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
-        btn.setText(i18n._(`${!btn.pressed ? 'show' : 'hide'} details`));
+        this.setDetailsHidden(this.filterPanel.isVisible());
+    },
+    /**
+     * sets the visibility of the managed filterPanel
+     * does not trigger state update so responsive auto hide does not affect usage on bigger devices
+     * @param {boolean} hidden
+     */
+    setDetailsHidden: function(hidden) {
+        const btn = this.detailsToggleBtn;
+
+        btn.setText(i18n._(`${hidden ? 'show' : 'hide'} details`));
         
-        const action = btn.pressed ? 'show' : 'hide';
+        const action = !hidden ? 'show' : 'hide';
         this.ftb[action]();
         if (this.filterPanel) this.filterPanel[action]();
         
@@ -337,16 +349,16 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
 
         if (btn.stateful && btn.stateId) {
             const state = Ext.state.Manager.get(btn.stateId);
-            if (typeof state?.detailsButtonPressed === 'undefined') {
+            if (typeof state?.filterPanelShow === 'undefined') {
                 const filterStore = this.ftb?.filterStore;
                 const queryFilter = filterStore.find('field', 'query');
                 const enabled = filterStore?.data?.length > 1 || queryFilter === -1;
-                Ext.state.Manager.set(btn.stateId, {detailsButtonPressed: enabled});
+                Ext.state.Manager.set(btn.stateId, {filterPanelShow: enabled});
                 btn.pressed = enabled;
             }
         }
 
-        this.onDetailsToggle(this.detailsToggleBtn);
+        this.setDetailsHidden(btn.pressed);
     },
     
     /**

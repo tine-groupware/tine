@@ -26,7 +26,7 @@ Tine.HumanResources.DailyWTReportGridPanel = Ext.extend(Tine.widgets.grid.GridPa
             quickFilterConfig: {
                 detailsToggleBtnConfig: {
                     initialState: {
-                        detailsButtonPressed: true
+                        filterPanelShow: true
                     }
                 }
             }
