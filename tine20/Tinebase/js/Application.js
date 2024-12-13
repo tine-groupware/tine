@@ -7,6 +7,7 @@
  */
 
 var EventEmitter = require('events');
+const {ref, toRef} = require("vue-demi");
 
 Ext.ns('Tine.Tinebase');
 
@@ -34,6 +35,8 @@ Tine.Tinebase.Application = function(config) {
 
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
+
+    this.dockBadge = this.hasMainScreen ? ref(0) : undefined;
 
     if (this.appName === 'Tinebase') {
         Ext.apply(this, Tine.Tinebase.Application.Tinebase);
@@ -84,6 +87,22 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @property {Locale.gettext} i18n
      */
     i18n: null,
+
+    /**
+     * @property {Ref<Number>|undefined} dockBadge
+     * If an application is docked, this number is shown as Bootstrap Badge
+     * Is undefined for apps with 'hasMainScreen' set to false
+     */
+    dockBadge: null,
+
+    /**
+     * Sets DockBadge
+     *
+     * @param {Number|String} value
+     */
+    setDockBadge: function(value) {
+        this.dockBadge.value = parseInt(value) || 0
+    },
 
     /**
      * returns title of this application
