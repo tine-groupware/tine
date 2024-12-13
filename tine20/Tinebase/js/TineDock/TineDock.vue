@@ -41,7 +41,11 @@
             'dock-item__active': app.name === state.activeApp,
             }"
           >
-            <div :class="app.iconCls" class="h-100 w-100 dock-item__icon"/>
+            <div :class="app.iconCls" class="h-100 w-100 dock-item__icon position-relative">
+              <span class="app-badge translate-middle badge rounded-pill fw-light" v-if="app.dockBadge?.value">
+                {{app.dockBadge}}
+              </span>
+            </div>
             <span class="dock-item__label">{{getTitle(app.text)}}</span>
           </div>
         </div>
@@ -71,7 +75,7 @@
 <script setup>
 /* eslint-disable vue/no-mutating-props */
 /* eslint-disable */
-import {computed, ref, watch, inject, onMounted, onUpdated} from 'vue'
+import {computed, ref, watch, inject, onMounted, onUpdated, onBeforeMount} from 'vue'
 import {useScroll, useWindowSize} from '@vueuse/core'
 import TMenu from "../vue/components/TMenu.vue";
 
@@ -110,7 +114,8 @@ const availableApps = computed(() => {
         text: app.getTitle(),
         iconCls: app.getIconCls(),
         name: app.name,
-        id: `${DOCKED_APP_ID_PREFIX}-${app.name.toLowerCase().replace(' ', '-')}`
+        id: `${DOCKED_APP_ID_PREFIX}-${app.name.toLowerCase().replace(' ', '-')}`,
+        dockBadge: app.dockBadge,
       })
     }
   }, this)
@@ -124,7 +129,7 @@ const dockedAppsInternal = computed(() => {
       return _.find(availableApps.value, availableApp => {
         return availableApp.name === appName
       })
-    })
+    }).filter(app => app)
     : []
 })
 
@@ -177,6 +182,12 @@ const dragEnd = () => {
 
 // hiding the dock for small screen devices
 const { width } = useWindowSize()
+onBeforeMount(() => {
+  const diff = _.difference(props.state.dockedApps, dockedAppsInternal.value.map(el => el.name))
+  if (diff.length) {
+    _.remove(props.state.dockedApps, (app) => diff.includes(app))
+  }
+})
 onMounted(() => {
   const t = Tine.Tinebase.MainScreen.getDock()
   if(width.value <= 500){
@@ -288,6 +299,15 @@ const { y, arrivedState } = useScroll(tineDockRef, { behavior: 'smooth' })
         background-repeat: no-repeat;
         background-size: 30px 30px;
         background-position: center !important;
+
+        .app-badge{
+          position: absolute;
+          right: -10px;
+          top: 10px;
+
+          background-color: var(--focus-color);
+          color: white;
+        }
       }
 
       &__label{

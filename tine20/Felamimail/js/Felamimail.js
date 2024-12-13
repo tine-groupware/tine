@@ -771,7 +771,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         if (this.unreadcountInDefaultInbox < 0) {
             this.unreadcountInDefaultInbox = 0;
         }
-        
+        Tine.Tinebase.appMgr.get('Calendar').setDockBadge(this.unreadcountInDefaultInbox)
+
         Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
         const currentTitle = document.title;
         const unreadString = this.unreadcountInDefaultInbox ? '(' + this.unreadcountInDefaultInbox + ') ' : '';
