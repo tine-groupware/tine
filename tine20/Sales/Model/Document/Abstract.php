@@ -541,6 +541,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ->{Sales_Model_Document_Status::FLD_BOOKED});
     }
 
+    public static function getStatusField(): string
+    {
+        return static::$_statusField;
+    }
+
+    public static function getStatusConfigKey(): string
+    {
+        return static::$_statusConfigKey;
+    }
+
     protected function _getPositionClassName(string $class): string
     {
         static $positionClasses = [];
@@ -563,26 +573,44 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->{self::FLD_PRECURSOR_DOCUMENTS} = new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, []);
         $this->{self::FLD_POSITIONS} = new Tinebase_Record_RecordSet($positionClass, []);
-        $isReversal = false;
+
+        if (($isReversal = (null !== $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->find(Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL, true)))
+                && null !== $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->find(Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL, false)) {
+            throw new Tinebase_Exception_UnexpectedValue('source documents must be either all reversals or not');
+        }
+
+        // since source documents might have different models, you can't expand all at once, you will have to "sort" them by model ... or do each individually
+        // check all source documents are booked
+        // check that either all source documents where reversals (status === reversal) or not
+        $sourcesAreReversals = null; // true means "Reversal of Reversal" -> FollowUp Document
+        $srcDocs = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
+        array_walk($srcDocs, function (Sales_Model_Document_Abstract $doc) use(&$sourcesAreReversals): void {
+            if (!$doc->isBooked()) {
+                throw new Tinebase_Exception_Record_Validation('source document is not booked');
+            }
+            $docReversed = $doc->{$doc::getStatusField()} === Sales_Config::getInstance()->{$doc::getStatusConfigKey()}->records->find(Sales_Model_Document_Status::FLD_REVERSAL, true)?->getId();
+            if (null === $sourcesAreReversals) {
+                $sourcesAreReversals = $docReversed;
+            } elseif ($sourcesAreReversals !== $docReversed) {
+                throw new Tinebase_Exception_Record_Validation('source documents reversal status mixed');
+            }
+
+            Tinebase_Record_Expander::expandRecord($doc);
+        });
+
+        if ($sourcesAreReversals && $isReversal) {
+            throw new Tinebase_Exception_Record_Validation('reversal of reversal are followups, thus is_reversal must be false');
+        }
 
         /** @var Sales_Model_Document_TransitionSource $record */
         foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $record) {
-            if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->isBooked()) {
-                throw new Tinebase_Exception_Record_Validation('source document is not booked');
-            }
-
-            Tinebase_Record_Expander::expandRecord($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT});
-
             $addedPositions = 0;
-            $isReversal = $isReversal || (bool)$record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL};
 
             // if the positions for this document are not specified, we take all of them
             if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) ||
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
-                //$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} = // why? remove those two lines?
-                    //new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
 
-                if ($record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL}) {
+                if ($isReversal) {
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                         ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED;
                 }
@@ -597,16 +625,19 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $sourcePosition = new Sales_Model_DocumentPosition_TransitionSource([
                         Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => $position,
                         Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL => get_class($position),
-                        Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL => $record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL},
+                        Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL => $isReversal,
                     ]);
                     /** @var Sales_Model_DocumentPosition_Abstract $position */
                     $position = new $positionClass([], true);
                     try {
-                        $position->transitionFrom($sourcePosition);
+                        $position->transitionFrom($sourcePosition, $sourcesAreReversals);
                         $this->{self::FLD_POSITIONS}->addRecord($position);
                         $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                         ++$addedPositions;
                     } catch (Tinebase_Exception_Record_Validation $e) {
+                        $e->setLogLevelMethod('info');
+                        $e->setLogToSentry(false);
+                        Tinebase_Exception::log($e);
                     }
                 }
 
@@ -618,6 +649,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                             ->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getID()))) {
                         throw new Tinebase_Exception_UnexpectedValue('sourcePosition in transition not found in source document!');
                     }
+                    if ((bool)$sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL} !== $isReversal) {
+                        throw new Tinebase_Exception_UnexpectedValue('transition source position needs to have same is_reversal state as transition source document');
+                    }
                     $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION} = $sPosition;
 
                     /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
@@ -627,13 +661,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
                     /** @var Sales_Model_DocumentPosition_Abstract $position */
                     $position = new $positionClass([], true);
-                    $position->transitionFrom($sourcePosition);
+                    $position->transitionFrom($sourcePosition, $sourcesAreReversals);
                     $this->{self::FLD_POSITIONS}->addRecord($position);
                     $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                     ++$addedPositions;
-                    $isReversal = $isReversal || (bool)$sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
 
-                    if ($sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL} && $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                    if ($isReversal && $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                                 ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} !== Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED) {
                         $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                             ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED;
@@ -687,10 +720,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
+        $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+            new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
         if ($isReversal) {
-            $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-                new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
-            $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ' ' .  implode(', ',
+            $this->{self::FLD_DOCUMENT_TITLE} =
+                $translation->_('Reversal') . ' ' .  implode(', ',
                     array_reduce($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}, function($carry, $document) {
                         array_push($carry, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER});
                         return $carry;
@@ -704,8 +738,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     throw new Tinebase_Exception_UnexpectedValue('reversal transitions need to to have same source and target document class');
                 }
             }
+
             $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->records->find(Sales_Model_Document_Status::FLD_REVERSAL, true)->getId();
         } else {
+            if ($sourcesAreReversals) {
+                $this->{self::FLD_DOCUMENT_TITLE} =
+                    preg_replace("/^{$translation->_('Reversal')}/", $translation->_('Followup'), $this->{self::FLD_DOCUMENT_TITLE});
+            }
             $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         }
 
