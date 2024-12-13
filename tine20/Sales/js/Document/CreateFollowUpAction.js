@@ -39,6 +39,10 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const sharedTransitionFlag = `shared_${targetRecordClass.getMeta('recordName').toLowerCase()}`
         const recipientField = `${targetRecordClass.getMeta('recordName').toLowerCase()}_recipient_id`
         const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
+        const statusFieldName = `${sourceType.toLowerCase()}_status`
+        const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
+        const reversedStatus = _.find(statusDef.records, { reversal: true })
+
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Create { targetRecordName }', { targetRecordName }),
             iconCls: `SalesDocument_${targetType} ${isReversal ? 'SalesDocument_Reversal' : ''}`,
@@ -46,12 +50,15 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 let enabled = records.length
 
                 if (isReversal) {
-                    // reversals are allowed for booked documents only
+                    // reversals are allowed for booked, non fully reversed documents only
                     const statusFieldName = `${sourceType.toLowerCase()}_status`
                     const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
                     enabled = records.reduce((enabled, record) => {
-                        return enabled && _.find(statusDef.records, {id: record.get(statusFieldName) })?.booked
+                        return enabled && record.get('reversal_status') !== 'reversed' && _.find(statusDef.records, {id: record.get(statusFieldName) })?.booked
                     }, enabled)
+                    // revere a mix of reversals and non reversals is not allowed
+                    const status = _.uniq(_.map(records, `data.${statusFieldName}`))
+                    enabled = enabled && (status.length < 2 || _.indexOf(status, reversedStatus.id) < 0)
                 }
 
                 action.setDisabled(!enabled)
@@ -64,20 +71,21 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 const maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen }).getEl()
                 const mask = new Ext.LoadMask(maskEl, { msg: app.formatMessage('Creating { targetRecordsName }', { targetRecordsName }) })
 
-                const statusFieldName = `${sourceType.toLowerCase()}_status`
-                const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
+
                 const unbooked = selections.reduce((unbooked, record) => {
                     record.noProxy = true // kill grid autoSave
                     const status = record.get(statusFieldName)
                     return unbooked.concat(statusDef.records.find((r) => { return r.id === status })?.booked ? [] : [record])
                 }, [])
 
-                if (_.filter(selections, (document) => { return document.get('reversal_status') !== 'notReversed' }).length) {
+
+                if (_.filter(selections, (document) => { return document.get(statusFieldName) === reversedStatus.id }).length) {
                     if (await Ext.MessageBox.confirm(
                         app.formatMessage('Create new { targetRecordName }?', { targetRecordName: targetRecordClass.getRecordName() }),
                         app.formatMessage('Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document.', { sourceRecordsName, targetRecordName: targetRecordClass.getRecordName() })
                     ) !== 'yes') { return false }
                 }
+
                 if (unbooked.length) {
                     if (await Ext.MessageBox.confirm(
                         app.formatMessage('Book unbooked { sourceRecordsName }', { sourceRecordsName }),

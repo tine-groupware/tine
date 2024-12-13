@@ -643,7 +643,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Invoice::class, [$invoice]));
 
         $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-            new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
+            new Zend_Locale($invoice->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
 
         $inTranslated = $translate->_('IN-');
         $piTranslated = $translate->_('PI-');
@@ -682,7 +682,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Delivery::class, [$delivery]));
 
         $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-            new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE}));
+            new Zend_Locale($delivery->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
 
         $dnTranslated = $translate->_('DN-');
         $pdTranslated = $translate->_('PD-');

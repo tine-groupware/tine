@@ -549,7 +549,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         return '';
     }
 
-    public function transitionFrom(Sales_Model_DocumentPosition_TransitionSource $transition)
+    public function transitionFrom(Sales_Model_DocumentPosition_TransitionSource $transition, bool $reversalOfReversal): void
     {
         $source = $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
         foreach (static::getConfiguration()->fieldKeys as $property) {
@@ -582,7 +582,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             return;
         }
 
-        if ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL}) {
+        if ($reversalOfReversal || $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL}) {
             $this->{self::FLD_UNIT_PRICE} = 0 - $this->{self::FLD_UNIT_PRICE};
             if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_POSITION_DISCOUNT_TYPE}) {
                 $this->{self::FLD_POSITION_DISCOUNT_SUM} = 0 - $this->{self::FLD_POSITION_DISCOUNT_SUM};
@@ -613,7 +613,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_QUANTITY} = $this->{self::FLD_QUANTITY} - $existingQuantities;
 
             $this->computePrice();
-        } elseif ($transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL}) {
+        } elseif ($reversalOfReversal || $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL}) {
             $this->computePrice();
         }
     }
