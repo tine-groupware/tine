@@ -1026,7 +1026,7 @@ Tine.Calendar.RrulePanel.INDIVIDUALcard = Ext.extend(Tine.Calendar.RrulePanel.Ab
         this.idPrefix = Ext.id();
 
         this.exceptionGrid = new Tine.widgets.grid.QuickaddGridPanel({
-            title: this.app.i18n._('Alternative Dates'),
+            title: this.app.i18n._('Individual Dates'),
             border: false,
             frame: false,
             autoExpandColumn: 'info',
