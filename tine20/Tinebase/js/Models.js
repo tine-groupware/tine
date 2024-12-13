@@ -5,37 +5,18 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+import Record from 'data/Record'
+
 Ext.ns('Tine.Tinebase.Model');
 
-/**
- * @type {Array}
- * 
- * modlog Fields
- */
-
-Tine.Tinebase.Model.modlogFields = [
-    { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
-    { name: 'created_by',                                                              omitDuplicateResolving: true },
-    { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
-    { name: 'last_modified_by',                                                        omitDuplicateResolving: true },
-    { name: 'is_deleted',         type: 'boolean',                                     omitDuplicateResolving: true },
-    { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true },
-    { name: 'deleted_by',                                                              omitDuplicateResolving: true },
-    { name: 'seq',                                                                     omitDuplicateResolving: true }
-];
-
-/**
- * @type {Array}
- * generic Record fields
- */
-Tine.Tinebase.Model.genericFields = Tine.Tinebase.Model.modlogFields.concat([
-    { name: 'container_id', header: 'Container',                                       omitDuplicateResolving: false}
-]);
+Tine.Tinebase.Model.modlogFields = Record.modlogFields
+Tine.Tinebase.Model.genericFields = Record.genericFields
 
 /**
  * Model of a country
  */
-Tine.Tinebase.Model.Country = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Country = Record.create([
     { name: 'shortName' },
     { name: 'translatedName' }
 ], {
@@ -68,7 +49,7 @@ Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
 /**
  * Model of a role
  */
-Tine.Tinebase.Model.Role = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Role = Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'}
@@ -84,7 +65,7 @@ Tine.Tinebase.Model.Role = Tine.Tinebase.data.Record.create([
 /**
  * Model of a generalised account (user or group)
  */
-Tine.Tinebase.Model.Account = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Account = Record.create([
     {name: 'id'},
     {name: 'type'},
     {name: 'name'},
@@ -99,7 +80,7 @@ Tine.Tinebase.Model.Account = Tine.Tinebase.data.Record.create([
 /**
  * Model of a container
  */
-Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
+Tine.Tinebase.Model.Container = Record.create(Record.modlogFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'hierarchy'},
@@ -129,7 +110,7 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
 /**
  * Model of a grant
  */
-Tine.Tinebase.Model.Grant = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Grant = Record.create([
     {name: 'id'},
     {name: 'record_id'},
     {name: 'account_id'},
@@ -161,9 +142,9 @@ Tine.Tinebase.Model.Grant = Tine.Tinebase.data.Record.create([
 /**
  * Model of a tag
  * 
- * @constructor {Tine.Tinebase.data.Record}
+ * @constructor {Record}
  */
-Tine.Tinebase.Model.Tag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
+Tine.Tinebase.Model.Tag = Record.create(Record.modlogFields.concat([
     {name: 'id'         },
     {name: 'app'        },
     {name: 'owner'      },
@@ -286,7 +267,7 @@ Tine.Tinebase.Model.Preference = Ext.data.Record.create([
  * 
  * @constructor {Ext.data.Record}
  */
-Tine.Tinebase.Model.Alarm = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Alarm = Record.create([
     {name: 'id'             },
     {name: 'record_id'      },
     {name: 'model'          },
@@ -322,11 +303,11 @@ Tine.Tinebase.Model.Alarm = Tine.Tinebase.data.Record.create([
 /**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.ImportJob
- * @extends   Tine.Tinebase.data.Record
+ * @extends   Record
  * 
  * Model of an import job
  */
-Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.ImportJob = Record.create([
     {name: 'files'                  },
     {name: 'import_definition_id'   },
     {name: 'model'                  },
@@ -347,11 +328,11 @@ Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
 /**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.ExportJob
- * @extends   Tine.Tinebase.data.Record
+ * @extends   Record
  * 
  * Model of an export job
  */
-Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.ExportJob = Record.create([
     {name: 'scope'                  },
     {name: 'filter'                 },
     {name: 'definitionId'   },
@@ -375,11 +356,11 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
 /**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Credentials
- * @extends   Tine.Tinebase.data.Record
+ * @extends   Record
  * 
  * Model of user credentials
  */
-Tine.Tinebase.Model.Credentials = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Credentials = Record.create([
     {name: 'id'},
     {name: 'username'},
     {name: 'password'}
@@ -396,11 +377,11 @@ Tine.Tinebase.Model.Credentials = Tine.Tinebase.data.Record.create([
 /**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Relation
- * @extends   Tine.Tinebase.data.Record
+ * @extends   Record
  * 
  * Model of a Relation
  */
-Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Relation = Record.create([
     {name: 'id'},
     {name: 'own_model'},
     {name: 'own_id'},
@@ -438,11 +419,11 @@ Tine.Tinebase.Model.Relation.findDuplicate = function(store, record) {
 /**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Department
- * @extends   Tine.Tinebase.data.Record
+ * @extends   Record
  * 
  * Model of a Department
  */
-Tine.Tinebase.Model.Department = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Department = Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'}
@@ -465,11 +446,11 @@ Tine.Tinebase.Model.Department.getFilterModel = function() {
 /**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Config
- * @extends   Tine.Tinebase.data.Record
+ * @extends   Record
  * 
  * Model of a application config settings
  */
-Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Config = Record.create([
     {name: 'id'},
     {name: 'application_id'},
     {name: 'name'},
@@ -496,7 +477,7 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
 Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'size', Tine.Tinebase.common.byteRenderer);
 Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision_size', Tine.Tinebase.common.byteRenderer);
 
-Tine.Tinebase.Model.KeyFieldRecord = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.KeyFieldRecord = Record.create([
     { name: 'id' },
     { name: 'value' },
     { name: 'i18nValue' },
@@ -510,7 +491,7 @@ Tine.Tinebase.Model.KeyFieldRecord = Tine.Tinebase.data.Record.create([
     titleProperty: 'value'
 });
 
-Tine.Tinebase.Model.Path = Tine.Tinebase.data.Record.create([
+Tine.Tinebase.Model.Path = Record.create([
     { name: 'id' },
     { name: 'path' },
     { name: 'shadow_path' },

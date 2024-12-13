@@ -7,6 +7,7 @@
 /**
  * @class Ext
  */
+const Ext = require("Ext/core/core/Ext");
 
 Ext.ns("Ext.grid", "Ext.list", "Ext.dd", "Ext.tree", "Ext.form", "Ext.menu",
        "Ext.state", "Ext.layout", "Ext.app", "Ext.ux", "Ext.chart", "Ext.direct");
@@ -16,7 +17,7 @@ Ext.ns("Ext.grid", "Ext.list", "Ext.dd", "Ext.tree", "Ext.form", "Ext.menu",
      * @type Object
      */
 
-Ext.apply(Ext, function(){
+module.exports = function(){
     var E = Ext, 
         idSeed = 0,
         scrollWidth = null;
@@ -541,7 +542,7 @@ Ext.zip(
             }
         }
     };
-}());
+}();
 
 /**
  * @class Function

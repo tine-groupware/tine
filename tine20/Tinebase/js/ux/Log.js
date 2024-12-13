@@ -1,4 +1,5 @@
-Ext.ns('Ext.ux');
+
+
 
 /**
  * logging extension (only to console atm.)
@@ -9,9 +10,9 @@ Ext.ns('Ext.ux');
  * @namespace   Ext.ux.log
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Ext.ux.log = window.console || {};
+const log = (typeof window !== "undefined" ? window : global)['console'];
 
-Ext.apply(Ext.ux.log, {
+Object.assign(log, {
     /**
      * @cfg {Number} prio (defaults to 7)
      */
@@ -65,15 +66,11 @@ Ext.apply(Ext.ux.log, {
      * @param {Number} prio
      */
     setPrio: function(prio) {
-        this.PRIO = Ext.LOGLEVEL = prio;
+        this.PRIO = prio;
         for (var name in this.priorities) {
-            this[name] = this[name.toLowerCase()] = prio >= this.priorities[name] ? this.prioLogFnMap[name] : Ext.emptyFn;
+            this[name] = this[name.toLowerCase()] = prio >= this.priorities[name] ? this.prioLogFnMap[name] : function(){};
         }
     }
 });
 
-// init Ext.ux.log
-Ext.onReady(function() {
-    Ext.ux.log.setPrio(Ext.LOGLEVEL||8);
-    Ext.ux.log.debug('logger initialized');
-});
+export default log

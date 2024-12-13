@@ -26,11 +26,6 @@ Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/p
 /** ------------------------ Tine 2.0 Initialisation ----------------------- **/
 
 /**
- * @class Tine
- */
-Ext.namespace('Tine');
-
-/**
  * version of Tine 2.0 javascript client version, gets set a build / release time <br>
  * <b>Supported Properties:</b>
  * <table>
@@ -77,7 +72,7 @@ Tine.onAllAppsLoaded = () => {
 /**
  * quiet logging in release mode
  */
-Tine.log = Ext.ux.log;
+Tine.log = require("./ux/Log.js").default;
 Tine.log.setPrio(Tine.clientVersion.buildType === 'RELEASE' ? 0 : 7);
 
 /**

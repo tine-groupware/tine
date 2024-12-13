@@ -32,7 +32,7 @@ var trimRe = /^\s+|\s+$/g,
  */
 
 // import emojiRegex from 'emoji-regex';
-Ext.util.Format = function(){
+var Format = function(){
     return {
         /**
          * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
@@ -401,3 +401,5 @@ Ext.util.Format = function(){
         }
     }
 }();
+
+module.exports = Format

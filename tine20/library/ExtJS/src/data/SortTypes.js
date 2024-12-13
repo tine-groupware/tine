@@ -5,12 +5,14 @@
  * http://www.extjs.com/license
  */
 
+const { isDate } = require("Ext/core/core/Ext");
+
 /**
  * @class Ext.data.SortTypes
  * @singleton
  * Defines the default sorting (casting?) comparison functions used when sorting data.
  */
-Ext.data.SortTypes = {
+module.exports = {
     /**
      * Default sort that does nothing
      * @param {Mixed} s The value being converted
@@ -63,7 +65,7 @@ Ext.data.SortTypes = {
         if(!s){
             return 0;
         }
-        if(Ext.isDate(s)){
+        if(isDate(s)){
             return s.getTime();
         }
     	return Date.parse(String(s));

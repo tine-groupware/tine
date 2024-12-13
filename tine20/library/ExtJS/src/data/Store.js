@@ -1238,8 +1238,7 @@ sortInfo: {
 
     // protected handleException.  Possibly temporary until Ext framework has an exception-handler.
     handleException : function(e) {
-        // @see core/Error.js
-        Ext.handleError(e);
+        throw e;
     },
 
     /**

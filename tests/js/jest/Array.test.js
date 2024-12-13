@@ -1,4 +1,5 @@
-const sum = require('ux/Array.js');
+// grr this pollutes global array object! how to cope whith it?
+require('ux/Array.js');
 
 const testArr = ["green", "red", "blue", "red"];
 
