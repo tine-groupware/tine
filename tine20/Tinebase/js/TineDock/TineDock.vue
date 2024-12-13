@@ -71,7 +71,7 @@
 <script setup>
 /* eslint-disable vue/no-mutating-props */
 /* eslint-disable */
-import {computed, ref, watch, inject, onMounted, onUpdated} from 'vue'
+import {computed, ref, watch, inject, onMounted, onUpdated, onBeforeMount} from 'vue'
 import {useScroll, useWindowSize} from '@vueuse/core'
 import TMenu from "../vue/components/TMenu.vue";
 
@@ -124,7 +124,7 @@ const dockedAppsInternal = computed(() => {
       return _.find(availableApps.value, availableApp => {
         return availableApp.name === appName
       })
-    })
+    }).filter(app => app)
     : []
 })
 
@@ -177,6 +177,12 @@ const dragEnd = () => {
 
 // hiding the dock for small screen devices
 const { width } = useWindowSize()
+onBeforeMount(() => {
+  const diff = _.difference(props.state.dockedApps, dockedAppsInternal.value.map(el => el.name))
+  if (diff.length) {
+    _.remove(props.state.dockedApps, (app) => diff.includes(app))
+  }
+})
 onMounted(() => {
   const t = Tine.Tinebase.MainScreen.getDock()
   if(width.value <= 500){
