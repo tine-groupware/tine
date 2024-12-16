@@ -252,7 +252,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     protected function _stripPasswordsFromRequestData($requestData)
     {
         foreach ($requestData as $i => $request) {
-            foreach (array('password', 'oldPassword', 'newPassword') as $field) {
+            foreach (array('password', 'oldPassword', 'newPassword', 'accountPassword') as $field) {
                 if (isset($requestData[$i]["params"][$field])) {
                     $requestData[$i]["params"][$field] = "*******";
                 }
