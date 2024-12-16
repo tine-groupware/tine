@@ -1116,6 +1116,10 @@ msgid_plural "Vacation corrections"
 msgstr[0] "Urlaus Korrektur"
 msgstr[1] "Urlaus Korrekturen"
 
+#: Exception/ContractDates.php:31
+msgid "The start date of the contract must be before the end date!"
+msgstr "Der Anfang des Vertrages muss vor dem Ende sein! (Ggf. wurde ein Vertragsende automatisch eingetragen.)"
+
 msgid "Status"
 msgstr "Status"
 
