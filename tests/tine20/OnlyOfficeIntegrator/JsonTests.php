@@ -1002,8 +1002,9 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         
         $httpTestClient = new Zend_Http_Client_Adapter_Test();
         $httpTestClient->setResponse(new Zend_Http_Response(200, [], '{"error":1}'));
-        onlyOfficeIntegrator_Controller::getInstance()->setCmdServiceClientAdapter($httpTestClient);
+        OnlyOfficeIntegrator_Controller::getInstance()->setCmdServiceClientAdapter($httpTestClient);
 
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         $this->_uit->getEditorConfigForNodeId($node->getId());
 
         $updatedToken = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
@@ -1108,6 +1109,7 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
 
         $start = time();
         try {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
             $this->_uit->getEditorConfigForTempFileId($token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
         } catch (OnlyOfficeIntegrator_Exception_WaitForOOSave $e) {
             static::assertGreaterThan(5, time() - $start, 'expected to wait a few secs here');

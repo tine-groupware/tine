@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Lock
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -23,6 +23,7 @@ interface Tinebase_Lock_Interface
     public function __construct($lockId);
 
     /**
+     * blocks indefinetly by default, set timeout to 0 to only try non-blocking
      * @return bool
      */
     public function tryAcquire(int $timeout = -1);
