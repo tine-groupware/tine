@@ -433,6 +433,9 @@ msgstr ""
 msgid "Additional Parameters"
 msgstr ""
 
+msgid "Failed"
+msgstr ""
+
 msgid "Vacation in same period"
 msgstr ""
 
