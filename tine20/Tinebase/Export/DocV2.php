@@ -82,6 +82,10 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
      */
     protected function _processRecord(Tinebase_Record_Interface $_record)
     {
+        if (null === $this->_currentProcessor) {
+            // no _currentProcessor -> nothing to do
+            return;
+        }
         static $a = 0;
         $a += 1;
         $this->_currentProcessor->setMainPart(str_replace(["\n", "\r", '\''], ['</w:t><w:br/><w:t>', '', '&apos;'],
