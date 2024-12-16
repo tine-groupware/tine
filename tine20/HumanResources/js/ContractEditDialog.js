@@ -226,7 +226,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 spin: this.updateWorkingHours.createDelegate(this)
             }
         };
-        
+
         return {
             xtype: 'tabpanel',
             plain:true,
@@ -331,7 +331,21 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }]
         };
     },
-    
+
+    onSaveAndClose: function () {
+        const start = this.getForm().findField('start_date').getValue()
+        const end = this.getForm().findField('end_date').getValue()
+        if (start > end) {
+            Ext.MessageBox.alert(
+              this.app.i18n._('Failed'),
+              this.app.i18n._('The start date of the contract must be before the end date!')
+            );
+            return
+        }
+
+        Tine.HumanResources.ContractEditDialog.superclass.onSaveAndClose.call(this);
+    },
+
     onWorkingtimeSchemaSelect: function(combo, record, index) {
         this.record.set('working_time_scheme', record.data);
         this.applyWorkingTimeSchema(record);

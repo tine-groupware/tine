@@ -995,6 +995,31 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         return false;
     }
 
+    public const OOI_CTRL_IS_DOCUMENT_OPEN = 'ooiCtrlIsDocumentOpen';
+    public function lockedIsDocumentOpenInOOServer(OnlyOfficeIntegrator_Model_AccessToken $token, Closure $restart): bool|array|OnlyOfficeIntegrator_Model_AccessToken
+    {
+        $lock = Tinebase_Core::getMultiServerLock(self::OOI_CTRL_IS_DOCUMENT_OPEN . $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY});
+        if ($lock->isLocked()) {
+            // it is our lock, we already asked OO -> the document is not open
+            return false;
+        }
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if (!$lock->tryAcquire(0)) {
+            // we have a race, we wait for the other process to finish, then restart ourself
+            if ($lock->tryAcquire()) {
+                $lock->release();
+            }
+            // do restart
+            return $restart();
+        }
+
+        // lock was free, we have it
+        if ($this->isDocumentOpenInOOServer($token)) {
+            return true;
+        }
+        return $restart();
+    }
+
     public function isDocumentOpenInOOServer(OnlyOfficeIntegrator_Model_AccessToken $token): bool
     {
         return $this->callCmdServiceInfo($token)['error'] !== 1;

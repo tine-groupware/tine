@@ -3600,7 +3600,7 @@ class Tinebase_FileSystem implements
             try {
                 $dirExists = ! empty($node->flypath) && $flySystem->directoryExists($node->flypath);
             } catch (Sabre\HTTP\ClientHttpException $shche) {
-                if ($shche->getMessage() === 'Gateway Timeout') {
+                if ($shche->getMessage() === 'Gateway Timeout' || $shche->getMessage() === 'Service Unavailable') {
                     // just log and try again later
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                         . ' Flysystem error on path "' . $node->flypath . '" : ' . $shche->getMessage());
