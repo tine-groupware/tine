@@ -222,7 +222,7 @@ msgid "Negative Timespace"
 msgstr "Negativer Zeitraum"
 
 msgid "The start date of the contract must be before the end date!"
-msgstr "Der Anfang des Vertrages muss vor dem Ende sein!"
+msgstr "Der Anfang des Vertrages muss vor dem Ende sein! (Ggf. wurde ein Vertragsende automatisch eingetragen.)"
 
 msgid "Contract not editable"
 msgstr "Vertrag nicht bearbeitbar"
@@ -447,6 +447,9 @@ msgstr "So."
 
 msgid "Additional Parameters"
 msgstr "Weitere Parameter"
+
+msgid "Failed"
+msgstr "Fehler"
 
 msgid "Vacation in same period"
 msgstr "Urlaub im selben Zeitraum"
@@ -1115,10 +1118,6 @@ msgid "Vacation corrections"
 msgid_plural "Vacation corrections"
 msgstr[0] "Urlaus Korrektur"
 msgstr[1] "Urlaus Korrekturen"
-
-#: Exception/ContractDates.php:31
-msgid "The start date of the contract must be before the end date!"
-msgstr "Der Anfang des Vertrages muss vor dem Ende sein! (Ggf. wurde ein Vertragsende automatisch eingetragen.)"
 
 msgid "Status"
 msgstr "Status"
