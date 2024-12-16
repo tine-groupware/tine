@@ -25,7 +25,7 @@ class Tinebase_BroadcastHub
         return $this->_isActive;
     }
 
-    public function push(string $verb, string $model, string $recordId, ?string $containerId): int
+    public function push(string $verb, string $model, string $recordId, ?string $containerId): Redis|int|false
     {
         return $this->_getRedis()->publish($this->_pubSubName, json_encode([
             'verb'          => $verb,
