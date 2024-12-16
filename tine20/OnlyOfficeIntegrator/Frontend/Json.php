@@ -65,17 +65,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_UnexpectedValue('parameter _version needs to be an integer greater 0');
         }
 
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $transRaii = (new Tinebase_RAII(function () use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
-
+        $transRaii = Tinebase_RAII::getTransactionManagerRAII();
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
 
         /** @var OnlyOfficeIntegrator_Model_AccessToken $accessToken */
@@ -100,12 +90,16 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $grants = new Tinebase_Model_Grants([], true);
-        $revisionToken = $this->getTokenForNode($node, $grants, static::$_fileExtensions,
-            OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_ONLY);
+        if (!($revisionToken = $this->getTokenForNode($node, $grants, static::$_fileExtensions,
+                fn() => $this->getHistoryData($_key, $_version), OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_ONLY)) instanceof OnlyOfficeIntegrator_Model_AccessToken) {
+            return $revisionToken;
+        }
         if (($prevRevision = $node->getPreviousRevision()) > 0) {
             $nodePrevRevision = $fs->get($node->getId(), false, $prevRevision);
-            $prevRevisionToken = $this->getTokenForNode($nodePrevRevision, $grants, static::$_fileExtensions,
-                OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_ONLY);
+            if (!($prevRevisionToken = $this->getTokenForNode($nodePrevRevision, $grants, static::$_fileExtensions,
+                    fn() => $this->getHistoryData($_key, $_version), OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_ONLY)) instanceof OnlyOfficeIntegrator_Model_AccessToken) {
+                return $prevRevisionToken;
+            }
             $previous = [
                 'key'           => $prevRevisionToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
                 'url'           => $prevRevisionToken->getEditorConfig()['document']['url'],
@@ -142,17 +136,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_UnexpectedValue('parameter _key needs to be a none empty string');
         }
 
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $transRaii = (new Tinebase_RAII(function () use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
-
+        $transRaii = Tinebase_RAII::getTransactionManagerRAII();
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
 
         /** @var OnlyOfficeIntegrator_Model_AccessToken $accessToken */
@@ -250,10 +234,14 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var OnlyOfficeIntegrator_Model_History $history */
         foreach($histories as $history) {
             if (null === $history->getId()) {
-                $revisionToken = $this->getTokenForNode(Tinebase_FileSystem::getInstance()->get(
-                    $history->{OnlyOfficeIntegrator_Model_History::FLDS_NODE_ID}, false,
-                    $history->{OnlyOfficeIntegrator_Model_History::FLDS_NODE_REVISION}), $grants,
-                    static::$_fileExtensions, OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_ONLY);
+                if (!($revisionToken = $this->getTokenForNode(Tinebase_FileSystem::getInstance()->get(
+                        $history->{OnlyOfficeIntegrator_Model_History::FLDS_NODE_ID}, false,
+                        $history->{OnlyOfficeIntegrator_Model_History::FLDS_NODE_REVISION}), $grants,
+                        static::$_fileExtensions,
+                        fn() => $this->getHistory($_key), // this actually can never happen because of read only mode
+                        OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_ONLY)) instanceof OnlyOfficeIntegrator_Model_AccessToken) {
+                    return $revisionToken;
+                }
             } else {
                 $revisionToken = null;
             }
@@ -751,18 +739,9 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_getEditorConfig($attachmentNodeId, $grants, null);
     }
 
-    public function getEditorConfigForTempFileId($tempFileId, $fileName=null)
+    public function getEditorConfigForTempFileId($tempFileId, $fileName = null)
     {
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         /** @var Tinebase_Model_TempFile $tempFile */
         $tempFile = Tinebase_TempFile::getInstance()->get($tempFileId);
@@ -777,14 +756,15 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         ], true);
 
         try {
-            $token = $this->getTokenForNode($node, new Tinebase_Model_Grants([
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true,
-            ], true), static::$_fileExtensions);
+            if (!($token = $this->getTokenForNode($node, new Tinebase_Model_Grants([
+                        Tinebase_Model_Grants::GRANT_READ => true,
+                        Tinebase_Model_Grants::GRANT_DOWNLOAD => true,
+                        Tinebase_Model_Grants::GRANT_EDIT => true,
+                    ], true), static::$_fileExtensions, fn() => $this->getEditorConfigForTempFileId($tempFileId, $fileName))) instanceof OnlyOfficeIntegrator_Model_AccessToken) {
+                return $token;
+            }
         } catch (OnlyOfficeIntegrator_Exception_WaitForOOSave $e) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
+            $raii->release();
             do {
                 usleep(300000);
             } while ($this->waitForTokenRequired($node->getId(), null, 30));
@@ -792,7 +772,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 throw new OnlyOfficeIntegrator_Exception_WaitForOOSave();
             }
 
-            return $this->getEditorConfigForTempFileId($tempFileId);
+            return $this->getEditorConfigForTempFileId($tempFileId, $fileName);
         }
 
         $raii->release();
@@ -861,7 +841,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord());
     }
 
-    protected function getTokenForNode(Tinebase_Model_Tree_Node $node, $usersGrants, $allowedExtensions, $mode = OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE)
+    protected function getTokenForNode(Tinebase_Model_Tree_Node $node, $usersGrants, $allowedExtensions, Closure $restart, $mode = OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE): OnlyOfficeIntegrator_Model_AccessToken|array
     {
         $fileType = null;
         $extension = null;
@@ -913,12 +893,14 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !==
                     (int)$node->revision) {
-                if (OnlyOfficeIntegrator_Controller::getInstance()->isDocumentOpenInOOServer($accessToken)) {
+                if (true === ($docIsOpen = OnlyOfficeIntegrator_Controller::getInstance()->lockedIsDocumentOpenInOOServer($accessToken, $restart))) {
                     // in case we would allow to open two different revisions at the same time, make sure that only one is writeable, all others need to be RO
                     throw new Tinebase_Exception_SystemGeneric(
                         Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)
                         ->translate("this revision currently can't be opened as a different revision is already open")
                     , 647);
+                } elseif (false !== $docIsOpen) {
+                    return $docIsOpen;
                 }
             }
 
@@ -927,10 +909,13 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $lastSaveForced = $accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED};
         } else {
             $waitFor = null;
+            $docIsOpen = false;
             if (OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE === $mode &&
                     $this->waitForTokenRequired($node->getId(), null, null, $waitFor) &&
-                    OnlyOfficeIntegrator_Controller::getInstance()->isDocumentOpenInOOServer($waitFor)) {
+                    true === ($docIsOpen = OnlyOfficeIntegrator_Controller::getInstance()->lockedIsDocumentOpenInOOServer($waitFor, $restart))) {
                 throw new OnlyOfficeIntegrator_Exception_WaitForOOSave();
+            } elseif (false !== $docIsOpen) {
+                return $docIsOpen;
             }
 
             $token = Tinebase_Record_Abstract::generateUID();
@@ -984,17 +969,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function getTokenForNodeId($nodeId, $usersGrants, $revision, $allowedExtensions, $mode = OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE)
     {
         $fs = Tinebase_FileSystem::getInstance();
-
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         $node = $fs->get($nodeId, false, $revision);
         if (null === $usersGrants) {
@@ -1014,7 +989,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         try {
-            $accessToken = $this->getTokenForNode($node, $usersGrants_, $allowedExtensions, $mode);
+            $accessToken = $this->getTokenForNode($node, $usersGrants_, $allowedExtensions, fn() => $this->getTokenForNodeId($nodeId, $usersGrants, $revision, $allowedExtensions, $mode), $mode);
         } catch (Tinebase_Exception_AreaLocked $teal) {
             if ($teal->getMessage() !== 'wait required') throw $teal;
             $raii->release();
