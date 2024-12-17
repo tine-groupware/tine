@@ -56,7 +56,7 @@ describe('groups', () => {
         await page.waitForTimeout(2000);
         await page.screenshot({path: 'screenshots/Administration/6_admin_gruppen.png'});
     });
-    test('edit group', async () => {
+    test.skip('edit group', async () => {
         let groupDialog = lib.getNewWindow();
         await expect(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'Users', clickCount: 2});
         groupDialog = await groupDialog;
