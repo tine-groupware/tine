@@ -4,9 +4,22 @@ Version: ab Caroline 2017.11
 
 Konfiguration und Performance-Optimierung der Datenbank
 
-## MySQL Optimierung
+## MySQL/MariaDB Optimierung
 
-### Zusammengefasst:
+### (Stand 2024) Tuning von MariaDB unter Debian Bookworm (mariadb-server 10.11.6)
+
+Server hat 8 GB RAM:
+
+- innodb_buffer_pool_size = 6G (~ 70 % RAM) 
+- max_heap_table_size = 64M
+- tmp_table_size = 64M
+- query_cache_size = 128M
+- query_cache_type = 1
+- innodb_read_io_threads = 8
+
+siehe auch https://mariadb.com/kb/en/mariadb-memory-allocation/
+
+### (Stand 2016) Zusammengefasst:
 
 * der MySQL Server muß entsprechend der Datenmenge und Anwendernutzung dimensioniert sein
 * der MySQL Server hat 16 Hardware Threads, innodb_thread_concurrency prüfen und ggf. anpassen. Der Wert sollte mindestens auf 16 gesetzt werden und später mittels Messungen der optimale Wert irgendwo zwischen 16 und 64 gefunden werden.
