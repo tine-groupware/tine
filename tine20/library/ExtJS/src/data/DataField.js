@@ -8,7 +8,7 @@
 const { apply, isDate } = require("Ext/core/core/Ext");
 const SortTypes = require("Ext/data/SortTypes");
 const isObject = require("lodash/isObject");
-
+// const { parseDate } = require('Ext/util/Date');
 /**
  * @class Ext.data.Field
  * <p>This class encapsulates the field definition information specified in the field definition objects
@@ -98,6 +98,10 @@ const Field = function(config){
                         if(dateFormat == "time"){
                             return new Date(parseInt(v, 10));
                         }
+                        if (dateFormat == "Y-m-d H:i:s"){
+                            return new Date(Date.parse(v));
+                        }
+                        // NOTE: Date.parseDate is an ext native augmentation, should not be neccesary for our ISO date format
                         return Date.parseDate(v, dateFormat);
                     }
                     var parsed = Date.parse(v);
@@ -201,7 +205,7 @@ var myData = [
      */
     /**
      * @cfg {String} dateFormat
-     * (Optional) A format string for the {@link Date#parseDate Date.parseDate} function, or "timestamp" if the
+     * (Optional) A format string for the {@link Date#parseDate parseDate} function, or "timestamp" if the
      * value provided by the Reader is a UNIX timestamp, or "time" if the value provided by the Reader is a
      * javascript millisecond timestamp.
      */

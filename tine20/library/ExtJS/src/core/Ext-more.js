@@ -80,15 +80,6 @@ module.exports = function(){
             return Ext.isEmpty(v, allowBlank) ? defaultValue : v;
         },
 
-        /**
-         * Escapes the passed string for use in a regular expression
-         * @param {String} str
-         * @return {String}
-         */
-        escapeRe : function(s) {
-            return s.replace(/([-.*+?^${}()|[\]\/\\])/g, "\\$1");
-        },
-
         sequence : function(o, name, fn, scope){
             o[name] = o[name].createSequence(fn, scope);
         },

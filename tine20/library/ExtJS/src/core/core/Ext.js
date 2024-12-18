@@ -805,7 +805,16 @@ function(el){
         supportsUserFocus: supportsUserFocus,
         supportsPopupWindows: !isIOS && !isAndroid,
         isThenable: isThenable,
-        isPromise: isThenable
+        isPromise: isThenable,
+
+        /**
+         * Escapes the passed string for use in a regular expression
+         * @param {String} str
+         * @return {String}
+         */
+        escapeRe : function(s) {
+            return s.replace(/([-.*+?^${}()|[\]\/\\])/g, "\\$1");
+        }
     });
 
     /**
@@ -1085,5 +1094,6 @@ export const isString = Ext.isString;
 export const isBoolean = Ext.isBoolean;
 export const isElement = Ext.isElement;
 export const isDefined = Ext.isDefined;
+export const escapeRe = Ext.escapeRe;
 export const ns = Ext.ns;
 */

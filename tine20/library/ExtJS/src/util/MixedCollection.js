@@ -5,9 +5,8 @@
  * http://www.extjs.com/license
  */
 
-const { extend, isArray, isFunction, isEmpty } = require("Ext/core/core/Ext");
+const { extend, isArray, isFunction, isEmpty, escapeRe } = require("Ext/core/core/Ext");
 const { Observable } = require("Ext/util/core/Observable");
-const { escapeRe } = require("Ext/core/Ext-more");
 const cloneDeep = require("lodash/cloneDeep");
 
 
