@@ -10,7 +10,7 @@
 
 /*global Ext, Tine, Locale*/
 
-const { isObject, isArray, map, isString, get, escapeRegExp, each, find } = require('lodash')
+const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact } = require('lodash')
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
 /**
  * static common helpers
