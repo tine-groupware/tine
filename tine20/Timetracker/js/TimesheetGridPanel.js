@@ -21,7 +21,7 @@ Ext.namespace('Tine.Timetracker');
  * <p><pre>
  * </pre></p>
  * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3q
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @param       {Object} config
@@ -88,12 +88,12 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.pagingToolbar.items.get('wt-bar').update(Ext.ux.PercentRenderer({
                 qtitle: this.app.i18n._('Working Time Statistics'),
                 qtip:
-                    this.app.formatMessage(`Working Time Target: { target }`, {
+                    this.app.formatMessage('Working Time Target: { target }', {
                         target: Ext.ux.form.DurationSpinner.durationRenderer(data.workingTimeTarget, {
                             baseUnit: 'seconds'
                         })
                     }) + "<br>" +
-                    this.app.formatMessage(`Working Time Recorded: { recorded }`, {
+                    this.app.formatMessage('Working Time Recorded: { recorded }', {
                         recorded: Ext.ux.form.DurationSpinner.durationRenderer(data.totalsum || 0, {
                             baseUnit: 'minutes'
                         })
@@ -108,8 +108,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.pagingToolbar.items.get('to-bar').update(Ext.ux.PercentRenderer({
                 qtitle: this.app.i18n._('Turnover Statistics'),
                 qtip:
-                    this.app.formatMessage(`Turnover Target: { target }`, {target: Ext.util.Format.money(data.turnOverGoal)}) + "<br>" +
-                    this.app.formatMessage(`Turnover Recorded: { recorded }`, {recorded: Ext.util.Format.money(data.clearedAmount || 0)}),
+                    this.app.formatMessage('Turnover Target: { target }', {target: Ext.util.Format.money(data.turnOverGoal)}) + "<br>" +
+                    this.app.formatMessage('Turnover Recorded: { recorded }', {recorded: Ext.util.Format.money(data.clearedAmount || 0)}),
                 percent: Math.round(100 * (data.clearedAmount || 0) / data.turnOverGoal)
             }));
         }

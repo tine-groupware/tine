@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -488,6 +487,12 @@ msgstr "URI of the sentry service in the following format: https://<key>:<secret
 
 msgid "Sentry Loglevel Bitmask"
 msgstr "Sentry Loglevel Bitmask"
+
+msgid "Sentry Environment"
+msgstr "Sentry Environment"
+
+msgid "One of: AUTODETECT, PRODUCTION, TEST, DEVELOPMENT"
+msgstr "One of: AUTODETECT, PRODUCTION, TEST, DEVELOPMENT"
 
 msgid "API key to access status URI"
 msgstr "API key to access status URI"
@@ -1396,6 +1401,18 @@ msgstr "No Information"
 
 msgid "No Access"
 msgstr "No Access"
+
+#, python-brace-format
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] "{0} minute"
+msgstr[1] "{0} minutes"
+
+#, python-brace-format
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0} hour"
+msgstr[1] "{0} hours"
 
 #, python-brace-format
 msgid "{0} second"

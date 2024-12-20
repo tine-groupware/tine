@@ -191,13 +191,13 @@ const modalProps = computed(() => {
       }
     } else if (modalData.reservationEvent.deletable) {
       modalTitle = formatMessage("Resource: {name} reserved by you", {name: modalData.reservableObj.displayName})
-      modalContent = formatMessage(`Do you want to delete your reservation ?`)
+      modalContent = formatMessage('Do you want to delete your reservation ?')
       modalAction = async () => {
         await deleteReservation(modalData.reservableObj.name)
       }
     } else {
-      modalTitle = formatMessage(`Resource: {name} already reserved`, {name: modalData.reservableObj.displayName})
-      modalContent = formatMessage(`The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}.`, {
+      modalTitle = formatMessage('Resource: {name} already reserved', {name: modalData.reservableObj.displayName})
+      modalContent = formatMessage('The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}.', {
         name: modalData.reservableObj.displayName,
         floorName: currentFloor.value.name,
         date: selectedDate.value,
