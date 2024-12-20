@@ -505,6 +505,12 @@ msgstr "URI eines sentry services im folgenden Format: https://<key>:<secret>@my
 msgid "Sentry Loglevel Bitmask"
 msgstr "Sentra Loglevel Bitmaske"
 
+msgid "Sentry Environment"
+msgstr ""
+
+msgid "One of: AUTODETECT, PRODUCTION, TEST, DEVELOPMENT"
+msgstr ""
+
 msgid "API key to access status URI"
 msgstr "API Schlüssel für den Status Info URI Zugriff"
 
@@ -1412,6 +1418,18 @@ msgstr "Keine Information"
 
 msgid "No Access"
 msgstr "Kein Zugriff"
+
+#, python-brace-format
+msgid "{0} minute"
+msgid_plural "{0} minutes"
+msgstr[0] "{0} Minute"
+msgstr[1] "{0} Minuten"
+
+#, python-brace-format
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0} Stunde"
+msgstr[1] "{0} Stunden"
 
 #, python-brace-format
 msgid "{0} second"

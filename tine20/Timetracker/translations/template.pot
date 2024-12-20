@@ -239,7 +239,19 @@ msgstr ""
 msgid "Working Time Statistics"
 msgstr ""
 
+msgid "Working Time Target: { target }"
+msgstr ""
+
+msgid "Working Time Recorded: { recorded }"
+msgstr ""
+
 msgid "Turnover Statistics"
+msgstr ""
+
+msgid "Turnover Target: { target }"
+msgstr ""
+
+msgid "Turnover Recorded: { recorded }"
 msgstr ""
 
 msgid "timeframe"

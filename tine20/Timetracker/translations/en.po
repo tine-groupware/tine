@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -240,8 +239,20 @@ msgstr "Turnover:"
 msgid "Working Time Statistics"
 msgstr "Working Time Statistics"
 
+msgid "Working Time Target: { target }"
+msgstr "Working Time Target: { target }"
+
+msgid "Working Time Recorded: { recorded }"
+msgstr "Working Time Recorded: { recorded }"
+
 msgid "Turnover Statistics"
 msgstr "Turnover Statistics"
+
+msgid "Turnover Target: { target }"
+msgstr "Turnover Target: { target }"
+
+msgid "Turnover Recorded: { recorded }"
+msgstr "Turnover Recorded: { recorded }"
 
 msgid "timeframe"
 msgstr "timeframe"
