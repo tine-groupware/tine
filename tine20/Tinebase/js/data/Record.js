@@ -316,7 +316,7 @@ extend(Record, ExtRecord, {
                 if (String(value)[0] === '{' || isObject(value)) {
                     this.set(fieldName, Record.setFromJson(value, recordClass));
                 } else {
-                    const proxy = new RecordProxy({
+                    const proxy = new Tine.Tinebase.data.RecordProxy({
                         recordClass: recordClass
                     });
                     pms.push(proxy.promiseLoadRecord(value)
