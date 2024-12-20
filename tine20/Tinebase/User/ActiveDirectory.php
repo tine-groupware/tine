@@ -173,6 +173,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
 
         if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}) {
+            $user->accountId = $_user->accountId;
+            $user->xprops()[static::class]['syncId'] = $_user->xprops()[static::class]['syncId'];
             $this->updateUserInSyncBackend($user);
             $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
         }
@@ -571,6 +573,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         );
         if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}
                 && ($_ldapEntry['ntsecuritydescriptor'][0] ?? false)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' start parsing sddl');
             try {
                 $sddl = SDDL::fromBytes($_ldapEntry['ntsecuritydescriptor'][0]);
                 $foundSelf = false;
@@ -629,6 +633,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                 }
 
                 $ldapData['ntsecuritydescriptor'] = $sddl->toBytes();
+                if ($_ldapEntry['ntsecuritydescriptor'][0] !== $ldapData['ntsecuritydescriptor'] && Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' changing ntsecuritydescriptor');
             } catch (\Tine\SDDL_Parser\ParserException $e) {
                 Tinebase_Exception::log($e);
             }
