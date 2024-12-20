@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const customAppsDir = path.resolve(__dirname, '../../../tine20/vendor/metaways')
+const appsDir = path.resolve(__dirname, '../../../tine20')
 
 /** @type {import('jest').Config} */
 const config = {
@@ -103,9 +104,14 @@ const config = {
   }, [])),
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  moduleNameMapper: {
+  moduleNameMapper: Object.assign({
     "^Ext(.*)$": "<rootDir>../../library/ExtJS/src$1",
-  },
+  }, fs.readdirSync(appsDir).reduce((accu, baseName) => {
+    if (fs.existsSync(`${appsDir}/${baseName}/js`)) {
+      accu[`^${baseName}/(.*)`] = `${appsDir}/${baseName}/js/$1`
+    }
+    return accu
+  }, {})),
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
