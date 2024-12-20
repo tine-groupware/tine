@@ -130,6 +130,9 @@ msgstr "Kopie speichern als"
 msgid "Exporting Document ..."
 msgstr "Dokument wird exportiert…"
 
+msgid "Version details for version { version } not available."
+msgstr "Details zur Versoin { version } sind nicht verfügbar."
+
 msgid "Overwrite Existing File?"
 msgstr "Bestehende Datei überschreiben?"
 

@@ -304,7 +304,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
             this.docEditor.setHistoryData(historyData);
         } catch (err) {
             this.docEditor.setHistoryData({
-                "error": this.app.i18n._(`Version details for version ${version} not available.`),
+                "error": this.app.i18n.formatMessage('Version details for version { version } not available.', {version}),
                 "version": version
             });
         }

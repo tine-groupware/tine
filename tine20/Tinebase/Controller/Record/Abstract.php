@@ -911,7 +911,9 @@ abstract class Tinebase_Controller_Record_Abstract
             }
 
             if (true === $freeOldValue) {
-                $numberable->free($_oldRecord->{$fieldDef['fieldName']});
+                try {
+                    $numberable->free($_oldRecord->{$fieldDef['fieldName']});
+                } catch (Tinebase_Exception_UnexpectedValue) {} // we ignore this free
             }
         }
     }
