@@ -125,6 +125,9 @@ msgstr ""
 msgid "Exporting Document ..."
 msgstr ""
 
+msgid "Version details for version { version } not available."
+msgstr ""
+
 msgid "Overwrite Existing File?"
 msgstr ""
 

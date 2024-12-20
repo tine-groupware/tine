@@ -825,6 +825,17 @@ msgstr "Do you want to reserve the resource {name} on floor {floorName} for {dat
 msgid "Resource: {name} reserved by you"
 msgstr "Resource: {name} reserved by you"
 
+msgid "Do you want to delete your reservation ?"
+msgstr "Do you want to delete your reservation ?"
+
+#, python-brace-format
+msgid "Resource: {name} already reserved"
+msgstr "Resource: {name} already reserved"
+
+#, python-brace-format
+msgid "The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}."
+msgstr "The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}."
+
 msgid "Floorplan"
 msgstr "Floorplan"
 

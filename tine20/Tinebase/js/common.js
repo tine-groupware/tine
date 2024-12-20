@@ -432,8 +432,8 @@ const common = {
         if (! format || ! Ext.isString(format)) {
             const isGridCell = isObject(format) && format.hasOwnProperty('cellAttr');
             const mediumRenderer = (i, H) => {
-                const minutes = i> 0 ? String.format(i18n.ngettext(`{0} minute`, `{0} minutes`, i), i) : '';
-                const hours = H > 0 ? String.format(i18n.ngettext(`{0} hour`, `{0} hours`, H), H) : '';
+                const minutes = i> 0 ? String.format(i18n.ngettext('{0} minute', '{0} minutes', i), i) : '';
+                const hours = H > 0 ? String.format(i18n.ngettext('{0} hour', '{0} hours', H), H) : '';
                 const duration = hours && minutes ? `${hours}, ${minutes}` : hours || minutes;
                 return `<span class="duration-renderer-medium">${duration}</span>`;
             }

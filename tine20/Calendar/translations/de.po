@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 12:18+0000\n"
+"PO-Revision-Date: 2024-12-10 09:54+0100\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/"
 "de/)\n"
@@ -28,9 +28,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.4.2\n"
 
 msgid "manage shared calendars"
 msgstr "Gemeinsame Kalender Verwalten"
@@ -1811,6 +1810,9 @@ msgstr "Jedes {0}. Jahr"
 msgid "of"
 msgstr "im"
 
+msgid "Individual Dates"
+msgstr "Einzeltermine"
+
 msgid "Date"
 msgstr "Datum"
 
@@ -2175,8 +2177,20 @@ msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
 msgid "You can review the poll results here:"
 msgstr "Sie können die Umfrageergebnisse hier einsehen:"
 
-msgid "Individual Dates"
-msgstr "Einzeltermine"
+msgid "Do you want to delete your reservation ?"
+msgstr "Möchten sie ihre Reservierung löschen?"
+
+#, python-brace-format
+msgid "Resource: {name} already reserved"
+msgstr "Die Resource {name} ist bereits reserviert"
+
+#, python-brace-format
+msgid ""
+"The resource {name} on floor {floorName} is reserved for selected date: "
+"{date} by {name1}."
+msgstr ""
+"Die Resource {name} im Stock {floorName} ist bereits am {date} von {name1} "
+"reserviert."
 
 msgid "Force update of existing events"
 msgstr "Erzwinge Aktualisierung von existierenden Terminen"
@@ -2329,19 +2343,6 @@ msgstr "Thema ⏎ Organisator ⏎ Lokalität"
 
 msgid "Reserve Resource: %1$s"
 msgstr "Reserviere Resource: %1$s"
-
-msgid "Do you want to delete your reservation ?"
-msgstr "Wollen Sie Ihre Reservierung löschen ?"
-
-msgid "Resource: {name} already reserved"
-msgstr "Resource: {name} schon reserviert"
-
-msgid ""
-"The resource {name} on floor {floorName} is reserved for selected date: "
-"{date} by {name1}."
-msgstr ""
-"Die Resource {name} im Stock {floorName} ist von {name1} für den Tag: "
-"{date} reserviert."
 
 msgid "The container already exists"
 msgstr "Der Container existiert bereits"
