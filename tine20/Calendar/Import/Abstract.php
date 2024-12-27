@@ -167,12 +167,15 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' '
             . ' Filter: ' . print_r($existingEventsFilter->toArray(), true));
 
+        $this->_cc->assertCalUserAttendee(false);
+        if (is_array($this->_options['overwriteOrganizer'])) {
+            $this->_cc->assertCalUserOrganizer(false);
+        }
+
         // insert one by one in a single transaction
-        $existingEvents->addIndices(array('uid'));
         foreach ($events as $event) {
             $existingEvent = $existingEvents->find('uid', $event->uid);
             if (is_array($this->_options['overwriteOrganizer'])) {
-                $this->_cc->assertCalUserOrganizer(false);
                 foreach($this->_options['overwriteOrganizer'] as $fieldName => $value) {
                     $event->{$fieldName} = $value;
                 }
@@ -187,7 +190,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
                 }
 
             } else if ($this->_options['attendeeStrategy'] === 'replace') {
-                $this->_cc->assertCalUserAttendee(false);
+
                 $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, $this->_options['attendee']);
             }
 
