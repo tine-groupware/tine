@@ -146,6 +146,36 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->_assertUblXml($invoice, round(5.97/(1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100)-0.01, 2), 5.97);
     }
 
+    public function testUblView(): void
+    {
+        if (!Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_SVC}) {
+            $this->markTestSkipped('no edocument view service configured, skipping');
+        }
+        $product1 = $this->_createProduct();
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 10,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+            ], true),
+        ];
+        $buyRef = 'buy refüÜß³';
+        $invoice = $this->_createInvoice($positions, [
+            SMDI::FLD_BUYER_REFERENCE => $buyRef,
+        ]);
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        $node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null);
+        ob_start();
+        (new Sales_Frontend_Http)->getXRechnungView($node->getId());
+        $html = ob_get_clean();
+        $this->assertStringContainsString($buyRef, $html);
+    }
+
     public function testPositionGrossDifferentTaxRates(): void
     {
         $product1 = $this->_createProduct();
