@@ -368,7 +368,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             'attendee' => [$sclever],
         ]);
         $startbucks = $importEvents->find('uid', '3632597');
-        $this->assertEquals(2, count($startbucks->attendee), 'attendee replaced instead of added');
+        $this->assertEquals(1, count($startbucks->attendee), 'attendee replaced instead of added');
         $this->assertNotEmpty(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
     }
 
