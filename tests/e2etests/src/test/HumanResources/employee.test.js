@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Human Resources');
 });
 
-describe.skip('employee', () => {
+describe('employee', () => {
     describe('employee grid', () => {
         test('show grid', async () => {
             await expectPuppeteer(page).toClick('.x-tree-node span', {text: 'Mitarbeiter', visible: true});
@@ -15,7 +15,7 @@ describe.skip('employee', () => {
         });
 
         test('select employee', async () => {
-            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'McBlack, James'});
+            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'James McBlack'});
         });
     });
     
@@ -268,7 +268,7 @@ describe.skip('employee', () => {
         let employeeEditDialog, contractEditDialog
         test('edit dialog', async () => {
             await page.waitForTimeout(1000);
-            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'Wulf, Paul'});
+            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'Paul Wulf'});
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge', visible:true});
         });
@@ -342,11 +342,11 @@ describe.skip('employee', () => {
             await contractEditDialog.waitForTimeout(1000);
         });
         test('edit workingtimeconverter', async () => {
-            await contractEditDialog.type('[class=new-row] input', 'Workingtime Converter');
+            await contractEditDialog.type('[class=new-row] input', 'Arbeitszeit Umwandler');
             await contractEditDialog.waitForTimeout(1000);
             let WorkingtimeConverter = lib.getNewWindow();
-            await expectPuppeteer(contractEditDialog).toMatchElement('.x-combo-list-item', {text: 'Workingtime Converter', visible:true});
-            await expectPuppeteer(contractEditDialog).toClick('.x-combo-list-item', {text: 'Workingtime Converter', visible:true});
+            await expectPuppeteer(contractEditDialog).toMatchElement('.x-combo-list-item', {text: 'Arbeitszeit Umwandler', visible:true});
+            await expectPuppeteer(contractEditDialog).toClick('.x-combo-list-item', {text: 'Arbeitszeit Umwandler', visible:true});
             WorkingtimeConverter = await WorkingtimeConverter;
             await WorkingtimeConverter.waitForTimeout(2000);
             await expectPuppeteer(WorkingtimeConverter).toClick('button', {text: 'Ok'});
@@ -359,7 +359,7 @@ describe.skip('employee', () => {
 
         test('check contract', async () => {
             await page.waitForTimeout(2000);
-            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'Wulf, Paul'});
+            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'Paul Wulf'});
             await page.waitForTimeout(2000);
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge'});
@@ -379,7 +379,7 @@ describe.skip('employee', () => {
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(2) .x-grid3-col-configRecord').textContent))
                 .toEqual(' Arbeitszeit wird ausgewertet von 06:00 bis 20:00. (Arbeitzeitlimitierung)');
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(3) .x-grid3-col-configRecord').textContent))
-                .toEqual(' Prefer workingtime over projecttime timesheets on a daily bases. (Workingtime Converter)');
+                .toEqual(' Bevorzuge Arbeitszeit vor Projektzeit Stundenzettel auf täglicher Basis. (Arbeitszeit Umwandler)');
 
         })
     });
