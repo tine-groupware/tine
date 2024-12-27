@@ -335,7 +335,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onSaveAndClose: function () {
         const start = this.getForm().findField('start_date').getValue()
         const end = this.getForm().findField('end_date').getValue()
-        if (start > end) {
+        if (end && start > end) {
             Ext.MessageBox.alert(
               this.app.i18n._('Failed'),
               this.app.i18n._('The start date of the contract must be before the end date!')
