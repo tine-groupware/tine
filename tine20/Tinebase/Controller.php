@@ -866,6 +866,57 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return $user;
     }
 
+    public function passwordLessLogin(Tinebase_Model_FullUser $user, ?string $userMFACfgId, ?string $userMFApwd, string $clientIdString): bool
+    {
+        if (!$user->mfa_configs instanceof Tinebase_Record_RecordSet) {
+            return false;
+        }
+
+        if (null !== $userMFACfgId) {
+            if (!($mfaCfg = $user->mfa_configs->getById($userMFACfgId))) {
+                return false;
+            }
+            try {
+                /** @var Tinebase_Model_MFA_UserConfig $mfaCfg */
+                $mfa = Tinebase_Auth_MFA::getInstance($mfaCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID});
+            } catch (Tinebase_Exception_Backend) {
+                return false;
+            }
+
+            if ($mfa->getConfig()->{Tinebase_Model_MFA_Config::FLD_ALLOW_PWD_LESS_LOGIN} && $mfa->validate($userMFApwd, $mfaCfg)) {
+                $authResult = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $user->accountLoginName);
+                $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($user->accountLoginName, $authResult, Tinebase_Core::get(Tinebase_Core::REQUEST),
+                    $clientIdString);
+
+                Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                $user = $this->_validateAuthResult($authResult, $accessLog);
+
+                if (!($user instanceof Tinebase_Model_FullUser)) {
+                    return false;
+                }
+
+                $this->_loginUser($user, $accessLog);
+
+                return true;
+            }
+
+            //return false;
+            //we fall through and use the outer return false ... to make phpstan happy
+        } else {
+            $availableUserMFAcfgs = $user->mfa_configs->filter(fn (Tinebase_Model_MFA_UserConfig $uCfg) =>
+                Tinebase_Auth_MFA::getInstance($uCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})->getConfig()->{Tinebase_Model_MFA_Config::FLD_ALLOW_PWD_LESS_LOGIN});
+
+            if (0 === $availableUserMFAcfgs->count()) {
+                return false;
+            }
+
+            $this->_throwMFAException(new Tinebase_Model_AreaLockConfig([Tinebase_Model_AreaLockConfig::FLD_AREA_NAME => Tinebase_Model_AreaLockConfig::AREA_LOGIN], true),
+                $availableUserMFAcfgs, $user);
+        }
+
+        return false;
+    }
+
     /**
      * @param Tinebase_Model_AccessLog $accessLog
      * @param Tinebase_Model_FullUser $user
