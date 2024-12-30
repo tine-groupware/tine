@@ -20,7 +20,7 @@ class Tinebase_Helper_Algorithm_TerminationDeadlineTest extends TestCase
      */
     public function testGetTerminationDeadline()
     {
-        $commencement = new Tinebase_DateTime(date('Y-m-d', strtotime('first day of January this year')));
+        $commencement = new Tinebase_DateTime(date('Y-01-01'));
         $termOfContractInMonths = 12;
         $automaticContractExtensionInMonths = 12;
         $cancelationPeriodInMonths = 3;
@@ -30,7 +30,7 @@ class Tinebase_Helper_Algorithm_TerminationDeadlineTest extends TestCase
             $termOfContractInMonths,
             $automaticContractExtensionInMonths,
             $cancelationPeriodInMonths,
-            (new Tinebase_DateTime())->setWeek(50)->setWeekDay(1)
+            new Tinebase_DateTime(date('Y-12-30'))
         );
 
         $expectedTerminationDeadline = (clone $commencement)->addYear(2)->subMonth($cancelationPeriodInMonths)->subDay(1);
@@ -39,7 +39,7 @@ class Tinebase_Helper_Algorithm_TerminationDeadlineTest extends TestCase
 
     public function testGetTerminationDeadlineWithSixMonthExtension()
     {
-        $commencement = new Tinebase_DateTime(date('Y-m-d', strtotime('first day of January this year')));
+        $commencement = new Tinebase_DateTime(date('Y-01-01'));
         $termOfContractInMonths = 12;
         $automaticContractExtensionInMonths = 6;
         $cancelationPeriodInMonths = 3;
@@ -49,7 +49,7 @@ class Tinebase_Helper_Algorithm_TerminationDeadlineTest extends TestCase
             $termOfContractInMonths,
             $automaticContractExtensionInMonths,
             $cancelationPeriodInMonths,
-            (new Tinebase_DateTime())->setWeek(50)->setWeekDay(1)
+            new Tinebase_DateTime(date('Y-12-30'))
         );
 
         $expectedTerminationDeadline = (clone $commencement)->addYear(1)->addMonth($automaticContractExtensionInMonths)->subMonth($cancelationPeriodInMonths)->subDay(1);
@@ -61,7 +61,7 @@ class Tinebase_Helper_Algorithm_TerminationDeadlineTest extends TestCase
      */
     public function testGetTerminationDeadlineForExtendedContract()
     {
-        $commencement = (new Tinebase_DateTime())->setWeek(1)->setWeekDay(1)->subYear(2);
+        $commencement = (new Tinebase_DateTime(date('Y-01-01')))->subYear(2);
         $termOfContractInMonths = 12;
         $automaticContractExtensionInMonths = 12;
         $cancelationPeriodInMonths = 3;
@@ -71,7 +71,7 @@ class Tinebase_Helper_Algorithm_TerminationDeadlineTest extends TestCase
             $termOfContractInMonths,
             $automaticContractExtensionInMonths,
             $cancelationPeriodInMonths,
-            (new Tinebase_DateTime())->setWeek(50)->setWeekDay(1)
+            new Tinebase_DateTime(date('Y-12-30'))
         );
 
         $expectedTerminationDeadline = (clone $commencement)->addYear(4)->subMonth($cancelationPeriodInMonths)->subDay(1);
