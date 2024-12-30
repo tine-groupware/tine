@@ -73,19 +73,13 @@ class Tinebase_Helper_Algorithm_TerminationDeadline
         $cancelationPeriodInMonths,
         $today = null
     ) {
-        $today = $today ?: Tinebase_DateTime::now();
+        $today = $today ?: Tinebase_DateTime::today();
 
         // Without renewal consideration
         $contractEndDate = (clone $commencement)->addMonth($termOfContractInMonths);
 
-        // Calculate end date including renewals
-        $commencementCopy = clone $commencement;
-        for (
-            $commencementCopy->addMonth($termOfContractInMonths);
-            (clone $commencementCopy)->subMonth($cancelationPeriodInMonths) < $today;
-            $commencementCopy->addMonth($automaticContractExtensionInMonths)
-        ) {
-            $contractEndDate = $commencementCopy;
+        while ($contractEndDate->getClone()->subMonth($cancelationPeriodInMonths)->subDay(1) < $today) {
+            $contractEndDate->addMonth($automaticContractExtensionInMonths);
         }
 
         return $contractEndDate->subMonth($cancelationPeriodInMonths)->subDay(1);
