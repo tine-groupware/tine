@@ -7,6 +7,7 @@
  */
 
 import Record from 'data/Record'
+import { accountSortType } from 'common'
 
 /**
  * @class Attendee
@@ -16,7 +17,7 @@ import Record from 'data/Record'
 const Attendee = Record.create([
     {name: 'id'},
     {name: 'cal_event_id'},
-    {name: 'user_id', sortType: Tine.Tinebase.common.accountSortType },
+    {name: 'user_id', sortType: accountSortType },
     {name: 'user_type'},
     {name: 'role', type: 'keyField', keyFieldConfigName: 'attendeeRoles'},
     {name: 'quantity'},
