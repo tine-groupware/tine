@@ -826,9 +826,13 @@ class SSO_Controller extends Tinebase_Controller_Event
                 break;
         }
 
-        /** @var ?SSO_Model_ExternalIdp $idp */
-        Tinebase_Session::getSessionNamespace()->sso_idp = $idp?->getId();
-        return $idp?->{SSO_Model_ExternalIdp::FLD_CONFIG}->initAuthProcess() ?? false;
+        return $idp ? static::startExternalIdpAuthProcess($idp): false;
+    }
+
+    public static function startExternalIdpAuthProcess(SSO_Model_ExternalIdp $idp): bool
+    {
+        Tinebase_Session::getSessionNamespace()->sso_idp = $idp->getId();
+        return $idp->{SSO_Model_ExternalIdp::FLD_CONFIG}->initAuthProcess();
     }
 
     public static function publicOidAuthResponseErrorRedirect(?\League\OAuth2\Server\RequestTypes\AuthorizationRequest $authRequest): \Psr\Http\Message\ResponseInterface
