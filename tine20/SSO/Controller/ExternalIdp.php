@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -15,6 +15,8 @@
  *
  * @package     SSO
  * @subpackage  Controller
+ *
+ * @method SSO_Model_ExternalIdp get(string $id)
  */
 class SSO_Controller_ExternalIdp extends Tinebase_Controller_Record_Abstract
 {
