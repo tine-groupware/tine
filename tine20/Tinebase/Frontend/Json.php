@@ -587,6 +587,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function login(?string $username = null, ?string $password = null, ?string $MFAUserConfigId = null, ?string $MFAPassword = null): array
     {
         if (empty($username)) {
+            try {
+                if (($idpId = ($this->_getRequestContextHeaders()['idpid'] ?? null)) &&
+                        ($idp = SSO_Controller_ExternalIdp::getInstance()->get($idpId)) &&
+                        $idp->{SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION}) {
+                    SSO_Controller::startExternalIdpAuthProcess($idp);
+                }
+            }  catch (Tinebase_Exception_NotFound) {}
             return $this->_getLoginFailedResponse();
         }
 

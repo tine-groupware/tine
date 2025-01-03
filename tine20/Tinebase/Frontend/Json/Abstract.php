@@ -151,7 +151,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
     }
 
-    protected function _getRequestContextHeaders()
+    protected function _getRequestContextHeaders(): array
     {
         $clientData = [];
         if ($request = Tinebase_Core::getRequest()) {
