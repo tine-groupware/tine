@@ -7,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -29,6 +29,8 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
     public const FLD_DESCRIPTION = 'description';
     public const FLD_NAME = 'name';
     public const FLD_DOMAINS = 'domains';
+    public const FLD_SHOW_AS_LOGIN_OPTION = 'show_login_option';
+    public const FLD_LOGO = 'logo';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -43,7 +45,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::RECORD_NAME => 'External Identity Provider',
         self::RECORDS_NAME => 'External Identity Providers', // ngettext('External Identity Provider', 'External Identity Providers', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -123,6 +125,16 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => SSO_Model_ExIdpDomain::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => SSO_Model_ExIdpDomain::FLD_EX_IPD_ID,
                 ],
+            ],
+            self::FLD_SHOW_AS_LOGIN_OPTION => [
+                self::LABEL                 => 'Show on Login Screen', // _('Show on Login Screen')
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+            ],
+            self::FLD_LOGO              => [
+                self::TYPE                  => self::TYPE_BLOB,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Logo', // _('Logo')
             ],
         ]
     ];

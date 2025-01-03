@@ -13,6 +13,7 @@
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Psr\Http\Message\RequestInterface;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * dispatcher and initialisation class (functions are static)
@@ -1841,6 +1842,11 @@ class Tinebase_Core
             'jsonKey'           => Tinebase_Core::get('jsonKey'),
             'licenseStatus'     => Tinebase_License::getInstance()->getStatus(),
             'licenseData'       => Tinebase_License::getInstance()->getCertificateData(),
+            'loginExternalIdps' => SSO_Controller_ExternalIdp::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class, [
+                    [TMFA::FIELD => SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => true],
+                ])
+            )->toArray(),
         ];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
