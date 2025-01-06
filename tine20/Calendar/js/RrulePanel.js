@@ -218,15 +218,11 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             this.NONEcard.html = this.app.i18n._("Exceptions of reccuring events can't have recurrences themselves.");
         }
 
-        if (!this.record.get('id')) {
-            this.INDIVIDUALcard.setDisabled(true);
-        } else {
-            if (this.activeRuleCard.freq === 'INDIVIDUAL') {
-                await Tine.Calendar.getEventExceptions(this.record.get('id'))
-                    .then((response) => {
-                        this.INDIVIDUALcard.exceptionGrid.store.loadData(response.results);
-                    });
-            }
+        if (this.activeRuleCard.freq === 'INDIVIDUAL') {
+            await Tine.Calendar.getEventExceptions(this.record.get('id'))
+                .then((response) => {
+                    this.INDIVIDUALcard.exceptionGrid.store.loadData(response.results);
+                });
         }
     },
     
@@ -234,7 +230,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         const rendered = _.get(this, 'activeRuleCard.rendered', false);
         const rrule = rendered ? this.activeRuleCard.getRule() : this.rrule;
         
-        if (rrule && (! this.rrule || !this.record.data.creation_time)) {
+        if (rrule && (!this.rrule || !this.record.data.creation_time || (rrule.freq === 'INDIVIDUAL' && this.rrule.count !== rrule.count))) {
             // mark as new rule to avoid series confirm dlg
             rrule.newrule = true;
         }
@@ -1069,6 +1065,7 @@ Tine.Calendar.RrulePanel.INDIVIDUALcard = Ext.extend(Tine.Calendar.RrulePanel.Ab
                 minWidth: 100,
                 hideable: false,
                 sortable: true,
+                editor: new Ext.form.TextField({allowBlank: true}),
             }, {
                 id: 'info',
                 header: this.app.i18n._('Info'),
@@ -1078,28 +1075,25 @@ Tine.Calendar.RrulePanel.INDIVIDUALcard = Ext.extend(Tine.Calendar.RrulePanel.Ab
             }]),
         });
 
-        this.exceptionGrid.on('beforeaddrecord', async (event) => {
+        this.exceptionGrid.on('beforeaddrecord', async (individualEvent) => {
             if (this.rrulePanel.activeRuleCard.freq !== 'INDIVIDUAL') return false;
-
-            const exception = Tine.Tinebase.data.Record.setFromJson(this.rrulePanel.record.data, Tine.Calendar.Model.Event);
-            const duration = (exception.get('dtend').getTime() - exception.get('dtstart').getTime()) / 60000;
-
-            exception.set('base_event_id', exception.get('base_event_id') || exception.get('id'));
-            exception.set('id', '');
-            exception.set('recurid', '');
-            exception.set('dtstart', event.get('dtstart'));
-            exception.set('dtend', event.get('dtstart').clone().add(Date.MINUTE, duration));
-            exception.set('summary', exception.get('summary'));
-            exception.set('rrule', this.rrulePanel.activeRuleCard.getRule() || {
+            if (!this.rrulePanel.record?.data?.id && !this.rrulePanel.activeRuleCard.getRule()) {
+                const proxy = this.rrulePanel.eventEditDialog.recordClass.getProxy();
+                this.rrulePanel.record = await proxy.promiseSaveRecord(this.rrulePanel.record);
+                this.rrulePanel.eventEditDialog.record = this.rrulePanel.record;
+            }
+            const rrule = this.rrulePanel.activeRuleCard.getRule() || {
                 freq: 'INDIVIDUAL',
                 interval: 1,
                 count: 2
-            });
+            };
+            const exception = this.createIndividualEvent(individualEvent, rrule);
 
             await Tine.Calendar.createRecurException(exception, false, false)
                 .then((result) => {
                     this.rrulePanel.eventEditDialog.loadRecord('remote');
                 })
+                .catch((e) => {})
         });
 
         this.items = [
@@ -1126,5 +1120,21 @@ Tine.Calendar.RrulePanel.INDIVIDUALcard = Ext.extend(Tine.Calendar.RrulePanel.Ab
                 '<span class="cal-pollpanel-alternativeevents-statuscount">' + count + '</span>' +
                 '</span>';
         }).join('');
+    },
+
+    createIndividualEvent(individualEvent, rrule) {
+        const baseEvent = this.rrulePanel.record;
+        const exception = Tine.Tinebase.data.Record.setFromJson(baseEvent.data, Tine.Calendar.Model.Event);
+        const duration = (baseEvent.get('dtend').getTime() - baseEvent.get('dtstart').getTime()) / 60000;
+
+        exception.set('base_event_id', individualEvent.get('base_event_id') || baseEvent.get('id'));
+        exception.set('id', '');
+        exception.set('recurid', '');
+        exception.set('dtstart', individualEvent.get('dtstart'));
+        exception.set('dtend', individualEvent.get('dtstart').clone().add(Date.MINUTE, duration));
+        exception.set('summary', individualEvent.get('summary') || baseEvent.get('summary'));
+        exception.set('rrule', rrule);
+
+        return exception;
     },
 });

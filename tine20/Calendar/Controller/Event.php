@@ -1471,7 +1471,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
                 $baseEvent = Calendar_Controller_Event::getInstance()->update($baseEvent);
 
-
                 $from = clone $baseEvent->dtstart;
                 $until = clone $baseEvent->dtstart;
                 $until->addDay($count);
