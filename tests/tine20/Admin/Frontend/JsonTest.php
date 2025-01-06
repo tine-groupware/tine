@@ -107,7 +107,9 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
         $group = $this->_createGroup();
         Tinebase_Group::getInstance()->deleteGroupsInSqlBackend([$group['id']]);
+        $checks = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
         Addressbook_Controller_List::getInstance()->delete([$group['list_id']]);
+        Addressbook_Controller_List::getInstance()->doRightChecks($checks);
 
         try {
             Tinebase_Group::getInstance()->getGroupById($group['id']);

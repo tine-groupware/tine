@@ -193,6 +193,9 @@ msgstr ""
 msgid "This Short Name already exists. How about {0}?"
 msgstr ""
 
+msgid "It is not allowed to delete a list linked to admin group!"
+msgstr ""
+
 msgid "It is not allowed to add non-account contacts to this list"
 msgstr ""
 

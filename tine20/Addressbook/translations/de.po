@@ -205,6 +205,9 @@ msgstr "Es ist nicht erlaubt, einen Kontakt vom Typ E-Mail-Konto zu löschen!"
 msgid "This Short Name already exists. How about {0}?"
 msgstr "Dieses Kürzel existiert bereits. Wie wäre es mit {0}?"
 
+msgid "It is not allowed to delete a list linked to admin group!"
+msgstr "Es ist nicht erlaubt, eine Gruppe zu Löschen, die zu einer Systemgruppe gehört!"
+
 msgid "It is not allowed to add non-account contacts to this list"
 msgstr "Es ist nicht erlaubt, Nichtbenutzer zu dieser Liste hinzuzufügen"
 
