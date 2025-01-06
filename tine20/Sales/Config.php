@@ -149,6 +149,7 @@ class Sales_Config extends Tinebase_Config_Abstract
     const VAT_PROCEDURE_TAXABLE = 'taxable';
     const VAT_PROCEDURE_NON_TAXABLE = 'nonTaxable';
     const VAT_PROCEDURE_REVERSE_CHARGE = 'reverseCharge';
+    const VAT_PROCEDURE_EXPORT = 'export';
 
     const REVERSE_CHANGE_TEMPLATE = 'reverseChargeTemplate';
 
@@ -1149,6 +1150,12 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'id' => self::VAT_PROCEDURE_REVERSE_CHARGE,
                         //_('Reverse charge')
                         'value' => 'Reverse charge',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::VAT_PROCEDURE_EXPORT,
+                        //_('Export outside EU')
+                        'value' => 'Export outside EU',
                         'icon' => null,
                         'system' => true,
                     ],
