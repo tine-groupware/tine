@@ -2606,4 +2606,77 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue($eventData['alarms'][0]['id'] !== $copiedEventData['alarms'][0]['id']);
         $this->assertTrue($eventData['alarms'][0]['record_id'] !== $copiedEventData['alarms'][0]['record_id']);
     }
+
+    public function testCreateIndividualEventWithExceptions()
+    {
+        $this->_testNeedsTransaction();
+        $event = new Calendar_Model_Event(array(
+            'summary'     => 'Individual event',
+            'dtstart'     => '2009-03-25 06:00:00',
+            'dtend'       => '2009-03-25 06:15:00',
+            'description' => 'test create individual event',
+            'attendee'    => $this->_getAttendee(),
+            'container_id' => $this->_getTestCalendar()->getId(),
+            'organizer'    => $this->_getTestUserContact()->getId(),
+            'uid'          => Calendar_Model_Event::generateUID(),
+
+            Tinebase_Model_Grants::GRANT_READ    => true,
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
+            Tinebase_Model_Grants::GRANT_DELETE  => true,
+        ));
+
+        $savedEvent = $this->_uit->saveEvent($event->toArray());
+
+        $persistentException = $savedEvent;
+        $persistentException['id'] = '';
+        $persistentException['summary'] = 'go sleeping';
+        $persistentException['dtstart'] = '2009-04-25 08:00:00';
+        $persistentException['dtend'] = '2009-04-25 08:15:00';
+        $persistentException['base_event_id'] = $savedEvent['id'];
+        $persistentException['rrule'] = [
+            'freq'     => 'INDIVIDUAL',
+            'interval' => 1,
+            'count'    => 2
+        ];
+
+        // create persistent exception1
+        $persistentException = $this->_uit->createRecurException($persistentException, FALSE, FALSE);
+        $persistentException =  $this->_uit->getEvent($persistentException['id']);
+        $this->assertEquals($savedEvent['uid'] . '-2009-03-26 05:00:00', $persistentException['recurid']);
+        $updatedBaseEvent =  $this->_uit->getEvent($savedEvent['id']);
+        $this->assertEquals(2, $updatedBaseEvent['rrule']['count']);
+
+        // create persistent exception2
+        $updatedBaseEvent['dtstart'] = '2009-05-25 18:00:00';
+        $updatedBaseEvent['dtend'] = '2009-05-25 18:15:00';
+        $updatedBaseEvent['base_event_id'] = $updatedBaseEvent['id'];
+        $updatedBaseEvent['id'] = '';
+        $updatedBaseEvent['rrule'] = [
+            'freq'     => 'INDIVIDUAL',
+            'interval' => 1,
+            'count'    => 3
+        ];
+        $persistentException2 = $this->_uit->createRecurException($updatedBaseEvent, FALSE, FALSE);
+        $persistentException2 =  $this->_uit->getEvent($persistentException2['id']);
+        $this->assertEquals($savedEvent['uid'] . '-2009-03-27 05:00:00', $persistentException2['recurid']);
+        $updatedBaseEvent = $this->_uit->getEvent($savedEvent['id']);
+        $this->assertEquals(3, $updatedBaseEvent['rrule']['count']);
+
+        //create self exception
+        $savedEventException = $this->_uit->createRecurException($updatedBaseEvent, FALSE, FALSE);
+        $savedEventException = $this->_uit->getEvent($savedEventException['id']);
+        $this->assertEquals(3, $updatedBaseEvent['rrule']['count']);
+
+        $exceptions = $this->_uit->searchEvents([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $savedEvent['container_id']],
+            ['field' => 'period', 'operator' => 'within', 'value' => [
+                'from' => '2009-02-10 06:00:00',
+                'until' => '2009-06-14 18:15:00',
+            ]]
+        ], []);
+        $this->assertEquals(3, count($exceptions['results']));
+
+        $events = $this->_uit->getEventExceptions($savedEvent['id']);
+        $this->assertEquals(3, count($events['results']));
+    }
 }

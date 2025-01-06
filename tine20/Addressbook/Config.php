@@ -366,7 +366,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             //_('Template for file_as field')
             self::DESCRIPTION           => 'Template for file_as field',
             self::TYPE                  => self::TYPE_STRING,
-            self::DEFAULT_STR           => '{% if n_family %}{% set n = n_family %}{% elseif org_name %}{% set n = org_name %}{% endif %}{% if n %}{{ n }}{% endif %}{% if n_given and n_given != n %}{% if n %}, {% endif %}{{ n_given }}{% endif %}',
+            self::DEFAULT_STR           => '{% if n_family %}{% set n = n_family %}{% elseif org_name %}{% set n = org_name %}{% elseif n_given %}{% set n = n_given %}{% elseif email %}{% set n = email %}{% endif %}{% if n and n_given and n != n_given %}{{ n }}, {{ n_given }}{% else %}{{ n }}{% endif %}',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
