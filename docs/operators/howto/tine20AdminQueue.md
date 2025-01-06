@@ -70,28 +70,26 @@ Add something like this to /etc/tine20/actionQueue.ini:
 
 ## Anschauen / Leeren der Queue
 
-schauen, ob der worker was in der queue hat (-n DBNUMBER):
+schauen, ob der worker was in der queue hat (-n DBNUMBER, *queueName* from 'actionqueue' config):
 
-    [root@vmw02: ~ ] redis-cli --scan --pattern "*tine20worker*" -n 0
-
+    redis-cli --scan --pattern "*queueName*" -n 0
 
 viele einträge löschen:
 
-    redis-cli --scan --pattern '*PATTERN*' | xargs -L 1000 redis-cli unlink
+    redis-cli --scan --pattern '*queueName*' | xargs -L 1000 redis-cli unlink
 
 oder
 
-    redis-cli -h redis.host EVAL "return redis.call('del', 'defaultKey',unpack(redis.call('keys', ARGV[1])))" 0 tine20worker_*
+    redis-cli -h redis.host EVAL "return redis.call('del', 'defaultKey',unpack(redis.call('keys', ARGV[1])))" 0 queueName_*
 
-
-Docker setup (container name "tine20-cache-1" may vary):
+Docker setup (container name "tine-cache-1" may vary, queueName = actionqueue):
 
     docker exec -it tine20-cache-1 sh
     redis-cli --scan --pattern 'actionqueue*' | xargs -L 1000 redis-cli unlink
 
 eintrag in der queue anschauen
 
-    redis-cli hval tine20workerData:UUID
+    redis-cli hval queueNameData:UUID
 
 ## tine Update ("waited for Action Queue to become empty for more than 300 sec")
 
