@@ -130,7 +130,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 relationType: 'EMPLOYEE',
                                 relationDegree: 'sibling',
                                 modelUnique: true,
-                            }, ]
+                            }]
                         ]
                     },
                     {
@@ -225,8 +225,14 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 fieldLabel: this.app.i18n._('Status'),
                                 name: 'status',
                                 columnWidth: 0.333
-                            })
-                            ]
+                            })],
+                            [{
+                                columnWidth: 1,
+                                xtype: 'tw-uidtriggerfield',
+                                fieldLabel: this.app.i18n._('ID'),
+                                name: 'inventory_id',
+                                maxLength: 100
+                            }]
                         ]
                     }]
                     
