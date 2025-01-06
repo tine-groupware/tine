@@ -179,7 +179,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
 
     // private
     createMethod : function(c, m){
-        var f, me=this;
+        let f, me = this;
         if(!m.formHandler){
             f = function(){
                 return this.doCall(c, m, Array.prototype.slice.call(arguments, 0));
@@ -195,7 +195,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
         };
         f.setRequestContext = (ctx) => {
             const headers = _.reduce(Object.keys(ctx), (accu, key) => {
-                return _.set(accu, `X-TINE20-REQUEST-CONTEXT-${key.toUpperCase()}`, ctx[key]);
+                return _.set(accu, `X-TINE20-REQUEST-CONTEXT-${key.toUpperCase()}`, encodeURIComponent(ctx[key]));
             }, {})
             return function() {
                 return me.doCall(c, m, Array.prototype.slice.call(arguments, 0), headers);
