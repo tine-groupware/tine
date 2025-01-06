@@ -285,9 +285,13 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                     if ($config->session && $config->session->prefix) {
                         $prefix = $config->session->prefix;
                     } else {
-                        $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
+                        $prefix = ($config->database && $config->database->tableprefix)
+                            ? $config->database->tableprefix : 'tine';
                     }
-                    $prefix = $prefix . '_SESSION_';
+                    if (strpos($prefix, '_') === false) {
+                        $prefix .= '_';
+                    }
+                    $prefix = $prefix . 'SESSION_';
 
                     $redisProxy = new Zend_RedisProxy();
                     if (!$redisProxy->connect($host, $port)) {
