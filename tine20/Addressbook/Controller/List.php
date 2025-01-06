@@ -219,6 +219,26 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     *  delete one record
+     *  - don't delete if it belongs to a admin group
+     * @param Tinebase_Record_Interface $_record
+     * @return void
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        /** @var Addressbook_Model_List $_record */
+        if ($this->_doContainerACLChecks && !empty($_record->group_id)) {
+            $translation = Tinebase_Translation::getTranslation('Addressbook');
+            throw new Addressbook_Exception_AccessDenied($translation->_(
+                'It is not allowed to delete a list linked to admin group!'));
+        }
+
+        parent::_deleteRecord($_record);
+    }
+
+    /**
      * add new members to list
      *
      * @param  mixed $_listId

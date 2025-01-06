@@ -158,6 +158,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (!($debitor = $this->{self::FLD_DEBITOR_ID}) instanceof Sales_Model_Debitor) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_DEBITOR_ID . ' not set or resolved');
         }
+        if (!($customer = $this->{self::FLD_CUSTOMER_ID}) instanceof Sales_Model_Customer) {
+            throw new Tinebase_Exception_UnexpectedValue(self::FLD_CUSTOMER_ID . ' not set or resolved');
+        }
         if (null !== $debitor->{Sales_Model_Debitor::FLD_EAS_ID} && !$debitor->{Sales_Model_Debitor::FLD_EAS_ID} instanceof Sales_Model_EDocument_EAS) {
             throw new Tinebase_Exception_UnexpectedValue('debitors eas not resolved');
         }
@@ -176,6 +179,23 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
         if (($buyerContact = $this->{self::FLD_CONTACT_ID}) && !$buyerContact instanceof Addressbook_Model_Contact) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_CONTACT_ID . ' set but not resolved');
+        }
+
+        switch($this->{self::FLD_VAT_PROCEDURE}) {
+            case Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE:
+                $taxId = 'AE';
+                break;
+            case Sales_Config::VAT_PROCEDURE_EXPORT:
+                $taxId = 'G';
+                break;
+            case Sales_Config::VAT_PROCEDURE_NON_TAXABLE:
+                $taxId = 'E';
+                break;
+            case Sales_Config::VAT_PROCEDURE_TAXABLE:
+                $taxId = 'S';
+                break;
+            default:
+                throw new Tinebase_Exception_UnexpectedValue(self::FLD_VAT_PROCEDURE . ' ' . $this->{self::FLD_VAT_PROCEDURE} . ' not supported');
         }
 
         $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
@@ -212,6 +232,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             }
         } else {
             $isStorno = false;
+        }
+
+        $precursorOrder = null;
+        if ($this->{self::FLD_PRECURSOR_DOCUMENTS} instanceof Tinebase_Record_RecordSet && $this->{self::FLD_PRECURSOR_DOCUMENTS}->getRecordClassName() === Sales_Model_Document_Order::class) {
+            $precursorOrder = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord();
         }
 
         $ublInvoice = (new UBL21\Invoice\Invoice())
@@ -357,8 +382,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         // BT-10: Buyer reference
-        if ($this->{self::FLD_BUYER_REFERENCE}) {
+        if (trim((string)$this->{self::FLD_BUYER_REFERENCE})) {
             $ublInvoice->setBuyerReference(new \UBL21\Common\CommonBasicComponents\BuyerReference($this->{self::FLD_BUYER_REFERENCE}));
+        } else {
+            $ublInvoice->setBuyerReference(new \UBL21\Common\CommonBasicComponents\BuyerReference($t->_('Not provided by buyer')));
         }
         // BT-11: Project reference 'cac:ProjectReference' 'cbc:ID'
         if ($this->{self::FLD_PROJECT_REFERENCE}) {
@@ -375,11 +402,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             ]);
         }
         // BT-13: Purchase order reference
-        if ($this->{self::FLD_PURCHASE_ORDER_REFERENCE}) {
+        if ($this->{self::FLD_PURCHASE_ORDER_REFERENCE} || $precursorOrder) {
             $ublInvoice->setOrderReference((new \UBL21\Common\CommonAggregateComponents\OrderReference)
-                ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PURCHASE_ORDER_REFERENCE}))
+                ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PURCHASE_ORDER_REFERENCE} ?: 'NA'))
                 // BT-14: Sales order reference
-                //->setSalesOrderID()
+                ->setSalesOrderID($precursorOrder ? new \UBL21\Common\CommonBasicComponents\SalesOrderID($precursorOrder->{Sales_Model_Document_Order::FLD_DOCUMENT_NUMBER}) : null)
             );
         }
 
@@ -392,6 +419,15 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             if ($buyerContact->email) {
                 $bContact->setElectronicMail(new \UBL21\Common\CommonBasicComponents\ElectronicMail($buyerContact->email));
             }
+        }
+
+        if ($customer->vatid) {
+            $customerParty->getParty()->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
+                ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($customer->vatid))
+                ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
+                )
+            );
         }
 
         if ($division->{Sales_Model_Division::FLD_VAT_NUMBER}) {
@@ -459,7 +495,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         : null
                     )
                     ->addToClassifiedTaxCategory((new \UBL21\Common\CommonAggregateComponents\ClassifiedTaxCategory)
-                        ->setID(new \UBL21\Common\CommonBasicComponents\ID('S'))
+                        ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
                         ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
@@ -503,9 +539,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         // fix 0 Eur line issue -> no tax rates set
         if (empty($this->xprops(self::FLD_SALES_TAX_BY_RATE))) {
             $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                self::NET_SUM => 0,
+                self::NET_SUM => $taxId !== 'S' ? $this->{self::FLD_NET_SUM} : 0,
                 self::TAX_SUM => 0,
-                self::TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
+                self::TAX_RATE => $taxId !== 'S' ? 0 : Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ];
         }
         $allowances = 0.0;
@@ -518,7 +554,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     ->setCurrencyID('EUR')
                 )
                 ->setTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID('S'))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
+                    ->setTaxExemptionReasonCode($taxId === 'AE' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-AE') : ($taxId === 'G' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-G'): null))
                     ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
@@ -538,7 +575,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setCurrencyID('EUR')
                     )
                     ->addToTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
-                        ->setID(new \UBL21\Common\CommonBasicComponents\ID('S'))
+                        ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
                         ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))

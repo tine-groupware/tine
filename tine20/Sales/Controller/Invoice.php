@@ -1533,7 +1533,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 ),
                 // TODO FIXME do we have a FLD_CONTACT_ID?
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
-                Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => $customer->{Sales_Model_Customer::FLD_VAT_PROCEDURE},
                 Sales_Model_Document_Invoice::FLD_BUYER_REFERENCE => $invoice->{Sales_Model_Invoice::FLD_BUYER_REFERENCE},
                 Sales_Model_Document_Invoice::FLD_PURCHASE_ORDER_REFERENCE => $invoice->{Sales_Model_Invoice::FLD_PURCHASE_ORDER_REFERENCE},
                 Sales_Model_Document_Invoice::FLD_PROJECT_REFERENCE => $invoice->{Sales_Model_Invoice::FLD_PROJECT_REFERENCE},
@@ -1545,6 +1545,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                         Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => $invoice->price_gross,
                         Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                         Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $invoice->sales_tax,
+
                     ], true),
                 ],
             ]);
@@ -1565,6 +1566,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 try {
                     (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
                 } catch (Tinebase_Exception_Record_Validation $e) {
+                    rewind($stream);
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . stream_get_contents($stream));
                     throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
                 }
                 rewind($stream); // redundant, but cheap and good for readability

@@ -41,7 +41,7 @@ return array(
        'redis' => array (
            'host' => '{{getenv "TINE20_CACHING_REDIS_HOST" ""}}',
            'port' => {{getenv "TINE20_CACHING_REDIS_PORT" "6379"}},
-           'prefix' => '{{getenv "TINE20_CACHING_REDIS_PREFIX" "master"}}',
+           'prefix' => '{{getenv "TINE20_CACHING_REDIS_PREFIX" "tine"}}',
        ),
        'path' => '{{getenv "TINE20_CACHING_PATH" "/var/lib/tine20/caching"}}',
     ),
@@ -57,9 +57,7 @@ return array(
         'path' => '{{getenv "TINE20_SESSIONP_PATH" "/var/lib/tine20/sessions"}}',
         'host' => '{{getenv "TINE20_SESSION_HOST" ""}}',
         'port' => '{{getenv "TINE20_SESSION_PORT" "6379"}}',
-        {{if not (eq (getenv "TINE20_SESSION_PREFIX" "") "")}}
-        'prefix' => '{{getenv "TINE20_SESSION_PREFIX"}}',
-        {{end}}
+        'prefix' => '{{getenv "TINE20_SESSION_PREFIX" "tine"}}',
     ),
 
     'credentialCacheSharedKey' => '{{.Env.TINE20_CREDENTIALCACHESHAREDKEY}}',
