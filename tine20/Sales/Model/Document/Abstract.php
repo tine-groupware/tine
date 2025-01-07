@@ -39,6 +39,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
     public const FLD_DEBITOR_ID = 'debitor_id';
+    public const FLD_PAYMENT_MEANS = 'payment_means';
     public const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
     public const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
 
@@ -153,9 +154,22 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         Sales_Model_Debitor::FLD_EAS_ID => [],
                     ],
                 ],
+                self::FLD_PAYMENT_MEANS     => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
+                    ],
+                ],
                 self::FLD_RECIPIENT_ID      => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Address::FLD_DEBITOR_ID => [],
+                        Sales_Model_Address::FLD_DEBITOR_ID => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_Debitor::FLD_PAYMENT_MEANS => [
+                                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                        Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 self::FLD_POSITIONS         => [
@@ -497,6 +511,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
                     self::DEPENDENT_RECORDS             => true,
                 ],
+            ],
+            self::FLD_PAYMENT_MEANS             => [
+                self::LABEL                         => 'Payment Means', // _('Payment Means')
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_PaymentMeans::MODEL_NAME_PART,
+                    self::STORAGE                       => self::TYPE_JSON,
+                    // only Invoice needs one default set (means selected)
+                ],
+                self::DEFAULT_VAL                   => '[]',
             ],
         ]
     ];

@@ -9,6 +9,7 @@ Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
 import EvaluationDimensionForm from "../../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+import PaymentMeansField from './PaymentMeansField'
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1240,
@@ -303,7 +304,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), _.assign(fields.positions_discount_sum, {columnWidth: 1/5}), _.assign(fields.positions_net_sum, {columnWidth: 1/5}), _.assign(fields.positions_gross_sum, {columnWidth: 1/5})],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax, fields.gross_sum],
-                [fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 4/5})],
+                [new PaymentMeansField({editDialog: this, columnWidth: 2/5}), fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 2/5})],
                 [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]

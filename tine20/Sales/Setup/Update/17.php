@@ -47,6 +47,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE026 = __CLASS__ . '::update026';
     protected const RELEASE017_UPDATE027 = __CLASS__ . '::update027';
     protected const RELEASE017_UPDATE028 = __CLASS__ . '::update028';
+    protected const RELEASE017_UPDATE029 = __CLASS__ . '::update029';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -151,6 +152,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE028 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update028',
+            ],
+            self::RELEASE017_UPDATE029 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update029',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -830,5 +835,56 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.28', self::RELEASE017_UPDATE028);
+    }
+
+    public function update029(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $mc = Sales_Model_Debitor::getConfiguration();
+        $refProp = new ReflectionProperty($mc, '_fields');
+        $refProp->setAccessible(true);
+        $fields = $mc->getFields();
+        $fields[Sales_Model_Debitor::FLD_PAYMENT_MEANS][TMCC::NULLABLE] = true;
+        $refProp->setValue($mc, $fields);
+        $mc = Sales_Model_Document_Debitor::getConfiguration();
+        $fields = $mc->getFields();
+        $fields[Sales_Model_Debitor::FLD_PAYMENT_MEANS][TMCC::NULLABLE] = true;
+        $refProp->setValue($mc, $fields);
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Division::class,
+            Sales_Model_Document_Debitor::class,
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_EDocument_EAS::class,
+            Sales_Model_EDocument_PaymentMeansCode::class,
+            Sales_Model_Invoice::class,
+        ]);
+
+        Sales_Setup_Initialize::initializeEDocumentPaymentMeansCode();
+
+        $debitor = new Sales_Model_Debitor([], true);
+        $debitor->runConvertToData();
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, [
+            Sales_Model_Debitor::FLD_PAYMENT_MEANS => $debitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS},
+        ]);
+        $this->getDb()->update(SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME, [
+            Sales_Model_Debitor::FLD_PAYMENT_MEANS => $debitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS},
+        ]);
+
+        Sales_Model_Debitor::resetConfiguration();
+        Sales_Model_Document_Debitor::resetConfiguration();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Document_Debitor::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.29', self::RELEASE017_UPDATE029);
     }
 }

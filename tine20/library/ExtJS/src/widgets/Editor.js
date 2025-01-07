@@ -231,6 +231,9 @@ Ext.extend(Ext.Editor, Ext.Component, {
             this.realign(true);
             this.editing = true;
             this.show();
+            if (this.field.expandOnFocus) {
+                this.field.onTriggerClick();
+            }
         }
     },
 

@@ -87,6 +87,11 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
                         ],
                         Sales_Model_Debitor::FLD_EAS_ID       => [],
+                        Sales_Model_Debitor::FLD_PAYMENT_MEANS=> [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
+                            ],
+                        ],
                     ],
                 ],
                 'postal'        => [

@@ -102,6 +102,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
 
         // check debitor / category division id match
+        $orgDebitor = null;
+        $orgDebitorId = null;
         if ($_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
             if (is_string($_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID})) {
                 $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Document_Debitor::getInstance()->get(_id: $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}, _getRelatedData: false);
@@ -110,17 +112,21 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID)) {
                 throw new Tinebase_Exception_Record_Validation('debitor division does not match category division');
             }
-        }
-        if (!$_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
+            $orgDebitorId = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID};
+        } else {
             $divisionId = $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID);
             if (is_string($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})) {
-                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID};
+                try {
+                    $customerId = Sales_Controller_Document_Customer::getInstance()->get($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID};
+                } catch (Tinebase_Exception_NotFound) {
+                    $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID};
+                }
             } elseif (isset($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID})) {
                 $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID};
             } else {
                 $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->getId();
             }
-            $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Debitor::getInstance()->search(
+            $orgDebitor = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Debitor::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Debitor::class, [
                     [TMFA::FIELD => Sales_Model_Debitor::FLD_CUSTOMER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customerId],
                     [TMFA::FIELD => Sales_Model_Debitor::FLD_DIVISION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $divisionId],
@@ -133,8 +139,19 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                     Sales_Model_Debitor::FLD_NAME => '-',
                 ], true));
                 $customer = Sales_Controller_Customer::getInstance()->update($customer);
-                $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(Sales_Model_Debitor::FLD_DIVISION_ID, $divisionId);
+                $orgDebitor = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(Sales_Model_Debitor::FLD_DIVISION_ID, $divisionId);
             }
+        }
+        
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}) {
+            if (null === $orgDebitor) {
+                $orgDebitor = Sales_Controller_Debitor::getInstance()->get($orgDebitorId);
+            }
+            $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} = clone $orgDebitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS};
+        }
+
+        if (1 !== $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true)->count()) {
+            throw new Tinebase_Exception_UnexpectedValue('payment means need to have one default record');
         }
     }
 

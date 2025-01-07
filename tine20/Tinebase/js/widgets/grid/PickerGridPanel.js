@@ -88,6 +88,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     isMetadataModelFor: null,
 
+    /**
+     * allow editing of metadataFor Record (cell dbl click in grid)
+     * @cfg {Boolean} allowMetadataForEditing
+     */
+    allowMetadataForEditing: true,
+
     metaDataFields: null,
     
     /**
@@ -587,6 +593,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     mappingRecordClass = mappingFieldDef.getRecordClass();
                 this.searchRecordClass = mappingRecordClass;
                 Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
+                Object.assign(searchComboConfig, _.get(mappingFieldDef, 'fieldDefinition.uiconfig', {}));
                 searchComboConfig.useEditPlugin = searchComboConfig.hasOwnProperty('useEditPlugin') ? searchComboConfig.useEditPlugin : true;
             }
 
@@ -626,6 +633,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.isMetadataModelFor) {
             var recordData = this.getRecordDefaults();
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
+            // copy (reference data from metadata record, e.g. config class for dynamic metadata records)
+            Ext.copyTo(recordData, recordData[this.isMetadataModelFor], picker.copyOnSelectProps);
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             record.phantom = true;
 
@@ -798,7 +807,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             updateFn = me.onEditDialogRecordUpdate;
 
         // in case of metadataFor / simple cross tables we might edit the metadataFor / referenced record
-        if(this.isMetadataModelFor && this.isMetadataModelFor === this.colModel.getColumnAt(col)?.dataIndex) {
+        if(this.allowMetadataForEditing && this.isMetadataModelFor && this.isMetadataModelFor === this.colModel.getColumnAt(col)?.dataIndex) {
             const recordClass = this.recordClass.getField(this.isMetadataModelFor).getRecordClass();
             editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
             record = Tine.Tinebase.data.Record.setFromJson(record.get(this.isMetadataModelFor), recordClass);

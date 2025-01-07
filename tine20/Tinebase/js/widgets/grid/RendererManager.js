@@ -271,7 +271,7 @@ Tine.widgets.grid.RendererManager = function() {
                         const hasNoAPI = !_.get(Tine, `${configRecordClass.getMeta('appName')}.search${_.upperFirst(configRecordClass.getMeta('modelName'))}s`);
                         const isDependent = configRecordClass.getModelConfiguration()?.isDependent;
 
-                        const titleHTML = `<span class="tine-recordclass-gridicon ${configRecordClass.getIconCls()}">&nbsp;</span>${Ext.util.Format.htmlEncode(Tine.Tinebase.data.Record.setFromJson(configRecord, configRecordClass).getTitle())} (${configRecordClass.getRecordName()})`;
+                        const titleHTML = `<span class="tine-recordclass-gridicon ${configRecordClass.getIconCls()}">&nbsp;</span>${Ext.util.Format.htmlEncode(Tine.Tinebase.data.Record.setFromJson(configRecord, configRecordClass).getTitle() || '')} (${configRecordClass.getRecordName()})`;
                         return isJSONStorage || dependentRecords || hasNoAPI || isDependent ? titleHTML : `<a href="#" data-record-class="${configRecordClass.getPhpClassName()}" data-record-id="${configRecord.id}">${titleHTML}</a>`;
                     };
                     break;

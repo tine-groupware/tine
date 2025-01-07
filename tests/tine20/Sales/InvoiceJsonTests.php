@@ -46,11 +46,14 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->assertTrue(is_array($customer['postal']));
 
         //we create a billing address as postal address
-        $this->assertTrue(is_array($customer['billing']));
-        $this->assertEquals(1, count($customer['billing']));
-        
-        $this->assertTrue(is_array($customer['delivery']));
-        $this->assertEquals(1, count($customer['delivery']));
+        $this->assertTrue(is_array($customer['debitors']));
+        $this->assertEquals(1, count($customer['debitors']));
+
+        $debitor = $customer['debitors'][0];
+        $this->assertTrue(is_array($debitor['billing']));
+        $this->assertEquals(1, count($debitor['billing']));
+        $this->assertTrue(is_array($debitor['delivery']));
+        $this->assertEquals(1, count($debitor['delivery']));
         
         $this->assertTrue(is_array($customer['relations']));
         $this->assertTrue(is_array($customer['relations'][0]['related_record']));
@@ -58,13 +61,15 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, count($customer['relations']));
         $this->assertEquals('CUSTOMER', $customer['relations'][0]['type']);
         
-        $customer['billing'][1] = array('prefix1' => 'Dr.', 'prefix2' => 'George Harbottle', 'street' => 'Glasgow Str. 432', 'postalcode' => '532 45', 'locality' => 'Birmingham', 'type' => 'billing');
-        $customer['delivery'][1] = array('prefix1' => 'Mr.', 'prefix2' => 'Peter Harbottle', 'street' => 'London Str. 123', 'postalcode' => '532 23', 'locality' => 'Birmingham', 'type' => 'delivery');
+        $customer['debitors'][0]['billing'][1] = array('prefix1' => 'Dr.', 'prefix2' => 'George Harbottle', 'street' => 'Glasgow Str. 432', 'postalcode' => '532 45', 'locality' => 'Birmingham', 'type' => 'billing');
+        $customer['debitors'][0]['delivery'][1] = array('prefix1' => 'Mr.', 'prefix2' => 'Peter Harbottle', 'street' => 'London Str. 123', 'postalcode' => '532 23', 'locality' => 'Birmingham', 'type' => 'delivery');
 
         $customer = $this->_uit->saveCustomer($customer);
         
-        $this->assertEquals(2, count($customer['billing']));
-        $this->assertEquals(2, count($customer['delivery']));
+        $debitor = $customer['debitors'][0];
+        $this->assertEquals(2, count($debitor['billing']));
+        $this->assertEquals(2, count($debitor['delivery']));
+
         
         // remove contracts, otherwise deleting customers having an contract-assigned billing address would fail
         $this->_contractController->delete($this->_contractRecords->getId());
