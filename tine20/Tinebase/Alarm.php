@@ -112,8 +112,10 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             try {
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
             } catch (Tinebase_Exception_AccessDenied $tead) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                    ' ' . $tead->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                        ' ' . $tead->getMessage());
+                }
                 continue;
             }
 
@@ -134,12 +136,14 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     if (!$e instanceof Tinebase_Exception_ProgramFlow) {
                         Tinebase_Exception::log($e);
                     }
-                    $alarm->sent_message = $e->getMessage();
+                    $alarm->sent_message = Tinebase_Helper::mbConvertTo($e->getMessage());
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_FAILURE;
                 }
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Updating alarm status: ' . $alarm->sent_status);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Updating alarm status: ' . $alarm->sent_status);
+                }
 
                 $this->update($alarm);
                 if ($areaLockCheck) {
