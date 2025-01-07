@@ -613,6 +613,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (SSO_Controller::passwordLessLogin($username)) {
                 return $this->_getLoginSuccessResponse($username);
             }
+            $user = null;
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
+            } catch(Tinebase_Exception_NotFound) {}
+            if (null !== $user) {
+                if (Tinebase_Controller::getInstance()->passwordLessLogin($user, $MFAUserConfigId, $MFAPassword, self::REQUEST_TYPE)) {
+                    return $this->_getLoginSuccessResponse($username);
+                }
+            }
             throw new Tinebase_Exception_Auth_PwdRequired();
         }
 
