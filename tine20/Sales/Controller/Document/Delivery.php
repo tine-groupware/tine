@@ -51,6 +51,7 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
             Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Delivery::FLD_DESCRIPTION,
             Sales_Model_Document_Delivery::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Delivery::FLD_PAYMENT_MEANS,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

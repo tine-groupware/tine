@@ -48,6 +48,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
     public const FLD_BUYER_REFERENCE = 'buyer_reference'; // varchar 255
     public const FLD_PURCHASE_ORDER_REFERENCE = 'purchase_order_reference';
     public const FLD_PROJECT_REFERENCE = 'project_reference';
+    public const FLD_PAYMENT_MEANS = 'payment_means';
 
 
     /**
@@ -63,7 +64,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 12,
+        self::VERSION       => 13,
         'recordName'        => 'Invoice', // gettext('GENDER_Invoice')
         'recordsName'       => 'Invoices', // ngettext('Invoice', 'Invoices', n)
         'hasRelations'      => TRUE,
@@ -94,7 +95,29 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 ],
             ]
         ],
-        
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'address_id'                => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Address::FLD_DEBITOR_ID => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_Debitor::FLD_PAYMENT_MEANS => [
+                                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                        Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                self::FLD_PAYMENT_MEANS     => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
+                    ],
+                ],
+            ],
+        ],
         'filterModel' => array(
             'contract' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
@@ -327,6 +350,16 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_PAYMENT_MEANS             => [
+                self::LABEL                         => 'Payment Means', // _('Payment Means')
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_PaymentMeans::MODEL_NAME_PART,
+                    self::STORAGE                       => self::TYPE_JSON,
+                ],
+                self::NULLABLE                      => true,
             ],
         )
     );

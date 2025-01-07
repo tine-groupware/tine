@@ -32,6 +32,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
     public const FLD_EAS_ID = 'eas_id';
     public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
     public const FLD_EDOCUMENT_TRANSPORT = 'edocument_transport';
+    public const FLD_PAYMENT_MEANS = 'payment_means';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -39,7 +40,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 3,
+        self::VERSION                   => 4,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Debitor', // gettext('GENDER_Debitor')
@@ -78,6 +79,11 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                 self::FLD_CUSTOMER_ID   => [],
                 self::FLD_DELIVERY      => [],
                 self::FLD_BILLING       => [],
+                self::FLD_PAYMENT_MEANS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
+                    ],
+                ],
             ],
         ],
 
@@ -246,6 +252,34 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                 ],
             ],
+            self::FLD_PAYMENT_MEANS         => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::LABEL                     => 'Payment Means', // _('Payment Means')
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                => Sales_Model_PaymentMeans::MODEL_NAME_PART,
+                    self::STORAGE                   => self::TYPE_JSON,
+                ],
+                self::VALIDATORS                => [
+                    [Sales_Model_Validator_PaymentMeansOneDefault::class],
+                ],
+                self::UI_CONFIG                 => [
+                    'allowDuplicatePicks'           => true,
+                    'allowMetadataForEditing'       => false,
+                    'searchComboConfig'             => [
+                        'useEditPlugin'                 => false,
+                    ],
+                    'columns'                       => [
+                        Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE,
+                        Sales_Model_PaymentMeans::FLD_CONFIG,
+                        Sales_Model_PaymentMeans::FLD_DEFAULT,
+                    ],
+                    // @TODO: define at metadata model????
+                    'copyMetadataForProps'          => [
+                        Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS,
+                    ],
+                ],
+            ],
         ],
     ];
 
@@ -255,4 +289,23 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function setFromArray(array &$_data)
+    {
+        if (!isset($_data[self::FLD_PAYMENT_MEANS])) {
+            $pmc = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS});
+            if (empty($model = $pmc->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS})) {
+                throw new Tinebase_Exception_UnexpectedValue('default payment means code configuration needs to have a config class configured');
+            }
+            $_data[self::FLD_PAYMENT_MEANS] = new Tinebase_Record_RecordSet(Sales_Model_PaymentMeans::class, [
+                new Sales_Model_PaymentMeans([
+                    Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS},
+                    Sales_Model_PaymentMeans::FLD_DEFAULT => true,
+                    Sales_Model_PaymentMeans::FLD_CONFIG_CLASS => $model,
+                    Sales_Model_PaymentMeans::FLD_CONFIG => new $model,
+                ])
+            ]);
+        }
+        parent::setFromArray($_data);
+    }
 }

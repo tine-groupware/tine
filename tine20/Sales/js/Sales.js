@@ -51,7 +51,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 
         // deprecated documents
         // TODO add migration to new documents
-        // {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
+        {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
         // {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
         {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
 

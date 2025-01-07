@@ -118,6 +118,7 @@ class Sales_Config extends Tinebase_Config_Abstract
     const INVOICE_DISCOUNT_SUM = 'SUM';
     
     const PAYMENT_METHODS = 'paymentMethods';
+    const DEBITOR_DEFAULT_PAYMENT_MEANS = 'debitorDefaultPaymentMeans';
 
     /**
      * Product Category
@@ -1055,6 +1056,12 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => '5'
         ),
+        self::DEBITOR_DEFAULT_PAYMENT_MEANS => [
+            self::LABEL                 => 'Debitor Default Payment Means', //_('Debitor Default Payment Means')
+            self::DESCRIPTION           => 'Debitor Default Payment Means', //_('Debitor Default Payment Means')
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+        ],
         self::PAYMENT_METHODS => array(
                                    //_('Payment Method')
             'label'                 => 'Payment Method',
