@@ -98,6 +98,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
     protected function _initializeEDocumentEAS(): void
     {
         self::initializeEDocumentEAS();
+        self::initializeEDocumentPaymentMeansCode();
     }
 
     public static function initializeEDocumentEAS(): void
@@ -109,6 +110,32 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 Sales_Model_EDocument_EAS::FLD_CODE => $eas[0],
                 Sales_Model_EDocument_EAS::FLD_REMARK => $eas[2],
             ]));
+        }
+    }
+
+    public static function initializeEDocumentPaymentMeansCode(): void
+    {
+        $paymentMeansData = json_decode(file_get_contents(__DIR__ . '/UNTDID_4461_3.json'), true);
+        foreach ($paymentMeansData['daten'] as $row) {
+            $paymentMeans = new Sales_Model_EDocument_PaymentMeansCode([
+                Sales_Model_EDocument_PaymentMeansCode::FLD_CODE => $row[0],
+                Sales_Model_EDocument_PaymentMeansCode::FLD_NAME => $row[1],
+                Sales_Model_EDocument_PaymentMeansCode::FLD_DESCRIPTION => $row[2],
+            ]);
+            switch ($row[0]) {
+                case '58': // SEPA credit transfer
+                    $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_PayeeFinancialAccount::class;
+                    break;
+                case '59': // SEPA direct debit
+                    $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_PaymentMandate::class;
+                    break;
+                default:
+                    break;
+            }
+            $paymentMeans = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->create($paymentMeans);
+            if ('58' === $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CODE}) { // 58 SEPA Überweisung
+                Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS} = $paymentMeans->getId();
+            }
         }
     }
 

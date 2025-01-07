@@ -91,10 +91,6 @@ class Tasks_Model_TaskDependency extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
-                self::UI_CONFIG                 => [
-                    'xtype' => 'tasks.dependency'
-//                    'columns'   => 'summary, status'
-                ],
             ],
             self::FLD_DEPENDS_ON            => [
                 self::LABEL                     => 'Depends on Task', // _('Depends on Task')
@@ -106,9 +102,6 @@ class Tasks_Model_TaskDependency extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-                self::UI_CONFIG                 => [
-//                    'columns'   => 'summary, status'
                 ],
             ],
         ],

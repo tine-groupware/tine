@@ -5,12 +5,12 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
- * filters for record ids, accepts either a string of 40 or an array ['id' => string(40)]
+ * filters for record ids, accepts either a string of 40 or an array ['id' => string(40)] or a Record Interface
  * returns null or string(40)
  *
  * @package     Tinebase
@@ -29,6 +29,8 @@ class Tinebase_Record_Filter_RecordId implements Zend_Filter_Interface
     {
         if (is_array($value) && isset($value['id'])) {
             $value = $value['id'];
+        } elseif ($value instanceof Tinebase_Record_Interface) {
+            $value = $value->getId();
         }
 
         if (is_string($value) && strlen($value) === 40) {

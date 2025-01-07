@@ -29,6 +29,17 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
         if (!isset($this->_mccCfg[MCC::REF_MODEL_FIELD])) {
+            if (isset($this->_mccCfg[MCC::APP_NAME]) && isset($this->_mccCfg[MCC::MODEL_NAME])) {
+                $modelName = $this->_mccCfg[MCC::APP_NAME] . '_Model_' . $this->_mccCfg[MCC::MODEL_NAME];
+                $this->_addRecordsToProcess($_records);
+                foreach ($_records as $record) {
+                    if (is_array($record->{$this->_property})) {
+                        $record->{$this->_property} = new $modelName($record->{$this->_property}, true);
+                        $record->{$this->_property}->runConvertToRecord();
+                    }
+                }
+                $this->_setData(new Tinebase_Record_RecordSet($modelName));
+            }
             return;
         }
         

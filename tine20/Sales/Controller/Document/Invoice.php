@@ -98,6 +98,15 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
     }
 
+    protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
+    {
+        parent::_inspectCategoryDebitor($_record);
+
+        if ($_record->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS}->count() > 1) {
+            $_record->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS} =
+                $_record->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true);
+        }
+    }
     /**
      * @param Sales_Model_Document_Invoice $_record
      * @param Sales_Model_Document_Invoice|null $_oldRecord

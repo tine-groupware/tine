@@ -6,6 +6,7 @@
  * Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+import PaymentMeansField from "./Document/PaymentMeansField";
 
 Ext.ns('Tine.Sales');
 
@@ -602,11 +603,16 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         labelAlign: 'top',
                         formDefaults: formFieldDefaults,
                         items: [
-                            [{
+                            [new PaymentMeansField({
+                                editDialog: this,
+                                recipientField: 'address_id',
+                                columnWidth: 2/3
+                            }), {
                                 fieldLabel: this.app.i18n._('Credit Term'),
                                 name: 'credit_term',
                                 allowBlank: false,
                                 xtype: 'uxspinner',
+                                columnWidth: 1/3,
                                 strategy: new Ext.ux.form.Spinner.NumberStrategy({
                                     incrementValue : 1,
                                     alternateIncrementValue: 10,

@@ -458,4 +458,47 @@ class Tinebase_Auth_MFATest extends TestCase
         $this->assertFalse($mfa->validate($sessionData['pin'], $this->_originalTestUser->mfa_configs->getFirstRecord()),
             'validate didn\'t fail as expected on second call');
     }
+
+    public function testWebAuthNPwdLessLogin(): void
+    {
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Auth_WebAuthnUserConfigMock::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Auth_WebAuthnUserConfigMock([
+                    Tinebase_Model_MFA_WebAuthnUserConfig::FLD_WEBAUTHN_ID => 'unittest',
+                    Tinebase_Model_MFA_WebAuthnUserConfig::FLD_PUBLIC_KEY_DATA => 'unittest',
+                ]),
+        ]]);
+        Tinebase_User::getInstance()->updateUserInSqlBackend($this->_originalTestUser);
+
+        $this->_createAreaLockConfig([], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Auth_WebAuthnUserConfigMock::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_WebAuthnConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_WebAuthnAdapterMock::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => [
+                Tinebase_Model_MFA_WebAuthnConfig::FLD_RESIDENT_KEY_REQUIREMENT => 'https://shoo.tld/restapi/message',
+            ],
+            Tinebase_Model_MFA_Config::FLD_ALLOW_PWD_LESS_LOGIN => true,
+        ]);
+
+        if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+        }
+        try {
+            (new Tinebase_Frontend_Json())->login($this->_originalTestUser->accountLoginName);
+            $this->fail('except ' . Tinebase_Exception_AreaLocked::class . ' exception to be thrown');
+        } catch (Tinebase_Exception_AreaLocked $a) {
+
+        }
+        $result = (new Tinebase_Frontend_Json())->login($this->_originalTestUser->accountLoginName, null, 'unittest', '....');
+        $this->assertTrue($result['success']);
+    }
 }

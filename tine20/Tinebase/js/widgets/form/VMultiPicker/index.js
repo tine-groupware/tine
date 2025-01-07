@@ -248,6 +248,8 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         })
     },
 
+    setReadOnly: Ext.form.Field.prototype.setReadOnly,
+
     /* needed for isFormField cycle */
     markInvalid: Ext.form.Field.prototype.markInvalid,
     clearInvalid: Ext.form.Field.prototype.clearInvalid,

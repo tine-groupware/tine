@@ -9,8 +9,6 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use Einvoicing\InvoiceReference;
-use Einvoicing\Payments\PaymentTerms;
 use GoetasWebservices\Xsd\XsdToPhpRuntime\Jms\Handler\BaseTypesHandler;
 use GoetasWebservices\Xsd\XsdToPhpRuntime\Jms\Handler\XmlSchemaDateHandler;
 use JMS\Serializer\Handler\HandlerRegistryInterface;
@@ -146,6 +144,14 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 throw new Tinebase_Exception_SystemGeneric('transition from ' . $sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL} . ' to ' . static::class . ' not allowed');
         }
 
+        if (!$sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} instanceof Tinebase_Record_RecordSet ||
+                ($this->{self::FLD_PAYMENT_MEANS} = clone $sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}
+                    ->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true))->count() !== 1) {
+            $this->{self::FLD_PAYMENT_MEANS} = clone
+                Sales_Controller_Debitor::getInstance()->get($sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{self::FLD_ORIGINAL_ID})
+                ->{Sales_Model_Debitor::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true);
+        }
+
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
             $this->_checkProductPrecursorPositionsComplete();
         }
@@ -164,6 +170,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (null !== $debitor->{Sales_Model_Debitor::FLD_EAS_ID} && !$debitor->{Sales_Model_Debitor::FLD_EAS_ID} instanceof Sales_Model_EDocument_EAS) {
             throw new Tinebase_Exception_UnexpectedValue('debitors eas not resolved');
         }
+        if (!$this->{self::FLD_PAYMENT_MEANS} instanceof Tinebase_Record_RecordSet || !$this->{self::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE} instanceof Sales_Model_EDocument_PaymentMeansCode) {
+            throw new Tinebase_Exception_UnexpectedValue('payment means not resolved');
+        }
         if (! $this->{self::FLD_DOCUMENT_CATEGORY} instanceof Sales_Model_Document_Category) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_DOCUMENT_CATEGORY . ' not set or resolved');
         }
@@ -180,6 +189,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (($buyerContact = $this->{self::FLD_CONTACT_ID}) && !$buyerContact instanceof Addressbook_Model_Contact) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_CONTACT_ID . ' set but not resolved');
         }
+        if (($pm = $this->{self::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true))->count() !== 1) {
+            throw new Tinebase_Exception_UnexpectedValue('only one payment means allowed');
+        }
+        $pm = $pm->getFirstRecord();
+        /** @var Sales_Model_PaymentMeans $pm */
 
         switch($this->{self::FLD_VAT_PROCEDURE}) {
             case Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE:
@@ -324,11 +338,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                 )
             )
-            ->setPaymentMeans([
-                ($paymentMeans = new \UBL21\Common\CommonAggregateComponents\PaymentMeans())
-                    ->setPaymentMeansCode(new \UBL21\Common\CommonBasicComponents\PaymentMeansCode('58'))  // BT-81 Zahlungsart 58 SEPA Überweisung 59 SEPA Einzug
-                    ->setPaymentID([new \UBL21\Common\CommonBasicComponents\PaymentID($this->{self::FLD_DOCUMENT_NUMBER})]) // BT-83 Verwendungszweck
-            ])
             ->setLegalMonetaryTotal(($legalMonetaryTotal = new \UBL21\Common\CommonAggregateComponents\LegalMonetaryTotal)
                 ->setLineExtensionAmount((new \UBL21\Common\CommonBasicComponents\LineExtensionAmount($this->{self::FLD_POSITIONS_NET_SUM}))
                     ->setCurrencyID('EUR')
@@ -517,24 +526,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             );
         }
 
-        $paymentMeansFirst = true;
-        /** @var Tinebase_Model_BankAccount $bankAccount */
-        foreach ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS} as $bankAccount) {
-            $bankAccount = $bankAccount->{Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT};
-            if (!$paymentMeansFirst) {
-                $paymentMeans = clone $paymentMeans;
-                $paymentMeans->setPaymentID([clone $paymentMeans->getPaymentID()[0]]);
-                $paymentMeans->setPaymentMeansCode(clone $paymentMeans->getPaymentMeansCode());
-            }
-            $paymentMeansFirst = false;
-            $paymentMeans->setPayeeFinancialAccount((new \UBL21\Common\CommonAggregateComponents\PayeeFinancialAccount)
-                ->setID(new \UBL21\Common\CommonBasicComponents\ID($bankAccount->{Tinebase_Model_BankAccount::FLD_IBAN}))
-                ->setName(new \UBL21\Common\CommonBasicComponents\Name($division->{Sales_Model_Division::FLD_NAME}))
-                ->setFinancialInstitutionBranch((new \UBL21\Common\CommonAggregateComponents\FinancialInstitutionBranch)
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($bankAccount->{Tinebase_Model_BankAccount::FLD_BIC}))
-                )
-            );
-        }
+        $pm->toUblInvoice($ublInvoice, $this);
 
         // fix 0 Eur line issue -> no tax rates set
         if (empty($this->xprops(self::FLD_SALES_TAX_BY_RATE))) {
