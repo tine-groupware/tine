@@ -224,13 +224,16 @@ TestAction.multiply(
 
         if(Ext.isArray(data)){
             callData = [];
+            o.headers = {};
             for(var i = 0, len = data.length; i < len; i++){
                 callData.push(this.getCallData(data[i]));
                 o.timeout += data[i].apiTimeout;
+                Object.assign(o.headers, data.headers);
             }
         }else{
             callData = this.getCallData(data);
             o.timeout += data.apiTimeout;
+            o.headers = data.headers;
         }
 
         if(this.enableUrlEncode){
@@ -267,7 +270,7 @@ TestAction.multiply(
         }
     },
 
-    doCall : function(c, m, args){
+    doCall : function(c, m, args, headers){
         var data = null, hs = args[args.length-2], scope = args[args.length-1];
 
         if(args.length-2 > 0){
@@ -275,6 +278,7 @@ TestAction.multiply(
         }
 
         var t = new Ext.Direct.Transaction({
+            headers,
             provider: this,
             args: args,
             action: c,
@@ -326,6 +330,7 @@ TestAction.multiply(
     
     processForm: function(t){
         Ext.Ajax.request({
+            headers,
             url: this.url,
             params: t.params,
             callback: this.onData,
