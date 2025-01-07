@@ -50,7 +50,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
     },
     
     // private
-    doCall : function(c, m, args) {
+    doCall : function(c, m, args, headers) {
         const me = this;
         var promise = new Promise(function(fulfill, reject) {
             const paramArray = {};
@@ -137,7 +137,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
             }
         }
         
-        Ext.ux.direct.JsonRpcProvider.superclass.doCall.call(this, c, m, args);
+        Ext.ux.direct.JsonRpcProvider.superclass.doCall.call(this, c, m, args, headers);
 
         return promise;
     },
@@ -179,7 +179,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
 
     // private
     createMethod : function(c, m){
-        var f;
+        let f, me = this;
         if(!m.formHandler){
             f = function(){
                 return this.doCall(c, m, Array.prototype.slice.call(arguments, 0));
@@ -193,6 +193,14 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
             action: c,
             method: m
         };
+        f.setRequestContext = (ctx) => {
+            const headers = _.reduce(Object.keys(ctx), (accu, key) => {
+                return _.set(accu, `X-TINE20-REQUEST-CONTEXT-${key.toUpperCase()}`, encodeURIComponent(ctx[key]));
+            }, {})
+            return function() {
+                return me.doCall(c, m, Array.prototype.slice.call(arguments, 0), headers);
+            }
+        }
         return f;
     },
 
