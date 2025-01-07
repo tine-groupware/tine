@@ -71,6 +71,11 @@ final class Tinebase_Auth_MFA
         }
     }
 
+    public function getConfig(): Tinebase_Model_MFA_Config
+    {
+        return $this->_config;
+    }
+
     public function getAdapter(): Tinebase_Auth_MFA_AdapterInterface
     {
         return $this->_adapter;
@@ -115,6 +120,7 @@ final class Tinebase_Auth_MFA
             $config->{Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG},
             $config->getId()
         );
+        $this->_config = $config;
     }
 
     /**
@@ -122,10 +128,9 @@ final class Tinebase_Auth_MFA
      */
     private function __clone() {}
 
-    /**
-     * @var Tinebase_Auth_MFA_AdapterInterface
-     */
-    private $_adapter;
+    private Tinebase_Auth_MFA_AdapterInterface $_adapter;
+
+    private Tinebase_Model_MFA_Config $_config;
 
     /**
      * holds the instances of the singleton
