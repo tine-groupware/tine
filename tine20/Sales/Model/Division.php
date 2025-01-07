@@ -35,6 +35,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
     public const FLD_BANK_ACCOUNTS  = 'bank_accounts';
     public const FLD_EAS_ID = 'eas_id';
     public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
+    public const FLD_SEPA_CREDITOR_ID = 'sepa_creditor_id';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -42,7 +43,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 2,
+        self::VERSION                   => 3,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Division', // gettext('GENDER_Division')
@@ -219,6 +220,12 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             self::FLD_ELECTRONIC_ADDRESS    => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LABEL                     => 'Electronic Address', // _('Electronic Address')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_SEPA_CREDITOR_ID      => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'SEPA Creditor Identification', // _('SEPA Creditor Identification')
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
             ],

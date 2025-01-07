@@ -428,7 +428,8 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                         new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters, true);
                     $this->{$fieldName}->runConvertToRecord();
                 } elseif (self::TYPE_DYNAMIC_RECORD === $config[self::TYPE]) {
-                    $modelName = $this->{$config[self::CONFIG][self::REF_MODEL_FIELD]};
+                    $modelName = ($config[self::CONFIG][self::REF_MODEL_FIELD] ?? false) ?
+                        $this->{$config[self::CONFIG][self::REF_MODEL_FIELD]} : $config[self::CONFIG][self::APP_NAME] . '_Model_' . $config[self::CONFIG][self::MODEL_NAME];
                     if (is_string($modelName) && is_a($modelName, Tinebase_Record_Interface::class, true)) {
                         $this->{$fieldName} = new $modelName($_data[$fieldName], $this->bypassFilters, true);
                         $this->{$fieldName}->runConvertToRecord();  

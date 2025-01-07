@@ -1526,6 +1526,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Sales_Model_Document_Invoice::FLD_SERVICE_PERIOD_END => $invoice->end_date,
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_CATEGORY => Sales_Controller_Document_Category::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}),
                 Sales_Model_Document_Invoice::FLD_DEBITOR_ID => $debitor,
+                Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS => $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS},
                 Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
                 Sales_Model_Document_Invoice::FLD_CONTRACT_ID => $contract->number,
                 Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
@@ -1548,6 +1549,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     ], true),
                 ],
             ]);
+
+            if (empty($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}) || 0 === $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->count()) {
+                $ublInvoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS} =
+                    $debitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true);
+            }
 
             if (is_numeric($invoice->credit_term)) {
                 $ublInvoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS} = $invoice->credit_term;

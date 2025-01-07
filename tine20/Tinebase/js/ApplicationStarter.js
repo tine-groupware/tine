@@ -122,6 +122,11 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             if (fieldDefinition.hasOwnProperty('default')) {
                 field.defaultValue = fieldDefinition['default'];
             }
+
+            if (_.toUpper(_.get(fieldDefinition, `config.storage`)) === 'JSON' && String(field.defaultValue).match(/^[\[{]/)) {
+                // NOTE: Server can't handle this properly, see {tine20/vendor/zendframework/zendframework1/library/Zend/Filter/Input.php:998}
+                field.defaultValue = JSON.parse(field.defaultValue);
+            }
             
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {

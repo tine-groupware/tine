@@ -214,4 +214,40 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
             + round(4.5/1.07, 2) - 0.01
             , 13.48);
     }
+
+    public function testPMCMandate(): void
+    {
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID} = Tinebase_Record_Abstract::generateUID();
+        Sales_Controller_Division::getInstance()->update($division);
+
+        $product1 = $this->_createProduct();
+
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 10,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+            ], true),
+        ];
+        $invoice = $this->_createInvoice($positions, [
+            Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PaymentMeans::class, [
+                new Sales_Model_PaymentMeans([
+                    Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getAll()->find(Sales_Model_EDocument_PaymentMeansCode::FLD_CODE, '59')->getId(),
+                    Sales_Model_PaymentMeans::FLD_DEFAULT => true,
+                    Sales_Model_PaymentMeans::FLD_CONFIG_CLASS => Sales_Model_EDocument_PMC_PaymentMandate::class,
+                    Sales_Model_PaymentMeans::FLD_CONFIG => new Sales_Model_EDocument_PMC_PaymentMandate([
+                        Sales_Model_EDocument_PMC_PaymentMandate::FLD_MANDATE_ID => 'foo',
+                        Sales_Model_EDocument_PMC_PaymentMandate::FLD_PAYER_IBAN => 'bar',
+                    ]),
+                ])
+            ])
+        ]);
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 10, round(10 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+    }
 }

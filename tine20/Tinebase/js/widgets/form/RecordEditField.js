@@ -22,6 +22,8 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
     itemCls: 'tw-recordEditField',
     triggerClass: 'action_edit',
     editable: false,
+    expandOnFocus: true,
+    blurOnSelect: true,
     
     initComponent: async function () {
         var _ = window.lodash;
@@ -119,6 +121,10 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
                     let record = !updatedRecord.data ? Tine.Tinebase.data.Record.setFromJson(updatedRecord, me.recordClass) : updatedRecord;
                     Tine.Tinebase.common.assertComparable(record);
                     this.setValue(record);
+                    this.fireEvent('select', this, this.getValue());
+                    if (this.blurOnSelect) {
+                        this.fireEvent('blur', this);
+                    }
                 },
                 'cancel': () => {
                     if (new Date().getTime() - 1000 < this.blurOnSelectLastRun) {

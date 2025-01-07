@@ -874,8 +874,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $monthBack = clone $this->_referenceDate;
         $monthBack->subMonth(1);
         $addressId = $this->_addressRecords->filter(
-                'customer_id', $this->_customerRecords->filter(
-                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                'debitor_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                         'type', 'billing')->getFirstRecord()->getId();
         
         $this->assertTrue($addressId !== NULL);
@@ -921,8 +921,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $monthBack = clone $this->_referenceDate;
         $monthBack->subMonth(1);
         $addressId = $this->_addressRecords->filter(
-                'customer_id', $this->_customerRecords->filter(
-                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                'debitor_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                         'type', 'billing')->getFirstRecord()->getId();
         
         $this->assertTrue($addressId !== NULL);
@@ -1154,8 +1154,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_createCostCenters();
         
         $addressId = $this->_addressRecords->filter(
-                'customer_id', $this->_customerRecords->filter(
-                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                'debitor_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                         'type', 'billing')->getFirstRecord()->getId();
         
         // the contract has an interval of 0, but it has to be billed
@@ -1254,7 +1254,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'container_id' => $this->_sharedContractsContainerId,
             'billing_point' => 'begin',
             'billing_address_id' => $this->_addressRecords->filter(
-                'customer_id', $customer->getId())->filter(
+                'debitor_id', $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                         'type', 'billing')->getFirstRecord()->getId(),
         
             'start_date' => $csDate,
@@ -1369,7 +1369,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'container_id' => $this->_sharedContractsContainerId,
             'billing_point' => 'begin',
             'billing_address_id' => $this->_addressRecords->filter(
-                'customer_id', $customer->getId())->filter(
+                'debitor_id', $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                     'type', 'billing')->getFirstRecord()->getId(),
     
             'start_date' => $csDate,
@@ -1512,8 +1512,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_createCustomers(1);
         $this->_createCostCenters();
         $addressId = $this->_addressRecords->filter(
-                        'customer_id', $this->_customerRecords->filter(
-                                'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'debitor_id', $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord()
+                            ->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                                         'type', 'billing')->getFirstRecord()->getId();
         
         // this contract begins 6 months before the first invoice will be created
@@ -1618,8 +1618,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         )));
         
         $addressId = $this->_addressRecords->filter(
-                        'customer_id', $this->_customerRecords->filter(
-                                'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'debitor_id', $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord()
+                            ->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                                         'type', 'billing')->getFirstRecord()->getId();
         
         // this contract begins 6 months before the first invoice will be created
