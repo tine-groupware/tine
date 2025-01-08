@@ -559,6 +559,12 @@ msgstr ""
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
+msgid "Grouping"
+msgstr ""
+
+msgid "Sorting"
+msgstr ""
+
 msgid "UI Config"
 msgstr ""
 

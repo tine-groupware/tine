@@ -574,6 +574,12 @@ msgstr "Schlüssel"
 msgid "Customfield already exists. Please choose another name."
 msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
+msgid "Grouping"
+msgstr "Gruppierung"
+
+msgid "Sorting"
+msgstr "Sortierung"
+
 msgid "UI Config"
 msgstr "UI Konfiguration"
 
