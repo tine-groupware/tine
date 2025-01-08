@@ -3920,8 +3920,9 @@ HumanResources_CliTests.testSetContractsEndDate */
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
-        $recordId = (is_string($location['record_id']) ? $location['record_id']
-            : !empty($location['record_id']['id'])) ? $location['record_id']['id'] : null;
+        $recordId = is_string($location['record_id'])
+            ? $location['record_id']
+            : (!empty($location['record_id']['id']) ? $location['record_id']['id'] : null);
         try {
             if (is_array($location['record_id']) && !$recordId) {
                 $recordData = new $location['model']($location['record_id']);
