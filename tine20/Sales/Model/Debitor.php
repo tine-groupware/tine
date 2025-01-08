@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -22,6 +22,8 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
 
     public const FLD_BILLING        = 'billing';
     public const FLD_BUYER_REFERENCE = 'buyer_reference';
+    public const FLD_SELLER_IDENTIFIER = 'seller_identifier';
+
     public const FLD_CUSTOMER_ID    = 'customer_id';
     public const FLD_DELIVERY       = 'delivery';
     public const FLD_DIVISION_ID    = 'division_id';
@@ -40,7 +42,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 4,
+        self::VERSION                   => 5,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Debitor', // gettext('GENDER_Debitor')
@@ -190,6 +192,14 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             self::FLD_BUYER_REFERENCE       => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LABEL                     => 'Buyer Reference', // _('Buyer Reference')
+                self::DESCRIPTION               => 'An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).', // _('An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_SELLER_IDENTIFIER       => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Seller identifier', // _('Seller identifier')
+                self::DESCRIPTION               => 'An identifier (usually assigned by the purchaser) of the seller, such as the vendor number for the funds management procedure or the supplier number for the ordering system (BT-29 [EN 16931]).', //_('An identifier (usually assigned by the purchaser) of the seller, such as the vendor number for the funds management procedure or the supplier number for the ordering system (BT-29 [EN 16931]).')
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
             ],

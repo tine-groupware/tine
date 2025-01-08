@@ -15,15 +15,15 @@
  * @package     Tinebase
  * @subpackage  Record
  *
- * @property    string      id
- * @property    string      application_id
- * @property    string      model
- * @property    string      name
- * @property    string      definition
- * @property    string      account_grants
- * @property    string      value
- * @property    string      label
- * @property    boolean     is_system
+ * @property    string                      $id
+ * @property    string                      $application_id
+ * @property    string                      $model
+ * @property    string                      $name
+ * @property    Tinebase_Config_Struct      $definition
+ * @property    string                      $account_grants
+ * @property    Tinebase_CustomField_Value  $value
+ * @property    string                      $label
+ * @property    boolean                     $is_system
  */
 class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
 {
