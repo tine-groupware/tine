@@ -446,7 +446,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         /** @var Tinebase_Model_CustomField_Config $cfConfig */
         foreach ($customFieldConfigs as $cfConfig) {
-            $label = empty($cfConfig->definition->label) ? $cfConfig->name : $cfConfig->definition->label;
+            $label = empty($cfConfig->definition?->label) ? $cfConfig->name : $cfConfig->definition->label;
             $name = $this->_translate->_($label);
 
             if (empty($name) || $name === $label) {
@@ -470,7 +470,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 if (isset($disallowedKeys[$cfConfig->name])) {
                     continue;
                 }
-                $this->_expandCustomFields[$cfConfig->name] = empty($cfConfig->definition->label) ? $cfConfig->name :
+                $this->_expandCustomFields[$cfConfig->name] = empty($cfConfig?->definition->label) ? $cfConfig->name :
                     $cfConfig->definition->label;
             }
         }
@@ -1736,7 +1736,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _customfieldToString(Tinebase_Model_CustomField_Config $value): string
     {
         try {
-            return $value->value->__toString();
+            return $value?->value->__toString() ?: '';
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' .
