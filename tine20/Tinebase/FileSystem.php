@@ -2715,14 +2715,19 @@ class Tinebase_FileSystem implements
     {
         return explode('/', trim($path, '/'));
     }
-    
+
     /**
      * update node
-     * 
+     *
      * @param Tinebase_Model_Tree_Node $_node
      * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    public function update(Tinebase_Model_Tree_Node $_node)
+    public function update(Tinebase_Model_Tree_Node $_node): Tinebase_Model_Tree_Node
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -2730,8 +2735,9 @@ class Tinebase_FileSystem implements
             $currentNodeObject = $this->get($_node->getId());
 
             if ($_node->name !== $currentNodeObject->name) {
-                throw new Tinebase_Exception_Record_Validation('name may not be changed in update');
-
+                $translation = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric(
+                    $translation->_('Node name may not be changed in update'));
             }
             if (isset($_node->grants)) {
                 if ($currentNodeObject->getId() !== $currentNodeObject->acl_node) {
@@ -3937,7 +3943,7 @@ class Tinebase_FileSystem implements
                 ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_accountId)
                 : $_accountId;
 
-            $translation = Tinebase_Translation::getTranslation('Tinebase');
+            $translation = Tinebase_Translation::getTranslation();
             $nodeName = sprintf($translation->_("%s's personal container"), $account->accountFullName);
             $nodeName = preg_replace('/\//', '', $nodeName);
             $path = $pathRecord->statpath . '/' . $nodeName;
