@@ -1526,6 +1526,19 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     }
 
     /**
+     * testAttachmentEncodedFilename
+     *
+     */
+    public function testAttachmentEncodedFilename()
+    {
+        $cachedMessage = $this->messageTestHelper('attachmentEncodedFilename.eml');
+        $message = $this->_getController()->getCompleteMessage($cachedMessage);
+
+        $this->assertEquals(1, count($message->attachments));
+        $this->assertEquals('0100030, test$K01995.pdf', $message->attachments[0]['filename']);
+    }
+
+    /**
      * testNewsletterMultipartRelated
      * 
      * @see 0007722: improve handling of newsletters

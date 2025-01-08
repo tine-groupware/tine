@@ -707,12 +707,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $part->location = isset($_partStructure['language']) ? $_partStructure['language'] : null;
         if (isset($_partStructure['disposition']) && is_array($_partStructure['disposition'])) {
             $part->disposition = $_partStructure['disposition']['type'];
-            if (isset($_partStructure['disposition']['parameters'])) {
-                $part->filename = (isset($_partStructure['disposition']['parameters']['filename']) || array_key_exists('filename', $_partStructure['disposition']['parameters'])) ? $_partStructure['disposition']['parameters']['filename'] : null;
-            }
         }
-        if (empty($part->filename) && isset($_partStructure['parameters']) && isset($_partStructure['parameters']['name'])) {
-            $part->filename = $_partStructure['parameters']['name'];
+
+        if (!empty($_partStructure['disposition']['parameters']['filename']) || !empty($_partStructure['parameters']['name'])) {
+            $part->filename = $this->_getAttachmentFilename($_partStructure);
         }
 
         return $part;
@@ -1367,12 +1365,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAttachmentFilename($part)
     {
-        if (is_array($part['disposition']) && (isset($part['disposition']['parameters']) || array_key_exists('parameters', $part['disposition']))
-            && (isset($part['disposition']['parameters']['filename']) || array_key_exists('filename', $part['disposition']['parameters']))) {
-            $filename = $part['disposition']['parameters']['filename'];
-        } elseif (is_array($part['parameters']) && (isset($part['parameters']['name']) || array_key_exists('name', $part['parameters']))) {
-            $filename = $part['parameters']['name'];
-        } else {
+        $filename = $part['disposition']['parameters']['filename']
+            ?? $part['parameters']['name']
+            ?? $part['disposition']['parameters']['filename*']
+            ?? $part['parameters']['name*']
+            ?? null;
+
+        if (!$filename) {
             $filename = 'Part ' . $part['partId'];
             if (isset($part['contentType'])) {
                 $filename .= ' (' . $part['contentType'] . ')';
