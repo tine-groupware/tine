@@ -271,7 +271,10 @@ class Tinebase_Helper
         if ($encoding !== FALSE) {
             $string = @mb_convert_encoding((string)$string, $encodingTo, $encoding);
         }
-        
+        if (preg_match("/^iso-8859-1''(.*)/", $string, $matches)) {
+            $string = iconv('ISO-8859-1', 'UTF-8', urldecode($matches[1]));
+        }
+
         return $string;
     }
     
