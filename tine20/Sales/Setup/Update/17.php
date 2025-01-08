@@ -49,6 +49,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE028 = __CLASS__ . '::update028';
     protected const RELEASE017_UPDATE029 = __CLASS__ . '::update029';
     protected const RELEASE017_UPDATE030 = __CLASS__ . '::update030';
+    protected const RELEASE017_UPDATE031 = __CLASS__ . '::update031';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -163,6 +164,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE029 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update029',
+            ],
+            self::RELEASE017_UPDATE031 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update031',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -910,5 +915,14 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.30', self::RELEASE017_UPDATE030);
+    }
+
+    public function update031(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.31', self::RELEASE017_UPDATE031);
     }
 }
