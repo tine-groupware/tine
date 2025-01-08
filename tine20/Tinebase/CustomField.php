@@ -766,7 +766,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
 
         /** @var Tinebase_Model_CustomField_Config $config */
         foreach ($_configs as $config) {
-            $type = strtolower($config->definition->type);
+            $type = strtolower((string)$config->definition?->type);
             if ($type === 'record' ||$type === 'recordlist') {
                 $cFields = $_customFields->filter('customfield_id', $config->getId());
                 if ($cFields->count() === 0) {
