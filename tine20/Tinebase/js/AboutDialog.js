@@ -33,7 +33,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
                 '<div class="tb-about-version">Version: {codeName}</div>',
                 '<div class="tb-about-build">({packageString})</div>',
                 '<div class="tb-about-subscription"><a href="javascript:void()" class="subscription" /></div>',
-                '<div class="tb-about-copyright">Copyright: 2007-{[new Date().getFullYear()]}&nbsp;<a href="http://www.metaways.de/" target="_blank">Metaways Infosystems GmbH</a></div>',
+                '<div class="tb-about-copyright">Copyright: 2007-{[new Date().getFullYear()]}&nbsp;<a href="https://www.metaways.info/" target="_blank">Metaways Infosystems GmbH</a></div>',
                 '<div class="tb-about-credits-license"><p><a href="javascript:void()" class="license" /><a href="javascript:void()" class="credits" /></p></div>',
             '</div>'
         );
