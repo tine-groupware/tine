@@ -220,6 +220,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ),
             self::FLD_BUYER_REFERENCE        => [
                 self::LABEL                         => 'Buyer Reference', //_('Buyer Reference')
+                self::DESCRIPTION                   => 'An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).', // _('An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
@@ -228,6 +229,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ],
             self::FLD_PURCHASE_ORDER_REFERENCE  => [
                 self::LABEL                         => 'Purchase Order Reference', // _('Purchase Order Reference')
+                self::DESCRIPTION                   => 'An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931]).', // _('An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931]).')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
@@ -235,6 +237,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             ],
             self::FLD_PROJECT_REFERENCE         => [
                 self::LABEL                         => 'Project Reference', // _('Project Reference')
+                self::DESCRIPTION                   => 'The identifier of a project to which the invoice refers (BT-11 [EN 16931]).', // _('The identifier of a project to which the invoice refers (BT-11 [EN 16931]).')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,

@@ -286,6 +286,14 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             ->setDocumentCurrencyCode(new \UBL21\Common\CommonBasicComponents\DocumentCurrencyCode('EUR'))
             ->setAccountingSupplierParty((new \UBL21\Common\CommonAggregateComponents\AccountingSupplierParty())
                 ->setParty(($supplierParty = new \UBL21\Common\CommonAggregateComponents\Party())
+                    ->setPartyIdentification(array_merge(
+                        $debitor->{Sales_Model_Debitor::FLD_SELLER_IDENTIFIER} ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
+                            new UBL21\Common\CommonBasicComponents\ID($debitor->{Sales_Model_Debitor::FLD_SELLER_IDENTIFIER})
+                        )] : [],
+                        $division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID} ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
+                            (new UBL21\Common\CommonBasicComponents\ID($division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID}))->setSchemeID('SEPA')
+                        )] : []
+                    ))
                     ->setEndpointID($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} && $division->{Sales_Model_Division::FLD_EAS_ID} ?
                         (new \UBL21\Common\CommonBasicComponents\EndpointID($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS}))->setSchemeID($division->{Sales_Model_Division::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE})
                         : null
