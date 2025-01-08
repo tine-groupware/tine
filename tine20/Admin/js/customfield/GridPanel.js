@@ -24,11 +24,11 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     newRecordIcon: 'admin-action-add-customfield',
     recordClass: Tine.Admin.Model.Customfield,
     recordProxy: Tine.Admin.customfieldBackend,
-    defaultSortInfo: {field: 'name', direction: 'ASC'},
+    defaultSortInfo: {field: 'label', direction: 'ASC'},
     evalGrants: false,
     copyEditAction: true,
     gridConfig: {
-        autoExpandColumn: 'name'
+        autoExpandColumn: 'label'
     },
     listenMessageBus: false,
     
@@ -38,6 +38,8 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.gridConfig.cm = this.getColumnModel();
         Tine.Admin.customfield.GridPanel.superclass.initComponent.call(this);
+
+        this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
     },
     
     /**
@@ -64,12 +66,15 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getColumns: function(){
         const columns = [
-            { header: this.app.i18n._('ID'), id: 'id' },
+            { header: this.app.i18n._('ID'), id: 'id', hidden: false},
             { header: this.app.i18n._('Label'), id: 'label', dataIndex: 'definition', hidden: false, width: 150, renderer: this.labelRenderer.createDelegate(this)},
-            { header: this.app.i18n._('Name'), id: 'name', hidden: false, width: 75},
+            { header: this.app.i18n._('Name'), id: 'name', hidden: true, width: 75},
             { header: this.app.i18n._('Type'), id: 'xtype', dataIndex: 'definition', hidden: false, width: 75, renderer: this.typeRenderer.createDelegate(this)},
             { header: this.app.i18n._('Application'), id: 'application_id', hidden: false, renderer: this.appRenderer.createDelegate(this)},
             { header: this.app.i18n._('Model'), id: 'model', hidden: false },
+            { header: this.app.i18n._('Required'), id: 'required', hidden: false },
+            { header: this.app.i18n._('Grouping'), id: 'group', hidden: false },
+            { header: this.app.i18n._('Sorting'), id: 'order', hidden: false },
             { header: this.app.i18n._('UI Config'), id: 'definition', hidden: false, width: 100, renderer: (definition) => {
                     return Tine.widgets.grid.jsonRenderer(JSON.stringify(definition.uiconfig));
                 }}
@@ -94,7 +99,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     typeRenderer: function(value) {
-        return this.app.i18n._(value.type);
+        return this.app.i18n._(value.type) + (value.type === 'string' &&  value?.length ? ` (${value.length})` : '');
     },
     
     /**
@@ -206,5 +211,14 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.recordProxy.deleteRecords(records, options);
         }
-    }
+    },
+
+    onStoreBeforeLoadRecords: function(o, options, success, store) {
+        o.records.forEach((record) => {
+            const uiconfig = record.data?.definition?.uiconfig;
+            record.set('group', uiconfig?.group ?? '');
+            record.set('order', uiconfig?.order ?? '');
+        })
+        Tine.Admin.customfield.GridPanel.superclass.onStoreBeforeLoadRecords.apply(this, arguments);
+    },
 });
