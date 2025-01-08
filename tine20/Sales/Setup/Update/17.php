@@ -48,6 +48,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE027 = __CLASS__ . '::update027';
     protected const RELEASE017_UPDATE028 = __CLASS__ . '::update028';
     protected const RELEASE017_UPDATE029 = __CLASS__ . '::update029';
+    protected const RELEASE017_UPDATE030 = __CLASS__ . '::update030';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -58,6 +59,12 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE012 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update012',
+            ],
+        ],
+        (self::PRIO_NORMAL_APP_STRUCTURE - 4) => [
+            self::RELEASE017_UPDATE030 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update030',
             ],
         ],
         (self::PRIO_NORMAL_APP_STRUCTURE - 3) => [
@@ -865,7 +872,9 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             Sales_Model_Invoice::class,
         ]);
 
-        Sales_Setup_Initialize::initializeEDocumentPaymentMeansCode();
+        if (Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getAll()->count() === 0) {
+            Sales_Setup_Initialize::initializeEDocumentPaymentMeansCode();
+        }
 
         $debitor = new Sales_Model_Debitor([], true);
         $debitor->runConvertToData();
@@ -886,5 +895,20 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.29', self::RELEASE017_UPDATE029);
+    }
+
+    public function update030(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_EDocument_PaymentMeansCode::class,
+        ]);
+
+        if (Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getAll()->count() === 0) {
+            Sales_Setup_Initialize::initializeEDocumentPaymentMeansCode();
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.30', self::RELEASE017_UPDATE030);
     }
 }
