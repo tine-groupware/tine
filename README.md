@@ -8,6 +8,7 @@ For more information please visit our [homepage](https://www.tine-groupware.de) 
 ## Official resources
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
 * [Mastodon](https://mastodon.social/@tinegroupware)
+* [Bluesky](https://bsky.app/profile/tine-groupware.bsky.social)
 * [Documentation](https://tine-docu.s3web.rz1.metaways.net)
 * [OCI images](https://hub.docker.com/u/tinegroupware)
 
