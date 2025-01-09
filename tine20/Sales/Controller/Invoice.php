@@ -1513,7 +1513,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         try {
             $customer = $this->_getCustomerFromInvoiceRelations($invoice) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
             /** @var Sales_Model_Contract $contract */
-            $contract = $invoice->relations->find('type', 'CONTRACT');
+            $contract = $invoice->relations->find('type', 'CONTRACT')?->related_record;
             Tinebase_Record_Expander::expandRecord($customer);
             $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
 
@@ -1528,7 +1528,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Sales_Model_Document_Invoice::FLD_DEBITOR_ID => $debitor,
                 Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS => $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS},
                 Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
-                Sales_Model_Document_Invoice::FLD_CONTRACT_ID => $contract->number,
+                Sales_Model_Document_Invoice::FLD_CONTRACT_ID => $contract,
                 Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
                     $debitor->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
                 ),
