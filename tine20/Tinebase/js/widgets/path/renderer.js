@@ -39,7 +39,7 @@ Tine.widgets.path.pathsRenderer = function(paths, queryString) {
 Tine.widgets.path.pathRenderer = function(path, queryString) {
     var _ = window.lodash,
         pathName = String(_.get(path, "path", path)),
-        queryParts = String(queryString || '').trim().split(' ');
+        queryParts = queryString ? String(queryString).trim().split(' ') : [];
 
     pathName = pathName
         .replace(/^\//, '')
