@@ -64,8 +64,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const EDOCUMENT = 'edocument';
     public const VALIDATION_SVC = 'validation_svc';
     public const VIEW_SVC = 'view_svc';
-
     const CUSTOMER_CONTACT_PERSON_FILTER = 'customerContactPersonFilter';
+    public const PAYMENT_MEANS_ID_TMPL = 'paymentMeansIdTmpl';
 
     /**
      * How should the contract number be validated
@@ -1131,6 +1131,13 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
             self::DEFAULT_STR               => [],
+        ],
+        self::PAYMENT_MEANS_ID_TMPL         => [
+            self::LABEL                     => 'Payment Means Identifier Template', //_('Payment Means Identifier Template')
+            self::DESCRIPTION               => 'Payment Means Identifier Template',
+            self::TYPE                      => self::TYPE_STRING,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => '{{ invoice.document_number }} {{ invoice.debitor_id.number }}',
         ],
         self::VAT_PROCEDURES => [
             //_('VAT Procedures')
