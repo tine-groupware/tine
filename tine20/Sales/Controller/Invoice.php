@@ -1688,7 +1688,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     // TODO move this to Timetracker (as on delete hook/fn)
                     if ($model == 'Timetracker_Model_Timeaccount') {
-                        // prevent throwing of Timetracker_Exception_ClosedTimeaccount for closed accounts (see \Timetracker_Controller_Timesheet::_checkGrant)
+                        // prevent throwing of Tinebase_Exception_Confirmation for closed accounts (see \Timetracker_Controller_Timesheet::_checkGrant)
                         $billableControllerName::getInstance()->setRequestContext([
                             'skipClosedCheck' => true,
                         ]);

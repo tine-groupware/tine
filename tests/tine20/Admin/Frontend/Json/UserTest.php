@@ -355,11 +355,11 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             $userArray = $this->_createTestUser();
             Admin_Controller_User::getInstance()->delete($userArray['accountId']);
             self::fail('should throw Tinebase_Exception_Confirmation');
-        } catch (Tinebase_Exception_Confirmation $e) {
+        } catch (Tinebase_Exception_Confirmation $tec) {
             $translate = Tinebase_Translation::getTranslation('Admin');
             $translation = $translate->_('Delete user will trigger the [V] events, do you still want to execute this action?');
 
-            self::assertEquals($translation, $e->getMessage());
+            self::assertEquals($translation, $tec->getMessage());
         }
 
         // user deletion need the confirmation header
