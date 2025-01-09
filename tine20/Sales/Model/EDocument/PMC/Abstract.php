@@ -45,7 +45,11 @@ abstract class Sales_Model_EDocument_PMC_Abstract extends Tinebase_Record_NewAbs
 
     protected function createPaymentMeans(Sales_Model_Document_Invoice $invoice): PaymentMeans
     {
+        $id = (new Tinebase_Twig(($local = new Zend_Locale($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE})), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $local)))
+            ->getEnvironment()
+            ->createTemplate(Sales_Config::getInstance()->{Sales_Config::PAYMENT_MEANS_ID_TMPL})
+            ->render(['invoice' => $invoice]);
         return (new PaymentMeans())
-            ->setPaymentID([new PaymentID($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . ' ' . $invoice->{Sales_Model_Document_Invoice::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_NUMBER})]); // BT-83 Verwendungszweck
+            ->setPaymentID([new PaymentID($id)]); // BT-83 Verwendungszweck
     }
 }
