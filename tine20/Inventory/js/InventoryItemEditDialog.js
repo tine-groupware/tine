@@ -68,6 +68,23 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             })
         }
 
+        const employee = Tine.Tinebase.appMgr.isEnabled('HumanResources') ?
+            {
+                columnWidth: 1,
+                editDialog: this,
+                xtype: 'tinerelationpickercombo',
+                fieldLabel: this.app.i18n._('Employee'),
+                allowBlank: true,
+                app: 'HumanResources',
+                recordClass: Tine.HumanResources.Model.Employee,
+                relationType: 'EMPLOYEE',
+                relationDegree: 'sibling',
+                modelUnique: true,
+            } : {
+                columnWidth: 1,
+                xtype: 'spacer'
+            }
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -119,18 +136,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 recordClass: Tine.Inventory.Model.Type,
                                 name: 'type',
                                 columnWidth: 0.5,
-                            }, {
-                                columnWidth: 1,
-                                editDialog: this,
-                                xtype: 'tinerelationpickercombo',
-                                fieldLabel: this.app.i18n._('Employee'),
-                                allowBlank: true,
-                                app: 'HumanResources',
-                                recordClass: Tine.HumanResources.Model.Employee,
-                                relationType: 'EMPLOYEE',
-                                relationDegree: 'sibling',
-                                modelUnique: true,
-                            }]
+                            }, employee ]
                         ]
                     },
                     {
