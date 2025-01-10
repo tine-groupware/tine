@@ -91,13 +91,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param   string                           $loginName
      * @param   string                           $password
-     * @param   \Zend\Http\PhpEnvironment\Request $request
+     * @param   \Laminas\Http\PhpEnvironment\Request $request
      * @param   string                           $clientIdString
      *
      * @return  bool
      * @throws  Tinebase_Exception_MaintenanceMode
      */
-    public function login($loginName, $password, \Zend\Http\PhpEnvironment\Request $request, $clientIdString = NULL)
+    public function login($loginName, $password, \Laminas\Http\PhpEnvironment\Request $request, $clientIdString = NULL)
     {
         // enforce utf8
         $password = Tinebase_Helper::mbConvertTo($password);
@@ -114,12 +114,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         // rolechange user: username*authuser?
         $authUserParts = preg_split('/\*+(?=[^*]+$)/', $loginName);
+        $roleChangeUserName = null;
         if (isset($authUserParts[1]) && Tinebase_User::getInstance()->getUserByLoginName($authUserParts[1])) {
             $loginName = $authUserParts[1];
             $roleChangeUserName = $authUserParts[0];
         }
 
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
+
+        return $this->processLoginAuthResult($loginName, $request, $password, $clientIdString, $authResult, $roleChangeUserName);
+    }
+
+    public function processLoginAuthResult(string $loginName, \Laminas\Http\PhpEnvironment\Request $request, ?string $password = null, ?string $clientIdString = null, ?Zend_Auth_Result $authResult = null, ?string $roleChangeUserName = null): bool
+    {
+        if (null === $authResult) {
+            $authResult = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $loginName);
+        }
 
         $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
             $clientIdString);
@@ -132,28 +142,25 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $this->_loginUser($user, $accessLog, $password);
 
-        $this->_checkPasswordPolicyAtLogin($password, $user);
+        if (null !== $password) {
+            $this->_checkPasswordPolicyAtLogin($password, $user);
 
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN}) {
-            $userController = Tinebase_User::getInstance();
-            if ($userController instanceof Tinebase_User_Sql) {
-                $userController->updateNtlmV2Hash($user->getId(), $password);
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN}) {
+                $userController = Tinebase_User::getInstance();
+                if ($userController instanceof Tinebase_User_Sql) {
+                    $userController->updateNtlmV2Hash($user->getId(), $password);
+                }
             }
-        }
-
-        // TODO generalize this -> apps should be able to react to "user login" event
-        if (Tinebase_Application::getInstance()->isInstalled('Felamimail', true)) {
-            Felamimail_Controller::getInstance()->handleAccountLogin($user, $password);
-        }
-
-        if (isset($roleChangeUserName)) {
-            Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
         }
 
         $loginEvent = new Tinebase_Event_User_Login();
         $loginEvent->password = $password;
         $loginEvent->user = $user;
         Tinebase_Event::fireEvent($loginEvent);
+
+        if (null !== $roleChangeUserName) {
+            Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
+        }
 
         return true;
     }
@@ -774,7 +781,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 break;
 
             case Tinebase_Event_User_Login::class:
-                if (($userCtrl = Tinebase_User::getInstance()) instanceof Tinebase_User_Interface_SyncAble
+                if (null !== $_eventObject->password && ($userCtrl = Tinebase_User::getInstance()) instanceof Tinebase_User_Interface_SyncAble
                         && Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}
                         && !$userCtrl->isReadOnlyUser($_eventObject->user->getId())) {
                     $userCtrl->setPasswordInSyncBackend($_eventObject->user, $_eventObject->password);
@@ -889,20 +896,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
 
             if ($mfa->getConfig()->{Tinebase_Model_MFA_Config::FLD_ALLOW_PWD_LESS_LOGIN} && $mfa->validate($userMFApwd, $mfaCfg)) {
-                $authResult = new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $user->accountLoginName);
-                $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($user->accountLoginName, $authResult, Tinebase_Core::get(Tinebase_Core::REQUEST),
-                    $clientIdString);
-
-                Tinebase_AreaLock::getInstance()->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-                $user = $this->_validateAuthResult($authResult, $accessLog);
-
-                if (!($user instanceof Tinebase_Model_FullUser)) {
-                    return false;
-                }
-
-                $this->_loginUser($user, $accessLog);
-
-                return true;
+                return $this->processLoginAuthResult(
+                    loginName:  $user->accountLoginName,
+                    request: Tinebase_Core::get(Tinebase_Core::REQUEST),
+                    clientIdString: $clientIdString
+                );
             }
 
             //return false;

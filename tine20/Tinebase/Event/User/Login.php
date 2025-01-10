@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Event
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -18,5 +18,5 @@
 class Tinebase_Event_User_Login extends Tinebase_Event_Abstract
 {
     public Tinebase_Model_FullUser $user;
-    public string $password;
+    public ?string $password;
 }
