@@ -163,8 +163,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         $contentType = $attachment['content-type'];
         $filename = $attachment['filename'];
-        /** @var GuzzleHttp\Psr7\Stream $stream */
-        $stream = $attachment['contentstream'];
+        $stream = $attachment['stream'];
 
         if ($stream === null) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -180,8 +179,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         $this->_prepareHeader($filename, $contentType);
 
-        $stream->rewind();
-        echo $stream->getContents();
+        @fpassthru($stream);
+        fclose($stream);
     }
 
     /**
