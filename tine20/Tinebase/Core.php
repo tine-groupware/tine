@@ -1843,10 +1843,10 @@ class Tinebase_Core
             'licenseStatus'     => Tinebase_License::getInstance()->getStatus(),
             'licenseData'       => Tinebase_License::getInstance()->getCertificateData(),
             'loginExternalIdps' => SSO_Controller_ExternalIdp::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class, [
-                    [TMFA::FIELD => SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => true],
-                ])
-            )->toArray(),
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class, [
+                        [TMFA::FIELD => SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => true],
+                    ])
+                )->toArray(),
         ];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

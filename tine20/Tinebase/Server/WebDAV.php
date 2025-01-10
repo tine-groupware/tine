@@ -126,13 +126,15 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
                     if (Tinebase_Auth_NtlmV2::AUTH_SUCCESS === $ntlmAuthStatus) {
                         try {
-                            Tinebase_Controller::getInstance()->loginUser($this->_ntlmV2->getUser(), $this->_request,
-                                self::REQUEST_TYPE);
+                            $hasIdentity = Tinebase_Controller::getInstance()->processLoginAuthResult(
+                                loginName: $this->_ntlmV2->getUser()->accountLoginName,
+                                request: $this->_request,
+                                clientIdString: self::REQUEST_TYPE
+                            );
                         } catch (Tinebase_Exception_MaintenanceMode $temm) {
                             header('HTTP/1.1 503 Service Unavailable');
                             return;
                         }
-                        $hasIdentity = true;
                     } else {
                         $this->_ntlmV2->sendHeaderForAuthPase($ntlmAuthStatus);
                         return;

@@ -586,17 +586,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function login(?string $username = null, ?string $password = null, ?string $MFAUserConfigId = null, ?string $MFAPassword = null): array
     {
-        if (empty($username)) {
-            try {
-                if (($idpId = ($this->_getRequestContextHeaders()['idpid'] ?? null)) &&
-                        ($idp = SSO_Controller_ExternalIdp::getInstance()->get($idpId)) &&
-                        $idp->{SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION}) {
-                    SSO_Controller::startExternalIdpAuthProcess($idp);
-                }
-            }  catch (Tinebase_Exception_NotFound) {}
-            return $this->_getLoginFailedResponse();
-        }
-
         try {
             Tinebase_Core::startCoreSession();
         } catch (Zend_Session_Exception $zse) {
@@ -607,6 +596,38 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'success'      => false,
                 'errorMessage' => "Could not start session!",
             );
+        }
+
+        if (empty($username)) {
+            try {
+                if (($idpId = ($this->_getRequestContextHeaders()['idpid'] ?? null)) &&
+                        ($idp = SSO_Controller_ExternalIdp::getInstance()->get($idpId)) &&
+                        $idp->{SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION}) {
+                    SSO_Controller::startExternalIdpAuthProcess($idp);
+                }
+            }  catch (Tinebase_Exception_NotFound) {}
+            if ($MFAPassword) {
+                if (null !== $MFAUserConfigId ||
+                        null !== ($MFAUserConfigId = Tinebase_Config::getInstance()->{Tinebase_Config::MFA}->records?->find(Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS, Tinebase_Auth_MFA_WebAuthnAdapter::class)?->getId())) {
+                    try {
+                        $user = Tinebase_Auth_Webauthn::webAuthnAuthenticate(Tinebase_Auth_MFA::getInstance($MFAUserConfigId)->getAdapter()->getConfig(), $MFAPassword);
+                    } catch (Throwable) {
+                        return $this->_getLoginFailedResponse();
+                    }
+                    $areaLock = Tinebase_AreaLock::getInstance();
+                    if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+                        $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
+                    }
+                    if (Tinebase_Controller::getInstance()->processLoginAuthResult(
+                                loginName: $user->accountLoginName,
+                                request: Tinebase_Core::get(Tinebase_Core::REQUEST),
+                                clientIdString: self::REQUEST_TYPE
+                            )) {
+                        return $this->_getLoginSuccessResponse($username);
+                    }
+                }
+            }
+            return $this->_getLoginFailedResponse();
         }
 
         if (empty($password)) {
@@ -1515,7 +1536,22 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    /**
+    public function getWebAuthnAuthenticateOptionsForLogin(?string $mfaId = null): array
+    {
+        if (null === $mfaId) {
+            if (null === ($mfaId = Tinebase_Config::getInstance()->{Tinebase_Config::MFA}->records?->find(Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS, Tinebase_Auth_MFA_WebAuthnAdapter::class)?->getId())) {
+                throw new Tinebase_Exception_Backend('service not configured');
+            }
+        }
+
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions(
+            Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig(),
+            true
+        )->jsonSerialize();
+    }
+
+
+/**
      * @param string $accountLoginName
      * @param string $mfaId
      * @return array
@@ -1538,7 +1574,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
         $config = Tinebase_Auth_MFA::getInstance($configId)->getAdapter()->getConfig();
 
-        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, $account->getId())->jsonSerialize();
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, true, $account->getId())->jsonSerialize();
     }
 
     public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)
