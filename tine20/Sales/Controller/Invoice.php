@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -1512,10 +1512,18 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         try {
             $customer = $this->_getCustomerFromInvoiceRelations($invoice) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
-            /** @var Sales_Model_Contract $contract */
-            $contract = $invoice->relations->find('type', 'CONTRACT')?->related_record;
             Tinebase_Record_Expander::expandRecord($customer);
-            $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
+            if ($contract = $invoice->relations->find('type', 'CONTRACT')?->related_record) {
+                Tinebase_Record_Expander::expandRecord($contract);
+            }
+            $debitor = null;
+            /** @var Sales_Model_Contract $contract */
+            if ($contract?->billing_address_id) {
+                $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(fn($deb) => $deb->{Sales_Model_Debitor::FLD_BILLING}->getById($contract->getIdFromProperty('billing_address_id')), null);
+            }
+            if (null === $debitor) {
+                $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
+            }
 
             // type (invoice_type) => REVERSAL => storno gibt verknüpfung
 
@@ -1530,7 +1538,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
                 Sales_Model_Document_Invoice::FLD_CONTRACT_ID => $contract,
                 Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => new Sales_Model_Document_Address(
-                    $debitor->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord()->toArray(), true
+                    ($contract?->billing_address_id ?:
+                        $debitor->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord())->toArray(), true
                 ),
                 // TODO FIXME do we have a FLD_CONTACT_ID?
                 Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE => 'de',
