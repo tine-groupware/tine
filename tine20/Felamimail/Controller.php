@@ -216,6 +216,11 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                     break;
                 }
                 break;
+            case Tinebase_Event_User_Login::class:
+                if (null !== $_eventObject->password) {
+                    $this->handleAccountLogin($_eventObject->user, $_eventObject->password);
+                }
+                break;
         }
     }
 

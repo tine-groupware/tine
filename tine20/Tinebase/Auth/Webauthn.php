@@ -44,7 +44,7 @@ final class Tinebase_Auth_Webauthn
         /** @var \Webauthn\PublicKeyCredentialSource $result */
         $result = self::_getServer()->loadAndCheckAssertionResponse(
             $data ?: $request->getBody()->getContents(),
-            self::getWebAuthnRequestOptions($config),
+            self::getWebAuthnRequestOptions($config, false),
             null,
             $request
         );
@@ -95,25 +95,28 @@ final class Tinebase_Auth_Webauthn
         return $credentialCreationOptions;
     }
 
-    public static function getWebAuthnRequestOptions(Tinebase_Model_MFA_WebAuthnConfig $config, ?string $accountId = null): \Webauthn\PublicKeyCredentialRequestOptions
+    public static function getWebAuthnRequestOptions(Tinebase_Model_MFA_WebAuthnConfig $config, bool $generateChallenge, ?string $accountId = null): \Webauthn\PublicKeyCredentialRequestOptions
     {
-        if (null === $accountId) {
+        if (false === $generateChallenge) {
             if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge)) {
                 throw new Tinebase_Exception_Backend('no authentication challenge found');
             }
             Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge = null;
             $credentialRequestOptions = \Webauthn\PublicKeyCredentialRequestOptions::createFromString($challenge);
         } else {
-            $user = Tinebase_User::getInstance()->getFullUserById($accountId);
             $credDescriptors = [];
-            foreach ((new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())->findAllForUserEntity(
-                new \Webauthn\PublicKeyCredentialUserEntity(
-                    $user->accountLoginName, $user->getId(), $user->accountDisplayName
-                )) as $val) {
-                $credDescriptors[] = $val->getPublicKeyCredentialDescriptor();
-            }
             $clientInputs = new AuthenticationExtensionsClientInputs();
-            $clientInputs->add(new AuthenticationExtension('userHandle', $user->getId()));
+            if (null !== $accountId) {
+                $user = Tinebase_User::getInstance()->getFullUserById($accountId);
+                $clientInputs->add(new AuthenticationExtension('userHandle', $user->getId()));
+                foreach ((new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())->findAllForUserEntity(
+                    new \Webauthn\PublicKeyCredentialUserEntity(
+                        $user->accountLoginName, $user->getId(), $user->accountDisplayName
+                    )) as $val) {
+                    $credDescriptors[] = $val->getPublicKeyCredentialDescriptor();
+                }
+            }
+
             $credentialRequestOptions = self::_getServer()->generatePublicKeyCredentialRequestOptions(
                 $config->{Tinebase_Model_MFA_WebAuthnConfig::FLD_USER_VERIFICATION_REQUIREMENT},
                 $credDescriptors,
