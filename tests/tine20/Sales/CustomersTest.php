@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -320,6 +320,8 @@ class Sales_CustomersTest extends TestCase
             'start_date' => Tinebase_DateTime::now(),
             'billing_address_id' => $customer['debitors'][0]['billing'][0]['id'],
         )));
+
+        $this->assertInstanceOf(Sales_Model_Address::class, $contract->billing_address_id);
 
         // if the property is set to null, no handling of this dependent records must be done
         $customer['debitors'][0]['billing'] = NULL;

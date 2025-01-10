@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -99,6 +99,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'billing_address_id' => [],
                 'products'       => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         'product_id' => [
