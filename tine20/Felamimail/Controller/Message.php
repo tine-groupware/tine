@@ -709,9 +709,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $part->disposition = $_partStructure['disposition']['type'];
         }
 
-        if (!empty($_partStructure['disposition']['parameters']['filename']) || !empty($_partStructure['parameters']['name'])) {
-            $part->filename = $this->_getAttachmentFilename($_partStructure);
-        }
+        $part->filename = $this->_getAttachmentFilename($_partStructure, true);
 
         return $part;
     }
@@ -1363,7 +1361,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $part
      * @return string
      */
-    protected function _getAttachmentFilename($part)
+    protected function _getAttachmentFilename($part, $allowEmpty = false)
     {
         $filename = $part['disposition']['parameters']['filename']
             ?? $part['parameters']['name']
@@ -1371,7 +1369,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ?? $part['parameters']['name*']
             ?? null;
 
-        if (!$filename) {
+        if (!$filename && !$allowEmpty) {
             $filename = 'Part ' . $part['partId'];
             if (isset($part['contentType'])) {
                 $filename .= ' (' . $part['contentType'] . ')';
