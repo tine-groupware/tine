@@ -4,17 +4,17 @@ tine:
       enabled: true
       imap:
         active: true
-        host: dev-mailstack-dovecot
-        port: 143
+        host: mailtest.tine20.net
+        port: 993
         useSystemAccount: 1
-        ssl: tls
-        verifyPeer: 0
+        ssl: SSL
+        verifyPeer: 1
         backend: dovecot_imap
         domain: {{ .Values.mailDomain }}
         instanceName: {{ .Values.domain }}
         dovecot:
-          host: dev-db-mariadb
-          dbname: devdovecot
+          host: mysql2.metaways.net
+          dbname: test_dovecot
           uid: vmail
           gid: vmail
           home: /var/vmail/%d/%u
@@ -22,24 +22,24 @@ tine:
       smtp:
         active: true
         backend: postfix
-        hostname: dev-mailstack-postfix
+        hostname: mailtest.tine20.net
         port: 25
-        ssl: none
-        auth: none
-        name: postfix
+        ssl: tls
+        auth: login
+        name: common.tine20.net
         primarydomain: {{ .Values.mailDomain }}
         instanceName: {{ .Values.domain }}
         from: {{ .Values.domain }}
         postfix:
-          host: dev-db-mariadb
-          dbname: devpostfix
+          host: mysql2.metaways.net
+          dbname: test_postfix
       sieve:
         active: true
-        hostname: dev-mailstack-dovecot
+        hostname: mailtest.tine20.net
         port: 4190
-        ssl: none
+        ssl: tls
       virt:
         active: true
         domain: {{ .Values.mailDomain }}
-        host: dev-db-mariadb
-        database: devpostfix
+        host: mysql2.metaways.net
+        user: test_tine20net
