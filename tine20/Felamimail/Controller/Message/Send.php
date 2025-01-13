@@ -232,7 +232,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @param Felamimail_Model_Message $_message
      */
-    protected function _resolveOriginalMessage(Felamimail_Model_Message $_message)
+    protected function _resolveOriginalMessage(Felamimail_Model_Message $_message): void
     {
         if (! $_message->original_id || $_message->original_id instanceof Felamimail_Model_Message) {
             return;
@@ -259,12 +259,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $originalMessage = Felamimail_Controller_Message::getInstance()->getMessageFromNode($originalMessageId);
                 $partId = 1;
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Did not find original message (' . $originalMessageId . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Did not find original message or file for forward/reply(' . $originalMessageId . ')');
                 }
-                $translation = Tinebase_Translation::getTranslation('Felamimail');
-                throw new Tinebase_Exception_NotFound($translation->_('Original message not found, email was moved or deleted'));
+                $originalMessage = null;
             }
         }
 
