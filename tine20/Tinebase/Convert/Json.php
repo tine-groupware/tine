@@ -505,7 +505,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     $mc = $model::getConfiguration();
                     Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records, $mc);
 
-                    self::resolveAttachmentImage($records);
+                    $this->resolveAttachmentImage($records);
 
                     self::resolveMultipleIdFields($records);
 
@@ -758,7 +758,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     {
         Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records, $modelConfiguration);
 
-        self::resolveAttachmentImage($records);
+        $this->resolveAttachmentImage($records);
 
         if ($multiple) {
             if ($records->getFirstRecord()->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
@@ -809,7 +809,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      *
      * @param $records
      */
-    static public function resolveAttachmentImage($records)
+    public function resolveAttachmentImage($records)
     {
         // get all images from attachments and set 'image' properties
 
