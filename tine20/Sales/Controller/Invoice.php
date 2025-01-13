@@ -1504,12 +1504,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     public function createXRechnungsAttachment(Sales_Model_Invoice $invoice): void
     {
         $remove = null;
-        foreach ($invoice->attachments?->filter(fn ($rec) => str_ends_with($rec->name, '-xrechnung.xml')) ?? [] as $remove) {
+        foreach ($invoice->attachments?->filter(fn($rec) => str_ends_with($rec->name, '-xrechnung.xml') || str_ends_with($rec->name, '-xrechnung.validation.html')) ?? [] as $remove) {
             $invoice->attachments->removeRecord($remove);
         }
         if (null !== $remove) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($invoice);
         }
+
         try {
             $customer = $this->_getCustomerFromInvoiceRelations($invoice) ?? throw new Tinebase_Exception_SystemGeneric('invoice does not have a customer');
             Tinebase_Record_Expander::expandRecord($customer);
@@ -1578,14 +1579,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             rewind($stream);
 
             if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
-                try {
-                    (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
-                } catch (Tinebase_Exception_Record_Validation $e) {
-                    rewind($stream);
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . stream_get_contents($stream));
-                    throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
-                }
+                $validationResult = (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
                 rewind($stream); // redundant, but cheap and good for readability
+                if (!empty($validationResult['errors'])) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' edocument validation service reported errors: ' . print_r($validationResult['errors'], true));
+                    }
+                    throw new Tinebase_Exception_HtmlReport($validationResult['html']);
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -1596,15 +1598,36 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $attachmentName = str_replace('/', '-', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml');
             Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($invoice, $attachmentName, $stream);
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
-        } catch (Exception $e) {
-            if ($e instanceof Tinebase_Exception_ProgramFlow) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' ' . $e->getMessage());
-                }
-            } else {
-                Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $invoice->getId()]);
+        } catch (Tinebase_Exception_HtmlReport $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $e->getMessage());
             }
+
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+            /** @var Sales_Model_Invoice $invoice */
+            $invoice = $this->get($invoice->getId());
+
+            $stream = fopen('php://temp', 'w+');
+            fwrite($stream, $e->getHtml());
+            rewind($stream);
+
+            foreach ($invoice->attachments->filter(fn($rec) => str_ends_with($rec->name, '-xrechnung.xml') || str_ends_with($rec->name, '-xrechnung.validation.html')) ?? [] as $remove) {
+                $invoice->attachments->removeRecord($remove);
+            }
+            $invoice->attachments->addRecord(new Tinebase_Model_Tree_Node([
+                'name' => str_replace('/', '-', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.validation.html'),
+                'tempFile' => $stream,
+            ], true));
+
+            $this->update($invoice);
+            $transaction->release();
+
+            throw $e;
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e, additionalData: ['invoice id: ' . $invoice->getId()]);
+            throw $e;
         }
     }
 

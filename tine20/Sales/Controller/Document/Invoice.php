@@ -154,6 +154,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
 
         $stream = null;
+        $attachmentName = str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml');
         try {
             if (!($stream = fopen('php://temp', 'r+'))) {
                 throw new Tinebase_Exception('cant create temp stream');
@@ -170,20 +171,22 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             rewind($stream);
 
             if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
-                try {
-                    (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
-                } catch (Tinebase_Exception_Record_Validation $e) {
-                    throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
-                }
+                $validationResult = (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
                 rewind($stream); // redundant, but cheap and good for readability
+                if (!empty($validationResult['errors'])) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' edocument validation service reported errors: ' . print_r($validationResult['errors'], true));
+                    }
+                    throw new Tinebase_Exception_HtmlReport($validationResult['html']);
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
             }
-            
-            $attachmentName = str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml');
-            if (null !== ($remove = $record->attachments?->find('name', $attachmentName))) {
-                $record->attachments->removeRecord($remove);
+
+            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '-xrechnung.validation.html')))->count() > 0) {
+                $record->attachments->removeRecords($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
             }
             $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $attachmentName, $stream);
@@ -213,6 +216,36 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             $record->seq = $updatedRecord->seq;
             $record->last_modified_time = $updatedRecord->last_modified_time;
 
+        } catch (Tinebase_Exception_HtmlReport $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $e->getMessage());
+            }
+
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+            /** @var Sales_Model_Invoice $invoice */
+            $record = $this->get($record->getId());
+
+            if ($stream) {
+                @fclose($stream);
+            }
+            $stream = fopen('php://temp', 'w+');
+            fwrite($stream, $e->getHtml());
+            rewind($stream);
+            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '-xrechnung.validation.html')))->count() > 0) {
+                $record->attachments->removeRecords($remove);
+            }
+
+            $record->attachments->addRecord(new Tinebase_Model_Tree_Node([
+                'name' => str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.validation.html'),
+                'tempFile' => $stream,
+            ], true));
+
+            $this->update($record);
+            $transaction->release();
+
+            throw $e;
         } finally {
             if ($stream) {
                 @fclose($stream);

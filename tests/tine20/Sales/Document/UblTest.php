@@ -50,6 +50,41 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame($taxInclValue, (float)$taxInclAmount[0]);
     }
 
+    public function testUblValidationFail(): void
+    {
+        $product1 = $this->_createProduct();
+
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+            ], true),
+        ];
+        $invoice = $this->_createInvoice($positions);
+
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $division->{Sales_Model_Division::FLD_VAT_NUMBER} = '';
+        $division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} = '';
+        Sales_Controller_Division::getInstance()->update($division);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        try {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+            Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+            $this->fail('expect to throw ' . Tinebase_Exception_HtmlReport::class);
+        } catch (Tinebase_Exception_HtmlReport $e) {
+            $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+            $this->assertSame(1, $invoice->attachments->count());
+            $attachement = $invoice->attachments->getFirstRecord();
+            $this->assertSame($invoice->{SMDI::FLD_DOCUMENT_NUMBER} . '-xrechnung.validation.html', $attachement->name);
+            $this->assertSame($e->getHtml(), file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($attachement, true)));
+        }
+    }
+
     public function testPositionNetDiscount(): void
     {
         $product1 = $this->_createProduct();
@@ -240,7 +275,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                     Sales_Model_PaymentMeans::FLD_CONFIG_CLASS => Sales_Model_EDocument_PMC_PaymentMandate::class,
                     Sales_Model_PaymentMeans::FLD_CONFIG => new Sales_Model_EDocument_PMC_PaymentMandate([
                         Sales_Model_EDocument_PMC_PaymentMandate::FLD_MANDATE_ID => 'foo',
-                        Sales_Model_EDocument_PMC_PaymentMandate::FLD_PAYER_IBAN => 'bar',
+                        Sales_Model_EDocument_PMC_PaymentMandate::FLD_PAYER_IBAN => 'DE02500105170137075030',
                     ]),
                 ])
             ])
