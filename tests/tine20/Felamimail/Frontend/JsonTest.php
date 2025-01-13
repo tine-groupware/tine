@@ -67,7 +67,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testClearFolder()
     {
-        $folderName = $this->_testFolderName;
         $folder = $this->_getFolder($this->_testFolderName);
         $folder = Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
 
@@ -1020,7 +1019,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $message = $this->_sendMessage();
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_account->trash_folder);
 
-        $result = $this->_json->moveMessages(array(array(
+        $this->_json->moveMessages(array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), Felamimail_Model_Folder::FOLDER_TRASH);
 
@@ -1056,8 +1055,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testReplyMessage()
     {
-        self::markTestSkipped('FIXME: fails at random');
-
         $message = $this->_sendMessage();
 
         $replyMessage = $this->_getReply($message);
@@ -1112,15 +1109,38 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
      */
     public function testReplyMessageInSentFolder()
     {
-        self::markTestSkipped('FIXME: fails at random');
-
         $messageInSent = $this->_sendMessage($this->_account->sent_folder);
         $replyMessage = $this->_getReply($messageInSent);
-        $returned = $this->_json->saveMessage($replyMessage);
+        $this->_json->saveMessage($replyMessage);
 
         $result = $this->_getMessages();
         $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
         $this->assertTrue(!empty($sentMessage));
+    }
+
+    public function testReplyForwardDeletedMessage(): void
+    {
+        $messageInSent = $this->_sendMessage($this->_account->sent_folder);
+        $replyMessage = $this->_getReply($messageInSent);
+        $this->_json->moveMessages(array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($messageInSent['id'])
+        )), Felamimail_Model_Folder::FOLDER_TRASH);
+        $returned = $this->_json->saveMessage($replyMessage);
+        self::assertArrayHasKey('In-Reply-To', $returned['headers']);
+
+        // forward moved message
+        $forwardMessageData = $this->_getForwardMessageData($messageInSent['id']);
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($forwardMessageData);
+
+        // now we expunge trash & try again
+        $folder = $this->_getFolder('TRASH');
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($folder->getId());
+
+        $this->_json->saveMessage($replyMessage);
+
+        // NOTE: not sure if forwarding should work in all cases - receipient might wonder about some missing attachments
+        $this->_json->saveMessage($forwardMessageData);
     }
 
     /**
@@ -1266,19 +1286,9 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $message = $this->_appendMessageforForwarding();
 
         $fwdSubject = 'Fwd: ' . $message['subject'];
-        $forwardMessageData = array(
-            'account_id' => $this->_account->getId(),
+        $forwardMessageData = $this->_getForwardMessageData($message['id'], [
             'subject' => $fwdSubject,
-            'to' => array($this->_getEmailAddress()),
-            'body' => "aaaaaä <br>",
-            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
-            'original_id' => $message['id'],
-            'attachments' => array(new Tinebase_Model_TempFile(array(
-                'type' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
-                'name' => 'Verbessurüngsvorschlag',
-            ), TRUE)),
-            'flags' => Zend_Mail_Storage::FLAG_PASSED,
-        );
+        ]);
 
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($forwardMessageData);
@@ -1299,6 +1309,23 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']),
             'forwarded flag missing in flags: ' . print_r($message, TRUE));
+    }
+
+    protected function _getForwardMessageData(string $originalMessageId, array $data = []): array
+    {
+        return array_merge([
+            'account_id' => $this->_account->getId(),
+            'subject' => 'fwd message test',
+            'to' => array($this->_getEmailAddress()),
+            'body' => "aaaaaä <br>",
+            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
+            'original_id' => $originalMessageId,
+            'attachments' => array(new Tinebase_Model_TempFile(array(
+                'type' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+                'name' => 'Verbessurüngsvorschlag',
+            ), TRUE)),
+            'flags' => Zend_Mail_Storage::FLAG_PASSED,
+        ], $data);
     }
 
     protected function _appendMessageforForwarding($file = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
