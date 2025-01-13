@@ -146,15 +146,8 @@ class Tinebase_Exception extends Exception
             Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' Data: ' . print_r($additionalData, true));
         }
 
-        // log trace?
         if ($suppressTrace === null) {
-            try {
-                $config = Tinebase_Core::getConfig();
-                $suppressTrace = (isset($config->suppressExceptionTraces)) ? $config->suppressExceptionTraces : false;
-            } catch (Exception $e) {
-                // catch all config exceptions here
-                $suppressTrace = false;
-            }
+            $suppressTrace = Tinebase_Core::getConfig()->get(Tinebase_Config::SUPPRESS_EXCEPTION_TRACES);
         }
 
         if (Tinebase_Core::isLogLevel(constant("Zend_Log::$logLevel")) && ! $suppressTrace) {

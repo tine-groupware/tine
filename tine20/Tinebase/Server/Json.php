@@ -455,14 +455,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected function _handleException($request, $exception)
     {
-        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+        $suppressTrace = Tinebase_Core::getConfig()->get(Tinebase_Config::SUPPRESS_EXCEPTION_TRACES);
         if ($exception instanceof Tinebase_Exception_ProgramFlow) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
                 $exception->getMessage());
         } else {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
                 $exception->getMessage());
-            Tinebase_Exception::log($exception, $suppressTrace);
+            Tinebase_Exception::log($exception);
         }
         
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
@@ -474,10 +474,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $exceptionData['title'] = $exception->getTitle();
         }
 
-        if ($suppressTrace !== TRUE) {
+        if ($suppressTrace !== true) {
             $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
-
 
         $server = self::_getServer();
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
