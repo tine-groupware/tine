@@ -1574,7 +1574,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
         $config = Tinebase_Auth_MFA::getInstance($configId)->getAdapter()->getConfig();
 
-        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, true, $account->getId())->jsonSerialize();
+        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, true, $account, $mfaId)->jsonSerialize();
     }
 
     public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)

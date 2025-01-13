@@ -59,7 +59,7 @@ class Tinebase_Model_MFA_WebAuthnUserConfig extends Tinebase_Auth_MFA_AbstractUs
                 Tinebase_Controller_WebauthnPublicKey::getInstance()->delete([$webauthnPublicKey->getId()]);
             }
             $this->{self::FLD_WEBAUTHN_ID} =
-                Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA}, $newUser);
+                Tinebase_Auth_Webauthn::webAuthnRegister($this->{self::FLD_PUBLIC_KEY_DATA});
         }
         $this->{self::FLD_PUBLIC_KEY_DATA} = null;
     }
