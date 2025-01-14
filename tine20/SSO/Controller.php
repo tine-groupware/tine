@@ -218,6 +218,9 @@ class SSO_Controller extends Tinebase_Controller_Event
                     Tinebase_Session::getSessionNamespace()->sso_oid_authRequest = $authRequest;
                     static::passwordLessLogin($request->getParsedBody()['username']);
                 }
+                if (!Tinebase_Core::getUser()) {
+                    throw new Tinebase_Exception_Auth_PwdRequired('Wrong username or password!');
+                }
             } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked
                     | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $tea) { // 630 + 631 + 650 + 651
                 $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
