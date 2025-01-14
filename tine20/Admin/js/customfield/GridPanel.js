@@ -215,9 +215,10 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     onStoreBeforeLoadRecords: function(o, options, success, store) {
         o.records.forEach((record) => {
-            const uiconfig = record.data?.definition?.uiconfig;
-            record.set('group', uiconfig?.group ?? '');
-            record.set('order', uiconfig?.order ?? '');
+            const definition = record.data?.definition;
+            record.set('group', definition?.uiconfig?.group ?? '');
+            record.set('order', definition?.uiconfig?.order ?? '');
+            record.set('required', !!definition?.required);
         })
         Tine.Admin.customfield.GridPanel.superclass.onStoreBeforeLoadRecords.apply(this, arguments);
     },
