@@ -42,7 +42,7 @@ describe('message', () => {
         
         await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
         const filePickerWindowNew = await lib.getNewWindow();
-        await filePickerWindowNew.waitForSelector('span',{text: "Meine Ordner"});
+        await filePickerWindowNew.waitForSelector('span',{text: 'Meine Ordner', timeout: 10000});
         await expect(filePickerWindowNew).toClick('span',{text: 'Meine Ordner'});
         await filePickerWindowNew.waitForTimeout(500);
         await expect(filePickerWindowNew).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
