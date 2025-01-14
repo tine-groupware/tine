@@ -226,13 +226,17 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
         
         $this->_db->delete($this->_destinationTable, $where);
     }
-    
+
     /**
      * create default destinations
-     * 
+     *
      * @param array $_smtpSettings
+     * @return void
+     * @throws Zend_Db_Adapter_Exception
+     *
+     * @todo remove code duplication with \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations
      */
-    protected function _createDefaultDestinations($_smtpSettings)
+    protected function _createDefaultDestinations(array $_smtpSettings): void
     {
         // create email -> username alias
         $this->_addDestination(array(
@@ -240,9 +244,13 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
             'source'        => $_smtpSettings[$this->_propertyMapping['emailAddress']],  // TineEmail
             'destination'   => $_smtpSettings[$this->_propertyMapping['emailUsername']], // email
         ));
-        
+
         // create username -> username alias if email and username are different
-        if ($_smtpSettings[$this->_propertyMapping['emailUsername']] != $_smtpSettings[$this->_propertyMapping['emailAddress']]) {
+        // and accountnamedestination is set
+        if ($this->_config['accountnamedestination']
+            && $_smtpSettings[$this->_propertyMapping['emailUsername']]
+            != $_smtpSettings[$this->_propertyMapping['emailAddress']]
+        ) {
             $this->_addDestination(array(
                 'users_id'    => $_smtpSettings['id'],
                 'source'      => $_smtpSettings[$this->_propertyMapping['emailUsername']], // username

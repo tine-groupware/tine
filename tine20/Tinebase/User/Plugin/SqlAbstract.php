@@ -263,4 +263,11 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
 
         return new Tinebase_Model_EmailUser($data, TRUE);
     }
+
+    public function setConfig(string $key, bool|string|int $value): bool|string|int
+    {
+        $current = $this->_config[$key];
+        $this->_config[$key] = $value;
+        return $current;
+    }
 }
