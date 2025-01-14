@@ -256,20 +256,9 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
-     * @todo make this test work
      */
     public function testAddUserCheckDefaultDestinations()
     {
-        self::markTestSkipped('FIXME this breaks Felamimail_Frontend_ActiveSyncTest::testSendEmail');
-
-        $this->_testNeedsTransaction();
-
-        Tinebase_User::destroyInstance();
-        $oldSmtpConf = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
-        $smtpConf = clone $oldSmtpConf;
-        $smtpConf->onlyemaildestination = true;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConf);
-
         $emailAddress = 'phpunitpostfix2@' . $this->_mailDomain;
         $user = TestCase::getTestUser([
             'accountLoginName'      => 'phpunitpostfix2login',
@@ -285,13 +274,15 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         $testUser = Tinebase_User::getInstance()->addUser($user);
         $this->objects['users'][] = $testUser;
         $queryResult = $this->_getDestinations($testUser);
-        self::assertEquals(1, count($queryResult), 'user should only have 1 destination! '
+        self::assertEquals(2, count($queryResult), 'user should have 2 destinations! '
             . print_r($queryResult, true));
-        $destination = $queryResult[0];
-        self::assertEquals($user->accountEmailAddress, $destination['source'], print_r($queryResult, true));
-        self::assertEquals($user->accountEmailAddress, $destination['source'], print_r($queryResult, true));
-        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $oldSmtpConf);
-        Tinebase_User::destroyInstance();
+        $found = false;
+        foreach ($queryResult as $destination) {
+            if ($user->accountEmailAddress === $destination['source']) {
+                $found = true;
+            }
+        }
+        self::assertTrue($found, 'accountEmailAddress not set as source: ' . print_r($queryResult, true));
     }
 
     /**
@@ -426,13 +417,27 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         self::assertEquals($user2->accountEmailAddress, $rawDovecotUser2['loginname']);
     }
 
-    public function testSecondaryDomainAliases()
+    public function testSecondaryDomainAliasesWithAccountnameDestination()
     {
+        /** @var Tinebase_EmailUser_Smtp_Postfix $postfixBackend */
+        $postfixBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $oldValue = $postfixBackend->setConfig('accountnamedestination', true);
         $user = $this->_addUserToSecondaryDomain();
         $destinations = $this->_getDestinations($user);
+        $postfixBackend->setConfig('accountnamedestination', $oldValue);
         self::assertCount(2, $destinations,
             'exactly two destinations expected: ' . print_r($destinations, true));
+    }
 
-        // TODO add test with 'onlyemaildestination' => true (should have only one destination)
+    public function testSecondaryDomainAliasesWithDeactivatedAccountnameDestination()
+    {
+        /** @var Tinebase_EmailUser_Smtp_Postfix $postfixBackend */
+        $postfixBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $oldValue = $postfixBackend->setConfig('accountnamedestination', false);
+        $user = $this->_addUserToSecondaryDomain();
+        $destinations = $this->_getDestinations($user);
+        $postfixBackend->setConfig('accountnamedestination', $oldValue);
+        self::assertCount(1, $destinations,
+            'exactly one destinations expected: ' . print_r($destinations, true));
     }
 }
