@@ -22,7 +22,7 @@
           </div>
           <div class="col">
             <div class="pb-1 mb-1">
-              <span v-html="props.opt.msg"></span>
+              <span @click="msgClickHandler" v-html="props.opt.msg"></span>
             </div>
             <div
               class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisiblity"
@@ -129,6 +129,10 @@ const reject = () => {
     const clsName = btnCfg.class
     return clsName.startsWith('cancel') || clsName.startsWith('no')
   })?.clickHandler() || closeBox()
+}
+
+const msgClickHandler = (e) => {
+  ExtEventBus.emit("messageClicked", e)
 }
 
 const buttonToShow = computed(() => {

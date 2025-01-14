@@ -29,6 +29,7 @@ const abstractAction = Ext.extend(Ext.Action, {
 
         // this.recordsName = recordClass.getRecordsName()
         this.selections = [...this.initialConfig.selections]
+        this.errors = []
         this.errorMsgs = []
         this.editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
         this.maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen }).getEl()

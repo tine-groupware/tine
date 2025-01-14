@@ -178,7 +178,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                             . ' edocument validation service reported errors: ' . print_r($validationResult['errors'], true));
                     }
-                    throw new Tinebase_Exception_HtmlReport($validationResult['html']);
+                    throw new Tinebase_Exception_HtmlReport($validationResult['html'], 'Validation Errors');
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__

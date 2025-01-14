@@ -14,7 +14,7 @@ class Tinebase_Exception_HtmlReport extends Tinebase_Exception_ProgramFlow
 {
     public function __construct(
         protected string $html,
-        $message = null, $code = 0, $previous = null)
+        $message = null, $code = 480, $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
