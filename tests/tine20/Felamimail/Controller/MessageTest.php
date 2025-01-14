@@ -2079,7 +2079,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         foreach ($result as $message) {
             $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($message);
             self::assertEquals($cachedMessageWithTags->flags, $message->flags, 'tags should be the same');
-            self::assertEquals(1, $tags->count());
+            self::assertEquals(1, $tags->count(), 'no tags found');
         }
     }
 

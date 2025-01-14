@@ -195,7 +195,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+    public const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
 
     /**
      * logger
@@ -205,11 +205,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const LOGGER = 'logger';
 
     /**
+     * suppress php exception traces
+     *
+     * @var string
+     */
+    public const SUPPRESS_EXCEPTION_TRACES = 'suppressExceptionTraces';
+
+    /**
      * RATE_LIMITS
      *
      * @var string
      */
-    const RATE_LIMITS = 'rateLimits';
+    public const RATE_LIMITS = 'rateLimits';
 
     /**
      * default sales tax
@@ -1126,6 +1133,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => false,
         ],
+        self::SUPPRESS_EXCEPTION_TRACES => [
+            //_('Suppress Exception Traces')
+            self::LABEL => 'Suppress Exception Traces',
+            self::DESCRIPTION => 'Do not send exception traces to log files or json client',
+            self::TYPE => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false,
+        ],
         self::MFA_BYPASS_NETMASKS => [
             self::LABEL             => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
             self::DESCRIPTION       => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
@@ -1317,7 +1334,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "secondarydomains":"second.test,third.test" (string - comma separated)
          * "additionaldomains":"another.test,onemore.test" (string - comma separated)
          * "instanceName":"tine.test" (string)
-         * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
+         * "accountnamedestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
          * "preventSecondaryDomainUsername": true

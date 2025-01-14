@@ -118,8 +118,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         'domain' => null,
         'alloweddomains' => [],
         'adapter' => Tinebase_Core::PDO_MYSQL,
-        // use this for adding only one default destination (email address -> mailserver username)
-        'onlyemaildestination' => false,
+        // use this for adding an additional destination (accountname -> accountname)
+        'accountnamedestination' => true,
         'allowOverwrite' => false,
     ];
     
@@ -366,10 +366,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     
     /**
      * create default destinations
-     * 
+     *
      * @param array $_smtpSettings
+     * @return void
+     * @throws Zend_Db_Adapter_Exception
      */
-    protected function _createDefaultDestinations(array $_smtpSettings)
+    protected function _createDefaultDestinations(array $_smtpSettings): void
     {
         $username = $_smtpSettings[$this->_propertyMapping['emailUsername']];
 
@@ -381,9 +383,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         ));
 
         // create username -> username alias if email and username are different
-        if (! $this->_config['onlyemaildestination']
+        // and accountnamedestination is set
+        if ($this->_config['accountnamedestination']
             && $_smtpSettings[$this->_propertyMapping['emailUsername']]
-                != $_smtpSettings[$this->_propertyMapping['emailAddress']]
+            != $_smtpSettings[$this->_propertyMapping['emailAddress']]
         ) {
             $this->_addDestination(array(
                 'userid' => $_smtpSettings[$this->_propertyMapping['emailUserId']],   // userID

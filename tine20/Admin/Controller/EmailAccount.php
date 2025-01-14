@@ -182,13 +182,15 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($_record->getId());
         }
 
-        $this->_inspectBeforeUpdate($_record, $currentAccount);
-        $account = $this->_backend->update($_record);
-        $this->_inspectAfterUpdate($account, $_record, $currentAccount);
-
-        if ($raii && Tinebase_EmailUser::backendSupportsMasterPassword($_record)) {
-            Tinebase_EmailUser::removeAdminAccess();
-            unset($raii);
+        try {
+            $this->_inspectBeforeUpdate($_record, $currentAccount);
+            $account = $this->_backend->update($_record);
+            $this->_inspectAfterUpdate($account, $_record, $currentAccount);
+        } finally {
+            if ($raii && Tinebase_EmailUser::backendSupportsMasterPassword($_record)) {
+                Tinebase_EmailUser::removeAdminAccess();
+                unset($raii);
+            }
         }
 
         return $account;
