@@ -224,7 +224,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
 
             Tinebase_TransactionManager::getInstance()->rollBack();
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
-            /** @var Sales_Model_Invoice $invoice */
+            /** @var Sales_Model_Invoice $record */
             $record = $this->get($record->getId());
 
             if ($stream) {
