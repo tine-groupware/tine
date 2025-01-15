@@ -871,7 +871,12 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $missingCount = 0;
         foreach ($mailAccounts as $account) {
             try {
-                Tinebase_User::getInstance()->getFullUserById($account->user_id);
+                $user = Tinebase_User::getInstance()->getFullUserById($account->user_id);
+                foreach (['smtpUser', 'imapUser'] as $mailUser) {
+                    if (empty($user->{$mailUser})) {
+                        echo "Could not find $mailUser for account " . $user->accountLoginName . "\n";
+                    }
+                }
                 continue;
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // remove mailaccount (fmail + dovecot + smtp)
