@@ -111,7 +111,7 @@ const Field = function(config){
                     var d = c1(v);
                     if (isDate(d)) {
                         d.toJSON = function() {
-                            return this.format(config.dateFormat);
+                            return this.format(config.dateFormat || 'Y-m-d H:i:s');
                         }
                     }
                     return d;
