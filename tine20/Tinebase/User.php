@@ -907,6 +907,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         $contact->account_id = $user->getId();
+        $contact->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
 
         return $contact;
     }
