@@ -6,7 +6,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
+
 Ext.namespace('Tine.Felamimail');
 
 require('./MessageFileAction');
@@ -502,8 +502,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         const exts = _.uniq(_.map(fileSelector.files, file => {return file.name.split('.').pop()}));
-        if (exts.length !== 1 || exts[0] !== 'eml') {
-            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml allowed only.'));
+        if (exts.length !== 1) {
+            // no files or too many
+            return true;
+        }
+        if (exts.length !== 1 || !['eml', 'emltpl', 'msg'].includes(exts[0])) {
+            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml, emltpl and msg allowed only.'));
         }
         
         this.importMask = new Ext.LoadMask(this.grid.getEl(), { msg: i18n._('Importing Messages...') });
@@ -1729,7 +1733,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const isStateIdChanged = this.grid.stateId !== stateId;
         if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
         this.grid.stateId = stateId;
-        
+
         const stateIdDefault = isEastLayout ? stateId : this.gridConfig.stateId;
         const stateStored = Ext.state.Manager.get(stateIdDefault);
         const stateCurrent = this.grid.getState();
@@ -1750,11 +1754,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             }
         }
-        
+
         if (stateId.includes(this.sendFolderGridStateId)) {
             let refState = Ext.state.Manager.get(stateId);
             if (refState) stateClonedResolved = JSON.parse(JSON.stringify(refState));
-            
+
             // - hide from email + name columns from grid
             // - show to column in grid
             const customHideCols = {
@@ -1766,7 +1770,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             _.each(customHideCols, (isHidden, colId) => {
                 const idx = _.findIndex(stateClonedResolved.columns, {id: colId});
                 isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
-                
+
                 if (idx > -1 && isHidden !== _.get(stateClonedResolved.columns[idx], 'hidden', false)) {
                     if (isHidden) {
                         stateClonedResolved.columns[idx].hidden = true;
@@ -2078,11 +2082,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         let header = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
-                    (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
+                    (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date'))
             {
                 result += (plain ? (header + ': ') : ('<b>' + header + ':</b> '))
                     + Ext.util.Format.htmlEncode(
-                        (ellipsis) 
+                        (ellipsis)
                             ? Ext.util.Format.ellipsis(headers[header], 40)
                             : headers[header]
                     ) + (plain ? '\n' : '<br/>');
@@ -2117,7 +2121,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         this.getStore().remove(msg);
                         this.deleteQueue.push(msg.id);
                         msgsIds.push(msg.id);
-    
+
                         //spam strategy will execute move message , ham will remain in current folder
                         const isSeen = msg.hasFlag('\\Seen');
                         const diff = isSeen ? 0 : 1;
@@ -2168,7 +2172,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     if ('spam' === option) {
                         this.onAfterDelete(msgsIds);
                     }
-                    
+
                     this.doRefresh();
             });
             
