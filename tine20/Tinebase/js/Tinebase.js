@@ -353,7 +353,10 @@ require('./Model/ImportExportDefinition');
 
 require('./widgets/CountryFilter');
 require('./widgets/SiteFilter');
+
 require('./widgets/dialog/ResetPasswordDialog');
+
+require('Exception/HTMLReportDialog');
 
 // UI style >= 2019
 require('node-waves');

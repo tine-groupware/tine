@@ -216,6 +216,23 @@ Tine.Tinebase.ExceptionHandler = function() {
                 }));
                 break;
 
+            // programm flow with html message
+            case 480:
+                Ext.MessageBox.show({
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR,
+                    title: formatMessage('There where Errors:'),
+                    msg: formatMessage('({e.code}) { e.message }', {e: exception})
+                        + (exception.html ? `&nbsp;<a data-error-num="0" href="#">(details)</a>` : ''),
+                    onMessageClick: (e) => {
+                        if (_.get(e.target, 'dataset', {}).hasOwnProperty('errorNum')) {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            Tine.Tinebase.Exception.HTMLReportDialog.openWindow(exception)
+                        }
+                    }
+                });
+                break;
             // Service Unavailable!
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:
@@ -302,7 +319,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                     Ext.Msg.confirm(
                         exception.title,
                         exception.message,
-                        async function(button) {
+                    async function(button) {
                             if (button === 'yes') {
                                 Ext.Ajax.request({
                                     scope: callbackScope,
@@ -311,17 +328,8 @@ Tine.Tinebase.ExceptionHandler = function() {
                                     },
                                     params: params,
                                     success : function(_result, _request) {
-                                        Ext.callback(callback, callbackScope);
+                                        Ext.callback(callback, callbackScope, [_result, _request]);
                                     },
-                                    failure: function(exception) {
-                                        if (! exception.code && exception.responseText) {
-                                            // we need to decode the exception first
-                                            const response = Ext.util.JSON.decode(exception.responseText);
-                                            exception = response.data;
-                                            exception.request = Ext.util.JSON.encode(request);
-                                        }
-                                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-                                    }
                                 });
                             }
                         }

@@ -11,6 +11,7 @@ Ext.ns('Tine.Filemanager');
 require('Filemanager/js/QuickLookRegistry');
 require('Filemanager/js/DocumentPreview');
 require('Filemanager/js/QuickLookMediaPanel');
+require('Filemanager/js/QuickLookHTMLPanel');
 
 Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
@@ -48,6 +49,8 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
      * @type SelectionModel
      */
     sm: null,
+
+    border: false,
 
     /**
      * init panel

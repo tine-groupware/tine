@@ -469,10 +469,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string $recordId
      * @param string $modelName
      */
-    public function downloadRecordAttachment($nodeId, $recordId, $modelName)
+    public function downloadRecordAttachment($nodeId, $recordId, $modelName, $disposition = 'attachment')
     {
         $this->checkAuth();
-        
+
+        $disposition = $disposition === 'attachment' ? $disposition : 'inline';
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Downloading attachment of ' . $modelName . ' record with id ' . $recordId);
         
@@ -489,7 +491,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record)
             . '/' . $node->name;
         
-        $this->_downloadFileNode($node, $path, /* revision */ null, /* $ignoreAcl */ true);
+        $this->_downloadFileNode($node, $path, /* revision */ null, /* $ignoreAcl */ true, $disposition);
         exit;
     }
 

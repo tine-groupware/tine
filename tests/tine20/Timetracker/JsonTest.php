@@ -1153,9 +1153,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             Timetracker_Controller_Timeaccount::getInstance()->setRequestContext([]);
             $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
             self::fail('should throw Tinebase_Exception_Confirmation');
-        } catch (Tinebase_Exception_Confirmation $e) {
+        } catch (Tinebase_Exception_Confirmation $tec) {
             $translate = Tinebase_Translation::getTranslation('Timetracker');
-            self::assertEquals($translate->_('Timeaccounts are still in use! Are you sure you want to delete them?'), $e->getMessage());
+            self::assertEquals($translate->_('Timeaccounts are still in use! Are you sure you want to delete them?'), $tec->getMessage());
         }
     }
 
@@ -1459,11 +1459,13 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testUpdateClosedTimeaccount()
     {
+        $this->_testNeedsTransaction();
         Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(true);
 
         $timeaccountData = $this->_saveTimeaccountWithGrants();
         $timeaccountData['is_open'] = 0;
         $timeaccount = $this->_json->saveTimeaccount($timeaccountData);
+        $this->_deleteTimeAccounts = array($timeaccountData['id']);
 
         $timesheet = $this->_getTimesheet(array(
              'timeaccount_id'    => $timeaccount['id'],
@@ -1476,10 +1478,15 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
         try {
             $timesheetUpdated = $this->_json->saveTimesheet($timesheetData, array('skipClosedCheck' => false));
-            $this->fail('Failed asserting that exception of type "Timetracker_Exception_ClosedTimeaccount" is thrown.');
-        } catch (Timetracker_Exception_ClosedTimeaccount $tect) {
-            $this->assertEquals('This Timeaccount is already closed!', $tect->getMessage());
+            $this->fail('Failed asserting that exception of type "Tinebase_Exception_Confirmation" is thrown.');
+        } catch (Tinebase_Exception_Confirmation $tec) {
+            $translate = Tinebase_Translation::getTranslation('Timetracker');
+            $this->assertEquals($translate->_('The related Timeaccount is already closed, do you still want to execute this action?'), $tec->getMessage());
         }
+
+        // update with the confirmation header
+        $timesheetUpdated = $this->_json->saveTimesheet($timesheetData, ['confirm' => true]);
+        $this->assertEquals('blubbblubb', $timesheetUpdated['description']);
     }
 
     public function testUnitField()
