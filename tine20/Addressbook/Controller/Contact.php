@@ -688,7 +688,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         $this->_checkAndSetShortName($_record, $_oldRecord);
 
-        if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+        if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER && empty($_record->type)) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
         }
 

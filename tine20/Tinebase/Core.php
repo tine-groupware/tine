@@ -2369,9 +2369,16 @@ class Tinebase_Core
             }
         }
 
+        $resolvedConfig = $config;
+        if (isset($config['adapter']) && is_callable($config['adapter']->writeBodyCallBack)) {
+            $adapterConfig = clone $config['adapter'];
+            unset($adapterConfig->writeBodyCallBack);
+            $resolvedConfig['adapter'] = $adapterConfig;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Creating Zend_Http_Client for ' . $uri . ' with config: '
-            . print_r($config, true));
+            . print_r($resolvedConfig, true));
 
         return new Zend_Http_Client($uri, $config);
     }

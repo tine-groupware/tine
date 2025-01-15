@@ -1045,6 +1045,18 @@ msgstr "SMS Config"
 msgid "SMS Adapter Configs"
 msgstr "SMS Adapter Configs"
 
+msgid "SMS Message Templates"
+msgstr "SMS Message Templates"
+
+msgid "Template for SMS New Password"
+msgstr "Template for SMS New Password"
+
+msgid "Template for SMS New Password with parameters: app, user, contact, password"
+msgstr "Template for SMS New Password with parameters: app, user, contact, password"
+
+msgid "Your new {{ app.branding.title }} password is: {{ password }}"
+msgstr "Your new {{ app.branding.title }} password is: {{ password }}"
+
 msgid "User type"
 msgstr "User type"
 
@@ -2961,6 +2973,27 @@ msgstr "Application Settings"
 
 msgid "My Profile"
 msgstr "My Profile"
+
+msgid "Set new password"
+msgstr "Set new password"
+
+msgid "Please enter the new Password:"
+msgstr "Please enter the new Password:"
+
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr "Password is expired in accordance with the password policy and needs to be changed"
+
+msgid "Password Must Change"
+msgstr "Password Must Change"
+
+msgid "Mobile"
+msgstr "Mobile"
+
+msgid "Send password via SMS"
+msgstr "Send password via SMS"
+
+msgid "SMS Message"
+msgstr "SMS Message"
 
 msgid "Second Factor Password Required"
 msgstr "Second Factor Password Required"
