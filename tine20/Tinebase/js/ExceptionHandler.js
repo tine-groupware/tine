@@ -302,7 +302,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                     Ext.Msg.confirm(
                         exception.title,
                         exception.message,
-                        async function(button) {
+                    async function(button) {
                             if (button === 'yes') {
                                 Ext.Ajax.request({
                                     scope: callbackScope,
@@ -311,17 +311,8 @@ Tine.Tinebase.ExceptionHandler = function() {
                                     },
                                     params: params,
                                     success : function(_result, _request) {
-                                        Ext.callback(callback, callbackScope);
+                                        Ext.callback(callback, callbackScope, [_result, _request]);
                                     },
-                                    failure: function(exception) {
-                                        if (! exception.code && exception.responseText) {
-                                            // we need to decode the exception first
-                                            const response = Ext.util.JSON.decode(exception.responseText);
-                                            exception = response.data;
-                                            exception.request = Ext.util.JSON.encode(request);
-                                        }
-                                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-                                    }
                                 });
                             }
                         }

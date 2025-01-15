@@ -76,6 +76,9 @@ msgstr "Timeaccounts are still in use! Are you sure you want to delete them?"
 msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
 msgstr "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
 
+msgid "The related Timeaccount is already closed, do you still want to execute this action?"
+msgstr "The related Timeaccount is already closed, do you still want to execute this action?"
+
 msgid "Add Timesheet"
 msgstr "Add Timesheet"
 

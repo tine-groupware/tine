@@ -374,27 +374,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_calculateTimes($_record);
         $this->_calcClearedAmount($_record, $_oldRecord);
 
-        if ($this->_isTSDateChanged($_record, $_oldRecord)) {
-            if ($_record->is_cleared && !empty($_record->invoice_id)) {
-                $context = $this->getRequestContext();
-
-                if ($context && is_array($context) &&
-                    (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
-                        || array_key_exists('confirm', $context))) {
-
-                    $relation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $_record->invoice_id, 'sibling', array('CONTRACT'), 'Sales_Model_Contract')->getFirstRecord();
-                    $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
-
-                    //Sales_Controller_Invoice::getInstance()->delete(array($_record->invoice_id));
-                    Sales_Controller_Invoice::getInstance()->createAutoInvoices(null, $contract, true);
-                } else {
-                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-                    $exception = new Tinebase_Exception_Confirmation(
-                        $translation->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?')
-                    );
-                    throw $exception;
-                }
-            }
+        if ($this->_isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
+            $relation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $_record->invoice_id, 'sibling', ['CONTRACT'], 'Sales_Model_Contract')
+                ->getFirstRecord();
+            $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
+            Sales_Controller_Invoice::getInstance()->createAutoInvoices(null, $contract, true);
         }
     }
 
@@ -502,9 +486,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param Timetracker_Model_Timesheet $_oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
-     * 
-     * @todo think about just setting the default values when user 
-     *       hasn't the required grant to change the field (instead of throwing exception) 
+     * @throws Tinebase_Exception_Confirmation
+     *
+     * @todo think about just setting the default values when user
+     *       hasn't the required grant to change the field (instead of throwing exception)
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
@@ -521,25 +506,16 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
         // only TA managers are allowed to alter TS of closed TAs, but they have to confirm first that they really want to do it
         if ($_action != 'get') {
-            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
-            if (! $timeaccount->is_open) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' This Timeaccount is already closed!');
-
-                if ($isAdmin === true) {
-                    if (is_array($this->_requestContext) && isset($this->_requestContext['skipClosedCheck']) && $this->_requestContext['skipClosedCheck']) {
-                        return true;
-                    }
-                }
-
-                if ($_throw) {
-                    throw new Timetracker_Exception_ClosedTimeaccount();
-                }
-                return FALSE;
+            if ($isAdmin && ($this->_requestContext['skipClosedCheck'] ?? false)) {
+               return true;
             }
-            
+
+            $this->_validateRelations($_record, $_oldRecord);
+
             // check if timeaccount->is_billable is false => set default in fieldGrants to 0 and allow only managers to change it
             // if old record is billable, everybody can make it not billable
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
+
             if (!$timeaccount->is_billable && (!$_oldRecord || !$_oldRecord->is_billable)) {
                 $this->_fieldGrants['is_billable']['default'] = 0;
                 $this->_fieldGrants['is_billable']['requiredGrant'] = Tinebase_Model_Grants::GRANT_ADMIN;
@@ -661,5 +637,79 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             default:
                 throw new Timetracker_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
+    }
+
+    /**
+     * attach tags hook
+     *
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function attachTagsHook($recordIds, $tagId)
+    {
+        $records = $this->getMultiple($recordIds);
+        $tag = Tinebase_Tags::getInstance()->getTagById($tagId);
+
+        foreach ($records as $record) {
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($record->timeaccount_id);
+            if ($timeaccount && !$timeaccount->is_open && $tag['name'] === Sales_Export_TimesheetTimeaccount::TAG_SUM) {
+                throw new Tinebase_Exception_SystemGeneric(
+                    'Is is not allowed to update tag : ' . $tag['name'] . ', when the related timeaccount is closed'
+                );
+            }
+        }
+    }
+
+    /**
+     * detach tags hook
+     *
+     */
+    public function detachTagsHook($recordIds, $tagId)
+    {
+        $records = $this->getMultiple($recordIds);
+        $tag = Tinebase_Tags::getInstance()->getTagById($tagId);
+
+        foreach ($records as $record) {
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($record->timeaccount_id);
+            if ($timeaccount && !$timeaccount->is_open && $tag['name'] === Sales_Export_TimesheetTimeaccount::TAG_SUM) {
+                throw new Tinebase_Exception_SystemGeneric(
+                    'Is is not allowed to update tag : ' . $tag['name'] . ', when the related timeaccount is closed'
+                );
+            }
+        }
+    }
+
+    protected function _validateRelations($_record, $_oldRecord)
+    {
+        $context = $this->getRequestContext();
+
+        if ($context && is_array($context) &&
+            (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
+                || array_key_exists('confirm', $context))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Force updating the timesheet');
+            return true;
+        }
+
+        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+        $exception = null;
+
+        if ($_oldRecord && $this->_isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
+            $exception = new Tinebase_Exception_Confirmation(
+                $translation->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?')
+            );
+        }
+
+        if (!$timeaccount->is_open) {
+            $exception = new Tinebase_Exception_Confirmation(
+                $translation->_('The related Timeaccount is already closed, do you still want to execute this action?')
+            );
+        }
+
+        if ($exception) {
+            throw $exception;
+        }
+
+        return true;
     }
 }
