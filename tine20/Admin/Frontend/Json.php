@@ -491,7 +491,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
-    
+
     /**
      * reset password for given account
      *
@@ -499,9 +499,15 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $password the new password
      * @param bool $mustChange
      * @return array
+     * @throws Admin_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function resetPassword($account, $password, $mustChange)
     {
+        parent::_setRequestContext(Admin_Controller_User::getInstance());
+
         if (is_array($account)) {
             if (isset($account['accountPrimaryGroup']) && is_array($account['accountPrimaryGroup']) && isset($account['accountPrimaryGroup']['id'])) {
                 $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];

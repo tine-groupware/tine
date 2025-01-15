@@ -58,6 +58,11 @@ class Tinebase_Model_Sms_GenericHttpAdapter extends Tinebase_Record_NewAbstract 
 
     protected array $_httpClientConfig = [];
 
+    public function getHttpClientConfig()
+    {
+        return $this->_httpClientConfig;
+    }
+
     public function setHttpClientConfig(array $_config): void
     {
         $this->_httpClientConfig = $_config;

@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
 Ext.ns('Tine.Admin.user');
 
 
@@ -297,35 +298,15 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * reset password
-     * 
-     * TODO add checkbox for must change pw
-     * TODO add pw repeat (see user edit dialog)
+     *
      */
     resetPasswordHandler: function(_button, _event) {
-        Ext.MessageBox.prompt(this.app.i18n._('Set new password'), this.app.i18n._('Please enter the new password:'), function(_button, _text) {
-            if(_button == 'ok') {
-                var accountObject = this.grid.getSelectionModel().getSelected().data;
-                
-                Ext.Ajax.request( {
-                    params: {
-                        method    : 'Admin.resetPassword',
-                        account   : accountObject,
-                        password  : _text,
-                        mustChange: true
-                    },
-                    scope: this,
-                    callback : function(_options, _success, _response) {
-                        if(_success === true) {
-                            var result = Ext.util.JSON.decode(_response.responseText);
-                            if(result.success === true) {
-                                this.grid.getStore().reload();
-                            }
-                        } else {
-                            Tine.Tinebase.ExceptionHandler.handleRequestException(_response);
-                        }
-                    }
-                });
-            }
+        const passwordDialog = new Tine.Tinebase.widgets.dialog.ResetPasswordDialog({
+            record: this.grid.getSelectionModel().getSelected(),
+        });
+        passwordDialog.openWindow();
+        passwordDialog.on('apply', async (record) => {
+            this.grid.getStore().reload();
         }, this);
     },
     

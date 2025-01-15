@@ -973,7 +973,7 @@ msgid "Ok"
 msgstr "Ok"
 
 msgid "Password is expired in accordance with the password policy and needs to be changed"
-msgstr ""
+msgstr "Das Passwort ist gemäß der Passwortrichtlinie abgelaufen und muss geändert werden"
 
 msgid "Account"
 msgstr "Benutzerkonto"

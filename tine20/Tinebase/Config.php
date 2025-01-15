@@ -750,6 +750,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const SMS = 'sms';
 
     public const SMS_ADAPTERS = 'sms_adapters';
+    public const SMS_MESSAGE_TEMPLATES = 'sms_message_templates';
+    public const SMS_NEW_PASSWORD_TEMPLATE = 'sms_new_password_template';
     
     /**
      * max username length
@@ -3611,7 +3613,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'SMS Config',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
-            self::CLIENTREGISTRYINCLUDE => false,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => true,
             self::CONTENT               => [
@@ -3621,6 +3623,30 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_OBJECT,
                     self::CLASSNAME             => Tinebase_Config_Struct::class,
                     self::CONTENT_CLASS         => Tinebase_Model_Sms_AdapterConfigs::class,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::SMS_MESSAGE_TEMPLATES          => [
+                    self::LABEL                 => 'SMS Message Templates', //_('SMS Message Templates')
+                    self::DESCRIPTION           => 'SMS Message Templates', //_('SMS Message Templates')
+                    self::TYPE                  => self::TYPE_OBJECT,
+                    self::CLASSNAME             => Tinebase_Config_Struct::class,
+                    self::CONTENT           => [
+                        self::SMS_NEW_PASSWORD_TEMPLATE          => [
+                            //_('Template for SMS New Password')
+                            self::LABEL                 => 'Template for SMS New Password',
+                            //_('Template for SMS New Password with parameters: app, user, contact, password')
+                            self::DESCRIPTION           => 'Template for SMS New Password with parameters: app, user, contact, password',
+                            self::TYPE                  => self::TYPE_ARRAY,
+                            self::CLIENTREGISTRYINCLUDE => true,
+                            self::SETBYADMINMODULE      => true,
+                            self::SETBYSETUPMODULE      => true,
+                            self::DEFAULT_STR           => [
+                                'de' => 'Ihr neues {{ app.branding.title }} Passwort ist: {{ password }}',
+                                'en' => 'Your new {{ app.branding.title }} password is: {{ password }}'
+                            ],
+                        ]
+                    ],
                     self::DEFAULT_STR           => [],
                 ],
             ],
