@@ -216,6 +216,23 @@ Tine.Tinebase.ExceptionHandler = function() {
                 }));
                 break;
 
+            // programm flow with html message
+            case 480:
+                Ext.MessageBox.show({
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR,
+                    title: formatMessage('There where Errors:'),
+                    msg: formatMessage('({e.code}) { e.message }', {e: exception})
+                        + (exception.html ? `&nbsp;<a data-error-num="0" href="#">(details)</a>` : ''),
+                    onMessageClick: (e) => {
+                        if (_.get(e.target, 'dataset', {}).hasOwnProperty('errorNum')) {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            Tine.Tinebase.Exception.HTMLReportDialog.openWindow(exception)
+                        }
+                    }
+                });
+                break;
             // Service Unavailable!
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:

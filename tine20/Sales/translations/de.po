@@ -843,7 +843,7 @@ msgid "Please select the { sourceRecordsName } where you want to change the docu
 msgstr "Bitte wählen die die { sourceRecordsName } bei denen das Belegdatum auf Heute geändert werden soll."
 
 msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"
-msgstr "Konnte { sourceDocument } nicht buchen: ({e.code}) { e.message })"
+msgstr "Konnte { sourceDocument } nicht buchen: ({e.code}) { e.message }"
 
 msgid "There where Errors:"
 msgstr "Diese Fehler sind aufgetreten:"

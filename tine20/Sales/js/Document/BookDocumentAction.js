@@ -70,7 +70,10 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         }
                     } catch (e) {
                         record.reject()
-                        this.errorMsgs.push(this.app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e }))
+                        let detailsHTML = e.code === 480 ? JSON.parse(e.response).data.html : ''
+                        this.errors.push(e)
+                        this.errorMsgs.push(this.app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e })
+                            + (detailsHTML ? `&nbsp;<a data-error-num="${this.errorMsgs.length}" href="#">(details)</a>` : ''))
                     }
                 })
                 this.mask.hide()
@@ -78,9 +81,18 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 if (this.errorMsgs.length) {
                     await Ext.MessageBox.show({
                         buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.WARNING,
+                        icon: Ext.MessageBox.ERROR,
                         title: this.app.formatMessage('There where Errors:'),
-                        msg: this.errorMsgs.join('<br />')
+                        msg: this.errorMsgs.join('<br />'),
+                        onMessageClick: (e) => {
+                            if (_.get(e.target, 'dataset', {}).hasOwnProperty('errorNum')) {
+                                e.stopPropagation()
+                                e.preventDefault()
+                                const err = this.errors[e.target.dataset.errorNum]
+                                Tine.Tinebase.Exception.HTMLReportDialog.openWindow(err)
+                            }
+
+                        }
                     })
                 }
             }

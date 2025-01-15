@@ -61,11 +61,6 @@ class Sales_Model_EDocument_PMC_PaymentMandate extends Sales_Model_EDocument_PMC
         if (empty($division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID})) {
             throw new Tinebase_Exception_UnexpectedValue('Division has no SEPA Creditor Identification');
         }
-
-        $ublInvoice->getAccountingSupplierParty()->getParty()->addToPartyIdentification(
-            (new \UBL21\Common\CommonAggregateComponents\PartyIdentification)
-                ->setID((new UBL_ID($division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID}))->setSchemeID('SEPA'))
-        );
     }
 
     public function toUblPaymentMeans(PaymentMeans $paymentMeans, Sales_Model_EDocument_PaymentMeansCode $pmc): void
@@ -74,7 +69,7 @@ class Sales_Model_EDocument_PMC_PaymentMandate extends Sales_Model_EDocument_PMC
         $paymentMeans->setPaymentMandate((new PaymentMandate)
             ->setID(new UBL_ID($this->{self::FLD_MANDATE_ID}))
             ->setPayerFinancialAccount((new PayerFinancialAccount())
-                ->setID(new UBL_ID($this->{self::FLD_MANDATE_ID}))
+                ->setID(new UBL_ID($this->{self::FLD_PAYER_IBAN}))
             )
         );
     }

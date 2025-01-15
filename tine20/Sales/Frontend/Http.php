@@ -24,6 +24,21 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected $_applicationName = 'Sales';
 
+    public function getXRechnungValidation(string $fileNodeId): void
+    {
+        $stream = null;
+        try {
+            if (!($stream = fopen('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($fileNodeId, true), 'r'))) {
+                throw new Tinebase_Exception_Backend('could not open node ' . $fileNodeId);
+            }
+            echo (new Sales_EDocument_Service_Validate())->validateXRechnung($stream)['html'] ?? throw new Tinebase_Exception_Backend('validation failed');
+        } finally {
+            if (null !== $stream) {
+                @fclose($stream);
+            }
+        }
+    }
+
     public function getXRechnungView(string $fileNodeId): void
     {
         try {
