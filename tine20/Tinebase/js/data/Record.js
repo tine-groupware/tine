@@ -656,7 +656,10 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         record = new recordClass({}, recordId);
     }
     record.setId(recordId);
-    record.commit();
+    // 2025-01-15 - cweiss - NOTE: we can't commit here as we would loose __meta modified
+    //                             i have no idea why i commited here, maybe just because of the id?
+    //                             let's solve it better the next time!
+    // record.commit();
 
     return record;
 };

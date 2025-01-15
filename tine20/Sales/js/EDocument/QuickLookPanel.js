@@ -6,10 +6,24 @@
  * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import('./ValidationPanel')
+
 const EDocumentQuickLookPanel = Ext.extend(Ext.Panel, {
     border: false,
 
     initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Sales');
+
+        this.tbar = ['->', {
+            text: this.app.i18n._('Validate eDocument'),
+            iconCls: 'action-sales-validate-document',
+            handler: (btn) => {
+                Tine.Sales.EDocumentValidationPanel.openWindow({
+                    nodeRecord: this.nodeRecord
+                });
+            }
+        }]
+
         this.html = `<iframe 
             class="sales-quicklook-edocuemnt"
             style="width: 100%; height: 100%; border: none;"

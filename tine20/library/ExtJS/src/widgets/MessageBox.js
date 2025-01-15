@@ -271,6 +271,11 @@ Ext.Msg.show({
                 vueEmitter = window.mitt();
                 vueEmitter.on("close", handleHide);
                 vueEmitter.on("buttonClicked", handleButton);
+                vueEmitter.on("messageClicked", e => {
+                    if (_.isFunction(options.onMessageClick)) {
+                        options.onMessageClick(e)
+                    }
+                });
 
                 vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
                 vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);

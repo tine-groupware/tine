@@ -194,8 +194,8 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => '',
                 ],
             ],
             self::FLD_BANK_ACCOUNTS         => [

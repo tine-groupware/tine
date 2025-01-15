@@ -274,6 +274,52 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     }
 
     /**
+     * testUpdateUserSendSMS
+     *
+     */
+    public function testResetPasswordSendSMS()
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS} = [
+            Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS => [
+                [
+                    Tinebase_Model_Sms_AdapterConfig::FLD_NAME => 'sms1',
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG => [
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL => 'https://shoo.tld/restapi/message',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_BODY => '{"encoding":"auto","body":"{{ message }}","originator":"{{ app.branding.title }}","recipients":["{{ cellphonenumber }}"],"route":"2345"}',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_METHOD => 'POST',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_HEADERS => [
+                            'Auth-Bearer' => 'unittesttokenshaaaaalalala'
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $account = $this->_originalTestUser;
+
+        $smsConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}
+            ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS}->getFirstRecord();
+        $smsAdapterConfig = $smsConfig ? $smsConfig->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG} : null;
+        $smsAdapterConfig->setHttpClientConfig([
+            'adapter' => ($httpClientTestAdapter = new Tinebase_ZendHttpClientAdapter())
+        ]);
+        $httpClientTestAdapter->writeBodyCallBack = function($body) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' sms request body: ' . $body);
+        };
+        $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
+
+        Admin_Controller_User::getInstance()->setRequestContext([
+            'sms-phone-number' => 1234567890,
+            'sms-new-password-template' => 'Your new {{ app.branding.title }} unit test password is: {{ password }}'
+        ]);
+        $result = $this->_json->resetPassword($account, 'tine20admin', false);
+
+        $this->assertStringContainsString('Your new ' . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) . ' unit test password is: tine20admin',
+            $httpClientTestAdapter->lastRequestBody);
+    }
+
+    /**
      * @param Tinebase_Model_FullUser $account
      * @return Tinebase_Model_Container
      */
@@ -355,11 +401,11 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             $userArray = $this->_createTestUser();
             Admin_Controller_User::getInstance()->delete($userArray['accountId']);
             self::fail('should throw Tinebase_Exception_Confirmation');
-        } catch (Tinebase_Exception_Confirmation $e) {
+        } catch (Tinebase_Exception_Confirmation $tec) {
             $translate = Tinebase_Translation::getTranslation('Admin');
             $translation = $translate->_('Delete user will trigger the [V] events, do you still want to execute this action?');
 
-            self::assertEquals($translation, $e->getMessage());
+            self::assertEquals($translation, $tec->getMessage());
         }
 
         // user deletion need the confirmation header

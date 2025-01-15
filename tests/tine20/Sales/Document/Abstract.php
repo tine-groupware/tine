@@ -76,8 +76,8 @@ class Sales_Document_Abstract extends TestCase
             if ($bankAccounts->count() === 0) {
                 $bankAccounts->addRecord(Tinebase_Controller_BankAccount::getInstance()->create(new Tinebase_Model_BankAccount([
                     Tinebase_Model_BankAccount::FLD_NAME => 'unittest',
-                    Tinebase_Model_BankAccount::FLD_BIC => 'unittest',
-                    Tinebase_Model_BankAccount::FLD_IBAN => 'unittest',
+                    Tinebase_Model_BankAccount::FLD_BIC => 'BYLADEM1001',
+                    Tinebase_Model_BankAccount::FLD_IBAN => 'DE02120300000000202051',
                 ])));
             }
             $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([

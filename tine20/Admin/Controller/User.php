@@ -159,6 +159,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      * @param  Tinebase_Model_FullUser  $_account the account
      * @param  string                   $_password the new password
+     *
      * @param  string                   $_passwordRepeat the new password again
      * @param  bool                     $_mustChange
      * @return void
@@ -183,6 +184,73 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             __METHOD__ . '::' . __LINE__ . 
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
         );
+
+        // send SMS message if client data is set
+        $context = Admin_Controller_User::getInstance()->getRequestContext();
+        $smsPhoneNumber = $context['sms-phone-number'] ?? $context['clientData']['sms-phone-number'] ?? null;
+        $customTemplate = $context['sms-new-password-template'] ?? $context['clientData']['sms-new-password-template'] ?? null;
+
+        if (!empty($_password) && !empty($smsPhoneNumber)) {
+            $mobilePhoneNumber = rawurldecode($smsPhoneNumber);
+            $smsAdapterConfigs = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}
+                ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS};
+
+            if (!$smsAdapterConfigs || count($smsAdapterConfigs) === 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' sms adapter configs is not found , skip sending new password message');
+                return;
+            }
+
+            $smsAdapterConfig = $smsAdapterConfigs->getFirstRecord();
+            $smsAdapterConfig = $smsAdapterConfig->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG};
+
+            if (empty($smsAdapterConfig->getHttpClientConfig())) {
+                $smsAdapterConfig->setHttpClientConfig([
+                    'adapter' => ($genericHttpAdapter = new Tinebase_ZendHttpClientAdapter())
+                ]);
+
+                $genericHttpAdapter->writeBodyCallBack = function($body) {
+                    $colorGreen = "\033[43m";
+                    $colorReset = "\033[0m";
+                    Tinebase_Core::getLogger()->warn($colorGreen . __METHOD__ . '::' . __LINE__ . ' sms request body: ' . $body . $colorReset . PHP_EOL);
+                };
+                $genericHttpAdapter->setResponse(new Zend_Http_Response(200, []));
+            }
+
+            $template = $customTemplate ? rawurldecode($customTemplate) : Tinebase_Config::getInstance()->{Tinebase_Config::SMS}
+                        ->{Tinebase_Config::SMS_MESSAGE_TEMPLATES}->get(Tinebase_Config::SMS_NEW_PASSWORD_TEMPLATE);
+
+            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(), [
+                Tinebase_Twig::TWIG_LOADER =>
+                    new Tinebase_Twig_CallBackLoader(__METHOD__ . 'password', time() - 1, function () use ($template) {
+                        return $template;
+                    })
+            ]);
+
+            $message = $twig->load(__METHOD__ . 'password')->render(array_merge($smsAdapterConfig->getTwigContext(), [
+                'password'  => $_password,
+                'user'      => $_account->accountDisplayName,
+                'contact'   => $_account->contact_id
+            ]));
+
+            $smsSendConfig = new Tinebase_Model_Sms_SendConfig([
+                Tinebase_Model_Sms_SendConfig::FLD_MESSAGE => $message,
+                Tinebase_Model_Sms_SendConfig::FLD_RECIPIENT_NUMBER => $mobilePhoneNumber,
+                Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG => $smsAdapterConfig,
+            ]);
+
+            try {
+                Tinebase_Sms::send($smsSendConfig);
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ .
+                    ' Send SMS message successfully : ' . print_r($context, true)
+                );
+            } catch (Zend_Session_Exception $zse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage()) ;
+            }
+        }
     }
 
     /**
@@ -590,16 +658,16 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         foreach ((array)$_accountIds as $accountId) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
-            
+
             $oldUser = $this->get($accountId);
-            
+
             $memberships = $groupsController->getGroupMemberships($accountId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
-            
+
             foreach ((array)$memberships as $groupId) {
                 $groupsController->removeGroupMember($groupId, $accountId);
             }
-            
+
             $this->_userBackend->deleteUser($accountId);
         }
     }

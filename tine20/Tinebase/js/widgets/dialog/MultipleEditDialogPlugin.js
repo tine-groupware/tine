@@ -810,26 +810,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                             changes: changes,
                             filter: filter
                         },
-                        success: function(_result, _request) {
-                            Ext.MessageBox.hide();
-                            var resp = Ext.decode(_result.responseText);
-                            if (resp.failcount > 0) {
-                                var window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
-                                    response: _result.responseText,
-                                    appName: this.app.appName,
-                                    recordClass: this.editDialog.recordClass
-                                });
-                                window.on('close', function() {
-                                    this.editDialog.fireEvent('update');
-                                    this.editDialog.onCancel();
-                                }, this);
-                            } else {
-                                this.editDialog.fireEvent('update');
-                                this.editDialog.onCancel();
-                            }
-                        },
-                        failure : function(exception) {
-                            Tine.Tinebase.ExceptionHandler.handleRequestException(exception, this.onUpdateFailure, this);
+                        success: this.onAfterUpdate,
+                        failure: function (result, request) {
+                            const responseData = Ext.decode(result.responseText);
+                            const exception = responseData.data ? responseData.data : responseData;
+                            exception.request = request.jsonData;
+                            exception.response = result.responseText;
+                            //confirmation exception should not reload the record
+                            Tine.Tinebase.ExceptionHandler.handleRequestException(exception, (exception.code === 650 ? this.onAfterUpdate : this.onUpdateFailure), this);
                         },
                         scope: this
                     });
@@ -842,9 +830,33 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }
         return false;
     },
-    
+
     /**
-     * 
+     *
+     * @param {} btn
+     * @param {} dialog
+     */
+    onAfterUpdate: function (_result, _request) {
+        Ext.MessageBox.hide();
+        const resp = Ext.decode(_result.responseText);
+        if (resp.failcount > 0) {
+            const window = Tine.widgets.dialog.MultipleEditResultSummary.openWindow({
+                response: _result.responseText,
+                appName: this.app.appName,
+                recordClass: this.editDialog.recordClass
+            });
+            window.on('close', function() {
+                this.editDialog.fireEvent('update');
+                this.editDialog.onCancel();
+            }, this);
+        } else {
+            this.editDialog.fireEvent('update');
+            this.editDialog.onCancel();
+        }
+    },
+
+    /**
+     *
      * @param {} btn
      * @param {} dialog
      */

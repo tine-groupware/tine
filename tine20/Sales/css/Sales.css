@@ -100,7 +100,7 @@
     color: #404040;
 }
 
-.SalesDocument_Order, .SalesOrderConfirmation, .SalesDocumentPosition_Order {
+.SalesDocument_Order, .SalesOrderConfirmation, .SalesDocumentPosition_Order, .action-sales-validate-document {
     background-image:url(../../images/icon-set/icon_order_confirmation.svg) !important;
 }
 

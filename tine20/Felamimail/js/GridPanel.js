@@ -6,7 +6,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
+
 import {getLayoutClassByMode} from "../../Tinebase/js/util/responsiveLayout";
 
 Ext.namespace('Tine.Felamimail');
@@ -505,6 +505,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         const exts = _.uniq(_.map(fileSelector.files, file => {return file.name.split('.').pop()}));
+        if (exts.length !== 1) {
+            // no files or too many
+            return true;
+        }
         if (exts.length !== 1 || !['eml', 'emltpl', 'msg'].includes(exts[0])) {
             return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml, emltpl and msg allowed only.'));
         }
@@ -1603,10 +1607,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     isSendFolderPath: function (pathFilterValue) {
         const pathParts = _.isString(pathFilterValue) ? pathFilterValue.split('/') : null;
         if (! pathParts || pathParts.length < 3) return false;
-        
+
         const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
         if (!composerAccount) return false;
-        
+
         const sendFolderIds = [
             composerAccount.getSendFolderId(),
             composerAccount.getSpecialFolderId('templates_folder'),
@@ -1638,7 +1642,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         params.filter[0].filters[0].filters = targetFilters;
     },
-    
+
     getStateIdSuffix() {
         this.resolveSendFolderPath();
         this.folderSuffix = this.sentFolderSelected ? '-SendFolder' : '';
@@ -1647,7 +1651,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     /**
      * if send, draft, template folders are selected, do the following:
-     * 
+     *
      * - hide from email + name columns from grid
      * - show to column in grid
      */
@@ -1667,11 +1671,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             })
         }
-        
+
         if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
             await this.grid.saveState();
         }
-        
+
         this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
         this.grid.view.layout();
     },
@@ -1968,7 +1972,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         let header = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
-                    (! onlyImportant || header === 'from' || header === 'to' || header === 'cc' || header === 'subject' || header === 'date')) 
+                    (! onlyImportant || header === 'from' || header === 'to' || header === 'cc' || header === 'subject' || header === 'date'))
             {
                 const headerName = plain ? (header + ': ') : ('<b>' + header + ':</b> ');
                 let headerContent = ellipsis ? Ext.util.Format.ellipsis(headers[header], 40) : headers[header];
@@ -2005,7 +2009,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         this.getStore().remove(msg);
                         this.deleteQueue.push(msg.id);
                         msgsIds.push(msg.id);
-                        
+
                         //spam strategy will execute move message , ham will remain in current folder
                         const isSeen = msg.hasFlag('\\Seen');
                         const diff = isSeen ? 0 : 1;

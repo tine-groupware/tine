@@ -54,7 +54,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     initComponent: function () {
-        var accountBackend = Tine.Tinebase.registry.get('accountBackend');
+        const accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend === 'Ldap' || accountBackend === 'ActiveDirectory');
 
         this.twingEnv = getTwingEnv();
@@ -62,6 +62,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
             loader.setTemplate(fieldName, template);
         }
+        this.hasSmsAdapters = Tine.Tinebase.registry.get('hasSmsAdapters');
 
         Tine.Admin.UserEditDialog.superclass.initComponent.call(this);
     },
@@ -77,12 +78,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         // samba user
-        var response = {
+        const response = {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
         };
         this.samRecord = Tine.Admin.samUserBackend.recordReader(response);
         // email user
-        var emailResponse = {
+        const emailResponse = {
             responseText: Ext.util.JSON.encode(this.record.get('emailUser'))
         };
         this.emailRecord = Tine.Admin.emailUserBackend.recordReader(emailResponse);
@@ -92,8 +93,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         // format dates
-        var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet'];
-        for (var i = 0; i < dateTimeDisplayFields.length; i += 1) {
+        const dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet'];
+        for (let i = 0; i < dateTimeDisplayFields.length; i += 1) {
             if (dateTimeDisplayFields[i] === 'accountLastLogin' || dateTimeDisplayFields[i] === 'accountLastPasswordChange') {
                 this.record.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.record.get(dateTimeDisplayFields[i])));
             } else {
@@ -123,20 +124,50 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.storeRoles.loadData(this.record.get('accountRoles'));
         }
 
-        var fileSystem = this.record.get('effectiveAndLocalQuota');
+        const fileSystem = this.record.get('effectiveAndLocalQuota');
         if (fileSystem && fileSystem.localUsage) {
             this.getForm().findField('personalFSSize').setValue(parseInt(fileSystem.localUsage));
         }
 
-        var xprops = this.record.get('xprops');
+        let xprops = this.record.get('xprops');
         xprops = Ext.isObject(xprops) ? xprops : {};
         if (xprops.personalFSQuota) {
             this.getForm().findField('personalFSQuota').setValue(xprops.personalFSQuota);
         }
 
+        this.defaultContainer = this.record.get('container_id');
+
         this.mustChangePasswordCheck()
 
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
+    },
+
+    /**
+     * Apply changes handler
+     *  - validate some additional data before saving
+     *
+     * @param {Ext.Button} button
+     * @param {Ext.EventObject} event
+     * @param {Boolean} closeWindow
+     */
+    onApplyChanges: function () {
+        const passwordField = this.getForm() ? this.getForm().findField('accountPassword') : null;
+        const updatedPassword = passwordField.getValue();
+
+        if (this.record.modified.hasOwnProperty('accountPassword') && updatedPassword) {
+            const passwordDialog = new Tine.Tinebase.widgets.dialog.ResetPasswordDialog({
+                record: this.record,
+                contactRecord: this.contactRecordPicker.selectedRecord,
+            });
+
+            passwordDialog.openWindow();
+            passwordDialog.on('apply', async (record) => {
+                this.record = record;
+                Tine.Admin.UserEditDialog.superclass.onApplyChanges.apply(this, arguments);
+            }, this);
+        } else {
+            Tine.Admin.UserEditDialog.superclass.onApplyChanges.apply(this, arguments);
+        }
     },
 
     /**
@@ -221,11 +252,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.record.set('password_must_change', this.record.get('password_must_change_actual'))
         }
 
-        var xprops = this.record.get('xprops');
+        let xprops = this.record.get('xprops');
+        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
+
         xprops = Ext.isObject(xprops) ? xprops : {};
         xprops.personalFSQuota = this.getForm().findField('personalFSQuota').getValue();
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
+
     },
     /**
      * need to unset localized datetime fields before saving
@@ -293,11 +327,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * Validate confirmed password
      */
     onPasswordConfirm: function () {
-        var confirmForm = this.passwordConfirmWindow.items.first().getForm(),
+        const confirmForm = this.passwordConfirmWindow.items.first().getForm(),
             confirmValues = confirmForm.getFieldValues(),
             passwordStatus = confirmForm.findField('passwordStatus'),
             passwordField = (this.getForm()) ? this.getForm().findField('accountPassword') : null;
-        
+
         if (! passwordField) {
             // oops: something went wrong, this should not happen
             return false;
@@ -926,7 +960,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
             preserveElStyle: true
         })
+    
         this.saveInaddressbookFields = this.getSaveInAddessbookFields(this);
+
         this.saveInaddressbookFields.push({
             hideLabel: true,
             xtype: 'checkbox',
@@ -1027,6 +1063,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 if (this.passwordConfirmWindow) {
                                     field.passwordsMatch = false;
                                 }
+                                const checkbox = this.getForm().findField('send_password_via_sms');
+                                if (checkbox) checkbox.setDisabled(false);
                             }
                         },
                         validateValue: function (value) {
@@ -1039,6 +1077,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         checkboxToggle: false,
                         columnWidth: 1,
                         layout: 'hfit',
+                        style: 'margin-bottom: 8px',
                         items: [this.MFAPanel]
                     }],  [{
                         vtype: 'email',
@@ -1055,7 +1094,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('OpenID'),
                         emptyText: '(' + this.app.i18n.gettext('Login name') + ')',
                         name: 'openid',
-                        columnWidth: 0.5
+                        columnWidth: 0.5,
                     }], [{
                         xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Primary group'),
@@ -1243,10 +1282,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     validateLoginName: function (value) {
         return value.match(/^[a-z\d._-]+$/i) !== null;
     },
-    
+
     getSaveInAddessbookFields(scope, hidden) {
         this.app = Tine.Tinebase.appMgr.get('Admin');
-        
+
         return [{
             xtype: 'combo',
             fieldLabel: this.app.i18n.gettext('Visibility'),
@@ -1262,10 +1301,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: scope,
                 select: function (combo, record) {
                     // disable container_id combo if hidden
-                    var addressbookContainerCombo = scope.getForm().findField('container_id');
-                    addressbookContainerCombo.setDisabled(record.data.field1 === 'hidden');
+                    const hidden = record.data.field1 === 'hidden';
+                    const addressbookContainerCombo = scope.getForm().findField('container_id');
+                    addressbookContainerCombo.setDisabled(hidden);
                     if (addressbookContainerCombo.getValue() === '') {
                         addressbookContainerCombo.setValue(null);
+                    }
+                    // disable container_id combo if hidden
+                    const addressbookContactCombo = scope.getForm().findField('contact_id');
+                    addressbookContactCombo.setDisabled(hidden);
+                    if (addressbookContactCombo.getValue() === '') {
+                        addressbookContactCombo.setValue(null);
                     }
                 }
             }
@@ -1282,6 +1328,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hidden: hidden ?? false,
             recordProxy: Tine.Admin.sharedAddressbookBackend,
             listeners: {
+                beforeselect: (combo, status, index) => {
+                    Ext.MessageBox.confirm(
+                        scope.app.i18n._('Confirm'),
+                        scope.app.i18n._('Do you want to move the contact to this addressbook?'),
+                        (btn) => {
+                            if (btn === 'yes') {
+                                combo.setValue(status.id);
+                            }
+                        },
+                    );
+                    return false;
+                },
                 specialkey: function(combo, e) {
                     if (e.getKey() == e.TAB && ! e.shiftKey) {
                         // move cursor to first input field (skip display fields)
@@ -1293,7 +1351,36 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 scope: scope
             }
-        }];
+        }, {
+            xtype: 'addressbookcontactpicker',
+            disabled: scope.record.get('visibility') === 'hidden',
+            hidden: hidden ?? false,
+            name: 'contact_id',
+            filter: [{field: 'type', operator: 'equals', value: 'contact'}],
+            ref: '../../../../../contactRecordPicker',
+            listeners: {
+                scope: scope,
+                beforeselect: (combo, status, index) => {
+                    const addressbookContainerCombo = scope.getForm().findField('container_id');
+                    const selectedContainer = addressbookContainerCombo.selectedRecord;
+
+                    let msg = scope.app.i18n._('The selected contact will be updated') + ` : <br><br><b>${status.data.n_fileas}</b><br>`
+                        + '<br>' + this.app.i18n.gettext('Saved in Addressbook') + ` : <b>${selectedContainer.data.name}</b><br>`;
+
+                    Ext.MessageBox.confirm(
+                        scope.app.i18n._('Confirm'),
+                        scope.app.i18n._(msg),
+                        (btn) => {
+                            if (btn === 'yes') {
+                                combo.setValue(status.id);
+                            }
+                        },
+                    );
+                    return false;
+                }
+            }
+        }
+        ];
     }
 });
 
@@ -1308,7 +1395,7 @@ Tine.Admin.UserEditDialog.openWindow = function (config) {
     const id = config.recordId ?? config.record?.id ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 600,
-        height: 520,
+        height: 550,
         name: Tine.Admin.UserEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Admin.UserEditDialog',
         contentPanelConstructorConfig: config

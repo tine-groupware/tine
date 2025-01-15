@@ -341,7 +341,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param int|null $revision
      * @param boolean $ignoreAcl
      */
-    protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false)
+    protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false, $disposition = 'attachment')
     {
         if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -356,7 +356,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 . ' Download file node ' . print_r($node->toArray(), TRUE));
         }
 
-        $this->_prepareHeader($node->name, $node->contenttype);
+        $this->_prepareHeader($node->name, $node->contenttype, $disposition);
 
         if (null !== $revision) {
             $streamContext = stream_context_create(array(
