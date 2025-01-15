@@ -98,6 +98,21 @@ Tine.Sales.renderAddress = function(record, companyName) {
     return lines;
 };
 
+Tine.Sales.renderSupplier = function(record) {
+    const app = Tine.Tinebase.appMgr.get('Sales');
+    const fields = [
+        'bic',
+        'iban',
+    ]
+    let info = '';
+    fields.forEach((fieldName, idx) => {
+        const field = record.fields.find((f) => f?.name === fieldName);
+        if (idx > 0) info += '\n';
+        if (field) info += `${app.i18n._(field.label)}: ${record.get(fieldName)}`;
+    })
+    return info;
+};
+
 /**
  * opens the Copy Address Dialog and adds the rendered address
  *

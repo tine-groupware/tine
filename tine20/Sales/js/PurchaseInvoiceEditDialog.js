@@ -405,13 +405,13 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             [{
                                 name: 'number',
                                 fieldLabel: this.app.i18n._('Invoice Number'),
-                                columnWidth: 1 / 4,
+                                columnWidth: 1,
                                 allowBlank: false
                                 //readOnly: ! Tine.Tinebase.common.hasRight('set_invoice_number', 'Sales'),
                                 //emptyText: this.app.i18n._('automatically set...')
-                            }, {
+                            }], [{
                                 fieldLabel: this.app.i18n._('Supplier'),
-                                columnWidth: 2 / 4,
+                                columnWidth: 1 / 2,
                                 editDialog: this,
                                 xtype: 'tinerelationpickercombo',
                                 allowBlank: false,
@@ -421,25 +421,36 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 relationDegree: 'sibling',
                                 modelUnique: true,
                                 ref: '../../../../../../../supplierPicker',
-                                //readOnly: true,
                                 name: 'supplier',
                                 listeners: {
                                     scope: this,
                                     select: this.onSelectSupplier
-                                }
+                                },
                             }, {
                                 name: 'vat_procedure',
                                 xtype: 'widget-keyfieldcombo',
                                 fieldLabel: this.app.i18n._('VAT Procedure'),
                                 app: 'Sales',
                                 keyFieldName: 'vatProcedures',
-                                columnWidth: 1 / 4,
+                                columnWidth: 1 / 2,
                                 readOnly: true,
                                 ref: '../../../../../../../vatProcedureCombo',
                                 checkState: function (editDialog, record) {
                                     const supplierRelation = record.data.relations.find(r => r.related_model === 'Sales_Model_Supplier');
                                     this.setValue(supplierRelation?.related_record?.vat_procedure ?? 'nonTaxable');
-                                },
+                                }
+                            }, {
+                                columnWidth: 1,
+                                name: 'fixed_supplier_info',
+                                xtype: 'textarea',
+                                height: 50,
+                                readOnly: true,
+                                hideLabel: true,
+                                checkState: function (editDialog, record) {
+                                    const supplier = editDialog?.supplierPicker?.combo?.selectedRecord;
+                                    if (!supplier) return;
+                                    this.setValue(Tine.Sales.renderSupplier(supplier));
+                                }
                             }], [
                                 this.dateOfInvoiceField,
                                 this.dueInDaysField,
