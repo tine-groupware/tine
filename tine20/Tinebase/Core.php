@@ -1797,6 +1797,18 @@ class Tinebase_Core
             $assetHash = Tinebase_Record_Abstract::generateUID(8);
         }
 
+        try {
+            $externalIdps = SSO_Controller_ExternalIdp::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class, [
+                    [TMFA::FIELD => SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION,
+                        TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => true],
+                ])
+            )->toArray();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            $externalIdps = [];
+        }
+
         $registryData =  [
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
@@ -1842,15 +1854,8 @@ class Tinebase_Core
             'jsonKey'           => Tinebase_Core::get('jsonKey'),
             'licenseStatus'     => Tinebase_License::getInstance()->getStatus(),
             'licenseData'       => Tinebase_License::getInstance()->getCertificateData(),
-            'loginExternalIdps' => SSO_Controller_ExternalIdp::getInstance()->search(
-                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class, [
-                        [TMFA::FIELD => SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => true],
-                    ])
-                )->toArray(),
+            'loginExternalIdps' => $externalIdps,
         ];
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Anonymous registry: ' . print_r($registryData, TRUE));
 
         return $registryData;
     }
