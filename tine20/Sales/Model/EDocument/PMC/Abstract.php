@@ -30,9 +30,15 @@ abstract class Sales_Model_EDocument_PMC_Abstract extends Tinebase_Record_NewAbs
         if (!($paymentMeans = $ublInvoice->getPaymentMeans())) {
             $ublInvoice->setPaymentMeans($paymentMeans = [$this->createPaymentMeans($invoice)]);
         }
+
+        $first = true;
         /** @var PaymentMeans $payMeans */
         foreach($paymentMeans as $payMeans) {
             $this->toUblPaymentMeans($payMeans, $pmc);
+            if (!$first) {
+                $payMeans->getPaymentMeansCode()->setName(null);
+            }
+            $first = false;
         }
     }
 
