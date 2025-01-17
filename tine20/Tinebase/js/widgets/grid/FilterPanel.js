@@ -179,8 +179,10 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
                     syncFields: this.syncFields,
                 }, this.quickFilterConfig));
+                this.quickFilterPlugin.init(filterToolbar, this);
+            } else {
+                this.quickFilterPlugin.initFilterToolbar(filterToolbar);
             }
-            this.quickFilterPlugin.init(filterToolbar, this);
         }
         this.filterToolbars[filterToolbar.id] = filterToolbar;
         this.criteriaCount++;
@@ -326,7 +328,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                     this.setActiveFilterToolbar(filterToolbar);
                 }
                 
-                filterToolbar.setValue(filterData.filters);
+                filterToolbar.setValue(filterData.filters || []);
                 keepFilterPanels.push(filterToolbar.id);
                 
                 if (filterData.label) {

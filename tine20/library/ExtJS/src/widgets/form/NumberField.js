@@ -115,11 +115,12 @@ Ext.form.NumberField = Ext.extend(Ext.form.TextField,  {
 
     setValue : function(v){
     	v = Ext.isNumber(v) ? v : parseFloat(String(v).replace(this.decimalSeparator, "."));
-        v = isNaN(v) ? '' : String(v).replace(".", this.decimalSeparator);
         if (this.rendered && this.coloredValue) {
             this.el.removeClass(['x-form-num-field-positiv', 'x-form-num-field-negativ'])
             this.el.addClass(`x-form-num-field-${v < 0 ? 'negativ' : 'positiv'}`);
         }
+        // back to string...
+        v = isNaN(v) ? '' : String(v).replace(".", this.decimalSeparator);
         return Ext.form.NumberField.superclass.setValue.call(this, v);
     },
     
