@@ -430,7 +430,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if (! $this->_disabledEvents) {
             $event = new Addressbook_Event_InspectContactAfterUpdate();
             $event->updatedContact = $updatedRecord;
-            $event->record = $record;
+            $event->record = $currentRecord;
             Tinebase_Event::fireEvent($event);
         }
     }
@@ -479,7 +479,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
-    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    protected function _inspectAfterSetRelatedDataCreate($_createdRecord, $_record)
     {
         // assertion
         if (! empty($_createdRecord->syncBackendIds)) {
