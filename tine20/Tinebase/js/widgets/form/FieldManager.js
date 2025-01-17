@@ -105,7 +105,7 @@ Tine.widgets.form.FieldManager = function() {
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             if (fieldDefinition.description) {
                 // class icon_dialog_info needs to be defined in css of app
-                field.fieldLabel += '<i class="icon_dialog_info" ext:qtip="' + Ext.util.Format.htmlEncode(i18n._hidden(fieldDefinition.description)) + '"></i>'
+                field.fieldLabel += '<span class="field-description" ext:qtip="' + Ext.util.Format.htmlEncode(i18n._hidden(fieldDefinition.description)) + '" />'
             }
             field.name = fieldDefinition.fieldName || fieldDefinition.name;
             field.readOnly = !! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly');
