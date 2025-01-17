@@ -30,7 +30,12 @@ Tine.Tinebase.Exception.HTMLReportDialog = Ext.extend(Tine.Tinebase.dialog.Dialo
     },
     afterRender: function() {
         Tine.Tinebase.Exception.HTMLReportDialog.superclass.afterRender.call(this);
-        this.el.query('iframe')[0].contentWindow.document.body.innerHTML = JSON.parse(this.exception.response).data.html
+        
+        const iframe = this.el.query('iframe')[0];
+        const doc = iframe.contentWindow.document || iframe.contentDocument;
+        doc.open();
+        doc.write(JSON.parse(this.exception.response).data.html);
+        doc.close();
     }
 });
 
