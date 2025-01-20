@@ -299,4 +299,9 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
     {
         return Admin_Model_SambaMachine::class;
     }
+
+    public function copy(string $id, bool $persist): Tinebase_Record_Interface
+    {
+        throw new Tinebase_Exception_NotImplemented('not needed here');
+    }
 }

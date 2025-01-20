@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * expands records based on provided definition
  *
@@ -6,15 +6,18 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 abstract class Tinebase_Record_Expander_Abstract
 {
     const EXPANDER_USE_JSON_EXPANDER = 'useJsonExpander';
     const EXPANDER_PROPERTIES = 'properties';
     const EXPANDER_PROPERTY_CLASSES = 'propertyClasses';
+    const EXPANDER_FULL = 'full';
     const EXPANDER_REPLACE_GET_TITLE = 'replaceGetTitle';
     const GET_DELETED = 'getDeleted';
 
@@ -63,6 +66,30 @@ abstract class Tinebase_Record_Expander_Abstract
             foreach ($_expanderDefinition[self::EXPANDER_PROPERTY_CLASSES] as $propClass => $definition) {
                 $this->_subExpanders[] = Tinebase_Record_Expander_Factory::createPropClass($_model, $definition,
                     $propClass, $this->_rootExpander);
+            }
+        }
+        if (($_expanderDefinition[self::EXPANDER_FULL] ?? false) && ($mc = $_model::getConfiguration())) {
+            foreach (array_merge($mc->recordFields ?? [], $mc->recordsFields ?? []) as $prop => $conf) {
+                if (! ($conf[TMCC::CONFIG][TMCC::DEPENDENT_RECORDS] ?? false)) {
+                    continue;
+                }
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, [self::EXPANDER_FULL => true], $prop,
+                    $this->_rootExpander);
+            }
+            if ($mc->{TMCC::HAS_RELATIONS}) {
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, [], TMCC::FLD_RELATIONS, $this->_rootExpander);
+            }
+            if ($mc->{TMCC::HAS_TAGS}) {
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, [], TMCC::FLD_TAGS, $this->_rootExpander);
+            }
+            if ($mc->{TMCC::HAS_ALARMS}) {
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, [], TMCC::FLD_ALARMS, $this->_rootExpander);
+            }
+            if ($mc->{TMCC::HAS_ATTACHMENTS}) {
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, [], TMCC::FLD_ATTACHMENTS, $this->_rootExpander);
+            }
+            if ($mc->{TMCC::HAS_NOTES}) {
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, [], TMCC::FLD_NOTES, $this->_rootExpander);
             }
         }
     }

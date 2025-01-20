@@ -354,4 +354,9 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
     {
         return Tinebase_Model_Config::class;
     }
+
+    public function copy(string $id, bool $persist): Tinebase_Record_Interface
+    {
+        throw new Tinebase_Exception_NotImplemented('not needed here');
+    }
 }
