@@ -52,7 +52,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
 
     public function testUblValidationFail(): void
     {
-        if (!Sales_Config::getInstance()->{Sales_Config::VALIDATION_SVC}) {
+        if (!Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
             $this->markTestSkipped('validation service not configured');
         }
 
