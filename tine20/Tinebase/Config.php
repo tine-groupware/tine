@@ -1008,9 +1008,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_SITE = 'featureSite';
 
     /**
-     * scheduler max fails
+     * scheduler user task fail notification threshold
      */
-    const SCHEDULER_MAX_FAILS = 'maxFails';
+    const SCHEDULER_USER_TASK_FAIL_NOTIFICATION_THRESHOLD = 'userTaskFailNotificationThreshold';
 
     /**
      * (non-PHPdoc)
@@ -3710,15 +3710,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
         ),
-        self::SCHEDULER_MAX_FAILS => [
-            self::LABEL                 => 'Max scheduler fails',
-            self::DESCRIPTION           => 'Max scheduler fails',
+        self::SCHEDULER_USER_TASK_FAIL_NOTIFICATION_THRESHOLD => [
+            self::LABEL                 => 'User Task Fail Notification Threshold',
+            self::DESCRIPTION           => 'User Task Fail Notification Threshold',
             self::TYPE                  => self::TYPE_INT,
             self::DEFAULT_STR           => 3,
-            self::CLIENTREGISTRYINCLUDE => true,
+            self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => true,
-            self::SETBYSETUPMODULE      => true
-        ]
+            self::SETBYSETUPMODULE      => false
+        ],
     );
 
     /**

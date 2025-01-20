@@ -153,6 +153,22 @@ class Tinebase_Scheduler_Task
             ->format('Y-m-d H:i:s');
     }
 
+    public function getFailCountSinceLastSuccess(Tinebase_Model_SchedulerTask $task): int
+    {
+        if (!$task->last_failure->equals($task->server_time)) {
+            return 0;
+        }
+        if (null === $task->last_run) {
+            return (int)$task->failure_count;
+        }
+
+        $failReRunInterval = $task->next_run->getTimestamp() - $task->server_time->getTimestamp();
+        $timeBetweenLastRegularRunAndLastFail =
+            $task->last_failure->getTimestamp() - $this->_cronObject->getNextRunDate($task->last_run->format('Y-m-d H:i:s'))->getTimestamp();
+
+        return $timeBetweenLastRegularRunAndLastFail < 1 ? 0 : floor($timeBetweenLastRegularRunAndLastFail / $failReRunInterval);
+    }
+
     /**
      * @param Tinebase_Model_SchedulerTask $task
      */
