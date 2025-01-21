@@ -21,7 +21,7 @@ use Tinebase_ModelConfiguration_Const as MCC;
  */
 class Tinebase_Model_Converter_JsonRecordSetDefault implements Tinebase_Model_Converter_RunOnNullInterface
 {
-    public function __construct(protected $default)
+    public function __construct(protected $defaultVal)
     {
     }
 
@@ -33,7 +33,7 @@ class Tinebase_Model_Converter_JsonRecordSetDefault implements Tinebase_Model_Co
     public function convertToRecord($record, $key, $blob)
     {
         if (null === $blob) {
-            $blob = $this->default;
+            $blob = $this->defaultVal;
         }
 
         if ($blob instanceof Tinebase_Record_RecordSet) {
@@ -49,7 +49,7 @@ class Tinebase_Model_Converter_JsonRecordSetDefault implements Tinebase_Model_Co
             $rs->runConvertToRecord();
             return $rs;
         }
-        return null;
+        return $this->defaultVal;
     }
 
     /**
@@ -59,13 +59,11 @@ class Tinebase_Model_Converter_JsonRecordSetDefault implements Tinebase_Model_Co
     public function convertToData($record, $key, $fieldValue)
     {
         if (null === $fieldValue) {
-            $fieldValue = $this->default;
+            $fieldValue = $this->defaultVal;
         }
 
         if (! $fieldValue instanceof Tinebase_Record_RecordSet) {
-            if (empty($fieldValue)) {
-                return null;
-            } elseif (is_array($fieldValue)) {
+            if (is_array($fieldValue) || null === json_decode($fieldValue, true)) {
                 return json_encode($fieldValue);
             } else {
                 return $fieldValue;
