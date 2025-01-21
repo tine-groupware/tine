@@ -525,6 +525,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     // only Invoice needs one default set (means selected)
                 ],
                 self::DEFAULT_VAL                   => '[]',
+                self::CONVERTERS                    => [
+                    [Tinebase_Model_Converter_JsonRecordSetDefault::class, []],
+                ],
             ],
         ]
     ];
