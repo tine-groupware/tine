@@ -50,6 +50,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE029 = __CLASS__ . '::update029';
     protected const RELEASE017_UPDATE030 = __CLASS__ . '::update030';
     protected const RELEASE017_UPDATE031 = __CLASS__ . '::update031';
+    protected const RELEASE017_UPDATE032 = __CLASS__ . '::update032';
+    protected const RELEASE017_UPDATE033 = __CLASS__ . '::update033';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -60,6 +62,13 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE012 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update012',
+            ],
+        ],
+        // ACHTUNG column rename!!!
+        (self::PRIO_NORMAL_APP_STRUCTURE - 5) => [
+            self::RELEASE017_UPDATE032 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update032',
             ],
         ],
         (self::PRIO_NORMAL_APP_STRUCTURE - 4) => [
@@ -168,6 +177,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE031 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update031',
+            ],
+            self::RELEASE017_UPDATE033 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update033',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -921,8 +934,46 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Sales_Model_Debitor::class,
+            Sales_Model_Document_Debitor::class,
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.31', self::RELEASE017_UPDATE031);
+    }
+
+    public function update032(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->_backend->columnExists('edocument_transport', Sales_Model_Debitor::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME
+                . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Manual\'');
+        }
+        if ($this->_backend->columnExists('edocument_transport', Sales_Model_Document_Debitor::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME
+                . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Manual\'');
+        }
+
+        foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
+            foreach ([
+                        'email'     => Sales_Model_EDocument_Dispatch_Email::class,
+                        'manual'    => Sales_Model_EDocument_Dispatch_Manual::class,
+                        'upload'    => Sales_Model_EDocument_Dispatch_Upload::class,
+                    ] as $old => $new) {
+                $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . $new . '" WHERE edocument_dispatch_type = "' . $old . '"');
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.32', self::RELEASE017_UPDATE032);
+    }
+
+    public function update033(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Document_Debitor::class,
+            Sales_Model_Document_DispatchHistory::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.33', self::RELEASE017_UPDATE033);
     }
 }

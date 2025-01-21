@@ -32,7 +32,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 1,
+        self::VERSION                       => 2,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
         self::HAS_ATTACHMENTS               => true,
@@ -65,12 +65,15 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_DISPATCH_TRANSPORT        => [
-                self::TYPE                      => self::TYPE_KEY_FIELD,
+                self::TYPE                      => self::TYPE_MODEL,
                 self::LABEL                     => 'Dispatch Transport Method', // _('Dispatch Transport Method')
-                self::NAME                      => Sales_Config::EDOCUMENT_TRANSPORT,
-                self::NULLABLE                  => false,
                 self::CONFIG                    => [
-                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::AVAILABLE_MODELS          => [
+                        Sales_Model_EDocument_Dispatch_Custom::class,
+                        Sales_Model_EDocument_Dispatch_Email::class,
+                        Sales_Model_EDocument_Dispatch_Manual::class,
+                        Sales_Model_EDocument_Dispatch_Upload::class,
+                    ],
                 ],
             ],
             self::FLD_DISPATCH_REPORT           => [
@@ -81,7 +84,6 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ATTACHED_DOCUMENT_ID      => [
                 self::TYPE                          => self::TYPE_RECORD,
-                self::NULLABLE                      => true,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,

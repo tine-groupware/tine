@@ -57,10 +57,6 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const PRODUCT_NUMBER_GENERATION_AUTO = 'auto';
     public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
 
-    public const EDOCUMENT_TRANSPORT = 'EDOCUMENT_TRANSPORT';
-    public const EDOCUMENT_TRANSPORT_EMAIL = 'email';
-    public const EDOCUMENT_TRANSPORT_DOWNLOAD = 'download';
-
     public const EDOCUMENT = 'edocument';
     public const VALIDATION_SVC = 'validation_svc';
     public const VIEW_SVC = 'view_svc';
@@ -271,6 +267,11 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_ORDERCONFIRMATIONS_MODULE = 'orderConfirmationsModule';
+
+    const ATTACHED_DOCUMENT_TYPES = 'attachedDocumentTypes';
+    const ATTACHED_DOCUMENT_TYPES_PAPERSLIP = 'paperslip';
+    const ATTACHED_DOCUMENT_TYPES_UBL = 'ubl';
+    const ATTACHED_DOCUMENT_TYPES_SUPPORTING_DOC = 'supportingDoc';
     
     /**
      * (non-PHPdoc)
@@ -287,26 +288,32 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
-        self::EDOCUMENT_TRANSPORT   => [
-            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+        self::ATTACHED_DOCUMENT_TYPES => [
+            self::LABEL              => 'Attached Document Types', //_('Attached Document Types')
+            self::DESCRIPTION        => 'Attached Document Types',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
             self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => false,
+            self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [
                 self::RECORDS => [
                     [
-                        'id' => self::EDOCUMENT_TRANSPORT_DOWNLOAD,
-                        'value' => 'Download', //_('Download')
+                        'id' => self::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
+                        'value' => 'Paperslip', //_('Paperslip')
                         'icon' => null,
                         'system' => true,
                     ], [
-                        'id' => self::EDOCUMENT_TRANSPORT_EMAIL,
-                        'value' => 'E-Mail', //_('E-Mail')
+                        'id' => self::ATTACHED_DOCUMENT_TYPES_UBL,
+                        'value' => 'Ubl', //_('Ubl')
                         'icon' => null,
                         'system' => true,
-                    ]
+                    ], [
+                        'id' => self::ATTACHED_DOCUMENT_TYPES_SUPPORTING_DOC,
+                        'value' => 'Supporting Document', //_('Supporting Document')
+                        'icon' => null,
+                        'system' => true,
+                    ],
                 ],
-                self::DEFAULT_STR => self::EDOCUMENT_TRANSPORT_EMAIL,
             ],
         ],
         self::DOCUMENT_FOLLOWUP_STATUS => [

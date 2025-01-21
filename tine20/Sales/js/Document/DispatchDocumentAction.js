@@ -94,7 +94,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 // let paperSlip
 
                 let record = this.selections = [...this.initialConfig.selections][0]
-                const transport = record.get('debitor_id').edocument_transport || 'manual'
+                const transport = record.get('debitor_id').edocument_dispatch_type || 'manual'
                 const win = window
 
 
