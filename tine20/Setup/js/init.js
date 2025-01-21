@@ -71,6 +71,7 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
     
     // if a config file exists, the admin needs to login!        
     if (Tine.Setup.registry.get('configExists') && !Tine.Setup.registry.get('currentAccount')) {
+        mainCardPanel.layout.container.remove(Tine.loginPanel)
         Tine.loginPanel = new Tine.Tinebase.LoginPanel({
             loginMethod: 'Setup.login',
             headsUpText: window.i18n._('Setup'),
@@ -84,7 +85,7 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
         });
         mainCardPanel.layout.container.add(Tine.loginPanel);
         mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
-        Tine.loginPanel.doLayout();
+        // Tine.loginPanel.doLayout();
         
         return false;
     }

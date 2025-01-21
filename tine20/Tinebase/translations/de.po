@@ -1748,6 +1748,19 @@ msgid "Please enter your login data"
 msgstr "Bitte geben Sie ihre Anmeldedaten ein"
 
 #, python-brace-format
+msgid "Login with {0} account"
+msgstr "Mit {0} Konto einloggen"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "Login with Password?"
+msgstr "Mit Passwort anmelden?"
+
+msgid "or"
+msgstr "oder"
+
+#, python-brace-format
 msgid "User: {0}"
 msgstr "Benutzer: {0}"
 
@@ -3313,9 +3326,6 @@ msgstr "Zeige"
 msgid "and"
 msgstr "und"
 
-msgid "or"
-msgstr "oder"
-
 msgid "add new filter"
 msgstr "neuen Filter hinzufügen"
 
@@ -3495,9 +3505,6 @@ msgstr "ID bereits vorhanden"
 
 msgid "ID needs to follow the syntax PARENTID:ID"
 msgstr "ID muss folgendem Schema folgen PARENTID:ID"
-
-msgid "Language"
-msgstr "Sprache"
 
 msgid "Setting new language..."
 msgstr "neue Sprache wird eingestellt..."

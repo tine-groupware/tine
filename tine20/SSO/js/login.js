@@ -19,6 +19,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
         i18n.textdomain('SSO');
         const rpInfo = window.initialData.relyingParty;
 
+        mainCardPanel.layout.container.remove(Tine.loginPanel);
         Tine.loginPanel = new Tine.Tinebase.LoginPanel({
             defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
             defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
@@ -33,8 +34,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                 Ext.MessageBox.wait(window.i18n._hidden('Logging you in...'), window.i18n._hidden('Please wait'));
 
                 const url = window.initialData.url || `${window.location.href}`;
-                const form = this.getLoginPanel().getForm();
-                const values = form.getFieldValues();
+                const values = this.getFormValue()
                 const formData = new FormData();
                 formData.append('username', values.username);
                 if (values.password) {
@@ -78,7 +78,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.ERROR,
                             fn: () => {
-                                this.getLoginPanel().getForm().findField('password').focus(true);
+                                this.focusPWField()
                             }
                         });
                     }
@@ -91,7 +91,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
         });
         mainCardPanel.layout.container.add(Tine.loginPanel);
         mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
-        Tine.loginPanel.doLayout();
+        // Tine.loginPanel.doLayout();
 
         return false;
     });
