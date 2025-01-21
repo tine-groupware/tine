@@ -754,6 +754,8 @@ class Sales_InvoiceTestCase extends TestCase
     
     protected function _createFullFixtures()
     {
+        (new Sales_Document_Abstract())->makeDefaultDivisonUblReady();
+
         $this->_createContacts();
         $this->_createContracts();
         

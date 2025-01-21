@@ -11,7 +11,7 @@ For more information please visit our [homepage](https://www.tine-groupware.de) 
 * [Bluesky](https://bsky.app/profile/tine-groupware.bsky.social)
 * [Documentation](https://tine-docu.s3web.rz1.metaways.net)
 * [OCI images](https://hub.docker.com/u/tinegroupware)
-
+* [Video Tutorials](https://tutorials.tine-groupware.de/)
 
 ## quick start
 tine consists of a number of integrated services which are provided as oci images. The easiest way to get you own
