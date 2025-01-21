@@ -627,7 +627,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         });
 
         if ($sourcesAreReversals && $isReversal) {
-            throw new Tinebase_Exception_Record_Validation('reversal of reversal are followups, thus is_reversal must be false');
+            $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL} = false;
+            $isReversal = false;
+            // reversal of reversal are followups, thus is_reversal must be false
         }
 
         /** @var Sales_Model_Document_TransitionSource $record */
