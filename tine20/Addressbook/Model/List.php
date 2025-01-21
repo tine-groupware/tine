@@ -327,10 +327,11 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
     /**
      * @return string
-     * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getListMembersWithFunctions()
+    public function getListMembersWithFunctions(): string
     {
         // @todo huge crap messed up by currently broken resolving.
         if (is_string($this->members) || empty($this->members)) {
@@ -339,23 +340,29 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             $members = $this->members;
         }
         
-        $roles = Addressbook_Controller_List::getInstance()->getMemberRolesBackend()->search(new Addressbook_Model_ListMemberRoleFilter([
+        $roles = Addressbook_Controller_List::getInstance()->getMemberRolesBackend()->search(
+            new Addressbook_Model_ListMemberRoleFilter([
             'list_id' => $this->getId()
         ]));
         
         $membersWithRoles = [];
         
-        foreach($members as $memberId) {
-            if (!($memberRole = $roles->filter('contact_id', $memberId)->getFirstRecord())) {
-                $membersWithRoles[] = Addressbook_Controller_Contact::getInstance()->get($memberId)->getTitle();
-                continue;
+        foreach ($members as $memberId) {
+            try {
+                if (!($memberRole = $roles->filter('contact_id', $memberId)->getFirstRecord())) {
+                    $membersWithRoles[] = Addressbook_Controller_Contact::getInstance()->get($memberId)->getTitle();
+                    continue;
+                }
+                $membersWithRoles[] = \sprintf(
+                    '%s (%s)',
+                    Addressbook_Controller_Contact::getInstance()->get($memberId)->getTitle(),
+                    Addressbook_Controller_ListRole::getInstance()->get($memberRole->list_role_id)->getTitle()
+                );
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                }
             }
-
-            $membersWithRoles[] = \sprintf(
-                '%s (%s)',
-                Addressbook_Controller_Contact::getInstance()->get($memberId)->getTitle(),
-                Addressbook_Controller_ListRole::getInstance()->get($memberRole->list_role_id)->getTitle()
-            );
         }
         
         return implode(', ', $membersWithRoles);
