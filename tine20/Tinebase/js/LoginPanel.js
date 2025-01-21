@@ -8,6 +8,9 @@
 
 /*global Ext, Tine*/
  
+import LoginPanel from "./LoginPanel.vue";
+import {BootstrapVueNext} from "bootstrap-vue-next";
+
 Ext.ns('Tine.Tinebase');
 
 /**
@@ -16,7 +19,7 @@ Ext.ns('Tine.Tinebase');
  * @extends     Ext.Panel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
+Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
     
     /**
      * @cfg {String} defaultUsername prefilled username
@@ -54,8 +57,12 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      */
     scope: null,
     
-    layout: 'fit',
+    // layout: 'fit',
     border: false,
+
+    height: '100%',
+
+    autoWidth: true,
 
     /**
      * return loginPanel
@@ -198,7 +205,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         var lastUser;
         lastUser = Ext.util.Cookies.get('TINE20LASTUSERID');
         if (lastUser) {
-            this.loginPanel.getForm().findField('username').setValue(lastUser);
+            // TODO vue pwd focus
+            // this.loginPanel.getForm().findField('username').setValue(lastUser);
             field.focus(false,250);
         }
     },
@@ -417,12 +425,27 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         
         return this.surveyTemplate;
     },
+
+    _getBrowserSupportStatus: function () {
+        let browserSupport = 'compatible';
+        if (Ext.isIE6 || Ext.isGecko2 || Ext.isIE || Ext.isNewIE) {
+            browserSupport = 'incompatible';
+        } else if (
+            ! (Ext.isWebKit || Ext.isGecko || Ext.isEdge)
+        ) {
+            // yepp we also mean -> Ext.isOpera
+            browserSupport = 'unknown';
+        }
+        return browserSupport
+    },
     
     /**
      * checks browser compatibility and show messages if unknown/incompatible
      * 
      * ie6-11, gecko2 -> bad
      * unknown browser -> may not work
+     *
+     * @deprecated
      * 
      * @return {Ext.Container}
      */
@@ -445,7 +468,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 // yepp we also mean -> Ext.isOpera
                 browserSupport = 'unknown';
             }
-            
+
             var items = [];
             if (browserSupport == 'incompatible') {
                 items = [{
@@ -480,9 +503,29 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     },
     
     initComponent: function () {
-        this.initLayout();
-        
         this.supr().initComponent.call(this);
+
+        this.vueProps = window.vue.reactive({
+            _this: window.vue.markRaw(this),
+            injectKey: this.injectKey,
+            formState: {
+                username: this.defaultUsername,
+                usernameValid: null,
+                password: this.defaultPassword,
+                passwordValid: null
+            }
+        })
+
+        this.showExtIDPOptions = !window.location.pathname.includes('setup.php')
+        this.allowPasskeyLogin = !window.location.pathname.includes('setup.php')
+
+        this.vueEventBus = window.mitt()
+        this.vueHandle = window.vue.createApp({
+            render: () => window.vue.h(LoginPanel, this.vueProps)
+        })
+        this.vueHandle.config.globalProperties.window = window
+        this.vueHandle.provide(this.injectKey, this.vueEventBus)
+        this.vueHandle.use(BootstrapVueNext)
 
         this.checkOIDCLogin();
     },
@@ -506,14 +549,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     onLoginFail: async function(response, request) {
         const exception = _.get(JSON.parse(response.responseText), 'data', {});
         const me = this;
-        
+
         Ext.MessageBox.hide();
         switch (exception.code) {
             case 630:
                 const mfaDevices = exception.mfaUserConfigs
                 return Tine.Tinebase.areaLocks.unlock(exception.area, {
                     mfaDevices,
-                    username: me.getLoginPanel().getForm().findField('username').getValue(),
+                    username: me.getFormValue().username,
                     USERABORTMethod() { Ext.MessageBox.hide(); },
                     unlockMethod(areaName, MFAUserConfigId, MFAPassword) {
                         me.onLoginPress({MFAUserConfigId, MFAPassword});
@@ -534,10 +577,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 this.redirect(exception);
                 break;
             case 651: // Password required
-                const pwdField = me.getLoginPanel().getForm().findField('password');
-                pwdField.setVisible(true);
-                pwdField.syncSize();
-                pwdField.focus(true);
+                this.focusPWField()
                 break;
             default:
                 return Tine.Tinebase.ExceptionHandler.handleRequestException(response);
@@ -572,6 +612,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             window.document.title = this.originalTitle;
             response.responseData = responseData;
             this.onLogin.call(this.scope, response);
+            this.cleanUp();
         } else {
             var modSsl = Tine.Tinebase.registry.get('modSsl');
             var resultMsg = modSsl ? i18n._('There was an error verifying your certificate!') :
@@ -582,68 +623,56 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 buttons: Ext.MessageBox.OK,
                 icon: Ext.MessageBox.ERROR,
                 fn: function () {
-                    this.getLoginPanel().getForm().findField('password').focus(true);
+                    this.focusPWField()
                 }.createDelegate(this)
             });
         }
     },
-    
-    initLayout: function () {
-        var infoPanelItems = (this.showInfoBox) ? [
-            this.getBrowserIncompatiblePanel(),
-            this.getLicenseInformationPanel()
-            // removed for Tine 2.0 Business Edition
-            //this.getCommunityPanel(),
-            //this.getSurveyPanel()
-        ] : [];
-        
-        this.infoPanel = new Ext.Container({
-            cls: 'tb-login-infosection',
-            border: false,
-            width: 300,
-            height: 520, // bad idea to hardcode height here
-            layout: 'vbox',
-            layoutConfig: {
-                align: 'stretch'
-            },
-            items: infoPanelItems
-        });
-        
-        this.items = [{
-            xtype: 'container',
-            layout: window.innerWidth < 768 ? 'column' : 'absolute',
-            border: false,
-            items: [
-                this.getLoginPanel(),
-                this.infoPanel,
-                this.getPoweredByPanel(),
-                this.getVersionPanel()
-            ]
-        }];
+
+    getFormValue: function () {
+        return this.vueProps.formState
     },
-    
+
+    checkFormValidity: function () {
+        // TODO: Proper form validation
+        const modSsl = Tine.Tinebase.registry.get('modSsl');
+        if (modSsl) this.vueProps.formState.usernameValid = this.vueProps.formState.username.length > 0
+        return true
+    },
+
+    onExtIDPLoginPress: function (idpID) {
+        Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
+        this._login(null, null, null, {
+            'X-TINE20-REQUEST-CONTEXT-idpId': idpID
+        })
+    },
+
+    _login: function(username, password, additionalParams, headers) {
+        Ext.Ajax.request({
+            scope: this,
+            params: Object.assign({
+                method: this.loginMethod,
+                username,
+                password,
+            }, additionalParams),
+            headers,
+            timeout: 60000, // 1 minute
+            success: this.onLoginSuccess,
+            failure: this.onLoginFail
+        })
+    },
+
     /**
      * do the actual login
      */
     onLoginPress: function (additionalParams) {
-        var form = this.getLoginPanel().getForm(),
-            values = form.getFieldValues();
-        
-        if (form.isValid()) {
-            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
-            Ext.Ajax.request({
-                scope: this,
-                params: _.assign({
-                    method: this.loginMethod,
-                    username: values.username,
-                    password: form.findField('password').isVisible() ? values.password : null
-                }, additionalParams),
-                timeout: 60000, // 1 minute
-                success: this.onLoginSuccess,
-                failure: this.onLoginFail
-            });
+        this._credGetAbortController?.abort()
+        const values = this.getFormValue()
+
+        if (this.checkFormValidity()) {
+            if (values.password) Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
+            this._login(values.username, values.password, additionalParams)
         } else {
-            
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },
@@ -655,19 +684,32 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
 
     onRender: function (ct, position) {
         this.supr().onRender.apply(this, arguments);
-        
+
+        this.vueEventBus.on(
+            'onLoginPress', this.onLoginPress.bind(this),
+        )
+
+        this.vueEventBus.on(
+            'onExtIDPLoginPress', this.onExtIDPLoginPress.bind(this),
+        )
+
+        this.vm = this.vueHandle.mount(this.el.dom)
+
         this.map = new Ext.KeyMap(this.el, [{
             key : [10, 13],
             scope : this,
             fn : this.onLoginPress
         }]);
-        
+
         this.originalTitle = window.document.title;
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
         window.document.title = Ext.util.Format.stripTags(Tine.title + postfix + ' - ' + i18n._('Please enter your login data'));
     },
-    
-    onResize: function () {
+
+    /*
+    * @deprecated
+    * */
+    _onResize: function () {
         this.supr().onResize.apply(this, arguments);
 
         var box      = this.getBox(),
@@ -696,5 +738,73 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         }, {
             html: '<p>' + i18n._('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
         }];
+    },
+
+    focusPWField: function () {
+        if (this.vueEventBus) this.vueEventBus.emit('focusPWField')
+    },
+
+    cleanUp: function () {
+        this.vueHandle.unmount()
+        this.vueHandle = null
+        this.vueProps = null
+        this.vueEventBus.all.clear()
+        this.vueEventBus = null
+    },
+
+    triggerBrowserCredentialLogin: async function(conditional=false) {
+        console.debug("conditional: ", conditional)
+        if (!window.PublicKeyCredential) {
+            window.alert('Passkey Login not supported.')
+            return
+        }
+        try {
+            const rfc4648 = await import('rfc4648');
+
+            if(this._credGetAbortController) this._credGetAbortController.abort()
+            this._credGetAbortController = new AbortController()
+
+            const publicKeyOptions = await Tine.Tinebase.getWebAuthnAuthenticateOptionsForLogin()
+            publicKeyOptions.challenge = rfc4648.base64url.parse(publicKeyOptions.challenge, { loose: true });
+            const publicKeyCredential = await navigator.credentials.get({
+                publicKey: publicKeyOptions,
+                password: true,
+                mediation: conditional ? "conditional" : "required",
+                signal: this._credGetAbortController.signal
+            });
+            let publicKeyData = {
+                id: publicKeyCredential.id,
+                type: publicKeyCredential.type,
+                rawId: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.rawId)),
+                response: {
+                    clientDataJSON: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.clientDataJSON)),
+                    authenticatorData: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.authenticatorData)),
+                    signature: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.signature)),
+                    userHandle: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.userHandle))
+                },
+            }
+
+            this._login(null, null, {
+                MFAUserConfigId: null,
+                MFAPassword: JSON.stringify(publicKeyData)
+            })
+        } catch (e) {
+            console.log(e.reason, e.message)
+            if (e.name === 'AbortError') {
+                console.debug(e.reason)
+            } else{
+                console.assert(e.message)
+                if (await Ext.MessageBox.show({
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.MessageBox.OKCANCEL,
+                    title: i18n._('Error'),
+                    msg: i18n._("FIDO2 WebAuthn authentication failed. Try again?")
+                }) === 'ok') {
+                    return this.triggerBrowserCredentialLogin(false);
+                } else {
+                    throw new Error('USERABORT');
+                }
+            }
+        }
     }
 });

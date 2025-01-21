@@ -20,9 +20,13 @@
         @paste="onPaste"
         v-model="shownValue"
         :class="computedBstpInputFieldClass"
-        autocomplete="off"
+        :autocomplete="autocomplete"
+        :disabled="disabled"
+        :tabindex="tabindex"
+        :state="validationState"
+        :name="name"
       />
-      <BInputGroupAppend>
+      <BInputGroupAppend v-if="!disabled">
         <BInputGroupText
           v-if="unLockable"
           @click="handlePWToggle"
@@ -45,12 +49,15 @@
 </template>
 
 <script setup>
+/* eslint-disable */
 import {
   computed, nextTick,
-  onBeforeMount, ref
+  onBeforeMount, ref, watch, defineModel, watchEffect
 } from 'vue'
+import {BInputGroup} from "bootstrap-vue-next";
 
 const props = defineProps({
+  modelValue: String,
   id: String,
   label: { type: String, default: null },
   unLockable: { type: Boolean, default: true },
@@ -62,13 +69,21 @@ const props = defineProps({
   editable: { type: Boolean, default: true },
   readOnly: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
+  autocomplete: { type: String, default: "off" },
 
   revealPasswordFn: { type: Function, default: null },
 
-  bstpInputFieldClass: { type: String, default: 'p-0 ps-1' }
+  bstpInputFieldClass: { type: String, default: '' },
+
+  // default input attributes
+  tabindex: { type: String, default: null },
+  name: { type: String, default: null },
 })
 
-const emit = defineEmits(['keypress', 'keydown', 'paste'])
+const emit = defineEmits(['keypress', 'keydown', 'paste', 'update:modelValue'])
+
+const _modelValue = ref(props.modelValue)
+watch(_modelValue, (eV) => emit('update:modelValue', eV))
 
 const onKeypress = (e) => {
   emit('keypress', e)
@@ -96,7 +111,7 @@ const inputRef = ref()
 const inputType = ref('text')
 
 const actualValue = ref('')
-const shownValue = ref('')
+const shownValue = ref(props.modelValue)
 
 const revealedPassword = ref('')
 
@@ -104,12 +119,27 @@ const _locked = ref()
 
 const hiddenPasswordChr = '●'
 
+const validationState = ref(null)
+
+const setValidationState = (val) => {
+  validationState.value = val
+}
+
 const init = () => {
   inputType.value = (props.locked && props.allowBrowserPasswordManager) ? 'password' : 'text'
   _locked.value = props.locked
 }
 
-const getValue = () => _locked.value ? actualValue.value : shownValue.value
+// watch([shownValue, actualValue], ([sv, av]) => {
+//   console.warn('sv', sv)
+//   console.warn('av', av)
+// })
+const getValue = () => _modelValue.value
+
+watchEffect(() => {
+  if(inputType.value === 'password') _modelValue.value = shownValue.value
+  else _modelValue.value = _locked.value ? actualValue.value : shownValue.value
+})
 const setValue = (val) => {
   if (!props.allowBrowserPasswordManager) {
     actualValue.value = val
@@ -240,8 +270,9 @@ const copyToClipBoard = async (value) => {
 onBeforeMount(() => init())
 
 const $inputEl = computed(() => inputRef.value.$el)
+const focus = () => inputRef.value.focus()
 
-defineExpose({ getValue, setValue, $inputEl })
+defineExpose({ getValue, setValue, setValidationState, $inputEl, focus })
 
 </script>
 

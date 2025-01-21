@@ -13,14 +13,14 @@ curl $URL \
     "config_class": "SSO_Model_ExIdp_OIdConfig",
     "config": {
       "name": "test idp",
-      "provider_url": "http://oidc-server-mock:4903",
-      "issuer": "http://oidc-server-mock:4903",
+      "provider_url": "http://oidc-server-mock",
+      "issuer": "http://oidc-server-mock",
       "client_id": "tine20",
       "client_secret": "tine20"
     },
     "domains": [
       {
-        "domain": "idp.test"
+        "domain": "mail.test"
       }
     ]
   },"duplicateCheck":true},"id":3}'

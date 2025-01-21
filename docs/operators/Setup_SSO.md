@@ -1,13 +1,14 @@
-# Configure tine as Single Sign On identity provider (SSO IdP)
+# Configuring tine for Single Sign On (SSO)
+## tine as Single Sign On Identity Provider (SSO IdP)
 
 tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) identity provider for [oidc](https://openid.net/connect/) and [SAML2](https://en.wikipedia.org/wiki/SAML_2.0)
 
-## 1) Install SSO application
+### 1) Install SSO application
 * Go to `setup.php` and make sure SSO is installed
 * In the UI go to `Admin` > `Applications` > `SSO` and make sure SSO is activated
 
 
-## 2) Generate keys
+### 2) Generate keys
 
 !!! note "Convert certificate to json web key"
 
@@ -26,30 +27,30 @@ sudo chown $(docker-compose exec  web sh -c "id tine20 -u"):$(docker-compose exe
 sudo chmod 660 ./conf.d/sso_cert.* ./conf.d/sso_key.*
 ~~~
 
-## 3) Create config
+### 3) Create config
 
 ``` php title="./conf.d/sso.inc.php"
 --8<-- "etc/tine20/conf.d/sso.inc.php.dist"
 ```
 
-## 4) Clear config cache
+### 4) Clear config cache
 
 ``` sh title=""
 --8<-- "scripts/docker-compose/clearCache"
 ```
 
-## 5) Configure relaying parties
+### 5) Configure relaying parties
 SSO Relaying parties can be configured per UI in the admin module or via cli using curl
 
-### - UI
+#### - UI
 Go to `Admin` > `Applications` > `SSO` and open the tab `RELYING PARTIES` in the SSO configuration dialog.
 
-### - CLI
+#### - CLI
 ``` sh title="Login"
 --8<-- "scripts/curl/login"
 ```
 
-#### SAML2
+##### - SAML2
 The metadata URL of the tine idp (needed in config of the rp) is <https://YOURTINEURL/sso/saml2/idpmetadata> .
 
 If not given tine fetches the `AssertionConsumerService*` and `singleLogoutService*` properties from the optional `metaUrl`.
@@ -70,30 +71,34 @@ If not given tine fetches the `AssertionConsumerService*` and `singleLogoutServi
     --8<-- "etc/tine20/samlPostAuthHook.php.dist"
     ```
 
-#### oidc
-The oicd provider url of the tine idp (needed in the config of the rp) is <https://YOURTINEURL> (no trailing slash). 
-``` sh title="Add oidc RP"
+##### - OIDC
+The OIDC provider url of the tine idp (needed in the config of the rp) is <https://YOURTINEURL> (no trailing slash). 
+``` sh title="Add OIDC RP"
 --8<-- "scripts/curl/admin_SSOAddRP_oidc"
 ```
 
-# Configure tine as Single Sign On relaying party (SSO RP)
+## tine as Single Sign On Relaying Party (SSO RP)
 
-tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) relaying party for [oidc](https://openid.net/connect/)
+tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) Relaying Party for [OIDC](https://openid.net/connect/)
 
-## 1) Install SSO application
+### 1) Install SSO application
 * Go to `setup.php` and make sure SSO is installed
 * In the UI go to `Admin` > `Applications` > `SSO` and make sure SSO is activated
 
-## 2) Configure identity providers (IdP)
+### 2) Configure identity providers (IdP)
 SSO identity providers can be configured per UI in the admin module or via cli using curl
 
-### - UI
+#### - UI
 Go to `Admin` > `Applications` > `SSO` and open the tab `EXTERNAL IDENTITY PROVIDERS` in the SSO configuration dialog.
 
-### - CLI
+#### - CLI
 ``` sh title="Login"
 --8<-- "scripts/curl/login"
 ```
+> **NOTE:**
+> For following setup to work correctly, a `oidc-server-mock` to `127.0.0.1` entry is required in `/etc/hosts`
+
+
 ``` sh title="Add foreign mock IDP"
 --8<-- "scripts/curl/admin_SSOAddExIdp_oidc"
 ```

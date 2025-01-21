@@ -421,7 +421,7 @@ Tine.Tinebase.tineInit = {
             activeItem = mainCardPanel.layout.activeItem;
 
         mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
-        Tine.loginPanel.doLayout();
+        // Tine.loginPanel.doLayout();
         Tine.loginPanel.onLogin = function(response) {
             mainCardPanel.layout.setActiveItem(activeItem);
             cb.call(scope||window, response);
