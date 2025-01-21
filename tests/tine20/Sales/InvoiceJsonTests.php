@@ -230,6 +230,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
 
         $this->assertEquals(0,$invoice['price_net']);
 
+        Timetracker_Controller_Timesheet::destroyInstance();
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         $timesheets = $tsController->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [

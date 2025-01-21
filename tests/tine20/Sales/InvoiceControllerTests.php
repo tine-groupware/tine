@@ -274,38 +274,21 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoice = $allInvoices->getFirstRecord();
         $invoice->cleared = 'CLEARED';
 
-//        $invoice->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_Invoice::class, 'Sql', $invoice->getId());
-        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
-        if ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
-            $bankAccounts = Tinebase_Controller_BankAccount::getInstance()->getAll();
-            if ($bankAccounts->count() === 0) {
-                $bankAccounts->addRecord(Tinebase_Controller_BankAccount::getInstance()->create(new Tinebase_Model_BankAccount([
-                    Tinebase_Model_BankAccount::FLD_NAME => 'unittest',
-                    Tinebase_Model_BankAccount::FLD_BIC => 'unittest',
-                    Tinebase_Model_BankAccount::FLD_IBAN => 'unittest',
-                ])));
-            }
-            $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
-                Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => $bankAccounts->getFirstRecord(),
-            ], true));
-            Sales_Controller_Division::getInstance()->update($division);
-        }
-
-        //Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'http://172.118.0.1:3000/ubl';
+        $oldSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC};
         Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'http://unittest:3000/ubl';
 
         Sales_EDocument_Service_Validate::$zendHttpClientAdapter = new Zend_Http_Client_Adapter_Test();
         Sales_EDocument_Service_Validate::$zendHttpClientAdapter->setResponse(new Zend_Http_Response(200, [],
-            '<?xml version="1.0" encoding="UTF-8"?>
-<svrl:schematron-output xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cn="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:error="https://doi.org/10.5281/zenodo.1495494#error" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api" xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xmlns:svrl="http://purl.oclc.org/dsdl/svrl" xmlns:ubl-creditnote="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:ubl-invoice="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:xs="http://www.w3.org/2001/XMLSchema" title="Schematron Version @xr-schematron.version.full@ - XRechnung @xrechnung.version@ compatible - UBL - Invoice / Creditnote">
-   <svrl:ns-prefix-in-attribute-values prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"/>
-</svrl:schematron-output>'));
+            '<?xml version="1.0" encoding="UTF-8"?><rep:report xmlns:html="http://www.w3.org/1999/xhtml" xmlns:in="http://www.xoev.de/de/validator/framework/1/createreportinput" xmlns:rep="http://www.xoev.de/de/validator/varl/1" xmlns:s="http://www.xoev.de/de/validator/framework/1/scenarios" xmlns:svrl="http://purl.oclc.org/dsdl/svrl" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" varlVersion="1.0.0" valid="false"><rep:engine><rep:name>KoSIT Validator 1.5.0</rep:name></rep:engine><rep:timestamp>2025-01-15T15:25:46.039Z</rep:timestamp><rep:documentIdentification><rep:documentHash><rep:hashAlgorithm>SHA-256</rep:hashAlgorithm><rep:hashValue>AJkMRyTwjQiADJefuHOyDzGFaB4xHiDVhPBeFdE6NFQ=</rep:hashValue></rep:documentHash><rep:documentReference>StreamSource</rep:documentReference></rep:documentIdentification><rep:scenarioMatched><s:scenario><s:name>EN16931 XRechnung (UBL Invoice)</s:name><s:description><s:p>Validates UBL Invoice in version 2.1</s:p><s:p>Uses UBL Invoice 2.1 XML Schema,                 Schematron rules from EN16931:2017, and XRechnung                 3.0.2 </s:p><s:p>Download of UBL XML Schema on 2024-11-19 from                 http://docs.oasis-open.org/ubl/os-UBL-2.1/UBL-2.1.zip</s:p><s:p>Download of UBL Schematron rules on 2024-11-19 from                 https://github.com/ConnectingEurope/eInvoicing-EN16931/releases/download/validation-1.3.12/en16931-ubl-1.3.12.zip</s:p><s:p>Download of XRechnung Schematron rules on 2024-11-19 from                 https://github.com/itplr-kosit/xrechnung-schematron/releases/download/release-2.2.0/xrechnung-3.0.2-schematron-2.2.0.zip</s:p></s:description><s:namespace prefix="cbc">urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2</s:namespace><s:namespace prefix="invoice">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2</s:namespace><s:namespace prefix="rep">http://www.xoev.de/de/validator/varl/1</s:namespace><s:match>exists(/invoice:Invoice/cbc:CustomizationID[])</s:match><s:validateWithXmlSchema><s:resource><s:name>XML Schema for UBL 2.1 Invoice</s:name><s:location>resources/ubl/2.1/xsd/maindoc/UBL-Invoice-2.1.xsd</s:location></s:resource></s:validateWithXmlSchema><s:validateWithSchematron><s:resource><s:name>Schematron rules for EN16931 (UBL)</s:name><s:location>resources/ubl/2.1/xsl/EN16931-UBL-validation.xsl</s:location></s:resource></s:validateWithSchematron><s:validateWithSchematron><s:resource><s:name>Schematron rules for Invoice - CIUS XRechnung (UBL)</s:name><s:location>resources/xrechnung/3.0.2/xsl/XRechnung-UBL-validation.xsl</s:location></s:resource></s:validateWithSchematron><s:createReport><s:resource><s:name>Validation report for XRechnung</s:name><s:location>resources/xrechnung-report.xsl</s:location></s:resource><s:customLevel level="warning">BR-CL-23</s:customLevel><s:customLevel level="warning">BR-CL-21</s:customLevel></s:createReport><s:acceptMatch>/rep:report/rep:assessment[1]/rep:accept[1]</s:acceptMatch></s:scenario><rep:documentData xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"><seller>Mit Namen bef?llen</seller><id>R-00001</id><issueDate>2024-01-01</issueDate></rep:documentData><rep:validationStepResult id="val-xsd" valid="true"><s:resource><s:name>XML Schema for UBL 2.1 Invoice</s:name><s:location>resources/ubl/2.1/xsd/maindoc/UBL-Invoice-2.1.xsd</s:location></s:resource></rep:validationStepResult><rep:validationStepResult id="val-sch.1" valid="true"><s:resource><s:name>Schematron rules for EN16931 (UBL)</s:name><s:location>resources/ubl/2.1/xsl/EN16931-UBL-validation.xsl</s:location></s:resource></rep:validationStepResult><rep:validationStepResult id="val-sch.2" valid="true"><s:resource><s:name>Schematron rules for Invoice - CIUS XRechnung (UBL)</s:name><s:location>resources/xrechnung/3.0.2/xsl/XRechnung-UBL-validation.xsl</s:location></s:resource><rep:message id="val-sch.2.1" level="error" xpathLocation="/Invoice/cac:AccountingCustomerParty[1]/cac:Party[1]" code="PEPPOL-EN16931-R010">Buyer electronic address MUST be provided</rep:message></rep:validationStepResult><rep:validationStepResult id="val-xml" valid="true"/></rep:scenarioMatched><rep:assessment><rep:reject><rep:explanation><html xmlns="http://www.w3.org/1999/xhtml" data-report-type="report"></html></rep:explanation></rep:reject></rep:assessment></rep:report>'));
 
         try {
-            $this->_invoiceController->update($invoice);
+            $invoice = $this->_invoiceController->update($invoice);
         } finally {
             Sales_EDocument_Service_Validate::$zendHttpClientAdapter = null;
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = $oldSvc;
         }
+
+        $this->assertSame(1, $invoice->attachments->count());
     }
 
     public function testTimeAccountBudget()

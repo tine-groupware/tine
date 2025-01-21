@@ -1628,11 +1628,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 if (!isset($this->_converters[$fieldKey])) {
                     $this->_converters[$fieldKey] = [];
                 }
+                if (is_array($converter)) {
+                    $args = $converter;
+                    $converter = array_shift($args);
+                } else {
+                    $args = [];
+                }
                 if (! class_exists($converter)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
                         . '::' . __LINE__ . ' Could not create converter ' . $converter . ' for model ' . $this->_modelName);
                 } else {
-                    $this->_converters[$fieldKey][] = new $converter();
+                    $this->_converters[$fieldKey][] = new $converter(...$args);
                 }
             }
 

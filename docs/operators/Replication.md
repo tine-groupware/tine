@@ -1,13 +1,31 @@
 
-Tine 2.0 Resolve Replication Errors
+Replication
 =================
 
-Version: Caroline 2017.11
+Version: Pelle 2024.11
 
-Problemlösungen bei Fehlern der Replikation
+## Was macht die Replikation?
 
-Allgemeines
-=================
+Die Replikation sorgt dafür, dass bestimmte Daten von einer Primärinstanzen auf beliebig viele weitere Mandanten/Instanzen („Replicas“) verteilt werden.
+Zu den replizierten Datentypen gehören u.a. die Folgenden:
+
+–	Benutzer  
+–	Gruppen  
+–	Rollen  
+–	Container (meint z.b. Adressbücher, Kalender, Aufgabenlisten, ...)  
+–	Termine  
+–	Dateien  
+–	Zusatzfelder-Definitionen  
+
+Falls noch weitere Datentypen in die Replikation aufgenommen werden sollen, bei denen das bislang nicht möglich ist, kann das leicht in der Software ergänzt werden.
+
+Im PHP-Model erkennt man an dem Rückgabewert der Funktion isReplicable(), ob das Model repliziert wird oder nicht.
+
+Die Replikation findet automatisch über einen regelmässig laufenden Hintergrundjob statt, normalerweise einmal pro Stunde.
+
+Wenn ein neuer Mandant hinzugefügt werden soll, muss dieser als Klon der Primärinstanz aufgesetzt werden. So wird sichergestellt, dass der Mandant auf dem aktuellen Stand ist. Ab dann kann er mit eigenen Informationen gefüllt werden und wird über die Primärinstanz dann weiterhin mit den replizierten Daten versorgt.
+
+## Allgemeines
 
 replication configuration
 
@@ -104,29 +122,27 @@ to find all master modlogs from a certain period (NOTE: only mods with instance_
     23 rows in set (0.09 sec)
 
 
-Problem: Role Replication Fail
-=================
+## Solve Replication Problems
+
+### Problem: Role Replication Fail
 
 if the role (rights/members) replication fails, this has to be resolved "by hand".
 
 maybe it is event necessary to create a new admin user/role with --create_admin!
 
-Problem: Data has been deleted on Slave
-=================
+### Problem: Data has been deleted on Slave
 
 es kann sein, dass auf dem master daten verändert werden, die auf dem slave
- bereits gelöscht sind. in diesem fall macht man am besten ein undelete auf dem
+ bereits gelöscht sind. in diesem Fall macht man am besten ein undelete auf dem
  slave. falls das nicht geht, muss die änderung geskippt werden.
 
-Problem: Concurrency Conflict
-=================
+### Problem: Concurrency Conflict
 
 die gleichen felder eines records wurden auf dem master und slave geändert.
 
 lösung: entweder die änderung auf dem slave rückgängig machen oder skip modlog.
 
-Problem: Update/Install Script Fail
-=================
+### Problem: Update/Install Script Fail
 
 update/install skript prüft nicht, ob man auf dem slave ist und legt
  evtl daten doppelt an.
@@ -141,13 +157,3 @@ update/install skript prüft nicht, ob man auf dem slave ist und legt
 
     $this->setApplicationVersion('MyApp', '1.2');
 
-
-Problem: Slaves laufen in "Duplicate Record" Fehler
-=================
-
-Wir hatten einmal den Fall, dass auf den Slaves die Master-Instance-Seq/ID nicht erhöht wurde.
-
-Allerdings haben wir noch nicht verstanden, wieso.
-
-Siehe auch #1299 replication problems fixen (Fileobjects replication) nach MM install
--> https://taiga.metaways.net/project/pschuele-erzbistum-hh/us/1299
