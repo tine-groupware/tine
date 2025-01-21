@@ -445,11 +445,13 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_DATE,
                 self::LABEL                 => 'Service Period Start', //_('Service Period Start')
                 self::NULLABLE              => true,
+                self::SHY                   => true,
             ],
             self::FLD_SERVICE_PERIOD_END =>  [
                 self::TYPE                  => self::TYPE_DATE,
                 self::LABEL                 => 'Service Period End', //_('Service Period End')
                 self::NULLABLE              => true,
+                self::SHY                   => true,
             ],
             self::FLD_REVERSAL                  => [
                 self::TYPE                          => self::TYPE_BOOLEAN,
