@@ -8,6 +8,9 @@
  * @copyright   Copyright (c) 2025-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+/**
+ * @property Sales_Model_EDocument_Dispatch_Interface $dispatch_config
+ */
 class Sales_Model_EDocument_Dispatch_DynamicConfig extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'EDocument_Dispatch_DynamicConfig';

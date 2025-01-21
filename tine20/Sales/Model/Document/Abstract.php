@@ -24,6 +24,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
     public const STATUS_REVERSAL = 'REVERSAL';
+    public const STATUS_DISPATCHED = 'DISPATCHED';
+    public const STATUS_MANUAL_DISPATCH = 'MANUAL_DISPATCH';
 
     public const TAX_RATE = 'tax_rate';
     public const TAX_SUM = 'tax_sum';
@@ -80,6 +82,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_CONTRACT_ID = 'contract_id';
 
     public const FLD_ATTACHED_DOCUMENTS = 'attached_documents';
+
+    public const FLD_DISPATCH_HISTORY = 'dispatch_history';
 
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
@@ -178,9 +182,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
                     ],
                 ],
-                self::FLD_ATTACHED_DOCUMENTS => [
+                self::FLD_ATTACHED_DOCUMENTS => [],
+                self::FLD_DISPATCH_HISTORY  => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Document_AttachedDocument::FLD_DISPATCH_HISTORY => [],
+                        self::FLD_ATTACHMENTS => [],
                     ],
                 ],
                 self::FLD_CONTACT_ID => [],
@@ -511,9 +516,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Attached Documents', // _('Attached Documents')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
-                    self::DEPENDENT_RECORDS             => true,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_ID,
                 ],
             ],
             self::FLD_PAYMENT_MEANS             => [
@@ -528,6 +534,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL                   => '[]',
                 self::CONVERTERS                    => [
                     [Tinebase_Model_Converter_JsonRecordSetDefault::class, []],
+                ],
+            ],
+            self::FLD_DISPATCH_HISTORY          => [
+                self::LABEL                         => 'Dispatch History', // _('Dispatch History')
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID,
                 ],
             ],
         ]
@@ -558,8 +574,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
 
-        $type = strtolower(str_replace('Document_', '', static::MODEL_NAME_PART));
-        $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::REF_ID_FIELD] = $type . '_id';
+        $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_DISPATCH_HISTORY][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => static::class,
+        ];
     }
 
     public function isBooked(): bool
@@ -1129,6 +1149,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     break;
             }
         }
+
+        $this->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = null;
 
         parent::prepareForCopy();
     }

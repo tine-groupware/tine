@@ -968,11 +968,27 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update033(): void
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
         Setup_SchemaTool::updateSchema([
             Sales_Model_Debitor::class,
+            Sales_Model_Division::class,
+            Sales_Model_Document_AttachedDocument::class,
             Sales_Model_Document_Debitor::class,
+            Sales_Model_Document_Delivery::class,
             Sales_Model_Document_DispatchHistory::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
         ]);
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME . ' SET ' .
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS . ' = "DISPATCHED" WHERE ' .
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS . ' = "SHIPPED"');
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Offer::TABLE_NAME . ' SET ' .
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS . ' = "DISPATCHED" WHERE ' .
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS . ' = "RELEASED"');
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.33', self::RELEASE017_UPDATE033);
     }

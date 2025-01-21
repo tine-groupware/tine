@@ -33,11 +33,38 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
         ];
     }
 
-    public function dispatch(Sales_Model_Document_Abstract $document): void
+    public function dispatch(Sales_Model_Document_Abstract $document, ?string $dispatchId = null): bool
     {
-        // TODO: Implement dispatch() method.
+        $dispatchHistory = new Sales_Model_Document_DispatchHistory([
+            Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
+            Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => 'upload to: ' . $this->{self::FLD_URL},
+            Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId ?? Tinebase_Record_Abstract::generateUID(),
+        ]);
+
+        if (null === $dispatchId) {
+            /** @var Sales_Controller_Document_Abstract $docCtrl */
+            $docCtrl = $document::getConfiguration()->getControllerInstance();
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+            /** @var Sales_Model_Document_Abstract $document */
+            $document = $docCtrl->get($document->getId());
+
+            $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
+            $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord($dispatchHistory);
+
+            $docCtrl->update($document);
+            $transaction->release();
+
+        } else {
+            $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
+            Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory);
+        }
+
+        return true;
     }
 
     protected static $_configurationObject = null;
 }
-{}

@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -30,6 +30,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
     public const FLD_CONTACT_NAME   = 'contact_name';
     public const FLD_CONTACT_EMAIL  = 'contact_email';
     public const FLD_CONTACT_PHONE  = 'contact_phone';
+    public const FLD_DISPATCH_FM_ACCOUNT_ID = 'dispatch_fm_account_id';
     public const FLD_TAX_REGISTRATION_ID = 'tax_registration_id';
     public const FLD_VAT_NUMBER     = 'vat_number';
     public const FLD_BANK_ACCOUNTS  = 'bank_accounts';
@@ -43,7 +44,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 3,
+        self::VERSION                   => 4,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Division', // gettext('GENDER_Division')
@@ -228,6 +229,15 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                 self::LABEL                     => 'SEPA Creditor Identification', // _('SEPA Creditor Identification')
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
+            ],
+            self::FLD_DISPATCH_FM_ACCOUNT_ID=> [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Dispatch email account', // _('Dispatch email account')
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Felamimail_Config::APP_NAME,
+                    self::MODEL_NAME                => 'Account',
+                ],
             ],
         ],
     ];

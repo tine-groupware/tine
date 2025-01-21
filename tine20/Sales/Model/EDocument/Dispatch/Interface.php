@@ -10,5 +10,5 @@
 
 interface Sales_Model_EDocument_Dispatch_Interface
 {
-    public function dispatch(Sales_Model_Document_Abstract $document): void;
+    public function dispatch(Sales_Model_Document_Abstract $document, ?string $dispatchId = null): bool;
 }
