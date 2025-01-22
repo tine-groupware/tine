@@ -19,9 +19,9 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
     closeAction: 'close',
     modal: true,
     width: 400,
-    height: 360,
+    height: 400,
     minWidth: 400,
-    minHeight: 360,
+    minHeight: 400,
     layout: 'fit',
     title: null,
 
@@ -30,6 +30,9 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             '<div class="tb-about-dlg">',
                 '<div class="tb-about-img"><a href="{logoLink}" target="_blank"><img src="{logo}" /></a></div>',
                 '<div class="tb-link-home"><a href="{logoLink}" target="_blank">{linkText}</a></div>',
+                '<div class="tb-link-home"><a href="{tutorialLink}" target="_blank">{tutorialText}</a></div>',
+                '<div class="tb-link-home"><a href="{docsLink}" target="_blank">{docsText}</a></div>',
+                '<div class="tb-link-home"><a href="{faqLink}" target="_blank">{faqText}</a></div>',
                 '<div class="tb-about-version">Version: {codeName}</div>',
                 '<div class="tb-about-build">({packageString})</div>',
                 '<div class="tb-about-subscription"><a href="javascript:void()" class="subscription" /></div>',
@@ -57,7 +60,13 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
                 logoLink: Tine.weburl,
                 linkText: String.format(i18n._('Learn more about {0}'), Tine.title),
                 codeName: version.codeName,
-                packageString: version.packageString
+                packageString: version.packageString,
+                tutorialLink: 'https://tutorials.tine-groupware.de/',
+                tutorialText: i18n._('Video Tutorials'),
+                docsLink: 'https://tine-docu.s3web.rz1.metaways.net/',
+                docsText: i18n._('Technical Documentation'),
+                faqLink: 'https://www.tine-groupware.de/faqs/',
+                faqText: i18n._('FAQ')
             }),
             buttons: [{
                 text: i18n._('Ok'),

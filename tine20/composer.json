@@ -26,6 +26,18 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/sddl-parser.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine-groupware/simplesamlphp.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine-groupware/timezoneconvert.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine-groupware/ubl-invoice.git"
     },
     {
@@ -34,31 +46,7 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine-groupware/sddl-parser.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/OpenDocument.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/syncroton.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine-groupware/timezoneconvert.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/Twig.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/sabrevobject.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/tine20/sabredav.git"
+      "url": "https://github.com/tine-groupware/zendframework1.git"
     },
     {
       "type": "git",
@@ -66,7 +54,7 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine-groupware/zendframework1.git"
+      "url": "https://github.com/tine20/OpenDocument.git"
     },
     {
       "type": "git",
@@ -75,6 +63,22 @@
     {
       "type": "git",
       "url": "https://github.com/tine20/PhpSpreadsheet.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/sabredav.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/sabrevobject.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/syncroton.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine20/Twig.git"
     },
     {
       "type": "git",
@@ -143,7 +147,7 @@
     "sabre/dav": "^4.5",
     "sabre/vobject": "^4.5",
     "sentry/sentry": "^3",
-    "simplesamlphp/simplesamlphp": "v1.19.*",
+    "simplesamlphp/simplesamlphp": "dev-pu/pm/replaceAssertOptions as v1.19.9",
     "spomky-labs/otphp": "^10.0",
     "symfony/cache": "^5.3",
     "symfony/config": "^4",

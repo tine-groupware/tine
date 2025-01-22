@@ -1388,7 +1388,23 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }   
     }
-    
+
+    public function copy(string $id, bool $persist): Tinebase_Record_Interface
+    {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $record = $this->get($id);
+
+        Tinebase_Record_Expander::expandRecord($record, true);
+        $record->prepareForCopy();
+
+        if ($persist) {
+            $record = $this->create($record);
+        }
+        $transaction->release();
+
+        return $record;
+    }
+
     /**
      * update one record
      *

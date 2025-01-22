@@ -549,4 +549,20 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->getId(),
         ];
     }
+
+    public function copy(string $id, bool $persist): Tinebase_Record_Interface
+    {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $copy = parent::copy($id, false);
+
+        $copy->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = null;
+
+        if ($persist) {
+            $copy = $this->create($copy);
+        }
+
+        $transaction->release();
+
+        return $copy;
+    }
 }
