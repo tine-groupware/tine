@@ -143,7 +143,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }
         }
         
-        if (!$_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}) {
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} || 0 === $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}->count()) {
             if (null === $orgDebitor) {
                 $orgDebitor = Sales_Controller_Debitor::getInstance()->get($orgDebitorId);
             }
