@@ -20,6 +20,7 @@ class Felamimail_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
 
+
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
             self::RELEASE017_UPDATE001          => [
@@ -45,6 +46,7 @@ class Felamimail_Setup_Update_17 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update004',
             ],
         ],
+
     ];
 
     public function update000()

@@ -536,11 +536,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @throws Felamimail_Exception_SievePutScriptFail
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function setSieveScript($_accountId, 
-        Felamimail_Model_Sieve_Vacation $_vacation = null, 
-        Tinebase_Record_RecordSet $_rules = null,
-        Tinebase_Record_RecordSet $_forwards = null
-    )
+    public function setSieveScript($_accountId, Felamimail_Model_Sieve_Vacation $_vacation = null, Tinebase_Record_RecordSet $_rules = null)
     {
         $account = $_accountId instanceof Felamimail_Model_Account
             ? $_accountId
@@ -550,12 +546,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_setSieveBackendAndAuthenticate($account);
         
         $script = $this->getSieveScript($account);
-        
-        if ($_forwards && count($_forwards) > 0) {
-            $forward = new Felamimail_Sieve_Forward();
-            $forward->setAddresses($_forwards->email);
-            $script->setForward($forward);
-        }
         
         if ($_vacation) {
             $this->_addVacationUserData($_vacation, $account);

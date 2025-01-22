@@ -1042,7 +1042,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'sieve_custom',
             'sieve_vacation',
             'sieve_rules',
-            'sieve_forwardings',
             'sent_folder',
             'trash_folder',
             'drafts_folder',
@@ -1310,11 +1309,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             ) {
                 Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
             }
-            $sieveRecord = is_array($record->sieve_vacation) ? new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE) : null;
-            $ruleRecords = is_array($record->sieve_rules) ? new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_Rule::class, array_values($record->sieve_rules)) : null;
-            $forwardRecords = $record->sieve_forwardings;
-            if ($sieveRecord || $ruleRecords || $forwardRecords) {
-                $script = Felamimail_Controller_Sieve::getInstance()->setSieveScript($updatedRecord, $sieveRecord, $ruleRecords, $forwardRecords);
+
+            if (is_array($record->sieve_vacation) && is_array($record->sieve_rules)) {
+                $sieveRecord = new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE);
+                $ruleRecords = new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_Rule::class, array_values($record->sieve_rules));
+
+                $script = Felamimail_Controller_Sieve::getInstance()->setSieveScript($updatedRecord, $sieveRecord, $ruleRecords);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' Updated sieve script : ' . $script);
