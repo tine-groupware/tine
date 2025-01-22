@@ -129,7 +129,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' Invalid until (' . $until . '): ' . $e->getMessage() . ' - sanitizing to 7 days from NOW()');
                 }
-                $until = Tinebase_DateTime::now()->addDay(7);
+                $until = Tinebase_DateTime::now()->addDay(7)->toString();
                 $this->_until = $this->_convertStringToUTC($until);
             }
         } else {
