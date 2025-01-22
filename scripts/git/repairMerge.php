@@ -40,11 +40,19 @@ if (0 !== $ret) {
 
 
 // find out commit id of last merge
-exec('git log --grep="Merge branch \'' . $argv[1] . '\' into ' . $argv[2] . '" -2 --pretty=format:"%H"', $out, $ret);
-if (0 !== $ret) {
-    echo 'failed to execute "git log --grep="Merge branch \'' . $argv[1] . '\' into ' . $argv[2] .
-        '" -2 --pretty=format:"%H"" ' . print_r($out, true) . ' ' . $ret . PHP_EOL;
-    exit(1);
+if ('main' === $argv[2]) {
+    exec('git log --grep="Merge branch \'' . $argv[1] . '\'$" -2 --pretty=format:"%H"', $out, $ret);
+    if (0 !== $ret) {
+        echo 'failed to execute "git log --grep="Merge branch \'' . $argv[1] . '\'$" -2 --pretty=format:"%H"" ' . print_r($out, true) . ' ' . $ret . PHP_EOL;
+        exit(1);
+    }
+} else {
+    exec('git log --grep="Merge branch \'' . $argv[1] . '\' into ' . $argv[2] . '" -2 --pretty=format:"%H"', $out, $ret);
+    if (0 !== $ret) {
+        echo 'failed to execute "git log --grep="Merge branch \'' . $argv[1] . '\' into ' . $argv[2] .
+            '" -2 --pretty=format:"%H"" ' . print_r($out, true) . ' ' . $ret . PHP_EOL;
+        exit(1);
+    }
 }
 if (2 !== count($out)) {
     echo 'could not find commit id of last merge' . PHP_EOL;
