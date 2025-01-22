@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -104,11 +104,15 @@ class Tinebase_ModelConfiguration_Const {
     public const FILTER_OPTIONS = 'filterOptions';
     public const FLAGS = 'flags';
     public const FLD_ACCOUNT_GRANTS = 'account_grants';
+    public const FLD_ALARMS = 'alarms';
+    public const FLD_ATTACHMENTS = 'attachments';
     public const FLD_CONTAINER_ID = 'container_id';
     public const FLD_DELETED_TIME = 'deleted_time';
     public const FLD_GRANTS = 'grants';
     public const FLD_LOCALLY_CHANGED = 'locally_changed';
+    public const FLD_NOTES = 'notes';
     public const FLD_ORIGINAL_ID = 'original_id';
+    public const FLD_RELATIONS = 'relations';
     public const FLD_TAGS = 'tags';
     public const FORCE_VALUES = 'forceValues';
     /**

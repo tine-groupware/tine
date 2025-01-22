@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -142,6 +142,52 @@ trait Tinebase_Record_AbstractTrait
             foreach ($denyProperties as $denyProperty) {
                 $this->{$denyProperty} = $oldRecord->{$denyProperty};
             }
+        }
+    }
+
+    public function prepareForCopy(): void
+    {
+        $mc = static::getConfiguration();
+        $this->setId(null);
+        foreach ($mc->getFields() as $prop => $def) {
+            switch ($def[self::TYPE] ?? null) {
+                case self::TYPE_RECORD:
+                case self::TYPE_RECORDS:
+                    if ($this->{$prop} && (($def[self::CONFIG][self::DEPENDENT_RECORDS] ?? false) || self::TYPE_JSON === ($def[self::CONFIG][self::STORAGE] ?? null))) {
+                        $this->{$prop}->prepareForCopy();
+                    }
+                    break;
+                case self::TYPE_DYNAMIC_RECORD:
+                    if ($this->{$prop} && true === ($def[self::CONFIG][self::PERSISTENT] ?? false)) {
+                        $this->{$prop}->prepareForCopy();
+                    }
+                    break;
+                case self::TYPE_NUMBERABLE_INT:
+                case self::TYPE_NUMBERABLE_STRING:
+                    $this->{$prop} = null;
+                    break;
+            }
+        }
+
+        if ($mc->{self::HAS_RELATIONS}) {
+            if (!$mc->{self::COPY_RELATIONS}) {
+                $this->{self::FLD_RELATIONS} = null;
+            } else {
+                $this->{self::FLD_RELATIONS}->setId(null);
+            }
+        }
+
+        // no need to prepare tags, they will just work
+
+        if ($this->has(self::FLD_ALARMS)) {
+            $this->{self::FLD_ALARMS}->setId(null);
+            $this->{self::FLD_ALARMS}->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
+        }
+
+        // no need to prepare attachments, they will just work
+
+        if ($this->has(self::FLD_NOTES)) {
+            $this->{self::FLD_NOTES}->setId(null);
         }
     }
 
