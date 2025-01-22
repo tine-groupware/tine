@@ -95,7 +95,7 @@ defineExpose({ focusPWField })
       <div class="login-container">
         <div class="login-logo">
           <a target="_blank" rel="noopener noreferrer" :href="Tine.websiteUrl">
-            <img :src="Tine.installLogo" class="logo-image">
+            <img :src="Tine.installLogo" class="logo-image dark-reverse">
           </a>
           <h2 class="mt-4">{{ i18n._('Login') }}</h2>
           <h5>{{ String.format(i18n._('Login with {0} account'), Tine.title)}}</h5>
@@ -289,8 +289,10 @@ $monitor: 1000px;
 }
 
 .logo-image {
-  width: 70px;
-  height: 70px;
+  min-width: 70px;
+  min-height: 40px;
+  max-width: 300px;
+  max-height: 70px;
 }
 
 .external-idp-login-btn {
@@ -362,8 +364,8 @@ $monitor: 1000px;
       width: 350px;
 
       .logo-image {
-        width: 80px;
-        height: 80px;
+        min-width: 80px;
+        max-height: 80px;
       }
     }
 
