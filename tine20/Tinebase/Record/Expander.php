@@ -29,14 +29,14 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
         }
     }
 
-    public static function expandRecord(Tinebase_Record_Interface $record): void
+    public static function expandRecord(Tinebase_Record_Interface $record, bool $fullExpansion = false): void
     {
-        static::expandRecords(new Tinebase_Record_RecordSet(get_class($record), [$record]), $record::getConfiguration());
+        static::expandRecords(new Tinebase_Record_RecordSet(get_class($record), [$record]), $record::getConfiguration(), $fullExpansion);
     }
 
-    public static function expandRecords(Tinebase_Record_RecordSet $records, ?Tinebase_ModelConfiguration $mc = null): void
+    public static function expandRecords(Tinebase_Record_RecordSet $records, ?Tinebase_ModelConfiguration $mc = null, bool $fullExpansion = false): void
     {
-        if (null === $mc) {
+        if (null === $mc && !$fullExpansion) {
             if ($records->count() < 1) {
                 return;
             }
@@ -44,7 +44,7 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
                 return;
             }
         }
-        (new self($records->getRecordClassName(), $mc->jsonExpander))->expand($records);
+        (new self($records->getRecordClassName(), $fullExpansion ? [self::EXPANDER_FULL => true] : $mc->jsonExpander))->expand($records);
     }
 
     protected function _fetchData()

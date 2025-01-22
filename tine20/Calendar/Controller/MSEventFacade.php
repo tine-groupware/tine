@@ -1322,4 +1322,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
     }
+
+    public function copy(string $id, bool $persist): Tinebase_Record_Interface
+    {
+        throw new Tinebase_Exception_NotImplemented();
+    }
 }

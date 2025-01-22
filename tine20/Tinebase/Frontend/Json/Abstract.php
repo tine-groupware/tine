@@ -344,6 +344,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         return $filter;
     }
 
+    protected function _copy(string $id, bool $persist, Tinebase_Controller_Record_Interface $ctrl): array
+    {
+        return $this->_recordToJson($ctrl->copy($id, $persist));
+    }
+
     /**
      * creates/updates a record
      *
@@ -821,7 +826,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     public function __call($method, array $args)
     {
         // provides api for default application methods
-        if (preg_match('/^(get|save|search|delete|import)([A-Za-z0-9_]+)/i', $method, $matches)) {
+        if (preg_match('/^(get|save|search|delete|import|copy)([A-Za-z0-9_]+)/i', $method, $matches)) {
             $apiMethod = $matches[1];
             $model = in_array($apiMethod, array('search', 'delete', 'import')) ? substr($matches[2],0,-1) : $matches[2];
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
@@ -858,6 +863,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                         $args[3] = [];
                     }
                     return $this->_import($args[0], $args[1], $args[2], $args[3]);
+                case 'copy':
+                    return $this->_copy($args[0], $args[1] ?? false, $modelController);
             }
         }
     }
