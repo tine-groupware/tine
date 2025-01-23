@@ -842,7 +842,7 @@ Tine.Felamimail.Model.Attachment = Tine.Tinebase.data.Record.create([
 ], {
     appName: 'Felamimail',
     modelName: 'Attachment',
-    idProperty: 'partId',
+    idProperty: 'id',
     titleProperty: 'fileName',
     // ngettext('Attachment', 'Attachments', n);
     recordName: 'Attachment',
