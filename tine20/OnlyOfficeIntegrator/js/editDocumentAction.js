@@ -25,34 +25,34 @@ Promise.all([
         emailInterceptor: async function(config) {
             const mask = await config.setWaitText(app.i18n._('Preparing Attachment...'));
             
-            const emailAttachment = config?.recordData?.cachePromises ? config.recordData : Tine.Tinebase.data.Record.setFromJson(config.recordData, Tine.Felamimail.Model.Attachment);
-            const partId = emailAttachment?.data?.partId.toString().split(':').pop();
+            if (config?.cachePromises) {
+                // open document does not need to check preview status
+                 await Promise.race(config.cachePromises)
+                    .then((response) => {
+                        config.recordData = response?.cache?.data;
+                    })
+                     .catch((e) => {
+                         console.error(e);
+                     })
+            } else {
+                console.error('email attachment must have cache promises!')
+            }
 
-            await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', emailAttachment.get('messageId'), partId].join(':'))
-                .then((response) => {
-                    config.recordData = _.get(response, 'attachments[0]');
-                })
-                .catch(async (e) => {
-                    if (emailAttachment?.cachePromises) {
-                        const responses = await Promise.all(emailAttachment.cachePromises);
-                        const validCache = responses.find((r) => {return r?.isPreviewReady});
-                        if (validCache?.cache?.data) {
-                            config.recordData = validCache.cache.data;
-                        }
-                    }
-                });
             mask.hide();
         },
 
         handler: function () {
             const record = this.selections[0];
             const tempFile = record.get('tempFile');
-            const isEmailAttachment = record.get('messageId');
-            let recordData = tempFile ? JSON.stringify(tempFile) : record.toString();
-            if (isEmailAttachment) {
-                recordData = record;
-            }
-            const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({ recordData: recordData, id: record.id, contentPanelConstructorInterceptor: isEmailAttachment ? this.emailInterceptor : null });
+            const recordData = tempFile ? JSON.stringify(tempFile) : record.toString();
+
+            const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
+                // always validate cachePromises to get the correct recordData
+                cachePromises: record?.cachePromises,
+                recordData: recordData,
+                id: record.id,
+                contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
+            });
         },
 
         actionUpdater: function (action, grants, records, isFilterSelect) {
