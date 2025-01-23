@@ -17,6 +17,8 @@ test_cloud_deploy() {
     export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
     export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
 
+    echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG
+
     # todo: but later (is not mvp)
     # if [ "$RELEASE_TYPE" == "nightly" ]; then
     #     helmfile -f path/to/helmfile.yaml destroy
