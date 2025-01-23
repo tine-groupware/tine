@@ -1552,6 +1552,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
+        if (!Tinebase_Session::isStarted()) {
+            Tinebase_Core::startCoreSession();
+        }
         return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions(
             Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig(),
             true
