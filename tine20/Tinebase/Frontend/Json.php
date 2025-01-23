@@ -600,12 +600,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (empty($username)) {
             try {
-                if (($idpId = ($this->_getRequestContextHeaders()['idpid'] ?? null)) &&
-                        ($idp = SSO_Controller_ExternalIdp::getInstance()->get($idpId)) &&
-                        $idp->{SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION}) {
+                if (Tinebase_Application::getInstance()->isInstalled('SSO') &&
+                    ($idpId = ($this->_getRequestContextHeaders()['idpid'] ?? null)) &&
+                    ($idp = SSO_Controller_ExternalIdp::getInstance()->get($idpId)) &&
+                    $idp->{SSO_Model_ExternalIdp::FLD_SHOW_AS_LOGIN_OPTION}) {
                     SSO_Controller::startExternalIdpAuthProcess($idp);
                 }
-            }  catch (Tinebase_Exception_NotFound) {}
+            } catch (Tinebase_Exception_NotFound) {
+            }
             if ($MFAPassword) {
                 if (null !== $MFAUserConfigId ||
                         null !== ($MFAUserConfigId = Tinebase_Config::getInstance()->{Tinebase_Config::MFA}->records?->find(Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS, Tinebase_Auth_MFA_WebAuthnAdapter::class)?->getId())) {
@@ -631,7 +633,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         if (empty($password)) {
-            if (SSO_Controller::passwordLessLogin($username)) {
+            if (Tinebase_Application::getInstance()->isInstalled('SSO')
+                && SSO_Controller::passwordLessLogin($username)) {
                 return $this->_getLoginSuccessResponse($username);
             }
             $user = null;
@@ -785,7 +788,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'success'=> true,
         );
 
-        if (Tinebase_Application::getInstance()->isInstalled('SSO') && $data = SSO_Controller::logoutHandler()) {
+        if (Tinebase_Application::getInstance()->isInstalled('SSO')
+            && $data = SSO_Controller::logoutHandler()) {
             $result = array_merge($result, $data);
         }
 
@@ -1548,6 +1552,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
+        if (!Tinebase_Session::isStarted()) {
+            Tinebase_Core::startCoreSession();
+        }
         return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions(
             Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig(),
             true
