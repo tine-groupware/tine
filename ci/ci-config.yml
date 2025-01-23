@@ -109,4 +109,4 @@ variables:
   TEST_IMAGE: ${TEST_IMAGE_REGISTRY}:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
 
   # Overwrites package repo name. Default repo name is CUSTOMER_MAJOR_COMMIT_REF_NAME with out trailing /. Only works for customer branches. 
-  PACKAGE_REPO_NAME_OVERWRITE: saas-beta
+  # PACKAGE_REPO_NAME_OVERWRITE: saas-beta
