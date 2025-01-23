@@ -64,7 +64,7 @@ const passwordFieldRef = ref()
 
 const getValue = () => passwordFieldRef.value?.getValue() || ''
 
-const disableok = computed(() => props.allowBlank ? false : passwordFieldRef.value?.getValue().length === 0)
+const disableok = computed(() => props.allowBlank ? false : passwordFieldRef.value?.getValue()?.length === 0)
 
 const initialFocus = computed(() => passwordFieldRef.value.$inputEl)
 

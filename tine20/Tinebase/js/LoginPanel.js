@@ -792,7 +792,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
             console.log(e.reason, e.message)
             if (e.name === 'AbortError') {
                 console.debug(e.reason)
-            } else{
+            } else if (e.name === 'NotAllowedError') {
+                console.debug(e)
+                // @TODO: disable passkey login
+                //  @TODO2 disable passkey login if passwordless login is not configured as well
+            } else {
                 console.assert(e.message)
                 if (await Ext.MessageBox.show({
                     icon: Ext.MessageBox.WARNING,
