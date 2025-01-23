@@ -76,10 +76,10 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                 if (e.status === 'failure') {
                     reject(e);
                 } else if (e.type === 'exception') {
-                    const errorData = e.error.data;
+                    const errorData = e?.error?.data ?? e.message;
                     
                     //check for status code 650 (generic confirm)
-                    if (errorData.code === 650) {
+                    if (errorData?.code === 650) {
                         if (errorData.info) {
                             errorData.message += '<br />' + errorData.info;
                         }
@@ -121,7 +121,7 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
                                 }
                             });
                     } else {
-                        reject (e.error);
+                        reject (e?.error ?? e.message);
                     }
                 } else {
                     fulfill(result);
