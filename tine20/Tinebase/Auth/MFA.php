@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -79,6 +79,18 @@ final class Tinebase_Auth_MFA
     public function getAdapter(): Tinebase_Auth_MFA_AdapterInterface
     {
         return $this->_adapter;
+    }
+
+    public static function hasPwdLessProvider(): bool
+    {
+        $mfas = Tinebase_Config::getInstance()->{Tinebase_Config::MFA} ?: null;
+        /** @var Tinebase_Model_MFA_Config $mfa */
+        foreach ($mfas?->records ?: [] as $mfa) {
+            if ($mfa->{Tinebase_Model_MFA_Config::FLD_ALLOW_PWD_LESS_LOGIN}) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function getAccountsMFAUserConfig(string $_userMfaId, Tinebase_Model_FullUser $_account): ?Tinebase_Model_MFA_UserConfig
