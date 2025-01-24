@@ -609,6 +609,17 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 $account->accountFirstName = $raw[2];
                 $account->accountLastName = $raw[1];
                 $applyTwig = true;
+
+                if (null === $cfg) {
+                    $cfg = Courses_Controller_Course::getInstance()->_getNewUserConfig($course);
+                    $sambaCfg = $cfg['samba'];
+                    $sambaSAM = $account->sambaSAM;
+                    $sambaSAM['homePath'] = $sambaCfg['homePath'] ?: '';
+                    $sambaSAM['homeDrive'] = $sambaCfg['homeDrive'] ?: '';
+                    $sambaSAM['logonScript'] = $sambaCfg['logonScript'] ?: '';
+                    $sambaSAM['profilePath'] = $sambaCfg['profilePath'] ?: '';
+                    $account->sambaSAM = $sambaSAM;
+                }
             }
 
             if ($applyTwig) {
