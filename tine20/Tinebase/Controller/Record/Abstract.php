@@ -3503,7 +3503,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record->{$_property} = $rs;
         }
         
-        if (! empty($_record->{$_property}) && $_record->{$_property} && $_record->{$_property}->count() > 0) {
+        if (! empty($_record->{$_property}) && $_record->{$_property} && ! is_scalar($_record->{$_property})
+            && $_record->{$_property}->count() > 0) {
             if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
                 foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
                     $_record->{$_property}->{$prop} = $val;
