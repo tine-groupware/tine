@@ -162,8 +162,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
             self::FLD_URL => [
                 self::TYPE => self::TYPE_LOCALIZED_STRING,
                 self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::CONFIG => [
                     self::TYPE => self::TYPE_STRING,
