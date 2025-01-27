@@ -54,9 +54,9 @@ class EventManager_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => [
                 'records' => [
-                    ['id' => 1,      'value' => 'Hauptveranstaltung'], //_('Hauptveranstaltung')
+                    ['id' => 1,      'value' => 'Main Event'], //_('Main Event')
                     ['id' => 2,      'value' => 'Workshop'], //_('Workshop')
-                    ['id' => 3,      'value' => 'Projektveranstaltung'], //_('Projektveranstaltung')
+                    ['id' => 3,      'value' => 'Project Event'], //_('Project Event')
                 ],
                 'default' => 1
             ]
@@ -191,7 +191,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 'records' => [
                     ['id' => 1,      'value' => 'Optional'], //_('Optional')
                     ['id' => 2,      'value' => 'Required'], //_('Required')
-                    ['id' => 3,      'value' => 'No Option'], //_('No Option')
+                    ['id' => 3,      'value' => 'Text block'], //_('Text block')
                 ],
                 'default' => 1
             ]
