@@ -222,14 +222,16 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
             scope: this,
             click: this.onClick,
             mouseover: this.onMouseOver,
-            mouseout: this.onMouseOut
+            mouseout: this.onMouseOut,
+            wheel: this.onScrollWheel
         });
         if(this.enableScrolling){
             this.mon(this.el, {
                 scope: this,
                 delegate: '.x-menu-scroller',
                 click: this.onScroll,
-                mouseover: this.deactivateActive
+                mouseover: this.deactivateActive,
+                wheel: this.onScrollWheel
             });
         }
     },
@@ -336,6 +338,19 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
         ul.scrollTop += this.scrollIncrement * (top ? -1 : 1);
         if(top ? ul.scrollTop <= 0 : ul.scrollTop + this.activeMax >= ul.scrollHeight){
            this.onScrollerOut(null, t);
+        }
+    },
+
+    onScrollWheel : function (e) {
+        if (!this.enableScrolling) {
+            return
+        }
+
+        const ul = this.ul.dom
+        if (e.browserEvent.deltaY > 0) {
+            ul.scrollTop += this.scrollIncrement;
+        } else {
+            ul.scrollTop -= this.scrollIncrement;
         }
     },
 
