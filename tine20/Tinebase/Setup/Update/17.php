@@ -392,6 +392,8 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         $this->_db->query('UPDATE ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET deleted_time = "1970-01-01 00:00:00" WHERE deleted_time IS NULL');
         $this->_db->query('DELETE FROM ' . $backend->getTablePrefix() . $backend->getTableName() . ' WHERE model = "MeetingManager_Model_Top" AND property = "decision_number"');
 
+        $this->_db->query('UPDATE ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET bucket_key = CONCAT(model, "#", property) WHERE bucket_key IS NULL OR bucket_key = "" OR bucket_key = "#"');
+
         foreach ($this->_db->query('SELECT id, bucket_key FROM ' . $backend->getTablePrefix() . $backend->getTableName() .
             ' WHERE model = "MeetingManager_Model_Meeting" AND property = "meeting_number"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             if (empty($row['bucket_key'])) continue;
