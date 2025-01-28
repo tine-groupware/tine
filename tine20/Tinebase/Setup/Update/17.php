@@ -398,7 +398,18 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             ' WHERE model = "MeetingManager_Model_Meeting" AND property = "meeting_number"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             if (empty($row['bucket_key'])) continue;
             $buckets = explode('#', $row['bucket_key']);
+            if ('meeting_number' === $buckets[count($buckets)-1]) {
+                continue;
+            }
             $this->_db->update($backend->getTablePrefix() . $backend->getTableName(), ['additional_key' => $buckets[count($buckets)-1]], 'id = "' . $row['id'] . '"');
+        }
+
+        foreach ($this->_db->query('select model, property, additional_key, count(*) as c from ' . $backend->getTablePrefix() . $backend->getTableName() . ' group by model, property, additional_key having c > 1')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+            foreach ($this->_db->query('select id, bucket_key from ' . $backend->getTablePrefix() . $backend->getTableName() . ' where model = "' . $row['model'] . '" AND property = "' . $row['property'] . '" AND additional_key = "' . $row['additional_key'] . '"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row1) {
+                if (str_starts_with($row1['bucket_key'], $row['model'] . '#' . $row['property'])) {
+                    $this->_db->query('update ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET additional_key = "' . trim(substr($row1['bucket_key'], strlen($row['model'] . '#' . $row['property'])), '#') . '" WHERE id = "' . $row1['id'] . '"');
+                }
+            }
         }
 
         $this->updateSchema(Tinebase_Config::APP_NAME, [
