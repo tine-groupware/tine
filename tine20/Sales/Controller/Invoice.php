@@ -1526,6 +1526,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
             }
 
+            $preceedingInvoice = $invoice->relations->find('type', 'REVERSAL')?->related_record;
+
             // type (invoice_type) => REVERSAL => storno gibt verknüpfung
 
             $ublInvoice = new Sales_Model_Document_Invoice([
@@ -1552,13 +1554,22 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     new Sales_Model_DocumentPosition_Invoice([
                         Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'Gesamtbetrag gem. Anlage',
                         Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
-                        Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
-                        Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => $invoice->price_gross,
+                        Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => $invoice->type === 'REVERSAL' ? -1 : 1,
+                        Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => abs($invoice->price_gross),
                         Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                         Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $invoice->sales_tax,
-
+                        Sales_Model_DocumentPosition_Invoice::FLD_REVERSAL => $invoice->type === 'REVERSAL',
                     ], true),
                 ],
+                Sales_Model_Document_Invoice::FLD_PRECURSOR_DOCUMENTS => $preceedingInvoice ? new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, [
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => new Sales_Model_Document_Invoice([
+                                Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER => $preceedingInvoice->number,
+                                Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => $preceedingInvoice->date,
+                            ], true),
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Invoice::class,
+                    ])
+                ]) : null,
             ]);
 
             if (empty($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}) || 0 === $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->count()) {

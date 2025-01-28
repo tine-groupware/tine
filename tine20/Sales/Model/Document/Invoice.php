@@ -249,8 +249,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         $precursorOrder = null;
-        if ($this->{self::FLD_PRECURSOR_DOCUMENTS} instanceof Tinebase_Record_RecordSet && $this->{self::FLD_PRECURSOR_DOCUMENTS}->getRecordClassName() === Sales_Model_Document_Order::class) {
-            $precursorOrder = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord();
+        if ($this->{self::FLD_PRECURSOR_DOCUMENTS} instanceof Tinebase_Record_RecordSet && $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()?->{Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME} === Sales_Model_Document_Order::class) {
+            $precursorOrder = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD};
         }
 
         $ublInvoice = (new UBL21\Invoice\Invoice())
@@ -520,10 +520,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                 )
                 ->setPrice((new \UBL21\Common\CommonAggregateComponents\Price)
-                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount(round($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY} *
+                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount(abs(round($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY} *
                         (Sales_Config::PRICE_TYPE_NET === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
                             $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE}
-                            : $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE} * 100 / (100 + $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})), 2)))
+                            : $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE} * 100 / (100 + $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})), 2))))
                         ->setCurrencyID('EUR')
                     )
                 )
