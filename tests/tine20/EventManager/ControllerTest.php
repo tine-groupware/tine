@@ -15,6 +15,17 @@
 class EventManager_ControllerTest extends TestCase
 {
     /**
+     * set up tests
+     */
+    protected function setUp(): void
+    {
+        if (!Tinebase_Application::getInstance()->isInstalled('EventManager')) {
+            self::markTestSkipped('App is not installed');
+        }
+        parent::setUp();
+    }
+
+    /**
      * try to add an event
      *
      */
