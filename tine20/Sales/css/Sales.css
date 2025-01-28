@@ -90,6 +90,7 @@
 
 .preview-panel-invoice-left {
     float: left;
+    /*box-sizing: border-box;*/
     position: relative;
     width: 32%;
     height: 122px;

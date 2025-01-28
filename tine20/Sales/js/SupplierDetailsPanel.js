@@ -55,7 +55,7 @@ Tine.Sales.SupplierDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     initDefaultTemplate: function() {
         
         this.defaultTpl = new Ext.XTemplate(
-            '<div class="preview-panel-timesheet-nobreak">',    
+            '<div class="preview-panel-timesheet-nobreak">',
                 '<!-- Preview contacts -->',
                 '<div class="preview-panel preview-panel-timesheet-left">',
                     '<div class="bordercorner_1"></div>',
@@ -115,7 +115,7 @@ Tine.Sales.SupplierDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<!-- Preview core data -->',
-                '<div class="preview-panel preview-panel-left preview-panel-supplier">',
+                '<div class="preview-panel preview-panel-invoice-left preview-panel-left preview-panel-supplier">',
                     '<div class="bordercorner_1"></div>',
                     '<div class="bordercorner_2"></div>',
                     '<div class="bordercorner_3"></div>',
@@ -133,7 +133,7 @@ Tine.Sales.SupplierDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 '</div>',
 
                 '<!-- Preview accounting data -->',
-                '<div class="preview-panel preview-panel-left preview-panel-supplier">',
+                '<div class="preview-panel preview-panel-invoice-left preview-panel-left preview-panel-supplier">',
                     '<div class="bordercorner_1"></div>',
                     '<div class="bordercorner_2"></div>',
                     '<div class="bordercorner_3"></div>',
@@ -149,7 +149,7 @@ Tine.Sales.SupplierDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                 '</div>',
             
                 '<!-- Preview description -->',
-                '<div class="preview-panel-description preview-panel-left preview-panel-supplier">',
+                '<div class="preview-panel-description preview-panel-invoice-left preview-panel-left preview-panel-supplier" style="box-sizing: border-box; height: 132px;">',
                     '<div class="bordercorner_gray_1"></div>',
                     '<div class="bordercorner_gray_2"></div>',
                     '<div class="bordercorner_gray_3"></div>',
