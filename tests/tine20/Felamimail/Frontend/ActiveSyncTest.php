@@ -161,7 +161,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
             $this->markTestSkipped('The (y)tnef command could not be found!');
         }
 
-        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+        $device = $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40);
+        $controller = $this->_getController($device);
 
         $message = $this->_createTestMessage('winmail_dat_attachment.eml', 'winmail_dat_attachment.eml');
 
@@ -192,6 +193,14 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         $syncrotonFileReference = $controller->getFileReference($bookmarkAttachment->fileReference);
         $this->assertEquals('text/html', $syncrotonFileReference->contentType);
         $this->assertEquals($dataSize, strlen(stream_get_contents($syncrotonFileReference->data)));
+
+        $syncrotonMail = $controller->toSyncrotonModel($message, array(
+            'mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME
+        ));
+        $testDoc = $this->_getDocFromSyncrotonMail($syncrotonMail, $device);
+        $encodedXml = self::encodeXml($testDoc);
+        // TODO find out how to extract winmail.dat ...
+        // self::assertStringContainsString('Content-Description: Extracted Content', $encodedXml);
     }
 
     /**
@@ -275,23 +284,30 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         $message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
         
         $syncrotonEmail = $controller->toSyncrotonModel($message, array('mimeSupport' => Syncroton_Command_Sync::MIMESUPPORT_SEND_MIME, 'bodyPreferences' => array(4 => array('type' => 4))));
-        
         $syncrotonEmail->subject = "Hallo\x0E";
-        
-        $imp                   = new DOMImplementation();
-        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
-        $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Syncroton', 'uri:Syncroton');
-        $testDoc->formatOutput = true;
-        $testDoc->encoding     = 'utf-8';
-        
-        $syncrotonEmail->appendXML($testDoc->documentElement, $device);
-        
+        $testDoc = $this->_getDocFromSyncrotonMail($syncrotonEmail, $device);
+
         $xml = $testDoc->saveXML();
         
         $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $xml), $xml);
         
         self::encodeXml($testDoc);
+    }
+
+    protected function _getDocFromSyncrotonMail(Syncroton_Model_Email $email,
+                                                Syncroton_Model_Device $device): DOMDocument
+    {
+        $imp                   = new DOMImplementation();
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN",
+            "http://www.microsoft.com/");
+        $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDoc->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/',
+            'xmlns:Syncroton', 'uri:Syncroton');
+        $testDoc->formatOutput = true;
+        $testDoc->encoding     = 'utf-8';
+
+        $email->appendXML($testDoc->documentElement, $device);
+        return $testDoc;
     }
 
     /**
@@ -1179,9 +1195,9 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
      * return active device
      * 
      * @param string $_deviceType
-     * @return ActiveSync_Model_Device
+     * @return Syncroton_Model_Device
      */
-    protected function _getDevice($_deviceType)
+    protected function _getDevice($_deviceType): Syncroton_Model_Device
     {
         if (isset($this->objects['devices'][$_deviceType])) {
             return $this->objects['devices'][$_deviceType];
