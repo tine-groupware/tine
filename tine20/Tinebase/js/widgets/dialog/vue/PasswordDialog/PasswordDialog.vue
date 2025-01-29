@@ -22,7 +22,7 @@
     <BButton
       v-if="hasPwGen"
       @click="onPWGenClick"
-      variant="outline-primary"
+      variant="primary"
       class="mb-2"
     >{{ window.i18n._('Generate password') }}</BButton>
   </div>
