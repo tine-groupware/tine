@@ -2513,7 +2513,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _unDeleteLinkedObjects(Tinebase_Record_Interface $_record)
     {
-        if ($_record->has('notes') && count($_record->notes) > 0) {
+        if ($_record->has('notes') && count($_record->notes ?: []) > 0) {
             $ids = array();
             foreach($_record['notes'] as $val) {
                 $ids[] = $val['id'];
