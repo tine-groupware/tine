@@ -122,3 +122,48 @@ js-e2e-tests-source-php-version-matrix:
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "matrix"
       when: never
     - !reference [.js-e2e-tests-source, rules]
+
+js-unit-tests:
+  image: ${UTIL_REGISTRY}/node:18.9.0-alpine-r1
+  stage: test
+  needs: []
+  timeout: 30m
+  variables:
+    KUBERNETES_CPU_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_CPU_REQUEST
+    KUBERNETES_CPU_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_CPU_LIMIT
+    KUBERNETES_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_MEMORY_REQUEST
+    KUBERNETES_MEMORY_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_MEMORY_LIMIT
+    KUBERNETES_HELPER_CPU_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_HELPER_CPU_REQUEST
+    KUBERNETES_HELPER_CPU_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_HELPER_CPU_LIMIT
+    KUBERNETES_HELPER_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_HELPER_MEMORY_REQUEST
+    KUBERNETES_HELPER_MEMORY_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_HELPER_MEMORY_LIMIT
+    KUBERNETES_SERVICE_CPU_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_CPU_REQUEST
+    KUBERNETES_SERVICE_CPU_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_CPU_LIMIT
+    KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_MEMORY_REQUEST
+    KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_MEMORY_LIMIT
+    TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+  services:
+    - name: ${TEST_IMAGE}
+      alias: tine
+      entrypoint:
+        !reference [.lib, entry_points, prepare_working_dir_js_tests]
+  before_script:
+    - !reference [.lib, script]
+    - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_mount_ready
+    - echo -n 'wait for signal_php_deps_installed ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed ]; do sleep 1; done; echo ' done'
+    - test_npm_install --ignore-scripts
+  script:
+    - !reference [.lib, script]
+    - cd ${TINE20ROOT}/tine20/Tinebase/js && node --experimental-vm-modules node_modules/jest/bin/jest.js -c ${TINE20ROOT}/tests/js/jest/jest.config.js
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $JS_UNIT_TESTS == "false"
+      when: never
+    - if: $JS_UNIT_TESTS == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $JS_UNIT_TESTS_MERGE_REQUEST != "false"
+      changes:
+        paths:
+          - "**/*.js"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /js-unit-tests/
+    - if: $PIPELINE_TYPE =~ /default-tests/
