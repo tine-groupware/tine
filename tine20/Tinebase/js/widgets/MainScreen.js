@@ -73,14 +73,23 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
 
         this.tbar = {
             hidden: true,
+            cls: 'tine-mainscreen-grid-responsive-tbar',
             items:
                 [{
-                    iconCls: 'action_menu',
+                    iconCls: 'tine-mainscreen-grid-responsive-func-menu',
                     handler: () => {
                         this.layout.west.slideOut()
                     }
-                }, '->', {
-                    text: '...',
+                }, new Ext.Container({
+                    ref: '../searchbarpanel',
+                    layout:'card',
+                    activeItem: 0,
+                    defaults: {
+                        border:false
+                    },
+                    items: []
+                }), '->', {
+                    iconCls: 'tine-mainscreen-grid-responsive-nav-menu',
                     handler: (btn) => {
                         const tbar = _.get(_.get(this.northCardPanel, 'layout.activeItem'), 'items.items[0]');
                         if (tbar) {
@@ -110,21 +119,34 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         this.westRegionPanel.afterIsRendered().then((panel) => { panel[isSmall ? 'collapse' : 'expand']() });
         this.northCardPanel.afterIsRendered().then((panel) => {panel.setVisible(!isSmall) });
 
-        const qfp = this.getCenterPanel()?.filterToolbar.quickFilterPlugin;
-
-        if (qfp != null) {
-            if (isSmall) {
-                qfp.setDetailsHidden(true);
-            } else {
-                //restore state before resize
-                qfp.setDetailsHidden(qfp.detailsToggleBtn.pressed);
-            }
-        }
-        
         this.westRegionPanel.on('click', () => { })
 
-        this.getTopToolbar().setVisible(isSmall);
-        _.defer(_.bind(this.doLayout, this), true);
+        _.defer(() => {
+            // NOTE: we need to defer as legacy apps init filtertoolbar after mainscreen
+            this.getTopToolbar().setVisible(isSmall);
+            const qfp = this.getCenterPanel()?.filterToolbar.getQuickFilterPlugin();
+            qfp?.setDetailsHidden(isSmall || qfp.detailsToggleBtn.pressed);
+            this.resizeRespFilterBar(isSmall, qfp, me);
+            this.doLayout()
+        }, true);
+    },
+
+    resizeRespFilterBar: (isSmall, qfp, mainscreen) => {
+        if (mainscreen.tbar) {
+            const searchbar = mainscreen.searchbarpanel.getActionEl();
+            const tbarChildren = mainscreen.searchbarpanel.ownerCt.items.items;
+
+            let box1 = tbarChildren[0].getEl();
+            let box2 = tbarChildren[3].getEl();
+
+            if (box1 && box2) {
+                let totalWidth = box2.getBox().x - box1.getBox().x - box1.getBox().width;
+    
+                searchbar.setWidth(totalWidth - 50);
+            } else {
+                console.warn("responsive dropdowns not found");
+            }
+        }
     },
 
     onDestroy: function() {
@@ -336,7 +358,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             //     this[contentType + suffix] = new Ext.Panel({html: 'ERROR'});
             // }
         }
-        
+
         return this[contentType + suffix];
     },
 
@@ -469,7 +491,35 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     showCenterPanel: function() {
         this.setActiveContentPanel(this.getCenterPanel(this.getActiveContentType()), true);
     },
-    
+
+    getQuicksearch: function(contentType, qfp) {
+        const search_field = new Ext.ux.SearchField({
+            width: 300,
+            enableKeyEvents: true,
+            ctCls: 'tine-mainscreen-grid-responsive-searchfield',
+        });
+
+        //safety check to prevent memory leaks
+        delete this.getCenterPanel(contentType).quicksearch;
+
+        this.getCenterPanel(contentType).quicksearch = search_field;
+
+        search_field.onKeyUp = () => {
+            qfp.quickFilter.setValue(search_field.getValue())
+            qfp.syncField(qfp.quickFilter);
+        };
+
+        search_field.onTrigger2Click = () => {
+            qfp.onQuickFilterTrigger();
+        };
+        search_field.onTrigger1Click = () => {
+            qfp.onQuickFilterClear();
+        };
+
+
+        return search_field;
+    },
+
     /**
      * shows module tree panel in mainscreen
      */
@@ -546,6 +596,15 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      */
     setActiveContentPanel: function(panel, keep) {
         Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.centerCardPanel, panel, keep);
+
+        const qfp = panel?.filterToolbar?.getQuickFilterPlugin();
+        if (qfp) {
+            const quicksearch = this.getQuicksearch(this.getActiveContentType(), qfp);
+            Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.searchbarpanel, quicksearch);
+        } else {
+            console.warn("Could not create responsive quicksearch: quickfilter plugin not found")
+        }
+
     },
 
     /**
