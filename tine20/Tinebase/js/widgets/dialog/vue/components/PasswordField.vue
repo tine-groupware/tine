@@ -33,15 +33,15 @@
           variant="outline-primary"
           :title="window.formatMessage('Cleartext/Hidden')"
         >
-          <img v-if="_locked" src="images/icon-set/icon_preview.svg" alt="copy-to-clipboard" :style="{width: '1.5em'}" class="enlarge-on-hover shrink-on-click">
-          <img v-else src="images/icon-set/icon_preview_disabled.svg" alt="copy-to-clipboard" :style="{width: '1.5em'}" class="enlarge-on-hover shrink-on-click">
+          <img v-if="_locked" src="images/icon-set/icon_preview.svg" alt="copy-to-clipboard" :style="{width: '1.5em'}" class="enlarge-on-hover shrink-on-click dark-reverse">
+          <img v-else src="images/icon-set/icon_preview_disabled.svg" alt="copy-to-clipboard" :style="{width: '1.5em'}" class="enlarge-on-hover shrink-on-click dark-reverse">
         </BInputGroupText>
         <BInputGroupText
           v-if="clipboard"
           @click="handleCopy"
           :title="window.formatMessage('Copy to Clipboard')"
         >
-          <img src="images/icon-set/icon_copy_to_clipboard.svg" alt="copy-to-clipboard" :style="{width: '1.4em'}" class="enlarge-on-hover shrink-on-click">
+          <img src="images/icon-set/icon_copy_to_clipboard.svg" alt="copy-to-clipboard" :style="{width: '1.4em'}" class="enlarge-on-hover shrink-on-click dark-reverse">
         </BInputGroupText>
       </BInputGroupAppend>
     </BInputGroup>
