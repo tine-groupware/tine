@@ -390,18 +390,27 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     handleAttachmentsOfExistingMessage: function (message) {
         if (!this.isForwardedMessage() && !this.draftOrTemplate) return;
 
-        const attachments = [];
-        const forwardMode = !this.isForwardedMessage() ? '' : Tine[this.app.appName].registry.get('preferences').get('emlForward');
+        let attachments = [];
+        let forwardMode = !this.isForwardedMessage()
+            ? ''
+            : Tine[this.app.appName].registry.get('preferences').get('emlForward');
 
         if (forwardMode === 'message' || this.draftOrTemplate) {
             Ext.each(message.get('attachments'), function (attachment) {
-                attachment = {
-                    name: attachment['filename'],
-                    type: attachment['content-type'],
-                    size: attachment['size'],
-                    id: message.id + '_' + attachment['partId']
-                };
-                attachments.push(attachment);
+                if (attachment['partId'].match(/winmail/)) {
+                    // we found a winmail extration attachment -> forward the original winmail.dat
+                    forwardMode = 'onlyAsAttachment';
+                    attachments = [];
+                    return false;
+                } else {
+                    attachment = {
+                        name: attachment['filename'],
+                        type: attachment['content-type'],
+                        size: attachment['size'],
+                        id: message.id + '_' + attachment['partId']
+                    };
+                    attachments.push(attachment);
+                }
             }, this);
         }
 
