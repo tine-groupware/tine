@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>Purchasing</name>
+    <!-- gettext('Purchasing') -->
+    <version>18.0</version>
+    <order>60</order>
+    <status>enabled</status>
+    <depends>
+        <application>Sales</application>
+    </depends>
+    <tables/>
+</application>

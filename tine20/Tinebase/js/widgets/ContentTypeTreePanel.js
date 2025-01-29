@@ -112,8 +112,9 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         var groupNodes = {};
         this.setRootNode(treeRoot);
         var treeRoot = this.getRootNode();
-        
-        this.recordClass = Tine[this.app.appName].Model[this.contentType];
+
+        var def = this.mainScreen.getContentTypeDefinition(this.contentType) || {};
+        this.recordClass = Tine[def.appName || this.app.appName].Model[def.modelName || this.contentType];
         
         this.on('click', this.saveClickedNodeState, this);
 

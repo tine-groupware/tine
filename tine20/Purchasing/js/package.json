@@ -1,0 +1,14 @@
+{
+  "name": "Purchasing",
+  "version": "18.0.0",
+  "description": "tine groupware purchasing Application",
+  "main": "purchasing.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Purchasing"
+  ],
+  "author": "Cornelius Weiß",
+  "license": "AGPL-3.0"
+}
