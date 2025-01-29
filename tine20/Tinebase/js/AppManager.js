@@ -205,7 +205,7 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
         app.hasMainScreen = true;
         var appPanel = Tine[app.appName].getPanel();
         var appObj =  new Tine.Tinebase.Application(app);
-        var mainScreen = new Tine.widgets.MainScreen({app: appObj});
+        var mainScreen = new (Tine[app.appName].MainScreen || Tine.widgets.MainScreen)({app: appObj});
 
         Ext.apply(appObj, {
             mainScreen: mainScreen
@@ -218,6 +218,9 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
             },
             getWestPanel: function() {
                 return this.appPanel;
+            },
+            getCenterPanel: function(contentType) {
+                return this.centerCardPanel.layout.activeItem;
             },
             afterRender: function() {
                 Tine.widgets.MainScreen.superclass.afterRender.call(this);
