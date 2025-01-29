@@ -3591,6 +3591,17 @@ class Tinebase_FileSystem implements
 
     static public $syncFlySystemRecursionCache = [];
 
+    /**
+     * @param Tinebase_Model_Tree_Node $node
+     * @param int $depth
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws \League\Flysystem\FilesystemException
+     */
     public function syncFlySystem(Tinebase_Model_Tree_Node $node, int $depth = -1): void
     {
         if (isset(static::$syncFlySystemRecursionCache[$node->getId()])) return;
@@ -3605,14 +3616,14 @@ class Tinebase_FileSystem implements
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
             try {
                 $dirExists = ! empty($node->flypath) && $flySystem->directoryExists($node->flypath);
-            } catch (Sabre\HTTP\ClientHttpException $shche) {
-                if ($shche->getMessage() === 'Gateway Timeout' || $shche->getMessage() === 'Service Unavailable') {
-                    // just log and try again later
+            } catch (Exception $e) {
+                // just log and try again later
+                // TODO are there errors that need a hard break & throwing here?
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' Flysystem error on path "' . $node->flypath . '" : ' . $shche->getMessage());
-                    return;
+                        . ' Flysystem error on path "' . $node->flypath . '" : ' . $e->getMessage());
                 }
-                throw $shche;
+                return;
             }
 
             if (!$dirExists) {
