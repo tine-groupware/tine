@@ -402,7 +402,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.getDataFields = function() {
         const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name')
             .concat(f.getMeta('idProperty'))
-            .concat(p.modelConfiguration?.hasNotes ? [] : 'notes')
+            .concat(p.modelConfiguration?.hasUserNotes ? [] : 'notes')
             .concat(p.modelConfiguration?.delegateAclField && p.grantsPath ? String(p.grantsPath).replace(/^data\./, '') : []);
         return _.difference(p.modelConfiguration?.fieldKeys, systemFields);
     };
