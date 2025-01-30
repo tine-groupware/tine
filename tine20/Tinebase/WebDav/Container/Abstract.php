@@ -562,11 +562,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      */
     public function getSyncToken()
     {
-        // this only returns null if the container is not found or if container.content_seq = NULL, this does not look up the content history!
-        if (null === ($token = Tinebase_Container::getInstance()->getContentSequence($this->_container))) {
-            return '-1';
+        if ($this->_container instanceof Tinebase_Model_Container) {
+            // this only returns null if the container is not found or if container.content_seq = NULL, this does not look up the content history!
+            return Tinebase_Container::getInstance()->getContentSequence($this->_container) ?? '-1';
+        } else {
+            // TreeNode
+            return $this->_container->seq;
         }
-        return $token;
     }
 
     /**
