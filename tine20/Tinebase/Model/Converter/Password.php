@@ -15,7 +15,7 @@ class Tinebase_Model_Converter_Password implements Tinebase_Model_Converter_Inte
 {
     public function convertToRecord($record, $key, $blob)
     {
-        return null;
+        return $blob;
     }
 
     /**
