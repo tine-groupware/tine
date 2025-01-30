@@ -1143,6 +1143,18 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->_json->saveMessage($forwardMessageData);
     }
 
+    public function testForwardWinmailDat()
+    {
+        $message = $this->_appendMessageforForwarding('winmail_dat_attachment.eml', 'test attached winmail.dat');
+        $subject = 'fwd: winmail_dat_attachment-' . Tinebase_Record_Abstract::generateUID(10);
+        $forwardMessageData = $this->_getForwardMessageData($message['id'], ['subject' => $subject]);
+        $this->_json->saveMessage($forwardMessageData);
+        $forwardMessage = $this->_searchForMessageBySubject($subject);
+        $forwardMessageComplete = $this->_json->getMessage($forwardMessage['id']);
+        self::assertCount(1, $forwardMessageComplete['attachments'],
+            print_r($forwardMessageComplete, true));
+    }
+
     /**
      * test reply mail with long references header
      *
@@ -2586,7 +2598,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
     public function testEmptyWinmailAttachment()
     {
         $messageToSend = $this->_getMessageData('' , __METHOD__);
-        $tempFile = $this->_getTempFile(dirname(__FILE__) . '/../files/empty_winmail.dat', 'winmail.dat', 'application/ms-tnef');
+                $tempFile = $this->_getTempFile(dirname(__FILE__) . '/../files/empty_winmail.dat', 'winmail.dat', 'application/ms-tnef');
         $messageToSend['attachments'] = array(
             array('tempFile' => array('id' => $tempFile->getId(), 'type' => 'application/ms-tnef'))
         );
@@ -2594,6 +2606,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $message = $this->_searchForMessageBySubject($messageToSend['subject']);
         $complete = $this->_json->getMessage($message['id']);
         self::assertEquals(0, count($complete['attachments']));
+        return $message;
     }
 
     /**
