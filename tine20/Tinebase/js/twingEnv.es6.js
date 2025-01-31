@@ -181,6 +181,10 @@ const getTwingEnv = function () {
       return Promise.resolve(transliterate(string))
     }))
 
+    twingEnv.addFilter(new TwingFilter('accountLoginChars', function (str) {
+      return Promise.resolve(String(str).replace(/[^\w\-_.@\d+]/u, ''))
+    }))
+
     /**
      * render proxy which gets replaced after with rendered content
      *
