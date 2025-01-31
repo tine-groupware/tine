@@ -1440,6 +1440,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.window.popup) this.window.rename(this.windowNamePrefix + this.record.id);
         
         if (closeWindow) {
+            this.checkUnsavedChanges = false;
             this.window.fireEvent('saveAndClose');
             if (this.window?.popup && (this.forceClose || !this.window.popup.opener)) {
                 this.window.popup.close();

@@ -154,7 +154,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const passwordField = this.getForm() ? this.getForm().findField('accountPassword') : null;
         const updatedPassword = passwordField.getValue();
 
-        if (this.record.modified.hasOwnProperty('accountPassword') && this.record.data.creation_time !== "" && updatedPassword) {
+        if (this.record.modified.hasOwnProperty('accountPassword') && updatedPassword) {
             const passwordDialog = new Tine.Tinebase.widgets.dialog.ResetPasswordDialog({
                 record: this.record,
                 contactRecord: this.contactRecordPicker.selectedRecord,
