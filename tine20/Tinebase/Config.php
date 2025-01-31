@@ -3909,10 +3909,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     protected static $_serverPlugins = array(
         Tinebase_Server_Plugin_Expressive::class   => 15,
-        Tinebase_Server_Plugin_Json::class      => 80,
+        Tinebase_Server_Plugin_Json::class      => 79,
         Tinebase_Server_Plugin_WebDAV::class    => 80,
         Tinebase_Server_Plugin_Cli::class        => 90,
-        Tinebase_Server_Plugin_Http::class      => 100
+        Tinebase_Server_Plugin_Http::class      => 100,
+        Tinebase_Server_Plugin_WebDAVCatchAll::class => 110,
     );
 
     /**

@@ -44,9 +44,6 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 
         $uri = $request->getUri()->getPath();
 
-        // remove trailing slashes - FastRoute is not handling uris with them correctly it seems
-        $uri = preg_replace('/\/+$/', '', $uri);
-
         // if the tine20 server is located in a subdir, we need to remove the server path from the uri
         if ('/' !== ($serverPath = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH)) && '' !== $serverPath) {
             $uri = preg_replace('/^' . preg_quote($serverPath, '/') . '/', '/', $uri);
@@ -54,6 +51,9 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 
         // remove multiple slashes as well - FastRoute is not handling uris with them correctly it seems
         $uri = preg_replace('/\/+/', '/', $uri);
+
+        // remove trailing slashes - FastRoute is not handling uris with them correctly it seems
+        $uri = rtrim($uri, '/');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), fn($headers, $name) => $headers .= PHP_EOL . $name . ': ' . ('authorization' === strtolower((string) $name) ? '*****' : $request->getHeaderLine($name)), ''));
