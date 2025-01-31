@@ -1249,7 +1249,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     suggestNameBasedProps: function(field, e) {
         // suggest for new users only!
-        if (!this.record.id) {
+        if (this.record.phantom) {
             // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
             Object.keys(Tine.Tinebase.configManager.get('accountTwig')).asyncForEach(async (fieldName) => {
                 if (fieldName === 'accountEmailAddress' && ! Tine.Tinebase.registry.get('primarydomain')) {
