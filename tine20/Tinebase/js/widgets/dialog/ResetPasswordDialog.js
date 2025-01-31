@@ -229,7 +229,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
     },
 
     onButtonApply: async function() {
-        if (!this.sendPWDViaSMSCheckbox.checked) {
+        if (!this.hasSmsAdapters || !this.sendPWDViaSMSCheckbox.checked) {
             return Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.onButtonApply.apply(this, arguments);
         }
         if (!this.phoneCombo.validate()) return;
@@ -249,7 +249,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
             return Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.onButtonApply.apply(this, arguments);
         })
         .catch((e) => {
-            Ext.Msg.alert(i18n._('Errors'), this.app.i18n._(e.data.message));
+            Ext.Msg.alert(i18n._('Errors'), i18n._(e.data.message));
         })
     },
 
