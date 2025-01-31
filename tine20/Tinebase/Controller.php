@@ -1678,7 +1678,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Cache_Exception
      */
-    public function getLogo($type = 'b', $size = '135x50', $mime='image/png', $colorSchema='light')
+    public function getLogo($type = 'b', $size = '300x100', $mime='image/png', $colorSchema='light')
     {
         if (! in_array($type, ['b', 'i'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
