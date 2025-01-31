@@ -1215,7 +1215,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
 
-            $routeCollector->get('/logo[/{type}[/{size}]]', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->get('/logo[/{type}[/{size}[/{mime}[/{colorSchema}]]]]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getLogo', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
@@ -1678,14 +1678,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Cache_Exception
      */
-    public function getLogo($type = 'b', $size = '135x50')
+    public function getLogo($type = 'b', $size = '135x50', $mime='image/png', $colorSchema='light')
     {
-        $mime = 'image/png';
-
         if (! in_array($type, ['b', 'i'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown type: ' . $type
-                . ' Using default "b"');
+                    . ' Using default "b"');
             $type = 'b';
         }
 
@@ -1697,26 +1695,45 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $size = '135x50';
         }
 
+        $mime = urldecode($mime);
+        if (! in_array($mime, array_merge(\Tinebase_ImageHelper::getSupportedImageMimeTypes(), ['image/svg+xml']))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown mime: ' . $mime
+                    . ' Using default "image/png"');
+            $mime='image/png';
+        }
+
+        if (! in_array($colorSchema, ['light', 'dark'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown colorSchema: ' . $colorSchema
+                    . ' Using default "light"');
+            $colorSchema = 'light';
+        }
+
         $cacheId = sha1(self::class . 'getLogo' . $type . $size . $mime);
         $imageBlob = Tinebase_Core::getCache()->load($cacheId);
-        
-        if (!$imageBlob) {
-            preg_match('/^(\d+)x(\d+)$/', $size, $matches);
 
-            $path = $type === 'i' ?
-                Tinebase_Core::getInstallLogo() :
-                Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO);
-            
+        if (!$imageBlob) {
+            $path = Tinebase_Core::getLogo($type, $colorSchema, $mime === 'image/svg+xml');
             $blob = Tinebase_Helper::getFileOrUriContents($path);
-            $image = Tinebase_Model_Image::getImageFromBlob($blob);
-            Tinebase_ImageHelper::resize($image, $matches[1], $matches[2], Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
-            $imageBlob = $image->getBlob($mime);
+
+            if ($mime === 'image/svg+xml' && substr($blob, 0, 5) === '<?xml') {
+                $imageBlob = $blob;
+            } else {
+                $mime = $mime !== 'image/svg+xml' ? $mime : 'image/png'; // fallback to png
+                preg_match('/^(\d+)x(\d+)$/', $size, $matches);
+                $image = Tinebase_Model_Image::getImageFromBlob($blob);
+                Tinebase_ImageHelper::resize($image, $matches[1], $matches[2], Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
+                $imageBlob = $image->getBlob($mime);
+            }
+
             Tinebase_Core::getCache()->save($imageBlob, $cacheId);
         }
 
         $response = new \Laminas\Diactoros\Response();
         $response->getBody()->write($imageBlob);
-        
+
+        $mime = $mime === 'image/svg+xml' && substr($imageBlob, 0, 5) === '<?xml' ? $mime : 'image/png';
         return $response
             ->withAddedHeader('Content-Type', $mime);
     }
