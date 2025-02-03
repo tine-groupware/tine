@@ -76,7 +76,7 @@ class SSO_PublicAPITest extends TestCase
             SSO_Model_RelyingParty::FLD_NAME => 'https://localhost:8443/auth/saml2/sp/metadata.php',
             SSO_Model_RelyingParty::FLD_LABEL => 'moodle',
             SSO_Model_RelyingParty::FLD_DESCRIPTION => 'desc',
-            SSO_Model_RelyingParty::FLD_LOGO => 'logo',
+            SSO_Model_RelyingParty::FLD_LOGO_LIGHT => 'logo',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_Saml2RPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_Saml2RPConfig([
                 SSO_Model_Saml2RPConfig::FLD_NAME => 'moodle',
