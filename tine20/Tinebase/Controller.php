@@ -1690,7 +1690,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         // TODO why do we have this param if only one size is supported? :)
-        if (! in_array($size, ['135x50'])) {
+        if (! in_array($size, ['135x50', '300x100'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown size: ' . $type
                     . ' Using default "135x50"');
