@@ -358,8 +358,8 @@ php-unit-update-tests:
       git checkout ${TINE_VERSION_NEXT}
       test_composer_install
       log update
-      su tine20 -c "php setup.php --config=/etc/tine20 --install EventManager"
       su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
+      su tine20 -c "php setup.php --config=/etc/tine20 --install EventManager"
     - |
       log "testing"
       test_phpunit
