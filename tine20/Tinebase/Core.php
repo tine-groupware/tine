@@ -2633,13 +2633,13 @@ class Tinebase_Core
     public static function getLogo($type = 'b', $colorSchema='light', $scalable=false)
     {
         $prio = array_merge(($type === 'i' ? [
-            "install_logo_${$colorSchema}_svg",
-            "install_logo_${$colorSchema}",
+            "install_logo_{$colorSchema}_svg",
+            "install_logo_{$colorSchema}",
             "install_logo_svg",
             "install_logo",
         ] : []), [
-            "branding_logo_${$colorSchema}_svg",
-            "branding_logo_${$colorSchema}",
+            "branding_logo_{$colorSchema}_svg",
+            "branding_logo_{$colorSchema}",
             "branding_logo_svg",
             "branding_logo",
         ]);
