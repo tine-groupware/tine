@@ -8,14 +8,10 @@
  */
 -->
 <script setup>
-/* eslint-disable */
 /* eslint-disable vue/no-mutating-props */
 import PasswordField from './widgets/dialog/vue/components/PasswordField.vue'
 import { onMounted, ref, inject, nextTick } from 'vue'
 import { BFormGroup } from 'bootstrap-vue-next'
-
-const i18n = window.i18n
-const Tine = window.Tine
 
 const props = defineProps({
   _this: Object,
@@ -28,24 +24,38 @@ const props = defineProps({
   }
 })
 
-const modSsl = Tine.Tinebase.registry.get('modSsl')
-// const ssoEnabled = Tine.Tinebase.registry.get('sso')
+// --------------------------------------------------------------------------
+
+const i18n = window.i18n
+
+// @DISCUSS: good idea to include Tine here
+const Tine = window.Tine
+const isSetup = window.location.pathname.includes('setup.php')
+
+// dont show ext idp options in setup.php
+const showExtIDPOptions = !isSetup
+
+// setup.php login only possible via username and password
+const allowPasskeyLogin = !isSetup && Tine.Tinebase.registry.get('allowPasskeyLogin')
+
+// used only to show password field
 const allowPasswordLessLogin = Tine.Tinebase.registry.get('allowPasswordLessLogin')
+
 const browserSupport = props._this._getBrowserSupportStatus()
 const licenseCheck = Tine.Tinebase.registry.get('licenseStatus')
 const extIdpConfig = Tine.Tinebase.registry.get('loginExternalIdps')
+
+// form a logo url
+let logoBase = Tine.logo
+logoBase = logoBase.endsWith('/') ? logoBase.slice(0, logoBase.length - 1) : logoBase
+// const isDark = document.body.classList.contains('dark-mode')
+// const logoUrl = `${logoBase}/300x100/image%2Fsvg%2Bxml${isDark ? '/dark' : ''}`
+const logoUrl = `${logoBase}${logoBase.endsWith('b') || logoBase.endsWith('i') ? '' : '/b'}/300x100`
 
 const eventBus = inject(props.injectKey)
 
 const usernameTRef = ref()
 const passwordTRef = ref()
-const setLastLoginUser = () => {
-  const lastUser = Ext.util.Cookies.get('TINE20LASTUSERID')
-  if (lastUser) {
-    props.formState.username = lastUser
-    usernameTRef.value.focus()
-  }
-}
 
 const onLoginPress = () => {
   eventBus.emit('onLoginPress')
@@ -55,47 +65,51 @@ const onExtIDPLoginPress = (idpId) => {
   eventBus.emit('onExtIDPLoginPress', idpId)
 }
 
-const triggerBrowserCredentialLogin = async (conditional=false) =>
+const triggerBrowserCredentialLogin = async (conditional = false) =>
+  /* eslint-disable no-useless-call */
   await props._this.triggerBrowserCredentialLogin.call(props._this, conditional)
 
 const langChooserRef = ref()
 onMounted(async () => {
-  console.error('mounted')
+  // render ext langChooser
   new Tine.widgets.LangChooser().render(langChooserRef.value)
+
   eventBus.on('focusPWField', focusPWField)
+  eventBus.on('focusUsernameField', focusUsernameField)
+
   if (allowPasswordLessLogin) props.formState.password = null
   usernameTRef.value.focus()
-  setLastLoginUser()
-  if (window.PublicKeyCredential
-    && PublicKeyCredential.isConditionalMediationAvailable
-    && props._this.allowPasskeyLogin
+
+  if (
+    allowPasskeyLogin &&
+    window.PublicKeyCredential &&
+    window.PublicKeyCredential.isConditionalMediationAvailable
   ) {
-    const isCMA = await PublicKeyCredential.isConditionalMediationAvailable();
+    const isCMA = await window.PublicKeyCredential.isConditionalMediationAvailable()
     if (isCMA) {
       await props._this.triggerBrowserCredentialLogin(true)
     }
   }
 })
 
-const pwFieldVisible = ref(!allowPasswordLessLogin || !props._this.allowPasskeyLogin)
+const pwFieldVisible = ref(!allowPasswordLessLogin)
 const focusPWField = () => {
   pwFieldVisible.value = true
   nextTick(() => {
     passwordTRef.value.focus()
   })
 }
-
-defineExpose({ focusPWField })
+const focusUsernameField = () => usernameTRef.value.focus()
 
 </script>
 
 <template>
-  <div class="bootstrap-scope main-container" style="height: 100%; width: 100%;">
+  <div class="bootstrap-scope main-container" style="height: 100%; width: 100%; min-height: fit-content">
     <div class="login-left">
       <div class="login-container">
         <div class="login-logo">
           <a target="_blank" rel="noopener noreferrer" :href="Tine.websiteUrl">
-            <img :src="Tine.installLogo" class="logo-image dark-reverse">
+            <img :src="logoUrl" class="logo-image dark-reverse">
           </a>
           <h2 class="mt-4">{{ i18n._('Login') }}</h2>
           <h5>{{ String.format(i18n._('Login with {0} account'), Tine.title)}}</h5>
@@ -113,7 +127,6 @@ defineExpose({ focusPWField })
                 class="login-input fs-5 ps-3"
                 v-model="formState.username"
                 :state="formState.usernameValid"
-                :disabled="modSsl"
                 autocomplete="username webauthn"
                 name="username"
             />
@@ -130,7 +143,6 @@ defineExpose({ focusPWField })
                 :un-lockable="!_this.allowBrowserPasswordManager"
                 :clipboard="false"
                 :name="'password'"
-                :disabled="modSsl"
                 ref="passwordTRef"
                 :state="formState.passwordValid"
                 v-model="formState.password"
@@ -140,14 +152,11 @@ defineExpose({ focusPWField })
               />
             </BFormGroup>
           </Transition>
-<!--          <BAlert :model-value="modSsl" class="mt-4">-->
-<!--            {{ i18n._('Certificate detected. Please, press Login button to proceed.') }}-->
-<!--          </BAlert>-->
           <div class="d-flex mt-4 justify-content-end">
             <BButton @click="onLoginPress" variant="primary" class="dark-reverse fs-5 px-4" pill>{{ i18n._('Login') }}</BButton>
           </div>
 <!--          <div class="auth-divider text-center mt-3">{{i18n._('Or')}}</div>-->
-          <div class="d-flex mt-3 justify-content-end" v-if="_this.allowPasskeyLogin">
+          <div class="d-flex mt-3 justify-content-end" v-if="allowPasskeyLogin">
             <BButton variant="link" class="fs-5 pr-0" underline-opacity="0" @click="triggerBrowserCredentialLogin(false)">
               <img src="images/icon-set/Icon_key.svg" class="d-inline-block" style="height: 1.5em; width: 1.5em"/>
               <span class="ms-1">{{ i18n._('Login with Passkey') }}</span>
@@ -160,7 +169,7 @@ defineExpose({ focusPWField })
           </div>
         </BForm>
       </div>
-      <div class="mt-4 external-idp-login" v-if="_this.showExtIDPOptions && extIdpConfig?.length > 0">
+      <div class="mt-4 external-idp-login" v-if="showExtIDPOptions && extIdpConfig?.length > 0">
         <p class="fs-3 fw-bolder text-center">{{i18n._('or').toUpperCase()}}</p>
         <div class="d-grid gap-2">
           <div
