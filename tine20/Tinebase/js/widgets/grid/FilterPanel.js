@@ -258,7 +258,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         for (let id in this.filterToolbars) {
             if (this.filterToolbars.hasOwnProperty(id) && this.filterToolbars[id].isActive) {
-                this.quickFilterPlugin.ftb = this.filterToolbars[id];
+                if (this.quickFilterPlugin) this.quickFilterPlugin.ftb = this.filterToolbars[id];
                 const filterData = this.filterToolbars[id].getValue();
                 filters.push({'condition': 'AND', 'filters': filterData, 'id': id, label: Ext.util.Format.htmlDecode(this.filterToolbars[id].title)});
             }
