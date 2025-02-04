@@ -1323,6 +1323,41 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
 
+    /**
+     * forward message test
+     *
+     * @see 0007624: losing umlauts in attached filenames
+     */
+    public function testGetForwardMessageAttachment()
+    {
+        $this->markTestSkipped('reopen this when we got bug report of opening eml attachment from the forwarded message');
+        $message = $this->_appendMessageforForwarding('msg_with_eml_attachment.eml', 'msg with eml attachment');
+        $attachment = $this->_json->getMessage($message['id'] . '_2');
+        $this->assertStringContainsString('msg with 1 image', $attachment['subject'],
+            'returned eml message as attachment is invalid');
+
+        $fwdSubject = 'Fwd: ' . $message['subject'];
+        $forwardMessageData = $this->_getForwardMessageData($message['id'], [
+            'subject' => $fwdSubject,
+        ]);
+
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($forwardMessageData);
+        $forwardMessage = $this->_searchForMessageBySubject($fwdSubject);
+
+//        // check attachment name
+//        $forwardMessageAttachment = $this->_json->getMessage($forwardMessage['id'] . '_2.2');
+//        $this->assertEquals(1, count($forwardMessageAttachment['attachments']));
+//        $this->assertStringContainsString('msg with 1 image', $forwardMessageAttachment['subject'],
+//            'returned eml message as attachment is invalid');
+
+        // check eml attachment subject
+        $forwardMessageAttachment2 = $this->_json->getMessage($forwardMessage['id'] . '_2');
+        $this->assertEquals(1, count($forwardMessageAttachment2['attachments']));
+        $this->assertStringContainsString('msg with 1 image', $forwardMessageAttachment2['subject'],
+            'returned eml message as attachment is invalid');
+    }
+
     protected function _getForwardMessageData(string $originalMessageId, array $data = []): array
     {
         return array_merge([
