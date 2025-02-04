@@ -397,7 +397,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         if (forwardMode === 'message' || this.draftOrTemplate) {
             Ext.each(message.get('attachments'), function (attachment) {
-                if (attachment['partId'].match(/winmail/)) {
+                if (attachment['partId'].toString().match(/winmail/)) {
                     // we found a winmail extration attachment -> forward the original winmail.dat
                     forwardMode = 'onlyAsAttachment';
                     attachments = [];

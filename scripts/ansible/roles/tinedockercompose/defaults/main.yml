@@ -1,5 +1,5 @@
 ---
-tinedockercompose_tine_image: "tinegroupware/tine:2023"
+tinedockercompose_tine_image: "tinegroupware/tine:2024"
 tinedockercompose_tinesetupuser: "tinesetup"
 tinedockercompose_tinesetuppw: "movemetovault"
 tinedockercompose_tinesetuphtpasswd: "setup:$$apr1$$JhCtViTh$$k15DH.HvNR5hZ66Ew5aTH/" #setuppw
