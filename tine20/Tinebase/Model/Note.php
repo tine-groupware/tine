@@ -17,6 +17,7 @@
  *
  * @property    string      $id
  * @property    string      $note_type_id
+ * @property    string      $note_visibility
  * @property    string      $note
  * @property    string      $record_id
  * @property    string      $record_model
@@ -25,6 +26,7 @@
 class Tinebase_Model_Note extends Tinebase_Record_Abstract
 {
     public const FLD_NOTE_TYPE_ID = 'note_type_id';
+    public const FLD_NOTE_VISIBILITY = 'note_visibility';
     public const FLD_NOTE = 'note';
     public const FLD_RECORD_ID = 'record_id';
     public const FLD_RECORD_MODEL = 'record_model';
@@ -78,7 +80,21 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
      * @staticvar string
      */
     const SYSTEM_NOTE_REVEAL_PASSWORD = 'revealPassword';
-    
+
+    /**
+     * system note visibility: private
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_PERSONAL = 'personal';
+
+    /**
+     * system note visibility: general
+     *
+     * @staticvar string
+     */
+    const SYSTEM_NOTE_SHARED = 'shared';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -134,6 +150,15 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
                 'validators' => [
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false
+                ]
+            ],
+            self::FLD_NOTE_VISIBILITY => [
+                'type' => self::TYPE_KEY_FIELD,
+                'name' => Tinebase_Config::NOTE_VISIBILITY,
+                'validators' => [
+                    'presence' => 'required',
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                 ]
             ],
             self::FLD_NOTE => [

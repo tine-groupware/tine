@@ -364,6 +364,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             // get default note type
                             $noteArray['note_type_id'] = Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
                         }
+                        if (!isset($noteArray['note_visibility'])) {
+                            // get default note visibility
+                            $noteArray['note_visibility'] = Tinebase_Model_Note::SYSTEM_NOTE_SHARED;
+                        }
                         try {
                             $note = new Tinebase_Model_Note($noteArray);
                             $notesToSet->addRecord($note);
@@ -452,6 +456,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $_record,
         $_userId = null,
         string $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,
+        string $_visibility = Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
         $_mods = null,
         $_backend = 'Sql',
         $_modelName = null
@@ -501,12 +506,13 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
 
         $note = new Tinebase_Model_Note(array(
-            'note_type_id'      => $_type,
-            'note'              => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
-            'record_model'      => $modelName,
-            'record_backend'    => ucfirst(strtolower($_backend)),
-            'record_id'         => $id,
-            'seq'               => $seq,
+            'note_type_id'              => $_type,
+            'note_visibility'           => $_visibility,
+            'note'                      => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
+            'record_model'              => $modelName,
+            'record_backend'            => ucfirst(strtolower($_backend)),
+            'record_id'                 => $id,
+            'seq'                       => $seq,
         ));
         
         return $this->addNote($note);
@@ -637,7 +643,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $_mods->addIndices(array('record_id'));
         foreach ($_mods->record_id as $recordId) {
             $modsOfRecord = $_mods->filter('record_id', $recordId);
-            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord, 'Sql', $modelName);
+            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $modsOfRecord, 'Sql', $modelName);
         }
     }
 
@@ -711,12 +717,17 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     {
         $backend = ucfirst(strtolower($_backend));
         $noteTypes = Tinebase_Config::getInstance()->get(Tinebase_Config::NOTE_TYPE)->records;
-        
+        $currentUser = Tinebase_Core::getUser();
+
+        if (!is_string($currentUser)) {
+            $currentUser = $currentUser->getId();
+        }
+
         if ($_onlyNonSystemNotes) {
             $noteTypes = $noteTypes->filter('is_user_type', 1);
         }
 
-        $filter = new Tinebase_Model_NoteFilter(array(
+        $filter = new Tinebase_Model_NoteFilter([
             array(
                 'field' => 'record_model',
                 'operator' => 'equals',
@@ -736,8 +747,23 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 'field' => 'note_type_id',
                 'operator' => 'in',
                 'value' => $noteTypes->getId()
-            )
-        ));
+            ),
+            ['condition' => 'OR',
+                'filters' => [
+                    [
+                        'field' => 'created_by',
+                        'operator' => 'equals',
+                        'value' => $currentUser
+                    ],
+                    [
+                        'field' => 'note_visibility',
+                        'operator' => 'equals',
+                        'value' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
+                    ]
+                ]
+            ],
+        ],
+        );
         
         return $filter;
     }

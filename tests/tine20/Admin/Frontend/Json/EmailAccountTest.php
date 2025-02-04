@@ -1023,7 +1023,8 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         $records = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
             ['field' => 'record_id', 'operator' => 'equals', 'value' => $account->getId()],
             ['field' => 'record_model', 'operator' => 'equals', 'value' => Felamimail_Model_Account::class],
-            ['field' => 'note_type_id', 'operator' => 'equals', 'value' => Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD]
+            ['field' => 'note_type_id', 'operator' => 'equals', 'value' => Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD],
+            ['field' => 'note_visibility', 'operator' => 'equals', 'value' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED]
         ]));
         self::assertCount(1, $records, 'reveal password failed');
 

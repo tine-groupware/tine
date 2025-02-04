@@ -33,12 +33,14 @@ class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'creation_time'  => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('note'), 'modelName' => Tinebase_Model_Note::class)),
-        'note'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'record_id'      => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'record_model'   => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'record_backend' => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'note_type_id'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'creation_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('note'), 'modelName' => Tinebase_Model_Note::class)),
+        'note'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'record_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'record_model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'record_backend'        => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'note_type_id'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'note_visibility'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'created_by'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

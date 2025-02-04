@@ -66,6 +66,7 @@ class Tinebase_NotesTest extends TestCase
     {
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'note_visibility'   => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             'note'              => 'phpunit test note',
             'record_model'      => $this->_objects['record']['model'],
             'record_backend'    => $this->_objects['record']['backend'],
@@ -94,7 +95,8 @@ class Tinebase_NotesTest extends TestCase
         $this->_instance->addSystemNote(
             $this->_objects['contact'], 
             Zend_Registry::get('currentAccount')->getId(), 
-            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED
+            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,
+            Tinebase_Model_Note::SYSTEM_NOTE_SHARED
         );
         
         $filter = new Tinebase_Model_NoteFilter(array(array(
@@ -212,6 +214,7 @@ class Tinebase_NotesTest extends TestCase
             $this->_instance->addNote(new Tinebase_Model_Note(array(
                 'note'          => 'very important note!',
                 'note_type_id'  => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                'note_visibility' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                 'record_id'     => $contact->getId(),
                 'record_model'  => 'Addressbook_Model_Contact',
             )));

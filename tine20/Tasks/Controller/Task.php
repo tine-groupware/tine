@@ -114,6 +114,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
                         $note = new Tinebase_Model_Note($note, true);
                     }
                     $note->note_type_id = Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
+                    $note->note_visibility = Tinebase_Model_Note::SYSTEM_NOTE_SHARED;
                     $_record->notes->addRecord($note);
                 }
                 if ($attachments && ($attachments = $attachments->filter('id', null)) && $attachments->count() > 0) {

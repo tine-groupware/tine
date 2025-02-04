@@ -217,6 +217,7 @@ Tine.Tinebase.PickerRecord = Ext.data.Record.create([
 Tine.Tinebase.Model.Note = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'note_type_id'   },
+    {name: 'note_visibility'   },
     {name: 'note'           },
     {name: 'creation_time', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     {name: 'created_by'     }

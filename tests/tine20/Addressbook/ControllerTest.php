@@ -458,6 +458,7 @@ class Addressbook_ControllerTest extends TestCase
     [0] => Array
         (
             [note_type_id] => note
+            [note_visibility] => shared
             [note] => phpunit test note
             [record_backend] => Sql
             [id] => 
@@ -701,6 +702,7 @@ class Addressbook_ControllerTest extends TestCase
         $notes = $createdContact->notes->toArray();
         $notes[] = array(
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'note_visibility'   => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             'note'              => 'phpunit test note 2',
         );
         $updateContact->notes = $notes;

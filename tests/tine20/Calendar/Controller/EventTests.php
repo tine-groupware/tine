@@ -2359,6 +2359,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event1->summary = 'event 1';
         $event1->notes = [new Tinebase_Model_Note([
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'note_visibility'   => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             'note'              => 'phpunit test note',
         ])];
         $event1->relations = [[
@@ -2403,6 +2404,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $notes = $updateEvent->notes->toArray();
         $notes[] = [
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'note_visibility'   => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             'note'              => 'phpunit test note 2',
         ];
         $updateEvent->notes = $notes;

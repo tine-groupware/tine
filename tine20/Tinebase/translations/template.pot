@@ -177,6 +177,9 @@ msgstr ""
 msgid "Logger Configuration"
 msgstr ""
 
+msgid "Suppress Exception Traces"
+msgstr ""
+
 msgid "MFA Bypass Netmasks"
 msgstr ""
 
@@ -917,9 +920,6 @@ msgstr ""
 msgid "Max amount per filter"
 msgstr ""
 
-msgid "Enable Password Less Login"
-msgstr ""
-
 msgid "Quota settings"
 msgstr ""
 
@@ -1039,6 +1039,18 @@ msgstr ""
 msgid "Reveal password"
 msgstr ""
 
+msgid "Note Visibility"
+msgstr ""
+
+msgid "Available Note visibility for modlog history"
+msgstr ""
+
+msgid "Personal"
+msgstr ""
+
+msgid "Shared"
+msgstr ""
+
 msgid "SMS Config"
 msgstr ""
 
@@ -1052,9 +1064,6 @@ msgid "Template for SMS New Password"
 msgstr ""
 
 msgid "Template for SMS New Password with parameters: app, user, contact, password"
-msgstr ""
-
-msgid "Your new {{ app.branding.title }} password is: {{ password }}"
 msgstr ""
 
 msgid "User type"
@@ -1217,6 +1226,9 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
+msgid "Node name may not be changed in update"
+msgstr ""
+
 msgid "The following files have changed:"
 msgstr ""
 
@@ -1289,6 +1301,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Learn more about {0}"
+msgstr ""
+
+msgid "Video Tutorials"
+msgstr ""
+
+msgid "Technical Documentation"
+msgstr ""
+
+msgid "FAQ"
 msgstr ""
 
 msgid "Ok"
@@ -1536,6 +1557,12 @@ msgstr ""
 msgid "This method is rate-limited and you sent too many requests."
 msgstr ""
 
+msgid "There where Errors:"
+msgstr ""
+
+msgid "({e.code}) { e.message }"
+msgstr ""
+
 msgid "Service Unavailable"
 msgstr ""
 
@@ -1582,6 +1609,9 @@ msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
 msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "Outdated Browser"
@@ -1730,6 +1760,12 @@ msgstr ""
 msgid "Please enter your login data"
 msgstr ""
 
+msgid "Error"
+msgstr ""
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr ""
+
 #, python-brace-format
 msgid "Login with {0} account"
 msgstr ""
@@ -1738,6 +1774,12 @@ msgid "Language"
 msgstr ""
 
 msgid "Login with Password?"
+msgstr ""
+
+msgid "Or"
+msgstr ""
+
+msgid "Login with Passkey"
 msgstr ""
 
 msgid "or"
@@ -1890,12 +1932,6 @@ msgid "Password required"
 msgstr ""
 
 msgid "This area is locked. To unlock it you need to provide your password."
-msgstr ""
-
-msgid "Error"
-msgstr ""
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
 msgstr ""
 
 msgid "Yubico OTP required"
@@ -2384,6 +2420,9 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
+msgid "Visibility"
+msgstr ""
+
 msgid "Created By"
 msgstr ""
 
@@ -2663,9 +2702,6 @@ msgid "Action:"
 msgstr ""
 
 msgid "Enter description"
-msgstr ""
-
-msgid "Close"
 msgstr ""
 
 msgid "delete"

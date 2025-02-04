@@ -438,6 +438,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
     {
         $note = array(
             'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'note_visibility'      => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             'note' => 'phpunit test note',
         );
 

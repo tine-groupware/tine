@@ -196,7 +196,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
             Tinebase_Timemachine_ModificationLog::getInstance()
                 ->setRecordMetaData($_monthlyWTR, self::ACTION_UPDATE, $currentRecord);
             $currentMods = $this->_writeModLog($_monthlyWTR, $currentRecord);
-            $this->_setSystemNotes($_monthlyWTR, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
+            $this->_setSystemNotes($_monthlyWTR, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $currentMods);
 
             $_monthlyWTR = $this->_backend->update($_monthlyWTR);
         }

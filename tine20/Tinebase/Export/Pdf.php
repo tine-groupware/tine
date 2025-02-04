@@ -485,20 +485,24 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             foreach ($_notes as $note) {
                 if ($note instanceOf Tinebase_Model_Note) {
                     $noteType = Tinebase_Config::getInstance()->get(Tinebase_Config::NOTE_TYPE)->records->getById($note->note_type_id);
+                    $noteVisibility = Tinebase_Config::getInstance()->get(Tinebase_Config::NOTE_VISIBILITY)->records->getById($note->note_visibility);
                     $noteArray = $note->toArray();
                     $noteText = (strlen((string)$note->note) > 100) ? substr($note->note, 0, 99) . '...' : $note->note;
                     $time = Tinebase_Translation::dateToStringInTzAndLocaleFormat($note->creation_time);
                       
                     $createdBy = '(' . $noteArray['created_by'] . ')';
-                    $record[] = array(
-                        'label' => $time,
-                        'type'  => 'multiRow',
-                        'value' => array(
-                            array('icon' => '/' . $noteType->icon),
-                            $noteText,
-                            $createdBy,
-                        )                
-                    );
+                    if (!empty($noteType)) {
+                        $record[] = array(
+                            'label' => $time,
+                            'type'  => 'multiRow',
+                            'value' => array(
+                                array('icon' => '/' . $noteType->icon),
+                                array('icon' => '/' . $noteVisibility->icon),
+                                $noteText,
+                                $createdBy,
+                            )
+                        );
+                    }
                 }
             }
         }

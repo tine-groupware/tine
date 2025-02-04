@@ -2108,7 +2108,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $imapConfig = $fmailaccount->getImapConfig();
         
         Tinebase_Notes::getInstance()->addSystemNote($fmailaccount, Tinebase_Core::getUser(),
-            Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD, $fmailaccount, 'Sql', 'Felamimail_Model_Account');
+            Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $fmailaccount, 'Sql', 'Felamimail_Model_Account');
         
         return [
             'password'=> $imapConfig['password']
