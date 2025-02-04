@@ -61,7 +61,7 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             //_('Number of included users')
             self::DESCRIPTION           => 'Number of included users',
             self::TYPE                  => self::TYPE_INT,
-            self::DEFAULT_STR           => 30,
+            self::DEFAULT_STR           => 50,
         ],
         self::PACKAGE_STORAGE_INFO_TEMPLATE                => [
             //_('Saas storage package info template')
