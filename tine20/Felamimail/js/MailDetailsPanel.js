@@ -399,6 +399,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                             hidden: selectedAttachments.length !== 1 || _.get(selectedAttachments, '[0]content-type') !== 'message/rfc822',
                             handler: () => {
                                 // fixme: messageId might be filemanager node id
+                                //fixme: eml attachment from forwarded message can not be open with 1fbfe2477a607f4b94e8166510e8fb63a2c421fd_3,
+                                // but success with 1fbfe2477a607f4b94e8166510e8fb63a2c421fd_3.3
                                 Tine.Felamimail.MessageDisplayDialog.openWindow({
                                     record: new Tine.Felamimail.Model.Message({
                                         id: messageId + '_' + selectedAttachments[0].partId
@@ -522,9 +524,12 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         _.each(attachments, (attachment) => {
             if (!attachment.promises) attachment.promises = [];
-            if (this.isAttachmentDataValid(attachment)) return;
 
             const promise = new Promise(async (resolve, reject) => {
+                if (this.isAttachmentDataValid(attachment)) return resolve({
+                    cache: new Tine.Tinebase.Model.Tree_Node(attachment.cache?.data ?? attachment.cache),
+                    isPreviewReady: attachment.isPreviewReady,
+                });
                 const start = Date.now();
                 const responses = await Promise.all(attachment.promises);
                 const validResponse = responses.find((r) => {return this.isAttachmentDataValid(r);});
@@ -540,7 +545,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         time: Date.now() - start,
                     });
                 }
-                const attachmentId = [sourceModel, record.id, attachment.partId].join(':');
+                //fixme: attachment message id with _ is not valid
+                const attachmentId = [sourceModel, record.id.split('_').shift(), attachment.partId].join(':');
                 await Tine.Felamimail.getAttachmentCache(attachmentId, createPreviewInstantly)
                     .then(async (cache) => {
                         const cacheRecord = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
@@ -560,7 +566,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     .catch((e) => {
                         console.error(e);
                         attachment.isPreviewReady = false;
-                        return reject(e);
+                        return resolve(attachment);
                     });
             })
             attachment.promises.push(promise);
