@@ -86,6 +86,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
         // the columnmodel
         var columnModel = new Ext.grid.ColumnModel([
             { resizable: true, id: 'note_type_id', header: this.translation.gettext('Type'), width: 25, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')},
+            { resizable: true, id: 'note_visibility', header: this.translation.gettext('Visibility'), width: 25, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteVisibility')},
             { resizable: true, id: 'note', header: this.translation.gettext('Note'), renderer: this.noteRenderer.createDelegate(this)},
             { resizable: true, id: 'created_by', header: this.translation.gettext('Created By'), width: 70},
             { resizable: true, id: 'creation_time', header: this.translation.gettext('Timestamp'), width: 50, 
@@ -292,6 +293,14 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                     filtertype: 'tine.widget.keyfield.filter',
                     app: 'Tinebase',
                     keyfieldName: 'noteType',
+                    defaultOperator: 'notin'
+                },
+                {
+                    label: this.translation._('Visibility'),
+                    field: 'note_visibility',
+                    filtertype: 'tine.widget.keyfield.filter',
+                    app: 'Tinebase',
+                    keyfieldName: 'noteVisibility',
                     defaultOperator: 'notin'
                 }
             ],

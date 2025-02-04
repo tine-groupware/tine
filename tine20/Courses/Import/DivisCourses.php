@@ -181,6 +181,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         if (null === $this->note) {
             $note = new Tinebase_Model_Note([
                 'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                'note_visibility' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                 'note' => 'last imported revision: 0',
                 'record_id' => $this->fileNode->getId(),
                 'record_model' => Tinebase_Model_Tree_Node::class,
@@ -789,6 +790,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 $resultMsg = mb_substr($resultMsg, 16000);
                 $note = new Tinebase_Model_Note([
                     'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                    'note_visibility' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                     'note' => mb_substr($resultMsg, 0, 16000),
                     'record_id' => $this->fileNode->getId(),
                     'record_model' => Tinebase_Model_Tree_Node::class,

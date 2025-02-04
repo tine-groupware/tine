@@ -1429,7 +1429,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         self::assertGreaterThan($expectedNumber, $history['totalcount'], 'no update note created');
 
         $notes = array_filter($history['results'], function($note) {
-            return $note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
+            return ($note['note_type_id'] === Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE && $note['note_visibility'] === Tinebase_Model_Note::SYSTEM_NOTE_SHARED);
         });
         self::assertCount($expectedNumber, $notes, 'no update note found:' . print_r($history['results'], true));
         $notesMatching = array_filter($notes, function($note) use ($translatedString) {

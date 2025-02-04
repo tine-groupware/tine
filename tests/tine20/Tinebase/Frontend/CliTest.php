@@ -509,6 +509,7 @@ class Tinebase_Frontend_CliTest extends TestCase
                 //create dead notes for each of those models
                 $note = new Tinebase_Model_Note(array(
                     'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                    'note_visibility'      => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                     'note'  => 'test note text',
                     'record_id' => Tinebase_Record_Abstract::generateUID(),
                     'record_model' => $model,
@@ -524,6 +525,7 @@ class Tinebase_Frontend_CliTest extends TestCase
             'n_family' => 'someone',
             'notes' => array(array(
                 'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                'note_visibility'      => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                 'note'  => 'test note text for real record',
             ))
         ));
@@ -542,6 +544,7 @@ class Tinebase_Frontend_CliTest extends TestCase
             'summary'   => 'test event',
             'notes' => array(array(
                 'note_type_id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+                'note_visibility'      => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                 'note'  => 'test note text for real record',
             ))
         ));

@@ -1,0 +1,208 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - EventManager\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgid "Type"
+msgstr ""
+
+msgid "Main Event"
+msgstr ""
+
+msgid "Workshop"
+msgstr ""
+
+msgid "Project Event"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Canceled"
+msgstr ""
+
+msgid "Planning"
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Attendee"
+msgstr ""
+
+msgid "Speaker"
+msgstr ""
+
+msgid "Moderator"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Manually"
+msgstr ""
+
+msgid "Confirmed"
+msgstr ""
+
+msgid "Member Status"
+msgstr ""
+
+msgid "Member"
+msgstr ""
+
+msgid "Not a Member"
+msgstr ""
+
+msgid "Languages Available"
+msgstr ""
+
+msgid "List of languages available in the modules."
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Level 1"
+msgstr ""
+
+msgid "Level 2"
+msgstr ""
+
+msgid "Level 3"
+msgstr ""
+
+msgid "Level 4"
+msgstr ""
+
+msgid "Level 5"
+msgstr ""
+
+msgid "Level 6"
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Text block"
+msgstr ""
+
+msgid "Sign Up"
+msgstr ""
+
+msgid "Event Information"
+msgstr ""
+
+msgid "Event Options"
+msgstr ""
+
+msgid "Registrations"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Enter description"
+msgstr ""
+
+msgid "Booked Options"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Booked Option"
+msgid_plural "Booked Options"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Event Option"
+msgstr ""
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Event start"
+msgstr ""
+
+msgid "Event end"
+msgstr ""
+
+msgid "Registration possible until"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Fee"
+msgstr ""
+
+msgid "Total places"
+msgstr ""
+
+msgid "Booked places"
+msgstr ""
+
+msgid "Available places"
+msgstr ""
+
+msgid "Double Opt in"
+msgstr ""
+
+msgid "Event Registrations"
+msgstr ""
+
+msgid "Event is live"
+msgstr ""
+
+msgid "Required Contact fields"
+msgstr ""
+
+msgid "Contact auto Tags"
+msgstr ""
+
+msgid "Option"
+msgid_plural "Options"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Url"
+msgstr ""
+
+msgid "EventManager"
+msgstr ""

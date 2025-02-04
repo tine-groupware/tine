@@ -177,6 +177,9 @@ msgstr "Database Configuration"
 msgid "Logger Configuration"
 msgstr "Logger Configuration"
 
+msgid "Suppress Exception Traces"
+msgstr "Suppress Exception Traces"
+
 msgid "MFA Bypass Netmasks"
 msgstr "MFA Bypass Netmasks"
 
@@ -917,9 +920,6 @@ msgstr "Max amount in total"
 msgid "Max amount per filter"
 msgstr "Max amount per filter"
 
-msgid "Enable Password Less Login"
-msgstr "Enable Password Less Login"
-
 msgid "Quota settings"
 msgstr "Quota settings"
 
@@ -1039,6 +1039,18 @@ msgstr "Changed"
 msgid "Reveal password"
 msgstr "Reveal password"
 
+msgid "Note Visibility"
+msgstr "Note Visibility"
+
+msgid "Available Note visibility for modlog history"
+msgstr "Available Note visibility for modlog history"
+
+msgid "Personal"
+msgstr "Personal"
+
+msgid "Shared"
+msgstr "Shared"
+
 msgid "SMS Config"
 msgstr "SMS Config"
 
@@ -1053,9 +1065,6 @@ msgstr "Template for SMS New Password"
 
 msgid "Template for SMS New Password with parameters: app, user, contact, password"
 msgstr "Template for SMS New Password with parameters: app, user, contact, password"
-
-msgid "Your new {{ app.branding.title }} password is: {{ password }}"
-msgstr "Your new {{ app.branding.title }} password is: {{ password }}"
 
 msgid "User type"
 msgstr "User type"
@@ -1217,6 +1226,9 @@ msgstr "Total: "
 msgid "Data"
 msgstr "Data"
 
+msgid "Node name may not be changed in update"
+msgstr "Node name may not be changed in update"
+
 msgid "The following files have changed:"
 msgstr "The following files have changed:"
 
@@ -1290,6 +1302,15 @@ msgstr "About {0}"
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr "Learn more about {0}"
+
+msgid "Video Tutorials"
+msgstr "Video Tutorials"
+
+msgid "Technical Documentation"
+msgstr "Technical Documentation"
+
+msgid "FAQ"
+msgstr "FAQ"
 
 msgid "Ok"
 msgstr "Ok"
@@ -1536,6 +1557,12 @@ msgstr "Rate-Limit"
 msgid "This method is rate-limited and you sent too many requests."
 msgstr "This method is rate-limited and you sent too many requests."
 
+msgid "There where Errors:"
+msgstr "There where Errors:"
+
+msgid "({e.code}) { e.message }"
+msgstr "({e.code}) { e.message }"
+
 msgid "Service Unavailable"
 msgstr "Service Unavailable"
 
@@ -1583,6 +1610,9 @@ msgstr "Method Not Found / Insufficent Permissions"
 
 msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
 msgstr "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
+
+msgid "Close"
+msgstr "Close"
 
 msgid "Outdated Browser"
 msgstr "Outdated Browser"
@@ -1730,6 +1760,12 @@ msgstr "Redirecting to SSO Identity Provider"
 msgid "Please enter your login data"
 msgstr "Please enter your login data"
 
+msgid "Error"
+msgstr "Error"
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr "FIDO2 WebAuthn authentication failed. Try again?"
+
 #, python-brace-format
 msgid "Login with {0} account"
 msgstr "Login with {0} account"
@@ -1739,6 +1775,12 @@ msgstr "Language"
 
 msgid "Login with Password?"
 msgstr "Login with Password?"
+
+msgid "Or"
+msgstr "Or"
+
+msgid "Login with Passkey"
+msgstr "Login with Passkey"
 
 msgid "or"
 msgstr "or"
@@ -1891,12 +1933,6 @@ msgstr "Password required"
 
 msgid "This area is locked. To unlock it you need to provide your password."
 msgstr "This area is locked. To unlock it you need to provide your password."
-
-msgid "Error"
-msgstr "Error"
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
-msgstr "FIDO2 WebAuthn authentication failed. Try again?"
 
 msgid "Yubico OTP required"
 msgstr "Yubico OTP required"
@@ -2384,6 +2420,9 @@ msgstr "Notes"
 msgid "Type"
 msgstr "Type"
 
+msgid "Visibility"
+msgstr "Visibility"
+
 msgid "Created By"
 msgstr "Created By"
 
@@ -2664,9 +2703,6 @@ msgstr "Action:"
 
 msgid "Enter description"
 msgstr "Enter description"
-
-msgid "Close"
-msgstr "Close"
 
 msgid "delete"
 msgstr "delete"

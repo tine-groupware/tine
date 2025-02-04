@@ -1,0 +1,208 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - EventManager\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Main Event"
+msgstr "Main Event"
+
+msgid "Workshop"
+msgstr "Workshop"
+
+msgid "Project Event"
+msgstr "Project Event"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Closed"
+msgstr "Closed"
+
+msgid "Canceled"
+msgstr "Canceled"
+
+msgid "Planning"
+msgstr "Planning"
+
+msgid "Function"
+msgstr "Function"
+
+msgid "Attendee"
+msgstr "Attendee"
+
+msgid "Speaker"
+msgstr "Speaker"
+
+msgid "Moderator"
+msgstr "Moderator"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Manually"
+msgstr "Manually"
+
+msgid "Confirmed"
+msgstr "Confirmed"
+
+msgid "Member Status"
+msgstr "Member Status"
+
+msgid "Member"
+msgstr "Member"
+
+msgid "Not a Member"
+msgstr "Not a Member"
+
+msgid "Languages Available"
+msgstr "Languages Available"
+
+msgid "List of languages available in the modules."
+msgstr "List of languages available in the modules."
+
+msgid "Level"
+msgstr "Level"
+
+msgid "Level 1"
+msgstr "Level 1"
+
+msgid "Level 2"
+msgstr "Level 2"
+
+msgid "Level 3"
+msgstr "Level 3"
+
+msgid "Level 4"
+msgstr "Level 4"
+
+msgid "Level 5"
+msgstr "Level 5"
+
+msgid "Level 6"
+msgstr "Level 6"
+
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Text block"
+msgstr "Text block"
+
+msgid "Sign Up"
+msgstr "Sign Up"
+
+msgid "Event Information"
+msgstr "Event Information"
+
+msgid "Event Options"
+msgstr "Event Options"
+
+msgid "Registrations"
+msgstr "Registrations"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Enter description"
+msgstr "Enter description"
+
+msgid "Booked Options"
+msgstr "Booked Options"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Booked Option"
+msgid_plural "Booked Options"
+msgstr[0] "Booked Option"
+msgstr[1] "Booked Options"
+
+msgid "Event Option"
+msgstr "Event Option"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Registration"
+msgstr[1] "Registrations"
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Event"
+msgstr[1] "Events"
+
+msgid "Event start"
+msgstr "Event start"
+
+msgid "Event end"
+msgstr "Event end"
+
+msgid "Registration possible until"
+msgstr "Registration possible until"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Fee"
+msgstr "Fee"
+
+msgid "Total places"
+msgstr "Total places"
+
+msgid "Booked places"
+msgstr "Booked places"
+
+msgid "Available places"
+msgstr "Available places"
+
+msgid "Double Opt in"
+msgstr "Double Opt in"
+
+msgid "Event Registrations"
+msgstr "Event Registrations"
+
+msgid "Event is live"
+msgstr "Event is live"
+
+msgid "Required Contact fields"
+msgstr "Required Contact fields"
+
+msgid "Contact auto Tags"
+msgstr "Contact auto Tags"
+
+msgid "Option"
+msgid_plural "Options"
+msgstr[0] "Option"
+msgstr[1] "Options"
+
+msgid "Price"
+msgstr "Price"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "EventManager"
+msgstr "EventManager"

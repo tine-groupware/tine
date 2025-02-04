@@ -616,12 +616,12 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 $text .= ' ' . $translation->_('Vacation message is now inactive.');
             }
             Tinebase_Notes::getInstance()->addSystemNote($account, Tinebase_Core::getUser(),
-                Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $text);
+                Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $text);
         }
         if ($rules) {
             $text = $translation->_('Sieve rules have been updated.');
             Tinebase_Notes::getInstance()->addSystemNote($account, Tinebase_Core::getUser(),
-                Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, $text);
+                Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $text);
         }
     }
     

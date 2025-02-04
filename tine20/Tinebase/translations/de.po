@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 12:12+0000\n"
+"PO-Revision-Date: 2025-02-03 11:24+0100\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -26,9 +26,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.5\n"
 
 msgid "admin"
 msgstr "Admin"
@@ -192,6 +191,9 @@ msgid "Database Configuration"
 msgstr ""
 
 msgid "Logger Configuration"
+msgstr ""
+
+msgid "Suppress Exception Traces"
 msgstr ""
 
 msgid "MFA Bypass Netmasks"
@@ -934,9 +936,6 @@ msgstr "Maximale Gesamtanzahl"
 msgid "Max amount per filter"
 msgstr "Maximalanzahl pro Filter"
 
-msgid "Enable Password Less Login"
-msgstr ""
-
 msgid "Quota settings"
 msgstr "Quota Einstellungen"
 
@@ -1056,6 +1055,18 @@ msgstr "Geändert"
 msgid "Reveal password"
 msgstr "Passwort anzeigen"
 
+msgid "Note Visibility"
+msgstr "Notiz Sichtbarkeit"
+
+msgid "Available Note visibility for modlog history"
+msgstr ""
+
+msgid "Personal"
+msgstr "Persönliche"
+
+msgid "Shared"
+msgstr "Gemeinsame"
+
 msgid "SMS Config"
 msgstr ""
 
@@ -1070,9 +1081,6 @@ msgstr "Schablone für SMS Neues Passwort"
 
 msgid "Template for SMS New Password with parameters: app, user, contact, password"
 msgstr "Vorlage für SMS New Password mit den Parametern: app, user, contact, password"
-
-msgid "Your new {{ app.branding.title }} password is: {{ password }}"
-msgstr "Ihr neues {{ app.branding.title }} Passwort ist: {{ password }}"
 
 msgid "User type"
 msgstr "Nutzer*innen Typ"
@@ -1234,6 +1242,9 @@ msgstr "Summe:"
 msgid "Data"
 msgstr "Daten"
 
+msgid "Node name may not be changed in update"
+msgstr ""
+
 msgid "The following files have changed:"
 msgstr "Die folgenden Dateien haben sich geändert:"
 
@@ -1307,6 +1318,15 @@ msgstr "Über {0}"
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr "Lerne mehr über {0}"
+
+msgid "Video Tutorials"
+msgstr ""
+
+msgid "Technical Documentation"
+msgstr ""
+
+msgid "FAQ"
+msgstr ""
 
 msgid "Ok"
 msgstr "Ok"
@@ -1553,6 +1573,12 @@ msgstr ""
 msgid "This method is rate-limited and you sent too many requests."
 msgstr ""
 
+msgid "There where Errors:"
+msgstr ""
+
+msgid "({e.code}) { e.message }"
+msgstr ""
+
 msgid "Service Unavailable"
 msgstr "Dienst nicht verfügbar"
 
@@ -1600,6 +1626,9 @@ msgstr "Methode nicht gefunden oder fehlende Rechte"
 
 msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
 msgstr "Sie haben versucht auf eine Methode zuzugreifen, die nicht existiert. Bitte aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
+
+msgid "Close"
+msgstr "Schließen"
 
 msgid "Outdated Browser"
 msgstr "Veralteter Browser"
@@ -1747,6 +1776,12 @@ msgstr "Weiterleitung zum SSO Identity Provider"
 msgid "Please enter your login data"
 msgstr "Bitte geben Sie ihre Anmeldedaten ein"
 
+msgid "Error"
+msgstr "Fehler"
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr "Authentifikation des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut versuchen?"
+
 #, python-brace-format
 msgid "Login with {0} account"
 msgstr "Mit {0} Konto einloggen"
@@ -1756,6 +1791,12 @@ msgstr "Sprache"
 
 msgid "Login with Password?"
 msgstr "Mit Passwort anmelden?"
+
+msgid "Or"
+msgstr ""
+
+msgid "Login with Passkey"
+msgstr ""
 
 msgid "or"
 msgstr "oder"
@@ -1908,12 +1949,6 @@ msgstr "Passwort erforderlich"
 
 msgid "This area is locked. To unlock it you need to provide your password."
 msgstr "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort eingeben."
-
-msgid "Error"
-msgstr "Fehler"
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
-msgstr "Authentifikation des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es erneut versuchen?"
 
 msgid "Yubico OTP required"
 msgstr "Yubico OTP erforderlich"
@@ -2401,6 +2436,9 @@ msgstr "Notizen"
 msgid "Type"
 msgstr "Typ"
 
+msgid "Visibility"
+msgstr "Sichtbarkeit"
+
 msgid "Created By"
 msgstr "Erstellt von"
 
@@ -2681,9 +2719,6 @@ msgstr "Aktion:"
 
 msgid "Enter description"
 msgstr "Beschreibung einfügen"
-
-msgid "Close"
-msgstr "Schließen"
 
 msgid "delete"
 msgstr "Löschen"
@@ -4421,3 +4456,6 @@ msgstr "Tine 2.0 URL"
 
 msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
+
+#~ msgid "Your new {{ app.branding.title }} password is: {{ password }}"
+#~ msgstr "Ihr neues {{ app.branding.title }} Passwort ist: {{ password }}"

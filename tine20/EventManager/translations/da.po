@@ -1,0 +1,49 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Bookmarks\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2024-11-25 16:54+0000\n"
+"Language-Team: Danish (https://app.transifex.com/tine/teams/16133/da/)\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+msgid "Live time of token subscriptions"
+msgstr ""
+
+msgid "Import html formated bookmarks"
+msgstr ""
+
+msgid "Bookmarks HTML import"
+msgstr ""
+
+msgid "Bookmark"
+msgid_plural "Bookmarks"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Bookmark list"
+msgid_plural "Bookmarks lists"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Url"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Access count"
+msgstr ""
+
+msgid "Bookmarks"
+msgstr ""
