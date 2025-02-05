@@ -1454,7 +1454,16 @@ Tine.Tinebase.tineInit = {
         require('Locale');
         require('Locale/Gettext');
 
-        await waitFor( function() { return Tine.__translationData?.__isLoaded; });
+        try {
+            await waitFor( function() { return Tine.__translationData?.__isLoaded; }, 10000);
+        } catch (e) {
+            await Ext.MessageBox.alert(
+                formatMessage('Translation Problem'),
+                formatMessage('A problem, with the translations was detected, trying to reload client...')
+            );
+            Tine.Tinebase.common.reload({ clearCache: true, keepRegistry: false });
+            throw e;
+        }
         Tine.__applyExtTranslations();
 
         _.each(Tine.__translationData.msgs, function(msgs, category) {
