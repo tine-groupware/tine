@@ -74,11 +74,12 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
                 layout: 'fit',
                 flex: 1,
                 autoScroll: true,
+                style: 'padding: 10px 0px;',
                 items: [{
                     xtype: 'label',
                     border: false,
                     cls: 'ext-mb-text',
-                    html: this.text
+                    html: this.text,
                 }]
             }]
         }];
