@@ -41,9 +41,10 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
         this.on('beforeselect', async (field, adr, idx) => {
             if (adr.get('type') === 'postal') {
                 const form = this.findParentBy((c) => {return c instanceof Ext.form.FormPanel}).getForm();
-                const category = form.findField('document_category').selectedRecord;
+                const category = form.findField('document_category')?.selectedRecord;
                 const division = category?.data?.division_id;
-                const selectedCustomer = form.findField('customer_id').selectedRecord;
+                const selectedCustomer = form.findField('customer_id')?.selectedRecord;
+                if (!selectedCustomer) return;
                 const customer = selectedCustomer.json?.original_id ? await Tine.Sales.getCustomer(selectedCustomer.json.original_id) : selectedCustomer.data;
                 const debitors = _.filter(customer.debitors, (deb) => { return _.get(deb, 'division_id.id', deb) === division?.id});
                 if (debitors) {
@@ -108,6 +109,13 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 //       in orders debitor of 'delivery', 'billing' should match receipient?
                 //       in all documents debitor should match precursor receipient?
                 typeRecord = typeRecords[0];
+
+                if (!typeRecord && !division) {
+                    const addrs =  _.flatten(_.map(_.cloneDeep(customer.data.debitors), (debitor) => {
+                        return debitor['billing'];
+                    }));
+                    typeRecord = addrs[0];
+                }
             }
             if (typeRecord && !this.isExplicitlyCleared) {
                 const address = Tine.Tinebase.data.Record.setFromJson(typeRecord, this.recordClass);
