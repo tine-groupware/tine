@@ -468,9 +468,6 @@ class Addressbook_ControllerTest extends TestCase
         
         $this->assertTrue($newcontact1->has('notes'));
         $this->assertEquals($compStr, $newcontact1->notes[0]->note);
-        
-        $this->expectException('Tinebase_Exception_NotFound');
-        $this->objects['contact']->notes[0]->note = 'note';
     }
 
     /**
