@@ -24,7 +24,7 @@ class Tinebase_User_PasswordPolicy
 
         if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH, $policies)) {
             $policies[Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH] = Tinebase_Config::getInstance()
-                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH} ?: 6;
+                ->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH} ?: 16;
         }
 
         if (!array_key_exists(Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS, $policies)) {

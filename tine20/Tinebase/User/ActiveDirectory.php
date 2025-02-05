@@ -137,7 +137,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             unset($ldapData[$this->_userUUIDAttribute]);
         }
 
-        $ldapData = array_merge($ldapData, $this->getLdapPasswordData(Tinebase_Record_Abstract::generateUID(20)));
+        $ldapData = array_merge($ldapData, $this->getLdapPasswordData(
+            Tinebase_User_PasswordPolicy::generatePolicyConformPassword())
+        );
 
         // will be added later
         $primaryGroupId = $ldapData['primarygroupid'];
