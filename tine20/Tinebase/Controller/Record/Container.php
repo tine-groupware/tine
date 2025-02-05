@@ -251,13 +251,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
         // NOTE: use id filter instead of container filter because of poor performance of container filter (setValue)
         $filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'in', $containerIds));
 
-        $result = $this->_backend->search($filter);
-
-        if ($_onlyIds) {
-            $result = $result->getArrayOfIds();
-        }
-
-        return $result;
+        return $this->_backend->search($filter, null, $_onlyIds ? Tinebase_Backend_Sql_Abstract::IDCOL : Tinebase_Backend_Sql_Abstract::ALLCOL);
     }
 
     /**

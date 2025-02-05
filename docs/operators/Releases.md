@@ -8,7 +8,7 @@ git tag	| `weekly-<date>.<counter>[*]`	| `main-<date>.<counter>[*]` | `<tine ver
 tag eg	| weekly-2024.6.30.1	| main-2024.2.15.2 | 2024.11-2024.8.7.1 | 2023.11.4	| 2022.11.4	| metaways-2024.11-2024.01.29.3pl16	| nightly-pu-fix-packaging-2024.03.28-g19ebe82e |
 triggerd	| by schedule - weekly	| by tag (conventionally every 3. Thursday of a month) | by tag (conventionally every 3. Thursday of a month) | by tag (conventionally every 3. Thursday of a month)	| by tag (conventionally every 3. Thursday of a month)	| by tag / by schedule (depends on the customer)	| schedule / merge request |
 github release	| as pre release	| no | as pre release	| as latest	| no	| no	| no |
-dockerhub tag	| weekly, git tag	| no | tine version without .11, git tag | latest, tine version without .11, git tag	| no	| no	| no |
+dockerhub tag	| weekly, git tag	| no | tine version without .11, git tag | latest, tine version without .11, git tag	| tine version without .11, git tag     | no	| no |
 vpackages	| tine20.org/maintances	| no | no	| tine20.com/maintance, set current link	| tine20.com/maintance	| customer repo, set current link, optional	| for debug purposes |
 gitlab packages	| tine20.org	| tine20.com, set monthly | no	| tine20.com, set current	| no	| for customer, set current link	| no |
 | customer registry tag	| no	| no | no | no	| no	| git tag, <customer>-<tine version withouth .11>, latest	| no |
