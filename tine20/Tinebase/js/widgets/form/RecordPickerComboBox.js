@@ -167,6 +167,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.emptyText = _.isString(this.emptyText) ? this.emptyText :
             (this.readOnly || this.disabled ? '' : String.format(i18n._('Search for {0} ...'), this.recordClass.getRecordName() || _('Record')));
 
+        this.listEmptyText = formatMessage('{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}', {
+            recordGender: this.recordClass.getRecordGender(),
+            recordsName: this.recordClass.getRecordsName()
+        });
+
         this.loadingText = i18n._('Searching...');
 
         this.sortBy = this.sortBy || this.recordClass.getModelConfiguration()?.defaultSortInfo?.field;
