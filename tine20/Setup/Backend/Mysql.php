@@ -132,6 +132,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      *
      * @param string $tableName
      * @return array list of foreignkey names
+     *
+     * @deprecated  use getOwnForeignKeys this function should be called getForeignKeys referring to this table
      */
     public function getExistingForeignKeys($tableName)
     {
