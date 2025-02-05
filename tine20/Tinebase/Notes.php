@@ -710,16 +710,15 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param string|array $_id
      * @param string $_model
      * @param string $_backend
-     * @param boolean|optional $onlyNonSystemNotes
+     * @param boolean $_onlyNonSystemNotes
      * @return Tinebase_Model_NoteFilter
      */
-    protected function _getNotesFilter($_id, $_model, $_backend, $_onlyNonSystemNotes = TRUE)
+    protected function _getNotesFilter($_id, $_model, $_backend, $_onlyNonSystemNotes = true): Tinebase_Model_NoteFilter
     {
         $backend = ucfirst(strtolower($_backend));
         $noteTypes = Tinebase_Config::getInstance()->get(Tinebase_Config::NOTE_TYPE)->records;
         $currentUser = Tinebase_Core::getUser();
-
-        if (!is_string($currentUser)) {
+        if ($currentUser && !is_string($currentUser)) {
             $currentUser = $currentUser->getId();
         }
 
@@ -727,45 +726,41 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $noteTypes = $noteTypes->filter('is_user_type', 1);
         }
 
-        $filter = new Tinebase_Model_NoteFilter([
-            array(
+        $filterData = [
+            [
                 'field' => 'record_model',
                 'operator' => 'equals',
                 'value' => $_model
-            ),
-            array(
+            ], [
                 'field' => 'record_backend',
                 'operator' => 'equals',
                 'value' => $backend
-            ),
-            array(
+            ], [
                 'field' => 'record_id',
                 'operator' => 'in',
                 'value' => (array) $_id
-            ),
-            array(
+            ], [
                 'field' => 'note_type_id',
                 'operator' => 'in',
                 'value' => $noteTypes->getId()
-            ),
-            ['condition' => 'OR',
+            ],
+        ];
+        if ($currentUser) {
+            $filterData[] = ['condition' => 'OR',
                 'filters' => [
                     [
                         'field' => 'created_by',
                         'operator' => 'equals',
                         'value' => $currentUser
-                    ],
-                    [
+                    ], [
                         'field' => 'note_visibility',
                         'operator' => 'equals',
                         'value' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                     ]
                 ]
-            ],
-        ],
-        );
-        
-        return $filter;
+            ];
+        }
+        return new Tinebase_Model_NoteFilter($filterData);
     }
     
     /************************** note types *******************/
