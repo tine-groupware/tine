@@ -45,13 +45,6 @@ const browserSupport = props._this._getBrowserSupportStatus()
 const licenseCheck = Tine.Tinebase.registry.get('licenseStatus')
 const extIdpConfig = Tine.Tinebase.registry.get('loginExternalIdps')
 
-// form a logo url
-let logoBase = Tine.logo
-logoBase = logoBase.endsWith('/') ? logoBase.slice(0, logoBase.length - 1) : logoBase
-// const isDark = document.body.classList.contains('dark-mode')
-// const logoUrl = `${logoBase}/300x100/image%2Fsvg%2Bxml${isDark ? '/dark' : ''}`
-const logoUrl = `${logoBase}${logoBase.endsWith('b') || logoBase.endsWith('i') ? '' : '/b'}/300x100`
-
 const eventBus = inject(props.injectKey)
 
 const usernameTRef = ref()
@@ -109,7 +102,7 @@ const focusUsernameField = () => usernameTRef.value.focus()
       <div class="login-container">
         <div class="login-logo">
           <a target="_blank" rel="noopener noreferrer" :href="Tine.websiteUrl">
-            <img :src="logoUrl" class="logo-image dark-reverse">
+            <img src="logo/i/300x100" class="logo-image">
           </a>
           <h2 class="mt-4">{{ i18n._('Login') }}</h2>
           <h5>{{ String.format(i18n._('Login with {0} account'), Tine.title)}}</h5>
