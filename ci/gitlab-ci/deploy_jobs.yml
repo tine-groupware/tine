@@ -66,6 +66,7 @@ deploy-built-image-to-dockerhub:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-dockerhub/
       when: manual
+    - if: $PIPELINE_TYPE =~ /release-lts(,|$)/
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         LATEST: "true"
