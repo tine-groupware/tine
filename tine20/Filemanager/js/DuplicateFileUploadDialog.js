@@ -42,7 +42,6 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
-
     applyToAll: false,
     
     /**
@@ -75,17 +74,16 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
                 persona: Personas.WARNING
             }), {
                 border: false,
-                layout: 'vbox',
+                layout: 'fit',
                 flex: 1,
-                layoutConfig: {
-                    align:'stretch'
-                },
+                autoScroll: true,
+                style: 'padding: 10px 0px;',
                 items: [
                     {
                         xtype: 'label',
                         border: false,
                         cls: 'ext-mb-text',
-                        html: this.questionText
+                        html: this.questionText,
                     }
                 ]
             }]
@@ -107,6 +105,7 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
             ctCls: 'checkbox-footbar',
             hideLabel: true,
             boxLabel: this.app.i18n._('Apply to All'),
+            ref: '../applyToAllCheckBox',
             listeners: {
                 'check': function(checkbox, value) {
                     this.applyToAll = value;
@@ -161,6 +160,14 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
         
         this.window.close();
     },
+
+    doLayout: function() {
+        Tine.Filemanager.DuplicateFileUploadDialog.superclass.doLayout.apply(this, arguments);
+
+        if (this.rendered) {
+            this.applyToAllCheckBox.hidden = !this.window.contentPanelConstructorConfig.showApplyToAllCheckBox;
+        }
+    },
 });
 
 /**
@@ -169,9 +176,12 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
  * @returns {null}
  */
 Tine.Filemanager.DuplicateFileUploadDialog.openWindow =  function (config) {
+    config.showApplyToAllCheckBox = Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack.length > 0;
+
     if (Tine.Filemanager.DuplicateFileUploadDialog.openWindow.current) {
+        Tine.Filemanager.DuplicateFileUploadDialog.openWindow.current.contentPanelConstructorConfig.showApplyToAllCheckBox = true;
         Tine.Filemanager.DuplicateFileUploadDialog.openWindow.stack.push(config);
-        return ;
+        return;
     }
     
     const constructor = 'Tine.Filemanager.DuplicateFileUploadDialog'

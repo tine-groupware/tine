@@ -25,6 +25,7 @@ export const PersonaContainer = Ext.extend(Ext.BoxComponent, {
     width: 100,
     height: 200,
     persona: Personas.INFO,
+    cls: 'dark-reverse',
 
     onRender: async function (ct, position){
         Ext.BoxComponent.superclass.onRender.call(this, ct, position)
