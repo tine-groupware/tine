@@ -136,6 +136,10 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         this.isMailinglistCheckbox.checked = this.isMailingList;
         const sieveReplyTo = record?.data?.xprops?.sieveReplyTo ?? 'sender';
         const sieveReplyToEmail = record?.data?.email;
+
+        this.replyToComboBox.setValue(sieveReplyTo);
+        this.emailField.setValue(sieveReplyToEmail);
+        this.emailField.value = sieveReplyToEmail;
         
         Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
             checkbox.checked = _.get(record, 'data.xprops.' + key, false);
@@ -149,10 +153,6 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             
             this.onMailinglistCheck(null, this.isMailingList);
             this.setReadOnly(!hasRequiredGrant || !hasRight);
-            
-            this.replyToComboBox.setValue(sieveReplyTo);
-            this.emailField.setValue(sieveReplyToEmail);
-            this.emailField.value = sieveReplyToEmail;
         });
     },
     
