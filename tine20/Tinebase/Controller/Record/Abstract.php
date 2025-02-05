@@ -652,7 +652,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
                 Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
             }
-            if ($record->has('notes')) {
+            if ($record->has('notes') && $this->useNotes()) {
                 $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($this->_modelName, $record->getId());
             }
             if (!empty($record::getConfiguration()->jsonExpander)) {
@@ -2473,7 +2473,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
     {
-        if ($_record->has('notes')) {
+        if ($_record->has('notes') && $this->useNotes()) {
             Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId());
         }
         
