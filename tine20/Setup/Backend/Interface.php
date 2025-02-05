@@ -231,6 +231,8 @@ interface Setup_Backend_Interface
      * 
      * @param string $tableName
      * @return array list of foreignkey names
+     *
+     * @deprecated  use getOwnForeignKeys this function should be called getForeignKeys referring to this table
      */
     public function getExistingForeignKeys($tableName);
 

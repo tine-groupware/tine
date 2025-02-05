@@ -150,7 +150,6 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                     }]
                 ]
             }, new PersonaContainer({
-                cls: 'dark-reverse',
                 region: 'west',
                 persona: Personas.QUESTION_INPUT
             })]
