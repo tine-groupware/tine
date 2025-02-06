@@ -3134,6 +3134,10 @@ msgstr "Kopie bearbeiten"
 msgid "Search for {0} ..."
 msgstr "Suche nach {0} ..."
 
+#, python-brace-format
+msgid "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
+msgstr "{recordGender, select, male {Kein passender {recordsName} gefunden} female {Keine passende {recordsName} gefunden} other {Kein passendes {recordsName} gefunden}}"
+
 msgid "Searching..."
 msgstr "Suche ..."
 
