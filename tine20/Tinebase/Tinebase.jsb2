@@ -254,10 +254,6 @@
           "path": "js/widgets/form/VMultiPicker"
         },
         {
-          "text": "RecordsComboBox.js",
-          "path": "js/ux/form/"
-        },
-        {
           "text": "DateTimeField.js",
           "path": "js/ux/form/"
         },
