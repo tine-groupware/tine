@@ -23,7 +23,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_configuredModels = [
         'Account',
         'Signature',
-        Felamimail_Model_Sieve_Forward::MODEL_NAME_PART,
     ];
 
     /***************************** folder funcs *******************************/

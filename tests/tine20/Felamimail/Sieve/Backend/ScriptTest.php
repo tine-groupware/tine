@@ -138,25 +138,6 @@ class Felamimail_Sieve_Backend_ScriptTest extends TestCase
         $this->assertStringContainsString('Felamimail_Sieve_Rule', $sieveScript);
     }
 
-
-    public function testForwarding()
-    {
-        $script    = new Felamimail_Sieve_Backend_Script();
-        $forward      = new Felamimail_Sieve_Forward();
-
-        $testEmails = [
-            'test1@mail.test', 
-            'test2@mail.test',
-        ];
-        $forward->setAddresses($testEmails);
-        $script->setForward($forward);
-        $sieveScript = $script->getSieve();
-        $this->assertStringContainsString('require ["envelope", "copy", "reject", "editheader", "variables"]', $sieveScript,
-            'editheader extension is required in script: ' . $sieveScript);
-        $this->assertStringContainsString('test1@mail.test', $sieveScript);
-        $this->assertStringContainsString('test2@mail.test', $sieveScript);
-    }
-    
     public function testInvalidRule()
     {
         $script    = new Felamimail_Sieve_Backend_Script();

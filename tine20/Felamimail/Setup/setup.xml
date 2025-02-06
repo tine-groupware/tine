@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>18.1</version>
+    <version>18.2</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>30</version>
+            <version>31</version>
             <declaration>
                 <field>
                     <name>id</name>

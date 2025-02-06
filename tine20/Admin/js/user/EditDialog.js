@@ -714,7 +714,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.initAliasesGrid();
-        this.forwardsGrid = this.initForwardsGrid();
+        this.initForwardsGrid();
 
         return [
             [this.aliasesGrid, this.forwardsGrid],
@@ -822,7 +822,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let record = this.record ?? additionConfig.record;
         const config = _.assign(this.getCommonConfig(), additionConfig);
 
-        return new Tine.widgets.grid.QuickaddGridPanel(
+        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
                     if (value.email === record.get('accountEmailAddress') || aliasesStore.find('email', value.email) !== -1) {
@@ -851,6 +851,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }])
             }, config)
         );
+        
+        return this.forwardsGrid;
     },
 
     initPasswordConfirmWindow: function() {

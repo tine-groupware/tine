@@ -20,13 +20,6 @@
 class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
 {
     /**
-     * forward backend
-     *
-     * @var Tinebase_Backend_Sql
-     */
-    protected $_forwardBackend = NULL;
-    
-    /**
      * rules backend
      * 
      * @var Tinebase_Backend_Sql
@@ -63,11 +56,6 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
      */
     public function __construct($_accountId, $_readData = TRUE)
     {
-        $this->_forwardBackend = new Tinebase_Backend_Sql(array(
-            'modelName' => 'Felamimail_Model_Sieve_Forward',
-            'tableName' => 'felamimail_sieve_forward',
-        ));
-        
         $this->_rulesBackend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Felamimail_Model_Sieve_Rule', 
             'tableName' => 'felamimail_sieve_rule',
@@ -104,33 +92,9 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         $this->_getRules();
         $this->_getVacation();
         $this->_getScriptParts();
-        $this->_getForwardings();
         
         if (count($this->_rules) === 0 && $this->_vacation === NULL && $this->_scriptParts->count() === 0) {
             throw new Tinebase_Exception_NotFound('No sieve data found in database for this account.');
-        }
-    }
-    
-    /**
-     * get vacation
-     */
-    protected function _getForwardings()
-    {
-        try {
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Sieve_Forward::class, [
-                ['field' => 'account_id', 'operator' => 'equals', 'value' => $this->_accountId]
-            ]);
-            $forwardRecords = $this->_forwardBackend->search($filter);
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Got forward from DB: ' . print_r($forwardRecords->toArray(), TRUE));
-            if ($forwardRecords->count() > 0) {
-                $forward = new Felamimail_Sieve_Forward();
-                $forward->setAddresses($forwardRecords->email);
-                $this->_forward = $forward;
-            }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // do nothing
         }
     }
 
@@ -198,38 +162,8 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         $this->_saveRules();
         $this->_saveVacation();
         $this->_saveScriptParts();
-        //$this->_saveForwardings();
     }
 
-
-    /**
-     * persist forwarding data in db
-     */
-    protected function _saveForwardings()
-    {
-        $this->_forwardBackend->deleteByProperty($this->_accountId, 'account_id');
-
-        if (empty($this->_forward)) {
-            return;
-        }
-
-        $forwardData = $this->_forward->toArray();
-        foreach ($forwardData['addresses'] as $email) {
-            $forwardRecord = new Felamimail_Model_Sieve_Forward();
-            $forwardRecord->account_id = $this->_accountId;
-            $forwardRecord->email = $email;
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Saving forward in DB: ' . print_r($forwardRecord->toArray(), TRUE));
-            
-            try {
-                $this->_forwardBackend->create($forwardRecord);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                Tinebase_Exception::log($tenf);
-            }
-        }
-    }
-    
     /**
      * persist script parts data in db
      *

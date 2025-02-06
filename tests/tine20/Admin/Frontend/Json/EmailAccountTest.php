@@ -442,24 +442,10 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
         $account->sieve_rules = [];
         $account->sieve_vacation = $vacationData;
-        $account->sieve_forwardings = new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_Forward::class, [
-            [
-                'account_id' => $account->getId(),
-                'email' => 'test1@mail.test',
-                'id' => Tinebase_Record_Abstract::generateUID(),
-            ], [
-                'account_id' => $account->getId(),
-                'email' => 'test2@mail.test',
-                'id' => Tinebase_Record_Abstract::generateUID(),
-            ]
-        ]);
 
         $this->_json->saveEmailAccount($account->toArray());
         $script = $this->_json->getSieveScript($account->getId());
         $this->assertStringContainsString('currentdate', $script);
-        $this->assertStringContainsString('test1@mail.test', $script);
-        $this->assertStringContainsString('test2@mail.test', $script);
-
 
         $account->sieve_rules = $this->_getSieveRuleData();
         $this->_json->saveEmailAccount($account->toArray());
