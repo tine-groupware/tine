@@ -96,7 +96,6 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_NUMBER,
                     Tinebase_Numberable_String::PREFIX     => 'DEB-',
                     Tinebase_Numberable_String::ZEROFILL   => 0,
                     Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,

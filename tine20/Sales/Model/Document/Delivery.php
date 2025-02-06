@@ -83,7 +83,6 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
                 self::SHY                       => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_PROFORMA_NUMBER,
                     Tinebase_Numberable_String::PREFIX     => 'PD-', // _('PD-')
                     Tinebase_Numberable_String::ZEROFILL   => 7,
                     Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,

@@ -64,7 +64,9 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
             $numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->create(new Tinebase_Model_NumberableConfig([
                 Tinebase_Model_NumberableConfig::FLD_MODEL => $model,
                 Tinebase_Model_NumberableConfig::FLD_PROPERTY => $property,
-                Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY => $config[TMCC::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY] ?? '',
+                Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY => $model . '#' . $property
+                    . (($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? false) ? '#' . $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] : '')
+                    . '#' . ($config[TMCC::CONFIG][Tinebase_Numberable_String::PREFIX] ?? ''),
                 Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '',
                 Tinebase_Model_NumberableConfig::FLD_PREFIX => $config[TMCC::CONFIG][Tinebase_Numberable_String::PREFIX] ?? '',
                 Tinebase_Model_NumberableConfig::FLD_ZEROFILL => $config[TMCC::CONFIG][Tinebase_Numberable_String::ZEROFILL] ?? 0,
@@ -99,6 +101,7 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
                 $_config[TMCC::CONFIG][Tinebase_Numberable_String::ZEROFILL] = (int)$numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL};
                 $_config[TMCC::CONFIG][Tinebase_Numberable_Abstract::START] = (int)$numberableCfg->{Tinebase_Model_NumberableConfig::FLD_START};
                 $_config[TMCC::CONFIG][Tinebase_Numberable_String::PREFIX] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX};
+                $_config[TMCC::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY};
             }
 
             if ($_config['type'] === TMCC::TYPE_NUMBERABLE_STRING) {
