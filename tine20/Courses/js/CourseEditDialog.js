@@ -10,6 +10,8 @@
  
 Ext.namespace('Tine.Courses');
 
+import * as async from 'async'
+
 Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
@@ -189,6 +191,10 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         this.record.set('members', members);
+
+        if (this.record.data?.type?.length > 0) {
+            this.record.set('type', this.record.data.type[0].id);
+        }
     },
     
     /**
@@ -232,17 +238,25 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name:'name',
                         allowBlank: false
                     }, {
-                        xtype:'reccombo',
+                        xtype:'tinerecordspickercombobox',
                         name: 'type',
                         allowBlank: false,
                         fieldLabel: this.app.i18n._('Course / School Type'),
+                        recordClass: Tine.Courses.Model.CourseType,
+                        recordProxy: Tine.Courses.courseTypeBackend,
                         displayField: 'name',
-                        store: new Ext.data.Store({
-                           fields: Tine.Courses.Model.CourseType,
-                           proxy:  Tine.Courses.courseTypeBackend,
-                           reader: Tine.Courses.courseTypeBackend.getReader(),
-                           sortInfo: {field: 'name', direction: 'ASC'}
-                        })
+                        setValue: function (value, editDialog) {
+                            if (this.vueEventBus) {
+                                this.reset();
+                                this.suspendEvents();
+                                const resolvedValue = value.records.results.filter((record) => {return record.id === value.value;} );
+                                async.forEach(resolvedValue, async (recordData) => {
+                                    await this.addRecord(Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass))
+                                }).then (() => {
+                                    this.resumeEvents()
+                                })
+                            }
+                        },
                     }, {
                         name: 'description',
                         fieldLabel: this.app.i18n._('Description'),
