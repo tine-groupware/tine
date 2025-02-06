@@ -361,7 +361,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         passwordDialog.openWindow();
 
-        passwordDialog.on('apply', function (password) {
+        passwordDialog.on('apply',  (password) => {
             this.loadMask.show();
             const accountObject = this.membersGrid.getSelectionModel().getSelected().data;
             Tine.Courses.resetPassword(accountObject.id, password, true).finally(() => {
