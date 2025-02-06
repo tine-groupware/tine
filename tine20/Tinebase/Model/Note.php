@@ -159,7 +159,10 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
-                ]
+                ],
+                'inputFilters' => [
+                    'Zend_Filter_Empty' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED
+                ],
             ],
             self::FLD_NOTE => [
                 'type' => 'string',
