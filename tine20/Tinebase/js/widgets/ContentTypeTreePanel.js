@@ -165,9 +165,9 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             // add check for model name also
             if (
                 ct.requiredRight && recordClass &&
-                ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('recordsName').toLowerCase()) &&
-                ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase()) &&
-                ! Tine.Tinebase.common.hasRight(ct.requiredRight, this.app.appName, recordClass.getMeta('modelName').toLowerCase() + 's')
+                ! Tine.Tinebase.common.hasRight(ct.requiredRight, (ct.appName || this.app.appName), recordClass.getMeta('recordsName').toLowerCase()) &&
+                ! Tine.Tinebase.common.hasRight(ct.requiredRight, (ct.appName || this.app.appName), recordClass.getMeta('modelName').toLowerCase()) &&
+                ! Tine.Tinebase.common.hasRight(ct.requiredRight, (ct.appName || this.app.appName), recordClass.getMeta('modelName').toLowerCase() + 's')
             ) return true;
 
             var c = {
