@@ -1,11 +1,27 @@
-Customise Logging
-=
+# Logging
+
 You can customize logging in tine either by changing the `logger` section in your `config.inc.php` or by adding 
 a customized logger config in your `conf.d` directory:
 
 ``` php title="./conf.d/logger.inc.php"
 --8<-- "etc/tine20/conf.d/logger.inc.php.dist"
 ```
+
+## Log Format
+
+Example log line:
+
+    c352c2 26d1a setupuser 648ms 0ms - 2025-02-06T14:08:37+00:00 WARN (4): Tinebase_FileSystem::_isFileIndexingActive::180 Indexing active but tikaJar config is not set
+
+- c352c2 => Request ID (random string created by server)
+- 26d1a => Transaction ID (random string created by client - from $REQUEST)
+- setupuser => Current User (login name)
+- 648ms => Total time of the request
+- 0ms => Time passed since the last logged line
+- 2025-02-06T14:08:37+00:00 => Timestamp in configured TZ (default: UTC, see "Set Timezone for Logging")
+- WARN (4) => Log level (see "Logger Priorities")
+- Tinebase_FileSystem::_isFileIndexingActive::180 => Class name::function name::line number in PHP file
+- Indexing active but tikaJar config is not set => Log message
 
 ## Logger Priorities
 
