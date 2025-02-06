@@ -47,7 +47,8 @@ Tine.Courses.Model.Course = Tine.Tinebase.data.Record.create(Tine.Courses.Model.
 
 Tine.Courses.Model.Course.getDefaultData = function() {
     return {
-        type: Tine.Courses.registry.get('defaultType')
+        type: Tine.Courses.registry.get('defaultType'),
+        fileserver: 0,
     };
 };
 
