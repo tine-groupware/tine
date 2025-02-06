@@ -658,6 +658,10 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $discount = 0;
         }
 
+        if (null === $this->{self::FLD_SALES_TAX_RATE}) {
+            $this->{self::FLD_SALES_TAX_RATE} = Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX};
+        }
+
         $total = is_null($this->{self::FLD_POSITION_PRICE}) ? null
             : $this->{self::FLD_POSITION_PRICE} - $discount;
 
