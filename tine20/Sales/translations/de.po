@@ -1384,7 +1384,7 @@ msgid "Billing Addresses"
 msgstr "Rechnungsanschriften"
 
 msgid "Buyer Reference"
-msgstr "Kundenreferenz / Leitweg-ID"
+msgstr "Käuferreferenz / Leitweg-ID"
 
 msgid "Electronic Invoice Type"
 msgstr "Elektronischer Rechnungstyp"
@@ -1573,7 +1573,7 @@ msgid "Internal Note"
 msgstr "Interne Notiz"
 
 msgid "Project Reference"
-msgstr "Projektkennung"
+msgstr "Projektnummer"
 
 msgid "Purchase Order Reference"
 msgstr "Bestellnummer"
