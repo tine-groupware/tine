@@ -9,7 +9,7 @@
  */
 
 .SalesIconCls {
-    background-image:url(../../images/icon-set/icon_calculator.svg) !important;
+    background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/building-store.svg) !important;
 }
 
 .x-tree-node-icon.SalesContract, .SalesContract {

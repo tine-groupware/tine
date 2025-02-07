@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "@tabler/icons": "^3.29.0",
     "@vueuse/core": "^10.3.0",
     "ace-builds": "^1.14.0",
     "async": "^3.2.4",
