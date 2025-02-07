@@ -416,7 +416,7 @@ Record.create = function(o, meta) {
     f.getDataFields = function() {
         const systemFields = map(Record.genericFields, 'name')
             .concat(f.getMeta('idProperty'))
-            .concat(p.modelConfiguration?.hasNotes ? [] : 'notes')
+            .concat(p.modelConfiguration?.hasUserNotes ? [] : 'notes')
             .concat(p.modelConfiguration?.delegateAclField && p.grantsPath ? String(p.grantsPath).replace(/^data\./, '') : []);
         return difference(p.modelConfiguration?.fieldKeys, systemFields);
     };
