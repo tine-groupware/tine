@@ -198,7 +198,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 filter = availableModels.reduce((filter, model) => {
                     const [appName,,modelName] = model.split('_');
                     const filterDefinition = Object.assign({... base}, {
-                        field: `${base.field}:${model}`,
+                        field: `${base.field}~${model}`,
                         preserveFieldName: true,
                         baseLabel: base.label,
                         label: `${base.label} ${modelName}`,

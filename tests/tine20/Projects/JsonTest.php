@@ -200,7 +200,7 @@ class Projects_JsonTest extends TestCase
         $this->assertSame(0, $searchResult['totalcount']);
 
         $searchResult = $tasksFE->searchTasks([
-            ['field' => 'source:Projects_Model_Project', 'operator' => 'definedBy', 'value' => [
+            ['field' => 'source~Projects_Model_Project', 'operator' => 'definedBy', 'value' => [
                 ['field' => 'title', 'operator' => 'equals', 'value' => $projectData['title']],
             ]],
         ], null);
@@ -216,7 +216,7 @@ class Projects_JsonTest extends TestCase
         ]));
 
         $searchResult = $tasksFE->searchTasks([
-            ['field' => 'source:Projects_Model_Project', 'operator' => 'definedBy', 'value' => [
+            ['field' => 'source~Projects_Model_Project', 'operator' => 'definedBy', 'value' => [
                 ['field' => 'title', 'operator' => 'equals', 'value' => 'titleFOOO'],
             ]],
         ], null);
