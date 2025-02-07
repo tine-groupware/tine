@@ -70,7 +70,7 @@ Ext.ux.ItemRegistry.registerItem('Tasks-Task-EditDialog-TabPanel',  Ext.extend(E
         const filters = _.get(options.params.filter, '[0].filters[0].filters')
 
         if (!_.find(filters, {field: 'timeaccount_id'})) {
-            filters.push({field: 'source:Tasks_Model_Task', operator: 'equals', value: this.record.id});
+            filters.push({field: 'source~Tasks_Model_Task', operator: 'equals', value: this.record.id});
         }
     },
 
