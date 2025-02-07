@@ -129,8 +129,8 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Appli
             $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS][] = Crm_Model_Lead::class;
         }
         $filterModels = $mc->filterModel;
-        if (!isset($filterModels['source:' . Crm_Model_Lead::class])) {
-            $filterModels['source:' . Crm_Model_Lead::class] = [
+        if (!isset($filterModels['source~' . Crm_Model_Lead::class])) {
+            $filterModels['source~' . Crm_Model_Lead::class] = [
                 TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
                 TMCC::OPTIONS => [
                     TMCC::CONTROLLER    => Crm_Controller_Lead::class,

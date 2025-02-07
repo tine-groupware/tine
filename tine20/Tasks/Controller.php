@@ -145,8 +145,8 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
             $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS][] = Tasks_Model_Task::class;
         }
         $filterModels = $mc->filterModel;
-        if (!isset($filterModels['source:' . Tasks_Model_Task::class])) {
-            $filterModels['source:' . Tasks_Model_Task::class] = [
+        if (!isset($filterModels['source~' . Tasks_Model_Task::class])) {
+            $filterModels['source~' . Tasks_Model_Task::class] = [
                 TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
                 TMCC::OPTIONS => [
                     TMCC::CONTROLLER    => Tasks_Controller_Task::class,
