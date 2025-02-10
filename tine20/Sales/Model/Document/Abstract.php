@@ -552,8 +552,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_CATEGORY][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] =
             Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
 
-        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
-            'Sales_Model_' . static::MODEL_NAME_PART . '#'. self::FLD_DOCUMENT_NUMBER;
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
             Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME)->_(static::$_documentNumberPrefix);
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
