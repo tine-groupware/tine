@@ -1069,6 +1069,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     public function getGroupMembershipsFromSyncBackend($_userId)
     {
         if ($this->isDisabledBackend()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' isDisabledBackend');
+            }
             return [];
         }
 
