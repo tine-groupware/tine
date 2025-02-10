@@ -289,6 +289,7 @@ class Tinebase_ModelConfiguration_Const {
 
     public const TYPE_INTEGER = 'integer';
     public const TYPE_JSON = 'json';
+    public const TYPE_NATIVE_JSON = 'nativeJson';
     public const TYPE_JSON_REFID = 'jsonRefId';
     public const TYPE_KEY_FIELD = 'keyfield';
     public const TYPE_LABEL = 'label';

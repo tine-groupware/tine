@@ -236,6 +236,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const SALES_TAX = 'salesTax';
 
+    const BATCH_JOB_MAX_CONCURRENCY = 'batchJobMaxConcurrency';
+
     /**
      * smtp conf name
      * 
@@ -2281,6 +2283,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => true,
             self::DEFAULT_STR => array()
         ),
+        self::BATCH_JOB_MAX_CONCURRENCY => [
+            self::LABEL => 'Batch Job max concurrency',
+            self::DESCRIPTION => 'Batch Job max concurrency',
+            self::TYPE => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => 1,
+        ],
         /**
          * Configure rate limits by user / ip / frontends
          *
