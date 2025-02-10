@@ -143,7 +143,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     /**
      * @param string $areaLockName
      * @param string $userMfaId
-     * @param string $password
+     * @param null|string $password
      * @param Tinebase_Model_FullUser $identity
      * @return Tinebase_Model_AreaLockState
      * @throws Tinebase_Exception
@@ -154,7 +154,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception_Record_Validation
      * @throws Zend_Session_Exception
      */
-    public function unlock(string $areaLockName, string $userMfaId, string $password, Tinebase_Model_FullUser $identity): Tinebase_Model_AreaLockState
+    public function unlock(string $areaLockName, string $userMfaId, ?string $password, Tinebase_Model_FullUser $identity): Tinebase_Model_AreaLockState
     {
         /** @var Tinebase_Model_AreaLockConfig $areaConfig */
         $areaConfig = $this->_getConfig()->records

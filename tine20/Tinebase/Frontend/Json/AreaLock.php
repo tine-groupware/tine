@@ -17,7 +17,7 @@
  */
 class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 {
-    public function unlock(string $areaLockName, string $userMfaId, string $password = null): array
+    public function unlock(string $areaLockName, string $userMfaId, ?string $password = null): array
     {
         $result = Tinebase_AreaLock::getInstance()->unlock($areaLockName, $userMfaId, $password, Tinebase_Core::getUser());
 
