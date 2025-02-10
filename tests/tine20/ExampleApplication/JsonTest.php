@@ -59,8 +59,6 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $container->xprops()[Tinebase_Numberable::CONFIG_XPROPS] = [
             Tinebase_Numberable::STEPSIZE => 10,
             // TODO create this automatically?
-            Tinebase_Numberable::BUCKETKEY => ExampleApplication_Model_ExampleRecord::class .
-                '#number_int#' . $container->getId(),
             Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => $container->getId(),
             Tinebase_Numberable::START => 100,
         ];
