@@ -223,6 +223,7 @@ describe('employee', () => {
 
             describe('book sickness as vacation', () => {
                 test('can book sickness as vacation', async () => {
+                    await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-grid3-cell-inner.x-grid3-col-type_status', {button: 'right'});
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).toClick('.x-menu-item-text', {text: 'Als Urlaub buchen'});
