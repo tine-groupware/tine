@@ -24,12 +24,15 @@ Promise.all([
 
         emailInterceptor: async function(config) {
             const mask = await config.setWaitText(app.i18n._('Preparing Attachment...'));
-            
-            if (config?.cachePromises) {
+
+            if (config?.cache) {
+                config.recordData = config.cache?.data || config.cache;
+            } else if (config?.cachePromises) {
                 // open document does not need to check preview status
-                 await Promise.race(config.cachePromises)
-                    .then((response) => {
-                        config.recordData = response?.cache?.data;
+                 await Promise.all(config?.cachePromises)
+                    .then((responses) => {
+                        const validPromise = responses.find((cachePromise) => !!cachePromise?.cache);
+                        config.recordData = validPromise.cache.data;
                     })
                      .catch((e) => {
                          console.error(e);
@@ -49,6 +52,7 @@ Promise.all([
             const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
                 // always validate cachePromises to get the correct recordData
                 cachePromises: record?.cachePromises,
+                cache: record?.data?.cache,
                 recordData: recordData,
                 id: record.id,
                 contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
