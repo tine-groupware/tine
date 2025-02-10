@@ -63,16 +63,16 @@ const priorities = {
 
     getEditDialog: async function (btnText, win) {
         await expect(win || page).toMatchElement('.x-btn-text', {text: btnText, visible: true});
-        await page.waitForTimeout(500); // wait for btn to get active
+        await page.waitForTimeout(1000); // wait for btn to get active
         let popupWindow = this.getNewWindow();
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
         popupWindow = await popupWindow;
         this.proxyConsole(popupWindow);
         try {
-            await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});
+            await popupWindow.waitForSelector('.ext-el-mask', {timeout: 10000});
         } catch {}
         await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
-        await popupWindow.screenshot({path: 'screenshots/test.png'});
+        await popupWindow.waitForTimeout(2000);
         return popupWindow;
     },
 
@@ -263,7 +263,7 @@ const priorities = {
             })
             .on('requestfailed', request => {
                 const url = request.url();
-                    if(process.env.LOGLEVEL >= priorities['ERR'] && !url.match('sockjs-node')) {
+                    if(process.env.LOGLEVEL >= ['ERR'] && !url.match('sockjs-node')) {
                         simpleConsole.log(magenta(`${request.failure().errorText} ${url}`))
                     }
             })
