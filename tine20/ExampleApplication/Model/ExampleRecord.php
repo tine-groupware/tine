@@ -129,7 +129,6 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable::BUCKETKEY         => self::class . '#number_str',
                     Tinebase_Numberable_String::PREFIX     => 'ER-',
                     Tinebase_Numberable_String::ZEROFILL   => 0,
                     // TODO implement that
@@ -150,7 +149,6 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE => 1,
-                    Tinebase_Numberable::BUCKETKEY => 'ExampleApplication_Model_ExampleRecord#number_int',
                     Tinebase_Numberable::CONFIG_OVERRIDE => 'Tinebase_Container::getNumberableConfig',
                 ]
             ],

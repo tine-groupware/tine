@@ -545,7 +545,6 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         $division = Sales_Controller_Division::getInstance()->get($document->getDivisionId());
         return [
-            Tinebase_Numberable::BUCKETKEY => $this->_modelName . '#' . $property . '#' . $division->getId(),
             Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->getId(),
         ];
     }

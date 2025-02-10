@@ -550,11 +550,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 await Tine.Felamimail.getAttachmentCache(attachmentId, createPreviewInstantly)
                     .then(async (cache) => {
                         const cacheRecord = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
-                        const isPreviewReady = cache.attachments[0].preview_count !== 0 && cache.attachments[0].path !== '';
+                        attachment.cache = cacheRecord;
 
+                        const isPreviewReady = cache.attachments[0].preview_count !== 0 && cache.attachments[0].path !== '';
                         if (isPreviewReady) {
                             attachment.isPreviewReady = true;
-                            attachment.cache = cacheRecord;
                         }
                         return resolve({
                             cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
