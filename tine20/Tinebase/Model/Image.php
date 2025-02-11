@@ -347,4 +347,25 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         
         return $extension;
     }
+
+    public function invert(): void
+    {
+        if ($this->mime !== 'image/png') return;
+
+        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $this->blob);
+        $im = imagecreatefrompng($tmpPath);
+
+        imagealphablending($im, false);
+
+        imagesavealpha($im, true);
+
+        imagefilter($im, IMG_FILTER_NEGATE);
+
+        imagepng($im,$tmpPath,0);
+
+        $this->blob = file_get_contents($tmpPath);
+        unlink($tmpPath);
+        return;
+    }
 } // end of Tinebase_Model_Image

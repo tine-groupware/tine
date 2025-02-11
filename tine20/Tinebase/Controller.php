@@ -1723,6 +1723,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $mime = $mime !== 'image/svg+xml' ? $mime : 'image/png'; // fallback to png
                 preg_match('/^(\d+)x(\d+)$/', $size, $matches);
                 $image = Tinebase_Model_Image::getImageFromBlob($blob);
+                if (
+                    $mime === 'image/png'
+                    && $colorSchema === 'dark'
+                    && $path === Tinebase_Core::getLogo($type, 'light', false)
+                    // no separate dark png
+                    // @FIXME: what if same img configured for both dark and light
+                ) {
+                    $image->invert();
+                }
                 Tinebase_ImageHelper::resize($image, $matches[1], $matches[2], Tinebase_ImageHelper::RATIOMODE_PRESERVNOFILL);
                 $imageBlob = $image->getBlob($mime);
             }
