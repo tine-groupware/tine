@@ -1052,12 +1052,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function monitoringCheckQuota(): int
     {
         $result = 0;
-        $config = Tinebase_Config::getInstance();
-        $quotaConfig = $config->get(Tinebase_Config::QUOTA_MONITORING);
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $monitoringQuota = $quotaConfig->{Tinebase_Config::QUOTA_MONITORING};
+        $totalQuota = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB};
 
-        if ($quotaConfig && Tinebase_FileSystem_Quota::getTotalQuotaBytes() > 0) {
+        if ($monitoringQuota && Tinebase_FileSystem_Quota::getTotalQuotaBytes() > 0) {
             $totalUsage = Tinebase_FileSystem_Quota::getRootUsedBytes();
-            $usagePercentage = ($totalUsage / $quotaConfig) * 100;
+            $usagePercentage = ($totalUsage / $totalQuota) * 100;
 
             if ($usagePercentage >= 99) {
                 $message = 'QUOTA LIMIT REACHED | usage=' . $totalUsage. ';;;;';
