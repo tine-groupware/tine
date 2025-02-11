@@ -140,7 +140,8 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             return $result;
         }
 
-        
+        $decimalFormatter = new NumberFormatter($this->_locale->toString(), NumberFormatter::DECIMAL);
+
         switch($_field->type) {
             case 'datetime':
             case 'date':
@@ -159,7 +160,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             case 'currency':
                 $currency = $_field->currency ?: 'EUR';
                 $result = $_record->{$_field->identifier} ?: '0';
-                $result = number_format($result, 2, '.', '') . ' ' . $currency;
+                $result = number_format($result, 2, $decimalFormatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL), $decimalFormatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL)) . ' ' . $currency;
                 break;
             case 'percentage':
                 $result    = $_record->{$_field->identifier} / 100;
