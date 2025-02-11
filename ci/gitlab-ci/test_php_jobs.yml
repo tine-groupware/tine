@@ -277,7 +277,6 @@ php-unit-tinebase-tests-built:
           - "**/*.php"
           - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
-    - if: $PIPELINE_TYPE =~ /default-tests/
   allow_failure: true
 php-unit-nogitlabci-tests-built-sequential:
   extends: .php-unit-nogitlabci-tests-built
