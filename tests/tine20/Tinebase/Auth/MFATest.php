@@ -461,6 +461,8 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testWebAuthNPwdLessLogin(): void
     {
+        $this->_skipIfLDAPBackend('fails with TypeError in \Tinebase_Model_MFA_UserConfig::updateUserOldRecordCallback');
+
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
             Tinebase_Model_MFA_UserConfig::class, [[
             Tinebase_Model_MFA_UserConfig::FLD_ID => 'unittest',
