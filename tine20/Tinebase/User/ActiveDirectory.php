@@ -176,11 +176,14 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
 
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
 
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}) {
+        if ($_user->accountId && Tinebase_Config::getInstance()->
+            {Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}
+        ) {
             $user->accountId = $_user->accountId;
             $user->xprops()[static::class]['syncId'] = $_user->xprops()[static::class]['syncId'];
             $this->updateUserInSyncBackend($user);
-            $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
+            $user = $this->getUserByPropertyFromSyncBackend('accountId', $user->accountId,
+                'Tinebase_Model_FullUser');
         }
 
         return $user;
