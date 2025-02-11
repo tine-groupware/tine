@@ -217,11 +217,23 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $customer = $this->_createCustomer();
         $product1 = $this->_createProduct();
 
+        /** @var Sales_Model_Address $recipientId */
+        $recipientId = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord();
+        $invoiceRecipientId = clone $recipientId;
+        $invoiceRecipientId->{Sales_Model_Address::FLD_PREFIX3} = 'unittest prefix3';
+
+        $path = Tinebase_FileSystem::getInstance()->getPathOfNode(
+            Filemanager_Controller_Node::getInstance()->createNodes('/shared/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord(), true);
+        file_put_contents('tine20://' . $path . '/test.txt', 'unittest');
+
         $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
             Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
             Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
-            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
-            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $recipientId,
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $invoiceRecipientId,
+            Sales_Model_Document_Order::FLD_ATTACHMENTS => new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [
+                Tinebase_FileSystem::getInstance()->stat($path . '/test.txt'),
+            ]),
             Sales_Model_Document_Order::FLD_POSITIONS => [
                 new Sales_Model_DocumentPosition_Order([
                     Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
@@ -237,10 +249,17 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ], true)
             ],
         ]));
+        $this->assertSame($recipientId->getId(), $order->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->{Sales_Model_Document_Order::FLD_ORIGINAL_ID});
+        $this->assertSame($recipientId->getId(), $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->{Sales_Model_Document_Order::FLD_ORIGINAL_ID});
+        $this->assertNotSame($order->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->getId(), $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->getId());
+        $this->assertNotSame($recipientId->getId(), $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->getId());
+        $this->assertNotSame('unittest prefix3', $order->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_PREFIX3});
+        $this->assertSame('unittest prefix3', $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->{Sales_Model_Address::FLD_PREFIX3});
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+        $this->assertSame(1, $order->attachments->count());
         $this->assertNull($order->{Sales_Model_Document_Order::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Order::FLD_NOTES});
-        Tinebase_Record_Expander::expandRecord($order, true);
+        Tinebase_Record_Expander::expandRecord($order, fullExpansion: true);
         $this->assertSame(1, $order->{Sales_Model_Document_Order::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Order::FLD_NOTES}->count());
 
         $invoice = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
@@ -254,29 +273,58 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]),
             ]
         ]));
+        $this->assertSame($recipientId->getId(), $invoice->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->{Sales_Model_Document_Order::FLD_ORIGINAL_ID});
+        $this->assertNotSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->getId(), $order->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->getId());
+        $this->assertSame('unittest prefix3', $invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_PREFIX3});
+        $this->assertSame(0, $invoice->attachments->count());
         $this->assertNull($invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES});
         Tinebase_Record_Expander::expandRecord($invoice, true);
         $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->count());
 
+        $invoice->attachments->addRecord(Tinebase_FileSystem::getInstance()->stat($path . '/test.txt'));
         $invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->addRecord(new Tinebase_Model_Note([
             Tinebase_Model_Note::FLD_NOTE_TYPE_ID => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
             Tinebase_Model_Note::FLD_NOTE => 'invoice'
         ], true));
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $ublAttachmentId = $invoice->attachments->getFirstRecord()->getId();
+        $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $ublAttachmentId,
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $invoice->seq,
+        ], true));
+        $invoice->attachments->addRecord(Tinebase_FileSystem::getInstance()->stat($path . '/test.txt'));
+        $invoice->attachments->getLastRecord()->name = 'test1.text';
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $otherAttachmentId = array_values(array_diff($invoice->attachments->getArrayOfIds(), [$ublAttachmentId]))[0];
+        $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $otherAttachmentId,
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $invoice->seq,
+        ], true));
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
         $this->assertNull($invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES});
-        Tinebase_Record_Expander::expandRecord($invoice, true);
+        Tinebase_Record_Expander::expandRecord($invoice, fullExpansion: true);
         $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->count());
 
-        $copy = Sales_Controller_Document_Invoice::getInstance()->copy($invoice->getId(), true);
+        $copy = Sales_Controller_Document_Invoice::getInstance()->copy($invoice->getId(), persist: true);
 
         $this->assertNotSame($invoice->getId(), $copy->getId());
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->count(), $copy->{Sales_Model_Document_Invoice::FLD_POSITIONS}->count());
         $this->assertNotSame($invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->getId(), $copy->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->getId());
         $this->assertNull($copy->{Sales_Model_Document_Invoice::FLD_PRECURSOR_DOCUMENTS});
 
+        $this->assertSame($recipientId->getId(), $copy->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->{Sales_Model_Document_Order::FLD_ORIGINAL_ID});
+        $this->assertNotSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->getId(), $copy->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->getId());
+        $this->assertSame('unittest prefix3', $copy->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_PREFIX3});
+
+        $this->assertSame(1, $copy->attachments->count());
+        $this->assertFalse($invoice->attachments->getById($copy->attachments->getFirstRecord()->getId()));
+        $this->assertSame(1, $copy->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
         $this->assertNull($copy->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES});
-        Tinebase_Record_Expander::expandRecord($copy, true);
+        Tinebase_Record_Expander::expandRecord($copy, fullExpansion: true);
         $this->assertSame(1, $copy->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->count());
         $this->assertNotSame($invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->getFirstRecord()->getId(), $copy->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->getFirstRecord()->getId());
     }
