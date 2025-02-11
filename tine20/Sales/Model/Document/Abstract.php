@@ -130,6 +130,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::HAS_CUSTOM_FIELDS => true,
         self::HAS_NOTES => false,
         self::HAS_RELATIONS => true,
+        self::COPY_RELATIONS => false,
         self::HAS_TAGS => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
@@ -1112,5 +1113,23 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->{self::FLD_POSITIONS}->addRecord($position);
         return $position;
+    }
+
+    public function prepareForCopy(): void
+    {
+        /** @var Sales_Model_Document_AttachedDocument $attachedDoc */
+        foreach ($this->{self::FLD_ATTACHED_DOCUMENTS} as $attachedDoc) {
+            switch ($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE}) {
+                case Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP:
+                case Sales_Model_Document_AttachedDocument::TYPE_UBL:
+                    $this->{self::FLD_ATTACHED_DOCUMENTS}->removeById($attachedDoc->getId());
+                    if ($this->{self::FLD_ATTACHMENTS} instanceof Tinebase_Record_RecordSet) {
+                        $this->{self::FLD_ATTACHMENTS}->removeById($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+                    }
+                    break;
+            }
+        }
+
+        parent::prepareForCopy();
     }
 }
