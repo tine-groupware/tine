@@ -128,8 +128,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }
             $orgDebitor = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Debitor::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Debitor::class, [
-                    [TMFA::FIELD => Sales_Model_Debitor::FLD_CUSTOMER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customerId],
-                    [TMFA::FIELD => Sales_Model_Debitor::FLD_DIVISION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $divisionId],
+                    [TMFA::FIELD => Sales_Model_Debitor::FLD_CUSTOMER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS,
+                        TMFA::VALUE => $customerId],
+                    [TMFA::FIELD => Sales_Model_Debitor::FLD_DIVISION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS,
+                        TMFA::VALUE => $divisionId],
                 ]))->getFirstRecord();
 
             if (null === $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
@@ -139,18 +141,27 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                     Sales_Model_Debitor::FLD_NAME => '-',
                 ], true));
                 $customer = Sales_Controller_Customer::getInstance()->update($customer);
-                $orgDebitor = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(Sales_Model_Debitor::FLD_DIVISION_ID, $divisionId);
+                $orgDebitor = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} =
+                    $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(Sales_Model_Debitor::FLD_DIVISION_ID,
+                        $divisionId);
             }
         }
         
-        if (!$_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} || 0 === $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}->count()) {
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} ||
+            0 === $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}->count()
+        ) {
             if (null === $orgDebitor) {
                 $orgDebitor = Sales_Controller_Debitor::getInstance()->get($orgDebitorId);
             }
-            $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} = clone $orgDebitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS};
+            if (is_object($orgDebitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS})) {
+                $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS} =
+                    clone $orgDebitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS};
+            }
         }
 
-        if (1 !== $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true)->count()) {
+        if (1 !== $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}
+                ->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true)->count()
+        ) {
             throw new Tinebase_Exception_UnexpectedValue('payment means need to have one default record');
         }
     }
