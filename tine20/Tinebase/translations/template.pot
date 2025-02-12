@@ -1039,18 +1039,6 @@ msgstr ""
 msgid "Reveal password"
 msgstr ""
 
-msgid "Note Visibility"
-msgstr ""
-
-msgid "Available Note visibility for modlog history"
-msgstr ""
-
-msgid "Personal"
-msgstr ""
-
-msgid "Shared"
-msgstr ""
-
 msgid "SMS Config"
 msgstr ""
 
@@ -1623,109 +1611,6 @@ msgstr ""
 msgid "License"
 msgstr ""
 
-msgid "Login"
-msgstr ""
-
-msgid "Username"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Certificate detected. Please, press Login button to proceed."
-msgstr ""
-
-msgid "Login via OpenID Connect"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is made for you"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Homepage"
-msgstr ""
-
-msgid "Translations"
-msgstr ""
-
-#, python-brace-format
-msgid "Translation state of {0}: {1}%."
-msgstr ""
-
-#, python-brace-format
-msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Translation Howto"
-msgstr ""
-
-msgid "Detailed Language Statistics"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license expired."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} trial"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr ""
-
-msgid "Powered by:"
-msgstr ""
-
-msgid "online open source groupware and crm"
-msgstr ""
-
-#, python-brace-format
-msgid "about {0} minutes"
-msgstr ""
-
-msgid "Tine 2.0 needs your help"
-msgstr ""
-
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr ""
-
-msgid "participate!"
-msgstr ""
-
-msgid "Languages"
-msgstr ""
-
-msgid "Duration"
-msgstr ""
-
-msgid "Browser incompatible"
-msgstr ""
-
-msgid "Your browser is not supported by Tine 2.0."
-msgstr ""
-
-msgid "Browser incompatible?"
-msgstr ""
-
-msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-msgstr ""
-
-msgid "You might try one of these browsers:"
-msgstr ""
-
 #, python-brace-format
 msgid "Login successful. Loading {0}..."
 msgstr ""
@@ -1754,9 +1639,6 @@ msgstr ""
 msgid "Please fix the errors noted."
 msgstr ""
 
-msgid "Redirecting to SSO Identity Provider"
-msgstr ""
-
 msgid "Please enter your login data"
 msgstr ""
 
@@ -1764,6 +1646,9 @@ msgid "Error"
 msgstr ""
 
 msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr ""
+
+msgid "Login"
 msgstr ""
 
 #, python-brace-format
@@ -1783,6 +1668,36 @@ msgid "Login with Passkey"
 msgstr ""
 
 msgid "or"
+msgstr ""
+
+msgid "Browser incompatible"
+msgstr ""
+
+msgid "Your browser is not supported by Tine 2.0."
+msgstr ""
+
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr ""
+
+msgid "You might try one of these browsers:"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license expired."
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} trial"
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+
+msgid "Powered by:"
 msgstr ""
 
 #, python-brace-format
@@ -1932,6 +1847,9 @@ msgid "Password required"
 msgstr ""
 
 msgid "This area is locked. To unlock it you need to provide your password."
+msgstr ""
+
+msgid "Password"
 msgstr ""
 
 msgid "Yubico OTP required"
@@ -2158,6 +2076,12 @@ msgid "tine needs to be updated or is not installed yet."
 msgstr ""
 
 msgid "Please wait or contact your administrator"
+msgstr ""
+
+msgid "Translation Problem"
+msgstr ""
+
+msgid "A problem, with the translations was detected, trying to reload client..."
 msgstr ""
 
 msgid "Total    Uploads"
@@ -2420,7 +2344,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-msgid "Visibility"
+msgid "Private"
 msgstr ""
 
 msgid "Created By"
@@ -2629,6 +2553,9 @@ msgid "Content Type"
 msgstr ""
 
 msgid "Creation Time"
+msgstr ""
+
+msgid "Username"
 msgstr ""
 
 msgid "Please enter your credentials"
@@ -3164,6 +3091,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Search for {0} ..."
+msgstr ""
+
+msgid "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
 msgstr ""
 
 msgid "Searching..."
@@ -3895,6 +3825,9 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
+msgid "Version"
+msgstr ""
+
 msgid "Area Lock Configuration"
 msgid_plural "Area Lock Configurations"
 msgstr[0] ""
@@ -4192,6 +4125,12 @@ msgid "Gebietsstand"
 msgstr ""
 
 msgid "Bevölkerungsstand"
+msgstr ""
+
+msgid "Is Private"
+msgstr ""
+
+msgid "If active, it is only visible for the creator of this note"
 msgstr ""
 
 msgid "GENDER_Numbering Range"

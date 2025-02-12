@@ -968,7 +968,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
 
     const NOTE_TYPE = 'noteType';
-    const NOTE_VISIBILITY = 'noteVisibility';
 
     /**
      * Grad der Verstädterung (CummunityIdentificationNumber)
@@ -3596,24 +3595,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         'icon' => 'images/icon-set/icon_preview.svg', 'icon_class' => 'notes_revealPasswordIcon', 'system' => true], // _('Reveal password')
                 ],
                 self::DEFAULT_STR           => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
-            ],
-        ],
-        self::NOTE_VISIBILITY => [
-            self::LABEL                 => 'Note Visibility', //_('Note Visibility')
-            self::DESCRIPTION           => 'Available Note visibility for modlog history', //_('Available Note visibility for modlog history')
-            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
-            self::OPTIONS               => [
-                'recordModel'               => Tinebase_Model_NoteVisibility::class,
-            ],
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::DEFAULT_STR           => [
-                self::RECORDS               => [
-                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_PERSONAL, 'value' => 'Personal', 'is_user_type' => 0,
-                        'icon' => 'images/icon-set/icon_star_out.svg', 'icon_class' => 'notes_createdIcon', 'system' => true], // _('Personal')
-                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED, 'value' => 'Shared', 'is_user_type' => 0,
-                        'icon' => 'images/icon-set/icon_preview.svg', 'icon_class' => 'notes_revealPasswordIcon', 'system' => true], // _('Shared')
-                ],
-                self::DEFAULT_STR           => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             ],
         ],
         self::SMS => [

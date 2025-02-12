@@ -2907,7 +2907,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->_touch($event, true);
 
             $currentMods = $this->_writeModLog($event, $oldEvent);
-            $this->_setSystemNotes($event, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $currentMods);
+            $this->_setSystemNotes($event, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {

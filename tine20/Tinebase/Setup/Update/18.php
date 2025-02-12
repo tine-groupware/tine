@@ -17,12 +17,17 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
             self::RELEASE018_UPDATE003 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update003',
+            ],
+            self::RELEASE018_UPDATE004 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update004',
             ],
         ],
         self::PRIO_TINEBASE_STRUCTURE => [
@@ -77,7 +82,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     }
     public function update003()
     {
-        if ($this->getTableVersion('notes') < 5) {
+        /*if ($this->getTableVersion('notes') < 5) {
             $this->_backend->addCol('notes', new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>note_visibility</name>
@@ -86,8 +91,28 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>'));
             $this->setTableVersion('notes', 5);
-        }
+        }*/
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
+    }
+
+    public function update004()
+    {
+        if ($this->_backend->columnExists('note_visibility', 'notes')) {
+            $this->_backend->dropCol('notes', 'note_visibility');
+        }
+
+        if ($this->getTableVersion('notes') < 6) {
+            $this->_backend->addCol('notes', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>restricted_to</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>NULL</default>
+                </field>'));
+            $this->setTableVersion('notes', 6);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
     }
 }

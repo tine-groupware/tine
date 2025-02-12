@@ -429,13 +429,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             }
             $this->addNotesToTreeNodes($newRecord->getId(),
                 Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,
-                Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                 $currentMods
             );
         }
     }
 
-    public function addNotesToTreeNodes($fileObjectId, $noteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $noteVisibility = Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $mods = null)
+    public function addNotesToTreeNodes($fileObjectId, $noteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $mods = null)
     {
         foreach (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getObjectUsage($fileObjectId) as
                  $node) {
@@ -443,7 +442,6 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             Tinebase_Notes::getInstance()->addSystemNote($node,
                 Tinebase_Core::getUser(),
                 $noteType,
-                $noteVisibility,
                 $mods,
                 'Sql',
                 'Tinebase_Model_Tree_Node');

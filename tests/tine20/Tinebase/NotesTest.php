@@ -66,7 +66,7 @@ class Tinebase_NotesTest extends TestCase
     {
         $note = new Tinebase_Model_Note(array(
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
-            'note_visibility'   => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
+            'restricted_to'      => null,
             'note'              => 'phpunit test note',
             'record_model'      => $this->_objects['record']['model'],
             'record_backend'    => $this->_objects['record']['backend'],
@@ -95,8 +95,7 @@ class Tinebase_NotesTest extends TestCase
         $this->_instance->addSystemNote(
             $this->_objects['contact'], 
             Zend_Registry::get('currentAccount')->getId(), 
-            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,
-            Tinebase_Model_Note::SYSTEM_NOTE_SHARED
+            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED
         );
         
         $filter = new Tinebase_Model_NoteFilter(array(array(
@@ -214,7 +213,7 @@ class Tinebase_NotesTest extends TestCase
             $this->_instance->addNote(new Tinebase_Model_Note(array(
                 'note'          => 'very important note!',
                 'note_type_id'  => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
-                'note_visibility' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
+                'restricted_to' => null,
                 'record_id'     => $contact->getId(),
                 'record_model'  => 'Addressbook_Model_Contact',
             )));
@@ -224,5 +223,71 @@ class Tinebase_NotesTest extends TestCase
         foreach ($contacts as $contact) {
             $this->assertGreaterThan(0, count($contact->notes), 'No notes found for contact ' . $contact->n_fn);
         }
+    }
+
+    /**
+     * test if visible only for currentUser if restricted_to = $currentUser
+     *
+     * @return void
+     */
+    public function testNotesRestriction()
+    {
+        $currentUser = $this->_personas['sclever']->accountId;
+        $this->_instance->addNote(new Tinebase_Model_Note(array(
+            'note'          => 'private note! ' . $currentUser,
+            'note_type_id'  => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'restricted_to' => $currentUser,
+            'record_id'     => $this->_objects['record']['id'],
+            'record_model'  => $this->_objects['record']['model'],
+        )));
+
+        $notes = $this->_instance->getNotesOfRecord($this->_objects['record']['model'], $this->_objects['record']['id']);
+        $notesCount = count($notes);
+        $this->assertEquals(0, $notesCount);
+        $found = false;
+        foreach ($notes as $note) {
+            if ($note->note === $note['note']) {
+                $found = true;
+            }
+        }
+        $this->assertFalse($found, 'note found in notes: ' . print_r($notes, true));
+
+        $this->_instance->addNote(new Tinebase_Model_Note(array(
+            'note'          => 'public note! ' . $currentUser,
+            'note_type_id'  => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'restricted_to' => null,
+            'record_id'     => $this->_objects['record']['id'],
+            'record_model'  => $this->_objects['record']['model'],
+        )));
+
+        $notes = $this->_instance->getNotesOfRecord($this->_objects['record']['model'], $this->_objects['record']['id']);
+        $notesCount = count($notes);
+        $this->assertEquals(1, $notesCount);
+        $found = false;
+        foreach ($notes as $note) {
+            if ($note->note === $note['note']) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found, 'note found in notes: ' . print_r($notes, true));
+
+        $this->_instance->addNote(new Tinebase_Model_Note(array(
+            'note'          => 'private note! ' . $currentUser,
+            'note_type_id'  => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            'restricted_to' => Tinebase_Core::getUser()->getId(),
+            'record_id'     => $this->_objects['record']['id'],
+            'record_model'  => $this->_objects['record']['model'],
+        )));
+
+        $notes = $this->_instance->getNotesOfRecord($this->_objects['record']['model'], $this->_objects['record']['id']);
+        $notesCount = count($notes);
+        $this->assertEquals(2, $notesCount);
+        $found = false;
+        foreach ($notes as $note) {
+            if ($note->note === $note['note']) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found, 'note found in notes: ' . print_r($notes, true));
     }
 }
