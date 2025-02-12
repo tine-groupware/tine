@@ -801,10 +801,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
 
-    const INSTALL_LOGO = 'install_logo';
+    const INSTALL_LOGO = 'install_logo'; // legacy
+    const INSTALL_LOGO_LIGHT_SVG = 'install_logo_light_svg';
+    const INSTALL_LOGO_LIGHT = 'install_logo_light';
+    const INSTALL_LOGO_DARK_SVG = 'install_logo_dark_svg';
+    const INSTALL_LOGO_DARK = 'install_logo_dark';
     const WEBSITE_URL = 'website_url';
 
-    const BRANDING_LOGO = 'branding_logo';
+    const BRANDING_LOGO = 'branding_logo'; // legacy
+    const BRANDING_LOGO_LIGHT_SVG = 'branding_logo_light_svg';
+    const BRANDING_LOGO_LIGHT = 'branding_logo_light';
+    const BRANDING_LOGO_DARK_SVG = 'branding_logo_dark_svg';
+    const BRANDING_LOGO_DARK = 'branding_logo_dark';
     const BRANDING_FAVICON = 'branding_favicon';
     const BRANDING_FAVICON_SVG = 'branding_favicon_svg';
     const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
@@ -2796,9 +2804,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
-        self::BRANDING_LOGO => array(
+        // legacy
+        self::BRANDING_LOGO => [
             //_('custom logo path')
-            self::LABEL => 'custom logo path',
+            self::LABEL => 'custom logo path - legacy use light/dark variants',
             //_('Path to custom logo.')
             self::DESCRIPTION => 'Path to custom logo.',
             self::TYPE => 'string',
@@ -2806,7 +2815,55 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
-        ),
+        ],
+        // use Tinebase_Core::getLogo('b', $colorSchema)
+        self::BRANDING_LOGO_LIGHT_SVG => [
+            //_('custom logo path')
+            self::LABEL => 'custom logo - light, scaleable',
+            //_('Path to custom logo.')
+            self::DESCRIPTION => 'Path to custom logo - light variant, scaleable.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '@TODO',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
+        // use Tinebase_Core::getLogo('b', $colorSchema)
+        self::BRANDING_LOGO_LIGHT => [
+            //_('custom logo path')
+            self::LABEL => 'custom logo - light',
+            //_('Path to custom logo.')
+            self::DESCRIPTION => 'Path to custom logo - light variant.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '@TODO',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
+        // use Tinebase_Core::getLogo('b', $colorSchema)
+        self::BRANDING_LOGO_DARK_SVG => [
+            //_('custom logo path')
+            self::LABEL => 'custom logo - dark, scaleable',
+            //_('Path to custom logo.')
+            self::DESCRIPTION => 'Path to custom logo - dark variant, scaleable.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '@TODO',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
+        // use Tinebase_Core::getLogo('b', $colorSchema)
+        self::BRANDING_LOGO_DARK => [
+            //_('custom logo path')
+            self::LABEL => 'custom logo - dark',
+            //_('Path to custom logo.')
+            self::DESCRIPTION => 'Path to custom logo - dark variant.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => '@TODO',
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
         self::BRANDING_DESCRIPTION => array(
             //_('custom description')
             self::LABEL => 'custom description',
@@ -2900,9 +2957,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE,
         ),
         // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
-        self::INSTALL_LOGO => array(
+        self::INSTALL_LOGO => [
             //_('Installation logo')
-            self::LABEL => 'Installation logo',
+            self::LABEL => 'Installation logo (legacy, use light/dark variants)',
             //_('Path to custom installation logo.')
             self::DESCRIPTION => 'Path to custom installation logo.',
             self::TYPE => 'string',
@@ -2910,7 +2967,55 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
-        ),
+        ],
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO_LIGHT_SVG => [
+            //_('Installation logo')
+            self::LABEL => 'Installation logo - light, scalable.',
+            //_('Path to custom installation logo.')
+            self::DESCRIPTION => 'Path to custom installation logo - light variant, scalable.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => './images/tine_logo.svg',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO_LIGHT => [
+            //_('Installation logo')
+            self::LABEL => 'Installation logo - light.',
+            //_('Path to custom installation logo.')
+            self::DESCRIPTION => 'Path to custom installation logo - light variant.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => false,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO_DARK_SVG => [
+            //_('Installation logo')
+            self::LABEL => 'Installation logo - dark, scalable.',
+            //_('Path to custom installation logo.')
+            self::DESCRIPTION => 'Path to custom installation logo - dark variant, scalable.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => './images/tine_logo.svg',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
+        // Retrieve via Tinebase_Core::getInstallLogo(), never use directly!
+        self::INSTALL_LOGO_DARK => [
+            //_('Installation logo')
+            self::LABEL => 'Installation logo - dark.',
+            //_('Path to custom installation logo.')
+            self::DESCRIPTION => 'Path to custom installation logo - dark variant.',
+            self::TYPE => 'string',
+            self::DEFAULT_STR => false,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => FALSE,
+            self::SETBYSETUPMODULE => FALSE,
+        ],
         self::WEBSITE_URL => array(
             //_('custom website url')
             self::LABEL => 'custom website url',

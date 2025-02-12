@@ -2606,18 +2606,51 @@ class Tinebase_Core
 
     /**
      * Returns path to install logo, if no install logo is set use branding logo
-     * 
+     *
+     * NOTE: returns bitmap if not scalable is found
+     *
+     * @param string $colorSchema
+     * @param boolean $scalable
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getInstallLogo()
+    public static function getInstallLogo($colorSchema='light', $scalable=false)
     {
-        $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
-        
-        if (!$logo) {
-            $logo =Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_LOGO};
+        return self::getLogo('i', $colorSchema, $scalable);
+    }
+
+    /**
+     * Returns path to requested logo
+     *
+     * NOTE: returns bitmap if not scalable is found
+     *
+     * @param string $type
+     * @param string $colorSchema
+     * @param boolean $scalable
+     * @return null|string
+     * @throws FileNotFoundException
+     */
+    public static function getLogo($type = 'b', $colorSchema='light', $scalable=false)
+    {
+        $prio = array_merge(($type === 'i' ? [
+            "install_logo_{$colorSchema}_svg",
+            "install_logo_{$colorSchema}",
+            "install_logo_svg",
+            "install_logo",
+        ] : []), [
+            "branding_logo_{$colorSchema}_svg",
+            "branding_logo_{$colorSchema}",
+            "branding_logo_svg",
+            "branding_logo",
+        ]);
+
+        $path = null;
+        foreach($prio as $confName) {
+            if (substr($confName, -4) === '_svg' && !$scalable) continue;
+            if (!$conf = Tinebase_Config::getInstance()->get($confName)) continue;
+            if ($path = Tinebase_Helper::getFilename($conf, false)) break;
         }
-        
-        return Tinebase_Helper::getFilename($logo, false);
+
+        return $path;
     }
 }

@@ -94,6 +94,9 @@ const focusPWField = () => {
 }
 const focusUsernameField = () => usernameTRef.value.focus()
 
+const isDark = document.body.classList.contains('dark-mode')
+const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
+
 </script>
 
 <template>
@@ -102,7 +105,7 @@ const focusUsernameField = () => usernameTRef.value.focus()
       <div class="login-container">
         <div class="login-logo">
           <a target="_blank" rel="noopener noreferrer" :href="Tine.websiteUrl">
-            <img src="logo/i/300x100" class="logo-image">
+            <img :src="logoUrl" class="dark-reverse logo-image">
           </a>
           <h2 class="mt-4">{{ i18n._('Login') }}</h2>
           <h5>{{ String.format(i18n._('Login with {0} account'), Tine.title)}}</h5>
