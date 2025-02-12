@@ -2835,7 +2835,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom logo.')
             self::DESCRIPTION => 'Path to custom logo - light variant.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => '@TODO',
+            self::DEFAULT_STR => './images/tine_logo.png',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -2859,7 +2859,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom logo.')
             self::DESCRIPTION => 'Path to custom logo - dark variant.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => '@TODO',
+            self::DEFAULT_STR => './images/tine_logo_dark.png',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -2963,7 +2963,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom installation logo.')
             self::DESCRIPTION => 'Path to custom installation logo.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => false,
+            self::DEFAULT_STR => './images/tine_logo.png',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -2975,6 +2975,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom installation logo.')
             self::DESCRIPTION => 'Path to custom installation logo - light variant, scalable.',
             self::TYPE => 'string',
+            self::DEFAULT_STR => './images/tine_logo.svg',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -2986,7 +2987,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom installation logo.')
             self::DESCRIPTION => 'Path to custom installation logo - light variant.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => false,
+            self::DEFAULT_STR => './images/tine_logo.png',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -2998,6 +2999,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom installation logo.')
             self::DESCRIPTION => 'Path to custom installation logo - dark variant, scalable.',
             self::TYPE => 'string',
+            self::DEFAULT_STR => './images/tine_logo.svg',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -3009,7 +3011,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Path to custom installation logo.')
             self::DESCRIPTION => 'Path to custom installation logo - dark variant.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => false,
+            self::DEFAULT_STR => './images/tine_logo_dark.png',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
