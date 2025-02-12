@@ -1710,7 +1710,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $colorSchema = 'light';
         }
 
-        $cacheId = sha1(self::class . 'getLogo' . $type . $size . $mime);
+        $cacheId = sha1(self::class . 'getLogo' . $type . $size . $mime . $colorSchema);
         $imageBlob = Tinebase_Core::getCache()->load($cacheId);
 
         if (!$imageBlob) {
