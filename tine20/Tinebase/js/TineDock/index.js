@@ -8,6 +8,7 @@
 
 import TineDock from "./TineDock.vue";
 import BootstrapVueNext from "bootstrap-vue-next";
+
 Ext.ns('Tine.Tinebase');
 
 Tine.Tinebase.TineDock = Ext.extend(Ext.BoxComponent, {
@@ -54,13 +55,17 @@ Tine.Tinebase.TineDock = Ext.extend(Ext.BoxComponent, {
         Tine.Tinebase.TineDock.superclass.initComponent.call(this)
     },
 
-    _setState: function(app){
+    pinAppToDock: function(app) {
         const appName = app.name
-        this.vueProps.state.activeApp = appName
-        if (_.indexOf(this.vueProps.state.dockedApps, appName) === -1) {
-            this.vueProps.state.dockedApps.push(appName)
-        }
+        if (_.indexOf(this.vueProps.state.dockedApps, appName) !== -1) return // app already pinned
+        this.vueProps.state.dockedApps.push(appName)
         this.fireEvent('syncState', this)
+    },
+
+    _setState: function(app){
+        this.vueProps.state.activeApp = app.name
+        this.pinAppToDock(app)
+        // this.fireEvent('syncState', this)
     },
 
     activateApp: function(appName) {

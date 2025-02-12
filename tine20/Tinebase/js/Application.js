@@ -102,6 +102,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      */
     setDockBadge: function(value) {
         this.dockBadge.value = parseInt(value) || 0
+        if(this.dockBadge.value) Tine.Tinebase.MainScreen.getDock().pinAppToDock(this)
     },
 
     /**
