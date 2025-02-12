@@ -1287,16 +1287,22 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
 
             @mkdir($pathWithMessageId);
+            $success = false;
             if (is_writable($pathWithMessageId)) {
                 $part = $this->getMessagePart($messageId, $partId);
                 $stream = $part->getDecodedStream();
                 $datFile = $pathWithMessageId . '/winmail.dat';
                 $tmpFile = fopen($datFile, 'w');
-                stream_copy_to_stream($stream, $tmpFile);
-                fclose($tmpFile);
-                $this->_extractWinMailDatToDir($datFile, $pathWithMessageId);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                if ($tmpFile) {
+                    stream_copy_to_stream($stream, $tmpFile);
+                    fclose($tmpFile);
+                    $this->_extractWinMailDatToDir($datFile, $pathWithMessageId);
+                    $success = true;
+                }
+            }
+
+            if(!$success && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(
                     __METHOD__ . '::' . __LINE__ . ' DAT file path is not writable: ' . $pathWithMessageId);
             }
         }
