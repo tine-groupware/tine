@@ -2229,7 +2229,7 @@ class Tinebase_FileSystem implements
             } catch (Tinebase_Exception_NotFound $tenf) {}
             $modLogs = $this->_treeNodeBackend->writeModLog($deletedNode, $node);
             if ($deletedNode) {
-                Tinebase_Notes::getInstance()->addSystemNote($deletedNode, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $modLogs);
+                Tinebase_Notes::getInstance()->addSystemNote($deletedNode, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modLogs);
             }
 
             if ($node->flysystem && $deleteFlySys) {

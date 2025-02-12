@@ -170,7 +170,6 @@ class Crm_ControllerTest extends Crm_AbstractTest
         
         $this->_objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
-            'note_visibility'      => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             'note'              => 'phpunit test note',    
         ));
     }

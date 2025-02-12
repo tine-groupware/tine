@@ -364,10 +364,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             // get default note type
                             $noteArray['note_type_id'] = Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
                         }
-                        if (!isset($noteArray['note_visibility'])) {
-                            // get default note visibility
-                            $noteArray['note_visibility'] = Tinebase_Model_Note::SYSTEM_NOTE_SHARED;
-                        }
                         try {
                             $note = new Tinebase_Model_Note($noteArray);
                             $notesToSet->addRecord($note);
@@ -456,7 +452,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $_record,
         $_userId = null,
         string $_type = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,
-        string $_visibility = Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
         $_mods = null,
         $_backend = 'Sql',
         $_modelName = null
@@ -507,7 +502,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         $note = new Tinebase_Model_Note(array(
             'note_type_id'              => $_type,
-            'note_visibility'           => $_visibility,
+            'restricted_to'             => null,
             'note'                      => mb_substr($noteText, 0, self::MAX_NOTE_LENGTH),
             'record_model'              => $modelName,
             'record_backend'            => ucfirst(strtolower($_backend)),
@@ -643,7 +638,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $_mods->addIndices(array('record_id'));
         foreach ($_mods->record_id as $recordId) {
             $modsOfRecord = $_mods->filter('record_id', $recordId);
-            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $modsOfRecord, 'Sql', $modelName);
+            $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord, 'Sql', $modelName);
         }
     }
 
@@ -749,13 +744,13 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $filterData[] = ['condition' => 'OR',
                 'filters' => [
                     [
-                        'field' => 'created_by',
+                        'field' => 'restricted_to',
                         'operator' => 'equals',
                         'value' => $currentUser
                     ], [
-                        'field' => 'note_visibility',
+                        'field' => 'restricted_to',
                         'operator' => 'equals',
-                        'value' => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
+                        'value' => null,
                     ]
                 ]
             ];

@@ -1039,18 +1039,6 @@ msgstr "Changed"
 msgid "Reveal password"
 msgstr "Reveal password"
 
-msgid "Note Visibility"
-msgstr "Note Visibility"
-
-msgid "Available Note visibility for modlog history"
-msgstr "Available Note visibility for modlog history"
-
-msgid "Personal"
-msgstr "Personal"
-
-msgid "Shared"
-msgstr "Shared"
-
 msgid "SMS Config"
 msgstr "SMS Config"
 
@@ -1623,109 +1611,6 @@ msgstr "You need a current Browser to use this program."
 msgid "License"
 msgstr "License"
 
-msgid "Login"
-msgstr "Login"
-
-msgid "Username"
-msgstr "Username"
-
-msgid "Password"
-msgstr "Password"
-
-msgid "Certificate detected. Please, press Login button to proceed."
-msgstr "Certificate detected. Please, press Login button to proceed."
-
-msgid "Login via OpenID Connect"
-msgstr "Login via OpenID Connect"
-
-msgid "Version"
-msgstr "Version"
-
-#, python-brace-format
-msgid "{0} is made for you"
-msgstr "{0} is made for you"
-
-#, python-brace-format
-msgid "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-msgstr "{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-
-#, python-brace-format
-msgid "{0} Homepage"
-msgstr "{0} Homepage"
-
-msgid "Translations"
-msgstr "Translations"
-
-#, python-brace-format
-msgid "Translation state of {0}: {1}%."
-msgstr "Translation state of {0}: {1}%."
-
-#, python-brace-format
-msgid "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
-msgstr "If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator."
-
-#, python-brace-format
-msgid "{0} Translation Howto"
-msgstr "{0} Translation Howto"
-
-msgid "Detailed Language Statistics"
-msgstr "Detailed Language Statistics"
-
-#, python-brace-format
-msgid "Your {0} license expired."
-msgstr "Your {0} license expired."
-
-#, python-brace-format
-msgid "{0} trial"
-msgstr "{0} trial"
-
-#, python-brace-format
-msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr "Please contact Metaways Infosystems GmbH to buy a valid license."
-
-msgid "Powered by:"
-msgstr "Powered by:"
-
-msgid "online open source groupware and crm"
-msgstr "online open source groupware and crm"
-
-#, python-brace-format
-msgid "about {0} minutes"
-msgstr "about {0} minutes"
-
-msgid "Tine 2.0 needs your help"
-msgstr "Tine 2.0 needs your help"
-
-msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-msgstr "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-
-msgid "participate!"
-msgstr "participate!"
-
-msgid "Languages"
-msgstr "Languages"
-
-msgid "Duration"
-msgstr "Duration"
-
-msgid "Browser incompatible"
-msgstr "Browser incompatible"
-
-msgid "Your browser is not supported by Tine 2.0."
-msgstr "Your browser is not supported by Tine 2.0."
-
-msgid "Browser incompatible?"
-msgstr "Browser incompatible?"
-
-msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-msgstr "You are using an unrecognized browser. This could result in unexpected behaviour."
-
-msgid "You might try one of these browsers:"
-msgstr "You might try one of these browsers:"
-
 #, python-brace-format
 msgid "Login successful. Loading {0}..."
 msgstr "Login successful. Loading {0}..."
@@ -1754,9 +1639,6 @@ msgstr "Errors"
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
-msgid "Redirecting to SSO Identity Provider"
-msgstr "Redirecting to SSO Identity Provider"
-
 msgid "Please enter your login data"
 msgstr "Please enter your login data"
 
@@ -1765,6 +1647,9 @@ msgstr "Error"
 
 msgid "FIDO2 WebAuthn authentication failed. Try again?"
 msgstr "FIDO2 WebAuthn authentication failed. Try again?"
+
+msgid "Login"
+msgstr "Login"
 
 #, python-brace-format
 msgid "Login with {0} account"
@@ -1784,6 +1669,36 @@ msgstr "Login with Passkey"
 
 msgid "or"
 msgstr "or"
+
+msgid "Browser incompatible"
+msgstr "Browser incompatible"
+
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Your browser is not supported by Tine 2.0."
+
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr "You are using an unrecognized browser. This could result in unexpected behaviour."
+
+msgid "You might try one of these browsers:"
+msgstr "You might try one of these browsers:"
+
+#, python-brace-format
+msgid "Your {0} license expired."
+msgstr "Your {0} license expired."
+
+#, python-brace-format
+msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+
+#, python-brace-format
+msgid "{0} trial"
+msgstr "{0} trial"
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr "Please contact Metaways Infosystems GmbH to buy a valid license."
+
+msgid "Powered by:"
+msgstr "Powered by:"
 
 #, python-brace-format
 msgid "User: {0}"
@@ -1933,6 +1848,9 @@ msgstr "Password required"
 
 msgid "This area is locked. To unlock it you need to provide your password."
 msgstr "This area is locked. To unlock it you need to provide your password."
+
+msgid "Password"
+msgstr "Password"
 
 msgid "Yubico OTP required"
 msgstr "Yubico OTP required"
@@ -2159,6 +2077,12 @@ msgstr "tine needs to be updated or is not installed yet."
 
 msgid "Please wait or contact your administrator"
 msgstr "Please wait or contact your administrator"
+
+msgid "Translation Problem"
+msgstr "Translation Problem"
+
+msgid "A problem, with the translations was detected, trying to reload client..."
+msgstr "A problem, with the translations was detected, trying to reload client..."
 
 msgid "Total    Uploads"
 msgstr "Total    Uploads"
@@ -2420,8 +2344,8 @@ msgstr "Notes"
 msgid "Type"
 msgstr "Type"
 
-msgid "Visibility"
-msgstr "Visibility"
+msgid "Private"
+msgstr "Private"
 
 msgid "Created By"
 msgstr "Created By"
@@ -2630,6 +2554,9 @@ msgstr "Content Type"
 
 msgid "Creation Time"
 msgstr "Creation Time"
+
+msgid "Username"
+msgstr "Username"
 
 msgid "Please enter your credentials"
 msgstr "Please enter your credentials"
@@ -3165,6 +3092,9 @@ msgstr "Edit copy"
 #, python-brace-format
 msgid "Search for {0} ..."
 msgstr "Search for {0} ..."
+
+msgid "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
+msgstr "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
 
 msgid "Searching..."
 msgstr "Searching..."
@@ -3895,6 +3825,9 @@ msgstr "Status"
 msgid "Order"
 msgstr "Order"
 
+msgid "Version"
+msgstr "Version"
+
 msgid "Area Lock Configuration"
 msgid_plural "Area Lock Configurations"
 msgstr[0] "Area Lock Configuration"
@@ -4193,6 +4126,12 @@ msgstr "Gebietsstand"
 
 msgid "Bevölkerungsstand"
 msgstr "Bevölkerungsstand"
+
+msgid "Is Private"
+msgstr "Is Private"
+
+msgid "If active, it is only visible for the creator of this note"
+msgstr "If active, it is only visible for the creator of this note"
 
 msgid "GENDER_Numbering Range"
 msgstr "GENDER_Numbering Range"

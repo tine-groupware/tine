@@ -191,7 +191,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         Tinebase_Timemachine_ModificationLog::getInstance()
             ->setRecordMetaData($_newRecord, Tinebase_Controller_Record_Abstract::ACTION_CREATE);
         $this->_writeModLog($_newRecord, null);
-        Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED);
+        Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED);
 
         /** @var Tinebase_Model_Tree_Node $_newRecord */
         $this->_inspectForPreviewCreation($_newRecord);
@@ -274,7 +274,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                         Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $oldRecord);
             $currentMods = $this->_writeModLog($newRecord, $oldRecord);
             if (null !== $currentMods && $currentMods->count() > 0) {
-                Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $currentMods);
+                Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             }
         }
 
@@ -306,7 +306,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $_oldRecord);
         $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
         if (null !== $currentMods && $currentMods->count() > 0 && (!$_newRecord->is_deleted || !$_newRecord->flysystem)) {
-            Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $currentMods);
+            Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
                 Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_FileSystem.checkForCRUDNotifications', $_newRecord->getId(), 'updated');
@@ -348,7 +348,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 $currentMods = $this->_writeModLog($newRecord, $oldRecord);
                 if (null !== $currentMods && $currentMods->count() > 0) {
                     Tinebase_Notes::getInstance()->addSystemNote($newRecord, Tinebase_Core::getUser(),
-                        Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $currentMods);
+                        Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
                 }
             }

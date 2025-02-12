@@ -292,7 +292,6 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Order::FLD_NOTES => new Tinebase_Record_RecordSet(Tinebase_Model_Note::class, [
                             new Tinebase_Model_Note([
                                 Tinebase_Model_Note::FLD_NOTE_TYPE_ID => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
-                                Tinebase_Model_Note::FLD_NOTE_VISIBILITY => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
                                 Tinebase_Model_Note::FLD_NOTE => 'order'
                             ], true)
                         ]),
@@ -334,7 +333,6 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice->attachments->addRecord(Tinebase_FileSystem::getInstance()->stat($path . '/test.txt'));
         $invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->addRecord(new Tinebase_Model_Note([
             Tinebase_Model_Note::FLD_NOTE_TYPE_ID => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
-            Tinebase_Model_Note::FLD_NOTE_VISIBILITY => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
             Tinebase_Model_Note::FLD_NOTE => 'invoice'
         ], true));
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);

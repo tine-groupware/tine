@@ -788,7 +788,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $createdRecordWithRelated = $this->_setRelatedData($createdRecord, $_record, null, true, true);
             $this->_inspectAfterSetRelatedDataCreate($createdRecordWithRelated, $_record);
             $mods = $this->_writeModLog($createdRecordWithRelated, null);
-            $this->_setSystemNotes($createdRecordWithRelated, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $mods);
+            $this->_setSystemNotes($createdRecordWithRelated, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $mods);
 
             if ($this->sendNotifications() && !$_record->mute) {
                 $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
@@ -1472,7 +1472,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectAfterSetRelatedDataUpdate($updatedRecordWithRelatedData, $_record, $currentRecord);
 
             $currentMods = $this->_writeModLog($updatedRecordWithRelatedData, $currentRecord);
-            $this->_setSystemNotes($updatedRecordWithRelatedData, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $currentMods);
+            $this->_setSystemNotes($updatedRecordWithRelatedData, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
             
             if ($this->_sendNotifications && count($currentMods) > 0) {
                 $this->doSendNotifications($updatedRecordWithRelatedData, Tinebase_Core::getUser(), 'changed', $currentRecord);
@@ -1827,7 +1827,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _setSystemNotes(
         $_updatedRecord,
         $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED,
-        $_systemNoteVisibility = Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
         $_currentMods = null
     ) {
         if (! $_updatedRecord->has('notes') || $this->_setNotes === false) {
@@ -1838,7 +1837,6 @@ abstract class Tinebase_Controller_Record_Abstract
             $_updatedRecord,
             Tinebase_Core::getUser(),
             $_systemNoteType,
-            $_systemNoteVisibility,
             $_currentMods
         );
     }
@@ -4010,7 +4008,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         
         $note = new Tinebase_Model_Note([
             'note_type_id'      => Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL,
-            'note_visibility'   => Tinebase_Model_Note::SYSTEM_NOTE_SHARED,
+            'restricted_to'     => null,
             'note'              => mb_substr($noteText, 0, Tinebase_Notes::MAX_NOTE_LENGTH),
             'record_model'      => $this->_modelName,
             'record_backend'    => ucfirst(strtolower('sql')),

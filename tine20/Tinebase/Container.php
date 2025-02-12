@@ -2285,7 +2285,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         unset($oldContainer->account_grants);
         $mods = $this->_writeModLog($result, $oldContainer);
         Tinebase_Notes::getInstance()->addSystemNote($result, Tinebase_Core::getUser(),
-            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $mods);
+            Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $mods);
 
         if ($_fireEvent) {
             $event = new Tinebase_Event_Record_Update();

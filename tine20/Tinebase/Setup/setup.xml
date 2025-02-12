@@ -2161,7 +2161,7 @@
         </table>
         <table>
             <name>notes</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2176,10 +2176,10 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>note_visibility</name>
+                    <name>restricted_to</name>
                     <type>text</type>
-                    <length>255</length>
-                    <notnull>true</notnull>
+                    <length>64</length>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>note</name>

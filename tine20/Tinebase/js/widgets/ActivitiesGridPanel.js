@@ -103,9 +103,9 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     getColumns: function () {
         const columns = [
-            { id: 'note_type_id', header: i18n._('Type'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType') },
-            { id: 'note_visibility', header: i18n._('Visibility'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteVisibility') },
+            { id: 'note_type_id', header: i18n._('Type'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')},
             { id: 'note', header: i18n._('Note'), renderer: this.renderMultipleLines },
+            { id: 'restricted_to', header: i18n._('Private'), renderer: Tine.Tinebase.common.booleanRenderer },
             { id: 'created_by', header: i18n._('Created By'), renderer: Tine.Tinebase.common.usernameRenderer },
             { id: 'creation_time', header: i18n._('Creation time'), renderer: Tine.Tinebase.common.dateTimeRenderer }
         ];
@@ -296,7 +296,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         var selectedRecord = this.getSelectionModel().getSelected();
         if (selectedRecord && button.iconCls == 'action_edit') {
             var typeId = selectedRecord.get('type_id');
-            var noteVisibility = selectedRecord.get('noteVisibility');
             var note = selectedRecord.get('note');
             var recordId = selectedRecord.id;
         }
@@ -313,9 +312,8 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             if (this.formPanel.getForm().findField('notification').validate()) {
                 const text = this.formPanel.getForm().findField('notification').getValue();
                 const noteType = this.formPanel.getForm().findField('noteType').getValue();
-                const noteVisibility = this.formPanel.getForm().findField('noteVisibility').getValue();
-    
-                this.onNoteAdd(text, noteType, noteVisibility, recordId);
+                const restrictedTo = this.formPanel.getForm().findField('restrictedTo').getValue();
+                this.onNoteAdd(text, noteType, restrictedTo, recordId);
                 this.onClose();
             }
         };
@@ -349,33 +347,39 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             border: false,
             frame: true,
             buttons: buttons,
-            items: [
-                {
-                    fieldLabel: i18n._('Type'),
-                    name: 'noteType',
-                    anchor: '100% 100%',
-                    xtype: 'widget-keyfieldcombo',
-                    app:   'Tinebase',
-                    keyFieldName: 'noteType',
-                    allowBlank: false
-                }, {
-                    fieldLabel: i18n._('Visibility'),
-                    name: 'noteVisibility',
-                    anchor: '100% 100%',
-                    xtype: 'widget-keyfieldcombo',
-                    app:   'Tinebase',
-                    keyFieldName: 'noteVisibility',
-                    allowBlank: false
-                }, {
-                    xtype: 'textarea',
-                    name: 'notification',
-                    fieldLabel: i18n._('Enter new note:'),
-                    labelSeparator: '',
-                    allowBlank: false,
-                    value: note || '',
-                    anchor: '100% 100%'
+            items: [{
+                fieldLabel: i18n._('Type'),
+                name: 'noteType',
+                anchor: '100% 100%',
+                xtype: 'widget-keyfieldcombo',
+                app:   'Tinebase',
+                keyFieldName: 'noteType',
+                allowBlank: false,
+                columnWidth: 0.75,
+            }, {
+                fieldLabel: i18n._('Private'),
+                name: 'restrictedTo',
+                anchor: '100%',
+                xtype: 'checkbox',
+                columnWidth: 0.25,
+                value: false,
+                listeners : {
+                    render: function(c) {
+                        new Ext.ToolTip ({
+                            target: c.getEl(),
+                            html: i18n._('If active, it is only visible for the creator of this note')
+                        });
+                    }
                 }
-            ]
+            },{
+                xtype: 'textarea',
+                name: 'notification',
+                fieldLabel: i18n._('Enter new note:'),
+                labelSeparator: '',
+                allowBlank: false,
+                value: note || '',
+                anchor: '100% 100%'
+            }]
         });
 
         this.window = Tine.WindowFactory.getWindow({
@@ -393,19 +397,19 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * on add note
      * - add note to activities panel
      */
-    onNoteAdd: function (text, typeId, noteVisibility, recordId) {
+    onNoteAdd: function (text, typeId, restrictedTo, recordId) {
         if (text && typeId  && recordId === undefined) {
             const newNote = new Tine.Tinebase.Model.Note({
                 note_type_id: typeId,
-                note_visibility: noteVisibility,
+                restricted_to: restrictedTo ? this.currentAccount.accountId : null,
                 note: text,
                 creation_time: new Date(),
                 created_by: this.currentAccount.accountId,
             });
             this.store.add(newNote);
-        } else if (text, typeId, noteVisibility, recordId) {
+        } else if (text, typeId, restrictedTo, recordId) {
             this.store.getById(recordId).set('note_type_id', typeId);
-            this.store.getById(recordId).set('note_visibility', noteVisibility);
+            this.store.getById(recordId).set('restricted_to', restrictedTo ? this.currentAccount.accountId : null);
             this.store.getById(recordId).set('note', text);
             this.store.getById(recordId).set('created_by', this.currentAccount.accountId);
         }

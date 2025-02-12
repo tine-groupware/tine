@@ -1045,10 +1045,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
      * @param   string $_systemNoteType
-     * @param   string $_systemNoteVisibility
      * @param   Tinebase_Record_RecordSet $_currentMods
      */
-    protected function _setSystemNotes($_updatedRecord, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_systemNoteVisibility = Tinebase_Model_Note::SYSTEM_NOTE_SHARED, $_currentMods = NULL)
+    protected function _setSystemNotes($_updatedRecord, $_systemNoteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, $_currentMods = NULL)
     {
         $resolvedMods = $_currentMods;
         if (null !== $_currentMods && Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED === $_systemNoteType) {
@@ -1066,7 +1065,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 $resolvedMods->addRecord($newMod);
             }
         }
-        parent::_setSystemNotes($_updatedRecord, $_systemNoteType, $_systemNoteVisibility, $resolvedMods);
+        parent::_setSystemNotes($_updatedRecord, $_systemNoteType, $resolvedMods);
     }
 
     protected function _resolveMembersForNotes(&$currentMembers, &$oldMembers)

@@ -40,7 +40,7 @@ class Tinebase_Model_NoteFilter extends Tinebase_Model_Filter_FilterGroup
         'record_model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'record_backend'        => array('filter' => 'Tinebase_Model_Filter_Text'),
         'note_type_id'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'note_visibility'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'restricted_to'         => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }
