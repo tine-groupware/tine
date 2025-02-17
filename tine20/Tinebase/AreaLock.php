@@ -261,6 +261,11 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
                 . __LINE__ . ' Config not found for area ' . $area);
             return false;
         }
+
+        if (Tinebase_Auth_MFA::checkMFABypass()) {
+            return true;
+        }
+
         /** @var Tinebase_Model_AreaLockConfig $config */
         foreach($configs as $config) {
             if (!$config->getBackend()->hasValidAuth()) {
@@ -272,13 +277,17 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
     }
 
     /**
+     * @param string $area
      * @return array<Tinebase_DateTime>
      */
     protected function _getAuthValidity(string $area): array
     {
+        $bypass = Tinebase_Auth_MFA::checkMFABypass();
         $result = [];
         foreach ($this->getAreaConfigs($area) as $config) {
-            $result[$config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME}] = $config->getBackend()->getAuthValidity();
+            $result[$config->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME}] = $bypass
+                ? Tinebase_DateTime::now()->addYear(1)
+                : $config->getBackend()->getAuthValidity();
         }
         return $result;
     }
