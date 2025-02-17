@@ -240,7 +240,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @return Tinebase_Model_TempFile
      * @throws Tinebase_Exception_Backend
      */
-    public function joinTempFiles($_tempFiles)
+    public function joinTempFiles($_tempFiles, $avscan = true)
     {
         $path = self::getTempPath();
         $name = preg_replace('/\.\d+\.chunk$/', '', $_tempFiles->getFirstRecord()->name);
@@ -262,8 +262,9 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             fclose($fChunk);
         }
 
-        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+        if ($avscan && Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
                 ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            // fixme: large file might lead to gateway timeout, we wait for the schedular task to scan the large files for now
             $this->_avScan($fJoin, $path);
         }
         

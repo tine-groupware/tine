@@ -697,7 +697,7 @@ class Tinebase_FileSystem implements
      * @param  resource $handle
      * @return boolean
      */
-    public function fclose($handle)
+    public function fclose($handle, $avscan = true)
     {
         if (!is_resource($handle)) {
             return false;
@@ -724,7 +724,7 @@ class Tinebase_FileSystem implements
                     $hashFile = 'flySystem'; // we need to set a true-ish string value here
                     $avResult = null; // FIXME todo add avScanning for FlySystem
                 } else {
-                    list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle);
+                    list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle, $avscan);
                 }
 
                 try {
@@ -2487,7 +2487,7 @@ class Tinebase_FileSystem implements
      * @throws Tinebase_Exception_NotImplemented
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public function createFileBlob($contents)
+    public function createFileBlob($contents, $avscan = true)
     {
         if (! is_resource($contents)) {
             throw new Tinebase_Exception_NotImplemented('please implement me!');
@@ -2532,8 +2532,12 @@ class Tinebase_FileSystem implements
         }
 
         // AV scan
-        $avResult = $this->avScanHashFile($hashFile);
-        
+        if ($avscan) {
+            $avResult = $this->avScanHashFile($hashFile);
+        } else {
+            $avResult = null;
+        }
+
         $tries = 0;
         $currentFilesHash = null;
         $previousCurrentFilesHash = null;
