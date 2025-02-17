@@ -850,10 +850,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         return $nonPrivateRecipients;
     }
 
-    protected function _getErrorException($messageText)
+    protected function _getErrorException(string $messageText): Tinebase_Exception_SystemGeneric
     {
         $translation = Tinebase_Translation::getTranslation('Felamimail');
-        $message = sprintf($translation->_('Error: %s'), $messageText);
+        if (preg_match('/evp_decrypt/i', $messageText)) {
+            $message = $translation->_(
+                'Decryption Error: Maybe your shared credential cache key is longer than 24 chars?');
+        } else {
+            $message = sprintf($translation->_('Error: %s'), $messageText);
+        }
         $tesg = new Tinebase_Exception_SystemGeneric($message);
         $tesg->setTitle($translation->_('Could not send message'));
 
