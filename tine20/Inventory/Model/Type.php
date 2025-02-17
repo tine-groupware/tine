@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Ching-En, Cheng <c.cheng@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -69,9 +69,13 @@ class Inventory_Model_Type extends Tinebase_Record_NewAbstract
 
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
-            self::INDEXES => [],
+            self::INDEXES => [
+                self::FLD_DESCRIPTION => [
+                    self::COLUMNS       => [self::FLD_DESCRIPTION],
+                    self::FLAGS         => [self::TYPE_FULLTEXT],
+                ],
+            ],
         ],
-        
 
         self::FIELDS => [
             self::FLD_NAME => [
