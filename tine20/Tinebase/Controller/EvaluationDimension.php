@@ -56,8 +56,10 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
             return;
         }
 
-        if (!Tinebase_Core::getUser()
-                ->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::MANAGE_EVALUATION_DIMENSIONS)) {
+        $user = Tinebase_Core::getUser();
+        if (is_object($user) && ! $user->hasRight(
+            Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::MANAGE_EVALUATION_DIMENSIONS)
+        ) {
             throw new Tinebase_Exception_AccessDenied('no right to ' . $_action . ' evaluation dimensions');
         }
     }
