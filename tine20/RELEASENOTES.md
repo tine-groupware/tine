@@ -3,7 +3,7 @@ TINE RELEASENOTES
 =====================
                     
   Release:     Pelle (2024.11)
-  Last change: 2024-10-22
+  Last change: 2024-11-06
 
 # GENERAL CHANGES (Administrative/Operative)
 
@@ -37,6 +37,10 @@ TINE RELEASENOTES
 ## number range configuration (for example for Sales product numbers)
 ## Send Password via SMS
 ## Show Mailaccount Sieve-Script
+## Tinebase feature "featureShowAccountEmail" has been removed
+
+It is now possible to configure the account "title" display via TWIG templates.
+See Tinebase_Config::ACCOUNT_TWIG configuration.
 
 # SSO
 
