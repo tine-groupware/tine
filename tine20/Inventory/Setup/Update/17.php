@@ -6,7 +6,7 @@
  * @package     Inventory
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  * this is 2024.11 (ONLY!)
@@ -18,6 +18,7 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
 
 
     static protected $_allUpdates = [
@@ -35,6 +36,10 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE017_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -109,5 +114,13 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
             Inventory_Model_InventoryItem::class 
         ]);
         $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Setup_SchemaTool::updateSchema([
+            Inventory_Model_Type::class
+        ]);
+        $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
     }
 }
