@@ -2,7 +2,7 @@
 <application>
     <name>EventManager</name>
     <!-- gettext('EventManager') -->
-    <version>16.0</version>
+    <version>17.0</version>
     <order>90</order>
     <status>enabled</status>
     <depends>
