@@ -494,7 +494,14 @@ class Tinebase_EmailUser
         $_throwException = false,
         $_allowedDomains = null,
         $_includeAdditional = false
-    ) {
+    ): bool
+    {
+        if (!Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||
+            !Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}
+        ) {
+            return true;
+        }
+
         $result = true;
         $allowedDomains = $_allowedDomains ?: self::getAllowedDomains(null, $_includeAdditional);
 
