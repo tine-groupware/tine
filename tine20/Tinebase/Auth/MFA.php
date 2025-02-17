@@ -9,6 +9,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use \IPLib\Factory;
+
 /**
  * SecondFactor Auth Facade
  *
@@ -133,6 +135,24 @@ final class Tinebase_Auth_MFA
             $config->getId()
         );
         $this->_config = $config;
+    }
+
+    public static function checkMFABypass(): bool
+    {
+        // mfa free netmasks:
+        if (($_SERVER['HTTP_X_REAL_IP'] ?? false) &&
+            !empty($byPassMasks = Tinebase_Config::getInstance()->{Tinebase_Config::MFA_BYPASS_NETMASKS}) &&
+            ($ip = Factory::parseAddressString($_SERVER['HTTP_X_REAL_IP']))
+        ) {
+            foreach ($byPassMasks as $netmask) {
+                if (Factory::parseRangeString($netmask)?->contains($ip)) {
+                    // bypassing
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
