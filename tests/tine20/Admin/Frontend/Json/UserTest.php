@@ -583,7 +583,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray = $user->toArray();
         $updatedUser = $this->_json->saveUser($userArray);
         self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
-        self::assertFalse(isset($updatedUser['xprops']['emailUserIdImap']), print_r($updatedUser['xprops'], true));
+        self::assertFalse(isset($updatedUser['xprops']['emailUserIdImap']),
+            'user should no longer have email xprops:' . print_r($updatedUser['xprops'], true));
     }
 
     /**

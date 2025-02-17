@@ -1079,7 +1079,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
-            && ! Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail) {
+            && ! Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail
+        ) {
             Tinebase_EmailUser::checkDomain($_user->accountEmailAddress,
                 true,
                 null,
@@ -1202,8 +1203,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
-        Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail
-            || Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
+            && ! Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail) {
+            Tinebase_EmailUser::checkDomain($_user->accountEmailAddress,
+                true,
+                null,
+                true);
+        }
 
         $_user->isValid(TRUE);
         
