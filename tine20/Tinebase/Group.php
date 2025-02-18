@@ -146,12 +146,12 @@ class Tinebase_Group
     }
     
     /**
-     * syncronize groupmemberships for given $_username from syncbackend to local sql backend
+     * synchronize group memberships for given $_username from sync backend to local sql backend
      * 
      * @todo sync secondary group memberships
      * @param  mixed  $_username  the login id of the user to synchronize
      */
-    public static function syncMemberships($_username)
+    public static function syncMemberships($_username): void
     {
         if ($_username instanceof Tinebase_Model_FullUser) {
             $username = $_username->accountLoginName;
@@ -162,6 +162,7 @@ class Tinebase_Group
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Sync group memberships for: " . $username);
         
         $userBackend  = Tinebase_User::getInstance();
+        /** @var Tinebase_Group_Ldap $groupBackend */
         $groupBackend = Tinebase_Group::getInstance();
         $adbInstalled = Tinebase_Application::getInstance()->isInstalled('Addressbook');
 
@@ -170,7 +171,11 @@ class Tinebase_Group
         
             $user = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
 
-            $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
+            try {
+                $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $membershipsSyncBackend = [];
+            }
             if (! in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
                 $membershipsSyncBackend[] = $user->accountPrimaryGroup;
             }
@@ -180,8 +185,10 @@ class Tinebase_Group
             sort($membershipsSqlBackend);
             sort($membershipsSyncBackend);
             if ($membershipsSqlBackend == $membershipsSyncBackend) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Group memberships are already in sync.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Group memberships are already in sync.');
+                }
 
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
