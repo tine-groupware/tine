@@ -3407,6 +3407,27 @@ msgstr "Zuletzt geändert von"
 msgid "Grid Panel Key Bindings"
 msgstr "Tastenkürzel Listenansicht"
 
+msgid "select all visible rows"
+msgstr "Alle sichtbaren Zeilen auswählen"
+
+msgid "copy record"
+msgstr "Datensatz kopieren"
+
+msgid "edit record"
+msgstr "Datensatz bearbeiten"
+
+msgid "new record"
+msgstr "Neuen Datensatz erstellen"
+
+msgid "find"
+msgstr "Suchen"
+
+msgid "focus grid"
+msgstr "Grid fokussieren"
+
+msgid "reload grid"
+msgstr "Grid aktualisieren"
+
 #, python-brace-format
 msgid "Moving {0}"
 msgstr "Verschiebe {0}"
