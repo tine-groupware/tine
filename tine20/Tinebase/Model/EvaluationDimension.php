@@ -28,8 +28,8 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
     public const FLD_DESCRIPTION = 'description';
     public const FLD_SORTING = 'sorting';
 
-    public const COST_CENTER = 'Cost Center';
-    public const COST_BEARER = 'Cost Bearer';
+    public const COST_CENTER = 'Cost Center'; // gettext('Cost Center')
+    public const COST_BEARER = 'Cost Bearer'; // gettext('Cost Bearer')
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -140,6 +140,7 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
         $definition = [
             Tinebase_Model_CustomField_Config::DEF_FIELD => [
                 self::LABEL             => $this->{self::FLD_NAME},
+                self::OWNING_APP        => Tinebase_Config::APP_NAME,
                 self::TYPE              => self::TYPE_RECORD,
                 self::CONFIG            => [
                     self::APP_NAME          => Tinebase_Config::APP_NAME,

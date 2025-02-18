@@ -3949,6 +3949,12 @@ msgstr "Nummer"
 msgid "GENDER_Evaluation Dimension"
 msgstr "female"
 
+msgid "Cost Center"
+msgstr "Kostenstelle"
+
+msgid "Cost Bearer"
+msgstr "Kostenträger"
+
 msgid "Evaluation Dimension"
 msgid_plural "Evaluation Dimensions"
 msgstr[0] "Auswertungsdimension"
