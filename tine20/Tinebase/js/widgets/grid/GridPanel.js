@@ -2521,15 +2521,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     getKeyBindingData() {
         const data = [
-            'A: select all visible rows',
-            'C: copy record',
-            'E: edit record',
-            'N: new record',
-            'F: find',
-            'ESC: focus grid',
-            'R: reload grid',
+            'A:  ' + i18n._('select all visible rows'),
+            'C:  ' + i18n._('copy record'),
+            'E:  ' + i18n._('edit record'),
+            'N:  ' + i18n._('new record'),
+            'F:  ' + i18n._('find'),
+            'ESC:  ' + i18n._('focus grid'),
+            'R:  ' + i18n._('reload grid')
         ];
-        return data.map((item) => i18n._(item));
+        return data
     },
 
     /**
