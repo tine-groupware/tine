@@ -802,7 +802,20 @@ class Tinebase_User implements Tinebase_Controller_Interface
         try {
             $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
-            $group = self::_getPrimaryGroupFromSyncBackend($user);
+            try {
+                $group = self::_getPrimaryGroupFromSyncBackend($user);
+            } catch (Tinebase_Exception $te) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . $te->getMessage());
+                }
+                $group = Tinebase_Group::getInstance()->getDefaultGroup();
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Assign default user group: ' . $group->name);
+                }
+                $user->accountPrimaryGroup = $group;
+            }
         }
         
         return $group;
@@ -833,8 +846,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
 
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Adding group " . $group->name);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Adding group " . $group->name);
+                }
 
                 $transactionId = Tinebase_TransactionManager::getInstance()
                     ->startTransaction(Tinebase_Core::getDb());
