@@ -93,10 +93,8 @@ Tine.Filemanager.FileSystemLinkDialog = Ext.extend(Ext.FormPanel, {
     },
 
     onSendAsMail: function () {
-        let body = `<a href="${this.link}" target="_blank">${Ext.ux.util.urlCoder.decodeURI(this.link)}</a>`;
-        
-        let defaults = Tine.Felamimail.Model.Message.getDefaultData();
-        defaults.body = body + Tine.Felamimail.getSignature();
+        const defaults = Tine.Felamimail.Model.Message.getDefaultData();
+        defaults.body = `<a href="${this.link}" target="_blank">${Ext.ux.util.urlCoder.decodeURI(this.link)}</a>`;
         
         const record = new Tine.Felamimail.Model.Message(defaults, 0);
 
