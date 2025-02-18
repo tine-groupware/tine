@@ -182,6 +182,11 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             return array();
         }
 
+        $mc = $_records->getFirstRecord()::getConfiguration();
+        $expander = new Tinebase_Record_Expander(Calendar_Model_Event::class, $mc->jsonExpander);
+        $expander->expand($_records);
+        $mc->setJsonExpander(null);
+
         if (null !== $_filter) {
             $rruleFilter = $_filter->getFilter('rrule', false, true);
             if ($rruleFilter && in_array($rruleFilter->getOperator(), ['in', 'notin'])) {
