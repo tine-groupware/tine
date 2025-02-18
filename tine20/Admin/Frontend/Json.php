@@ -1651,7 +1651,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 });
             }
 
-            $records = $this->_getQuotaNodesByLevel($treeLevel, $path, $filter);
+            $records = $this->_getQuotaNodesByLevel($treeLevel, $filter);
             $result = $this->_multipleRecordsToJson($records, $filter);
         }
 
@@ -1662,7 +1662,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
 
-    protected function _getQuotaNodesByLevel($treeLevel, $path, $filter) {
+    protected function _getQuotaNodesByLevel($treeLevel, $filter): Tinebase_Record_RecordSet
+    {
         $emailVirtualPath = '/Emails';
 
         $records = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, []);
@@ -1673,7 +1674,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $imapBackend = Tinebase_EmailUser::getInstance();
                 $imapUsageQuota = $imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot ? $imapBackend->getTotalUsageQuota() : null;
                 $totalEmailQuotaUsage = $imapUsageQuota['mailSize'];
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound | Tinebase_Exception_Backend $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                }
                 $totalEmailQuotaUsage = 0;
             }
 
@@ -1745,8 +1750,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
         )));
 
-        $records = Tinebase_FileSystem::getInstance()->search($filter);
-        return $records;
+        return Tinebase_FileSystem::getInstance()->search($filter);
     }
 
     /**
@@ -1793,9 +1797,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $nodeIds = [];
             $accounts = Admin_Controller_EmailAccount::getInstance()->search();
             foreach ($accounts as $account) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' account node data: '
-                    . print_r($account, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' account node data: '
+                        . print_r($account, true));
+                }
             }
             
             $emailUsers = $imapBackend->getAllEmailUsers($pathParts[0]);
