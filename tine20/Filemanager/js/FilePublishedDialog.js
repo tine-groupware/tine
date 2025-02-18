@@ -119,8 +119,8 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
             body += '<br>' + this.app.i18n._("Password") + ": " + this.password;
         }
         
-        let defaults = Tine.Felamimail.Model.Message.getDefaultData();
-        defaults.body = body + Tine.Felamimail.getSignature();
+        const defaults = Tine.Felamimail.Model.Message.getDefaultData();
+        defaults.body = body ;
         
         const record = new Tine.Felamimail.Model.Message(defaults, 0);
 
