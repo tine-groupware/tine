@@ -441,7 +441,9 @@ abstract class Tinebase_Setup_DemoData_Abstract
             $this->_costCenterKeys[] = $cc->getId();
         }
 
-        $this->_divisions  = HumanResources_Controller_Division::getInstance()->search();
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            $this->_divisions = HumanResources_Controller_Division::getInstance()->search();
+        }
         
         return $this->_costCenters;
     }
