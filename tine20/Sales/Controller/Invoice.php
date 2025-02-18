@@ -1165,6 +1165,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     Sales_Model_Invoice::FLD_BUYER_REFERENCE => $contract->{Sales_Model_Debitor::FLD_BUYER_REFERENCE} ?? $debitor->{Sales_Model_Debitor::FLD_BUYER_REFERENCE},
                     Sales_Model_Invoice::FLD_PURCHASE_ORDER_REFERENCE => $contract->{Sales_Model_Contract::FLD_PURCHASE_ORDER_REFERENCE},
                     Sales_Model_Invoice::FLD_PROJECT_REFERENCE => $contract->{Sales_Model_Contract::FLD_PROJECT_REFERENCE},
+                    Sales_Model_Invoice::FLD_PAYMENT_MEANS  => $debitor->{Sales_Model_Debitor::FLD_PAYMENT_MEANS}->toArray(),
                 ));
                 
                 $invoice->relations = $relations;

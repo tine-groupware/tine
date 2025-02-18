@@ -314,7 +314,15 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     Sales_Model_PaymentMeans::FLD_CONFIG => new $model,
                 ])
             ]);
+        } else {
+            if (is_array($_data[self::FLD_PAYMENT_MEANS])
+                && count($_data[self::FLD_PAYMENT_MEANS]) === 1
+                && !$_data[self::FLD_PAYMENT_MEANS][0][Sales_Model_PaymentMeans::FLD_DEFAULT]
+            ) {
+                $_data[self::FLD_PAYMENT_MEANS][0][Sales_Model_PaymentMeans::FLD_DEFAULT] = true;
+            }
         }
+
         parent::setFromArray($_data);
     }
 }
