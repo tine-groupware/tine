@@ -519,6 +519,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $now->setDate($now->format('Y'), $now->format('m'), 1);
         $now->setTime(3,0,0);
 
+        if (! $this->_referenceDate) {
+            $this->_setReferenceDate();
+        }
+
         $date = clone $this->_referenceDate;
 
         while ($date < $now) {
@@ -532,6 +536,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedContracts()
     {
+        if (!Tinebase_Application::getInstance()->isInstalled('Timetracker')) {
+            return;
+        }
+
         $cNumber = 1;
 
         $container = $this->_contractController->getSharedContractsContainer();
@@ -738,6 +746,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         foreach ($customers as $customer) {
             $oc = $orderconfirmations->getByIndex($i);
+            if (!$oc) {
+                // order confirmation not found
+                continue;
+            }
             $i++;
             $relations = array(array(
                 'own_model'              => 'Sales_Model_Offer',
@@ -809,12 +821,17 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
         ;
 
-        foreach ($divisionsArray as $divisionName) {
-            try {
-                HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(array('title' => $divisionName)));
-            } catch (Zend_Db_Statement_Exception $e) {
-            } catch (Tinebase_Exception_Duplicate $e) {
-            } catch (Tinebase_Exception_SystemGeneric $e) {}
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            foreach ($divisionsArray as $divisionName) {
+                try {
+                    HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division(
+                        ['title' => $divisionName]
+                    ));
+                } catch (Zend_Db_Statement_Exception $e) {
+                } catch (Tinebase_Exception_Duplicate $e) {
+                } catch (Tinebase_Exception_SystemGeneric $e) {
+                }
+            }
         }
 
         $this->_loadCostCentersAndDivisions();
