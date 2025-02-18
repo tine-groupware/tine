@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -375,6 +374,9 @@ msgstr "Product Number Zero Fill"
 msgid "Fill the number with leading zero"
 msgstr "Fill the number with leading zero"
 
+msgid "Debitor Default Payment Means"
+msgstr "Debitor Default Payment Means"
+
 msgid "Payment Method"
 msgstr "Payment Method"
 
@@ -432,6 +434,9 @@ msgstr "Datev recipient emails"
 msgid "Datev recipient emails for invoice"
 msgstr "Datev recipient emails for invoice"
 
+msgid "Payment Means Identifier Template"
+msgstr "Payment Means Identifier Template"
+
 msgid "VAT Procedures"
 msgstr "VAT Procedures"
 
@@ -446,6 +451,9 @@ msgstr "Non taxable"
 
 msgid "Reverse charge"
 msgstr "Reverse charge"
+
+msgid "Export outside EU"
+msgstr "Export outside EU"
 
 msgid "Reverse Charge Template"
 msgstr "Reverse Charge Template"
@@ -482,6 +490,12 @@ msgstr "Suppliers Module"
 
 msgid "Purchase Invoice Module"
 msgstr "Purchase Invoice Module"
+
+msgid "Contact person filter"
+msgstr "Contact person filter"
+
+msgid "Configure filter for customer contacts via container path filter"
+msgstr "Configure filter for customer contacts via container path filter"
 
 msgid "Legacy (non-document) Offers)"
 msgstr "Legacy (non-document) Offers)"
@@ -920,6 +934,11 @@ msgstr "Manual Dispatch"
 msgid "Dispatch documents where created, please download and dispatch manually."
 msgstr "Dispatch documents where created, please download and dispatch manually."
 
+msgid "Payment Means"
+msgid_plural "Payment Means"
+msgstr[0] "Payment Means"
+msgstr[1] "Payment Means"
+
 msgid "Generic"
 msgstr "Generic"
 
@@ -957,6 +976,12 @@ msgstr "Trac Document { title }"
 
 msgid "Expand Positions"
 msgstr "Expand Positions"
+
+msgid "Validate eDocument"
+msgstr "Validate eDocument"
+
+msgid "Close"
+msgstr "Close"
 
 msgid "Invoice Number"
 msgstr "Invoice Number"
@@ -1153,6 +1178,9 @@ msgid_plural "Purchase Invoices"
 msgstr[0] "Purchase Invoice"
 msgstr[1] "Purchase Invoices"
 
+msgid "VAT Procedure"
+msgstr "VAT Procedure"
+
 msgid "Overdue date"
 msgstr "Overdue date"
 
@@ -1232,6 +1260,24 @@ msgstr "Until"
 msgid "GENDER_Contract"
 msgstr "GENDER_Contract"
 
+msgid "Buyer Reference"
+msgstr "Buyer Reference"
+
+msgid "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
+msgstr "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
+
+msgid "Purchase Order Reference"
+msgstr "Purchase Order Reference"
+
+msgid "An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931])."
+msgstr "An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931])."
+
+msgid "Project Reference"
+msgstr "Project Reference"
+
+msgid "The identifier of a project to which the invoice refers (BT-11 [EN 16931])."
+msgstr "The identifier of a project to which the invoice refers (BT-11 [EN 16931])."
+
 msgid "Responsible"
 msgstr "Responsible"
 
@@ -1256,9 +1302,6 @@ msgstr "Has Invoices"
 msgid "Has Deliveries"
 msgstr "Has Deliveries"
 
-msgid "VAT Procedure"
-msgstr "VAT Procedure"
-
 msgid "GENDER_Debitor"
 msgstr "GENDER_Debitor"
 
@@ -1278,8 +1321,11 @@ msgstr "Delivery Addresses"
 msgid "Billing Addresses"
 msgstr "Billing Addresses"
 
-msgid "Buyer Reference"
-msgstr "Buyer Reference"
+msgid "Seller identifier"
+msgstr "Seller identifier"
+
+msgid "An identifier (usually assigned by the purchaser) of the seller, such as the vendor number for the funds management procedure or the supplier number for the ordering system (BT-29 [EN 16931])."
+msgstr "An identifier (usually assigned by the purchaser) of the seller, such as the vendor number for the funds management procedure or the supplier number for the ordering system (BT-29 [EN 16931])."
 
 msgid "Electronic Invoice Type"
 msgstr "Electronic Invoice Type"
@@ -1404,6 +1450,9 @@ msgstr "VAT Number"
 msgid "Bank Accounts"
 msgstr "Bank Accounts"
 
+msgid "SEPA Creditor Identification"
+msgstr "SEPA Creditor Identification"
+
 msgid "Document"
 msgid_plural "Documents"
 msgstr[0] "Document"
@@ -1463,14 +1512,11 @@ msgstr "Gross Sum"
 msgid "Internal Note"
 msgstr "Internal Note"
 
-msgid "Project Reference"
-msgstr "Project Reference"
-
-msgid "Purchase Order Reference"
-msgstr "Purchase Order Reference"
-
 msgid "Attached Documents"
 msgstr "Attached Documents"
+
+msgid "Followup"
+msgstr "Followup"
 
 msgid "GENDER_Attached Document"
 msgstr "GENDER_Attached Document"
@@ -1544,6 +1590,9 @@ msgstr "Payable immediately without deduction."
 #, python-brace-format
 msgid "Payable within {days} days without deduction."
 msgstr "Payable within {days} days without deduction."
+
+msgid "Not provided by buyer"
+msgstr "Not provided by buyer"
 
 msgid "GENDER_Offer"
 msgstr "GENDER_Offer"
@@ -1686,6 +1735,39 @@ msgstr "Code"
 msgid "Remark"
 msgstr "Remark"
 
+msgid "GENDER_Payment Means"
+msgstr "GENDER_Payment Means"
+
+msgid "Config Class"
+msgstr "Config Class"
+
+msgid "GENDER_No Configuration"
+msgstr "GENDER_No Configuration"
+
+msgid "No Configuration"
+msgid_plural "No Configurations"
+msgstr[0] "No Configuration"
+msgstr[1] "No Configurations"
+
+msgid "All bank accounts"
+msgstr "All bank accounts"
+
+msgid "GENDER_Payee Financial Account"
+msgstr "GENDER_Payee Financial Account"
+
+msgid "Payee Financial Account"
+msgid_plural "Payee Financial Accounts"
+msgstr[0] "Payee Financial Account"
+msgstr[1] "Payee Financial Accounts"
+
+msgid "GENDER_Payment Mandate"
+msgstr "GENDER_Payment Mandate"
+
+msgid "Payment Mandate"
+msgid_plural "Payment Mandates"
+msgstr[0] "Payment Mandate"
+msgstr[1] "Payment Mandates"
+
 msgid "XRechnung"
 msgid_plural "XRechnungen"
 msgstr[0] "XRechnung"
@@ -1702,6 +1784,9 @@ msgstr "Month"
 
 msgid "GENDER_Order Confirmation"
 msgstr "GENDER_Order Confirmation"
+
+msgid "Config"
+msgstr "Config"
 
 msgid "Billing Interval"
 msgstr "Billing Interval"
