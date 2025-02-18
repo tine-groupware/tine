@@ -248,7 +248,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
         let isDay = _.get(col, 'dataIndex') === 'virtual';
         let isSameRow = _.get(me.selectionModel.getSelections(), 0, cellInfo)[0] === cellInfo[0];
-        let isExludeDay = me.isExcludeDay(employee, col.day);
+        let isExludeDay = isDay && me.isExcludeDay(employee, col.day);
 
         return isDay && !isExludeDay && (keepExisting ? isSameRow : true);
     },
@@ -416,8 +416,8 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
                 'type': this.freeTimeType,
                 'freedays': freedays,
                 'days_count': freedays.length,
-                'firstday_date': freedays[0],
-                'lastday_date': freedays[freedays.length-1]
+                'firstday_date': _.get(freedays[0], 'date'),
+                'lastday_date': _.get(freedays[freedays.length-1], 'date')
             });
         }
 
