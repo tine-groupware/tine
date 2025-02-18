@@ -107,6 +107,9 @@ Tine.widgets.form.FieldManager = function() {
                 // class icon_dialog_info needs to be defined in css of app
                 field.fieldLabel += '<span class="field-description" ext:qtip="' + Ext.util.Format.htmlEncode(i18n._hidden(fieldDefinition.description)) + '" />'
             }
+            if (field.emptyText) {
+                field.emptyText = i18n._hidden(field.emptyText);
+            }
             field.name = fieldDefinition.fieldName || fieldDefinition.name;
             field.readOnly = !! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly');
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);

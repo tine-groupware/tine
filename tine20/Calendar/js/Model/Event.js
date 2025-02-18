@@ -512,7 +512,7 @@ Event.getFilterModel = function() {
         ];
 
     if (app.featureEnabled('featureEventType')) {
-        filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: EventTypes, ownField: 'event_types', foreignRefIdField: 'eventType'});
+        filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: 'Calendar.EventTypes', ownField: 'event_types', foreignRefIdField: 'eventType'});
     }
     if (Tine.Tinebase.featureEnabled('featureSite')) {
         filter.push({filtertype: 'tinebase.site', app: app});
