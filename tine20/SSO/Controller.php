@@ -193,8 +193,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class)
             );
         } catch (League\OAuth2\Server\Exception\OAuthServerException $oauthException) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' ' . $oauthException->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $oauthException->getMessage());
+            }
             return new \Laminas\Diactoros\Response('php://memory', 401);
         }
 
@@ -222,7 +224,14 @@ class SSO_Controller extends Tinebase_Controller_Event
                     throw new Tinebase_Exception_Auth_PwdRequired('Wrong username or password!');
                 }
             } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked
-                    | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $tea) { // 630 + 631 + 650 + 651
+                    | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $tea)
+            {
+                // 630 + 631 + 650 + 651
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tea->getMessage());
+                }
+
                 $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
                     'jsonrpc' => '2.0',
@@ -790,7 +799,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         $idp = null;
-        switch(SSO_Config::getInstance()->{SSO_Config::PWD_LESS_LOGIN}) {
+        switch (SSO_Config::getInstance()->{SSO_Config::PWD_LESS_LOGIN}) {
             case SSO_Config::PWD_LESS_LOGIN_BOTH:
             case SSO_Config::PWD_LESS_LOGIN_ONLY_LOCAL:
                 $account = null;
@@ -888,8 +897,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 // TODO FIXME check if we should create!
 
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
-                        ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()
+                            ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
+                    }
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 }
                 $loginName = substr($data->email, 0, $pos);
@@ -939,6 +950,9 @@ class SSO_Controller extends Tinebase_Controller_Event
             }
 
             return new \Laminas\Diactoros\Response('php://memory', 302, ['Location' => Tinebase_Core::getUrl()]);
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()
+                ->info(__METHOD__ . '::' . __LINE__ . ' OIDC auth failure');
         }
 
         return static::publicOidAuthResponseErrorRedirect($authRequest);
