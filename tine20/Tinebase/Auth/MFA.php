@@ -63,7 +63,12 @@ final class Tinebase_Auth_MFA
     public function validate($_data, Tinebase_Model_MFA_UserConfig $_userCfg): bool
     {
         try {
-            return $this->_adapter->validate($_data, $_userCfg);
+            $result = $this->_adapter->validate($_data, $_userCfg);
+            if (!$result && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()
+                    ->info(__METHOD__ . '::' . __LINE__ . ' MFA validation failure for ' . $_userCfg->getTitle());
+            }
+            return $result;
         } catch (Tinebase_Exception $e) {
             $e->setLogToSentry(false);
             $e->setLogLevelMethod('notice');
