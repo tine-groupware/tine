@@ -302,6 +302,86 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
     }
 
     /**
+     * tests if timeaccounts/timesheets get cleared if the invoice get billed
+     */
+    public function testRecreateInvoicePositionAfterUpdateClearedTimesheet()
+    {
+        $this->_createFullFixtures();
+
+        // the whole year, 12 months
+        $date = clone $this->_referenceDate;
+        $date->addMonth(6);
+        $this->_invoiceController->createAutoInvoices($date);
+
+        $timeaccountFilter = array(
+            array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
+                'appName' => 'Sales',
+                'linkType' => 'relation',
+                'modelName' => 'Customer',
+                'filters' => array(
+                    array('field' => 'name', 'operator' => 'equals', 'value' => 'Customer3')
+                )
+            ))
+
+        );
+        // test if timesheets get cleared
+        $invoices = $this->_uit->searchInvoices($timeaccountFilter, array());
+
+        $invoiceIds = array();
+
+        $this->assertEquals(1, $invoices['totalcount']);
+
+        foreach($invoices['results'] as $invoice) {
+            $invoiceIds[] = $invoice['id'];
+            // fetch invoice by get to have all relations set
+            $invoice = $this->_uit->getInvoice($invoice['id']);
+            $invoice['cleared'] = 'CLEARED';
+            $this->_uit->saveInvoice($invoice);
+        }
+        $invoiceId = $invoices['results'][0]['id'];
+        $this->assertEquals(0,$invoice['price_net']);
+
+        Timetracker_Controller_Timesheet::destroyInstance();
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $timesheets = $tsController->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                    ['field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId],
+                    ['field' => 'start_time', 'operator' => 'equals', 'value' => '09:20:00'],
+                    ['field' => 'start_date', 'operator' => 'equals', 'value' => '2024-05-08'],
+                ]
+            ));
+
+        foreach($timesheets as $timesheet) {
+            $this->assertTrue(in_array($timesheet->invoice_id, $invoiceIds), 'the invoice id must be set!');
+            $this->assertEquals(1, $timesheet->is_cleared);
+        }
+
+        $invoice = $this->_uit->getInvoice($invoiceId);
+        $this->assertEquals(1, count($invoice['positions']));
+        $position = $invoice['positions'][0];
+        $this->assertEquals('2024-05', $position['month']);
+        $this->assertEquals(7.0, $position['quantity']);
+
+        //test update ts date after status set to is_cleared
+        Timetracker_Controller_Timesheet::getInstance()->setRequestContext(['confirm' => true]);
+        $timesheets[0]->start_time = '09:00:00';
+        $timesheets[0]->end_time = '12:00:00';
+        $timesheet = $tsController->update($timesheets[0]);
+        $this->assertEquals(1, $timesheet['is_cleared']);
+        $this->assertEquals($invoiceId, $timesheet['invoice_id']);
+
+        // get the invoice again
+        $invoices = $this->_uit->searchInvoices($timeaccountFilter, array());
+        $invoice = $this->_uit->getInvoice($invoices['results'][0]['id']);
+
+        $this->assertEquals(1, count($invoice['positions']));
+        $position = $invoice['positions'][0];
+
+        $this->assertEquals('2024-05', $position['month']);
+        $this->assertEquals(10.0, $position['quantity']);
+    }
+
+    /**
      * tests if delete timesheet throw exception when timesheet is cleared with invoice id
      */
     public function testClearingDeleteTS()
