@@ -854,7 +854,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
         foreach($timesheets as $timesheet)
         {
-            if ($timesheet->last_modified_time && $timesheet->last_modified_time->isLater($invoice->creation_time)) {
+            if ($timesheet->last_modified_time && $timesheet->last_modified_time->isLater($invoice->creation_time) && !$timesheet->is_cleared) {
                 return true;
             }
         }

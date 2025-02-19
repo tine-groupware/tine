@@ -237,6 +237,7 @@ php-unit-all-tests-ldap-source-parallel:
           - "tine20/Tinebase/User.php"
           - "tine20/Tinebase/User/*.php"
           - "tine20/Tinebase/User/LdapPlugin/*.php"
+          - "tine20/Tinebase/Group.php"
           - "tine20/Tinebase/Group/*.php"
           - "tine20/Tinebase/Group/LdapPlugin/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ad-source/

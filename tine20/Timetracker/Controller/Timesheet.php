@@ -375,10 +375,9 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_calcClearedAmount($_record, $_oldRecord);
 
         if ($this->_isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
-            $relation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $_record->invoice_id, 'sibling', ['CONTRACT'], 'Sales_Model_Contract')
-                ->getFirstRecord();
-            $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
-            Sales_Controller_Invoice::getInstance()->createAutoInvoices(null, $contract, true);
+            //reset invoicing related fields to find the invoice positions
+            $_record->is_cleared = false;
+            $_record->invoice_id = '';
         }
     }
 
@@ -389,6 +388,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $updatedRecord */
         if ($this->_isTSDateChanged($updatedRecord, $currentRecord)) {
             $this->_tsChanged($updatedRecord, $currentRecord);
+            //need to clear timesheet after generate invoice position
+            if (!$updatedRecord->is_cleared && empty($updatedRecord->invoice_id) && !empty($currentRecord->invoice_id)) {
+                $result = Sales_Controller_Invoice::getInstance()->checkForUpdate($currentRecord->invoice_id);
+                if (in_array($currentRecord->invoice_id, $result)) {
+                    $updatedRecord->is_cleared = true;
+                    $updatedRecord->invoice_id = $currentRecord->invoice_id;
+                    $this->getBackend()->update($updatedRecord);
+                }
+            }
         }
     }
 
