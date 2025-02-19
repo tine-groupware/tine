@@ -537,7 +537,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         foreach ($billableAccountables as &$ba) {
             $ba['partOfInvoice'] = false;
-            if (! $ba['ac']->isBillable($this->_currentMonthToBill, $this->_currentBillingContract, $ba['pa'])) {
+            //fixme: isBillable only filtered timesheets with is_cleared = 0, how to make cleared timesheet billable ?
+            if (!$ba['ac']->isBillable($this->_currentMonthToBill, $this->_currentBillingContract, $ba['pa'])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' isBillable failed for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
                 }
