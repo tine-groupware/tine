@@ -47,7 +47,13 @@ const Event = Record.create(Record.genericFields.concat([
     { name: 'tags' },
     { name: 'notes'},
     { name: 'attachments'},
-    { name: 'event_types'},
+    { name: 'event_types', fieldDefinition: {config: {
+        // we need some fieldDef to get filter working
+        appName: 'Calendar',
+        modelName: 'EventTypes',
+        refIdField: 'record',
+        dependentRecords: true
+    }}},
     //{ name: 'contact' },
     //{ name: 'related' },
     //{ name: 'resources' },
@@ -512,7 +518,7 @@ Event.getFilterModel = function() {
         ];
 
     if (app.featureEnabled('featureEventType')) {
-        filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: 'Calendar.EventTypes', ownField: 'event_types', foreignRefIdField: 'eventType'});
+        filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, ownRecordClass: 'Calendar.Event', ownField: 'event_types', foreignRecordClass: 'Calendar.EventTypes'});
     }
     if (Tine.Tinebase.featureEnabled('featureSite')) {
         filter.push({filtertype: 'tinebase.site', app: app});
