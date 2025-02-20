@@ -137,7 +137,9 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' response: ' . print_r($result, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' response: ' . print_r($result, true));
+        }
 
         $response = (new \Zend\Diactoros\Response())->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode(isset($bodyMsg['lookup']['medium']) ?
@@ -264,5 +266,25 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
     {
         return MatrixSynapseIntegrator_Config::getInstance()->{MatrixSynapseIntegrator_Config::MATRIX_DOMAIN} ?:
             Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST);
+    }
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch (get_class($_eventObject)) {
+            case Admin_Event_AddAccount::class:
+                MatrixSynapseIntegrator_Controller_User::getInstance()->create($_eventObject->account);
+                break;
+            case Admin_Event_UpdateAccount::class:
+                MatrixSynapseIntegrator_Controller_User::getInstance()->update($_eventObject->account, $_eventObject->oldAccount);
+                break;
+            case Tinebase_Event_User_DeleteAccount::class:
+                MatrixSynapseIntegrator_Controller_User::getInstance()->delete($_eventObject->account);
+                break;
+        }
     }
 }

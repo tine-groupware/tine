@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -6,7 +7,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,9 +19,14 @@
  */
 class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
 {
-    const APP_NAME = 'MatrixSynapseIntegrator';
+    public const APP_NAME = 'MatrixSynapseIntegrator';
 
-    const MATRIX_DOMAIN = 'matrixDomain';
+    public const MATRIX_DOMAIN = 'matrixDomain';
+    public const HOME_SERVER_URL = 'homeServerUrl';
+    public const CORPORAL_SHARED_AUTH_TOKEN = 'corporalSharedAuthToken';
+
+    public const USER_XPROP_MATRIX_ID = 'matrixId';
+    public const USER_XPROP_MATRIX_ACTIVE = 'matrixActive';
 
     /**
      * (non-PHPdoc)
@@ -42,6 +48,28 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
             self::SETBYSETUPMODULE          => true,
+        ],
+        self::HOME_SERVER_URL            => [
+            //_('Home Server URL')
+            self::LABEL                     => 'Home Server URL',
+            //_('Home Server URL')
+            self::DESCRIPTION               => 'Home Server URL',
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::SETBYSETUPMODULE          => true,
+            self::DEFAULT_STR               => 'https://matrix.mydomain',
+        ],
+        self::CORPORAL_SHARED_AUTH_TOKEN     => [
+            //_('Corporal Shared Auth Token')
+            self::LABEL                     => 'Corporal Shared Auth Token',
+            //_('Corporal Shared Auth Token')
+            self::DESCRIPTION               => 'Corporal Shared Auth Token',
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => false,
+            self::SETBYADMINMODULE          => false,
+            self::SETBYSETUPMODULE          => false,
+            self::DEFAULT_STR               => 'abc',
         ],
     ];
 
