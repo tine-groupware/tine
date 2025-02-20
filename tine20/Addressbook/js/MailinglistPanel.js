@@ -51,6 +51,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             maxLength: 128,
             disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
             allowBlank: false,
+            hidden: true,
             checkState: function (editDialog, record) {
                 this.validate();
             },
