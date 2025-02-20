@@ -92,18 +92,23 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('E-Mail'),
                                 name: 'email',
                                 maxLength: 255,
-                                allowBlank: true,
+                                allowBlank: false,
                                 checkState: function (editDialog, field) {
                                     if (editDialog?.mailingListPanel) {
                                         const checked = editDialog.mailingListPanel.isMailinglistCheckbox.checked;
                                         const field = editDialog.getForm().findField('email');
-                                        field.setVisible(checked);
-                                        field.validate();
+                                        field[checked ? 'show' : 'hide']();
                                         editDialog.doLayout();
+                                        field.validate();
                                     }
                                 },
                                 validator: function (value) {
-                                    return Tine.Tinebase.common.checkEmailDomain(value);
+                                    const editDialog = this.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
+                                    if (editDialog?.mailingListPanel?.isMailinglistCheckbox?.checked) {
+                                        if (!value) return false;
+                                        return Tine.Tinebase.common.checkEmailDomain(value);
+                                    }
+                                    return true;
                                 },
                                 disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
