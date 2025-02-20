@@ -109,7 +109,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     disabled: this.record.get('visibility') === 'hidden'
                 }], [{
                     columnWidth: 0.5,
-                    xtype: 'textfield',
+                    xtype: 'mirrortextfield',
                     fieldLabel: this.app.i18n._('E-mail'),
                     name: 'email',
                     anchor: '100%',
@@ -117,10 +117,19 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     maxLength: 255,
                     allowBlank: true,
                     checkState: function (editDialog, field) {
-                            const checked = editDialog.record.data.xprops?.useAsMailinglist;
-                            field = editDialog.getForm().findField('email');
-                            field.setVisible(checked);
-                            editDialog.doLayout();
+                        const checked = editDialog.record.data.xprops?.useAsMailinglist;
+                        field = editDialog.getForm().findField('email');
+                        field[checked ? 'show' : 'hide']();
+                        editDialog.doLayout();
+                        field.validate();
+                    },
+                    validator: function (value) {
+                        const editDialog = this.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
+                        if (editDialog?.record?.data?.xprops?.useAsMailinglist) {
+                            if (!value) return false;
+                            return Tine.Tinebase.common.checkEmailDomain(value);
+                        }
+                        return true;
                     },
                 }, {
                     columnWidth: 0.5,
@@ -151,10 +160,10 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.Tinebase.registry.get('manageSmtpEmailUser') &&
             adb.featureEnabled('featureMailinglist')
         ) {
-            var mailingListPanel = new Tine.Addressbook.MailinglistPanel({
+            this.mailingListPanel = new Tine.Addressbook.MailinglistPanel({
                 editDialog: this
             });
-            tabpanelItems.push(mailingListPanel);
+            tabpanelItems.push(this.mailingListPanel);
         }
 
         if (this.app.featureEnabled('xpropsEditor')) {
