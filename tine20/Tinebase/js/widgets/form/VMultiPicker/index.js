@@ -229,6 +229,14 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         this.vueHandle?.unmount()
     },
 
+    /**
+     * returns recordData of selected Records
+     *
+     * @NOTE single record pickers just return recordId with getValue and have selectedRecord property to get the whole record
+     *       we might want to adopt dataflow here?
+     *
+     * @returns {Array<Object>|*[]}
+     */
     getValue: function(){
         return this.props ?
             this.props.records ?
