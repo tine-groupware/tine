@@ -526,16 +526,25 @@ Tine.Filemanager.nodeActions.Preview = {
     scope: this,
     constraint: 'file',
     handler: function () {
-        var selection = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
+        let record = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
+        let initialApp = this.initialConfig.initialApp;
 
-        if (selection) {
-            if (selection.get('type') === 'file') {
-                Tine.Filemanager.QuickLookPanel.openWindow({
-                    record: selection,
-                    initialApp: this.initialConfig.initialApp || null,
-                    sm: this.initialConfig.sm
-                });
+        if (record && record.get('type') === 'file') {
+            if (!record.constructor?.getPhpClassName?.()) {
+                if (record.get('object_id')) {
+                    record = new Tine.Tinebase.Model.Tree_Node(record.data);
+                    if (record.get('path').match(/^\/records/)) {
+                        const appName = record.get('path').split('/')[2].split('_')[0];
+                        initialApp = Tine.Tinebase.appMgr.get(appName);
+                    }
+                }
             }
+
+            Tine.Filemanager.QuickLookPanel.openWindow({
+                record: record,
+                initialApp: initialApp || null,
+                sm: this.initialConfig.sm
+            });
         }
     },
     actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
