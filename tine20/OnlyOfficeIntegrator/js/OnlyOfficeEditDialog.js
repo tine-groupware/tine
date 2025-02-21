@@ -56,7 +56,6 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
 
         this.apiIsInjected = this.injectAPI();
 
-        this.window.on('beforeclose', this.onBeforeCloseWindow, this);
         this.on('afterrender', this.onAfterRender, this);
 
         const tokenKeepAliveInterval = Tine.Tinebase.configManager.get('tokenLiveTime', 'OnlyOfficeIntegrator') * 800;
@@ -356,13 +355,6 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
 
             this.onRequestHistoryClose();
         }
-    },
-
-    onBeforeCloseWindow: function() {
-        /**
-         * NOTE: Tine.OnlyOfficeIntegrator.tokenSignOut is done in Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose
-         *       as we need to use the main/parent window as this window can't process the request any more
-         */
     },
 
     getSignedConfig: async function() {
