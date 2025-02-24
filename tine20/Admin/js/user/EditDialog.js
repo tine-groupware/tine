@@ -972,7 +972,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             name: 'password_must_change',
             plugins: [this.mustChangeTriggerPlugin]
         });
-        
+
         var config = {
             xtype: 'tabpanel',
             deferredRender: false,
@@ -985,6 +985,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 frame: true,
                 layout: 'hfit',
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key: 'Admin-UserEditDialog-RecordForm'
+                }],
                 items: [{
                     xtype: 'columnform',
                     labelAlign: 'top',

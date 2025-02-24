@@ -31,7 +31,7 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
 
 
     public function setUp(): void
-{
+    {
         parent::setUp();
 
         $this->_oldRequest = Tinebase_Core::getContainer()->get(RequestInterface::class);
@@ -41,7 +41,7 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
     }
 
     public function tearDown(): void
-{
+    {
         Tinebase_Core::getContainer()->set(RequestInterface::class, $this->_oldRequest);
 
         if ($this->_originalTestUser) {

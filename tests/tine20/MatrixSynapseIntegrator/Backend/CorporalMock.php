@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * MatrixSynapseIntegrator Backend
+ *
+ * @package      MatrixSynapseIntegrator
+ * @subpackage   Backend
+ * @license      http =>//www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ */
+
+/**
+ * MatrixSynapseIntegrator Backend Mock
+ *
+ * @package      MatrixSynapseIntegrator
+ * @subpackage   Backend
+ */
+class MatrixSynapseIntegrator_Backend_CorporalMock extends MatrixSynapseIntegrator_Backend_Corporal
+{
+    public function push(Tinebase_Model_FullUser $user): bool
+    {
+        $this->_policy = $this->_getPolicy($user);
+        return true;
+    }
+}

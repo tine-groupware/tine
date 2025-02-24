@@ -41,9 +41,10 @@ class Felamimail_Controller extends Tinebase_Controller_Event
     private static $_instance = NULL;
 
     /**
-     * constructor (get current user)
+     * constructor
      */
-    private function __construct() {
+    private function __construct()
+    {
     }
     
     /**

@@ -4,7 +4,7 @@
  *
  * @package     MatrixSynapseIntegrator
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -15,13 +15,12 @@
  */
 class MatrixSynapseIntegrator_AllTests
 {
-
-
     public static function suite ()
     {
         $suite = new PHPUnit\Framework\TestSuite('All MatrixSynapseIntegrator tests');
 
         $suite->addTestSuite(MatrixSynapseIntegrator_ControllerTests::class);
+        $suite->addTestSuite(MatrixSynapseIntegrator_Controller_UserTests::class);
 
         return $suite;
     }
