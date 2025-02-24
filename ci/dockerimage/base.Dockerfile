@@ -71,7 +71,7 @@ RUN apk add --update --no-cache supervisor curl bash ytnef openjdk8-jre gettext 
 # install latest version of tika 2.9.*. (Expects apache to only serve on version of tika 2.9.*)
 RUN tika_version=$(curl https://dlcdn.apache.org/tika/ | grep -oh '<a href="2.9.[0123456789]*/">' | cut -d '"' -f 2 | cut -d / -f 1) \
  && curl https://dlcdn.apache.org/tika/${tika_version}/tika-app-${tika_version}.jar --output /usr/local/bin/tika.jar \
- && echo $(curl https://dlcdn.apache.org/tika/${tika_version}/tika-app-${tika_version}.jar.sha512) /usr/local/bin/tika.jar | sha512sum -c
+ && echo "$(curl https://dlcdn.apache.org/tika/${tika_version}/tika-app-${tika_version}.jar.sha512)  /usr/local/bin/tika.jar" | sha512sum -c
 
 RUN apk add --no-cache \
                                   ${ALPINE_PHP_PACKAGE} \
