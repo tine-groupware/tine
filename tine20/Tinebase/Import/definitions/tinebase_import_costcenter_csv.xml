@@ -2,7 +2,7 @@
 <config>
     <name>tinebase_import_costcenter_csv</name>
     <model>Tinebase_Model_CostCenter</model>
-    <plugin>Tinebase_Import_CostCenter_Csv</plugin>
+    <plugin>Tinebase_Import_Csv_Generic</plugin>
     <type>import</type>
     <headline>1</headline>
     <dryrun>0</dryrun>
