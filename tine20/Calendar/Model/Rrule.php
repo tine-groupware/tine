@@ -562,33 +562,38 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         
         $_eventSet->addRecord($_recurrence);
     }
-    
+
     /**
      * merge recurrences amd remove all events that do not match period filter
-     * 
+     *
      * @param Tinebase_Record_RecordSet $_events
      * @param Calendar_Model_EventFilter $_filter
+     * @return Tinebase_Record_RecordSet $removedEvents
      */
     public static function mergeAndRemoveNonMatchingRecurrences(Tinebase_Record_RecordSet $_events, Calendar_Model_EventFilter $_filter = null)
     {
+        $removedEvents = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
         if (!$_filter) {
-            return;
+           return $removedEvents;
         }
-        
+
         $period = $_filter->getFilter('period', false, true);
         if ($period) {
             self::mergeRecurrenceSet($_events, $period->getFrom(), $period->getUntil());
-            
+
             foreach ($_events as $event) {
                 if (! $event->isInPeriod($period)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ 
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__
                         . ') Removing not matching event ' . $event->summary);
+                    $removedEvents->addRecord($event);
                     $_events->removeRecord($event);
                 }
             }
         }
+        return $removedEvents;
     }
-    
+
+
     /**
      * returns next occurrence _ignoring exceptions_ or NULL if there is none/not computable
      * 
