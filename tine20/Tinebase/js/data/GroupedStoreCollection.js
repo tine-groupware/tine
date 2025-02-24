@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import recordMgr from './RecordMgr'
+import Record from './Record'
+
 Ext.ns('Tine.Tinebase.data');
 
 /**
@@ -159,6 +162,16 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             groupNames = [groupNames];
         }
 
+        groupNames = groupNames.map((groupName) => {
+            if (_.isObject(groupName) && ! _.isFunction(groupName.getTitle) && _.isString(this.group)) {
+                const conf = _.get(record.constructor.getField(this.group), 'fieldDefinition.config');
+                let recordClass
+                if (conf && conf.appName && conf.modelName && (recordClass = recordMgr.get(conf.appName, conf.modelName))) {
+                    return Record.setFromJson(groupName, recordClass)
+                }
+            }
+            return groupName;
+        })
         groupNames = await this.sanitizeGroupNames(groupNames);
 
         if (this.fixedGroups.length) {
