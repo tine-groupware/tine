@@ -238,7 +238,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 
     createBorderColors: function (colors) {
         if(colors.length === 0) {
-            return 'linear-gradient(to bottom, rgb(210, 210, 210) 0%, rgb(210, 210, 210) 100%)';
+            return 'linear-gradient(to bottom, rgb(210, 210, 210) 0%, rgb(210, 210, 210) 100%) 0 0 0 3';
         }
         let out = 'linear-gradient(to bottom';
         let pct = 100 / colors.length;
@@ -253,7 +253,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             c++;
             out += ', '+rgb+' '+(c*pct)+'%';
         });
-        return out + ')';
+        return out + ') 0 0 0 3 stretch';
     },
 
     onSelectedChange: function(state){
