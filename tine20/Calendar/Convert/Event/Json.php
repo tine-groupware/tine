@@ -204,7 +204,8 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
         Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);
-        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
+        $removedEvents = Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
+        $removedResults = parent::fromTine20RecordSet($removedEvents, $_filter, $_pagination);
 
         $_records->sortByPagination($_pagination);
 
@@ -212,7 +213,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         // NOTE: parent::fromTine20RecordSet does not expand values in recurring instances (tags, notes, attachments, (system) cf's
         //       therefore we copy anything not scheduling related manualy here (NOTE freebusy infos have no id)
-        $baseEventMap = array_reduce($results, function ($map, $result) {
+        $baseEventMap = array_reduce(array_merge($results, $removedResults), function ($map, $result) {
             if (isset($result['id']) && !preg_match('/^fakeid/', $result['id'])) {
                 $map[$result['id']] = $result;
             }
