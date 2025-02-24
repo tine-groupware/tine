@@ -861,6 +861,9 @@ msgid_plural "Sites"
 msgstr[0] "Standort"
 msgstr[1] "Standorte"
 
+msgid "GENDER_Site"
+msgstr "male"
+
 msgid "GENDER_Group"
 msgstr "female"
 

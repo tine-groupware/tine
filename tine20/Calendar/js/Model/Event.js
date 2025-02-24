@@ -30,7 +30,11 @@ const Event = Record.create(Record.genericFields.concat([
     { name: 'adr_lat' },
     { name: 'location' },
     { name: 'location_record' },
-    { name: 'event_site' },
+    { name: 'event_site', type: 'record', fieldDefinition: { config: {
+        // we need some fieldDef to get grouping store working
+        appName: 'Addressbook',
+        modelName: 'Contact',
+    }}},
     { name: 'organizer_type' },
     { name: 'organizer' },
     { name: 'organizer_email' },
@@ -47,7 +51,7 @@ const Event = Record.create(Record.genericFields.concat([
     { name: 'tags' },
     { name: 'notes'},
     { name: 'attachments'},
-    { name: 'event_types', fieldDefinition: {config: {
+    { name: 'event_types', type: 'records', fieldDefinition: { config: {
         // we need some fieldDef to get filter working
         appName: 'Calendar',
         modelName: 'EventTypes',
@@ -521,7 +525,7 @@ Event.getFilterModel = function() {
         filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, ownRecordClass: 'Calendar.Event', ownField: 'event_types', foreignRecordClass: 'Calendar.EventTypes'});
     }
     if (Tine.Tinebase.featureEnabled('featureSite')) {
-        filter.push({filtertype: 'tinebase.site', app: app});
+        filter.push({filtertype: 'tinebase.site', app: app, field: 'event_site'});
     }
 
     return filter;

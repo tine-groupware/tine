@@ -18,15 +18,13 @@ Tine.Tinebase.SiteFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
 
     // private
     field: 'site',
-    valueType: 'relation',
 
     /**
      * @private
      */
     initComponent: function() {
-        var i18n = Tine.Tinebase.appMgr.get('Tinebase').i18n;
         this.label = i18n._('Site');
-        this.foreignRecordClass = Tine.Addressbook.Model.Contact;
+        this.gender = i18n._('GENDER_Site');
         this.pickerConfig = {
             emptyText: i18n._('no site association'),
             allowBlank: true,
