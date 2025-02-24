@@ -111,6 +111,10 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                 switch (cfDefinition.type) {
                     case 'record':
                         if (_.get(window, cfDefinition.recordConfig.value.records)) {
+                            // @TODO remove on EBHH #1690 cleanup
+                            if (modelName === 'Calendar_Model_Event' && _.get(cfDefinition, 'recordConfig.value.records') === 'Tine.Addressbook.Model.Contact' && Tine.Tinebase.featureEnabled('featureSite')) {
+                                return;
+                            }
                             result.push({
                                 filtertype: 'foreignrecord',
                                 label: cfDefinition.label,

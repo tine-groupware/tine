@@ -10,7 +10,7 @@
 
 const { apply, extend, isPrimitive, isArray, isString } = require("Ext/core/core/Ext");
 const { emptyFn } = require("Ext/core/Ext-more");
-const { lowerFirst, get, find, forEach, isFunction, isObject, indexOf, map, difference, compact } = require('lodash');
+const { lowerFirst, get, set, find, forEach, isFunction, isObject, indexOf, map, difference, compact } = require('lodash');
 const ExtRecord = require("Ext/data/Record");
 const MixedCollection = require("Ext/util/MixedCollection");
 const Field = require("Ext/data/DataField");
@@ -180,7 +180,10 @@ extend(Record, ExtRecord, {
             this.afterEdit();
         }
     },
-    
+
+    getData: function() {
+        return set(ExtRecord.prototype.getData.call(this), '__meta.recordClass', `${this.appName}.${this.modelName}`);
+    },
     /**
      * returns title of this record
      * 

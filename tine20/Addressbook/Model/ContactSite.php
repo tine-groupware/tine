@@ -32,7 +32,7 @@ class Addressbook_Model_ContactSite extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION => 1,
-        self::RECORD_NAME               => 'Site',
+        self::RECORD_NAME               => 'Site',  // ngettext('GENDER_Site')
         self::RECORDS_NAME              => 'Sites', // ngettext('Site', 'Sites', n)
         self::TITLE_PROPERTY            => "{{ renderTitle(site, 'Addressbook_Model_Contact') }}",
         self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_SITE],

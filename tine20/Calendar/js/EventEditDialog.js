@@ -577,6 +577,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     setLocationRecord: function(resource, overwrite = false) {
         const locationField = this.getForm().findField('location');
         const locationRecordField = this.getForm().findField('location_record');
+        const siteField = this.getForm().findField('event_site');
 
         if (! locationField.getValue() || overwrite) {
             locationField.setValue(
@@ -586,19 +587,18 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         var relations = _.get(resource, 'data.user_id.relations'),
             locationId = relations ? _.findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
-            locationContact = locationId >= 0 ? relations[locationId].related_record : null;
+            locationContact = locationId >= 0 ? relations[locationId].related_record : null,
+            siteId = relations ? _.findIndex(relations, function (k) { return k.type == 'SITE'; }) : -1,
+            siteContact = siteId >= 0 ? relations[siteId].related_record : null;
 
         if (locationContact && (!locationRecordField.getValue() || overwrite)) {
             locationRecordField.setValue(locationContact);
-        } else {
-            var siteId = relations ? _.findIndex(relations, function (k) {
-                    return k.type == 'SITE';
-                }) : -1,
-                siteContact = siteId >= 0 ? relations[siteId].related_record : null;
+        } else if (siteContact && (!locationRecordField.getValue() || overwrite)) {
+            locationRecordField.setValue(siteContact);
+        }
 
-            if (siteContact && (!locationRecordField.getValue() || overwrite)) {
-                locationRecordField.setValue(siteContact);
-            }
+        if (Tine.Tinebase.featureEnabled('featureSite') && siteContact && (!siteField.getValue || overwrite)) {
+            siteField.setValue(siteContact)
         }
     },
 

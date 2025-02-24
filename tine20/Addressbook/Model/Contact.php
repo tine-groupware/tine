@@ -326,15 +326,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'adr_two_countryname' => [
                 'filter'            => Tinebase_Model_Filter_Country::class,
             ],
-            'sites'              => [
-                'filter'            => Tinebase_Model_Filter_ForeignRecords::class,
-                'label'             => 'Sites', // _('Sites')
-                'options'           => [
-                    'controller' => Addressbook_Controller_ContactSite::class,
-                    'recordClassName' => Addressbook_Model_ContactSite::class,
-                    'refIdField' => 'record',
-                ]
-            ],
         ],
 
         self::FIELDS        => [

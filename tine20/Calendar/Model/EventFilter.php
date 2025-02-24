@@ -79,5 +79,9 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
             'recordClassName' => Calendar_Model_EventTypes::class,
             'refIdField' => 'record',
         ]],
+        'event_site' => ['filter' => Tinebase_Model_Filter_ForeignId::class, 'options' => [
+            'controller' => Addressbook_Controller_Contact::class,
+            'filtergroup'       => Addressbook_Model_ContactFilter::class,
+        ]],
     );
 }

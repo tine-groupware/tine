@@ -99,9 +99,17 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.ownRecordClass);
         }
         if (!this.ownRecordClass) {
-            this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
+            this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName)
+                || this.ftb.recordClass;
         }
-        
+
+        if (!this.foreignRecordClass) {
+            // NOTE: def is equal to mc, but we can fake it in legacy models
+            const def = this.ownRecordClass.getField(this.field)?.fieldDefinition;
+            if (def && def.config) {
+                this.foreignRecordClass = `${def.config.appName}.${def.config.modelName}`
+            }
+        }
         if (this.foreignRecordClass) {
             this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(this.foreignRecordClass);
         }
