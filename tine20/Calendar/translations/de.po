@@ -842,6 +842,9 @@ msgstr[1] "Terminarten"
 msgid "Site"
 msgstr "Standort"
 
+msgid "Search for sites ..."
+msgstr "Suche nach Standorten..."
+
 msgid "View"
 msgstr "Ansicht"
 
