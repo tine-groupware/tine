@@ -81,7 +81,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
             case 'week':
                 // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
                 const wkStart = this.startDate.add(Date.DAY, this.startDate.getDay() < 1 ? 1 : 0);
-                dateString = wkStart.getWeekOfYear() + ' - ' + this.startDate.format('Y');
+                dateString = wkStart.getWeekOfYear() + ' - ' + (wkStart.getWeekOfYear() === 1 ? this.value.until.format('Y') : this.startDate.format('Y'))
                 break;
             case 'month':
                 dateString = Date.getShortMonthName(this.startDate.getMonth()) + ' ' + this.startDate.format('Y');
