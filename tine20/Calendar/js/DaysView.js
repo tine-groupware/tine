@@ -1553,7 +1553,8 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         );
         
         ts.event = new Ext.XTemplate(
-            '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-image: {infoColors};">',
+            '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor};">',
+                '<div style="position: absolute; height: 100%; width: 4px; left: 0; top: 0; background: {infoColors}"></div>',
                 '<div class="cal-daysviewpanel-event-header" style="background-color: {bgColor};">',
                     '<div class="cal-daysviewpanel-event-header-inner" style="background-color: {bgColor}; z-index: {zIndex};">{startTime}</div>',
                     '<div class="cal-daysviewpanel-event-header-icons">',
