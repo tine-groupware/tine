@@ -1402,7 +1402,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @param int $upperCase
      * @return string
      *
-     * TODO should have a param "usePWPolicy"
+     * @deprecated replace with Tinebase_User_PasswordPolicy::generatePolicyConformPassword
      */
     public static function generateRandomPassword($length = 12, $numSpecialChar = 1, $upperCase = 1)
     {

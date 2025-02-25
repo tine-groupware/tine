@@ -6,6 +6,7 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <extension>csv</extension>
+    <passwordGenerator>\Tinebase_User_PasswordPolicy::generatePolicyConformPassword</passwordGenerator>
     <mapping>
         <field>
             <source>firstname</source>
@@ -34,6 +35,10 @@
         <field>
             <source>emailForwards</source>
             <destination>emailForwards</destination>
+        </field>
+        <field>
+            <source>emailForwardOnly</source>
+            <destination>emailForwardOnly</destination>
         </field>
     </mapping>
 </config>
