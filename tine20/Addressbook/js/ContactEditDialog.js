@@ -164,6 +164,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 refIdField: 'contact',
                                 searchComboConfig: {
                                     useEditPlugin: false,
+                                    emptyText: this.app.i18n._('Search for sites ... (leave empty for all sites)'),
                                     additionalFilterSpec: {
                                         config: {
                                             name: 'siteFilter',

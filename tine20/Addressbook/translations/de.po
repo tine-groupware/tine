@@ -426,6 +426,9 @@ msgstr "Abteilung"
 msgid "Sites"
 msgstr "Standorte"
 
+msgid "Search for sites ... (leave empty for all sites)"
+msgstr "Suche nach Standorten ... (leer lassen für alle Standorte)"
+
 msgid "Color"
 msgstr "Farbe"
 

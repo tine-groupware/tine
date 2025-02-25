@@ -145,7 +145,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     useAccountRecord: false,
                                     searchComboConfig: {useEditPlugin: false},
                                     requiredGrant: 'editGrant',
-                                    recordEditPluginConfig: {allowCreateNew: false,},
+                                    recordEditPluginConfig: {allowCreateNew: false},
+                                    emptyText: this.app.i18n._('Search for sites ...'),
                                     additionalFilterSpec: {
                                         config: {
                                             name: 'siteFilter',
