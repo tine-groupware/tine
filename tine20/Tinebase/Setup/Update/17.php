@@ -35,6 +35,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE014 = __CLASS__ . '::update014';
     protected const RELEASE017_UPDATE015 = __CLASS__ . '::update015';
     protected const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
+    protected const RELEASE017_UPDATE017 = __CLASS__ . '::update017';
 
 
     static protected $_allUpdates = [
@@ -114,6 +115,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE006 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update006',
+            ],
+            self::RELEASE017_UPDATE017 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update017',
             ],
         ],
     ];
@@ -421,18 +426,43 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update016(): void
     {
+        $this->_numberableConfigUpdate();
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.16', self::RELEASE017_UPDATE016);
+    }
+
+    public function update017(): void
+    {
+        $this->_numberableConfigUpdate();
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.17', self::RELEASE017_UPDATE017);
+    }
+
+    protected function _numberableConfigUpdate(): void
+    {
         $numCtrl = Tinebase_Controller_NumberableConfig::getInstance();
         foreach ($numCtrl->getAll() as $numCfg) {
             $newNumCfg = $numCtrl->update(clone $numCfg);
+            $bucketKey = $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_MODEL} . '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PROPERTY} . ($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} ? '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} : '') . '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX};
+            if ($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} !== $bucketKey) {
+                $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} = $bucketKey;
+                $newNumCfg = $numCtrl->update($newNumCfg);
+            }
             if ($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} !== $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}) {
                 $this->_db->update(
                     SQL_TABLE_PREFIX . 'numberable',
                     ['bucket' => $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}],
                     $this->_db->quoteInto('bucket = ?', $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY})
                 );
+
+                if (str_ends_with($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
+                    $bucketKey = substr($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
+                        strrpos($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
+                    $this->_db->update(
+                        SQL_TABLE_PREFIX . 'numberable',
+                        ['bucket' => $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}],
+                        $this->_db->quoteInto('bucket = ?', $bucketKey)
+                    );
+                }
             }
         }
-
-        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.16', self::RELEASE017_UPDATE016);
     }
 }
