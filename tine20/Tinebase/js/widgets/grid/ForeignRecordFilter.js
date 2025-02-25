@@ -308,6 +308,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
             var operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
                 registeredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', false);
+            let [op, options] = me.parseOperator(filter.get('operator'));
 
             if (registeredOperator) {
                 value.push({
@@ -318,8 +319,6 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 });
             } else {
                 // get value for idField if our own operator is not definedBy
-
-                let [op, options] = me.parseOperator(filter.get('operator'));
                 let opMap = {
                     not: 'equals', // we auto switch definedBy to notDefinedBy for not filters
                     notin: 'in', // we auto switch definedBy to notDefinedBy for notin filters
@@ -344,10 +343,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 }, this);
             }
             if (this.crossRecordClass) {
-                value = [{'field': this.crossRecordForeignField, operator: 'definedBy?condition=and&setOperator=one0f', value: value}]
+                value = [{'field': this.crossRecordForeignField, operator: 'definedBy?condition=and&setOperator=oneOf', value: value}]
             } else if (this.metaDataForField && operator !== 'definedBy') {
-                value = [{'field': this.metaDataForField, operator: 'definedBy?condition=and&setOperator=one0f', value: value}]
+                value = [{'field': this.metaDataForField, operator: 'definedBy?condition=and&setOperator=oneOf', value: value}]
             }
+            if ((me.crossRecordClass || me.metaDataForField) && op !== 'definedBy' && !filter.formFields.value.value) {
+                value = null;
+            }
+
         }
         
         return value;
@@ -366,7 +369,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         if (isRegisteredOperator || ['equals', 'not', 'in', 'notin', 'allOf'].indexOf(operator) >= 0) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
-            return filter.formFields.value.origSetValue(arguments.length ? arguments[1] : value);
+            value = arguments.length ? arguments[1] : value;
+            if ((me.crossRecordClass || me.metaDataForField) && _.isArray(value) && ! value.length) {
+                value = '';
+            }
+            return filter.formFields.value.origSetValue(value);
         }
         
         // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
@@ -608,6 +615,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     notin: 'notDefinedBy?condition=and&setOperator=oneOf',
                     allOf: 'definedBy?condition=and&setOperator=allOf'
                 };
+
+            if ((me.crossRecordClass || me.metaDataForField) && op !== 'definedBy' && !filter.formFields.value.value) {
+                return op;
+            }
 
             if (_.isFunction(me.getCustomOperators)) {
                 me.getCustomOperators().map((def) => {
