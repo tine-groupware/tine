@@ -85,6 +85,14 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
                     'last_modified_by'                                          => [
                         Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
                     ],
+                    'sites'                                                     => [
+                        Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                        Tinebase_Record_Dehydrator_Strategy::DEF_SUB_DEFINITIONS    => [
+                            Addressbook_Model_ContactSite::FLD_SITE => [
+                                Tinebase_Record_Dehydrator_Strategy::DEF_FLAT               => true,
+                            ],
+                        ],
+                    ],
                 ]
             ]);
 
