@@ -245,9 +245,6 @@ msgstr "Not allowed!"
 msgid "It's only allowed to book remaining vacation days from years in the past!"
 msgstr "It's only allowed to book remaining vacation days from years in the past!"
 
-msgid "Excel current columns"
-msgstr "Excel current columns"
-
 msgid "Monthly Report (Clock Times)"
 msgstr "Monthly Report (Clock Times)"
 

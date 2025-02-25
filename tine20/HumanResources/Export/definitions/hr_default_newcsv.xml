@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>HumanResources_Model_Employee</model>
+    <name>hr_default_newcsv</name>
+    <label>CSV list with custom fields</label>
+    <type>export</type>
+    <plugin>Tinebase_Export_CsvNew</plugin>
+    <description>default csv employee export definition with custom fields</description>
+    <favorite>true</favorite>
+    <customFields>1</customFields>
+    <header>1</header>
+    <sort>
+        <field>number</field>
+        <direction>ASC</direction>
+    </sort>
+    <columns>
+        <column>
+            <identifier>number</identifier>
+            <header>Number</header>
+        </column>
+        <column>
+            <identifier>account_id</identifier>
+            <header>Account</header>
+        </column>
+        <column>
+            <identifier>description</identifier>
+            <header>Description</header>
+        </column>
+        <column>
+            <identifier>countryname</identifier>
+            <header>Country</header>
+        </column>
+        <column>
+            <identifier>locality</identifier>
+            <header>Locality</header>
+        </column>
+        <column>
+            <identifier>postalcode</identifier>
+            <header>Postalcode</header>
+        </column>
+        <column>
+            <identifier>region</identifier>
+            <header>Region</header>
+        </column>
+        <column>
+            <identifier>street</identifier>
+            <header>Street</header>
+        </column>
+        <column>
+            <identifier>street2</identifier>
+            <header>Street 2</header>
+        </column>
+        <column>
+            <identifier>email</identifier>
+            <header>E-Mail</header>
+        </column>
+        <column>
+            <identifier>tel_home</identifier>
+            <header>Telephone Number</header>
+        </column>
+        <column>
+            <identifier>tel_cell</identifier>
+            <header>Cell Phone Number</header>
+        </column>
+        <column>
+            <identifier>title</identifier>
+            <header>Title</header>
+        </column>
+        <column>
+            <identifier>salutation</identifier>
+            <header>Salutation</header>
+        </column>
+        <column>
+            <identifier>n_family</identifier>
+            <header>Last Name</header>
+        </column>
+        <column>
+            <identifier>n_given</identifier>
+            <header>First Name</header>
+        </column>
+        <column>
+            <identifier>n_fn</identifier>
+            <header>Employee name</header>
+        </column>
+        <column>
+            <identifier>bday</identifier>
+            <header>Birthday</header>
+        </column>
+        <column>
+            <identifier>bank_account_holder</identifier>
+            <header>Account Holder</header>
+        </column>
+        <column>
+            <identifier>bank_account_number</identifier>
+            <header>Account Number</header>
+        </column>
+        <column>
+            <identifier>iban</identifier>
+            <header>IBAN</header>
+        </column>
+        <column>
+            <identifier>bic</identifier>
+            <header>BIC</header>
+        </column>
+        <column>
+            <identifier>bank_name</identifier>
+            <header>Bank Name</header>
+        </column>
+        <column>
+            <identifier>bank_code_number</identifier>
+            <header>Code Number</header>
+        </column>
+        <column>
+            <identifier>employment_begin</identifier>
+            <header>Employment begin</header>
+        </column>
+        <column>
+            <identifier>employment_end</identifier>
+            <header>Employment end</header>
+        </column>
+        <column>
+            <identifier>supervisor_id</identifier>
+            <header>Supervisor</header>
+        </column>
+        <column>
+            <identifier>division_id</identifier>
+            <header>Division</header>
+        </column>
+        <column>
+            <identifier>health_insurance</identifier>
+            <header>Health Insurance</header>
+        </column>
+        <column>
+            <identifier>profession</identifier>
+            <header>Profession</header>
+        </column>
+        <column>
+            <identifier>position</identifier>
+            <header>Position</header>
+        </column>
+        <column>
+            <identifier>created_by</identifier>
+            <header>Created By</header>
+        </column>
+        <column>
+            <identifier>creation_time</identifier>
+            <header>Creation Time</header>
+        </column>
+        <column>
+            <identifier>last_modified_by</identifier>
+            <header>Last Modified By</header>
+        </column>
+        <column>
+            <identifier>last_modified_time</identifier>
+            <header>Last Modified Time</header>
+        </column>
+        <column>
+            <identifier>tags</identifier>
+            <header>Tags</header>
+            <type>tags</type>
+        </column>
+    </columns>
+</config>

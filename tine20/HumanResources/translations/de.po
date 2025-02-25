@@ -260,9 +260,6 @@ msgstr "Nicht erlaubt!"
 msgid "It's only allowed to book remaining vacation days from years in the past!"
 msgstr "Es ist nur erlaubt, Resturlaub aus vergangenen Jahren zu buchen!"
 
-msgid "Excel current columns"
-msgstr "Excel angezeigte Spalten"
-
 msgid "Monthly Report (Clock Times)"
 msgstr "Monatsbericht (Stempelzeiten)"
 
@@ -1288,3 +1285,6 @@ msgstr "Sonderzahlung"
 
 msgid "[H] Short Business trip"
 msgstr "[Z] Kurze Dienstreise"
+
+#~ msgid "Excel current columns"
+#~ msgstr "Excel angezeigte Spalten"

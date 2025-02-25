@@ -152,6 +152,27 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
 
     protected function _endRow()
     {
+        if ($this->_config->columns && $this->_config->customFields) {
+            $record = new $this->_modelName(array(), true);
+
+            $this->_fields = $record->getFields();
+            $this->_fields = array_unique(array_merge(
+                array_diff($this->_fields, ['customfields']),
+                array_keys($this->_expandCustomFields)
+            ));
+
+            foreach ($this->_expandCustomFields as $key => $value) {
+                if ($this->_currentRowType === self::ROW_TYPE_GENERIC_HEADER) {
+                    $name = $this->_translate->_($value);
+                    $this->_writeValue($name);
+                }
+                if ($this->_currentRowType === self::ROW_TYPE_RECORD) {
+                    $record = $this->_currentRecord;
+                    $this->_writeValue($this->_convertToString($record->{$key}));
+                }
+            }
+        }
+
         if (false === self::fputcsv($this->_filehandle, $this->_currentRow, $this->_delimiter, $this->_enclosure,
                 $this->_escape_char, $this->_charset)) {
             throw new Tinebase_Exception_Backend('could not write current row to csv stream');
