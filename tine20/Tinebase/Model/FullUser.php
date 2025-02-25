@@ -320,7 +320,15 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         } elseif (! empty($options['password'])) {
             $userPassword = $options['password'];
         } elseif (! empty($options['passwordGenerator']) && is_callable($options['passwordGenerator'])) {
-            $userPassword = $options['passwordGenerator']($this);
+            if (is_string($options['passwordGenerator']) && str_contains($options['passwordGenerator'],
+                    'Tinebase_User_PasswordPolicy::generatePolicyConformPassword')
+            ) {
+                // TODO maybe the default should be a function call without param? how can we detect this?
+                $userPassword = $options['passwordGenerator']();
+            } else {
+                // passwordGenerator function expects user as its param
+                $userPassword = $options['passwordGenerator']($this);
+            }
         }
         
         $this->_addEmailUser($userPassword);
