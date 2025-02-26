@@ -110,10 +110,16 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
 
-        if($_id) {
+        if ($_id) {
             $listController = Addressbook_Controller_List::getInstance();
             $groups = $listController->getMemberships($_id);
-            $contact->groups = $listController->getBackend()->getMultiple($groups);
+            // we remove the list members, so we can do the search on the backend, its way more efficient
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
+                ['field' => 'id', 'operator' => 'in', 'value' => $groups]
+            ]);
+            $listController->checkFilterACL($filter);
+            $listController->addDefaultFilter($filter);
+            $contact->groups = $listController->getBackend()->search($filter);
             $contact->groups->members = null;
         }
 
