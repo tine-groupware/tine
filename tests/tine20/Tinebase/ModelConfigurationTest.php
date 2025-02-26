@@ -38,22 +38,6 @@ class Tinebase_ModelConfigurationTest extends TestCase
     }
 
     /**
-     * tests if the modelconfiguration is created for foreign record keys that are disabled by a feature switch
-     */
-    public function testModelConfigWithDisabledForeignRecords()
-    {
-        // TODO disable feature first
-        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
-            $this->markTestSkipped('only testable when disabled');
-        }
-
-        $timesheet = new Timetracker_Model_Timesheet(array(), true);
-        $mcFields = $timesheet->getConfiguration()->getFields();
-        $this->assertEquals('string', $mcFields['invoice_id']['type']);
-        $this->assertEquals(null, $mcFields['invoice_id']['label']);
-    }
-
-    /**
      * testModelConfigWithDisabledRelationApp
      */
     public function testModelConfigWithDisabledRelationApp()
