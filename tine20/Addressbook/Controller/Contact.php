@@ -311,6 +311,53 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * set relations / tags / alarms
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord the just updated record
+     * @param   Tinebase_Record_Interface $record the update record
+     * @param   Tinebase_Record_Interface $currentRecord the original record if one exists
+     * @param   boolean $returnUpdatedRelatedData
+     * @param   boolean $isCreate
+     * @return  Tinebase_Record_Interface
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
+    {
+        if (is_array($groups = $record->groups)) {
+            foreach ($groups as &$group) {
+                if ($group['id'] ?? false) {
+                    $group = $group['id'];
+                }
+            }
+        } elseif ($groups instanceof Tinebase_Record_RecordSet) {
+            $groups = $groups->getArrayOfIds();
+        } else {
+            return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+        }
+
+        if ($currentRecord) {
+            $toAdd = array_diff($groups, $currentRecord->groups->getArrayOfIds());
+            $toDelete = array_diff($currentRecord->groups->getArrayOfIds(), $groups);
+        } else {
+            $toAdd = $groups;
+            $toDelete = [];
+        }
+
+        foreach ($toAdd as $groupId) {
+            Addressbook_Controller_List::getInstance()->addListMember($groupId, $updatedRecord->getId());
+        }
+        foreach ($toDelete as $groupId) {
+            Addressbook_Controller_List::getInstance()->removeListMember($groupId, $updatedRecord->getId());
+        }
+        $updatedRecord->groups = $groups;
+
+        return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
+    }
+
+    /**
      * inspect update of one record (after update)
      *
      * @param   Addressbook_Model_Contact $updatedRecord   the just updated record
