@@ -302,8 +302,10 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      */
     onComposeEmail: async function (btn, to) {
         const sm = this.getGridPanel().grid ? this.getGridPanel().grid.getSelectionModel() : null;
-        const records = (sm && sm.isFilterSelect) ? sm.getSelections(): this.records;
-        
+        const records = sm?.isFilterSelect ? sm.getSelections(): this.records;
+        this.massMailingFlag = to === 'mass';
+        if (this.massMailingFlag) to = 'BCC';
+
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
             massMailingPlugins: records?.[0]?.data?.poll_id ? ['poll'] : ['all'],
             contentPanelConstructorInterceptor: async (config) => {
@@ -311,29 +313,13 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                 const mask = await config.setWaitText(waitingText);
                 const mailAddresses = await this.getMailAddresses(records);
 
-                const record = new Tine.Felamimail.Model.Message({
+                config.record = new Tine.Felamimail.Model.Message({
                     subject: (this.subject) ? this.subject : '',
                     body: this.body,
-                    massMailingFlag: this.massMailingFlag
+                    massMailingFlag: this.massMailingFlag,
+                    [to.toLowerCase()]: mailAddresses
                 }, 0);
-    
-                switch (to) {
-                    case "TO":
-                        record.set('to', mailAddresses);
-                        break;
-                    case "CC":
-                        record.set('cc', mailAddresses);
-                        break;
-                    case "BCC":
-                        record.set('bcc', mailAddresses);
-                        break;
-                    case "mass":
-                        to = 'bcc';
-                        record.set('massMailingFlag', true);
-                        record.set('bcc', mailAddresses);
-                        break;
-                }
-                config.record = record;
+
                 config.listeners = {
                     single: true,
                     load: function() {
@@ -341,7 +327,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                     }
                 };
             },
-            selectionFilter: sm && sm.isFilterSelect ? Ext.encode({
+            selectionFilter: sm?.isFilterSelect ? Ext.encode({
                 to: to,
                 filter: sm.getSelectionFilter()
             }) : null,
