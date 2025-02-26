@@ -50,7 +50,8 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: true,
             text: this.app.i18n._('Add new member'),
             scope: this,
-            handler: this.onAddNewMember
+            handler: this.onAddNewMember,
+            hidden: true
         });
 
         this.tbarItems = [
