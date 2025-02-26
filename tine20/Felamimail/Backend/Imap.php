@@ -1110,8 +1110,8 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     {
         $result = $_header;
 
-        $encoding = (extension_loaded('mbstring')) ? mb_detect_encoding($result) : 'unknown';
-        if ($encoding !== 'ASCII' && preg_match('/[^\x20-\x7E]*/', $result)) {
+        $encoding = (extension_loaded('mbstring')) ? mb_detect_encoding($result, strict: true) : 'unknown';
+        if ((!$encoding || $encoding !== 'ASCII') && preg_match('/[^\x20-\x7E]*/', $result)) {
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Non-ASCII character (encoding:' . $encoding .') detected, mime encode some headers.');

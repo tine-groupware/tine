@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d3eff1538cc034db59491c50e664aac",
+    "content-hash": "884a3de75031787b54689beea7c2d604",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -8145,7 +8145,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/simplesamlphp.git",
-                "reference": "30562972ab2bf9f2c6130692dca6c54bbe5c2b3f"
+                "reference": "071f2f5c66e6a8cb684ad862907c0d6e9376aa02"
             },
             "require": {
                 "ext-date": "*",
@@ -8222,6 +8222,7 @@
                 "ext-radius": "Needed if a Radius backend is used",
                 "predis/predis": "Needed if a Redis server is used to store session information"
             },
+            "default-branch": true,
             "type": "project",
             "autoload": {
                 "psr-4": {
@@ -8273,7 +8274,7 @@
                 "issues": "https://github.com/simplesamlphp/simplesamlphp/issues",
                 "source": "https://github.com/simplesamlphp/simplesamlphp"
             },
-            "time": "2024-11-04T14:08:02+00:00"
+            "time": "2025-02-26T15:41:19+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp-module-adfs",
@@ -15693,7 +15694,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "8.1 - 8.2",
+        "php": "8.1 - 8.3",
         "ext-spl": "*",
         "ext-simplexml": "*",
         "ext-bcmath": "*",
@@ -15737,5 +15738,5 @@
         "ext-xmlwriter": "8.1",
         "ext-zip": "8.1"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
