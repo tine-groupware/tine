@@ -20,6 +20,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
             name: 'dataIntendedPurposes',
             width: 300,
             allowBlank: true,
+            cls: 'felamimail-compose-info',
             recordClass: Tine.GDPR.Model.DataIntendedPurpose,
             recordProxy: Tine.GDPR.dataintendedpurposeBackend,
             listeners: {
