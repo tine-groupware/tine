@@ -882,6 +882,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         return $contactIds;
     }
 
+    public function addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter): void
+    {
+        $this->_addDefaultFilter($_filter);
+    }
+
     /**
      * you can define default filters here
      *
