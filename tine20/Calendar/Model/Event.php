@@ -259,6 +259,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     'searchComboConfig'     => [
                         'useEditPlugin'         => false,
                     ],
+                    self::UI_CONFIG_FEATURE     => [
+                        self::APP_NAME              => Tinebase_Config::APP_NAME,
+                        self::UI_CONFIG_FEATURE     => Tinebase_Config::FEATURE_SITE
+                    ],
                 ],
             ],
             'organizer'      => [

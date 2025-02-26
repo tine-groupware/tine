@@ -77,6 +77,11 @@ Tine.widgets.form.FieldManager = function() {
                 return null;
             }
 
+            const feature = _.get(fieldDefinition, 'uiconfig.feature')
+            if (feature && !Tine.Tinebase.featureEnabled(feature.feature, feature.appName)) {
+                return null;
+            }
+
             return this.getByFieldDefinition(fieldDefinition, category, config);
         },
 

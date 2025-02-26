@@ -1059,7 +1059,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG             => [
                     'filterOptions' => [
                         'jsConfig' => ['filtertype' => 'tinebase.site']
-                    ]
+                    ],
+                    self::UI_CONFIG_FEATURE     => [
+                        self::APP_NAME              => Tinebase_Config::APP_NAME,
+                        self::UI_CONFIG_FEATURE     => Tinebase_Config::FEATURE_SITE
+                    ],
                 ]
             ],
 
