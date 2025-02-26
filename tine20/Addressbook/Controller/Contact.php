@@ -113,7 +113,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if ($_id) {
             $listController = Addressbook_Controller_List::getInstance();
             $groups = $listController->getMemberships($_id);
-            $contact->groups = $listController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
+            // we remove the list members, so we can do the search on the backend, its way more efficient
+            $contact->groups = $listController->getBackend()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
                 ['field' => 'id', 'operator' => 'in', 'value' => $groups]
             ]));
             $contact->groups->members = null;
