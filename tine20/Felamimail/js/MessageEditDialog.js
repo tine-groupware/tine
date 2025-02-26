@@ -336,7 +336,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.recordDefaults.to = Ext.decode(this.mailAddresses);
         } else if (this.selectionFilter) {
             // put filter into to, cc or bcc of record and the loading be handled by resolveRecipientFilter
-            var filterAndTo = Ext.decode(this.selectionFilter);
+            const filterAndTo = Ext.decode(this.selectionFilter);
             this.record.set(filterAndTo.to.toLowerCase(), filterAndTo.filter);
         }
 
@@ -860,7 +860,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             delete this[field];
 
             this.resolveRecipientFilter(field);
-
         }, this);
     },
 
@@ -1732,20 +1731,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 return '';
             }
         });
-        
-        const infoItems = [
-            {
-                // message file info text
-                ref: '../../messageFileInfoText',
-                style: 'display: block;',
-            },
-            {
-                // mass mailing info text
-                html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
-                ref: '../../massMailingInfoText',
-                style: 'padding: 5px 0px; display: block;',
-            }
-        ]
 
         const activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
         return {
@@ -1757,7 +1742,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ref: '../messageInfoFormPanel',
                     layout: 'form',
                     region: 'north',
-                    padding: '5px',
                     border:  false,
                     autoHeight: true,
                     align: 'left',
@@ -1768,7 +1752,19 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         hidden: true,
                         xtype: 'label',
                     },
-                    items: infoItems
+                    items: [
+                        {
+                            // message file info text
+                            ref: '../../messageFileInfoText',
+                            style: 'padding: 5px; display: block;',
+                        },
+                        {
+                            // mass mailing info text
+                            html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
+                            ref: '../../massMailingInfoText',
+                            style: 'padding: 5px; display: block;',
+                        }
+                    ]
                 },
                 {
                     region: 'center',

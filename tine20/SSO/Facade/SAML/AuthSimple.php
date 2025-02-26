@@ -235,7 +235,7 @@ class SSO_Facade_SAML_AuthSimple
 
             $this->session->doLogout($this->authSource);
 
-            $params['LogoutCompletedHandler'] = [get_class(), 'logoutCompleted'];
+            $params['LogoutCompletedHandler'] = [self::class, 'logoutCompleted'];
 
             $as = Source::getById($this->authSource);
             if ($as !== null) {
