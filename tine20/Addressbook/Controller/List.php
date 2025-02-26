@@ -193,7 +193,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
 
-        if ($_onlyIds !== true) {
+        if ($result instanceof Tinebase_Record_RecordSet) {
             $this->_removeHiddenListMembers($result);
         }
 
