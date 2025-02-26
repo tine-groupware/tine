@@ -296,6 +296,10 @@ class Tinebase_ModelConfiguration_Const {
     public const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
     public const UNSIGNED = 'unsigned';
     public const UI_CONFIG = 'uiconfig';
+    /**
+     * define which feature is required to enable field or filter
+     */
+    public const UI_CONFIG_FEATURE = 'feature';
     public const UI_CONFIG_LAYOUT_SMALL = 'small';
     public const UI_CONFIG_LAYOUT_MEDIUM = 'medium';
     public const UI_CONFIG_LAYOUT_BIG = 'big';

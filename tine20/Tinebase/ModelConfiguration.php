@@ -2232,14 +2232,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             $result = self::$_availableApplications[$fieldConfig['appName']];
         }
 
-        if ($result && isset($fieldConfig['feature'])) {
-            $config = Tinebase_Config_Abstract::factory($fieldConfig['appName']);
-            $result = $config->featureEnabled($fieldConfig['feature']);
-
-            if (! $result && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
-                . '::' . __LINE__ . ' Feature ' . $fieldConfig['feature'] . ' disables field');
-        }
-
         return $result;
     }
     

@@ -186,10 +186,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     'appName'               => 'Sales',
                     'modelName'             => 'Invoice',
                     'idProperty'            => 'id',
-                    // TODO we should replace this with a generic approach to fetch configured models of an app
-                    // -> APP_Frontend_Json::$_configuredModels should be moved from json to app controller
-                    'feature'               => 'invoicesModule', // Sales_Config::FEATURE_INVOICES_MODULE
                 ),
+                self::UI_CONFIG         => [
+                    self::UI_CONFIG_FEATURE     => [
+                        self::APP_NAME              => 'Sales',
+                        self::UI_CONFIG_FEATURE     => 'invoicesModule'
+                    ],
+                ],
                 'copyOmit'              => true,
             ),
             'is_cleared'            => array(

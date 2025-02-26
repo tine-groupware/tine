@@ -68,6 +68,15 @@ Tine.widgets.grid.ColumnManager = function() {
             if (! app) return null;
             
             if (fieldDefinition) {
+                if (_.get(fieldDefinition, 'disabled') || _.get(fieldDefinition, 'uiconfig.disabled')) {
+                    return null;
+                }
+
+                const feature = _.get(fieldDefinition, 'uiconfig.feature')
+                if (feature && !Tine.Tinebase.featureEnabled(feature.feature, feature.appName)) {
+                    return null;
+                }
+
                 if (['text', 'fulltext'].indexOf(fieldDefinition.type) >= 0) {
                     config.hidden = true;
                 }
