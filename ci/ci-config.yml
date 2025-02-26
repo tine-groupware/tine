@@ -37,7 +37,7 @@ variables:
   PHPUNIT_FILTER: ""
   
   # "Php version to use."
-  PHP_VERSION: "8.2"
+  PHP_VERSION: "8.3"
 
   # "Codename for build"
   CODENAME: "Next"
