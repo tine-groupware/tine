@@ -324,7 +324,6 @@ require("../css/ux/form/ImageField.css");
 require("../css/ux/form/Spinner.css");
 require("../css/ux/form/HtmlEditor.css");
 require("../css/ux/form/LayerCombo.css");
-require("../css/ux/form/PeriodPicker.css");
 require("../css/ux/display/DisplayPanel.css");
 require("../css/ux/layout/CenterLayout.css");
 require("../css/ux/tree/treegrid.css");
