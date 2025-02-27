@@ -99,7 +99,7 @@ and follow the instructions of the repo.
 - DAVx5 to version 4.4.3
 
 ### Server
-- PHP version 8.1 to 8.2
+- PHP version 8.1 to 8.3
 - MySQL to version 8.0
 - MariaDB to version 10.9
 - Nginx to version 1.25

@@ -3,9 +3,13 @@ TINE RELEASENOTES
 =====================
                     
   Release:     Pelle (2024.11)
-  Last change: 2024-11-06
+  Last change: 2025-02-27
 
 # GENERAL CHANGES (Administrative/Operative)
+
+## PHP 8.3 Support
+
+- PHP 8.3 is now fully supported (with version 2024.11.6)
 
 ## PHP 8.2 Support
 
