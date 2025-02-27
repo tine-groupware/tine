@@ -9,8 +9,9 @@
 
 /*global Ext*/
 
-Ext.ns('Ext.ux', 'Ext.ux.form');
+require("../../../css/ux/form/PeriodPicker.less");
 
+Ext.ns('Ext.ux', 'Ext.ux.form');
 /**
  * A combination range and paging control
  *
