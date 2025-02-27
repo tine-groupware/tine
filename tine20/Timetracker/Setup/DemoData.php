@@ -149,10 +149,11 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $c = Timetracker_Controller_Timeaccount::getInstance();
         
         $f = new Timetracker_Model_TimeaccountFilter(array(
-            array('field' => 'description', 'operator' => 'equals', 'value' => 'Created By Tine 2.0 DemoData'),
+            array('field' => 'description', 'operator' => 'contains', 'value' => 'tine DEMO DATA'),
         ), 'AND');
+        $count = $c->search($f)->count();
         
-        return ($c->search($f)->count() > 9) ? true : false;
+        return ($count > 9);
     }
     
     /**
@@ -244,7 +245,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'status'      => 'billed',
                     'cleared_at'  => $this->_clearedDate,
                     'budget'      => NULL,
-                    'description' => 'Created By Tine 2.0 DEMO DATA'
+                    'description' => 'Created By tine DEMO DATA'
                 ));
                 
                 if (($costcenter->name == 'Marketing') || ($costcenter->name == $developmentString)) {
