@@ -370,9 +370,8 @@ class Tinebase_Frontend_Cli_Abstract
                 ] : [];
             $importer = new Tinebase_Setup_DemoData_Import($model, $options);
             try {
-                echo 'Importing Demo Data for ' . $model . "\n";
                 $importer->importDemodata();
-                echo 'Csv Demo Data was created successfully' . "\n";
+                echo 'Imported CSV Demo Data for ' . $model . "\n";
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // model has no import files
             }
