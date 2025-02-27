@@ -102,7 +102,7 @@ and follow the instructions of the repo.
 - DAVx5 to version 4.5
 
 ### Server
-- PHP version 8.1 to 8.3
+- PHP version 8.2 to 8.4
 - MySQL 8.0.12 to version 8.0.44
 - MariaDB 10.4 to version 12.2
 - Apache to version 2.4
