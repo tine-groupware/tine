@@ -1884,14 +1884,17 @@ fi';
         }
         
         $className = $app . '_Frontend_Cli';
-        
         $classNameDD = $app . '_Setup_DemoData';
         
         if (class_exists($className)) {
-            if (! $classNameDD::hasBeenRun()) {
-                echo 'Creating DemoData in application "' . $app . '"...' . PHP_EOL;
+            if (! class_exists($classNameDD) || ! $classNameDD::hasBeenRun()) {
                 $class = new $className();
-                $class->createDemoData($opts, FALSE);
+                if (method_exists($class, 'createDemoData')) {
+                    echo 'Creating DemoData in application "' . $app . '"...' . PHP_EOL;
+                    $class->createDemoData($opts, false);
+                } else {
+                    echo $className . ' has no method createDemoData() ...' . PHP_EOL;
+                }
             } else {
                 echo 'DemoData for ' . $app . ' has been run already, skipping...' . PHP_EOL;
             }

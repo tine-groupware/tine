@@ -1502,8 +1502,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             if ($message['body_content_type'] === 'text/html') {
-                $encoding = mb_detect_encoding($message['body']);
-                if (! $encoding) {
+                $encoding = mb_detect_encoding($message['body'], 'UTF-8', true);
+                if (!$encoding) {
                     $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
                 }
                 $message->body = str_replace("\r", '', $message['body']);

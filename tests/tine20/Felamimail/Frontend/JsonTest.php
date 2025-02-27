@@ -2867,9 +2867,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
             dirname(__FILE__) . '/../files/multipart_related_recipients.msg'
         );
 
-        // TODO make encodingCheck work again (in PHP 8.3+)
-        $encodingCheck = PHP_VERSION_ID < 80300;
-        $message = $this->_assertMessageFromNode($result[0]['id'], $encodingCheck);
+        $message = $this->_assertMessageFromNode($result[0]['id'], true);
         self::assertEquals(2, count($message['cc']));
         self::assertEquals('c.weiss@metaways.de', $message['cc'][0]['email']);
         self::assertEquals('name@example.com', $message['cc'][1]['email']);
