@@ -100,6 +100,43 @@ RUN apt-get update \
 
 
 
+FROM docker.io/library/ubuntu:noble as php8.4
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+    software-properties-common \
+    gnupg2 \
+    apt-transport-https \
+    lsb-release \
+    ca-certificates \
+ && add-apt-repository ppa:ondrej/php \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+    php8.4 \
+    php8.4-apcu \
+    php8.4-bcmath \
+    php8.4-curl \
+    php8.4-fpm \
+    php8.4-gd \
+    php8.4-igbinary \
+    php8.4-imagick \
+    php8.4-intl \
+    php8.4-ldap \
+    php8.4-mbstring \
+    php8.4-mysql \
+    php8.4-phpdbg \
+    php8.4-redis \
+    php8.4-soap \
+    php8.4-xml \
+    php8.4-yaml \
+    php8.4-zip \
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /etc/php/8.4 /etc/php/default \
+ && ln -s /usr/sbin/php-fpm8.4 /usr/sbin/php-fpm \
+ && echo "php8.4" > /etc/php/container-php-package-name
+
+
+
+
 FROM hairyhenderson/gomplate:stable-alpine as gomplate
 
 FROM ${PHP_IMAGE} as base
