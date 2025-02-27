@@ -263,7 +263,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     disableClearedFields: function(disable) {
-        this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in').setDisabled(disable);
+        this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in')?.setDisabled(disable);
     },
 
     onDurationChange: function() {
