@@ -176,6 +176,7 @@ COPY ci/dockerimage/supervisor.d/worker.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/workerLR.ini /etc/supervisor.d/
 COPY ci/dockerimage/scripts/* /usr/local/bin/
 
+VOLUME [ "/var/lib/tine20/", "/var/log/" ]
 WORKDIR ${TINE20ROOT}
 ENV TINE20ROOT=${TINE20ROOT}
 ENV TINE20_ACTIONQUEUE=true
