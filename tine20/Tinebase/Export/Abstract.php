@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tinebase Abstract export class
  *
@@ -6,7 +7,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -1590,8 +1591,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (isset($twigResult[$key]) || array_key_exists($key, $twigResult)) {
                 $value = $this->_convertToString($twigResult[$key]);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                    ' twig mapping: ' . $key . ' ' . $twigKey . ' not found in twig result array');
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                        ' twig mapping: ' . $key . ' ' . $twigKey . ' not found in twig result array');
+                }
                 $value = '';
             }
             $this->_setValue($twigKey, $value);
@@ -1605,6 +1608,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected function _getTwigContext(array $context)
     {
         if (null === $this->_baseContext) {
+            $account = Tinebase_Core::getUser();
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+                $account->getId(),
+                true);
+
             $this->_baseContext = [
                 Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
                 'branding' => [
@@ -1616,8 +1624,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 'export' => [
                     'config' => $this->_config->toArray(),
                     'timestamp' => $this->_exportTimeStamp,
-                    'account' => Tinebase_Core::getUser(),
-                    'contact' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+                    'account' => $account,
+                    'contact' => $contact,
                 ],
                 'additionalRecords' => $this->_additionalRecords,
             ];
