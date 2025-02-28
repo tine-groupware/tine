@@ -1,3 +1,4 @@
+import {default as vPersonaContainer} from './PersonaContainer.vue'
 Ext.ns("Tine.ux.vue")
 Ext.ns("Tine.personas")
 
@@ -28,10 +29,8 @@ export const PersonaContainer = Ext.extend(Ext.BoxComponent, {
 
     onRender: async function (ct, position){
         Ext.BoxComponent.superclass.onRender.call(this, ct, position)
-        window.vue = window.vue || await import(/* webpackChunkName: "Tinebase/js/Vue-Runtime" */"tine-vue")
-        const { default: PersonaContainer } = await import("./PersonaContainer.vue")
-        this.app = vue.createApp(
-            PersonaContainer,
+        this.app = window.vue.createApp(
+            vPersonaContainer,
             {
                 iconName: this.initialConfig.persona,
                 skinColor: this.initialConfig.skinColor

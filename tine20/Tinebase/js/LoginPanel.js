@@ -759,7 +759,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
             return
         }
         try {
-            const rfc4648 = await import('rfc4648');
+            const rfc4648 = await import(/* webpackChunkName: "Tinebase/js/rfc4648"*/'rfc4648');
 
             if(this._credGetAbortController) this._credGetAbortController.abort()
             this._credGetAbortController = new AbortController()

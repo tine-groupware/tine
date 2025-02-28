@@ -37,7 +37,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Tine.widgets.dialog.ModalDialog,
             passwordLabel: this.passwordLabel,
             dialogText: this.dialogText
         })
-        const { default: PasswordChangeDialog } = await import(/* webpackChunkName: "Tinebase/vue/PasswordChangeDialog"*/'./PasswordChangeDialog.vue')
+        const { default: PasswordChangeDialog } = await import(/* webpackChunkName: "Tinebase/js/vPasswordChangeDialog"*/'./PasswordChangeDialog.vue')
         this.dlgContentComponent = PasswordChangeDialog
         this.vueEventBus.on('close', this.destroy.bind(this))
         this.vueEventBus.on('cancel', this.destroy.bind(this))
