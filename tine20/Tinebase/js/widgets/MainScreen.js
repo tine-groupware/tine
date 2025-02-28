@@ -78,6 +78,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 [{
                     iconCls: 'tine-mainscreen-grid-responsive-func-menu',
                     handler: () => {
+                        !this.layout.west.isCollapsed ? this.westRegionPanel.collapse() : Ext.emptyFn() ;
                         this.layout.west.slideOut()
                     }
                 }, new Ext.Container({

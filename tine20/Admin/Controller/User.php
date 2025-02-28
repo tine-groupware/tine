@@ -201,21 +201,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 return;
             }
 
-            $smsAdapterConfig = $smsAdapterConfigs->getFirstRecord();
-            $smsAdapterConfig = $smsAdapterConfig->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG};
-
-            if (empty($smsAdapterConfig->getHttpClientConfig())) {
-                $smsAdapterConfig->setHttpClientConfig([
-                    'adapter' => ($genericHttpAdapter = new Tinebase_ZendHttpClientAdapter())
-                ]);
-
-                $genericHttpAdapter->writeBodyCallBack = function($body) {
-                    $colorGreen = "\033[43m";
-                    $colorReset = "\033[0m";
-                    Tinebase_Core::getLogger()->warn($colorGreen . __METHOD__ . '::' . __LINE__ . ' sms request body: ' . $body . $colorReset . PHP_EOL);
-                };
-                $genericHttpAdapter->setResponse(new Zend_Http_Response(200, []));
-            }
+            $smsAdapterClass = $smsAdapterConfigs->getFirstRecord()->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS};
+            $smsAdapterConfig = $smsAdapterConfigs->getFirstRecord()->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG};
 
             $template = $customTemplate ? rawurldecode($customTemplate) : Tinebase_Config::getInstance()->{Tinebase_Config::SMS}
                         ->{Tinebase_Config::SMS_MESSAGE_TEMPLATES}->get(Tinebase_Config::SMS_NEW_PASSWORD_TEMPLATE);
@@ -236,7 +223,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $smsSendConfig = new Tinebase_Model_Sms_SendConfig([
                 Tinebase_Model_Sms_SendConfig::FLD_MESSAGE => $message,
                 Tinebase_Model_Sms_SendConfig::FLD_RECIPIENT_NUMBER => $mobilePhoneNumber,
-                Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CLASS => $smsAdapterClass,
                 Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG => $smsAdapterConfig,
             ]);
 
