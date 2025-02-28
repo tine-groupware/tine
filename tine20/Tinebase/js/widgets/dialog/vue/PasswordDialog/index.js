@@ -75,7 +75,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.widgets.dialog.Mod
 
         this.injected['genPW'] = this.genPW.bind(this)
 
-        const { default: PasswordDialog } = await import(/* webpackChunkName: "Tinebase/vue/PasswordDialog"*/'./PasswordDialog.vue')
+        const { default: PasswordDialog } = await import(/* webpackChunkName: "Tinebase/js/vPasswordDialog"*/'./PasswordDialog.vue')
 
         this.dlgContentComponent = PasswordDialog
         this.postInit()
