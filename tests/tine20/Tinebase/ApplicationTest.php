@@ -552,6 +552,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_Sms_AdapterConfig::class,
                 Tinebase_Model_Sms_AdapterConfigs::class,
                 Tinebase_Model_Sms_GenericHttpAdapter::class,
+                Tinebase_Model_Sms_MockAdapter::class,
                 Tinebase_Model_Sms_SendConfig::class,
                 Tinebase_Model_State::class,
                 Tinebase_Model_Tag::class,
