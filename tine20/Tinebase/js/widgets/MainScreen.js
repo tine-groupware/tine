@@ -77,6 +77,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 [{
                     iconCls: 'action_menu',
                     handler: () => {
+                        !this.layout.west.isCollapsed ? this.westRegionPanel.collapse() : Ext.emptyFn() ;
                         this.layout.west.slideOut()
                     }
                 }, '->', {
