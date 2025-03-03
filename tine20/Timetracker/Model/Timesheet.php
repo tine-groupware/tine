@@ -54,6 +54,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         'createModule'      => true,
         'containerProperty' => null,
         'copyEditAction'    => true,
+        // we don't want to copy working time reports and other relations
+        'copyRelations'     => false,
         'copyNoAppendTitle' => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         Tinebase_ModelConfiguration::RUN_CONVERT_TO_RECORD_FROM_JSON => true,
