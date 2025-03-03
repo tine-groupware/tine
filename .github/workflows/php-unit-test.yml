@@ -21,8 +21,8 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-22.04]
-        php-versions: ['8.0', '8.1']
+        operating-system: [ubuntu-24.04]
+        php-versions: ['8.2', '8.3']
 
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
     steps:
