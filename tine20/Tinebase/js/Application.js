@@ -298,6 +298,11 @@ Tine.Tinebase.featureEnabled = function(featureName) {
     return Tine.Tinebase.appMgr.get('Tinebase').featureEnabled(featureName);
 };
 
+Tine.Tinebase.fieldUiFeatureEnabled = function(fieldconfig) {
+    const feature = _.get(fieldconfig, 'uiconfig.feature')
+    return !(feature && !Tine.Tinebase.appMgr.get(feature.appName).featureEnabled(feature.feature));
+};
+
 Tine.Tinebase.Application.Tinebase = {
     registerCoreData() {
         // don't use this -> register from server only

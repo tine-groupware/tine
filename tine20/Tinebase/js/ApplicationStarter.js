@@ -303,8 +303,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             Tine.log.error('Application ' + owningAppName + ' not found!');
             return null;
         }
-        const feature = _.get(fieldconfig, 'uiconfig.feature')
-        if (feature && !Tine.Tinebase.featureEnabled(feature.feature, feature.appName)) {
+        if (! Tine.Tinebase.fieldUiFeatureEnabled(fieldconfig)) {
             return null;
         }
         // check right on foreign app

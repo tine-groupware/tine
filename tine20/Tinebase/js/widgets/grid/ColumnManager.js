@@ -72,8 +72,7 @@ Tine.widgets.grid.ColumnManager = function() {
                     return null;
                 }
 
-                const feature = _.get(fieldDefinition, 'uiconfig.feature')
-                if (feature && !Tine.Tinebase.featureEnabled(feature.feature, feature.appName)) {
+                if (! Tine.Tinebase.fieldUiFeatureEnabled(fieldDefinition)) {
                     return null;
                 }
 
