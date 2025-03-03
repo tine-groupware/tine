@@ -126,6 +126,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         }
 
         $quotaChecked = false;
+        $completeFile = null;
         // OwnCloud chunked file upload
         if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
             static::checkQuota($pathRecord->getNode());
@@ -184,7 +185,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         } catch (Exception $e) {
             Tinebase_FileSystem::getInstance()->unlink($path);
-            $translation = Tinebase_Translation::getTranslation('Tinebase');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            }
             if ($e instanceof Tinebase_Exception_QuotaExceeded) {
                 throw new Sabre\DAV\Exception\InsufficientStorage($e->getMessage());
             } else if ($e instanceof Tinebase_Exception_NotFound) {
@@ -192,8 +195,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             } else {
                 throw new Sabre\DAV\Exception($e->getMessage());
             }
+        } finally {
+            if ($completeFile) {
+                Tinebase_TempFile::getInstance()->deleteTempFile($completeFile);
+            }
         }
-
 
         return '"' . $etag . '"';
     }
@@ -355,7 +361,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         $stat = fstat($tempfileHandle);
 
         if (parent::$_CONTENT_LENGTH != $stat['size']) {
-            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . parent::$_CONTENT_LENGTH . ' got: ' . $stat['size']);
+            throw new \Sabre\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: '
+                . parent::$_CONTENT_LENGTH . ' got: ' . $stat['size']);
         }
 
         fclose($tempfileHandle);
@@ -364,7 +371,15 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         $number = $chunkInfo['chunkId'] + 1;
         $index = str_pad($number, strlen((string)$chunkInfo['totalCount']), '0', STR_PAD_LEFT);
+        // TODO we should not abuse the type param for the index... why can't we add it to the filename?
         Tinebase_TempFile::getInstance()->createTempFile($path, $tempFileName, $index);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' path: ' . $path . ' name: ' . $tempFileName . ' index: '
+                . $index . ' chunk info: ' . print_r($chunkInfo, true)
+            );
+        }
 
         // check if the client sent all chunks
         $uploadedChunks = Tinebase_TempFile::getInstance()->search(
@@ -374,8 +389,20 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             new Tinebase_Model_Pagination(array('sort' => 'type', 'dir' => 'ASC'))
         );
 
-        if ($uploadedChunks->count() != $chunkInfo['totalCount']) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' uploaded chunks: '
+                . print_r($uploadedChunks->toArray(), true)
+            );
+        }
+
+        if ($uploadedChunks->count() < $chunkInfo['totalCount']) {
             return false;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Chunks: ' . print_r($uploadedChunks->path, true));
         }
 
         // combine all chunks to one file
