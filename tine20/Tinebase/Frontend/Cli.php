@@ -1054,30 +1054,32 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $result = 0;
         $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
         $monitoringQuota = $quotaConfig->{Tinebase_Config::QUOTA_MONITORING};
-        $totalQuota = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB};
+        $totalQuota = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}*1024*1024;
 
         if ($monitoringQuota && Tinebase_FileSystem_Quota::getTotalQuotaBytes() > 0) {
             $totalUsage = Tinebase_FileSystem_Quota::getRootUsedBytes();
             $usagePercentage = ($totalUsage / $totalQuota) * 100;
+            $quotaValueString = 'usage=' . Tinebase_Helper::formatBytes($totalUsage) . ';totalQuota=' . Tinebase_Helper::formatBytes($totalQuota) . ';;;';
 
             if ($usagePercentage >= 99) {
-                $message = 'QUOTA LIMIT REACHED | usage=' . $totalUsage. ';;;;';
+                $message = 'QUOTA LIMIT REACHED | ' . $quotaValueString;
                 $result = 2;
             } elseif ($usagePercentage >= 80) {
-                $message = 'QUOTA LIMIT WARN | usage=' . $totalUsage. ';;;;';
+                $message = 'QUOTA LIMIT WARN | ' . $quotaValueString;
                 $result = 1;
             } else {
-                $message = 'QUOTA LIMIT OK | usage=' . $totalUsage. ';;;;';
+                $message = 'QUOTA LIMIT OK | ' . $quotaValueString;
             }
 
             $this->_logMonitoringResult($result, $message);
         } else {
-            $message = 'QUOTA INACTIVE';
+            $message = 'QUOTA MONITORING INACTIVE';
         }
 
         echo $message . "\n";
         return $result;
     }
+
 
     /**
      * nagios monitoring for tine 2.0 active users
