@@ -2505,7 +2505,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         foreach ($events as $event) {
 
             if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $event->isReplicable()) {
-                throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+                throw new Tinebase_Exception_AccessDenied('Replicable events are read-only on the replicas!');
             }
 
             // implicitly delete persistent recur instances of series
