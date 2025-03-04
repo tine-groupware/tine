@@ -8,7 +8,7 @@
 const { extend, isPrimitive, isEmpty } = require("Ext/core/core/Ext");
 const Field = require("Ext/data/DataField");
 const MixedCollection = require("Ext/util/MixedCollection");
-const { get, isFunction, isUndefined, forEach } = require('lodash');
+const { get, isFunction, isUndefined, forEach, difference } = require('lodash');
 
 /**
  * @class Record
@@ -418,13 +418,16 @@ Record.id(rec); // automatically generate a unique sequential id
         const copy = Tine.Tinebase.data.Record.setFromJson(data, this.constructor);
         forEach(this.data, (v, k) => {
             if (isFunction(get(v, 'copy'))) {
-                this.data[k] = v.copy();
+                copy.data[k] = v.copy();
             }
         });
         forEach(this.__metaFields, (m) => {
             if (this.hasOwnProperty(m)) {
                 copy[m] = this[m];
             }
+        });
+        difference(Object.keys(data), this.fields.keys, ["__meta"]).forEach((k) => {
+            copy.data[k] = data[k];
         });
         copy.modified = [];
         forEach(this.modified, (v, k) => {
