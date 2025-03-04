@@ -16,10 +16,15 @@ class Sales_Model_EDocument_Dispatch_DocumentType extends Tinebase_Record_NewAbs
     protected static $_modelConfiguration = [
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::RECORD_NAME               => 'Document Type', // ngettext('Document Type', 'Document Types', n)
+        self::RECORDS_NAME              => 'Document Types', // gettext('GENDER_Document Type')
+        self::TITLE_PROPERTY            => '{{ keyField("' . Sales_Config::APP_NAME . '", "' . Sales_Config::ATTACHED_DOCUMENT_TYPES . '", ' . self::FLD_DOCUMENT_TYPE . ') }}',
+        self::IS_METADATA_MODEL_FOR     => self::FLD_DOCUMENT_TYPE,
 
         self::FIELDS                    => [
             self::FLD_DOCUMENT_TYPE         => [
                 self::TYPE                      => self::TYPE_KEY_FIELD,
+                self::LABEL                     => 'Document Type', // _('Document Type')
                 self::NAME                      => Sales_Config::ATTACHED_DOCUMENT_TYPES,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,

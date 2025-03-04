@@ -10,7 +10,7 @@
 
 class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispatch_Abstract
 {
-    public const MODEL_NAME_PART = 'EDocument_Dispatch_Email';
+    public const MODEL_NAME_PART = 'EDocument_Dispatch_Upload';
 
     public const FLD_URL = 'url';
 
@@ -18,10 +18,18 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
     {
         parent::inheritModelConfigHook($_definition);
 
+        $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
+        $_definition[self::RECORD_NAME] = 'Upload'; // gettext('GENDER_Upload')
+        $_definition[self::RECORDS_NAME] = 'Uploads'; // ngettext('Upload', 'Uploads', n)
+        $_definition[self::TITLE_PROPERTY] = self::FLD_URL;
 
         $_definition[self::FIELDS][self::FLD_URL] = [
             self::TYPE              => self::TYPE_STRING,
             self::LABEL             => 'URL', // _('URL')
+            self::VALIDATORS        => [
+                Zend_Filter_Input::ALLOW_EMPTY => false,
+                Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+            ],
         ];
     }
 

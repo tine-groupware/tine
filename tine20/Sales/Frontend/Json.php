@@ -74,6 +74,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
         Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
         Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Manual::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Email::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Upload::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Custom::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DynamicConfig::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DocumentType::MODEL_NAME_PART,
         Sales_Model_PaymentMeans::MODEL_NAME_PART,
 //        'OrderConfirmation',
 //        'PurchaseInvoice',
@@ -86,7 +92,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Boilerplate',
         'Invoice',
     );
-    
+
     /**
      * the constructor
      */
@@ -121,7 +127,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_configuredModels[] = 'OrderConfirmation';
         }
     }
-    
+
     /**
      * Returns registry data of the application.
      *
@@ -141,7 +147,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultContractContainer' => $sharedContainer->toArray(),
         );
     }
-    
+
     /**
      * Sets the config for Sales
      * @param array $config
@@ -150,7 +156,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Sales_Controller::getInstance()->setConfig($config);
     }
-    
+
     /**
      * Get Config for Sales
      * @return array

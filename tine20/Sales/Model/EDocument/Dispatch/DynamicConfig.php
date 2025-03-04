@@ -17,6 +17,10 @@ class Sales_Model_EDocument_Dispatch_DynamicConfig extends Tinebase_Record_NewAb
     protected static $_modelConfiguration = [
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::RECORD_NAME               => 'Custom Config', // gettext('GENDER_Custom Config')
+        self::RECORDS_NAME              => 'Custom Configs', // ngettext('Custom Config', 'Custom Configs', n)
+        self::TITLE_PROPERTY            => self::FLD_DISPATCH_TYPE,
+        self::IS_METADATA_MODEL_FOR     => self::FLD_DISPATCH_TYPE,
 
         self::FIELDS                    => [
             self::FLD_DISPATCH_TYPE         => [
@@ -39,11 +43,16 @@ class Sales_Model_EDocument_Dispatch_DynamicConfig extends Tinebase_Record_NewAb
                         Sales_Model_EDocument_Dispatch_Manual::class,
                         Sales_Model_EDocument_Dispatch_Upload::class,
                     ]],
-                ]
+                ],
+                self::UI_CONFIG                     => [
+                    'includeAppName'                    => false,
+                    'useRecordName'                     => true,
+                ],
             ],
             self::FLD_DISPATCH_CONFIG       => [
                 self::LABEL                     => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')
                 self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
+                self::DEFAULT_VAL               => '[]',
                 self::CONFIG                    => [
                     self::REF_MODEL_FIELD           => self::FLD_DISPATCH_TYPE,
                     self::PERSISTENT                => true,

@@ -17,10 +17,15 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
     protected static $_modelConfiguration = [
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::RECORD_NAME               => 'Custom Config', // gettext('GENDER_Custom Config')
+        self::RECORDS_NAME              => 'Custom Configs', // ngettext('Custom Config', 'Custom Configs', n)
+//        self::TITLE_PROPERTY            => '{% for config in dispatch_configs %}{{ renderModel(config.dispatch_type) }}{% endfor %}',
+        self::TITLE_PROPERTY            => '{{ dispatch_configs|map(c => renderModel(c.dispatch_type))|join(", ") }}',
 
         self::FIELDS                    => [
             self::FLD_DISPATCH_CONFIGS        => [
                 self::TYPE                      => self::TYPE_RECORDS,
+                self::LABEL                     => 'Custom Configs', // _('Custom Configs')
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_EDocument_Dispatch_DynamicConfig::MODEL_NAME_PART,
@@ -30,9 +35,17 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::UI_CONFIG                 => [
+                    'allowDuplicatePicks'           => true,
+                    'columns'                       => [
+                        Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_TYPE,
+                        Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG,
+                    ]
+                ]
             ],
         ],
     ];
+    protected static $_configurationObject = null;
 
     public function dispatch(Sales_Model_Document_Abstract $document): void
     {

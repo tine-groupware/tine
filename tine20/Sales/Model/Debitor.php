@@ -307,7 +307,11 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                         Sales_Model_EDocument_Dispatch_Manual::class,
                         Sales_Model_EDocument_Dispatch_Upload::class,
                     ]],
-                ]
+                ],
+                self::UI_CONFIG                     => [
+                    'includeAppName'                    => false,
+                    'useRecordName'                     => true,
+                ],
             ],
             self::FLD_EDOCUMENT_DISPATCH_CONFIG=> [
                 self::LABEL                     => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')

@@ -94,7 +94,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 // let paperSlip
 
                 let record = this.selections = [...this.initialConfig.selections][0]
-                const transport = record.get('debitor_id').edocument_dispatch_type || 'manual'
+                const dispatchType = record.get('debitor_id').edocument_dispatch_type || 'manual'
                 const win = window
 
 
@@ -154,11 +154,11 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     editDialog: this.editDialog,
                     docs,
                     record,
-                    transport,
+                    dispatchType,
                     win
                 }
 
-                if (transport === 'email') {
+                if (dispatchType === 'email') {
                     win.Tine.Felamimail.MessageEditDialog.openWindow({
                         contentPanelConstructorInterceptor: async (config) => {
                             await Promise.allSettled(promises)
@@ -199,7 +199,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         }
                     });
                 } else {
-                    // @TODO download transport
+                    // @TODO other dispatchTypes
                     await Promise.allSettled(promises)
                     await Ext.MessageBox.alert(
                         app.formatMessage('Manual Dispatch'),

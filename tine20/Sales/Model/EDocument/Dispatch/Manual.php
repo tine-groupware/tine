@@ -11,12 +11,21 @@
 class Sales_Model_EDocument_Dispatch_Manual extends Tinebase_Record_NewAbstract implements Sales_Model_EDocument_Dispatch_Interface
 {
     public const MODEL_NAME_PART = 'EDocument_Dispatch_Manual';
+    public const FLD_INSTRUCTIONS = 'instructions';
 
     protected static $_modelConfiguration = [
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::RECORD_NAME               => 'Manual Dispatching', // gettext('GENDER_Manual Dispatching')
+        self::RECORDS_NAME              => 'Manual Dispatchings', // ngettext('Manual Dispatching', 'Manual Dispatchings', n)
+        self::TITLE_PROPERTY            => self::FLD_INSTRUCTIONS,
 
-        self::FIELDS                    => [],
+        self::FIELDS                    => [
+            self::FLD_INSTRUCTIONS           => [
+                self::LABEL                     => 'Instructions', // _('Instructions')
+                self::TYPE                      => self::TYPE_FULLTEXT,
+            ],
+        ],
     ];
     protected static $_configurationObject = null;
 
