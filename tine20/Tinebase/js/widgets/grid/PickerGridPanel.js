@@ -589,10 +589,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             const searchComboConfig = {...this.searchComboConfig || {}};
 
             if (this.isMetadataModelFor) {
-                var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
-                    mappingRecordClass = mappingFieldDef.getRecordClass();
-                this.searchRecordClass = mappingRecordClass;
-                Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
+                const mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor);
+                if (_.get(mappingFieldDef, 'fieldDefinition.type') !== 'record') {
+                    Object.assign(searchComboConfig, Tine.widgets.form.FieldManager.get(this.recordClass.getMeta('appName'), this.recordClass, this.isMetadataModelFor, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID), {
+                        allowBlank: true,
+                    });
+                } else {
+                    this.searchRecordClass = mappingFieldDef.getRecordClass();
+                    Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
+                }
+
                 Object.assign(searchComboConfig, _.get(mappingFieldDef, 'fieldDefinition.uiconfig', {}));
                 searchComboConfig.useEditPlugin = searchComboConfig.hasOwnProperty('useEditPlugin') ? searchComboConfig.useEditPlugin : true;
             }
@@ -635,6 +641,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
             // copy (reference data from metadata record, e.g. config class for dynamic metadata records)
             Ext.copyTo(recordData, recordData[this.isMetadataModelFor], picker.copyOnSelectProps);
+            if (picker.xtype === 'tw-modelpicker') {
+                recordData[this.isMetadataModelFor] = recordData[this.isMetadataModelFor].className;
+            }
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             record.phantom = true;
 

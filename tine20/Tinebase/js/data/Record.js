@@ -480,7 +480,7 @@ Record.create = function(o, meta) {
         return i18n._(p.appName);
     };
     f.getIconCls = function() {
-        return 'ApplicationIconCls ' + p.appName + 'IconCls ' + p.appName + p.recordName;
+        return 'ApplicationIconCls ' + p.appName + 'IconCls ' + p.appName + p.modelName;
     };
     /**
      * returns the php class name of the record itself or by the application(name) and model(name)
