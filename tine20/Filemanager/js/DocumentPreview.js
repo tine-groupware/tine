@@ -48,6 +48,10 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
 
+        if (navigator.pdfViewerEnabled) {
+            this.nativelySupported.push('application/pdf');
+        }
+
         this.afterIsRendered().then(() => {
             this.el.on('contextmenu', (e) => {
                 e.stopEvent();
@@ -113,9 +117,31 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     addPreviewPanelForRecord: function (me, record) {
         const path = record.get('path');
         const revision = record.get('revision');
+        const contenttype = record.get('contenttype');
         const urls = [];
 
         if (this.useOriginal(record)) {
+            if (contenttype == 'application/pdf') {
+                // Why does this not work in Chrome?
+                me.previewContainer.getEl().dom.parentNode.style.overflow = 'hidden';
+                me.doLayout();
+                // NOTE: Tine serves Downloads with header "Content-Disposition: attachment". While Firefox shows inline anyhow
+                //       Chrome does respect the header and offers downloading instead. Therefore file is loaded by script.
+                const pdfFile = new Request( Tine.Filemanager.Model.Node.getDownloadUrl(record) );
+                fetch(pdfFile)
+                    .then( (response) => response.blob() )
+                    .then( (pdfBlob) => {
+                        const pdfOptions = 'view=FitH';
+                        me.previewContainer.update({
+                            html: '<object style="width: 100%; height:100%; position:absolute;" type="application/pdf" data="' + URL.createObjectURL(pdfBlob) + '#' + pdfOptions + '"></object>',
+                            xtype: 'panel',
+                            cls: 'dark-reverse',
+                            frame: true,
+                            border: true
+                        })
+                    });
+                return true;
+            }
             urls.push(Tine.Filemanager.Model.Node.getDownloadUrl(record));
         } else {
             _.range(record.get('preview_count')).forEach((previewNumber) => {
