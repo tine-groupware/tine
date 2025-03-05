@@ -39,7 +39,8 @@ Tine.widgets.form.FieldManager = function() {
         CATEGORY_PROPERTYGRID: 'propertyGrid',
 
         specialTypeMap: {
-            password : 'tw-passwordTriggerField'
+            password: 'tw-passwordTriggerField',
+            country: 'widget-countrycombo'
         },
 
         /**

@@ -1,6 +1,6 @@
 tine:
   features:
     edocument:
-      active: false
+      active: true
       validation_svc: https://edocument-mwtest.mws-hosting.net/ubl
       view_svc: https://edocument-mwtest.mws-hosting.net/ublView

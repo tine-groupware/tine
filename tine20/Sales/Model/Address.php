@@ -184,6 +184,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             ],
             self::FLD_COUNTRYNAME => [
                 self::TYPE => self::TYPE_STRING,
+                self::SPECIAL_TYPE => self::SPECIAL_TYPE_COUNTRY,
                 self::LABEL   => 'Country', //_('Country')
                 self::DEFAULT_VAL => 'DE',
                 self::QUERY_FILTER => TRUE,
