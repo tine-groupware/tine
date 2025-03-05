@@ -5,7 +5,7 @@
  * http://www.extjs.com/license
  */
 
-const { apply, isDate } = require("Ext/core/core/Ext");
+const { apply, isDate, isNumber } = require("Ext/core/core/Ext");
 const SortTypes = require("Ext/data/SortTypes");
 const isObject = require("lodash/isObject");
 // const { parseDate } = require('Ext/util/Date');
@@ -99,9 +99,12 @@ const Field = function(config){
                             return new Date(parseInt(v, 10));
                         }
                         if (dateFormat == "Y-m-d H:i:s"){
-                            return new Date(Date.parse(v));
+                            const ts = Date.parse(v);
+                            if (isNumber(ts)) { // some old browsers...
+                                return new Date(ts);
+                            }
                         }
-                        // NOTE: Date.parseDate is an ext native augmentation, should not be neccesary for our ISO date format
+                        // NOTE: Date.parseDate is an ext augmentation, should not be necessary for our ISO date format
                         return Date.parseDate(v, dateFormat);
                     }
                     var parsed = Date.parse(v);
