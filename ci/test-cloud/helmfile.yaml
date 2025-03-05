@@ -1,13 +1,15 @@
-helmDefaults:
-  wait: true
-  waitForJobs: true
-
 environments:
   default:
     values:
-      - domain: {{ requiredEnv "DEPLOYMENT_NAME" }}.tcloud.mytine20.com
-        mailDomain: {{ requiredEnv "DEPLOYMENT_NAME" }}.tcloud.mytine20.com
+      - domain: {{ requiredEnv "DEPLOYMENT_NAME" }}.tcloud.tine-dev.de
+        mailDomain: {{ requiredEnv "DEPLOYMENT_NAME" }}.tcloud.tine-dev.de
         instance: {{ requiredEnv "DEPLOYMENT_NAME" }}
+
+---
+
+helmDefaults:
+  wait: true
+  waitForJobs: true
 
 repositories:
 - name: tine-charts
