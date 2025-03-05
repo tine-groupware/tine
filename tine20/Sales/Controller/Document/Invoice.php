@@ -51,6 +51,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Invoice::FLD_DESCRIPTION,
             Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [
@@ -203,7 +204,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                     Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
                     Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
                     Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->seq + 1,
-                ]));
+                ], true));
             }
             $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
                 ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->seq)

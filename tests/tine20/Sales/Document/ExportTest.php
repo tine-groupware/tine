@@ -62,7 +62,7 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
     public function testExportSimpleDocumentDocxOverwrite()
     {
         $document = $this->createExportData();
-        $document[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_RELEASED;
+        $document[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_DISPATCHED;
         (new Sales_Frontend_Json())->saveDocument_Offer($document);
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Offer::class, [

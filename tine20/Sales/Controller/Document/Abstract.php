@@ -560,11 +560,20 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         ];
     }
 
+    public static function dispatchDocument(Sales_Model_Document_Abstract $document): bool
+    {
+        $debitor = Sales_Controller_Debitor::getInstance()->get($document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}
+            ->getIdFromProperty(Sales_Model_Document_Abstract::FLD_ORIGINAL_ID));
+
+        /** @var Sales_Model_EDocument_Dispatch_Interface $dispatcher */
+        $dispatcher = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG};
+        return $dispatcher->dispatch($document);
+    }
+
     public function copy(string $id, bool $persist): Tinebase_Record_Interface
     {
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
         $copy = parent::copy($id, false);
-
         $copy->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = null;
 
         if ($persist) {

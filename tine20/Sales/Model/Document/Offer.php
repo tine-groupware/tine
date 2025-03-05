@@ -29,7 +29,6 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
      * offer status
      */
     public const STATUS_DRAFT = 'DRAFT';
-    public const STATUS_RELEASED = 'RELEASED';
     public const STATUS_ORDERED = 'ORDERED';
     public const STATUS_REJECTED = 'REJECTED';
 

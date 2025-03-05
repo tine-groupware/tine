@@ -36,7 +36,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
      */
     public const STATUS_PROFORMA = 'PROFORMA';
     public const STATUS_BOOKED = 'BOOKED';
-    public const STATUS_SHIPPED = 'SHIPPED';
     public const STATUS_PAID = 'PAID';
 
 
