@@ -74,6 +74,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
         Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
         Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Manual::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Email::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Upload::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Custom::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DynamicConfig::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DocumentType::MODEL_NAME_PART,
         Sales_Model_PaymentMeans::MODEL_NAME_PART,
 //        'OrderConfirmation',
 //        'PurchaseInvoice',
@@ -86,7 +92,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Boilerplate',
         'Invoice',
     );
-    
+
     /**
      * the constructor
      */
@@ -121,7 +127,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_configuredModels[] = 'OrderConfirmation';
         }
     }
-    
+
     /**
      * Returns registry data of the application.
      *
@@ -141,7 +147,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultContractContainer' => $sharedContainer->toArray(),
         );
     }
-    
+
     /**
      * Sets the config for Sales
      * @param array $config
@@ -150,7 +156,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Sales_Controller::getInstance()->setConfig($config);
     }
-    
+
     /**
      * Get Config for Sales
      * @return array
@@ -954,7 +960,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP,
                 Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
                 Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $document->seq + 1,
-            ]));
+            ], true));
         }
         $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
             ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->seq)
@@ -966,10 +972,23 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
+    public function dispatchDocument(string $model, string $documentId): bool
+    {
+        /** @var Tinebase_Record_Interface $model */
+        /** @var Sales_Controller_Document_Abstract $docCtrl */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+
+        /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to lock stuff */
+
+        /** @var Sales_Model_Document_Abstract $document */
+        $document = $docCtrl->get($documentId);
+        return $docCtrl::dispatchDocument($document);
+    }
+
     public function createFollowupDocument(array $documentTransition): array
     {
-        /** @var Sales_Model_Document_Transition $documentTransition */
         $documentTransition = $this->_jsonToRecord($documentTransition, Sales_Model_Document_Transition::class);
+        /** @var Sales_Model_Document_Transition $documentTransition */
 
         return $this->_recordToJson(
             Sales_Controller_Document_Abstract::executeTransition($documentTransition)

@@ -21,6 +21,9 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
     public const TABLE_NAME         = 'sales_debitor';
 
     public const FLD_BILLING        = 'billing';
+
+    public const FLD_BUYER_LEGAL_REGISTRATION_IDENTIFIER = 'buyer_legal_registration_identifier';
+    public const FLD_VAT_IDENTIFIER = 'buyer_vat_identifier';
     public const FLD_BUYER_REFERENCE = 'buyer_reference';
     public const FLD_SELLER_IDENTIFIER = 'seller_identifier';
 
@@ -29,11 +32,14 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
     public const FLD_DIVISION_ID    = 'division_id';
     public const FLD_NUMBER         = 'number';
     public const FLD_NAME           = 'name';
+    public const FLD_DESCRIPTION    = 'description';
     public const FLD_EINVOICE_TYPE  = 'einvoice_type';
     public const FLD_EINVOICE_CONFIG= 'einvoice_config';
     public const FLD_EAS_ID = 'eas_id';
     public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
-    public const FLD_EDOCUMENT_TRANSPORT = 'edocument_transport';
+    public const FLD_EDOCUMENT_DISPATCH_TYPE = 'edocument_dispatch_type';
+    public const FLD_EDOCUMENT_DISPATCH_CONFIG = 'edocument_dispatch_config';
+
     public const FLD_PAYMENT_MEANS = 'payment_means';
 
     /**
@@ -113,6 +119,16 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                 ],
                 self::LABEL                 => 'Name', // _('Name')
             ],
+            self::FLD_DESCRIPTION               => [
+                self::LABEL                         => 'Description', // _('Description')
+                self::TYPE                          => self::TYPE_FULLTEXT,
+                self::QUERY_FILTER                  => true,
+                self::NULLABLE                      => true,
+                self::SHY                           => true,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
+            ],
             self::FLD_CUSTOMER_ID           => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Customer', // _('Customer')
@@ -188,6 +204,20 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     ],
                 ],
             ],
+            self::FLD_BUYER_LEGAL_REGISTRATION_IDENTIFIER  => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Buyer legal registration identifier', // _('Buyer legal registration identifier')
+                self::DESCRIPTION               => 'An identifier issued by an official registrar that identifies the acquirer as a legal entity or legal person. E.g. commercial register entry, register of associations, etc. (BT-47 [EN 16931]).', // _('An identifier issued by an official registrar that identifies the acquirer as a legal entity or legal person. E.g. commercial register entry, register of associations, etc. (BT-47 [EN 16931]).')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_VAT_IDENTIFIER        => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Buyer VAT identifier', // _('Buyer VAT identifier')
+                self::DESCRIPTION               => 'The VAT identification number preceded by a country prefix (BT-48 [EN 16931]).', // _('The VAT identification number preceded by a country prefix (BT-48 [EN 16931]).')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
             self::FLD_BUYER_REFERENCE       => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LABEL                     => 'Buyer Reference', // _('Buyer Reference')
@@ -218,7 +248,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     [Zend_Validate_InArray::class, [
                         Sales_Model_Einvoice_XRechnung::class,
                     ]],
-                ]
+                ],
             ],
             self::FLD_EINVOICE_CONFIG       => [
                 self::LABEL                     => 'Electronic Invoice Config', // _('Electronic Invoice Config')
@@ -240,6 +270,8 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             self::FLD_EAS_ID                => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
+                self::DESCRIPTION               => "The pattern for 'Buyer electronic address (BT-49 [EN 16931]).", //_("The pattern for 'Buyer electronic address (BT-49 [EN 16931]).")
+
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
@@ -249,16 +281,53 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             self::FLD_ELECTRONIC_ADDRESS    => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LABEL                     => 'Electronic Address', // _('Electronic Address')
+                self::DESCRIPTION               => 'Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931]).', //_('Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931]).')
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
             ],
-            self::FLD_EDOCUMENT_TRANSPORT   => [
-                self::TYPE                      => self::TYPE_KEY_FIELD,
+            self::FLD_EDOCUMENT_DISPATCH_TYPE => [
+                self::TYPE                      => self::TYPE_MODEL,
                 self::LABEL                     => 'Electronic Document Transport Method', // _('Electronic Document Transport Method')
-                self::NAME                      => Sales_Config::EDOCUMENT_TRANSPORT,
-                self::NULLABLE                  => true,
+                self::DEFAULT_VAL               => Sales_Model_EDocument_Dispatch_Manual::class,
                 self::CONFIG                    => [
-                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::AVAILABLE_MODELS          => [
+                        Sales_Model_EDocument_Dispatch_Custom::class,
+                        Sales_Model_EDocument_Dispatch_Email::class,
+                        Sales_Model_EDocument_Dispatch_Manual::class,
+                        Sales_Model_EDocument_Dispatch_Upload::class,
+                    ],
+                ],
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Empty::class => Sales_Model_EDocument_Dispatch_Manual::class,
+                    Zend_Filter_Input::DEFAULT_VALUE => Sales_Model_EDocument_Dispatch_Manual::class,
+                    [Zend_Validate_InArray::class, [
+                        Sales_Model_EDocument_Dispatch_Custom::class,
+                        Sales_Model_EDocument_Dispatch_Email::class,
+                        Sales_Model_EDocument_Dispatch_Manual::class,
+                        Sales_Model_EDocument_Dispatch_Upload::class,
+                    ]],
+                ],
+                self::UI_CONFIG                     => [
+                    'includeAppName'                    => false,
+                    'useRecordName'                     => true,
+                ],
+            ],
+            self::FLD_EDOCUMENT_DISPATCH_CONFIG=> [
+                self::LABEL                     => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')
+                self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
+                self::DEFAULT_VAL               => '[]',
+                self::CONFIG                    => [
+                    self::REF_MODEL_FIELD           => self::FLD_EDOCUMENT_DISPATCH_TYPE,
+                    self::PERSISTENT                => true,
+                ],
+                self::INPUT_FILTERS         => [
+                    Zend_Filter_Empty::class => [[]],
+                ],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => [[]],
+                    [Tinebase_Record_Validator_SubValidate::class, [Tinebase_Record_Validator_SubValidate::IGNORE_VALUE => []]],
                 ],
             ],
             self::FLD_PAYMENT_MEANS         => [
