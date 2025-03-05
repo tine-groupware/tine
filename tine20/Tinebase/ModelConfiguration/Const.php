@@ -227,6 +227,8 @@ class Tinebase_ModelConfiguration_Const {
     public const SPECIAL_TYPE_PASSWORD = 'password';
     public const SPECIAL_TYPE_PERCENT = 'percent';
     public const SPECIAL_TYPE_URL = 'url';
+    public const SPECIAL_TYPE_COUNTRY = 'country';
+
     public const STORAGE = 'storage';
     public const SUPPORTED_FORMATS = 'supportedFormats';
     /**

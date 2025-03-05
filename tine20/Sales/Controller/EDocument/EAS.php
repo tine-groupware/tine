@@ -11,6 +11,8 @@
  *
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * EAS controller class for Sales application
  *
@@ -37,5 +39,14 @@ class Sales_Controller_EDocument_EAS extends Tinebase_Controller_Record_Abstract
         $this->_modelName = Sales_Model_EDocument_EAS::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+    }
+
+    public function getByCode(string $code): ?Sales_Model_EDocument_EAS
+    {
+        /** @var ?Sales_Model_EDocument_EAS $eas */
+        $eas = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+                [TMFA::FIELD => Sales_Model_EDocument_EAS::FLD_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $code],
+            ]))->getFirstRecord();
+        return $eas;
     }
 }
