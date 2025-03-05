@@ -1427,9 +1427,6 @@ msgstr "Lieferanschriften"
 msgid "Billing Addresses"
 msgstr "Rechnungsanschriften"
 
-msgid "Buyer Reference"
-msgstr "Kundenreferenz / Leitweg-ID"
-
 msgid "Seller identifier"
 msgstr "Verkäufer Kennung"
 
@@ -1625,12 +1622,6 @@ msgstr "Endbetrag"
 msgid "Internal Note"
 msgstr "Interne Notiz"
 
-msgid "Project Reference"
-msgstr "Projektkennung"
-
-msgid "Purchase Order Reference"
-msgstr "Bestellnummer"
-
 msgid "Attached Documents"
 msgstr "Angehängte Dokumente"
 
@@ -1795,13 +1786,6 @@ msgstr "Einheit"
 msgid "Unit Price"
 msgstr "Einzelpreis"
 
-msgid ""
-"An identifier assigned by the acquirer and used for internal control "
-"purposes (BT-10 [EN 16931])."
-msgstr ""
-"Ein vom Erwerber zugewiesener und für interne Lenkungszwecke benutzter "
-"Bezeichner (BT-10 [EN 16931])."
-
 msgid "Position Discount Type"
 msgstr "Positionsrabatt Typ"
 
@@ -1827,19 +1811,6 @@ msgstr[1] "Lieferpositionen"
 
 msgid "GENDER_Delivery Position"
 msgstr "female"
-
-msgid ""
-"The identifier of a project to which the invoice refers (BT-11 [EN 16931])."
-msgstr ""
-"Die Kennung eines Projektes, auf das sich die Rechnung bezieht (BT-11 [EN "
-"16931])."
-
-msgid ""
-"An identifier issued by the purchaser for a referenced order (BT-13 [EN "
-"16931])."
-msgstr ""
-"Eine vom Erwerber ausgegebene Kennung für eine referenzierte Bestellung "
-"(BT-13 [EN 16931])."
 
 msgid "Invoice Position"
 msgid_plural "Invoice Positions"
@@ -1935,18 +1906,6 @@ msgstr "GTIN"
 
 msgid "Shortcut"
 msgstr "Kürzel"
-
-msgid "Seller identifier"
-msgstr "Verkäufer Kennung"
-
-msgid ""
-"An identifier (usually assigned by the purchaser) of the seller, such as the "
-"vendor number for the funds management procedure or the supplier number for "
-"the ordering system (BT-29 [EN 16931])."
-msgstr ""
-"Eine (i. d. R. vom Erwerber vergebene) Kennung des Verkäufers, wie z. B. die "
-"Kreditorennummer für das Mittelbewirtschaftungsverfahren oder die "
-"Lieferantennummer für das Bestellsystem (BT-29 [EN 16931])."
 
 msgid "Default Grouping"
 msgstr "Standard Gruppierung"
