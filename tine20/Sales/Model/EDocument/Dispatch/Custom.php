@@ -79,6 +79,7 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
             ])
         );
 
+        /** @var Sales_Model_Document_Abstract $document */
         $document = $docCtrl->update($document);
         $transaction->release();
 
@@ -102,6 +103,7 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
         }
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        /** @var Sales_Model_Document_Abstract $document */
         $document = $docCtrl->get($document->getId());
         $document->{$document::getStatusField()} = $result && Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH !== $document->{$document::getStatusField()} ? Sales_Model_Document_Abstract::STATUS_DISPATCHED : Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
         $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord(

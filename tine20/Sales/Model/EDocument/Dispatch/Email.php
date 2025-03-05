@@ -111,6 +111,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         if (null === $dispatchId) {
             /** @var Sales_Controller_Document_Abstract $docCtrl */
             $docCtrl = $document::getConfiguration()->getControllerInstance();
+            /** @var Sales_Model_Document_Abstract $document */
             $document = $docCtrl->get($document->getId());
 
             $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_DISPATCHED;
