@@ -386,6 +386,43 @@ class Tinebase_Relation_RelationTest extends TestCase
         }
     }
 
+    public function testSaveRecordAfterDeleteRelationsRecord()
+    {
+        $adbc = Addressbook_Controller_Contact::getInstance();
+        $contact1 = $adbc->create(new Addressbook_Model_Contact([
+            'n_family'              => 'contact',
+            'n_given'               => 'one',
+            'bday'                  => '1979-06-05T00:00:00',
+            'container_id'          => '',
+        ]));
+        $contact2 = $adbc->create(new Addressbook_Model_Contact([
+            'n_family'              => 'contact',
+            'n_given'               => 'two',
+            'bday'                  => '1979-06-05T00:00:00',
+            'container_id'          => '',
+        ]));
+
+        $relationData = array(
+            array(
+                'own_model'              => 'Addressbook_Model_Contact',
+                'own_backend'            => 'SQL',
+                'own_id'                 => $contact1->getId(),
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Addressbook_Model_Contact',
+                'related_backend'        => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_id'             => $contact2->getId(),
+                'type'                   => ''
+            )
+        );
+        $contact1->relations = $relationData;
+        $contact1 = $adbc->update($contact1);
+        $adbc->delete($contact2->getId());
+        $contact1 = $adbc->update($contact1);
+        $contact1 = $adbc->get($contact1->getId());
+
+        $this->assertEquals(0, count($contact1->relations));
+    }
+
     /**
      * testRemoveRelationsByAppACL
      *
