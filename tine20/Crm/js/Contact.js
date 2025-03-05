@@ -273,22 +273,19 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * 
      * TODO use generic function?
      */
-    onUpdate: function(contact) {
-        var response = {
-            responseText: contact
-        };
-        contact = Tine.Tinebase.data.Record.setFromJson(response?.results, Tine.Addressbook.Model.Contact);
-        
+    onUpdate: function(contactData) {
+        const contact = Tine.Tinebase.data.Record.setFromJson(contactData, Tine.Addressbook.Model.Contact);
+
         Tine.log.debug('Tine.Crm.Contact.GridPanel::onUpdate - Contact has been updated:');
         Tine.log.debug(contact);
         
         // remove contact relations to prevent cyclic relation structure
         contact.data.relations = null;
-        
-        var myContact = this.store.getById(contact.id);
+
+        const myContact = this.store.getById(contact.id);
         if (myContact) {
             myContact.beginEdit();
-            for (var p in contact.data) {
+            for (const p in contact.data) {
                 myContact.set(p, contact.get(p));
             }
             myContact.endEdit();
