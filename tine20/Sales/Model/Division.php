@@ -151,6 +151,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             self::FLD_ADDR_COUNTRY          => [
                 self::LABEL                     => 'Address Country', // _('Address Country')
                 self::TYPE                      => self::TYPE_STRING,
+                self::SPECIAL_TYPE              => self::SPECIAL_TYPE_COUNTRY,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,

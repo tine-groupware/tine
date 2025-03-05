@@ -25,6 +25,7 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
 
         $_definition[self::FIELDS][self::FLD_URL] = [
             self::TYPE              => self::TYPE_STRING,
+            self::SPECIAL_TYPE      => self::SPECIAL_TYPE_URL,
             self::LABEL             => 'URL', // _('URL')
             self::VALIDATORS        => [
                 Zend_Filter_Input::ALLOW_EMPTY => false,
