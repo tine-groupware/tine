@@ -238,7 +238,7 @@ function createArchives()
 
 function createSpecialArchives()
 {
-    echo "building Tine 2.0 allinone archive... "
+    echo "building tine allinone archive... "
     mkdir /root/allinone
 
     for ARCHIVE in $(ls ${TINE20PACKAGES}/source/${RELEASE}/tine20-*_${RELEASE}.tar.bz2); do
@@ -248,18 +248,6 @@ function createSpecialArchives()
     (cd /root/allinone; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2 .)
     if [ "$ZIP_PACKAGES" == "true" ]; then
         (cd /root/allinone; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-allinone_${RELEASE}.zip .)
-    fi
-
-    echo "building Tine 2.0 voip archive... "
-    mkdir /root/voip
-
-    for ARCHIVENAME in phone voipmanager; do
-        (cd /root/voip; tar xjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-${ARCHIVENAME}_${RELEASE}.tar.bz2)
-    done
-
-    (cd /root/voip; tar cjf ${TINE20PACKAGES}/source/${RELEASE}/tine20-voip_${RELEASE}.tar.bz2 .)
-    if [ "$ZIP_PACKAGES" == "true" ]; then
-        (cd /root/voip; zip -qr ${TINE20PACKAGES}/source/${RELEASE}/tine20-voip_${RELEASE}.zip .)
     fi
 }
 

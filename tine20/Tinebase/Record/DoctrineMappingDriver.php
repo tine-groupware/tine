@@ -217,6 +217,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
             }
 
             $config[self::TYPE] = self::$_typeMap[$type];
+            if ('text' === $config[self::TYPE] && ($config[self::LENGTH] ?? 256) < 256) {
+                $config[self::TYPE] = 'string';
+            }
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
             if (isset($config[self::UNSIGNED])) {
                 if (!isset($config[self::OPTIONS])) {

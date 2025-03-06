@@ -89,6 +89,42 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         // important! after _inspectDenormalization in parent::_inspectBeforeCreate
         // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
+
+        $this->_inspectServicePeriod($_record);
+    }
+
+    protected function _inspectServicePeriod(Sales_Model_Document_Abstract $document): void
+    {
+        if (!$document->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet ||
+                !$document->has(Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START)) {
+            return;
+        }
+
+        $min = null;
+        $max = null;
+        $document->{Sales_Model_Document_Abstract::FLD_POSITIONS}->find(
+            function(Sales_Model_DocumentPosition_Abstract $position) use(&$min, &$max) {
+                if (null === $min ||
+                    (null !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_START}
+                        && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_START}->isEarlier($min))) {
+                    $min = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_START};
+                }
+                if (null === $max ||
+                    (null !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_END}
+                        && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_END}->isLater($max))) {
+                    $max = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_END};
+                }
+                return false;
+            }, null);
+
+        if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} || (null !== $min &&
+                $min->isEarlier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START}))) {
+            $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} = $min;
+        }
+        if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} || (null !== $max &&
+                $max->isEarlier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
+            $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} = $max;
+        }
     }
 
     protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
@@ -252,6 +288,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
         // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
+
+        $this->_inspectServicePeriod($_record);
     }
 
     protected function _inspectBeforeForBookedOldRecord(Sales_Model_Document_Abstract $_record, Sales_Model_Document_Abstract $_oldRecord)
