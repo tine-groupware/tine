@@ -95,6 +95,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DOCUMENT_ID               => [
                 self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
+                self::LENGTH                        => 40,
                 self::CONFIG                        => [
                     self::REF_MODEL_FIELD               => self::FLD_DOCUMENT_TYPE,
                     self::PERSISTENT                    => Tinebase_Model_Converter_DynamicRecord::REFID,
