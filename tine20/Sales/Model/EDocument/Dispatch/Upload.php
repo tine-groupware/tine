@@ -34,7 +34,7 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
         ];
     }
 
-    public function dispatch(Sales_Model_Document_Abstract $document, ?string $dispatchId = null): bool
+    public function dispatch(Sales_Model_Document_Abstract $document, ?string $parentDispatchId = null): bool
     {
         $dispatchHistory = new Sales_Model_Document_DispatchHistory([
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
@@ -43,10 +43,11 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => 'upload to: ' . $this->{self::FLD_URL},
             Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
-            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId ?? Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
         ]);
 
-        if (null === $dispatchId) {
+        if (null === $parentDispatchId) {
             /** @var Sales_Controller_Document_Abstract $docCtrl */
             $docCtrl = $document::getConfiguration()->getControllerInstance();
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
