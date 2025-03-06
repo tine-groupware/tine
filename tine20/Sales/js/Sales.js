@@ -25,7 +25,7 @@ import './Document/CreatePaperSlipAction';
 import './Document/DispatchDocumentAction';
 import './Document/AttachedDocument/ShowDispatchHistory';
 import './Document/AttachedDocument/ManageAttachmentAction';
-import './Document/TracAction';
+import './Document/TrackAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';
 import './EDocument/QuickLookPanel';

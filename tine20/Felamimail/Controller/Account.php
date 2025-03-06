@@ -2287,9 +2287,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
-        // TODO fix me! system account resolving is missing, add it here?!
-        throw new Tinebase_Exception_NotImplemented('do not use this function');
+        return $this->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'id', 'operator' => 'in', 'values' => (array)$_ids],
+                ['field' => 'is_deleted', 'operator' => 'equals', 'value' => $_getDeleted ? Tinebase_Model_Filter_Bool::VALUE_NOTSET : false],
+            ]),
+            _getRelations: $_expander,
+        );
     }
+
 
     /**
      * @param Addressbook_Model_List $list
