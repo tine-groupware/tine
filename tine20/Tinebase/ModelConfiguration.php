@@ -537,6 +537,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
      * note: money is an own type so we can separate currency
      * money                     Float               float    float                         float             Tinebase_Model_Filter_Int
+     * string      month         Month               varchar  string                        string            Tinebase_Model_Filter_Text
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
@@ -891,6 +892,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         'datetime_separated_time' => Tinebase_Model_Filter_Date::class,
         'datetime_separated_tz' => Tinebase_Model_Filter_Text::class,
         'date'                  => Tinebase_Model_Filter_Date::class,
+        'month'                 => Tinebase_Model_Filter_Month::class,
         'datetime'              => Tinebase_Model_Filter_DateTime::class,
         'time'                  => Tinebase_Model_Filter_Time::class,
         'string'                => Tinebase_Model_Filter_Text::class,
