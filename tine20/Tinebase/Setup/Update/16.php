@@ -211,8 +211,8 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
                 $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog')
                     ->limitPage(++$pageNumber, $pageCount)
                     ->where('new_value like "%\"password\":%"')
-                    ->where('application_id is' . Tinebase_Application::getInstance()->getApplicationByName($model['application'])->getId())
-                    ->where('record_type is' . $model['model']);
+                    ->where( $this->_db->quoteIdentifier('application_id') . ' = ?', Tinebase_Application::getInstance()->getApplicationByName($model['application'])->getId())
+                    ->where( $this->_db->quoteIdentifier('record_type') . ' = ?', $model['model']);
                 $stmt = $select->query();
                 $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
