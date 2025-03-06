@@ -3,10 +3,10 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Tine.Sales.Document.TracDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
+Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     width: 800,
     height: 600,
 
@@ -81,7 +81,7 @@ Tine.Sales.Document.TracDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             this.tracData = values[1];
             this.onTracDataLoad();
         });
-        Tine.Sales.Document.TracDialog.superclass.initComponent.call(this);
+        Tine.Sales.Document.TrackDialog.superclass.initComponent.call(this);
     },
 
     renderCy (cytoscape) {
@@ -266,12 +266,12 @@ Tine.Sales.Document.TracDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     }
 });
 
-Tine.Sales.Document.TracDialog.openWindow = function(config) {
+Tine.Sales.Document.TrackDialog.openWindow = function(config) {
     return Tine.WindowFactory.getWindow({
         // width: 400,
         // height: 300,
-        name: `Tine.Sales.Document.TracDialog.${config.document.id}`,
-        contentPanelConstructor: 'Tine.Sales.Document.TracDialog',
+        name: `Tine.Sales.Document.TrackDialog.${config.document.id}`,
+        contentPanelConstructor: 'Tine.Sales.Document.TrackDialog',
         contentPanelConstructorConfig: config,
     });
 

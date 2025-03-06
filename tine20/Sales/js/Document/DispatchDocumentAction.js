@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 // @see https://github.com/ericmorand/twing/issues/332
@@ -11,8 +11,9 @@
 import getTwingEnv from "twingEnv";
 // #endif
 
-import AbstractAction from "./AbstractAction";
-import { createAttachedDocument } from "./CreatePaperSlipAction";
+import AbstractAction from "./AbstractAction"
+import { createAttachedDocument } from "./CreatePaperSlipAction"
+import DispatchHistoryGridPanel from "./DispatchHistoryGridPanel"
 
 // dispatching is done by the server based on dispatch configs. (Sales_Frontend_Json->dispatchDocument)
 // also for manual dispatching the server creates the necessary documents and sets the document to MANUAL_DISPATCH state
@@ -71,12 +72,13 @@ const setDispatched = async function(config) {
     }
 
     if (config.dispatchHistoryRecords.length) {
-        // set given history records COMPLETED
+        // add history records with type success
         // @TODO
     }
 
     mask.hide()
 }
+
 
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
@@ -102,37 +104,67 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 let record = this.selections = [...this.initialConfig.selections][0]
                 const win = window
                 const docType = record.constructor.getMeta('recordName')
+                const className = record.constructor.getPhpClassName()
                 const statusFieldName = `${docType.toLowerCase()}_status`
                 const currentStatus = record.get(statusFieldName)
 
-                if (currentStatus === 'DISPATCHED') {
-                    await Ext.MessageBox.alert(
-                        app.formatMessage('Nothing to do'),
-                        app.formatMessage('This document is already dispatched!')
-                    )
-                    return
-                } else if (currentStatus === 'MANUAL_DISPATCH') {
+                if (currentStatus === 'DISPATCHED' && Ext.MessageBox.confirm(
+                    app.formatMessage('Nothing to do'),
+                   app.formatMessage('This document is already dispatched!') + '<br /><br />' +
+                        app.formatMessage('Do you want to dispatch again?')
+                ) !== 'yes') {
+                    return false;
+                }
+
+                if (currentStatus !== 'MANUAL_DISPATCH') {
+                    this.mask.show()
+
+                    try {
+                        const success = await Tine.Sales.dispatchDocument(className, record.id)
+                    } catch (e) {
+                        await Ext.MessageBox.show({
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.WARNING,
+                            title: this.app.formatMessage('Dispatching not Possible'),
+                            msg: e.message
+                        })
+                        this.mask.hide()
+                        return
+                    }
+
+                    record = await record.constructor.getProxy().promiseLoadRecord(record)
+                    this.editDialog ? this.editDialog.loadRecord(record, true) : null
+
+                    this.mask.hide()
+                }
+
+                if (record.get(statusFieldName) === 'MANUAL_DISPATCH') {
                     await Ext.MessageBox.alert(
                         app.formatMessage('Manual Dispatch Needed'),
                         app.formatMessage('All automatic dispatch steps are completed, you need to fulfill the remaining tasks manually.')
                     )
                     return
+                    // const dhs = _.sortBy(record.get('dispatch_history'), 'dispatch_date')
+                    //
+                    // // @TODO how to separate multiple steps of the same transport in one custom dispatch? (one record or other field)
+                    // const dMap = _.groupBy(dhs, (dh) => `${dh.dispatch_id}-${dh.dispatch_transport}`)
+                    //
+                    // const openDMap = _.reduce(dMap, (accu, v, k) => {
+                    //     return Object.assign(accu, _.find(v, { type: 'success' }) ? {} : _.set({}, k, v) )
+                    // }, {})
+
+                    // grouping grid with checkboxe?
+                    // dispatchHistoryDialog/Tab -> DispatchHistoryGrid
+
+                    // we need start's without success
+
+
+                    // find all tasks
+                    // @TODO inform user what to do.
+                    // how does user add the completed history records?
+                    // multioptions to complete tasks
+                    // The following tasks have to be completed manually. Check tasks to set them done.
                 }
-
-
-
-                await Ext.MessageBox.alert(
-                    app.formatMessage('Not yet implemented'),
-                    app.formatMessage('Waits for Sales_Frontend_Json->dispatchDocument.')
-                )
-                // // @TODO other dispatchTypes
-                // await Promise.allSettled(promises)
-                // await Ext.MessageBox.alert(
-                //     app.formatMessage('Manual Dispatch'),
-                //     app.formatMessage('Dispatch documents where created, please download and dispatch manually.')
-                // )
-                // setDispatched(dispatchedConfig)
-
             },
             menu: [new AbstractAction({
                 documentType: type,
@@ -292,7 +324,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                             dispatch_date: new Date(),
                                             dispatch_transport: 'Sales_Model_EDocument_Dispatch_Manual',
                                             dispatch_report: app.formatMessage('Manually dispatched without evaluating the configured dispatch type'),
-                                            type: 'start'
+                                            type: 'success'
                                         },
                                         type: 'attachment'
                                     })

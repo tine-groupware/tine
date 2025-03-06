@@ -90,7 +90,8 @@ module.exports = function() {
         runtime += '        )}).then(function() {\n';
         runtime += '          appLoadedStates[appName] = "fulfilled";\n';
         runtime += '          appResolves[appName]();\n';
-        runtime += '        }).catch(function() {\n';
+        runtime += '        }).catch(function(e) {\n';
+        runtime += '          console.error(e);\n';
         runtime += '          appLoadedStates[appName] = "rejected";\n';
         runtime += '          appRejects[appName]();\n';
         runtime += '        });\n';
