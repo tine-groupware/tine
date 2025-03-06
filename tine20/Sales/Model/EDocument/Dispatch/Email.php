@@ -26,10 +26,6 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         $_definition[self::FIELDS][self::FLD_EMAIL] = [
             self::TYPE              => self::TYPE_STRING,
             self::LABEL             => 'Email', // _('Email')
-            self::VALIDATORS        => [
-                Zend_Filter_Input::ALLOW_EMPTY => false,
-                Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
-            ],
         ];
     }
 
@@ -44,6 +40,15 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchIdToUse,
         ]);
+
+        if (!$this->{self::FLD_EMAIL}) {
+            if (!$document->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_EMAIL}) {
+                return false;
+            }
+            $email = $document->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_EMAIL};
+        } else {
+            $email = $this->{self::FLD_EMAIL};
+        }
 
         if (null === $dispatchId) {
             /** @var Sales_Controller_Document_Abstract $docCtrl */
@@ -88,7 +93,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         $msg = new Felamimail_Model_Message([
             'account_id' => $fmAccountId,
             'subject' => 'dispatch',
-            'to' => $this->{self::FLD_EMAIL},
+            'to' => $email,
             'body' => 'see document attached',
             'attachments' => $attachments,
         ], true);
