@@ -122,7 +122,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} = $min;
         }
         if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} || (null !== $max &&
-                $max->isEarlier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
+                $max->isLater($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
             $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} = $max;
         }
     }
