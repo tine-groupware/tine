@@ -3,10 +3,10 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import './TracDialog'
+import './TrackDialog'
 
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
@@ -24,7 +24,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             },
             async handler(cmp) {
                 let record = this.initialConfig.selections[0]
-                Tine.Sales.Document.TracDialog.openWindow({
+                Tine.Sales.Document.TrackDialog.openWindow({
                     documentModel: recordClass.getPhpClassName(),
                     document: {... record.data},
                 })
