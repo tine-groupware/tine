@@ -118,11 +118,11 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }, null);
 
         if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} || (null !== $min &&
-                $min->isEalier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START}))) {
+                $min->isEarlier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START}))) {
             $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} = $min;
         }
         if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} || (null !== $max &&
-                $max->isEalier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
+                $max->isEarlier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
             $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} = $max;
         }
     }
