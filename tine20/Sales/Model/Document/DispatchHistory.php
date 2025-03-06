@@ -31,6 +31,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
     public const FLD_DISPATCH_REPORT = 'dispatch_report';
     public const FLD_TYPE = 'type';
     public const FLD_DISPATCH_ID = 'dispatch_id';
+    public const FLD_PARENT_DISPATCH_ID = 'parent_dispatch_id';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -38,7 +39,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 3,
+        self::VERSION                       => 4,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
         self::HAS_ATTACHMENTS               => true,
@@ -153,6 +154,13 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_PARENT_DISPATCH_ID        => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::NULLABLE                      => true,
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],

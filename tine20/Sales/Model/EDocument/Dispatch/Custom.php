@@ -48,10 +48,10 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
 
     protected static $_configurationObject = null;
 
-    public function dispatch(Sales_Model_Document_Abstract $document, ?string $dispatchId = null): bool
+    public function dispatch(Sales_Model_Document_Abstract $document, ?string $parentDispatchId = null): bool
     {
-        if (null !== $dispatchId) {
-            throw new Tinebase_Exception_UnexpectedValue('dispatchId needs to be null');
+        if (null !== $parentDispatchId) {
+            throw new Tinebase_Exception_UnexpectedValue('parentDispatchId needs to be null');
         }
         $dispatchId = Tinebase_Record_Abstract::generateUID();
 
