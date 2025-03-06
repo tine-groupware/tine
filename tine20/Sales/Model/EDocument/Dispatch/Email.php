@@ -29,16 +29,17 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         ];
     }
 
-    public function dispatch(Sales_Model_Document_Abstract $document, ?string $dispatchId = null): bool
+    public function dispatch(Sales_Model_Document_Abstract $document, ?string $parentDispatchId = null): bool
     {
-        $dispatchIdToUse = $dispatchId ?? Tinebase_Record_Abstract::generateUID();
+        $dispatchId = Tinebase_Record_Abstract::generateUID();
         $dispatchHistory = new Sales_Model_Document_DispatchHistory([
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
             Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
-            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchIdToUse,
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
+            Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
         ]);
 
         if (!$this->{self::FLD_EMAIL}) {
@@ -50,7 +51,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             $email = $this->{self::FLD_EMAIL};
         }
 
-        if (null === $dispatchId) {
+        if (null === $parentDispatchId) {
             /** @var Sales_Controller_Document_Abstract $docCtrl */
             $docCtrl = $document::getConfiguration()->getControllerInstance();
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
@@ -109,11 +110,12 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
             Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS,
-            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchIdToUse,
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
+            Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
         ]);
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
-        if (null === $dispatchId) {
+        if (null === $parentDispatchId) {
             /** @var Sales_Controller_Document_Abstract $docCtrl */
             $docCtrl = $document::getConfiguration()->getControllerInstance();
             /** @var Sales_Model_Document_Abstract $document */
