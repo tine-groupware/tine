@@ -316,10 +316,28 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             } else {
                 self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $validators);
             }
-            self::$_inputFilters[$keyName]->addValidatorPrefixPath('', dirname(dirname(__DIR__)));
+            $defaultFilter = [];
+            foreach ($filters as $property => $f) {
+                foreach (is_array($f) ? $f : [$f]  as $filter) {
+                    if ($filter instanceof Tinebase_Record_Filter_DefaultValue) {
+                        $defaultFilter[$property] = $filter;
+                        continue 2;
+                    }
+                }
+            }
+            self::$_inputFilters[$keyName . '#default'] = $defaultFilter;
         }
 
         return self::$_inputFilters[$keyName];
+    }
+
+    /**
+     * @param string|null $field
+     * @return array<string, Tinebase_Record_Filter_DefaultValue>
+     */
+    protected static function _getDefaultFilter(?string $field = null): array
+    {
+        return self::$_inputFilters[static::class . $field . '#default'];
     }
 
     public function setId($_id): self
@@ -464,6 +482,12 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             // set $this->_data with the filtered values
             $this->_data  = $inputFilter->getUnescaped();
             $this->_isValidated = true;
+
+            foreach (static::_getDefaultFilter() as $property => $filter) {
+                if (empty($this->_data[$property] ?? null)) {
+                    $this->_data[$property] = $filter->applyDefault($property, $this);
+                }
+            }
 
             return true;
         }
