@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -34,10 +34,11 @@ class Zend_AllTests
     public static function suite()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Test for Zend rewritten stuff');
+        $suite->addTestSuite('Zend_Db_SelectTest');
+        $suite->addTestSuite('Zend_FilterTest');
+        $suite->addTestSuite('Zend_Ldap_ConvertTest');
         $suite->addTestSuite('Zend_Translate_Adapter_GettextPoTest');
         $suite->addTestSuite('Zend_Translate_TranslateTest');
-        $suite->addTestSuite('Zend_Ldap_ConvertTest');
-        $suite->addTestSuite('Zend_Db_SelectTest');
         return $suite;
     }
 }
