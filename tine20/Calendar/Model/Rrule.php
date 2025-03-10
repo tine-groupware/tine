@@ -848,21 +848,32 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param  Tinebase_Record_RecordSet    $_exceptions
      * @return array
      */
-    public static function getExceptionsRecurIds($_event, $_exceptions)
+    public static function getExceptionsRecurIds($_event, $_exceptions): array
     {
         $recurIds = $_exceptions->recurid;
         
         if (! empty($_event->exdate)) {
             $exdates = is_array($_event->exdate) ? $_event->exdate : array($_event->exdate);
             foreach ($exdates as $exdate) {
-                $recurIds[] = $_event->uid . '-' . $exdate->toString(Tinebase_Record_Abstract::ISO8601LONG);
+                if ($exdate instanceof Tinebase_DateTime) {
+                    $date = $exdate->toString(Tinebase_Record_Abstract::ISO8601LONG);
+                } else if ($exdate instanceof Calendar_Model_Event) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . " got Event exdate - expected DateTime");
+                    }
+                    $date = $exdate->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument('invalid exdate');
+                }
+                $recurIds[] = $_event->uid . '-' . $date;
             }
         }
         return array_values($recurIds);
     }
     
     /**
-     * gets an cloned event to be used for new recur events
+     * gets a cloned event to be used for new recur events
      * 
      * @param  Calendar_Model_Event         $_event
      * @return Calendar_Model_Event         $_event
@@ -871,10 +882,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     {
         $clone = clone $_event;
         $clone->setId(NULL);
-        //unset($clone->exdate);
-        //unset($clone->rrule);
-        //unset($clone->rrule_until);
-        
         return $clone;
     }
     
@@ -891,9 +898,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     protected static function _computeRecurDaily($_event, $_rrule, $_exceptionRecurIds, $_from, $_until, $_recurSet)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . " from: $_from until: $_until");
-        
         $computationStartDate = clone $_event->dtstart;
         $endDate = ($_event->rrule_until instanceof DateTime
                 && $_until instanceof Tinebase_DateTime
