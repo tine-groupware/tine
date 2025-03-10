@@ -65,7 +65,6 @@ class Felamimail_Model_Signature extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_STRING,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::DEFAULT_VALUE => null
                 ],
                 self::LENGTH => 40,
                 self::SHY => true,
