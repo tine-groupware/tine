@@ -51,11 +51,10 @@ class Zend_FilterTest extends \PHPUnit\Framework\TestCase
 
         $inputFilter = new Zend_Filter_Input([], [
             'unittest' => [
-                Zend_Filter_Input::DEFAULT_VALUE => fn() => new stdClass,
+                Zend_Filter_Input::DEFAULT_VALUE => ['sprintf', 'result'],
             ]
         ], []);
         $this->assertTrue($inputFilter->isValid());
-        $this->assertArrayHasKey('unittest', ($result = $inputFilter->getUnescaped()));
-        $this->assertInstanceOf(stdClass::class, $result['unittest']);
+        $this->assertSame(['unittest' => 'result'], $inputFilter->getUnescaped());
     }
 }
