@@ -2355,6 +2355,11 @@ class Tinebase_Core
         return $userAgent;
     }
 
+    public static function createInstance(string $class, ...$args): object
+    {
+        return new $class(...$args);
+    }
+
     /**
      * get http client
      *

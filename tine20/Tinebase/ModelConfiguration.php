@@ -2121,6 +2121,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 }
                 break;
             case self::TYPE_DYNAMIC_RECORD:
+                if ($fieldDef[self::CONFIG][self::SET_DEFAULT_INSTANCE] ?? false) {
+                    $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_DynamicRecordDefault;
+                }
                 if (!isset($this->_converters[$fieldKey])) {
                     if (isset($fieldDef[self::CONFIG][self::REF_MODEL_FIELD]) || isset($fieldDef[self::CONFIG][self::MODEL_NAME])) {
                         $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_DynamicRecord(

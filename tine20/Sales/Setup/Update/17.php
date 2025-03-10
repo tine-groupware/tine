@@ -952,11 +952,19 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         if ($this->_backend->tableExists(Sales_Model_Debitor::TABLE_NAME)) {
             if ($this->_backend->columnExists('edocument_transport', Sales_Model_Debitor::TABLE_NAME)) {
                 $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME
-                    . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Manual\'');
+                    . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Email\'');
+            }
+            if (!$this->_backend->columnExists('edocument_dispatch_config', Sales_Model_Debitor::TABLE_NAME)) {
+                $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME
+                    . ' ADD COLUMN edocument_dispatch_config longtext NOT NULL');
             }
             if ($this->_backend->columnExists('edocument_transport', Sales_Model_Document_Debitor::TABLE_NAME)) {
                 $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME
-                    . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Manual\'');
+                    . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Email\'');
+            }
+            if (!$this->_backend->columnExists('edocument_dispatch_config', Sales_Model_Document_Debitor::TABLE_NAME)) {
+                $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME
+                    . ' ADD COLUMN edocument_dispatch_config longtext NOT NULL');
             }
 
             foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
