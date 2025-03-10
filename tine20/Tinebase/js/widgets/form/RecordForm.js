@@ -84,7 +84,7 @@ Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
 
     let fieldDefs = _.sortBy(_.reduce(fieldNames, function(fieldDefinitions, fieldName) {
         var fieldDefinition = _.cloneDeep(modelConfig.fields[fieldName]);
-        if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0) {
+        if (fieldDefinition && fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0) {
             _.set(fieldDefinition, 'uiconfig.sorting', _.get(fieldDefinition, 'uiconfig.sorting', fieldDefinitions.length * 10));
             fieldDefinitions.push(fieldDefinition);
         }
