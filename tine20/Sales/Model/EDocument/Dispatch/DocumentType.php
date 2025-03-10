@@ -22,6 +22,12 @@ class Sales_Model_EDocument_Dispatch_DocumentType extends Tinebase_Record_NewAbs
         self::IS_METADATA_MODEL_FOR     => self::FLD_DOCUMENT_TYPE,
 
         self::FIELDS                    => [
+            self::ID                        => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::DEFAULT_VALUE => [[Tinebase_Record_Abstract::class, 'generateUID']],
+                ],
+            ],
             self::FLD_DOCUMENT_TYPE         => [
                 self::TYPE                      => self::TYPE_KEY_FIELD,
                 self::LABEL                     => 'Document Type', // _('Document Type')

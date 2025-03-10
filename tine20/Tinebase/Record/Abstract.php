@@ -579,6 +579,12 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             // set $this->_properties with the filtered values
             $this->_properties  = $inputFilter->getUnescaped();
             $this->_isValidated = true;
+
+            foreach (static::_getDefaultFilter() as $property => $filter) {
+                if (empty($this->_properties[$property] ?? null)) {
+                    $this->_properties[$property] = $filter->applyDefault($property, $this);
+                }
+            }
             
             return true;
         }
@@ -736,7 +742,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     protected function _getFilter($field = null)
     {
-        $keyName = get_class($this) . $field;
+        $keyName = static::class . $field;
         
         if (! (isset(self::$_inputFilters[$keyName]) || array_key_exists($keyName, self::$_inputFilters))) {
             if ($field !== null) {
@@ -745,12 +751,31 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 
                 self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $validators);
             } else {
-                self::$_inputFilters[$keyName] = new Zend_Filter_Input($this->_filters, $this->_validators);
+                $filters = $this->_filters;
+                self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $this->_validators);
             }
-            self::$_inputFilters[$keyName]->addValidatorPrefixPath('', dirname(dirname(__DIR__)));
+            $defaultFilter = [];
+            foreach ($filters as $property => $f) {
+                foreach (is_array($f) ? $f : [$f] as $filter) {
+                    if ($filter instanceof Tinebase_Record_Filter_DefaultValue) {
+                        $defaultFilter[$property] = $filter;
+                        continue 2;
+                    }
+                }
+            }
+            self::$_inputFilters[$keyName . '#default'] = $defaultFilter;
         }
         
         return self::$_inputFilters[$keyName];
+    }
+
+    /**
+     * @param string|null $field
+     * @return array<string, Tinebase_Record_Filter_DefaultValue>
+     */
+    protected static function _getDefaultFilter(?string $field = null): array
+    {
+        return self::$_inputFilters[static::class . $field . '#default'];
     }
     
     /**
