@@ -164,7 +164,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.getForm().findField('service_period_start')?.setValue(minPosServiceStart);
             servicePeriodAdopted = true
         }
-        const serviceEnd = this.getForm().findField('service_period_start')?.getValue();
+        const serviceEnd = this.getForm().findField('service_period_end')?.getValue();
         const maxServiceEnd = _.reduce(positions, (maxDate, pos) => {
             return !maxDate ? pos.service_period_end : (pos.service_period_end > maxDate ? pos.service_period_end : maxDate)
         }, null)
