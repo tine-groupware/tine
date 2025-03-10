@@ -215,6 +215,7 @@ class Tinebase_ModelConfiguration_Const {
     public const RESPONSIVE_LEVEL = 'responsiveLevel';
     public const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
+    public const SET_DEFAULT_INSTANCE = 'setDefaultInstance';
     /**
      * frontends do not show this field in grids per default
      */
