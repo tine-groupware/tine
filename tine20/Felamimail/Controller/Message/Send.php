@@ -109,7 +109,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
             $saveInSent = $account->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT
             || $account->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE
-            || sizeof($_message->sent_copy_folder) > 0;
+            || ($_message->sent_copy_folder && sizeof($_message->sent_copy_folder) > 0);
 
             $this->_sendMailViaTransport($mail, $account, $_message, $saveInSent);
         } catch (Exception $e) {
