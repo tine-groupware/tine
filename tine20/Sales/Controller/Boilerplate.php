@@ -128,7 +128,7 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
         }
     }
 
-    public function getApplicableBoilerplates(string $type, ?Tinebase_DateTime $date = null, ?string $customerId = null, ?string $category = null, ?string $language = null): Tinebase_Record_RecordSet
+    public function getApplicableBoilerplates(string $type, ?Tinebase_DateTime $date = null, ?string $customerId = null, ?string $category = null, ?string $language = null, ?bool $isDefault = null): Tinebase_Record_RecordSet
     {
         $defaultLang = Sales_Config::getInstance()->{Sales_Config::LANGUAGES_AVAILABLE}->default;
         $filter = [
@@ -176,6 +176,10 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
             ];
         } else {
             $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null];
+        }
+
+        if (null !== $isDefault) {
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_IS_DEFAULT, 'operator' => 'equals', 'value' => $isDefault];
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

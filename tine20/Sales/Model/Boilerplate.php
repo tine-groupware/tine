@@ -31,6 +31,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
     public const FLD_MODEL = 'model';
     public const FLD_NAME = 'name';
     public const FLD_UNTIL = 'until';
+    public const FLD_IS_DEFAULT = 'is_default';
 
     public const MODEL_NAME_PART = 'Boilerplate';
     public const TABLE_NAME = 'sales_boilerplate';
@@ -41,7 +42,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 2,
+        self::VERSION => 3,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -173,6 +174,11 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_IS_DEFAULT        => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::LABEL                 => 'Is Default', // _('Is Default'),
+                self::DEFAULT_VAL           => false,
             ],
         ]
     ];

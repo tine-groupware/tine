@@ -84,6 +84,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $this->_inspectBeforeForBookedRecord($_record);
         }
 
+        $this->_inspectDefaultBoilerplates($_record);
+
         parent::_inspectBeforeCreate($_record);
 
         // important! after _inspectDenormalization in parent::_inspectBeforeCreate
@@ -91,6 +93,19 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
 
         $this->_inspectServicePeriod($_record);
+    }
+
+    protected function _inspectDefaultBoilerplates(Sales_Model_Document_Abstract $document): void
+    {
+        if (null !== $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES}) {
+            return;
+        }
+        $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES} =
+            Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates(
+                type: $document::class,
+                language: $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE},
+                isDefault: true,
+            );
     }
 
     protected function _inspectServicePeriod(Sales_Model_Document_Abstract $document): void

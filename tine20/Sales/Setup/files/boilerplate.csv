@@ -1,0 +1,41 @@
+model,name,boilerplate,documentCategory,language,is_default
+Sales_Model_Document_Offer,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unser Angebot {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Order,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unsere Auftragsbestätigung {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Delivery,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unseren Lieferschein {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Invoice,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unsere Rechnung {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} vom {{ date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Offer,Email,"Dear Sir or Madam,
+
+please find attached our offer {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
+Sales_Model_Document_Order,Email,"Dear Sir or Madam,
+
+please find attached our order confirmation {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
+Sales_Model_Document_Delivery,Email,"Dear Sir or Madam,
+
+please find attached our delivery bill {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
+Sales_Model_Document_Invoice,Email,"Dear Sir or Madam,
+
+please find attached our invoice {{ document_number }}{% if document_title %} ""{{ document_title }}""{% endif %}{% if date %} from {{ date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1

@@ -22,6 +22,7 @@ class Sales_Import_ContractTest extends TestCase
     {
         parent::tearDown();
         self::clear('Sales', 'Contract');
+        self::clear('Sales', 'Boilerplate', [['field' => 'is_default', 'operator' => 'equals', 'value' => false]]);
     }
 
     public function testImportDemoData()
