@@ -844,39 +844,41 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
-    const REPLICATION_MASTER = 'replicationMaster';
+    public const REPLICATION_MASTER = 'replicationMaster';
 
     /**
      * @var string
      */
-    const REPLICATION_SLAVE = 'replicationSlave';
+    public const REPLICATION_SLAVE = 'replicationSlave';
 
     /**
      * @var string
      */
-    const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
+    public const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
 
-    const REPLICATION_IS_PRIMARY = 'replicationIsPrimary';
-
-    /**
-     * @var string
-     */
-    const STATUS_INFO = 'statusInfo';
+    public const REPLICATION_IS_PRIMARY = 'replicationIsPrimary';
 
     /**
      * @var string
      */
-    const MASTER_URL = 'masterURL';
+    public const STATUS_INFO = 'statusInfo';
 
     /**
      * @var string
      */
-    const MASTER_USERNAME = 'masterUsername';
+    public const MASTER_URL = 'masterURL';
 
     /**
      * @var string
      */
-    const MASTER_PASSWORD = 'masterPassword';
+    public const MASTER_USERNAME = 'masterUsername';
+
+    /**
+     * @var string
+     */
+    public const MASTER_PASSWORD = 'masterPassword';
+
+    public const NUM_OF_MODLOGS = 'numOfModlogs';
 
     /**
      * var string
@@ -1483,7 +1485,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
                 self::ERROR_NOTIFICATION_LIST   => array(
                     self::TYPE => Tinebase_Config::TYPE_ARRAY,
-                )
+                ),
+                // number of mod logs to apply in each run
+                self::NUM_OF_MODLOGS => [
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 100,
+                ]
             )
         ),
         self::FULLTEXT => array(

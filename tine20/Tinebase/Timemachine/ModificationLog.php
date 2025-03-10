@@ -1594,8 +1594,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
             try {
                 /** @noinspection PhpUndefinedMethodInspection */
-                $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
-                /* TODO make the amount above configurable  */
+                $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId,
+                    $slaveConfiguration->{Tinebase_Config::NUM_OF_MODLOGS});
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 throw new Tinebase_Exception_Backend('could not getReplicationModificationLogs from master');
@@ -1737,6 +1737,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      */
     public static function defaultApply(Tinebase_Model_ModificationLog $_modification, $_controller)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Applying change ' . $_modification->change_type . ' to ' . $_modification->record_type
+                . ' ID: ' . $_modification->record_id);
+        }
+
         $oldValue = $_controller->doContainerACLChecks(false);
         $raii = new Tinebase_RAII(function() use($_controller, $oldValue) {
             $_controller->doContainerACLChecks($oldValue);
