@@ -959,13 +959,9 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
-            foreach ([
-                        'email'     => Sales_Model_EDocument_Dispatch_Email::class,
-                        'manual'    => Sales_Model_EDocument_Dispatch_Manual::class,
-                        'upload'    => Sales_Model_EDocument_Dispatch_Upload::class,
-                    ] as $old => $new) {
-                $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . $new . '" WHERE edocument_dispatch_type = "' . $old . '"');
-            }
+            if (!$this->_backend->tableExists($table)) continue;
+            $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Manual::class . '" WHERE edocument_dispatch_type = "download"');
+            $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Email::class . '", edocument_dispatch_config = "{\\"document_types\\":[{\\"document_type\\":\\"paperslip\\"},{\\"document_type\\":\\"ubl\\"}]}" WHERE edocument_dispatch_type = "email"');
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.32', self::RELEASE017_UPDATE032);
