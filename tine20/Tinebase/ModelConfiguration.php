@@ -939,8 +939,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * @var array
     */
     protected $_validatorMapping = array(
-        self::TYPE_RECORD    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'relation'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'hexcolor'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '#969696', Zend_Filter_Input::VALIDATE => array('Regex' => '/^#[0-9a-fA-F]{6}$/'))
     );
 
@@ -1104,7 +1102,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 'shy' => true,
                 'sortable' => false,
                 'type' => 'custom',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true)
             ];
         }
 
@@ -1119,7 +1117,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     self::MODEL_NAME => Tinebase_Model_Relation::MODEL_NAME_PART,
                 ],
                 self::FILTER_DEFINITION => [],
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit' => ! $this->_copyRelations
             ];
         }
@@ -1227,7 +1225,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 'label' => 'Tags',
                 'sortable' => false,
                 'type' => 'tag', 
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'useGlobalTranslation' => TRUE,
                 'filterDefinition' => array(
                     'key'     => 'tag',

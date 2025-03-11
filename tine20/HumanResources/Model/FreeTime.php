@@ -171,7 +171,7 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
             ),
             
            'freedays' => array(
-               'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+               'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                'label' => 'Free Days', // _('Free Days')
                'type'       => 'records',
                'config'     => array(

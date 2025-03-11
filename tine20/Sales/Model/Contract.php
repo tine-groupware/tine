@@ -269,7 +269,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 )
             ),
             'products' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Products', // _('Products')
                 'type'       => 'records', // be careful: records type has no automatic filter definition!
                 'config'     => array(

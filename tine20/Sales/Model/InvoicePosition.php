@@ -67,7 +67,7 @@ class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
                 ],
             ),
             'invoice_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label' => NULL,
                 'type'  => 'record',
                 'config' => array(

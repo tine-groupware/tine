@@ -260,7 +260,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::LENGTH                    => 64,
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::NULLABLE                  => true,
                 self::UNSIGNED                  => true,
