@@ -3693,6 +3693,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' .
                         $_modification->change_type);
             }
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            // we skip the rrule problems here
+            Tinebase_Exception::log($teuv);
         } finally {
             $this->_doContainerACLChecks = $oldDoContainerAcl;
             $this->_sendNotifications = $oldSendNotifications;
