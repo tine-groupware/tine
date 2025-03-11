@@ -193,7 +193,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'nullable' => true,
             ],
             'lists' => [
-                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
                 'label'      => 'Lists', // _('Lists')
                 'type'       => 'records',
                 'config'     => [

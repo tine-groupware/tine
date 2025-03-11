@@ -57,12 +57,12 @@ class Phone_Model_MyPhone extends Tinebase_Record_Abstract
              ),
              // TODO: resolve them the modern way, now still done in fe-json
              'settings' => array(
-                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                  'label'      => 'Settings', // _('Settings')
              ),
              // TODO: resolve them the modern way, now still done in fe-json
              'lines' => array(
-                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                  'label'      => 'Lines', // _('Lines')
              ),
             'description'           => array(
