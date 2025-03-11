@@ -313,15 +313,15 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'resetTransactionTransactionable']);
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'restartTransaction']);
         try {
             Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-            $this->fail('expect register on commit callback to throw exception');
-        } catch (Tinebase_Exception $e) {
-            $this->assertSame('unittest', $e->getMessage());
         } finally {
-            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
         }
+
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
 
@@ -516,6 +516,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
     public function testInvoiceStorno()
     {
+        $this->clear(Sales_Config::APP_NAME, Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART);
+
         $customer = $this->_createCustomer();
         $product1 = $this->_createProduct();
         $product2 = $this->_createProduct();
@@ -596,21 +598,20 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $app->status = Tinebase_Application::DISABLED;
         Tinebase_Application::getInstance()->updateApplication($app);
 
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'resetTransactionTransactionable']);
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'restartTransaction']);
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
         try {
             Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-            $this->fail('expect register on commit callback to throw exception');
-        } catch (Tinebase_Exception $e) {
-            $this->assertSame('unittest', $e->getMessage());
         } finally {
-            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            Tinebase_TransactionManager::getInstance()->resetTransactions();
+            $this->resetTransactionTransactionable();
+            $this->restartTransaction();
         }
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
-
-
 
         $this->assertNotNull($attachment = $invoice->attachments->find('name', $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
         $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
@@ -622,6 +623,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ->getLastRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'resetTransactionTransactionable']);
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'restartTransaction']);
 
         /** @var Sales_Model_Document_Invoice $storno */
         $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
@@ -637,14 +640,11 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ]));
 
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
         try {
             Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-            $this->fail('expect register on commit callback to throw exception');
-        } catch (Tinebase_Exception $e) {
-            $this->assertSame('unittest', $e->getMessage());
         } finally {
-            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
         }
         Tinebase_Record_Expander_DataRequest::clearCache();
         $storno = Sales_Controller_Document_Invoice::getInstance()->get($storno->getId());
