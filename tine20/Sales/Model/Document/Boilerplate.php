@@ -33,7 +33,6 @@ class Sales_Model_Document_Boilerplate extends Sales_Model_Boilerplate
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
         $_definition[self::TABLE][self::INDEXES][self::FLD_DOCUMENT_ID] = [
@@ -45,9 +44,6 @@ class Sales_Model_Document_Boilerplate extends Sales_Model_Boilerplate
 
         $_definition[self::EXPOSE_JSON_API] = true;
 
-        if (!isset($_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
-            $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];
-        }
         /* sadly not possible
          * $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE][self::FLD_DOCUMENT_ID] =
             [
