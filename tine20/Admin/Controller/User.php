@@ -191,7 +191,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $customTemplate = $context['sms-new-password-template'] ?? $context['clientData']['sms-new-password-template'] ?? null;
 
         if (!empty($_password) && !empty($smsPhoneNumber)) {
-            $mobilePhoneNumber = rawurldecode($smsPhoneNumber);
+            $mobilePhoneNumber = Addressbook_Model_Contact::normalizeTelephoneNum($smsPhoneNumber);
             $smsAdapterConfigs = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}
                 ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS};
 
