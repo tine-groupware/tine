@@ -268,6 +268,8 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_ORDERCONFIRMATIONS_MODULE = 'orderConfirmationsModule';
 
+    const DISPATCH_HISTORY_TYPES = 'dispatchHistoryType';
+
     const ATTACHED_DOCUMENT_TYPES = 'attachedDocumentTypes';
     const ATTACHED_DOCUMENT_TYPES_PAPERSLIP = 'paperslip';
     const ATTACHED_DOCUMENT_TYPES_UBL = 'ubl';
@@ -310,6 +312,39 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ], [
                         'id' => self::ATTACHED_DOCUMENT_TYPES_SUPPORTING_DOC,
                         'value' => 'Supporting Document', //_('Supporting Document')
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+            ],
+        ],
+        self::DISPATCH_HISTORY_TYPES => [
+            self::LABEL              => 'Attached Document Types', //_('Attached Document Types')
+            self::DESCRIPTION        => 'Attached Document Types',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
+                        'value' => 'Start', //_('Start')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_WAIT_FOR_FEEDBACK,
+                        'value' => 'Waiting for feedback', //_('Waiting for feedback')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS,
+                        'value' => 'Success', //_('Success')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_FAIL,
+                        'value' => 'Failure', //_('Failure')
                         'icon' => null,
                         'system' => true,
                     ],
