@@ -69,16 +69,13 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                                         'Int',
                                         'default'       => 0            ),
         // can be array for multiple sort rows
-        'sort'                 => array('allowEmpty'    => true,
-                                        'default'       => NULL         ),
+        'sort'                 => array('allowEmpty'    => true,),
         // can be array of sort dirs for multiple sort rows
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
                                         'default'       => 'ASC'        ),
-        'model'                => array('allowEmpty'    => true,
-                                        'default'       => NULL         ),
-        'group'                => array('allowEmpty'    => true,
-                                        'default'       => NULL         ),
+        'model'                => array('allowEmpty'    => true),
+        'group'                => array('allowEmpty'    => true),
     );
 
     protected static $context = [];

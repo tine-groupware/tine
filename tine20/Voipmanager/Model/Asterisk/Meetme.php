@@ -50,7 +50,7 @@ class Voipmanager_Model_Asterisk_Meetme extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'confno'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'pin'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'adminpin'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

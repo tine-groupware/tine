@@ -441,9 +441,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*))
         ),
         'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'adr_lon'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'adr_lat'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_lon'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_lat'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'location'             => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'location_record'      => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
         'organizer'            => array(Zend_Filter_Input::ALLOW_EMPTY => false,        ),
@@ -494,7 +494,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => false      ),
 
         // relations
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         
         // grant helper fields

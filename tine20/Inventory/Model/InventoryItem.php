@@ -153,7 +153,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'hidden'     => true,
                 'type'       => 'record',
                 'nullable'   => true,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => null),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'config' => array(
                     'appName'     => Tinebase_Config::APP_NAME,
                     'modelName'   => Tinebase_Model_CostCenter::MODEL_NAME_PART,
