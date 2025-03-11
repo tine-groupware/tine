@@ -153,3 +153,7 @@
 .SalesEDocument_Dispatch_Custom {
     background-image:url(../../images/icon-set/icon_filemanager_bearbeiten.svg) !important;
 }
+
+.sales-complete-dispatch {
+    background-image:url(../../images/icon-set/icon_tasks.svg) !important;
+}

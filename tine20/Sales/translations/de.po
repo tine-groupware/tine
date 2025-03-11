@@ -398,9 +398,6 @@ msgstr "Nummer mit führender Null auffüllen"
 msgid "Fill the number with leading zero"
 msgstr "Nummer mit führender Null auffüllen"
 
-msgid "Debitor Default Payment Means"
-msgstr ""
-
 msgid "Payment Method"
 msgstr "Zahlungsart"
 
@@ -458,9 +455,6 @@ msgstr ""
 msgid "Datev recipient emails for invoice"
 msgstr ""
 
-msgid "Payment Means Identifier Template"
-msgstr ""
-
 msgid "VAT Procedures"
 msgstr "Mehrwertsteuer-Verfahren"
 
@@ -475,9 +469,6 @@ msgstr "Nicht steuerpflichtig"
 
 msgid "Reverse charge"
 msgstr "Umkehrung der Steuerschuldnerschaft"
-
-msgid "Export outside EU"
-msgstr ""
 
 msgid "Reverse Charge Template"
 msgstr "Schablone für Umkehr der Steuerschuld"
@@ -514,12 +505,6 @@ msgstr "Lieferantenmodul"
 
 msgid "Purchase Invoice Module"
 msgstr "Eingangsrechnungsmodul"
-
-msgid "Contact person filter"
-msgstr "Kontaktperson Filter"
-
-msgid "Configure filter for customer contacts via container path filter"
-msgstr "Filter für Kundenkontakte über den Contianer Path Filter"
 
 msgid "Legacy (non-document) Offers)"
 msgstr "Angebote (alt, nicht dokumententbaiert)"
@@ -1032,11 +1017,6 @@ msgstr ""
 "Die Dokumente für den Beleg-Versandt wurden erstellt. Bitte laden sie diese "
 "herunter und versenden sie diese manuell."
 
-msgid "Payment Means"
-msgid_plural "Payment Means"
-msgstr[0] "Zahlungsmethoden"
-msgstr[1] "Zahlungsmethoden"
-
 msgid "Generic"
 msgstr "Generell"
 
@@ -1074,12 +1054,6 @@ msgstr "Belegverfolgung zu { title }"
 
 msgid "Expand Positions"
 msgstr "Positionen ausklappen"
-
-msgid "Validate eDocument"
-msgstr ""
-
-msgid "Close"
-msgstr ""
 
 msgid "Invoice Number"
 msgstr "Rechnungsnummer"
@@ -1284,9 +1258,6 @@ msgid_plural "Purchase Invoices"
 msgstr[0] "Eingangsrechnung"
 msgstr[1] "Eingangsrechnungen"
 
-msgid "VAT Procedure"
-msgstr "Mehrwertsteuer-Verfahren"
-
 msgid "Overdue date"
 msgstr "Überfälligkeits Datum"
 
@@ -1366,24 +1337,6 @@ msgstr "Bis"
 msgid "GENDER_Contract"
 msgstr "male"
 
-msgid "Buyer Reference"
-msgstr "Käuferreferenz / Leitweg-ID"
-
-msgid "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
-msgstr "Ein vom Erwerber zugewiesener und für interne Lenkungszwecke benutzter Bezeichner (BT-10 [EN 16931])."
-
-msgid "Purchase Order Reference"
-msgstr "Bestellnummer"
-
-msgid "An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931])."
-msgstr "Eine vom Erwerber ausgegebene Kennung für eine referenzierte Bestellung (BT-13 [EN 16931])."
-
-msgid "Project Reference"
-msgstr "Projektnummer"
-
-msgid "The identifier of a project to which the invoice refers (BT-11 [EN 16931])."
-msgstr "Die Kennung eines Projektes, auf das sich die Rechnung bezieht (BT-11 [EN 16931])."
-
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
@@ -1408,6 +1361,9 @@ msgstr "Hat Rechnungen"
 msgid "Has Deliveries"
 msgstr "Hat Lieferungen"
 
+msgid "VAT Procedure"
+msgstr "Mehrwertsteuer-Verfahren"
+
 msgid "GENDER_Debitor"
 msgstr "male"
 
@@ -1427,11 +1383,8 @@ msgstr "Lieferanschriften"
 msgid "Billing Addresses"
 msgstr "Rechnungsanschriften"
 
-msgid "Seller identifier"
-msgstr "Verkäufer Kennung"
-
-msgid "An identifier (usually assigned by the purchaser) of the seller, such as the vendor number for the funds management procedure or the supplier number for the ordering system (BT-29 [EN 16931])."
-msgstr "Eine (i. d. R. vom Erwerber vergebene) Kennung des Verkäufers, wie z. B. die Kreditorennummer für das Mittelbewirtschaftungsverfahren oder die Lieferantennummer für das Bestellsystem (BT-29 [EN 16931])."
+msgid "Buyer Reference"
+msgstr "Kundenreferenz / Leitweg-ID"
 
 msgid "Electronic Invoice Type"
 msgstr "Elektronischer Rechnungstyp"
@@ -1560,9 +1513,6 @@ msgstr "Umsatzsteuer Nummer"
 msgid "Bank Accounts"
 msgstr "Bankkonten"
 
-msgid "SEPA Creditor Identification"
-msgstr ""
-
 msgid "Document"
 msgid_plural "Documents"
 msgstr[0] "Beleg"
@@ -1622,11 +1572,14 @@ msgstr "Endbetrag"
 msgid "Internal Note"
 msgstr "Interne Notiz"
 
+msgid "Project Reference"
+msgstr "Projektkennung"
+
+msgid "Purchase Order Reference"
+msgstr "Bestellnummer"
+
 msgid "Attached Documents"
 msgstr "Angehängte Dokumente"
-
-msgid "Followup"
-msgstr ""
 
 msgid "GENDER_Attached Document"
 msgstr "other"
@@ -1700,9 +1653,6 @@ msgstr "Zahlbar sofort ohne Abzug"
 #, python-brace-format
 msgid "Payable within {days} days without deduction."
 msgstr "Zahlbar innerhalb {days} Tagen ohne Abzug."
-
-msgid "Not provided by buyer"
-msgstr ""
 
 msgid "GENDER_Offer"
 msgstr "other"
@@ -1786,6 +1736,13 @@ msgstr "Einheit"
 msgid "Unit Price"
 msgstr "Einzelpreis"
 
+msgid ""
+"An identifier assigned by the acquirer and used for internal control "
+"purposes (BT-10 [EN 16931])."
+msgstr ""
+"Ein vom Erwerber zugewiesener und für interne Lenkungszwecke benutzter "
+"Bezeichner (BT-10 [EN 16931])."
+
 msgid "Position Discount Type"
 msgstr "Positionsrabatt Typ"
 
@@ -1811,6 +1768,19 @@ msgstr[1] "Lieferpositionen"
 
 msgid "GENDER_Delivery Position"
 msgstr "female"
+
+msgid ""
+"The identifier of a project to which the invoice refers (BT-11 [EN 16931])."
+msgstr ""
+"Die Kennung eines Projektes, auf das sich die Rechnung bezieht (BT-11 [EN "
+"16931])."
+
+msgid ""
+"An identifier issued by the purchaser for a referenced order (BT-13 [EN "
+"16931])."
+msgstr ""
+"Eine vom Erwerber ausgegebene Kennung für eine referenzierte Bestellung "
+"(BT-13 [EN 16931])."
 
 msgid "Invoice Position"
 msgid_plural "Invoice Positions"
@@ -1845,39 +1815,6 @@ msgstr ""
 msgid "Remark"
 msgstr "Anmerkung"
 
-msgid "GENDER_Payment Means"
-msgstr ""
-
-msgid "Config Class"
-msgstr ""
-
-msgid "GENDER_No Configuration"
-msgstr ""
-
-msgid "No Configuration"
-msgid_plural "No Configurations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "All bank accounts"
-msgstr ""
-
-msgid "GENDER_Payee Financial Account"
-msgstr ""
-
-msgid "Payee Financial Account"
-msgid_plural "Payee Financial Accounts"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "GENDER_Payment Mandate"
-msgstr ""
-
-msgid "Payment Mandate"
-msgid_plural "Payment Mandates"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "XRechnung"
 msgid_plural "XRechnungen"
 msgstr[0] ""
@@ -1895,9 +1832,6 @@ msgstr "Monat"
 msgid "GENDER_Order Confirmation"
 msgstr "female"
 
-msgid "Config"
-msgstr ""
-
 msgid "Billing Interval"
 msgstr "Mtl. Abrechnungsintervall (variabel)"
 
@@ -1906,6 +1840,18 @@ msgstr "GTIN"
 
 msgid "Shortcut"
 msgstr "Kürzel"
+
+msgid "Seller identifier"
+msgstr "Verkäufer Kennung"
+
+msgid ""
+"An identifier (usually assigned by the purchaser) of the seller, such as the "
+"vendor number for the funds management procedure or the supplier number for "
+"the ordering system (BT-29 [EN 16931])."
+msgstr ""
+"Eine (i. d. R. vom Erwerber vergebene) Kennung des Verkäufers, wie z. B. die "
+"Kreditorennummer für das Mittelbewirtschaftungsverfahren oder die "
+"Lieferantennummer für das Bestellsystem (BT-29 [EN 16931])."
 
 msgid "Default Grouping"
 msgstr "Standard Gruppierung"
@@ -2127,126 +2073,147 @@ msgstr ""
 "Gibt eine elektronische Adresse des Erwerbers an, an die eine Rechnung "
 "gesendet werden sollte (BT-49 [EN 16931])."
 
-#~ msgid "Invoice Period Start"
-#~ msgstr "Abrechnungszeitraum Start"
+msgid "Report"
+msgstr "Meldungen"
 
-#~ msgid "Invoice Period End"
-#~ msgstr "Abrechnungszeitraum Ende"
+msgid "Transport Method"
+msgstr "Transport Methode"
 
-#, python-brace-format
-#~ msgid "Creating {type} Paper Slip"
-#~ msgstr "Erzeuge Papier-{type}"
+msgid "Contact person filter"
+msgstr "Kontaktperson Filter"
 
-#~ msgid "Cannot create { type } paper slip: ({e.code}) { e.message }"
-#~ msgstr "Konnte Papier-{ type } nicht erzeugen: ({e.code}) { e.message })"
+msgid "Configure filter for customer contacts via container path filter"
+msgstr "Filter für Kundenkontakte über den Contianer Path Filter"
 
-#~ msgid "total"
-#~ msgstr "Gesamtsumme"
+msgid "Payment Means"
+msgid_plural "Payment Means"
+msgstr[0] "Zahlungsmethoden"
+msgstr[1] "Zahlungsmethoden"
 
-#~ msgid "inclusive"
-#~ msgstr "Inklusive"
+msgid "Invoice Period Start"
+msgstr "Abrechnungszeitraum Start"
 
-#~ msgid "exceeding"
-#~ msgstr "Überschreitet"
-
-#~ msgid "Create timesheet"
-#~ msgstr "Timesheet erstellen"
-
-#~ msgid "List of languages available in the sales modules."
-#~ msgstr "Liste der verfügbaren Sprachen in der Sales Anwendung."
-
-#~ msgid "Lead Cost Center"
-#~ msgstr "Hauptkostenstelle"
-
-#~ msgid "Cost Center"
-#~ msgstr "Kostenstelle"
-
-#~ msgid "Merge"
-#~ msgstr "Zusammenführen"
-
-#~ msgid "Cost Bearer"
-#~ msgstr "Kostenträger"
-
-#~ msgid "Costcenter"
-#~ msgstr "Kostenstelle"
-
-#~ msgid "Document Category"
-#~ msgstr "Beleg Kategorie"
-
-#~ msgid "All supllier records"
-#~ msgstr "Alle Lieferantendatensätze"
-
-#~ msgid "Delivery Address"
-#~ msgstr "Lieferanschrift"
-
-#~ msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceTypes } now?"
-#~ msgstr "Die Erstellung von Folge-{ targetRecordsName } ist nur für gebuchte { sourceRecordsName } erlaubt. Ausgewählte { sourceTypes } jetzt buchen?"
-
-#~ msgid "Either street or postbox is required!"
-#~ msgstr "Bitte geben Sie entweder eine Straße oder ein Postfach an!"
-
-#~ msgid "Add, edit and delete divisions."
-#~ msgstr "Abteilungen hinzufügen, bearbeiten und löschen."
-
-#~ msgid "GENDER_Cost Center"
-#~ msgstr "female"
-
-#~ msgid "All Cost Centers"
-#~ msgstr "Alle Kostenstellen"
-
-#~ msgid "All costcenter records"
-#~ msgstr "Alle Kostenstellendatensätze"
-
-#~ msgid "All Divisions"
-#~ msgstr "Alle Abteilungen"
-
-#~ msgid "All division records"
-#~ msgstr "Alle Abteilungsdatensätze"
-
-#~ msgid "Create { targetType }"
-#~ msgstr "{ targetType } erzeugen"
-
-#~ msgid "Loading..."
-#~ msgstr "Lade ..."
-
-#~ msgid "Euro (€)"
-#~ msgstr "Euro (€)"
-
-#~ msgid "Add New Cost Center"
-#~ msgstr "Neue Kostenstelle hinzufügen"
+msgid "Invoice Period End"
+msgstr "Abrechnungszeitraum Ende"
 
 #, python-brace-format
-#~ msgid "Edit {0} \"{1}\""
-#~ msgstr "{0} \"{1}\" bearbeiten"
+msgid "Creating {type} Paper Slip"
+msgstr "Erzeuge Papier-{type}"
 
-#~ msgid "Add New Billing Address"
-#~ msgstr "Neue Rechnungsanschrift Hinzufügen"
+msgid "Cannot create { type } paper slip: ({e.code}) { e.message }"
+msgstr "Konnte Papier-{ type } nicht erzeugen: ({e.code}) { e.message })"
 
-#~ msgid "Add New Delivery Address"
-#~ msgstr "Neue Lieferanschrift Hinzufügen"
+msgid "total"
+msgstr "Gesamtsumme"
 
-#~ msgid "Add New Division"
-#~ msgstr "Neue Abteilung hinzufügen"
+msgid "inclusive"
+msgstr "Inklusive"
 
-#~ msgid "Unit price"
-#~ msgstr "Einzelpreis"
+msgid "exceeding"
+msgstr "Überschreitet"
 
-#~ msgid "GENDER_Delivery Note"
-#~ msgstr "male"
+msgid "Create timesheet"
+msgstr "Timesheet erstellen"
 
-#~ msgid "Delivery Note"
-#~ msgid_plural "Delivery Notes"
-#~ msgstr[0] "Lieferschein"
-#~ msgstr[1] "Lieferscheine"
+msgid "List of languages available in the sales modules."
+msgstr "Liste der verfügbaren Sprachen in der Sales Anwendung."
 
-#~ msgid "Delivery Note Status"
-#~ msgstr "Lieferscheinstatus"
+msgid "Lead Cost Center"
+msgstr "Hauptkostenstelle"
 
-#~ msgid "Possible Delivery Note Status"
-#~ msgstr "Mögliche Lieferscheinstatus"
+msgid "Cost Center"
+msgstr "Kostenstelle"
 
-#~ msgid "Delivery Note Status Transitions"
-#~ msgstr "Lieferscheinstatus-Übergänge"
+msgid "Merge"
+msgstr "Zusammenführen"
 
-#~ msgid "Possible Delivery Note Status Transitions"
-#~ msgstr "Mögliche Lieferscheinstatus-Übergänge"
+msgid "Cost Bearer"
+msgstr "Kostenträger"
+
+msgid "Costcenter"
+msgstr "Kostenstelle"
+
+msgid "Document Category"
+msgstr "Beleg Kategorie"
+
+msgid "All supllier records"
+msgstr "Alle Lieferantendatensätze"
+
+msgid "Delivery Address"
+msgstr "Lieferanschrift"
+
+msgid ""
+"Creating followup { targetRecordsName } is allowed for booked "
+"{ sourceRecordsName } only. Book selected { sourceTypes } now?"
+msgstr ""
+"Die Erstellung von Folge-{ targetRecordsName } ist nur für gebuchte "
+"{ sourceRecordsName } erlaubt. Ausgewählte { sourceTypes } jetzt buchen?"
+
+msgid "Either street or postbox is required!"
+msgstr "Bitte geben Sie entweder eine Straße oder ein Postfach an!"
+
+msgid "Add, edit and delete divisions."
+msgstr "Abteilungen hinzufügen, bearbeiten und löschen."
+
+msgid "GENDER_Cost Center"
+msgstr "female"
+
+msgid "All Cost Centers"
+msgstr "Alle Kostenstellen"
+
+msgid "All costcenter records"
+msgstr "Alle Kostenstellendatensätze"
+
+msgid "All Divisions"
+msgstr "Alle Abteilungen"
+
+msgid "All division records"
+msgstr "Alle Abteilungsdatensätze"
+
+msgid "Create { targetType }"
+msgstr "{ targetType } erzeugen"
+
+msgid "Loading..."
+msgstr "Lade ..."
+
+msgid "Euro (€)"
+msgstr "Euro (€)"
+
+msgid "Add New Cost Center"
+msgstr "Neue Kostenstelle hinzufügen"
+
+#, python-brace-format
+msgid "Edit {0} \"{1}\""
+msgstr "{0} \"{1}\" bearbeiten"
+
+msgid "Add New Billing Address"
+msgstr "Neue Rechnungsanschrift Hinzufügen"
+
+msgid "Add New Delivery Address"
+msgstr "Neue Lieferanschrift Hinzufügen"
+
+msgid "Add New Division"
+msgstr "Neue Abteilung hinzufügen"
+
+msgid "Unit price"
+msgstr "Einzelpreis"
+
+msgid "GENDER_Delivery Note"
+msgstr "male"
+
+msgid "Delivery Note"
+msgid_plural "Delivery Notes"
+msgstr[0] "Lieferschein"
+msgstr[1] "Lieferscheine"
+
+msgid "Delivery Note Status"
+msgstr "Lieferscheinstatus"
+
+msgid "Possible Delivery Note Status"
+msgstr "Mögliche Lieferscheinstatus"
+
+msgid "Delivery Note Status Transitions"
+msgstr "Lieferscheinstatus-Übergänge"
+
+msgid "Possible Delivery Note Status Transitions"
+msgstr "Mögliche Lieferscheinstatus-Übergänge"
