@@ -341,7 +341,7 @@ class Admin_Controller_UserTest extends TestCase
         $user->contact_id = $newContact->getId();
 
         Admin_Controller_User::getInstance()->setRequestContext([
-            'sms-phone-number' => 1234567890,
+            'sms-phone-number' => '01234567890',
             'sms-new-password-template' => 'Your new {{ app.branding.title }} unit test password is: {{ password }}'
         ]);
 
@@ -356,7 +356,6 @@ class Admin_Controller_UserTest extends TestCase
         static::assertEquals($newContact->email, $user->accountEmailAddress, 'new contact email should be the same as user email');
         static::assertEquals($newContact->n_fn, $user->accountFullName);
         static::assertEquals($newContact->n_fileas, $user->accountDisplayName);
-
     }
 
     public function testUpdateUserWithEmailButNoPassword()

@@ -329,7 +329,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
         } finally {
-            Tinebase_Session::destroyAndRemoveCookie();
+            // TODO do we want to remove the session in some cases? I think we should not always do it,
+            //      because that would log us out of tine if some tine url is called which is matched
+            //      by the webdav-catchall
+            // Tinebase_Session::destroyAndRemoveCookie();
         }
     }
 

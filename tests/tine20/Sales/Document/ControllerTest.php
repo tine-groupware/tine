@@ -343,7 +343,12 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             }
         });
         $this->assertSame(1, $dispatchMsgs->count(), print_r($dispatchMsgs->subject, true));
-        $this->assertSame('dispatch', $dispatchMsgs->getFirstRecord()->subject);
+        $locale = new Zend_Locale($invoice->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+        $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale);
+        /** @var Felamimail_Model_Message $msg */
+        $msg = Felamimail_Controller_Message::getInstance()->getCompleteMessage($dispatchMsgs->getFirstRecord());
+        $this->assertStringStartsWith($t->_('Invoice') . ' ' . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER}, $msg->subject);
+        $this->assertStringContainsString($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER}, $msg->getPlainTextBody());
 
         unset($cleanMsgsRaii);
 

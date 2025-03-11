@@ -98,7 +98,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
                 'label' => 'Employee',
                 'type'  => 'record',
                 'doctrineIgnore'        => true, // already defined as association
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'duplicateCheckGroup' => 'year-employee',
                 'config' => array(
                     'appName'     => 'HumanResources',

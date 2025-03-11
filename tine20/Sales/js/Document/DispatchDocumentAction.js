@@ -13,7 +13,7 @@ import getTwingEnv from "twingEnv";
 
 import AbstractAction from "./AbstractAction"
 import { createAttachedDocument } from "./CreatePaperSlipAction"
-import DispatchHistoryGridPanel from "./DispatchHistoryGridPanel"
+import DispatchHistoryDialog from "./DispatchHistoryDialog"
 
 // dispatching is done by the server based on dispatch configs. (Sales_Frontend_Json->dispatchDocument)
 // also for manual dispatching the server creates the necessary documents and sets the document to MANUAL_DISPATCH state
@@ -143,27 +143,11 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         app.formatMessage('Manual Dispatch Needed'),
                         app.formatMessage('All automatic dispatch steps are completed, you need to fulfill the remaining tasks manually.')
                     )
-                    return
-                    // const dhs = _.sortBy(record.get('dispatch_history'), 'dispatch_date')
-                    //
-                    // // @TODO how to separate multiple steps of the same transport in one custom dispatch? (one record or other field)
-                    // const dMap = _.groupBy(dhs, (dh) => `${dh.dispatch_id}-${dh.dispatch_transport}`)
-                    //
-                    // const openDMap = _.reduce(dMap, (accu, v, k) => {
-                    //     return Object.assign(accu, _.find(v, { type: 'success' }) ? {} : _.set({}, k, v) )
-                    // }, {})
 
-                    // grouping grid with checkboxe?
-                    // dispatchHistoryDialog/Tab -> DispatchHistoryGrid
-
-                    // we need start's without success
-
-
-                    // find all tasks
-                    // @TODO inform user what to do.
-                    // how does user add the completed history records?
-                    // multioptions to complete tasks
-                    // The following tasks have to be completed manually. Check tasks to set them done.
+                    DispatchHistoryDialog.openWindow({
+                        editDialog: this.editDialog,
+                        record
+                    })
                 }
             },
             menu: [new AbstractAction({
@@ -180,9 +164,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     const statusFieldName = `${docType.toLowerCase()}_status`
                     const currentStatus = record.get(statusFieldName)
                     const isDispatched = ['DISPATCHED', 'MANUAL_DISPATCH'].indexOf(currentStatus) >= 0
-
-                    // record.get('dispatch_history')
-                    const dispatchHistoryRecords = [] // @TODO if manual task are open, ask user if he wants to complete on of those tasks (multi options, allowMultiple)
+                    const dispatchHistoryRecords = record.get('dispatch_history')
 
                     if (!dispatchHistoryRecords.length && await Ext.MessageBox.confirm(
                         app.formatMessage('Bypass Dispatch Configs?'), (isDispatched ?
@@ -252,6 +234,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         })
                     } catch (e) {/* USERABORT */ return }
 
+                    // @TODO if manual task are open, ask user if he wants to complete those tasks (multi options, allowMultiple)
+                    const dispatchProcesses = _.groupBy(_.sortBy(record.get('dispatch_history'), 'dispatch_date'), (dh) => `${dh.dispatch_id}-${dh.dispatch_parent_id}-${dh.dispatch_transport}`)
+                    const openProcesses = _.reduce(dispatchProcesses, (accu, dhs, group) => {
+                        return _.concat(accu,dhs[0].dispatch_transport === 'Sales_Model_EDocument_Dispatch_Manual' && !_.find(dhs, { type: 'success' }) ? _.find(dhs, {type: 'start'}) : [])
+                    }, [])
+
+
                     this.mask.show()
 
                     // create paperslip/ubl if nessesary
@@ -296,7 +285,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 this.twingEnv = getTwingEnv()
                                 const loader = this.twingEnv.getLoader()
                                 loader.setTemplate(`${record.id}-email`, emailBoilerplate.boilerplate)
-                                body = await this.twingEnv.render(`${record.id}-email`, record.data)
+                                body = await this.twingEnv.render(`${record.id}-email`, {record: record.data})
                                 if (mailDefaults.content_type === 'text/html') {
                                     body = Ext.util.Format.nl2br(body)
                                 }
@@ -333,9 +322,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         },
                         listeners: {
                             update: async (mail) => {
-                                setDispatched(Object.assign(dispatchedConfig, {
-                                    // ...
-                                }))
+                                // save document so that server manages doc state
+                                if (config.editDialog) {
+                                    await config.editDialog.applyChanges()
+                                    config.record = config.editDialog.record
+                                } else {
+                                    config.record = await config.record.getProxy().promiseSaveRecord(config.record)
+                                }
                             }
                         }
                     });

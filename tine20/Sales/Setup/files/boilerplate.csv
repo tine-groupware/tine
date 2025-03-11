@@ -1,0 +1,41 @@
+model,name,boilerplate,documentCategory,language,is_default
+Sales_Model_Document_Offer,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unser Angebot {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} vom {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Order,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unsere Auftragsbestätigung {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} vom {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Delivery,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unseren Lieferschein {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} vom {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Invoice,Email,"Sehr geehrte Damen und Herren,
+
+bitte finden sie im Anhang unsere Rechnung {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} vom {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Mit freundlichen Grüßen",,de,1
+Sales_Model_Document_Offer,Email,"Dear Sir or Madam,
+
+please find attached our offer {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} from {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
+Sales_Model_Document_Order,Email,"Dear Sir or Madam,
+
+please find attached our order confirmation {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} from {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
+Sales_Model_Document_Delivery,Email,"Dear Sir or Madam,
+
+please find attached our delivery bill {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} from {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
+Sales_Model_Document_Invoice,Email,"Dear Sir or Madam,
+
+please find attached our invoice {{ record.document_number }}{% if record.document_title %} ""{{ record.document_title }}""{% endif %}{% if record.date %} from {{ record.date|date('d.m.Y') }}{% endif %}.
+
+Yours sincerely",,en,1
