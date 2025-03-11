@@ -598,7 +598,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             locationRecordField.setValue(siteContact);
         }
 
-        if (Tine.Tinebase.featureEnabled('featureSite') && siteContact && (!siteField.getValue || overwrite)) {
+        if (Tine.Tinebase.featureEnabled('featureSite') && siteContact && (!siteField.getValue() || overwrite)) {
             siteField.setValue(siteContact)
         }
     },
