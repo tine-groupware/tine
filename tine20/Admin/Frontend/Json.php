@@ -935,6 +935,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRole($roleId)
     {
+        // this may take longer
+        $this->_longRunningRequest(60);
         $role = array();
         if ($roleId) {
             $role = Admin_Controller_Role::getInstance()->get($roleId)->toArray();
