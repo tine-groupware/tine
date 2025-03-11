@@ -20,14 +20,15 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Document_DispatchHistory';
     public const TABLE_NAME = 'sales_document_dispatch_history';
 
+    public const DH_TYPE_START = 'start';
+    public const DH_TYPE_WAIT_FOR_FEEDBACK = 'waitForFeedback';
+    public const DH_TYPE_SUCCESS = 'success';
+    public const DH_TYPE_FAIL = 'fail';
+
     public const FLD_DISPATCH_ID = 'dispatch_id';
     public const FLD_PARENT_DISPATCH_ID = 'parent_dispatch_id';
     public const FLD_DISPATCH_PROCESS = 'dispatch_process';
     public const FLD_TYPE = 'type';
-    public const DH_TYPE_START = 'start';
-    public const DH_TYPE_SUCCESS = 'success';
-    public const DH_TYPE_FAIL = 'fail';
-
     public const FLD_DOCUMENT_ID = 'document_id';
     public const FLD_DOCUMENT_TYPE = 'document_type';
     public const FLD_DISPATCH_DATE = 'dispatch_date';
@@ -67,23 +68,6 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                        => [
-            self::FLD_DISPATCH_ID               => [
-                self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
-                ],
-            ],
-            self::FLD_PARENT_DISPATCH_ID        => [
-                self::TYPE                          => self::TYPE_STRING,
-                self::NULLABLE                      => true,
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
-                ],
-            ],
             self::FLD_DISPATCH_PROCESS      => [
                 self::TYPE                          => self::TYPE_VIRTUAL,
                 self::DOCTRINE_IGNORE               => true,
@@ -96,23 +80,6 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                 ],
 
             ],
-            self::FLD_TYPE                      => [
-                self::LABEL                         => 'Process Step', //_('Process Step')
-                self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    [Zend_Validate_InArray::class, [
-                        self::DH_TYPE_START,
-                        self::DH_TYPE_SUCCESS,
-                        self::DH_TYPE_FAIL,
-                    ]],
-                ],
-                self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
-                ],
-            ],
-
             self::FLD_DISPATCH_DATE             => [
                 self::LABEL                         => 'Date', //_('Date')
                 self::TYPE                          => self::TYPE_DATETIME,
@@ -186,6 +153,41 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                         Sales_Model_Document_Order::class,
                     ]],
                 ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_TYPE                      => [
+                self::LABEL                         => 'Process Step', //_('Process Step')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::DISPATCH_HISTORY_TYPES,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_InArray::class, [
+                        self::DH_TYPE_START,
+                        self::DH_TYPE_WAIT_FOR_FEEDBACK,
+                        self::DH_TYPE_SUCCESS,
+                        self::DH_TYPE_FAIL,
+                    ]],
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                      => true,
+                ],
+            ],
+            self::FLD_DISPATCH_ID               => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_PARENT_DISPATCH_ID        => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::NULLABLE                      => true,
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
