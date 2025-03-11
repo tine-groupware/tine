@@ -696,15 +696,15 @@ class Sales_JsonTest extends TestCase
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ctrl->getAll()->toArray(), true));
 
-        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class);
+        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, isDefault: false);
         $this->assertCount(1, $result['results']);
         $this->assertSame($boilerDefault->getId(), $result['results'][0]['id']);
 
-        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, null, $customer['id']);
+        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, null, $customer['id'], isDefault: false);
         $this->assertCount(1, $result['results']);
         $this->assertSame($boilerCustomer->getId(), $result['results'][0]['id']);
 
-        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, Tinebase_DateTime::now()->addDay(5));
+        $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class, Tinebase_DateTime::now()->addDay(5), isDefault: false);
         $this->assertCount(1, $result['results']);
         $this->assertSame($boilerDate->getId(), $result['results'][0]['id']);
     }

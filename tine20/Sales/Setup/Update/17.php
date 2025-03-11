@@ -53,6 +53,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE032 = __CLASS__ . '::update032';
     protected const RELEASE017_UPDATE033 = __CLASS__ . '::update033';
     protected const RELEASE017_UPDATE034 = __CLASS__ . '::update034';
+    protected const RELEASE017_UPDATE035 = __CLASS__ . '::update035';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -186,6 +187,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE034 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update034',
+            ],
+            self::RELEASE017_UPDATE035 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update035',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -1010,5 +1015,19 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.34', self::RELEASE017_UPDATE034);
+    }
+
+    public function update035(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Boilerplate::class,
+            Sales_Model_Document_Boilerplate::class,
+        ]);
+
+        Sales_Setup_Initialize::initializeBoilerPlates();
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE035);
     }
 }

@@ -29,6 +29,10 @@
             <source>language</source>
             <destination>language</destination>
         </field>
+        <field>
+            <source>is_default</source>
+            <destination>is_default</destination>
+        </field>
     </mapping>
 </config>
 

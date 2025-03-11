@@ -1091,11 +1091,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @todo coding style (-> _clear)
      */
-    protected function clear($app,$model)
+    protected function clear($app,$model,$additionalFilter = [])
     {
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , array_merge([
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
-        ]);
+        ], $additionalFilter));
         $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good...
         $controller::getInstance()->deleteByFilter($filter);
     }

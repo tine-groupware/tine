@@ -863,12 +863,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ])->toArray();
     }
 
-    public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null, string $language = null)
+    public function getApplicableBoilerplates(string $type, ?string $date = null, ?string $customerId = null, ?string $category = null, ?string $language = null, ?bool $isDefault = null)
     {
         if ($date) {
             $date = new Tinebase_DateTime($date);
         }
-        $result = Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates($type, $date, $customerId, $category, $language);
+        $result = Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates($type, $date, $customerId, $category, $language, $isDefault);
         return [
             'totalcount' => $result->count(),
             'results' => array_values($this->_multipleRecordsToJson($result)),
