@@ -285,7 +285,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 this.twingEnv = getTwingEnv()
                                 const loader = this.twingEnv.getLoader()
                                 loader.setTemplate(`${record.id}-email`, emailBoilerplate.boilerplate)
-                                body = await this.twingEnv.render(`${record.id}-email`, record.data)
+                                body = await this.twingEnv.render(`${record.id}-email`, {record: record.data})
                                 if (mailDefaults.content_type === 'text/html') {
                                     body = Ext.util.Format.nl2br(body)
                                 }
