@@ -102,7 +102,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
                     new Tinebase_Twig_CallBackLoader($boilerPlate->getId(), ($boilerPlate->last_modified_time ?: $boilerPlate->creation_time)->getTimestamp(), fn() => $boilerPlate->{Sales_Model_Boilerplate::FLD_BOILERPLATE}),
                 Tinebase_Twig::TWIG_AUTOESCAPE => false,
             ]);
-            $body = $twig->load($boilerPlate->getId())->render($document->toArray()); // legacy, copy of FE code :-/
+            $body = $twig->load($boilerPlate->getId())->render(['record' => $document]);
         } else {
             $body = 'see document attached';
         }
