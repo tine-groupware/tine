@@ -189,6 +189,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     ],
                 ],
                 self::FLD_CONTACT_ID => [],
+                self::FLD_BOILERPLATES => [],
             ]
         ],
 

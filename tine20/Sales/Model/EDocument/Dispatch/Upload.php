@@ -36,12 +36,13 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
 
     public function dispatch(Sales_Model_Document_Abstract $document, ?string $parentDispatchId = null): bool
     {
+        $t = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
         $dispatchHistory = new Sales_Model_Document_DispatchHistory([
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
-            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => 'upload to: ' . $this->{self::FLD_URL},
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $t->_('upload to: ') . $this->{self::FLD_URL},
             Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => Tinebase_Record_Abstract::generateUID(),
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
