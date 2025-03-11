@@ -335,7 +335,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::COPY_OMIT                 => true,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    Zend_Filter_Input::DEFAULT_VALUE    => null
                 ],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,

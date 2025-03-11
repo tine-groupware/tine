@@ -104,7 +104,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
             ),
             'last_autobill' => array(
                 'label'      => NULL,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type'       => 'date',
                 'default'    => NULL
             ),

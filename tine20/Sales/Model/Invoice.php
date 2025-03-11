@@ -280,7 +280,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 self::NULLABLE => true,
             ),
             'positions' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Positions', // _('Positions')
                 'type'       => 'records',
                 'config'     => array(

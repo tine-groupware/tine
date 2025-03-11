@@ -156,7 +156,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null
                 ],
                 self::LENGTH => 40,
             ],
@@ -235,7 +234,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 # self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class => null,
@@ -413,7 +411,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SHY => true,
             ],
             'signatures' => [
-                self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 self::LABEL => 'Signatures', // _('Signatures')
                 self::TYPE => self::TYPE_RECORDS,
                 self::NULLABLE => true,
@@ -495,7 +493,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 # self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::OMIT_MOD_LOG => true,
                 self::INPUT_FILTERS             => [
@@ -571,7 +568,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::INPUT_FILTERS             => [],
                 self::NULLABLE                  => true,
@@ -607,7 +603,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::NULLABLE                  => true
             ],
