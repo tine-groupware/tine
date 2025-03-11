@@ -436,9 +436,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             }
         }
 
-        if ($customer->vatid) {
+        if ($vatId = $debitor->{Sales_Model_Debitor::FLD_VAT_IDENTIFIER} ?: $customer->vatid) {
             $customerParty->getParty()->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
-                ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($customer->vatid))
+                ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($vatId))
                 ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                 )
