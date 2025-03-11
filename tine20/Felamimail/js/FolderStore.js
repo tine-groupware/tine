@@ -64,15 +64,15 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
      * async query
      */
     asyncQuery: function(field, value, callback, args, scope, store) {
-        var result = null,
+        let result = null,
             key = store.getKey(field, value);
-        
+        // we need regexp here because query returns all records with path that begins with the value string otherwise
+        const valueReg = new RegExp(window.lodash.escapeRegExp(value) + '$');
+
         Tine.log.info('Tine.Felamimail.FolderStore.asyncQuery: ' + key);
         
         if (store.queriesDone.indexOf(key) >= 0) {
             Tine.log.debug('result already loaded -> directly query store');
-            // we need regexp here because query returns all records with path that begins with the value string otherwise
-            var valueReg = new RegExp(window.lodash.escapeRegExp(value) + '$');
             result = store.query(field, valueReg);
             args.push(result);
             callback.apply(scope, args);
@@ -81,11 +81,11 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             this.asyncQuery.defer(2500, this, [field, value, callback, args, scope, store]);
         } else {
             Tine.log.debug('result is requested the first time -> fetch from server');
-            var accountId = value.match(/^\/([a-z0-9]*)/i)[1],
+            const accountId = value.match(/^\/([a-z0-9]*)/i)[1],
                 folderIdMatch = value.match(/[a-z0-9]+\/([a-z0-9]*)$/i),
                 folderId = (folderIdMatch) ? folderIdMatch[1] : null,
                 folder = folderId ? store.getById(folderId) : null;
-            
+
             if (folderId && ! folder) {
                 Tine.log.warn('folder ' + folderId + ' not found -> performing no query at all');
                 callback.apply(scope, args);
@@ -102,9 +102,8 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
                 callback: function () {
                     store.queriesDone.push(key);
                     store.queriesPending.remove(key);
-                    
                     // query store again (it should have the new folders now) and call callback function to add nodes
-                    result = store.query(field, value);
+                    result = store.query(field, valueReg);
                     args.push(result);
                     callback.apply(scope, args);
                 },
