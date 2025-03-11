@@ -608,7 +608,7 @@ myGrid.getColumnModel().setHidden(0, true); // hide column 0 (0 = the first colu
      */
     setHidden : function(colIndex, hidden, suppressEvent){
         var c = this.config[colIndex];
-        if(c.hidden !== hidden){
+        if(c && c.hidden !== hidden){
             c.hidden = hidden;
             this.totalWidth = null;
             if (!suppressEvent) {
