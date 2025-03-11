@@ -223,6 +223,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
     getEventData: function (event) {
         if (event === 'apply') {
             this.record.set('accountPassword', this.getForm().findField('password').getValue());
+            this.record.set('password_must_change', this.getForm().findField('password_must_change').getValue())
             return this.record;
         }
     },
