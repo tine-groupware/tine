@@ -257,7 +257,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => null),
             ),
             'delivery' => array (
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Delivery Addresses', // _('Delivery Addresses')
                 'type'       => 'records',
                 'config'     => array(
@@ -273,7 +273,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 ),
             ),
             'billing' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Billing Addresses', // _('Billing Addresses')
                 'type'       => 'records',
                 'config'     => array(
@@ -291,7 +291,7 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 ),
             ),
             'postal' => [
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
                 self::TYPE              => self::TYPE_RECORD,
                 self::DOCTRINE_IGNORE   => true,
                 self::CONFIG            => [

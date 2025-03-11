@@ -51,7 +51,7 @@ class Voipmanager_Model_Snom_Template extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'model'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),

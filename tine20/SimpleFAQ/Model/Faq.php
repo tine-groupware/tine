@@ -66,8 +66,8 @@ class SimpleFAQ_Model_Faq extends Tinebase_Record_Abstract
          'deleted_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
          'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
          'tags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
-         'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-         'notes'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+         'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+         'notes'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
          
          'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
      );

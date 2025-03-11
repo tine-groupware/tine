@@ -72,7 +72,6 @@ class Tinebase_Model_ActionLog extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_USER,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null
                 ],
                 self::LENGTH => 40,
             ],

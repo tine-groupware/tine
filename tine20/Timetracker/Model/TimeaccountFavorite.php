@@ -40,7 +40,7 @@ class Timetracker_Model_TimeaccountFavorite extends Tinebase_Record_Abstract
      */
     protected $_validators = array (
         // tine 2.0 generic fields
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -50,7 +50,7 @@ class Timetracker_Model_TimeaccountFavorite extends Tinebase_Record_Abstract
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // model specific fields
-        'account_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => false, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'account_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'timeaccount_id'  => array('presence' => 'required')
     );
 }
