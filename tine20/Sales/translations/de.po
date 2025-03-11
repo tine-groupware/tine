@@ -1621,6 +1621,9 @@ msgstr "Sammelbeleg"
 msgid "DN-"
 msgstr "LS-"
 
+msgid "Report"
+msgstr "Meldungen"
+
 msgid "GENDER_Dispatch Report"
 msgstr ""
 
@@ -1629,11 +1632,8 @@ msgid_plural "Dispatch Reports"
 msgstr[0] "Belegversandt Report"
 msgstr[1] "Belegversandt Reports"
 
-msgid "Dispatch Date"
-msgstr "Belegversandt Datum"
-
-msgid "Dispatch Transport Method"
-msgstr "Belegversandt Transport Methode"
+msgid "Transport Method"
+msgstr "Transport Methode"
 
 msgid "GENDER_Invoice"
 msgstr "female"

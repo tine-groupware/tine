@@ -20,6 +20,10 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Document_DispatchHistory';
     public const TABLE_NAME = 'sales_document_dispatch_history';
 
+    public const FLD_DISPATCH_ID = 'dispatch_id';
+    public const FLD_PARENT_DISPATCH_ID = 'parent_dispatch_id';
+    public const FLD_DISPATCH_PROCESS = 'dispatch_process';
+    public const FLD_TYPE = 'type';
     public const DH_TYPE_START = 'start';
     public const DH_TYPE_SUCCESS = 'success';
     public const DH_TYPE_FAIL = 'fail';
@@ -29,9 +33,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
     public const FLD_DISPATCH_DATE = 'dispatch_date';
     public const FLD_DISPATCH_TRANSPORT = 'dispatch_transport';
     public const FLD_DISPATCH_REPORT = 'dispatch_report';
-    public const FLD_TYPE = 'type';
-    public const FLD_DISPATCH_ID = 'dispatch_id';
-    public const FLD_PARENT_DISPATCH_ID = 'parent_dispatch_id';
+
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -43,6 +45,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
         self::HAS_ATTACHMENTS               => true,
+        self::EXPOSE_JSON_API               => true,
         self::CREATE_MODULE                 => true,
 
         self::APP_NAME                      => Sales_Config::APP_NAME,
@@ -64,17 +67,65 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                        => [
+            self::FLD_DISPATCH_ID               => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_PARENT_DISPATCH_ID        => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_DISPATCH_PROCESS      => [
+                self::TYPE                          => self::TYPE_VIRTUAL,
+                self::DOCTRINE_IGNORE               => true,
+                self::CONFIG                        => [
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::LABEL                 => 'Dispatch Process', // _('Dispatch Process')
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+
+            ],
+            self::FLD_TYPE                      => [
+                self::LABEL                         => 'Process Step', //_('Process Step')
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_InArray::class, [
+                        self::DH_TYPE_START,
+                        self::DH_TYPE_SUCCESS,
+                        self::DH_TYPE_FAIL,
+                    ]],
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+
             self::FLD_DISPATCH_DATE             => [
-                self::LABEL                         => 'Dispatch Date', //_('Dispatch Date')
+                self::LABEL                         => 'Date', //_('Date')
                 self::TYPE                          => self::TYPE_DATETIME,
                 self::NULLABLE                      => false,
                 self::UI_CONFIG => [
-                    'format' => ['medium'],
+                    self::READ_ONLY                     => true,
+                    'format'                            => ['medium'],
                 ],
+
             ],
             self::FLD_DISPATCH_TRANSPORT        => [
                 self::TYPE                      => self::TYPE_MODEL,
-                self::LABEL                     => 'Dispatch Transport Method', // _('Dispatch Transport Method')
+                self::LABEL                     => 'Transport Method', // _('Transport Method')
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS          => [
                         Sales_Model_EDocument_Dispatch_Custom::class,
@@ -83,12 +134,18 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                         Sales_Model_EDocument_Dispatch_Upload::class,
                     ],
                 ],
+                self::UI_CONFIG => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_DISPATCH_REPORT           => [
-                self::LABEL                         => 'Dispatch Report', //_('Dispatch Report')
+                self::LABEL                         => 'Report', //_('Report')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
+                self::UI_CONFIG => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_DOCUMENT_ID               => [
                 self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
@@ -129,38 +186,6 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                         Sales_Model_Document_Order::class,
                     ]],
                 ],
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
-                ],
-            ],
-            self::FLD_TYPE                      => [
-                self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    [Zend_Validate_InArray::class, [
-                        self::DH_TYPE_START,
-                        self::DH_TYPE_SUCCESS,
-                        self::DH_TYPE_FAIL,
-                    ]],
-                ],
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
-                ],
-            ],
-            self::FLD_DISPATCH_ID               => [
-                self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
-                ],
-            ],
-            self::FLD_PARENT_DISPATCH_ID        => [
-                self::TYPE                          => self::TYPE_STRING,
-                self::NULLABLE                      => true,
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
