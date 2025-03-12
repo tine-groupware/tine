@@ -11,5 +11,10 @@ test('Array.diff', () => {
 
 test('Array.intersect', () => {
     expect(testArr.intersect(["blue", "green"]).length).toBe(2);
-    expect(testArr.intersect(["blue", "green"])).toStrictEqual(['green', 'blue']);
+    expect(testArr.intersect(["blue", "green"])).toStrictEqual(['blue', 'green']);
 });
+
+test('Array.containsAny', () => {
+    expect(testArr.containsAny(["apple", "green"])).toBe(true);
+    expect(testArr.containsAny(["apple", "banana"])).toBe(false);
+})
