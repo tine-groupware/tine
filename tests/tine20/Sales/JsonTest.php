@@ -450,6 +450,9 @@ class Sales_JsonTest extends TestCase
      */
     public function testSearchSuppliers()
     {
+        $this->clear(Sales_Config::APP_NAME, 'Supplier');
+        Tinebase_Core::getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'sales_numbers WHERE model = "' . Sales_Model_Supplier::class . '"');
+
         $record = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier(array('name' => 'auto1')));
         $result = $this->_instance->searchSuppliers($this->_getFilter('auto1'), array('limit' => 50));
 
