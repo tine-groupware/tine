@@ -138,8 +138,9 @@ class Tinebase_Relations
         $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
-        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds);
+        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds, $relations);
         $toUpdate = array_intersect($currentIds, $relationsIds);
+
         foreach ($relations as $key => $relation) {
             if (!empty($id = $relation->getId()) && !in_array($id, $toDel) && !in_array($id, $toUpdate)) {
                 $toAdd[] = $key;
@@ -208,11 +209,14 @@ class Tinebase_Relations
     }
 
     /**
-     * @param $currentRelations
+     * @param Tinebase_Record_RecordSet $currentRelations
      * @param array $relationsIds
+     * @param Tinebase_Record_RecordSet $relations
      * @return array
      */
-    protected function _getToDeleteIds($currentRelations, $relationsIds)
+    protected function _getToDeleteIds(Tinebase_Record_RecordSet $currentRelations,
+                                       array $relationsIds,
+                                       Tinebase_Record_RecordSet $relations): array
     {
         $deleteIds = [];
         foreach ($currentRelations as $relation) {
@@ -220,7 +224,36 @@ class Tinebase_Relations
                 $deleteIds[] = $relation->getId();
             }
         }
+        $deleteIds = array_merge($deleteIds, $this->_getDeletedRecordRelations($currentRelations, $relationsIds, $relations));
 
+        return $deleteIds;
+    }
+
+    protected function _getDeletedRecordRelations(Tinebase_Record_RecordSet $currentRelations,
+                                                  array $relationsIds,
+                                                  Tinebase_Record_RecordSet $relations): array
+    {
+        $deleteIds = [];
+        foreach (array_diff($relationsIds, $currentRelations->getArrayOfIds()) as $relationIdToCheck) {
+            $relation = $relations->getById($relationIdToCheck);
+            $controller = Tinebase_Core::getApplicationInstance(_applicationName: $relation->related_model, _ignoreACL: true);
+            if (! $controller instanceof Tinebase_Controller_Record_Abstract) {
+                // can't check this relation...
+                continue;
+            }
+            $acl = $controller->doContainerACLChecks(false);
+            try {
+                $controller->get($relation->related_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Removing no longer valid relation - related record has been deleted: ' . $relation->related_id);
+                }
+                $deleteIds[] = $relation->getId();
+            } finally {
+                $controller->doContainerACLChecks($acl);
+            }
+        }
         return $deleteIds;
     }
 
@@ -426,7 +459,8 @@ class Tinebase_Relations
                 if (isset($myConstraints[$idGroup]) && ($config['max'] > 0 && $config['max'] < $myConstraints[$idGroup])) {
                 
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Constraints validation failed from the own side! ' . print_r($cc, 1));
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Constraints validation failed from the own side! ' . print_r($cc, 1));
                     }
                     throw new Tinebase_Exception_InvalidRelationConstraints();
                 }
