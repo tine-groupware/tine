@@ -35,7 +35,15 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
                 Sales_Model_Document_Abstract::FLD_BOILERPLATES => [],
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Document_Category::FLD_DIVISION_ID => [],
+                        Sales_Model_Document_Category::FLD_DIVISION_ID => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_Division::FLD_BANK_ACCOUNTS => [
+                                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                        Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => [],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ]
@@ -103,6 +111,12 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             $_record = $this->_records['PREPOSITIONS']->getFirstRecord();
         }
         parent::_renderTwigTemplate($_record);
+    }
+
+    protected function _getTwigContext(array $context)
+    {
+        $context['bankaccounts'] = $this->_records['PREPOSITIONS']->getFirstRecord()->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_DIVISION_ID}->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->{Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT};
+        return parent::_getTwigContext($context);
     }
 
     protected function _startDataSource($_name)
