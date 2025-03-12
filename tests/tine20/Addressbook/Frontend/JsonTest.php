@@ -590,7 +590,9 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( ->  YomiName: PHPUNIT_multipleUpdate) relations (1 ' . $translate->_('added') . ': ');
+        $this->_checkChangedNote($record['id'],
+            'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields' .
+            ' ( ->  YomiName: PHPUNIT_multipleUpdate) relations (1 ' . $translate->_('added') . ': ');
 
         // check relation
         $fullRecord = $this->_uit->getContact($record['id']);
@@ -888,6 +890,34 @@ class Addressbook_Frontend_JsonTest extends TestCase
         ], null);
 
         static::assertCount(0, $result['results']);
+    }
+
+    public function testUpdateContactAddRelation()
+    {
+        $contactData = $this->_getContactData();
+        $contact1 = $this->_uit->saveContact($contactData);
+        $contactData['n_given'] = 'Mohammed';
+        unset($contactData['email']);
+        $contact2 = $this->_uit->saveContact($contactData);
+
+        $contact1['relations'] = [
+            [
+                'own_backend' => 'Sql',
+                'related_backend' => 'Sql',
+                'own_id' => $contact1['id'],
+                'own_model' => 'Addressbook_Model_Contact',
+                'related_record' => $contact2,
+                'related_id' => $contact2['id'],
+                'related_model' => 'Addressbook_Model_Contact',
+                'type' => '',
+                'related_degree' => 'sibling',
+                // client auto creates ID
+                'id' => Tinebase_Record_Abstract::generateUID()
+            ],
+        ];
+        $contact1 = $this->_uit->saveContact($contact1);
+
+        self::assertCount(1, $contact1['relations']);
     }
 
     /**
