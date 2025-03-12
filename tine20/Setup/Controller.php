@@ -720,7 +720,7 @@ class Setup_Controller
                     }
                 }
 
-                if (Setup_SchemaTool::hasSchemaUpdates()) {
+                if (Setup_SchemaTool::hasSchemaUpdates(true)) {
                     Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                         ' pending schema updates found, this should not happen!');
                     if ($options['strict']) {
