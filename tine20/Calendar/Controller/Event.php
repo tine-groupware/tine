@@ -2501,10 +2501,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectDelete(array $_ids) {
         $events = $this->_backend->getMultiple($_ids);
-        
-        foreach ($events as $event) {
 
-            if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $event->isReplicable()) {
+        /** @var Calendar_Model_Event $event */
+        foreach ($events as $event) {
+            if ($this->_doContainerACLChecks && Tinebase_Core::isReplica() && $event->isReplicable()) {
                 throw new Tinebase_Exception_AccessDenied('Replicable events are read-only on the replicas!');
             }
 
