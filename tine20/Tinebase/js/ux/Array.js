@@ -56,31 +56,82 @@ Object.assign(Array.prototype, {
     
     /**
      * returns an array containing all the values of this array that are present in all the arguments.
+     * taken from https://github.com/lovasoa/fast_array_intersect
      * 
      * @param {Array} array1
      * @param {Array} [array2]
      * @param {Array} [...]
      */
     intersect: function() {
-        var allItems = [],
-            intersect = [];
-        
-        // create an array containing all items of all args
-        for (var i=0; i<arguments.length; i++) {
-            allItems = allItems.concat(arguments[i]);
-        }
-        
-        // check which item is not present in all args
-        this.forEach((item) => {
-            if (allItems.indexOf(item) >= 0) {
-                intersect.push(item);
+        const arrays = arguments
+        if (arrays.length === 0) return [];
+
+        // Put the smallest array in the beginning
+        for (let i=1; i<arrays.length; i++) {
+            if(arrays[i].length < arrays[0].length) {
+                let tmp = arrays[0];
+                arrays[0] = arrays[i];
+                arrays[i] = tmp;
             }
+        }
+
+        // Create a map associating each element to its current count
+        const set = new Map();
+        for(const elem of arrays[0]) {
+            set.set(elem, 1);
+        }
+        for (let i=1; i<arrays.length; i++) {
+            let found = 0;
+            for(const elem of arrays[i]) {
+                const count = set.get(elem)
+                if (count === i) {
+                    set.set(elem,  count + 1);
+                    found++;
+                }
+            }
+            // Stop early if an array has no element in common with the smallest
+            if (found === 0) return [];
+        }
+
+        // Output only the elements that have been seen as many times as there are arrays
+        return arrays[0].filter(e => {
+            const count = set.get(e);
+            if (count !== undefined) set.set(e, 0);
+            return count === arrays.length
         });
-        
-        
-        return intersect;
     },
-    
+
+    /**
+     * determine if this array contains one or more items from another array.
+     * @param {array} arr the array providing items to check for items in this.
+     * @return {boolean} true|false if this array contains at least one item from arr.
+     */
+    containsAny: function (arr) {
+        let arr1 = this;
+        let arr2 = arr;
+        if (arr2.length < arr1.length) {
+            const tmp = arr1;
+            arr1 = arr2;
+            arr2 = tmp;
+
+        }
+
+        const m = new Map();
+        for(const elem of arr1) {
+            m.set(elem, true);
+        }
+
+        for(const elem of arr2) {
+            if(m.get(elem)) {
+                return true;
+            }
+        }
+
+        return false;
+
+        // return arr.some(v => this.includes(v));
+    },
+
     /**
      * Creates a copy of this Array, filtered to contain only unique values.
      * @return {Array} The new Array containing unique values.
