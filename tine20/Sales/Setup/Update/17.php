@@ -54,6 +54,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE033 = __CLASS__ . '::update033';
     protected const RELEASE017_UPDATE034 = __CLASS__ . '::update034';
     protected const RELEASE017_UPDATE035 = __CLASS__ . '::update035';
+    protected const RELEASE017_UPDATE036 = __CLASS__ . '::update036';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -77,6 +78,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE030 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update030',
+            ],
+            self::RELEASE017_UPDATE036 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update036',
             ],
         ],
         (self::PRIO_NORMAL_APP_STRUCTURE - 3) => [
@@ -705,6 +710,11 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         if ($this->_backend->tableExists(Sales_Model_Division::TABLE_NAME)
                 && $this->_backend->columnExists(Sales_Model_Division::FLD_NAME, Sales_Model_Division::TABLE_NAME)) {
+            if (!$this->_backend->tableExists(Sales_Model_DivisionBankAccount::TABLE_NAME)) {
+                Setup_SchemaTool::updateSchema([
+                    Sales_Model_DivisionBankAccount::class,
+                ]);
+            }
             return;
         }
 
@@ -1030,6 +1040,12 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         Sales_Setup_Initialize::initializeBoilerPlates();
 
-        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE035);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.35', self::RELEASE017_UPDATE035);
+    }
+
+    public function update036(): void
+    {
+        $this->divisionUpdate();
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.36', self::RELEASE017_UPDATE036);
     }
 }
