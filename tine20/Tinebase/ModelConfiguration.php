@@ -1981,13 +1981,30 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             case self::TYPE_MODEL:
             case 'string':
             case 'text':
-            case 'fulltext':
-            case self::TYPE_STRICTFULLTEXT:
             case 'integer':
             case self::TYPE_BIGINT:
             case 'float':
             case 'boolean':
             case 'container':
+                break;
+            case 'fulltext':
+            case self::TYPE_STRICTFULLTEXT:
+                foreach ($this->_table[self::INDEXES] ?? [] as &$index) {
+                    if ([$fieldKey] === ($index[self::COLUMNS] ?? [])) {
+                        if (array_key_exists(self::FLAGS, $index)) {
+                            if ([self::TYPE_FULLTEXT] === $index[self::FLAGS]) {
+                                break 2;
+                            }
+                        } else {
+                            $index[self::FLAGS] = [self::TYPE_FULLTEXT];
+                            break 2;
+                        }
+                    }
+                }
+                $this->_table[self::INDEXES][$fieldKey . '_ft'] = [
+                    self::COLUMNS   => [$fieldKey],
+                    self::FLAGS     => [self::TYPE_FULLTEXT],
+                ];
                 break;
             case 'datetime_separated_date':
             case 'date':
