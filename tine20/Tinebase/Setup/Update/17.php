@@ -36,6 +36,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE015 = __CLASS__ . '::update015';
     protected const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
     protected const RELEASE017_UPDATE017 = __CLASS__ . '::update017';
+    protected const RELEASE017_UPDATE018 = __CLASS__ . '::update018';
 
 
     static protected $_allUpdates = [
@@ -119,6 +120,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE017 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update017',
+            ],
+            self::RELEASE017_UPDATE018 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update018',
             ],
         ],
     ];
@@ -464,5 +469,15 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 }
             }
         }
+    }
+
+    public function update018(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        // create missing fulltext index
+        Setup_SchemaTool::updateAllSchema();
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.18', self::RELEASE017_UPDATE018);
     }
 }
