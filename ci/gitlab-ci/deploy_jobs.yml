@@ -64,6 +64,17 @@ release-dev-image-to-dockerhub [amd64, 8.3]:
         matrix:
           - ARCH: amd64
             PHP_VERSION: "8.3"
+release-dev-image-to-dockerhub [amd64, 8.4]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: amd64
+    PHP_VERSION: "8.4"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: amd64
+            PHP_VERSION: "8.4"
 release-dev-image-to-dockerhub [arm64, 8.1]:
   extends: .release-dev-image-to-dockerhub
   variables:
@@ -97,6 +108,17 @@ release-dev-image-to-dockerhub [arm64, 8.3]:
         matrix:
           - ARCH: arm64
             PHP_VERSION: "8.3"
+release-dev-image-to-dockerhub [arm64, 8.4]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: arm64
+    PHP_VERSION: "8.4"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: arm64
+            PHP_VERSION: "8.4"
 
 deploy-built-image-to-dockerhub:
   extends: .abstract_jobs.docker
