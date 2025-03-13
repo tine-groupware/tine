@@ -495,7 +495,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $customer[Sales_Model_Customer::FLD_DEBITORS] =
                 new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [array_merge([
                     Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
-                    Sales_Model_Debitor::FLD_EAS_ID      => Sales_Controller_EDocument_EAS::getInstance()->getRecordByTitleProperty('Germany VAT number')->getId(),
+                    Sales_Model_Debitor::FLD_EAS_ID      => Sales_Controller_EDocument_EAS::getInstance()->getByCode('9930')->getId(),
                     Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS => $customer['vatid'],
                 ], $customer['debitor'])], true);
 
@@ -905,7 +905,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $defaultDivision->{Sales_Model_Division::FLD_CONTACT_PHONE} = '+441273-3766-373';
         $defaultDivision->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} = '12345 67890';
         $defaultDivision->{Sales_Model_Division::FLD_VAT_NUMBER} = 'GB123456789';
-        $defaultDivision->{Sales_Model_Division::FLD_EAS_ID} = Sales_Controller_EDocument_EAS::getInstance()->getRecordByTitleProperty('United Kingdom VAT number')->getId();
+        $defaultDivision->{Sales_Model_Division::FLD_EAS_ID} = Sales_Controller_EDocument_EAS::getInstance()->getByCode('9932')->getId();
         $defaultDivision->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} = 'GB123456789';
         $defaultDivision->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID} = 'GB98ZZZ09999999999';
         Sales_Controller_Division::getInstance()->update($defaultDivision);

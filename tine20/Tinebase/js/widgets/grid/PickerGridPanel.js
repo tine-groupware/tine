@@ -770,6 +770,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         me.store.clearData();
         _.each(recordsdata, function(recordData) {
             var record = Tine.Tinebase.data.Record.setFromJson(recordData, me.recordClass);
+            if (!recordData.hasOwnProperty(me.recordClass.getMeta('idProperty'))) {
+                record.phantom = true;
+            }
             me.store.addSorted(record);
         });
 
