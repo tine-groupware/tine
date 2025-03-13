@@ -235,10 +235,13 @@ COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini
 
 
 FROM ${BASE_IMAGE} as dev
+# todo move tesseract to base image, if ocr is tested
 RUN apt-get update \
  && apt-get install -y \
     composer \
     $(cat /etc/php/container-php-package-name)-xdebug \
+    tesseract-ocr \
+    tesseract-ocr-deu \
  && rm -rf /var/lib/apt/lists/*
 
 
