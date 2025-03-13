@@ -1038,8 +1038,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             Sales_Model_Document_Boilerplate::class,
         ]);
 
-        Sales_Setup_Initialize::initializeBoilerPlates();
-
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.35', self::RELEASE017_UPDATE035);
     }
 

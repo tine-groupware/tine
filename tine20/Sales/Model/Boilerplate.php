@@ -178,7 +178,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
             self::FLD_IS_DEFAULT        => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::LABEL                 => 'Is Default', // _('Is Default'),
-                self::DEFAULT_VAL           => false,
+                self::DEFAULT_VAL           => true,
             ],
         ]
     ];
