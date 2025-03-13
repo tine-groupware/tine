@@ -59,11 +59,13 @@ docker-build-dev:
             - "8.1"
             - "8.2"
             - "8.3"
+            - "8.4"
         - ARCH: arm64
           PHP_VERSION:
             - "8.1"
             - "8.2"
             - "8.3"
+            - "8.4"
   script:  
     - |
       buildctl-daemonless.sh build \
