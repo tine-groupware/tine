@@ -349,9 +349,6 @@ msgstr "Produktkategorie"
 msgid "Possible Product Categories."
 msgstr "Mögliche Produktkategorien."
 
-msgid "Default"
-msgstr "Default"
-
 msgid "Product Unfold Type"
 msgstr "Produkt Entfaltungsmodus"
 
