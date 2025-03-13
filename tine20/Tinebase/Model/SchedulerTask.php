@@ -97,7 +97,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'datetime',
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'last_duration' => [
@@ -107,7 +107,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'integer',
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'lock_id' => [
@@ -118,7 +118,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => null,
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_NEXT_RUN => [
@@ -133,7 +133,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'datetime',
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'failure_count' => [
@@ -142,7 +142,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => 0,
                 'type'          => 'integer',
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'server_time' => [
@@ -157,7 +157,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 self::TYPE          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL   => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_ACCOUNT_ID => [
