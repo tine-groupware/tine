@@ -272,8 +272,8 @@ Ext.Msg.show({
                 vueEmitter.on("close", handleHide);
                 vueEmitter.on("buttonClicked", handleButton);
                 vueEmitter.on("messageClicked", e => {
-                    if (_.isFunction(options.onMessageClick)) {
-                        options.onMessageClick(e)
+                    if (_.isFunction(opt.onMessageClick)) {
+                        opt.onMessageClick(e)
                     }
                 });
 
