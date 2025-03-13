@@ -349,9 +349,6 @@ msgstr "Produktkategorie"
 msgid "Possible Product Categories."
 msgstr "Mögliche Produktkategorien."
 
-msgid "Default"
-msgstr "Default"
-
 msgid "Product Unfold Type"
 msgstr "Produkt Entfaltungsmodus"
 
@@ -2083,6 +2080,9 @@ msgstr[1] "Zahlungsmittel"
 
 msgid "Config"
 msgstr "Konfiguration"
+
+msgid "Default"
+msgstr "Standard"
 
 msgid "Dispatch Date"
 msgstr "Belegversandt Datum"
