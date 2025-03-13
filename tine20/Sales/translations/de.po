@@ -1621,6 +1621,9 @@ msgstr "Sammelbeleg"
 msgid "DN-"
 msgstr "LS-"
 
+msgid "Report"
+msgstr "Meldungen"
+
 msgid "GENDER_Dispatch Report"
 msgstr ""
 
@@ -1629,11 +1632,8 @@ msgid_plural "Dispatch Reports"
 msgstr[0] "Belegversandt Report"
 msgstr[1] "Belegversandt Reports"
 
-msgid "Dispatch Date"
-msgstr "Belegversandt Datum"
-
-msgid "Dispatch Transport Method"
-msgstr "Belegversandt Transport Methode"
+msgid "Transport Method"
+msgstr "Transport Methode"
 
 msgid "GENDER_Invoice"
 msgstr "female"
@@ -2073,22 +2073,28 @@ msgstr ""
 "Gibt eine elektronische Adresse des Erwerbers an, an die eine Rechnung "
 "gesendet werden sollte (BT-49 [EN 16931])."
 
-msgid "Report"
-msgstr "Meldungen"
+msgid "Electronic Document Transport Config"
+msgstr "Elektronische Dokumenten Konfiguration"
 
-msgid "Transport Method"
-msgstr "Transport Methode"
+msgid "Payment Means"
+msgid_plural "Payment Means"
+msgstr[0] "Zahlungsmittel"
+msgstr[1] "Zahlungsmittel"
+
+msgid "Config"
+msgstr "Konfiguration"
+
+msgid "Dispatch Date"
+msgstr "Belegversandt Datum"
+
+msgid "Dispatch Transport Method"
+msgstr "Belegversandt Transport Methode"
 
 msgid "Contact person filter"
 msgstr "Kontaktperson Filter"
 
 msgid "Configure filter for customer contacts via container path filter"
 msgstr "Filter für Kundenkontakte über den Contianer Path Filter"
-
-msgid "Payment Means"
-msgid_plural "Payment Means"
-msgstr[0] "Zahlungsmethoden"
-msgstr[1] "Zahlungsmethoden"
 
 msgid "Invoice Period Start"
 msgstr "Abrechnungszeitraum Start"
