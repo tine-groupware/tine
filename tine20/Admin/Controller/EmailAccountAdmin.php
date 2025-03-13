@@ -22,4 +22,11 @@ class Admin_Controller_EmailAccountAdmin extends Admin_Controller_EmailAccount
             parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action)->toArray()
         );
     }
+
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    {
+        return new Tinebase_Record_RecordSet(Admin_Model_EmailAccountAdmin::class,
+            parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted)->toArray()
+        );
+    }
 }

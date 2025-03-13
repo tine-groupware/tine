@@ -68,6 +68,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                     ],
                 ],
                 self::FLD_EAS_ID => [],
+                self::FLD_DISPATCH_FM_ACCOUNT_ID => [],
             ],
             Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                 Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS         => [],
@@ -238,6 +239,9 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                 self::CONFIG                    => [
                     self::APP_NAME                  => Admin_Config::APP_NAME,
                     self::MODEL_NAME                => 'EmailAccountAdmin',
+                ],
+                self::UI_CONFIG                 => [
+                    'xtype'                         => 'felamimail-admin-accountpicker',
                 ],
             ],
         ],
