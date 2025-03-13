@@ -241,6 +241,7 @@
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
     - !reference [.lib, script]
     - docker_registry_login ${REGISTRY} ${REGISTRY_USER} ${REGISTRY_PASSWORD}
+    - docker_registry_login ${CI_DEPENDENCY_PROXY_SERVER} ${CI_DEPENDENCY_PROXY_USER} ${CI_DEPENDENCY_PROXY_PASSWORD}
     - |
       WAIT_TIME=0
       until [ $WAIT_TIME -eq 60 ] || docker version > /dev/null 2>&1
