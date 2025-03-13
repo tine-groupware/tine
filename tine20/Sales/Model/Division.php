@@ -236,8 +236,8 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                 self::LABEL                     => 'Dispatch email account', // _('Dispatch email account')
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
-                    self::APP_NAME                  => Felamimail_Config::APP_NAME,
-                    self::MODEL_NAME                => 'Account',
+                    self::APP_NAME                  => Admin_Config::APP_NAME,
+                    self::MODEL_NAME                => 'EmailAccountAdmin',
                 ],
             ],
         ],
