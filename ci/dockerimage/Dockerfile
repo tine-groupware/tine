@@ -101,7 +101,7 @@ RUN apt-get update \
 
 
 
-FROM docker.io/library/ubuntu:noble as php8.4
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.4
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     software-properties-common \
