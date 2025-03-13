@@ -96,6 +96,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     },
 
     setValue(value, record) {
+        value = value?.id || value;
         const allowedTargetStatus = this.transitions ? this.transitions.value[value || '']?.targetStatus : null;
 
         this.store.each((record) => {

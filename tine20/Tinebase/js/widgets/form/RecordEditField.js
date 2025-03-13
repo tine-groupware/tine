@@ -65,9 +65,13 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
     
     setValue : function(v, owningRecord){
         this.recordData = _.get(v, 'data', v);
+        this.recordData = ((_.isString(this.recordData) && this.recordData === '[]') || (_.isArray(this.recordData) && this.recordData.length === 0)) ? {} : this.recordData; // transform server defaults
         this.assertRecordClass(owningRecord);
-    
+
         const valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
+        if (!this.recordData.hasOwnProperty(this.recordClass.getMeta('idProperty'))) {
+            valueRecord.phantom = true;
+        }
         Promise.resolve().then(async () => {
             let text = valueRecord ? valueRecord.getTitle() || '...' : '';
             if (text && text.asString) {

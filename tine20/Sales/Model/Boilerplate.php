@@ -77,6 +77,16 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
             'copyEditAction'    => true,
         ],
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_DOCUMENT_CATEGORY => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Category::FLD_DIVISION_ID => [],
+                    ],
+                ],
+            ],
+        ],
+
         self::FIELDS => [
             self::FLD_MODEL => [
                 self::TYPE => self::TYPE_MODEL,

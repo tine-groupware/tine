@@ -186,9 +186,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             const customer = await Tine.Sales.getCustomer(record.data.customer_id.original_id)
 
                             const emails = []
-                                .concat(debitor.edocument_dispatch_type === 'Sales_Model_EDocument_Dispatch_Email' && debitor.edocument_dispatch_config.email ?
+                                .concat(debitor.edocument_dispatch_type === 'Sales_Model_EDocument_Dispatch_Email' && debitor.edocument_dispatch_config?.email ?
                                     { name: debitor.edocument_dispatch_config.email, text: app.formatMessage('{ adr } (Dispatch email of debitor)', { adr: debitor.edocument_dispatch_config.email })} : [])
-                                .concat(debitor.eas_id.code === 'EM' && debitor.electronic_address ?
+                                .concat(debitor.eas_id?.code === 'EM' && debitor.electronic_address ?
                                     { name: debitor.electronic_address, text: app.formatMessage('{ adr } (Electronic address of debitor)', { adr: debitor.electronic_address })} : [])
                                 .concat(record.data.recipient_id.email ?
                                     { name: `${record.data.recipient_id.name} < ${record.data.recipient_id.email} >`, text: app.formatMessage('{ adr } (Email of document recipient)', { adr: `${record.data.recipient_id.name} < ${record.data.recipient_id.email} >` })} : [])

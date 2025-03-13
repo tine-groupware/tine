@@ -7,11 +7,12 @@ ARG JSBUILD_IMAGE=jsbuild
 ARG BUILD_IMAGE=build
 ARG BUILT_IMAGE=built
 ARG PACKAGING_IMAGE=packaging
+ARG DOCKER_HUB_PROXY=""
 
 
 
 
-FROM docker.io/library/ubuntu:jammy as php8.1
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:jammy as php8.1
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php \
@@ -40,7 +41,7 @@ RUN apt-get update \
 
 
 
-FROM docker.io/library/ubuntu:noble as php8.2
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.2
 RUN apt-get update \
  && apt-get install -y software-properties-common \
  && add-apt-repository -y ppa:ondrej/php \
@@ -71,7 +72,7 @@ RUN apt-get update \
 
 
 
-FROM docker.io/library/ubuntu:noble as php8.3
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.3
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php \
@@ -100,7 +101,7 @@ RUN apt-get update \
 
 
 
-FROM hairyhenderson/gomplate:stable-alpine as gomplate
+FROM ${DOCKER_HUB_PROXY}hairyhenderson/gomplate:stable-alpine as gomplate
 
 FROM ${PHP_IMAGE} as base
 ARG TINE20ROOT=/usr/share
@@ -197,10 +198,13 @@ COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini
 
 
 FROM ${BASE_IMAGE} as dev
+# todo move tesseract to base image, if ocr is tested
 RUN apt-get update \
  && apt-get install -y \
     composer \
     $(cat /etc/php/container-php-package-name)-xdebug \
+    tesseract-ocr \
+    tesseract-ocr-deu \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -222,7 +226,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-ansi --no-prog
 
 
 
-FROM node:18.9.0-alpine as jsdependency
+FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine as jsdependency
 ARG TINE20ROOT=/usr/share
 RUN apk add git
 COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
@@ -253,7 +257,7 @@ FROM ${SOURCE_IMAGE} AS source-copy
 
 
 
-FROM node:18.9.0-alpine as jsbuild
+FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine as jsbuild
 ARG TINE20ROOT=/usr/share
 ARG REVISION=local
 WORKDIR ${TINE20ROOT}/tine20/Tinebase/js

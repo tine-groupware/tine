@@ -332,9 +332,25 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName($billingAddress->{Sales_Model_Address::FLD_NAME} ?: $this->{self::FLD_CUSTOMER_ID}->name))
                     ])
                     ->setPostalAddress((new \UBL21\Common\CommonAggregateComponents\PostalAddress())
-                        ->setAddressLine($billingAddress->{Sales_Model_Address::FLD_STREET} ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                            ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_STREET}))
-                        ] : [])
+                        ->setAddressLine(array_merge(
+                            $billingAddress->{Sales_Model_Address::FLD_PREFIX1} ?
+                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_PREFIX1}))
+                                ] : [],
+                            $billingAddress->{Sales_Model_Address::FLD_PREFIX2} ?
+                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_PREFIX2}))
+                                ] : [],
+                            $billingAddress->{Sales_Model_Address::FLD_PREFIX3} ?
+                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_PREFIX3}))
+                                ] : [],
+                            $billingAddress->{Sales_Model_Address::FLD_STREET} ?
+                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_STREET}))
+                                ] : [],
+                        ))
+                        ->setPostbox($billingAddress->{Sales_Model_Address::FLD_POBOX} ? new \UBL21\Common\CommonBasicComponents\Postbox($billingAddress->{Sales_Model_Address::FLD_POBOX}) : null)
                         ->setPostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE} ? new \UBL21\Common\CommonBasicComponents\PostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE}) : null)
                         ->setCityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY} ? new \UBL21\Common\CommonBasicComponents\CityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY}) : null)
                         ->setCountry($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME} ? (new \UBL21\Common\CommonAggregateComponents\Country())

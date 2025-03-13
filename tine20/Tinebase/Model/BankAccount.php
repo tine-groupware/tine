@@ -39,7 +39,7 @@ class Tinebase_Model_BankAccount extends Tinebase_Record_Abstract
         self::VERSION => 1,
         self::RECORD_NAME           => 'Bank Account',
         self::RECORDS_NAME          => 'Bank Accounts', // ngettext('Bank Account', 'Bank Accounts', n)
-        self::TITLE_PROPERTY        => '{{ name }}: {{ iban }}',
+        self::TITLE_PROPERTY        => '{{ name }}: {{ iban }} - {{ description }}',
         self::DEFAULT_SORT_INFO     => [self::FIELD => self::FLD_NAME],
 
         self::HAS_RELATIONS => false,
