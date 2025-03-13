@@ -155,12 +155,16 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                         $this->_sendUnauthorizedHeader();
                         return;
                     }
-                    Tinebase_Core::startCoreSession();
-                    Tinebase_Core::initFramework();
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     $this->_sendUnauthorizedHeader();
                     return;
                 }
+            }
+
+            Tinebase_Core::startCoreSession();
+            Tinebase_Core::initFramework();
+            if (($saveHandler = Zend_Session::getSaveHandler()) instanceof Tinebase_Session_SaveHandler_Redis) {
+                $saveHandler->setLifeTimeSec(30*60);
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -310,8 +314,6 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     implode("\n", headers_list()) . "\n\n" .
                     self::$_server->httpResponse->stopBodyLog());
             }
-
-            Tinebase_Controller::getInstance()->logout();
         } catch (Tinebase_Exception_Unauthorized $teu) {
             @header('HTTP/1.1 401 Not authorized');
         } catch (Tinebase_Exception_AccessDenied $tead) {
@@ -328,11 +330,6 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
-        } finally {
-            // TODO do we want to remove the session in some cases? I think we should not always do it,
-            //      because that would log us out of tine if some tine url is called which is matched
-            //      by the webdav-catchall
-            // Tinebase_Session::destroyAndRemoveCookie();
         }
     }
 
