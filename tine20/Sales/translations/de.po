@@ -2072,3 +2072,17 @@ msgid ""
 msgstr ""
 "Gibt eine elektronische Adresse des Erwerbers an, an die eine Rechnung "
 "gesendet werden sollte (BT-49 [EN 16931])."
+
+msgid "Electronic Document Transport Config"
+msgstr "Elektronische Dokumenten Konfiguration"
+
+msgid "Payment Means"
+msgid_plural "Payment Means"
+msgstr[0] "Zahlungsmittel"
+msgstr[1] "Zahlungsmittel"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Config"
+msgstr "Konfiguration"
