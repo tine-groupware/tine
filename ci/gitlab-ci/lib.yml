@@ -69,6 +69,7 @@
           done
       }
 
+    - |
       # lib/scripts/docker_build_image.sh
       docker_build_image_dev() {
           log dev image: building ...
@@ -168,6 +169,7 @@
               .
       }
 
+    - |
       # lib/scripts/docker_hub.sh
       docker_hub_deploy () {
           set -e
@@ -185,6 +187,7 @@
           docker push "${DESTINATION_IMAGE}"
       }
 
+    - |
       # lib/scripts/docker_registry.sh
       docker_registry_login () {
           registry="$1"
@@ -207,23 +210,32 @@
       
       docker_registry_release_image() {
           name="$1"
-          desitination="$2"
+          destination="$2"
           latest="$3"
       
           from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
       
           if [ -z "$CI_COMMIT_TAG" ]; then
               echo "pushing nightly"
-              docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+              docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
               return
           fi
       
           if [ "$latest" == "true" ]; then
-              docker_registry_push "${from}" "${desitination}:latest"
+              docker_registry_push "${from}" "${destination}:latest"
           fi
       
-          docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-          docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+          docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+          docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+      }
+      
+      docker_registry_release_dev_image() {
+          name=dev
+          targetRegistry="$1"
+      
+          from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+      
+          docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
       }
       
       docker_registry_push() {
@@ -234,7 +246,20 @@
           docker tag "${from}" "${to}"
           docker push "${to}"
       }
+      
+      # needs to be run one time per architecture, with $ARCH set.
+      # Why?: This allows us push new architectures as their build finishes
+      docker_registry_push_multi_platform() {
+          from="$1"
+          to="$2"
+      
+          skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+      
+          # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+          manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
+      }
 
+    - |
       # lib/scripts/git_repo.sh
       git_repo_clone () {
           git clone ${CI_REPOSITORY_URL} --branch ${CI_COMMIT_REF_NAME} --depth 1 --single-branch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
@@ -279,6 +304,7 @@
           popd
       }
 
+    - |
       # lib/scripts/github.sh
       github_create_release() {
           tag=$1
@@ -327,6 +353,7 @@
               "$upload_url?name=$name.tar.bz2"
       }
 
+    - |
       # lib/scripts/matrix.sh
       matrix_send_message() {
           roomid=$1
@@ -354,6 +381,7 @@
       }
 
 
+    - |
       # lib/scripts/merge.sh
       merge_merge_upwards () {
           if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" "customers"; then
@@ -417,6 +445,7 @@
           done
       }
 
+    - |
       # lib/scripts/packaging.sh
       packaging_build_packages() {
           echo "packaging_build_packages()"
@@ -527,6 +556,7 @@
           fi
       }
 
+    - |
       # lib/scripts/phpstan.sh
       phpstan_analyse() {
           if test "${CI_PROJECT_NAME}" == "tine20"; then
@@ -565,6 +595,7 @@
           php -d memory_limit=2G $TINE20ROOT/tine20/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv $dir | tee ${CI_PROJECT_DIR}/code-quality-report.json
       }
 
+    - |
       # lib/scripts/pipeline_status.sh
       pipeline_status_send () {
           errors=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/test_report" | jq -c '.test_suites[] | select((.error_count>0) or .failed_count>0)| {name,error_count,failed_count}')
@@ -588,6 +619,7 @@
           matrix_send_message $MATRIX_ROOM "$message"
       }
 
+    - |
       # lib/scripts/release.sh
       release_tag() {
           branch="$(echo "$CI_COMMIT_REF_NAME" | sed sI/I-Ig)"
@@ -662,7 +694,16 @@
       
           echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
       }
+      
+      release_is_patch_level_release() {
+          # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+          # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+          # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+      
+          echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+      }
 
+    - |
       # lib/scripts/release_packages.sh
       release_packages_github_create_release() {
           package_repo=$(release_packages_determin_package_repo_name)
@@ -696,7 +737,10 @@
                   matrix_room="${MATRIX_ROOM}"
               fi
       
-              matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+              if ! release_is_patch_level_release; then
+                  matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+              fi
+      
           fi
       }
       
@@ -795,6 +839,7 @@
           return
       }
 
+    - |
       # lib/scripts/repo.sh
       repo_release_notes() {
           tag=$1
@@ -807,6 +852,7 @@
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
       }
 
+    - |
       # lib/scripts/test.sh
       test_prepare_working_dir() {
           if [ "${TINE20ROOT}" != "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20" ]; then
@@ -986,6 +1032,7 @@
           echo -e "\033[0;34m"$@"\033[0m"
       }
 
+    - |
       # lib/scripts/test_cloud.sh
       test_cloud_generate_deployment_name() {
           deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
@@ -1018,6 +1065,7 @@
           helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
       }
 
+    - |
       # lib/scripts/version_check.sh
       version_check_update () {
           version_check_update_file htdocs%2FversionCheck%2Fversion.json
@@ -1244,23 +1292,32 @@
         
         docker_registry_release_image() {
             name="$1"
-            desitination="$2"
+            destination="$2"
             latest="$3"
         
             from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+                docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
             if [ "$latest" == "true" ]; then
-                docker_registry_push "${from}" "${desitination}:latest"
+                docker_registry_push "${from}" "${destination}:latest"
             fi
         
-            docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-            docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+            docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+        }
+        
+        docker_registry_release_dev_image() {
+            name=dev
+            targetRegistry="$1"
+        
+            from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+        
+            docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
         }
         
         docker_registry_push() {
@@ -1270,6 +1327,18 @@
             docker pull "${from}"
             docker tag "${from}" "${to}"
             docker push "${to}"
+        }
+        
+        # needs to be run one time per architecture, with $ARCH set.
+        # Why?: This allows us push new architectures as their build finishes
+        docker_registry_push_multi_platform() {
+            from="$1"
+            to="$2"
+        
+            skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+        
+            # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+            manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
         }
 
         # lib/scripts/git_repo.sh
@@ -1699,6 +1768,14 @@
         
             echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
         }
+        
+        release_is_patch_level_release() {
+            # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+            # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+            # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+        
+            echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -1733,7 +1810,10 @@
                     matrix_room="${MATRIX_ROOM}"
                 fi
         
-                matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                if ! release_is_patch_level_release; then
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                fi
+        
             fi
         }
         
@@ -2327,23 +2407,32 @@
         
         docker_registry_release_image() {
             name="$1"
-            desitination="$2"
+            destination="$2"
             latest="$3"
         
             from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+                docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
             if [ "$latest" == "true" ]; then
-                docker_registry_push "${from}" "${desitination}:latest"
+                docker_registry_push "${from}" "${destination}:latest"
             fi
         
-            docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-            docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+            docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+        }
+        
+        docker_registry_release_dev_image() {
+            name=dev
+            targetRegistry="$1"
+        
+            from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+        
+            docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
         }
         
         docker_registry_push() {
@@ -2353,6 +2442,18 @@
             docker pull "${from}"
             docker tag "${from}" "${to}"
             docker push "${to}"
+        }
+        
+        # needs to be run one time per architecture, with $ARCH set.
+        # Why?: This allows us push new architectures as their build finishes
+        docker_registry_push_multi_platform() {
+            from="$1"
+            to="$2"
+        
+            skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+        
+            # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+            manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
         }
 
         # lib/scripts/git_repo.sh
@@ -2782,6 +2883,14 @@
         
             echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
         }
+        
+        release_is_patch_level_release() {
+            # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+            # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+            # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+        
+            echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -2816,7 +2925,10 @@
                     matrix_room="${MATRIX_ROOM}"
                 fi
         
-                matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                if ! release_is_patch_level_release; then
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                fi
+        
             fi
         }
         
