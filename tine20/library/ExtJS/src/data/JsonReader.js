@@ -328,7 +328,7 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
         for(var j = 0; j < len; j++){
             f = items[j];
             var v = this.ef[j](data);
-            values[f.name] = f.convert((v !== undefined) ? v : f.defaultValue, data);
+            values[f.name] = f.convert((v !== undefined) ? v : (Ext.isFunction(f.defaultValue) ? f.defaultValue() : f.defaultValue), data);
         }
         return values;
     }
