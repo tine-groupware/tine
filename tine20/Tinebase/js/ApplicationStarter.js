@@ -117,17 +117,33 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             if (fieldDefinition.hasOwnProperty('validators')) {
                 if (fieldDefinition['validators']['default']) {
                     field.defaultValue = fieldDefinition['validators']['default'];
+
+                    // php for [className, functionName]
+                    if (_.get(field.defaultValue, '[0].length') === 2) {
+                        if (field.defaultValue[1] === 'Tinebase_Record_RecordSet') {
+                            field.defaultValue = field.defaultValue[3];
+                        } else if (field.defaultValue[0][1] === 'generateUID') {
+                            field.defaultValue = _.bind(Tine.Tinebase.data.Record.generateUID, _, field.defaultValue[1] || 40);
+                        }
+                    }
                 }
             }
             if (fieldDefinition.hasOwnProperty('default')) {
                 field.defaultValue = fieldDefinition['default'];
             }
 
-            if (_.toUpper(_.get(fieldDefinition, `config.storage`)) === 'JSON' && String(field.defaultValue).match(/^[\[{]/)) {
+            if ((_.toUpper(_.get(fieldDefinition, `config.storage`)) === 'JSON' || _.get(fieldDefinition, `config.persistent`) === true)
+                && !_.isArray(field.defaultValue) && String(field.defaultValue).match(/^[\[{]/)) {
                 // NOTE: Server can't handle this properly, see {tine20/vendor/zendframework/zendframework1/library/Zend/Filter/Input.php:998}
                 field.defaultValue = JSON.parse(field.defaultValue);
             }
-            
+            if (fieldDefinition.type === 'dynamicRecord' && !fieldDefinition.nullable && !field.defaultValue) {
+                field.defaultValue = {};
+            }
+            if (['record', 'dynamicRecord'].indexOf(fieldDefinition.type) >=0 && JSON.stringify(field.defaultValue) === '[]') {
+                field.defaultValue = {};
+            }
+
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
                 field.dateFormat = fieldDefinition.dateFormat;

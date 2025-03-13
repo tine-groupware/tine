@@ -20,6 +20,7 @@ const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     allowDelete: false,
     usePagingToolbar: false,
     stateful: false,
+    initFilterPanel: Ext.emptyFn,
 
     initComponent() {
         this.app = Tine.Tinebase.appMgr.get('Sales')
