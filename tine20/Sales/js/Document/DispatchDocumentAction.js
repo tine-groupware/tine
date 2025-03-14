@@ -36,50 +36,6 @@ import DispatchHistoryDialog from "./DispatchHistoryDialog"
 //     - optionally set manual tasks "COMPLETED"
 //     - optionally set document dispatched
 
-
-const setDispatched = async function(config) {
-    const app = Tine.Tinebase.appMgr.get('Sales')
-    const win = config.win || window
-    const recordClass = config.recordClass || config.record.constructor
-    const recordName = recordClass.getRecordName()
-
-    const maskMsg = app.formatMessage('Set { recordName } dispatched', { recordName })
-    const mask = new win.Ext.LoadMask(config.maskEl, { msg: maskMsg })
-    mask.show()
-
-    const docType = config.record.constructor.getMeta('recordName')
-    const statusFieldName = `${docType.toLowerCase()}_status`
-    const currentStatus = config.record.get(statusFieldName)
-
-    let changeStatusTo = null;
-    if (docType === 'Invoice' && currentStatus === 'BOOKED') {
-        changeStatusTo = 'DISPATCHED';
-    } else if (docType === 'Offer' && currentStatus === 'DRAFT') {
-        // don't change status - might still be a draft!
-    }
-    if (changeStatusTo &&  !config.dispatchHistoryRecords.length && await Ext.MessageBox.confirm(
-        app.formatMessage('Mark Document Dispatched?'),
-        app.formatMessage('Do you want to set the Document Status to "Dispatched"?')
-    ) === 'yes') {
-        config.record.set(statusFieldName, changeStatusTo)
-        if (config.editDialog) {
-            config.editDialog.getForm().findField(statusFieldName).setValue(changeStatusTo)
-            await config.editDialog.applyChanges()
-            config.record = config.editDialog.record
-        } else {
-            config.record = await config.record.getProxy().promiseSaveRecord(config.record)
-        }
-    }
-
-    if (config.dispatchHistoryRecords.length) {
-        // add history records with type success
-        // @TODO
-    }
-
-    mask.hide()
-}
-
-
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
     const app = Tine.Tinebase.appMgr.get('Sales')
@@ -243,41 +199,37 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                     this.mask.show()
 
-                    // create paperslip/edocument if nessesary
-                    let promises = [];
-                    if (_.find(docs, { name: 'paperslip' }) && !paperslip) {
-                        promises.push(createAttachedDocument({
-                            record,
-                            type: 'paperslip',
-                            maskEl: this.maskEl,
-                            editDialog: this.editDialog
-                        }).then( ret => {
-                            _.find(docs, { name: 'paperslip' }).file = ret.attachedDocument
-                        }))
-                    }
-                    if (_.find(docs, { name: 'edocument' }) && !edocument) {
-                        promises.push(createAttachedDocument({
-                            record,
-                            type: 'edocument',
-                            maskEl: this.maskEl,
-                            editDialog: this.editDialog
-                        }).then( ret => {
-                            _.find(docs, { name: 'edocument' }).file = ret.attachedDocument
-                        }))
-                    }
-
-                    const dispatchedConfig = {
-                        maskEl: this.maskEl,
-                        editDialog: this.editDialog,
-                        docs,
-                        record,
-                        dispatchHistoryRecords,
-                        win
-                    }
-
                     win.Tine.Felamimail.MessageEditDialog.openWindow({
                         contentPanelConstructorInterceptor: async (config) => {
+                            // create paperslip/edocument if nessesary
+                            let promises = [];
+                            if (_.find(docs, { name: 'paperslip' }) && !paperslip) {
+                                promises.push(createAttachedDocument({
+                                    record,
+                                    type: 'paperslip',
+                                    win: config.window.popup,
+                                    // maskEl: this.maskEl,
+                                    editDialog: this.editDialog
+                                }).then( ret => {
+                                    _.find(docs, { name: 'paperslip' }).file = ret.attachedDocument
+                                }))
+                            }
+                            if (_.find(docs, { name: 'edocument' }) && !edocument) {
+                                promises.push(createAttachedDocument({
+                                    record,
+                                    type: 'edocument',
+                                    win: config.window.popup,
+                                    // maskEl: this.maskEl,
+                                    editDialog: this.editDialog
+                                }).then( ret => {
+                                    _.find(docs, { name: 'edocument' }).file = ret.attachedDocument
+                                    if (! ret.attachedDocument) {
+                                        _.find(docs, { name: 'ubl' }).file = ret.attachedDocument
+                                    }
+                                }))
+                            }
                             await Promise.allSettled(promises)
+
                             const mailDefaults = win.Tine.Felamimail.Model.Message.getDefaultData()
                             const emailBoilerplate = _.find(record.get('boilerplates'), (bp) => { return bp.name === 'Email'})
                             let body = ''
@@ -295,9 +247,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 subject: `${record.constructor.getRecordName()} ${record.get('document_number')}` + (record.get('document_title') ? `: ${record.get('document_title')}` : ''),
                                 body: body,
                                 to: emailRecipients,
-                                attachments: _.map(docs, (doc) => {
-                                    return Object.assign(doc.file, { attachment_type: 'attachment' })
-                                })
+                                attachments: _.reduce(docs, (accu, doc) => {
+                                    return accu.concat(doc.file ? Object.assign(doc.file, { attachment_type: 'attachment' }) : [])
+                                }, [])
                             }), 0)
 
                             Object.assign(config, {
