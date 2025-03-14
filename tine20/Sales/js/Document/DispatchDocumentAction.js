@@ -208,12 +208,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                     )), 'name') } catch (e) {/* USERABORT */ return }
 
-                    // autocheck paperslip, ubl and supporting_documents, offer all other attachments
+                    // autocheck paperslip, edocument and supporting_documents, offer all other attachments
                     let paperslip = record.getAttachedDocument('paperslip')
-                    let edocument = record.getAttachedDocument('ubl')
+                    let edocument = record.getAttachedDocument('edocument')
                     let docs = _.concat([
                         { name: 'paperslip', text: app.formatMessage('Paperslip ({ filename })', {filename: paperslip ? paperslip.name : app.formatMessage('Generated when dispatched')}), file: paperslip, checked: true },
-                        { name: 'ubl', text: app.formatMessage('eDocument ({ filename })', {filename: edocument ? edocument.name : app.formatMessage('Generated when dispatched')}), file: edocument, checked: true }
+                        { name: 'edocument', text: app.formatMessage('eDocument ({ filename })', {filename: edocument ? edocument.name : app.formatMessage('Generated when dispatched')}), file: edocument, checked: true }
                     ], _.reduce(record.get('attachments'), (docs, attachment) => {
                         const attachedDocument = _.find(record.get('attached_documents'), { node_id: attachment.id })
                         if (! attachedDocument || attachedDocument.type === 'supporting_document') {
@@ -243,7 +243,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                     this.mask.show()
 
-                    // create paperslip/ubl if nessesary
+                    // create paperslip/edocument if nessesary
                     let promises = [];
                     if (_.find(docs, { name: 'paperslip' }) && !paperslip) {
                         promises.push(createAttachedDocument({
@@ -255,14 +255,14 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             _.find(docs, { name: 'paperslip' }).file = ret.attachedDocument
                         }))
                     }
-                    if (_.find(docs, { name: 'ubl' }) && !edocument) {
+                    if (_.find(docs, { name: 'edocument' }) && !edocument) {
                         promises.push(createAttachedDocument({
                             record,
-                            type: 'ubl',
+                            type: 'edocument',
                             maskEl: this.maskEl,
                             editDialog: this.editDialog
                         }).then( ret => {
-                            _.find(docs, { name: 'ubl' }).file = ret.attachedDocument
+                            _.find(docs, { name: 'edocument' }).file = ret.attachedDocument
                         }))
                     }
 

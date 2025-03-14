@@ -272,7 +272,7 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     const ATTACHED_DOCUMENT_TYPES = 'attachedDocumentTypes';
     const ATTACHED_DOCUMENT_TYPES_PAPERSLIP = 'paperslip';
-    const ATTACHED_DOCUMENT_TYPES_UBL = 'ubl';
+    const ATTACHED_DOCUMENT_TYPES_EDOCUMENT = 'edocument';
     const ATTACHED_DOCUMENT_TYPES_SUPPORTING_DOC = 'supportingDoc';
     
     /**
@@ -305,7 +305,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         'system' => true,
                     ], [
-                        'id' => self::ATTACHED_DOCUMENT_TYPES_UBL,
+                        'id' => self::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
                         'value' => 'Ubl', //_('Ubl')
                         'icon' => null,
                         'system' => true,
