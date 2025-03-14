@@ -14,7 +14,6 @@ name: Sales
 
 files:
 #$app,$model,$definition,$file
-- Sales/Boilerplate/sales_import_boilerplate_csv/*
 - Tinebase/CostCenter/tinebase_import_costcenter_csv/*
 - Addressbook/Contact/addressbook_tine_import_csv/*
 - Sales/Customer/sales_import_customer_csv/*

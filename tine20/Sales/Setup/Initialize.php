@@ -141,15 +141,15 @@ class Sales_Setup_Initialize extends Setup_Initialize
 
     public static function initializeBoilerPlates()
     {
-        $importer = Tinebase_Import_Csv_Generic::createFromDefinition(
-            Tinebase_ImportExportDefinition::getInstance()->getFromFile(dirname(__DIR__) . '/Import/definitions/sales_import_boilerplate_csv.xml', Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME))
-        );
-        $importer->importFile(__DIR__ . '/files/boilerplate.csv');
+
     }
 
     protected function _initializeBoilerPlates()
     {
-        self::initializeBoilerPlates();
+        $importer = Tinebase_Import_Csv_Generic::createFromDefinition(
+            Tinebase_ImportExportDefinition::getInstance()->getFromFile(dirname(__DIR__) . '/Import/definitions/sales_import_boilerplate_csv.xml', Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME))
+        );
+        $importer->importFile(__DIR__ . '/files/boilerplate.csv');
     }
 
     /**
