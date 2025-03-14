@@ -163,6 +163,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Type', // _('Type')
                 self::NAME => 'mailAccountType',
+                self::CONFIG => [
+                    self::APPLICATION => Felamimail_Config::APP_NAME,
+                ],
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER],
@@ -577,6 +580,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LABEL => 'Auto-move notifications', // _('Auto-move notifications')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NAME => Felamimail_Config::SIEVE_NOTIFICATION_MOVE_STATUS,
+                self::CONFIG => [
+                    self::APPLICATION => Felamimail_Config::APP_NAME,
+                ],
             ],
             'sieve_vacation' => [
                 self::TYPE => self::TYPE_VIRTUAL,
