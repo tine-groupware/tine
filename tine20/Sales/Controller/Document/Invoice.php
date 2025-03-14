@@ -143,12 +143,12 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         $this->createEInvoiceAttachment($updatedRecord, $currentRecord);
     }
 
-    public function createEDocument(Tinebase_Record_Interface $record): void
+    public function createEDocument(Tinebase_Record_Interface $record, ?bool $throw = false): void
     {
-        $this->createEInvoiceAttachment($record);
+        $this->createEInvoiceAttachment($record, null, $throw);
     }
 
-    protected function createEInvoiceAttachment(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
+    protected function createEInvoiceAttachment(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null, ?bool $throw = false): void
     {
         if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
             return;
@@ -164,7 +164,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 fwrite($stream, $record->toUbl());
             } catch (Throwable $t) {
                 Tinebase_Exception::log($t);
-                if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                if ($throw || Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
                     throw $t;
                 }
                 return;
