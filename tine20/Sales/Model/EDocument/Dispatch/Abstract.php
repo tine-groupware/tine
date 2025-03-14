@@ -32,7 +32,7 @@ abstract class Sales_Model_EDocument_Dispatch_Abstract extends Tinebase_Record_N
                 self::VALIDATORS                => [
                     Zend_Filter_Input::DEFAULT_VALUE => [[Tinebase_Core::class, 'createInstance'], Tinebase_Record_RecordSet::class, Sales_Model_EDocument_Dispatch_DocumentType::class, [
                         [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP],
-                        [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_UBL],
+                        [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT],
                     ]],
                 ],
             ],

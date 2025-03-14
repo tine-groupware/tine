@@ -19,6 +19,7 @@ require('Tinebase/js/ux/ItemRegistry');
 require('Tinebase/js/widgets/MainScreen');
 
 require('./admin/AccountGridPanel');
+require('./admin/AccountPicker');
 
 /**
  * @namespace   Tine.Felamimail

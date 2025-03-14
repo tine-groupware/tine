@@ -19,6 +19,8 @@
  */
 class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 {
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * application backend class
      *
@@ -31,10 +33,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() 
+    protected function __construct()
     {
         $this->_applicationName       = 'Admin';
-        $this->_modelName             = Felamimail_Model_Account::class;
+        $this->_modelName             = Admin_Model_EmailAccount::class;
         $this->_purgeRecords          = false;
 
         // we need to avoid that anybody else gets this instance ... as it has acl turned off!
@@ -43,35 +45,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $this->_backend->doContainerACLChecks(false);
         // unset internal reference to prevent others to get instance without acl
         Felamimail_Controller_Account::destroyInstance();
-    }
-
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {
-    }
-
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Admin_Controller_EmailAccount
-     */
-    private static $_instance = NULL;
-
-    /**
-     * the singleton pattern
-     *
-     * @return Admin_Controller_EmailAccount
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Admin_Controller_EmailAccount;
-        }
-        
-        return self::$_instance;
     }
 
     public static function destroyInstance()
@@ -94,9 +67,22 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_EmailAccountId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $this->_checkRight('get');
+//        $record = new Admin_Model_EmailAccount(
+//            parent::get($_id, $_EmailAccountId, $_getRelatedData, $_getDeleted, $_aclProtect)->toArray()
+//        );
         $record = $this->_backend->get($_id);
         $this->resolveAccountEmailUsers($record);
         return $record;
+    }
+
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    {
+        $this->_checkRight('get');
+        $records = new Tinebase_Record_RecordSet(Admin_Model_EmailAccount::class,
+            parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted)->toArray()
+        );
+        $this->resolveAccountEmailUsers($records);
+        return $records;
     }
 
     /**
@@ -113,6 +99,9 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('get');
 
+//        $result = new Tinebase_Record_RecordSet(Admin_Model_EmailAccount::class,
+//            parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action)->toArray()
+//        );
         $result = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         if (! $_onlyIds) {
             // we need to unset the accounts grants to make the admin grid actions work for all accounts
