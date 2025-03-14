@@ -23,6 +23,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
+    public const EXCLUDE_FROM_DOCUMENT_SEQ = 'exclDocSeq';
+
     public const STATUS_REVERSAL = 'REVERSAL';
     public const STATUS_DISPATCHED = 'DISPATCHED';
     public const STATUS_MANUAL_DISPATCH = 'MANUAL_DISPATCH';
@@ -84,6 +86,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_ATTACHED_DOCUMENTS = 'attached_documents';
 
     public const FLD_DISPATCH_HISTORY = 'dispatch_history';
+
+    public const FLD_DOCUMENT_SEQ = 'document_seq';
 
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
@@ -545,6 +549,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID,
+                ],
+            ],
+            self::FLD_DOCUMENT_SEQ              => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::DEFAULT_VAL                   => 1,
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
                 ],
             ],
         ]
@@ -1142,7 +1153,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         foreach ($this->{self::FLD_ATTACHED_DOCUMENTS} as $attachedDoc) {
             switch ($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE}) {
                 case Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP:
-                case Sales_Model_Document_AttachedDocument::TYPE_UBL:
+                case Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT:
                     $this->{self::FLD_ATTACHED_DOCUMENTS}->removeById($attachedDoc->getId());
                     if ($this->{self::FLD_ATTACHMENTS} instanceof Tinebase_Record_RecordSet) {
                         $this->{self::FLD_ATTACHMENTS}->removeById($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});

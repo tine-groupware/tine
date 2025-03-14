@@ -482,7 +482,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         if ($isStorno) {
-            $refDoc = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD};
+            if (is_string($refDoc = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD})) {
+                $refDoc = Sales_Controller_Document_Invoice::getInstance()->get($refDoc);
+            }
             // BG-3: Preceding invoice reference
             $ublInvoice->addToBillingReference((new \UBL21\Common\CommonAggregateComponents\BillingReference)
                 ->setInvoiceDocumentReference((new \UBL21\Common\CommonAggregateComponents\InvoiceDocumentReference)

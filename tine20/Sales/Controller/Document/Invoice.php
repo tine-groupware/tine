@@ -131,24 +131,50 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
     }
 
-    public function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
+    public function createEDocument(string $documentId): Sales_Model_Document_Invoice
     {
-        parent::_inspectAfterSetRelatedDataCreate($createdRecord, $record);
-        $this->createEInvoiceAttachment($createdRecord);
+        /** @var Sales_Model_Document_Invoice $document */
+        $document = $this->get($documentId);
+        $this->_createEDocument($document);
+        return $document;
     }
 
-    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    /**
+     * @param Sales_Model_Document_Invoice $_newRecord
+     * @param ?Sales_Model_Document_Invoice $_oldRecord
+     * @return Tinebase_Record_RecordSet|NULL
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _writeModLog($_newRecord, $_oldRecord)
     {
-        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
-        $this->createEInvoiceAttachment($updatedRecord, $currentRecord);
+        $modLogs = parent::_writeModLog($_newRecord, $_oldRecord);
+
+        $this->_createMissingAttachedDocuments($_newRecord, $_oldRecord);
+
+        return $modLogs;
     }
 
-    public function createEDocument(Tinebase_Record_Interface $record, ?bool $throw = false): void
+    protected function _createMissingAttachedDocuments(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
     {
-        $this->createEInvoiceAttachment($record, null, $throw);
+        if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
+            return;
+        }
+
+        /** @var Sales_Model_Debitor $debitor */
+        $debitor = Sales_Controller_Debitor::getInstance()->get($record->{Sales_Model_Document_Invoice::FLD_DEBITOR_ID}->getIdFromProperty(Sales_Model_Document_Debitor::FLD_ORIGINAL_ID));
+        $missingDocTypes = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG}->getMissingDocumentTypes($record);
+
+        // need to do this before comit, we want the modlogs to be written first
+        // order matters, edocument may embed any of the other documents
+        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $missingDocTypes)) {
+            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([new Sales_Frontend_Json, 'createPaperSlip'], [Sales_Model_Document_Invoice::class, $record->getId()]);
+        }
+        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT, $missingDocTypes)) {
+            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'createEDocument'], [$record->getId()]);
+        }
     }
 
-    protected function createEInvoiceAttachment(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null, ?bool $throw = false): void
+    protected function _createEDocument(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
     {
         if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
             return;
@@ -164,7 +190,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 fwrite($stream, $record->toUbl());
             } catch (Throwable $t) {
                 Tinebase_Exception::log($t);
-                if ($throw || Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
                     throw $t;
                 }
                 return;
@@ -198,23 +224,24 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, []);
             }
             if (($attachedDocument = $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $attachmentId))) {
-                $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
+                $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
             } else {
                 $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
-                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
+                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT,
                     Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
-                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->seq + 1,
+                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1,
                 ], true));
             }
             $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
-                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->seq)
-                ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} !== Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT)
-                ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
+                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ})
+                ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} === Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP)
+                ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
 
             $updatedRecord = $this->update($record);
             $record->attachments = $updatedRecord->attachments;
             $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = $updatedRecord->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS};
             $record->seq = $updatedRecord->seq;
+            $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} = $updatedRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
             $record->last_modified_time = $updatedRecord->last_modified_time;
 
         } catch (Tinebase_Exception_HtmlReport $e) {

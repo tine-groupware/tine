@@ -46,4 +46,25 @@ abstract class Sales_Model_EDocument_Dispatch_Abstract extends Tinebase_Record_N
             ],
         ],
     ];
+
+    public function getRequiredDocumentTypes(): array
+    {
+        $requiredTypes = [];
+        foreach ($this->{self::FLD_DOCUMENT_TYPES} as $documentType) {
+            $requiredTypes[] = $documentType->{Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE};
+        }
+        return array_unique($requiredTypes);
+    }
+
+    public function getMissingDocumentTypes(Sales_Model_Document_Abstract $document): array
+    {
+        $missingDoyTypes = [];
+        $attachedDocs = $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ});
+        foreach ($this->getRequiredDocumentTypes() as $docType) {
+            if (null === $attachedDocs->find(Sales_Model_Document_AttachedDocument::FLD_TYPE, $docType)) {
+                $missingDoyTypes[] = $docType;
+            }
+        }
+        return array_unique($missingDoyTypes);
+    }
 }

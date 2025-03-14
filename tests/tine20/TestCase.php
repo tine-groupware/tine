@@ -1453,4 +1453,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             'sort' => array('note_type_id', 'creation_time')
         ));
     }
+
+    public static function throwTinebaseException($msg): void
+    {
+        throw new Tinebase_Exception($msg);
+    }
 }
