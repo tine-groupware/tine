@@ -39,6 +39,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_configuredModels = [
         Admin_Model_SchedulerTask::MODEL_NAME_PART,
         Admin_Model_SchedulerTask_Import::MODEL_NAME_PART,
+        Admin_Model_EmailAccountAdmin::MODEL_NAME_PART,
     ];
 
     /**
