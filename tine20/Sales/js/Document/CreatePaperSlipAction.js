@@ -30,10 +30,12 @@ const createAttachedDocument = async (config) => {
     const api = config.type === 'paperslip' ? Tine.Sales.createPaperSlip : Tine.Sales.createEDocument
     let record
     let attachedDocument
-
-    const maskMsg = app.formatMessage('Creating { recordName } { typeName }', { recordName, typeName })
-    const mask = new win.Ext.LoadMask(config.maskEl, { msg: maskMsg })
-    mask.show()
+    let mask
+    if (config.maskEl) {
+        const maskMsg = app.formatMessage('Creating { recordName } { typeName }', {recordName, typeName})
+        mask = new win.Ext.LoadMask(config.maskEl, {msg: maskMsg})
+        mask.show()
+    }
 
     try {
         record = !config.editDialog ? config.record :
@@ -61,7 +63,7 @@ const createAttachedDocument = async (config) => {
         });
     }
 
-    mask.hide()
+    mask ? mask.hide() : null;
 
     return { record, attachedDocument }
 };

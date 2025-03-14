@@ -888,7 +888,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
         $document = $docCtrl->get($documentId);
-        $docCtrl->createEDocument($document);
+        $docCtrl->createEDocument($document, true);
 
         $result = $this->_recordToJson($docCtrl->get($documentId));
 
