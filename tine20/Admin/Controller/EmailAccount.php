@@ -36,7 +36,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     protected function __construct()
     {
         $this->_applicationName       = 'Admin';
-        $this->_modelName             = Felamimail_Model_Account::class;
+        $this->_modelName             = Admin_Model_EmailAccount::class;
         $this->_purgeRecords          = false;
 
         // we need to avoid that anybody else gets this instance ... as it has acl turned off!
@@ -67,9 +67,22 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     public function get($_id, $_EmailAccountId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $this->_checkRight('get');
+//        $record = new Admin_Model_EmailAccount(
+//            parent::get($_id, $_EmailAccountId, $_getRelatedData, $_getDeleted, $_aclProtect)->toArray()
+//        );
         $record = $this->_backend->get($_id);
         $this->resolveAccountEmailUsers($record);
         return $record;
+    }
+
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    {
+        $this->_checkRight('get');
+        $records = new Tinebase_Record_RecordSet(Admin_Model_EmailAccount::class,
+            parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted)->toArray()
+        );
+        $this->resolveAccountEmailUsers($records);
+        return $records;
     }
 
     /**
@@ -86,6 +99,9 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('get');
 
+//        $result = new Tinebase_Record_RecordSet(Admin_Model_EmailAccount::class,
+//            parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action)->toArray()
+//        );
         $result = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         if (! $_onlyIds) {
             // we need to unset the accounts grants to make the admin grid actions work for all accounts
