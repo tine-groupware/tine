@@ -1,10 +1,12 @@
 AccountPicker = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
-    recordClass: 'Felamimail.Account', // @TODO: switch to Admin.EmailAccount once implemented and announced
-    initComponent() {
+    recordClass: 'Admin.EmailAccount',
+    wtf: 'fuckfuckfuc',
+
+    initComponent: function() {
         this.recordProxy = new Tine.Tinebase.data.RecordProxy({
             appName: 'Admin',
             modelName: 'EmailAccount',
-            recordClass: this.recordClass,
+            recordClass: Tine.Tinebase.data.RecordMgr.get(this.recordClass),
             idProperty: 'id'
         });
 
