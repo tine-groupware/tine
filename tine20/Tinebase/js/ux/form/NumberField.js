@@ -74,13 +74,13 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      */
     setValue: function(v) {
         // If empty string!
-        if (['', null, undefined].indexOf(v) >= 0 && !this.nullable) {
+        if (['', null, undefined, NaN].indexOf(v) >= 0 && !this.nullable) {
             v = "0";
         }
 
         Ext.ux.form.NumberField.superclass.setValue.call(this, v);
 
-        if (['', null, undefined].indexOf(v) >= 0 && this.nullable) {
+        if (['', null, undefined, NaN].indexOf(v) >= 0 && this.nullable) {
             return this;
         }
 
