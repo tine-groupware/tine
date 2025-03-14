@@ -271,7 +271,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
                 ]),
                 new Sales_Model_EDocument_Dispatch_DocumentType([
-                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_UBL,
+                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
                 ]),
             ]),
         ], true);
