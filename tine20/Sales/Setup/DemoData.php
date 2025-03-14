@@ -426,7 +426,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Email([
                         Sales_Model_EDocument_Dispatch_Email::FLD_EMAIL => 'rechnung@elko-elektronik.de',
                         Sales_Model_EDocument_Dispatch_Abstract::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [[
-                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_UBL,
+                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
                         ], [
                             Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
                         ]]),
@@ -447,7 +447,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Upload([
                         Sales_Model_EDocument_Dispatch_Upload::FLD_URL => 'https://www.platt-reifen.de/lieferantenprotal/erechnungsupload/',
                         Sales_Model_EDocument_Dispatch_Abstract::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [[
-                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_UBL,
+                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
                         ]]),
                     ]),
                 ],

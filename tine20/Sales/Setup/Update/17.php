@@ -55,6 +55,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE034 = __CLASS__ . '::update034';
     protected const RELEASE017_UPDATE035 = __CLASS__ . '::update035';
     protected const RELEASE017_UPDATE036 = __CLASS__ . '::update036';
+    protected const RELEASE017_UPDATE037 = __CLASS__ . '::update037';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -196,6 +197,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE035 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update035',
+            ],
+            self::RELEASE017_UPDATE037 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update037',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -986,7 +991,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             
             foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
                 $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Manual::class . '" WHERE edocument_dispatch_type = "download"');
-                $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Email::class . '", edocument_dispatch_config = "{\\"document_types\\":[{\\"document_type\\":\\"paperslip\\"},{\\"document_type\\":\\"ubl\\"}]}" WHERE edocument_dispatch_type = "email"');
+                $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Email::class . '", edocument_dispatch_config = "{\\"document_types\\":[{\\"document_type\\":\\"paperslip\\"},{\\"document_type\\":\\"edocument\\"}]}" WHERE edocument_dispatch_type = "email"');
             }
         }
 
@@ -1045,5 +1050,14 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         $this->divisionUpdate();
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.36', self::RELEASE017_UPDATE036);
+    }
+
+    public function update037(): void
+    {
+        foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
+            $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_config = REPLACE(edocument_dispatch_config, \'"ubl\', \'"edocument\') WHERE edocument_dispatch_config LIKE \'%"document_type\\\\\\\\":\\\\\\\\"ubl\\\\\\\\"%\'');
+            $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_config = REPLACE(edocument_dispatch_config, \'"document_type":"ubl"\', \'"document_type":"edocument"\') WHERE edocument_dispatch_config LIKE \'%"document_type":"ubl"%\'');
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.37', self::RELEASE017_UPDATE037);
     }
 }
