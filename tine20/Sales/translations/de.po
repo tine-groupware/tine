@@ -872,7 +872,7 @@ msgid "Exclude from Dispatch Document"
 msgstr "Vom Belegversandt ausschließen"
 
 msgid "Show Dispatch History"
-msgstr "Speichere Beleg-Versandt Historie"
+msgstr "Zeige Beleg-Versandt Historie"
 
 msgid "More Boilerplates"
 msgstr "Weitere Textbausteine"
