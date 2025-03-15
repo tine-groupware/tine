@@ -5,9 +5,13 @@
  * @subpackage  ux
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+import FieldTriggerPlugin from "ux/form/FieldTriggerPlugin";
+import FieldClipboardPlugin from 'ux/form/FieldClipboardPlugin'
+
 Ext.ns('Tine.Tinebase.widgets.form');
 
 /**
@@ -22,6 +26,20 @@ Tine.Tinebase.widgets.form.UrlField = Ext.extend(Ext.form.TextField, {
      * @private
      */
     initComponent: function(){
+        this.vtype = 'url';
+        this.plugins = this.plugins || [];
+        this.plugins.push(new FieldClipboardPlugin());
+        this.plugins.push(new FieldTriggerPlugin({
+            hideOnEmptyValue: true,
+            hideOnInvalidValue: true,
+            triggerClass: 'action_open_link',
+            qtip: i18n._('Open link in new window'),
+            onTriggerClick: () => {
+                if (this.isValid()) {
+                    window.open(this.getValue(), '_blank');
+                }
+            }
+        }));
         Tine.Tinebase.widgets.form.UrlField.superclass.initComponent.call(this);
         this.on('focus', this.onFieldFocus, this);
         this.on('blur', this.onFieldBlur, this);
@@ -30,7 +48,7 @@ Tine.Tinebase.widgets.form.UrlField = Ext.extend(Ext.form.TextField, {
     onFieldFocus: function (el) {
         if (! this.getValue()) {
             this.setValue('https://');
-            this.selectText.defer(100, this, [7, 11]);
+            this.selectText.defer(100, this, [8, 11]);
         }
         this.focus();
     },
