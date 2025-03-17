@@ -204,7 +204,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         preferredIconEl.setAttribute('ext:qtip', i18n._('Preferred E-Mail'));
         if (isPreferred) el.append(preferredIconEl);
 
-        this.setValue(token.email);
         return el.outerHTML;
     },
     
