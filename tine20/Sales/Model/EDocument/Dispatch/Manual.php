@@ -8,25 +8,27 @@
  * @copyright   Copyright (c) 2025-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-class Sales_Model_EDocument_Dispatch_Manual extends Tinebase_Record_NewAbstract implements Sales_Model_EDocument_Dispatch_Interface
+class Sales_Model_EDocument_Dispatch_Manual extends Sales_Model_EDocument_Dispatch_Abstract
 {
     public const MODEL_NAME_PART = 'EDocument_Dispatch_Manual';
+
     public const FLD_INSTRUCTIONS = 'instructions';
 
-    protected static $_modelConfiguration = [
-        self::APP_NAME                  => Sales_Config::APP_NAME,
-        self::MODEL_NAME                => self::MODEL_NAME_PART,
-        self::RECORD_NAME               => 'Manual Dispatching', // gettext('GENDER_Manual Dispatching')
-        self::RECORDS_NAME              => 'Manual Dispatchings', // ngettext('Manual Dispatching', 'Manual Dispatchings', n)
-        self::TITLE_PROPERTY            => self::FLD_INSTRUCTIONS,
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+        parent::inheritModelConfigHook($_definition);
 
-        self::FIELDS                    => [
-            self::FLD_INSTRUCTIONS           => [
-                self::LABEL                     => 'Instructions', // _('Instructions')
-                self::TYPE                      => self::TYPE_FULLTEXT,
-            ],
-        ],
-    ];
+        $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
+        $_definition[self::RECORD_NAME] = 'Manual Dispatching'; // gettext('GENDER_Manual Dispatching')
+        $_definition[self::RECORDS_NAME] = 'Manual Dispatchings'; // ngettext('Manual Dispatching', 'Manual Dispatchings', n)
+        $_definition[self::TITLE_PROPERTY] = self::FLD_INSTRUCTIONS;
+
+        $_definition[self::FIELDS][self::FLD_INSTRUCTIONS] = [
+            self::TYPE              => self::TYPE_TEXT,
+            self::LABEL             => 'Instructions', // _('Instructions')
+        ];
+    }
+
     protected static $_configurationObject = null;
 
     public function dispatch(Sales_Model_Document_Abstract $document, ?string $parentDispatchId = null): bool

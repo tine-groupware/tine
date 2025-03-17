@@ -17,6 +17,29 @@ use Sales_Model_DocumentPosition_Invoice as SMDPI;
  */
 class Sales_Document_UblTest extends Sales_Document_Abstract
 {
+    protected $oldPreviewSvc = null;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($this->oldPreviewSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+    }
+
+    public function tearDown(): void
+    {
+        Sales_Export_DocumentPdf::$previewService = null;
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $this->oldPreviewSvc;
+
+        parent::tearDown();
+    }
 
     protected function _createInvoice(array $positions, array $invoiceData = []): SMDI
     {
@@ -38,6 +61,19 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
 
     protected function _assertUblXml(SMDI $invoice, float $taxExclValue, float $taxInclValue): void
     {
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('expect register on commit callback to throw exception');
+        } catch (Tinebase_Exception $e) {
+            $this->assertSame('unittest', $e->getMessage());
+        } finally {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+
         $this->assertNotNull($node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null));
         //echo file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($node, true));
         $xml = new SimpleXMLElement(file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)));

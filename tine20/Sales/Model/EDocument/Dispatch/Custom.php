@@ -120,4 +120,14 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
 
         return $result;
     }
+
+    public function getRequiredDocumentTypes(): array
+    {
+        $requiredTypes = [];
+        /** @var Sales_Model_EDocument_Dispatch_DynamicConfig $dispatchConfig */
+        foreach ($this->{self::FLD_DISPATCH_CONFIGS} as $dispatchConfig) {
+            $requiredTypes = array_merge($requiredTypes, $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getRequiredDocumentTypes());
+        }
+        return array_unique($requiredTypes);
+    }
 }

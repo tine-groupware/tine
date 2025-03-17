@@ -11,4 +11,5 @@
 interface Sales_Model_EDocument_Dispatch_Interface
 {
     public function dispatch(Sales_Model_Document_Abstract $document, ?string $parentDispatchId = null): bool;
+    public function getRequiredDocumentTypes(): array;
 }

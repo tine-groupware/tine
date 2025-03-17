@@ -379,6 +379,34 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
     }
 
+    protected function _writeModLog($_newRecord, $_oldRecord)
+    {
+        $modLogs = parent::_writeModLog($_newRecord, $_oldRecord);
+        if (null === $_newRecord || null === $_oldRecord) {
+            return $modLogs;
+        }
+
+        $mcFields = $_newRecord::getConfiguration()->fields;
+        /** @var Tinebase_Model_ModificationLog $modLog */
+        foreach ($modLogs as $modLog) {
+            foreach (array_diff(array_keys(($diff = json_decode($modLog->new_value, true))['diff'] ?? []), Tinebase_ModelConfiguration::$genericProperties) as $property) {
+
+                if ($mcFields[$property][Tinebase_ModelConfiguration_Const::CONFIG][Sales_Model_Document_Abstract::EXCLUDE_FROM_DOCUMENT_SEQ] ?? false) {
+                    continue;
+                }
+
+                $_newRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
+                $diff['diff'][Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ] = $_newRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
+                $diff['oldData'][Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ] = $_oldRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
+                $modLog->new_value = json_encode($diff);
+                $this->_backend->updateMultiple([$_newRecord->getId()], [Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ => $_newRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ}]);
+                break 2;
+            }
+        }
+
+        return $modLogs;
+    }
+
     /**
      * all precursor documents need to update their followup stati
      *
@@ -613,10 +641,21 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         ];
     }
 
-    public static function dispatchDocument(Sales_Model_Document_Abstract $document): bool
+    public static function dispatchDocument(string $documentId): bool
     {
+        $document = static::getInstance()->get($documentId);
         $debitor = Sales_Controller_Debitor::getInstance()->get($document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}
             ->getIdFromProperty(Sales_Model_Document_Abstract::FLD_ORIGINAL_ID));
+
+        $missingDocTypes = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG}->getMissingDocumentTypes($document);
+
+        // order matters, edocument may embed any of the other documents
+        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $missingDocTypes)) {
+            (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $documentId);
+        }
+        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT, $missingDocTypes) && static::class === Sales_Controller_Document_Invoice::class) {
+            Sales_Controller_Document_Invoice::getInstance()->createEDocument($documentId);
+        }
 
         /** @var Sales_Model_EDocument_Dispatch_Interface $dispatcher */
         $dispatcher = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG};

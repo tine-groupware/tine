@@ -361,20 +361,27 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         Tinebase_Application::getInstance()->updateApplication($app);
 
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
-        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        Tinebase_Record_Expander_DataRequest::clearCache();
-
-        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
-
-        unset($unitTestModeRaii);
-        unset($previewRaii);
-        unset($exportPdfRaii);
-
+        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('expect register on commit callback to throw exception');
+        } catch (Tinebase_Exception $e) {
+            $this->assertSame('unittest', $e->getMessage());
+        } finally {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
 
+        unset($previewRaii);
+        unset($exportPdfRaii);
+
         $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
         $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+        foreach ($invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS} as $attachedDoc) {
+            $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE});
+        }
 
         (new Sales_Frontend_Json)->dispatchDocument(Sales_Model_Document_Invoice::class, $invoice->getId());
 
@@ -516,7 +523,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
         $ublAttachmentId = $invoice->attachments->getFirstRecord()->getId();
         $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
-            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT,
             Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $ublAttachmentId,
             Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $invoice->seq,
         ], true));
@@ -626,15 +633,42 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         Tinebase_Record_Expander::expandRecord($invoice);
 
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        $previewRaii = new Tinebase_RAII(fn () => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc);
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $exportPdfRaii = new Tinebase_RAII(fn () => Sales_Export_DocumentPdf::$previewService = null);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
-        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('expect register on commit callback to throw exception');
+        } catch (Tinebase_Exception $e) {
+            $this->assertSame('unittest', $e->getMessage());
+        } finally {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+
+
 
         $this->assertNotNull($attachment = $invoice->attachments->find('name', $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
-        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
         $this->assertSame($attachment->getId(), $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
-            ->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
-        $this->assertSame($invoice->seq, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
+            ->find(Sales_Model_Document_AttachedDocument::FLD_TYPE, Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT)->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
             ->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
+            ->getLastRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
 
@@ -651,6 +685,21 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]),
             ]
         ]));
+
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'throwTinebaseException'], ['unittest']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('expect register on commit callback to throw exception');
+        } catch (Tinebase_Exception $e) {
+            $this->assertSame('unittest', $e->getMessage());
+        } finally {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $storno = Sales_Controller_Document_Invoice::getInstance()->get($storno->getId());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
 
         $this->assertNotNull($storno->attachments->find('name', $storno->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
 
