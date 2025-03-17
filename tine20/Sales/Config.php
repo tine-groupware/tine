@@ -424,14 +424,14 @@ class Sales_Config extends Tinebase_Config_Abstract
         ],
         self::DEFAULT_DEBITOR_EDOCUMENT_DISPATCH_TYPE => [
             self::TYPE                  => self::TYPE_MIXED,
-            self::CLIENTREGISTRYINCLUDE => false,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => Sales_Model_EDocument_Dispatch_Email::class,
         ],
         self::DEFAULT_EDOCUMENT_DISPATCH_DOCUMENT_TYPES => [
             self::TYPE                  => self::TYPE_MIXED,
-            self::CLIENTREGISTRYINCLUDE => false,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [[Tinebase_Core::class, 'createInstance'], Tinebase_Record_RecordSet::class, Sales_Model_EDocument_Dispatch_DocumentType::class, [

@@ -114,22 +114,31 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 || (fieldDefinition.nullable)) {
                 field.defaultValue = null;
             }
+
+            // NOTE: this field default is meant for doctrine on server
+            if (fieldDefinition.hasOwnProperty('default')) {
+                field.defaultValue = fieldDefinition['default'];
+            }
+
             if (fieldDefinition.hasOwnProperty('validators')) {
                 if (fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty']) {
                     field.defaultValue = fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty'];
-
-                    // php for [className, functionName]
-                    if (_.get(field.defaultValue, '[0].length') === 2) {
-                        if (field.defaultValue[1] === 'Tinebase_Record_RecordSet') {
-                            field.defaultValue = field.defaultValue[3];
-                        } else if (field.defaultValue[0][1] === 'generateUID') {
-                            field.defaultValue = _.bind(Tine.Tinebase.data.Record.generateUID, _, field.defaultValue[1] || 40);
-                        }
-                    }
                 }
             }
-            if (fieldDefinition.hasOwnProperty('default')) {
-                field.defaultValue = fieldDefinition['default'];
+
+            let defaultFromConfig = _.get(fieldDefinition, 'config.defaultFromConfig');
+            defaultFromConfig = defaultFromConfig ? Tine.Tinebase.configManager.get(defaultFromConfig.config, defaultFromConfig.appName) : null;
+            if (defaultFromConfig) {
+                field.defaultValue = defaultFromConfig
+            }
+
+            // php for [className, functionName]
+            if (_.get(field.defaultValue, '[0].length') === 2) {
+                if (field.defaultValue[1] === 'Tinebase_Record_RecordSet') {
+                    field.defaultValue = field.defaultValue[3];
+                } else if (field.defaultValue[0][1] === 'generateUID') {
+                    field.defaultValue = _.bind(Tine.Tinebase.data.Record.generateUID, _, field.defaultValue[1] || 40);
+                }
             }
 
             if ((_.toUpper(_.get(fieldDefinition, `config.storage`)) === 'JSON' || _.get(fieldDefinition, `config.persistent`) === true)
