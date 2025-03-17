@@ -17,7 +17,7 @@
  */
 class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
-    const REQUEST_TYPE = 'WebDAV';
+    public const REQUEST_TYPE = 'WebDAV';
     
    /**
     * @var \Sabre\DAV\Server
@@ -67,7 +67,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     $this->_body = $this->_request->getContentStream();
                 } else if ($this->_request instanceof \Laminas\Http\Request) {
                     $this->_body = fopen('php://temp', 'r+');
-                    fwrite($this->_body, $request->getContent());
+                    fwrite($this->_body, (string) $request->getContent());
                     rewind($this->_body);
                 }
             }
@@ -91,7 +91,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     rewind($this->_body);
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
-                            (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown user agent') . " --> inserted xml body");
+                            ($_SERVER['HTTP_USER_AGENT'] ?? 'unknown user agent') . " --> inserted xml body");
                     }
                 }
             }
@@ -99,8 +99,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $hasIdentity = false;
 
             if (isset($_SERVER['HTTP_USER_AGENT']) &&
-                (strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') === 0 ||
-                    strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft Office') === 0)) {
+                (str_starts_with((string) $_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') ||
+                    str_starts_with((string) $_SERVER['HTTP_USER_AGENT'], 'Microsoft Office'))) {
                 try {
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
@@ -108,7 +108,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
                         $hasIdentity = true;
                     }
-                } catch (Zend_Session_Exception $zse) {
+                } catch (Zend_Session_Exception) {
                     // expire session cookie for client
                     Tinebase_Session::expireSessionCookie();
 
@@ -131,7 +131,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                                 request: $this->_request,
                                 clientIdString: self::REQUEST_TYPE
                             );
-                        } catch (Tinebase_Exception_MaintenanceMode $temm) {
+                        } catch (Tinebase_Exception_MaintenanceMode) {
                             header('HTTP/1.1 503 Service Unavailable');
                             return;
                         }
@@ -146,7 +146,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 try {
                     $authData = $this->_getAuthData($this->_request);
                     if (count($authData) === 2) {
-                        list($loginName, $password) = $authData;
+                        [$loginName, $password] = $authData;
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -155,7 +155,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                         $this->_sendUnauthorizedHeader();
                         return;
                     }
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $this->_sendUnauthorizedHeader();
                     return;
                 }
@@ -177,7 +177,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 && is_array($denyList)
             ) {
                 foreach ($denyList as $deny) {
-                    if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, $_SERVER['HTTP_USER_AGENT'])) {
+                    if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match($deny, (string) $_SERVER['HTTP_USER_AGENT'])) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                 . ' Blocked access of user agent string ' . $_SERVER['HTTP_USER_AGENT']);
@@ -198,7 +198,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     $this->_sendUnauthorizedHeader();
                     return;
                 }
-            } catch (Tinebase_Exception_MaintenanceMode $temm) {
+            } catch (Tinebase_Exception_MaintenanceMode) {
                 header('HTTP/1.1 503 Service Unavailable');
                 return;
             }
@@ -220,7 +220,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " headers: " . print_r($hdrs, true));
                 $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-                $method = strtoupper($this->_request->getMethod());
+                $method = strtoupper((string) $this->_request->getMethod());
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $method);
 
                 if ('PUT' !== $method && 'PATCH' !== $method) {
@@ -287,7 +287,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
                 $userA = null;
                 if (isset($_SERVER['HTTP_USER_AGENT'])) {
-                    list($userA, $tbVersion) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+                    [$userA, $tbVersion] = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
                 }
                 if (Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD !== $userA || version_compare($tbVersion, '78.0') >= 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
@@ -304,7 +304,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             // drop frontend query from rewrite rule
             $_SERVER['QUERY_STRING'] = str_replace('frontend=webdav&', '',
-                isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
+                $_SERVER['QUERY_STRING'] ?? '');
 
             self::$_server->exec();
 
@@ -314,7 +314,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     implode("\n", headers_list()) . "\n\n" .
                     self::$_server->httpResponse->stopBodyLog());
             }
-        } catch (Tinebase_Exception_Unauthorized $teu) {
+        } catch (Tinebase_Exception_Unauthorized) {
             @header('HTTP/1.1 401 Not authorized');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {

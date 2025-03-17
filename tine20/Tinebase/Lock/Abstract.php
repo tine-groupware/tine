@@ -17,8 +17,6 @@
  */
 abstract class Tinebase_Lock_Abstract implements Tinebase_Lock_Interface
 {
-    protected $_lockId;
-
     /**
      * @var bool
      */
@@ -27,15 +25,14 @@ abstract class Tinebase_Lock_Abstract implements Tinebase_Lock_Interface
     /**
      * @param string $lockId
      */
-    public function __construct($_lockId)
+    public function __construct(protected $_lockId)
     {
-        $this->_lockId = $_lockId;
         $this->processLockId();
     }
 
     protected function processLockId()
     {
-        $this->_lockId = sha1($this->_lockId);
+        $this->_lockId = sha1((string) $this->_lockId);
     }
 
     /**

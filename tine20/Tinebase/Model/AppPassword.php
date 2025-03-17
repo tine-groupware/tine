@@ -18,13 +18,13 @@
 
 class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'AppPassword';
-    const TABLE_NAME = 'app_pwd';
+    public const MODEL_NAME_PART = 'AppPassword';
+    public const TABLE_NAME = 'app_pwd';
 
-    const FLD_AUTH_TOKEN = 'auth_token';
-    const FLD_ACCOUNT_ID = 'account_id';
-    const FLD_CHANNELS = 'channels';
-    const FLD_VALID_UNTIL = 'valid_until';
+    public const FLD_AUTH_TOKEN = 'auth_token';
+    public const FLD_ACCOUNT_ID = 'account_id';
+    public const FLD_CHANNELS = 'channels';
+    public const FLD_VALID_UNTIL = 'valid_until';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

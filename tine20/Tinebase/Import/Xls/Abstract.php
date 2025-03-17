@@ -237,7 +237,7 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
 
             try {
                 $nodeController->createNodes('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Import/' . $tempFile->name, 'file', $_tempFileIds = array($tempFile->id));
-            } catch (Filemanager_Exception_NodeExists $e){
+            } catch (Filemanager_Exception_NodeExists){
                 // This is fine
             };
            

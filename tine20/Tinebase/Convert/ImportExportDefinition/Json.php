@@ -84,7 +84,7 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      */
     protected function _handleAutotags($_autotagOptions)
     {
-        $result = (isset($_autotagOptions['tag'])) ? $_autotagOptions['tag'] : $_autotagOptions;
+        $result = $_autotagOptions['tag'] ?? $_autotagOptions;
         
         if (isset($result['name'])) {
             $result = array($result);
@@ -96,7 +96,7 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
                 try {
                     $tag = Tinebase_Tags::getInstance()->get($value['id']);
                     $result[$idx] = $tag->toArray();
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     // do nothing
                 }
             }

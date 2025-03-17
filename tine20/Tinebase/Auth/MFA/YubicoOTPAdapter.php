@@ -47,7 +47,7 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
             return false;
         }
 
-        $_data = strtolower($_data);
+        $_data = strtolower((string) $_data);
         if (!preg_match("/^([cbdefghijklnrtuv]{1,16})([cbdefghijklnrtuv]{32})$/", $_data, $matches)) {
             return false;
         }
@@ -71,11 +71,11 @@ class Tinebase_Auth_MFA_YubicoOTPAdapter implements Tinebase_Auth_MFA_AdapterInt
             return false;
         }
 
-        if (substr($plaintext, 0, 12) !== $cc->username) {
+        if (substr((string) $plaintext, 0, 12) !== $cc->username) {
             return false;
         }
-        $counter = intval(substr($plaintext, 14, 2) . substr($plaintext, 12, 2), 16);
-        $session = intval(substr($plaintext, 22, 2), 16);
+        $counter = intval(substr((string) $plaintext, 14, 2) . substr((string) $plaintext, 12, 2), 16);
+        $session = intval(substr((string) $plaintext, 22, 2), 16);
 
         if ($counter > intval($yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER}) || (
                 $counter === intval($yubicoOTPCfg->{Tinebase_Model_MFA_YubicoOTPUserConfig::FLD_COUNTER}) &&

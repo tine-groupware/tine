@@ -14,14 +14,14 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'BankHoliday';
-    const TABLE_NAME = 'bankholiday';
+    public const MODEL_NAME_PART = 'BankHoliday';
+    public const TABLE_NAME = 'bankholiday';
 
-    const FLD_CALENDAR_ID = 'calendar_id';
-    const FLD_DATE = 'date';
-    const FLD_DESCRIPTION = 'description';
-    const FLD_FRACTION = 'fraction';
-    const FLD_NAME = 'name';
+    public const FLD_CALENDAR_ID = 'calendar_id';
+    public const FLD_DATE = 'date';
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_FRACTION = 'fraction';
+    public const FLD_NAME = 'name';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

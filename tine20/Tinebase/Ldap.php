@@ -229,11 +229,11 @@ class Tinebase_Ldap extends Zend_Ldap
         $hexGuid = unpack("H*hex", $binaryGuid); 
         $hex = $hexGuid["hex"];
         
-        $hex1 = substr($hex, -26, 2) . substr($hex, -28, 2) . substr($hex, -30, 2) . substr($hex, -32, 2);
-        $hex2 = substr($hex, -22, 2) . substr($hex, -24, 2);
-        $hex3 = substr($hex, -18, 2) . substr($hex, -20, 2);
-        $hex4 = substr($hex, -16, 4);
-        $hex5 = substr($hex, -12, 12);
+        $hex1 = substr((string) $hex, -26, 2) . substr((string) $hex, -28, 2) . substr((string) $hex, -30, 2) . substr((string) $hex, -32, 2);
+        $hex2 = substr((string) $hex, -22, 2) . substr((string) $hex, -24, 2);
+        $hex3 = substr((string) $hex, -18, 2) . substr((string) $hex, -20, 2);
+        $hex4 = substr((string) $hex, -16, 4);
+        $hex5 = substr((string) $hex, -12, 12);
         
         $guid = $hex1 . "-" . $hex2 . "-" . $hex3 . "-" . $hex4 . "-" . $hex5;
         
@@ -282,7 +282,7 @@ class Tinebase_Ldap extends Zend_Ldap
         $unpacked = unpack("crev/cdashes/nc/Nd/V*e", $binarySid); 
         
         if ($unpacked) { 
-            $n232 = pow(2,32); 
+            $n232 = 2 ** 32; 
             unset($unpacked["dashes"]); // unused 
             $unpacked["c"] = $n232 * $unpacked["c"] + $unpacked["d"]; 
             unset($unpacked["d"]); 

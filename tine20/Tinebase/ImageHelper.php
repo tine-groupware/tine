@@ -18,16 +18,16 @@ class Tinebase_ImageHelper
     /**
      * preserves ratio and cropes image on the oversize side
      */
-    const RATIOMODE_PRESERVANDCROP = 0;
+    public const RATIOMODE_PRESERVANDCROP = 0;
     /**
      * preserves ratio and does not crop image. Resuling image dimension is less
      * than requested on one dimension as this dim is not filled  
      */
-    const RATIOMODE_PRESERVNOFILL = 1;
+    public const RATIOMODE_PRESERVNOFILL = 1;
     /**
      * max pixels allowed per edge for resize operations
      */
-    const MAX_RESIZE_PX = 2000;
+    public const MAX_RESIZE_PX = 2000;
     /**
      * scales given image to given size
      * 
@@ -124,17 +124,12 @@ class Tinebase_ImageHelper
     public static function getMime($fileExt)
     {
         $ext = strtolower(str_replace('/^\./', '', $fileExt));
-        switch ($ext) {
-            case 'png':
-                return 'image/png';
-            case 'jpg':
-            case 'jpeg':
-                return 'image/jpeg';
-            case 'gif':
-                return 'image/gif';
-            default:
-                return '';
-        }
+        return match ($ext) {
+            'png' => 'image/png',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            default => '',
+        };
     }
 
     /**
@@ -184,7 +179,7 @@ class Tinebase_ImageHelper
      */
     public static function getDataUrl($imagePath)
     {
-        if (substr($imagePath, 0, 5) === 'data:') {
+        if (str_starts_with($imagePath, 'data:')) {
             return $imagePath;
         }
 
@@ -195,14 +190,14 @@ class Tinebase_ImageHelper
             $blob = Tinebase_Helper::getFileOrUriContents($imagePath);
             $mime = '';
 
-            if (substr($imagePath, -4) === '.ico') {
+            if (str_ends_with($imagePath, '.ico')) {
                 $mime = 'image/x-icon';
             } elseif ($blob) {
                 $info = self::getImageInfoFromBlob($blob);
                 $mime = $info['mime'];
             }
 
-            $dataUrl = 'data:' . $mime . ';base64,' . base64_encode($blob);
+            $dataUrl = 'data:' . $mime . ';base64,' . base64_encode((string) $blob);
             Tinebase_Core::getCache()->save($dataUrl, $cacheId);
         }
 

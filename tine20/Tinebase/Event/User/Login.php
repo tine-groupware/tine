@@ -18,5 +18,5 @@
 class Tinebase_Event_User_Login extends Tinebase_Event_Abstract
 {
     public Tinebase_Model_FullUser $user;
-    public ?string $password;
+    public ?string $password = null;
 }

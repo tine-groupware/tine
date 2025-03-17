@@ -17,9 +17,9 @@
  */
 class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Auth_MFA_AbstractUserConfig
 {
-    const MODEL_NAME_PART = 'MFA_SmsUserConfig';
+    public const MODEL_NAME_PART = 'MFA_SmsUserConfig';
 
-    const FLD_CELLPHONENUMBER = 'cellphonenumber';
+    public const FLD_CELLPHONENUMBER = 'cellphonenumber';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

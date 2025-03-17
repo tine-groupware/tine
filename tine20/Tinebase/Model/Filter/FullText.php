@@ -47,7 +47,7 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
 
         $not = false;
         $in = false;
-        if (false !== strpos($this->_operator, 'not')) {
+        if (str_contains($this->_operator, 'not')) {
             $not = true;
         }
         if ($this->_operator === 'in') {
@@ -114,18 +114,14 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
             $value = preg_replace('/[^\p{L}\p{N}_]+/u', ' ', $value);
             // replace multiple spaces with just one
             $value = preg_replace('# +#u', ' ', trim($value));
-            $values = array_merge($values, explode(' ', $value));
+            $values = array_merge($values, explode(' ', (string) $value));
         }
 
         if (true === $_useMysqlFullText) {
             $ftConfig = static::getMySQLFullTextConfig();
-            $values = array_filter($values, function($val) use ($ftConfig) {
-                return mb_strlen($val) >= $ftConfig['tokenSize'] && !in_array(strtolower($val), $ftConfig['stopWords']);
-            });
+            $values = array_filter($values, fn($val) => mb_strlen((string) $val) >= $ftConfig['tokenSize'] && !in_array(strtolower((string) $val), $ftConfig['stopWords']));
         } else {
-            $values = array_filter($values, function($val) {
-                return mb_strlen($val) >= 3;
-            });
+            $values = array_filter($values, fn($val) => mb_strlen((string) $val) >= 3);
         }
 
         return $values;
@@ -143,15 +139,15 @@ class Tinebase_Model_Filter_FullText extends Tinebase_Model_Filter_Abstract
         $cacheId = 'mysqlFullTextConfig';
 
         try {
-            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-        } catch (Tinebase_Exception_NotFound $tenf) {}
+            return Tinebase_Cache_PerRequest::getInstance()->load(self::class, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        } catch (Tinebase_Exception_NotFound) {}
 
         $db = Tinebase_Core::getDb();
 
         $result['stopWords'] = $db->query('SELECT `value` FROM INFORMATION_SCHEMA.INNODB_FT_DEFAULT_STOPWORD')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
         $result['tokenSize'] = $db->query('SELECT @@innodb_ft_min_token_size')->fetchColumn(0);
 
-        Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        Tinebase_Cache_PerRequest::getInstance()->save(self::class, __METHOD__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
 
         return $result;
     }

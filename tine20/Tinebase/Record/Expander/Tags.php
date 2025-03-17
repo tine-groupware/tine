@@ -20,7 +20,7 @@ class Tinebase_Record_Expander_Tags extends Tinebase_Record_Expander_Property
         }
     }
 
-    protected function _setData(Tinebase_Record_RecordSet $_data)
+    protected function _setData(Tinebase_Record_RecordSet $_data): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
     }

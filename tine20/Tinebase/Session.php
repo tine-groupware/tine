@@ -21,7 +21,7 @@ class Tinebase_Session extends Tinebase_Session_Abstract
     /**
      * Session namespace for Tinebase Core data
      */
-    const NAMESPACE_NAME = 'Tinebase_Core_Session_Namespace';
+    public const NAMESPACE_NAME = 'Tinebase_Core_Session_Namespace';
     
     /**
      * Register Validator for account status

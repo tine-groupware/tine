@@ -19,8 +19,8 @@
  */
 class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 {
-    const BEFORE_OR_IS_NULL = 'beforeOrIsNull';
-    const AFTER_OR_IS_NULL = 'afterOrIsNull';
+    public const BEFORE_OR_IS_NULL = 'beforeOrIsNull';
+    public const AFTER_OR_IS_NULL = 'afterOrIsNull';
 
     /**
      * @var array list of allowed operators
@@ -54,12 +54,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         'after_or_equals'   => array('sqlop' => ' >= ?'),
     );
 
-    const DAY_THIS = 'dayThis';
-    const DAY_LAST = 'dayLast';
-    const DAY_NEXT = 'dayNext';
-    const MONTH_THIS = 'monthThis';
-    const MONTH_LAST = 'monthLast';
-    const MONTH_NEXT = 'monthNext';
+    public const DAY_THIS = 'dayThis';
+    public const DAY_LAST = 'dayLast';
+    public const DAY_NEXT = 'dayNext';
+    public const MONTH_THIS = 'monthThis';
+    public const MONTH_LAST = 'monthLast';
+    public const MONTH_NEXT = 'monthNext';
 
     // @todo add YEAR constants
 
@@ -116,10 +116,10 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
 
         if (isset($value[0]) && $value[0]) {
             if (isset($this->_options[self::BEFORE_OR_IS_NULL]) && $this->_options[self::BEFORE_OR_IS_NULL] &&
-                    strpos($this->_operator, 'before') === 0) {
+                    str_starts_with($this->_operator, 'before')) {
                 $_select->orWhere($field . ' IS NULL');
             } elseif (isset($this->_options[self::AFTER_OR_IS_NULL]) && $this->_options[self::AFTER_OR_IS_NULL] &&
-                    strpos($this->_operator, 'after') === 0) {
+                    str_starts_with($this->_operator, 'after')) {
                 $_select->orWhere($field . ' IS NULL');
             }
         }
@@ -140,7 +140,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     . ' does not support array value');
             }
 
-            if (preg_match('/^(day|week|month|year)/', $_value, $matches)) {
+            if (preg_match('/^(day|week|month|year)/', (string) $_value, $matches)) {
                 if ($matches[1] === 'day') {
                     $date = $this->_getDate();
                 } else {
@@ -156,19 +156,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                         $date->setTime(23, 59, 59);
                         break;
                 }
-                switch ($_value) {
-                    case Tinebase_Model_Filter_Date::DAY_THIS:
-                        $_value = $date->toString();
-                        break;
-                    case Tinebase_Model_Filter_Date::DAY_LAST:
-                        $_value = $date->subDay(1)->toString();
-                        break;
-                    case Tinebase_Model_Filter_Date::DAY_NEXT:
-                        $_value = $date->addDay(1)->toString();
-                        break;
-                    default:
-                        throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_value);
-                }
+                $_value = match ($_value) {
+                    Tinebase_Model_Filter_Date::DAY_THIS => $date->toString(),
+                    Tinebase_Model_Filter_Date::DAY_LAST => $date->subDay(1)->toString(),
+                    Tinebase_Model_Filter_Date::DAY_NEXT => $date->addDay(1)->toString(),
+                    default => throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_value),
+                };
             }
         }
 

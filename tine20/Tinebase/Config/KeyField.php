@@ -51,12 +51,11 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     
     /**
      * create a new instance
-     * 
-     * @param mixed     $_data
+     *
      * @param array     $_options
-     * @return          Tinebase_Config_KeyField 
+     * @return          Tinebase_Config_KeyField
      */
-    public static function create($_data, array $_options = array())
+    public static function create(mixed $_data, array $_options = array())
     {
         $record = new self();
         if (isset($_options['appName'])) {

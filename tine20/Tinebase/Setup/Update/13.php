@@ -13,16 +13,16 @@
  */
 class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
 {
-    const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
-    const RELEASE013_UPDATE004 = __CLASS__ . '::update004';
-    const RELEASE013_UPDATE005 = __CLASS__ . '::update005';
-    const RELEASE013_UPDATE006 = __CLASS__ . '::update006';
-    const RELEASE013_UPDATE007 = __CLASS__ . '::update007';
-    const RELEASE013_UPDATE008 = __CLASS__ . '::update008';
-    const RELEASE013_UPDATE009 = __CLASS__ . '::update009';
-    const RELEASE013_UPDATE010 = __CLASS__ . '::update010';
+    public const RELEASE013_UPDATE001 = self::class . '::update001';
+    public const RELEASE013_UPDATE002 = self::class . '::update002';
+    public const RELEASE013_UPDATE003 = self::class . '::update003';
+    public const RELEASE013_UPDATE004 = self::class . '::update004';
+    public const RELEASE013_UPDATE005 = self::class . '::update005';
+    public const RELEASE013_UPDATE006 = self::class . '::update006';
+    public const RELEASE013_UPDATE007 = self::class . '::update007';
+    public const RELEASE013_UPDATE008 = self::class . '::update008';
+    public const RELEASE013_UPDATE009 = self::class . '::update009';
+    public const RELEASE013_UPDATE010 = self::class . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -178,7 +178,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         while (count($rows = $db->query('select group_concat(id), count(id) AS c from ' . SQL_TABLE_PREFIX . 'container where deleted_time > "1970-01-01 00:00:00" group by application_id, name, owner_id, model, deleted_time having c > 1')
                 ->fetchAll(Zend_Db::FETCH_NUM)) > 0) {
             foreach ($rows as $row) {
-                foreach(explode(',', $row[0]) as $key => $id) {
+                foreach(explode(',', (string) $row[0]) as $key => $id) {
                     if (0 === $key) continue;
                     $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container set deleted_time = DATE_ADD(deleted_time, INTERVAL ' . $key . ' SECOND) WHERE id = "' . $id .'"');
                 }
@@ -187,7 +187,7 @@ class Tinebase_Setup_Update_13 extends Setup_Update_Abstract
         while (count($rows = $db->query('select group_concat(id), count(id) AS c from ' . SQL_TABLE_PREFIX . 'container group by application_id, name, owner_id, model, deleted_time having c > 1')
                 ->fetchAll(Zend_Db::FETCH_NUM)) > 0) {
             foreach ($rows as $row) {
-                foreach(explode(',', $row[0]) as $key => $id) {
+                foreach(explode(',', (string) $row[0]) as $key => $id) {
                     if (0 === $key) continue;
                     $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'container set name = CONCAT(name, " ('.$key.')") WHERE id = "' . $id .'"');
                 }

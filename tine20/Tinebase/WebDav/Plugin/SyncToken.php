@@ -26,7 +26,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
      */
     protected $server;
 
-    const SYNCTOKEN_PREFIX = 'http://tine20.net/ns/sync/';
+    public const SYNCTOKEN_PREFIX = 'http://tine20.net/ns/sync/';
 
     /**
      * Returns a list of features for the DAV: HTTP header. 
@@ -127,7 +127,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         $syncToken = (string)$syncToken;
         if (strlen($syncToken) > 0 ) {
             // Sync-token must start with our prefix
-            if (substr($syncToken, 0, strlen(self::SYNCTOKEN_PREFIX)) !== self::SYNCTOKEN_PREFIX || strlen($syncToken) <= strlen(self::SYNCTOKEN_PREFIX)) {
+            if (!str_starts_with($syncToken, self::SYNCTOKEN_PREFIX) || strlen($syncToken) <= strlen(self::SYNCTOKEN_PREFIX)) {
                 throw new Sabre\DAV\Exception\BadRequest('Invalid or unknown sync token');
             }
             $syncToken = substr($syncToken, strlen(self::SYNCTOKEN_PREFIX));
@@ -172,7 +172,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
                 $resolvedProperties[$fullPath] = $this->server->getPropertiesForPath($fullPath, $properties);
 
                 // in case the user doesnt have access to this
-            } catch (Sabre\DAV\Exception\NotFound $e) {
+            } catch (Sabre\DAV\Exception\NotFound) {
                 unset($resolvedProperties[$fullPath]);
             }
         }

@@ -51,12 +51,12 @@ class Tinebase_Model_Filter_RecordAttachment extends Tinebase_Model_Filter_Abstr
     protected function _setOptions(array $_options)
     {
         if (!isset($_options['modelName'])) {
-            throw new Tinebase_Exception_InvalidArgument(__CLASS__ . ' requires a option modelName set');
+            throw new Tinebase_Exception_InvalidArgument(self::class . ' requires a option modelName set');
         }
         $this->_model = $_options['modelName'];
 
         if (!isset($_options['idProperty'])) {
-            throw new Tinebase_Exception_InvalidArgument(__CLASS__ . ' requires a option idProperty set');
+            throw new Tinebase_Exception_InvalidArgument(self::class . ' requires a option idProperty set');
         }
         $this->_idProperty = $_options['idProperty'];
 
@@ -97,13 +97,13 @@ class Tinebase_Model_Filter_RecordAttachment extends Tinebase_Model_Filter_Abstr
             $value = $this->_value;
         }
 
-        list($app,) = explode('_', $this->_model, 2);
+        [$app, ] = explode('_', $this->_model, 2);
         $fs = Tinebase_FileSystem::getInstance();
         $basePath = $fs->getApplicationBasePath($app, Tinebase_FileSystem::FOLDER_TYPE_RECORDS) . '/' .
             $this->_model;
         try {
             $modelNode = $fs->stat($basePath);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $this->_appendNoMatch($_select);
             return;
         }

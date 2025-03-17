@@ -17,7 +17,7 @@
  */
 class Tinebase_Model_Tree_Node_Link extends Tinebase_Record_NewAbstract
 {
-    const FLD_RECORD_ID = 'record_id';
+    public const FLD_RECORD_ID = 'record_id';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

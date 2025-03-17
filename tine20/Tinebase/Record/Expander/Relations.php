@@ -12,11 +12,8 @@
 
 class Tinebase_Record_Expander_Relations extends Tinebase_Record_Expander_Property
 {
-    protected $_parentModel;
-
-    public function __construct($_parentModel, $_model, $_property, $_expanderDefinition, Tinebase_Record_Expander $_rootExpander)
+    public function __construct(protected $_parentModel, $_model, $_property, $_expanderDefinition, Tinebase_Record_Expander $_rootExpander)
     {
-        $this->_parentModel = $_parentModel;
         parent::__construct($_model, $_property, $_expanderDefinition, $_rootExpander);
     }
 
@@ -53,7 +50,7 @@ class Tinebase_Record_Expander_Relations extends Tinebase_Record_Expander_Proper
         $this->expand($expandData);
     }
 
-    protected function _setData(Tinebase_Record_RecordSet $_data)
+    protected function _setData(Tinebase_Record_RecordSet $_data): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
     }

@@ -19,23 +19,6 @@
 class Tinebase_Auth_ModSsl extends Zend_Auth_Adapter_ModSsl implements Tinebase_Auth_Interface
 {
     /**
-     * Constructor
-     *
-     * @param array  $options An array of arrays of IMAP options
-     * @param string $username
-     * @param string $password
-     */
-    public function __construct(array $options = array(), $username = null, $password = null)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . ' ' . print_r($options, true));
-
-        // TODO does this make sense?
-        /** @noinspection PhpUndefinedMethodInspection */
-        parent::__construct($options, $username, $password);
-    }
-    
-    /**
      * set loginname
      *
      * TODO function probably doesnt work
@@ -45,8 +28,6 @@ class Tinebase_Auth_ModSsl extends Zend_Auth_Adapter_ModSsl implements Tinebase_
      */
     public function setIdentity($identity)
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        parent::setUsername($identity);
         return $this;
     }
     
@@ -60,8 +41,6 @@ class Tinebase_Auth_ModSsl extends Zend_Auth_Adapter_ModSsl implements Tinebase_
      */
     public function setCredential($credential)
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        parent::setPassword($credential);
         return $this;
     }
 
@@ -74,9 +53,10 @@ class Tinebase_Auth_ModSsl extends Zend_Auth_Adapter_ModSsl implements Tinebase_
     }
 
     /**
-     * @return self
+     * @return never
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function getAuthByEmailBackend()
+    public function getAuthByEmailBackend(): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call ' . __METHOD__);
     }

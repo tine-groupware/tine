@@ -56,10 +56,10 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         foreach($apps['results'] as $app) {
             if (   $app['install_status'] == 'uptodate'
                 && $app['name'] != 'Admin'
-                && $this->_config->{strtolower($app['name'])}
-                && $this->_config->{strtolower($app['name'])}->enabled) {
+                && $this->_config->{strtolower((string) $app['name'])}
+                && $this->_config->{strtolower((string) $app['name'])}->enabled) {
                 
-                $config = $this->_config->{strtolower($app['name'])}->toArray();
+                $config = $this->_config->{strtolower((string) $app['name'])}->toArray();
                 
                 $class_name = $app['name'] . '_Setup_Import_Egw14';
                 if (! class_exists($class_name)) {
@@ -68,7 +68,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 }
                 
                 try {
-                    $importer = new $class_name($this->_config->{strtolower($app['name'])}, $this->_log);
+                    $importer = new $class_name($this->_config->{strtolower((string) $app['name'])}, $this->_log);
                     $importer->import();
                 } catch (Exception $e) {
                     $this->_log->ERR(__METHOD__ . '::' . __LINE__ . " import for {$app['name']} failed ". $e->getMessage());
@@ -109,7 +109,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 'accountPrimaryGroup'       => abs($account->account_primary_group),
                 'accountLastName'           => $account->n_family ?: 'Lastname',
                 'accountFirstName'          => $account->n_given ?: 'Firstname',
-                'accountEmailAddress'       => isset($account->email) ? $account->email : $account->contact_email
+                'accountEmailAddress'       => $account->email ?? $account->contact_email
             ));
             
             $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ .' user: ' . print_r($user->toArray(), true));
@@ -121,7 +121,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             try {
                 Tinebase_User::getInstance()->getUserByProperty('accountId', $user->accountId);
                 $user = Tinebase_User::getInstance()->updateUser($user);
-            } catch (Tinebase_Exception_NotFound $ten) {
+            } catch (Tinebase_Exception_NotFound) {
                 $user = Tinebase_User::getInstance()->addUser($user);
             }
         

@@ -189,7 +189,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                     }
                 }
             }
-            elseif (substr($ldapName, -8) == ':boolean') {
+            elseif (str_ends_with((string) $ldapName, ':boolean')) {
                 if ($value == 1) {
                     $this->_deletePropertyFromLdapRawData($property_name, false, $_user['accountLoginName']);
                     $this->_addPropertyToLdapRawData($property_name, true, $_user['accountLoginName']);
@@ -276,10 +276,10 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         // replace wildcards in config
         $this->_runtimeConfig[$originalAccount] = $this->_simpleMailConfig;
         array_walk_recursive($this->_runtimeConfig[$originalAccount], function(&$value, $property, $userdata ) {
-            if (strpos($value, '%s') !== false) {
+            if (str_contains($value, '%s')) {
                 $value = str_replace('%s', $userdata['dn'], $value);
             }
-            elseif (strpos($value, '%u') !== false) {
+            elseif (str_contains($value, '%u')) {
                 $value = str_replace('%u', $userdata['user'], $value);
             }
         }, array(
@@ -355,8 +355,8 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
 
             $keepEntryThreshold = 0;
             foreach ($this->_propertyMapping as $property => $ldapName) {
-                if (substr($ldapName, -8) == ':boolean') {
-                    $ldapName = substr($ldapName, 0, -8);
+                if (str_ends_with((string) $ldapName, ':boolean')) {
+                    $ldapName = substr((string) $ldapName, 0, -8);
                 }
                 if (!isset($dn[$ldapName])) {
                     $dn[$ldapName] = null;
@@ -394,8 +394,8 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
     protected function _getPropertiesFromLdapRawData($ldapProperty, $account)
     {
         $properties = array();
-        if (substr($ldapProperty, -8) == ':boolean') {
-            $ldapProperty = substr($ldapProperty, 0, -8);
+        if (str_ends_with((string) $ldapProperty, ':boolean')) {
+            $ldapProperty = substr((string) $ldapProperty, 0, -8);
             $properties = (boolean) null;
         }
         foreach ($this->_ldapRawData[$account] as $dn) {
@@ -431,8 +431,8 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         }
 
         $ldapProperty = $this->_propertyMapping[$property];
-        if (substr($ldapProperty, -8) == ':boolean') {
-            $ldapProperty = substr($ldapProperty, 0, -8);
+        if (str_ends_with((string) $ldapProperty, ':boolean')) {
+            $ldapProperty = substr((string) $ldapProperty, 0, -8);
             $this->_ldapRawData[$account][$numberOfLdapElements-1][$ldapProperty] = array();
             $value = $value ? 'TRUE' : 'FALSE';
         }
@@ -452,8 +452,8 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
     {
 
         $ldapProperty = $this->_propertyMapping[$property];
-        if (substr($ldapProperty, -8) == ':boolean') {
-            $ldapProperty = substr($ldapProperty, 0, -8);
+        if (str_ends_with((string) $ldapProperty, ':boolean')) {
+            $ldapProperty = substr((string) $ldapProperty, 0, -8);
         }
 
         $managedPath = Zend_Ldap_Dn::fromString($this->_runtimeConfig[$account]['storage_base'], Zend_Ldap_Dn::ATTR_CASEFOLD_LOWER);

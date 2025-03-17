@@ -46,7 +46,7 @@ class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInte
             ->getAdapter()->getConfig();
         try {
             Tinebase_Auth_Webauthn::webAuthnAuthenticate($config, $_data);
-        } catch (Exception $e) {
+        } catch (Exception) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' webauthn mfa validation failed');
             return false;

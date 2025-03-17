@@ -321,7 +321,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         if ($templateFile !== NULL) {
             // autodetection works much better with file ending, thanks to phpspreadsheet we can simply use the reader
             //   version! (at least until ms will change the file endings) :-)
-            $tmpFile = Tinebase_TempFile::getTempPath() . '.' . strtolower($this->_excelVersion);
+            $tmpFile = Tinebase_TempFile::getTempPath() . '.' . strtolower((string) $this->_excelVersion);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Copy template file to temp path: '
                 . $templateFile . ' -> ' . $tmpFile);
             if (false === copy($templateFile, $tmpFile)) {
@@ -336,7 +336,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 $this->_spreadsheet = $reader->load($tmpFile);
             }
             
-            $activeSheet = isset($this->_config->sheet) ? $this->_config->sheet : 0;
+            $activeSheet = $this->_config->sheet ?? 0;
             $this->_spreadsheet->setActiveSheetIndex($activeSheet);
 
             $this->_hasTemplate = true;
@@ -368,7 +368,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         foreach($this->_spreadsheet->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
-            if (\strpos($desc, $_key) !== false) {
+            if (str_contains($desc, $_key)) {
                 $drawing->setDescription(str_replace($_key, $_value, $desc));
             }
         }
@@ -402,12 +402,12 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $cellIter = $row->getCellIterator();
             try {
                 $cellIter->setIterateOnlyExistingCells(true);
-            } catch (\PhpOffice\PhpSpreadsheet\Exception $pe) {
+            } catch (\PhpOffice\PhpSpreadsheet\Exception) {
                 continue;
             }
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
-                if (false !== strpos((string)$cell->getValue(), $_search)) {
+                if (str_contains((string)$cell->getValue(), $_search)) {
                     if (null !== $key) {
                         $notFound[$key] = false;
                     }
@@ -455,17 +455,17 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $cellIter = $row->getCellIterator();
             try {
                 $cellIter->setIterateOnlyExistingCells(true);
-            } catch (\PhpOffice\PhpSpreadsheet\Exception $pe) {
+            } catch (\PhpOffice\PhpSpreadsheet\Exception) {
                 continue;
             }
             /** @var Cell $cell */
             foreach($cellIter as $cell) {
-                if (false !== strpos((string)$cell->getValue(), '${twig:') &&
-                        preg_match_all('/(\${twig:(.+?[^%=])})/s', $cell->getValue(), $matches, PREG_SET_ORDER)) {
+                if (str_contains((string)$cell->getValue(), '${twig:') &&
+                        preg_match_all('/(\${twig:(.+?[^%=])})/s', (string) $cell->getValue(), $matches, PREG_SET_ORDER)) {
                     foreach($matches as $match) {
                         $this->_twigMapping[$i] = $match[1];
                         $source .= ($i === 0 ? '' : ',') .
-                            (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ?
+                            (str_contains($match[2], '{{') || str_contains($match[2], '{%') ?
                                 str_replace('=}', '}}', $match[2])
                                 : '{{' . $match[2] . '}}');
                         ++$i;
@@ -476,13 +476,13 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         foreach($this->_spreadsheet->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
-            if (false !== strpos((string)$desc, '${twig:') &&
+            if (str_contains((string)$desc, '${twig:') &&
                 preg_match_all('/(\${twig:(.+?[^%=])})/s', $desc, $matches, PREG_SET_ORDER)
             ) {
                 foreach ($matches as $match) {
                     $this->_twigMapping[$i] = $match[1];
                     $source .= ($i === 0 ? '' : ',') .
-                        (strpos($match[2], '{{') !== false || strpos($match[2], '{%') !== false ?
+                        (str_contains($match[2], '{{') || str_contains($match[2], '{%') ?
                             str_replace('=}', '}}', $match[2])
                             : '{{' . $match[2] . '}}');
                     ++$i;
@@ -743,7 +743,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         /** @var Drawing $drawing */
         foreach($this->_spreadsheet->getActiveSheet()->getDrawingCollection() as $drawing) {
             $desc = $drawing->getDescription();
-            if (strpos($desc, '://') !== false) {
+            if (str_contains($desc, '://')) {
                 $desc = trim($desc);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found url: ' . $desc);
@@ -775,7 +775,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function _replaceDrawing($filePath, Drawing $drawing)
     {
-        list($newWidth, $newHeight) = getimagesize($filePath);
+        [$newWidth, $newHeight] = getimagesize($filePath);
         $oldWidth = $drawing->getWidth();
         $oldHeight = $drawing->getHeight();
 
@@ -817,11 +817,9 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $this->save($from);
         }
         
-        switch($to) {
-            case Tinebase_Export_Convertible::PDF:
-                return $this->convertToPdf($from);
-            default:
-                return null;
-        }
+        return match ($to) {
+            Tinebase_Export_Convertible::PDF => $this->convertToPdf($from),
+            default => null,
+        };
     }
 }

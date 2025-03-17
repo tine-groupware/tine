@@ -33,7 +33,7 @@ class Tinebase_Event
      */
     static public function fireEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        self::$events[get_class($_eventObject)][$_eventObject->getId()] = $_eventObject;
+        self::$events[$_eventObject::class][$_eventObject->getId()] = $_eventObject;
         $historyOffset = count(static::$history);
         static::$history[$historyOffset] = ['event' => $_eventObject];
         
@@ -83,7 +83,7 @@ class Tinebase_Event
         if ($customEventHook) {
             try {
                 Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
-                    . ' About to process user defined event hook for ' . get_class($_eventObject));
+                    . ' About to process user defined event hook for ' . $_eventObject::class);
                 $customEventHook->handleEvent($_eventObject);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
@@ -92,7 +92,7 @@ class Tinebase_Event
             }
         }
         
-        unset(self::$events[get_class($_eventObject)][$_eventObject->getId()]);
+        unset(self::$events[$_eventObject::class][$_eventObject->getId()]);
 
         return true;
     }
@@ -125,7 +125,7 @@ class Tinebase_Event
                 }
                 if ($controller instanceof Tinebase_Event_Interface) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
-                        . __LINE__ . ' calling eventhandler for event ' . get_class($event) . ' of application ' . (string) $application);
+                        . __LINE__ . ' calling eventhandler for event ' . $event::class . ' of application ' . (string) $application);
 
                     try {
                         $controller->handleEvent($event);

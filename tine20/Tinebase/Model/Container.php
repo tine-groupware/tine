@@ -42,17 +42,17 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     /**
      * type for personal containers
      */
-    const TYPE_PERSONAL = 'personal';
+    public const TYPE_PERSONAL = 'personal';
     
     /**
      * type for shared container
      */
-    const TYPE_SHARED = 'shared';
+    public const TYPE_SHARED = 'shared';
     
     /**
      * type for shared container
      */
-    const TYPE_OTHERUSERS = 'otherUsers';
+    public const TYPE_OTHERUSERS = 'otherUsers';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -332,11 +332,10 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     
     /**
      * checks if container is a personal container of given account
-     * 
-     * @param mixed $account
+     *
      * @return bool
      */
-    public function isPersonalOf($account)
+    public function isPersonalOf(mixed $account)
     {
         return $this->type == Tinebase_Model_Container::TYPE_PERSONAL 
             && $this->getOwner() == Tinebase_Model_User::convertUserIdToInt($account);
@@ -352,7 +351,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     public static function pathIsContainer($_path)
     {
         // NOTE: path may contain "virtual" parts e.g. /shared/foo/bar/....
-        if (preg_match("/^\/personal(?:\/.*)*\/[0-9a-z_\-]+\/([a-f0-9]+)|^\/shared(?:\/.*)*\/([a-f0-9]+)/i", $_path, $matches)) {
+        if (preg_match("/^\/personal(?:\/.*)*\/[0-9a-z_\-]+\/([a-f0-9]+)|^\/shared(?:\/.*)*\/([a-f0-9]+)/i", (string) $_path, $matches)) {
             return (isset($matches[2]) || array_key_exists(2, $matches)) ? $matches[2] : $matches[1];
         }
         
@@ -418,7 +417,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }

@@ -17,7 +17,7 @@
  */
 class Tinebase_Model_Sms_MockAdapter extends Tinebase_Model_Sms_GenericHttpAdapter
 {
-    const MODEL_NAME_PART = 'Sms_MockAdapter';
+    public const MODEL_NAME_PART = 'Sms_MockAdapter';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

@@ -73,7 +73,7 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
             return;
         }
 
-        $user = isset($this->_options['user']) ? $this->_options['user'] : Tinebase_Core::getUser();
+        $user = $this->_options['user'] ?? Tinebase_Core::getUser();
 
         $this->_joinedTableAlias = uniqid($this->_aclTableName);
         $db = $backend->getAdapter();
@@ -86,7 +86,7 @@ class Tinebase_Model_Filter_GrantsFilterGroup extends Tinebase_Model_Filter_Filt
         $this->_tempBackend = $backend;
         try {
             Tinebase_Container::addGrantsSql($select, $user, $this->_requiredGrants, $this->_joinedTableAlias, false,
-                [$this, 'addGrantsSqlCallback']);
+                $this->addGrantsSqlCallback(...));
         } finally {
             $this->_tempBackend = null;
         }

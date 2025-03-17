@@ -24,7 +24,7 @@ class Tinebase_Record_Expander_JsonStorageProperty extends Tinebase_Record_Expan
         }
     }
 
-    protected function _setData(Tinebase_Record_RecordSet $_data)
+    protected function _setData(Tinebase_Record_RecordSet $_data): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' must never be called');
     }

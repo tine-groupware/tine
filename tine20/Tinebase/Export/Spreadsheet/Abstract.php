@@ -127,7 +127,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             $result = $_record->{$_field->identifier};
 
             if (isset($_field->removeEmptyLines)) {
-                $result = implode("\n", array_filter(explode("\n", $result), 'trim'));
+                $result = implode("\n", array_filter(explode("\n", (string) $result), 'trim'));
             }
 
             if (isset($_field->maxcharacters)) {
@@ -157,8 +157,8 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 $result = $this->_getResolvedKeyfield($_record->{$_field->identifier}, $_field->keyfield, $_field->application);
                 break;
             case 'currency':
-                $currency = ($_field->currency) ? $_field->currency : 'EUR';
-                $result = ($_record->{$_field->identifier}) ? $_record->{$_field->identifier} : '0';
+                $currency = $_field->currency ?: 'EUR';
+                $result = $_record->{$_field->identifier} ?: '0';
                 $result = number_format($result, 2, '.', '') . ' ' . $currency;
                 break;
             case 'percentage':
@@ -172,9 +172,9 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                     $_record,
                     /* $relationType = */       $_field->identifier,
                     /* $recordField = */        $_field->field,
-                    /* $onlyFirstRelation = */  isset($_field->onlyfirst) ? $_field->onlyfirst : false,
-                    /* $keyfield = */            isset($_field->keyfield) ? $_field->keyfield : NULL,
-                    /* $application = */        isset($_field->application) ? $_field->application : NULL
+                    /* $onlyFirstRelation = */  $_field->onlyfirst ?? false,
+                    /* $keyfield = */            $_field->keyfield ?? NULL,
+                    /* $application = */        $_field->application ?? NULL
                 );
                 break;
             case 'notes':
@@ -201,7 +201,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 }
                 
                 if (isset($_field->trim) && $_field->trim == 1) {
-                    $result = trim($result);
+                    $result = trim((string) $result);
                 }
                 
                 // set special value from params

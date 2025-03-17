@@ -55,7 +55,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
 
         $this->_operator = empty($_data['operator']) ? 'contains' : $_data['operator'] ;
 
-        $condition = (0 === strpos($this->_operator, 'not'))
+        $condition = (str_starts_with((string) $this->_operator, 'not'))
             ? Tinebase_Model_Filter_FilterGroup::CONDITION_AND
             : Tinebase_Model_Filter_FilterGroup::CONDITION_OR;
 
@@ -82,7 +82,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         $this->_value = $_data['value'];
 
         if (!empty($this->_value)) {
-            $queries = is_array($this->_value) ? $this->_value : explode(' ', $this->_value);
+            $queries = is_array($this->_value) ? $this->_value : explode(' ', (string) $this->_value);
 
             /** @var Tinebase_Model_Filter_FilterGroup $parentFilterGroup */
             $parentFilterGroup = $this->_options['parentFilter'];

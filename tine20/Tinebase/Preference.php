@@ -25,71 +25,71 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      * page size in grids
      * 
      */
-    const PAGE_SIZE = 'pageSize';
+    public const PAGE_SIZE = 'pageSize';
     
     /**
      * strip rows in grids
      * 
      */
-    const GRID_STRIPE_ROWS = 'gridStripeRows';
+    public const GRID_STRIPE_ROWS = 'gridStripeRows';
     
     /**
      * show load mask in grids
      * 
      */
-    const GRID_LOAD_MASK = 'gridLoadMask';
+    public const GRID_LOAD_MASK = 'gridLoadMask';
 
     /**
      * grid resizing strategy
      *
      */
-    const GRID_RESIZING_STRATEGY = 'gridResizingStrategy';
+    public const GRID_RESIZING_STRATEGY = 'gridResizingStrategy';
 
     /**
      * auto search on filter change
      * 
      */
-    const FILTER_CHANGE_AUTO_SEARCH = 'filterChangeAutoSearch';
+    public const FILTER_CHANGE_AUTO_SEARCH = 'filterChangeAutoSearch';
    
     /**
      *  timezone pref const
      *
      */
-    const TIMEZONE = 'timezone';
+    public const TIMEZONE = 'timezone';
 
     /**
      * locale pref const
      *
      */
-    const LOCALE = 'locale';
+    public const LOCALE = 'locale';
     
     /**
      * default application
      *
      */
-    const DEFAULT_APP = 'defaultapp';
+    public const DEFAULT_APP = 'defaultapp';
 
     /**
      * preferred window type
      *
      */
-    const WINDOW_TYPE = 'windowtype';
+    public const WINDOW_TYPE = 'windowtype';
     
     /**
      * show logout confirmation
      *
      */
-    const CONFIRM_LOGOUT = 'confirmLogout';
+    public const CONFIRM_LOGOUT = 'confirmLogout';
 
     /**
      * advanced search through relations and so on
      */
-    const ADVANCED_SEARCH = 'advancedSearch';
+    public const ADVANCED_SEARCH = 'advancedSearch';
 
     /**
      * Preference for file row double click default action
      */
-    const FILE_DBLCLICK_ACTION = 'fileDblClickAction';
+    public const FILE_DBLCLICK_ACTION = 'fileDblClickAction';
     
     /**************************** public functions *********************************/
     

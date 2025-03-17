@@ -24,7 +24,7 @@ class Tinebase_Notification_Factory
      *
      * @staticvar string
      */
-    const SMTP = 'Smtp';
+    public const SMTP = 'Smtp';
     
     /**
      * return a instance of the current accounts backend

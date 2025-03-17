@@ -34,27 +34,27 @@
  */
 class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'ImportExportDefinition';
+    public const MODEL_NAME_PART = 'ImportExportDefinition';
 
-    const FLDS_LABEL = 'label';
-    const FLDS_NAME = 'name';
-    const FLDS_MODEL = 'model';
-    const FLDS_APPLICATION_ID = 'application_id';
-    const FLDS_DESCRIPTION = 'description';
-    const FLDS_TYPE = 'type';
-    const FLDS_FAVORITE = 'favorite';
-    const FLDS_ORDER = 'order';
-    const FLDS_ICON_CLASS = 'icon_class';
-    const FLDS_PLUGIN = 'plugin';
-    const FLDS_SCOPE = 'scope';
-    const FLDS_PLUGIN_OPTIONS = 'plugin_options';
-    const FLDS_PLUGIN_OPTIONS_JSON = 'plugin_options_json';
-    const FLDS_PLUGIN_OPTIONS_DEFINITION = 'plugin_options_definition';
-    const FLDS_FORMAT = 'format';
-    const FLDS_FILENAME = 'filename';
-    const FLDS_FILTER = 'filter';
-    const FLDS_CONTAINER_ID = 'container_id';
-    const FLDS_SKIP_UPSTREAM_UPDATES = 'skip_upstream_updates';
+    public const FLDS_LABEL = 'label';
+    public const FLDS_NAME = 'name';
+    public const FLDS_MODEL = 'model';
+    public const FLDS_APPLICATION_ID = 'application_id';
+    public const FLDS_DESCRIPTION = 'description';
+    public const FLDS_TYPE = 'type';
+    public const FLDS_FAVORITE = 'favorite';
+    public const FLDS_ORDER = 'order';
+    public const FLDS_ICON_CLASS = 'icon_class';
+    public const FLDS_PLUGIN = 'plugin';
+    public const FLDS_SCOPE = 'scope';
+    public const FLDS_PLUGIN_OPTIONS = 'plugin_options';
+    public const FLDS_PLUGIN_OPTIONS_JSON = 'plugin_options_json';
+    public const FLDS_PLUGIN_OPTIONS_DEFINITION = 'plugin_options_definition';
+    public const FLDS_FORMAT = 'format';
+    public const FLDS_FILENAME = 'filename';
+    public const FLDS_FILTER = 'filter';
+    public const FLDS_CONTAINER_ID = 'container_id';
+    public const FLDS_SKIP_UPSTREAM_UPDATES = 'skip_upstream_updates';
 
     /**
      * key in $_validators/$_properties array for the filed which
@@ -74,22 +74,22 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
     /**
      * hidden from frontend
      */
-    const SCOPE_HIDDEN = 'hidden';
+    public const SCOPE_HIDDEN = 'hidden';
 
     /**
      * only (?) export multiple records
      */
-    const SCOPE_MULTI = 'multi';
+    public const SCOPE_MULTI = 'multi';
 
     /**
      * only (?) export single records
      */
-    const SCOPE_SINGLE = 'single';
+    public const SCOPE_SINGLE = 'single';
 
     /**
      * independent from current selection
      */
-    const SCOPE_REPORT = 'report';
+    public const SCOPE_REPORT = 'report';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -260,7 +260,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
      */
     public function getFilter()
     {
-        $filter = json_decode($this->{self::FLDS_FILTER}, true);
+        $filter = json_decode((string) $this->{self::FLDS_FILTER}, true);
         return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->model, is_array($filter) ? $filter : []);
     }
 

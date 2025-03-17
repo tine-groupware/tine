@@ -30,16 +30,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      */
     protected $_egwDb = null;
     
-    /**
-     * @var Zend_Config
-     */
-    protected $_config = null;
-    
-    /**
-     * @var Zend_Log
-     */
-    protected $_log = null;
-    
     protected $_failures = array();
 
     /**
@@ -119,11 +109,8 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      * @param Zend_Config               $_config
      * @param Zend_Log                  $_log
      */
-    public function __construct($_config, $_log)
+    public function __construct(protected $_config, protected $_log)
     {
-        $this->_config = $_config;
-        $this->_log    = $_log;
-
         $dbConfig = $this->_config->all ? $this->_config->all->egwDb : $this->_config->egwDb;
         $this->_egwDb = Zend_Db::factory('PDO_MYSQL', $dbConfig);
         
@@ -229,7 +216,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             return null;
         }
         
-        $_tz = $_tz ? $_tz : $this->_config->all->egwServerTimezone;
+        $_tz = $_tz ?: $this->_config->all->egwServerTimezone;
         
         $date = new Tinebase_DateTime($_egwTS, $_tz);
         
@@ -565,7 +552,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 'name'                   => $cat['cat_name'],
                 'description'            => $cat['cat_description'],
                 'color'                  => $catData['color'],
-                'created_by'             => $tagOwner ? $tagOwner : Tinebase_Core::getUser()->getId(),
+                'created_by'             => $tagOwner ?: Tinebase_Core::getUser()->getId(),
                 'creation_time'          => $cat['last_mod'] ? $this->convertDate($cat['last_mod']) : Tinebase_DateTime::now(),
             ));
             
@@ -682,9 +669,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             $value = $config['addressbook']['config_value'];
             // somehow the serialized config data might be corrupted - fix from stackoverflow (THX!)
             // https://stackoverflow.com/questions/10152904/how-to-repair-a-serialized-string-which-has-been-corrupted-by-an-incorrect-byte/21389439#21389439
-            $value = preg_replace_callback ( '!s:(\d+):"(.*?)";!', function($match) {
-                return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
-            }, $value);
+            $value = preg_replace_callback ( '!s:(\d+):"(.*?)";!', fn($match) => ($match[1] == strlen((string) $match[2])) ? $match[0] : 's:' . strlen((string) $match[2]) . ':"' . $match[2] . '";', $value);
             return unserialize($value);
         } else {
             return [];

@@ -11,14 +11,14 @@
 
 class Tinebase_Model_BankHolidayCalendar extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'BankHolidayCalendar';
-    const TABLE_NAME = 'bankholiday_calendar';
+    public const MODEL_NAME_PART = 'BankHolidayCalendar';
+    public const TABLE_NAME = 'bankholiday_calendar';
 
-    const FLD_BANKHOLIDAYS = 'bank_holidays';
-    const FLD_DATA_SOURCE = 'data_source';
-    const FLD_DESCRIPTION = 'description';
-    const FLD_NAME = 'name';
-    const FLD_TARGET_CAL_ID = 'target_cal_id';
+    public const FLD_BANKHOLIDAYS = 'bank_holidays';
+    public const FLD_DATA_SOURCE = 'data_source';
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_NAME = 'name';
+    public const FLD_TARGET_CAL_ID = 'target_cal_id';
 
 
     /**

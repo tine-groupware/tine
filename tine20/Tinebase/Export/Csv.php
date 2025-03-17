@@ -241,10 +241,10 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
             $csvArray = array();
             foreach ($this->_getFields() as $fieldName) {
                 if (in_array($fieldName, $this->_relationsTypes)
-                    || (! empty($this->_relationsTypes) && preg_match('/^' . implode('|', $this->_relationsTypes) . '-/', $fieldName))
+                    || (! empty($this->_relationsTypes) && preg_match('/^' . implode('|', $this->_relationsTypes) . '-/', (string) $fieldName))
                 ) {
-                    if (strpos($fieldName, '-') !== FALSE) {
-                        list($relationType, $recordField) = explode('-', $fieldName);
+                    if (str_contains((string) $fieldName, '-')) {
+                        [$relationType, $recordField] = explode('-', (string) $fieldName);
                     } else {
                         $relationType = $fieldName;
                         $recordField = NULL;
@@ -280,7 +280,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
      */
     public function _getFilename()
     {
-        return ($this->_toStdout) ? 'STDOUT' : Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
+        return ($this->_toStdout) ? 'STDOUT' : Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . md5(uniqid(random_int(0, mt_getrandmax()), true)) . '.csv';
     }
         
     /**

@@ -109,7 +109,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         }
 
         $ownIds = $this->_getOwnIds($ownModel);
-        $notOperator = strpos($this->_operator, 'not') === 0;
+        $notOperator = str_starts_with($this->_operator, 'not');
         if ($this->_valueIsNull) {
             $notOperator = !$notOperator;
         }
@@ -138,7 +138,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
                 . print_r($this->_filterGroup->toArray(), TRUE));
             try {
                 $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
-            } catch(Tinebase_Exception_AccessDenied $e) {
+            } catch(Tinebase_Exception_AccessDenied) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' no access to related app ');
                 $this->_foreignIds = [];
@@ -225,7 +225,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _getGenericFilterInformation()
     {
-        list($appName, $i, $modelName) = explode('_', $this->_options['related_model']);
+        [$appName, $i, $modelName] = explode('_', (string) $this->_options['related_model']);
             
         $result = array(
             'linkType'      => 'relation',

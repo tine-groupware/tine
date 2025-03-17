@@ -20,7 +20,7 @@ class Tinebase_Mail extends Zend_Mail
     /**
      * email address domain regex
      */
-    const EMAIL_ADDRESS_REGEXP_DOMAIN = '[a-z0-9-\.]+\.[a-z]{2,63}';
+    public const EMAIL_ADDRESS_REGEXP_DOMAIN = '[a-z0-9-\.]+\.[a-z]{2,63}';
     
     /**
     * email address regexp
@@ -28,12 +28,12 @@ class Tinebase_Mail extends Zend_Mail
      * NOTE: we currently do not support umlauts
      * see  https://stackoverflow.com/questions/15121359/are-international-characters-e-g-umlaut-characters-valid-in-the-local-part-of
     */
-    const EMAIL_ADDRESS_REGEXP = '/^([a-z0-9_\+-\.&]+@' . self::EMAIL_ADDRESS_REGEXP_DOMAIN . ')$/i';
+    public const EMAIL_ADDRESS_REGEXP = '/^([a-z0-9_\+-\.&]+@' . self::EMAIL_ADDRESS_REGEXP_DOMAIN . ')$/i';
 
     /**
      * email address regexp (which might be contained in a longer text)
      */
-    const EMAIL_ADDRESS_CONTAINED_REGEXP = '/([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i';
+    public const EMAIL_ADDRESS_CONTAINED_REGEXP = '/([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i';
 
     /**
      * Sender: address
@@ -46,7 +46,7 @@ class Tinebase_Mail extends Zend_Mail
      * 
      * @var string
      */
-    const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
+    public const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
     
     /**
      * create Tinebase_Mail from Zend_Mail_Message
@@ -80,14 +80,10 @@ class Tinebase_Mail extends Zend_Mail
         } else {
             $mp->decodeContent();
             if ($_zmm->headerExists('content-transfer-encoding')) {
-                switch ($_zmm->getHeader('content-transfer-encoding')) {
-                    case Zend_Mime::ENCODING_BASE64:
-                        // BASE64 encode has a bug that swallows the last char(s)
-                        $bodyEncoding = Zend_Mime::ENCODING_7BIT;
-                        break;
-                    default: 
-                        $bodyEncoding = $_zmm->getHeader('content-transfer-encoding');
-                }
+                $bodyEncoding = match ($_zmm->getHeader('content-transfer-encoding')) {
+                    Zend_Mime::ENCODING_BASE64 => Zend_Mime::ENCODING_7BIT,
+                    default => $_zmm->getHeader('content-transfer-encoding'),
+                };
             } else {
                 $bodyEncoding = Zend_Mime::ENCODING_7BIT;
             }
@@ -404,7 +400,7 @@ class Tinebase_Mail extends Zend_Mail
                     case 'bcc':
                         $addresses = self::parseAdresslist($value);
                         foreach ($addresses as $address) {
-                            $this->addBcc($address['address'], $address['name']);
+                            $this->addBcc($address['address']);
                         }
                         break;
                         
@@ -435,7 +431,7 @@ class Tinebase_Mail extends Zend_Mail
                         break;
                         
                     case 'message-id':
-                        $this->setMessageId(trim($value,"<>"));
+                        $this->setMessageId(trim((string) $value,"<>"));
                         break;
                         
                     case 'return-path':
@@ -572,7 +568,7 @@ class Tinebase_Mail extends Zend_Mail
                 try {
                     $body = $zmp->getDecodedContent();
                     restore_error_handler();
-                } catch (Tinebase_Exception $e) {
+                } catch (Tinebase_Exception) {
                     restore_error_handler();
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
@@ -601,7 +597,7 @@ class Tinebase_Mail extends Zend_Mail
     {
         return ($_structure && isset($_structure['parameters']['charset'])) 
             ? $_structure['parameters']['charset']
-            : ($_part->charset ? $_part->charset : self::DEFAULT_FALLBACK_CHARSET);
+            : ($_part->charset ?: self::DEFAULT_FALLBACK_CHARSET);
     }
     
     /**
@@ -619,7 +615,7 @@ class Tinebase_Mail extends Zend_Mail
         } elseif ('us-ascii' === $charset) {
             // us-ascii caused problems with iconv encoding to utf-8
             $charset = self::DEFAULT_FALLBACK_CHARSET;
-        } elseif (strpos($charset, '.') !== false) {
+        } elseif (str_contains($charset, '.')) {
             // the stream filter does not like charsets with a dot in its name
             // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
             $charset = self::DEFAULT_FALLBACK_CHARSET;
@@ -685,13 +681,13 @@ class Tinebase_Mail extends Zend_Mail
      */
     public static function parseAdresslist($_addressList)
     {
-        if (strpos($_addressList, ',') !== FALSE && substr_count($_addressList, '@') == 1) {
+        if (str_contains((string) $_addressList, ',') && substr_count((string) $_addressList, '@') == 1) {
             // we have a comma in the name -> do not split string!
             $addresses = array($_addressList);
         } else {
             // create stream to be used with fgetcsv
             $stream = fopen("php://temp", 'r+');
-            fputs($stream, $_addressList);
+            fputs($stream, (string) $_addressList);
             rewind($stream);
             
             // alternative solution to create stream; yet untested
@@ -708,11 +704,11 @@ class Tinebase_Mail extends Zend_Mail
         }
         //todo: should we parse contact type too ?
         foreach ($addresses as $key => $address) {
-            if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
+            if (preg_match('/(.*)<(.+@[^@]+)>/', (string) $address, $matches)) {
                 $name = trim(trim($matches[1]), '"');
                 $address = trim($matches[2]);
                 $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
-            } else if (strpos($address, '@') !== false) {
+            } else if (str_contains((string) $address, '@')) {
                 $address = preg_replace('/[,;]*/i', '', $address);
                 $addresses[$key] = array('name' => null, 'address' => trim($address));
             } else {

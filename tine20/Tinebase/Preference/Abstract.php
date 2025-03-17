@@ -28,29 +28,29 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      *
      * @staticvar string
      */
-    const YES_NO_OPTIONS = 'yesnoopt';
+    public const YES_NO_OPTIONS = 'yesnoopt';
 
     /**
      * default persistent filter
      */
-    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
+    public const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
     
     /**
      * name of the filter representing the last used filter
      */
-    const LASTUSEDFILTER = '_lastusedfilter_';
+    public const LASTUSEDFILTER = '_lastusedfilter_';
     
     /**
      * default container options
      *
      * @staticvar string
      */
-    const DEFAULTCONTAINER_OPTIONS = 'defaulcontaineropt';
+    public const DEFAULTCONTAINER_OPTIONS = 'defaulcontaineropt';
 
     /**
      * changing preference needs client reload
      */
-    const CLIENT_NEEDS_RELOAD = 'clientneedsreload';
+    public const CLIENT_NEEDS_RELOAD = 'clientneedsreload';
     
     /**************************** backend settings *********************************/
 
@@ -345,7 +345,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         try {
             $queryResult = $this->_getPrefs($_preferenceName, $_accountId, $_accountType);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $queryResult = null;
         }
         
@@ -376,9 +376,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $cacheId = $_accountId . $_accountType;
         
         if (isset($this->_appPrefsCache[$cacheId])) {
-            $result = array_filter($this->_appPrefsCache[$cacheId], function ($result) use ($_preferenceName) {
-                return $result['name'] == $_preferenceName;
-            });
+            $result = array_filter($this->_appPrefsCache[$cacheId], fn($result) => $result['name'] == $_preferenceName);
             
             return $result;
         }
@@ -400,9 +398,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         $this->_appPrefsCache[$cacheId] = $queryResult;
 
-        $result = array_filter($queryResult, function ($result) use ($_preferenceName) {
-            return $result['name'] == $_preferenceName;
-        });
+        $result = array_filter($queryResult, fn($result) => $result['name'] == $_preferenceName);
         
         return $result;
     }
@@ -872,7 +868,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         try {
             $application_id = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
-        } catch (Exception $e) {
+        } catch (Exception) {
             // app not installed
             $application_id = null;
         }
@@ -914,8 +910,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $locale = Tinebase_Core::getLocale();
                 $question = Zend_Locale::getTranslationList('Question', $locale);
 
-                list($yes, $dummy) = explode(':', $question['yes']);
-                list($no, $dummy) = explode(':', $question['no']);
+                [$yes, $dummy] = explode(':', (string) $question['yes']);
+                [$no, $dummy] = explode(':', (string) $question['no']);
 
                 $result[] = array(0, $no);
                 $result[] = array(1, $yes);
@@ -945,8 +941,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     protected function _getDefaultContainerOptions($_appName = NULL, $_accountId = null)
     {
         $result = array();
-        $appName = ($_appName !== NULL) ? $_appName : $this->_application;
-        $model = strpos($appName, '_Model_') === false ?
+        $appName = $_appName ?? $this->_application;
+        $model = !str_contains($appName, '_Model_') ?
             Tinebase_Core::getApplicationInstance($appName)->getDefaultModel() : $appName;
 
         $user = $_accountId ? Tinebase_User::getInstance()->getUserById($_accountId) : Tinebase_Core::getUser();
@@ -979,8 +975,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_appName = NULL, $_optionName = self::DEFAULTCONTAINER_OPTIONS)
     {
-        $appName = ($_appName !== NULL) ? $_appName : $this->_application;
-        $model = strpos($appName, '_Model_') === false ?
+        $appName = $_appName ?? $this->_application;
+        $model = !str_contains($appName, '_Model_') ?
             Tinebase_Core::getApplicationInstance($appName)->getDefaultModel() : $appName;
 
         $accountId = $_accountId ?: Tinebase_Core::getUser()->getId();

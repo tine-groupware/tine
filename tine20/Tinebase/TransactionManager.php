@@ -114,11 +114,10 @@ class Tinebase_TransactionManager
     /**
      * starts a transaction
      *
-     * @param   mixed $_transactionable
      * @return  string transactionId
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function startTransaction($_transactionable)
+    public function startTransaction(mixed $_transactionable)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . "  startTransaction request");
@@ -279,10 +278,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just before the real commit happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerOnCommitCallback(array $callable, array $param = array())
+    public function registerOnCommitCallback(array|callable $callable, array $param = array())
     {
         $this->_onCommitCallbacks[] = array($callable, $param);
     }

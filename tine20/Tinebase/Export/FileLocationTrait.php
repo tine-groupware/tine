@@ -38,9 +38,9 @@ trait Tinebase_Export_FileLocationTrait
                 $fs->checkPathACL($trgtPath, 'add', false);
 
                 $fileName = $this->getDownloadFilename();
-                $pInfo = pathinfo($fileName);
+                $pInfo = pathinfo((string) $fileName);
                 if (strlen((string)$this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
-                    $pInfoFL = pathinfo($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
+                    $pInfoFL = pathinfo((string) $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
                     $fileName = $pInfoFL['filename'] . '.' . $pInfo['extension'];
                     $pInfo['filename'] = $pInfoFL['filename'];
                 }
@@ -57,10 +57,10 @@ trait Tinebase_Export_FileLocationTrait
 
             case Tinebase_Model_Tree_FileLocation::TYPE_ATTACHMENT:
                 $fileName = $this->getDownloadFilename();
-                $pInfo = pathinfo($fileName);
+                $pInfo = pathinfo((string) $fileName);
                 if (strlen((string)$this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME}) > 0) {
-                    $pInfo = pathinfo($fileName);
-                    $pInfoFL = pathinfo($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
+                    $pInfo = pathinfo((string) $fileName);
+                    $pInfoFL = pathinfo((string) $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME});
                     $fileName = $pInfoFL['filename'] . '.' . $pInfo['extension'];
                     $pInfo['filename'] = $pInfoFL['filename'];
                 }
@@ -72,14 +72,14 @@ trait Tinebase_Export_FileLocationTrait
                 try {
                     $this->save($targetNode->tempFile);
 
-                    list($record, $ctrl) = $this->_fileLocation->getAttachmentRecordAndCtrl();
+                    [$record, $ctrl] = $this->_fileLocation->getAttachmentRecordAndCtrl();
                     Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
                     $i = 0;
                     while ($record->attachments->find('name', $fileName)) {
                         $fileName = $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
                         $targetNode->name = $fileName;
                     }
-                    $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME} = basename($fileName);
+                    $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME} = basename((string) $fileName);
                     $record->attachments->addRecord($targetNode);
                     $ctrl->update($record);
                 } finally {

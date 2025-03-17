@@ -27,9 +27,9 @@
  */
 class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
 {
-    const DEF_FIELD = 'fieldDef';
-    const DEF_HOOK = 'hook';
-    const CONTROLLER_HOOKS = 'controllerHooks';
+    public const DEF_FIELD = 'fieldDef';
+    public const DEF_HOOK = 'hook';
+    public const CONTROLLER_HOOKS = 'controllerHooks';
 
     protected $_identifier = 'id';
     

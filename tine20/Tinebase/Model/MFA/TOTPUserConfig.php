@@ -91,7 +91,7 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
         if (!$newUser->mfa_configs || !$newUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
                 $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
             $cc = Tinebase_Auth_CredentialCache::getInstance();
-            $adapter = explode('_', get_class($cc->getCacheAdapter()));
+            $adapter = explode('_', $cc->getCacheAdapter()::class);
             $adapter = end($adapter);
             try {
                 $cc->setCacheAdapter('Shared');
@@ -113,7 +113,7 @@ class Tinebase_Model_MFA_TOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
                 $this->{self::ID} = Tinebase_Record_Abstract::generateUID();
             }
             $cc = Tinebase_Auth_CredentialCache::getInstance();
-            $adapter = explode('_', get_class($cc->getCacheAdapter()));
+            $adapter = explode('_', $cc->getCacheAdapter()::class);
             $adapter = end($adapter);
             try {
                 $cc->setCacheAdapter('Shared');

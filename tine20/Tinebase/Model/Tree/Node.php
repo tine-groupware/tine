@@ -52,22 +52,22 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public const TABLE_NAME = 'tree_nodes';
 
     // forbidden in windows, @see #202420
-    const FILENAME_FORBIDDEN_CHARS_EXP = '/[\/\\\:*?"<>|]/';
+    public const FILENAME_FORBIDDEN_CHARS_EXP = '/[\/\\\:*?"<>|]/';
 
-    const XPROPS_REVISION = 'revisionProps';
-    const XPROPS_REVISION_NODE_ID = 'nodeId';
-    const XPROPS_REVISION_ON = 'keep';
-    const XPROPS_REVISION_NUM = 'keepNum';
-    const XPROPS_REVISION_MONTH = 'keepMonth';
+    public const XPROPS_REVISION = 'revisionProps';
+    public const XPROPS_REVISION_NODE_ID = 'nodeId';
+    public const XPROPS_REVISION_ON = 'keep';
+    public const XPROPS_REVISION_NUM = 'keepNum';
+    public const XPROPS_REVISION_MONTH = 'keepMonth';
 
     /**
      * {"notificationProps":[{"active":true,....},{"active":true....},{....}]}
      */
-    const XPROPS_NOTIFICATION = 'notificationProps';
-    const XPROPS_NOTIFICATION_ACTIVE = 'active';
-    const XPROPS_NOTIFICATION_SUMMARY = 'summary';
-    const XPROPS_NOTIFICATION_ACCOUNT_ID = 'accountId';
-    const XPROPS_NOTIFICATION_ACCOUNT_TYPE = 'accountType';
+    public const XPROPS_NOTIFICATION = 'notificationProps';
+    public const XPROPS_NOTIFICATION_ACTIVE = 'active';
+    public const XPROPS_NOTIFICATION_SUMMARY = 'summary';
+    public const XPROPS_NOTIFICATION_ACCOUNT_ID = 'accountId';
+    public const XPROPS_NOTIFICATION_ACCOUNT_TYPE = 'accountType';
     
     /**
      * key in $_validators/$_properties array for the filed which

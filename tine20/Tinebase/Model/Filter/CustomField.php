@@ -44,8 +44,8 @@
  */
 class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
 {
-    const OPT_FORCE_FULLTEXT = 'forceFullText';
-    const OPT_FORCE_TYPE = 'forceType';
+    public const OPT_FORCE_FULLTEXT = 'forceFullText';
+    public const OPT_FORCE_TYPE = 'forceType';
 
     /**
      * the filter used for querying the customfields table
@@ -152,13 +152,13 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     $passThroughData = $_fieldOrData;
                     $passThroughData['field'] = 'value';
                     $passThroughData['value'] = $passThroughData['value']['value'];
-                    $filterGroup = get_class(Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName));
+                    $filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel($modelName)::class;
                     if ($filterGroup === Tinebase_Model_Filter_FilterGroup::class) {
                         $filterGroup = $modelName;
                     }
                     $passThroughData['options'] = [
                         'tablename'     => $this->_correlationName,
-                        'controller'    => get_class(Tinebase_Core::getApplicationInstance($modelName)),
+                        'controller'    => Tinebase_Core::getApplicationInstance($modelName)::class,
                         'filtergroup'   => $filterGroup,
                     ];
                     $passThroughData['value'] = $this->_sanitizePassThroughFilter($passThroughData['value']);
@@ -229,7 +229,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
      */
     protected function _setOptions(array $_options)
     {
-        $_options['idProperty'] = isset($_options['idProperty']) ? $_options['idProperty'] : 'id';
+        $_options['idProperty'] ??= 'id';
         
         $this->_options = $_options;
     }
@@ -261,7 +261,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
 
             $queryForEmpty = count($value) === 0 || (count($value) === 1 && isset($value[0]) &&
                 is_array($value[0]) && array_key_exists('value', $value[0]) && empty($value[0]['value']));
-            $notOperator = strpos($this->_operator, 'not') === 0;
+            $notOperator = str_starts_with($this->_operator, 'not');
 
             if ($queryForEmpty) {
                 if (strpos($this->_operator, 'contains')) {
@@ -277,8 +277,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 }
             } else {
                 array_walk($value, function (&$val) {
-                    if (isset($val['field']) && strpos($val['field'], ':') === 0) {
-                        $val['field'] = substr($val['field'], 1);
+                    if (isset($val['field']) && str_starts_with((string) $val['field'], ':')) {
+                        $val['field'] = substr((string) $val['field'], 1);
                     }
                 });
                 $this->_subFilter->setFromArray($value);
@@ -307,7 +307,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                     // this is all just wrong....
                     is_numeric($this->_value['value']) || is_bool($this->_value['value'])  ? '0' : ''));
             } else {
-                if (strpos($this->_operator, 'not') === 0) {
+                if (str_starts_with($this->_operator, 'not')) {
                     $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
                     $this->_valueFilter->appendFilterSql($groupSelect, $_backend);
                     $groupSelect->orWhere($valueIdentifier . ' IS NULL');
@@ -331,7 +331,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
     public function toArray($valueToJson = false)
     {
         $result = parent::toArray($valueToJson);
-        if (strtolower($this->_cfRecord->definition['type']) == 'record') {
+        if (strtolower((string) $this->_cfRecord->definition['type']) == 'record') {
             if ($valueToJson) {
                 try {
                     $modelName = Tinebase_CustomField::getModelNameFromDefinition($this->_cfRecord->definition);

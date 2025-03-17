@@ -86,7 +86,7 @@ class Tinebase_Record_PersistentObserver
     public function fireEvent(Tinebase_Event_Observer_Abstract $_event)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Fire Event ' . get_class($_event));
+            . ' Fire Event ' . $_event::class);
 
         $setOuterCall = false;
         if (true === $this->_outerCall) {
@@ -96,7 +96,7 @@ class Tinebase_Record_PersistentObserver
         }
 
         try {
-            $observers = $this->getObserversByEvent($_event->observable, get_class($_event));
+            $observers = $this->getObserversByEvent($_event->observable, $_event::class);
 
             /** @var Tinebase_Model_PersistentObserver $observer */
             foreach ($observers as $observer) {
@@ -218,7 +218,7 @@ class Tinebase_Record_PersistentObserver
     public function removeAllObservables(Tinebase_Record_Interface $_observer)
     {
         $where = array(
-            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote($_observer::class),
             $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId())
         );
 
@@ -234,7 +234,7 @@ class Tinebase_Record_PersistentObserver
     public function getAllObservables(Tinebase_Record_Interface $_observer)
     {
         $where = array(
-            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote($_observer::class),
             $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId())
         );
 
@@ -251,7 +251,7 @@ class Tinebase_Record_PersistentObserver
     public function getObservablesByEvent(Tinebase_Record_Interface $_observer, $_event)
     {
         $where = array(
-            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote(get_class($_observer)),
+            $this->_db->quoteIdentifier('observer_model') .       ' = ' . $this->_db->quote($_observer::class),
             $this->_db->quoteIdentifier('observer_identifier') .  ' = ' . $this->_db->quote((string)$_observer->getId()),
             $this->_db->quoteIdentifier('observed_event') .       ' = ' . $this->_db->quote((string)$_event)
         );
@@ -285,7 +285,7 @@ class Tinebase_Record_PersistentObserver
     protected function getObserversByEvent(Tinebase_Record_Interface $_observable,  $_event)
     {
         $where =
-            $this->_db->quoteIdentifier('observable_model') .      ' = ' . $this->_db->quote(get_class($_observable)) . ' AND (' .
+            $this->_db->quoteIdentifier('observable_model') .      ' = ' . $this->_db->quote($_observable::class) . ' AND (' .
             $this->_db->quoteIdentifier('observable_identifier') . ' = ' . $this->_db->quote((string)$_observable->getId()) . ' OR ' .
             $this->_db->quoteIdentifier('observable_identifier') . ' IS NULL ) AND ' .
             $this->_db->quoteIdentifier('observed_event') .        ' = ' . $this->_db->quote((string)$_event)

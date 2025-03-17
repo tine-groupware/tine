@@ -24,12 +24,12 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
     /**
      * Type of a shared tag
      */
-    const TYPE_SHARED = 'shared';
+    public const TYPE_SHARED = 'shared';
     
     /**
      * Type of a personal tag
      */
-    const TYPE_PERSONAL = 'personal';
+    public const TYPE_PERSONAL = 'personal';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -141,7 +141,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }
@@ -166,7 +166,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to allocate tag ' . $tagName);
             
-            $tagName = trim($tagName);
+            $tagName = trim((string) $tagName);
             if (empty($tagName)) {
                 continue;
             }

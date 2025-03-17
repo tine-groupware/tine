@@ -12,25 +12,15 @@
 
 class Tinebase_Record_Expander_DataRequest
 {
-    public $prio;
-    /**
-     * @var Tinebase_Controller_Record_Interface
-     */
-    public $controller;
-    public $ids;
-    public $callback;
-    protected $_getDeleted = false;
     protected $_merged = false;
     protected static $_dataCache = [];
     protected static $_deletedDataCache = [];
 
-    public function __construct($prio, $controller, $ids, $callback, $getDeleted = false)
+    /**
+     * @param \Tinebase_Controller_Record_Interface $controller
+     */
+    public function __construct(public $prio, public $controller, public $ids, public $callback, protected $_getDeleted = false)
     {
-        $this->prio = $prio;
-        $this->controller = $controller;
-        $this->ids = $ids;
-        $this->callback = $callback;
-        $this->_getDeleted = $getDeleted;
     }
 
     public function merge(Tinebase_Record_Expander_DataRequest $_dataRequest)
@@ -44,7 +34,7 @@ class Tinebase_Record_Expander_DataRequest
         if (null === $this->controller) {
             return 'null';
         }
-        return get_class($this->controller);
+        return $this->controller::class;
     }
 
     public function getData()

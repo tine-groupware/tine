@@ -60,7 +60,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
                 );
                 try {
                     $result = $otp->verify($_data);
-                } catch (RuntimeException $re) {
+                } catch (RuntimeException) {
                     $result = false;
                 }
                 if ($result) {
@@ -88,7 +88,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
             try {
                 $result = !in_array($_data, $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED}) &&
                     $otp->verify($_data, null, 1);
-            } catch (RuntimeException $re) {
+            } catch (RuntimeException) {
                 $result = false;
             }
             if ($result) {

@@ -15,38 +15,38 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 {
-    const RELEASE015_UPDATE000 = __CLASS__ . '::update000';
-    const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
-    const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
-    const RELEASE015_UPDATE005 = __CLASS__ . '::update005';
-    const RELEASE015_UPDATE006 = __CLASS__ . '::update006';
-    const RELEASE015_UPDATE007 = __CLASS__ . '::update007';
-    const RELEASE015_UPDATE008 = __CLASS__ . '::update008';
-    const RELEASE015_UPDATE009 = __CLASS__ . '::update009';
-    const RELEASE015_UPDATE010 = __CLASS__ . '::update010';
-    const RELEASE015_UPDATE011 = __CLASS__ . '::update011';
-    const RELEASE015_UPDATE012 = __CLASS__ . '::update012';
-    const RELEASE015_UPDATE013 = __CLASS__ . '::update013';
-    const RELEASE015_UPDATE014 = __CLASS__ . '::update014';
-    const RELEASE015_UPDATE015 = __CLASS__ . '::update015';
-    const RELEASE015_UPDATE016 = __CLASS__ . '::update016';
-    const RELEASE015_UPDATE017 = __CLASS__ . '::update017';
-    const RELEASE015_UPDATE018 = __CLASS__ . '::update018';
-    const RELEASE015_UPDATE019 = __CLASS__ . '::update019';
-    const RELEASE015_UPDATE020 = __CLASS__ . '::update020';
-    const RELEASE015_UPDATE021 = __CLASS__ . '::update021';
-    const RELEASE015_UPDATE022 = __CLASS__ . '::update022';
-    const RELEASE015_UPDATE023 = __CLASS__ . '::update023';
-    const RELEASE015_UPDATE024 = __CLASS__ . '::update024';
-    const RELEASE015_UPDATE025 = __CLASS__ . '::update025';
-    const RELEASE015_UPDATE026 = __CLASS__ . '::update026';
-    const RELEASE015_UPDATE027 = __CLASS__ . '::update027';
-    const RELEASE015_UPDATE028 = __CLASS__ . '::update028';
-    const RELEASE015_UPDATE029 = __CLASS__ . '::update029';
-    const RELEASE015_UPDATE030 = __CLASS__ . '::update030';
-    const RELEASE015_UPDATE031 = __CLASS__ . '::update031';
+    public const RELEASE015_UPDATE000 = self::class . '::update000';
+    public const RELEASE015_UPDATE001 = self::class . '::update001';
+    public const RELEASE015_UPDATE002 = self::class . '::update002';
+    public const RELEASE015_UPDATE003 = self::class . '::update003';
+    public const RELEASE015_UPDATE004 = self::class . '::update004';
+    public const RELEASE015_UPDATE005 = self::class . '::update005';
+    public const RELEASE015_UPDATE006 = self::class . '::update006';
+    public const RELEASE015_UPDATE007 = self::class . '::update007';
+    public const RELEASE015_UPDATE008 = self::class . '::update008';
+    public const RELEASE015_UPDATE009 = self::class . '::update009';
+    public const RELEASE015_UPDATE010 = self::class . '::update010';
+    public const RELEASE015_UPDATE011 = self::class . '::update011';
+    public const RELEASE015_UPDATE012 = self::class . '::update012';
+    public const RELEASE015_UPDATE013 = self::class . '::update013';
+    public const RELEASE015_UPDATE014 = self::class . '::update014';
+    public const RELEASE015_UPDATE015 = self::class . '::update015';
+    public const RELEASE015_UPDATE016 = self::class . '::update016';
+    public const RELEASE015_UPDATE017 = self::class . '::update017';
+    public const RELEASE015_UPDATE018 = self::class . '::update018';
+    public const RELEASE015_UPDATE019 = self::class . '::update019';
+    public const RELEASE015_UPDATE020 = self::class . '::update020';
+    public const RELEASE015_UPDATE021 = self::class . '::update021';
+    public const RELEASE015_UPDATE022 = self::class . '::update022';
+    public const RELEASE015_UPDATE023 = self::class . '::update023';
+    public const RELEASE015_UPDATE024 = self::class . '::update024';
+    public const RELEASE015_UPDATE025 = self::class . '::update025';
+    public const RELEASE015_UPDATE026 = self::class . '::update026';
+    public const RELEASE015_UPDATE027 = self::class . '::update027';
+    public const RELEASE015_UPDATE028 = self::class . '::update028';
+    public const RELEASE015_UPDATE029 = self::class . '::update029';
+    public const RELEASE015_UPDATE030 = self::class . '::update030';
+    public const RELEASE015_UPDATE031 = self::class . '::update031';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -308,7 +308,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             }
 
             if (!in_array($tableName, $tables)) {
-                list($app) = explode('_', $model);
+                [$app] = explode('_', $model);
                 Tinebase_Application::getInstance()->addApplicationTable($app, $tableName, $mc->getVersion() ?: 1);
             }
         }
@@ -346,7 +346,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             foreach ($this->getDb()->query('SELECT GROUP_CONCAT(id), count(*) as c FROM ' . SQL_TABLE_PREFIX .
                     'groups GROUP BY name HAVING c > 1')->fetchAll(Zend_Db::FETCH_NUM) as $row) {
                 $date = new Tinebase_DateTime('1970-01-01 00:00:01');
-                foreach (explode(',', $row[0]) as $num => $id) {
+                foreach (explode(',', (string) $row[0]) as $num => $id) {
                     if (0 === $num) continue;
                     $this->getDb()->update(SQL_TABLE_PREFIX . 'groups', ['deleted_time' => $date->toString()], $this->getDb()->quoteInto('id = ?', $id));
                     $date->addSecond(1);
@@ -371,7 +371,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
 
         try {
             $this->_backend->dropForeignKey('notes', 'notes::note_type_id--note_types::id');
-        } catch (Exception $e) {
+        } catch (Exception) {
             // key might have already been dropped
         }
         $this->_backend->dropTable('note_types');
@@ -825,7 +825,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             [TMFA::FIELD => 'model', TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'Sales_Model_Contract'],
             [TMFA::FIELD => 'name', TMFA::OPERATOR => 'equals', TMFA::VALUE => 'Inactive Contracts'],
         ]))->getFirstRecord();
-        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && strpos($filter->toArray()['value'], '20') === 0) {
+        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && str_starts_with((string) $filter->toArray()['value'], '20')) {
             $filter->setValue(Tinebase_Model_Filter_Date::DAY_THIS);
             $pFilterCtrl->update($result);
         }
@@ -835,7 +835,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             [TMFA::FIELD => 'model', TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'Sales_Model_Contract'],
             [TMFA::FIELD => 'name', TMFA::OPERATOR => 'equals', TMFA::VALUE => 'Active Contracts'],
         ]))->getFirstRecord();
-        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && strpos($filter->toArray()['value'], '20') === 0) {
+        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && str_starts_with((string) $filter->toArray()['value'], '20')) {
             $filter->setValue(Tinebase_Model_Filter_Date::DAY_LAST);
             $pFilterCtrl->update($result);
         }
@@ -845,7 +845,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             [TMFA::FIELD => 'model', TMFA::OPERATOR => 'startswith', TMFA::VALUE => 'Crm_Model_LeadFilter'],
             [TMFA::FIELD => 'name', TMFA::OPERATOR => 'equals', TMFA::VALUE => 'Leads with overdue tasks'],
         ]))->getFirstRecord();
-        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && strpos($filter->toArray()['value'], '20') === 0) {
+        if ($result && ($filter = $result->filters->getFilter('end_date', false, true)) && str_starts_with((string) $filter->toArray()['value'], '20')) {
             $filter->setValue(Tinebase_Model_Filter_Date::DAY_THIS);
             $pFilterCtrl->update($result);
         }

@@ -165,9 +165,9 @@ final class Tinebase_Auth_MFA
      */
     private function __clone() {}
 
-    private Tinebase_Auth_MFA_AdapterInterface $_adapter;
+    private readonly Tinebase_Auth_MFA_AdapterInterface $_adapter;
 
-    private Tinebase_Model_MFA_Config $_config;
+    private readonly Tinebase_Model_MFA_Config $_config;
 
     /**
      * holds the instances of the singleton

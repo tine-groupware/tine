@@ -72,7 +72,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             throw new Tinebase_Exception_InvalidArgument('Container filter needs the modelName option');
         }
         
-        $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
+        $_options['ignoreAcl'] ??= false;
         
         $this->_options = $_options;
     }
@@ -109,7 +109,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     public function setValue($_value)
     {
         // transform *Node operators
-        if (strpos($this->getOperator(), 'Node') !== FALSE) {
+        if (str_contains($this->getOperator(), 'Node')) {
             $_value = $this->_node2path($this->getOperator(), $_value);
             $this->setOperator('equals');
         }
@@ -119,10 +119,10 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         $value = array();
         foreach ((array) $_value as $v) {
             $this->_flatten($v);
-            $v = trim($v);
+            $v = trim((string) $v);
             
             // transform id to path
-            if (strpos($v, '/') === FALSE) {
+            if (!str_contains($v, '/')) {
                 try {
                     $container = Tinebase_Container::getInstance()->getContainerById($v, TRUE);
                     $v = $container ? $container->getPath() : '/';
@@ -137,7 +137,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         
         parent::setValue(is_array($_value)
             ? $value
-            : (isset($value[0]) ? $value[0] : null)
+            : ($value[0] ?? null)
         );
         $this->_isResolved = FALSE;
     }
@@ -185,7 +185,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                         $containerData['path'] = "/personal/$ownerId";
                         $containerData['owner'] = $owner->toArray();
                     }
-                } catch(Tinebase_Exception_NotFound $e) {
+                } catch(Tinebase_Exception_NotFound) {
 
                 }
 
@@ -193,7 +193,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             }
             $result['value'] = is_array($this->_value)
                 ? $values
-                : (isset($values[0]) ? $values[0] : null);
+                : ($values[0] ?? null);
         }
         
         return $result;
@@ -213,10 +213,8 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     
     /**
      * flatten resolved records
-     * 
-     * @param mixed &$_value
      */
-    protected function _flatten(&$_value) {
+    protected function _flatten(mixed &$_value) {
         if (is_array($_value)) {
             if((isset($_value['path']) || array_key_exists('path', $_value))) {
                 $_value = $_value['path'];
@@ -347,13 +345,10 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     protected function _node2path($_operator, $_value)
     {
-        switch ($_operator) {
-            case 'specialNode':
-                return '/' . ($_value != 'all' ?  $_value : '');
-            case 'personalNode':
-                return "/personal/{$_value}";
-            default:
-                throw new Tinebase_Exception_UnexpectedValue("operator '$_operator' not supported");
-        }
+        return match ($_operator) {
+            'specialNode' => '/' . ($_value != 'all' ?  $_value : ''),
+            'personalNode' => "/personal/{$_value}",
+            default => throw new Tinebase_Exception_UnexpectedValue("operator '$_operator' not supported"),
+        };
     }
 }

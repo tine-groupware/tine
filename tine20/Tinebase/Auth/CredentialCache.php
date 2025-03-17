@@ -45,9 +45,9 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     private static $_instance = NULL;
     
-    const SESSION_NAMESPACE = 'credentialCache';
-    const CIPHER_ALGORITHM = 'aes-256-ctr';
-    const HASH_ALGORITHM = 'sha256';
+    public const SESSION_NAMESPACE = 'credentialCache';
+    public const CIPHER_ALGORITHM = 'aes-256-ctr';
+    public const HASH_ALGORITHM = 'sha256';
     
     /**
      * don't clone. Use the singleton.
@@ -134,7 +134,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     public function cacheCredentials($username, $password, $key = NULL, $persist = FALSE, $validUntil = null)
     {
-        $key = ($key !== NULL) ? $key : $this->_cacheAdapter->getDefaultKey();
+        $key ??= $this->_cacheAdapter->getDefaultKey();
         
         $cache = new Tinebase_Model_CredentialCache(array(
             'id'            => $this->_cacheAdapter->getDefaultId(),
@@ -166,7 +166,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
             $session = Tinebase_Session::getSessionNamespace();
             
             $session->{self::SESSION_NAMESPACE}[$cache->getId()] = $cache->toArray();
-        } catch (Zend_Session_Exception $zse) {
+        } catch (Zend_Session_Exception) {
             // nothing to do
         }
     }
@@ -181,7 +181,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     {
         try {
             $this->create($cache);
-        } catch (Zend_Db_Statement_Exception $zdse) {
+        } catch (Zend_Db_Statement_Exception) {
             $this->update($cache);
         }
     }
@@ -223,7 +223,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
                 return new Tinebase_Model_CredentialCache($credentialSessionCache[$id]);
             }
             
-        } catch (Zend_Session_Exception $zse) {
+        } catch (Zend_Session_Exception) {
             // nothing to do
         }
 
@@ -274,7 +274,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     public static function decryptData($_data, $_key)
     {
-        if (false === ($encryptedData = base64_decode($_data))) {
+        if (false === ($encryptedData = base64_decode((string) $_data))) {
             return false;
         }
         $ivLength = openssl_cipher_iv_length(self::CIPHER_ALGORITHM);
@@ -329,7 +329,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
                     base64_decode($_cache->cache), 'AES-128-CBC',
                     $_cache->key,
                     OPENSSL_RAW_DATA|OPENSSL_ZERO_PADDING,
-                    substr($_cache->getId(), 0, 16)
+                    substr((string) $_cache->getId(), 0, 16)
                 ))) {
                 $persistAgain = true;
             } else {
@@ -341,7 +341,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
 
         try {
             $cacheData = Zend_Json::decode(trim($jsonEncodedData));
-        } catch (Exception $e) {
+        } catch (Exception) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' persisted cache data is no valid json');
             throw new Tinebase_Exception_NotFound('persisted cache data is no valid json');
@@ -359,7 +359,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
                 $this->get($_cache->getId());
                 $this->_encrypt($_cache);
                 $this->_persistCache($_cache);
-            } catch(Tinebase_Exception_NotFound $tenf) {
+            } catch(Tinebase_Exception_NotFound) {
                 // shouldn't happen anyway, just to be save.
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__ . ' cache is not in DB, so we don\'t persist it again, just continue gracefully');

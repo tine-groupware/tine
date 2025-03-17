@@ -26,7 +26,7 @@ class Tinebase_Backend_Sql_Factory_Abstract
     */
     public static function factory(Zend_Db_Adapter_Abstract $adapter)
     {
-        $className = get_called_class() . '_' . self::_getClassName($adapter);
+        $className = static::class . '_' . self::_getClassName($adapter);
          
         // @todo find better array key (add loginname and host)
         if (!isset(self::$_instances[$className])) {
@@ -52,7 +52,7 @@ class Tinebase_Backend_Sql_Factory_Abstract
      */
     private static function _getClassName($adapter)
     {
-        $completeClassName = explode('_',get_class($adapter));
+        $completeClassName = explode('_',$adapter::class);
         $className = $completeClassName[count($completeClassName)-1];
         $className = str_replace('Oci','Oracle',$className);
          

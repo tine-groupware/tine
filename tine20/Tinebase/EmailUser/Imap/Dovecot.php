@@ -539,7 +539,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
 
         $emailUsername = $this->getEmailUserName($_user, $_newUserProperties->accountEmailAddress);
 
-        list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+        [$localPart, $usernamedomain] = explode('@', (string) $emailUsername, 2);
         $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
 
         if (isset($this->_config['instanceName'])) {
@@ -603,7 +603,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         try {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                 . __LINE__ . ' Remove master user: ' . $username);
-        } catch (Throwable $t) {
+        } catch (Throwable) {
             // logger writers might already been shut down
         }
 

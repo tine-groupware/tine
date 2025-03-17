@@ -529,7 +529,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             ? $this->_filterModel[$_filterData[TMFA::FIELD]] : '';
         
         if (empty($fieldModel)) {
-            if (isset($_filterData[TMFA::FIELD]) && strpos($_filterData[TMFA::FIELD], '#') === 0) {
+            if (isset($_filterData[TMFA::FIELD]) && str_starts_with((string) $_filterData[TMFA::FIELD], '#')) {
                 $this->_addCustomFieldFilter($_filterData);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -538,7 +538,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                         . ' ' . print_r($this->_filterModel, true)
                         . ' ' . static::class);
                 }
-                if (self::$beStrict && !str_starts_with($_filterData[TMFA::FIELD], 'customfield:')) {
+                if (self::$beStrict && !str_starts_with((string) $_filterData[TMFA::FIELD], 'customfield:')) {
                     throw new Tinebase_Exception_Record_DefinitionFailure(
                         'No filter model found for field ' . $_filterData[TMFA::FIELD] . ' ('
                         . $this->_configuredModel .  ' ' . $this->_modelName . ')');
@@ -577,7 +577,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     protected function _addCustomFieldFilter($_filterData)
     {
-        $cfName = ltrim($_filterData[TMFA::FIELD], '#');
+        $cfName = ltrim((string) $_filterData[TMFA::FIELD], '#');
         $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $this->_applicationName,
             $cfName,
@@ -604,12 +604,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     
     /**
      * return sanitized filter data
-     * 
+     *
      * @param string $_field
-     * @param mixed $_value
      * @return array
      */
-    public static function sanitizeFilterData($_field, $_value)
+    public static function sanitizeFilterData($_field, mixed $_value)
     {
         return array(
             TMFA::FIELD     => $_field,
@@ -667,12 +666,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @param  string|array $_fieldOrData
      * @param  string $_operator
-     * @param  mixed  $_value
      * @return Tinebase_Model_Filter_Abstract|Tinebase_Model_Filter_FilterGroup
-     * 
      * @todo remove legacy code + obsolete params sometimes
      */
-    public function createFilter($_fieldOrData, $_operator = NULL, $_value = NULL)
+    public function createFilter($_fieldOrData, $_operator = NULL, mixed $_value = NULL)
     {
         if (is_array($_fieldOrData)) {
             $data = $_fieldOrData;
@@ -725,7 +722,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 // equals is also valid (for Tinebase_Model_Filter_ForeignId)
                 // TODO this needs to go away!
                 if (! in_array($data[TMFA::OPERATOR], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in', 'not', 'notin', 'notDefinedBy:AND']) &&
-                        strpos($data[TMFA::OPERATOR], 'efinedBy') === false) {
+                        !str_contains((string) $data[TMFA::OPERATOR], 'efinedBy')) {
                     // add a sub-query filter
                     $data[TMFA::VALUE] = [
                         [TMFA::FIELD => 'query', TMFA::OPERATOR => $data[TMFA::OPERATOR], TMFA::VALUE => $data[TMFA::VALUE]]
@@ -788,7 +785,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function setCondition($_condition)
     {
-        $this->_concatenationCondition = $_condition === self::CONDITION_OR ? self::CONDITION_OR : ($_condition === self::CONDITION_AND ? self::CONDITION_AND : ($this->_concatenationCondition !== NULL ? $this->_concatenationCondition : self::CONDITION_AND));
+        $this->_concatenationCondition = $_condition === self::CONDITION_OR ? self::CONDITION_OR : ($_condition === self::CONDITION_AND ? self::CONDITION_AND : ($this->_concatenationCondition ?? self::CONDITION_AND));
     }
     
     /**
@@ -872,7 +869,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function getModelName()
     {
         if (null === $this->_modelName) {
-            $this->_modelName = substr(get_called_class(), 0, -6);
+            $this->_modelName = substr(static::class, 0, -6);
         }
         return $this->_modelName;
     }

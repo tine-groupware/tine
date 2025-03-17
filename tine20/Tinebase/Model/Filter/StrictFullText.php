@@ -28,7 +28,7 @@ class Tinebase_Model_Filter_StrictFullText extends Tinebase_Model_Filter_FullTex
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $not = false !== strpos($this->_operator, 'not');
+        $not = str_contains($this->_operator, 'not');
         $filterGroup = new Tinebase_Model_Filter_FilterGroup([], $not ?
             Tinebase_Model_Filter_FilterGroup::CONDITION_OR : Tinebase_Model_Filter_FilterGroup::CONDITION_AND);
       

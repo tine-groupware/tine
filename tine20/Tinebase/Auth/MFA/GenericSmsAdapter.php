@@ -42,7 +42,7 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
     {
         $pinLength = (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH};
         if ($pinLength < 3 || $pinLength > 10) throw new Tinebase_Exception('pin length needs to be between 3 and 10');
-        $pin = sprintf('%0' . $pinLength .'d', random_int(1, pow(10, $pinLength) - 1));
+        $pin = sprintf('%0' . $pinLength .'d', random_int(1, 10 ** $pinLength - 1));
 
         $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->isValid();
 
@@ -63,17 +63,13 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
         $message .= '\n\n@{{ app.websiteUrl }} {{ code }}';
 
         $twig = new \Twig\Environment(new \Twig\Loader\ArrayLoader());
-        $twig->addFilter(new \Twig\TwigFilter('alnum', function($data) {
-            return preg_replace('/[^0-9a-zA-Z]+/', '', $data);
-        }));
+        $twig->addFilter(new \Twig\TwigFilter('alnum', fn($data) => preg_replace('/[^0-9a-zA-Z]+/', '', $data)));
         $twig->addFilter(new \Twig\TwigFilter('gsm7', function(string $data) {
             static $converter = null;
             if (null === $converter) $converter = new BenMorel\GsmCharsetConverter\Converter();
             return $converter->cleanUpUtf8String($data, true);
         }));
-        $twig->addFilter(new \Twig\TwigFilter('ucs2', function(string $data) {
-            return iconv('ucs-2', 'utf-8', iconv('utf-8', 'ucs-2//TRANSLIT', $data));
-        }));
+        $twig->addFilter(new \Twig\TwigFilter('ucs2', fn(string $data) => iconv('ucs-2', 'utf-8', iconv('utf-8', 'ucs-2//TRANSLIT', $data))));
 
         $message = $twig->createTemplate($message)->render(array_merge($genericHttpAdapter->getTwigContext(), [
             'code' => $pin

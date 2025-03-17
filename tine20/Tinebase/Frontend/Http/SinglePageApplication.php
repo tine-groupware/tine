@@ -114,7 +114,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             $jsonFileUri = $devServerURL . '/' . $jsonFile;
             $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
             if (! $json) {
-                Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
+                Tinebase_Core::getLogger()->ERR(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
         } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename()) {
@@ -170,8 +170,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 }
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
-            Tinebase_Core::getLogger()->NOTICE(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
+            Tinebase_Core::getLogger()->NOTICE(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
+            Tinebase_Core::getLogger()->NOTICE(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
         }
 
         return sha1(json_encode($map) . TINE20_BUILDTYPE);

@@ -69,7 +69,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
             $orgField = $this->_field;
             $this->_field = 'id';
             $not = false;
-            if (strpos($this->_operator, 'not') === 0) {
+            if (str_starts_with($this->_operator, 'not')) {
                 $not = true;
             }
             try {
@@ -132,7 +132,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
 
         try {
             if ($this->_valueIsNull) {
-                if (strpos($this->_operator, 'not') === 0) {
+                if (str_starts_with($this->_operator, 'not')) {
                     if (empty($this->_foreignIds)) {
                         $_select->where('1 = 0');
                     } else {

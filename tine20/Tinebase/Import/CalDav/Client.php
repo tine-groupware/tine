@@ -38,7 +38,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
     protected $userName;
     protected $password;
     
-    const findCurrentUserPrincipalRequest = 
+    public const findCurrentUserPrincipalRequest = 
 '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
@@ -46,7 +46,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
   </d:prop>
 </d:propfind>';
 
-    const findCalendarHomeSetRequest =
+    public const findCalendarHomeSetRequest =
 '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
@@ -54,7 +54,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
   </d:prop>
 </d:propfind>';
     
-    const resolvePrincipalRequest =
+    public const resolvePrincipalRequest =
 '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
@@ -71,8 +71,8 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         
         //$this->requestLogFH = fopen('/var/log/tine20/requestLog', 'w');
         
-        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet';
-        $this->propertyMap['{DAV:}acl'] = 'Sabre\DAVACL\Xml\Property\Acl';
+        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet::class;
+        $this->propertyMap['{DAV:}acl'] = \Sabre\DAVACL\Xml\Property\Acl::class;
         $this->propertyMap['{DAV:}group-member-set'] = 'Tinebase_Import_CalDav_GroupMemberSet';
     }
     
@@ -123,7 +123,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
             Tinebase_Core::set(Tinebase_Core::USER, $user);
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->userName, $this->password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-        } catch (Tinebase_Exception_NotFound $e) {
+        } catch (Tinebase_Exception_NotFound) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Can\'t find tine20 user: ' . $this->userName);
             return null;
         }
@@ -147,7 +147,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
                         . ' Skipping ' . $username);
                     unset($users[$username]);
                 }
-            } catch (Tinebase_Exception $te) {
+            } catch (Tinebase_Exception) {
                 // TODO should use better exception (Not_Authenticated, ...)
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
                         . ' Skipping ' . $username);
@@ -276,7 +276,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         if ($depth===0) {
             reset($result);
             $result = current($result);
-            $result = isset($result[200])?$result[200]:array();
+            $result = $result[200] ?? array();
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Result (depth 0): ' . var_export($result, true));
@@ -287,7 +287,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         $newResult = array();
         foreach($result as $href => $statusList)
         {
-            $newResult[$href] = isset($statusList[200])?$statusList[200]:array();
+            $newResult[$href] = $statusList[200] ?? array();
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -316,7 +316,7 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
             libxml_clear_errors();
             libxml_use_internal_errors($oldSetting);
 
-        } catch(InvalidArgumentException $e) {
+        } catch(InvalidArgumentException) {
             libxml_clear_errors();
             libxml_use_internal_errors($oldSetting);
 

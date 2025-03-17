@@ -17,8 +17,8 @@
  */
 class Tinebase_Record_Hydration_Factory
 {
-    const TYPE_JSON = 'json';
-    const TYPE_ARRAY = 'array';
+    public const TYPE_JSON = 'json';
+    public const TYPE_ARRAY = 'array';
     //const TYPE_XML = 'xml';
     //const TYPE_DB = 'db';
     //const TYPE_YAML = 'yaml';
@@ -35,13 +35,10 @@ class Tinebase_Record_Hydration_Factory
         if (null !== $_strategyDefinition) {
             $_strategyDefinition = new Tinebase_Record_Dehydrator_Strategy($_type, $_strategyDefinition);
         }
-        switch ($_type) {
-            case self::TYPE_JSON:
-                return new Tinebase_Record_Dehydrator_Json($_model, $_strategyDefinition);
-            case self::TYPE_ARRAY:
-                return new Tinebase_Record_Dehydrator_Array($_model, $_strategyDefinition);
-            default:
-                throw new Tinebase_Exception_InvalidArgument('type unknown: ' . print_r($_type, true));
-        }
+        return match ($_type) {
+            self::TYPE_JSON => new Tinebase_Record_Dehydrator_Json($_model, $_strategyDefinition),
+            self::TYPE_ARRAY => new Tinebase_Record_Dehydrator_Array($_model, $_strategyDefinition),
+            default => throw new Tinebase_Exception_InvalidArgument('type unknown: ' . print_r($_type, true)),
+        };
     }
 }

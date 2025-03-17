@@ -15,20 +15,10 @@
  */
 class Tinebase_Config_Struct extends ArrayObject
 {
-    protected $_parent;
-    protected $_parentKey;
-    protected $_struct;
-    protected $_appName;
-
     /** TODO struct should be mandatory at some point */
-    public function __construct($data = array(), $parent = null, $parentKey = null, $struct = null, $appName = null)
+    public function __construct($data = array(), protected $_parent = null, protected $_parentKey = null, protected $_struct = null, protected $_appName = null)
     {
         parent::__construct($data);
-
-        $this->_struct = $struct;
-        $this->_appName = $appName;
-        $this->_parent = $parent;
-        $this->_parentKey = $parentKey;
     }
 
     /**
@@ -39,7 +29,7 @@ class Tinebase_Config_Struct extends ArrayObject
      * @return mixed
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function get($_name, $_default = null)
+    public function get($_name, mixed $_default = null)
     {
         /** TODO struct should be mandatory at some point, remove null check */
         if (null !== $this->_struct && !isset($this->_struct[$_name])) {

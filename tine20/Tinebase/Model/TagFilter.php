@@ -66,7 +66,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
         $select = $db->select()
             ->from (array('tags' => SQL_TABLE_PREFIX . 'tags'))
             ->where($db->quoteIdentifier('is_deleted') . ' = 0')
-            ->order('name', 'ASC');
+            ->order('name');
         
         if (!empty($this->application)) {
             $applicationId = $this->application instanceof Tinebase_Model_Application 

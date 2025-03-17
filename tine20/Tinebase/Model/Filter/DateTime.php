@@ -108,19 +108,12 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
                     $date->setTime(23, 59, 59);
                     break;
             }
-            switch ($_string) {
-                case Tinebase_Model_Filter_Date::DAY_THIS:
-                    $string = $date->toString();
-                    break;
-                case Tinebase_Model_Filter_Date::DAY_LAST:
-                    $string = $date->subDay(1)->toString();
-                    break;
-                case Tinebase_Model_Filter_Date::DAY_NEXT:
-                    $string = $date->addDay(1)->toString();
-                    break;
-                default:
-                    throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
-            }
+            $string = match ($_string) {
+                Tinebase_Model_Filter_Date::DAY_THIS => $date->toString(),
+                Tinebase_Model_Filter_Date::DAY_LAST => $date->subDay(1)->toString(),
+                Tinebase_Model_Filter_Date::DAY_NEXT => $date->addDay(1)->toString(),
+                default => throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string),
+            };
             return parent::_convertStringToUTC($string);
         }
         return parent::_convertStringToUTC($_string);
@@ -138,9 +131,9 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         $result = parent::toArray($_valueToJson);
 
         if ($this->_operator != 'within' && $_valueToJson == true && $result['value']
-                && preg_match('/^\d\d\d\d-\d\d-\d\d/', $result['value'])) {
+                && preg_match('/^\d\d\d\d-\d\d-\d\d/', (string) $result['value'])) {
             $date = new Tinebase_DateTime($result['value'],
-                isset($this->_options['timezone']) ? $this->_options['timezone'] : null);
+                $this->_options['timezone'] ?? null);
             $date->setTimezone(Tinebase_Core::getUserTimezone());
             $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         }

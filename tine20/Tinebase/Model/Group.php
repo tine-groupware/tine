@@ -31,14 +31,14 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     *
     * @var string
     */
-    const VISIBILITY_HIDDEN    = 'hidden';
+    public const VISIBILITY_HIDDEN    = 'hidden';
     
     /**
      * visible in addressbook
      *
      * @var string
      */
-    const VISIBILITY_DISPLAYED = 'displayed';
+    public const VISIBILITY_DISPLAYED = 'displayed';
     
     /**
      * list of zend inputfilter
@@ -198,7 +198,7 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     public function runConvertToRecord()
     {
         if (isset($this->_properties['xprops'])) {
-            $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
+            $this->_properties['xprops'] = json_decode((string) $this->_properties['xprops'], true);
         }
         if (isset($this->_properties['deleted_time']) && '1970-01-01 00:00:00' === $this->_properties['deleted_time']) {
             $this->_properties['deleted_time'] = null;

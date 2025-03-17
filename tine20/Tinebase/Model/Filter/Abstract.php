@@ -108,12 +108,10 @@ abstract class Tinebase_Model_Filter_Abstract
      *
      * @param string|array $_fieldOrData
      * @param string $_operator
-     * @param mixed  $_value    
      * @param array  $_options
-     * 
      * @todo remove legacy code + obsolete params sometimes
      */
-    public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
+    public function __construct($_fieldOrData, $_operator = NULL, mixed $_value = NULL, array $_options = array())
     {
         $this->_db = Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
@@ -138,8 +136,8 @@ abstract class Tinebase_Model_Filter_Abstract
             }
         }
 
-        $this->setClientOptions(isset($data['clientOptions']) ? $data['clientOptions'] : null);
-        $this->_setOptions((isset($data['options'])) ? $data['options'] : array());
+        $this->setClientOptions($data['clientOptions'] ?? null);
+        $this->_setOptions($data['options'] ?? array());
         $this->setField($data['field']);
         $this->setOperator($data['operator']);
         $this->setValue($data['value']);
@@ -257,7 +255,7 @@ abstract class Tinebase_Model_Filter_Abstract
                 __METHOD__ . '::' . __LINE__ . ' '
                 . ' Allowed operators: ' . print_r($this->_operators, TRUE));
             throw new Tinebase_Exception_UnexpectedValue("operator $_operator is not defined in "
-                . get_class($this));
+                . static::class);
         }
         
         $this->_operator = $_operator;
@@ -414,11 +412,11 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo to be removed once we split filter model / backend
      */
     protected function _getQuotedFieldName($_backend) {
-        $tablename = (isset($this->_options['tablename'])) ? $this->_options['tablename'] : $_backend->getTableName();
+        $tablename = $this->_options['tablename'] ?? $_backend->getTableName();
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Using tablename: ' . $tablename);
 
-        $field = isset($this->_options['field']) ? $this->_options['field'] : $this->_field;
+        $field = $this->_options['field'] ?? $this->_field;
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Using field: ' . $field);
 
@@ -520,9 +518,9 @@ abstract class Tinebase_Model_Filter_Abstract
         $value = (string)$value;
 
         // be wary of explode on empty string
-        if (stripos($action['sqlop'], 'LIKE') !== false && !$this->_userFilter) {
+        if (stripos((string) $action['sqlop'], 'LIKE') !== false && !$this->_userFilter) {
             $value = str_replace(['|', '%', '_'], ['||', '|%', '|_'], $value);
-        } elseif (stripos($action['sqlop'], 'LIKE') !== false && '' !== $value) {
+        } elseif (stripos((string) $action['sqlop'], 'LIKE') !== false && '' !== $value) {
             // we have a LIKE op, so we need to do some stuff:
             // tine20 supports * and _ as wildcards, where * transforms to % and _ stays _ and \ escapes them
             // \ also escapes itself, but ONLY in front of a wildcard -> \\* => one backslash (escaped, two...) followed by %

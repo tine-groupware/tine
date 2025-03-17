@@ -46,9 +46,9 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      *
      * @param int $_groupId
      * @param array $_groupMembers
-     * @return unknown
+     * @return never
      */
-    public function setGroupMembers($_groupId, $_groupMembers)
+    public function setGroupMembers($_groupId, $_groupMembers): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -58,9 +58,10 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
+     * @throws Tinebase_Exception_AccessDenied
+     * @return never
      */
-    public function addGroupMember($_groupId, $_accountId)
+    public function addGroupMember($_groupId, $_accountId): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -70,9 +71,10 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
+     * @throws Tinebase_Exception_AccessDenied
+     * @return never
      */
-    public function removeGroupMember($_groupId, $_accountId)
+    public function removeGroupMember($_groupId, $_accountId): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -81,9 +83,10 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      * create a new group
      *
      * @param string $_groupName
-     * @return unknown
+     * @throws Tinebase_Exception_AccessDenied
+     * @return never
      */
-    public function addGroup(Tinebase_Model_Group $_group)
+    public function addGroup(Tinebase_Model_Group $_group): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -92,9 +95,10 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      * updates an existing group
      *
      * @param Tinebase_Model_Group $_account
-     * @return Tinebase_Model_Group
+     * @return never
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function updateGroup(Tinebase_Model_Group $_group)
+    public function updateGroup(Tinebase_Model_Group $_group): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -103,9 +107,10 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      * remove groups
      *
      * @param mixed $_groupId
-     * 
+     * @return never
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function deleteGroups($_groupId)
+    public function deleteGroups($_groupId): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -119,8 +124,7 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
     {
         $select = $this->_t3db->select()
             ->from('be_groups');
-            //->where('deleted = 0'))
-            
+
         $groups = $select->query()->fetchAll(Zend_Db::FETCH_ASSOC);
         
         foreach($groups as $group) {
@@ -175,7 +179,7 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
             // evaluate typo3 groups
             if (empty($t3user['usergroup'])) continue;
             
-            $t3userGroups = explode(',', $t3user['usergroup']);
+            $t3userGroups = explode(',', (string) $t3user['usergroup']);
                         
             foreach((array) $t3userGroups as $groupId) {
                 if (! (isset($groupMap[$groupId]) || array_key_exists($groupId, $groupMap))) {
@@ -200,6 +204,4 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
             }
         }
     }
-    
- }
- 
+}

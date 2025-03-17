@@ -203,7 +203,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
     protected function _checkName($name)
     {
-        if (strpos($name, '/') !== false) {
+        if (str_contains((string) $name, '/')) {
             $translate = Tinebase_Translation::getTranslation('Tinebase');
             throw new Tinebase_Exception_SystemGeneric($translate->_('node name must not contain the character /'));
         }
@@ -363,7 +363,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     protected function _inspectBeforeSoftDelete(array $_ids)
     {
         if (!empty($_ids)) {
-            list($accountId, $now) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+            [$accountId, $now] = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
             /** @var Tinebase_Model_Tree_Node $node */
             foreach($this->getMultiple($_ids) as $node) {
                 $node->deleted_by = $accountId;
@@ -697,7 +697,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     
     public function sanitizePath($path)
     {
-        return trim($path, '/');
+        return trim((string) $path, '/');
     }
     
     /**
@@ -706,7 +706,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function splitPath($_path)
     {
-        return explode('/', $this->sanitizePath($_path));
+        return explode('/', (string) $this->sanitizePath($_path));
     }
 
     /**
@@ -794,7 +794,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                     /** @var Tinebase_Model_Tree_FileObject $fileObject */
                     try {
                         $fileObject = $_fileObjectBackend->get($data['object_id'], true);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         $transactionManager->commitTransaction($transactionId);
                         continue;
                     }

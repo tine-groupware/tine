@@ -37,7 +37,7 @@ trait Tinebase_Model_Filter_AdvancedSearchTrait {
             return null;
         }
 
-        if (0 === strpos($this->_operator, 'not')) {
+        if (str_starts_with($this->_operator, 'not')) {
             $not = true;
             $operator = substr($this->_operator, 3);
         } else {
@@ -55,7 +55,7 @@ trait Tinebase_Model_Filter_AdvancedSearchTrait {
 
             try {
                 $relatedIds = Tinebase_Core::getApplicationInstance($relatedModel)->search($relatedFilter, NULL, FALSE, TRUE);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
+            } catch (Tinebase_Exception_AccessDenied) {
                 continue;
             }
             Tinebase_Core::set('ADVANCED_SEARCHING', false);

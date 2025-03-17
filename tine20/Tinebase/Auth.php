@@ -24,97 +24,97 @@ class Tinebase_Auth
      * constant for Sql auth
      *
      */
-    const SQL = 'Sql';
+    public const SQL = 'Sql';
 
     /**
      * constant for Sql by email auth
      *
      */
-    const SQL_EMAIL = 'SqlEmail';
+    public const SQL_EMAIL = 'SqlEmail';
     
     /**
      * constant for LDAP auth
      *
      */
-    const LDAP = 'Ldap';
+    public const LDAP = 'Ldap';
 
     /**
      * constant for IMAP auth
      *
      */
-    const IMAP = 'Imap';
+    public const IMAP = 'Imap';
 
     /**
      * constant for DigitalCertificate auth / SSL
      *
      */
-    const MODSSL = 'ModSsl';
+    public const MODSSL = 'ModSsl';
 
     /**
      * PIN auth
      *
      */
-    const PIN = 'Pin';
+    public const PIN = 'Pin';
 
     /**
      * General Failure
      */
-    const FAILURE                       =  Zend_Auth_Result::FAILURE;
+    public const FAILURE                       =  Zend_Auth_Result::FAILURE;
 
     /**
      * Failure due to identity not being found.
      */
-    const FAILURE_IDENTITY_NOT_FOUND    = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
+    public const FAILURE_IDENTITY_NOT_FOUND    = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
 
     /**
      * Failure due to identity being ambiguous.
      */
-    const FAILURE_IDENTITY_AMBIGUOUS    = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
+    public const FAILURE_IDENTITY_AMBIGUOUS    = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
 
     /**
      * Failure due to invalid credential being supplied.
      */
-    const FAILURE_CREDENTIAL_INVALID    = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
+    public const FAILURE_CREDENTIAL_INVALID    = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
 
     /**
      * Failure due to uncategorized reasons.
      */
-    const FAILURE_UNCATEGORIZED         = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
+    public const FAILURE_UNCATEGORIZED         = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
     
     /**
      * Failure due the account is disabled
      */
-    const FAILURE_DISABLED              = -100;
+    public const FAILURE_DISABLED              = -100;
 
     /**
      * Failure due the account is expired
      */
-    const FAILURE_PASSWORD_EXPIRED      = -101;
+    public const FAILURE_PASSWORD_EXPIRED      = -101;
     
     /**
      * Failure due the account is temporarily blocked
      */
-    const FAILURE_BLOCKED               = -102;
+    public const FAILURE_BLOCKED               = -102;
         
     /**
      * database connection failure
      */
-    const FAILURE_DATABASE_CONNECTION   = -103;
+    public const FAILURE_DATABASE_CONNECTION   = -103;
 
     /**
      * license expired
      */
-    const LICENSE_EXPIRED               = -104;
+    public const LICENSE_EXPIRED               = -104;
     
     /**
      * license user limit reached
      */
-    const LICENSE_USER_LIMIT_REACHED    = -105;
+    public const LICENSE_USER_LIMIT_REACHED    = -105;
     
     /**
      * Authentication success.
      */
-    const SUCCESS                        =  Zend_Auth_Result::SUCCESS;
+    public const SUCCESS                        =  Zend_Auth_Result::SUCCESS;
 
     use Tinebase_Controller_SingletonTrait;
 
@@ -225,21 +225,21 @@ class Tinebase_Auth
             } else {
                 Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
             }
-        } catch (Zend_Session_Exception $e) {
+        } catch (Zend_Session_Exception) {
             Zend_Auth::getInstance()->setStorage(new Zend_Auth_Storage_NonPersistent());
         }
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
 
         if ($result->getCode() !== self::SUCCESS && Tinebase_Config::getInstance()
                 ->{Tinebase_Config::AUTHENTICATION_BY_EMAIL} && $this->_backend->supportsAuthByEmail()) {
-            if (strpos($_username, '@') === false) {
+            if (!str_contains($_username, '@')) {
                 foreach (Tinebase_User::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                         Tinebase_Model_FullUser::class, [
                             ['field' => 'email', 'operator' => 'startswith', 'value' => $_username . '@']
                         ])) as $user) {
                     try {
                         $this->_backend->setIdentity($user->accountLoginName);
-                    } catch (Zend_Auth_Adapter_Exception $zaae) {}
+                    } catch (Zend_Auth_Adapter_Exception) {}
                     $tmpResult = Zend_Auth::getInstance()->authenticate($this->_backend);
                     if ($tmpResult->getCode() === self::SUCCESS) {
                         return $tmpResult;
@@ -334,17 +334,16 @@ class Tinebase_Auth
     
     /**
      * Setter for {@see $_backendConfiguration}
-     * 
+     *
      * NOTE:
      * Setting will not be written to Database or Filesystem.
      * To persist the change call {@see saveBackendConfiguration()}
-     * 
-     * @param mixed $_value
+     *
      * @param string $_key
      * @param boolean $_applyDefaults
      * @return void
      */
-    public static function setBackendConfiguration($_value, $_key = null, $_applyDefaults = false)
+    public static function setBackendConfiguration(mixed $_value, $_key = null, $_applyDefaults = false)
     {
         $defaultValues = self::$_backendConfigurationDefaults[self::getConfiguredBackend()];
         

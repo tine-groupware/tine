@@ -69,7 +69,7 @@ class Tinebase_BroadcastHub
     {
         if (null === $this->_redis) {
             if (!$this->_isActive) {
-                throw new Tinebase_Exception_Backend(__CLASS__ . ' is not activated');
+                throw new Tinebase_Exception_Backend(self::class . ' is not activated');
             }
             $this->_redis = new Redis();
             $this->_redis->connect($this->_config->{Tinebase_Config::BROADCASTHUB_REDIS}

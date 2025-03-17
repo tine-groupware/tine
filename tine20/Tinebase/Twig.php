@@ -21,9 +21,9 @@ use Twig\Extra\CssInliner\CssInlinerExtension;
  */
 class Tinebase_Twig
 {
-    const TWIG_AUTOESCAPE = 'autoEscape';
-    const TWIG_LOADER = 'loader';
-    const TWIG_CACHE = 'cache';
+    public const TWIG_AUTOESCAPE = 'autoEscape';
+    public const TWIG_LOADER = 'loader';
+    public const TWIG_CACHE = 'cache';
 
     /**
      * @var Twig_Environment
@@ -77,9 +77,7 @@ class Tinebase_Twig
         
         /** @noinspection PhpUndefinedMethodInspection */
         /** @noinspection PhpUnusedParameterInspection */
-        $this->_twigEnvironment->getExtension(Twig\Extension\EscaperExtension::class)->setEscaper('json', function($twigEnv, $string, $charset) {
-            return json_encode($string);
-        });
+        $this->_twigEnvironment->getExtension(Twig\Extension\EscaperExtension::class)->setEscaper('json', fn($twigEnv, $string, $charset) => json_encode($string));
 
         $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
         $this->_twigEnvironment->addExtension(new CssInlinerExtension());
@@ -159,19 +157,11 @@ class Tinebase_Twig
             $n->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL),
             $n->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL));
 
-        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('removeSpace', function($str) {
-            return str_replace(' ', '', (string)$str);
-        }));
-        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
-            return iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', $str));
-        }));
-        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('accountLoginChars', function($str) {
-            return preg_replace('/[^\w\-_.@\d+]/u', '', $str);
-        }));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('removeSpace', fn($str) => str_replace(' ', '', (string)$str)));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', fn($str) => iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', (string) $str))));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('accountLoginChars', fn($str) => preg_replace('/[^\w\-_.@\d+]/u', '', $str)));
 
-        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', function($subject, $pattern, $replacement, int $limit=-1, int $count=null) {
-            return preg_replace($pattern, $replacement, $subject, $limit, $count);
-        }));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', fn($subject, $pattern, $replacement, int $limit=-1, int $count=null) => preg_replace($pattern, $replacement, $subject, $limit, $count)));
 
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
             function ($str) use($locale, $translate) {
@@ -201,9 +191,7 @@ class Tinebase_Twig
                 return $translatedStr;
             }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
-            function ($str) {
-                return (is_scalar($str) && strlen((string)$str) > 0) ? $str . "\n" : $str;
-            }));
+            fn($str) => (is_scalar($str) && strlen((string)$str) > 0) ? $str . "\n" : $str));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
             if (!($date instanceof DateTime)) {
                 $date = new Tinebase_DateTime($date, Tinebase_Core::getUserTimezone());
@@ -244,9 +232,7 @@ class Tinebase_Twig
             
             return implode(', ', $tags->getTitle());
         }));
-        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderModel', function ($modelName) {
-            return $modelName::getConfiguration()->recordName;
-        }));
+        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderModel', fn($modelName) => $modelName::getConfiguration()->recordName));
         $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderTitle', function ($record, $modelName) {
             if (! $record instanceof Tinebase_Record_Abstract) {
                 $record = new $modelName($record);
@@ -254,29 +240,17 @@ class Tinebase_Twig
             return $record->getTitle();
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('findBySubProperty',
-            function ($records, $property, $subProperty, $value) {
-                return $records instanceof Tinebase_Record_RecordSet ?
-                    $records->find(function($record) use($property, $subProperty, $value) {
-                        return $record->{$property} instanceof Tinebase_Record_Interface &&
-                            $record->{$property}->{$subProperty} === $value;
-                }, null) : null;
-        }));
+            fn($records, $property, $subProperty, $value) => $records instanceof Tinebase_Record_RecordSet ?
+                $records->find(fn($record) => $record->{$property} instanceof Tinebase_Record_Interface &&
+                    $record->{$property}->{$subProperty} === $value, null) : null));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('filterBySubProperty',
-            function ($records, $property, $subProperty, $value) {
-                return $records instanceof Tinebase_Record_RecordSet ?
-                    $records->filter(function($record) use ($property, $subProperty, $value) {
-                        return $record->{$property} instanceof Tinebase_Record_Interface &&
-                            $record->{$property}->{$subProperty} === $value;
-                    }, null) : null;
-            }));
+            fn($records, $property, $subProperty, $value) => $records instanceof Tinebase_Record_RecordSet ?
+                $records->filter(fn($record) => $record->{$property} instanceof Tinebase_Record_Interface &&
+                    $record->{$property}->{$subProperty} === $value, null) : null));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('formatMessage',
-            function(string $msg, array $data) use($locale, $translate) {
-                return msgfmt_format_message((string)$locale, $translate->translate($msg, $locale), $data);
-            }));
+            fn(string $msg, array $data) => msgfmt_format_message((string)$locale, $translate->translate($msg, $locale), $data)));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('getCountryByCode',
-            function($code) use($locale) {
-                return Tinebase_Translation::getCountryNameByRegionCode($code, $locale) ?: $code;
-            }));
+            fn($code) => Tinebase_Translation::getCountryNameByRegionCode($code, $locale) ?: $code));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)

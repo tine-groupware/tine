@@ -17,21 +17,18 @@
  */
 class Tinebase_Record_Dehydrator_Strategy
 {
-    const DEF_LOAD_FROM_MODEL = 'loadFromModel';
-    const DEF_FLAT = 'flat';
-    const DEF_SUB_DEFINITIONS = 'subDefinitions';
+    public const DEF_LOAD_FROM_MODEL = 'loadFromModel';
+    public const DEF_FLAT = 'flat';
+    public const DEF_SUB_DEFINITIONS = 'subDefinitions';
 
     protected $_preSubHTasks = [];
     protected $_postSubHTasks = [];
     protected $_subHydrators = [];
-
-    protected $_type;
     protected $_definition = [];
     protected $_subDefinitions = [];
 
-    public function __construct($_type, array $_definition = null)
+    public function __construct(protected $_type, array $_definition = null)
     {
-        $this->_type = $_type;
         if (null !== $_definition) {
             $this->_definition = $_definition;
             if (isset($this->_definition[self::DEF_SUB_DEFINITIONS])) {
@@ -85,8 +82,7 @@ class Tinebase_Record_Dehydrator_Strategy
                                 ' has a unknown model');
                         }
                         $this->_subHydrators[$property] = Tinebase_Record_Hydration_Factory::createDehydrator(
-                            $this->_type, $model, isset($this->_subDefinitions[$property]) ?
-                                $this->_subDefinitions[$property] : null);
+                            $this->_type, $model, $this->_subDefinitions[$property] ?? null);
                         break;
                     case 'date':
                         $dateFields[] = $property;

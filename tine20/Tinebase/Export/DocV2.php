@@ -64,9 +64,7 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
         
         $twigName = uniqid();
         $this->_twig->addLoader(new Tinebase_Twig_CallBackLoader($twigName, $this->_getLastModifiedTimeStamp(),
-            function() {
-                return $this->_currentProcessor->fixBrokenTwigMacros($this->_currentProcessor->getMainPart());
-            }));
+            fn() => $this->_currentProcessor->fixBrokenTwigMacros($this->_currentProcessor->getMainPart())));
 
         $xml = str_replace(["\n", "\r", '\'', Tinebase_Export_Richtext_TemplateProcessor::NEW_LINE_PLACEHOLDER],
             ['</w:t><w:br/><w:t>', '', '&apos;', '</w:t><w:br/><w:t>'],
@@ -120,13 +118,13 @@ class Tinebase_Export_DocV2 extends Tinebase_Export_Doc
             $src = $this->_currentProcessor->getMainPart();
         }
 
-        while (preg_match('/\{[\{%][^\}]+&gt;/', $src, $m)) {
+        while (preg_match('/\{[\{%][^\}]+&gt;/', (string) $src, $m)) {
             $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 4) . '>', $src);
         }
-        while (preg_match('/\{[\{%][^\}]+&lt;/', $src, $m)) {
+        while (preg_match('/\{[\{%][^\}]+&lt;/', (string) $src, $m)) {
             $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 4) . '<', $src);
         }
-        while (preg_match('/\{\{[^\}]+\([^\}\)]+=>[^\)]*&quot;/', $src, $m)) {
+        while (preg_match('/\{\{[^\}]+\([^\}\)]+=>[^\)]*&quot;/', (string) $src, $m)) {
             $src = str_replace($m[0], substr($m[0], 0, strlen($m[0]) - 6 /*? oder 5*/) . '"', $src);
         }
 

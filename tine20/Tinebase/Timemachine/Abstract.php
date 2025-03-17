@@ -43,21 +43,21 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
      *   is_deleted, deleted_time, deleted_by
      */
     protected $_timemachine_tablename;
-    
+
     /**
      * Holds an instance of the corresponding table
      * 
      * @var Tinebase_Db_Table
      */
     protected $_timemachine_table;
-    
+
     /**
      * Holds ModificationLog instance
      * 
      * @var Tinebase_Timemachine_ModificationLog
      */
     private $_modificationLog;
-    
+
     /**
      * Constructor
      */
@@ -67,7 +67,7 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
             'name' => $this->_timemachine_tablename
         ));
     }
-    
+
     /**
      * Returns ids(strings) of records which where created in a given timespan.
      * 
@@ -79,9 +79,9 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
      */
     public function getCreated( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter )
     {
-        
+
     }
-    
+
     /**
      * Returns uids(strings) of records which where modified in a given timespan.
      * 
@@ -93,9 +93,9 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
      */
     public function getModified( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter )
     {
-        
+
     }
-    
+
     /**
      * Returns ids(strings) of records which where deleted in a given timespan.
      * 
@@ -107,9 +107,9 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
      */
     public function getDeleted( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter )
     {
-        
+
     }
-    
+
     /**
      * Returns a record as it was at a given point in history
      * 
@@ -121,7 +121,7 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
     public function getRecord( $_id,  Tinebase_DateTime $_at )
     {
     }
-    
+
     /**
      * Returns a set of records as they where at a given point in history
      * 
@@ -133,7 +133,7 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
     public function getRecords( array $_ids,  Tinebase_DateTime $_at )
     {
     }
-    
+
     /**
      * Returns instance of Tinebase_Timemachine_ModificationLog
      * (only create instace on demand)
@@ -145,9 +145,9 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
         if (!$this->_modificationLog) {
             $this->_modificationLog = Tinebase_Timemachine_ModificationLog::getInstance();
         }
-        
+
         return $this->_modificationLog;
     }
-    
+
 } // end of Tinebase_Timemachine_Interface
 ?>

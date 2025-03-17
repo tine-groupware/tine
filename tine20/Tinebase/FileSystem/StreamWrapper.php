@@ -232,8 +232,8 @@ class Tinebase_FileSystem_StreamWrapper
         } else {
             $context = stream_context_get_options($this->context);
         }
-        if (isset($context[__CLASS__]) && isset($context[__CLASS__]['revision'])) {
-            $revision = $context[__CLASS__]['revision'];
+        if (isset($context[self::class]) && isset($context[self::class]['revision'])) {
+            $revision = $context[self::class]['revision'];
         } else {
             $revision = null;
         }
@@ -256,7 +256,7 @@ class Tinebase_FileSystem_StreamWrapper
 
     public static function getStream($path)
     {
-        return isset(static::$openStreams[$path]) ? static::$openStreams[$path] : null;
+        return static::$openStreams[$path] ?? null;
     }
     
     /**
