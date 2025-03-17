@@ -48,7 +48,10 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CONTRACT_NUMBER_VALIDATION = 'contractNumberValidation';
-    
+
+    const DEFAULT_DEBITOR_EDOCUMENT_DISPATCH_TYPE = 'defaultDebitorEDocumentDispatchType';
+    const DEFAULT_EDOCUMENT_DISPATCH_DOCUMENT_TYPES = 'defaultEDocumentDispatchDocumentTypes';
+
     /**
      * How should the contract number be created
      * @var string
@@ -418,6 +421,23 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR => self::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED,
             ],
+        ],
+        self::DEFAULT_DEBITOR_EDOCUMENT_DISPATCH_TYPE => [
+            self::TYPE                  => self::TYPE_MIXED,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => Sales_Model_EDocument_Dispatch_Email::class,
+        ],
+        self::DEFAULT_EDOCUMENT_DISPATCH_DOCUMENT_TYPES => [
+            self::TYPE                  => self::TYPE_MIXED,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [[Tinebase_Core::class, 'createInstance'], Tinebase_Record_RecordSet::class, Sales_Model_EDocument_Dispatch_DocumentType::class, [
+                [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP],
+                [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT],
+            ]],
         ],
         self::DOCUMENT_OFFER_STATUS => [
             //_('Offer Status')
