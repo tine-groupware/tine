@@ -495,6 +495,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         $updateData = array_intersect_key($updateData, $this->getSchema());
         try {
             $this->_db->update($this->_userTable, $updateData, $where);
+            $this->_afterAddOrUpdate($emailUserData);
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (! Tinebase_Exception::isDbDuplicate($zdse)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
@@ -504,12 +505,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Duplicate: '
                     . $zdse);
-                $translate = Tinebase_Translation::getTranslation('Tinebase');
-                throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+                $translate = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translate->_(
+                    'Email account or alias/forward already exists'));
             }
         }
-
-        $this->_afterAddOrUpdate($emailUserData);
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
