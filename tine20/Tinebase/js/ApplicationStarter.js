@@ -115,8 +115,8 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 field.defaultValue = null;
             }
             if (fieldDefinition.hasOwnProperty('validators')) {
-                if (fieldDefinition['validators']['default']) {
-                    field.defaultValue = fieldDefinition['validators']['default'];
+                if (fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty']) {
+                    field.defaultValue = fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty'];
 
                     // php for [className, functionName]
                     if (_.get(field.defaultValue, '[0].length') === 2) {

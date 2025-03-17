@@ -45,9 +45,12 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
         // sometimes we need the instances from registry (e.g. printing)
         this.editDialog.recordForm = this;
 
+        const fieldsToExclude = _.get(this, 'editDialog.fieldsToExclude', this.fieldsToExclude);
+        const fieldsToInclude = _.get(this, 'editDialog.fieldsToInclude', this.fieldsToInclude);
+
         Ext.each(fieldDefinitions, function(fieldDefinition) {
-            const fieldsToExclude = _.get(this, 'editDialog.fieldsToExclude', this.fieldsToExclude);
             if (_.isArray(fieldsToExclude) && _.indexOf(fieldsToExclude, fieldDefinition.fieldName) >=0) return;
+            if (_.isArray(fieldsToInclude) && _.indexOf(fieldsToInclude, fieldDefinition.fieldName) <0) return;
 
             var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog');
             if (field) {

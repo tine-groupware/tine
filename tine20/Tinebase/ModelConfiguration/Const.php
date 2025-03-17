@@ -225,6 +225,7 @@ class Tinebase_ModelConfiguration_Const {
     public const SPECIAL_TYPE = 'specialType';
     public const SPECIAL_TYPE_DISCOUNT = 'discount';
     public const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
+    public const SPECIAL_TYPE_EMAIL = 'email';
     public const SPECIAL_TYPE_PASSWORD = 'password';
     public const SPECIAL_TYPE_PERCENT = 'percent';
     public const SPECIAL_TYPE_URL = 'url';
