@@ -21,7 +21,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
     public const TABLE_NAME = 'sales_document_attached_document';
 
     public const TYPE_PAPERSLIP = 'paperslip';
-    public const TYPE_UBL = 'ubl';
+    public const TYPE_EDOCUMENT = 'edocument';
     public const TYPE_SUPPORTING_DOCUMENT = 'supporting_document';
 
 

@@ -142,15 +142,15 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             $app->status = Tinebase_Application::DISABLED;
             Tinebase_Application::getInstance()->updateApplication($app);
             $document = $this->_instance->createPaperSlip(SMDOffer::class, $document['id']);
-            $this->assertSame($document['seq'], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($document[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
             $document = $this->_instance->getDocument_Offer($document['id']);
-            $this->assertSame($document['seq'], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($document[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
 
             $newDocument = $this->_instance->createPaperSlip(SMDOffer::class, $document['id']);
             $this->assertNotSame($newDocument['seq'], $document['seq']);
-            $this->assertSame($newDocument['seq'], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($newDocument[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
             $newDocument = $this->_instance->getDocument_Offer($document['id']);
-            $this->assertSame($newDocument['seq'], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($newDocument[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
 
         } finally {
             Sales_Export_DocumentPdf::$previewService = null;
