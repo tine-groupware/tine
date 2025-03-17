@@ -46,6 +46,7 @@ class Tinebase_ModelConfiguration_Const {
     public const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
 
     public const DB_COLUMNS = 'dbColumns';
+    public const DEFAULT_FROM_CONFIG = 'defaultFromConfig';
     /**
      * default sort info
      *

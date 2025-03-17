@@ -28,12 +28,10 @@ abstract class Sales_Model_EDocument_Dispatch_Abstract extends Tinebase_Record_N
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_EDocument_Dispatch_DocumentType::MODEL_NAME_PART,
                     self::STORAGE                   => self::TYPE_JSON,
-                ],
-                self::VALIDATORS                => [
-                    Zend_Filter_Input::DEFAULT_VALUE => [[Tinebase_Core::class, 'createInstance'], Tinebase_Record_RecordSet::class, Sales_Model_EDocument_Dispatch_DocumentType::class, [
-                        [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP],
-                        [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT],
-                    ]],
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Sales_Config::APP_NAME,
+                        self::CONFIG                    => Sales_Config::DEFAULT_EDOCUMENT_DISPATCH_DOCUMENT_TYPES,
+                    ],
                 ],
             ],
             self::FLD_EXPECTS_FEEDBACK      => [
