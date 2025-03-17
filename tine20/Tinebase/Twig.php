@@ -209,7 +209,7 @@ class Tinebase_Twig
                 $date = new Tinebase_DateTime($date, Tinebase_Core::getUserTimezone());
             }
             
-            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
+            return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, $this->_locale, $format);
         }));
 
         $staticData = [];

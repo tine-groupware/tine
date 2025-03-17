@@ -97,6 +97,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_NAME                  => [
                 self::LABEL                     => 'Name', // _('Name')
+                self::DESCRIPTION               => 'The full name under which the seller is registered in the national register of legal entities or as a taxable person or otherwise acts as a person(s) (company) (BT-27 [EN 16931]).', // _('The full name under which the seller is registered in the national register of legal entities or as a taxable person or otherwise acts as a person(s) (company) (BT-27 [EN 16931]).')
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
@@ -106,6 +107,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_ADDR_PREFIX1          => [
                 self::LABEL                     => 'Address Prefix 1', // _('Address Prefix 1')
+                self::DESCRIPTION               => 'The main line in an address. This is usually either the street and house number or the text "PO box" followed by the PO box number (BT-31 [EN 16931]).', // _('The main line in an address. This is usually either the street and house number or the text "PO box" followed by the PO box number (BT-31 [EN 16931]).')
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
@@ -161,6 +163,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_CONTACT_NAME          => [
                 self::LABEL                     => 'Contact Name', // _('Contact Name')
+                self::DESCRIPTION               => 'Details of contact person or contact point (e.g. name of a person, department or office name) (BT-41 [EN 16931]).',
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
@@ -188,12 +191,14 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_TAX_REGISTRATION_ID   => [
                 self::LABEL                     => 'Tax Registration Id', // _('Tax Registration Id')
+                self::DESCRIPTION               => 'A local tax code for the seller (determined by their address) or a reference to their registered tax status (BT-32 [EN 16931]). (If applicable, the information "tax liability of the recipient of the service" or the VAT exemption of the invoicing party must be entered here).', // _('A local tax code for the seller (determined by their address) or a reference to their registered tax status (BT-32 [EN 16931]). (If applicable, the information “tax liability of the recipient of the service” or the VAT exemption of the invoicing party must be entered here).')
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
                 self::QUERY_FILTER              => true,
             ],
             self::FLD_VAT_NUMBER            => [
-                self::LABEL                     => 'VAT Number', // _('VAT Number')
+                self::LABEL                     => 'VAT identifier', // _('VAT identifier')
+                self::DESCRIPTION               => 'The sales tax identification number of the seller (BT-31 [EN 16931]).', // _('The sales tax identification number of the seller (BT-31 [EN 16931]).') 'If the seller has such a number, it must be entered here unless information on the “Tax representative of the seller” (BG-11 [EN 16931]) is provided (BT-31 [EN 16931]).',
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
@@ -214,6 +219,8 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             self::FLD_EAS_ID                => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
+                self::DESCRIPTION               => "The pattern for 'Seller electronic address' (BT-34 [EN 16931]).", //_("The pattern for 'Seller electronic address (BT-34 [EN 16931]).")
+
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
@@ -223,6 +230,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             self::FLD_ELECTRONIC_ADDRESS    => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LABEL                     => 'Electronic Address', // _('Electronic Address')
+                self::DESCRIPTION               => 'Specifies the electronic address of the vendor to which the application level response to an invoice can be sent (BT-34 [EN 16931]).', //_('Specifies the electronic address of the vendor to which the application level response to an invoice can be sent (BT-34 [EN 16931]).')
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
             ],
@@ -235,6 +243,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             self::FLD_DISPATCH_FM_ACCOUNT_ID=> [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Dispatch email account', // _('Dispatch email account')
+                self::DESCRIPTION               => 'Account which is used for sending documents and auto processing feedback.', // ('Account which is used for sending documents and auto processing feedback.')
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Admin_Config::APP_NAME,
