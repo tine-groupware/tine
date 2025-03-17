@@ -1616,6 +1616,30 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 }
             }
 
+            if ($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG] ?? false) {
+                if (!($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::APP_NAME] ?? false)) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires app name');
+                }
+                if (!($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::CONFIG] ?? false)) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires config key');
+                }
+                if ($this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] ?? false) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires zend default validator not to be set');
+                }
+                $defaultValue = Tinebase_Config::getAppConfig($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::APP_NAME])
+                    ->{$fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::CONFIG]};
+                $fieldDef[Zend_Filter_Input::DEFAULT_VALUE] = $this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] = $defaultValue;
+                $fieldDef[self::INPUT_FILTERS][Tinebase_Record_Filter_CallableEmpty::class] = $defaultValue;
+                foreach ($this->_filters[$fieldKey] ?? [] as $filter) {
+                    if ($filter instanceof Tinebase_Record_Filter_CallableEmpty) {
+                        throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires callable empty filter not to be set');
+                    } elseif ($filter instanceof Zend_Filter_Empty) {
+                        throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires zend empty input filter not to be set');
+                    }
+                }
+                $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_CallableEmpty($defaultValue);
+            }
+
             $this->_addToModlogOmit($fieldDef, $fieldKey);
             $this->_addToPasswordFields($fieldDef, $fieldKey);
 
