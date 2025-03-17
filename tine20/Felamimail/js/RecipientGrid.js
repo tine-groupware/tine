@@ -247,7 +247,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         this.loadMask.show();
            
                         const contacts = await Tine.Tinebase.common.findContactsByEmailString(value);
+                        this.searchCombo.reset();
                         await this.updateRecipientsToken(null, contacts);
+
                         this.loadMask.hide();
                     })
                 },
