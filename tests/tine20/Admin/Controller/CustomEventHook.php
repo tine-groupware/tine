@@ -1,6 +1,6 @@
 <?php
 /**
- * tine - https://www.tine-groupware.de/
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * custom event hook for \Admin_Controller_UserTest::testCustomEventHookUserAdd
  *

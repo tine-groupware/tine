@@ -1164,8 +1164,8 @@ msgstr ""
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder ungütig"
 
-msgid "Email account already exists"
-msgstr "Das E-Mail-Konto existiert bereits"
+msgid "Email account or alias/forward already exists"
+msgstr "Das E-Mail-Konto oder ein Alias bzw. eine Weiterleitung existiert bereits"
 
 msgid "Area is locked"
 msgstr "Dieser Bereich ist gesperrt"

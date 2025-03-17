@@ -1,11 +1,12 @@
 <?php
+
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -358,6 +359,34 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
             foreach ($updatedUser->smtpUser->emailAliases as $alias) {
                 self::assertEquals(0, $alias->dispatch_address, print_r($alias->toArray(), true));
             }
+        }
+    }
+
+    public function testAliasDestinationExists()
+    {
+        $user = $this->testAddUser();
+
+        $backend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        if (! method_exists($backend, 'getDb')) {
+            self::markTestSkipped('not supported');
+        }
+        $backend->getDb()->insert('smtp_destinations', [
+            'userid' => Tinebase_Core::getUser()->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP],
+            'source' => 'testneu@' . $this->_mailDomain,
+            'destination' => 'test@' . $this->_mailDomain,
+        ]);
+
+        $user->smtpUser->emailAliases->addRecord(new Tinebase_Model_EmailUser_Alias([
+            'email' => 'testneu@' . $this->_mailDomain,
+            'dispatch_address' => 1,
+        ]));
+        try {
+            $this->_backend->updateUser($user);
+            self::fail('should throw exception');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translate = Tinebase_Translation::getTranslation();
+            self::assertEquals($translate->_(
+                'Email account or alias/forward already exists'), $tesg->getMessage());
         }
     }
 
