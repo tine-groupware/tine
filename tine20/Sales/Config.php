@@ -309,7 +309,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true,
                     ], [
                         'id' => self::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
-                        'value' => 'Ubl', //_('Ubl')
+                        'value' => 'eDocument', //_('eDocument')
                         'icon' => null,
                         'system' => true,
                     ], [

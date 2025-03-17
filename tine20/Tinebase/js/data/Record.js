@@ -663,3 +663,15 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
 
     return record;
 };
+
+/**
+ * creates a clone of given record (in current window context)
+ * @param record
+ * @return record
+ */
+Tine.Tinebase.data.Record.clone = function(record) {
+    const data = JSON.stringify(record.getData());
+    const recordClass = record.constructor.getPhpClassName()
+
+    return Tine.Tinebase.data.Record.setFromJson(data, recordClass);
+}
