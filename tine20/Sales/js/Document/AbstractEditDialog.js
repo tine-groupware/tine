@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import FieldTriggerPlugin from "../../../Tinebase/js/ux/form/FieldTriggerPlugin";
+
 Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
@@ -261,6 +263,16 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }
                         fields['buyer_reference'].setValue(_.get(record, 'data.debitor_id.buyer_reference', ''))
                     }
+                    config.plugins = config.plugins || []
+                    config.plugins.push(new FieldTriggerPlugin({
+                        triggerClass: 'SalesDebitor',
+                        qtip: this.app.i18n._('Open Debitor'),
+                        onTriggerClick: () => {
+                            // @TODO open document debitor once dispatch config gets denormalized
+                            const debitorId = this.record.get('debitor_id').original_id
+                            Tine.Sales.DebitorEditDialog.openWindow({recordId: debitorId, record: {id: debitorId}, mode: 'remote'})
+                        }
+                    }))
                     // more logic in Tine.Sales.AddressSearchCombo
                     break;
                 case 'vat_procedure':

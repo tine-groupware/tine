@@ -76,7 +76,15 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.mask.show()
 
                     try {
-                        const success = await Tine.Sales.dispatchDocument(className, record.id)
+                        if (! await Tine.Sales.dispatchDocument(className, record.id)) {
+                            if (await Ext.MessageBox.confirm(
+                                app.formatMessage('Nothing was dispatched'),
+                                app.formatMessage('Do you want to dispatch manually by email?')
+                            ) === 'yes') {
+                                this.menu.items.get(0).handler.call(this, cmp, true)
+                            }
+                        }
+
                     } catch (e) {
                         await Ext.MessageBox.show({
                             buttons: Ext.Msg.OK,
@@ -110,8 +118,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 documentType: type,
                 text: app.formatMessage('Manual Dispatch via Email'),
                 iconCls: `SalesEDocument_Dispatch_Email`,
-                handler: async function(cmp) {
-                    this.initialConfig = this.parentMenu.ownerCt.initialConfig;
+                handler: async function(cmp, force) {
+                    this.initialConfig = (this.parentMenu?.ownerCt || this).initialConfig;
                     AbstractAction.prototype.handler.call(this, cmp);
 
                     let record = this.selections = [...this.initialConfig.selections][0]
@@ -122,7 +130,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     const isDispatched = ['DISPATCHED', 'MANUAL_DISPATCH'].indexOf(currentStatus) >= 0
                     const dispatchHistoryRecords = record.get('dispatch_history')
 
-                    if (!dispatchHistoryRecords.length && await Ext.MessageBox.confirm(
+                    if (!force && !dispatchHistoryRecords.length && await Ext.MessageBox.confirm(
                         app.formatMessage('Bypass Dispatch Configs?'), (isDispatched ?
                          '<b>' + app.formatMessage('This document is already dispatched!') + '</b><br /><br />' : '') +
                          app.formatMessage('You are about to manually dispatch this document without evaluating the configured dispatch type. Do you want to proceed?')
@@ -295,6 +303,38 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             msg: this.errorMsgs.join('<br />')
                         })
                     }
+                }
+            }), new AbstractAction({
+                documentType: type,
+                text: app.formatMessage('Show Dispatch History'),
+                iconCls: `SalesDocument_DispatchHistory`,
+                handler: async function(cmp) {
+                    this.initialConfig = this.parentMenu.ownerCt.initialConfig;
+                    AbstractAction.prototype.handler.call(this, cmp);
+
+                    let record = this.selections = [...this.initialConfig.selections][0]
+
+                    DispatchHistoryDialog.openWindow({
+                        editDialog: this.editDialog,
+                        record
+                    })
+                }
+            }), new AbstractAction({
+                documentType: type,
+                text: app.formatMessage('Show Dispatch Configuration'),
+                iconCls: `SalesEDocument_Dispatch_Custom`,
+                handler: async function(cmp) {
+                    this.initialConfig = this.parentMenu.ownerCt.initialConfig;
+                    AbstractAction.prototype.handler.call(this, cmp);
+
+                    let record = this.selections = [...this.initialConfig.selections][0]
+                    const debitorId = record.get('debitor_id').original_id
+                    Tine.Sales.DebitorEditDialog.openWindow({
+                        recordId: debitorId,
+                        record: {id: debitorId},
+                        mode: 'remote',
+                        fieldsToInclude: ['name', 'number', 'description', 'eas_id', 'electronic_address', 'edocument_dispatch_type', 'edocument_dispatch_config']
+                    })
                 }
             })]
         })

@@ -872,7 +872,7 @@ msgid "Exclude from Dispatch Document"
 msgstr "Vom Belegversandt ausschließen"
 
 msgid "Show Dispatch History"
-msgstr "Speichere Beleg-Versandt Historie"
+msgstr "Zeige Beleg-Versandt Historie"
 
 msgid "More Boilerplates"
 msgstr "Weitere Textbausteine"
@@ -2078,11 +2078,11 @@ msgid_plural "Payment Means"
 msgstr[0] "Zahlungsmittel"
 msgstr[1] "Zahlungsmittel"
 
-msgid "Config"
-msgstr "Konfiguration"
-
 msgid "Default"
 msgstr "Standard"
+
+msgid "Config"
+msgstr "Konfiguration"
 
 msgid "Dispatch Date"
 msgstr "Belegversandt Datum"

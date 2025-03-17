@@ -154,6 +154,10 @@
     background-image:url(../../images/icon-set/icon_filemanager_bearbeiten.svg) !important;
 }
 
+.SalesDocument_DispatchHistory {
+    background-image:url(../../images/icon-set/icon_time_export.svg) !important;
+}
+
 .sales-complete-dispatch {
     background-image:url(../../images/icon-set/icon_tasks.svg) !important;
 }
