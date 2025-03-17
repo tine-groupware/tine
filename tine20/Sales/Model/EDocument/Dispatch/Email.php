@@ -25,7 +25,11 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
 
         $_definition[self::FIELDS][self::FLD_EMAIL] = [
             self::TYPE              => self::TYPE_STRING,
+            self::SPECIAL_TYPE      => self::SPECIAL_TYPE_EMAIL,
             self::LABEL             => 'Email', // _('Email')
+            self::UI_CONFIG         => [
+                'emptyText'             => 'If empty, email address of document recipient will be taken.', // _('If empty, email address of document recipient will be taken.')
+            ]
         ];
     }
 

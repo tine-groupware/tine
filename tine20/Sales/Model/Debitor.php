@@ -366,7 +366,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
 
     public function setFromArray(array &$_data)
     {
-        if (!isset($_data[self::FLD_PAYMENT_MEANS])) {
+        if (!isset($_data[self::FLD_PAYMENT_MEANS]) || (is_array($_data[self::FLD_PAYMENT_MEANS]) && empty($_data[self::FLD_PAYMENT_MEANS]))) {
             $pmc = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS});
             if (empty($model = $pmc->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS})) {
                 throw new Tinebase_Exception_UnexpectedValue('default payment means code configuration needs to have a config class configured');

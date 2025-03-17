@@ -78,6 +78,10 @@ class Sales_Model_EDocument_PaymentMeansCode extends Tinebase_Record_NewAbstract
                         Sales_Model_EDocument_PMC_PayeeFinancialAccount::class,
                     ],
                 ],
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Empty::class            => Sales_Model_EDocument_PMC_NoConfig::class,
+                ],
             ],
         ],
     ];

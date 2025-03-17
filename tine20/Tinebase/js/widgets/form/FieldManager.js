@@ -13,6 +13,7 @@ import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
 import 'widgets/form/LocalizedField';
 import 'widgets/form/UrlField';
+import 'widgets/form/EmailField';
 
 /**
  * central form field manager
@@ -40,7 +41,9 @@ Tine.widgets.form.FieldManager = function() {
 
         specialTypeMap: {
             password: 'tw-passwordTriggerField',
-            country: 'widget-countrycombo'
+            country: 'widget-countrycombo',
+            url: 'urlfield',
+            email: 'tw-emailField'
         },
 
         /**

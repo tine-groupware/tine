@@ -69,7 +69,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         this.assertRecordClass(owningRecord);
 
         const valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
-        if (!this.recordData.hasOwnProperty(this.recordClass.getMeta('idProperty'))) {
+        if (valueRecord && this.recordClass && !this.recordData.hasOwnProperty(this.recordClass.getMeta('idProperty'))) {
             valueRecord.phantom = true;
         }
         Promise.resolve().then(async () => {
