@@ -35,7 +35,6 @@ Tine.Tinebase.widgets.form.EmailField = Ext.extend(Ext.form.TextField, {
             triggerClass: 'action_composeEmail',
             qtip: i18n._('Compose Email'),
             onTriggerClick: (e) => {
-                debugger
                 if (Tine.Felamimail && !e.altKey && !e.ctrlKey) {
                     const record = new Tine.Felamimail.Model.Message(Object.assign({to: this.getValue()}, Tine.Felamimail.Model.Message.getDefaultData()), Tine.Tinebase.data.Record.generateUID());
                     Tine.Felamimail.MessageEditDialog.openWindow({

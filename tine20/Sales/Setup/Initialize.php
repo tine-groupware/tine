@@ -130,10 +130,11 @@ class Sales_Setup_Initialize extends Setup_Initialize
                     $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_PaymentMandate::class;
                     break;
                 default:
+                    $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_NoConfig::class;
                     break;
             }
             $paymentMeans = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->create($paymentMeans);
-            if ('58' === $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CODE}) { // 58 SEPA Überweisung
+            if ('58' === $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CODE}) { // SEPA credit transfer
                 Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS} = $paymentMeans->getId();
             }
         }
