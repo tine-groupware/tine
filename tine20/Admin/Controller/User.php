@@ -718,50 +718,49 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _checkAccountDeletionConfig($_accountIds)
     {
         $context = $this->getRequestContext();
+        $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
 
-        if ($context && is_array($context) && 
-            (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
-            || array_key_exists('confirm', $context))) {
-            return;
-        }
+        if (!$confirmHeader) {
+            $userData = '<br />';
 
-        $userData = '<br />';
-
-        foreach ((array)$_accountIds as $accountId) {
-            $oldUser = $this->get($accountId)->getTitle();
-            $userData .= "$oldUser <br />";
-        }
-
-        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-        $configs = Tinebase_Config::getInstance()->getDefinition(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION);
-        
-        $exception = new Tinebase_Exception_Confirmation(
-            $translation->_('Delete user will trigger the [V] events, do you still want to execute this action?'));
-        
-        foreach ($configs['content'] as $key => $content) {
-            switch ($key) {
-                case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER:
-                case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_CONTACT:
-                case Tinebase_Config::ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS:
-                case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER:
-                case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS:
-                case Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS:
-                    $label = $translation->_($content['label']);
-                    $enable = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
-                    $enable =  $enable === true ? '[V]' : '[ ]';
-                $userData .= "<br /> $enable $label";
-                    break;
-                case Tinebase_Config::ACCOUNT_DELETION_ADDITIONAL_TEXT:
-                    $text = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
-                    $userData .= "<br /> $text <br />";
-                    break;
-                default;
-                    break;
+            foreach ((array)$_accountIds as $accountId) {
+                $oldUser = $this->get($accountId)->getTitle();
+                $userData .= "$oldUser <br />";
             }
+
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+            $configs = Tinebase_Config::getInstance()->getDefinition(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION);
+
+            $exception = new Tinebase_Exception_Confirmation(
+                $translation->_('Delete user will trigger the [V] events, do you still want to execute this action?'));
+
+            foreach ($configs['content'] as $key => $content) {
+                switch ($key) {
+                    case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER:
+                    case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_CONTACT:
+                    case Tinebase_Config::ACCOUNT_DELETION_KEEP_ORGANIZER_EVENTS:
+                    case Tinebase_Config::ACCOUNT_DELETION_KEEP_AS_EXTERNAL_ATTENDER:
+                    case Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS:
+                    case Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS:
+                        $label = $translation->_($content['label']);
+                        $enable = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
+                        $enable =  $enable === true ? '[V]' : '[ ]';
+                        $userData .= "<br /> $enable $label";
+                        break;
+                    case Tinebase_Config::ACCOUNT_DELETION_ADDITIONAL_TEXT:
+                        $text = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
+                        $userData .= "<br /> $text <br />";
+                        break;
+                    default;
+                        break;
+                }
+            }
+
+            $exception->setInfo($userData);
+            throw $exception;
         }
-        
-        $exception->setInfo($userData);
-        throw $exception;
+
+        return true;
     }
 
     /**

@@ -83,6 +83,10 @@ msgstr "Abgelehnt"
 msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
 msgstr "Zeitkonten als Favorit zufügen um Stundenzettel Erzeugung zu Beschleunigen."
 
+#, python-format
+msgid "There are %s hours have not yet been billed, do you want to make them billable?"
+msgstr "Es sind noch %s std nicht abgerechnet, wollen Sie diese abrechenbar machen?"
+
 msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
 msgstr "Zeitkonten sind noch in Benutzung!, Sind Sie sicher, dass Sie sie löschen möchten?"
 

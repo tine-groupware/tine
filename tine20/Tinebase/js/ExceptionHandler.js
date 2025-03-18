@@ -320,18 +320,19 @@ Tine.Tinebase.ExceptionHandler = function() {
                         exception.title,
                         exception.message,
                     async function(button) {
-                            if (button === 'yes') {
-                                Ext.Ajax.request({
-                                    scope: callbackScope,
-                                    headers: {
-                                        'X-TINE20-REQUEST-CONTEXT-CONFIRM' : true
-                                    },
-                                    params: params,
-                                    success : function(_result, _request) {
-                                        Ext.callback(callback, callbackScope, [_result, _request]);
-                                    },
-                                });
+                            if (button === 'no' && !exception?.sendRequestOnRejection) {
+                                return false;
                             }
+                            Ext.Ajax.request({
+                                scope: callbackScope,
+                                headers: {
+                                    'X-TINE20-REQUEST-CONTEXT-CONFIRM' : button === 'yes'
+                                },
+                                params: params,
+                                success : function(_result, _request) {
+                                    Ext.callback(callback, callbackScope, [_result, _request]);
+                                },
+                            });
                         }
                     );
                 }

@@ -688,19 +688,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
     protected function _validateRelations($_record, $_oldRecord)
     {
-        $context = $this->getRequestContext();
-
-        if ($context && is_array($context) &&
-            (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
-                || array_key_exists('confirm', $context))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Force updating the timesheet');
-            return true;
-        }
+        $exception = null;
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
-        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-        $exception = null;
 
         if ($_oldRecord && $this->_isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
             $exception = new Tinebase_Exception_Confirmation(
@@ -715,7 +706,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         }
 
         if ($exception) {
-            throw $exception;
+            $context = $this->getRequestContext();
+            $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
+
+            if (!$confirmHeader) {
+                throw $exception;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Force updating the timesheet');
         }
 
         return true;
