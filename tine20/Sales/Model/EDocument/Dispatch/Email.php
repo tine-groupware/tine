@@ -81,6 +81,10 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
                 }
             }
 
+            if (empty($attachments)) {
+                throw new Tinebase_Exception_UnexpectedValue('no attached documents found for dispatching by email');
+            }
+
             $locale = new Zend_Locale($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
             $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale);
             if ($boilerPlate = $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES}
