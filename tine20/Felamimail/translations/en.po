@@ -1,19 +1,3 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: Tine 2.0 - Felamimail\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: en\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-
 msgid "Manage personal email accounts"
 msgstr "Manage personal email accounts"
 
@@ -283,13 +267,13 @@ msgstr "Bad recipient address syntax"
 msgid "Recipient address rejected"
 msgstr "Recipient address rejected"
 
-msgid "Original message not found, email was moved or deleted"
-msgstr "Original message not found, email was moved or deleted"
-
 msgid "Invalid address format"
 msgstr "Invalid address format"
 
-#, python-format
+msgid "Decryption Error: Maybe your shared credential cache key is longer than 24 chars?"
+msgstr "Decryption Error: Maybe your shared credential cache key is longer than 24 chars?"
+
+#, python-format, php-format
 msgid "Error: %s"
 msgstr "Error: %s"
 
@@ -299,6 +283,7 @@ msgstr "Could not send message"
 msgid "My Mail Download Links"
 msgstr "My Mail Download Links"
 
+#, php-format
 msgid "Out of Office reply from %1$s"
 msgstr "Out of Office reply from %1$s"
 
@@ -897,6 +882,36 @@ msgstr "Error Filing Message"
 msgid "Could not file message."
 msgstr "Could not file message."
 
+msgid "Ctrl+N / Ctrl+M : Compose message"
+msgstr "Ctrl+N / Ctrl+M : Compose message"
+
+msgid "Ctrl+L : Forward message"
+msgstr "Ctrl+L : Forward message"
+
+msgid "Ctrl+R : Reply message"
+msgstr "Ctrl+R : Reply message"
+
+msgid "Ctrl+Shift+R : Reply to all"
+msgstr "Ctrl+Shift+R : Reply to all"
+
+msgid "A / Ctrl+S : File message"
+msgstr "A / Ctrl+S : File message"
+
+msgid "Ctrl+O / Enter : Open message"
+msgstr "Ctrl+O / Enter : Open message"
+
+msgid "1 : Toggle highlighting"
+msgstr "1 : Toggle highlighting"
+
+msgid "M : Mark read/unread"
+msgstr "M : Mark read/unread"
+
+msgid "J : Mark message as SPAM"
+msgstr "J : Mark message as SPAM"
+
+msgid "Shift+J : Mark message as HAM"
+msgstr "Shift+J : Mark message as HAM"
+
 msgid "Send Reading Confirmation"
 msgstr "Send Reading Confirmation"
 
@@ -1209,6 +1224,9 @@ msgstr "Mark Folder as read"
 
 msgid "Update Folder List"
 msgstr "Update Folder List"
+
+msgid "Agree that this account can be transferred to other users"
+msgstr "Agree that this account can be transferred to other users"
 
 msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
 msgstr "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
@@ -1678,3 +1696,9 @@ msgstr "All mails with the draft flag"
 
 msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr "Can not combine \"allow external\" and \"allow only members\""
+
+msgid "Forward and forwarded email as .eml in attachment"
+msgstr "Forward and forwarded email as .eml in attachment"
+
+msgid "Only forwarded email as .eml in attachment"
+msgstr "Only forwarded email as .eml in attachment"
