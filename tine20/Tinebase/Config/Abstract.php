@@ -103,6 +103,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     const TYPE_DATETIME = 'dateTime';
 
+    const TYPE_MIXED = 'mixed';
+
     /**
      * keyField config type
      *
@@ -1057,6 +1059,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $options = isset($definition['options']) ? (array) $definition['options'] : array();
                 $options['appName'] = $appName;
                 return Tinebase_Config_KeyField::create($_rawData, $options);
+            case self::TYPE_MIXED:
+                return $_rawData;
 
             // TODO this should be an error
             default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData, $parent, $parentKey) : $_rawData;

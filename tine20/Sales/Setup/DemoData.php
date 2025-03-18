@@ -415,7 +415,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $customers = array(
             array(
                 'name' => 'ELKO Elektronik und Söhne',
-                'url' => 'www.elko-elektronik.de',
+                'url' => 'https://www.elko-elektronik.de',
                 'discount' => 0,
                 'name_shorthand' => 'ELKO',
                 'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
@@ -436,7 +436,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ),
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
-                'url' => 'www.platt-reifen.de',
+                'url' => 'https://www.platt-reifen.de',
                 'discount' => 0,
                 'name_shorthand' => 'PLATT',
                 'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
@@ -454,7 +454,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ),
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',
-                'url' => 'www.frische-fische-hamburg.de',
+                'url' => 'https://www.frische-fische-hamburg.de',
                 'discount' => 15.2,
                 'name_shorthand' => 'FrischeFische',
                 'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,

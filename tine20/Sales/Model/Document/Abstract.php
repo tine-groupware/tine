@@ -549,6 +549,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID,
+                    self::EXCLUDE_FROM_DOCUMENT_SEQ     => true,
                 ],
             ],
             self::FLD_DOCUMENT_SEQ              => [

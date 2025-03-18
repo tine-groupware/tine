@@ -167,10 +167,10 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         // need to do this before comit, we want the modlogs to be written first
         // order matters, edocument may embed any of the other documents
         if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $missingDocTypes)) {
-            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([new Sales_Frontend_Json, 'createPaperSlip'], [Sales_Model_Document_Invoice::class, $record->getId()]);
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([new Sales_Frontend_Json, 'createPaperSlip'], [Sales_Model_Document_Invoice::class, $record->getId()]);
         }
         if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT, $missingDocTypes)) {
-            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'createEDocument'], [$record->getId()]);
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'createEDocument'], [$record->getId()]);
         }
     }
 

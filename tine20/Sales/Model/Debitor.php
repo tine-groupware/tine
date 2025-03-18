@@ -289,6 +289,10 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Electronic Document Transport Method', // _('Electronic Document Transport Method')
                 self::DEFAULT_VAL               => Sales_Model_EDocument_Dispatch_Email::class,
                 self::CONFIG                    => [
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Sales_Config::APP_NAME,
+                        self::CONFIG                    => Sales_Config::DEFAULT_DEBITOR_EDOCUMENT_DISPATCH_TYPE,
+                    ],
                     self::AVAILABLE_MODELS          => [
                         Sales_Model_EDocument_Dispatch_Custom::class,
                         Sales_Model_EDocument_Dispatch_Email::class,
@@ -296,11 +300,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                         Sales_Model_EDocument_Dispatch_Upload::class,
                     ],
                 ],
-                self::INPUT_FILTERS             => [
-                    Zend_Filter_Empty::class        => Sales_Model_EDocument_Dispatch_Email::class,
-                ],
                 self::VALIDATORS                => [
-                    Zend_Filter_Input::DEFAULT_VALUE => Sales_Model_EDocument_Dispatch_Email::class,
                     [Zend_Validate_InArray::class, [
                         Sales_Model_EDocument_Dispatch_Custom::class,
                         Sales_Model_EDocument_Dispatch_Email::class,
