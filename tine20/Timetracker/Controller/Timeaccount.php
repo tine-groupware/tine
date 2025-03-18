@@ -80,6 +80,77 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
 
     /**
      * inspect update of one record
+     * @param $_record
+     * @param $_oldRecord
+     * @return  void
+     * @throws Tinebase_Exception_Confirmation
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        if ($_record['is_billable'] && $_record['is_billable'] !== $_oldRecord['is_billable']) {
+            $tsBackend = new Timetracker_Backend_Timesheet();
+            $timesheets = $tsBackend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $_record->getId()],
+                ['field' => 'is_billable', 'operator' => 'equals', 'value' => false],
+            ]));
+
+            if ($timesheets->count() > 0) {
+                $context = $this->getRequestContext();
+                $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
+
+                if (!$confirmHeader) {
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    $timesheetTitles = null;
+                    $totalCount = 0;
+                    $timesheetTitles = '<div style="max-height: 300px; overflow-y: auto; padding: 5px;">'; // Start with a container that has scrolling
+                    $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            'account_id' => []
+                        ]
+                    ]);
+                    $expander->expand(new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, $timesheets));
+
+                    foreach ($timesheets as $timesheet) {
+                        $title = $timesheet->getTitle();
+                        $duration  = $timesheet->duration / 60;
+                        $startDate = $timesheet->start_date->format('Y-m-d');
+                        $accountName = $timesheet->account_id->accountDisplayName;
+                        $timesheetTitles .= '<div style="display: block; margin: 5px;">
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <span style="text-align: left; min-width: 80px">' . $startDate . '</span>
+                                    <span style="text-align: left; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 200px">' . $title . '</span>
+                                    <span style="text-align: right;">' . $duration . '</span>
+                                </div>
+                                <div style="display: flex;flex-direction: row;justify-content: space-between;">
+                                    <span style="text-align: left; max-width: 300px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">' . $accountName . '</span>
+                                </div>
+                              </div>';
+                        $totalCount += $duration;
+                    }
+                    $exception = new Tinebase_Exception_Confirmation(
+                        sprintf($translation->_('There are %s hours have not yet been billed, do you want to make them billable?'), $totalCount)
+                    );
+                    $exception->setInfo($timesheetTitles);
+                    //update timesheet should not interrupt the update process of timeaccount
+                    $exception->setSendRequestOnRejection(true);
+                    throw $exception;
+                }
+
+                if (filter_var($confirmHeader, FILTER_VALIDATE_BOOLEAN) === true) {
+                    $tsBackend->updateMultiple($timesheets->getId(), [
+                        'is_billable' => true,
+                    ]);
+                }
+            }
+        }
+    }
+
+    /**
+     * inspect update of one record
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $record          the update record
      * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
@@ -89,7 +160,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     {
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
-        $this->_resolveTimesheets($updatedRecord, $record, $currentRecord);
+        $this->_resolveTimesheets($updatedRecord, $currentRecord);
     }
 
     /**
@@ -113,9 +184,9 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
 
         if ($timeAccounts->count() > 0) {
             $context = $this->getRequestContext();
+            $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
 
-            if (!$context || (!array_key_exists('confirm', $context) &&
-                    (!isset($context['clientData']) || !array_key_exists('confirm', $context['clientData'])))) {
+            if (!$confirmHeader) {
                 $translation = Tinebase_Translation::getTranslation($this->_applicationName);
                 $exception = new Tinebase_Exception_Confirmation(
                     $translation->_('Timeaccounts are still in use! Are you sure you want to delete them?'));
@@ -304,27 +375,26 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     /**
      * resolve timesheets when timeaccount is cleared
      *
-     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $record          the update record
-     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @param Tinebase_Record_Interface $updatedRecord the just updated record
+     * @param $oldRecord
+     * @throws Setup_Exception
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_Validation
      */
-    private function _resolveTimesheets($updatedRecord, $record, $currentRecord)
+    private function _resolveTimesheets($updatedRecord, $oldRecord)
     {
         $tsBackend = new Timetracker_Backend_Timesheet();
 
-        if ($currentRecord['status'] !== $updatedRecord['status'] && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED) {
-
+        if ($oldRecord['status'] !== $updatedRecord['status'] && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED) {
             $invoiceIdPresent = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
-
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                 ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
                 ['field' => 'is_billable', 'operator' => 'equals', 'value' => true],
             ]);
             $innerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
-                    ['field'    => 'is_cleared', 'operator' => 'equals', 'value'    => false],
-                ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+                ['field'    => 'is_cleared', 'operator' => 'equals', 'value'    => false],
+            ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
             if ($invoiceIdPresent) {
                 $innerFilter->addFilter($innerFilter->createFilter(
                     ['field' => 'invoice_id', 'operator' => 'equals', 'value' => null]
@@ -332,12 +402,13 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
             }
             $filter->addFilterGroup($innerFilter);
             $timesheets = $tsBackend->search($filter);
+
             if ($timesheets->count() > 0) {
                 $tsBackend->updateMultiple($timesheets->getId(), array_merge($invoiceIdPresent ? [
-                        'invoice_id' => $updatedRecord['invoice_id'],
-                    ] : [], [
-                        'is_cleared' => true,
-                    ]));
+                    'invoice_id' => $updatedRecord['invoice_id'],
+                ] : [], [
+                    'is_cleared' => true,
+                ]));
             }
         }
     }

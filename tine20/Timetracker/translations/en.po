@@ -70,6 +70,10 @@ msgstr "Declined"
 msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
 msgstr "Add timeaccounts as favorite to speedup timesheet creation.)"
 
+#, python-format
+msgid "There are %s hours have not yet been billed, do you want to make them billable?"
+msgstr "There are %s hours have not yet been billed, do you want to make them billable?"
+
 msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
 msgstr "Timeaccounts are still in use! Are you sure you want to delete them?"
 
