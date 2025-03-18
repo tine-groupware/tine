@@ -1454,8 +1454,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ));
     }
 
-    public static function throwTinebaseException($msg): void
+    public function resetTransactionTransactionable(): void
     {
-        throw new Tinebase_Exception($msg);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+    }
+
+    public function restartTransaction(): void
+    {
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
 }

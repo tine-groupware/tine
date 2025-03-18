@@ -677,7 +677,20 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
     public static function dispatchDocument(string $documentId): bool
     {
+        /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to row lock stuff */
+        // we only want to dispatch a specific document once at a time, so we lock manually
+        // TODO FIXME aquire and try are reversed, fix it
+        if (!Tinebase_Core::acquireMultiServerLock($lockId = __METHOD__ . $documentId, false)) {
+            throw new Tinebase_Exception_SystemGeneric('an other dispatch is currently running');
+        }
+        $unlock = new Tinebase_RAII(fn() => Tinebase_Core::releaseMultiServerLock($lockId));
+
+        /** @var Sales_Model_Document_Abstract $document */
         $document = static::getInstance()->get($documentId);
+        if (!$document->isBooked() || $document::getStatusField() === Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH) {
+            throw new Tinebase_Exception_SystemGeneric('document needs to be booked and not in status manual dispatch');
+        }
+
         $debitor = Sales_Controller_Debitor::getInstance()->get($document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}
             ->getIdFromProperty(Sales_Model_Document_Abstract::FLD_ORIGINAL_ID));
 
@@ -693,7 +706,9 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
         /** @var Sales_Model_EDocument_Dispatch_Interface $dispatcher */
         $dispatcher = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG};
-        return $dispatcher->dispatch($document);
+        $result = $dispatcher->dispatch($document);
+        unset($unlock);
+        return $result;
     }
 
     public function copy(string $id, bool $persist): Tinebase_Record_Interface

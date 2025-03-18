@@ -33,4 +33,64 @@ class Sales_Controller_Document_DispatchHistory extends Tinebase_Controller_Reco
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        $this->_registerOnCommitHook($_record);
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        throw new Tinebase_Exception_NotImplemented('dispatch history should not be updated');
+    }
+
+    protected function _registerOnCommitHook(Sales_Model_Document_DispatchHistory $history): void
+    {
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'onCommitCallback'], [$history]);
+        Tinebase_TransactionManager::getInstance()->registerOnRollbackCallback([static::class, 'clearOnCommitCallbackCache']);
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([static::class, 'clearOnCommitCallbackCache']);
+    }
+
+    public static function onCommitCallback(Sales_Model_Document_DispatchHistory $history): void
+    {
+        if (self::$onCommitCallbackCache[$docId = $history->getIdFromProperty(Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID)] ?? false) {
+            return;
+        }
+        self::$onCommitCallbackCache[$docId] = true;
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var Tinebase_Record_Interface $model */
+        $model = $history->{Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE};
+        /** @var Sales_Model_Document_Abstract $document */
+        $document = $model::getConfiguration()->getControllerInstance()->get($docId);
+
+        /** @var Tinebase_Record_RecordSet $historyList */
+        $historyList = $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID, $history->{Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID});
+        $historyList->mergeById($document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID, $history->{Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID}));
+        $historyListSuccessCount = $historyList->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS)->count();
+        $historyListStartCount = $historyList->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_START)->count();
+
+        if ($historyListStartCount === $historyListSuccessCount
+                && $historyListStartCount + $historyListSuccessCount === $historyList->count()) {
+            if ($document->{$document::getStatusField()} !== Sales_Model_Document_Abstract::STATUS_DISPATCHED) {
+                $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_DISPATCHED;
+            }
+        } else {
+            if ($document->{$document::getStatusField()} !== Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH) {
+                $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
+            }
+        }
+        if ($document->isDirty()) {
+            $model::getConfiguration()->getControllerInstance()->update($document);
+        }
+    }
+
+    public static function clearOnCommitCallbackCache(): void
+    {
+        self::$onCommitCallbackCache = [];
+    }
+
+    protected static array $onCommitCallbackCache = [];
 }
