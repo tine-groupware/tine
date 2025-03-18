@@ -62,15 +62,7 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
             $report .= PHP_EOL . $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getTitle();
         }
 
-        /** @var Sales_Controller_Document_Abstract $docCtrl */
-        $docCtrl = $document::getConfiguration()->getControllerInstance();
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
-        /** @var Sales_Model_Document_Abstract $document */
-        $document = $docCtrl->get($document->getId());
-
-        $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
-        $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord(
-            new Sales_Model_Document_DispatchHistory([
+        Sales_Controller_Document_DispatchHistory::getInstance()->create(new Sales_Model_Document_DispatchHistory([
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $report,
@@ -79,34 +71,26 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
             ])
         );
 
-        /** @var Sales_Model_Document_Abstract $document */
-        $document = $docCtrl->update($document);
-        $transaction->release();
-
-        // we need to change the dispatch state in order for dispatch state to be set correctly by the child dispatchers
-        $document->{$document::getStatusField()} = Sales_Config::getInstance()->{$document::getStatusConfigKey()}->records->filter(
-                fn ($rec) => $rec->{Sales_Model_Document_Status::FLD_BOOKED} && !$rec->{Sales_Model_Document_Status::FLD_CLOSED}
-                    && $rec->getId() !== Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH && $rec->getId() !== Sales_Model_Document_Abstract::STATUS_DISPATCHED
-            )->getFirstRecord()->getId();
-
         $result = true;
         $report = $t->_('successfully dispatched the following dispatches:');
         $failed = $t->_('failed to dispatch the following dispatches:');
         /** @var Sales_Model_EDocument_Dispatch_DynamicConfig $dispatchConfig */
         foreach ($this->{self::FLD_DISPATCH_CONFIGS} as $dispatchConfig) {
-            if ($dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->dispatch($document, $dispatchId)) {
-                $report .= PHP_EOL . $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getTitle();
-            } else {
+            try {
+                if ($dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->dispatch($document, $dispatchId)) {
+                    $report .= PHP_EOL . $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getTitle();
+                } else {
+                    $result = false;
+                    $failed .= PHP_EOL . $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getTitle();
+                }
+            } catch (Throwable $t) {
+                Tinebase_Exception::log($t);
+                $failed .= PHP_EOL . get_class($t) . ': ' . $t->getMessage();
                 $result = false;
-                $failed .= PHP_EOL . $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getTitle();
             }
         }
 
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
-        /** @var Sales_Model_Document_Abstract $document */
-        $document = $docCtrl->get($document->getId());
-        $document->{$document::getStatusField()} = $result && Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH !== $document->{$document::getStatusField()} ? Sales_Model_Document_Abstract::STATUS_DISPATCHED : Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
-        $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord(
+        Sales_Controller_Document_DispatchHistory::getInstance()->create(
             new Sales_Model_Document_DispatchHistory([
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
@@ -115,8 +99,6 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
             ])
         );
-        $docCtrl->update($document);
-        $transaction->release();
 
         return $result;
     }
