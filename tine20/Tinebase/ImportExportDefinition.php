@@ -19,10 +19,10 @@
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {
     // FIXME why is this duplicated here? belongs to the model! i.e. \Tinebase_Model_ImportExportDefinition::SCOPE_SINGLE
-    const SCOPE_SINGLE = 'single';
-    const SCOPE_MULTI = 'multi';
-    const SCOPE_HIDDEN = 'hidden';
-    const SCOPE_REPORT = 'report';
+    public const SCOPE_SINGLE = 'single';
+    public const SCOPE_MULTI = 'multi';
+    public const SCOPE_HIDDEN = 'hidden';
+    public const SCOPE_REPORT = 'report';
 
     /**
      * holds the instance of the singleton
@@ -108,7 +108,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                     $toRemove[] = $definition;
                 }
                 if (!empty($config->template)) {
-                    if (strpos($config->template, 'tine20://') === false) {
+                    if (!str_contains($config->template, 'tine20://')) {
                         continue;
                     }
                     try {
@@ -166,7 +166,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $config = new Zend_Config_Xml($_filename);
             
             if ($_name === NULL) {
-                $name = ($config->name) ? $config->name : preg_replace("/\.xml/", '', $basename);
+                $name = $config->name ?: preg_replace("/\.xml/", '', $basename);
             } else {
                 $name = $_name;
             }
@@ -178,7 +178,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                     if (is_subclass_of($plugin, 'Tinebase_Export_Abstract')) {
                         $format = $plugin::getDefaultFormat();
                     }
-                } catch(Exception $e) {}
+                } catch(Exception) {}
             }
             
             if ($config->overrideApplication) {
@@ -296,7 +296,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $definition->seq = $existing->seq++;
             $result = $this->update($definition, true, true);
             
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // does not exist
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating import/export definion from file: ' . $_filename);
             $result = $this->create($definition);
@@ -410,7 +410,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             try {
                 return Tinebase_Container::getInstance()->getContainerByName(Tinebase_Model_ImportExportDefinition::class,
                     'Internal Import/Export Container', Tinebase_Model_Container::TYPE_SHARED);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 throw new Tinebase_Exception_Record_NotAllowed('on replicas, default container needs to replicated from master');
             }
         }

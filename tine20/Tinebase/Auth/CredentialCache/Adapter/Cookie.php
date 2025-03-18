@@ -24,7 +24,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
      * 
      * @var string
      */
-    const COOKIE_KEY = 'usercredentialcache';
+    public const COOKIE_KEY = 'usercredentialcache';
     
     /**
      * setCache() - persists cache
@@ -64,7 +64,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     {
         $result = null;
         if (isset($_COOKIE[self::COOKIE_KEY]) && ! empty($_COOKIE[self::COOKIE_KEY])) {
-            $decodedCookie = base64_decode($_COOKIE[self::COOKIE_KEY]);
+            $decodedCookie = base64_decode((string) $_COOKIE[self::COOKIE_KEY]);
             try {
                 $cacheId = Zend_Json::decode($decodedCookie);
             } catch (Zend_Json_Exception $zje) {
@@ -100,7 +100,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Reset credential cache cookie.');
-            setcookie(self::COOKIE_KEY, '', time() - 3600, '', '', Tinebase_Core::isHttpsRequest());
+            setcookie(self::COOKIE_KEY, '', ['expires' => time() - 3600, 'path' => '', 'domain' => '', 'secure' => Tinebase_Core::isHttpsRequest()]);
         }
     }
     

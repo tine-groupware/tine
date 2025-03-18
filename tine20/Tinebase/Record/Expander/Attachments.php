@@ -24,7 +24,7 @@ class Tinebase_Record_Expander_Attachments extends Tinebase_Record_Expander_Prop
         }
     }
 
-    protected function _setData(Tinebase_Record_RecordSet $_data)
+    protected function _setData(Tinebase_Record_RecordSet $_data): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
     }

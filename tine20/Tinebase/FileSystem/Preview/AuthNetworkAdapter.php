@@ -12,9 +12,7 @@
 
 class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSystem_Preview_NetworkAdapter
 {
-    protected $_url;
     protected $_licensePath;
-    protected $_caPath;
 
 
     /**
@@ -23,12 +21,9 @@ class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSys
      * @param $licensePath
      * @param $caPath
      */
-    public function __construct($url, $licensePath, $caPath)
+    public function __construct(protected $_url, $licensePath, protected $_caPath)
     {
-        $this->_url = $url;
-
         $this->_licensePath = Tinebase_TempFile::getTempPath();
-        $this->_caPath = $caPath;
 
         copy($licensePath, $this->_licensePath);
     }
@@ -79,11 +74,11 @@ class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSys
         if ((! isset($config['noProxy']) || ! $config['noProxy']) && !empty($proxyConfig)) {
             $curlOptions = array_merge($curlOptions, [
                 CURLOPT_PROXY =>
-                    isset($proxyConfig['proxy_host']) ? $proxyConfig['proxy_host'] : '',
+                    $proxyConfig['proxy_host'] ?? '',
                 CURLOPT_PROXYUSERPWD =>
                     isset($proxyConfig['proxy_user']) && isset($proxyConfig['proxy_pass']) ? $proxyConfig['proxy_user'].':'.$proxyConfig['proxy_pass'] : '',
                 CURLOPT_PROXYPORT =>
-                    isset($proxyConfig['proxy_port']) ? $proxyConfig['proxy_port'] : ''
+                    $proxyConfig['proxy_port'] ?? ''
             ]);
         }
 

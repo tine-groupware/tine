@@ -30,11 +30,9 @@ interface Tinebase_Backend_Sql_Command_Interface
     
     /**
      * @param string $field
-     * @param mixed $returnIfTrue
-     * @param mixed $returnIfFalse
      * @return string
      */
-    public function getIfIsNull($field, $returnIfTrue, $returnIfFalse);
+    public function getIfIsNull($field, mixed $returnIfTrue, mixed $returnIfFalse);
     
     /**
      * @param string $condition
@@ -54,15 +52,9 @@ interface Tinebase_Backend_Sql_Command_Interface
      */
     public function getSwitch($field, $cases);
     
-    /**
-     * @param mixed $date
-     */
-    public function setDate($date);
+    public function setDate(mixed $date);
     
-    /**
-     * @param mixed $date
-     */
-    public function setDateValue($date);
+    public function setDateValue(mixed $date);
 
     /**
      * returns the false value according to backend

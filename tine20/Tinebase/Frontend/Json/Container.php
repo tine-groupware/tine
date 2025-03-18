@@ -198,7 +198,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
                         $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $value['account_id']);
-                    } catch (Tinebase_Exception_NotFound $e) {
+                    } catch (Tinebase_Exception_NotFound) {
                         $account = Tinebase_User::getInstance()->getNonExistentUser();
                     }
                     $value['account_name'] = $account->toArray();
@@ -206,7 +206,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     try {
                         $group = Tinebase_Group::getInstance()->getGroupById($value['account_id']);
-                    } catch (Tinebase_Exception_Record_NotDefined $e) {
+                    } catch (Tinebase_Exception_Record_NotDefined) {
                         $group = Tinebase_Group::getInstance()->getNonExistentGroup();
                     }
                     $value['account_name'] = $group->toArray();
@@ -214,7 +214,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
                     try {
                         $role = Tinebase_Acl_Roles::getInstance()->getRoleById($value['account_id']);
-                    } catch(Tinebase_Exception_NotFound $tenf) {
+                    } catch(Tinebase_Exception_NotFound) {
                         $role = Tinebase_Acl_Roles::getInstance()->getNonExistentRole();
                     }
                     $value['account_name'] = $role->toArray();
@@ -240,7 +240,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
      */
     public function setContainerGrants($containerId, $grants)
     {
-        $grants = ($grants) ? $grants : array();
+        $grants = $grants ?: array();
 
         $container = Tinebase_Container::getInstance()->getContainerById($containerId);
 

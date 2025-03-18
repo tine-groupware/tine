@@ -34,7 +34,7 @@ abstract class Tinebase_Group_Abstract
      * @param mixed $_accountId the account as integer or Tinebase_Model_User
      * @return array
      */
-    abstract public function getGroupMemberships($_accountId);
+    abstract public function getGroupMemberships(mixed $_accountId);
     
     /**
      * get list of groupmembers
@@ -108,10 +108,9 @@ abstract class Tinebase_Group_Abstract
     /**
      * remove groups
      *
-     * @param mixed $_groupId
-     * 
+     *
      */
-    abstract public function deleteGroups($_groupId);
+    abstract public function deleteGroups(mixed $_groupId);
     
     /**
      * get group by id
@@ -240,7 +239,7 @@ abstract class Tinebase_Group_Abstract
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
-        } catch (Tinebase_Exception_Record_NotDefined $tenf) {
+        } catch (Tinebase_Exception_Record_NotDefined) {
             // create group on the fly
             $group = new Tinebase_Model_Group(array(
                 'name'    => $defaultGroupName,

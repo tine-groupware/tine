@@ -18,9 +18,9 @@
 
 class Tinebase_Model_WebDavLock extends Tinebase_Record_Abstract
 {
-    const TABLE_NAME = 'webdav_lock';
+    public const TABLE_NAME = 'webdav_lock';
 
-    const MODEL_NAME_PART = 'WebDavLock';
+    public const MODEL_NAME_PART = 'WebDavLock';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

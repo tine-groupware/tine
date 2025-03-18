@@ -61,6 +61,6 @@ class Tinebase_AreaLock_Presence implements Tinebase_AreaLock_Interface
 
     protected function _getPresenceKey(): string
     {
-        return __CLASS__ . '#' . $this->_config->getKey();
+        return self::class . '#' . $this->_config->getKey();
     }
 }

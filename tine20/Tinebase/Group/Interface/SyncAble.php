@@ -33,7 +33,7 @@ interface Tinebase_Group_Interface_SyncAble
      * 
      * @return Tinebase_Model_Group
      */
-    public function getGroupByIdFromSyncBackend($_groupId);
+    public function getGroupByIdFromSyncBackend(mixed $_groupId);
 
     public function addGroupInSyncBackend(Tinebase_Model_Group $_group): ?Tinebase_Model_Group;
      
@@ -80,19 +80,16 @@ interface Tinebase_Group_Interface_SyncAble
     /**
      * add a new groupmember to group in sync backend
      *
-     * @param  mixed  $_groupId
      * @param  mixed  $_accountId string or user object
      */
-    public function addGroupMemberInSyncBackend($_groupId, $_accountId, $_checkExistance = true);
+    public function addGroupMemberInSyncBackend(mixed $_groupId, mixed $_accountId, $_checkExistance = true);
 
     /**
      * remove one member from the group in sync backend
      *
-     * @param  mixed  $_groupId
-     * @param  mixed  $_accountId
      * @param bool $_checkWriteGroupIds
      */
-    public function removeGroupMemberInSyncBackend($_groupId, $_accountId, $_checkWriteGroupIds = true);
+    public function removeGroupMemberInSyncBackend(mixed $_groupId, mixed $_accountId, $_checkWriteGroupIds = true);
     
     /**
      * updates an existing group in sync backend
@@ -105,20 +102,16 @@ interface Tinebase_Group_Interface_SyncAble
     
     /**
      * delete one or more groups in sync backend
-     *
-     * @param  mixed   $_groupId
      */
-    public function deleteGroupsInSyncBackend($_groupId);
+    public function deleteGroupsInSyncBackend(mixed $_groupId);
     
     /**
      * replace all current groupmemberships of user in sync backend
      *
-     * @param  mixed  $_userId
-     * @param  mixed  $_groupIds
-     * 
+     *
      * @return array
      */
-    public function setGroupMembershipsInSyncBackend($_userId, $_groupIds);
+    public function setGroupMembershipsInSyncBackend(mixed $_userId, mixed $_groupIds);
     
     /**
      * merges missing properties from existing sql group into group fetchted from sync backend

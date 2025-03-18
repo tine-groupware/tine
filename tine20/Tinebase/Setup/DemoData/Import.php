@@ -17,7 +17,7 @@
  */
 class Tinebase_Setup_DemoData_Import
 {
-    const IMPORT_DIR = 'importDir';
+    public const IMPORT_DIR = 'importDir';
 
     protected $_application = null;
     protected $_options = [];
@@ -43,10 +43,9 @@ class Tinebase_Setup_DemoData_Import
      */
     public function importDemodata()
     {
-        $importDir = isset($this->_options[self::IMPORT_DIR]) ?  $this->_options[self::IMPORT_DIR] :
-            dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
-            . $this->_application->name . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData'
-            . DIRECTORY_SEPARATOR . 'import'. DIRECTORY_SEPARATOR . $this->_options['modelName'];
+        $importDir = $this->_options[self::IMPORT_DIR] ?? dirname(__DIR__, 3) . DIRECTORY_SEPARATOR
+        . $this->_application->name . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData'
+        . DIRECTORY_SEPARATOR . 'import'. DIRECTORY_SEPARATOR . $this->_options['modelName'];
 
         if (! file_exists($importDir)) {
             throw new Tinebase_Exception_NotFound('Import dir not found: ' . $importDir);

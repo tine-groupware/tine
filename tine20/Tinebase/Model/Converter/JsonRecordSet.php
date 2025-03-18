@@ -22,11 +22,8 @@ use Tinebase_ModelConfiguration_Const as MCC;
 
 class Tinebase_Model_Converter_JsonRecordSet implements Tinebase_Model_Converter_Interface
 {
-    protected $refId;
-
-    public function __construct($refId = false)
+    public function __construct(protected $refId = false)
     {
-        $this->refId = $refId;
     }
 
     /**

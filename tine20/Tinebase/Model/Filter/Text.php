@@ -19,7 +19,7 @@
  */
 class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
 {
-    const CASE_SENSITIVE = 'caseSensitive';
+    public const CASE_SENSITIVE = 'caseSensitive';
 
     /**
      * @var array list of allowed operators
@@ -67,7 +67,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
      */
     public function __construct($_fieldOrData, $_operator = NULL, $_value = NULL, array $_options = array())
     {
-        $_options = isset($_fieldOrData['options']) ? $_fieldOrData['options'] : $_options;
+        $_options = $_fieldOrData['options'] ?? $_options;
         if (isset($_options[self::CASE_SENSITIVE]) && $_options[self::CASE_SENSITIVE]) {
             $this->_caseSensitive = true;
         }
@@ -143,7 +143,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         }
         
         if (! (isset($this->_opSqlMap[$this->_operator]) || array_key_exists($this->_operator, $this->_opSqlMap))) {
-            throw new Tinebase_Exception_InvalidArgument('Operator "' . $this->_operator . '" not defined in sql map of ' . get_class($this));
+            throw new Tinebase_Exception_InvalidArgument('Operator "' . $this->_operator . '" not defined in sql map of ' . static::class);
         }
         $action = $this->_opSqlMap[$this->_operator];
         
@@ -153,11 +153,11 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         
         // check if group by is operator and return if this is the case
         if ($this->_operator == 'group') {
-            $_select->group(isset($this->_options['field']) ? $this->_options['field'] : $this->_field);
+            $_select->group($this->_options['field'] ?? $this->_field);
         }
         
         if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {
-            $value = explode(' ', $value);
+            $value = explode(' ', (string) $value);
         }
         
         // this is a text filter, so all items in the filter must be of type text (needed in pgsql)
@@ -170,7 +170,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         $db = Tinebase_Core::getDb();
                 
         if (is_array($value) && empty($value)) {
-             $_select->where('1=' . (substr($this->_operator, 0, 3) == 'not' ? '1/* empty query */' : '0/* impossible query */'));
+             $_select->where('1=' . (str_starts_with($this->_operator, 'not') ? '1/* empty query */' : '0/* impossible query */'));
              return;
         }
         

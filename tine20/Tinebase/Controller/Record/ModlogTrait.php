@@ -85,7 +85,7 @@ trait Tinebase_Controller_Record_ModlogTrait
             }
             $id = $notNullRecord->getId();
             if (null !== $verb) {
-                $bchub->pushAfterCommit($verb, get_class($notNullRecord), $id, $cId);
+                $bchub->pushAfterCommit($verb, $notNullRecord::class, $id, $cId);
             }
         }
 
@@ -94,7 +94,7 @@ trait Tinebase_Controller_Record_ModlogTrait
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Writing modlog for ' . get_class($notNullRecord));
+            __METHOD__ . '::' . __LINE__ . ' Writing modlog for ' . $notNullRecord::class);
 
         return Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
             $this->_getBackendType(), $notNullRecord->getId());

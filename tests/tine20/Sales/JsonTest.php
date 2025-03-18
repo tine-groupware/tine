@@ -152,8 +152,10 @@ class Sales_JsonTest extends TestCase
         $contract2re = $this->_instance->getContract($contract2->getId());
 
         // only one CUSTOMER relation is allowed, contract2 still has related contact2
-        $this->assertEquals(1, count($contract1re['relations']), 'contract1 relations count failed: ' . print_r($contract1re, true));
-        $this->assertEquals(2, count($contract2re['relations']), 'contract2 relations count failed: ' . print_r($contract2re, true));
+        $this->assertEquals(1, count($contract1re['relations']),
+            'contract1 relations count failed: ' . print_r($contract1re, true));
+        $this->assertEquals(2, count($contract2re['relations']),
+            'contract2 relations count failed: ' . print_r($contract2re['relations'], true));
 
         $this->assertEquals($contact1->getId(), $contract1re['relations'][0]['related_id']);
         

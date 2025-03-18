@@ -73,7 +73,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
              if ($this->_operator == 'in' || $this->_operator == 'equals') {
                  if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                      . ' Empty value with "' . $this->_operator . '"" operator (model: '
-                     . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options'). ')');
+                     . ($this->_options['modelName'] ?? 'unknown / no modelName defined in filter options'). ')');
                  $_select->where('1=0');
              } else if ($this->_operator == 'not') {
 
@@ -83,7 +83,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         } else if ($this->_operator == 'equals' && is_array($this->_value)) {
              if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                  . ' Unexpected array value with "equals" operator (model: ' 
-                 . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options') . ')');
+                 . ($this->_options['modelName'] ?? 'unknown / no modelName defined in filter options') . ')');
              $_select->where('1=0');
          } else {
              $type = $this->_getFieldType($_backend);
@@ -241,15 +241,15 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
                     $recordArray = $record->toArray();
                 } else {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' Could not get record with id ' . $value . ' / controller: ' . get_class($controller));
+                        . ' Could not get record with id ' . $value . ' / controller: ' . $controller::class);
                     return $value;
                 }
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Controller '
-                    . get_class($controller) . ' has no get method');
+                    . $controller::class . ' has no get method');
                 return $value;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             $recordArray = $value;
         }
         

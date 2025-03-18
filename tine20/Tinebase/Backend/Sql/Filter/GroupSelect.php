@@ -26,13 +26,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  */
-class Tinebase_Backend_Sql_Filter_GroupSelect
+class Tinebase_Backend_Sql_Filter_GroupSelect implements \Stringable
 {
-    /**
-     * @var Zend_Db_Select
-     */
-    protected $_select = NULL;
-    
     /**
      * @var Zend_Db_Adapter_Abstract
      */
@@ -48,9 +43,8 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
      *
      * @param  Zend_Db_Select|Tinebase_Backend_Sql_Filter_GroupSelect $_select
      */
-    public function __construct($_select)
+    public function __construct(protected $_select)
     {
-        $this->_select = $_select;
         $this->_adapter = Tinebase_Core::getDb();
     }
 
@@ -158,7 +152,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
         return implode(' ', $this->_parts[Zend_Db_Select::WHERE] ?? []);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->_select->__toString();
     }

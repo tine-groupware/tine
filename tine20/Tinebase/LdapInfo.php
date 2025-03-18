@@ -18,12 +18,12 @@ class Tinebase_LdapInfo
     /**
      * openldap server
      */
-    const TYPE_OPENLDAP = 'openldap';
+    public const TYPE_OPENLDAP = 'openldap';
 
     /**
      * unknown server
      */
-    const TYPE_UNKNOWN  = 'unknown';
+    public const TYPE_UNKNOWN  = 'unknown';
     
     
     protected $_serverType = NULL;
@@ -93,14 +93,10 @@ class Tinebase_LdapInfo
 
         // find servder type
         if($info[0]['structuralobjectclass']) {
-            switch($info[0]['structuralobjectclass'][0]) {
-                case 'OpenLDAProotDSE':
-                    $this->_serverType = self::TYPE_OPENLDAP;
-                    break;
-                default:
-                    $this->_serverType = self::TYPE_UNKNOWN;
-                    break;
-            }
+            $this->_serverType = match ($info[0]['structuralobjectclass'][0]) {
+                'OpenLDAProotDSE' => self::TYPE_OPENLDAP,
+                default => self::TYPE_UNKNOWN,
+            };
             
         }
         
@@ -129,7 +125,7 @@ class Tinebase_LdapInfo
         if($info[0]['objectclasses']) {
             for($i=0; $i<$info[0]['objectclasses']['count']; $i++) {
                 $pattern = '/^\( (.*) NAME \'(\w*)\' /';
-                if(preg_match($pattern, $info[0]['objectclasses'][$i], $matches)) {
+                if(preg_match($pattern, (string) $info[0]['objectclasses'][$i], $matches)) {
                     #_debug_array($matches);
                     if(count($matches) == 3) {
                         $supportedObjectClasses[$matches[1]] = strtolower($matches[2]);

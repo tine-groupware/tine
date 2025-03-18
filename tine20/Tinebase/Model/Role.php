@@ -96,7 +96,7 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }

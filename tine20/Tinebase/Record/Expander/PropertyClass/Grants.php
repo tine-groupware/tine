@@ -33,7 +33,7 @@ class Tinebase_Record_Expander_PropertyClass_Grants extends Tinebase_Record_Expa
                 try {
                     $record->{Tinebase_Record_Abstract::FLD_GRANTS} = Tinebase_Container::getInstance()
                         ->getGrantsOfContainer($record->{$record::getConfiguration()->getContainerProperty()});
-                } catch (Tinebase_Exception_AccessDenied $tead) {
+                } catch (Tinebase_Exception_AccessDenied) {
                     continue;
                 }
             }
@@ -43,21 +43,21 @@ class Tinebase_Record_Expander_PropertyClass_Grants extends Tinebase_Record_Expa
                         try {
                             /** @phpstan-ignore-next-line */
                             $grant->account_name = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
-                        } catch (Tinebase_Exception_NotFound $e) {
+                        } catch (Tinebase_Exception_NotFound) {
                             $grant->account_name = Tinebase_User::getInstance()->getNonExistentUser();
                         }
                         break;
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                         try {
                             $grant->account_name = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
-                        } catch (Tinebase_Exception_Record_NotDefined $e) {
+                        } catch (Tinebase_Exception_Record_NotDefined) {
                             $grant->account_name = Tinebase_Group::getInstance()->getNonExistentGroup();
                         }
                         break;
                     case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
                         try {
                             $grant->account_name = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
-                        } catch(Tinebase_Exception_NotFound $tenf) {
+                        } catch(Tinebase_Exception_NotFound) {
                             $grant->account_name = Tinebase_Acl_Roles::getInstance()->getNonExistentRole();
                         }
                         break;

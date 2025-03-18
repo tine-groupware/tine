@@ -13,11 +13,11 @@
  */
 class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
 {
-    protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
-    protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
-    protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
-    protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
-    protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE018_UPDATE000 = self::class . '::update000';
+    protected const RELEASE018_UPDATE001 = self::class . '::update001';
+    protected const RELEASE018_UPDATE002 = self::class . '::update002';
+    protected const RELEASE018_UPDATE003 = self::class . '::update003';
+    protected const RELEASE018_UPDATE004 = self::class . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [

@@ -13,11 +13,8 @@
  */
 class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record_Expander_DataRequest
 {
-    protected Tinebase_ModelConfiguration $parentMC;
-
-    public function __construct($prio, $controller, $ids, $mc, $callback, $getDeleted = false)
+    public function __construct($prio, $controller, $ids, protected Tinebase_ModelConfiguration $parentMC, $callback, $getDeleted = false)
     {
-        $this->parentMC = $mc;
         parent::__construct($prio, $controller, $ids, $callback, $getDeleted);
     }
 

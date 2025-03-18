@@ -192,7 +192,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         
         // add header (disabled at the moment)
         if (isset($this->_config->header) && $this->_config->header) {
-            $this->_addHead($this->_activeTable);
+            $this->_addHead();
         }
         
         $this->_exportRecords();
@@ -470,27 +470,14 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         if (is_string($_fieldType) && str_starts_with($_fieldType, 'int')) {
             $_fieldType = 'number';
         }
-        switch($_fieldType) {
-            case 'date':
-            case 'datetime':
-                $result = OpenDocument_SpreadSheet_Cell::TYPE_DATE;
-                break;
-            case 'time':
-                $result = OpenDocument_SpreadSheet_Cell::TYPE_TIME;
-                break;
-            case 'currency':
-                $result = OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY;
-                break;
-            case 'percentage':
-                $result = OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE;
-                break;
-            case 'float':
-            case 'number':
-                $result = OpenDocument_SpreadSheet_Cell::TYPE_FLOAT;
-                break;
-            default:
-                $result = OpenDocument_SpreadSheet_Cell::TYPE_STRING;
-        }
+        $result = match ($_fieldType) {
+            'date', 'datetime' => OpenDocument_SpreadSheet_Cell::TYPE_DATE,
+            'time' => OpenDocument_SpreadSheet_Cell::TYPE_TIME,
+            'currency' => OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY,
+            'percentage' => OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE,
+            'float', 'number' => OpenDocument_SpreadSheet_Cell::TYPE_FLOAT,
+            default => OpenDocument_SpreadSheet_Cell::TYPE_STRING,
+        };
         
         return $result;
     }

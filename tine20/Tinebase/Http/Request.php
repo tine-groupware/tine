@@ -36,7 +36,7 @@ class Tinebase_Http_Request extends Laminas\Http\PhpEnvironment\Request
         if (! $this->_inputStream) {
             if (! empty($this->content)) {
                 $this->_inputStream = fopen('php://temp', 'r+');
-                fputs($this->_inputStream, $this->content);
+                fputs($this->_inputStream, (string) $this->content);
             } else {
                 // NOTE: as of php 5.6 php://input can be rewinded ... but for POST only and this is even SAPI dependend
                 $this->_inputStream = fopen('php://temp', 'r+');

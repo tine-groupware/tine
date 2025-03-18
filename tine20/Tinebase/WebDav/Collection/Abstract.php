@@ -51,13 +51,6 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
     protected $_user;
     
     /**
-     * the current path
-     * 
-     * @var string
-     */
-    protected $_path;
-    
-    /**
      * @var array
      */
     protected $_pathParts;
@@ -68,11 +61,13 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
      * @param  string|Tinebase_Model_Application  $_application  the current application
      * @param  string                             $_path         the current path
      */
-    public function __construct($_path)
+    public function __construct(/**
+     * the current path
+     */
+    protected $_path)
     {
-        $this->_path            = $_path;
-        $this->_pathParts       = $this->_parsePath($_path);
-        $this->_applicationName = Tinebase_Helper::array_value(0, explode('_', get_class($this)));
+        $this->_pathParts       = $this->_parsePath($this->_path);
+        $this->_applicationName = Tinebase_Helper::array_value(0, explode('_', static::class));
     }
     
     /**
@@ -105,7 +100,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             
             // container exists already => that's bad!
             throw new Sabre\DAV\Exception\Forbidden('Folders exists already');
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue
         }
 
@@ -149,7 +144,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                 if ($this->_pathParts[1] == Tinebase_Model_Container::TYPE_SHARED) {
                     try {
                         $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_model, $_name, Tinebase_Model_Container::TYPE_SHARED);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
                     if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
@@ -182,7 +177,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             case 3:
                 try {
                     $container = $_name instanceof Tinebase_Model_Container ? $_name : Tinebase_Container::getInstance()->getContainerByName($this->_model, $_name, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
                 if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
@@ -337,7 +332,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
      */
     public function getName()
     {
-        list(,$name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        [, $name] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         return $name;
     }
@@ -370,7 +365,7 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
         
         $children = array();
         
-        list(, $basename) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        [, $basename] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         switch (count($pathParts)) {
             # path == /accountLoginName

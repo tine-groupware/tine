@@ -27,7 +27,7 @@ class Tinebase_Record_Expander_RecordsProperty extends Tinebase_Record_Expander_
             $ctrl = null;
             try {
                 $ctrl = Tinebase_Core::getApplicationInstance($this->_model, '', true);
-            } catch (Tinebase_Exception_NotFound $tenf) {}
+            } catch (Tinebase_Exception_NotFound) {}
             $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(
                 $this->_prio, $ctrl, $ids,
                 // workaround: [$this, '_setData'] doesn't work, even so it should!

@@ -146,7 +146,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }    
@@ -163,11 +163,11 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_InvalidArgument('No version set.');
         }
 
-        if (strpos($this->version, '.') === false) {
+        if (!str_contains($this->version, '.')) {
             $minorVersion = 0;
             $majorVersion = $this->version;
         } else {
-            list($majorVersion, $minorVersion) = explode('.', $this->version);
+            [$majorVersion, $minorVersion] = explode('.', $this->version);
         }
 
         return array('major' => $majorVersion, 'minor' => $minorVersion);

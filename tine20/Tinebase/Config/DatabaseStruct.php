@@ -15,12 +15,12 @@
  */
 class Tinebase_Config_DatabaseStruct extends Tinebase_Config_Struct
 {
-    const ADAPTER = 'adapter';
-    const DBNAME = 'dbname';
-    const USERNAME = 'username';
-    const PASSWORD = 'password';
-    const HOST = 'host';
-    const PORT = 'port';
+    public const ADAPTER = 'adapter';
+    public const DBNAME = 'dbname';
+    public const USERNAME = 'username';
+    public const PASSWORD = 'password';
+    public const HOST = 'host';
+    public const PORT = 'port';
     
     public function __construct($data = array())
     {

@@ -48,12 +48,12 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             }
         }
 
-        if (strpos($format, 'new') === 0) {
+        if (str_starts_with($format, 'new')) {
             $format = strtolower(substr($format, 3));
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . get_class($export) . ')'
+            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . $export::class . ')'
                 . ' in format ' . $format .
             ' / options: ' . print_r($_options, TRUE)
         );
@@ -139,7 +139,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $format = 'txt';
             $switchFormat = 'error';
         } catch (Exception $e) {
-            if (strpos(get_class($e), 'Zend_Db') === 0) {
+            if (str_starts_with($e::class, 'Zend_Db')) {
                 throw $e;
             }
             Tinebase_Exception::log($e);
@@ -256,14 +256,14 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         $previewNode = null;
         try {
             $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if ('true' === $syncHeader) {
                 if (false === Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node)) {
                     $this->_handleFailure(); // defaults 500
                 }
                 try {
                     $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $this->_handleFailure(404);
                 }
             } else {

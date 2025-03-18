@@ -95,7 +95,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @see 0007266: make groups / group memberships cache cleaning more efficient
      * @var integer
      */
-    const ACL_CACHE_TIMEOUT = 30;
+    public const ACL_CACHE_TIMEOUT = 30;
     
     /**
      * the singleton pattern
@@ -404,23 +404,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             throw new Tinebase_Exception_AccessDenied('Permission to manage grants on container denied.');
         }
         
-        switch($_accountType) {
-            case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-                break;
-            case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                $accountId = Tinebase_Model_Group::convertGroupIdToInt($_accountId);
-                break;
-            case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
-                $accountId = '0';
-                break;
-            case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
-                $accountId = Tinebase_Model_Role::convertRoleIdToInt($_accountId);
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument('invalid $_accountType');
-                break;
-        }
+        $accountId = match ($_accountType) {
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER => Tinebase_Model_User::convertUserIdToInt($_accountId),
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP => Tinebase_Model_Group::convertGroupIdToInt($_accountId),
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE => '0',
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE => Tinebase_Model_Role::convertRoleIdToInt($_accountId),
+            default => throw new Tinebase_Exception_InvalidArgument('invalid $_accountType'),
+        };
         
         $containerGrants = $this->getGrantsOfContainer($containerId, TRUE);
         $containerGrants->addIndices(array('account_type', 'account_id'));
@@ -486,7 +476,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             }
         } elseif (in_array('Tinebase_Record_Interface', class_implements($_recordClass))) {
             $ret['appName'] = $_recordClass->getApplication();
-            $ret['recordClass'] = get_class($_recordClass);
+            $ret['recordClass'] = $_recordClass::class;
         } else {
             throw new Tinebase_Exception_InvalidArgument('Invalid value as recordClass given: ' . print_r($_recordClass, 1));
         }
@@ -530,7 +520,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
         
@@ -543,7 +533,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             )
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $applicationId);
 
-        $this->addGrantsSql($select, $accountId, $grant);
+        static::addGrantsSql($select, $accountId, $grant);
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         
@@ -596,7 +586,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             if ($container instanceof Tinebase_Model_Container) {
                 return $container;
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
 
@@ -701,14 +691,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         $classCacheId = $accountId .
                         $application->getId() .
-                        ($meta['recordClass'] ? $meta['recordClass'] : null) .
+                        ($meta['recordClass'] ?: null) .
                         $ownerId .
                         implode('', (array)$grant) .
                         (int)$_ignoreACL;
 
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
 
@@ -728,7 +718,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
             ->order('container.creation_time');
 
-        $this->addGrantsSql($select, $accountId, $grant);
+        static::addGrantsSql($select, $accountId, $grant);
         
         if ($meta['recordClass']) {
             // TODO needs fixing, you dont get container by application name, maybe by models (yet maybe we want to have
@@ -865,7 +855,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $quotedGrant   = $db->quoteIdentifier($_aclTableName . '.account_grant');
 
             if (null === $joinCallBack) {
-                $joinCallBack = [static::class, 'addGrantsSqlCallback'];
+                $joinCallBack = static::addGrantsSqlCallback(...);
             }
             $iteration = 0;
             $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
@@ -873,21 +863,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             foreach ($grants as $grant) {
                 if ($grant[0] === '(') {
                     $grantsSelect->openBracket();
-                    $grant = substr($grant, 1);
+                    $grant = substr((string) $grant, 1);
                 }
                 if ($grant[0] === '&') {
                     ++$iteration;
                     $andGrants = true;
-                    $grant = substr($grant, 1);
+                    $grant = substr((string) $grant, 1);
                 } elseif ($grant[0] === '|') {
                     $andGrants = false;
-                    $grant = substr($grant, 1);
+                    $grant = substr((string) $grant, 1);
                 } else {
                     $andGrants = $_andGrants;
                 }
-                if ($grant[strlen($grant) - 1] === ')') {
+                if ($grant[strlen((string) $grant) - 1] === ')') {
                     $closeBracket = true;
-                    $grant = rtrim($grant, ')');
+                    $grant = rtrim((string) $grant, ')');
                 } else {
                     $closeBracket = false;
                 }
@@ -999,7 +989,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
 
@@ -1016,7 +1006,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $select->order(['order', 'hierachyName']);
 
-        $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
+        static::addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, self::class . '::addGrantsSqlCallback');
 
         /** @var Tinebase_Model_Grants $grantModel */
         foreach (Tinebase_Application::getInstance()->getAllApplicationGrantModels($application) as $grantModel) {
@@ -1093,7 +1083,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $classCacheId = Tinebase_Helper::convertCacheId($accountId . $application->getId() . implode('', (array)$grant) . (int)$_ignoreACL . (int)$_andGrants);
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
 
@@ -1116,7 +1106,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->where("{$this->_db->quoteIdentifier('accounts.status')} IN (?)",
                 [Tinebase_Model_FullUser::ACCOUNT_STATUS_BLOCKED, Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED]);
 
-        $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
+        static::addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, self::class . '::addGrantsSqlCallback');
 
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         $accountIds = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
@@ -1166,7 +1156,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
 
@@ -1190,7 +1180,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             
             ->order('accounts.display_name');
 
-        $this->addGrantsSql($select, $accountId, $grant);
+        static::addGrantsSql($select, $accountId, $grant);
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
@@ -1287,9 +1277,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             }
             throw $e;
         }
-        
+
         $tm->commitTransaction($myTransactionId);
-        
+
         return $deletedContainer;
 
         /*
@@ -1303,12 +1293,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $container->owner,
             Tinebase_Model_Grants::GRANT_ADD
         );
-        
+
         //-- determine first matching personal container (or create new one)
         // $personalContainer =
-        
+
         //-- move all records to personal container
-        
+
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Moving all records from container ' . $containerId . ' to personal container ' . $personalContainer->getId()
         );
@@ -1342,7 +1332,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $controller->deleteContainerContents($container, $_ignoreAcl);
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' No deleteContainerContents defined in controller ' . get_class($controller));
+                    . ' No deleteContainerContents defined in controller ' . $controller::class);
             }
 
             if ($acl) {
@@ -1365,7 +1355,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
 
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue...
         }
 
@@ -1379,7 +1369,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $_applicationId)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
 
-        $this->addGrantsSql($select, $accountId, $_grants);
+        static::addGrantsSql($select, $accountId, $_grants);
 
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
@@ -1478,7 +1468,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         try {
             $allGrants = $this->loadFromClassCache(__FUNCTION__, $classCacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // NOTE: some tests ask for already deleted container ;-)
             $select = $this->_getSelect(array(), true)
                 ->distinct()
@@ -1489,7 +1479,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                     /* select */ array('container_acl.account_grant')
                 );
 
-            $this->addGrantsSql($select, $accountId, '*');
+            static::addGrantsSql($select, $accountId, '*');
 
             $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
@@ -1525,7 +1515,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         foreach ($grantsData as $grantData) {
-            $givenGrants = explode(',', $grantData['account_grants']);
+            $givenGrants = explode(',', (string) $grantData['account_grants']);
             foreach($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
             }
@@ -1585,14 +1575,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                     ' Invalid data in cache ... fetching fresh data from DB');
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // not found in cache
         }
 
         $select = $this->_getAclSelectByContainerId($containerId)
             ->group('container_acl.account_grant');
 
-        $this->addGrantsSql($select, $accountId, '*');
+        static::addGrantsSql($select, $accountId, '*');
 
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
 
@@ -1711,9 +1701,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             )
             ->group(['container.id']);
 
-        $this->addGrantsSql($select, $accountId, '*');
+        static::addGrantsSql($select, $accountId, '*');
         $where = $select->getPart(Zend_Db_Select::WHERE);
-        $where[1] = rtrim($where[1], ')') . ') OR container_acl.account_type IS NULL)';
+        $where[1] = rtrim((string) $where[1], ')') . ') OR container_acl.account_type IS NULL)';
         $select->reset(Zend_Db_Select::WHERE);
         $select->where(join(' ', $where));
         $select->columns(['containerid' => 'id'], 'container');
@@ -1799,7 +1789,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 $data = array(
                     'container_id' => $containerId,
                     'account_id' => is_array($recordGrants['account_id']) ?
-                        (isset($recordGrants['account_id']['id']) ? $recordGrants['account_id']['id'] : $recordGrants['account_id']['accountId']) : $recordGrants['account_id'],
+                        ($recordGrants['account_id']['id'] ?? $recordGrants['account_id']['accountId']) : $recordGrants['account_id'],
                     'account_type' => $recordGrants['account_type'],
                 );
 
@@ -2233,7 +2223,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 /* @var Tinebase_Model_Container $container */
                 $container = Tinebase_Container::getInstance()->get($configId);
                 return $container;
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
             }
         }
 
@@ -2546,7 +2536,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 if ($appController instanceof Tinebase_Controller_Record_Abstract) {
                     $this->_clearSingleContainerContent($container, $appController);
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
     }

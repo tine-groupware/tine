@@ -71,7 +71,7 @@ class Tinebase_Export
             throw new Tinebase_Exception_InvalidArgument('Export definition ID or format required in options');
         }
         
-        if (preg_match('/pdf/i', $exportClass) && true === static::$_pdfLegacyHandling) {
+        if (preg_match('/pdf/i', (string) $exportClass) && true === static::$_pdfLegacyHandling) {
             // legacy
             $result = new $exportClass($_additionalOptions);
         } else if (class_exists($exportClass)) {
@@ -94,7 +94,7 @@ class Tinebase_Export
      */
     protected static function _getExportClass($appName, $model, $format)
     {
-        $format = ucfirst(strtolower($format));
+        $format = ucfirst(strtolower((string) $format));
         $simpleModel = Tinebase_Record_Abstract::getSimpleModelName($appName, $model);
         $mainAppExport = $appName . '_Export_' . $format;
         $modelSpecificExport = $mainAppExport . '_' . $simpleModel;

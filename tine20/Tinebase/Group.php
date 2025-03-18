@@ -22,10 +22,10 @@ class Tinebase_Group
      * 
      * @var string
      */
-    const ACTIVEDIRECTORY = 'ActiveDirectory';
-    const LDAP            = 'Ldap';
-    const SQL             = 'Sql';
-    const TYPO3           = 'Typo3';
+    public const ACTIVEDIRECTORY = 'ActiveDirectory';
+    public const LDAP            = 'Ldap';
+    public const SQL             = 'Sql';
+    public const TYPO3           = 'Typo3';
     
     
     /**
@@ -33,21 +33,21 @@ class Tinebase_Group
      * 
      * @var string
      */
-    const DEFAULT_ADMIN_GROUP = 'Administrators';
+    public const DEFAULT_ADMIN_GROUP = 'Administrators';
     
     /**
      * default user group name
      * 
      * @var string
      */
-    const DEFAULT_USER_GROUP = 'Users';
+    public const DEFAULT_USER_GROUP = 'Users';
 
     /**
      * default anonymous group name
      *
      * @var string
      */
-    const DEFAULT_ANONYMOUS_GROUP = 'Anonymous';
+    public const DEFAULT_ANONYMOUS_GROUP = 'Anonymous';
     
     /**
      * the constructor
@@ -151,7 +151,7 @@ class Tinebase_Group
      * @todo sync secondary group memberships
      * @param  mixed  $_username  the login id of the user to synchronize
      */
-    public static function syncMemberships($_username): void
+    public static function syncMemberships(mixed $_username): void
     {
         if ($_username instanceof Tinebase_Model_FullUser) {
             $username = $_username->accountLoginName;
@@ -173,7 +173,7 @@ class Tinebase_Group
 
             try {
                 $membershipsSyncBackend = $groupBackend->getGroupMembershipsFromSyncBackend($user);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 $membershipsSyncBackend = [];
             }
             if (! in_array($user->accountPrimaryGroup, $membershipsSyncBackend)) {
@@ -201,11 +201,11 @@ class Tinebase_Group
                 // make sure new groups exist in sql backend / create empty group if needed
                 try {
                     $groupBackend->getGroupById($groupId);
-                } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                } catch (Tinebase_Exception_Record_NotDefined) {
                     try {
                         $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
                         // TODO use exact exception class Ldap something?
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                         // we dont get the group? ok, just ignore it, maybe we don't have rights to view it.
                         continue;
                     }
@@ -260,7 +260,7 @@ class Tinebase_Group
                 // get single groups to make sure that container id is joined
                 try {
                     $group = Tinebase_Group::getInstance()->getGroupById($groupId);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     continue;
                 }
 
@@ -347,7 +347,7 @@ class Tinebase_Group
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
                 
-            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+            } catch (Tinebase_Exception_Record_NotDefined) {
                 // try to find group by name
                 try {
                     $sqlGroup = $groupBackend->getGroupByName($group->name);
@@ -357,7 +357,7 @@ class Tinebase_Group
                     $groupBackend->deleteGroupsInSqlBackend(array($sqlGroup->getId()));
                     $groupBackend->mergeMissingProperties($group, $sqlGroup);
 
-                } catch (Tinebase_Exception_Record_NotDefined $tern2) {
+                } catch (Tinebase_Exception_Record_NotDefined) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' Group not found by ID and name, adding new group.');
                 }
@@ -398,9 +398,7 @@ class Tinebase_Group
      */
     public static function createInitialGroups()
     {
-        $defaultAdminGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)) 
-            ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
-            : self::DEFAULT_ADMIN_GROUP;
+        $defaultAdminGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY) ?: self::DEFAULT_ADMIN_GROUP;
         $adminGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultAdminGroupName,
             'description'   => 'Group of administrative accounts',
@@ -408,9 +406,7 @@ class Tinebase_Group
         ));
         Tinebase_Group::getInstance()->addGroup($adminGroup);
 
-        $defaultUserGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY))
-            ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY)
-            : self::DEFAULT_USER_GROUP;
+        $defaultUserGroupName = Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY) ?: self::DEFAULT_USER_GROUP;
         $userGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultUserGroupName,
             'description'   => 'Group of user accounts',
@@ -419,9 +415,7 @@ class Tinebase_Group
         Tinebase_Group::getInstance()->addGroup($userGroup);
 
         $defaultAnonymousGroupName =
-            Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
-            ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
-            : self::DEFAULT_ANONYMOUS_GROUP;
+            Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY) ?: self::DEFAULT_ANONYMOUS_GROUP;
         $anonymousGroup = new Tinebase_Model_Group(array(
             'name'          => $defaultAnonymousGroupName,
             'description'   => 'Group of anonymous user accounts',
@@ -439,19 +433,13 @@ class Tinebase_Group
      */
     public static function getDefaultGroupConfigKey($groupName)
     {
-        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
-                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY)
-                : self::DEFAULT_ADMIN_GROUP) === $groupName) {
+        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY) ?: self::DEFAULT_ADMIN_GROUP) === $groupName) {
             return Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY;
         }
-        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY)
-                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY)
-                : self::DEFAULT_USER_GROUP) === $groupName) {
+        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY) ?: self::DEFAULT_USER_GROUP) === $groupName) {
             return Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY;
         }
-        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
-                ? Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY)
-                : self::DEFAULT_ANONYMOUS_GROUP) === $groupName) {
+        if ((Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY) ?: self::DEFAULT_ANONYMOUS_GROUP) === $groupName) {
             return Tinebase_User::DEFAULT_ANONYMOUS_GROUP_NAME_KEY;
         }
         return false;

@@ -44,16 +44,16 @@
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {
-    const XPROP_PERSONAL_FS_QUOTA = 'personalFSQuota';
+    public const XPROP_PERSONAL_FS_QUOTA = 'personalFSQuota';
 
     /**
      * external email user ids (for example in dovecot/postfix sql)
      */
-    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
-    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+    public const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    public const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     // don't create and show users system mail account
-    const XPROP_FMAIL_SKIP_MAILACCOUNT = 'emailSkipFmailAccount';
+    public const XPROP_FMAIL_SKIP_MAILACCOUNT = 'emailSkipFmailAccount';
 
     public const USER_TYPE_SYSTEM = 'system';
     public const USER_TYPE_USER = 'user';
@@ -358,11 +358,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     {
         $samUser = new Tinebase_Model_SAMUser(array(
             'homePath'      => (isset($options['homePath'])) ? $options['homePath'] . $this->accountLoginName : '',
-            'homeDrive'     => (isset($options['homeDrive'])) ? $options['homeDrive'] : '',
-            'logonScript'   => (isset($options['logonScript'])) ? $options['logonScript'] : '',
+            'homeDrive'     => $options['homeDrive'] ?? '',
+            'logonScript'   => $options['logonScript'] ?? '',
             'profilePath'   => (isset($options['profilePath'])) ? $options['profilePath'] . $this->accountLoginName : '',
-            'pwdCanChange'  => isset($options['pwdCanChange'])  ? $options['pwdCanChange']  : new Tinebase_DateTime('@1'),
-            'pwdMustChange' => isset($options['pwdMustChange']) ? $options['pwdMustChange'] : new Tinebase_DateTime('@2147483647')
+            'pwdCanChange'  => $options['pwdCanChange'] ?? new Tinebase_DateTime('@1'),
+            'pwdMustChange' => $options['pwdMustChange'] ?? new Tinebase_DateTime('@2147483647')
         ));
     
         $this->sambaSAM = $samUser;
@@ -471,7 +471,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->accountLoginName;
     }

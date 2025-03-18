@@ -20,12 +20,11 @@ interface Tinebase_Convert_Interface
 {
     /**
      * converts external format to Tinebase_Record_Interface
-     * 
-     * @param  mixed                     $_blob
+     *
      * @param  Tinebase_Record_Interface|null  $_record  update existing record
      * @return Tinebase_Record_Interface
      */
-    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null);
+    public function toTine20Model(mixed $_blob, Tinebase_Record_Interface $_record = null);
     
     /**
      * converts Tinebase_Record_Interface to external format

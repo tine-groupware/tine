@@ -220,7 +220,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         $result = '';
         if (self::$_logdifftime) {
             $currenttime = microtime(true);
-            $result = $currenttime - (self::$_lastlogtime ? self::$_lastlogtime : $currenttime);
+            $result = $currenttime - (self::$_lastlogtime ?: $currenttime);
             self::$_lastlogtime = $currenttime;
             if ($format) {
                 $result = Tinebase_Helper::formatMicrotimeDiff($result);
@@ -250,30 +250,15 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      */
     protected function _getColorByPrio($logPrio): string
     {
-        switch ($logPrio) {
-            case 0:
-            case 1:
-            case 2:
-                $color = "31m"; // red
-                break;
-            case 3:
-                $color = "35m"; // magenta
-                break;
-            case 4:
-                $color = "33m"; // yellow
-                break;
-            case 5:
-                $color = "36m"; // cyan
-                break;
-            case 6:
-                $color = "32m"; // green
-                break;
-            case 8:
-                $color = "34m"; // blue
-                break;
-            default:
-                $color = "37m"; // white
-        }
+        $color = match ($logPrio) {
+            0, 1, 2 => "31m",
+            3 => "35m",
+            4 => "33m",
+            5 => "36m",
+            6 => "32m",
+            8 => "34m",
+            default => "37m",
+        };
 
         return $color;
     }
@@ -292,7 +277,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
                 : NULL;
         }
 
-        $result = (self::$_username) ? self::$_username : '-- none --';
+        $result = self::$_username ?: '-- none --';
 
         if (self::$_colorize) {
             // TODO use different background here?

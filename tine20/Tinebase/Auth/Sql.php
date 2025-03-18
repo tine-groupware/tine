@@ -17,11 +17,9 @@
  */
 class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Auth_Interface
 {
-    const ACCTNAME_FORM_USERNAME  = 2;
-    const ACCTNAME_FORM_BACKSLASH = 3;
-    const ACCTNAME_FORM_PRINCIPAL = 4;
-
-    protected $_noCanonicalIdentityTreatment = false;
+    public const ACCTNAME_FORM_USERNAME  = 2;
+    public const ACCTNAME_FORM_BACKSLASH = 3;
+    public const ACCTNAME_FORM_PRINCIPAL = 4;
 
     /**
      * __construct() - Sets configuration options
@@ -33,10 +31,8 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
      * @param  string                   $credentialTreatment
      */
     public function __construct(Zend_Db_Adapter_Abstract $zendDb = null, $tableName = null, $identityColumn = null,
-        $credentialColumn = null, $credentialTreatment = null, $noCanonicalIdentityTreatment = false)
+        $credentialColumn = null, $credentialTreatment = null, protected $_noCanonicalIdentityTreatment = false)
     {
-        $this->_noCanonicalIdentityTreatment = $noCanonicalIdentityTreatment;
-
         parent::__construct($zendDb, $tableName, $identityColumn, $credentialColumn, $credentialTreatment);
     }
     /**
@@ -90,9 +86,9 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
         }
 
         if (function_exists('mb_strtolower')) {
-            $uname = mb_strtolower($uname, 'UTF-8');
+            $uname = mb_strtolower((string) $uname, 'UTF-8');
         } else {
-            $uname = strtolower($uname);
+            $uname = strtolower((string) $uname);
         }
 
         if ($form === 0) {
@@ -197,7 +193,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
         if (empty($resultIdentity[$this->_credentialColumn])) {
             $validatedPw = ($this->_credential === '');
         } else {
-            $passwordHash = substr($resultIdentity[$this->_credentialColumn], 0, 1) === '{' 
+            $passwordHash = str_starts_with((string) $resultIdentity[$this->_credentialColumn], '{') 
                 ? $resultIdentity[$this->_credentialColumn] 
                 : '{PLAIN-MD5}' . $resultIdentity[$this->_credentialColumn];
             $validatedPw = Hash_Password::validate($passwordHash, $this->_credential);

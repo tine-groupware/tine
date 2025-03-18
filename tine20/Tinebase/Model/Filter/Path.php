@@ -65,7 +65,7 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
         $this->_resolvePathIds($modelName);
 
         if (empty($this->_pathRecordIds)) {
-            if (strpos($this->_operator, 'not') === false) {
+            if (!str_contains($this->_operator, 'not')) {
                 $_select->where('1 = 0');
             } else {
                 $_select->where('1 = 1');
@@ -118,7 +118,7 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
                         $pathPart = mb_strtolower($pathPart);
                         $found = array();
                         foreach ($sT as $key => $term) {
-                            if (strpos($pathPart, $term) !== false) {
+                            if (str_contains($pathPart, (string) $term)) {
                                 $found[] = $key;
                             }
                         }

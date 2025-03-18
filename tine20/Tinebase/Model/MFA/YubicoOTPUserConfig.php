@@ -114,7 +114,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
         if (!$newUser->mfa_configs || !$newUser->mfa_configs->find(Tinebase_Model_MFA_UserConfig::FLD_ID,
                 $userCfg->{Tinebase_Model_MFA_UserConfig::FLD_ID})) {
             $cc = Tinebase_Auth_CredentialCache::getInstance();
-            $adapter = explode('_', get_class($cc->getCacheAdapter()));
+            $adapter = explode('_', $cc->getCacheAdapter()::class);
             $adapter = end($adapter);
             try {
                 $cc->setCacheAdapter('Shared');
@@ -130,7 +130,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
         $this->{self::FLD_ACCOUNT_ID} = $newUser->getId();
         if (($newAes = $this->getAesKey()) && $newId = $this->getPrivatId()) {
             $cc = Tinebase_Auth_CredentialCache::getInstance();
-            $adapter = explode('_', get_class($cc->getCacheAdapter()));
+            $adapter = explode('_', $cc->getCacheAdapter()::class);
             $adapter = end($adapter);
             try {
                 $cc->setCacheAdapter('Shared');
@@ -152,6 +152,6 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
 
     public function getClientPasswordLength(): ?int
     {
-        return 32 + strlen($this->{self::FLD_PUBLIC_ID});
+        return 32 + strlen((string) $this->{self::FLD_PUBLIC_ID});
     }
 }

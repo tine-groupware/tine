@@ -83,7 +83,7 @@ abstract class Tinebase_License_Abstract
     {
         try {
             $result = Tinebase_Application::getInstance()->isInstalled('Addressbook');
-        } catch (Exception $e) {
+        } catch (Exception) {
             Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' License handling needs Addressbook');
             return false;
         }
@@ -152,7 +152,7 @@ abstract class Tinebase_License_Abstract
 
         if ($this->getStatus() !== Tinebase_License::STATUS_LICENSE_OK) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
+                self::class . '::' . __METHOD__ . ' ' . __LINE__
                 . ' Feature/application needs valid license: ' . $feature);
             return false;
         }
@@ -162,7 +162,7 @@ abstract class Tinebase_License_Abstract
             if (! $hasFeature) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(
-                        __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
+                        self::class . '::' . __METHOD__ . ' ' . __LINE__
                         . ' Feature/application not permitted by license: ' . $feature
                     );
                 }

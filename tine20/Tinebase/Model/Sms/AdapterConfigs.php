@@ -17,9 +17,9 @@
  */
 class Tinebase_Model_Sms_AdapterConfigs extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'Sms_AdapterConfigs';
+    public const MODEL_NAME_PART = 'Sms_AdapterConfigs';
 
-    const FLD_ADAPTER_CONFIGS = 'adapter_configs';
+    public const FLD_ADAPTER_CONFIGS = 'adapter_configs';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

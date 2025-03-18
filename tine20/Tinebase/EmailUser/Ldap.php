@@ -98,7 +98,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                         break;
                 
                     case 'emailForwardOnly':
-                        $accountArray[$keyMapping] = (strtolower($value[0]) == 'forwardonly') ? true : false;
+                        $accountArray[$keyMapping] = (strtolower((string) $value[0]) == 'forwardonly') ? true : false;
                         break;
                         
                     default: 

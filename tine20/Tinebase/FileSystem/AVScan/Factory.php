@@ -12,8 +12,8 @@
  */
 class Tinebase_FileSystem_AVScan_Factory
 {
-    const MODE_OFF = 'off';
-    const MODE_QUAHOG = 'quahog';
+    public const MODE_OFF = 'off';
+    public const MODE_QUAHOG = 'quahog';
 
     protected static $_scanners = [];
 

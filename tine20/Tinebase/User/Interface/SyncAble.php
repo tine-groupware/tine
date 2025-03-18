@@ -43,20 +43,18 @@ interface Tinebase_User_Interface_SyncAble
     /**
      * update user status (enabled or disabled)
      *
-     * @param   mixed   $_accountId
      * @param   string  $_status
      */
-    public function setStatusInSyncBackend($_accountId, $_status);
+    public function setStatusInSyncBackend(mixed $_accountId, $_status);
 
     /**
      * sets/unsets expiry date in ldap backend
      *
      * expiryDate is the number of days since Jan 1, 1970
      *
-     * @param   mixed      $_accountId
      * @param   Tinebase_DateTime  $_expiryDate
      */
-    public function setExpiryDateInSyncBackend($_accountId, $_expiryDate);
+    public function setExpiryDateInSyncBackend(mixed $_accountId, $_expiryDate);
     
     /**
      * add an user

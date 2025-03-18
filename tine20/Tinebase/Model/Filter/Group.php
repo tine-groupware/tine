@@ -32,14 +32,11 @@ class Tinebase_Model_Filter_Group extends Tinebase_Model_Filter_Id
 
     protected function transformValue($val)
     {
-        switch ($val) {
-            case Tinebase_Group::DEFAULT_USER_GROUP:
-                return Tinebase_Group::getInstance()->getDefaultGroup()->getId();
-            case Tinebase_Group::DEFAULT_ADMIN_GROUP:
-                return Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId();
-            case Tinebase_Group::DEFAULT_ANONYMOUS_GROUP:
-                return Tinebase_Group::getInstance()->getDefaultAnonymousGroup()->getId();
-        }
-        return $val;
+        return match ($val) {
+            Tinebase_Group::DEFAULT_USER_GROUP => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+            Tinebase_Group::DEFAULT_ADMIN_GROUP => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
+            Tinebase_Group::DEFAULT_ANONYMOUS_GROUP => Tinebase_Group::getInstance()->getDefaultAnonymousGroup()->getId(),
+            default => $val,
+        };
     }
 }

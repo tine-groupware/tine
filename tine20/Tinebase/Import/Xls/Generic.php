@@ -92,7 +92,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
         $modelConfig = $this->_options['model']::getConfiguration();
 
         if (!$modelConfig) {
-            throw new InvalidArgumentException(__CLASS__ . ' can only import models with a valid Tinebase_ModelConfiguration.');
+            throw new InvalidArgumentException(self::class . ' can only import models with a valid Tinebase_ModelConfiguration.');
         }
 
         $fields = $modelConfig->getFields();
@@ -104,9 +104,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
                 continue;
             }
 
-            $englishMessage = array_keys(array_filter($messages, function ($v) use ($mapping) {
-                return $v === $mapping || (is_array($v) && in_array($mapping, $v, true));
-            }, ARRAY_FILTER_USE_BOTH));
+            $englishMessage = array_keys(array_filter($messages, fn($v) => $v === $mapping || (is_array($v) && in_array($mapping, $v, true)), ARRAY_FILTER_USE_BOTH));
 
             $englishString = array_shift($englishMessage);
 

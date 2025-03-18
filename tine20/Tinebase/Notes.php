@@ -32,20 +32,20 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * default record backend
      */
-    const DEFAULT_RECORD_BACKEND = 'Sql';
+    public const DEFAULT_RECORD_BACKEND = 'Sql';
     
     /**
      * number of notes per record for activities panel
      * (NOT the tab panel)
      */
-    const NUMBER_RECORD_NOTES = 8;
+    public const NUMBER_RECORD_NOTES = 8;
 
     /**
      * max length of note text
      * 
      * @var integer
      */
-    const MAX_NOTE_LENGTH = 10000;
+    public const MAX_NOTE_LENGTH = 10000;
     
     /**
      * don't clone. Use the singleton.
@@ -206,7 +206,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         . ' Do not fetch record notes because user has no private data grant for adb container');
                     $recordIdFilter->setValue('');
                 }
-            } catch (Tinebase_Exception_AccessDenied $tead) {
+            } catch (Tinebase_Exception_AccessDenied) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Do not fetch record notes because user has no read grant for container');
                 $recordIdFilter->setValue('');
@@ -342,7 +342,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function setNotesOfRecord($_record, $_backend = 'Sql', $_notesProperty = 'notes')
     {
-        $model = get_class($_record);
+        $model = $_record::class;
         $backend = ucfirst(strtolower($_backend));
         
         $currentNotes = $this->getNotesOfRecord($model, $_record->getId(), $backend);
@@ -427,7 +427,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $data = $_note->toArray(FALSE, FALSE);
 
         if (mb_strlen((string)$data['note']) > 65535) {
-            $data['note'] = mb_substr($data['note'], 0, 65535);
+            $data['note'] = mb_substr((string) $data['note'], 0, 65535);
         }
         
         $this->_notesTable->insert($data);
@@ -469,8 +469,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         $id = $_record instanceof Tinebase_Record_Interface ? $_record->getId() : $_record;
         $seq = $_record instanceof Tinebase_Record_Interface && $_record->has('seq') ? $_record->seq : 0;
-        $modelName = ($_modelName !== null) ? $_modelName : (($_record instanceof Tinebase_Record_Interface)
-            ? get_class($_record) : 'unknown');
+        $modelName = $_modelName ?? (($_record instanceof Tinebase_Record_Interface)
+            ? $_record::class : 'unknown');
         if (($_userId === null)) {
             $_userId = Tinebase_Core::getUser();
         }
@@ -550,22 +550,20 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
                             method_exists($controller, 'get')) {
                         if ($oldData) {
-                            if (is_array($oldData)) $oldData = isset($oldData['id']) ? $oldData['id'] : '';
+                            if (is_array($oldData)) $oldData = $oldData['id'] ?? '';
                             try {
                                 $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
-                            } catch (Tinebase_Exception_NotFound $tenf) {
-                                $oldDataString = $oldData;
-                            } catch (Tinebase_Exception_AccessDenied $tead) {
+                            } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
                                 $oldDataString = $oldData;
                             }
                         } else {
                             $oldDataString = '';
                         }
                         if ($value) {
-                            if (is_array($value)) $value = isset($value['id']) ? $value['id'] : '';
+                            if (is_array($value)) $value = $value['id'] ?? '';
                             try {
                                 $valueString = $controller->get($value, null, false, true)->getTitle();
-                            } catch(Tinebase_Exception_NotFound $e) {
+                            } catch(Tinebase_Exception_NotFound) {
                                 $valueString = $value;
                             }
                         } else {
@@ -578,7 +576,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                                 if (is_object($val)) {
                                     $val = $val->toArray();
                                 }
-                                $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
+                                $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? ($val['id'] ?? print_r($val,
                                         true)) : $val);
                             }
                         } else {
@@ -590,7 +588,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                                 if (is_object($val)) {
                                     $val = $val->toArray();
                                 }
-                                $valueString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
+                                $valueString .= ' ' . $key . ': ' . (is_array($val) ? ($val['id'] ?? print_r($val,
                                         true)) : $val);
                             }
                         } else {
@@ -767,14 +765,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  Tinebase_Model_Filter_FilterGroup $_filter
      * @param  Tinebase_Model_Pagination $_pagination
      * @param  array|string|boolean $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
-     * @return Tinebase_Record_RecordSet
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
     public function search(
         Tinebase_Model_Filter_FilterGroup $_filter = null,
         Tinebase_Model_Pagination $_pagination = null,
         $_cols = '*'
-    ) {
+    ): never {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
 
@@ -782,10 +780,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * Gets total count of search with $_filter
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -795,10 +793,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @param string $_id
      * @param boolean $_getDeleted get deleted records
-     * @return Tinebase_Record_Interface
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function get($_id, $_getDeleted = FALSE)
+    public function get($_id, $_getDeleted = FALSE): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -808,10 +806,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @param string|array $_ids Ids
      * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getMultiple($_ids, $_containerIds = null)
+    public function getMultiple($_ids, $_containerIds = null): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -822,10 +820,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param string $_orderBy Order result by
      * @param string $_orderDirection Order direction - allowed are ASC and DESC
      * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_RecordSet
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC'): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -834,10 +832,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * Create a new persistent contact
      *
      * @param  Tinebase_Record_Interface $_record
-     * @return Tinebase_Record_Interface
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function create(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -855,7 +853,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         if (!isset($data['id'])) throw new Tinebase_Exception_Backend('id not set');
         if (mb_strlen((string)$data['note']) > 65535) {
-            $data['note'] = mb_substr($data['note'], 0, 65535);
+            $data['note'] = mb_substr((string) $data['note'], 0, 65535);
         }
 
         $this->_notesTable->update($data, $this->_db->quoteInto('id = ?', $data['id']));
@@ -871,7 +869,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param Tinebase_Model_Pagination $_pagination
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function updateMultiple($_filter, $_data, $_pagination = null)
+    public function updateMultiple($_filter, $_data, $_pagination = null): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -880,10 +878,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * Deletes one or more existing persistent record(s)
      *
      * @param string|array $_identifier
-     * @return void
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function delete($_identifier)
+    public function delete($_identifier): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -891,10 +889,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * get backend type
      *
-     * @return string
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getType()
+    public function getType(): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -903,9 +901,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * sets modlog active flag
      *
      * @param $_bool
-     * @return Tinebase_Backend_Sql_Abstract
+     * @return never
      */
-    public function setModlogActive($_bool)
+    public function setModlogActive($_bool): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -913,9 +911,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * checks if modlog is active or not
      *
-     * @return bool
+     * @return never
      */
-    public function getModlogActive()
+    public function getModlogActive(): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -925,9 +923,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @param array|string $ids
      * @param string $property
-     * @return array (key = id, value = property value)
+     * @return never
      */
-    public function getPropertyByIds($ids, $property)
+    public function getPropertyByIds($ids, $property): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -972,9 +970,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      *
      * @param array $_ids
      * @param bool $_getDeleted
-     * @return array
+     * @return never
      */
-    public function has(array $_ids, $_getDeleted = false)
+    public function has(array $_ids, $_getDeleted = false): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -1040,10 +1038,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             continue;
                         }
                         $controllers[$note->record_model] = $recordController;
-                    } catch (Tinebase_Exception_AccessDenied $e) {
+                    } catch (Tinebase_Exception_AccessDenied) {
                         // TODO log
                         continue;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         $deleteIds[] = $note->getId();
                         continue;
                     }
@@ -1100,7 +1098,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             $deleteIds[] = $note->getId();
                             $purgeCountCreated++;
                         } else if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
-                            && strpos($note->note, '|') === false)
+                            && !str_contains($note->note, '|'))
                         {
                             $deleteIds[] = $note->getId();
                             $purgeCountEmptyUpdate++;
@@ -1110,7 +1108,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                     try {
 
                         $recordController->get($note->record_id, null, false, true);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         $deleteIds[] = $note->getId();
                     }
                 }

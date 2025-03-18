@@ -21,21 +21,21 @@
  */
 class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 {
-    const TYPE_FM_NODE = 'fm_node';
-    const TYPE_ATTACHMENT = 'attachment';
+    public const TYPE_FM_NODE = 'fm_node';
+    public const TYPE_ATTACHMENT = 'attachment';
     // user gets a download
-    const TYPE_DOWNLOAD = 'download';
+    public const TYPE_DOWNLOAD = 'download';
     // local filesystem, i.e. for CLI use
-    const TYPE_LOCAL = 'local';
+    public const TYPE_LOCAL = 'local';
 
-    const FLD_TYPE = 'type';
-    const FLD_MODEL = 'model';
-    const FLD_RECORD_ID = 'record_id';
-    const FLD_FILE_NAME = 'file_name';
-    const FLD_FM_PATH = 'fm_path';
-    const FLD_NODE_ID = 'node_id';
-    const FLD_REVISION = 'revision';
-    const FLD_TEMPFILE_ID = 'tempfile_id';
+    public const FLD_TYPE = 'type';
+    public const FLD_MODEL = 'model';
+    public const FLD_RECORD_ID = 'record_id';
+    public const FLD_FILE_NAME = 'file_name';
+    public const FLD_FM_PATH = 'fm_path';
+    public const FLD_NODE_ID = 'node_id';
+    public const FLD_REVISION = 'revision';
+    public const FLD_TEMPFILE_ID = 'tempfile_id';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -113,7 +113,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
                 $fs->update($trgtNode);
                 break;
             case self::TYPE_ATTACHMENT:
-                list($record, $ctrl) = $this->getAttachmentRecordAndCtrl();
+                [$record, $ctrl] = $this->getAttachmentRecordAndCtrl();
                 Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
                 $record->attachments->addRecord($srcNode);
                 $ctrl->update($record);
@@ -133,16 +133,11 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
             $this->{self::FLD_TYPE} = self::TYPE_FM_NODE;
         }
 
-        switch ($this->{self::FLD_TYPE}) {
-            case self::TYPE_FM_NODE:
-                $node = $this->_getFMNode();
-                break;
-            case self::TYPE_ATTACHMENT:
-                $node = $this->_getAttachmentNode();
-                break;
-            default:
-                throw new Tinebase_Exception_UnexpectedValue('invalid type: ' . $this->{self::FLD_TYPE});
-        }
+        $node = match ($this->{self::FLD_TYPE}) {
+            self::TYPE_FM_NODE => $this->_getFMNode(),
+            self::TYPE_ATTACHMENT => $this->_getAttachmentNode(),
+            default => throw new Tinebase_Exception_UnexpectedValue('invalid type: ' . $this->{self::FLD_TYPE}),
+        };
 
         $nodeId = is_array($this->{self::FLD_NODE_ID}) ? $this->{self::FLD_NODE_ID}['id'] : $this->{self::FLD_NODE_ID};
         if (!empty($nodeId) && $nodeId !== $node->getId()) {
@@ -153,7 +148,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 
     public function getAttachmentRecordAndCtrl()
     {
-        list($app) = explode('_', $this->{self::FLD_MODEL});
+        [$app] = explode('_', (string) $this->{self::FLD_MODEL});
         $recordCtrl = Tinebase_Core::getApplicationInstance($app, $this->{self::FLD_MODEL});
         $record = $recordCtrl->get($this->{self::FLD_RECORD_ID}, null, false);
 
@@ -162,7 +157,7 @@ class Tinebase_Model_Tree_FileLocation extends Tinebase_Record_NewAbstract
 
     protected function _getAttachmentNode()
     {
-        list($record) = $this->getAttachmentRecordAndCtrl();
+        [$record] = $this->getAttachmentRecordAndCtrl();
         $fs = Tinebase_FileSystem::getInstance();
         $pNode = $fs->stat(Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record));
         if (!empty($this->{self::FLD_NODE_ID})) {

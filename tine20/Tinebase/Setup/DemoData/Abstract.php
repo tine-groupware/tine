@@ -458,7 +458,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     public static function getRequiredApplications()
     {
-        return static::$_requiredApplications ? static::$_requiredApplications : array();
+        return static::$_requiredApplications ?: array();
     }
     
     /**
@@ -524,7 +524,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
         foreach($users as $loginName => $name) {
             try {
                 $this->_personas[$loginName] = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
-            } catch (Tinebase_Exception_NotFound $e) {
+            } catch (Tinebase_Exception_NotFound) {
                 echo 'Persona with login name ' . $loginName . ' does not exist or no demo data is defined!' . chr(10);
                 echo 'Have you called Admin.createDemoDate already?' . PHP_EOL;
                 echo 'If not, do this!' . PHP_EOL;
@@ -543,7 +543,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
 
         if (is_array($this->_models)) {
             foreach ($this->_models as $model) {
-                $mname = ucfirst($model);
+                $mname = ucfirst((string) $model);
                 // shared records
                 if ($this->_createShared) {
                     $methodName = '_createShared' . $mname . 's';
@@ -597,8 +597,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     protected function _getRelationArray($ownRecord, $foreignRecord, $ownDegree = Tinebase_Model_Relation::DEGREE_SIBLING, $type = NULL)
     {
-        $ownModel = get_class($ownRecord);
-        $foreignModel = get_class($foreignRecord);
+        $ownModel = $ownRecord::class;
+        $foreignModel = $foreignRecord::class;
         
         if (! $type) {
             $split = explode('_Model_', $foreignModel);
@@ -628,7 +628,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     {
         try {
             $container = Tinebase_Container::getInstance()->getContainerByName($this->_appName . '_Model_' . $this->_modelName, $containerName,Tinebase_Model_Container::TYPE_SHARED);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // create shared container
             $container = Tinebase_Container::getInstance()->addContainer(
                 new Tinebase_Model_Container(array_merge(

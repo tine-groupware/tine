@@ -112,7 +112,7 @@ abstract class Tinebase_Import_Db_Abstract
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Ignore existing record');
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $record = $controller->create($recordToImport, $this->_duplicateCheck);
             $this->_onAfterImportRecord($record, $row);
         }

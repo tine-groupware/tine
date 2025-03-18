@@ -18,12 +18,12 @@
  */
 class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
 {
-    const TABLE_NAME = 'tree_reflog';
-    const MODEL_NAME_PART = 'Tree_RefLog';
+    public const TABLE_NAME = 'tree_reflog';
+    public const MODEL_NAME_PART = 'Tree_RefLog';
 
-    const FLD_FOLDER_ID = 'folder_id';
-    const FLD_SIZE_DELTA = 'sizeDelta';
-    const FLD_REVISION_SIZE_DELTA = 'revisionSizeDelta';
+    public const FLD_FOLDER_ID = 'folder_id';
+    public const FLD_SIZE_DELTA = 'sizeDelta';
+    public const FLD_REVISION_SIZE_DELTA = 'revisionSizeDelta';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

@@ -548,7 +548,7 @@ class Tinebase_Tags
         $result = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class);
         foreach ($_records as $record) {
             $data = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class,
-                (isset($tagsOfRecords[$record->getId()])) ? $tagsOfRecords[$record->getId()] : array()
+                $tagsOfRecords[$record->getId()] ?? array()
             );
             $record->{$_tagsProperty} = $data;
             $result->mergeById($data);
@@ -570,7 +570,7 @@ class Tinebase_Tags
         $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty]);
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT);
 
-        $appId = $this->_getApplicationForModel(get_class($_record))->getId();
+        $appId = $this->_getApplicationForModel($_record::class)->getId();
         if (! $this->_userHasPersonalTagRight($appId)) {
             $tagsToSet = $tagsToSet->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
             $currentTags = $currentTags->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
@@ -629,7 +629,7 @@ class Tinebase_Tags
     public function attachSystemTag(Tinebase_Record_Interface $record, Tinebase_Model_Tag $tag)
     {
         $this->_checkSystemTag($tag);
-        $appId = $this->_getApplicationForModel(get_class($record))->getId();
+        $appId = $this->_getApplicationForModel($record::class)->getId();
         $this->_attachTag($tag->getId(), $record->getId(), $appId);
     }
 
@@ -651,7 +651,7 @@ class Tinebase_Tags
     public function detachSystemTag(Tinebase_Record_Interface $record, Tinebase_Model_Tag $tag)
     {
         $this->_checkSystemTag($tag);
-        $recordClass = get_class($record);
+        $recordClass = $record::class;
         $appId = $this->_getApplicationForModel($recordClass)->getId();
         $controller = Tinebase_Core::getApplicationInstance($recordClass);
         $this->_detachSingleTag([$record->getId()], $tag->getId(), $appId, $controller);
@@ -669,7 +669,7 @@ class Tinebase_Tags
         if (in_array($modelName, array('Filemanager_Model_Node'))) {
             $appName = 'Tinebase';
         } else {
-            list($appName, , ) = explode('_', $modelName);
+            [$appName, , ] = explode('_', $modelName);
         }
 
         return Tinebase_Application::getInstance()->getApplicationByName($appName);
@@ -686,7 +686,7 @@ class Tinebase_Tags
      * 
      * @todo maybe this could be done in a more generic way (in Tinebase_Controller_Record_Abstract)
      */
-    public function attachTagToMultipleRecords($_filter, $_tag)
+    public function attachTagToMultipleRecords($_filter, mixed $_tag)
     {
         // check/create tag on the fly
         $tags = $this->_createTagsOnTheFly(array($_tag));
@@ -779,7 +779,7 @@ class Tinebase_Tags
      * 
      * @todo maybe this could be done in a more generic way (in Tinebase_Controller_Record_Abstract)
      */
-    public function detachTagsFromMultipleRecords($_filter, $_tag)
+    public function detachTagsFromMultipleRecords($_filter, mixed $_tag)
     {
         $app = $this->_getApplicationForModel($_filter->getModelName());
         $appId = $app->getId();
@@ -1131,10 +1131,9 @@ class Tinebase_Tags
      *
      * @param string|array $_recordId
      * @param string $_applicationId
-     * @param mixed $_cols
      * @return Zend_Db_Select
      */
-    protected function _getSelect($_recordId, $_applicationId, $_cols = '*')
+    protected function _getSelect($_recordId, $_applicationId, mixed $_cols = '*')
     {
         $recordIds = (array) $_recordId;
         // stringify record ids (we might have a mix of uuids and old integer ids)
@@ -1300,7 +1299,7 @@ class Tinebase_Tags
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Tag already exists: ' . $tag['name']);
                 continue;
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // go on ...
             }
 
@@ -1309,19 +1308,17 @@ class Tinebase_Tags
             } else {
                 $color = $randomizeColors ? '#' . Tinebase_Record_Abstract::generateUID(6) : '#339966';
                 // check for 'parent' tag
-                if (strpos($tag['name'], '/') !== false) {
-                    $path = explode('/', $tag['name']);
+                if (str_contains((string) $tag['name'], '/')) {
+                    $path = explode('/', (string) $tag['name']);
                     try {
                         $parent = Tinebase_Tags::getInstance()->getTagByName($path[0]);
                         $color = $parent->color;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                     }
                 }
             }
 
-            $description = substr((isset($tag['description']))
-                ? $tag['description']
-                : $tag['name'], 0, 50);
+            $description = substr($tag['description'] ?? $tag['name'], 0, 50);
             $sharedTag = new Tinebase_Model_Tag(array(
                 'type' => Tinebase_Model_Tag::TYPE_SHARED,
                 'name' => $tag['name'],

@@ -195,7 +195,7 @@ class Tinebase_FileSystem_Previews
             return $this->createPreviewsFromNode($node);
         } catch (Zend_Db_Statement_Exception $zdse) {
             // this might throw Deadlock exceptions - ignore those
-            if (strpos($zdse->getMessage(), 'Deadlock') !== false) {
+            if (str_contains($zdse->getMessage(), 'Deadlock')) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Ignoring deadlock / skipping preview generation - Error: '
                     . $zdse->getMessage());
@@ -489,7 +489,7 @@ class Tinebase_FileSystem_Previews
 
         try {
             $this->_fsController->stat($this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3));
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return false;
         }
 
@@ -504,9 +504,9 @@ class Tinebase_FileSystem_Previews
         $basePath = $this->_getBasePath();
         foreach($_hashes as $hash) {
             try {
-                $this->_fsController->rmdir($basePath . '/' . substr($hash, 0, 3) . '/' . substr($hash, 3), true);
+                $this->_fsController->rmdir($basePath . '/' . substr((string) $hash, 0, 3) . '/' . substr((string) $hash, 3), true);
                 // these hashes are unchecked, there may not be previews for them! => catch, no logging (debug at most)
-            } catch(Tinebase_Exception_NotFound $tenf) {}
+            } catch(Tinebase_Exception_NotFound) {}
         }
     }
 

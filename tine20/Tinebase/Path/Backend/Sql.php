@@ -158,9 +158,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
 
         // filter out any emtpy values
-        $ids = array_filter((array) $_id, function($value) {
-            return !empty($value);
-        });
+        $ids = array_filter((array) $_id, fn($value) => !empty($value));
 
         if (empty($ids)) {
             return $parentResult;
@@ -259,7 +257,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
 
         if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
+            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . $_record::class . '". but should be instance of ' . $this->_modelName);
         }
 
         $this->_registerCallBacks();
@@ -415,9 +413,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 if (!$this->_allowComplexFilter) {
                     throw new Tinebase_Exception_NotImplemented('paths don\'t support complex filters for in memory operations');
                 } else {
-                    $filters = array_values(array_filter($_filter->getFilter('shadow_path', true, true), function ($val) {
-                        return $val->getOperator() === 'endswith';
-                    }));
+                    $filters = array_values(array_filter($_filter->getFilter('shadow_path', true, true), fn($val) => $val->getOperator() === 'endswith'));
                     $filters[0] = clone $filters[0];
                     $filters[0]->setOperator('contains');
                 }
@@ -445,7 +441,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     $value = preg_replace('#[^\w\d ]|_#u', ' ', $value);
                     // replace multiple spaces with just one
                     $value = preg_replace('# +#u', ' ', trim($value));
-                    $searchValues = array_merge($searchValues, explode(' ', $value));
+                    $searchValues = array_merge($searchValues, explode(' ', (string) $value));
                 }
                 $values = $searchValues;
             }
@@ -470,7 +466,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 foreach (static::$_modelStore as $id => $record) {
                     $parentResult->removeById($id);
                     foreach($values as $value) {
-                        if (mb_stripos((string)$record->{$field}, (string)$value) === 0 && strlen($record->{$field}) === strlen($value)) {
+                        if (mb_stripos((string)$record->{$field}, (string)$value) === 0 && strlen((string) $record->{$field}) === strlen((string) $value)) {
                             $parentResult->addRecord($record);
                             break;
                         }
@@ -483,10 +479,10 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 if ($field === 'path') {
                     foreach (static::$_modelStore as $id => $record) {
                         $parentResult->removeById($id);
-                        $fvalue = preg_replace('# +#u', ' ', trim(preg_replace('#[^\w\d ]|_#u', ' ', (string)$record->{$field})));
+                        $fvalue = preg_replace('# +#u', ' ', trim((string) preg_replace('#[^\w\d ]|_#u', ' ', (string)$record->{$field})));
                         $success = true;
                         foreach($values as $value) {
-                            if (mb_stripos($fvalue, $value) === false) {
+                            if (mb_stripos((string) $fvalue, (string) $value) === false) {
                                 $success = false;
                                 break;
                             }
@@ -500,11 +496,11 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                     foreach (static::$_modelStore as $id => $record) {
                         $parentResult->removeById($id);
                         foreach($values as $value) {
-                            if (($pos = mb_stripos($record->{$field}, $value)) !== false) {
+                            if (($pos = mb_stripos((string) $record->{$field}, (string) $value)) !== false) {
                                 if ('shadow_path' === $field) {
-                                    if ($pos + mb_strlen($value) === mb_strlen((string)$record->{$field}) ||
-                                            mb_stripos($record->{$field}, $value . '/') !== false ||
-                                            mb_stripos($record->{$field}, $value . '{') !== false) {
+                                    if ($pos + mb_strlen((string) $value) === mb_strlen((string)$record->{$field}) ||
+                                            mb_stripos((string) $record->{$field}, $value . '/') !== false ||
+                                            mb_stripos((string) $record->{$field}, $value . '{') !== false) {
                                         $parentResult->addRecord($record);
                                         break;
                                     }
@@ -521,7 +517,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 foreach (static::$_modelStore as $id => $record) {
                     $parentResult->removeById($id);
                     foreach($values as $value) {
-                        if (mb_stripos($record->{$field}, $value) === 0 && strlen($record->{$field}) === strlen($value)) {
+                        if (mb_stripos((string) $record->{$field}, (string) $value) === 0 && strlen((string) $record->{$field}) === strlen((string) $value)) {
                             $parentResult->addRecord($record);
                             break;
                         }
@@ -607,8 +603,8 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected function _registerCallBacks()
     {
         if (true !== static::$_registeredCallback) {
-            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(array($this, 'executeDelayed'));
-            Tinebase_TransactionManager::getInstance()->registerOnRollbackCallback(array($this, 'rollback'));
+            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback($this->executeDelayed(...));
+            Tinebase_TransactionManager::getInstance()->registerOnRollbackCallback($this->rollback(...));
             static::$_registeredCallback = true;
         }
     }

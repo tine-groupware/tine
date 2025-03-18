@@ -18,8 +18,8 @@
  */
 class Tinebase_Numberable_String extends Tinebase_Numberable
 {
-    const ZEROFILL     = 'zerofill';
-    const PREFIX       = 'prefix';
+    public const ZEROFILL     = 'zerofill';
+    public const PREFIX       = 'prefix';
 
     protected $_zerofill = 0;
     protected $_prefix = '';
@@ -101,9 +101,9 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
     protected function _cutStringConvertToInt($value)
     {
         $_value = (string)$value;
-        if (($len = strlen($this->_prefix)) > 0)
+        if (($len = strlen((string) $this->_prefix)) > 0)
         {
-            if (strpos($_value, $this->_prefix) !== 0) {
+            if (!str_starts_with($_value, (string) $this->_prefix)) {
                 throw new Tinebase_Exception_UnexpectedValue('prefix missing: "' . $this->_prefix . '"');
             }
             $_value = substr($_value, $len);

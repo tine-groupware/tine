@@ -24,7 +24,7 @@ class Tinebase_Twig_ImprovedFileCache extends \Twig\Cache\FilesystemCache
         try {
             parent::write($key, $content);
         } catch (\RuntimeException $re) {
-            if (strpos($re->getMessage(), 'Failed to write cache file') === 0) {
+            if (str_starts_with($re->getMessage(), 'Failed to write cache file')) {
                 clearstatcache(true, $key);
                 if (is_file($key) && is_readable($key)) {
                     return;

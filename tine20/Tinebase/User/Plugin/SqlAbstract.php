@@ -103,11 +103,11 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
         if (isset($this->_subconfigKey)) {
             $mailDbConfig = $this->_config[$this->_subconfigKey];
             $mailDbConfig['adapter'] = !empty($mailDbConfig['adapter']) ?
-                strtolower($mailDbConfig['adapter']) :
-                strtolower($this->_config['adapter']);
+                strtolower((string) $mailDbConfig['adapter']) :
+                strtolower((string) $this->_config['adapter']);
 
             $tine20DbConfig = Tinebase_Core::getDb()->getConfig();
-            $tine20DbConfig['adapter'] = strtolower(str_replace('Tinebase_Backend_Sql_Adapter_', '', get_class(Tinebase_Core::getDb())));
+            $tine20DbConfig['adapter'] = strtolower(str_replace('Tinebase_Backend_Sql_Adapter_', '', Tinebase_Core::getDb()::class));
 
             if ($mailDbConfig['adapter'] == $tine20DbConfig['adapter'] &&
                 $mailDbConfig['host'] == $tine20DbConfig['host'] &&

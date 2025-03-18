@@ -90,9 +90,9 @@ class Tinebase_Config_MCKeyFieldRecord extends Tinebase_Record_NewAbstract
         static::$translation = $translation;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return static::$translation ? static::$translation->getAdapter()->_($this->value) : $this->value;
+        return (string) (static::$translation ? static::$translation->getAdapter()->_($this->value) : $this->value);
     }
 
     public function getTitle()

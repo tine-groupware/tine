@@ -300,7 +300,7 @@ class Tinebase_Log extends Zend_Log
             // log profiling information
             $time_end = microtime(true);
             $time = $time_end - $time_start;
-            $pid = $pid === null ? getmypid() : $pid;
+            $pid ??= getmypid();
 
             if ($asJson) {
                 $message = json_encode([

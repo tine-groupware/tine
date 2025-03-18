@@ -35,49 +35,49 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * 
      * @var string
      */
-    const CURRENTACCOUNT = 'currentAccount';
+    public const CURRENTACCOUNT = 'currentAccount';
     
     /**
      * hidden from addressbook
      * 
      * @var string
      */
-    const VISIBILITY_HIDDEN    = 'hidden';
+    public const VISIBILITY_HIDDEN    = 'hidden';
     
     /**
      * visible in addressbook
      * 
      * @var string
      */
-    const VISIBILITY_DISPLAYED = 'displayed';
+    public const VISIBILITY_DISPLAYED = 'displayed';
     
     /**
      * account is enabled
      * 
      * @var string
      */
-    const ACCOUNT_STATUS_ENABLED = 'enabled';
+    public const ACCOUNT_STATUS_ENABLED = 'enabled';
     
     /**
      * account is disabled
      * 
      * @var string
      */
-    const ACCOUNT_STATUS_DISABLED = 'disabled';
+    public const ACCOUNT_STATUS_DISABLED = 'disabled';
     
     /**
      * account is expired
      * 
      * @var string
      */
-    const ACCOUNT_STATUS_EXPIRED = 'expired';
+    public const ACCOUNT_STATUS_EXPIRED = 'expired';
     
     /**
      * account is blocked
      * 
      * @var string
      */
-    const ACCOUNT_STATUS_BLOCKED  = 'blocked';
+    public const ACCOUNT_STATUS_BLOCKED  = 'blocked';
 
     /**
      * key in $_validators/$_properties array for the filed which
@@ -200,7 +200,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         $this->bypassFilters = true;
 
         if (isset($_data['accountEmailAddress'])) {
-            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode(mb_strtolower(trim($_data['accountEmailAddress'])));
+            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode(mb_strtolower(trim((string) $_data['accountEmailAddress'])));
         }
 
         parent::setFromArray($_data);
@@ -208,11 +208,11 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         $twigConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
 
         // only set accountDisplayName and accountFullName if they are not set already
-        if (!isset($_data['accountDisplayName']) || '' === trim($_data['accountDisplayName'])) {
+        if (!isset($_data['accountDisplayName']) || '' === trim((string) $_data['accountDisplayName'])) {
             $this->accountDisplayName = $this->applyAccountTwig('accountDisplayName',
                 $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_DISPLAYNAME});
         }
-        if (!isset($_data['accountFullName']) || '' === trim($_data['accountFullName'])) {
+        if (!isset($_data['accountFullName']) || '' === trim((string) $_data['accountFullName'])) {
             $this->accountFullName = $this->applyAccountTwig('accountFullName',
                 $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_FULLNAME});
         }
@@ -228,16 +228,16 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         $twigConfig = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
 
         // only set properties if they are not set already
-        if (!isset($this->_properties['accountDisplayName']) || '' === trim($this->_properties['accountDisplayName'])) {
+        if (!isset($this->_properties['accountDisplayName']) || '' === trim((string) $this->_properties['accountDisplayName'])) {
             $this->accountDisplayName = $this->applyAccountTwig('accountDisplayName',
                 $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_DISPLAYNAME});
         }
-        if (!isset($this->_properties['accountFullName']) || '' === trim($this->_properties['accountFullName'])) {
+        if (!isset($this->_properties['accountFullName']) || '' === trim((string) $this->_properties['accountFullName'])) {
             $this->accountFullName = $this->applyAccountTwig('accountFullName',
                 $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_FULLNAME});
         }
         // maybe set accountLoginName before setting accountEmailAddress, eventually the latter is based on first one
-        if (!isset($this->_properties['accountLoginName']) || '' === trim($this->_properties['accountLoginName'])) {
+        if (!isset($this->_properties['accountLoginName']) || '' === trim((string) $this->_properties['accountLoginName'])) {
             $this->accountLoginName = $this->applyAccountTwig('accountLoginName',
                 $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_LOGIN});
         }
@@ -246,7 +246,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         // value !== null && trim(value) evaluates to '' => applyTwig
         if (!array_key_exists('accountEmailAddress', $this->_properties) ||
                 (null !== $this->_properties['accountEmailAddress'] &&
-                    '' === trim($this->_properties['accountEmailAddress']))) {
+                    '' === trim((string) $this->_properties['accountEmailAddress']))) {
             $this->accountEmailAddress = Tinebase_Helper::convertDomainToPunycode(
                 $this->applyAccountTwig('accountEmailAddress', $twigConfig->{Tinebase_Config::ACCOUNT_TWIG_EMAIL}));
         }
@@ -275,7 +275,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         }
         $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
             Tinebase_Twig::TWIG_LOADER =>
-                new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function() use($twig) { return $twig; }),
+                new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, fn() => $twig),
             Tinebase_Twig::TWIG_AUTOESCAPE => false,
         ]);
         return $twig->load(__METHOD__ . $name)->render(array_merge(['email' => Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)], static::$twigContext, ['account' => $this]));
@@ -390,7 +390,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     /**
      * check if the current user has a given grant
      *
-     * @param mixed $_containerId
      * @param string $_grant
      * @param string $_aclModel
      * @return boolean
@@ -398,14 +397,14 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      *
      * TODO improve handling of different acl models
      */
-    public function hasGrant($_containerId, $_grant, $_aclModel = 'Tinebase_Model_Container')
+    public function hasGrant(mixed $_containerId, $_grant, $_aclModel = 'Tinebase_Model_Container')
     {
         if (true === static::$_forceSuperUser) {
             return true;
         }
 
         if ($_containerId instanceof Tinebase_Record_Interface) {
-            $aclModel = get_class($_containerId);
+            $aclModel = $_containerId::class;
             if (! in_array($aclModel, array('Tinebase_Model_Container', 'Tinebase_Model_Tree_Node'))) {
                 // fall back to param
                 $aclModel = $_aclModel;

@@ -29,7 +29,7 @@ class Tinebase_Presence implements Tinebase_Controller_Interface
     /**
      * session namespace
      */
-    const PRESENCE_SESSION_NAMESPACE = 'presence';
+    public const PRESENCE_SESSION_NAMESPACE = 'presence';
 
     /**
      * don't clone. Use the singleton.

@@ -28,7 +28,7 @@ class Tinebase_Server_ZendReflectionClassWrapper extends Zend_Server_Reflection_
 
         foreach ($reflection->getMethods() as $method) {
             // Don't aggregate magic methods
-            if ('__' == substr($method->getName(), 0, 2)) {
+            if (str_starts_with($method->getName(), '__')) {
                 continue;
             }
 

@@ -166,14 +166,14 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             $this->_applicationName = $this->_filter->getApplicationName();
         }
 
-        $this->_controller = ($_controller !== NULL) ? $_controller : Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        $this->_controller = $_controller ?? Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig($_additionalOptions);
         $this->_locale = Tinebase_Core::getLocale();
         if (isset($_additionalOptions['sortInfo'])) {
             if (isset($_additionalOptions['sortInfo']['field'])) {
                 $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];
-                $this->_sortInfo['dir'] = isset($_additionalOptions['sortInfo']['direction']) ? $_additionalOptions['sortInfo']['direction'] : 'ASC';
+                $this->_sortInfo['dir'] = $_additionalOptions['sortInfo']['direction'] ?? 'ASC';
             } else {
                 $this->_sortInfo =  $_additionalOptions['sortInfo'];
             }
@@ -351,7 +351,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         if ($templateFile !== NULL) {
 
             // check if template file has absolute path
-            if (strpos($templateFile, '/') !== 0) {
+            if (!str_starts_with((string) $templateFile, '/')) {
 
                 $tineFileSystemPath = Tinebase_Model_Tree_Node_Path::createFromPath('/Tinebase/folders/shared/export/templates/' . $this->_applicationName . '/' . $templateFile);
                 if (Tinebase_FileSystem::getInstance()->isFile($tineFileSystemPath->statpath)) {
@@ -359,7 +359,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
                     $fileNode = Tinebase_FileSystem::getInstance()->stat($tineFileSystemPath->statpath);
                     $templateFile = $fileNode->getFilesystemPath();
                 } else {
-                    $templateFile = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName .
+                    $templateFile = dirname(__FILE__, 3) . DIRECTORY_SEPARATOR . $this->_applicationName .
                         DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $templateFile;
                 }
             }
@@ -414,7 +414,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
             if (! empty($definition->filename)) {
                 // check if file with plugin options exists and use that
                 // TODO: this is confusing when imported an extra definition from a file having the same name as the default -> the default will be used
-                $completeFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_applicationName . 
+                $completeFilename = dirname(__FILE__, 3) . DIRECTORY_SEPARATOR . $this->_applicationName . 
                     DIRECTORY_SEPARATOR . 'Export' . DIRECTORY_SEPARATOR . 'definitions' . DIRECTORY_SEPARATOR . $definition->filename;
                 try {
                     $fileDefinition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
@@ -627,7 +627,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
     protected function _getRelationSummary(Tinebase_Record_Interface $_record)
     {
         $result = '';
-        switch(get_class($_record)) {
+        switch($_record::class) {
             case 'Addressbook_Model_Contact':
                 $result = $_record->n_fileas;
                 break;
@@ -701,8 +701,8 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
         // check for matches
         if (isset($_fieldConfig->match)) {
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_fieldConfig->match, true));
-            preg_match($_fieldConfig->match, $value, $matches);
-            $value = (isset($matches[1])) ? $matches[1] : '';
+            preg_match($_fieldConfig->match, (string) $value, $matches);
+            $value = $matches[1] ?? '';
         }
         
         return $value;
@@ -732,7 +732,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
     }
 
     public function strikeText($text){
-        $splitText = preg_split('//u', $text, null, PREG_SPLIT_NO_EMPTY);
+        $splitText = preg_split('//u', (string) $text, null, PREG_SPLIT_NO_EMPTY);
         return implode(IntlChar::chr(822), $splitText) . IntlChar::chr(822);
     }
 }

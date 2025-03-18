@@ -49,7 +49,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                     $children[] = $this->getChild($node->name);
                 }
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('path not found: ' . $this->_path);
         }
 
@@ -80,7 +80,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
         }
 
@@ -132,7 +132,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             static::checkQuota($pathRecord->getNode());
             $quotaChecked = true;
 
-            $name = urldecode(basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
+            $name = urldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
             $completeFile = static::handleOwnCloudChunkedFileUpload($name, $data);
 
             if (!$completeFile instanceof Tinebase_Model_TempFile) {

@@ -102,7 +102,7 @@ class Tinebase_WebDav_XMLUtil
 
         // The BitKinex client sends xml documents as UTF-16. PHP 5.3.1 (and presumably lower)
         // does not support this, so we must intercept this and convert to UTF-8.
-        if (substr($xml, 0, 12) === "\x3c\x00\x3f\x00\x78\x00\x6d\x00\x6c\x00\x20\x00") {
+        if (str_starts_with($xml, "\x3c\x00\x3f\x00\x78\x00\x6d\x00\x6c\x00\x20\x00")) {
 
             // Note: the preceeding byte sequence is "<?xml" encoded as UTF_16, without the BOM.
             $xml = iconv('UTF-16LE', 'UTF-8', $xml);
@@ -195,7 +195,7 @@ class Tinebase_WebDav_XMLUtil
     static function splitPath($path)
     {
         $matches = array();
-        if(preg_match('/^(?:(?:(.*)(?:\/+))?([^\/]+))(?:\/?)$/u',$path,$matches)) {
+        if(preg_match('/^(?:(?:(.*)(?:\/+))?([^\/]+))(?:\/?)$/u',(string) $path,$matches)) {
             return array($matches[1],$matches[2]);
         } else {
             return array(null,null);

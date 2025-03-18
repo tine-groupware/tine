@@ -22,13 +22,16 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
     /**
      * config key const
      */
-    const CONFIG_KEY = Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY;
+    public const CONFIG_KEY = Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY;
     protected const MAX_KEY_LENGTH = 24;
 
     /**
      * setCache() - persists cache
      *
      * @param  Tinebase_Model_CredentialCache $_cache
+     * @param ?ResponseInterface $response
+     * @return ?ResponseInterface
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function setCache(Tinebase_Model_CredentialCache $_cache, ?ResponseInterface $response = null): ?ResponseInterface
     {
@@ -38,9 +41,10 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
     /**
      * getCache() - get the credential cache
      *
-     * @return NULL|Tinebase_Model_CredentialCache
+     * @return never
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function getCache()
+    public function getCache(): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' must never be called');
     }
@@ -48,7 +52,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
     /**
      * resetCache() - resets the cache
      */
-    public function resetCache()
+    public function resetCache(): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' must never be called');
     }
@@ -82,11 +86,11 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
             throw new Tinebase_Exception_UnexpectedValue(self::CONFIG_KEY . ' not set in config!');
         }
 
-        if (strlen($key) > self::MAX_KEY_LENGTH) {
+        if (strlen((string) $key) > self::MAX_KEY_LENGTH) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                 __METHOD__ . '::' . __LINE__ . ' ' . self::CONFIG_KEY . ' is longer than '
                 . self::MAX_KEY_LENGTH . ' chars');
-            $key = substr($key, 0, self::MAX_KEY_LENGTH);
+            $key = substr((string) $key, 0, self::MAX_KEY_LENGTH);
         }
 
         return $key;

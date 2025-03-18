@@ -24,19 +24,19 @@ use Sabre\DAV\PropFind;
 class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
 {
 
-    const NS_OWNCLOUD = 'http://owncloud.org/ns';
+    public const NS_OWNCLOUD = 'http://owncloud.org/ns';
 
     /**
      * Min version of owncloud
      */
-    const OWNCLOUD_MIN_VERSION = '2.0.0';
+    public const OWNCLOUD_MIN_VERSION = '2.0.0';
 
     /**
      * Max version of owncloud
      *
      * Adjust max version of supported owncloud clients for tine
      */
-    const OWNCLOUD_MAX_VERSION = '100.0.0';
+    public const OWNCLOUD_MAX_VERSION = '100.0.0';
 
     /**
      * Client apps
@@ -64,7 +64,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
 
         $this->useragent = $server->httpRequest->getHeader('user-agent') ?? '';
 
-        $server->on('propFind', array($this, 'propFind'));
+        $server->on('propFind', $this->propFind(...));
 
         /* Namespaces | new iOS ownCloudApp uses 'oc' hardcoded */
         $server->xml->namespaceMap[self::NS_OWNCLOUD] = ($this->getOwnCloudClientPlatform() == 'iOS') ? 'oc' : 'owncloud';

@@ -18,16 +18,13 @@
  */
 class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_ServiceV1
 {
-    protected $_networkAdapter;
-
     /**
      * Tinebase_FileSystem_Preview_ServiceV2 constructor.
      * @param $networkAdapter Tinebase_FileSystem_Preview_NetworkAdapter
      */
-    public function __construct($networkAdapter)
+    public function __construct(protected $_networkAdapter)
     {
         parent::__construct();
-        $this->_networkAdapter = $networkAdapter;
     }
 
     /**
@@ -35,15 +32,15 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
      *
      * {@inheritDoc}
      *
-     * @param $filePaths array of file Paths to convert
+     * @param array $filePaths of file Paths to convert
      * @param array $config
      * @return array|bool
      * @throws Zend_Http_Client_Exception
      * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
-    public function getPreviewsForFiles(array $_filePaths, array $_config)
+    public function getPreviewsForFiles(array $filePaths, array $config)
     {
-        if (isset($_config['synchronRequest']) && $_config['synchronRequest']) {
+        if (isset($config['synchronRequest']) && $config['synchronRequest']) {
             $synchronRequest = true;
         } else {
             $synchronRequest = false;
@@ -51,9 +48,9 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
 
         $httpClient = $this->_getHttpClient($synchronRequest);
         $httpClient->setMethod(Zend_Http_Client::POST);
-        $httpClient->setParameterPost('config', json_encode($_config));
+        $httpClient->setParameterPost('config', json_encode($config));
 
-        foreach ($_filePaths as $filePath) {
+        foreach ($filePaths as $filePath) {
             $httpClient->setFileUpload($filePath, 'files[]');
         }
 
@@ -75,7 +72,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
         foreach ($responseJson as $key => $files) {
             $response[$key] = array();
             foreach ($files as $file) {
-                $blob = base64_decode($file);
+                $blob = base64_decode((string) $file);
                 if (false === $blob) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' couldn\'t base64decode response file ' . $key);
@@ -108,14 +105,14 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
     /**
      * Merges multiple pdf files into a single one.
      *
-     * @param $filePaths array of file paths
+     * @param array $filePaths of file paths
      * @param bool $synchronousRequest
      * @return string path to file
      * @throws Zend_Http_Client_Exception
      * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function mergePdfFiles($filePaths, $synchronousRequest = false)
+    public function mergePdfFiles(array $filePaths, bool $synchronousRequest = false)
     {
         foreach ($filePaths as $filePath) {
             if (mime_content_type($filePath) != 'application/pdf') {

@@ -64,11 +64,10 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     /**
      * get temp file description from db
      *
-     * @param mixed $_fileId
      * @param boolean $skipSessionCheck
      * @return Tinebase_Model_TempFile
      */
-    public function getTempFile($_fileId, $skipSessionCheck = false) : ?Tinebase_Model_TempFile
+    public function getTempFile(mixed $_fileId, $skipSessionCheck = false) : ?Tinebase_Model_TempFile
     {
         $fileId = is_array($_fileId) ? $_fileId['id'] : $_fileId;
         
@@ -115,7 +114,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
             
-            $name =       base64_decode($_SERVER['HTTP_X_FILE_NAME']);
+            $name =       base64_decode((string) $_SERVER['HTTP_X_FILE_NAME']);
             $size =       (double) $_SERVER['HTTP_X_FILE_SIZE'];
             $type =       $_SERVER['HTTP_X_FILE_TYPE'];
             $error =      0;
@@ -310,7 +309,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function clearTableAndTempdir($_date = NULL)
     {
-        $date = ($_date === NULL) ? Tinebase_DateTime::now()->subHour(6) : $_date;
+        $date = $_date ?? Tinebase_DateTime::now()->subHour(6);
         if (! $date instanceof Tinebase_DateTime) {
             $date = new Tinebase_DateTime($date);
         }
@@ -360,7 +359,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $numberOfDeletedFiles = 0;
         foreach (new DirectoryIterator($dir) as $directoryIterator) {
             $filename = $directoryIterator->getFilename();
-            if (strpos($filename, '.') === 0) {
+            if (str_starts_with($filename, '.')) {
                 // do nothing with dotfiles
                 continue;
             }

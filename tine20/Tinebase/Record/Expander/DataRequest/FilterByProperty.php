@@ -12,14 +12,12 @@
 
 class Tinebase_Record_Expander_DataRequest_FilterByProperty extends Tinebase_Record_Expander_DataRequest
 {
-    protected $property;
     protected $additionalFilters;
     protected $paging;
     protected $filterOptions;
 
-    public function __construct($prio, $controller, $property, $ids, $callback, $getDeleted = false)
+    public function __construct($prio, $controller, protected $property, $ids, $callback, $getDeleted = false)
     {
-        $this->property = $property;
         parent::__construct($prio, $controller, $ids, $callback, $getDeleted);
     }
 

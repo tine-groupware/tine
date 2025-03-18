@@ -122,14 +122,14 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * policies
      */
-    const POLICY_MAX_USERS                      = 101;
-    const POLICY_MAX_CONCURRENT_USERS           = 102;
-    const POLICY_LICENSE_TYPE                   = 103;
-    const POLICY_LICENSE_VERSION                = 104;
-    const POLICY_LICENSE_FEATURES               = 105;
-    const POLICY_DEFAULT_MAX_USERS              = 500;
-    const POLICY_DEFAULT_MAX_CONCURRENT_USERS   = 500;
-    const POLICY_DEFAULT_LICENSE_TYPE           = Tinebase_License::LICENSE_TYPE_LIMITED_USER_TIME;
+    public const POLICY_MAX_USERS                      = 101;
+    public const POLICY_MAX_CONCURRENT_USERS           = 102;
+    public const POLICY_LICENSE_TYPE                   = 103;
+    public const POLICY_LICENSE_VERSION                = 104;
+    public const POLICY_LICENSE_FEATURES               = 105;
+    public const POLICY_DEFAULT_MAX_USERS              = 500;
+    public const POLICY_DEFAULT_MAX_CONCURRENT_USERS   = 500;
+    public const POLICY_DEFAULT_LICENSE_TYPE           = Tinebase_License::LICENSE_TYPE_LIMITED_USER_TIME;
 
     /**
      * get ca file(s)
@@ -347,7 +347,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             $validFrom = new Tinebase_DateTime('@' . $data['validFrom_time_t']);
             if ($data['validTo_time_t'] > 0) {
                 $validTo = new Tinebase_DateTime('@' . $data['validTo_time_t']);
-            } else if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})/', $data['validTo'], $matches)) {
+            } else if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})/', (string) $data['validTo'], $matches)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . " Got broken validTo_time_t, using validTo ..." . print_r($matches, true));
                 $validTo = new Tinebase_DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3]);

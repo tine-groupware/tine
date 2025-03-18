@@ -11,7 +11,7 @@
  */
 
 // set include path for phpexcel
-set_include_path(dirname(dirname(dirname(dirname(__FILE__)))) . '/library/PHPExcel' . PATH_SEPARATOR . get_include_path() );
+set_include_path(dirname(__FILE__, 4) . '/library/PHPExcel' . PATH_SEPARATOR . get_include_path() );
 
 /**
  * Tinebase xls generation class
@@ -178,7 +178,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      */
     public function write()
     {
-        $xlsFormat = ($this->_config->writer) ? $this->_config->writer : 'Excel5';
+        $xlsFormat = $this->_config->writer ?: 'Excel5';
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating and sending xls to client (Format: ' . $xlsFormat . ').');
         $xlswriter = PHPExcel_IOFactory::createWriter($this->_excelObject, $xlsFormat);
         
@@ -210,7 +210,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
             // TODO file a bugreport to PHPExcel 
             @stream_wrapper_restore("zip");
             
-            $activeSheet = isset($this->_config->sheet) ? $this->_config->sheet : 1;
+            $activeSheet = $this->_config->sheet ?? 1;
             $this->_excelObject->setActiveSheetIndex($activeSheet);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
@@ -306,7 +306,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
             foreach ($this->_config->columns->column as $field) {
                 if ($field->identifier == $this->_groupBy) {
                     $this->_groupByFieldConfig = $field;
-                    $this->_groupByFieldType = (isset($field->type)) ? $field->type : 'string';
+                    $this->_groupByFieldType = $field->type ?? 'string';
                 }
                 
                 $this->_columnCount++;
@@ -405,7 +405,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
                 }
                 
                 // get type and value for cell
-                $cellType = (isset($field->type)) ? $field->type : 'string';
+                $cellType = $field->type ?? 'string';
                 $cellValue = $this->_getCellValue($field, $record, $cellType);
                 
                 // add formula

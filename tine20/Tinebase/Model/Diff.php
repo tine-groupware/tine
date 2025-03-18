@@ -20,5 +20,5 @@
  */
 class Tinebase_Model_Diff extends Tinebase_Record_Diff
 {
-    const MODEL_NAME_PART = 'Diff';
+    public const MODEL_NAME_PART = 'Diff';
 }

@@ -99,11 +99,11 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         
         // try to get description from in-memory cache & persistent cache
         try {
-            $result = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            $result = Tinebase_Cache_PerRequest::getInstance()->load(self::class, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
             if (is_array($result) && count($result) > 0) {
                 return $result;
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // do nothing
         }
         
@@ -113,7 +113,7 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         // if table does not exist (yet), $result is an empty array
         if (count($result) > 0) {
             // save result for next request
-            Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            Tinebase_Cache_PerRequest::getInstance()->save(self::class, __METHOD__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         }
         
         return $result;
@@ -121,13 +121,13 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
 
     public static function clearTableDescriptionInCache($tableName)
     {
-        if (strpos($tableName, SQL_TABLE_PREFIX) !== 0) {
+        if (!str_starts_with((string) $tableName, SQL_TABLE_PREFIX)) {
             $tableName = SQL_TABLE_PREFIX . $tableName;
         }
         $db = Tinebase_Core::getDb();
         $dbConfig = $db->getConfig();
         $cacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
-        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, __CLASS__ . '::getTableDescriptionFromCache',
+        Tinebase_Cache_PerRequest::getInstance()->reset(self::class, self::class . '::getTableDescriptionFromCache',
             $cacheId);
     }
 }

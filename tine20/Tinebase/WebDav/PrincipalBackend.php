@@ -17,10 +17,10 @@
  */
 class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend\BackendInterface
 {
-    const PREFIX_USERS  = 'principals/users';
-    const PREFIX_GROUPS = 'principals/groups';
-    const PREFIX_INTELLIGROUPS = 'principals/intelligroups';
-    const SHARED        = 'shared';
+    public const PREFIX_USERS  = 'principals/users';
+    public const PREFIX_GROUPS = 'principals/groups';
+    public const PREFIX_INTELLIGROUPS = 'principals/intelligroups';
+    public const SHARED        = 'shared';
 
     protected static $_showHiddenGroups = false;
 
@@ -102,7 +102,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
         $principal = null;
         
-        list($prefix, $id) = \Tinebase_WebDav_XMLUtil::splitPath($path);
+        [$prefix, $id] = \Tinebase_WebDav_XMLUtil::splitPath($path);
         
         // special handling for calendar proxy principals
         // they are groups in the user namespace
@@ -112,7 +112,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             // set prefix to calendar-proxy-read or calendar-proxy-write
             $prefix = $id;
             
-            list(, $id) = \Tinebase_WebDav_XMLUtil::splitPath($path);
+            [, $id] = \Tinebase_WebDav_XMLUtil::splitPath($path);
         }
         
         switch ($prefix) {
@@ -141,10 +141,10 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
             case self::PREFIX_GROUPS:
             case self::PREFIX_INTELLIGROUPS:
-                if (0 === strpos($id, 'role-')) {
+                if (str_starts_with((string) $id, 'role-')) {
                     try {
-                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById(substr($id, 5));
-                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        $role = Tinebase_Acl_Roles::getInstance()->getRoleById(substr((string) $id, 5));
+                    } catch(Tinebase_Exception_NotFound) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                             Tinebase_Core::getLogger()->notice(
                                 __METHOD__ . '::' . __LINE__ . ' Role(group) principal does not exist: ' . $id);
@@ -242,7 +242,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     {
         $result = array();
         
-        list($prefix, $id) = \Tinebase_WebDav_XMLUtil::splitPath($principal);
+        [$prefix, $id] = \Tinebase_WebDav_XMLUtil::splitPath($principal);
         
         // special handling for calendar proxy principals
         // they are groups in the user namespace
@@ -252,7 +252,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             // set prefix to calendar-proxy-read or calendar-proxy-write
             $prefix = $id;
             
-            list(, $id) = \Tinebase_WebDav_XMLUtil::splitPath($path);
+            [, $id] = \Tinebase_WebDav_XMLUtil::splitPath($path);
         }
         
         switch ($prefix) {
@@ -314,10 +314,10 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
             case self::PREFIX_GROUPS:
             case self::PREFIX_INTELLIGROUPS:
-                if (0 === strpos($id, 'role-')) {
+                if (str_starts_with((string) $id, 'role-')) {
                     $accounts = array();
                     $groups = array();
-                    foreach (Tinebase_Acl_Roles::getInstance()->getRoleMembers(substr($id, 5)) as $roleMember) {
+                    foreach (Tinebase_Acl_Roles::getInstance()->getRoleMembers(substr((string) $id, 5)) as $roleMember) {
                         if (Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP === $roleMember['account_type']) {
                             $groups[] = $roleMember['account_id'];
                         } elseif (Tinebase_Acl_Rights::ACCOUNT_TYPE_USER === $roleMember['account_type']) {
@@ -405,7 +405,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     {
         $result = array();
         
-        list($prefix, $contactId) = \Tinebase_WebDav_XMLUtil::splitPath($principal);
+        [$prefix, $contactId] = \Tinebase_WebDav_XMLUtil::splitPath($principal);
         
         switch ($prefix) {
             case self::PREFIX_GROUPS:
@@ -417,8 +417,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     $classCacheId = $principal . '::' . static::$_showHiddenGroups;
                     
                     try {
-                        return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __FUNCTION__, $classCacheId);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        return Tinebase_Cache_PerRequest::getInstance()->load(self::class, __FUNCTION__, $classCacheId);
+                    } catch (Tinebase_Exception_NotFound) {
                         // continue...
                     }
                     
@@ -429,7 +429,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     $result = $cache->load($cacheId);
                     
                     if ($result !== FALSE) {
-                        Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __FUNCTION__, $classCacheId, $result);
+                        Tinebase_Cache_PerRequest::getInstance()->save(self::class, __FUNCTION__, $classCacheId, $result);
                         
                         return $result;
                     }
@@ -478,7 +478,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                             $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';
                         }
                     }
-                    Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __FUNCTION__, $classCacheId, $result);
+                    Tinebase_Cache_PerRequest::getInstance()->save(self::class, __FUNCTION__, $classCacheId, $result);
                     $cache->save($result, $cacheId, array(), 60 * 3);
                 }
                 
@@ -737,10 +737,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                                 if ($group->list_id) {
                                     $containerPrincipals[] = self::PREFIX_GROUPS . '/' . $group->list_id;
                                 }
-                            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                                // skip group
-                                continue 2;
-                            } catch (Tinebase_Exception_NotFound $tenf) {
+                            } catch (Tinebase_Exception_Record_NotDefined|Tinebase_Exception_NotFound) {
                                 // skip group
                                 continue 2;
                             }
@@ -756,10 +753,10 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                                 if ($user->contact_id) {
                                     $containerPrincipals[] = self::PREFIX_USERS . '/' . $user->contact_id;
                                 }
-                            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                            } catch (Tinebase_Exception_Record_NotDefined) {
                                 // skip group
                                 continue 2;
-                            } catch (Tinebase_Exception_NotFound $tenf) {
+                            } catch (Tinebase_Exception_NotFound) {
                                 // skip user
                                 continue 2;
                             }
@@ -770,7 +767,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                             try {
                                 $role = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
                                 $containerPrincipals[] = self::PREFIX_GROUPS . '/role-' . $role->id;
-                            } catch (Tinebase_Exception_NotFound $tenf) {
+                            } catch (Tinebase_Exception_NotFound) {
                                 // skip role
                                 continue 2;
                             }

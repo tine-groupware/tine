@@ -176,7 +176,7 @@ class Tinebase_State
      */
     public static function decode($raw)
     {
-        if (preg_match('/^(a|n|d|b|s|o)\:(.*)$/', urldecode($raw), $matches)) {
+        if (preg_match('/^(a|n|d|b|s|o)\:(.*)$/', urldecode((string) $raw), $matches)) {
             $type = $matches[1];
             $v = $matches[2];
 

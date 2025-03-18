@@ -37,43 +37,43 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
      * pending status
      *
      */
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
     
     /**
      * failure status
      *
      */
-    const STATUS_FAILURE = 'failure';
+    public const STATUS_FAILURE = 'failure';
 
     /**
      * success status
      *
      */
-    const STATUS_SUCCESS = 'success';
+    public const STATUS_SUCCESS = 'success';
     
     /**
      * minutes_before value for custom alarm time
      */
-    const OPTION_CUSTOM = 'custom';
+    public const OPTION_CUSTOM = 'custom';
     
     /**
      * ack client option
      */
-    const OPTION_ACK_CLIENT = 'ack_client';
+    public const OPTION_ACK_CLIENT = 'ack_client';
     
     /**
      * ack ip option
      */
-    const OPTION_ACK_IP = 'ack_ip';
+    public const OPTION_ACK_IP = 'ack_ip';
 
-    const OPT_SKIP = 'skip';
-    const OPT_ACK = 'ack';
-    const OPT_SNOOZE = 'snooze';
+    public const OPT_SKIP = 'skip';
+    public const OPT_ACK = 'ack';
+    public const OPT_SNOOZE = 'snooze';
     
     /**
      * default minutes_before value
      */
-    const DEFAULT_MINUTES_BEFORE = 15;
+    public const DEFAULT_MINUTES_BEFORE = 15;
 
     public const FLD_ALARM_TIME = 'alarm_time';
     public const FLD_MINUTES_BEFORE = 'minutes_before';
@@ -233,11 +233,10 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
     
     /**
      * sets an option
-     * 
+     *
      * @param string|array $_key
-     * @param mixed $_value
      */
-    public function setOption($_key, $_value = null)
+    public function setOption($_key, mixed $_value = null)
     {
         $options = $this->options ? Zend_Json::decode($this->options) : array();
         

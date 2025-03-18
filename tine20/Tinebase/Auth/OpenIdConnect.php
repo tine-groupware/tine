@@ -45,7 +45,7 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
     {
         // TODO validate state / auth?
 
-        parse_str($this->_oidcResponse, $responseArray);
+        parse_str((string) $this->_oidcResponse, $responseArray);
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($responseArray, true));
 
         if (! isset($responseArray['access_token'])) {
@@ -125,7 +125,7 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
             // fetch user from DB (need to put user email address in user table)
             // always use email as ID?
             $user = Tinebase_User::getInstance()->getUserByProperty('openid', $this->_userInfo->email, Tinebase_Model_FullUser::class);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $user = null;
         }
 

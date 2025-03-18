@@ -53,7 +53,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
             throw new Tinebase_Exception_InvalidArgument('Tag filter needs the applicationName option');
         }
         
-        $_options['idProperty'] = isset($_options['idProperty']) ? $_options['idProperty'] : 'id';
+        $_options['idProperty'] ??= 'id';
         
         $this->_options = $_options;
     }

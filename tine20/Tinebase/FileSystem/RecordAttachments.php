@@ -44,7 +44,7 @@ class Tinebase_FileSystem_RecordAttachments
     public function getRecordAttachments(Tinebase_Record_Interface $record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Fetching attachments of ' . get_class($record) . ' record with id ' . $record->getId() . ' ...');
+            ' Fetching attachments of ' . $record::class . ' record with id ' . $record->getId() . ' ...');
         
         $parentPath = $this->getRecordAttachmentPath($record);
         
@@ -62,7 +62,7 @@ class Tinebase_FileSystem_RecordAttachments
 
             // to resolve grants... but as not needed currently we save the effort
             //Filemanager_Controller_Node::getInstance()->resolveGrants($record->attachments);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $record->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
         
@@ -83,7 +83,7 @@ class Tinebase_FileSystem_RecordAttachments
     public function getMultipleAttachmentsOfRecords($records)
     {
         if ($records instanceof Tinebase_Record_Interface) {
-            $records = new Tinebase_Record_RecordSet(get_class($records), array($records));
+            $records = new Tinebase_Record_RecordSet($records::class, array($records));
         }
 
         if ($records->count() === 0) {
@@ -108,7 +108,7 @@ class Tinebase_FileSystem_RecordAttachments
         // top folder for record attachments
         try {
             $classPathNode = $this->_fsController->stat($classPathName);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         }
 
@@ -191,16 +191,15 @@ class Tinebase_FileSystem_RecordAttachments
     }
     
     /**
-     * add attachment to record
-     * 
-     * @param  Tinebase_Record_Interface $record
-     * @param  string $name
-     * @param  mixed $attachment
-         @see Tinebase_FileSystem::copyTempfile
-     * @return null|Tinebase_Model_Tree_Node
-     * @throws Tinebase_Exception_Duplicate
-     */
-    public function addRecordAttachment(Tinebase_Record_Interface $record, $name, $attachment)
+    * add attachment to record
+    *
+    * @param  Tinebase_Record_Interface $record
+    * @param  string $name
+        @see Tinebase_FileSystem::copyTempfile
+    * @return null|Tinebase_Model_Tree_Node
+    * @throws Tinebase_Exception_Duplicate
+    */
+    public function addRecordAttachment(Tinebase_Record_Interface $record, $name, mixed $attachment)
     {
         if (!$name && isset($attachment->tempFile) && ! is_resource($attachment->tempFile)) {
             $attachment = Tinebase_TempFile::getInstance()->getTempFile($attachment->tempFile);
@@ -215,7 +214,7 @@ class Tinebase_FileSystem_RecordAttachments
                     $tmpNode = $this->_fsController->get($attachment->id, true);
                     $tmpPath = $this->_fsController->getPathOfNode($tmpNode, true);
                     $attachment = $this->_fsController->stat($tmpPath, null, true);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
                             __LINE__ . ' could not find attachment record with id: ' . $attachment->id);
                 }
@@ -242,8 +241,8 @@ class Tinebase_FileSystem_RecordAttachments
             return null;
         }
 
-        if (mb_strlen($name) > 255) {
-            $name = mb_substr($name, 0, 255);
+        if (mb_strlen((string) $name) > 255) {
+            $name = mb_substr((string) $name, 0, 255);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attachment name too long,
                  truncating to ' . $name);
@@ -294,7 +293,7 @@ class Tinebase_FileSystem_RecordAttachments
         
         $parentPath = $this->_fsController->getApplicationBasePath($record->getApplication(),
             Tinebase_FileSystem::FOLDER_TYPE_RECORDS);
-        $recordPath = $parentPath . '/' . get_class($record) . '/' . $record->getId();
+        $recordPath = $parentPath . '/' . $record::class . '/' . $record->getId();
         if ($createDirIfNotExists && ! $this->_fsController->fileExists($recordPath)) {
             $this->_fsController->mkdir($recordPath);
         }
@@ -313,7 +312,7 @@ class Tinebase_FileSystem_RecordAttachments
     {
         $parentPath = $this->_fsController->getApplicationBasePath($record->getApplication(),
             Tinebase_FileSystem::FOLDER_TYPE_RECORDS);
-        $recordPath = $parentPath . '/' . get_class($record);
+        $recordPath = $parentPath . '/' . $record::class;
         if ($createDirIfNotExists && ! $this->_fsController->fileExists($recordPath)) {
             $this->_fsController->mkdir($recordPath);
         }

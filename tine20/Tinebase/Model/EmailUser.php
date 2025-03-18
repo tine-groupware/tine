@@ -118,7 +118,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
                  ] as $arrayField => $model) {
             if (isset($_data[$arrayField])) {
                 $data = ! is_array($_data[$arrayField])
-                    ? explode(',', preg_replace('/ /', '', $_data[$arrayField]))
+                    ? explode(',', (string) preg_replace('/ /', '', $_data[$arrayField]))
                     : $_data[$arrayField];
                 array_walk($data, function (&$value) {
                     if (! is_array($value) && $value) {
@@ -127,9 +127,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
                         ];
                     }
                 });
-                $data = array_filter($data, function($value) {
-                    return is_array($value) && isset($value['email']) && $value['email'];
-                });
+                $data = array_filter($data, fn($value) => is_array($value) && isset($value['email']) && $value['email']);
                 $_data[$arrayField] = new Tinebase_Record_RecordSet($model, $data);
             }
         }

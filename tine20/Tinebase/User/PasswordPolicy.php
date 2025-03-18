@@ -60,7 +60,7 @@ class Tinebase_User_PasswordPolicy
         static::_addChars($chars, 97, 122, (int)$policies[Tinebase_Config::PASSWORD_POLICY_MIN_WORD_CHARS]);
 
         shuffle($chars);
-        return implode($chars);
+        return implode('', $chars);
     }
 
     protected static function _addChars(array &$array, int $min, int $max, int $count)
@@ -157,7 +157,7 @@ class Tinebase_User_PasswordPolicy
                         __METHOD__ . '::' . __LINE__ . ' Testing if password is part of username "' . $regex . '"');
 
                     if (! empty($password)) {
-                        $result = preg_match('/' . preg_quote($password, '/') . '/i', $regex) ?
+                        $result = preg_match('/' . preg_quote($password, '/') . '/i', (string) $regex) ?
                             $description :
                             true;
                     }

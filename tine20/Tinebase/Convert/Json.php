@@ -82,7 +82,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
         // for resolving we'll use recordset
         /** @var Tinebase_Record_Interface $recordClassName */
-        $recordClassName = get_class($_record);
+        $recordClassName = $_record::class;
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Converting record of class ' . $recordClassName);
@@ -269,9 +269,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 } else {
                     try {
                         $foreignRecords = $this->_getForeignRecords($foreignIds, $foreignRecordClassName,
-                            isset($cfg[MCC::CONFIG][MCC::RESOLVE_DELETED]) ?
-                                $cfg[MCC::CONFIG][MCC::RESOLVE_DELETED] : false);
-                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                            $cfg[MCC::CONFIG][MCC::RESOLVE_DELETED] ?? false);
+                    } catch (Tinebase_Exception_AccessDenied) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' No right to access application of record ' . $foreignRecordClassName);
                         continue;
@@ -280,7 +279,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
                 foreach ($foreignRecordsArray as $id => $rec) {
                     if ($foreignRecords->getById($id) === false) {
-                        if ($cfg['type'] === 'user' && get_class($rec) === Tinebase_Model_User::class) {
+                        if ($cfg['type'] === 'user' && $rec::class === Tinebase_Model_User::class) {
                             $rec = new Tinebase_Model_FullUser($rec->toArray(), true);
                         }
                         $foreignRecords->addRecord($rec);
@@ -391,7 +390,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if (isset($value['id'])) {
                     $value = [$value['id']];
                 } else {
-                    $value = array_filter($value, function ($val) { return is_scalar($val); });
+                    $value = array_filter($value, fn($val) => is_scalar($val));
                 }
             } elseif (is_scalar($value)) {
                 $value = [$value];
@@ -406,7 +405,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         try {
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
+        } catch (Tinebase_Exception_AccessDenied) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                 . ' No right to access application of record ' . $foreignRecordClassName);
             return;
@@ -441,7 +440,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                             case 'Tinebase_Model_FullUser':
                                 try {
                                     $record->{$field} = Tinebase_User::getInstance()->getUserById($record->{$field}, Tinebase_Model_User::class, true);
-                                } catch (Tinebase_Exception_NotFound $tenf) {
+                                } catch (Tinebase_Exception_NotFound) {
                                     $record->{$field} = Tinebase_User::getInstance()->getNonExistentUser();
                                 }
                                 break;
@@ -485,7 +484,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             foreach ($_records->{$property} as $idx => $recordOrRecords) {
                 // cope with single records
                 if ($recordOrRecords instanceof Tinebase_Record_Interface) {
-                    $records = new Tinebase_Record_RecordSet(get_class($recordOrRecords));
+                    $records = new Tinebase_Record_RecordSet($recordOrRecords::class);
                     $records->addRecord($recordOrRecords);
                 } else {
                     $records = $recordOrRecords;
@@ -547,9 +546,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             return;
         }
 
-        $resolveFields = array_filter((array)$modelConfiguration->recordFields, function($val) {
-            return isset($val[MCC::CONFIG][MCC::REF_ID_FIELD]);
-        });
+        $resolveFields = array_filter((array)$modelConfiguration->recordFields, fn($val) => isset($val[MCC::CONFIG][MCC::REF_ID_FIELD]));
 
         if (! ($resolveFields = array_merge($resolveFields, (array)$modelConfiguration->recordsFields))) {
             return;
@@ -597,8 +594,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
 
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray,
-                Tinebase_Model_Filter_FilterGroup::CONDITION_AND, isset($config[MCC::FILTER_OPTIONS]) ?
-                    $config[MCC::FILTER_OPTIONS] : []);
+                Tinebase_Model_Filter_FilterGroup::CONDITION_AND, $config[MCC::FILTER_OPTIONS] ?? []);
 
             $paging = NULL;
             if (isset($config['paging']) && is_array($config['paging'])) {
@@ -732,9 +728,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                             continue;
                         }
                         $class = $class::getInstance();
-                        
+
                         $resultSet = $class->$method($resultSet);
-                        
+
                     }
                 // if no array has been given, this should be a function name
                 } else {

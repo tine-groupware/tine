@@ -17,7 +17,7 @@
  */
 class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_Interface_SyncAble
 {
-    const PLUGIN_SAMBA = 'Tinebase_Group_LdapPlugin_Samba';
+    public const PLUGIN_SAMBA = 'Tinebase_Group_LdapPlugin_Samba';
     
     /**
      * the ldap backend
@@ -136,8 +136,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $this->_isDisabledBackend = true;
         }
         
-        $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
-        $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
+        $this->_userUUIDAttribute  = strtolower((string) $this->_options['userUUIDAttribute']);
+        $this->_groupUUIDAttribute = strtolower((string) $this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
         $this->_userBaseFilter     = $this->_options['userFilter'];
         $this->_userSearchScope    = $this->_options['userSearchScope'];
@@ -198,7 +198,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $result = new Tinebase_Model_Group(array(
             'id'            => $this->_decodeGroupId($group[$this->_groupUUIDAttribute][0]),
             'name'          => $group['cn'][0],
-            'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
+            'description'   => $group['description'][0] ?? '' 
         ), TRUE);
         
         return $result;
@@ -242,7 +242,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $groupObject = new Tinebase_Model_Group(array(
                 'id'            => $this->_decodeGroupId($group[$this->_groupUUIDAttribute][0]),
                 'name'          => $group['cn'][0],
-                'description'   => isset($group['description'][0]) ? $group['description'][0] : null
+                'description'   => $group['description'][0] ?? null
             ), TRUE);
 
             $result->addRecord($groupObject);
@@ -555,7 +555,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         try {
             $accountMetaData = $this->_getAccountMetaData($_accountId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_accountId);
             return;
         }
@@ -718,7 +718,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         foreach ($groupIds as $groupId) {
             try {
                 $dn = $this->_getDn($groupId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // group does not exist in LDAP backend any more
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Did not found group with id ' . $groupId . ' in LDAP. Delete skipped!');

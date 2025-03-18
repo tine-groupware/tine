@@ -291,7 +291,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             try {
                 Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $queryResult['userid']);
                 throw new Tinebase_Exception_SystemGeneric('could not overwrite email data of user ' . $queryResult['userid']);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                         . __LINE__ . ' Removing old email data of userid ' . $queryResult['userid']);
@@ -502,9 +502,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                 // create email -> forward
                 $this->_addDestination(array(
                     $userIdField  => $userId,
-                    'source'      => isset($source['email']) ? $source['email'] : $source,
+                    'source'      => $source['email'] ?? $source,
                     'destination' => $forwardAddress->email,
-                    'dispatch_address' => isset($source['dispatch_address']) ? $source['dispatch_address'] : 1
+                    'dispatch_address' => $source['dispatch_address'] ?? 1
                 ));
             }
         }
@@ -633,7 +633,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             ) {
                 $aliases[] = [
                     'email' => $destination['source'],
-                    'dispatch_address' => isset($destination['dispatch_address']) ? $destination['dispatch_address'] : 1
+                    'dispatch_address' => $destination['dispatch_address'] ?? 1
                 ];
                 $sources[] = $destination['source'];
             }
@@ -656,7 +656,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _getDispatchAddress($userid, $aliases, $userIdProperty = null)
     {
-        $userIdProperty = $userIdProperty ? $userIdProperty : $this->_propertyMapping['emailUserId'];
+        $userIdProperty = $userIdProperty ?: $this->_propertyMapping['emailUserId'];
 
         $select = $this->_db->select()
             ->from($this->_destinationTable)
@@ -671,7 +671,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             ) {
                 $result[] = [
                     'email' => $destination['source'],
-                    'dispatch_address' => isset($destination['dispatch_address']) ? $destination['dispatch_address'] : 1
+                    'dispatch_address' => $destination['dispatch_address'] ?? 1
                 ];
             }
         }
@@ -832,7 +832,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
-            . escapeshellarg($dbConfig['dbname']) . ' '
+            . escapeshellarg((string) $dbConfig['dbname']) . ' '
             . escapeshellarg($this->_userTable)
             .' --where="' . "client_idnr='$clientId'" . '"'
             ." | bzip2 > $backupDir/tine20_postfix_users.sql.bz2";
@@ -853,7 +853,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
-            . escapeshellarg($dbConfig['dbname']) . ' '
+            . escapeshellarg((string) $dbConfig['dbname']) . ' '
             . escapeshellarg($this->_destinationTable)
             . ' --where="' . $where . '"'
             ." | bzip2 > $backupDir/tine20_postfix_destination.sql.bz2";

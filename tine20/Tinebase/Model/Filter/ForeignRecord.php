@@ -183,7 +183,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                 continue;
             }
 
-            if (strpos($filterData['field'], ':') !== FALSE) {
+            if (str_contains((string) $filterData['field'], ':')) {
                 $value[$idx]['field'] = str_replace(':', '', $filterData['field']);
                 $prefixedFields[] = $value[$idx]['field'];
             }
@@ -347,10 +347,10 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             if (method_exists($controller, 'get')) {
                 $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ true)->toArray();
             } else {
-                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . get_class($controller) . ' has no get method');
+                Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . $controller::class . ' has no get method');
                 return $value;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             $recordArray = $value;
         }
 

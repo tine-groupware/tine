@@ -21,16 +21,6 @@
 class Tinebase_Twig_CallBackLoader implements Twig\Loader\LoaderInterface, Twig\Loader\SourceContextLoaderInterface, Twig\Loader\ExistsLoaderInterface
 {
     /**
-     * @var int|null
-     */
-    protected $_creationTimeStamp = null;
-
-    /**
-     * @var null|string
-     */
-    protected $_name = null;
-
-    /**
      * @var callable|null
      */
     protected $_callBack = null;
@@ -38,13 +28,11 @@ class Tinebase_Twig_CallBackLoader implements Twig\Loader\LoaderInterface, Twig\
     /**
      * Tinebase_Twig_Loader constructor.
      * @param string   $_name
-     * @param int      $_timeStamp
+     * @param int $_creationTimeStamp
      * @param callable $_callBack
      */
-    public function __construct($_name, $_timeStamp, $_callBack)
+    public function __construct(protected $_name, protected $_creationTimeStamp, $_callBack)
     {
-        $this->_name = $_name;
-        $this->_creationTimeStamp = $_timeStamp;
         $this->_callBack = $_callBack;
     }
 
@@ -57,7 +45,7 @@ class Tinebase_Twig_CallBackLoader implements Twig\Loader\LoaderInterface, Twig\
      */
     public function exists($name)
     {
-        return $name === $this->_name || strpos($name, $this->_name . '#~#') === 0;
+        return $name === $this->_name || str_starts_with($name, $this->_name . '#~#');
     }
 
     /**
@@ -100,7 +88,7 @@ class Tinebase_Twig_CallBackLoader implements Twig\Loader\LoaderInterface, Twig\
      */
     function getCacheKey($name)
     {
-        if ($name !== $this->_name && strpos($name, $this->_name . '#~#') !== 0) {
+        if ($name !== $this->_name && !str_starts_with($name, $this->_name . '#~#')) {
             throw new Twig_Error_Loader('template ' . $name . ' not found');
         }
         return $name . $this->_creationTimeStamp;
@@ -117,7 +105,7 @@ class Tinebase_Twig_CallBackLoader implements Twig\Loader\LoaderInterface, Twig\
      */
     function isFresh($name, $time)
     {
-        if ($name !== $this->_name && strpos($name, $this->_name . '#~#') !== 0) {
+        if ($name !== $this->_name && !str_starts_with($name, $this->_name . '#~#')) {
             throw new Twig_Error_Loader('template ' . $name . ' not found');
         }
         return $time > $this->_creationTimeStamp;

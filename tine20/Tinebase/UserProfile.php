@@ -19,7 +19,7 @@ class Tinebase_UserProfile
      * Config key for allowed userProfile fields
      * @staticvar string
      */
-    const USERPROFILEFIELDS = 'userProfileFields';
+    public const USERPROFILEFIELDS = 'userProfileFields';
     
     /**
      * possible profile fields

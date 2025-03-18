@@ -28,10 +28,10 @@
  */
 class Tinebase_Helper_Algorithm_TerminationDeadline
 {
-    const END_OF_MONTH = 'end_of_month';
-    const END_OF_QUARTER = 'end_of_quarter';
-    const END_OF_HALF_YEAR = 'end_of_half_year';
-    const END_OF_YEAR = 'end_of_year';
+    public const END_OF_MONTH = 'end_of_month';
+    public const END_OF_QUARTER = 'end_of_quarter';
+    public const END_OF_HALF_YEAR = 'end_of_half_year';
+    public const END_OF_YEAR = 'end_of_year';
 
     /**
      * @var Tinebase_Helper_Algorithm_TerminationDeadline

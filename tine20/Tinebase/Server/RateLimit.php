@@ -32,7 +32,7 @@ class Tinebase_Server_RateLimit
     {
         $cacheConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::CACHE);
         $active = strtolower($cacheConfig->backend) === 'redis';
-        $redisConfig = isset($cacheConfig['redis']) ? $cacheConfig['redis'] : $cacheConfig;
+        $redisConfig = $cacheConfig['redis'] ?? $cacheConfig;
         $this->_config = [
             'active' => $active,
             'redis' => $redisConfig,
@@ -59,9 +59,7 @@ class Tinebase_Server_RateLimit
 
     public function getLimitDefinition(string $user, string $method): ?array
     {
-        $limits = array_filter($this->_config['ratelimits'][$user], function($ratelimit) use ($method) {
-            return $ratelimit['method'] === $method;
-        });
+        $limits = array_filter($this->_config['ratelimits'][$user], fn($ratelimit) => $ratelimit['method'] === $method);
 
         return count($limits) > 0 ? array_pop($limits) : null;
     }

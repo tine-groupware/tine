@@ -83,12 +83,12 @@ final class Tinebase_Auth_Webauthn
                 }
                 $credentialCreationOptions->setAuthenticatorSelection($criteria);
             }
-            Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge = json_encode($credentialCreationOptions->jsonSerialize());
+            Tinebase_Session::getSessionNamespace(self::class)->regchallenge = json_encode($credentialCreationOptions->jsonSerialize());
         } else {
-            if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge)) {
+            if (!($challenge = Tinebase_Session::getSessionNamespace(self::class)->regchallenge)) {
                 throw new Tinebase_Exception_Backend('no registration challenge found');
             }
-            Tinebase_Session::getSessionNamespace(__CLASS__)->regchallenge = null;
+            Tinebase_Session::getSessionNamespace(self::class)->regchallenge = null;
             $credentialCreationOptions = \Webauthn\PublicKeyCredentialCreationOptions::createFromString($challenge);
         }
 
@@ -98,10 +98,10 @@ final class Tinebase_Auth_Webauthn
     public static function getWebAuthnRequestOptions(Tinebase_Model_MFA_WebAuthnConfig $config, bool $generateChallenge, ?Tinebase_Model_FullUser $account = null, ?string $mfaId = null): \Webauthn\PublicKeyCredentialRequestOptions
     {
         if (false === $generateChallenge) {
-            if (!($challenge = Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge)) {
+            if (!($challenge = Tinebase_Session::getSessionNamespace(self::class)->authchallenge)) {
                 throw new Tinebase_Exception_Backend('no authentication challenge found');
             }
-            Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge = null;
+            Tinebase_Session::getSessionNamespace(self::class)->authchallenge = null;
             $credentialRequestOptions = \Webauthn\PublicKeyCredentialRequestOptions::createFromString($challenge);
         } else {
             $credDescriptors = [];
@@ -130,7 +130,7 @@ final class Tinebase_Auth_Webauthn
                 $clientInputs
             );
 
-            Tinebase_Session::getSessionNamespace(__CLASS__)->authchallenge = json_encode($credentialRequestOptions->jsonSerialize());
+            Tinebase_Session::getSessionNamespace(self::class)->authchallenge = json_encode($credentialRequestOptions->jsonSerialize());
         }
 
         return $credentialRequestOptions;

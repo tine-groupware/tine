@@ -20,12 +20,12 @@ class Tinebase_Model_CustomField_Grant extends Tinebase_Record_Abstract
     /**
      * grant to write custom field
      */
-    const GRANT_READ = 'readGrant';
+    public const GRANT_READ = 'readGrant';
     
     /**
      * grant to write custom field
      */
-    const GRANT_WRITE = 'writeGrant';
+    public const GRANT_WRITE = 'writeGrant';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -73,7 +73,7 @@ class Tinebase_Model_CustomField_Grant extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         if (is_array($_data) && isset($_data['account_grant'])) {
-            $rights = explode(',', $_data['account_grant']);
+            $rights = explode(',', (string) $_data['account_grant']);
             $_data['readGrant'] = in_array(self::GRANT_READ, $rights);
             $_data['writeGrant']  = in_array(self::GRANT_WRITE, $rights);
         }

@@ -19,14 +19,14 @@
 
 class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\TemplateProcessor
 {
-    const TYPE_STANDARD = 'standard';
-    const TYPE_DATASOURCE = 'datasource';
-    const TYPE_GROUP = 'group';
-    const TYPE_SUBGROUP = 'subgroup';
-    const TYPE_RECORD = 'record';
-    const TYPE_SUBRECORD = 'subrecord';
+    public const TYPE_STANDARD = 'standard';
+    public const TYPE_DATASOURCE = 'datasource';
+    public const TYPE_GROUP = 'group';
+    public const TYPE_SUBGROUP = 'subgroup';
+    public const TYPE_RECORD = 'record';
+    public const TYPE_SUBRECORD = 'subrecord';
 
-    const NEW_LINE_PLACEHOLDER = 'WORD_NEWLINE';
+    public const NEW_LINE_PLACEHOLDER = 'WORD_NEWLINE';
 
     /**
      * Content of document rels (in XML format) of the temporary document.
@@ -38,8 +38,6 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     protected $_tempHeaderRels = array();
 
     protected $_tempFooterRels = array();
-
-    protected $_type = null;
 
     protected $_parent = null;
 
@@ -54,20 +52,19 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     /**
      * @param string $documentTemplate The fully qualified template filename.
      * @param bool   $inMemory
-     * @param string $type
+     * @param string $_type
      * @param Tinebase_Export_Richtext_TemplateProcessor|null $parent
      *
      * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
      * @throws \PhpOffice\PhpWord\Exception\CopyFileException
      */
-    public function __construct($documentTemplate, $inMemory = false, $type = self::TYPE_STANDARD, Tinebase_Export_Richtext_TemplateProcessor $parent = null, $name = '')
+    public function __construct($documentTemplate, $inMemory = false, protected $_type = self::TYPE_STANDARD, Tinebase_Export_Richtext_TemplateProcessor $parent = null, $name = '')
     {
-        $this->_type = $type;
         $this->_parent = $parent;
         if (null !== $parent) {
              $this->_twigName = $parent->getTwigName();
         }
-        $this->_twigName .= $type . $name;
+        $this->_twigName .= $this->_type . $name;
 
         if (true === $inMemory) {
             $this->tempDocumentMainPart = $documentTemplate;
@@ -275,19 +272,19 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         $offset = 0;
 
         do {
-            if (false === ($newOffset = strpos($xmlData, 'descr="tine20://', $offset)) &&
-                    false === ($newOffset = strpos($xmlData, 'descr="file://', $offset))) {
+            if (false === ($newOffset = strpos((string) $xmlData, 'descr="tine20://', $offset)) &&
+                    false === ($newOffset = strpos((string) $xmlData, 'descr="file://', $offset))) {
                 break;
             }
             $offset = $newOffset;
-            if (false === ($drawOffset = strrpos($xmlData, '<w:drawing', 0 - (strlen($xmlData) - $offset)))) {
+            if (false === ($drawOffset = strrpos((string) $xmlData, '<w:drawing', 0 - (strlen((string) $xmlData) - $offset)))) {
                 break;
             }
-            if (false === ($drawEndOffset = strpos($xmlData, '</w:drawing>', $offset))) {
+            if (false === ($drawEndOffset = strpos((string) $xmlData, '</w:drawing>', $offset))) {
                 break;
             }
 
-            $drawingStr = substr($xmlData, $drawOffset, $drawEndOffset - $drawOffset + 12);
+            $drawingStr = substr((string) $xmlData, $drawOffset, $drawEndOffset - $drawOffset + 12);
             if (preg_match(
                     '#<w:drawing[^>]*>.*<wp:docPr[^>]+descr="(\w+://[^"]+)".+r:embed="([^"]+)".+</w:drawing>#is',
                     $drawingStr, $match)) {
@@ -301,7 +298,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                             ' unsupported file extension: ' . $match[1]);
                     continue;
                 }
-                if (preg_match('#Relationship Id="' . $match[2] . '"[^>]+Target="(media/[^"]+)"#', $relData, $relMatch)) {
+                if (preg_match('#Relationship Id="' . $match[2] . '"[^>]+Target="(media/[^"]+)"#', (string) $relData, $relMatch)) {
                     // if file was not found try all (other) supported file extensions
                     // i.e. file might be defined as jpg but a tiff with this name is in the filemanager
                     if (!is_file($match[1])) {
@@ -746,17 +743,13 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^{}%]*\{[^}]*\}[^}]*\}|U',
-            function ($match) {
-                return strip_tags($match[0]);
-            },
+            fn($match) => strip_tags((string) $match[0]),
             $fixedDocumentPart
         );
 
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^{}%]*%[^}]*%[^}]*\}|U',
-            function ($match) {
-                return strip_tags($match[0]);
-            },
+            fn($match) => strip_tags((string) $match[0]),
             $fixedDocumentPart
         );
 
@@ -775,17 +768,13 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
     {
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^}{%]*\{[^}]*\}[^}]*\}|U',
-            function ($match) {
-                return htmlspecialchars_decode(strip_tags($match[0]), ENT_QUOTES | ENT_XML1);
-            },
+            fn($match) => htmlspecialchars_decode(strip_tags((string) $match[0]), ENT_QUOTES | ENT_XML1),
             $documentPart
         );
 
         $fixedDocumentPart = preg_replace_callback(
             '|\{[^}{%]*%[^}]*\}|U',
-            function ($match) {
-                return htmlspecialchars_decode(strip_tags($match[0]), ENT_QUOTES | ENT_XML1);
-            },
+            fn($match) => htmlspecialchars_decode(strip_tags((string) $match[0]), ENT_QUOTES | ENT_XML1),
             $fixedDocumentPart
         );
 
@@ -813,7 +802,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         if (!preg_match('/^(.*\<w:hdr[^>]+>)(.*)/m', $this->tempDocumentHeaders[$headerIndex], $match)) {
             return;
         }
-        $watermark = str_replace('PROFORMA', htmlspecialchars($text, ENT_XML1|ENT_DISALLOWED|ENT_NOQUOTES),
+        $watermark = str_replace('PROFORMA', htmlspecialchars((string) $text, ENT_XML1|ENT_DISALLOWED|ENT_NOQUOTES),
             '<w:sdt><w:sdtPr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w15:appearance xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" w15:val="boundingBox"/><w:placeholder><w:docPart w:val="DefaultPlaceholder_TEXT"/></w:placeholder><w:docPartObj><w:docPartGallery w:val="Watermarks"/><w:docPartUnique w:val="true"/></w:docPartObj><w:rPr><w:rFonts w:cs="Arial" w:eastAsia="Arial"/></w:rPr></w:sdtPr><w:sdtContent xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:rPr><w:rFonts w:cs="Arial" w:eastAsia="Arial"/></w:rPr></w:pPr><w:r><w:rPr><w:rFonts w:cs="Arial" w:eastAsia="Arial"/></w:rPr><mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="wpg"><w:drawing><wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="115200" distR="115200" simplePos="0" relativeHeight="11264" behindDoc="1" locked="0" layoutInCell="1" allowOverlap="1"><wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="margin"><wp:align>center</wp:align></wp:positionH><wp:positionV relativeFrom="margin"><wp:align>center</wp:align></wp:positionV><wp:extent cx="7560548" cy="1497471"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="6" name="" hidden="0"/><wp:cNvGraphicFramePr/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">		<a:graphicData uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:wsp xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:cNvPr id="0" name=""/><wps:cNvSpPr/><wps:spPr bwMode="auto"><a:xfrm rot="18899975"><a:off x="0" y="0"/><a:ext cx="7560547" cy="1497471"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></wps:spPr><wps:txbx><w:txbxContent><w:p><w:pPr><w:ind w:left="0" w:right="0" w:firstLine="0"/><w:jc w:val="center"/><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:r><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">PROFORMA</w:t></w:r><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:r><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:r></w:p></w:txbxContent></wps:txbx><wps:bodyPr rot="0" spcFirstLastPara="0" vertOverflow="overflow" horzOverflow="clip" vert="horz" wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" numCol="1" spcCol="0" rtlCol="0" fromWordArt="0" anchor="ctr" anchorCtr="0" forceAA="0" upright="0" compatLnSpc="1"/></wps:wsp></a:graphicData></a:graphic></wp:anchor></w:drawing></mc:Choice><mc:Fallback><w:pict><v:shape xmlns:v="urn:schemas-microsoft-com:vml" id="shape 5" o:spid="_x0000_s5" xmlns:o="urn:schemas-microsoft-com:office:office" o:spt="1" style="position:absolute;mso-wrap-distance-left:9.1pt;mso-wrap-distance-top:0.0pt;mso-wrap-distance-right:9.1pt;mso-wrap-distance-bottom:0.0pt;z-index:-11264;o:allowoverlap:true;o:allowincell:true;mso-position-horizontal-relative:margin;mso-position-horizontal:center;mso-position-vertical-relative:margin;mso-position-vertical:center;width:595.3pt;height:117.9pt;rotation:314;v-text-anchor:middle;" coordsize="100000,100000" path="" filled="f" stroked="f"><v:path textboxrect="0,0,0,0"/><v:textbox><w:txbxContent><w:p><w:pPr><w:ind w:left="0" w:right="0" w:firstLine="0"/><w:jc w:val="center"/><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:r><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">PROFORMA</w:t></w:r><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:r><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial" w:eastAsia="Arial" w:hint="default"/><w:b w:val="0"/><w:i w:val="0"/><w:strike w:val="false"/><w:sz w:val="204"/><w:u w:val="none"/><w:lang w:val="de-DE"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:schemeClr w14:val="bg1"><w14:wordShade w14:val="166"/><w14:alpha w14:val="500"/></w14:schemeClr></w14:solidFill></w14:textFill></w:rPr></w:r></w:p></w:txbxContent></v:textbox></v:shape></w:pict></mc:Fallback></mc:AlternateContent></w:r><w:r><w:rPr><w:rFonts w:cs="Arial" w:eastAsia="Arial"/></w:rPr></w:r></w:p></w:sdtContent></w:sdt>'
         );
 

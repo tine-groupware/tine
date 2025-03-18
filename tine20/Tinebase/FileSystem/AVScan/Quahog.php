@@ -47,7 +47,7 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
         } else {
             try {
                 $this->_socket->assertAlive();
-            } catch (\Socket\Raw\Exception|\Error $sre) {
+            } catch (\Socket\Raw\Exception|\Error) {
                 $this->_socket = null;
                 $this->_connect();
             }
@@ -76,8 +76,7 @@ class Tinebase_FileSystem_AVScan_Quahog implements Tinebase_FileSystem_AVScan_In
                     ' Scanning done. Result: ' . print_r($result, true));
             }
 
-        } catch (\Socket\Raw\Exception $e) {
-        } catch (\Xenolope\Quahog\Exception\ConnectionException $e) {}
+        } catch (\Socket\Raw\Exception|\Xenolope\Quahog\Exception\ConnectionException $e) {}
 
         if ($e instanceof Exception) {
             if (preg_match('/timeout/i', $e->getMessage())) {

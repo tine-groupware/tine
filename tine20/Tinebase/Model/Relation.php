@@ -36,42 +36,42 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
     /**
      * degree parent
      */
-    const DEGREE_PARENT = 'parent';
+    public const DEGREE_PARENT = 'parent';
     
     /**
      * degree child
      */
-    const DEGREE_CHILD = 'child';
+    public const DEGREE_CHILD = 'child';
     
     /**
      * degree sibling
      */
-    const DEGREE_SIBLING = 'sibling';
+    public const DEGREE_SIBLING = 'sibling';
 
     /**
      * related record removed by acl
      */
-    const REMOVED_BY_ACL = 'removedByAcl';
+    public const REMOVED_BY_ACL = 'removedByAcl';
 
     /**
      * related record removed by acl
      */
-    const REMOVED_BY_AREA_LOCK = 'removedByAreaLock';
+    public const REMOVED_BY_AREA_LOCK = 'removedByAreaLock';
 
     /**
      * related record removed by another reason
      */
-    const REMOVED_BY_OTHER = 'removedByOther';
+    public const REMOVED_BY_OTHER = 'removedByOther';
 
     /**
      * manually created relation
      */
-    const TYPE_MANUAL = 'manual';
+    public const TYPE_MANUAL = 'manual';
     
     /**
      * default record backend
      */
-    const DEFAULT_RECORD_BACKEND = 'Sql';
+    public const DEFAULT_RECORD_BACKEND = 'Sql';
     
     /**
      * key to find identifier
@@ -205,7 +205,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         if (is_array($_data['related_record'] ?? null) && isset($_data['related_model'])) {
             $this->related_record = new $_data['related_model']($_data['related_record'], true);
         }
-        if ($this->remark && is_string($this->remark) && strpos($this->remark, '{') === 0) {
+        if ($this->remark && is_string($this->remark) && str_starts_with($this->remark, '{')) {
             $this->remark = Zend_Json::decode($this->remark);
         }
     }
@@ -234,7 +234,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         // TODO allow empty titles?
         $title = isset($this->related_record) ? $this->related_record->getTitle() : null;
 
-        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($title)), 0, 1024) . $childType;
+        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim((string) $title)), 0, 1024) . $childType;
     }
 
     /**

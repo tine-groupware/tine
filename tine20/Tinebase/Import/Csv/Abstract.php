@@ -75,7 +75,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         parent::__construct($_options);
 
         if (empty($this->_options['model'])) {
-            throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs model in config.');
+            throw new Tinebase_Exception_InvalidArgument(static::class . ' needs model in config.');
         }
         
         $this->_setController();
@@ -99,7 +99,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             $this->_options['maxLineLength'],
             $delimiter,
             $this->_options['enclosure'],
-            $this->_options['escape']
+            (string) $this->_options['escape']
         );
         
         if (is_array($lineData) && count($lineData) == 1) {
@@ -124,7 +124,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         // get headline
         if (isset($this->_options['headline']) && $this->_options['headline']) {
             $firstLine = $this->_getRawData($_resource);
-            $this->_headline = $firstLine ? $firstLine : array();
+            $this->_headline = $firstLine ?: array();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Got headline: ' . implode(', ', $this->_headline));
             if (! $this->_options['use_headline']) {
@@ -232,7 +232,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' No value found for field ' . (isset($field['source']) ? $field['source'] : print_r($field, true)));
+                    . ' No value found for field ' . ($field['source'] ?? print_r($field, true)));
                 continue;
             }
 
@@ -245,7 +245,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             if (isset($field['destinations']) && isset($field['destinations']['destination'])) {
                 $destinations = $field['destinations']['destination'];
                 $delimiter = isset($field['$separator']) && ! empty($field['$separator']) ? $field['$separator'] : ' ';
-                $values = array_map('trim', explode($delimiter, $value, count($destinations)));
+                $values = array_map('trim', explode($delimiter, (string) $value, count($destinations)));
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' values: ' . print_r($values, true));
                 $i = 0;
@@ -287,7 +287,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             $valueIfEmpty = $translation->_("N/A");
             
             foreach ($notImportedFields as $nKey => $nVal) {
-                if (trim($nVal) == "") {
+                if (trim((string) $nVal) == "") {
                     if ($ignoreEmpty) {
                         continue;
                     }

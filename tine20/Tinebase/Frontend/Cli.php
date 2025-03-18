@@ -41,7 +41,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_checkAdminRight();
 
         $args = $this->_parseArgs($opts, array());
-        $count = isset($args['count']) ? $args['count'] : 1;
+        $count = $args['count'] ?? 1;
 
         Tinebase_Timemachine_ModificationLog::getInstance()->increaseReplicationMasterId($count);
 
@@ -118,8 +118,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $contentClasses = array_intersect($allowedContentClasses, $contentClasses);
         }
 
-        $msg = 'forcing resync for APIs: ' . join($apis, ', ') . ' with content classes: ' .
-            join($contentClasses, ', ') . (empty($userIds) ? ' for all users' : ' for users: ' . join($userIds, ', '));
+        $msg = 'forcing resync for APIs: ' . join(', ', $apis) . ' with content classes: ' .
+            join(', ', $contentClasses) . (empty($userIds) ? ' for all users' : ' for users: ' . join(', ', $userIds));
         echo $msg . PHP_EOL;
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
@@ -242,7 +242,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                 try {
                     $app = Tinebase_Core::getApplicationInstance($model, '', true);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' no application found for it');
                     $doAll = true;
@@ -254,7 +254,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     } else {
                         if (!$app instanceof Tinebase_Controller_Record_Abstract) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . $app::class . ' not an instance of Tinebase_Controller_Record_Abstract');
                             continue;
                         }
 
@@ -262,7 +262,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                     if (!$backend instanceof Tinebase_Backend_Interface) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . get_class($backend) . ' not an instance of Tinebase_Backend_Interface');
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . $backend::class . ' not an instance of Tinebase_Backend_Interface');
                         continue;
                     }
                     $record = new $model(null, true);
@@ -324,7 +324,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $accountsController = Tinebase_User::getInstance();
             try {
                 $account = $accountsController->getFullUserByLoginName($authResult->getIdentity());
-            } catch (Tinebase_Exception_NotFound $e) {
+            } catch (Tinebase_Exception_NotFound) {
                 echo 'account ' . $authResult->getIdentity() . ' not found in account storage'."\n";
                 exit();
             }
@@ -362,7 +362,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function handle($_opts)
     {
-        list($application, $method) = explode('.', $_opts->method);
+        [$application, $method] = explode('.', $_opts->method);
         $class = $application . '_Frontend_Cli';
         
         if (@class_exists($class)) {
@@ -421,7 +421,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         try {
             $userController = Tinebase_User::getInstance();
             $cronuser = $userController->getFullUserByLoginName($_opts->username);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
@@ -469,7 +469,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
 
@@ -617,8 +617,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $args = $this->_parseArgs($_opts, array(), 'cleanNotesOffset');
 
-        $offset = (isset($args['cleanNotesOffset']) ? $args['cleanNotesOffset'] : 0);
-        $purge = isset($args['purge']) ? $args['purge'] : false;
+        $offset = ($args['cleanNotesOffset'] ?? 0);
+        $purge = $args['purge'] ?? false;
 
         $deletedCount = Tinebase_Notes::getInstance()->removeObsoleteData($purge, $offset, $_opts->d);
 
@@ -652,7 +652,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 } else {
                     $filterClass = 'ClassThatDoesNotExist';
                 }
-            } catch(Tinebase_Exception_AccessDenied $e) {
+            } catch(Tinebase_Exception_AccessDenied) {
                 // TODO log
                 continue;
             } catch(Tinebase_Exception_NotFound $tenf) {
@@ -707,7 +707,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 foreach ($customFieldValues as $customFieldValue) {
                     try {
                         $controller->get($customFieldValue->record_id, null, false, true);
-                    } catch(Tinebase_Exception_NotFound $tenf) {
+                    } catch(Tinebase_Exception_NotFound) {
                         $deleteIds[] = $customFieldValue->getId();
                     }
                 }
@@ -746,7 +746,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $_opts->getRemainingArgs();
         $data = array();
         foreach ($args as $idx => $arg) {
-            list($key, $value) = explode('=', $arg);
+            [$key, $value] = explode('=', (string) $arg);
             if ($key == 'application') {
                 $key = 'application_id';
                 $value = Tinebase_Application::getInstance()->getApplicationByName($value)->getId();
@@ -784,7 +784,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $_opts->getRemainingArgs();
         $data = array();
         foreach ($args as $idx => $arg) {
-            list($key, $value) = explode('=', $arg);
+            [$key, $value] = explode('=', (string) $arg);
             if ($key == 'application') {
                 $key = 'application_id';
                 $value = Tinebase_Application::getInstance()->getApplicationByName($value)->getId();
@@ -811,7 +811,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $grantsArray = Tinebase_Helper::jsonDecode($data['grants']);
         $removeOldGrants = true;
         foreach ($grantsArray as $grant) {
-            $accountType = isset($grant['account_type']) ? $grant['account_type'] : null;
+            $accountType = $grant['account_type'] ?? null;
             if (isset($grant['account'])) {
                 if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
                     $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
@@ -822,7 +822,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
                 }
             } else {
-                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+                $accountId = $grant['account_id'] ?? null;
             }
             $grants = [];
             $allGrants = Tinebase_Model_CustomField_Grant::getAllGrants();
@@ -864,7 +864,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         // @todo generalize this - see \Tinebase_Frontend_Cli::setCustomfieldAcl
         $grantsToSet = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
         foreach ($grantsArray as $grant) {
-            $accountType = isset($grant['account_type']) ? $grant['account_type'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+            $accountType = $grant['account_type'] ?? Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
             if (isset($grant['account'])) {
                 if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
                     $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
@@ -874,7 +874,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $accountId = $user->getId();
                 }
             } else {
-                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+                $accountId = $grant['account_id'] ?? null;
             }
             $grantRecord = new Tinebase_Model_Grants([
                 'account_id' => $accountId,
@@ -1008,7 +1008,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if ($result > 0) {
             try {
                 Tinebase_Exception::log(new Tinebase_Exception($message));
-            } catch (Throwable $t) {
+            } catch (Throwable) {
                 // just logging
             }
         }
@@ -1326,7 +1326,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration
                         . ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
                 } catch (Exception $e) {
-                    $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
+                    $message = 'QUEUE FAIL: ' . $e::class . ' - ' . $e->getMessage();
                     $message .= ' - https://tine-docu.s3web.rz1.metaways.net/operators/howto/tine20AdminQueue/';
                     $result = 2;
                 }
@@ -1665,9 +1665,9 @@ fi';
         if ($data['iseqto'] < $data['iseqfrom']) {
             throw new Tinebase_Exception_UnexpectedValue('iseqto needs to be equal or greater than iseqfrom');
         }
-        $data['accountid'] = explode(',', $data['accountid']);
+        $data['accountid'] = explode(',', (string) $data['accountid']);
         if (!is_array($data['models'])) {
-            $data['models'] = explode(',', $data['models']);
+            $data['models'] = explode(',', (string) $data['models']);
         }
         if (false !== ($key = array_search('fs', $data['models']))) {
             unset($data['models'][$key]);
@@ -1769,7 +1769,7 @@ fi';
         
         $dryrun = $opts->d;
         $overwrite = (isset($data['overwrite']) && $data['overwrite']) ? TRUE : FALSE;
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun, (isset($data['modified_attribute'])?$data['modified_attribute']:null));
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun, ($data['modified_attribute'] ?? null));
         
         if (! $dryrun) {
             Setup_Controller::getInstance()->clearCache(false);
@@ -2033,7 +2033,7 @@ fi';
         $data = $this->_parseArgs($opts);
         $ids = [];
         if (isset($data['ids'])) {
-            $ids = explode(',', $data['ids']);
+            $ids = explode(',', (string) $data['ids']);
         }
 
         Tinebase_FileSystem_Previews::getInstance()->resetErrorCount();
@@ -2110,7 +2110,7 @@ fi';
     {
         $args = $this->_parseArgs($_opts, array('definition'));
 
-        if (preg_match("/\.xml/", $args['definition'])) {
+        if (preg_match("/\.xml/", (string) $args['definition'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                 $args['definition'],
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
@@ -2147,7 +2147,7 @@ fi';
         
         try {
             $args = $this->_parseArgs($opts, array('oldId', 'newId', 'model'));
-        } catch (Tinebase_Exception_InvalidArgument $e) {
+        } catch (Tinebase_Exception_InvalidArgument) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Parameters "oldId", "newId" and "model" are required!');
             }
@@ -2331,7 +2331,7 @@ fi';
             $dryRun = true;
         }
 
-        Tinebase_Group::getInstance()->sanitizeGroupListSync($dryRun);
+        Tinebase_Group::getInstance()->sanitizeGroupListSync();
 
         return 0;
     }
@@ -2424,7 +2424,7 @@ fi';
         foreach ($records as $record) {
             try {
                 Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->create(clone $record);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->update(clone $record);
             }
             if ($record->acl_node === $record->getId()) {
@@ -2635,8 +2635,8 @@ fi';
     {
         $this->_checkAdminRight();
         $args = $this->_parseArgs($opts);
-        $locale = isset($args['locale']) ? $args['locale'] : null;
-        $path = isset($args['path']) ? $args['path'] : null;
+        $locale = $args['locale'] ?? null;
+        $path = $args['path'] ?? null;
 
         $translations = new Tinebase_Translation();
         $translations->generateTranslationLists($locale, $path);

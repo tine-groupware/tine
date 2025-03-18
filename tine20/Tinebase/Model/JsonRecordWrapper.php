@@ -22,7 +22,7 @@
  */
 class Tinebase_Model_JsonRecordWrapper extends Tinebase_Model_DynamicRecordWrapper
 {
-    const MODEL_NAME_PART = 'JsonRecordWrapper';
+    public const MODEL_NAME_PART = 'JsonRecordWrapper';
 
 
     public static function inheritModelConfigHook(array &$_definition)
