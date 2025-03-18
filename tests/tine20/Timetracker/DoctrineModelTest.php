@@ -16,7 +16,7 @@ class Timetracker_DoctrineModelTest extends TestCase
 {
 
     protected function setUp(): void
-{
+    {
     }
 
     public function testTimesheetTimaccountForeignKey()
@@ -36,11 +36,11 @@ class Timetracker_DoctrineModelTest extends TestCase
         $schema = $tool->getSchemaFromMetadata($classes);
         $sql = $schema->toSql($em->getConnection()->getDatabasePlatform());
         self::assertEquals(4, count($sql), print_r($sql, true));
-        self::assertStringContainsString('CREATE TABLE tine20_timetracker_timeaccount', $sql[0], print_r($sql, true));
-        self::assertStringContainsString('CREATE TABLE tine20_timetracker_timesheet', $sql[1], print_r($sql, true));
-        self::assertStringContainsString('ALTER TABLE tine20_timetracker_timeaccount ADD CONSTRAINT', $sql[2], print_r($sql, true));
-        self::assertStringContainsString('FOREIGN KEY (eval_dim_cost_center) REFERENCES tine20_evaluation_dimension_item (id)', $sql[2], print_r($sql, true));
-        self::assertStringContainsString('ALTER TABLE tine20_timetracker_timesheet ADD CONSTRAINT', $sql[3], print_r($sql, true));
-        self::assertStringContainsString('FOREIGN KEY (timeaccount_id) REFERENCES tine20_timetracker_timeaccount (id)', $sql[3], print_r($sql, true));
+        self::assertStringContainsString('CREATE TABLE ' . SQL_TABLE_PREFIX . 'timetracker_timeaccount', $sql[0], print_r($sql, true));
+        self::assertStringContainsString('CREATE TABLE ' . SQL_TABLE_PREFIX . 'timetracker_timesheet', $sql[1], print_r($sql, true));
+        self::assertStringContainsString('ALTER TABLE ' . SQL_TABLE_PREFIX . 'timetracker_timeaccount ADD CONSTRAINT', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('FOREIGN KEY (eval_dim_cost_center) REFERENCES ' . SQL_TABLE_PREFIX . 'evaluation_dimension_item (id)', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('ALTER TABLE ' . SQL_TABLE_PREFIX . 'timetracker_timesheet ADD CONSTRAINT', $sql[3], print_r($sql, true));
+        self::assertStringContainsString('FOREIGN KEY (timeaccount_id) REFERENCES ' . SQL_TABLE_PREFIX . 'timetracker_timeaccount (id)', $sql[3], print_r($sql, true));
     }
 }
