@@ -46,7 +46,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         }
 
         $t = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
-        $dispatchHistory = new Sales_Model_Document_DispatchHistory([
+        Sales_Controller_Document_DispatchHistory::getInstance()->create(new Sales_Model_Document_DispatchHistory([
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
@@ -55,77 +55,78 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $t->_('email to: ') . $email,
-        ]);
+        ]));
 
-        if (null === $parentDispatchId) {
-            /** @var Sales_Controller_Document_Abstract $docCtrl */
-            $docCtrl = $document::getConfiguration()->getControllerInstance();
-            $transaction = Tinebase_RAII::getTransactionManagerRAII();
-            /** @var Sales_Model_Document_Abstract $document */
-            $document = $docCtrl->get($document->getId());
+        try {
+            $division = $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}
+                ->{Sales_Model_Document_Category::FLD_DIVISION_ID};
+            $fmAccountId = $division->getIdFromProperty(Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID);
 
-            $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
-            $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord($dispatchHistory);
+            $attachments = [];
+            $attachedDocSend = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class);
 
-            $document = $docCtrl->update($document);
-            $transaction->release();
-
-        } else {
-            Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory);
-        }
-
-        $division = $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}
-            ->{Sales_Model_Document_Category::FLD_DIVISION_ID};
-        $fmAccountId = $division->getIdFromProperty(Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID);
-
-        $attachments = [];
-        $attachedDocSend = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class);
-
-        /** @var Sales_Model_EDocument_Dispatch_DocumentType $docType */
-        foreach ($this->{self::FLD_DOCUMENT_TYPES} as $docType) {
-            /** @var Sales_Model_Document_AttachedDocument $attachedDoc */
-            foreach ($document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_TYPE,
+            /** @var Sales_Model_EDocument_Dispatch_DocumentType $docType */
+            foreach ($this->{self::FLD_DOCUMENT_TYPES} as $docType) {
+                /** @var Sales_Model_Document_AttachedDocument $attachedDoc */
+                foreach ($document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_TYPE,
                     $docType->{Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE}) as $attachedDoc) {
-                $attachedDocSend->addRecord($attachedDoc);
-                $node = Tinebase_FileSystem::getInstance()->get($attachedDoc->getIdFromProperty(Sales_Model_Document_AttachedDocument::FLD_NODE_ID));
-                $attachments[] = [
-                    'attachment_type' => 'attachment',
-                    'id' => $node->getId(),
-                    'name' => $node->name,
-                    'size' => $node->size,
-                ];
+                    $attachedDocSend->addRecord($attachedDoc);
+                    $node = Tinebase_FileSystem::getInstance()->get($attachedDoc->getIdFromProperty(Sales_Model_Document_AttachedDocument::FLD_NODE_ID));
+                    $attachments[] = [
+                        'attachment_type' => 'attachment',
+                        'id' => $node->getId(),
+                        'name' => $node->name,
+                        'size' => $node->size,
+                    ];
+                }
             }
-        }
 
-        $locale = new Zend_Locale($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
-        $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale);
-        if ($boilerPlate = $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES}
+            $locale = new Zend_Locale($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+            $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale);
+            if ($boilerPlate = $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES}
                 ?->find(Sales_Model_Boilerplate::FLD_NAME, 'Email')) {
-            $twig = new Tinebase_Twig($locale, $t, [
-                Tinebase_Twig::TWIG_LOADER =>
-                    new Tinebase_Twig_CallBackLoader($boilerPlate->getId(), ($boilerPlate->last_modified_time ?: $boilerPlate->creation_time)->getTimestamp(), fn() => $boilerPlate->{Sales_Model_Boilerplate::FLD_BOILERPLATE}),
-                Tinebase_Twig::TWIG_AUTOESCAPE => false,
-            ]);
-            $body = $twig->load($boilerPlate->getId())->render(['record' => $document]);
-        } else {
-            $body = 'see document attached';
+                $twig = new Tinebase_Twig($locale, $t, [
+                    Tinebase_Twig::TWIG_LOADER =>
+                        new Tinebase_Twig_CallBackLoader($boilerPlate->getId(), ($boilerPlate->last_modified_time ?: $boilerPlate->creation_time)->getTimestamp(), fn() => $boilerPlate->{Sales_Model_Boilerplate::FLD_BOILERPLATE}),
+                    Tinebase_Twig::TWIG_AUTOESCAPE => false,
+                ]);
+                $body = $twig->load($boilerPlate->getId())->render(['record' => $document]);
+            } else {
+                $body = 'see document attached';
+            }
+
+
+            $msg = new Felamimail_Model_Message([
+                'account_id' => $fmAccountId,
+                'subject' => $t->_($document::getConfiguration()->recordName) . ' ' . $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER}
+                    . (($title = $document->getTitle()) ? ': ' . $title : '') . ' ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString(),
+                'to' => $email,
+                'body' => $body,
+                'attachments' => $attachments,
+            ], true);
+            $msg = Felamimail_Controller_Message_Send::getInstance()->sendMessage($msg);
+            // TODO FIXME this is not concurrency safe at all!!! need to fix this code in felamimail
+            $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder(
+                Felamimail_Controller_Account::getInstance()->getSystemFolder($fmAccountId, Felamimail_Model_Folder::FOLDER_SENT),
+                $msg
+            );
+
+        } catch (Throwable $t) {
+            Tinebase_Exception::log($t);
+
+            Sales_Controller_Document_DispatchHistory::getInstance()->create(new Sales_Model_Document_DispatchHistory([
+                Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
+                Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
+                Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
+                Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
+                Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_FAIL,
+                Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => get_class($t) . ': ' . $t->getMessage(),
+                Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
+                Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
+            ]));
+
+            return false;
         }
-
-
-        $msg = new Felamimail_Model_Message([
-            'account_id' => $fmAccountId,
-            'subject' => $t->_($document::getConfiguration()->recordName) . ' ' .  $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER}
-                . (($title = $document->getTitle()) ? ': ' . $title : '') . ' ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString(),
-            'to' => $email,
-            'body' => $body,
-            'attachments' => $attachments,
-        ], true);
-        $msg = Felamimail_Controller_Message_Send::getInstance()->sendMessage($msg);
-        // TODO FIXME this is not concurrency safe at all!!! need to fix this code in felamimail
-        $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder(
-            Felamimail_Controller_Account::getInstance()->getSystemFolder($fmAccountId, Felamimail_Model_Folder::FOLDER_SENT),
-            $msg
-        );
 
         $dispatchHistory = new Sales_Model_Document_DispatchHistory([
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
@@ -139,32 +140,13 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         ]);
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
-        if (null === $parentDispatchId) {
-            /** @var Sales_Controller_Document_Abstract $docCtrl */
-            $docCtrl = $document::getConfiguration()->getControllerInstance();
-            /** @var Sales_Model_Document_Abstract $document */
-            $document = $docCtrl->get($document->getId());
-
-            $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_DISPATCHED;
-            $oldHistoryIds = $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->getArrayOfIds();
-            $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord($dispatchHistory);
-
-            $document = $docCtrl->update($document);
-
-            $addedHistoryId = array_values(array_diff($document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->getArrayOfIds(), $oldHistoryIds));
-        } else {
-            $addedHistoryId = [Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory)->getId()];
-        }
-
+        $addedHistoryId = Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory)->getId();
         Sales_Controller_Document_DispatchHistory::getInstance()->fileMessageAttachment(
-            ['record_id' => $addedHistoryId[0]],
+            ['record_id' => $addedHistoryId],
             $sentMessage,
             ['partId' => null, 'name' => 'email']
         );
-
         $transaction->release();
-
-        //TODO FIXME make add history abstract?
 
         return true;
     }

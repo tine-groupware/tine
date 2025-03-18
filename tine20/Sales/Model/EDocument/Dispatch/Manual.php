@@ -44,23 +44,7 @@ class Sales_Model_EDocument_Dispatch_Manual extends Sales_Model_EDocument_Dispat
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
         ]);
 
-        if (null === $parentDispatchId) {
-            /** @var Sales_Controller_Document_Abstract $docCtrl */
-            $docCtrl = $document::getConfiguration()->getControllerInstance();
-            $transaction = Tinebase_RAII::getTransactionManagerRAII();
-            /** @var Sales_Model_Document_Abstract $document */
-            $document = $docCtrl->get($document->getId());
-
-            $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
-            $document->{Sales_Model_Document_Abstract::FLD_DISPATCH_HISTORY}->addRecord($dispatchHistory);
-
-            $docCtrl->update($document);
-            $transaction->release();
-
-        } else {
-            $document->{$document::getStatusField()} = Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH;
-            Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory);
-        }
+        Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory);
 
         return true;
     }

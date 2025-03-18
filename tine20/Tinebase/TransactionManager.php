@@ -122,7 +122,7 @@ class Tinebase_TransactionManager
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . "  startTransaction request");
-        if (! in_array($_transactionable, $this->_openTransactionables)) {
+        if (! in_array($_transactionable, $this->_openTransactionables, true)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                 __METHOD__ . '::' . __LINE__ . "  new transactionable. Starting transaction on this resource");
             if ($_transactionable instanceof Zend_Db_Adapter_Abstract) {
@@ -344,6 +344,18 @@ class Tinebase_TransactionManager
     {
         if (false !== ($pos = array_search($_transactionable, $this->_openTransactionables, true))) {
             unset($this->_openTransactionables[$pos]);
+        }
+    }
+
+    public function unitTestRemoveTransactionables()
+    {
+        $this->_openTransactionables = [];
+    }
+
+    public function unitTestAddTransactionable($_transactionable)
+    {
+        if (false === array_search($_transactionable, $this->_openTransactionables, true)) {
+            $this->_openTransactionables[] = $_transactionable;
         }
     }
 }
