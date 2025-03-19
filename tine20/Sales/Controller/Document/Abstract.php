@@ -99,17 +99,17 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
     protected function _inspectAutoCreateValues(Sales_Model_Document_Abstract $document): void
     {
-        if (empty($document->{Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE}) &&
+        if ($document->has(Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE) && empty($document->{Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE}) &&
                 !empty($document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}?->{Sales_Model_Debitor::FLD_BUYER_REFERENCE})) {
             $document->{Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE} = $document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE};
         }
 
-        if (empty($document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS}) &&
+        if ($document->has(Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS) && empty($document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS}) &&
                 !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->credit_term)) {
             $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->credit_term;
         }
 
-        if (empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) &&
+        if ($document->has(Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE) && empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) &&
                 empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM}) &&
                 intval($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) === 0 &&
                 intval($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM}) === 0 &&
@@ -123,7 +123,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $document->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Customer::FLD_VAT_PROCEDURE};
         }
 
-        if (empty($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}) &&
+        if ($document->has(Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE) && empty($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}) &&
                 !empty($document->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}?->{Sales_Model_Address::FLD_LANGUAGE})) {
             $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE} = $document->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_LANGUAGE};
         }
