@@ -341,7 +341,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
     protected function _copy(string $id, bool $persist, Tinebase_Controller_Record_Interface $ctrl): array
     {
-        return $this->_recordToJson($ctrl->copy($id, $persist));
+        if ($persist) {
+            return $this->_recordToJson($ctrl->copy($id, $persist));
+        } else {
+            return $ctrl->copy($id, $persist)->toArray();
+        }
     }
 
     /**

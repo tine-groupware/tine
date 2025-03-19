@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -664,6 +664,20 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     )),
                 ),
                 'help'   => 'Save ' . $simpleModelName . '',
+                'plural' => false,
+            ),
+            'copy' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'recordData',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'boolean',
+                        'name' => 'persist',
+                    )),
+                ),
+                'help'   => 'Copy ' . $simpleModelName . ' persistent or just phantom',
                 'plural' => false,
             ),
             'delete' => array(

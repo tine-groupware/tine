@@ -1088,7 +1088,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @returns {boolean}
      */
     isNewRecord: function () {
-        return !this.record || !(this.record.get && this.record.id )
+        return !this.record || !(this.record.get && this.record.id ) || this.record.phantom;
     },
 
     setReadOnly: function(readOnly) {
