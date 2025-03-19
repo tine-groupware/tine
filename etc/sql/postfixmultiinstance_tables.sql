@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `smtp_destinations` (
     `users_id` int(11) NOT NULL,
     `source` varchar(80) NOT NULL,
     `destination` varchar(80) NOT NULL,
+    `dispatch_address` tinyint(1) NOT NULL DEFAULT 1,
     KEY `users_id` (`users_id`),
     KEY `source` (`source`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
