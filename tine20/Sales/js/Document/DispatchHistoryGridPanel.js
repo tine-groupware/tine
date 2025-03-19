@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import { getDispatchAction } from './DispatchDocumentAction'
+import '../Model/Document/DispatchHistory'
+
 const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     /**
@@ -21,26 +24,23 @@ const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     usePagingToolbar: false,
     stateful: false,
     initFilterPanel: Ext.emptyFn,
+    listenMessageBus: false,
 
     initComponent() {
         this.app = Tine.Tinebase.appMgr.get('Sales')
         this.modelConfig = this.recordClass.getModelConfiguration()
 
-        this.dispatchHistoryRecords = this.record.get('dispatch_history')
-        this.dispatchHistoryRecords.forEach(dh => {
-            dh = dh.data || dh;
-            dh.dispatch_process = `${dh.dispatch_id}-${dh.dispatch_parent_id}-${dh.dispatch_transport}`
-        })
-
         this.store = new Ext.data.GroupingStore({
             groupField: 'dispatch_process',
             reader: new Ext.data.JsonReader({}, this.recordClass),
-            data: this.dispatchHistoryRecords,
+            // data: this.dispatchHistoryRecords,
             sortInfo: {
                 field: 'dispatch_date',
                 direction: 'ASC'
             }
         })
+
+        this.loadData(this.record)
 
         this.gridConfig  = this.gridConfig || {};
         this.gridConfig.view = new Ext.grid.GroupingView({
@@ -50,9 +50,9 @@ const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             hideGroupedColumn: true,
             getGroupText: function (values) {
                 const startRecord = values.rs[0]
-                const transportName = Tine.Tinebase.data.RecordMgr.get(startRecord.get('dispatch_transport')).getRecordName()
-                //@TODO add state icon from last Record once type is a keyField
-                return `${transportName} - ${startRecord.get('dispatch_report')}`;
+                const currRecord = _.last(values.rs)
+                const groupState = Tine.Tinebase.widgets.keyfield.Renderer.get('Sales', 'dispatchHistoryType', 'icon')(currRecord.get('type'))
+                return `${groupState} ${startRecord.getGroupName()}`
             },
             enableRowBody: true,
             getRowClass: function(record, rowIndex, rp, ds){
@@ -106,12 +106,57 @@ const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         })
 
+
+
+        this.action_completeByMail = new Ext.Action({
+            disabled: true,
+            text: this.app.formatMessage('Send Email for this Process'),
+            iconCls: `SalesEDocument_Dispatch_Email`,
+            actionUpdater: (action, grants, records, isFilterSelect, filteredContainers) => {
+                let enabled = records.length === 1
+                action.setDisabled(!enabled)
+            },
+            handler: async (cmp) => {
+
+                cmp.startRecord = _.find(this.store.data.items, { data: { dispatch_process: cmp.initialConfig.selections[0]?.data.dispatch_process, type: 'start' } })
+
+
+                if (cmp.startRecord) {
+                    cmp.app = this.app
+                    cmp.record = this.record
+                    cmp.editDialog = this.editDialog
+                    cmp.dispatchHistoryStartRecord = cmp.startRecord.get('dispatch_config')
+                    cmp.on('sentmail', (cmp) => {
+                        this.loadData(cmp.record)
+                    })
+
+                    _.find(getDispatchAction(cmp.startRecord.get('document_type').split('_').pop(), {}).initialConfig.menu, { initialConfig: { iconCls: 'SalesEDocument_Dispatch_Email' }}).initialConfig.handler.call(cmp, cmp, true)
+                }
+            }
+        });
+
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-        this.tbar = [Ext.apply(new Ext.Button(this.action_markCompleted), medBtnStyle)]
+        this.tbar = [
+            Ext.apply(new Ext.Button(this.action_markCompleted), medBtnStyle),
+            Ext.apply(new Ext.Button(this.action_completeByMail), medBtnStyle)
+        ]
 
         this.supr().initComponent.call(this)
 
         this.actionUpdater.addAction(this.action_markCompleted)
+        this.actionUpdater.addAction(this.action_completeByMail)
+    },
+
+    loadData(record) {
+        this.record = record
+        this.dispatchHistoryRecords = _.sortBy(this.record.get('dispatch_history'), 'dispatch_date')
+        this.dispatchHistoryRecords.forEach(dh => {
+            dh = dh.data || dh;
+            dh.dispatch_process = `${dh.dispatch_id}-${dh.dispatch_parent_id}-${dh.dispatch_transport}`
+        })
+
+        this.store.loadData(this.dispatchHistoryRecords)
+        this.store.applyGroupField()
     }
 });
 

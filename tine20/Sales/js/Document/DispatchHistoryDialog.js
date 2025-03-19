@@ -10,6 +10,7 @@ import DispatchHistoryGridPanel from "./DispatchHistoryGridPanel"
 
 const DispatchHistoryDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     record: null,
+    editDialog: null,
 
     initComponent() {
         this.app = Tine.Tinebase.appMgr.get('Sales')

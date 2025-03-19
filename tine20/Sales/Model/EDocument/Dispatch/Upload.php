@@ -46,6 +46,7 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
             Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => Tinebase_Record_Abstract::generateUID(),
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_CONFIG => clone $this,
         ]);
 
         Sales_Controller_Document_DispatchHistory::getInstance()->create($dispatchHistory);

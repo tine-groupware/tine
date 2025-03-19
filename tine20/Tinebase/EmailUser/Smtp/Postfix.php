@@ -454,17 +454,32 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             // check if in primary or secondary domains
             if (! empty($aliasAddress->email) && $this->_checkDomain($aliasAddress->email)) {
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
-                    // create alias -> email
-                    $this->_addDestination(array(
+                    $destinationData = [
                         $userIdField  => $userId,
                         'source'      => $aliasAddress->email,
                         'destination' => $_smtpSettings[$this->_propertyMapping['emailAddress']],
                         'dispatch_address' => $aliasAddress->dispatch_address,
-                    ));
+                    ];
+                    $this->_checkIfDestinationExists($destinationData, $userIdField);
+                    $this->_addDestination($destinationData);
                 } else if ($this->_hasForwards($_smtpSettings)) {
                     $this->_addForwards($userId, $aliasAddress, $_smtpSettings[$this->_propertyMapping['emailForwards']]);
                 }
             }
+        }
+    }
+
+    protected function _checkIfDestinationExists(array $destinationData, string $userIdField): void
+    {
+        $select = $this->_db->select()->from($this->_destinationTable)
+            ->where($userIdField . ' != ?', $destinationData[$userIdField])
+            ->where('source = ?', $destinationData['source']);
+        $result = $this->_db->fetchRow($select);
+        if ($result) {
+            $translation = Tinebase_Translation::getTranslation();
+            throw new Tinebase_Exception_SystemGeneric(
+                $translation->_('Destination source already exists:')
+                . ' ' . $destinationData['source'] . ' destination: ' . $destinationData['destination']);
         }
     }
     
@@ -476,7 +491,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
      */
     protected function _hasForwards($_smtpSettings)
     {
-        return ((isset($_smtpSettings[$this->_propertyMapping['emailForwards']]) || array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings)) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]));
+        return ((isset($_smtpSettings[$this->_propertyMapping['emailForwards']])
+                || array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings))
+            && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]));
     }
     
     /**
@@ -498,14 +515,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                 } else if (is_array($forwardAddress)) {
                     $forwardAddress = new Tinebase_Model_EmailUser_Forward($forwardAddress);
                 }
-
-                // create email -> forward
-                $this->_addDestination(array(
+                $destinationData = [
                     $userIdField  => $userId,
                     'source'      => isset($source['email']) ? $source['email'] : $source,
                     'destination' => $forwardAddress->email,
                     'dispatch_address' => isset($source['dispatch_address']) ? $source['dispatch_address'] : 1
-                ));
+                ];
+                $this->_checkIfDestinationExists($destinationData, $userIdField);
+                $this->_addDestination($destinationData);
             }
         }
     }
@@ -521,9 +538,6 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             return;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Setting forwards for ' . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailForwards']], TRUE));
-        
         $this->_addForwards(
             $_smtpSettings[$this->_propertyMapping['emailUserId']],
             $_smtpSettings[$this->_propertyMapping['emailAddress']],

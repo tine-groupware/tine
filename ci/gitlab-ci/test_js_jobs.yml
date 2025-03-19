@@ -37,7 +37,7 @@
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service]
   image:
-    name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.4
+    name: dockerregistry.metaways.net/tine20/tine20/puppeteer:2.0.0
   before_script:
     - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_mount_ready
     - echo -n 'wait for signal_files_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready ]; do sleep 1; done; echo ' done'
@@ -61,6 +61,10 @@
       export start=$(date -d '-2 hour' +%s000);
       echo tine20 log: "${GRAFANA_URL}&left=%5B%22${start}%22,%22${now}%22,%22Loki%22,%7B%22refId%22:%22A%22,%22expr%22:%22%7Bapp%3D%5C%22${HOSTNAME}%5C%22,%20container%3D%5C%22${TINE_CONTAINER_NAME}%5C%22%7D%22%7D%5D"
     - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
+    - |
+      if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
+        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/
+      fi
   artifacts:
     when: always
     reports:

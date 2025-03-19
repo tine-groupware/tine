@@ -270,7 +270,6 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
                 self::DESCRIPTION               => "The pattern for 'Buyer electronic address (BT-49 [EN 16931]).", //_("The pattern for 'Buyer electronic address (BT-49 [EN 16931]).")
-
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
