@@ -200,34 +200,38 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
     }
     public function update009()
     {
-        $pageNumber = 0;
-        $pageCount = 10;
-        $counter = 0;
-        $models = [
-            ['model' => 'Felamimail_Model_Account', 'application' => 'Felamimail']
-        ];
-        foreach ($models as $model) {
-            do {
-                $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog')
-                    ->limitPage(++$pageNumber, $pageCount)
-                    ->where('new_value like "%\"password\":%"')
-                    ->where( $this->_db->quoteIdentifier('application_id') . ' = ?', Tinebase_Application::getInstance()->getApplicationByName($model['application'])->getId())
-                    ->where( $this->_db->quoteIdentifier('record_type') . ' = ?', $model['model']);
-                $stmt = $select->query();
-                $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            $pageNumber = 0;
+            $pageCount = 10;
+            $counter = 0;
+            $models = [
+                ['model' => 'Felamimail_Model_Account', 'application' => 'Felamimail']
+            ];
+            foreach ($models as $model) {
+                do {
+                    $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog')
+                        ->limitPage(++$pageNumber, $pageCount)
+                        ->where('new_value like "%\"password\":%"')
+                        ->where($this->_db->quoteIdentifier('application_id') . ' = ?',
+                            Tinebase_Application::getInstance()->getApplicationByName($model['application'])->getId())
+                        ->where($this->_db->quoteIdentifier('record_type') . ' = ?', $model['model']);
+                    $stmt = $select->query();
+                    $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-                foreach ($rows as $row) {
-                    if (!str_contains((string) $row['new_value'], '"password":null')) {
-                        Tinebase_Core::getDB()->update(SQL_TABLE_PREFIX . 'timemachine_modlog', [
-                            'new_value' => preg_replace('/"password":"[^"]+"/', '"password":"******"', $row['new_value'])
-                        ], 'id = ' . Tinebase_Core::getDb()->quote($row['id']));
-                        $counter++;
+                    foreach ($rows as $row) {
+                        if (!str_contains((string) $row['new_value'], '"password":null')) {
+                            Tinebase_Core::getDB()->update(SQL_TABLE_PREFIX . 'timemachine_modlog', [
+                                'new_value' => preg_replace('/"password":"[^"]+"/', '"password":"******"', $row['new_value'])
+                            ], 'id = ' . Tinebase_Core::getDb()->quote($row['id']));
+                            $counter++;
+                        }
                     }
-                }
-            } while (count($rows) >= $pageCount);
+                } while (count($rows) >= $pageCount);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' Updated ' . $counter . ' modlog records from record_type' . $model['model']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Updated ' . $counter . ' modlog records from record_type'
+                    . $model['model']);
+            }
         }
 
         $this->addApplicationUpdate('Tinebase', '16.9', self::RELEASE016_UPDATE009);
