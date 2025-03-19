@@ -251,26 +251,38 @@ class SSO_Controller extends Tinebase_Controller_Event
         // The Authentication Request contains the prompt parameter with the value login. In this case, the Authorization Server MUST reauthenticate the End-User even if the End-User is already authenticated.
 
         if ($user = Tinebase_Core::getUser()) {
-            $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
-            $authRequest->setAuthorizationApproved(true);
-            $response = $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
-
-            if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-                $response = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()
-                    ->setCache(Tinebase_Core::getUserCredentialCache(), $response);
-            }
-            
-            if ($request->hasHeader('x-requested-with') && $request->getHeader('x-requested-With')[0] === 'XMLHttpRequest') {
-                // our login client
-                $response->getBody()->write('{ "method":"GET", "url": "' . $response->getHeader('Location')[0] . '" }');
-                return $response->withoutHeader('Location');
-            } else {
-                return $response;
-            }
-
+            return static::_answerOIdAuthRequest($authRequest, $user, $server);
         }
 
         return static::renderLoginPage($authRequest->getClient()->getRelyingPart(), ['url' => $request->getUri()]);
+    }
+
+    protected static function _answerOIdAuthRequest(\League\OAuth2\Server\RequestTypes\AuthorizationRequest $authRequest, Tinebase_Model_FullUser $user, ?\League\OAuth2\Server\AuthorizationServer $server = null): \Psr\Http\Message\ResponseInterface
+    {
+        if (null === $server) {
+            $server = static::getOpenIdConnectServer();
+        }
+
+        $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
+        $authRequest->setAuthorizationApproved(true);
+        $response = $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+            $response = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()
+                ->setCache(Tinebase_Core::getUserCredentialCache(), $response);
+        }
+
+        Tinebase_Session::getSessionNamespace()->sso_oid_authRequest = null;
+
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        if ($request->hasHeader('x-requested-with') && $request->getHeader('x-requested-With')[0] === 'XMLHttpRequest') {
+            // our login client
+            $response->getBody()->write('{ "method":"GET", "url": "' . $response->getHeader('Location')[0] . '" }');
+            return $response->withoutHeader('Location');
+        } else {
+            return $response;
+        }
     }
 
     public static function publicToken(): \Psr\Http\Message\ResponseInterface
@@ -564,7 +576,8 @@ class SSO_Controller extends Tinebase_Controller_Event
                     'relyingParty' => [
                         SSO_Model_RelyingParty::FLD_LABEL => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LABEL} : null,
                         SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp ? $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION} : null,
-                        SSO_Model_RelyingParty::FLD_LOGO => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LOGO} : null,
+                        SSO_Model_RelyingParty::FLD_LOGO_LIGHT => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LOGO_LIGHT} : null,
+                        SSO_Model_RelyingParty::FLD_LOGO_DARK => $rp?->{SSO_Model_RelyingParty::FLD_LOGO_DARK},
                     ],
                 ])
             ]);
@@ -695,7 +708,8 @@ class SSO_Controller extends Tinebase_Controller_Event
             'relyingParty' => [
                 SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
                 SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
-                SSO_Model_RelyingParty::FLD_LOGO => $rp->{SSO_Model_RelyingParty::FLD_LOGO},
+                SSO_Model_RelyingParty::FLD_LOGO_LIGHT => $rp->{SSO_Model_RelyingParty::FLD_LOGO_LIGHT},
+                SSO_Model_RelyingParty::FLD_LOGO_DARK => $rp->{SSO_Model_RelyingParty::FLD_LOGO_DARK},
             ],
         ];
         if ($mfaEx) {
@@ -868,6 +882,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
         try {
             $ssoIdp = SSO_Controller_ExternalIdp::getInstance()->get($ssoIdp);
+            /** @var SSO_Model_ExternalIdp $ssoIdp */
         } catch (Tinebase_Exception) {
             return static::publicOidAuthResponseErrorRedirect($authRequest);
         }
@@ -891,10 +906,11 @@ class SSO_Controller extends Tinebase_Controller_Event
                     ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an sub to work with');
                 return static::publicOidAuthResponseErrorRedirect($authRequest);
             }
+            $openid = $ssoIdp->getId() . ':' . $data->sub;
+            $account = null;
             try {
-                $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('openid', $ssoIdp->getId() . ':' . $data->sub, Tinebase_Model_FullUser::class);
+                $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('openid', $openid, Tinebase_Model_FullUser::class);
             } catch (Tinebase_Exception_NotFound) {
-                // TODO FIXME check if we should create!
 
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
@@ -905,32 +921,50 @@ class SSO_Controller extends Tinebase_Controller_Event
                 }
                 $loginName = substr($data->email, 0, $pos);
 
-                $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
-                $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
-                try {
-                    $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
-                    Tinebase_Core::setUser($user);
-
-                    $pw = Tinebase_Record_Abstract::generateUID(12) . '!Ab1';
-                    $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
-                        'accountLoginName'      => $loginName,
-                        'accountEmailAddress'   => $data->email,
-                        'accountStatus'         => 'enabled',
-                        'accountExpires'        => NULL,
-                        'openid'                => $ssoIdp->getId() . ':' . $data->sub,
-                        'accountLastName'       => $data->name ?? $loginName,
-                        'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                    ])), $pw, $pw);
-                } catch (Tinebase_Exception $e) {
-                    $e->setLogLevelMethod('notice');
-                    $e->setLogToSentry(false);
-                    Tinebase_Exception::log($e);
-                    return static::publicOidAuthResponseErrorRedirect($authRequest);
-                } finally {
-                    Admin_Controller_User::getInstance()->doRightChecks($oldValue);
-                    Admin_Controller_Group::getInstance()->doRightChecks($oldGroupValue);
-                    Tinebase_Core::unsetUser();
+                if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_ALLOW_EXISTING_LOCAL_ACCOUNT}) {
+                    try {
+                        $account = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+                        if (empty($account->openid) || $ssoIdp->{SSO_Model_ExternalIdp::FLD_ALLOW_REASSIGN_LOCAL_ACCOUNT}) {
+                            $account->openid = $openid;
+                            Tinebase_User::getInstance()->updateUserInSqlBackend($account);
+                        } else {
+                            $account = null;
+                        }
+                    } catch (Tinebase_Exception_NotFound) {}
                 }
+
+                if (null === $account && $ssoIdp->{SSO_Model_ExternalIdp::FLD_ALLOW_CREATE_LOCAL_ACCOUNT}) {
+                    $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
+                    $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
+                    try {
+                        $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
+                        Tinebase_Core::setUser($user);
+
+                        $pw = Tinebase_Record_Abstract::generateUID(12) . '!Ab1';
+                        $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
+                            'accountLoginName' => $loginName,
+                            'accountEmailAddress' => $data->email,
+                            'accountStatus' => 'enabled',
+                            'accountExpires' => NULL,
+                            'openid' => $ssoIdp->getId() . ':' . $data->sub,
+                            'accountLastName' => $data->name ?? $loginName,
+                            'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?: Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                        ])), $pw, $pw);
+                    } catch (Tinebase_Exception $e) {
+                        $e->setLogLevelMethod('notice');
+                        $e->setLogToSentry(false);
+                        Tinebase_Exception::log($e);
+                        return static::publicOidAuthResponseErrorRedirect($authRequest);
+                    } finally {
+                        Admin_Controller_User::getInstance()->doRightChecks($oldValue);
+                        Admin_Controller_Group::getInstance()->doRightChecks($oldGroupValue);
+                        Tinebase_Core::unsetUser();
+                    }
+                }
+            }
+
+            if (null === $account) {
+                return static::publicOidAuthResponseErrorRedirect($authRequest);
             }
 
             Tinebase_Auth::destroyInstance();
@@ -949,6 +983,11 @@ class SSO_Controller extends Tinebase_Controller_Event
                 Tinebase_Auth::setBackendType(null);
             }
 
+            Tinebase_Session::getSessionNamespace()->{SSO_Model_ExternalIdp::SESSION_KEY} = $ssoIdp->toUserArray();
+
+            if (Tinebase_Session::getSessionNamespace()->sso_oid_authRequest instanceof \League\OAuth2\Server\RequestTypes\AuthorizationRequest) {
+                return static::_answerOIdAuthRequest(Tinebase_Session::getSessionNamespace()->sso_oid_authRequest, $account);
+            }
             return new \Laminas\Diactoros\Response('php://memory', 302, ['Location' => Tinebase_Core::getUrl()]);
         } else if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()

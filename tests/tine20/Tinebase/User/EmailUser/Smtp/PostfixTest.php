@@ -362,19 +362,38 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         }
     }
 
-    public function testAliasDestinationExists()
+    public function testAliasDestinationExists1()
     {
         $user = $this->testAddUser();
 
-        $backend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-        if (! method_exists($backend, 'getDb')) {
-            self::markTestSkipped('not supported');
-        }
-        $backend->getDb()->insert('smtp_destinations', [
+        $this->_testExistingDestination($user, [
             'userid' => Tinebase_Core::getUser()->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP],
             'source' => 'testneu@' . $this->_mailDomain,
             'destination' => 'test@' . $this->_mailDomain,
         ]);
+    }
+
+    public function testAliasDestinationExists2()
+    {
+        $user = $this->testAddUser();
+
+        $this->_testExistingDestination($user, [
+            'userid' => Tinebase_Core::getUser()->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP],
+            'source' => 'testneu@' . $this->_mailDomain,
+            'destination' => Tinebase_Core::getUser()->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]
+                . '@' . $this->_mailDomain,
+        ]);
+    }
+
+    protected function _testExistingDestination(Tinebase_Model_FullUser $user, array $destinationData)
+    {
+        $backend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        if (! method_exists($backend, 'getDb')) {
+            self::markTestSkipped('not supported');
+        }
+        /** @var Zend_Db_Adapter_Abstract $db */
+        $db = $backend->getDb();
+        $db->insert('smtp_destinations', $destinationData);
 
         $user->smtpUser->emailAliases->addRecord(new Tinebase_Model_EmailUser_Alias([
             'email' => 'testneu@' . $this->_mailDomain,
@@ -382,12 +401,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         ]));
         try {
             $this->_backend->updateUser($user);
-            // TODO test needs to be improved here & independent from db schema
-            // self::fail('should throw exception');
+            self::fail('should throw exception');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             $translate = Tinebase_Translation::getTranslation();
-            self::assertEquals($translate->_(
-                'Email account or alias/forward already exists'), $tesg->getMessage());
+            self::assertStringContainsString($translate->_('Destination source already exists:'), $tesg->getMessage());
         }
     }
 

@@ -632,15 +632,24 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
 
+        $user = null;
+        try {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
+        } catch(Tinebase_Exception_NotFound) {}
+        if (null !== $user && $user->openid && ($pos = strpos($user->openid, ':')) && Tinebase_Application::getInstance()->isInstalled('SSO')) {
+            try {
+                if (!SSO_Controller_ExternalIdp::getInstance()->get(substr($user->openid, 0, $pos))->{SSO_Model_ExternalIdp::FLD_ALLOW_LOCAL_LOGIN} &&
+                        !SSO_Controller::passwordLessLogin($username)) {
+                    return $this->_getLoginFailedResponse();
+                }
+            } catch(Tinebase_Exception_NotFound) {}
+        }
+
         if (empty($password)) {
             if (Tinebase_Application::getInstance()->isInstalled('SSO')
                 && SSO_Controller::passwordLessLogin($username)) {
                 return $this->_getLoginSuccessResponse($username);
             }
-            $user = null;
-            try {
-                $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
-            } catch(Tinebase_Exception_NotFound) {}
             if (null !== $user) {
                 if (Tinebase_Controller::getInstance()->passwordLessLogin($user, $MFAUserConfigId, $MFAPassword, self::REQUEST_TYPE)) {
                     return $this->_getLoginSuccessResponse($username);
@@ -915,6 +924,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $userRegistryData['encourage_mfa'] = true;
+        }
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->{SSO_Model_ExternalIdp::SESSION_KEY}) {
+            $userRegistryData[SSO_Model_ExternalIdp::SESSION_KEY] = Tinebase_Core::get(Tinebase_Core::SESSION)->{SSO_Model_ExternalIdp::SESSION_KEY};
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
