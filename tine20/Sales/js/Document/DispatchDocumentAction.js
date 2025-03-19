@@ -328,6 +328,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.mask.hide()
 
                     if (this.errorMsgs.length) {
+                        console.error(this.errorMsgs)
                         await Ext.MessageBox.show({
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING,

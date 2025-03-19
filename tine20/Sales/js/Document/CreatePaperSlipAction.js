@@ -3,12 +3,13 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 // @see https://github.com/ericmorand/twing/issues/332
 // #if process.env.NODE_ENV !== 'unittest'
 import getTwingEnv from "twingEnv";
+import AbstractAction from "./AbstractAction";
 // #endif
 
 /**
@@ -52,7 +53,7 @@ const createAttachedDocument = async (config) => {
             attachedDocument = record.getAttachedDocument(config.type)
         }
     } catch (e) {
-
+        console.error(e)
         await win.Ext.MessageBox.show({
             buttons: Ext.Msg.OK,
             icon: Ext.MessageBox.WARNING,
@@ -166,8 +167,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             const {record, attachedDocument } = await createAttachedDocument(Object.assign(paperSlipConfig, { win, maskEl: mainCardPanel.el }))
                             Object.assign(config, {
                                 recordData: attachedDocument,
-                                id: attachedDocument.id,
-                                // tbarItems: [await getMailAction(win, record, paperSlip)]
+                                id: attachedDocument.id
                             });
                         }
                     })
@@ -176,15 +176,54 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     await createAttachedDocument(Object.assign(paperSlipConfig, { maskEl }))
                     alert('OnlyOfficeIntegrator missing -> find paperSlip in attachments')
                 }
-            }
+            },
+            menu: [
+                new AbstractAction({
+                    documentType: type,
+                    text: app.formatMessage('Create eDocument'),
+                    iconCls: `SalesEDocument`,
+                    actionUpdater(action, grants, records, isFilterSelect, filteredContainers) {
+                        let enabled = records.length === 1
 
+                        enabled = enabled && type === 'Invoice'
+
+                        enabled = records.reduce((enabled, record) => {
+                            return enabled && _.find(action.initialConfig.statusDef.records, {id: record.get(action.initialConfig.statusFieldName) })?.booked
+                        }, enabled)
+
+                        action.setDisabled(!enabled) // this is the action which sets all instances
+                    },
+                    handler: async function(cmp, e) {
+                        AbstractAction.prototype.handler.call(this, cmp);
+
+                        let record = this.selections = [...this.initialConfig.selections][0]
+                        const paperSlipConfig = { record, recordClass, editDialog: cmp.editDialog, type: 'edocument' }
+                        paperSlipConfig.force = e.ctrlKey || e.altKey
+                        Tine.Filemanager.QuickLookPanel.openWindow({
+                            id: record.id,
+                            contentPanelConstructorInterceptor: async (config) => {
+                                const isPopupWindow = config.window.popup
+                                const win = isPopupWindow ? config.window.popup : window
+                                const mainCardPanel = isPopupWindow ? win.Tine.Tinebase.viewport.tineViewportMaincardpanel : await config.window.afterIsRendered()
+                                isPopupWindow ? mainCardPanel.get(0).hide() : null;
+
+                                const {record, attachedDocument } = await createAttachedDocument(Object.assign(paperSlipConfig, { win, maskEl: mainCardPanel.el }))
+                                Object.assign(config, {
+                                    record: Tine.Tinebase.data.Record.setFromJson(attachedDocument, 'Filemanager.Node'),
+                                    id: attachedDocument.id
+                                });
+                            }
+                        })
+                    }
+                })
+            ]
         }, config))
     }
 
     ['Offer', 'Order', 'Delivery', 'Invoice'].forEach((type) => {
         const action = getAction(type, {})
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-        Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10)
+        Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-editDialog-Toolbar`, Ext.apply(new Ext.SplitButton(action), medBtnStyle), 10)
     })
 })
 

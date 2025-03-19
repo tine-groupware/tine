@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
@@ -202,6 +202,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                 mask.hide()
                 if (errorMsgs.length) {
+                    console.error(errorMsgs)
                     await Ext.MessageBox.show({
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.WARNING,
