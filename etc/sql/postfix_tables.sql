@@ -21,3 +21,9 @@ CREATE TABLE IF NOT EXISTS `smtp_destinations` (
     CONSTRAINT `smtp_destinations::userid--smtp_users::userid` FOREIGN KEY (`userid`)
     REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=Innodb DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `smtp_virtual_domains` (
+    `domain` varchar(50) NOT NULL,
+    `instancename` varchar(40) NOT NULL,
+    PRIMARY KEY (`domain`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
