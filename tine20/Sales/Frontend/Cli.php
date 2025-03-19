@@ -4,7 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -502,6 +502,14 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // Tinebase_Exception::log($e);
             }
         }
+    }
+
+    public function createBoilerplatesIfEmpty()
+    {
+        if (Sales_Controller_Boilerplate::getInstance()->getAll()->count() > 0) {
+            return;
+        }
+        Sales_Setup_Initialize::initializeBoilerPlates();
     }
 
     /**
