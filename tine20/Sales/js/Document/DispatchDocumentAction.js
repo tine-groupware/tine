@@ -173,7 +173,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     )), 'name') } catch (e) {/* USERABORT */ return }
 
                     const dispatchConfig = (cmp.startRecord ? cmp.startRecord.get('dispatch_config') : null) || Tine.Tinebase.configManager.get('defaultEDocumentDispatchDocumentTypes', 'Sales')[3]
-                    const documentTypes = _.map(dispatchConfig, 'document_type')
+                    const documentTypes = (dispatchConfig.document_types || dispatchConfig).map(dt => dt.document_type)
                     let paperslip = record.getAttachedDocument('paperslip')
                     let edocument = record.getAttachedDocument('edocument')
                     let docs = _.concat([
