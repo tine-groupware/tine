@@ -236,7 +236,7 @@ Tine.Tinebase.tineInit = {
                     EditDialog.openWindow({recordId: recordId, record: {id: recordId}, mode: 'remote'});
                 }
             }
-            
+
             if (target && href && href !== '#' && href !== Tine.Tinebase.common.getUrl()) {
                 target.set({
                     href: decodeURI(href),
@@ -247,7 +247,8 @@ Tine.Tinebase.tineInit = {
                 // open internal links in same window (use router)
                 const mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
                 if (window === mainWindow) {
-                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
+                    //todo: ask router if it is internal link, yes => open in same page , otherwise open in new tab
+                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl()) + '#/'))) {
                         target.set({
                             href: decodeURI(href),
                             target: "_self"
