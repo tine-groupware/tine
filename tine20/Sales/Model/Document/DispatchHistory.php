@@ -34,6 +34,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
     public const FLD_DISPATCH_DATE = 'dispatch_date';
     public const FLD_DISPATCH_TRANSPORT = 'dispatch_transport';
     public const FLD_DISPATCH_REPORT = 'dispatch_report';
+    public const FLD_DISPATCH_CONFIG = 'dispatch_config';
 
 
     /**
@@ -42,7 +43,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 4,
+        self::VERSION                       => 5,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
         self::HAS_ATTACHMENTS               => true,
@@ -190,6 +191,15 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_DISPATCH_CONFIG=> [
+                self::LABEL                     => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')
+                self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::REF_MODEL_FIELD           => self::FLD_DISPATCH_TRANSPORT,
+                    self::PERSISTENT                => true,
                 ],
             ],
         ],

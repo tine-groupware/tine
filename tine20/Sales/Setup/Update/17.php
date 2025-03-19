@@ -56,6 +56,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE035 = __CLASS__ . '::update035';
     protected const RELEASE017_UPDATE036 = __CLASS__ . '::update036';
     protected const RELEASE017_UPDATE037 = __CLASS__ . '::update037';
+    protected const RELEASE017_UPDATE038 = __CLASS__ . '::update038';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -201,6 +202,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE037 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update037',
+            ],
+            self::RELEASE017_UPDATE038 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update038',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -1059,5 +1064,14 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_config = REPLACE(edocument_dispatch_config, \'"document_type":"ubl"\', \'"document_type":"edocument"\') WHERE edocument_dispatch_config LIKE \'%"document_type":"ubl"%\'');
         }
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.37', self::RELEASE017_UPDATE037);
+    }
+
+    public function update038(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_DispatchHistory::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.38', self::RELEASE017_UPDATE038);
     }
 }

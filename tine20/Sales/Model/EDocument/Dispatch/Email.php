@@ -55,6 +55,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $t->_('email to: ') . $email,
+            Sales_Model_Document_DispatchHistory::FLD_DISPATCH_CONFIG => clone $this,
         ]));
 
         try {
