@@ -6,7 +6,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -309,7 +309,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true,
                     ], [
                         'id' => self::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
-                        'value' => 'Ubl', //_('Ubl')
+                        'value' => 'eDocument', //_('eDocument')
                         'icon' => null,
                         'system' => true,
                     ], [
@@ -333,22 +333,22 @@ class Sales_Config extends Tinebase_Config_Abstract
                     [
                         'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
                         'value' => 'Start', //_('Start')
-                        'icon' => null,
+                        'icon' => 'images/icon-set/icon_arrow_right.svg',
                         'system' => true,
                     ], [
                         'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_WAIT_FOR_FEEDBACK,
                         'value' => 'Waiting for feedback', //_('Waiting for feedback')
-                        'icon' => null,
+                        'icon' => 'images/icon-set/icon_timetracking.svg',
                         'system' => true,
                     ], [
                         'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS,
                         'value' => 'Success', //_('Success')
-                        'icon' => null,
+                        'icon' => 'images/icon-set/icon_hook_green.svg',
                         'system' => true,
                     ], [
                         'id' => Sales_Model_Document_DispatchHistory::DH_TYPE_FAIL,
                         'value' => 'Failure', //_('Failure')
-                        'icon' => null,
+                        'icon' => 'images/icon-set/icon_cross_red.svg',
                         'system' => true,
                     ],
                 ],

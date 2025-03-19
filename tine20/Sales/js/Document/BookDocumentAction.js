@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import AbstractAction from "./AbstractAction";
 
@@ -49,7 +49,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             options: notToday.map((source) => {
                                 return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
                             })
-                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()); debugger});
+                        }), (option) => { _.find(this.unbooked, { id: option.name }).set('date', new Date().clearTime()); });
                     }
                 } catch (e) {/* USERABORT -> continue */ }
 
@@ -79,6 +79,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 this.mask.hide()
 
                 if (this.errorMsgs.length) {
+                    console.error(this.errorMsgs)
                     await Ext.MessageBox.show({
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.ERROR,

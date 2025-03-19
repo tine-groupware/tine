@@ -128,7 +128,9 @@ Tine.Tinebase.ExceptionHandler = function() {
             var response = Ext.util.JSON.decode(exception.responseText);
             exception = response.data;
         }
-        
+
+        console.error(exception);
+
         if (exception.appName != 'Tinebase' && Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
             // the registered function must return true to don't work on this generically
             if (Tine.Tinebase.ExceptionHandlerRegistry.get(exception.appName)(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) === true) {

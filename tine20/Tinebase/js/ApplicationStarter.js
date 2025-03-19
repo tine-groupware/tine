@@ -122,6 +122,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
 
             if (fieldDefinition.hasOwnProperty('validators')) {
                 if (fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty']) {
+                    // @TODO evaluate inputFilters. inputFilters run on server when the key ist set in the data whereas validators always run
                     field.defaultValue = fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty'];
                 }
             }

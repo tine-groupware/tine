@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import FieldTriggerPlugin from "../../../Tinebase/js/ux/form/FieldTriggerPlugin";
 
@@ -43,7 +43,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             title: this.app.formatMessage('Change Document Date?'),
             msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
         }) === 'yes') {
-            this.record.set('date', new Date().clearTime());
+            this.getForm().findField('date').setValue(new Date().clearTime());
         }
 
         if (this.record.phantom) {
