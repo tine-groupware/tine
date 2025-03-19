@@ -50,7 +50,9 @@ const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             hideGroupedColumn: true,
             getGroupText: function (values) {
                 const startRecord = values.rs[0]
-                return startRecord.getGroupName()
+                const currRecord = _.last(values.rs)
+                const groupState = Tine.Tinebase.widgets.keyfield.Renderer.get('Sales', 'dispatchHistoryType', 'icon')(currRecord.get('type'))
+                return `${groupState} ${startRecord.getGroupName()}`
             },
             enableRowBody: true,
             getRowClass: function(record, rowIndex, rp, ds){

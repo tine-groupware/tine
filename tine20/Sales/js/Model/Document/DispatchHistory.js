@@ -7,9 +7,8 @@
  */
 
 const Mixin = {
-    getGroupName: function(withStatus) {
+    getGroupName: function() {
         const transportName = Tine.Tinebase.data.RecordMgr.get(this.get('dispatch_transport')).getRecordName()
-        //@TODO add state icon from last Record once type is a keyField and withSatus is true
         return `${transportName} - ${this.get('dispatch_report')}`;
     }
 }
