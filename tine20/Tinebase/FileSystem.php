@@ -3052,7 +3052,6 @@ class Tinebase_FileSystem implements
         $start = 0;
         $limit = 500;
         $hashesToDelete = [];
-        $baseDir = Tinebase_Core::getConfig()->filesdir;
 
         do {
             $pagination = new Tinebase_Model_Pagination([
@@ -3063,8 +3062,7 @@ class Tinebase_FileSystem implements
 
             $fileObjectIds = $this->_fileObjectBackend->search($filter, $pagination, true);
             foreach ($this->_fileObjectBackend->getHashes($fileObjectIds) as $hash) {
-                if (!file_exists($baseDir . DIRECTORY_SEPARATOR . substr((string) $hash, 0, 3) . DIRECTORY_SEPARATOR .
-                        substr((string) $hash, 3))) {
+                if (!file_exists($this->getFilesystemPathByHash($hash))) {
                     $hashesToDelete[] = $hash;
                 }
             }
@@ -3129,6 +3127,14 @@ class Tinebase_FileSystem implements
         Tinebase_Fulltext_Indexer::getInstance()->removeFileContentsFromIndex($fileObjectIds);
 
         return $count;
+    }
+
+    public function getFilesystemPathByHash(string $hash)
+    {
+        $baseDir = Tinebase_Core::getConfig()->filesdir;
+        return $baseDir
+            . DIRECTORY_SEPARATOR . substr($hash, 0, 3)
+            . DIRECTORY_SEPARATOR . substr($hash, 3);
     }
 
     /**

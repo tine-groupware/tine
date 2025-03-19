@@ -1138,7 +1138,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param $filePath
      * @return array
      */
-    protected function _createTestNode($nodeName, $filePath)
+    protected function _createTestNode($nodeName, $filePath): array
     {
         $user = Tinebase_Core::getUser();
         $container = Tinebase_FileSystem::getInstance()->getPersonalContainer(
