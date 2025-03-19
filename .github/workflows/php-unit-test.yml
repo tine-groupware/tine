@@ -45,8 +45,7 @@ jobs:
         cd tine20
         composer install --ignore-platform-reqs
         cp config.inc.github.php config.inc.php
-        cp install.properties.github install.properties
-        vendor/bin/phing tine-install
+        php -d include_path=.:${configdir} setup.php --install -- adminLoginName=github adminPassword=github adminEmailAddress=github@example.org acceptedTermsVersion=1000
 
     - name: Unit tests
       run: |
