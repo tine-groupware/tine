@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -21,6 +21,8 @@ class AllTests
 {
     public static function suite()
     {
+        (new Sales_Frontend_Cli)->createBoilerplatesIfEmpty();
+
         $node_total = isset($_ENV['NODE_TOTAL']) ? intval($_ENV['NODE_TOTAL']):1;
         $node_index = isset($_ENV['NODE_INDEX']) ? intval($_ENV['NODE_INDEX']):1;
 
