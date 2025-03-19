@@ -41,11 +41,6 @@ class Sales_Controller_Document_DispatchHistory extends Tinebase_Controller_Reco
         $this->_registerOnCommitHook($_record);
     }
 
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-        throw new Tinebase_Exception_NotImplemented('dispatch history should not be updated');
-    }
-
     protected function _registerOnCommitHook(Sales_Model_Document_DispatchHistory $history): void
     {
         Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'onCommitCallback'], [$history]);

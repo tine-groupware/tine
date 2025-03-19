@@ -68,6 +68,7 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $report,
                 Sales_Model_Document_DispatchHistory::FLD_TYPE => Sales_Model_Document_DispatchHistory::DH_TYPE_START,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
+                Sales_Model_Document_DispatchHistory::FLD_DISPATCH_CONFIG => clone $this,
             ])
         );
 

@@ -623,6 +623,19 @@ Record.setFromJson = function(json, recordClass) {
 };
 
 /**
+ * returns a clone of given record (in current window context)
+ *
+ * @param {Record} record
+ * @return {Record}
+ */
+Record.clone = function(record) {
+    const data = JSON.stringify(record.getData());
+    const recordClass = record.constructor.getPhpClassName()
+
+    return TRecord.setFromJson(data, recordClass);
+}
+
+/**
  * @type {Array}
  *
  * modlog Fields

@@ -53,6 +53,9 @@ class Tinebase_ModelConfiguration_Const {
      * example: ['field' => 'number', 'direction' => 'DESC']
      */
     public const DEFAULT_SORT_INFO = 'defaultSortInfo';
+    /**
+     * evaluated from doctrine only! has nothing to do with record validation default or empty value
+     */
     public const DEFAULT_VAL = 'default';
     /**
      * config for default value

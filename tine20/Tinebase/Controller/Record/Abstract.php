@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -3920,7 +3920,10 @@ HumanResources_CliTests.testSetContractsEndDate */
             : (!empty($location['record_id']['id']) ? $location['record_id']['id'] : null);
         try {
             if (is_array($location['record_id']) && !$recordId) {
-                $recordData = new $location['model']($location['record_id']);
+                /** @var Tinebase_Record_Interface $recordData */
+                $recordData = new $location['model']([], true);
+                $tmp = $location['record_id'];
+                $recordData->setFromJsonInUsersTimezone($tmp);
                 $record = $this->create($recordData);
             } else {
                 $record = $this->get($recordId);

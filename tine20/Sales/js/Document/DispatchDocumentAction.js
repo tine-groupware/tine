@@ -14,6 +14,8 @@ import getTwingEnv from "twingEnv";
 import AbstractAction from "./AbstractAction"
 import { createAttachedDocument } from "./CreatePaperSlipAction"
 import DispatchHistoryDialog from "./DispatchHistoryDialog"
+import "../Model/Document/DispatchHistory"
+import DispatchHistoryGridPanel from "./DispatchHistoryGridPanel";
 
 // dispatching is done by the server based on dispatch configs. (Sales_Frontend_Json->dispatchDocument)
 // also for manual dispatching the server creates the necessary documents and sets the document to MANUAL_DISPATCH state
@@ -36,11 +38,13 @@ import DispatchHistoryDialog from "./DispatchHistoryDialog"
 //     - optionally set manual tasks "COMPLETED"
 //     - optionally set document dispatched
 
+let getAction
+
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
     const app = Tine.Tinebase.appMgr.get('Sales')
 
-    const getAction = (type, config) => {
+    getAction = (type, config) => {
         return new AbstractAction({
             documentType: type,
             text: config.text || app.formatMessage('Dispatch Document'),
@@ -86,12 +90,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         }
 
                     } catch (e) {
-                        await Ext.MessageBox.show({
-                            buttons: Ext.Msg.OK,
-                            icon: Ext.MessageBox.WARNING,
-                            title: this.app.formatMessage('Dispatching not Possible'),
-                            msg: e.message
-                        })
+                        e.data.title = this.app.formatMessage('Dispatching not Possible');
+                        await Tine.Tinebase.ExceptionHandler.handleRequestException(e);
                         this.mask.hide()
                         return
                     }
@@ -122,7 +122,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.initialConfig = (this.parentMenu?.ownerCt || this).initialConfig;
                     AbstractAction.prototype.handler.call(this, cmp);
 
-                    let record = this.selections = [...this.initialConfig.selections][0]
+                    let record = this.selections = this.record || [...this.initialConfig.selections][0]
                     const win = window
                     const docType = record.constructor.getMeta('recordName')
                     const statusFieldName = `${docType.toLowerCase()}_status`
@@ -172,12 +172,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                     )), 'name') } catch (e) {/* USERABORT */ return }
 
-                    // autocheck paperslip, edocument and supporting_documents, offer all other attachments
+                    const dispatchConfig = (cmp.startRecord ? cmp.startRecord.get('dispatch_config') : null) || Tine.Tinebase.configManager.get('defaultEDocumentDispatchDocumentTypes', 'Sales')[3]
+                    const documentTypes = (dispatchConfig.document_types || dispatchConfig).map(dt => dt.document_type)
                     let paperslip = record.getAttachedDocument('paperslip')
                     let edocument = record.getAttachedDocument('edocument')
                     let docs = _.concat([
-                        { name: 'paperslip', text: app.formatMessage('Paperslip ({ filename })', {filename: paperslip ? paperslip.name : app.formatMessage('Generated when dispatched')}), file: paperslip, checked: true },
-                        { name: 'edocument', text: app.formatMessage('eDocument ({ filename })', {filename: edocument ? edocument.name : app.formatMessage('Generated when dispatched')}), file: edocument, checked: true }
+                        { name: 'paperslip', text: app.formatMessage('Paperslip ({ filename })', {filename: paperslip ? paperslip.name : app.formatMessage('Generated when dispatched')}), file: paperslip, checked: documentTypes.indexOf('paperslip') >=0 },
+                        { name: 'edocument', text: app.formatMessage('eDocument ({ filename })', {filename: edocument ? edocument.name : app.formatMessage('Generated when dispatched')}), file: edocument, checked: documentTypes.indexOf('edocument') >=0 }
                     ], _.reduce(record.get('attachments'), (docs, attachment) => {
                         const attachedDocument = _.find(record.get('attached_documents'), { node_id: attachment.id })
                         if (! attachedDocument || attachedDocument.type === 'supporting_document') {
@@ -198,12 +199,47 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         })
                     } catch (e) {/* USERABORT */ return }
 
-                    // @TODO if manual task are open, ask user if he wants to complete those tasks (multi options, allowMultiple)
                     const dispatchProcesses = _.groupBy(_.sortBy(record.get('dispatch_history'), 'dispatch_date'), (dh) => `${dh.dispatch_id}-${dh.dispatch_parent_id}-${dh.dispatch_transport}`)
                     const openProcesses = _.reduce(dispatchProcesses, (accu, dhs, group) => {
-                        return _.concat(accu,dhs[0].dispatch_transport === 'Sales_Model_EDocument_Dispatch_Manual' && !_.find(dhs, { type: 'success' }) ? _.find(dhs, {type: 'start'}) : [])
+                        return _.concat(accu, !_.find(dhs, { type: 'success' }) ? _.find(dhs, {type: 'start'}) : [])
                     }, [])
+                    let fileLocations = [{
+                        model: 'Sales_Model_Document_DispatchHistory',
+                        record_id : {
+                            dispatch_id: Tine.Tinebase.data.Record.generateUID(),
+                            document_type: record.constructor.getPhpClassName(),
+                            document_id: record.id,
+                            dispatch_transport: 'Sales_Model_EDocument_Dispatch_Manual',
+                            dispatch_report: app.formatMessage('Manually dispatched by email without evaluating the configured dispatch type'),
+                            type: 'success'
+                        },
+                        type: 'attachment'
+                    }]
 
+                    if (openProcesses.length) {
+                        // @TODO don't show other options if cmp.startRecord is set?
+                        try {
+                            fileLocations = _.map(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                                title: app.formatMessage('Complete open Dispatch Processes?'),
+                                questionText: app.formatMessage('By sending this mail, the following dispatch processes must be marked completed:'),
+                                allowMultiple: true,
+                                allowEmpty: false,
+                                allowCancel: true,
+                                height: docs.length * 30 + 100,
+                                options: _.reduce(openProcesses, (accu, startRecord, key) => {
+                                    startRecord = Tine.Tinebase.data.Record.setFromJson(startRecord, 'Sales_Model_Document_DispatchHistory')
+                                    return accu.concat({ name: key, text: startRecord.getGroupName(), checked: startRecord.id === cmp.startRecord.id , value: {
+                                            model: 'Sales_Model_Document_DispatchHistory',
+                                            record_id : Ext.copyTo({
+                                                dispatch_report: app.formatMessage('Dispatched by manual email'),
+                                                type: 'success'
+                                            }, startRecord.data, 'dispatch_process, dispatch_id, parent_dispatch_id, document_id, document_type, dispatch_transport'),
+                                            type: 'attachment'
+                                        } })
+                                }, [])
+                            }), 'value')
+                        } catch (e) {/* USERABORT */ return }
+                    }
 
                     this.mask.show()
 
@@ -245,7 +281,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 this.twingEnv = getTwingEnv()
                                 const loader = this.twingEnv.getLoader()
                                 loader.setTemplate(`${record.id}-email`, emailBoilerplate.boilerplate)
-                                body = await this.twingEnv.render(`${record.id}-email`, {record: record.data})
+                                // NOTE: twing needs data in same window context
+                                body = await this.twingEnv.render(`${record.id}-email`, {record: Tine.Tinebase.data.Record.clone(record).data})
                                 if (mailDefaults.content_type === 'text/html') {
                                     body = Ext.util.Format.nl2br(body)
                                 }
@@ -264,31 +301,26 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 record: mailRecord,
                                 onRecordUpdate: function() {
                                     Tine.Felamimail.MessageEditDialog.prototype.onRecordUpdate.call(this)
-                                    this.record.data.fileLocations.push({
-                                        model: 'Sales_Model_Document_DispatchHistory',
-                                        record_id : {
-                                            dispatch_id: Tine.Tinebase.data.Record.generateUID(),
-                                            document_type: record.constructor.getPhpClassName(),
-                                            document_id: record.id,
-                                            dispatch_date: new Date(),
-                                            dispatch_transport: 'Sales_Model_EDocument_Dispatch_Manual',
-                                            dispatch_report: app.formatMessage('Manually dispatched without evaluating the configured dispatch type'),
-                                            type: 'success'
-                                        },
-                                        type: 'attachment'
-                                    })
+                                    this.record.data.fileLocations = _.concat(this.record.data.fileLocations, _.map(fileLocations, (fileLocation) => {
+                                        return _.set(fileLocation, 'record_id.dispatch_date', new Date())
+                                    }))
                                 }
                             })
                         },
                         listeners: {
                             update: async (mail) => {
-                                // save document so that server manages doc state
-                                if (config.editDialog) {
-                                    await config.editDialog.applyChanges()
-                                    config.record = config.editDialog.record
+                                // we need to fetch record first, as dispatchHistory is dependend and we don't have the
+                                // new dispatchHistoryRecord which we created via mail fileLocation
+                                cmp.record = await cmp.record.constructor.getProxy().promiseLoadRecord(cmp.record)
+
+                                if (cmp.editDialog && cmp.editDialog.loadRecord) {
+                                    await cmp.editDialog.loadRecord(cmp.record, true)
+                                    await cmp.editDialog.applyChanges()
+                                    cmp.record = cmp.editDialog.record
                                 } else {
-                                    config.record = await config.record.getProxy().promiseSaveRecord(config.record)
+                                    cmp.record = await cmp.record.constructor.getProxy().promiseSaveRecord(cmp.record)
                                 }
+                                cmp.fireEvent('sentmail', cmp)
                             }
                         }
                     });
@@ -296,6 +328,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.mask.hide()
 
                     if (this.errorMsgs.length) {
+                        console.error(this.errorMsgs)
                         await Ext.MessageBox.show({
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING,
@@ -349,3 +382,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.SplitButton(action), medBtnStyle), 30)
     })
 })
+
+export {
+    getAction as getDispatchAction
+}

@@ -799,8 +799,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ->getLastRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'resetTransactionTransactionable']);
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'restartTransaction']);
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'resetTransactionTransactionable']);
+        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'restartTransaction']);
 
         /** @var Sales_Model_Document_Invoice $storno */
         $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
