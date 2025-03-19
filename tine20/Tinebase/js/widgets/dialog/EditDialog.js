@@ -479,6 +479,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * generic form layout
      */
     getFormItems: function() {
+        let plugin
         return {
             xtype: 'tabpanel',
             border: false,
@@ -492,6 +493,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }, {
                 ptype: 'ux.itemregistry',
                 key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
+            }, plugin = {
+                init: Ext.emptyFn
             }],
             items:_.concat([
                 {
@@ -501,7 +504,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     frame: true,
                     layout: 'border',
                     defaults: { autoScroll: true },
-                    items: [Ext.applyIf(this.getRecordFormItems(), {
+                    items: [Ext.applyIf(this.getRecordFormItems(plugin), {
                         region: 'center',
                         xtype: 'columnform',
                         labelAlign: 'top',
@@ -574,10 +577,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         } : [];
     },
 
-    getRecordFormItems: function() {
+    getRecordFormItems: function(plugin) {
         return new Tine.widgets.form.RecordForm({
             recordClass: this.recordClass,
-            editDialog: this
+            editDialog: this,
+            tapPanelPlugin: plugin
         });
     },
 

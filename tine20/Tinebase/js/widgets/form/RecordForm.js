@@ -35,6 +35,8 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
             app = Tine.Tinebase.appMgr.get(appName),
             fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(this.recordClass);
 
+        let _ = window.lodash
+
         this.items = [];
         this.plugins = this.plugins || [];
         this.plugins.push({
@@ -44,6 +46,30 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
 
         // sometimes we need the instances from registry (e.g. printing)
         this.editDialog.recordForm = this;
+        let tabs = _.groupBy(fieldDefinitions, 'uiconfig.tab');
+        this.tapPanelPlugin.init = this.tapPanelPlugin.init.createSequence((tabPanel) => {
+            _.each(tabs, (fieldDefinitions, tabName) => {
+                if (tabName && tabName !== 'undefined') {
+                    let items = [];
+                    _.each(fieldDefinitions, (fieldDefinition) => {
+                        items.push(Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog'))
+                    })
+                    tabPanel.add({
+                        title: app.i18n._hidden(tabName),
+                        layout: 'form',
+                        border: true,
+                        frame: true,
+                        labelAlign: 'top',
+                        autoScroll: true,
+                        items: items,
+                        defaults: {
+                            anchor: '100%',
+                            labelSeparator: ''
+                        }
+                    })
+                }
+            })
+        })
 
         const fieldsToExclude = _.get(this, 'editDialog.fieldsToExclude', this.fieldsToExclude);
         const fieldsToInclude = _.get(this, 'editDialog.fieldsToInclude', this.fieldsToInclude);
@@ -51,6 +77,7 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
         Ext.each(fieldDefinitions, function(fieldDefinition) {
             if (_.isArray(fieldsToExclude) && _.indexOf(fieldsToExclude, fieldDefinition.fieldName) >=0) return;
             if (_.isArray(fieldsToInclude) && _.indexOf(fieldsToInclude, fieldDefinition.fieldName) <0) return;
+            if (fieldDefinition.uiconfig.tab) return;
 
             var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog');
             if (field) {
