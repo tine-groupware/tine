@@ -219,13 +219,47 @@ class Tinebase_FileSystem_Previews
                 {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size
             || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
                 {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT} < $node->preview_error_count
+            || ! $this->_checkMinimalImageSize($node)
         ) {
             return false;
         }
 
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
-
         return $this->isSupportedFileExtension($fileExtension);
+    }
+
+    /**
+     * check if node is image, if image has dimensions < 5px, (for example tracking pixel or horizontal lines)
+     * => do not create preview
+     *
+     * @param Tinebase_Model_Tree_Node $node
+     * @return bool
+     */
+    protected function _checkMinimalImageSize(Tinebase_Model_Tree_Node $node): bool
+    {
+        if (! in_array($node->contenttype, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+            return true;
+        }
+        $path = Tinebase_FileSystem::getInstance()->getFilesystemPathByHash($node->hash);
+        $imageSize = @getimagesize($path);
+        if (!$imageSize) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not read image file from path: '
+                    . $path
+                );
+            }
+            return false;
+        } else if ($imageSize[0] < 10 || $imageSize[1] < 10) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Image too small for preview ('
+                    . $imageSize[0] . 'x' . $imageSize[1] . ')'
+                );
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

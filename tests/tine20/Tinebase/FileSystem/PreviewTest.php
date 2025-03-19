@@ -1,13 +1,13 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Milan Mertens <m.mertens@metaways.de>
  */
-
 
 class Tinebase_FileSystem_PreviewTest extends TestCase
 {
@@ -149,7 +149,7 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
     public function testCreatePreviewsFormNodeFailPreviewCreationFailed()
     {
         $this->_previewService->setReturnValueGetPreviewsForFile(false);
-        //if createPreviews has run while file creation, it will also run a second time (because there are no previews for the file)
+        // if createPreviews has run while file creation, it will also run a second time (because there are no previews for the file)
         $this->assertCreatePreviewsFormNode(0, 0, 1, 2);
     }
 
@@ -157,5 +157,18 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
     {
         $this->_previewService->setThrowExceptionGetPreviewsForFile(new Tinebase_FileSystem_Preview_BadRequestException("File not usable", 400));
         $this->assertCreatePreviewsFormNode(0, 400, 1, 1);
+    }
+
+    public function testSmallImageSizeNoPreview()
+    {
+        // create node from file
+        $imgFile = $this->_createTestNode(
+            'image.png',
+            dirname(__FILE__) . '/Preview/image.png'
+        );
+        $imgFileNode = Tinebase_FileSystem::getInstance()->get($imgFile[0]['id']);
+        // check canNodeHavePreviews
+        self::assertFalse(Tinebase_FileSystem_Previews::getInstance()->canNodeHavePreviews($imgFileNode)
+            , 'image node should not have preview');
     }
 }
