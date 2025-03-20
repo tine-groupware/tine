@@ -227,6 +227,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     initColumnModel: function() {
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
             lazyInit: false,
+            listEmptyText: false,
             listeners: {
                 scope: this,
                 specialkey: this.onSearchComboSpecialkey,
@@ -247,7 +248,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         this.loadMask.show();
            
                         const contacts = await Tine.Tinebase.common.findContactsByEmailString(value);
-                        this.searchCombo.reset();
+                        this.searchCombo.setRawValue('');
                         await this.updateRecipientsToken(null, contacts);
 
                         this.loadMask.hide();
