@@ -1795,6 +1795,7 @@ class Tinebase_Core
         }
 
         $externalIdps = [];
+        $hasExternalIdps = false;
         if (Tinebase_Application::getInstance()->isInstalled('SSO')) {
             try {
                 $externalIdps = SSO_Controller_ExternalIdp::getInstance()->search(
@@ -1803,6 +1804,13 @@ class Tinebase_Core
                             TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => true],
                     ])
                 )->toArray();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+            try {
+                $hasExternalIdps = ((int)SSO_Controller_ExternalIdp::getInstance()->searchCount(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class)
+                )) > 0;
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
             }
@@ -1827,7 +1835,7 @@ class Tinebase_Core
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
             'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
-            'allowPasswordLessLogin' => Tinebase_Auth_MFA::hasPwdLessProvider(),
+            'allowPasswordLessLogin' => $hasExternalIdps || Tinebase_Auth_MFA::hasPwdLessProvider(),
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
             'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),
