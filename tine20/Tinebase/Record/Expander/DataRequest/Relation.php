@@ -23,7 +23,7 @@ class Tinebase_Record_Expander_DataRequest_Relation extends Tinebase_Record_Expa
 
     public function merge(Tinebase_Record_Expander_DataRequest $_dataRequest)
     {
-        $ids = $_dataRequest->ids[$_dataRequest->_model][$_dataRequest->_backend] ?? [];
+        $ids = $_dataRequest->_ids[$_dataRequest->_model][$_dataRequest->_backend] ?? [];
         if (!isset($this->_ids[$_dataRequest->_model])) {
             $this->_ids[$_dataRequest->_model] = [$_dataRequest->_backend => $ids];
         } elseif (!isset($this->_ids[$_dataRequest->_model][$_dataRequest->_backend])) {
