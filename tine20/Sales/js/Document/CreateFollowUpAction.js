@@ -106,13 +106,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
                             allowMultiple: true,
                             allowEmpty: true,
-                            allowCancel: false,
+                            allowCancel: true,
                             height: notToday.length * 30 + 100,
                             options: notToday.map((source) => {
                                 return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
                             })
                         }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) }) : null;
-                    } catch (e) {/* USERABORT -> continue */ }
+                    } catch (e) {/* USERABORT */ mask.hide(); return; }
 
                     await unbooked.asyncForEach(async (record) => {
                         record.set(statusFieldName, bookedState.id)
