@@ -256,8 +256,15 @@ class Sales_Controller extends Tinebase_Controller_Event
             $customer = $contact->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
 
             if (! $customer) {
+                $name = $contact->n_fn;
+                if (! empty($contact->salutation)) {
+                    $name = $contact->salutation . ' ' . $name;
+                }
+                if (! empty($contact->org_name)) {
+                    $name = $contact->org_name . ' - ' . $name;
+                }
                 $customer = new Sales_Model_Customer([
-                    'name' => $contact->n_fn,
+                    'name' => $name,
                     'cpextern_id' => $contact->getId(),
                     'relations' => [[
                         'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
