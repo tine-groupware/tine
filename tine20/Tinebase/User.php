@@ -802,7 +802,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Assign default user group: ' . $group->name);
                 }
-                $user->accountPrimaryGroup = $group;
+                $user->accountPrimaryGroup = $group->getId();
             }
         }
         
