@@ -1421,9 +1421,18 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                             throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
                                 $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
 
-                            // yes array_key_exists, as you should be able to set default to null
-                        } elseif ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
+                        }
+                        // yes array_key_exists, as you should be able to set default to null
+                        if ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
                             $fieldDef[self::DEFAULT_VAL] = $keyField->default;
+                        }
+                        // yes array_key_exists, as you should be able to set default to null
+                        if ($keyField && !array_key_exists(Zend_Filter_Input::DEFAULT_VALUE, $fieldDef[self::VALIDATORS] ?? []) && is_scalar($keyField->default)) {
+                            $fieldDef[self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] = $keyField->default;
+                        }
+                        // yes array_key_exists, as you should be able to set default to null
+                        if ($keyField && !array_key_exists(Zend_Filter_Empty::class, $fieldDef[self::INPUT_FILTERS] ?? []) && is_scalar($keyField->default)) {
+                            $fieldDef[self::INPUT_FILTERS][Zend_Filter_Empty::class] = $keyField->default;
                         }
                     }
                     break;
