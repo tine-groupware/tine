@@ -1163,7 +1163,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
-        $this->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = null;
+        $this->{self::FLD_PRECURSOR_DOCUMENTS} = null;
+        $this->{static::getStatusField()} = null;
+        $this->{self::FLD_REVERSAL_STATUS} = null;
 
         parent::prepareForCopy();
     }
