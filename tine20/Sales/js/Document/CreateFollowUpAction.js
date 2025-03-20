@@ -101,7 +101,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         const notToday = _.reduce(unbooked, (acc, record) => {
                             return _.concat(acc, record.get('date') && record.get('date').format('Ymd') !== new Date().format('Ymd') ? record : []);
                         }, [])
-                        _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                        notToday.length ? _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                             title: app.formatMessage('Change Document Date?'),
                             questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
                             allowMultiple: true,
@@ -111,7 +111,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             options: notToday.map((source) => {
                                 return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
                             })
-                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) });
+                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) }) : null;
                     } catch (e) {/* USERABORT -> continue */ }
 
                     await unbooked.asyncForEach(async (record) => {
