@@ -41,7 +41,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
         const statusFieldName = `${sourceType.toLowerCase()}_status`
         const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
-        const reversedStatus = _.find(statusDef.records, { reversal: true })
+        const reversedStatus = _.find(statusDef.records, { reversal: true }) || {id: 'doctype-without-reversals'}
 
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Create { targetRecordName }', { targetRecordName }),
@@ -101,18 +101,18 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         const notToday = _.reduce(unbooked, (acc, record) => {
                             return _.concat(acc, record.get('date') && record.get('date').format('Ymd') !== new Date().format('Ymd') ? record : []);
                         }, [])
-                        _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                        notToday.length ? _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                             title: app.formatMessage('Change Document Date?'),
                             questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
                             allowMultiple: true,
                             allowEmpty: true,
-                            allowCancel: false,
+                            allowCancel: true,
                             height: notToday.length * 30 + 100,
                             options: notToday.map((source) => {
                                 return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
                             })
-                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) });
-                    } catch (e) {/* USERABORT -> continue */ }
+                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) }) : null;
+                    } catch (e) {/* USERABORT */ mask.hide(); return; }
 
                     await unbooked.asyncForEach(async (record) => {
                         record.set(statusFieldName, bookedState.id)
