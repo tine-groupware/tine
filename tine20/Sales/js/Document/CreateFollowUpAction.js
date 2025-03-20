@@ -41,7 +41,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
         const statusFieldName = `${sourceType.toLowerCase()}_status`
         const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
-        const reversedStatus = _.find(statusDef.records, { reversal: true })
+        const reversedStatus = _.find(statusDef.records, { reversal: true }) || {id: 'doctype-without-reversals'}
 
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Create { targetRecordName }', { targetRecordName }),
