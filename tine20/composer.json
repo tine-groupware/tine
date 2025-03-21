@@ -161,6 +161,7 @@
     "tine20/composerapploader": "1.0.*",
     "twig/cssinliner-extra": "^3.7",
     "twig/extensions": "^1.5",
+    "twig/html-extra": "^3.7",
     "twig/twig": "v2.15.5",
     "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
     "web-auth/webauthn-lib": "^3.3",

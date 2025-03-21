@@ -11,6 +11,8 @@
  */
 
 use Twig\Extra\CssInliner\CssInlinerExtension;
+use Twig\Extra\Html\HtmlExtension;
+
 
 /**
  * Tinebase Twig class
@@ -81,6 +83,8 @@ class Tinebase_Twig
 
         $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
         $this->_twigEnvironment->addExtension(new CssInlinerExtension());
+        $this->_twigEnvironment->addExtension(new HtmlExtension());
+
 
         $this->_addTwigFunctions();
 
@@ -95,6 +99,7 @@ class Tinebase_Twig
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             'branding'          => [
                 'logo'              => Tinebase_Core::getInstallLogo(),
+                'logoContent'       => Tinebase_Controller::getInstance()->getLogo(),
                 'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
                 'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
                 'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
@@ -110,11 +115,48 @@ class Tinebase_Twig
 
     /**
      * @param string $_filename
+     * @param Zend_Locale $locale
+     *
+     *  directory structure
+     *    some.twig          <-- default (en), taken if nothing else matches
+     *    de_DE/some.twig    <-- exact match for de_DE
+     *    de/some.twig       <-- matches de_AT for example
      * @return Twig_TemplateWrapper
      */
-    public function load($_filename)
+    public function load($_filename, Zend_Locale $locale = null)
     {
-        return $this->_twigEnvironment->load($_filename);
+        $locale = $locale ?? Tinebase_Core::getLocale();
+        $path = $_filename;
+        $filename = basename($path);
+        $baseDir = dirname($path);
+
+        $localString = (String)$locale;
+        $localeParts = explode('_', $localString);
+        $language = $localeParts[0] ?? '';
+
+        // de_DE
+        // first check de_DE dir and if nothing is found check de dir fallback to given path else
+        // Check paths in order of specificity:
+        // 1. Full locale (e.g., de_DE/file.txt)
+        // 2. Language only (e.g., de/file.txt)
+        // 3. Original path (baseDir/file.txt)
+        $possiblePaths = [
+            "{$baseDir}/{$localString}",
+            "{$baseDir}/{$language}",
+            "{$baseDir}"
+        ];
+        // Return the first existing path
+        $loader = $this->_twigEnvironment->getLoader();
+        foreach ($possiblePaths as $possiblePath) {
+            if (file_exists("$possiblePath/$filename")) {
+                if ($loader instanceof Twig_Loader_Filesystem) {
+                    $loader->addPath($possiblePath,  '__main__');
+                    return $this->_twigEnvironment->load($filename);
+                }
+            }
+        }
+        //todo: remove this?
+        return $this->_twigEnvironment->load($path);
     }
 
     /**
@@ -255,6 +297,16 @@ class Tinebase_Twig
             function($string) {
                 return Tinebase_Model_Tree_Node::sanitizeName($string);
             }));
+        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('localizeString', function ($records, $locale = null) {
+            $language = is_string($locale) ? $locale : $locale->getLanguage();
+            $record = $records?->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $language);
+
+            if (!$record) {
+                $record = $records?->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, 'en');
+            }
+
+            return $record ? $record->{Tinebase_Record_PropertyLocalization::FLD_TEXT} : '';
+        }));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)

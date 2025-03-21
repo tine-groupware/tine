@@ -24,7 +24,7 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
     public const FLD_DESCRIPTION = 'description';
     public const FLD_IS_SELF_REGISTRATION = 'is_self_registration';
     public const FLD_IS_SELF_SERVICE = 'is_self_service';
-
+    public const FLD_URL = 'url';
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -119,6 +119,21 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => false
                 ],
+            ],
+            self::FLD_URL => [
+                self::LABEL                     => 'Registration link', // _('Registration link')
+                self::TYPE                      => self::TYPE_VIRTUAL,
+                self::SPECIAL_TYPE              => self::SPECIAL_TYPE_URL,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false
+                ],
+                self::UI_CONFIG     => [
+                    self::READ_ONLY             => true,
+                    'plugins'                   => [
+                        'ux.fieldclipboardplugin'
+                    ],
+                ]
             ],
         ]
     ];

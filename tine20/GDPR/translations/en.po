@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,20 +43,26 @@ msgstr "default"
 msgid "Default data provenance for ADB contacts"
 msgstr "Default data provenance for ADB contacts"
 
-msgid "Manage consent page explain text"
-msgstr "Manage consent page explain text"
-
-msgid "Manage consent Email template"
-msgstr "Manage consent Email template"
-
 msgid "Languages Available"
 msgstr "Languages Available"
 
 msgid "List of the language in which the multilingual texts are laid out."
 msgstr "List of the language in which the multilingual texts are laid out."
 
-msgid "Consent management for"
-msgstr "Consent management for"
+msgid "Subscription container id"
+msgstr "Subscription container id"
+
+msgid "Subscription container id in Addressbook."
+msgstr "Subscription container id in Addressbook."
+
+msgid "GDPR registration secret string"
+msgstr "GDPR registration secret string"
+
+msgid "GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable"
+msgstr "GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable"
+
+msgid "GDPR template path"
+msgstr "GDPR template path"
 
 msgid "Data provenances"
 msgstr "Data provenances"
@@ -107,32 +112,32 @@ msgstr "Show expired"
 msgid "GDPR Intended Purpose"
 msgstr "GDPR Intended Purpose"
 
-#, python-brace-format
-msgid "I am not {email}"
-msgstr "I am not {email}"
-
-msgid "Data intended purpose"
-msgid_plural "Data intended purposes"
-msgstr[0] "Data intended purpose"
-msgstr[1] "Data intended purposes"
+msgid "Description"
+msgstr "Description"
 
 msgid "Status"
 msgstr "Status"
 
+msgid "Manage"
+msgstr "Manage"
+
 msgid "Not decided"
 msgstr "Not decided"
+
+msgid "Agree"
+msgstr "Agree"
 
 msgid "Withdraw date"
 msgstr "Withdraw date"
 
+msgid "Withdraw"
+msgstr "Withdraw"
+
 msgid "Agreement date"
 msgstr "Agreement date"
 
-msgid "Enter your email address"
-msgstr "Enter your email address"
-
-msgid "Get my link"
-msgstr "Get my link"
+msgid "Send"
+msgstr "Send"
 
 msgid "I hereby withdraw the following data intended purpose"
 msgstr "I hereby withdraw the following data intended purpose"
@@ -157,6 +162,16 @@ msgstr "Cancel"
 
 msgid "Confirm"
 msgstr "Confirm"
+
+msgid "Register"
+msgstr "Register"
+
+#, python-brace-format
+msgid "I am not {email}"
+msgstr "I am not {email}"
+
+msgid "Go to my manage consent link"
+msgstr "Go to my manage consent link"
 
 msgid "Data Intended purpose of this mass mailing"
 msgstr "Data Intended purpose of this mass mailing"
@@ -207,8 +222,19 @@ msgstr "Add all contacts having agreed to this purpose"
 msgid "Compose mass mail without recipients"
 msgstr "Compose mass mail without recipients"
 
-msgid "Description"
-msgstr "Description"
+msgid "Data intended purpose"
+msgid_plural "Data intended purposes"
+msgstr[0] "Data intended purpose"
+msgstr[1] "Data intended purposes"
+
+msgid "Hide from self registration"
+msgstr "Hide from self registration"
+
+msgid "Hide from self service"
+msgstr "Hide from self service"
+
+msgid "Registration link"
+msgstr "Registration link"
 
 msgid "GENDER_Data intended purpose"
 msgstr "GENDER_Data intended purpose"
@@ -236,8 +262,14 @@ msgstr "GDPR Data Expiry Date"
 msgid "Enter your email"
 msgstr "Enter your email"
 
-msgid "Thank you for using GDPR module\""
-msgstr "Thank you for using GDPR module\""
+msgid "E-mail"
+msgstr "E-mail"
 
-msgid "To review or edit your consent please use the following link:"
-msgstr "To review or edit your consent please use the following link:"
+msgid "First Name"
+msgstr "First Name"
+
+msgid "Last Name"
+msgstr "Last Name"
+
+msgid "Organization"
+msgstr "Organization"
