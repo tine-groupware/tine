@@ -1401,6 +1401,9 @@ msgstr "Bankkonto"
 msgid "GENDER_Division"
 msgstr "female"
 
+msgid "Copy { recordName }"
+msgstr "{ recordName } Kopieren"
+
 msgid "The full name under which the seller is registered in the national register of legal entities or as a taxable person or otherwise acts as a person(s) (company) (BT-27 [EN 16931])."
 msgstr "Der vollständige Name, unter dem der Verkäufer im nationalen Register für juristische Personen oder als steuerpflichtige Person eingetragen ist oder anderweitig als Person(en) handelt (Firma) (BT-27 [EN 16931])."
 
