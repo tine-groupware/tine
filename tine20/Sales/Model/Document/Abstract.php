@@ -1168,5 +1168,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $this->{self::FLD_REVERSAL_STATUS} = null;
 
         parent::prepareForCopy();
+
+        $this->isValid();
     }
 }
