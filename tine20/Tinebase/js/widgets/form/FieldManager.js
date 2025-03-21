@@ -332,7 +332,11 @@ Tine.widgets.form.FieldManager = function() {
                 case 'text':
                 case 'fulltext':
                     field.xtype = 'textarea';
-                    field.height = 70; // 5 lines
+                    if (fieldDefinition.uiconfig) {
+                        field.height = fieldDefinition.uiconfig.height || 70;
+                    } else {
+                        field.height = 70; // 5 lines
+                    }
                     break;
                 case 'stringAutocomplete':
                     field.xtype = 'tine.widget.field.AutoCompleteField';
