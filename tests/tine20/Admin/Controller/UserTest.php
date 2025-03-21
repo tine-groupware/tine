@@ -434,7 +434,7 @@ class Admin_Controller_UserTest extends TestCase
         $user = $this->_createTestUser([
             'type' => 'somethin',
         ]);
-        self::assertNull($user->type);
+        self::assertSame(Tinebase_Model_FullUser::USER_TYPE_USER, $user->type);
 
         // try to set type for user (with feature)
         $features = Admin_Config::getInstance()->{Admin_Config::ENABLED_FEATURES};

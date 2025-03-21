@@ -228,10 +228,6 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'type' => [
                 self::LABEL => 'User type', // _('User type')
                 self::TYPE => self::TYPE_KEY_FIELD,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true
-                ],
-                self::DEFAULT_VAL => self::USER_TYPE_USER,
                 self::NAME => Tinebase_Config::USER_TYPES,
             ],
             'visibility'                    => [
