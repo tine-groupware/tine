@@ -672,6 +672,11 @@ class SSO_Controller extends Tinebase_Controller_Event
             $response->getBody()->write(\Tinebase_Helper::createFormHTML($e->redirectUrl, $e->data));
         }
 
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+            $response = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()
+                ->setCache(Tinebase_Core::getUserCredentialCache(), $response);
+        }
+
         return $response;
     }
     
