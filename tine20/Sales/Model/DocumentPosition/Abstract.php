@@ -700,4 +700,14 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         unset($_data[self::FLD_PRECURSOR_POSITION]);
         unset($_data[self::FLD_PRECURSOR_POSITION_MODEL]);
     }
+
+    public function prepareForCopy(): void
+    {
+        $this->{self::FLD_IS_REVERSED} = false;
+        $this->{self::FLD_REVERSAL} = false;
+        $this->{self::FLD_PRECURSOR_POSITION_MODEL} = null;
+        $this->{self::FLD_PRECURSOR_POSITION} = null;
+
+        parent::prepareForCopy();
+    }
 }

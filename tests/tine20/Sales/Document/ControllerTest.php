@@ -623,6 +623,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         Tinebase_Record_Expander::expandRecord($order, fullExpansion: true);
         $this->assertSame(1, $order->{Sales_Model_Document_Order::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Order::FLD_NOTES}->count());
 
+        $copyOrder = Sales_Controller_Document_Order::getInstance()->copy($order->getId(), false);
+        $this->assertInstanceOf(Sales_Model_Document_Address::class, $copyOrder->{Sales_Model_Document_Order::FLD_RECIPIENT_ID});
+        $this->assertNull($copyOrder->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->getId());
+
+        $copyOrder = (new Sales_Frontend_Json())->copyDocument_Order($order->getId(), false);
+        $this->assertIsArray($copyOrder[Sales_Model_Document_Order::FLD_RECIPIENT_ID]);
+        $this->assertNull($copyOrder[Sales_Model_Document_Order::FLD_RECIPIENT_ID]['id']);
+
         $invoice = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
