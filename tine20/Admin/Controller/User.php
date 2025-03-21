@@ -221,6 +221,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 'contact'   => $_account->contact_id
             ]));
 
+            $message = str_replace("\n", '\n', $message);
+
             $smsSendConfig = new Tinebase_Model_Sms_SendConfig([
                 Tinebase_Model_Sms_SendConfig::FLD_MESSAGE => $message,
                 Tinebase_Model_Sms_SendConfig::FLD_RECIPIENT_NUMBER => $mobilePhoneNumber,
