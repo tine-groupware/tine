@@ -17,7 +17,8 @@ class Admin_ControllerTest extends TestCase
     public function testAccountUndelete()
     {
         $this->_skipIfLDAPBackend("on ldap backends the user is hard deleted");
-        
+        $this->_testNeedsTransaction();
+
         try {
             Admin_Controller_User::getInstance()->setRequestContext(['clientData' => ['confirm' => true]]);
             Admin_Controller_User::getInstance()->delete($this->_personas['jmcblack']->getId());

@@ -1111,7 +1111,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // exports from export definitions
         this.actions_export = Tine.widgets.exportAction.getExportButton(this.recordClass, {
             exportFunction: exportFunction,
-            gridPanel: this
+            gridPanel: this,
         }, Tine.widgets.exportAction.SCOPE_MULTI, additionalItems);
 
         if (this.actions_export) {
