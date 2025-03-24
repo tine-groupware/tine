@@ -365,7 +365,7 @@ Tine.Felamimail.nodeActions.ApproveMigrationAction = {
     itemId: 'ApproveMigrationAction',
     iconCls: 'action_approve_migration',
     scope: this,
-    qtip: 'Agree that this account can be transferred to other users',
+    qtip: 'Agree that this account can be transferred to other users', // _('Agree that this account can be transferred to other users')
     handler: async function(action) {
         if (!action.node) return;
         const app = action.app;
