@@ -623,6 +623,20 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
     }
 
+    public function undelete(Tinebase_Model_FullUser $account): Tinebase_Model_FullUser
+    {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $this->_userBackend->undelete($account->accountLoginName);
+        $account = $this->get($account->getId());
+        $account->visibility = Tinebase_Model_FullUser::VISIBILITY_DISPLAYED;
+        $account->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($account, 'undelete', $account);
+        $account = $this->update($account);
+        $transaction->release();
+
+        return $account;
+    }
+
     /**
      * delete accounts
      *
