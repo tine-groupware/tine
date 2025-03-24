@@ -12,13 +12,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     // from -> to
     const allowedTransitions = {
         Offer: {
-            Offer: {isReversal: false},
-            Order: {}
+            Order: {},
+            Offer: {isReversal: false}
         },
         Order: {
-            Order: {isReversal: true},
             Delivery: {},
             Invoice: {},
+            Order: {isReversal: true},
         },
         Delivery: {
             Delivery: {isReversal: true},
@@ -231,8 +231,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         Object.keys(allowedTransitions[sourceType]).forEach((targetType) => {
             const action = getFollowUpAction(sourceType, targetType, allowedTransitions[sourceType][targetType])
             const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ContextMenu`, action, 2)
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 30)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ContextMenu`, action, 44)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 34)
             Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 40)
         })
     })

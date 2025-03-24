@@ -63,7 +63,7 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             layout: 'fit',
             // align: 'stretch',
             // pack: 'start',
-            // border: false,
+            border: false,
             // autoScroll: true,
             items: [
                 this.cyPanel,
@@ -85,6 +85,8 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     },
 
     renderCy (cytoscape) {
+        const darkMode = window.document.body.classList.contains('dark-mode');
+
         this.cy = cytoscape({
             container: this.cyPanel.body.dom,
             elements: [],
@@ -103,7 +105,7 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         // 'background-opacity': 0,
                         // 'border-width': 3,
                         // 'border-opacity': 0,
-                        'background-color': '#ffffff',
+                        'background-color': darkMode ? '#ddd' : '#ffffff',
                         'label': 'data(name)',
                         'background-image': this.createImage,
                         // 'background-fit': 'contain',
@@ -137,8 +139,8 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         'curve-style': 'bezier',
                         'target-arrow-shape': 'triangle',
                         'width': 4,
-                        'line-color': '#ddd',
-                        'target-arrow-color': '#ddd'
+                        'line-color': darkMode ? '#888': '#ddd',
+                        'target-arrow-color': darkMode ? '#888' :'#ddd'
                     }
                 }
             ]
