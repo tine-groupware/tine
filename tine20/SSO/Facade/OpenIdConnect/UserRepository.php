@@ -47,6 +47,12 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
                     $result['groups'] = array_values(Tinebase_Group::getInstance()->getMultiple(
                         Tinebase_Group::getInstance()->getGroupMemberships($userEntity->getTineUser()->getId()))->name);
                     break;
+                case 'tine/matrix_synapse_integrator/matrix_id':
+                    $xprops = $userEntity->getTineUser()->xprops();
+                    if (array_key_exists(MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID, $xprops)) {
+                        $result['tine/matrix_synapse_integrator/matrix_id'] = $userEntity->getTineUser()->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID];
+                    }
+                    break;
             }
         }
         return $result;
