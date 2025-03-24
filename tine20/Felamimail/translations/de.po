@@ -709,6 +709,12 @@ msgstr "Umfrage Link: {0}"
 msgid "{0} as default mailer"
 msgstr "{0} als Standard-E-Mailprogramm"
 
+msgid "No e-mail account assigned"
+msgstr "Kein E-Mail Konto zugewiesen"
+
+msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
+msgstr "Ihnen wurde bisher kein eMail Konto zugewiesen. Daher ist diese Ansicht leer"
+
 msgid "New mails"
 msgstr "Neue Nachrichten"
 
