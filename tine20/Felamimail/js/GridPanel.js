@@ -1346,16 +1346,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     getKeyBindingData() {
         const data = [
-            'Ctrl+N / Ctrl+M : Compose message',
-            'Ctrl+L : Forward message',
-            'Ctrl+R : Reply message',
-            'Ctrl+Shift+R : Reply to all',
-            'A / Ctrl+S : File message',
-            'Ctrl+O / Enter : Open message',
-            '1 : Toggle highlighting',
-            'M : Mark read/unread',
-            'J : Mark message as SPAM',
-            'Shift+J : Mark message as HAM',
+            this.app.i18n._('Ctrl+N / Ctrl+M : Compose message'),
+            this.app.i18n._('Ctrl+L : Forward message'),
+            this.app.i18n._('Ctrl+R : Reply message'),
+            this.app.i18n._('Ctrl+Shift+R : Reply to all'),
+            this.app.i18n._('A / Ctrl+S : File message'),
+            this.app.i18n._('Ctrl+O / Enter : Open message'),
+            this.app.i18n._('1 : Toggle highlighting'),
+            this.app.i18n._('M : Mark read/unread'),
+            this.app.i18n._('J : Mark message as SPAM'),
+            this.app.i18n._('Shift+J : Mark message as HAM'),
         ];
         return data.map((item) => this.app.i18n._(item));
     },
