@@ -1612,7 +1612,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $headers = $this->getMessageHeaders($record, null, true);
                 return isset($headers['x-tine20-autosaved']);
             });
-            $this->_backend->delete($messages->getId());
+            if (count($messages) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Remove ' . count($messages) . ' auto-saved messages from Drafts');
+                }
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($messages,
+                    [Zend_Mail_Storage::FLAG_DELETED]);
+            }
         } catch (Exception $e) {
             if (!$e instanceof Felamimail_Exception_IMAPMessageNotFound &&
                 !$e instanceof Felamimail_Exception_IMAPInvalidCredentials
