@@ -80,6 +80,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             Sales_Controller_Document_Invoice::class . '::documentNumberConfigOverride';
 
+        $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
+
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_DOCUMENT_PROFORMA_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
@@ -89,7 +91,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
                     Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_PROFORMA_NUMBER,
-                    Tinebase_Numberable_String::PREFIX     => 'PI-', // _('PI-')
+                    Tinebase_Numberable_String::PREFIX     => $translate->_('PI-'),
                     Tinebase_Numberable_String::ZEROFILL   => 7,
                     Tinebase_Numberable::CONFIG_OVERRIDE   =>
                         Sales_Controller_Document_Invoice::class . '::documentProformaNumberConfigOverride',
