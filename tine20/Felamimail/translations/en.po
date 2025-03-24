@@ -677,6 +677,12 @@ msgstr "Poll URL: {0}"
 msgid "{0} as default mailer"
 msgstr "{0} as default mailer"
 
+msgid "No e-mail account assigned"
+msgstr "No e-mail account assigned"
+
+msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
+msgstr "You have not yet been assigned an e-mail account. This view is therefore empty"
+
 msgid "New mails"
 msgstr "New mails"
 

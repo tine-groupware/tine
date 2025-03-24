@@ -677,6 +677,12 @@ msgstr ""
 msgid "{0} as default mailer"
 msgstr ""
 
+msgid "No e-mail account assigned"
+msgstr ""
+
+msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
+msgstr ""
+
 msgid "New mails"
 msgstr ""
 
