@@ -914,7 +914,19 @@ class SSO_Controller extends Tinebase_Controller_Event
             $openid = $ssoIdp->getId() . ':' . $data->sub;
             $account = null;
             try {
-                $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('openid', $openid, Tinebase_Model_FullUser::class);
+                try {
+                    $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('openid', $openid, Tinebase_Model_FullUser::class);
+                } catch (Tinebase_Exception_NotFound) {
+                    $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('openid', $openid, Tinebase_Model_FullUser::class, true);
+                    $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
+                    $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
+                    try {
+                        $account = Admin_Controller_User::getInstance()->undelete($account);
+                    } finally {
+                        Admin_Controller_User::getInstance()->doRightChecks($oldValue);
+                        Admin_Controller_Group::getInstance()->doRightChecks($oldGroupValue);
+                    }
+                }
             } catch (Tinebase_Exception_NotFound) {
 
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
