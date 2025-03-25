@@ -174,10 +174,10 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
     }
 
-    protected function _createEDocument(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
+    protected function _createEDocument(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): ?Sales_Model_Document_Abstract
     {
         if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
-            return;
+            return null;
         }
 
         $stream = null;
@@ -193,7 +193,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
                     throw $t;
                 }
-                return;
+                return null;
             }
             rewind($stream);
 
@@ -243,6 +243,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             $record->seq = $updatedRecord->seq;
             $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} = $updatedRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
             $record->last_modified_time = $updatedRecord->last_modified_time;
+            return $updatedRecord;
 
         } catch (Tinebase_Exception_HtmlReport $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {

@@ -3,8 +3,10 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+import DocumentMixin from '../Document/AbstractMixin'
 
 const AbstractMixin = {
     parentOnly() {
@@ -72,7 +74,7 @@ const AbstractMixin = {
 
     computePrice() {
         if (this.isProductType()) {
-            const price = this.get('unit_price') * this.get('quantity');
+            const price = this.constructor.toFixed(this.get('unit_price') * this.get('quantity'));
             this.set('position_price', price);
             const discount = this.get('position_discount_type') === 'SUM' ? this.get('position_discount_sum') :
                 (price / 100 * this.get('position_discount_percentage'));
@@ -80,15 +82,15 @@ const AbstractMixin = {
             let tax = 0
             const taxRate = this.get('sales_tax_rate') || 0;
             if (this.get('unit_price_type') === 'gross') {
-                this.set('gross_price', total);
+                this.set('gross_price', this.constructor.toFixed(total));
                 tax = total - total * 100/(100+taxRate);
-                this.set('net_price', total - tax);
+                this.set('net_price', this.constructor.toFixed(total - tax));
             } else {
-                this.set('net_price', total);
+                this.set('net_price', this.constructor.toFixed(total));
                 tax = total / 100 * taxRate;
-                this.set('gross_price', total + tax);
+                this.set('gross_price', this.constructor.toFixed(total + tax));
             }
-            this.set('sales_tax', tax);
+            this.set('sales_tax', this.constructor.toFixed(tax));
         }
     },
 
@@ -97,6 +99,7 @@ const AbstractMixin = {
     },
 
     statics: {
+        toFixed: DocumentMixin.statics.toFixed,
         parentOnly() {
             console.error('parentOnlyStatic');
         },

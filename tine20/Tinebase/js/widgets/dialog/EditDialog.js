@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import waitFor from "util/waitFor.es6"
+
 Ext.ns('Tine.widgets.dialog');
 
 /**
@@ -645,6 +647,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             }
         }, this)
+    },
+
+    /**
+     * checks if data is modified since last save/commit
+     */
+    isModified: async function() {
+        if (this.isDestroyed || !this.record) return;
+        await waitFor( () => !this.loadRequest, 250);
+        this.onRecordUpdate();
+        return this.record.isModified();
     },
 
     /**
@@ -1300,7 +1312,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * helper function to async force save
      *
-     * @return {Promise<record>}
+     * @return {Promise<recordData>}
      */
     async applyChanges() {
         return new Promise((resolve, reject) => {

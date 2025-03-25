@@ -19,8 +19,7 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Custom Config', // gettext('GENDER_Custom Config')
         self::RECORDS_NAME              => 'Custom Configs', // ngettext('Custom Config', 'Custom Configs', n)
-//        self::TITLE_PROPERTY            => '{% for config in dispatch_configs %}{{ renderModel(config.dispatch_type) }}{% endfor %}',
-        self::TITLE_PROPERTY            => '{{ dispatch_configs|map(c => renderModel(c.dispatch_type))|join(", ") }}',
+        self::TITLE_PROPERTY            => '{% if dispatch_configs and dispatch_configs is iterable %}{{ dispatch_configs|map(c => renderModel(c.dispatch_type))|join(", ") }}{% else %}...{% endif %}',
 
         self::FIELDS                    => [
             self::FLD_DISPATCH_CONFIGS        => [

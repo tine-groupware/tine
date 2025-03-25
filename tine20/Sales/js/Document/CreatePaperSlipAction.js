@@ -40,7 +40,7 @@ const createAttachedDocument = async (config) => {
 
     try {
         record = !config.editDialog ? config.record :
-            (config.editDialog.record.isModified() ? Tine.Tinebase.data.Record.setFromJson(await config.editDialog.applyChanges(), recordClass) : config.editDialog.record)
+            ( (await config.editDialog.isModified()) || config.force ? Tine.Tinebase.data.Record.setFromJson(await config.editDialog.applyChanges(), recordClass) : config.editDialog.record)
         attachedDocument = record.getAttachedDocument(config.type)
         if (!attachedDocument || config.force) {
             record = Tine.Tinebase.data.Record.setFromJson(await api(recordClass.getPhpClassName(), config.record.id), recordClass)
