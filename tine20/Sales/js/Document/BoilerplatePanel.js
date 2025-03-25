@@ -42,7 +42,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
 
     onRecordLoad: async function(editDialog, record) {
         const boilerplates = record.get('boilerplates') || [];
-        this.store.loadData(boilerplates);
+        this.store.loadData([...boilerplates]);
         this.onBoilerplatesLoad(editDialog);
 
         this.loadBoilerplatesIf(editDialog, record);
@@ -54,7 +54,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             let field = editDialog.getForm().findField(fieldName);
             boilerplate.set('boilerplate', field.getValue());
         });
-        record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data')));
+        record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data'), true));
 
         // e.g. on lang change
         await this.loadBoilerplatesIf(editDialog, record);
@@ -170,7 +170,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
                 }
             });
 
-            record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data')));
+            record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data'), true));
             this.onBoilerplatesLoad(editDialog);
         }
     },

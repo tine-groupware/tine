@@ -688,11 +688,13 @@ Tine.Tinebase.common = {
      * assert that given object is comparable
      *
      * @param {mixed} o
+     * @param {bool} clone
      * @return {mixed} o
      */
-    assertComparable: function(o) {
+    assertComparable: function(o, clone) {
         // NOTE: Ext estimates Object/Array by a toString operation
         if (Ext.isObject(o) || Ext.isArray(o)) {
+            if (clone) o = _.cloneDeep(o);
             Tine.Tinebase.common.applyComparableToString(o);
         }
 

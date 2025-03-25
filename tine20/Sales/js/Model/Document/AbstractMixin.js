@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 const AbstractMixin = {
@@ -18,6 +18,19 @@ const AbstractMixin = {
             return {
                 credit_term: Tine.Tinebase.configManager.get('defaultPaymentTerms', 'Sales')
             }
+        },
+        /**
+         * returns number rounded to given number of fractionDigits or input if it's not a Number
+         *
+         * NOTE: the default is our internal precision which might be subject to change
+         *
+         * @param number
+         * @param fractionDigits
+         * @returns {*}
+         */
+        toFixed(number, fractionDigits= 2) {
+            if (!_.isNumber(fractionDigits) || !_.isNumber(number)) return number
+            return 1 * number.toFixed(fractionDigits)
         }
     }
 }
