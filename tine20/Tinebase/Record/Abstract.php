@@ -1755,7 +1755,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $value = $this->_properties[$_property];
         if (is_object($value) && $value instanceof Tinebase_Record_Interface) {
             return $_getIdFromRecord ? (string)$value->getId() : null;
-        } elseif (is_string($value) || is_integer($value)) {
+        } elseif (is_string($value) || is_numeric($value)) {
             return (string)$value;
         }
 

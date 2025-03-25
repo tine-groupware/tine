@@ -3671,7 +3671,20 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . $_property);
 
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($_fieldConfig['recordClassName'], $_fieldConfig['addFilters'] ?? [], 'AND');
+        /** @var Tinebase_Record_Interface $subModel */
+        $subModel = $_fieldConfig['recordClassName'];
+        $uniques = [];
+        $uniqueData = [];
+        if (($subMC = $subModel::getConfiguration()) && $subMC->hasDeletedTimeUnique) {
+            foreach ($subMC->table[Tinebase_ModelConfiguration_Const::UNIQUE_CONSTRAINTS] ?? [] as $constraint) {
+                if (false !== ($pos = array_search(Tinebase_ModelConfiguration_Const::FLD_DELETED_TIME, $constraint[Tinebase_ModelConfiguration_Const::COLUMNS]))) {
+                    $tmp = $constraint[Tinebase_ModelConfiguration_Const::COLUMNS];
+                    unset($tmp[$pos]);
+                    $uniques[] = $tmp;
+                }
+            }
+        }
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($subModel, $_fieldConfig['addFilters'] ?? [], 'AND');
         //try {
         //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
@@ -3697,12 +3710,30 @@ HumanResources_CliTests.testSetContractsEndDate */
         $filter->addFilter(new Tinebase_Model_Filter_Id($_fieldConfig['refIdField'], 'equals', $_record->getId()));
         $filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals', 1));
         //}
-        $unDeleteRecords = $controller->search($filter);
+        $unDeleteRecords = $controller->search($filter, new Tinebase_Model_Pagination([
+            Tinebase_Model_Pagination::FLD_SORT => Tinebase_ModelConfiguration_Const::FLD_DELETED_TIME,
+            Tinebase_Model_Pagination::FLD_DIR => 'DESC',
+        ]));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO) && $unDeleteRecords->count() > 0) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' undeleting dependent records with id = "' . print_r($unDeleteRecords->getArrayOfIds(), 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
         }
+        /** @var Tinebase_Record_Interface $record */
         foreach ($unDeleteRecords as $record) {
+            foreach ($uniques as $offset => $props) {
+                $key = '';
+                $first = true;
+                foreach ($props as $property) {
+                    try {
+                        $key .= ($first ? '' : '-') . strtolower($record->getIdFromProperty($property));
+                    } catch (Tinebase_Exception_UnexpectedValue) {}
+                    $first = false;
+                }
+                if ($uniqueData[$offset][$key] ?? false) {
+                    continue 2;
+                }
+                $uniqueData[$offset][$key] = true;
+            }
             $controller->unDelete($record);
         }
 

@@ -104,6 +104,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property bool       $hasPerspectives
  * @property bool       $hasSystemCustomFields
  * @property bool       $skipLegacyJsonConvert
+ * @property bool       $hasDeletedTimeUnique
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
