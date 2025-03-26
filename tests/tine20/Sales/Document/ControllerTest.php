@@ -349,6 +349,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ])
         ]));
 
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
             Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
@@ -361,31 +364,19 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $app->status = Tinebase_Application::DISABLED;
         Tinebase_Application::getInstance()->updateApplication($app);
 
-        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
-        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'resetTransactionTransactionable']);
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'restartTransaction']);
-        try {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        } finally {
-            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
-        }
-
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+
+        (new Sales_Frontend_Json)->dispatchDocument(Sales_Model_Document_Invoice::class, $invoice->getId());
 
         unset($previewRaii);
         unset($exportPdfRaii);
-
-        $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
-        (new Sales_Frontend_Json)->dispatchDocument(Sales_Model_Document_Invoice::class, $invoice->getId());
 
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
         $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
         $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_FAIL)->count());
-
     }
 
     public function testDispatchDocument()
@@ -475,6 +466,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ])
         ]));
 
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
             Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
@@ -487,22 +481,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $app->status = Tinebase_Application::DISABLED;
         Tinebase_Application::getInstance()->updateApplication($app);
 
-        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
-        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'resetTransactionTransactionable']);
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'restartTransaction']);
-        try {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        } finally {
-            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
-        }
-
-        Tinebase_Record_Expander_DataRequest::clearCache();
-        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
 
         unset($previewRaii);
         unset($exportPdfRaii);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
 
         $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
         $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
@@ -768,7 +754,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]));
         $this->assertSame(0, $result->count());
 
-        Tinebase_Record_Expander::expandRecord($invoice);
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
@@ -782,18 +769,12 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $app->status = Tinebase_Application::DISABLED;
         Tinebase_Application::getInstance()->updateApplication($app);
 
-        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'resetTransactionTransactionable']);
-        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'restartTransaction']);
-        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
-        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
-        try {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        } finally {
-            Tinebase_TransactionManager::getInstance()->resetTransactions();
-            $this->resetTransactionTransactionable();
-            $this->restartTransaction();
-        }
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
+
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
 
@@ -807,8 +788,6 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ->getLastRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
-        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'resetTransactionTransactionable']);
-        Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'restartTransaction']);
 
         /** @var Sales_Model_Document_Invoice $storno */
         $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
@@ -824,19 +803,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ]));
 
-        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
-        try {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        } finally {
-            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
-        }
-        Tinebase_Record_Expander_DataRequest::clearCache();
-        $storno = Sales_Controller_Document_Invoice::getInstance()->get($storno->getId());
-
-        unset($previewRaii);
-        unset($exportPdfRaii);
-
-        $this->assertNotNull($storno->attachments->find('name', $storno->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
+        $this->assertNull($storno->attachments->find('name', $storno->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
