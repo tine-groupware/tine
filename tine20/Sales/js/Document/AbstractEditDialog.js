@@ -37,7 +37,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return false;
         }
 
-        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+        const booked = this.getForm().findField(this.statusFieldName).store.data.items.find((r) => r.id === this.record.get(this.statusFieldName)).json.booked
+        if (!booked && this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
             icon: Ext.MessageBox.QUESTION,
             buttons: Ext.MessageBox.YESNO,
             title: this.app.formatMessage('Change Document Date?'),

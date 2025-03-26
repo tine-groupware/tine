@@ -47,7 +47,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             allowCancel: true,
                             height: notToday.length * 30 + 100,
                             options: notToday.map((source) => {
-                                return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
+                                return { text: source.getTitle() || ' - ' + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: notToday.length === 1, source }
                             })
                         }), (option) => { _.find(this.unbooked, { id: option.name }).set('date', new Date().clearTime()); });
                     }
