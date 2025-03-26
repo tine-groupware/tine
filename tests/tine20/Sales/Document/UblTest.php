@@ -61,15 +61,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
 
     protected function _assertUblXml(SMDI $invoice, float $taxExclValue, float $taxInclValue): void
     {
-        Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'resetTransactionTransactionable']);
-        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([$this, 'restartTransaction']);
-        try {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        } finally {
-            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
-        }
-        
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
         Tinebase_Record_Expander_DataRequest::clearCache();
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());

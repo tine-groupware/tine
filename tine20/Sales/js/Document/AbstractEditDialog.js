@@ -37,7 +37,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return false;
         }
 
-        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+        const booked = this.getForm().findField(this.statusFieldName).store.data.items.find((r) => r.id === this.record.get(this.statusFieldName)).json.booked
+        if (!booked && this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
             icon: Ext.MessageBox.QUESTION,
             buttons: Ext.MessageBox.YESNO,
             title: this.app.formatMessage('Change Document Date?'),
@@ -99,6 +100,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         })
 
         Object.keys(sums).forEach((fld) => {
+            sums[fld] = this.recordClass.toFixed(sums[fld])
             if (this.recordClass.hasField(fld)) {
                 this.record.set(fld, sums[fld])
             }
@@ -118,21 +120,23 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (document_price_type === 'gross') {
             // sales_tax & sales_tax_by_rate
             // ok discount is already applied -> lower sales_tax_by_rate by discount rate
-            this.record.set('sales_tax', Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
+            this.record.set('sales_tax', this.recordClass.toFixed(Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
                 sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum') / this.record.get('positions_gross_sum')) || 0
                 return a + sums['sales_tax_by_rate'][rate]
-            }, 0))
-            this.record.set('net_sum', this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax'))
+            }, 0)))
+            this.record.set('net_sum', this.recordClass.toFixed(this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax')))
             this.getForm().findField('net_sum')?.setValue(this.record.get('net_sum'))
         } else {
-            this.record.set('sales_tax', Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
+            this.record.set('sales_tax', this.recordClass.toFixed(Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
                 sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) || 0)) * rate / 100
                 return a + sums['sales_tax_by_rate'][rate]
-            }, 0))
+            }, 0)))
 
-            this.record.set('gross_sum', this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))
+            this.record.set('gross_sum', this.recordClass.toFixed(this.recordClass.toFixed(this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))))
             this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
         }
+        this.record.set('invoice_discount_sum', this.recordClass.toFixed(this.record.get('invoice_discount_sum')))
+        this.record.set('net_sum', this.recordClass.toFixed(this.record.get('net_sum')))
 
         // reformat sales_tax_by_rate
         this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
