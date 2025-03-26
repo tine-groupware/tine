@@ -139,41 +139,6 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         return $document;
     }
 
-    /**
-     * @param Sales_Model_Document_Invoice $_newRecord
-     * @param ?Sales_Model_Document_Invoice $_oldRecord
-     * @return Tinebase_Record_RecordSet|NULL
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _writeModLog($_newRecord, $_oldRecord)
-    {
-        $modLogs = parent::_writeModLog($_newRecord, $_oldRecord);
-
-        $this->_createMissingAttachedDocuments($_newRecord, $_oldRecord);
-
-        return $modLogs;
-    }
-
-    protected function _createMissingAttachedDocuments(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
-    {
-        if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
-            return;
-        }
-
-        /** @var Sales_Model_Debitor $debitor */
-        $debitor = Sales_Controller_Debitor::getInstance()->get($record->{Sales_Model_Document_Invoice::FLD_DEBITOR_ID}->getIdFromProperty(Sales_Model_Document_Debitor::FLD_ORIGINAL_ID));
-        $missingDocTypes = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG}->getMissingDocumentTypes($record);
-
-        // need to do this before comit, we want the modlogs to be written first
-        // order matters, edocument may embed any of the other documents
-        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $missingDocTypes)) {
-            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([new Sales_Frontend_Json, 'createPaperSlip'], [Sales_Model_Document_Invoice::class, $record->getId()]);
-        }
-        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT, $missingDocTypes)) {
-            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'createEDocument'], [$record->getId()]);
-        }
-    }
-
     protected function _createEDocument(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): ?Sales_Model_Document_Abstract
     {
         if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
