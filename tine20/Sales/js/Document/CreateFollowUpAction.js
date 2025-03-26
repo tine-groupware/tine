@@ -94,6 +94,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                     // @TODO: maybe we should define default booked state somehow? e.g. offer should be accepted (not only send) or let the user select?
                     const bookedState = statusDef.records.find((r) => { return r.booked })
+                    const booked = selections.reduce((a, s) => { return a && statusDef.records.find((r) => r.id === s.get(statusFieldName))?.booked }, true)
                     mask.show()
 
                     try {
@@ -101,7 +102,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         const notToday = _.reduce(unbooked, (acc, record) => {
                             return _.concat(acc, record.get('date') && record.get('date').format('Ymd') !== new Date().format('Ymd') ? record : []);
                         }, [])
-                        notToday.length ? _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                        !booked && notToday.length ? _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                             title: app.formatMessage('Change Document Date?'),
                             questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
                             allowMultiple: true,
@@ -109,7 +110,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             allowCancel: true,
                             height: notToday.length * 30 + 100,
                             options: notToday.map((source) => {
-                                return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
+                                return { text: source.getTitle() || ' - ' + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: notToday.length === 1, source }
                             })
                         }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) }) : null;
                     } catch (e) {/* USERABORT */ mask.hide(); return; }
