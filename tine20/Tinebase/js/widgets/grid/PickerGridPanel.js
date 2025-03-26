@@ -637,7 +637,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         if (this.isMetadataModelFor) {
-            var recordData = this.getRecordDefaults();
+            var recordData = Object.assign({}, this.recordClass.getDefaultData(), this.getRecordDefaults());
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
             // copy (reference data from metadata record, e.g. config class for dynamic metadata records)
             Ext.copyTo(recordData, recordData[this.isMetadataModelFor], picker.copyOnSelectProps);
