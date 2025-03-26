@@ -141,7 +141,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
                     applicableBoilerplate.data.original_id = applicableBoilerplate.id; // don't modify
                     this.store.addSorted(applicableBoilerplate);
                 } else {
-                    //@TODO: don't replace when document is in closed state -> even don't ask!
+                    if (booked) return;
                     const isEqual = existingBoilerplate.get('boilerplate') === applicableBoilerplate.get('boilerplate');
                     const existingIsLocallyChanged = !!+existingBoilerplate.get('locally_changed');
                     const applicableIsNewer = applicableBoilerplate.getMTime() > existingBoilerplate.getMTime();
