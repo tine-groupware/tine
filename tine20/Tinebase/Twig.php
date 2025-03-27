@@ -277,6 +277,10 @@ class Tinebase_Twig
             function($code) use($locale) {
                 return Tinebase_Translation::getCountryNameByRegionCode($code, $locale) ?: $code;
             }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('sanitizeFileName',
+            function($string) {
+                return Tinebase_Model_Tree_Node::sanitizeName($string);
+            }));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)
