@@ -199,9 +199,9 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                     array_walk($path, fn(&$path) => $path = $path['name']);
                     $oldPath = '/' . implode('/', $path);
                     array_pop($path);
-                    $record->attachments->addRecord(
-                        Tinebase_FileSystem::getInstance()->rename($oldPath, '/'. join('/', $path) . '/' . $replaceName)
-                    );
+                    Tinebase_FileSystem::getInstance()->rename($oldPath, '/'. join('/', $path) . '/' . $replaceName);
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+                    $remove = $record->attachments->filter(fn($rec) => str_ends_with($rec->name, '.validation.html'));
                 }
                 $record->attachments->removeRecords($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
