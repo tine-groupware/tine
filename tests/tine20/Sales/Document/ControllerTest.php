@@ -461,11 +461,31 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(3, $invoice->attachments->count());
         $this->assertSame(3, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
 
-        //Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(4, $invoice->attachments->count());
+        $this->assertSame(4, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
+        // test replacement of attachment
+        $oldEDocReplace = Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL};
+        $oldEDocRaii = new Tinebase_RAII(fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} = $oldEDocReplace);
+        Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} = '';
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(4, $invoice->attachments->count());
+        $this->assertSame(4, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
+        // test rename of attachment
+        Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} = '{{ node.creation_time.toString() ~ "-" ~ node.name }}';
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(5, $invoice->attachments->count());
+        $this->assertSame(5, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
 
         unset($previewRaii);
         unset($exportPdfRaii);
         unset($oldPaperRaii);
+        unset($oldEDocRaii);
     }
 
     public function testDispatchDocument()
