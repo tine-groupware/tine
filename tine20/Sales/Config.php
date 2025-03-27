@@ -66,6 +66,11 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     public const PAYMENT_MEANS_ID_TMPL = 'paymentMeansIdTmpl';
 
+    public const INVOICE_EDOCUMENT_NAME_TMPL = 'invoiceEDocumentNameTmpl';
+    public const INVOICE_PAPERSLIP_NAME_TMPL = 'invoicePaperslipNameTmpl';
+    public const INVOICE_EDOCUMENT_RENAME_TMPL = 'invoiceEDocumentRenameTmpl';
+    public const INVOICE_PAPERSLIP_RENAME_TMPL = 'invoicePaperslipRenameTmpl';
+
     /**
      * How should the contract number be validated
      * 
@@ -1025,6 +1030,49 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR           => 'en',
             ],
+        ],
+        self::INVOICE_EDOCUMENT_NAME_TMPL => [
+            //_('Invoice EDocument Attachment Name Template')
+            self::LABEL                 => 'Invoice EDocument Attachment Name Template',
+            self::DESCRIPTION           => 'Invoice EDocument Attachment Name Template',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '{{ sanitizeFileName(document.document_number|replace({"/": "-"})) }}-xrechnung.xml',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::INVOICE_EDOCUMENT_RENAME_TMPL => [
+            //_('Invoice EDocument Attachment Rename Template')
+            self::LABEL                 => 'Invoice EDocument Attachment Rename Template',
+            self::DESCRIPTION           => 'Invoice EDocument Attachment Rename Template',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::INVOICE_PAPERSLIP_NAME_TMPL => [
+            //_('Invoice Paperslip Attachment Name Template')
+            self::LABEL                 => 'Invoice EDocument Paperslip Name Template',
+            self::DESCRIPTION           => 'Invoice EDocument Paperslip Name Template',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '{{ sanitizeFileName( (document.document_date|default(date)) ~ "_" '
+                . '~ (document.isBooked() ? (document.document_number|replace({"/": "-"})) : "Proforma-" '
+                . '~ ((document.has("document_proforma_number") ? document.document_proforma_number : document.document_number )|replace({"/": "-"}))) '
+                . '~ (document.document_title ? ("-" ~ document.document_title) : "") ) }}.pdf',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::INVOICE_PAPERSLIP_RENAME_TMPL => [
+            //_('Invoice Paperslip Attachment Rename Template')
+            self::LABEL                 => 'Invoice Paperslip Attachment Rename Template',
+            self::DESCRIPTION           => 'Invoice Paperslip Attachment Rename Template',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
         ],
         self::INVOICE_TYPE => array(
                                    //_('Invoice Type')
