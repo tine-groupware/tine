@@ -10,6 +10,7 @@
  *
  */
 
+use Jumbojett\OpenIDConnectClientException;
 use Tinebase_Model_Filter_Abstract as TMFA;
 
 use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
@@ -903,7 +904,16 @@ class SSO_Controller extends Tinebase_Controller_Event
         $client->setRedirectURL($redirectUrl);
         $client->addScope(['openid', 'email', 'profile']);
 
-        if ($client->authenticate()) {
+        try {
+            $oidcAuthResult = $client->authenticate();
+        } catch (OpenIDConnectClientException $e) {
+            $e = new Tinebase_Exception($e->getMessage(), previous: $e);
+            $e->setLogToSentry(false);
+            $e->setLogLevelMethod('info');
+            Tinebase_Exception::log($e);
+            return static::publicOidAuthResponseErrorRedirect($authRequest);
+        }
+        if ($oidcAuthResult) {
             $data = $client->requestUserInfo();
 
             if (!isset($data->sub)) {
