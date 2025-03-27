@@ -146,7 +146,14 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
 
         $stream = null;
-        $attachmentName = str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml');
+        $attachmentName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+            Tinebase_Twig::TWIG_LOADER =>
+                new Tinebase_Twig_CallBackLoader(__METHOD__, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_NAME_TMPL}),
+            Tinebase_Twig::TWIG_AUTOESCAPE => false,
+        ]))->load(__METHOD__)->render([
+            'document' => $record,
+        ]);
+
         try {
             if (!($stream = fopen('php://temp', 'r+'))) {
                 throw new Tinebase_Exception('cant create temp stream');
@@ -177,7 +184,25 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                     . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
             }
 
-            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '-xrechnung.validation.html')))->count() > 0) {
+            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '.validation.html')))->count() > 0) {
+                if (Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} && ($node = $remove->find('name', $attachmentName))) {
+                    $replaceName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+                        Tinebase_Twig::TWIG_LOADER =>
+                            new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL}),
+                        Tinebase_Twig::TWIG_AUTOESCAPE => false,
+                    ]))->load(Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL)->render([
+                        'document' => $record,
+                        'node' => $node,
+                        'date' => Tinebase_DateTime::now()->format('Y-m-d'),
+                    ]);
+                    $path = Tinebase_FileSystem::getInstance()->getPathOfNode($node);
+                    array_walk($path, fn(&$path) => $path = $path['name']);
+                    $oldPath = '/' . implode('/', $path);
+                    array_pop($path);
+                    $record->attachments->addRecord(
+                        Tinebase_FileSystem::getInstance()->rename($oldPath, '/'. join('/', $path) . '/' . $replaceName)
+                    );
+                }
                 $record->attachments->removeRecords($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
             }
@@ -227,12 +252,12 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             $stream = fopen('php://temp', 'w+');
             fwrite($stream, $e->getHtml());
             rewind($stream);
-            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '-xrechnung.validation.html')))->count() > 0) {
+            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '.validation.html')))->count() > 0) {
                 $record->attachments->removeRecords($remove);
             }
 
             $record->attachments->addRecord(new Tinebase_Model_Tree_Node([
-                'name' => str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.validation.html'),
+                'name' => $attachmentName . '.validation.html',
                 'tempFile' => $stream,
             ], true));
 

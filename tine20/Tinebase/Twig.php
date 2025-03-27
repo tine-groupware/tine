@@ -251,6 +251,10 @@ class Tinebase_Twig
             fn(string $msg, array $data) => msgfmt_format_message((string)$locale, $translate->translate($msg, $locale), $data)));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('getCountryByCode',
             fn($code) => Tinebase_Translation::getCountryNameByRegionCode($code, $locale) ?: $code));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('sanitizeFileName',
+            function($string) {
+                return Tinebase_Model_Tree_Node::sanitizeName($string);
+            }));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)

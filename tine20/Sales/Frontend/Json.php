@@ -933,16 +933,35 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_ConcurrencyConflict('document seq increase during export, please try again');
         }
 
-        $name = Tinebase_Model_Tree_Node::sanitizeName(($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE} ?? Tinebase_DateTime::now())->format('Y-m-d') . '_' .
-            ($document->isBooked() ? '' : 'Proforma-') .
-            ($document->isBooked() || !$document->has(Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER) ?
-                $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} :
-                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) .
-            ($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} ?
-                '-' . $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} : '') . '.pdf');
+        $name = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+            Tinebase_Twig::TWIG_LOADER =>
+                new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_PAPERSLIP_NAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_NAME_TMPL}),
+            Tinebase_Twig::TWIG_AUTOESCAPE => false,
+        ]))->load(Sales_Config::INVOICE_PAPERSLIP_NAME_TMPL)->render([
+            'document' => $document,
+            'date' => Tinebase_DateTime::now()->format('Y-m-d'),
+        ]);
 
         if ($node = $document->attachments->find('name', $name)) {
             $document->attachments->removeRecord($node);
+            if (Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL}) {
+                $replaceName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+                    Tinebase_Twig::TWIG_LOADER =>
+                        new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL}),
+                    Tinebase_Twig::TWIG_AUTOESCAPE => false,
+                ]))->load(Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL)->render([
+                    'document' => $document,
+                    'node' => $node,
+                    'date' => Tinebase_DateTime::now()->format('Y-m-d'),
+                ]);
+                $path = Tinebase_FileSystem::getInstance()->getPathOfNode($node);
+                array_walk($path, fn(&$path) => $path = $path['name']);
+                $oldPath = '/' . implode('/', $path);
+                array_pop($path);
+                $document->attachments->addRecord(
+                    Tinebase_FileSystem::getInstance()->rename($oldPath, '/'. join('/', $path) . '/' . $replaceName)
+                );
+            }
         }
         $document->attachments->addRecord(new Tinebase_Model_Tree_Node(['name' => $name, 'tempFile' => $stream], true));
         $document = $docCtrl->update($document);
