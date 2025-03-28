@@ -680,6 +680,11 @@
                 $messageSubject = sprintf($translate->_('Tentative event notification for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
                 break;
 
+            case 'declineCounter':
+                $messageSubject = sprintf($translate->_('Proposed changes for event "%1$s" at %2$s declined' ), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_DECLINECOUNTER;
+                break;
+
             default:
                 $messageSubject = $translate->_('Unknown action');
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(

@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test testOrganizerSendBy
@@ -167,6 +167,80 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->assertSame($exception2->getId(), $imipEvent->uid);
         $this->assertSame($exception2->dtstart->toString(), $imipEvent->dtstart->toString());
         $this->assertEmpty($imipEvent->exdate);
+    }
+
+    protected function _prepCounterIMIP(?string $externalEmail, ?Calendar_Model_Event &$event = null): Calendar_Model_iMIP
+    {
+        if (null === $event) {
+            $event = $this->_getEvent();
+            $event->attendee->addRecord(new Calendar_Model_Attender([
+                'user_email' => $externalEmail,
+                'user_type' => Calendar_Model_Attender::USERTYPE_EMAIL,
+                'role' => Calendar_Model_Attender::ROLE_REQUIRED,
+            ]));
+
+            $oldSend = Calendar_Controller_Event::getInstance()->sendNotifications(false);
+            try {
+                $event = Calendar_Controller_Event::getInstance()->create($event);
+            } finally {
+                Calendar_Controller_Event::getInstance()->sendNotifications($oldSend);
+            }
+        }
+
+        $counterEvent = clone $event;
+        $counterEvent->summary = 'counter!';
+        $counterEvent->dtstart->addHour(1);
+        $counterEvent->dtend->addHour(1);
+
+        return new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'ics'            => (new Calendar_Convert_Event_VCalendar_Generic)->fromTine20Model($counterEvent)->serialize(),
+            'method'         => 'COUNTER',
+            'originator'     => $externalEmail,
+        ));
+    }
+
+    public function testAcceptCounter(): void
+    {
+        $event = null;
+        $iMIP = $this->_prepCounterIMIP($externalEmail = 'a@bcd.ef', $event);
+        $this->assertSame(true, $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED));
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
+
+        $this->assertSame($updatedEvent->dtstart->toString(), $event->dtstart->getClone()->addHour(1)->toString());
+    }
+
+    public function testDeclineCounter(): void
+    {
+        $iMIP = $this->_prepCounterIMIP($externalEmail = 'a@bcd.ef');
+
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+        $this->assertSame(true, $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_DECLINED));
+
+        $msgs = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertCount(1, $msgs);
+        /** @var Tinebase_Mail $msg */
+        $msg = $msgs[0];
+        $this->assertCount(1, $msg->getRecipients());
+        $this->assertSame($externalEmail, current($msg->getRecipients()));
+        $this->assertStringContainsString('Proposed changes for event',  $msg->getSubject());
+        $this->assertStringContainsString('declined',  $msg->getSubject());
+        $this->assertStringContainsString('METHOD:DECLINECOUNTER',  $msg->getPartContent(0));
+    }
+
+    public function testAutoProcessCounter(): void
+    {
+        $iMIP = $this->_prepCounterIMIP($externalEmail = 'a@bcd.ef');
+
+        $result = (new Calendar_Frontend_iMIP)->autoProcess($iMIP);
+        $this->assertInstanceOf(Calendar_Model_iMIP::class, $result);
+        $this->assertArrayHasKey('counterDiff', $result->xprops());
+        $counterDiff = $result->xprops()['counterDiff'];
+        sort($counterDiff);
+        $counterDiffLog = print_r($counterDiff, true);
+        $this->assertCount(3, $result->xprops()['counterDiff'], $counterDiffLog);
+        $this->assertSame(['dtend', 'dtstart', 'summary'], $counterDiff, $counterDiffLog);
     }
 
     public function testExternalInvitationToOneOfARecurSeries()
