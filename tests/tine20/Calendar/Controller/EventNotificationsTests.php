@@ -485,6 +485,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testRecuringExceptions()
     {
+        $jmcblack =  $this->_getPersona('jmcblack');
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblack->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
         $year = Tinebase_DateTime::now()->subYear(2)->format('Y');
         $from = new Tinebase_DateTime($year . '-03-01 00:00:00');
         $until = new Tinebase_DateTime($year . '-03-31 23:59:59');
@@ -1548,6 +1555,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testNotificationForNonAttendeeOrganizer()
     {
         $jmcblack =  $this->_getPersona('jmcblack');
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblack->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
         $event = $this->_getEvent(/*now = */ true);
         
         // remove organizer attendee
