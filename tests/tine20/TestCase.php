@@ -1463,4 +1463,30 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
     }
+
+    /**
+     * return a test person
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getPersona($loginName): Tinebase_Model_FullUser
+    {
+        if ($this->_personas === null) {
+            $this->_getPersonas();
+        }
+        return $this->_personas[$loginName];
+    }
+
+    /**
+     * returns an array of test persons
+     *
+     * @return array
+     */
+    protected function _getPersonas(): array
+    {
+        if ($this->_personas === null) {
+            $this->_personas = Zend_Registry::get('personas');
+        }
+        return $this->_personas;
+    }
 }
