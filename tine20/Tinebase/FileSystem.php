@@ -3490,6 +3490,10 @@ class Tinebase_FileSystem implements
             $allChildIds = $this->getAllChildIds(array($_node->getId()));
             $deleteGrantChildIds = $this->getAllChildIds(array($_node->getId()), array(), false, $requiredGrant);
             if ($allChildIds != $deleteGrantChildIds) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' the following child nodes has no ' . $requiredGrant . ' grant for node : ' . $_node->name . ' : ' . print_r(array_diff($allChildIds, $deleteGrantChildIds), true));
+                }
                 $result = false;
             }
         }
