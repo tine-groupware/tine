@@ -510,12 +510,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         parent::_setRequestContext(Admin_Controller_User::getInstance());
 
         if (is_array($account)) {
-            if (isset($account['accountPrimaryGroup']) && is_array($account['accountPrimaryGroup']) && isset($account['accountPrimaryGroup']['id'])) {
-                $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
+            if ($account['accountId'] ?? false) {
+                $account = Tinebase_User::getInstance()->getFullUserById($account['accountId']);
+            } else {
+                $account = Tinebase_User::getInstance()->getFullUserByLoginName($account['accountLoginName']);
             }
-            $account = new Tinebase_Model_FullUser($account);
         } else {
-            $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
+            $account = Tinebase_User::getInstance()->getFullUserById($account);
         }
 
         Tinebase_Core::getLogger()->addReplacement($password);
