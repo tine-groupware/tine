@@ -577,7 +577,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         while ($inputFilter->isValid()) {
             // set $this->_properties with the filtered values
             $this->_properties  = $inputFilter->getUnescaped();
-            $this->_isValidated = true;
 
             foreach (static::_getDefaultFilter() as $property => $filter) {
                 if (empty($this->_properties[$property] ?? null)) {
@@ -588,7 +587,8 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                     }
                 }
             }
-            
+
+            $this->_isValidated = true;
             return true;
         }
         
