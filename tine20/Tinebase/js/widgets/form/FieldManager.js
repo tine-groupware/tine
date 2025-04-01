@@ -173,11 +173,13 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
+                        field.allowNegative = false;
                     }
 
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'minutes') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'minutes';
+                        field.allowNegative = false;
                     }
 
                     if (fieldDefinition.max) {
