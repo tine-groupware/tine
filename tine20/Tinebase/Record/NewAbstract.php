@@ -481,7 +481,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         while ($inputFilter->isValid()) {
             // set $this->_data with the filtered values
             $this->_data  = $inputFilter->getUnescaped();
-            $this->_isValidated = true;
 
             foreach (static::_getDefaultFilter() as $property => $filter) {
                 if (empty($this->_data[$property] ?? null)) {
@@ -493,6 +492,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                 }
             }
 
+            $this->_isValidated = true;
             return true;
         }
 
