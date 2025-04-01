@@ -76,9 +76,11 @@ class Tinebase_BroadcastHub
                 throw new Tinebase_Exception_Backend(self::class . ' is not activated');
             }
             $this->_redis = new Redis();
-            $this->_redis->connect($this->_config->{Tinebase_Config::BROADCASTHUB_REDIS}
-                    ->{Tinebase_Config::BROADCASTHUB_REDIS_HOST},
-                $this->_config->{Tinebase_Config::BROADCASTHUB_REDIS}->{Tinebase_Config::BROADCASTHUB_REDIS_PORT});
+            $this->_redis->connect(
+                $this->_config->{Tinebase_Config::BROADCASTHUB_REDIS}->{Tinebase_Config::BROADCASTHUB_REDIS_HOST},
+                $this->_config->{Tinebase_Config::BROADCASTHUB_REDIS}->{Tinebase_Config::BROADCASTHUB_REDIS_PORT},
+                1 /* 1 sec timeout */
+            );
         }
 
         return $this->_redis;
