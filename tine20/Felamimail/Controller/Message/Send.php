@@ -85,8 +85,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            $recipients = is_array($_message->to) ? array_map(function ($address) {
+                return $address['email'] ?? $address;
+            }, $_message->to) : $_message->to;
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-            ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, true));
+            ' Sending message with subject ' . $_message->subject . ' to ' . print_r($recipients, true));
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), true));
