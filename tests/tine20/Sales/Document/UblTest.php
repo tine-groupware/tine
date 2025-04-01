@@ -24,21 +24,6 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         parent::setUp();
 
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
-        if (!($this->oldPreviewSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
-            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
-        }
-        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
-        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
-        $app->status = Tinebase_Application::DISABLED;
-        Tinebase_Application::getInstance()->updateApplication($app);
-    }
-
-    public function tearDown(): void
-    {
-        Sales_Export_DocumentPdf::$previewService = null;
-        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $this->oldPreviewSvc;
-
-        parent::tearDown();
     }
 
     protected function _createInvoice(array $positions, array $invoiceData = []): SMDI
