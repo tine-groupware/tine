@@ -7,8 +7,10 @@
  *
  * TODO         use new filter syntax in onBeforeQuery when TagFilter is refactored and extends Tinebase_Model_Filter_FilterGroup 
  */
- 
+
 Ext.ns('Tine.widgets', 'Tine.widgets.tags');
+
+import RecordEditFieldTriggerPlugin from "../form/RecordEditFieldTriggerPlugin";
 
 /**
  * @namespace   Tine.widgets.tags
@@ -45,11 +47,71 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         
         this.initStore();
         this.initTemplate();
-        
+        this.plugins = [new RecordEditFieldTriggerPlugin({
+            qtip: i18n._('Add a new personal tag'),
+            visible: Tine.Tinebase.common.hasRight('use_personal_tags', this.app.appName),
+            scope: this,
+            onTriggerClick: () => {
+                Ext.Msg.prompt(i18n._('Add New Personal Tag'),
+                    i18n._('Please note: You create a personal tag. Only you can see it!') + ' <br />' + i18n._('Enter tag name:'),
+                    function(btn, text) {
+                        if (btn === 'ok'){
+                            if (text.length < 3) {
+                                Ext.Msg.show({
+                                    title: i18n._('Notice'),
+                                    msg: i18n._('The minimum tag length is three.'),
+                                    buttons: Ext.Msg.OK,
+                                    animEl: 'elId',
+                                    icon: Ext.MessageBox.INFO
+                                });
+                                return false;
+                            }
+                            const tagToAttach = new Tine.Tinebase.Model.Tag({
+                                name: text,
+                                type: 'personal',
+                                description: '',
+                                color: '#FFFFFF'
+                            });
+                            /*
+                            @todo check if tag exist here
+                            this.availableTagsStore.each(function(tag){
+                                if(tag.data.name == tagName) {
+                                    tagToAttach = tag;
+                                }
+                            }, this);*/
+
+                            if (! Ext.isIE) {
+                                this.el.mask();
+                            }
+                            Ext.Ajax.request({
+                                params: {
+                                    method: 'Tinebase.saveTag',
+                                    tag: tagToAttach.data
+                                },
+                                success: function(_result, _request) {
+                                    const tagData = Ext.util.JSON.decode(_result.responseText);
+                                    const newTag = new Tine.Tinebase.Model.Tag(tagData, tagData.id);
+                                    this.fireEvent('select', this, newTag);
+                                    // reset avail tag store
+                                    //this.availableTagsStore.lastOptions = null;
+                                    this.lastQuery = null;
+                                    this.el.unmask();
+                                },
+                                failure: function ( result, request) {
+                                    Ext.MessageBox.alert(i18n._('Failed'), i18n._('Could not create tag.'));
+                                    this.el.unmask();
+                                },
+                                scope: this
+                            });
+                        }
+                    },
+                    this, false, this.lastQuery);
+            }
+        })];
+
         Tine.widgets.tags.TagCombo.superclass.initComponent.call(this);
         
         this.on('select', this.onSelectRecord, this);
-        
         this.on('beforequery', this.onBeforeQuery, this);
     },
     
@@ -58,12 +120,11 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      * NOTE: executed after native onSelect method
      */
     onSelectRecord: function(){
-        var v = this.getValue();
-        
+        const v = this.getValue();
+
         if(String(v) !== String(this.startValue)){
             this.fireEvent('change', this, v, this.startValue);
         }
-        
     },
     
     /**

@@ -81,7 +81,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
                 true, false
             )
         ) {
-            throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete file: ' . $this->_path);
         }
         
         Tinebase_FileSystem::getInstance()->unlink($this->_path);
