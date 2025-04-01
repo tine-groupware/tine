@@ -854,9 +854,6 @@ msgstr "Druckvorschau"
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
-msgid "Create New Task"
-msgstr "Neue Aufgabe anlegen"
-
 msgid "Delete"
 msgstr "Löschen"
 
