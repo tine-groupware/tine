@@ -101,7 +101,18 @@ class Tinebase_Exception extends Exception
         $basePath = dirname(__FILE__, 2);
         return str_replace($basePath, '...', $_string);
     }
-    
+
+    public static function wrap(Throwable $t, string $logLevel, bool $logToSentry): Tinebase_Exception
+    {
+        if (!$t instanceof Tinebase_Exception) {
+            $t = new Tinebase_Exception($t->getMessage(), previous: $t);
+        }
+        $t->setLogToSentry($logToSentry);
+        $t->setLogLevelMethod($logLevel);
+
+        return $t;
+    }
+
     /**
      * log exception (remove confidential information from trace)
      *

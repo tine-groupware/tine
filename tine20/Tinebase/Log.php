@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Log
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -19,6 +19,7 @@
  * @method void trace(string $msg)
  * @method void debug(string $msg)
  * @method void info(string $msg)
+ * @method void notice(string $msg)
  * @method void warn(string $msg)
  * @method void err(string $msg)
  */
