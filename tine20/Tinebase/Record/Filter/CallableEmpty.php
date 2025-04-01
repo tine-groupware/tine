@@ -21,7 +21,7 @@ class Tinebase_Record_Filter_CallableEmpty implements Zend_Filter_Interface
 
     protected function getReplacement()
     {
-        if (is_callable($this->replacement)) {
+        if (is_callable($this->replacement[0] ?? null)) {
             $tmp = $this->replacement;
             return call_user_func_array(array_shift($tmp), $tmp);
         }
