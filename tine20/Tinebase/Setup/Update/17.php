@@ -37,6 +37,8 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
     protected const RELEASE017_UPDATE017 = __CLASS__ . '::update017';
     protected const RELEASE017_UPDATE018 = __CLASS__ . '::update018';
+    protected const RELEASE017_UPDATE019 = __CLASS__ . '::update019';
+    protected const RELEASE017_UPDATE020 = __CLASS__ . '::update020';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -96,6 +98,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update014',
             ],
+            self::RELEASE017_UPDATE020 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update020',
+            ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
             self::RELEASE017_UPDATE000 => [
@@ -109,6 +115,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE011 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update011',
+            ],
+            self::RELEASE017_UPDATE019 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update019',
             ],
         ],
         (self::PRIO_NORMAL_APP_UPDATE + 1) => [
@@ -478,5 +488,22 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         Setup_SchemaTool::updateAllSchema();
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.18', self::RELEASE017_UPDATE018);
+    }
+
+    public function update019(): void
+    {
+        Tinebase_Scheduler::getInstance()->spreadTasks(true);
+        Tinebase_Scheduler::getInstance()->spreadTasks(false);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.19', self::RELEASE017_UPDATE019);
+    }
+
+    public function update020(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_SchedulerTask::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.20', self::RELEASE017_UPDATE020);
     }
 }
