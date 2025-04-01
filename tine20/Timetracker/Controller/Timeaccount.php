@@ -91,7 +91,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
 
-        if ($_record['is_billable'] && $_record['is_billable'] !== $_oldRecord['is_billable']) {
+        if ($_record['is_billable'] && $_record['is_billable'] != $_oldRecord['is_billable']) {
             $tsBackend = new Timetracker_Backend_Timesheet();
             $timesheets = $tsBackend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                 ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $_record->getId()],
