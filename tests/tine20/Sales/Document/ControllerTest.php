@@ -420,7 +420,6 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
         $this->assertSame($node->getId(), $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
 
-
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
@@ -437,6 +436,10 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '.pdf', ($node = $invoice->attachments->find(fn($rec) => $rec->getId() !== $node->getId(), null))?->name);
         $this->assertNotNull($attachedDoc = $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $node->getId()));
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+
+        $modLogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(Sales_Config::APP_NAME, $invoice->getId())->sort('seq', 'DESC');
+        $diff = new Tinebase_Model_Diff(json_decode($modLogs->getFirstRecord()->new_value, true));
+        $this->assertArrayNotHasKey(Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS, $diff->diff);
 
         // test replacement of attachment
         $oldPaperReplace = Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL};

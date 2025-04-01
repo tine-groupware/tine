@@ -358,7 +358,11 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS};
                 continue;
             }
-            $_record->{$field} = $_oldRecord->{$field};
+            if ($_oldRecord->{$field} instanceof Tinebase_Record_RecordSet || $_oldRecord->{$field} instanceof Tinebase_Record_Interface) {
+                $_record->{$field} = clone $_oldRecord->{$field};
+            } else {
+                $_record->{$field} = $_oldRecord->{$field};
+            }
         }
     }
 
