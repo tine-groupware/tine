@@ -72,10 +72,11 @@ class Sales_Model_PaymentMeans extends Tinebase_Record_NewAbstract
                         Sales_Model_EDocument_PMC_PayeeFinancialAccount::class,
                     ],
                 ],
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                self::INPUT_FILTERS                 => [
                     Zend_Filter_Empty::class            => Sales_Model_EDocument_PMC_NoConfig::class,
+                ],
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::DEFAULT_VALUE    => Sales_Model_EDocument_PMC_NoConfig::class,
                 ],
                 self::UI_CONFIG                      => [
                     self::DISABLED                      => true,
@@ -87,13 +88,8 @@ class Sales_Model_PaymentMeans extends Tinebase_Record_NewAbstract
                 self::CONFIG                        => [
                     self::REF_MODEL_FIELD               => self::FLD_CONFIG_CLASS,
                     self::PERSISTENT                    => true,
+                    self::SET_DEFAULT_INSTANCE          => true,
                 ],
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    Zend_Filter_Empty::class            => [],
-                ],
-//                self::DEFAULT_VAL                   => [],
             ],
         ],
     ];

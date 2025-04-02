@@ -536,6 +536,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::STORAGE                       => self::TYPE_JSON,
                     // only Invoice needs one default set (means selected)
                 ],
+                // important not so set any filter / validation defaults as default handling is done in the controller!
                 self::DEFAULT_VAL                   => '[]',
                 self::CONVERTERS                    => [
                     [Tinebase_Model_Converter_JsonRecordSetDefault::class, []],
