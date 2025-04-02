@@ -216,7 +216,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 }
                  config.minWidth = 65;
                  config.defaultWidth = width;
-                 config.maxWidth = 135;
+                 config.maxWidth = 160;
             }
             
             if (type === 'tag') {
