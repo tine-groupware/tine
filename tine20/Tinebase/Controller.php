@@ -1710,10 +1710,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
             ];
 
-            foreach ([
+            foreach (array_merge([
                         'actionQueue' => Tinebase_ActionQueue::getInstance(),
+                    ], Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING} ? [
                         'actionQueueLR' => Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)
-                     ] as $qName => $actionQueue) {
+                    ] : []) as $qName => $actionQueue) {
 
                 $missingQueueKeys = [];
                 $missingDaemonKeys = [];
@@ -1804,13 +1805,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
                 Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
             Tinebase_ActionQueue::getInstance()->executeAction([
-                'action'    => 'Tinebase.measureActionQueue',
-                'params'    => [microtime(true)]
+                'action' => 'Tinebase.measureActionQueue',
+                'params' => [microtime(true)]
             ]);
-            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->executeAction([
-                'action'    => 'Tinebase.measureActionQueueLongRun',
-                'params'    => [microtime(true)]
-            ]);
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING}) {
+                Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->executeAction([
+                    'action' => 'Tinebase.measureActionQueueLongRun',
+                    'params' => [microtime(true)]
+                ]);
+            }
         }
         return true;
     }
