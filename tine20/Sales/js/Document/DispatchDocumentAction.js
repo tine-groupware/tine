@@ -68,7 +68,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 const statusFieldName = `${docType.toLowerCase()}_status`
                 const currentStatus = record.get(statusFieldName)
 
-                if (currentStatus === 'DISPATCHED' && Ext.MessageBox.confirm(
+                if (currentStatus === 'DISPATCHED' && await Ext.MessageBox.confirm(
                     app.formatMessage('Nothing to do'),
                    app.formatMessage('This document is already dispatched!') + '<br /><br />' +
                         app.formatMessage('Do you want to dispatch again?')
