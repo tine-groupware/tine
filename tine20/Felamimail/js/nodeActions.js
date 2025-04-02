@@ -157,21 +157,31 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
         
         try {
             if (selectedNode) {
-                Ext.MessageBox.confirm(
-                    app.i18n._('Empty Folder'),
-                    app.i18n._('Do you really want to delete all the messages in this folder?'),
-                    async function (button) {
-                        if (button === 'yes') {
-                            selectedNode.getUI().addClass("x-tree-node-loading");
-                            const result = await Tine.Felamimail.emptyFolder(folder.id);
-                            const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+                Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+                    title: app.i18n._('Empty Folder'),
+                    questionText: app.i18n._('Do you really want to delete all the messages in this folder?'),
+                    allowCancel: true,
+                    height: 170,
+                    scope: this,
+                    options: [
+                        {text: app.i18n._('Only delete the messages from this folder'), name: 'current', checked: true},
+                        {text: app.i18n._('Delete all messages and subfolders'), name: 'all'}
+                    ],
+
+                    handler: async function (option) {
+                        const deleteSubfolders = option === 'all';
+
+                        selectedNode.getUI().addClass("x-tree-node-loading");
+                        const result = await Tine.Felamimail.emptyFolder(folder.id, deleteSubfolders);
+                        const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+
+                        if (deleteSubfolders) {
                             app.getFolderStore().updateFolder(folderRecord);
                             selectedNode.removeAll();
-                            selectedNode.getUI().removeClass("x-tree-node-loading");
                         }
-                    },
-                    this
-                );
+                        selectedNode.getUI().removeClass("x-tree-node-loading");
+                    }
+                });
             } else {
                 folder.set('cache_unreadcount', 0);
             }

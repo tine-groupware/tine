@@ -247,8 +247,33 @@ Tine.Tinebase.tineInit = {
                 // open internal links in same window (use router)
                 const mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
                 if (window === mainWindow) {
-                    //todo: ask router if it is internal link, yes => open in same page , otherwise open in new tab
-                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl()) + '#/'))) {
+                    const isInternal = (url) =>  {
+                        return new Promise((resolve) => {
+                            const notfound = Tine.Tinebase.router.notfound;
+                            const before = Tine.Tinebase.router.every.before;
+                            let result = true;
+                            try {
+                                Tine.Tinebase.router.configure({
+                                    notfound: function() {
+                                        result = false;
+                                        return false;
+                                    },
+                                    before: function() {
+                                        result = true;
+                                        return false;
+                                    },
+                                });
+                                Tine.Tinebase.router.dispatch('on', url.replace(/.*#/, ''))
+                            } finally {
+                                Tine.Tinebase.router.configure({
+                                    notfound: notfound,
+                                    before: before
+                                });
+                            }
+                            resolve(result);
+                        });
+                    }
+                    if (await isInternal(href)) {
                         target.set({
                             href: decodeURI(href),
                             target: "_self"
@@ -693,7 +718,7 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.router = new director.Router().init();
         Tine.Tinebase.router.configure({notfound: function () {
-            var defaultApp = Tine.Tinebase.appMgr.getDefault();
+            const defaultApp = Tine.Tinebase.appMgr.getDefault();
             if (defaultApp) {
                 Tine.Tinebase.router.setRoute(defaultApp.getRoute());
             }

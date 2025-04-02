@@ -24,7 +24,6 @@ class FieldTriggerPlugin {
         this.field = field
 
         field.initKeyEvents()
-        this.assertState()
         field.setValue = field.setValue.createSequence(_.bind(this.assertState, this))
         field.clearValue = field.clearValue?.createSequence(_.bind(this.assertState, this))
         field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
@@ -63,6 +62,8 @@ class FieldTriggerPlugin {
             field.el.autoBoxAdjust = false;
             field.onResize(wrap.getWidth(), wrap.getHeight());
         }
+
+        this.assertState()
     }
 
     assertState() {

@@ -33,6 +33,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
     public const FLD_IS_SYSTEM = 'is_system';
     public const FLD_NAME = 'name';
     public const FLD_NEXT_RUN = 'next_run';
+    public const FLD_DISABLE_AUTO_SHUFFLE = 'disable_auto_shuffle';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,7 +41,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version'           => 3,
+        'version'           => 4,
         'recordName'        => 'Scheduler task',
         'recordsName'       => 'Scheduler tasks', // ngettext('Scheduler task', 'Scheduler tasks', n)
         //'containerProperty' => 'container_id',
@@ -89,6 +90,11 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'label'         => 'Configuration', // _('Configuration')
                 'converters'    => [Tinebase_Scheduler_TaskConverter::class],
                 'inputFilters'  => []
+            ],
+            self::FLD_DISABLE_AUTO_SHUFFLE => [
+                self::TYPE      => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL => false,
+                self::LABEL     => 'Disable automatic time shuffle', // _('Disable automatic time shuffle')
             ],
             'last_run' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],

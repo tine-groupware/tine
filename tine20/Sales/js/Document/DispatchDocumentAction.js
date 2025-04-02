@@ -68,7 +68,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 const statusFieldName = `${docType.toLowerCase()}_status`
                 const currentStatus = record.get(statusFieldName)
 
-                if (currentStatus === 'DISPATCHED' && Ext.MessageBox.confirm(
+                if (currentStatus === 'DISPATCHED' && await Ext.MessageBox.confirm(
                     app.formatMessage('Nothing to do'),
                    app.formatMessage('This document is already dispatched!') + '<br /><br />' +
                         app.formatMessage('Do you want to dispatch again?')
@@ -192,7 +192,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             title: app.formatMessage('Please Select Files to Dispatch'),
                             questionText: app.formatMessage('Please select the files which should be dispatched.'),
                             allowMultiple: true,
-                            allowEmpty: false,
+                            allowEmpty: true,
                             allowCancel: true,
                             height: docs.length * 30 + 100,
                             options: docs
@@ -223,12 +223,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 title: app.formatMessage('Complete open Dispatch Processes?'),
                                 questionText: app.formatMessage('By sending this mail, the following dispatch processes must be marked completed:'),
                                 allowMultiple: true,
-                                allowEmpty: false,
+                                allowEmpty: true,
                                 allowCancel: true,
                                 height: docs.length * 30 + 100,
                                 options: _.reduce(openProcesses, (accu, startRecord, key) => {
                                     startRecord = Tine.Tinebase.data.Record.setFromJson(startRecord, 'Sales_Model_Document_DispatchHistory')
-                                    return accu.concat({ name: key, text: startRecord.getGroupName(), checked: startRecord.id === cmp.startRecord.id , value: {
+                                    return accu.concat({ name: key, text: startRecord.getGroupName(), checked: startRecord.id === cmp.startRecord?.id , value: {
                                             model: 'Sales_Model_Document_DispatchHistory',
                                             record_id : Ext.copyTo({
                                                 dispatch_report: app.formatMessage('Dispatched by manual email'),
