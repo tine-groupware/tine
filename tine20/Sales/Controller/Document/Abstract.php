@@ -688,6 +688,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             throw new Tinebase_Exception_SystemGeneric('an other dispatch is currently running');
         }
         $unlock = new Tinebase_RAII(fn() => Tinebase_Core::releaseMultiServerLock($lockId));
+        $mailAccountRAII = new Tinebase_RAII(Admin_Controller_EmailAccount::getInstance()->assertPublicUsage());
 
         /** @var Sales_Model_Document_Abstract $document */
         $document = static::getInstance()->get($documentId);
@@ -711,6 +712,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         /** @var Sales_Model_EDocument_Dispatch_Interface $dispatcher */
         $dispatcher = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG};
         $result = $dispatcher->dispatch($document);
+        unset($mailAccountRAII);
         unset($unlock);
         return $result;
     }
