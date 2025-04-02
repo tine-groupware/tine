@@ -246,10 +246,12 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         });
         $oldAcl = $this->doContainerACLChecks(false);
         $oldMonthAcl = HumanResources_Controller_MonthlyWTReport::getInstance()->doContainerACLChecks(false);
-        $aclRaii = new Tinebase_RAII(function() use($oldAcl, $oldMonthAcl) {
-            HumanResources_Controller_DailyWTReport::getInstance()->doContainerACLChecks($oldAcl);
-            HumanResources_Controller_MonthlyWTReport::getInstance()->doContainerACLChecks($oldMonthAcl);
-        });
+        $oldDivisionAcl = HumanResources_Controller_Division::getInstance()->doContainerACLChecks(false);
+        $aclRaii = new Tinebase_RAII(fn() =>
+            HumanResources_Controller_DailyWTReport::getInstance()->doContainerACLChecks($oldAcl) &
+            HumanResources_Controller_MonthlyWTReport::getInstance()->doContainerACLChecks($oldMonthAcl) &
+            HumanResources_Controller_Division::getInstance()->doContainerACLChecks($oldDivisionAcl)
+        );
 
         // init some member vars
         $this->_monthlyWTR = [];
@@ -260,6 +262,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
         // first we get all data. We do this in a transaction to get a proper snapshot
         $dataReadTransaction = new Tinebase_TransactionManager_Handle();
 
+        $contractRaii = new Tinebase_RAII(HumanResources_Controller_Contract::getInstance()->assertPublicUsage());
         $rs = new Tinebase_Record_RecordSet(HumanResources_Model_Employee::class, [$employee]);
         Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs,
             HumanResources_Model_Employee::getConfiguration());
@@ -274,6 +277,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             ],
         ]);
         $expander->expand($rs);
+        unset($contractRaii);
 
         if ($startDate && $lastClearedReport = $this->_getLastClearedWTR()) {
             $lastClearedReport = (new Tinebase_DateTime($lastClearedReport->{HumanResources_Model_MonthlyWTReport::FLDS_MONTH}
@@ -734,7 +738,11 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             $filterData
         );
 
-        $timeSheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
+        $taPublicUsage = new Tinebase_RAII(Timetracker_Controller_Timeaccount::getInstance()->assertPublicUsage());
+        $tsCtrl = Timetracker_Controller_Timesheet::getInstance();
+        $tsPublicUsage = new Tinebase_RAII($tsCtrl->assertPublicUsage());
+
+        $timeSheets = $tsCtrl->search($filter);
         (new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON => [],
@@ -756,6 +764,10 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             }
             $result[$day]->addRecord($ts);
         }
+
+        unset($taPublicUsage);
+        unset($tsPublicUsage);
+
         return $result;
     }
 
