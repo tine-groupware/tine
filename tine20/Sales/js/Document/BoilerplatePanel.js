@@ -128,7 +128,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
         const statusField = this.editDialog.fields[this.editDialog.statusFieldName]
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
 
-        if (String(this.gabpArgs) !== String(gabpArgs) && !booked) {
+        if (!this.editDialog.loadRequest && !booked && String(this.gabpArgs) !== String(gabpArgs)) {
             this.gabpArgs = gabpArgs;
             const { results } = await Tine.Sales.getApplicableBoilerplates(...gabpArgs);
             this.applicableBoilerplatesData = results;
@@ -141,7 +141,6 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
                     applicableBoilerplate.data.original_id = applicableBoilerplate.id; // don't modify
                     this.store.addSorted(applicableBoilerplate);
                 } else {
-                    if (booked) return;
                     const isEqual = existingBoilerplate.get('boilerplate') === applicableBoilerplate.get('boilerplate');
                     const existingIsLocallyChanged = !!+existingBoilerplate.get('locally_changed');
                     const applicableIsNewer = applicableBoilerplate.getMTime() > existingBoilerplate.getMTime();
