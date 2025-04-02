@@ -106,7 +106,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $folder = $this->_getFolder($this->_testFolderName);
         $this->testCreateFolders();
 
-        $folderArray = $this->_json->emptyFolder($folder->getId());
+        $folderArray = $this->_json->emptyFolder($folder->getId(), true);
         $this->assertEquals(0, $folderArray['has_children']);
 
         $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);

@@ -1228,6 +1228,12 @@ msgstr "Ordner leeren"
 msgid "Do you really want to delete all the messages in this folder?"
 msgstr "Möchten Sie alle Nachrichten in diesem Ordner wirklich löschen?"
 
+msgid "Only delete the messages from this folder"
+msgstr "Nur die Nachrichten aus diesem Ordner löschen"
+
+msgid "Delete all messages and subfolders"
+msgstr "Alle Nachrichten und Unterordner löschen"
+
 msgid "Add Folder"
 msgstr "Ordner hinzufügen"
 
