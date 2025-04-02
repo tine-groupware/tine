@@ -1185,6 +1185,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     ],
                     'provider_class'        => 'Tinebase_Auth_MFA_WebAuthnAdapter',
                     'user_config_class'     => 'Tinebase_Model_MFA_WebAuthnUserConfig'
+                ], [
+                    'id'                    => 'YUBICO',
+                    'allow_self_service'    => true,
+                    'provider_config_class' => 'Tinebase_Model_MFA_YubicoOTPConfig',
+                    'provider_config'       => [],
+                    'provider_class'        => 'Tinebase_Auth_MFA_YubicoOTPAdapter',
+                    'user_config_class'     => 'Tinebase_Model_MFA_YubicoOTPUserConfig'
                 ]]
             ],
         ),
