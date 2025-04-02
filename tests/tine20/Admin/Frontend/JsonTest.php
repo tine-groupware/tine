@@ -1142,7 +1142,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         self::assertNull(ExampleApplication_Config::getInstance()->get($result['name']));
     }
 
-    public function testSearchConfigs()
+    public function testSearchConfigs(): array
     {
         $result = $this->_json->searchConfigs(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
@@ -1151,7 +1151,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $this->assertGreaterThanOrEqual(2, $result['totalcount']);
 
         $attendeeRoles = NULL;
-        foreach($result['results'] as $configData) {
+        foreach ($result['results'] as $configData) {
             if ($configData['name'] == 'attendeeRoles') {
                 $attendeeRoles = $configData;
                 break;
@@ -1159,7 +1159,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         }
 
         $this->assertNotNull($attendeeRoles);
-        $this->assertContains('{', $attendeeRoles);
+        $this->assertArrayHasKey('id', $attendeeRoles);
 
         return $attendeeRoles;
     }

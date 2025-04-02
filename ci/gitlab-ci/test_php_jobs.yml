@@ -127,7 +127,7 @@ php-unit-setup-tests-source:
 php-unit-servertests-source:
   extends: .php-unit-all-tests-source
   variables:
-    ARG_TEST: AllServerTests
+    ARG_TEST: AllServerTests.php
   timeout: 30m
   rules:
     - if: $RUN_NO_TESTS == "true"
@@ -311,7 +311,7 @@ php-unit-all-tests-built-parallel:
     NODE_TOTAL: 1
     NODE_INDEX: 1
     ARG_IMAGE: test-built
-    ARG_TEST: Tinebase/AllTests
+    ARG_TEST: Tinebase/AllTests.php
   needs:
     - docker_build_built
   rules:

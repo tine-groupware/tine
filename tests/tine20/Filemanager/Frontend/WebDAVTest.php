@@ -1321,7 +1321,7 @@ EOS
         $rc = fopen('php://temp', 'r');
         $etag = $parent->createFile('AR-0394xa5 = GS-00sb064', $rc);
         fclose($rc);
-        self::assertRegExp('/"[a-z0-9]+"/', $etag);
+        self::assertMatchesRegularExpression('/"[a-z0-9]+"/', $etag);
     }
 
     public function testUpdateFileWithOCMTime()
