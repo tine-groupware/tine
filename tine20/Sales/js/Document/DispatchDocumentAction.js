@@ -228,7 +228,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 height: docs.length * 30 + 100,
                                 options: _.reduce(openProcesses, (accu, startRecord, key) => {
                                     startRecord = Tine.Tinebase.data.Record.setFromJson(startRecord, 'Sales_Model_Document_DispatchHistory')
-                                    return accu.concat({ name: key, text: startRecord.getGroupName(), checked: startRecord.id === cmp.startRecord.id , value: {
+                                    return accu.concat({ name: key, text: startRecord.getGroupName(), checked: startRecord.id === cmp.startRecord?.id , value: {
                                             model: 'Sales_Model_Document_DispatchHistory',
                                             record_id : Ext.copyTo({
                                                 dispatch_report: app.formatMessage('Dispatched by manual email'),
