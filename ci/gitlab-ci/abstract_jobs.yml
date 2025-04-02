@@ -64,7 +64,7 @@
     TINE20_ACCEPTED_TERMS_VERSION: 1000
     TINE20_LICENSE_PATH: "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem" # be default use test license from cloned tine repo
     ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci
-    ARG_TEST: AllTests
+    ARG_TEST: AllTests.php
     ARG_FILTER: $PHPUNIT_FILTER
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/tine20/
     ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfix_tables.sql

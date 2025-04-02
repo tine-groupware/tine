@@ -172,7 +172,7 @@
     "laminas/laminas-psr7bridge": "^1",
     "phing/phing": "2.16.*",
     "phpstan/phpstan": "^1.6",
-    "phpunit/phpunit": "^8.5",
+    "phpunit/phpunit": "^9.6",
     "rector/rector": "^1.2",
     "squizlabs/php_codesniffer": "^3.8",
     "tedivm/jshrink": "~1.0"
