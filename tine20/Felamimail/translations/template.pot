@@ -1196,6 +1196,12 @@ msgstr ""
 msgid "Do you really want to delete all the messages in this folder?"
 msgstr ""
 
+msgid "Only delete the messages from this folder"
+msgstr ""
+
+msgid "Delete all messages and subfolders"
+msgstr ""
+
 msgid "Add Folder"
 msgstr ""
 
