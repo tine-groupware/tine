@@ -94,11 +94,12 @@ const DispatchHistoryGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             dispatch_date: new Date()
                         }, record.data, 'dispatch_process, dispatch_id, parent_dispatch_id, document_id, document_type, dispatch_transport')
 
-                        this.dispatchHistoryRecords.push(dhData)
-                        const updatedRecord = await Tine.Tinebase.data.RecordMgr.get(record.get('document_type')).getProxy().promiseSaveRecord(this.record)
-                        this.editDialog ? this.editDialog.loadRecord(updatedRecord, true) : null
+                        this.record.get('dispatch_history').push(dhData)
+                        this.loadData(this.record)
 
-                        this.store.add(new this.recordClass(dhData))
+                        const updatedRecord = this.editDialog ?
+                            await this.editDialog.applyChanges() :
+                            await Tine.Tinebase.data.RecordMgr.get(record.get('document_type')).getProxy().promiseSaveRecord(this.record)
 
                         mask.hide()
                     }
