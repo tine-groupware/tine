@@ -55,6 +55,10 @@ class Admin_Controller_SchedulerTask extends Tinebase_Controller_Record_Abstract
         if ($_record->{Admin_Model_SchedulerTask::FLD_IS_SYSTEM}) {
             throw new Tinebase_Exception_AccessDenied('can not make a task a system task');
         }
+
+        if ($_record->{Admin_Model_SchedulerTask::FLD_CRON} !== $_oldRecord->{Admin_Model_SchedulerTask::FLD_CRON}) {
+            $_record->{Admin_Model_SchedulerTask::FLD_DISABLE_AUTO_SHUFFLE} = true;
+        }
     }
 
     protected function _inspectDelete(array $_ids): array
