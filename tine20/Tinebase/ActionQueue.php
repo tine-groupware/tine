@@ -175,7 +175,7 @@
             unset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]);
             unset($options[Tinebase_Config::ACTIONQUEUE_ACTIVE]);
 
-            if (null !== $_queue) {
+            if (null !== $_queue && (self::QUEUE_LONG_RUN !== $_queue || $this->_config->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING})) {
                 if (!isset($options['queueName'])) {
                     $options['queueName'] = Tinebase_ActionQueue_Backend_Redis::QUEUE_NAME;
                 }
