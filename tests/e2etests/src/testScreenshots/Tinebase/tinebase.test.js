@@ -37,7 +37,7 @@ describe('usersettings', () => {
         await page.waitForTimeout(2000);
         await page.click('.account-user-avatar');
         await page.waitForTimeout(2000);
-        settings = await expect(page).toMatchElement('.x-menu-item-text', {text: 'Einstellungen', visible: true});
+        settings = await expect(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
         await settings.hover();
         await page.screenshot({
             path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png'
