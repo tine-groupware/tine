@@ -26,9 +26,11 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
     }
 
-    protected function _createInvoice(array $positions, array $invoiceData = []): SMDI
+    protected function _createInvoice(array $positions, array $invoiceData = [], ?Sales_Model_Customer $customer = null): SMDI
     {
-        $customer = $this->_createCustomer();
+        if (null === $customer) {
+            $customer = $this->_createCustomer();
+        }
 
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new SMDI(array_merge([
@@ -44,7 +46,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         return $invoice;
     }
 
-    protected function _assertUblXml(SMDI $invoice, float $taxExclValue, float $taxInclValue): void
+    protected function _assertUblXml(SMDI $invoice, float $taxExclValue, float $taxInclValue): SimpleXMLElement
     {
         Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
         Tinebase_Record_Expander_DataRequest::clearCache();
@@ -61,6 +63,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame($taxExclValue, (float)$taxExclAmount[0]);
         $this->assertIsArray($taxInclAmount = $xml->xpath('/ubl:Invoice/cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount'));
         $this->assertSame($taxInclValue, (float)$taxInclAmount[0]);
+
+        return $xml;
     }
 
     public function testUblValidationFail(): void
@@ -274,6 +278,10 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         Sales_Controller_Division::getInstance()->update($division);
 
         $product1 = $this->_createProduct();
+        $customer = $this->_createCustomer([
+            Sales_Model_Address::FLD_PREFIX2 => 'pre2',
+            Sales_Model_Address::FLD_PREFIX3 => 'pre3',
+        ]);
 
         $positions = [
             new SMDPI([
@@ -296,10 +304,13 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                     ]),
                 ])
             ])
-        ]);
+        ], $customer);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        $this->_assertUblXml($invoice, 10, round(10 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+        $xml = $this->_assertUblXml($invoice, 10, round(10 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+
+        $this->assertIsArray($customerPartyName = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:Name'));
+        $this->assertSame('pre3' . PHP_EOL . 'pre2', (string)$customerPartyName[0]);
     }
 }

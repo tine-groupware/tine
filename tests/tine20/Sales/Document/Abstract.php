@@ -26,7 +26,7 @@ class Sales_Document_Abstract extends TestCase
         ], $data)));
     }
 
-    protected function _createCustomer(): Sales_Model_Customer
+    protected function _createCustomer(array $additionalBillingData = []): Sales_Model_Customer
     {
         $division = self::makeDefaultDivisonUblReady();
 
@@ -49,12 +49,12 @@ class Sales_Document_Abstract extends TestCase
                     'name' => 'some delivery address for ' . $name,
                     'type' => 'delivery'
                 ]]),
-                'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
+                'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[array_merge([
                     Sales_Model_Address::FLD_POSTALCODE => '12345',
                     Sales_Model_Address::FLD_LOCALITY => 'Neu Altdorf',
                     'name' => 'some billing address for ' . $name,
                     'type' => 'billing'
-                ]]),
+                ], $additionalBillingData)]),
                 Sales_Model_Debitor::FLD_EAS_ID => Sales_Controller_EDocument_EAS::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_EAS::class, [
                     [TMFA::FIELD => Sales_Model_EDocument_EAS::FLD_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => '9930'],
                 ]))->getFirstRecord(),
