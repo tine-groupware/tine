@@ -51,7 +51,7 @@ class Tinebase_Record_Expander_DataRequest
             $model = $this->controller->getModel();
         }
         $data = static::_getInstancesFromCache($model, $model, $this->ids, $this->_getDeleted);
-
+    try {
         if (!empty($this->ids)) {
             /** TODO make sure getMultiple doesnt do any resolving, customfields etc */
             /** TODO Tinebase_Container / Tinebase_User_Sql etc. do not have the propery mehtod signature! */
@@ -66,6 +66,7 @@ class Tinebase_Record_Expander_DataRequest
             static::_addInstancesToCache($model, $newRecords, $this->_getDeleted);
             $data->mergeById($newRecords);
         }
+    } catch (Tinebase_Exception_AccessDenied) {} // TODO FIXME this is a very bad hotfix, needs to be fixed!
 
         return $data;
     }
