@@ -6,19 +6,21 @@ Twig Dokumentation
 In Text und Tabellenkalkulations-Vorlagen können Platzhalter verwendet werden die beim Export durch entsprechende Werte ersetzt werden.
 Um die Platzhalter zu ersetzen wird [Twig](https://twig.symfony.com/doc/) verwendet.
 
-Beispiel: \
+Innerhalb von Twig kann auf die Felder eines Datensatzes mit ihren internen Feldnamen zugegriffen werden wobei einzelne Datensätze im Kontext als `record` geführt werden.
 
-    Der Termin startet um {{record.dtstart.format('H:i')}} Uhr. 
-    Wir treffen uns hier: {{record.location}}
+Beispiel:
+
+    Für den Termin {{ record.summary }} treffen wir uns hier: {{ record.location }}. 
+    Wir starten um: {{ dateFormat(record.dtstart, 'time') }} Uhr. Bitte sei pünklich!
 
 
 !!! note "Alte Syntax"
-In alten exports sind die Twig Platzhalter in eine weitere Ebene von internen Platzhaltern eingebettet. Die äußeren Klammern (`{{` und `}}`) entfallen dann
 
-    Der Termin startet um ${twig:record.dtstart.format('H:i')} Uhr.
-    Wir treffen uns hier: ${twig:record.location}
+    In älteren (legacy) exports sind die Twig Platzhalter in eine weitere Ebene von internen Platzhaltern eingebettet. Die äußeren Klammern (`{{` und `}}`) entfallen dann
 
-Innerhalb von Twig kann auf die Felder des Datensatzes mit ihren internen Feldnamen zugegriffen werden. 
+        Für den Termin ${twig:record.summary} treffen wir uns hier: ${twig:record.location}. 
+        Wir starten um: ${twig:dateFormat(record.dtstart, 'time')} Uhr. Bitte sei pünklich!
+
 
 Ist der Wert eines Feldes ein einfacher Text oder eine Zahl kann diese ohne Weiterverarbeitung sofort ausgegeben werden.
 
