@@ -213,6 +213,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
+        if ($billingAddress->{Sales_Model_Address::FLD_LANGUAGE} !== $this->{self::FLD_DOCUMENT_LANGUAGE}) {
+            $billAdrT = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($billingAddress->{Sales_Model_Address::FLD_LANGUAGE}));
+        } else {
+            $billAdrT = $t;
+        }
 
         $this->calculatePricesIncludingPositions();
 
@@ -330,36 +335,34 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         (new \UBL21\Common\CommonBasicComponents\EndpointID($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}))->setSchemeID($debitor->{Sales_Model_Debitor::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE})
                         : null
                     )
+                    ->setPartyName($billingAddress->{Sales_Model_Address::FLD_PREFIX1} ? [(new \UBL21\Common\CommonAggregateComponents\PartyName)->setName(new \UBL21\Common\CommonBasicComponents\Name($billingAddress->{Sales_Model_Address::FLD_PREFIX1}))] : [])
                     ->setPartyLegalEntity([(new \UBL21\Common\CommonAggregateComponents\PartyLegalEntity())
                         ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName($billingAddress->{Sales_Model_Address::FLD_NAME} ?: $this->{self::FLD_CUSTOMER_ID}->name))
                     ])
                     ->setPostalAddress((new \UBL21\Common\CommonAggregateComponents\PostalAddress())
-                        ->setAddressLine(array_merge(
-                            $billingAddress->{Sales_Model_Address::FLD_PREFIX1} ?
-                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_PREFIX1}))
-                                ] : [],
-                            $billingAddress->{Sales_Model_Address::FLD_PREFIX2} ?
-                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_PREFIX2}))
-                                ] : [],
-                            $billingAddress->{Sales_Model_Address::FLD_PREFIX3} ?
-                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_PREFIX3}))
-                                ] : [],
-                            $billingAddress->{Sales_Model_Address::FLD_STREET} ?
-                                [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                    ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_STREET}))
-                                ] : [],
-                        ))
-                        ->setPostbox($billingAddress->{Sales_Model_Address::FLD_POBOX} ? new \UBL21\Common\CommonBasicComponents\Postbox($billingAddress->{Sales_Model_Address::FLD_POBOX}) : null)
+                        ->setStreetName(
+                            $billingAddress->{Sales_Model_Address::FLD_POBOX} || $billingAddress->{Sales_Model_Address::FLD_STREET} ?
+                                new \UBL21\Common\CommonBasicComponents\StreetName(
+                                    $billingAddress->{Sales_Model_Address::FLD_POBOX} ?
+                                        ($billAdrT->_('Postbox') . ' ' . $billingAddress->{Sales_Model_Address::FLD_POBOX})
+                                        : $billingAddress->{Sales_Model_Address::FLD_STREET}
+                                ) : null
+                             )
+                        ->setAdditionalStreetName($billingAddress->{Sales_Model_Address::FLD_POBOX} && $billingAddress->{Sales_Model_Address::FLD_STREET} ?
+                            new \UBL21\Common\CommonBasicComponents\AdditionalStreetName($billingAddress->{Sales_Model_Address::FLD_STREET}) : null)
                         ->setPostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE} ? new \UBL21\Common\CommonBasicComponents\PostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE}) : null)
                         ->setCityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY} ? new \UBL21\Common\CommonBasicComponents\CityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY}) : null)
+                        ->setCountrySubentity($billingAddress->{Sales_Model_Address::FLD_REGION} ? new \UBL21\Common\CommonBasicComponents\CountrySubentity($billingAddress->{Sales_Model_Address::FLD_REGION}) : null)
                         ->setCountry($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME} ? (new \UBL21\Common\CommonAggregateComponents\Country())
                             ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode(strtoupper($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME})))
                             : null
                         )
                     )
+                    ->setContact(($billingAddress->{Sales_Model_Address::FLD_PREFIX3} || $billingAddress->{Sales_Model_Address::FLD_PREFIX2} || $billingAddress->{Sales_Model_Address::FLD_EMAIL}) ?
+                        (new \UBL21\Common\CommonAggregateComponents\Contact())
+                            ->setName($billingAddress->{Sales_Model_Address::FLD_PREFIX3} || $billingAddress->{Sales_Model_Address::FLD_PREFIX2} ? new \UBL21\Common\CommonBasicComponents\Name($billingAddress->{Sales_Model_Address::FLD_PREFIX3} . ($billingAddress->{Sales_Model_Address::FLD_PREFIX3} && $billingAddress->{Sales_Model_Address::FLD_PREFIX2} ? PHP_EOL : '') . $billingAddress->{Sales_Model_Address::FLD_PREFIX2} ): null)
+                            ->setElectronicMail($billingAddress->{Sales_Model_Address::FLD_EMAIL} ? new \UBL21\Common\CommonBasicComponents\ElectronicMail($billingAddress->{Sales_Model_Address::FLD_EMAIL} ): null)
+                        : null)
                 )
             )
             ->setLegalMonetaryTotal(($legalMonetaryTotal = new \UBL21\Common\CommonAggregateComponents\LegalMonetaryTotal)
