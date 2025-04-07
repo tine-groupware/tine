@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -997,7 +997,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 } else {
                     // success, FE to render input field
                     $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
-                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]), $user);
+                        Tinebase_Model_MFA_UserConfig::class, [$userCfg]), $user);
                 }
             }
         } else {
@@ -1237,6 +1237,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             $routeCollector->addRoute(['GET', 'POST'], '/export/{definitionId}', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Export_Abstract::class, 'expressiveApi'))->toArray());
+
+            $routeCollector->post('/sendSupportRequest', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'postSendSupportRequest'))->toArray());
         });
 
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1273,6 +1276,48 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
             ]))->toArray());
         });
+    }
+
+    public function postSendSupportRequest(): \Psr\Http\Message\ResponseInterface
+    {
+        try {
+            $roleName = Tinebase_Config::getInstance()->{Tinebase_Config::SUPPORT_REQUEST_NOTIFICATION_ROLE};
+            if (!$roleName) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending support request' . PHP_EOL);
+                return new \Laminas\Diactoros\Response;
+            }
+
+            /** @var \Psr\Http\Message\ServerRequestInterface $request */
+            $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+            if (!is_array($post = $request->getParsedBody()) || !($post['msg'] ?? false)) {
+                return new \Laminas\Diactoros\Response(status: 400);
+            }
+
+            // TODO FIXME make sure msg is pure text, no potentially malicious email content
+            $messagePlain = strip_tags($post['msg']);
+
+            $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
+            $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
+            $recipients = Tinebase_User::getInstance()->getMultiple(array_unique($recipientIds), Tinebase_Model_FullUser::class)
+                ->contact_id;
+
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                Tinebase_Core::getUser()->accountId));
+            $translate = Tinebase_Translation::getTranslation(_locale: $locale);
+            $subject = $translate->_('Support Request');
+
+            Tinebase_Notification::getInstance()->send(
+                Tinebase_Core::getUser(),
+                $recipients,
+                $subject,
+                $messagePlain
+            );
+
+            return new \Laminas\Diactoros\Response;
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+        return (new \Laminas\Diactoros\Response(status: 500));
     }
 
     public function publicPostAuthPAMvalidate(): \Psr\Http\Message\ResponseInterface

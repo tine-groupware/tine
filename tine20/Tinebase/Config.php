@@ -7,7 +7,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo remove all deprecated stuff
@@ -978,6 +978,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
 
     public const NOTE_TYPE = 'noteType';
+
+    const SUPPORT_REQUEST_NOTIFICATION_ROLE = 'supportRequestNotificationRole';
 
     /**
      * Grad der Verstädterung (CummunityIdentificationNumber)
@@ -3085,6 +3087,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => false,
         ),
+        self::SUPPORT_REQUEST_NOTIFICATION_ROLE => [
+            self::LABEL => 'Role receiving support requests', //_('Role receiving support requests')
+            self::DESCRIPTION => 'Role receiving support requests',
+            self::TYPE => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+        ],
         self::FILESYSTEM => array(
             //_('Filesystem settings')
             self::LABEL => 'Filesystem settings',

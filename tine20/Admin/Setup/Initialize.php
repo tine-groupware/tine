@@ -41,4 +41,15 @@ class Admin_Setup_Initialize extends Setup_Initialize
         $roles->useNotes($oldNotesValue);
         $roles->modlogActive($oldModLogValue);
     }
+
+    protected function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        $oldRightValue = $scheduler->doRightChecks(false);
+        try {
+            Admin_Scheduler_Task::addJWTAccessRoutesCleanUpTask($scheduler);
+        } finally {
+            $scheduler->doRightChecks($oldRightValue);
+        }
+    }
 }
