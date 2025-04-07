@@ -967,7 +967,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                         $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
                         Tinebase_Core::setUser($user);
 
-                        $pw = Tinebase_Record_Abstract::generateUID(12) . '!Ab1';
+                        $pw = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
                         $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
                             'accountLoginName' => $loginName,
                             'accountEmailAddress' => $data->email,
