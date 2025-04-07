@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -99,6 +99,16 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage()) ;
                 return false;
             }
+
+            $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_SmsUserConfig::FLD_AUTH_TOKEN} =
+                Admin_Controller_JWTAccessRoutes::getInstance()->getNewJWT([
+                    Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => Tinebase_Core::getUser()->getId(),
+                    Admin_Model_JWTAccessRoutes::FLD_ROUTES => [
+                        Tinebase_Controller::class . '::postSendSupportRequest',
+                    ],
+                    Admin_Model_JWTAccessRoutes::FLD_TTL => Tinebase_DateTime::now()->addMinute(30),
+                ], keyBits: 1024); // 1024 bits are significantly faster than 2048 and we are only valid for 30 minutes
+
             return true;
         }
         return false;
