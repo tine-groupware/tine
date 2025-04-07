@@ -110,33 +110,8 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
         }
 
         if ((!$oldFreeDay || !$oldFreeDay->event) && !$freeDay->event) {
-            $translation = Tinebase_Translation::getTranslation('Calendar');
-            $account = Tinebase_User::getInstance()->getFullUserById($freeTime->employee_id->account_id);
-            $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
-            $raii = new Tinebase_RAII(Calendar_Controller_Event::getInstance()->assertPublicUsage());
-            $time = $freeDay->date->getClone();
-            $time->hasTime(true);
-            $event = Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
-                'summary' => sprintf($translation->_('%s away'), $contact->n_fileas),
-                'dtstart' => $time,
-                'is_all_day_event' => true,
-                'container_id' => $freeTime->employee_id->division_id->{HumanResources_Model_Division::FLD_FREE_TIME_CAL},
-                'organizer' => $account->contact_id,
-                'description' => sprintf($translation->_('%s is away'), $contact->n_fileas),
-                'mute' => true,
-                'attendee' => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
-                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                        'user_id' => $account->contact_id,
-                        'status' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED ===
-                            $freeTime->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} ?
-                            Calendar_Model_Attender::STATUS_ACCEPTED : Calendar_Model_Attender::STATUS_TENTATIVE,
-                    ]])
-            ]));
-            $event->attendee->getFirstRecord()->status = Calendar_Model_Attender::STATUS_ACCEPTED;
-            $event = Calendar_Controller_Event::getInstance()->update($event);
-            unset($raii);
 
-            $freeDay->event = $event->getId();
+            $this->_createFreeTimeEvent($freeDay, $freeTime);
             return;
         }
 
@@ -167,6 +142,36 @@ class HumanResources_Controller_FreeDay extends Tinebase_Controller_Record_Abstr
             Calendar_Controller_Event::getInstance()->update($event);
         }
         unset($raii);
+    }
+
+    protected function _createFreeTimeEvent($freeDay, $freeTime)
+    {
+        $translation = Tinebase_Translation::getTranslation('HumanResources');
+        $account = Tinebase_User::getInstance()->getFullUserById($freeTime->employee_id->account_id);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
+        $raii = new Tinebase_RAII(Calendar_Controller_Event::getInstance()->assertPublicUsage());
+        $time = $freeDay->date->getClone();
+        $time->hasTime(true);
+        $event = Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event([
+            'summary' => sprintf($translation->_('%s away'), $contact->n_fileas),
+            'dtstart' => $time,
+            'is_all_day_event' => true,
+            'container_id' => $freeTime->employee_id->division_id->{HumanResources_Model_Division::FLD_FREE_TIME_CAL},
+            'organizer' => $account->contact_id,
+            'description' => sprintf($translation->_('%s is away'), $contact->n_fileas),
+            'mute' => true,
+            'attendee' => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id' => $account->contact_id,
+                'status' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED ===
+                $freeTime->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} ?
+                    Calendar_Model_Attender::STATUS_ACCEPTED : Calendar_Model_Attender::STATUS_TENTATIVE,
+            ]])
+        ]));
+        $event->attendee->getFirstRecord()->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        unset($raii);
+        $freeDay->event = $event->getId();
     }
 
     protected function _getFreeTime(string $id): HumanResources_Model_FreeTime
