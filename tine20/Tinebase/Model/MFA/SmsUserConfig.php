@@ -17,9 +17,10 @@
  */
 class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Auth_MFA_AbstractUserConfig
 {
-    const MODEL_NAME_PART = 'MFA_SmsUserConfig';
+    public const MODEL_NAME_PART = 'MFA_SmsUserConfig';
 
-    const FLD_CELLPHONENUMBER = 'cellphonenumber';
+    public const FLD_CELLPHONENUMBER = 'cellphonenumber';
+    public const FLD_AUTH_TOKEN = 'authToken';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -45,8 +46,19 @@ class Tinebase_Model_MFA_SmsUserConfig extends Tinebase_Auth_MFA_AbstractUserCon
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
+            self::FLD_AUTH_TOKEN                => [
+                self::TYPE                          => self::TYPE_STRING,
+                self::SHY                           => true,
+            ],
         ]
     ];
+
+    public function toFEArray(?Tinebase_Model_FullUser $user = null): array
+    {
+        return [
+            self::FLD_AUTH_TOKEN => $this->{self::FLD_AUTH_TOKEN},
+        ];
+    }
 
     /**
      * holds the configuration object (must be declared in the concrete class)

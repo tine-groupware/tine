@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,7 +15,7 @@
  * - optional jwt key id
  * - the account linked to that JWT
  * - the routes accessible using this JWT
- * // todo - optional max ttl to accept
+ * - optional ttl to accept
  *
  * @package   Admin
  * @subpackage    Model
@@ -31,7 +31,7 @@ class Admin_Model_JWTAccessRoutes extends Tinebase_Record_NewAbstract
     const FLD_KEY = 'key';
     const FLD_ACCOUNTID = 'account_id';
     const FLD_ROUTES = 'routes';
-    //const FLD_MAXTTL = 'max_ttl';
+    const FLD_TTL = 'ttl';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -39,7 +39,7 @@ class Admin_Model_JWTAccessRoutes extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::APP_NAME => Admin_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE => true,
@@ -96,6 +96,10 @@ class Admin_Model_JWTAccessRoutes extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_TTL        => [
+                self::TYPE              => self::TYPE_DATETIME,
+                self::NULLABLE          => true,
             ],
         ],
     ];
