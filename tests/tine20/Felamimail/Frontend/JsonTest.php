@@ -243,7 +243,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     {
         $system = $this->_getSystemAccount();
         unset($system['id']);
-        $system['type'] = Felamimail_Model_Account::TYPE_USER;
+        $system['type'] = Felamimail_Model_Account::TYPE_USER_EXTERNAL;
 
         $account = $this->_addSignature($system);
 
@@ -3311,7 +3311,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $pass = 'somepass';
         $account = $this->_json->saveAccount([
             'email' => Tinebase_Core::getUser()->accountEmailAddress,
-            'type' => Felamimail_Model_Account::TYPE_USER,
+            'type' => Felamimail_Model_Account::TYPE_USER_EXTERNAL,
             'user' => Tinebase_Core::getUser()->accountEmailAddress,
             'password' => $pass,
             'user_id' => Tinebase_Core::getUser()->toArray(),

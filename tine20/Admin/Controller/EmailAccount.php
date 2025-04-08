@@ -194,7 +194,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        if ($_createdRecord->type !== Felamimail_Model_Account::TYPE_USER) {
+        if ($_createdRecord->type !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             $this->updateAccountEmailUsers($_record);
             $this->resolveAccountEmailUsers($_createdRecord);
         }
@@ -211,7 +211,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         // if user of email account changes and if migration checkbox is checked, it needs to be unchecked
-        if ($_record->user_id !== $_oldRecord->user_id && $_record->type === Felamimail_Model_Account::TYPE_USER) {
+        if ($_record->user_id !== $_oldRecord->user_id && $_record->type === Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             $_record->migration_approved = false;
         }
         
@@ -233,7 +233,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if ($record->type !== Felamimail_Model_Account::TYPE_USER) {
+        if ($record->type !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             $this->updateAccountEmailUsers($record);
         }
         

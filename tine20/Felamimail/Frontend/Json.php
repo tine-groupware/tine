@@ -603,7 +603,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // only show system accounts if role was changed
             if (Tinebase_Controller::getInstance()->userAccountChanged() &&
                 ! in_array($account['type'], [
-                    Felamimail_Model_Account::TYPE_SHARED,
+                    Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
                     Felamimail_Model_Account::TYPE_USER_INTERNAL,
                     Felamimail_Model_Account::TYPE_SYSTEM,
                     Felamimail_Model_Account::TYPE_ADB_LIST,
@@ -613,8 +613,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
 
             if (! in_array($account['type'], [
-                Felamimail_Model_Account::TYPE_SHARED,
-                Felamimail_Model_Account::TYPE_USER,
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                Felamimail_Model_Account::TYPE_USER_EXTERNAL,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
                 Felamimail_Model_Account::TYPE_ADB_LIST,
@@ -649,7 +649,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     protected function _initSystemAccount(Felamimail_Model_Account $account): Felamimail_Model_Account
     {
-        if (! in_array($account->type, [Felamimail_Model_Account::TYPE_SYSTEM, Felamimail_Model_Account::TYPE_SHARED])) {
+        if (! in_array($account->type, [Felamimail_Model_Account::TYPE_SYSTEM, Felamimail_Model_Account::TYPE_SHARED_INTERNAL])) {
             return $account;
         }
 
@@ -695,7 +695,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _appendSieveInformationToAccountArray(array &$account): void
     {
         if (! isset($account['type'])
-            || $account['type'] === Tinebase_EmailUser_Model_Account::TYPE_USER
+            || $account['type'] === Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL
             || empty($account['sieve_hostname'])
         ) {
             return;
@@ -1017,7 +1017,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $account = Felamimail_Controller_Account::getInstance()->get($accountId);
         
         // only test connection for external user account by default
-        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
+        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             return [
                 'status' => 'success'
             ];
@@ -1097,7 +1097,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $account = Felamimail_Controller_Account::getInstance()->get($accountId);
         
         //only test connection for external user account by default 
-        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER) {
+        if (!$forceConnect && $account->type !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             return [
                 'status' => 'success'
             ];

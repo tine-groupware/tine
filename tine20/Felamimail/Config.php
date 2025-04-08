@@ -217,13 +217,23 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => array(
                 'records' => array(
-                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER,    'value' => 'Additional Personal External Account', 'system' => true), //_('Additional Personal External Account')
-                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SHARED,    'value' => 'Shared System Account',  'system' => true), //_('Shared System Account')
-                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,   'value' => 'Additional Personal System Account',  'system' => true), //_('Additional Personal System Account')
-                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,   'value' => 'Default Personal System Account',   'system' => true), //_('Default Personal System Account')
-                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,   'value' => 'Mailinglist',   'system' => true), //_('Mailinglist')
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
+                        //_('Additional Personal External Account')
+                        'value' => 'Additional Personal External Account', 'system' => true),
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
+                        //_('Shared System Account')
+                        'value' => 'Shared System Account',  'system' => true),
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,
+                        //_('Additional Personal System Account')
+                        'value' => 'Additional Personal System Account',  'system' => true),
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
+                        //_('Default Personal System Account')
+                        'value' => 'Default Personal System Account',   'system' => true),
+                    array('id' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
+                        //_('Mailinglist')
+                        'value' => 'Mailinglist',   'system' => true),
                 ),
-                self::DEFAULT_STR => Tinebase_EmailUser_Model_Account::TYPE_USER
+                self::DEFAULT_STR => Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL
             )
         ),
         self::SIEVE_MAILINGLIST_REJECT_REASON => [
