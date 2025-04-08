@@ -296,6 +296,7 @@ function generatePOTFiles($opts)
           --omit-header \
           --output=translations/template.pot \
           --language=Python \
+          --join-existing \
           --from-code=utf-8 \
           --keyword=formatMessage \
           --keyword=translate \
