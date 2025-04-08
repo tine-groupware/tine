@@ -258,7 +258,10 @@ class Sales_Controller extends Tinebase_Controller_Event
             if (! $customer) {
                 $name = $contact->n_fn;
                 if (! empty($contact->salutation)) {
-                    $name = $contact->salutation . ' ' . $name;
+                    $salutations = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION);
+                    $record = $salutations->records->getById($contact->salutation);
+                    $translation = Tinebase_Translation::getTranslation('Addressbook');
+                    $name = $translation->_($record->value) . ' ' . $name;
                 }
                 if (! empty($contact->org_name)) {
                     $name = $contact->org_name . ' - ' . $name;
