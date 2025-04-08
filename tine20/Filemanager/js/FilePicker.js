@@ -392,7 +392,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         const gridPanel = this.getGridPanel();
         const selectionModel = gridPanel.getGrid().getSelectionModel();
         const store = gridPanel.getStore();
-        const fileIdx = store.find('name', this.fileName);
+        const fileIdx = store.findExact('name', this.fileName);
         
         if (fileIdx >= 0) {
             selectionModel.selectRow(fileIdx);
