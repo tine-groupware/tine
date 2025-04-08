@@ -1043,4 +1043,36 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         $account = $this->_json->saveEmailAccount($account);
         static::assertEquals('both', $account['adb_list']['xprops'][Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]);
     }
+
+    public function testEmailAccountApiSharedExternalAccount()
+    {
+        $this->_uit = $this->_json;
+        // just use default system account as shared account
+        $systemAccount = Felamimail_Controller_Account::getInstance()->getSystemAccount();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $accountData = self::getSharedAccountData(data: [
+            'type' => Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
+            'email' => $systemAccount->email,
+            'user' => $credentials['username'],
+            'password' => $credentials['password'],
+            'host' => $systemAccount->host,
+        ]);
+        $accountDataCreated = $this->_json->saveEmailAccount($accountData);
+        $this->_emailAccounts[] = $accountDataCreated;
+        $this->_assertSharedAccount($accountDataCreated);
+
+        $account = new Felamimail_Model_Account($accountDataCreated);
+        $account->resolveCredentials(false);
+        self::assertEquals($credentials['username'], $account->user);
+        self::assertEquals($credentials['password'], $account->password);
+
+        // try to find account in user accounts
+        $result = Felamimail_Controller_Account::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'id', 'value' => $account->getId()]
+            ]))->getFirstRecord();
+        self::assertNotNull($result);
+
+        $this->_uit->deleteEmailAccounts($account->getId());
+    }
 }

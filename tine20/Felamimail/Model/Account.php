@@ -848,7 +848,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
 
-            if ($this->type === self::TYPE_SYSTEM || $this->type === self::TYPE_USER_EXTERNAL || $this->type === self::TYPE_USER_INTERNAL) {
+            if (in_array($this->type, [
+                self::TYPE_SYSTEM,
+                self::TYPE_USER_EXTERNAL,
+                self::TYPE_USER_INTERNAL
+            ])) {
                 $credentials = Tinebase_Core::getUserCredentialCache();
                 if (! $credentials) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
@@ -869,7 +873,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     return false;
                 }
                 $credentialCachePwd = substr($credentials->password, 0, 24);
-            } elseif ($this->type === self::TYPE_SHARED_INTERNAL || $this->type === self::TYPE_ADB_LIST) {
+            } elseif (in_array($this->type, [
+                self::TYPE_SHARED_INTERNAL,
+                self::TYPE_SHARED_EXTERNAL,
+                self::TYPE_ADB_LIST,
+            ])) {
                 $credentialCachePwd = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
             } else {
                 throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown or empty');
@@ -877,7 +885,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
             // TYPE_SYSTEM + TYPE_USER_INTERNAL never has its own credential cache, it uses the users one
             if (! in_array($this->type, [
-                self::TYPE_SHARED_INTERNAL,
+                self::TYPE_SYSTEM,
                 self::TYPE_USER_INTERNAL
             ])) {
                 try {

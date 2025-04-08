@@ -1377,10 +1377,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             return true;
         }
 
-        if ($action === 'delete' && ($record->type === Felamimail_Model_Account::TYPE_SHARED_INTERNAL || $record->type === Felamimail_Model_Account::TYPE_ADB_LIST)
-            && ! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_EMAILACCOUNTS)
+        if ($action === 'delete' && (in_array($record->type, [
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
+                Felamimail_Model_Account::TYPE_ADB_LIST,
+            ])) && ! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_EMAILACCOUNTS)
         ) {
-            throw new Tinebase_Exception_AccessDenied('Shared accounts can only be deleted by email admins with MANAGE_EMAILACCOUNTS right');
+            throw new Tinebase_Exception_AccessDenied(
+                'Shared accounts can only be deleted by email admins with MANAGE_EMAILACCOUNTS right');
         }
 
         if ($this->_checkEditAccountRight($record, $oldRecord)) {
@@ -2327,7 +2331,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'type', 'operator' => 'in', 'value' => [
-                Felamimail_Model_Account::TYPE_SHARED_INTERNAL, 
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
                 Felamimail_Model_Account::TYPE_ADB_LIST
             ]],
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $user->getId()],
@@ -2487,9 +2492,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (! $account instanceof Felamimail_Model_Account) {
             $account = Felamimail_Controller_Account::getInstance()->get($account);
         }
-        if ($account->type !== Felamimail_Model_Account::TYPE_SHARED_INTERNAL 
-            && $account->type !== Felamimail_Model_Account::TYPE_ADB_LIST 
-            && $account->user_id !== Tinebase_Core::getUser()->getId()
+        if (! in_array($account->type, [
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
+                Felamimail_Model_Account::TYPE_ADB_LIST,
+            ]) && $account->user_id !== Tinebase_Core::getUser()->getId()
         ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()

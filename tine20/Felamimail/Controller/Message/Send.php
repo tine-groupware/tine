@@ -101,8 +101,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
 
         // only check send grant for shared accounts
-        if (($account->type === Felamimail_Model_Account::TYPE_SHARED_INTERNAL || $account->type === Felamimail_Model_Account::TYPE_ADB_LIST)
-            && !$account->account_grants->{Felamimail_Model_AccountGrants::GRANT_ADD}) {
+        if (in_array($account->type, [
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
+                Felamimail_Model_Account::TYPE_ADB_LIST,
+            ]) && !$account->account_grants->{Felamimail_Model_AccountGrants::GRANT_ADD}) {
             throw new Tinebase_Exception_AccessDenied('User is not allowed to send a message with this account');
         }
 

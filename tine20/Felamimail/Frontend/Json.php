@@ -614,6 +614,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             if (! in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
                 Felamimail_Model_Account::TYPE_USER_EXTERNAL,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
