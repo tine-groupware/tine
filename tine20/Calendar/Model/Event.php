@@ -941,6 +941,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
                 $keys[] = 'container_id';
             }
+            if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR) {
+                $keys[] = 'class';
+            }
 
             static::$_freebusyCleanUpKeys = array_flip($keys);
         }
