@@ -32,8 +32,9 @@ msgid_plural "Bookmarks"
 msgstr[0] "Lesezeichen"
 msgstr[1] "Lesezeichen"
 
+#, fuzzy
 msgid "Bookmark list"
-msgid_plural "Bookmarks lists"
+msgid_plural "Bookmark lists"
 msgstr[0] "Lesezeichenliste"
 msgstr[1] "Lesezeichenlisten"
 
