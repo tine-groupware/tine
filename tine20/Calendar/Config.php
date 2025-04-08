@@ -264,6 +264,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FREEBUSY_INFO_ALLOW_ORGANIZER = 20;
     const FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE = 30;
     const FREEBUSY_INFO_ALLOW_CALENDAR = 40;
+    const FREEBUSY_INFO_ALLOW_CLASS = 45;
     const FREEBUSY_INFO_ALLOW_ALL_ATTENDEE = 50;
 
     const FLOORPLANS = 'floorplans';
@@ -716,6 +717,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                         ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_ORGANIZER,  'value' => 'and organizer'], //_('and organizer')
                         ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE,  'value' => 'and resources'], //_('and resources')
                         ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR,  'value' => 'and calendar'], //_('and calendar')
+                        ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_CLASS,  'value' => 'and the classification'], //_('and classification')
                         ['id' => Calendar_Config::FREEBUSY_INFO_ALLOW_ALL_ATTENDEE,  'value' => 'and other attendees'], //_('and other attendees')
                     ],
                 ],

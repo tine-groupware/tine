@@ -347,6 +347,9 @@ msgstr ""
 msgid "and calendar"
 msgstr ""
 
+msgid "and classification"
+msgstr ""
+
 msgid "and other attendees"
 msgstr ""
 
@@ -365,42 +368,55 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
+#, php-format
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
+#, php-format
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
+#, php-format
 msgid "Resource \"%1$s\" was booked for \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
+#, php-format
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr ""
 
+#, php-format
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr ""
 
+#, php-format
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "Unknown status update from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""
 
+#, php-format
 msgid "Tentative event notification for event \"%1$s\" at %2$s"
 msgstr ""
 
@@ -416,7 +432,7 @@ msgstr ""
 msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal calendar"
 msgstr ""
 
@@ -432,9 +448,11 @@ msgstr ""
 msgid "This contact has been automatically added by the system as a poll attendee"
 msgstr ""
 
+#, php-format
 msgid "Attendance Confirmation for Poll \"%1$s\""
 msgstr ""
 
+#, php-format
 msgid "%1$s is scheduled for %2$s"
 msgstr ""
 
@@ -730,12 +748,10 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-msgid "Event Type"
-msgid_plural "Event Types"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Site"
+msgstr ""
+
+msgid "Search for sites ..."
 msgstr ""
 
 msgid "View"
@@ -1198,6 +1214,11 @@ msgstr ""
 msgid "Cancel this action"
 msgstr ""
 
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
@@ -1265,26 +1286,6 @@ msgid "Event (as organizer)"
 msgstr ""
 
 msgid "Event attendee"
-msgstr ""
-
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Calendar Hierarchy/Name"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Maximum number of attendee"
-msgstr ""
-
-msgid "Default attendee status"
-msgstr ""
-
-msgid "Busy Type"
 msgstr ""
 
 msgid "Resource Grant"
@@ -1386,6 +1387,21 @@ msgid "The grant to get free/busy information of events in this calendar"
 msgstr ""
 
 msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+
+msgid "Calendar Hierarchy/Name"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Maximum number of attendee"
+msgstr ""
+
+msgid "Default attendee status"
+msgstr ""
+
+msgid "Busy Type"
 msgstr ""
 
 msgid "WK"
@@ -1636,6 +1652,9 @@ msgstr ""
 msgid "fourth"
 msgstr ""
 
+msgid "fifth"
+msgstr ""
+
 msgid "last"
 msgstr ""
 
@@ -1700,6 +1719,11 @@ msgstr ""
 msgid "Organizer timezone"
 msgstr ""
 
+msgid "Event Type"
+msgid_plural "Event Types"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Short Name"
 msgstr ""
 
@@ -1709,11 +1733,11 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "Every %s day"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "Every %s week on"
 msgstr ""
 
@@ -1723,28 +1747,31 @@ msgstr ""
 msgid "and"
 msgstr ""
 
+#, php-format
 msgid "Every %1$s month on the %2$s %3$s"
 msgstr ""
 
+#, php-format
 msgid "Monthly every %1$s %2$s"
 msgstr ""
 
+#, php-format
 msgid "Every %1$s month on the %2$s"
 msgstr ""
 
+#, php-format
 msgid "Monthly on the %1$s"
 msgstr ""
 
+#, php-format
 msgid "Yearly every %1$s %2$s of %3$s"
 msgstr ""
 
+#, php-format
 msgid "Yearly on the %1$s of %2$s"
 msgstr ""
 
 msgid "second to last"
-msgstr ""
-
-msgid "fifth"
 msgstr ""
 
 msgid "st"
@@ -1947,27 +1974,35 @@ msgstr ""
 msgid "This is an event series exception."
 msgstr ""
 
+#, php-format
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
 msgstr ""
 
+#, php-format
 msgid "%1$s has been invited"
 msgstr ""
 
+#, php-format
 msgid "%1$s has been removed"
 msgstr ""
 
+#, php-format
 msgid "%1$s accepted invitation"
 msgstr ""
 
+#, php-format
 msgid "%1$s declined invitation"
 msgstr ""
 
+#, php-format
 msgid "Tentative response from %1$s"
 msgstr ""
 
+#, php-format
 msgid "No response from %1$s"
 msgstr ""
 
+#, php-format
 msgid "\"%2$s\" response from %1$s"
 msgstr ""
 
@@ -1990,4 +2025,34 @@ msgid "The definite event is scheduled for \"%1$s\""
 msgstr ""
 
 msgid "You can review the poll results here:"
+msgstr ""
+
+msgid "Summary - Organizer"
+msgstr ""
+
+msgid "Summary ⏎ Description"
+msgstr ""
+
+msgid "Summary - Location"
+msgstr ""
+
+msgid "Summary ⏎ Organizer ⏎ Location"
+msgstr ""
+
+msgid "Me"
+msgstr ""
+
+msgid "Intelligent"
+msgstr ""
+
+msgid "Calendar owner"
+msgstr ""
+
+msgid "Filtered attendee"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Monday"
 msgstr ""
