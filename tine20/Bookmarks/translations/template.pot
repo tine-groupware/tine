@@ -28,7 +28,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Bookmark list"
-msgid_plural "Bookmarks lists"
+msgid_plural "Bookmark lists"
 msgstr[0] ""
 msgstr[1] ""
 
