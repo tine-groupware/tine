@@ -112,4 +112,14 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
         }
         return array_unique($requiredTypes);
     }
+
+    public function getMissingDocumentTypes(Sales_Model_Document_Abstract $document): array
+    {
+        $missingDoyTypes = [];
+        /** @var Sales_Model_EDocument_Dispatch_DynamicConfig $dispatchConfig */
+        foreach ($this->{self::FLD_DISPATCH_CONFIGS} as $dispatchConfig) {
+            $missingDoyTypes = array_merge($missingDoyTypes, $dispatchConfig->{Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG}->getMissingDocumentTypes($document));
+        }
+        return array_unique($missingDoyTypes);
+    }
 }
