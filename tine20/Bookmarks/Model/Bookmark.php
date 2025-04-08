@@ -52,7 +52,7 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
         self::TITLE_PROPERTY            => 'name',
         self::HAS_PERSONAL_CONTAINER    => true,
         self::CONTAINER_NAME            => 'Bookmark list',
-        self::CONTAINERS_NAME           => 'Bookmark lists', // ngettext('Bookmark list', 'Bookmarks lists', n)
+        self::CONTAINERS_NAME           => 'Bookmark lists', // ngettext('Bookmark list', 'Bookmark lists', n)
         self::HAS_RELATIONS             => true,
         self::HAS_CUSTOM_FIELDS         => false,
         self::HAS_NOTES                 => true,
