@@ -1378,7 +1378,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
 
-        if ($sieve && isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
+        if ($sieve && isset($result['type'])
+            && $result['type'] !== Felamimail_Model_Account::TYPE_USER_EXTERNAL
+            && $result['type'] !== Felamimail_Model_Account::TYPE_SHARED_EXTERNAL
+        ) {
             try {
                 $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
                 $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
