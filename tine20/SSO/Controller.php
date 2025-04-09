@@ -384,7 +384,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
 
         static::initSAMLServer();
-        $idpentityid = 'tine20';
+        $idpentityid = SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID};
 
         $certInfo = \SimpleSAML\Utils\Crypto::loadPublicKey(\SimpleSAML\Configuration::getInstance(), true);
 
@@ -429,7 +429,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         if (SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::ENABLED}) {
             static::initSAMLServer();
-            $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+            $idp = \SimpleSAML\IdP::getById('saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID});
 
             // @phpstan-ignore-next-line
             if ($logoutMessages = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
@@ -483,7 +483,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         static::initSAMLServer();
-        $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+        $idp = \SimpleSAML\IdP::getById('saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID});
 
         $binding = Binding::getCurrentBinding();
         $message = $binding->receive();
@@ -606,7 +606,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
 
         static::initSAMLServer();
-        $idp = \SimpleSAML\IdP::getById('saml2:tine20');
+        $idp = \SimpleSAML\IdP::getById('saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID});
         $simpleSampleIsReallyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
         $simpleSampleIsReallyGreat->setAccessible(true);
         if ($simpleSampleIsReallyGreat->getValue($idp) instanceof \SimpleSAML\Auth\Simple) {
