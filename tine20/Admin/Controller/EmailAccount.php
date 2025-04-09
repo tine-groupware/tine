@@ -194,7 +194,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        if ($_createdRecord->type !== Felamimail_Model_Account::TYPE_USER) {
+        if ($_createdRecord->type !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             $this->updateAccountEmailUsers($_record);
             $this->resolveAccountEmailUsers($_createdRecord);
         }
@@ -211,7 +211,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         // if user of email account changes and if migration checkbox is checked, it needs to be unchecked
-        if ($_record->user_id !== $_oldRecord->user_id && $_record->type === Felamimail_Model_Account::TYPE_USER) {
+        if ($_record->user_id !== $_oldRecord->user_id && $_record->type === Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             $_record->migration_approved = false;
         }
         
@@ -233,7 +233,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if ($record->type !== Felamimail_Model_Account::TYPE_USER) {
+        if ($record->type !== Felamimail_Model_Account::TYPE_USER_EXTERNAL) {
             $this->updateAccountEmailUsers($record);
         }
         
@@ -320,12 +320,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * @param Felamimail_Model_Account $account
      */
-    public function updateAccountEmailUsers(Felamimail_Model_Account $account)
+    public function updateAccountEmailUsers(Felamimail_Model_Account $account): void
     {
         $this->checkRight('MANAGE_ACCOUNTS');
 
         // set emailUserId im xprops if not set
         if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            return;
+        }
+
+        if ($account->isExternalAccount()) {
             return;
         }
 
@@ -363,6 +367,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $_records = $_records instanceof Tinebase_Record_RecordSet ? $_records : [$_records];
 
         foreach ($_records as $_record) {
+            if ($_record->isExternalAccount()) {
+                continue;
+            }
+
             if (!isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
                 try {
                     $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);

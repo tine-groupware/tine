@@ -899,7 +899,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 ['field' => 'type', 'operator' => 'in', 'value' => [
                     Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
                     Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
-                    Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                    Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
                     Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,
                 ]],
                 ['field' => 'email', 'operator' => 'equals', 'value' => $result['email']]

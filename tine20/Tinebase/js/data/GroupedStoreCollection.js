@@ -316,8 +316,9 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
     onCloneStoreAdd: function(eventStore, rs) {
         if (this.suspendCloneStoreEvents) return;
 
+        const method = this.store.remoteSort ? 'add' : 'addSorted';
         Ext.each(rs, function(r) {
-            this.store.add(r.copy());
+            this.store[method](r.copy());
         }, this);
     },
 

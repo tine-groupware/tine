@@ -44,8 +44,6 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      */
     nullable: false,
 
-    style: 'text-align: right',
-
     initComponent: function() {
         if (this.useThousandSeparator) {
             this.thousandSeparator = this.thousandSeparator ? this.thousandSeparator : (this.decimalSeparator == '.' ? ',' : '.');
