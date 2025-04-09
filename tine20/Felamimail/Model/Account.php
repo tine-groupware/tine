@@ -998,4 +998,12 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         $json = $converter->fromTine20Model(clone $this);
         $this->signature = isset($json['signature']) ? $json['signature'] : null;
     }
+
+    public function isExternalAccount(): bool
+    {
+        return in_array($this->type, [
+            Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
+            Tinebase_EmailUser_Model_Account::TYPE_SHARED_EXTERNAL,
+        ]);
+    }
 }

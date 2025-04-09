@@ -320,12 +320,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * @param Felamimail_Model_Account $account
      */
-    public function updateAccountEmailUsers(Felamimail_Model_Account $account)
+    public function updateAccountEmailUsers(Felamimail_Model_Account $account): void
     {
         $this->checkRight('MANAGE_ACCOUNTS');
 
         // set emailUserId im xprops if not set
         if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
+            return;
+        }
+
+        if ($account->isExternalAccount()) {
             return;
         }
 
@@ -363,10 +367,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $_records = $_records instanceof Tinebase_Record_RecordSet ? $_records : [$_records];
 
         foreach ($_records as $_record) {
-            if (in_array($_record->type, [
-                Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
-                Tinebase_EmailUser_Model_Account::TYPE_SHARED_EXTERNAL,
-            ])) {
+            if ($_record->isExternalAccount()) {
                 continue;
             }
 

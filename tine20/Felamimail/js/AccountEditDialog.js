@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -12,7 +12,6 @@ Ext.namespace('Tine.Felamimail');
 
 require('./SignatureGridPanel');
 require('./sieve/VacationPanel');
-import waitFor from "util/waitFor.es6";
 
 /**
  * @namespace   Tine.Felamimail
@@ -146,7 +145,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.disableUserCombo(item);
                     break;
                 case 'migration_approved':
-                    disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
+                    disabled = this.isSharedAccount();
                     item.setDisabled(disabled);
                     break;
                 case 'signatures':
@@ -177,6 +176,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     disabled = ! this.hasEditAccountRight || !(
                         !this.record.get('type')
                         || this.record.get('type') === 'userInternal'
+                        || this.record.get('type') === 'sharedExternal'
                         || this.record.get('type') === 'user'
                     );
                     item.setDisabled(disabled);
@@ -236,14 +236,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }, this);
 
-        this.grantsGrid.setDisabled(! ((this.record.get('type') === 'shared' || this.record.get('type') === 'adblist') && this.asAdminModule));
+        this.grantsGrid.setDisabled(! (this.isSharedAccount() && this.asAdminModule));
     },
 
     disableUserCombo: function(item) {
         if (! this.asAdminModule) {
             item.hide();
         } else {
-            let disabled = this.record.get('type') === 'shared' || this.record.get('type') === 'adblist';
+            let disabled = this.isSharedAccount();
             item.setDisabled(disabled);
             if (disabled) {
                 item.setValue('');
@@ -252,7 +252,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     disablePasswordField: function(item) {
-        if (this.record.get('type') && this.record.get('type') === 'user') {
+        if (this.record.get('type')
+            && (this.record.get('type') === 'user' || this.record.get('type') === 'sharedExternal')
+        ) {
             item.setDisabled(false);
         } else {
             item.setDisabled(! (
@@ -279,7 +281,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.asAdminModule) {
             return Tine.Tinebase.common.hasRight('manage_emailaccounts', 'Admin');
         } else {
-            if (account.data?.type === 'shared' || account.data?.type === 'adblist') {
+            if (account.data?.type === 'shared' || account.data?.type === 'sharedExternal' || account.data?.type === 'adblist') {
                 return account.data?.account_grants?.editGrant;
             }
             return true;
@@ -287,11 +289,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     isSystemAccount: function() {
-        return this.record.get('type') === 'system' || this.record.get('type') === 'shared' || this.record.get('type') === 'userInternal' || this.record.get('type') === 'adblist';
+        return this.record.get('type') === 'system'
+            || this.record.get('type') === 'shared'
+            || this.record.get('type') === 'userInternal'
+            || this.record.get('type') === 'adblist';
     },
 
-    isExternalUserAccount: function () {
-        return this.record.get('type') === 'user';
+    isSharedAccount: function() {
+        return this.record.get('type') === 'shared'
+            || this.record.get('type') === 'sharedExternal'
+            || this.record.get('type') === 'adblist';
+    },
+
+    isExternalAccount: function () {
+        return this.record.get('type') === 'user' || this.record.get('type') === 'sharedExternal';
     },
 
     /**
@@ -313,7 +324,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             disabled: !this.asAdminModule,
             recordClass: Tine.Tinebase.Model.Grant,
             checkState: function () {
-                const disabled = !((me.record.get('type') === 'shared' || me.record.get('type') === 'adblist') && me.asAdminModule);
+                const disabled = !((me.record.get('type') === 'shared'
+                    || me.record.get('type') === 'adblist'
+                    || me.record.get('type') === 'sharedExternal') && me.asAdminModule);
                 me.grantsGrid.setDisabled(disabled);
                 const contact = me.record.get('adb_list');
                 if (!disabled && me.record.get('type') === 'adblist' && contact?.name) {
@@ -471,7 +484,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 scope: this
                             },
                             checkState: function () {
-                                const disabled = me.record.get('type') === 'shared' || me.record.get('type') === 'adblist';
+                                const disabled = me.record.get('type') === 'shared'
+                                    || me.record.get('type') === 'sharedExternal'
+                                    || me.record.get('type') === 'adblist';
                                 this.setDisabled(disabled);
                             }
                         }], [
@@ -562,6 +577,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         const disabled = !(
                             !me.record.get('type')
                             || me.record.get('type') === 'userInternal'
+                            || me.record.get('type') === 'sharedExternal'
                             || me.record.get('type') === 'user'
                         );
                         this.setDisabled(disabled);
@@ -1056,7 +1072,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const password = this.getForm().findField('password').getValue();
 
         //only test connection for external user account
-        if (this.isExternalUserAccount() && '' !== password) {
+        if (this.isExternalAccount() && '' !== password) {
             await (_.reduce(['IMAP', 'SMTP'], (pre, server) => {
                 return pre.then(async () => {
                     await this.testConnection(server, false)
