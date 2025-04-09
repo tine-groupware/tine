@@ -699,8 +699,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Username (optional)'),
                     name: 'smtp_user',
                     checkState: function () {
-                        const disabled = me.isSystemAccount() || (me.asAdminModule && me.record.get('type') === 'user');
-                        this.setDisabled(disabled);
+                        this.setDisabled(me.isSystemAccount());
                     }
                 }], [{
                     fieldLabel: this.app.i18n._('Password (optional)'),
@@ -718,8 +717,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }
                     },
                     checkState: function () {
-                        const disabled = me.isSystemAccount() || (me.asAdminModule && me.record.get('type') === 'user');
-                        this.setDisabled(disabled);
+                        this.setDisabled(me.isSystemAccount());
                     }
                 }], [
                     this.smtpButton = new Ext.Button({
