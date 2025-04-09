@@ -245,7 +245,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             $dispatchFMAccount = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
                 'name' => 'unittest sales dispatch account',
                 'email' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
-                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
                 'user_id' => Tinebase_Core::getUser()->getId(),
                 'host' => $imapConfig->hostname,
                 'ssl' => $imapConfig->ssl,
@@ -474,7 +474,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             $dispatchFMAccount = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
                 'name' => 'unittest sales dispatch account',
                 'email' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
-                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
                 'user_id' => Tinebase_Core::getUser()->getId(),
                 'host' => $imapConfig->hostname,
                 'ssl' => $imapConfig->ssl,
