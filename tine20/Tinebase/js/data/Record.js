@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import {isUndefined} from "lodash";
+
 const { apply, extend, isPrimitive, isArray, isString } = require("Ext/core/core/Ext");
 const { emptyFn } = require("Ext/core/Ext-more");
 const { lowerFirst, get, set, find, forEach, isFunction, isObject, indexOf, map, difference, compact } = require('lodash');
@@ -331,6 +333,30 @@ extend(Record, ExtRecord, {
         });
         
         await Promise.all(pms);
+    },
+
+    copy: function(newId) {
+        const data = this.getData();
+        data[this.idProperty] = isUndefined(newId) ? data[this.idProperty] : newId;
+        const copy = Record.setFromJson(data, this.constructor);
+        forEach(this.data, (v, k) => {
+            if (isFunction(get(v, 'copy'))) {
+                copy.data[k] = v.copy();
+            }
+        });
+        forEach(this.__metaFields, (m) => {
+            if (this.hasOwnProperty(m)) {
+                copy[m] = this[m];
+            }
+        });
+        difference(Object.keys(data), this.fields.keys, ["__meta"]).forEach((k) => {
+            copy.data[k] = data[k];
+        });
+        copy.modified = [];
+        forEach(this.modified, (v, k) => {
+            copy.modified[k] = isFunction(get(v, 'copy')) ? v.copy() : this.modified[k];
+        });
+        return copy;
     }
 });
 
@@ -632,7 +658,7 @@ Record.clone = function(record) {
     const data = JSON.stringify(record.getData());
     const recordClass = record.constructor.getPhpClassName()
 
-    return TRecord.setFromJson(data, recordClass);
+    return Record.setFromJson(data, recordClass);
 }
 
 /**
