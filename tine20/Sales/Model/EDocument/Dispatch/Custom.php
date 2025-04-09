@@ -62,6 +62,8 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
         }
 
         Sales_Controller_Document_DispatchHistory::getInstance()->create(new Sales_Model_Document_DispatchHistory([
+                Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
+                Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $report,
@@ -92,6 +94,8 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
 
         Sales_Controller_Document_DispatchHistory::getInstance()->create(
             new Sales_Model_Document_DispatchHistory([
+                Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
+                Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_TRANSPORT => static::class,
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_DATE => Tinebase_DateTime::now(),
                 Sales_Model_Document_DispatchHistory::FLD_DISPATCH_REPORT => $report . ($result ? '' : PHP_EOL . $failed),
