@@ -43,7 +43,12 @@ abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_NewAbstr
     /**
      * shared account
      */
-    public const TYPE_SHARED = 'shared';
+    public const TYPE_SHARED_INTERNAL = 'shared';
+
+    /**
+     * shared account (external))
+     */
+    public const TYPE_SHARED_EXTERNAL = 'sharedExternal';
 
     /**
      * system account
@@ -53,7 +58,7 @@ abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_NewAbstr
     /**
      * user defined account
      */
-    public const TYPE_USER = 'user';
+    public const TYPE_USER_EXTERNAL = 'user';
 
     /**
      * user defined account on internal mail system

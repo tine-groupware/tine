@@ -672,7 +672,7 @@ class Tinebase_EmailUser
         if (
             $account && ! in_array($account->type, [
                 Felamimail_Model_Account::TYPE_SYSTEM,
-                Felamimail_Model_Account::TYPE_SHARED,
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_ADB_LIST
             ])

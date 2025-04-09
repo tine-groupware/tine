@@ -190,7 +190,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 if ($_eventObject->deleteEmailAccounts()) {
                     try {
                         $accountTypes = [  
-                            Felamimail_Model_Account::TYPE_USER,
+                            Felamimail_Model_Account::TYPE_USER_EXTERNAL,
                             Felamimail_Model_Account::TYPE_USER_INTERNAL
                         ];
 
@@ -284,7 +284,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                     ['field' => 'type', 'operator' => 'in', 'value' => [
                         Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
                         Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
-                        Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                        Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
                     ]]
                 ], '', [
                     'ignoreAcl' => true,
@@ -297,7 +297,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                         case Tinebase_EmailUser_Model_Account::TYPE_SYSTEM:
                             $totalSystemAccounts++;
                             break;
-                        case Tinebase_EmailUser_Model_Account::TYPE_SHARED:
+                        case Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL:
                             $totalSharedAccounts++;
                             break;
                         case Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST:
