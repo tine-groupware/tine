@@ -169,17 +169,17 @@ Ext.extend(Ext.dd.DragSource, Ext.dd.DDProxy, {
     },
     
     // private
-    onDragDrop : function(e, id){
+    onDragDrop : async function(e, id){
         var target = this.cachedTarget || Ext.dd.DragDropMgr.getDDById(id);
         if(this.beforeDragDrop(target, e, id) !== false){
             if(target.isNotifyTarget){
-                if(target.notifyDrop(this, e, this.dragData)){ // valid drop?
-                    this.onValidDrop(target, e, id);
+                if(await target.notifyDrop(this, e, this.dragData)){ // valid drop?
+                    await this.onValidDrop(target, e, id);
                 }else{
-                    this.onInvalidDrop(target, e, id);
+                    await this.onInvalidDrop(target, e, id);
                 }
             }else{
-                this.onValidDrop(target, e, id);
+                await this.onValidDrop(target, e, id);
             }
             
             if(this.afterDragDrop){
@@ -191,7 +191,7 @@ Ext.extend(Ext.dd.DragSource, Ext.dd.DDProxy, {
                  * @param {String} id The id of the dropped element
                  * @method afterDragDrop
                  */
-                this.afterDragDrop(target, e, id);
+                await this.afterDragDrop(target, e, id);
             }
         }
         delete this.cachedTarget;
