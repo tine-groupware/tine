@@ -35,7 +35,14 @@ docker_registry_release_image() {
     fi
 
     docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
-    docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+
+    # For customer image we only release latest and the full tag.
+    # We push customer images with their full tag into our local tine registry,
+    # if we release there image to our test cloud. If we would release partial tags we might overwrite the main tine version.
+    # TODO: the test cloud should probably, get the images from the customer repository. NOTE: That would require all customer to have an repository.
+    if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" == "" ]; then
+        docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+    fi
 }
 
 docker_registry_release_dev_image() {
