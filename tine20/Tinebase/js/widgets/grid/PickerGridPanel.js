@@ -644,13 +644,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (picker.xtype === 'tw-modelpicker') {
                 recordData[this.isMetadataModelFor] = recordData[this.isMetadataModelFor].className;
             }
+            if (picker.xtype === 'widget-keyfieldcombo') {
+                recordData[this.isMetadataModelFor] = recordData[this.isMetadataModelFor].id;
+            }
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             record.phantom = true;
 
             // check if already in
+            const probeMetaData = record.get(this.isMetadataModelFor);
             const existingRecord = this.store.findBy(function (r) {
                 const metaData = r.get(this.isMetadataModelFor) ?? '';
-                if (metaData && metaData.id === record.get(this.isMetadataModelFor).id) {
+                if ((metaData?.id || metaData) === (probeMetaData?.id || probeMetaData)) {
                     return true;
                 }
             }, this);
