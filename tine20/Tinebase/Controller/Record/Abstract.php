@@ -1598,6 +1598,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($record->has('attachments') && isset($record->attachments) && Tinebase_Core::isFilesystemAvailable()) {
             $updatedRecord->attachments = $record->attachments;
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
+            $this->_inspectAfterUpdateRecordAttachments($updatedRecord);
         }
         if ($record->has('notes') && $this->_setNotes !== false) {
             if (isset($record->notes) && (is_array($record->notes) || $record->notes instanceof Tinebase_Record_RecordSet)) {
@@ -1880,6 +1881,10 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return  void
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+    }
+
+    protected function _inspectAfterUpdateRecordAttachments($updatedRecord)
     {
     }
 
