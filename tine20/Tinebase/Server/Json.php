@@ -241,8 +241,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
         $requestData = $this->_stripPasswordsFromRequestData($requestData);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' is JSON request. rawdata: ' . var_export($requestData, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' JSON request - raw data: ' . var_export($requestData, true));
     }
 
     /**
