@@ -513,7 +513,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if ($account['accountId'] ?? false) {
                 $account = Tinebase_User::getInstance()->getFullUserById($account['accountId']);
             } else {
-                $account = Tinebase_User::getInstance()->getFullUserByLoginName($account['accountLoginName']);
+                try {
+                    $account = Tinebase_User::getInstance()->getFullUserByLoginName($account['accountLoginName']);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    return array(
+                        'success' => false
+                    );
+                }
             }
         } else {
             $account = Tinebase_User::getInstance()->getFullUserById($account);

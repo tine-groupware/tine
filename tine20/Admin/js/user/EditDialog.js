@@ -158,12 +158,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             const passwordDialog = new Tine.Tinebase.widgets.dialog.ResetPasswordDialog({
                 record: this.record,
                 contactRecord: this.contactRecordPicker.selectedRecord,
+                editDialog: this,
+                windowTitle: this.app.i18n._('Send SMS message with new password'),
             });
 
             passwordDialog.openWindow();
             passwordDialog.on('apply', async (record) => {
-                this.record = record;
-                this.record.set('password_must_change_actual', record.get('password_must_change'))
                 Tine.Admin.UserEditDialog.superclass.onApplyChanges.apply(this, arguments);
             }, this);
         } else {

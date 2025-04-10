@@ -220,6 +220,7 @@ msgstr ""
 msgid "Your container has been changed"
 msgstr "Ihr persönlicher Container wurde geändert"
 
+#, php-format
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Ihr Container wurde von %1$s geändert %2$sNotiz: %3$s"
 
@@ -857,6 +858,9 @@ msgstr "Verwendung:&#160;"
 msgid "System Tag"
 msgstr "System Tag"
 
+msgid "Send SMS message with new password"
+msgstr "SMS Nachricht mit neuem Passwort senden"
+
 msgid "Allowed Domains"
 msgstr "Erlaubte Domänen"
 
@@ -1062,6 +1066,12 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
+msgid "Do you want to move the contact to this addressbook?"
+msgstr "Möchten Sie den Kontakt in dieses Adressbuch verschieben?"
+
+msgid "The selected contact will be updated"
+msgstr "Der ausgewählte Kontakt wird aktualisiert"
+
 msgid "Enable Account"
 msgstr "Benutzer aktivieren"
 
@@ -1082,12 +1092,6 @@ msgstr "MFA Konfiguriert"
 
 msgid "Password changed"
 msgstr "Passwort geändert"
-
-msgid "Set new password"
-msgstr "Passwort zurücksetzen"
-
-msgid "Please enter the new password:"
-msgstr "Bitte geben Sie das neue Passwort ein:"
 
 msgid "Users"
 msgstr "Benutzer"

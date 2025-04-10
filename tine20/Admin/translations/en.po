@@ -205,6 +205,7 @@ msgstr "Modules to show in admin app, default value null means all modules."
 msgid "Your container has been changed"
 msgstr "Your container has been changed"
 
+#, php-format
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Your container has been changed by %1$s %2$sNote: %3$s"
 
@@ -842,6 +843,9 @@ msgstr "Usage:&#160;"
 msgid "System Tag"
 msgstr "System Tag"
 
+msgid "Send SMS message with new password"
+msgstr "Send SMS message with new password"
+
 msgid "Allowed Domains"
 msgstr "Allowed Domains"
 
@@ -1047,6 +1051,12 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
+msgid "Do you want to move the contact to this addressbook?"
+msgstr "Do you want to move the contact to this addressbook?"
+
+msgid "The selected contact will be updated"
+msgstr "The selected contact will be updated"
+
 msgid "Enable Account"
 msgstr "Enable Account"
 
@@ -1067,12 +1077,6 @@ msgstr "MFA Configured"
 
 msgid "Password changed"
 msgstr "Password changed"
-
-msgid "Set new password"
-msgstr "Set new password"
-
-msgid "Please enter the new password:"
-msgstr "Please enter the new password:"
 
 msgid "Users"
 msgstr "Users"
