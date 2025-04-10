@@ -614,12 +614,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function getImage($application, $identifier, $location = '')
     {
-        if ($location === 'vfs') {
+        if ($location === Tinebase_Model_Image::LOCATION_VFS) {
             $node = Tinebase_FileSystem::getInstance()->get($identifier);
             $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . Tinebase_FileSystem::getInstance()->getPathOfNode($node, /* $getPathAsString */ true);
             $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($path));
 
-        } else if ($application == 'Tinebase' && $location == 'tempFile') {
+        } else if ($location === Tinebase_Model_Image::LOCATION_VFS_WATERMARK) {
+            $parentNode = Tinebase_FileSystem::getInstance()->get($identifier);
+            $watermark = Tinebase_FileSystem_RecordAttachments::getInstance()->getWatermark($parentNode);
+            $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . Tinebase_FileSystem::getInstance()->getPathOfNode($watermark, /* $getPathAsString */ true);
+            $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($path));
+
+        } else if ($application == 'Tinebase' && $location == Tinebase_Model_Image::LOCATION_TEMP_FILE) {
             $tempFile = Tinebase_TempFile::getInstance()->getTempFile($identifier);
             $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
 
@@ -642,7 +648,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 throw new Tinebase_Exception_UnexpectedValue('broken image');
             }
         }
-
 
         return $image;
     }
