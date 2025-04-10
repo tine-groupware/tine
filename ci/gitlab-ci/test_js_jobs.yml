@@ -147,6 +147,8 @@ js-unit-tests:
     KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_MEMORY_REQUEST
     KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_MEMORY_LIMIT
     TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    # Pass variable configured in settings to service
+    TINE20_REPO_URL: ${TINE20_REPO_URL}
   services:
     - name: ${TEST_IMAGE}
       alias: tine
@@ -154,7 +156,7 @@ js-unit-tests:
         !reference [.lib, entry_points, prepare_working_dir_js_tests]
   before_script:
     - !reference [.lib, script]
-    - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_mount_ready
+    - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/signal_mount_ready
     - echo -n 'wait for signal_php_deps_installed ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed ]; do sleep 1; done; echo ' done'
     - test_npm_install --ignore-scripts
   script:

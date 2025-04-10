@@ -1292,23 +1292,32 @@
         
         docker_registry_release_image() {
             name="$1"
-            desitination="$2"
+            destination="$2"
             latest="$3"
         
             from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+                docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
             if [ "$latest" == "true" ]; then
-                docker_registry_push "${from}" "${desitination}:latest"
+                docker_registry_push "${from}" "${destination}:latest"
             fi
         
-            docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-            docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+            docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+        }
+        
+        docker_registry_release_dev_image() {
+            name=dev
+            targetRegistry="$1"
+        
+            from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+        
+            docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
         }
         
         docker_registry_push() {
@@ -1318,6 +1327,18 @@
             docker pull "${from}"
             docker tag "${from}" "${to}"
             docker push "${to}"
+        }
+        
+        # needs to be run one time per architecture, with $ARCH set.
+        # Why?: This allows us push new architectures as their build finishes
+        docker_registry_push_multi_platform() {
+            from="$1"
+            to="$2"
+        
+            skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+        
+            # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+            manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
         }
 
         # lib/scripts/git_repo.sh
@@ -1747,6 +1768,14 @@
         
             echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
         }
+        
+        release_is_patch_level_release() {
+            # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+            # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+            # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+        
+            echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -1781,7 +1810,10 @@
                     matrix_room="${MATRIX_ROOM}"
                 fi
         
-                matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                if ! release_is_patch_level_release; then
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                fi
+        
             fi
         }
         
@@ -2122,7 +2154,7 @@
         }
 
         #!/bin/bash
-        echo -n 'wait for signal_mount_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_mount_ready ]; do sleep 1; done; echo ' done'
+        echo -n 'wait for signal_mount_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/signal_mount_ready ]; do sleep 1; done; echo ' done'
         
         test_prepare_working_dir
         touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready
