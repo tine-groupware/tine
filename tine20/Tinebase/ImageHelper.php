@@ -203,4 +203,78 @@ class Tinebase_ImageHelper
 
         return $dataUrl;
     }
+
+    /**
+     * create watermark
+     *
+     * @param Tinebase_Model_Image $_image
+     * @param string $font
+     * @param float $fontsize
+     * @param string $watermarktext
+     * @param array $configWatermark
+     *
+     */
+    public static function createWatermark(Tinebase_Model_Image $_image, $font, $fontsize, $watermarktext, $configWatermark = null)
+    {
+
+        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $_image->blob);
+
+        switch ($_image->mime) {
+            case ('image/png'):
+                $img = imagecreatefrompng($tmpPath);
+                $imgDumpFunction = 'imagepng';
+                break;
+            case ('image/jpeg'):
+                $img = imagecreatefromjpeg($tmpPath);
+                $imgDumpFunction = 'imagejpeg';
+                break;
+            case ('image/gif'):
+                $img = imagecreatefromgif($tmpPath);
+                $imgDumpFunction = 'imagegif';
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_image->mime);
+        }
+
+        $color = imagecolorallocate($img, 0, 0, 0);
+        $backgroundColor = imagecolorallocatealpha($img, 255, 255, 255, 90);
+        $positionX1 = 0;
+        $positionY2 = 0;
+        if (isset($configWatermark)) {
+            if (isset($configWatermark['x'])) {
+                $positionX1 = $configWatermark['x'];
+            }
+            if (isset($configWatermark['y'])) {
+                $positionY2 = $configWatermark['y'];
+            }
+        }
+
+        $watermarktextCount = strlen($watermarktext);
+        // does not work because of "imageloadfont():
+        // Product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully"
+        /*$fontLoaded = imageloadfont($font);
+        $fontWidth = imagefontwidth($fontLoaded);
+        $fontHeight = imagefontheight($fontLoaded);
+        $fontFactor = $fontsize / $fontHeight;
+        $positionX2 = $positionX1 + $watermarktextCount * ($fontWidth * $fontFactor);
+        $positionY1 = $positionY2 - $fontsize;*/
+
+        /*if ($positionX2 > $_image->width) {
+            $widthFactor = $positionX2 / $_image->width;
+            $fontsize = $fontsize / $widthFactor;
+            $fontFactor = $fontsize / $fontHeight;
+            $positionX2 = $positionX1 + $watermarktextCount * ($fontWidth * $fontFactor);
+            $positionY1 = $positionY2 - $fontsize;
+        }*/
+
+        $positionY1 = $positionY2 - 10;
+        $positionX2 = $_image->width;
+
+        imagefilledrectangle($img, $positionX1, $positionY1, $positionX2, $positionY2, $backgroundColor);
+        imagettftext($img, $fontsize, 0, $positionX1, $positionY2, $color, $font, $watermarktext);
+        $imgDumpFunction($img, $tmpPath);
+        $_image->blob = file_get_contents($tmpPath);
+        unlink($tmpPath);
+    }
 }

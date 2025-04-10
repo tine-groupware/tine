@@ -362,7 +362,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $this->checkAuth();
 
         // close session to allow other requests
-        Tinebase_Session::writeClose(true);
+        Tinebase_Session::writeClose();
         
         $clientETag      = null;
         $ifModifiedSince = null;

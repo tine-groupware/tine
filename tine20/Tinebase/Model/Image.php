@@ -38,6 +38,10 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
      */
     public const RATIOMODE_PRESERVNOFILL = 1;
 
+    public const LOCATION_VFS = 'vfs';
+    public const LOCATION_VFS_WATERMARK = 'vfs_watermark';
+    public const LOCATION_TEMP_FILE = 'tempFile';
+
     protected $_identifier = 'id';
 
     /**
@@ -49,9 +53,9 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
 
     protected $_validators = array(
         // image identifiers
-        'id'          => array('presence' => 'required', 'allowEmpty' => false, /*'Alnum'*/ ),
+        'id'          => array('presence' => 'required', 'allowEmpty' => false ),
         'application' => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'location'    => array('default' => '', 'allowEmpty' => true, 'Alnum', ),
+        'location'    => array('default' => '', 'allowEmpty' => true ),
 
         // image properties
         'width'       => array('allowEmpty' => true, 'Int' ),

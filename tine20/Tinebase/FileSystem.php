@@ -1379,6 +1379,10 @@ class Tinebase_FileSystem implements
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             if (!$this->isDir($dirName)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ .
+                        '::' . __LINE__ . ' Parent is not a directory: ' . $dirName);
+                }
                 $rollBack = false;
                 return false;
             }
