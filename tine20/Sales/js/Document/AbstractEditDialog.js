@@ -266,6 +266,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fields['document_language'].setValue(record?.get('language'))
                         }
                         fields['buyer_reference'].setValue(_.get(record, 'data.debitor_id.buyer_reference', ''))
+                        this.record.set('debitor_id', _.get(record, 'data.debitor_id', null))
                     }
                     config.plugins = config.plugins || []
                     config.plugins.push(new FieldTriggerPlugin({
