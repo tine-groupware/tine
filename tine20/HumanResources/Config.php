@@ -112,7 +112,7 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     array('id' => self::FREE_TIME_TYPE_STATUS_UNEXCUSED, 'value' => 'Unexcused', 'icon' => 'images/icon-set/icon_stop.svg', 'system' => TRUE),  //_('Unexcused')
 
                 ),
-                'default' => 'EXCUSED'
+                'default' => null
             )
         ),
         self::FREE_TIME_PROCESS_STATUS => array(
