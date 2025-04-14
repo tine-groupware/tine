@@ -1132,7 +1132,7 @@ msgstr "Meine Antwort setzen"
 
 #, python-brace-format
 msgid "Copy {0}"
-msgstr "Kopiere {0}"
+msgstr "{0} kopieren"
 
 msgid "Set event status"
 msgstr "Terminstatus setzen"
