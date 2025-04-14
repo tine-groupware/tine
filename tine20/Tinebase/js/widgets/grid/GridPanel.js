@@ -2378,6 +2378,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 id: cfConfig.id,
                 header: cfConfig.get('definition').label,
                 dataIndex: '#' + cfConfig.get('name'),
+                type: cfConfig.get('definition').type,
                 renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
                 sortable: !!this.recordClass.getModelConfiguration(),
                 hidden: true
