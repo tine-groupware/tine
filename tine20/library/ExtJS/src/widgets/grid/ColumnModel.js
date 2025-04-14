@@ -220,7 +220,7 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
             if (config[i]?.dataIndex && initial) {
                 const fieldConfig = {
                     name: config[i]?.dataIndex,
-                    type: 'auto',
+                    type: config[i]?.type ?? 'auto',
                 };
                 const uiConfig = Tine.widgets.grid.ColumnManager.getColumnUIConfig(fieldConfig, null, config[i]);
                 const resolvedConfig = Tine.widgets.grid.ColumnManager.resolveUIConfigWidth(config[i], uiConfig);
