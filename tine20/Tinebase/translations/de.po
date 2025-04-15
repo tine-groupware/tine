@@ -2743,8 +2743,8 @@ msgstr "Wählen Sie eine Exportdefinition"
 #, python-brace-format
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] "Exportiere {0}"
-msgstr[1] "Exportiere {0}"
+msgstr[0] "{0} exportieren"
+msgstr[1] "{0} exportieren"
 
 msgid "Download"
 msgstr "Download"
@@ -3388,8 +3388,8 @@ msgstr "Drucke Seite"
 #, python-brace-format
 msgid "Move {0}"
 msgid_plural "Move {0}"
-msgstr[0] "Verschiebe {0}"
-msgstr[1] "Verschiebe {0}"
+msgstr[0] "{0} verschieben"
+msgstr[1] "{0} verschieben"
 
 #, python-brace-format
 msgid "Export as {0}"
