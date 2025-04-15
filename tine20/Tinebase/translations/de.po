@@ -1262,8 +1262,9 @@ msgstr ""
 "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder "
 "ungütig"
 
-msgid "Email account already exists"
-msgstr "Das E-Mail-Konto existiert bereits"
+msgid "Email account or alias/forward already exists"
+msgstr ""
+"Das E-Mail-Konto oder ein Alias bzw. eine Weiterleitung existiert bereits"
 
 msgid "Area is locked"
 msgstr "Dieser Bereich ist gesperrt"
@@ -3028,8 +3029,8 @@ msgstr "Wählen Sie eine Exportdefinition"
 #, python-brace-format
 msgid "Export {0}"
 msgid_plural "Export {0}"
-msgstr[0] "Exportiere {0}"
-msgstr[1] "Exportiere {0}"
+msgstr[0] "{0} exportieren"
+msgstr[1] "{0} exportieren"
 
 msgid "Download"
 msgstr "Download"
@@ -3734,8 +3735,8 @@ msgstr "Drucke Seite"
 #, python-brace-format
 msgid "Move {0}"
 msgid_plural "Move {0}"
-msgstr[0] "Verschiebe {0}"
-msgstr[1] "Verschiebe {0}"
+msgstr[0] "{0} verschieben"
+msgstr[1] "{0} verschieben"
 
 #, python-brace-format
 msgid "Export as {0}"
@@ -4834,9 +4835,8 @@ msgstr "Tine 2.0 URL"
 msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
-msgid "Email account or alias/forward already exists"
-msgstr ""
-"Das E-Mail-Konto oder ein Alias bzw. eine Weiterleitung existiert bereits"
+msgid "Email account already exists"
+msgstr "Das E-Mail-Konto existiert bereits"
 
 #, python-brace-format
 msgid "Login with {0} account"
