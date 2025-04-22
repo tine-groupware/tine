@@ -1205,6 +1205,8 @@ viewConfig: {
                 this.grid.stateId = this.latestGridStateId;
                 if (currentGridState) {
                     this.grid.applyState(currentGridState, true);
+                    this.updateHeaders();
+                    this.updateHeaderSortState();
                 }
             }
             const mode = this.getResponsiveMode();
