@@ -895,8 +895,8 @@
           if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
               # COMPOSER custom cache
               # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-              export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-              mkdir -p ${COMPOSER_CACHE_DIR}
+              # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+              # mkdir -p ${COMPOSER_CACHE_DIR}
       
               log "instaling custom app ..."
               customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -1042,18 +1042,13 @@
     - |
       # lib/scripts/test_cloud.sh
       test_cloud_generate_deployment_name() {
-          deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-      
-          if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-              # remove trailing /
-              deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-          fi
+          deployment_name=$MAJOR_COMMIT_REF_NAME
       
           if [ "$RELEASE_TYPE" == "nightly" ]; then
               deployment_name=nightly-$deployment_name
           fi
       
-          echo -n $deployment_name | sed 's/\./-/g'
+          echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
       }
       
       test_cloud_deploy() {
@@ -1973,8 +1968,8 @@
             if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
                 # COMPOSER custom cache
                 # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-                export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-                mkdir -p ${COMPOSER_CACHE_DIR}
+                # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+                # mkdir -p ${COMPOSER_CACHE_DIR}
         
                 log "instaling custom app ..."
                 customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -2119,18 +2114,13 @@
 
         # lib/scripts/test_cloud.sh
         test_cloud_generate_deployment_name() {
-            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-        
-            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-                # remove trailing /
-                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-            fi
+            deployment_name=$MAJOR_COMMIT_REF_NAME
         
             if [ "$RELEASE_TYPE" == "nightly" ]; then
                 deployment_name=nightly-$deployment_name
             fi
         
-            echo -n $deployment_name | sed 's/\./-/g'
+            echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
         }
         
         test_cloud_deploy() {
@@ -3095,8 +3085,8 @@
             if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
                 # COMPOSER custom cache
                 # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-                export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-                mkdir -p ${COMPOSER_CACHE_DIR}
+                # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+                # mkdir -p ${COMPOSER_CACHE_DIR}
         
                 log "instaling custom app ..."
                 customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -3241,18 +3231,13 @@
 
         # lib/scripts/test_cloud.sh
         test_cloud_generate_deployment_name() {
-            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-        
-            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-                # remove trailing /
-                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-            fi
+            deployment_name=$MAJOR_COMMIT_REF_NAME
         
             if [ "$RELEASE_TYPE" == "nightly" ]; then
                 deployment_name=nightly-$deployment_name
             fi
         
-            echo -n $deployment_name | sed 's/\./-/g'
+            echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
         }
         
         test_cloud_deploy() {
