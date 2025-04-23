@@ -54,4 +54,6 @@ EOF
 # use the patched image, when recreated.
 docker build -f $dockerfile -t "$imageName" $runtimeDiffDir
 
+echo "Container $name with image $imageName has been patched. If the container is restarted the patched image will be used."
+
 rm -f $dockerfile
