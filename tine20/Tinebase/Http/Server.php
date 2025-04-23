@@ -267,7 +267,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
             }
         }
 
-        echo $error['msg'] . "\n";
+        echo htmlentities(strip_tags($error['msg'])) . "\n";
     }
     
     /**
