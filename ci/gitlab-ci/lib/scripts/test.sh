@@ -32,8 +32,8 @@ test_prepare_working_dir() {
     if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
         # COMPOSER custom cache
         # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-        export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-        mkdir -p ${COMPOSER_CACHE_DIR}
+        # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+        # mkdir -p ${COMPOSER_CACHE_DIR}
 
         log "instaling custom app ..."
         customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')

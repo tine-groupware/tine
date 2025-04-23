@@ -207,12 +207,9 @@ class Tinebase_TransactionManager
              foreach ($afterCallbacks as $callable) {
                  try {
                      call_user_func_array($callable[0], $callable[1]);
-                 } catch (Tinebase_Exception_AccessDenied $tead) {
+                 } catch (Tinebase_Exception_AccessDenied | Tinebase_Exception_NotFound | RedisException $e) {
                      if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                         __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
-                 } catch (Tinebase_Exception_NotFound $tenf) {
-                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                         __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                         __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                  } catch (Exception $e) {
                      // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
                      // actually can't roll back anything anymore as we already committed.
