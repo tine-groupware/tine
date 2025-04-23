@@ -102,6 +102,7 @@
     "ext-libxml": "*",
     "ext-mbstring": "*",
     "ext-openssl": "*",
+    "ext-redis": "*",
     "ext-xml": "*",
     "ext-xmlreader": "*",
     "ext-xmlwriter": "*",
