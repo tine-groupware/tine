@@ -158,7 +158,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
 
         // remove already applied cfs / fill the mixed collection
         Ext.each(allCfConfigs, function(cfConfig) {
-            if (! form.findField('customfield_' + cfConfig.get('name'))) {
+            if (! form.findField('customfield_' + cfConfig.get('name'))
+                && !_.get(cfConfig, 'data.definition.uiconfig.disabled')) {
                 cfConfigs.push(cfConfig);
             }
         }, this);
