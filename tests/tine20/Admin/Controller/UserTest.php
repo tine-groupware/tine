@@ -276,6 +276,9 @@ class Admin_Controller_UserTest extends TestCase
         $userInBackend = $emailUserBackend->getRawUserById($xpropsUser);
         self::assertFalse($userInBackend, 'email user should be deleted: '
             . print_r($userInBackend, true));
+        if (Tinebase_Application::getInstance()->isInstalled('SaasInstance')) {
+            Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_DELETION, ormore: true);
+        }
     }
 
     public function testAddUserAdbContainer()
@@ -442,6 +445,7 @@ class Admin_Controller_UserTest extends TestCase
         Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
 
         $user->type = 'somethin';
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         $updatedUser = Admin_Controller_User::getInstance()->update($user);
         self::assertEquals($user->type, $updatedUser->type);
     }
