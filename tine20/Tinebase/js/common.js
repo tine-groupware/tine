@@ -578,7 +578,7 @@ const common = {
         // normalize
         color = String(color).replace('#', '');
 
-        return '<div style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
+        return '<div class="dark-reverse" style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
     },
 
     /**
