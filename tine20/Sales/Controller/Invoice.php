@@ -1371,7 +1371,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * inspect creation of one record (before create)
      *
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Sales_Model_Invoice $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
@@ -1387,6 +1387,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             $this->_setNextNumber($_record);
         }
+
+        $this->_inspectPaymentMeans($_record);
     }
     
     /**
@@ -1812,11 +1814,22 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         return $_ids;
     }
 
+    protected function _inspectPaymentMeans(Sales_Model_Invoice $invoice): void
+    {
+        if ($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS} instanceof Tinebase_Record_RecordSet) {
+            if ($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->count() === 1) {
+                $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->{Sales_Model_PaymentMeans::FLD_DEFAULT} = true;
+            } elseif ($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->count() > 1 && $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true)->count() !== 1) {
+                throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME)->_('payment means need to have one default record'));
+            }
+        }
+    }
+
     /**
      * inspect update of one record (before update)
      *
-     * @param   Tinebase_Record_Interface $_record the update record
-     * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
+     * @param   Sales_Model_Invoice $_record the update record
+     * @param   Sales_Model_Invoice $_oldRecord the current persistent record
      * @return  void
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
@@ -1854,6 +1867,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         $this->_checkCleared($_record, $_oldRecord);
+
+        $this->_inspectPaymentMeans($_record);
     }
 
     /**
