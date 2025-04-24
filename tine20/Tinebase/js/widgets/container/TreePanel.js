@@ -607,7 +607,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                         this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
                             tag: 'span',
                             html: '&nbsp;&#9673;&nbsp',
-                            style: {color: appendedNode.attributes.container.color || '#808080'}
+                            style: {color: appendedNode.attributes.container.color || '#808080'},
+                            cls: 'dark-reverse'
                         }, true);
                     }
                 }, appendedNode.ui);
