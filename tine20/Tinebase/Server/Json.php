@@ -257,6 +257,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $requestData[$i]["params"][$field] = "*******";
                 }
             }
+            // TODO add more methods
+            //      get this from SMD?
+            if ($request['method'] === 'Admin.resetPassword') {
+                $requestData[$i]['params'][1] = "*******";
+            }
         }
         return $requestData;
     }
