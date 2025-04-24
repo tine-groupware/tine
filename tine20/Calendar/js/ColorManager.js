@@ -236,6 +236,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     iconCls:'action_changecolor',
     colorStrategy: 'container',
     infoBarColorStrategy: 'response',
+    useLightColors: false,
     stateful: true,
     stateId: 'cal-calpanel-color-strategy-btn',
     stateEvents: [],
@@ -256,6 +257,8 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
         // init state now to render menu with state applied
         this.initState();
 
+        Ext.getBody()[(this.useLightColors ? 'add' : 'remove') + 'Class']('cal-use-light-colors');
+
         this.text = this.app.i18n._('Colors');
         this.menu = {
             items: _.reduce(Tine.Calendar.colorStrategies, function(items, strategy, key) {
@@ -268,6 +271,14 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
             }, [])
         };
 
+        this.menu.items.unshift({
+            text: this.app.i18n._('Use Light-Mode Colors'),
+            qtip: this.app.i18n._('In dark mode event colors are inverted for better readability. If you want to see the original colors of light mode check this option.'),
+            checked: me.useLightColors,
+            cls: 'cal-light-mode-color-menu-item',
+            checkHandler: me.changeColorMode.createDelegate(me)
+        });
+        
         let sidebarItems =  _.reduce(Tine.Calendar.infoBarColorStrategies, function(items, strategy, key) {
             return items.concat({
                 text: strategy.getName(),
@@ -285,6 +296,13 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
         Tine.Calendar.ColorManager.colorStrategyBtn.superclass.initComponent.apply(this, arguments);
     },
 
+    changeColorMode: function(cmp) {
+        this.useLightColors = cmp.checked;
+        Ext.getBody()[(this.useLightColors ? 'add' : 'remove') + 'Class']('cal-use-light-colors');
+
+        this.saveState();
+    },
+
     changeColorStrategy: function(strategy) {
         this.colorStrategy = strategy;
         this.saveState();
@@ -292,7 +310,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
     },
 
     getState: function() {
-        return {colorStrategy: this.colorStrategy, infoBarColorStrategy: this.infoBarColorStrategy}
+        return {colorStrategy: this.colorStrategy, infoBarColorStrategy: this.infoBarColorStrategy, useLightColors: this.useLightColors}
     },
 
     changeInfoBarColorStrategy: function(strategy) {
