@@ -336,3 +336,17 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .dark-mode .x-hide-label .x-form-element .x-form-check-group .x-form-check-wrap label.x-form-cb-label {
     filter: invert(1) hue-rotate(180deg);
 }
+
+.cal-light-mode-color-menu-item {
+    display: none !important;
+}
+
+.dark-mode .cal-light-mode-color-menu-item {
+    display: block !important;
+}
+
+.dark-mode.cal-use-light-colors .cal-daysviewpanel-event,
+.dark-mode.cal-use-light-colors .cal-monthview-event,
+.dark-mode.cal-use-light-colors .cal-yearview-event {
+    filter: invert(1) hue-rotate(180deg);
+}
