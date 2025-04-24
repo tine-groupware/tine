@@ -2051,15 +2051,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 $this->_timeFields[] = $fieldKey;
                 break;
             case 'user':
-                $fieldDef['config'] = array(
-                    'length'                  => 40,
+                $fieldDef[self::LENGTH] = 40;
+                $fieldDef[self::CONFIG] = array_merge($fieldDef[self::CONFIG] ?? [], [
                     'appName'                 => 'Tinebase',
                     'modelName'               => 'User',
                     'type'                    => self::TYPE_RECORD,
                     'recordClassName'         => Tinebase_Model_User::class,
                     'controllerClassName'     => Tinebase_User::class,
                     'filterClassName'         => Tinebase_Model_FullUserFilter::class,
-                );
+                ]);
                 $this->_recordFields[$fieldKey] = $fieldDef;
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */

@@ -92,10 +92,11 @@ class SSO_PublicAPITest extends TestCase
     }
 
     /**
-     * @throws Tinebase_Exception
-     * @throws Zend_Session_Exception
      *
      * @group needsbuild
+     *
+     * @throws Tinebase_Exception
+     * @throws Zend_Session_Exception
      */
     public function testSaml2LoginPage()
     {
@@ -114,7 +115,7 @@ class SSO_PublicAPITest extends TestCase
         $this->assertStringContainsString('},"relyingParty":{', $response);
         $this->assertStringContainsString('"label":"moodle"', $response);
         $this->assertStringContainsString('"description":"desc"', $response);
-        $this->assertStringContainsString('"logo":"logo"', $response);
+        $this->assertStringContainsString('"logo_light":"logo"', $response);
     }
 
     protected function createSAMLRequest()
@@ -161,6 +162,74 @@ class SSO_PublicAPITest extends TestCase
         $this->assertStringContainsString(
             '<saml:Attribute Name="Klasse" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"><saml:AttributeValue xsi:type="xs:string">Users</saml:AttributeValue></saml:Attribute>',
             $xml);
+    }
+
+    public function testOAuthDeviceTokenCall()
+    {
+        $oauthDevice = SSO_Controller_OAuthDevice::getInstance()->create(new SSO_Model_OAuthDevice([
+            SSO_Model_OAuthDevice::FLD_NAME => 'unittest',
+        ]));
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/device/auth', 'POST'))
+                ->withParsedBody([
+                    'client_id' => $oauthDevice->getId(),
+                ])
+        );
+
+        Tinebase_Core::unsetUser();
+        $coreSession = Tinebase_Session::getSessionNamespace();
+        if (isset($coreSession->currentAccount)) {
+            unset($coreSession->currentAccount);
+        }
+
+        $response = SSO_Controller::publicOAuthDeviceAuth();
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertIsArray($body = json_decode($body, true));
+        $this->assertArrayHasKey('device_code', $body);
+        $deviceCode = $body['device_code'];
+        $this->assertArrayHasKey('user_code', $body);
+        $userCode = $body['user_code'];
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/token', 'POST'))
+                ->withParsedBody([
+                    'client_id' => $oauthDevice->getId(),
+                    'device_code' => $deviceCode,
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
+                ])
+        );
+
+        $response = SSO_Controller::publicToken();
+        $this->assertSame(400, $response->getStatusCode());
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+        $this->assertIsArray($body = json_decode($body, true));
+        $this->assertArrayHasKey('error', $body);
+        $this->assertSame('authorization_pending', $body['error']);
+
+        SSO_Controller::publicOAuthDeviceUser($userCode);
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/token', 'POST'))
+                ->withParsedBody([
+                    'client_id' => $oauthDevice->getId(),
+                    'device_code' => $deviceCode,
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
+                ])
+        );
+
+        $response = SSO_Controller::publicToken();
+        $this->assertSame(200, $response->getStatusCode());
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+        $bodyDecoded = json_decode($body, true);
+        $this->assertIsArray($bodyDecoded, $body);
+        $this->assertArrayHasKey('access_token', $bodyDecoded);
+        $this->assertArrayHasKey('id_token', $bodyDecoded);
     }
 
     /**

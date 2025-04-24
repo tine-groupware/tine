@@ -1104,7 +1104,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $column = $schema[$identifier];
         
-        if (!in_array($column['DATA_TYPE'], array('varchar', 'VARCHAR2'))) {
+        if (!in_array($column['DATA_TYPE'], array('varchar', 'char'))) {
             return false;
         }
         
