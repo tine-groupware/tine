@@ -37,9 +37,10 @@ class Sales_Model_EDocument_Dispatch_DynamicConfig extends Tinebase_Record_NewAb
                         Sales_Model_EDocument_Dispatch_Upload::class,
                     ],
                 ],
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                self::INPUT_FILTERS => [
                     Zend_Filter_Empty::class => Sales_Model_EDocument_Dispatch_Manual::class,
+                ],
+                self::VALIDATORS => [
                     Zend_Filter_Input::DEFAULT_VALUE => Sales_Model_EDocument_Dispatch_Manual::class,
                     [Zend_Validate_InArray::class, [
                         Sales_Model_EDocument_Dispatch_Email::class,
@@ -55,18 +56,14 @@ class Sales_Model_EDocument_Dispatch_DynamicConfig extends Tinebase_Record_NewAb
             self::FLD_DISPATCH_CONFIG       => [
                 self::LABEL                     => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')
                 self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
-                self::DEFAULT_VAL               => '[]',
                 self::CONFIG                    => [
                     self::REF_MODEL_FIELD           => self::FLD_DISPATCH_TYPE,
                     self::PERSISTENT                => true,
-                ],
-                self::INPUT_FILTERS         => [
-                    Zend_Filter_Empty::class => [[]],
+                    self::SET_DEFAULT_INSTANCE      => true,
                 ],
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => [[]],
-                    [Tinebase_Record_Validator_SubValidate::class, [Tinebase_Record_Validator_SubValidate::IGNORE_VALUE => []]],
+                    [Tinebase_Record_Validator_SubValidate::class],
                 ],
             ],
         ],

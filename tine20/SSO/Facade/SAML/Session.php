@@ -67,7 +67,7 @@ class SSO_Facade_SAML_Session
 
                 try {
                     $lr = \SimpleSAML\Module\saml\Message::buildLogoutRequest(
-                        \SimpleSAML\IdP::getById('saml2:tine20')->getConfig(),
+                        \SimpleSAML\IdP::getById('saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID})->getConfig(),
                         ($dstCfg = \SimpleSAML\Metadata\MetaDataStorageHandler::getMetadataHandler()
                             ->getMetaDataConfig($spEntityId, 'saml20-sp-remote'))
                     );
