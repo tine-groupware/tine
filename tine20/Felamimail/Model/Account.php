@@ -167,7 +167,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 ],
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL],
+                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
                      ['InArray', [
                          Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,
                          Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
@@ -175,7 +175,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                          Tinebase_EmailUser_Model_Account::TYPE_SHARED_EXTERNAL,
                          Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
                          Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
-                     ]]
+                     ]],
+                ],
             ],
             'name' => [
                 self::TYPE => self::TYPE_STRING,

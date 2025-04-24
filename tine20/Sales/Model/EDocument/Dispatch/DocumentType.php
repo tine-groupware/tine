@@ -25,6 +25,7 @@ class Sales_Model_EDocument_Dispatch_DocumentType extends Tinebase_Record_NewAbs
             self::ID                        => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
                     Zend_Filter_Input::DEFAULT_VALUE => [[Tinebase_Record_Abstract::class, 'generateUID']],
                 ],
             ],
@@ -32,6 +33,9 @@ class Sales_Model_EDocument_Dispatch_DocumentType extends Tinebase_Record_NewAbs
                 self::TYPE                      => self::TYPE_KEY_FIELD,
                 self::LABEL                     => 'Document Type', // _('Document Type')
                 self::NAME                      => Sales_Config::ATTACHED_DOCUMENT_TYPES,
+                self::CONFIG                    => [
+                    self::VALIDATE                  => true,
+                ],
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
