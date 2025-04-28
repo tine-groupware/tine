@@ -28,6 +28,11 @@ php-unit-all-tests-source-sequential:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+  after_script:
+    - |
+      if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
+        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/coverage/ s3://tine-phpunit-coverage/${CI_COMMIT_REF_NAME}/
+      fi
   needs: []
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "sequential"

@@ -225,6 +225,8 @@ RUN apt-get update \
     composer \
     npm \
     nodejs \
+    s3cmd \ 
+    $(cat /etc/php/container-php-package-name)-pcov \
  && rm -rf /var/lib/apt/lists/*
 COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
