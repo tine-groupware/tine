@@ -113,10 +113,10 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
             icons.push({name: 'spam',src: 'images/icon-set/icon_spam.svg', qtip: app.i18n._('This message might be SPAM')});
         }
         if (this.hasFlag('\\Answered')) {
-            icons.push({name: 'answered', src: 'images/icon-set/icon_email_answer.svg', qtip: app.i18n._('Answered')});
+            icons.push({name: 'answered', src: 'https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons/corner-up-left.svg', qtip: app.i18n._('Answered')});
         }
         if (this.hasFlag('Passed')) {
-            icons.push({name: 'passed',src: 'images/icon-set/icon_email_forward.svg', qtip: app.i18n._('Forwarded')});
+            icons.push({name: 'passed',src: 'https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons/corner-up-right.svg', qtip: app.i18n._('Forwarded')});
         }
         if (this.get('content_type') === 'multipart/encrypted') {
             icons.push({name: 'encrypted',src: 'images/icon-set/icon_lock.svg', qtip: app.i18n._('Encrypted Message')});
