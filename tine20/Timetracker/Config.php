@@ -51,6 +51,7 @@ class Timetracker_Config extends Tinebase_Config_Abstract
     const ACCOUNTING_TIME_ROUNDING_METHOD_CEIL = 'ceil';
     const ACCOUNTING_TIME_ROUNDING_METHOD_FLOOR = 'floor';
     const ACCOUNTING_TIME_ROUNDING_METHOD_ROUND = 'round';
+    //const CALCULATE_BUDGET_BILLABLE_ONLY = 'calculateBudgetBillableOnly';
 
     /**
      * @var array
@@ -143,6 +144,16 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => self::ACCOUNTING_TIME_ROUNDING_METHOD_CEIL,
         ],
+        //todo: support is_billable filter
+//        self::CALCULATE_BUDGET_BILLABLE_ONLY => [
+//            self::LABEL                 => 'calculate budget billable only',
+//            self::DESCRIPTION           => 'Calculate budget in hours with billable timesheets only',
+//            self::TYPE                  => self::TYPE_BOOL,
+//            self::SETBYSETUPMODULE      => true,
+//            self::SETBYADMINMODULE      => true,
+//            self::CLIENTREGISTRYINCLUDE => true,
+//            self::DEFAULT_STR           => false,
+//        ],
     ];
 
     /**

@@ -109,6 +109,9 @@ msgstr ""
 msgid "Budget in hours"
 msgstr ""
 
+msgid "All timesheet durations are aggregated here, no matter if they are billable or not"
+msgstr ""
+
 msgid "Status"
 msgstr ""
 
@@ -330,6 +333,9 @@ msgstr ""
 msgid "The grant to manage clearing of Timesheets"
 msgstr ""
 
+msgid "Project time budget in hours"
+msgstr ""
+
 msgid "Price"
 msgstr ""
 
@@ -349,6 +355,12 @@ msgid "Accounting time factor"
 msgstr ""
 
 msgid "Stream"
+msgstr ""
+
+msgid "Budget level in %"
+msgstr ""
+
+msgid "Budget booked hours"
 msgstr ""
 
 msgid "hour"
