@@ -121,7 +121,6 @@
   #         - tine20/Tinebase/js/npm-shrinkwrap.json
   #     paths:
   #       - tine20/Tinebase/js/node_modules
-  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   artifacts:
     paths:
       - ${CI_PROJECT_DIR}/tine20.log
