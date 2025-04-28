@@ -3437,6 +3437,13 @@ class Tinebase_FileSystem implements
                     }
                 } else {
                     $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
+                    if ($_nodePath && $_action === 'delete') {
+                        $parentNode = $_path->getNode();
+                        $sourceNode = $_nodePath->getNode();
+                        if ($sourceNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE && $parentNode->getId() === $sourceNode->parent_id) {
+                            $hasPermission = $this->_checkACLNode($sourceNode, $_action);
+                        }
+                    }
                 }
                 break;
             case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:

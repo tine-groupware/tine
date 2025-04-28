@@ -1292,7 +1292,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $newNode = $this->_copyOrMoveFileNode($_source, $_destination, 'copy', $_forceOverwrite);
                 break;
             case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
-                $newNode = $this->_copyFolderNode($_source, $_destination);
+                $newNode = $this->_copyFolderNode($_source, $_destination, $_forceOverwrite);
                 break;
         }
         
@@ -1360,12 +1360,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Tree_Node_Path $_destination
      * @return Tinebase_Model_Tree_Node
      * @throws Filemanager_Exception_NodeExists
-     * 
-     * @todo add $_forceOverwrite?
+     *
      */
-    protected function _copyFolderNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination)
+    protected function _copyFolderNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_forceOverwrite)
     {
-        $newNode = $this->_createNode($_destination, Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+        $newNode = $this->_createNode($_destination, Tinebase_Model_Tree_FileObject::TYPE_FOLDER, _forceOverwrite: $_forceOverwrite);
         
         // recursive copy for (sub-)folders/files
         $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
@@ -1375,7 +1374,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         )));
         $result = $this->search($filter);
         if (count($result) > 0) {
-            $this->copyNodes($result->path, $newNode->path);
+            $this->copyNodes($result->path, $newNode->path, $_forceOverwrite);
         }
         
         return $newNode;

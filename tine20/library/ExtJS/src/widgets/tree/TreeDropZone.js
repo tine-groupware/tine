@@ -254,7 +254,7 @@ Ext.extend(Ext.tree.TreeDropZone, Ext.dd.DropZone, {
 
     // private
     completeDrop : function(de){
-        var ns = de.dropNode, p = de.point, t = de.target;
+        var ns = de.dropNode, p = de.point, t = de.target, re = de.rawEvent;
         if(!Ext.isArray(ns)){
             ns = [ns];
         }
@@ -266,6 +266,9 @@ Ext.extend(Ext.tree.TreeDropZone, Ext.dd.DropZone, {
             }else if(p == "below"){
                 t.parentNode.insertBefore(n, t.nextSibling);
             }else{
+                n.on('beforemove',function(_dataSource, _options) {
+                    return !(re.ctrlKey || re.altKey);
+                });
                 t.appendChild(n);
             }
         }
