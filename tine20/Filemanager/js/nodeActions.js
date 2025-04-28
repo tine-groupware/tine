@@ -51,7 +51,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
                 return allowed && node.id !== targetNode.id
             }, true);
             
-            if (action === 'move') {
+            if (action === 'move' || action === 'copy') {
                 isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
                     return allowed
                         // delete grant for all sources required
@@ -443,9 +443,38 @@ Tine.Filemanager.nodeActions.Delete = {
 };
 
 /**
- * one node with readGrant
+ * one or multiple nodes with read, edit AND deleteGrant
  */
-// Tine.Filemanager.nodeActions.Copy = {};
+Tine.Filemanager.nodeActions.Copy = {
+    app: 'Filemanager',
+    requiredGrant: 'editGrant',
+    allowMultiple: true,
+    text: 'Copy', // _('Copy')
+    disabled: true,
+    actionType: 'edit',
+    scope: this,
+    iconCls: 'action_editcopy',
+    handler: function() {
+        const app = this.initialConfig.app,
+            records = this.initialConfig.selections;
+
+        const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+            windowTitle: app.i18n._('Copy Items'),
+            singleSelect: true,
+            mode: 'target',
+            constraint: (targetNode) => {
+                return Tine.Filemanager.nodeActionsMgr.checkConstraints('copy', targetNode, records);
+            }
+        });
+
+        filePickerDialog.on('apply', function(node) {
+            Tine.Filemanager.nodeBackend.copyNodes(records, node[0], null, true);
+        });
+
+        filePickerDialog.openWindow();
+    }
+};
+
 
 /**
  * one or multiple nodes with read, edit AND deleteGrant
