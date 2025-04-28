@@ -413,7 +413,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         this.ctxMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             actionMgr: Tine.Filemanager.nodeActionsMgr,
             nodeName: this.recordClass.getContainerName(),
-            actions: ['reload', createFolder, 'delete', 'rename', 'move', 'edit', 'publish', 'systemLink'],
+            actions: ['reload', createFolder, 'delete', 'rename', 'move', 'copy', 'edit', 'publish', 'systemLink'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
