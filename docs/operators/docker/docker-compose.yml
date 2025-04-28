@@ -40,6 +40,7 @@ services:
       TINE20_SETUPUSER_PASSWORD: tinesetup
       TINE20_SETUP_HTPASSWD: "setup:$$apr1$$JhCtViTh$$k15DH.HvNR5hZ66Ew5aTH/" #setup:setuppw
       TINE20_ACTIONQUEUE: "true"
+      BROADCASTHUB_URL: http://broadcasthub
       # TINE20_LOGGER_PRIORITY: "7"
       ### the url of you tine installation (should be adjusted)
       # TINE20_URL: http://localhost:4000
@@ -51,6 +52,7 @@ services:
       # TINE20_LOGIN_PASSWORD: change_me
       ### apps to install - if omitted, all available apps are installed
       # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
+
     volumes:
       - "tine_files:/var/lib/tine20/files"
       # use this for custom configuration files (like logger.inc.php)
@@ -77,6 +79,25 @@ services:
     networks:
       - internal_network
 
+  broadcasthub:
+    image: tinegroupware/broadcasthub:0.7
+    restart: always
+    networks:
+      - external_network
+      - internal_network
+    ports:
+      - "5001:80"
+    environment:
+      REDIS_URL: redis://cache:6379
+      REDIS_CHANNEL: broadcasthub
+      TINE20_JSON_API_URL: http://localhost
+      AUTH_TIMEOUT: 5000
+      WS_PORT: 80
+      DEBUG: '*'
+      DEBUG_DEFAULT_LOGGING: "on"
+      DEBUG_LOG_TO_FILE: "off"
+      DEBUG_LOG_FILE: ../../stdout.log
+
 ### other optional services
 
 ############################################################################
@@ -96,28 +117,6 @@ services:
 #    restart: always
 #    networks:
 #      - internal_network
-
-############################################################################
-#  broadcasthub
-############################################################################
-#  broadcasthub:
-#    image: tinegroupware/broadcasthub:0.7
-#    restart: always
-#    networks:
-#      - external_network
-#      - internal_network
-#    ports:
-#      - "5001:80"
-#    environment:
-#      REDIS_URL: redis://cache:6379
-#      REDIS_CHANNEL: broadcasthub
-#      TINE20_JSON_API_URL: http://localhost
-#      AUTH_TIMEOUT: 5000
-#      WS_PORT: 80
-#      DEBUG: '*'
-#      DEBUG_DEFAULT_LOGGING: "on"
-#      DEBUG_LOG_TO_FILE: "off"
-#      DEBUG_LOG_FILE: ../../stdout.log
 
 ############################################################################
 #  documentserver
