@@ -165,6 +165,9 @@ test_phpunit() {
         cmd="${cmd} --group ${ARG_GROUP}"
     fi
 
+    mkdir -p ${CI_PROJECT_DIR}/coverage    
+    cmd="${cmd} --coverage-text --colors=never --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+
     cmd="${cmd} ${ARG_TEST}";
 
     echo ${cmd};
