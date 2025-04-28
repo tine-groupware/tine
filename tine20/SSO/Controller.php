@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,9 +18,7 @@ use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
-use SimpleSAML\Logger;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
-use SimpleSAML\Stats;
 
 /**
  * 
@@ -59,6 +57,18 @@ class SSO_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/token', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicToken', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->addRoute(['POST'], '/oauth2/device/auth', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOAuthDeviceAuth', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->addRoute(['GET'], '/oauth2/device/user[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOAuthDeviceUser', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->addRoute(['POST'], '/oauth2/device/user[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOAuthDeviceUserPost', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
             $routeCollector->post('/oauth2/register', (new Tinebase_Expressive_RouteHandler(
@@ -176,6 +186,64 @@ class SSO_Controller extends Tinebase_Controller_Event
             . "\r\n\r\n")->setServer(new \Laminas\Stdlib\Parameters([$request->getServerParams()]));
     }
 
+    protected static function processJsLoginRequest(\Psr\Http\Message\ServerRequestInterface $request): ?\Psr\Http\Message\ResponseInterface
+    {
+        if (isset($request->getParsedBody()['username'])) {
+            try {
+                if (!empty($request->getParsedBody()['password'] ?? null)) {
+                    Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+                    try {
+                        Tinebase_Controller::getInstance()->setRequestContext(array(
+                            'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
+                            'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
+                        ));
+                        Tinebase_Controller::getInstance()->login($request->getParsedBody()['username'],
+                            $request->getParsedBody()['password'],
+                            static::getLoginFakeRequest($request->getUri()->getPath()),
+                            self::OIDC_AUTH_REQUEST_TYPE);
+                    } finally {
+                        Tinebase_Controller::getInstance()->forceUnlockLoginArea(false);
+                    }
+                } else {
+                    static::passwordLessLogin($request->getParsedBody()['username']);
+                }
+                if (!Tinebase_Core::getUser()) {
+                    throw new Tinebase_Exception_Auth_PwdRequired('Wrong username or password!');
+                }
+            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked
+                | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $tea)
+            {
+                // 630 + 631 + 650 + 651
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tea->getMessage());
+                }
+
+                return static::getJsonLoginFailureResponse($tea);
+            }
+        }
+        return null;
+    }
+
+    protected static function getJsonLoginFailureResponse(Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked
+                                                          | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $e):  \Psr\Http\Message\ResponseInterface
+    {
+        $response = new \Laminas\Diactoros\Response(headers: [
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'no-store',
+        ]);
+        $response->getBody()->write(json_encode([
+            'jsonrpc' => '2.0',
+            'id' => 'fakeid',
+            'error' => [
+                'code' => -32000,
+                'message' => $e->getMessage(),
+                'data' => $e->toArray(),
+            ],
+        ]));
+        return $response;
+    }
+
     // TODO FIX ME
     // 3.1.2.6.  Authentication Error Response
     public static function publicAuthorize(): \Psr\Http\Message\ResponseInterface
@@ -201,51 +269,11 @@ class SSO_Controller extends Tinebase_Controller_Event
             return new \Laminas\Diactoros\Response('php://memory', 401);
         }
 
-        if (isset($request->getParsedBody()['username'])) {
-            try {
-                if (!empty($request->getParsedBody()['password'] ?? null)) {
-                    Tinebase_Controller::getInstance()->forceUnlockLoginArea();
-                    try {
-                        Tinebase_Controller::getInstance()->setRequestContext(array(
-                            'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
-                            'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
-                        ));
-                        Tinebase_Controller::getInstance()->login($request->getParsedBody()['username'],
-                            $request->getParsedBody()['password'],
-                            static::getLoginFakeRequest('/sso/oauth2/authorize'),
-                            self::OIDC_AUTH_REQUEST_TYPE);
-                    } finally {
-                        Tinebase_Controller::getInstance()->forceUnlockLoginArea(false);
-                    }
-                } else {
-                    Tinebase_Session::getSessionNamespace()->sso_oid_authRequest = $authRequest;
-                    static::passwordLessLogin($request->getParsedBody()['username']);
-                }
-                if (!Tinebase_Core::getUser()) {
-                    throw new Tinebase_Exception_Auth_PwdRequired('Wrong username or password!');
-                }
-            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked
-                    | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $tea)
-            {
-                // 630 + 631 + 650 + 651
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $tea->getMessage());
-                }
-
-                $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
-                $response->getBody()->write(json_encode([
-                    'jsonrpc' => '2.0',
-                    'id' => 'fakeid',
-                    'error' => [
-                        'code' => -32000,
-                        'message' => $tea->getMessage(),
-                        'data' => $tea->toArray(),
-                    ],
-                ]));
-                return $response;
-            }
+        Tinebase_Session::getSessionNamespace()->sso_oid_authRequest = $authRequest;
+        if (null !== ($response = static::processJsLoginRequest($request))) {
+            return $response;
         }
+        unset(Tinebase_Session::getSessionNamespace()->sso_oid_authRequest);
 
         // TODO FIXME
         // 3.1.2.3.  Authorization Server Authenticates End-User
@@ -284,6 +312,132 @@ class SSO_Controller extends Tinebase_Controller_Event
         } else {
             return $response;
         }
+    }
+
+    protected static function getOAuthErrorResponse(string $error, ?string $errorDescription = null): \Psr\Http\Message\ResponseInterface
+    {
+        $response = new \Laminas\Diactoros\Response(
+            status: 400,
+            headers: [
+                'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-store',
+            ]
+        );
+        $response->getBody()->write(json_encode(array_merge([
+            'error' => $error,
+        ], $errorDescription === null ? [] : [
+            'error_description' => $errorDescription,
+        ])));
+        return $response;
+    }
+
+    public static function publicOAuthDeviceUserPost(?string $userCode = null): \Psr\Http\Message\ResponseInterface
+    {
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        if (null !== ($response = static::processJsLoginRequest($request))) {
+            return $response;
+        }
+
+        if (Tinebase_Core::getUser()) {
+            $e = (new Tinebase_Exception_Auth_Redirect())->setUrl((string)$request->getUri());
+        } else {
+            $e = new Tinebase_Exception_Auth_PwdRequired('Wrong username or password!');
+        }
+
+        return static::getJsonLoginFailureResponse($e);
+    }
+
+    public static function publicOAuthDeviceUser(?string $userCode = null): \Psr\Http\Message\ResponseInterface
+    {
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+
+        if ($user = Tinebase_Core::getUser()) {
+            if (null === $userCode) {
+                // TODO FIXME render user dialog
+                return static::getOAuthErrorResponse('invalid_request', 'user dialog should be rendered here');
+            }
+
+            $deviceCode = SSO_Controller_OAuthDeviceCode::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_OAuthDeviceCode::class, [
+                    [TMFA::FIELD => SSO_Model_OAuthDeviceCode::FLD_USER_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $userCode],
+                    [TMFA::FIELD => SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()],
+                ]))->getFirstRecord();
+
+            if (null === $deviceCode) {
+                // TODO FIXME
+                return static::getOAuthErrorResponse('invalid_request', 'failed, failure msg should be displayed here ... and user dialog rendered again I guess');
+            }
+
+            $deviceCode->{SSO_Model_OAuthDeviceCode::FLD_APPROVED_BY} = $user->getId();
+            // we give the device 3 minutes to poll the authorization
+            $deviceCode->{SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL} = Tinebase_DateTime::now()->addMinute(3);
+            SSO_Controller_OAuthDeviceCode::getInstance()->update($deviceCode);
+
+            // TODO FIXME
+            return static::getOAuthErrorResponse('invalid_request', 'succeeded, success msg should be displayed here');
+        }
+
+        return static::renderLoginPage(
+            data: ['url' => (string)$request->getUri()],
+            url: (string)$request->getUri()
+        );
+    }
+
+    public static function publicOAuthDeviceAuth(): \Psr\Http\Message\ResponseInterface
+    {
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        $requestBody = $request->getParsedBody();
+
+        if (null === ($clientId = ($requestBody['client_id'] ?? null))) {
+            return static::getOAuthErrorResponse('invalid_request');
+        }
+
+        try {
+            $oauthDevice = SSO_Controller_OAuthDevice::getInstance()->get($clientId);
+        } catch (Tinebase_Exception_NotFound) {
+            return static::getOAuthErrorResponse('invalid_client');
+        }
+
+        $deviceCodeCreateFun = fn() => SSO_Controller_OAuthDeviceCode::getInstance()->create(new SSO_Model_OAuthDeviceCode([
+            SSO_Model_OAuthDeviceCode::FLD_DEVICE_ID => $oauthDevice->getId(),
+            SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addMinute(16), // add one more minute than we tell the client
+            SSO_Model_OAuthDeviceCode::FLD_USER_CODE => strtoupper(Tinebase_Record_Abstract::generateUID(5) . '-' . Tinebase_Record_Abstract::generateUID(5)),
+        ]));
+
+        try {
+            $deviceCode = $deviceCodeCreateFun();
+        } catch (Zend_Db_Exception) {
+            // retry in case of user_code collision
+            $deviceCode = $deviceCodeCreateFun();
+        }
+
+        $uri = Tinebase_Core::getUrl() . '/oauth2/device/user';
+        $response = new \Laminas\Diactoros\Response(
+            headers: [
+                'Content-Type' => 'application/json',
+                'Cache-Control' => 'no-store',
+            ]
+        );
+        $response->getBody()->write(json_encode([
+            'device_code' => $deviceCode->getId(),
+            'user_code' => $deviceCode->{SSO_Model_OAuthDeviceCode::FLD_USER_CODE},
+            'verification_uri' => $uri,
+            'verification_uri_complete' => $uri . '/' . urlencode($deviceCode->{SSO_Model_OAuthDeviceCode::FLD_USER_CODE}),
+            'expires_in' => 1800,
+            'interval' => 5,
+        ]));
+        return $response;
     }
 
     public static function publicToken(): \Psr\Http\Message\ResponseInterface
@@ -343,12 +497,13 @@ class SSO_Controller extends Tinebase_Controller_Event
             'userinfo_endpoint'                                 => $serverUrl . '/sso/openidconnect/userinfo',
             //'revocation_endpoint'                             => $serverUrl . '/sso/oauth2/revocation',
             'jwks_uri'                                          => $serverUrl . '/sso/oauth2/certs',
-            //"device_authorization_endpoint": "https://oauth2.googleapis.com/device/code",
+            "device_authorization_endpoint"                     => $serverUrl . '/sso/oauth2/device/auth',
             'response_types_supported'                          => [
                 'code',
             ],
             'grant_types_supported'                             => [
                 'authorization_code',
+                'urn:ietf:params:oauth:grant-type:device_code',
             ],
             'token_endpoint_auth_methods_supported'             => ['client_secret_basic', 'private_key_jwt'],
             'token_endpoint_auth_signing_alg_values_supported'  => ['RS256'],
@@ -642,16 +797,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (SSO_Facade_SAML_MFAMaskException $e) {
             if ($request->getParsedBody() && array_key_exists('username', $request->getParsedBody())) {
                 // render MFA mask
-                $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
-                $response->getBody()->write(json_encode([
-                    'jsonrpc' => '2.0',
-                    'id' => 'fakeid',
-                    'error' => [
-                        'code' => -32000,
-                        'message' => $e->mfaException->getMessage(),
-                        'data' => $e->mfaException->toArray(),
-                    ],
-                ]));
+                $response = static::getJsonLoginFailureResponse($e->mfaException);
             } else {
                 // reload while in mfa required state
                 $response = self::getLoginPage($request);
@@ -702,7 +848,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         return static::renderLoginPage($rp, $data);
     }
 
-    protected static function renderLoginPage(SSO_Model_RelyingParty $rp, array $data, ?string $url = null, ?Tinebase_Exception_SystemGeneric $mfaEx = null)
+    protected static function renderLoginPage(?SSO_Model_RelyingParty $rp = null, array $data = [], ?string $url = null, ?Tinebase_Exception_SystemGeneric $mfaEx = null)
     {
         $locale = Tinebase_Core::getLocale();
 
@@ -710,13 +856,13 @@ class SSO_Controller extends Tinebase_Controller_Event
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
 
         $initialData = [
-            'sso' => $data,
-            'relyingParty' => [
+            'sso' => $data, // TODO FIXME is 'url' to be in here <- or down below in $url [which is not being used by the code!]
+            'relyingParty' => $rp ? [
                 SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
                 SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
                 SSO_Model_RelyingParty::FLD_LOGO_LIGHT => $rp->{SSO_Model_RelyingParty::FLD_LOGO_LIGHT},
                 SSO_Model_RelyingParty::FLD_LOGO_DARK => $rp->{SSO_Model_RelyingParty::FLD_LOGO_DARK},
-            ],
+            ] : [],
         ];
         if ($mfaEx) {
             $initialData['mfa'] = [
@@ -751,6 +897,24 @@ class SSO_Controller extends Tinebase_Controller_Event
         );
 
         $grant = new SSO_Facade_OpenIdConnect_AuthCodeGrant(
+            new SSO_Facade_OAuth2_AuthCodeRepository(),
+            new SSO_Facade_OAuth2_RefreshTokenRepository(),
+            new SSO_Facade_OpenIdConnect_ClaimRepository(),
+            new \Idaas\OpenID\Session(),
+            new \DateInterval('PT10M'), // authorization codes will expire after 10 minutes
+            new \DateInterval('PT1H') // id tokens will expire after 1 hour
+        );
+
+        $grant->setIssuer(static::getOAuthIssuer());
+        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+
+        // Enable the authentication code grant on the server
+        $server->enableGrantType(
+            $grant,
+            new \DateInterval('PT1H') // access tokens will expire after 1 hour
+        );
+
+        $grant = new SSO_Facade_OpenIdConnect_DeviceCodeGrant(
             new SSO_Facade_OAuth2_AuthCodeRepository(),
             new SSO_Facade_OAuth2_RefreshTokenRepository(),
             new SSO_Facade_OpenIdConnect_ClaimRepository(),

@@ -205,6 +205,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
 
         $config['doctrineIgnore'] = true;
         $type = $config[self::DOCTRINE_MAPPING_TYPE] ?? $config[self::TYPE];
+        if (($config[self::CONFIG][self::FIXED_LENGTH] ?? false) && !array_key_exists('fixed', $config[self::OPTIONS] ?? [])) {
+            $config[self::OPTIONS]['fixed'] = true;
+        }
         if (isset(self::$_typeMap[$type])) {
             if ($type === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;

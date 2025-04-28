@@ -106,6 +106,7 @@ class Tinebase_ModelConfiguration_Const {
      */
     public const FILTER_MODEL = 'filterModel';
     public const FILTER_OPTIONS = 'filterOptions';
+    public const FIXED_LENGTH = 'fixedLength';
     public const FLAGS = 'flags';
     public const FLD_ACCOUNT_GRANTS = 'account_grants';
     public const FLD_ALARMS = 'alarms';
