@@ -78,7 +78,8 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         if (! Tinebase_FileSystem::getInstance()->checkPathACL(
                 $pathRecord->getParent(),
                 'delete',
-                true, false
+                true, false,
+                $pathRecord
             )
         ) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete file: ' . $this->_path);
