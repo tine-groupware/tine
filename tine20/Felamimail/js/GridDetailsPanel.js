@@ -60,7 +60,7 @@ Ext.ns('Tine.Felamimail');
         this.defaultTpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-preparedPart"></div>',
-                '<div class="preview-panel-felamimail-body">{[values ? values.msg : ""]}</div>',
+                '{[values?.msg ? `<div class="preview-panel-felamimail-body">${values.msg}</div>` : ""]}',
             '</div>'
         );
     },
@@ -112,35 +112,57 @@ Ext.ns('Tine.Felamimail');
             this.setTemplateContent(record);
         }
     },
-    
-    /**
-     * wait for body content
-     * 
-     * @param {Tine.Felamimail.Model.Message} record
-     *
-     * @todo move to Tine.Felamimail.MailDetailsPanel?
-     */
-    waitForContent: function(record) {
-        if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
-            this.refetchBody(record, {
-                success: this.updateDetails.createDelegate(this, [record]),
-                failure: function (exception) {
-                    Tine.log.debug(exception);
-                    this.getLoadMask().hide();
-                    if (exception.code == 404) {
-                        this.defaultTpl.overwrite(this.singleRecordPanel.getTemplateBody(), {msg: this.app.i18n._('Message not available.')});
-                    } else {
-                        Tine.Felamimail.messageBackend.handleRequestException(exception);
-                    }
-                },
-                scope: this
-            });
-            this.defaultTpl.overwrite(this.singleRecordPanel.getTemplateBody(), {msg: ''});
-            this.getLoadMask().show();
-        } else {
-            this.getLoadMask().hide();
-        }
-    },
+
+     /**
+      * show template for multiple rows
+      *
+      * @param {Ext.grid.RowSelectionModel} sm
+      * @param {Mixed} body
+      */
+     showMulti: function(sm, body) {
+         let lastActive = this.grid.store.getAt(sm.lastActive);
+         if (!lastActive) {
+             lastActive = sm.selections.itemAt(sm.selections.length - 1);
+         }
+         if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
+             this.layout.setActiveItem(this.getSingleRecordPanel());
+         }
+         if (!lastActive.bodyIsFetched()) {
+             this.record = lastActive;
+             this.waitForContent(lastActive);
+         } else {
+             this.setTemplateContent(lastActive);
+         }
+     },
+
+     /**
+      * wait for body content
+      *
+      * @param {Tine.Felamimail.Model.Message} record
+      *
+      * @todo move to Tine.Felamimail.MailDetailsPanel?
+      */
+     waitForContent: function(record) {
+         if (! this.grid || this.grid.getSelectionModel().getCount() > 0) {
+             this.refetchBody(record, {
+                 success: this.updateDetails.createDelegate(this, [record]),
+                 failure: function (exception) {
+                     Tine.log.debug(exception);
+                     this.getLoadMask().hide();
+                     if (exception.code == 404) {
+                         this.defaultTpl.overwrite(this.singleRecordPanel.getTemplateBody(), {msg: this.app.i18n._('Message not available.')});
+                     } else {
+                         Tine.Felamimail.messageBackend.handleRequestException(exception);
+                     }
+                 },
+                 scope: this
+             });
+             this.defaultTpl.overwrite(this.singleRecordPanel.getTemplateBody(), {msg: ''});
+             this.getLoadMask().show();
+         } else {
+             this.getLoadMask().hide();
+         }
+     },
     
     /**
      * refetch message body
