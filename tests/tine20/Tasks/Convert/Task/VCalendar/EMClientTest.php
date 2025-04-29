@@ -94,17 +94,13 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestC
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals('NEEDS-ACTION', $task->status);
 
-        $vcalendar = str_replace('STATUS:NEEDS-ACTION', 'STATUS:CONFIRMED', $vcalendar);
+        $vcalendar = str_replace('STATUS:NEEDS-ACTION', 'STATUS:' . Tasks_Model_Task::TASK_STATUS_COMPLETED, $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals(Calendar_Model_Event::STATUS_CONFIRMED, $task->status);
+        $this->assertEquals(Tasks_Model_Task::TASK_STATUS_COMPLETED, $task->status);
 
-        $vcalendar = str_replace('STATUS:CONFIRMED', 'STATUS:TENTATIVE', $vcalendar);
+        $vcalendar = str_replace('STATUS:' . Tasks_Model_Task::TASK_STATUS_COMPLETED, 'STATUS:' . Tasks_Model_Task::TASK_STATUS_CANCELLED, $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals(Calendar_Model_Event::STATUS_TENTATIVE, $task->status);
-        
-        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELLED', $vcalendar);
-        $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $task->status);
+        $this->assertEquals(Tasks_Model_Task::TASK_STATUS_CANCELLED, $task->status);
     }
     
     /**

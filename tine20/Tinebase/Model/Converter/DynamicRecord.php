@@ -50,9 +50,12 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
         if (true === $this->_persistent && is_string($blob)) {
             $blob = json_decode($blob, true);
         }
-        if (!empty($model) && is_array($blob) && strpos((string) $model, '_Model_') && class_exists($model)) {
-            $newRecord = new $model($blob, $record->byPassFilters());
+        if (is_string($model) && is_array($blob) && strpos($model, '_Model_') && class_exists($model)) {
+            $newRecord = new $model($blob, true);
             $newRecord->runConvertToRecord();
+            if (!$record->byPassFilters()) {
+                $newRecord->isValid(true);
+            }
             return $newRecord;
         }
         return $blob;

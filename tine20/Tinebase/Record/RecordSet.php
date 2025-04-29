@@ -256,7 +256,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getIndexById($_id)
     {
-        return (isset($this->_idMap[$_id]) || array_key_exists($_id, $this->_idMap)) ? $this->_idMap[$_id] : false;
+        return $this->_idMap[$_id] ?? (is_numeric($_id) ?
+            (is_string($_id) ? ($this->_idMap[intval($_id)] ?? false) : ($this->_idMap[(string)$_id] ?? false))
+            : false);
     }
     
     /**

@@ -435,7 +435,7 @@ class Admin_Controller_UserTest extends TestCase
     {
         // try to set type for new user (without feature)
         $user = $this->_createTestUser([
-            'type' => 'somethin',
+            'type' => Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER,
         ]);
         self::assertSame(Tinebase_Model_FullUser::USER_TYPE_USER, $user->type);
 
@@ -444,7 +444,7 @@ class Admin_Controller_UserTest extends TestCase
         $features[Admin_Config::FEATURE_CHANGE_USER_TYPE] = true;
         Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
 
-        $user->type = 'somethin';
+        $user->type = Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER;
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         $updatedUser = Admin_Controller_User::getInstance()->update($user);
         self::assertEquals($user->type, $updatedUser->type);

@@ -33,6 +33,7 @@ class Sales_Model_EDocument_Dispatch_Custom extends Tinebase_Record_NewAbstract 
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Tinebase_Record_Validator_SubValidate::class],
                 ],
                 self::UI_CONFIG                 => [
                     'allowDuplicatePicks'           => true,
