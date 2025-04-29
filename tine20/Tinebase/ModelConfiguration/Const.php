@@ -308,7 +308,7 @@ class Tinebase_ModelConfiguration_Const {
     public const UI_CONFIG_LAYOUT_MEDIUM = 'medium';
     public const UI_CONFIG_LAYOUT_BIG = 'big';
     public const UI_CONFIG_LAYOUT_LARGE = 'large';
-
+    public const VALIDATE = 'validate';
     public const VALIDATORS = 'validators';
     public const VERSION = 'version';
 }

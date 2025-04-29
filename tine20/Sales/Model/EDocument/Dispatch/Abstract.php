@@ -33,6 +33,9 @@ abstract class Sales_Model_EDocument_Dispatch_Abstract extends Tinebase_Record_N
                         self::CONFIG                    => Sales_Config::DEFAULT_EDOCUMENT_DISPATCH_DOCUMENT_TYPES,
                     ],
                 ],
+                self::VALIDATORS                => [
+                    [Tinebase_Record_Validator_SubValidate::class],
+                ],
             ],
             self::FLD_EXPECTS_FEEDBACK      => [
                 self::TYPE                      => self::TYPE_BOOLEAN,

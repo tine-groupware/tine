@@ -49,7 +49,7 @@ class Tasks_Model_TaskFilterTest extends \PHPUnit\Framework\TestCase
             'geo'                  => 0.2345,
             'location'             => 'here and there',
             'organizer'            => Tinebase_Core::getUser()->getId(),
-            'priority'             => 2,
+            'priority'             => Tasks_Model_Priority::LOW,
             'status'               => 'NEEDS-ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
