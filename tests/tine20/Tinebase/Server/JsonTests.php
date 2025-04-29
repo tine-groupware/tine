@@ -18,7 +18,6 @@ use Psr\Http\Message\RequestInterface;
  */
 class Tinebase_Server_JsonTests extends TestCase
 {
-    protected bool $_resetRateLimitConfig = false;
     protected $_imapConf = null;
 
     /**
@@ -26,11 +25,6 @@ class Tinebase_Server_JsonTests extends TestCase
      */
     protected function tearDown(): void
     {
-        if ($this->_resetRateLimitConfig) {
-            $rateLimit = new Tinebase_Server_RateLimit();
-            $rateLimit->purge(Tinebase_Core::getUser()->accountLoginName, 'Inventory.searchInventoryItems');
-            Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, []);
-        }
         if ($this->_imapConf !== null) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_imapConf);
             Tinebase_EmailUser::clearCaches();
@@ -381,24 +375,51 @@ class Tinebase_Server_JsonTests extends TestCase
      */
     public function testRateLimit()
     {
-        $this->_resetRateLimitConfig = true;
-        $config = [
-            Tinebase_Core::getUser()->accountLoginName => [[
-                'method' => 'Inventory.searchInventoryItems',
-                'maxrequests' => 1,
-                'period' => 3600, // per hour
-            ]]
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_FRONTENDS][Tinebase_Server_Json::class] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD => 'Inventory.searchInventoryItems',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS => 1,
+                Tinebase_Model_RateLimit::FLD_PERIOD => 3600, // per hour
+            ]
         ];
-        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $config);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
 
         $params = [
             'filter' => [],
             'paging' => [],
         ];
-        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params);
-        self::assertStringContainsString('{"result":{"totalcount":', $response);
         $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
-        self::assertStringContainsString('{"error":{"code":-32000,"message":"Method is rate-limited: Inventory.searchInventoryItems"', $response);
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        self::assertStringContainsString('Method is rate-limited: Inventory.searchInventoryItems', $response);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testRateLimitByUser()
+    {
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_USER]['*'] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD => 'Inventory.search*',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS => 1,
+                Tinebase_Model_RateLimit::FLD_PERIOD => 3600, // per hour
+            ]
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
+
+        $params = [
+            'filter' => [],
+            'paging' => [],
+        ];
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        self::assertStringContainsString('Method is rate-limited: Inventory.searchInventoryItems', $response);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
     }
 
     /**

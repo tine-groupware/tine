@@ -542,6 +542,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_PersistentFilterGrant::class,
                 Tinebase_Model_PersistentObserver::class,
                 Tinebase_Model_Preference::class,
+                Tinebase_Model_RateLimit::class,
                 Tinebase_Model_Registration::class,
                 Tinebase_Model_Relation::class,
                 Tinebase_Model_Role::class,

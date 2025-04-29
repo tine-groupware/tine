@@ -9,6 +9,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
+use \IPLib\Factory;
+
 /**
  * Helper class
  *
@@ -658,5 +660,25 @@ class Tinebase_Helper
 </html>';
 
             return $html;
+    }
+
+    public static function getIpAddress()
+    {
+        if (($_SERVER['HTTP_X_REAL_IP'] ?? false) && $ip = Factory::parseAddressString($_SERVER['HTTP_X_REAL_IP']) ) {
+            return $ip;
+        }
+        return false;
+    }
+    public static function ipAddressMatchNetmasks($netmasks)
+    {
+        if ($ip = self::getIpAddress() && !empty($netmasks)) {
+            foreach ($netmasks as $netmask) {
+                if (Factory::parseRangeString($netmask)?->contains($ip)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

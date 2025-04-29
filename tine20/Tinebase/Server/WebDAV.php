@@ -306,6 +306,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $_SERVER['QUERY_STRING'] = str_replace('frontend=webdav&', '',
                 $_SERVER['QUERY_STRING'] ?? '');
 
+            self::_checkRateLimit(Tinebase_Server_WebDAV::class, $this->_request->getMethod() . '.' . $_SERVER['REQUEST_URI']);
+
             self::$_server->exec();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -327,6 +329,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     . ' Maintenance mode / session problem: ' . $zse->getMessage());
             }
             @header('HTTP/1.1 503 Service Unavailable');
+        } catch (Tinebase_Exception_RateLimit $ter) {
+            @header('HTTP/1.1 429 Too Many Requests');
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');

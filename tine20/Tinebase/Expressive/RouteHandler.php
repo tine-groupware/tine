@@ -218,6 +218,8 @@ class Tinebase_Expressive_RouteHandler
             $callable = [new $this->_class, $this->_method];
         }
 
+        Tinebase_Server_Expressive::checkRateLimit($this->_class . '.' . $this->_method);
+
         return call_user_func_array($callable, $orderedParams);
     }
 

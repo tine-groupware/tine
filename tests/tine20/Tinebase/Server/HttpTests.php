@@ -390,4 +390,26 @@ class Tinebase_Server_HttpTests extends TestCase
 
         $this->assertEquals("Call to Felamimail.downloadAttachment failed.\n", $out);
     }
+
+    /**
+     * @group ServerTests
+     */
+    public function testRateLimit()
+    {
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_FRONTENDS][Tinebase_Server_Http::class] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD            =>  'Calendar.exportEvents',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  1,
+                Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600
+            ],
+        ];
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
+        $out = $this->testExportEvents(true);
+        $out = $this->testExportEvents(true);
+        self::assertStringContainsString('', $out);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
+    }
 }

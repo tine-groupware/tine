@@ -82,6 +82,11 @@ class Tinebase_Core
     public const USER = 'currentAccount';
 
     /**
+     * constant for anonymous user
+     */
+    public const USER_ANONYMOUS = 'anon';
+
+    /**
      * const for current users credentialcache
      */
     public const USERCREDENTIALCACHE = 'usercredentialcache';

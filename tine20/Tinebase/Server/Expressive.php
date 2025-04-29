@@ -176,4 +176,9 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
         $this->_emitter = $emitter;
         return $oldEmitter;
     }
+
+    public static function checkRateLimit($method): void
+    {
+        self::_checkRateLimit('Tinebase_Server_Expressive', $method);
+    }
 }

@@ -339,7 +339,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
 
                 $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
-                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon') .
+                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : Tinebase_Core::USER_ANONYMOUS) .
                     ($appPwd ? $appPwd->getId() : ''));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -422,7 +422,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             self::_checkAreaLock($method);
-            self::_checkRateLimit($method);
+            self::_checkRateLimit(Tinebase_Server_Json::class, $method);
             
             $this->_methods[] = $method;
 
