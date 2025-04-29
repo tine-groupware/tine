@@ -217,6 +217,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     public const RATE_LIMITS = 'rateLimits';
+    public const RATE_LIMITS_USER = 'user';
+    public const RATE_LIMITS_IP = 'ip';
+    public const RATE_LIMITS_FRONTENDS = 'frontends';
 
     /**
      * default sales tax
@@ -2190,25 +2193,71 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR => array()
         ),
         /**
-         * Configure rate limits by user and method
+         * Configure rate limits by user / ip / frontends
          *
-         * example:
+         * - group priority : user > IP > frontends
+         * - both rate limit key and method are validated by regex , exact match has higher priority than wildcard '*'
+         * - example config:
          *
-         * ['LOGIN_NAME' => [
-         *   'method' => 'Felamimail.searchMessages',
-         *   'maxrequests' => 100,
-         *   'period' => 3600, // per hour
-         * ]]
-         */
+         *  $key   => [
+         *      [
+         *          Tinebase_Model_RateLimit::FLD_METHOD            =>  'Filemanager.save*', // all save methods in Filemanager_Frontend_Json
+         *          Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  100, // times
+         *          Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600 // minutes
+         *      ]
+         *  ]
+         *
+         * - frontend method regex examples:
+         *      Tinebase_Server_Expressive   => 'GDPR_Controller_DataIntendedPurposeRecord.publicApiPostManageConsent',
+         *      Tinebase_Server_Json         => 'Felamimail.search*',
+         *      Tinebase_Server_WebDAV       => // todo: support methods or request uri regex like 'PROPFIND.calendar*'
+         *      Tinebase_Server_Http         => 'Felamimail.getResource',
+         *
+        **/
         self::RATE_LIMITS => [
             self::LABEL                 => 'Rate Limits',
             self::DESCRIPTION           => 'Configure rate limits by user and method',
-            self::TYPE                  => self::TYPE_ARRAY,
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
-            self::DEFAULT_STR           => [],
+            self::CONTENT               => [
+                // key is the user login name, eg: 'tine20admin' or Tinebase_Core::USER_ANONYMOUS
+                self::RATE_LIMITS_USER   => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                // key is the netmask, eg: '10.0.10.10',
+                self::RATE_LIMITS_IP   => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::RATE_LIMITS_FRONTENDS   => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [
+                        'Tinebase_Server_Expressive'   => [],
+                        'Tinebase_Server_Json'      => [],
+                        'Tinebase_Server_WebDAV'    => [],
+                        'Tinebase_Server_Http'     => [],
+                        // possible fallback config for all frontends
+                        /*
+                        '*'     => [
+                            [
+                                Tinebase_Model_RateLimit::FLD_METHOD            =>  '*',
+                                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  10000,
+                                Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600
+                            ],
+                        ],
+                        */
+                    ],
+                ],
+            ]
         ],
+
         self::SALES_TAX => array(
             //_('Sales Tax Default')
             self::LABEL => 'Sales Tax Default',

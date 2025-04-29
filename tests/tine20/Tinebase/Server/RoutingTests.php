@@ -170,4 +170,46 @@ class Tinebase_Server_RoutingTests extends TestCase
             self::assertGreaterThanOrEqual(0, $decodedContent['totalEmailMailingList']);
         }
     }
+
+    /**
+     * @group ServerTests
+     */
+    public function testRateLimit()
+    {
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_FRONTENDS][Tinebase_Server_Expressive::class] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD            =>  Tinebase_Controller::class . '.getStatusMetrics',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  1,
+                Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600
+            ],
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
+
+        $apiKey = 'testmetrics123';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::METRICS_API_KEY, $apiKey);
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+            'GET /metrics/' . $apiKey . ' HTTP/1.1' . "\r\n"
+            . 'Host: localhost' . "\r\n"
+            . 'User-Agent: Tine 2.0 UNITTEST' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . "\r\n"
+        ));
+
+        $emitter = new Tinebase_Server_UnittestEmitter();
+        $server = new Tinebase_Server_Expressive($emitter);
+        /** @var \Symfony\Component\DependencyInjection\Container $container */
+        $container = Tinebase_Core::getPreCompiledContainer();
+        $container->set(\Psr\Http\Message\RequestInterface::class, $request);
+        Tinebase_Core::setContainer($container);
+        $server->handle();
+        $server->handle();
+        $emitter->response->getBody()->rewind();
+        $body = $emitter->response;
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
+        self::assertNotEmpty($body);
+        self::assertEquals(429, $body->getStatusCode());
+    }
 }
