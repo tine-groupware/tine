@@ -1,3 +1,18 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Felamimail\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
 msgid "Manage personal email accounts"
 msgstr "Manage personal email accounts"
 
@@ -21,6 +36,9 @@ msgstr "Additional Personal External Account"
 
 msgid "Shared System Account"
 msgstr "Shared System Account"
+
+msgid "Shared External Account"
+msgstr "Shared External Account"
 
 msgid "Additional Personal System Account"
 msgstr "Additional Personal System Account"
@@ -1190,6 +1208,13 @@ msgid_plural "Flag lists"
 msgstr[0] "Flag list"
 msgstr[1] "Flag lists"
 
+#, python-brace-format
+msgid "Delete {0}"
+msgstr "Delete {0}"
+
+msgid "Do you really want to delete the following folders?"
+msgstr "Do you really want to delete the following folders?"
+
 msgid "Empty Folder"
 msgstr "Empty Folder"
 
@@ -1231,8 +1256,9 @@ msgstr "Creating {0}..."
 msgid "Edit Account"
 msgstr "Edit Account"
 
-msgid "Mark Folder as read"
-msgstr "Mark Folder as read"
+#, python-brace-format
+msgid "Mark {0} as read"
+msgstr "Mark {0} as read"
 
 msgid "Update Folder List"
 msgstr "Update Folder List"
@@ -1243,8 +1269,9 @@ msgstr "Agree that this account can be transferred to other users"
 msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
 msgstr "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
 
-msgid "Move Folder"
-msgstr "Move Folder"
+#, python-brace-format
+msgid "Move {0}"
+msgstr "Move {0}"
 
 msgid "Invalid Selection"
 msgstr "Invalid Selection"
