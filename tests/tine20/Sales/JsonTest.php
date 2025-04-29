@@ -358,6 +358,49 @@ class Sales_JsonTest extends TestCase
         $this->assertTrue(isset($filterModel['_filterModel']['products']), 'products not found in filter model: ' . print_r($filterModel, true));
     }
 
+    public function testDebitorDispatchConfig(): void
+    {
+        $createFun = fn($id = null) => $this->_instance->saveCustomer([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION},
+                Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Custom::class,
+                Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG => [
+                    Sales_Model_EDocument_Dispatch_Custom::FLD_DISPATCH_CONFIGS => [[
+                        Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Manual::class,
+                        Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG => [
+                            Sales_Model_EDocument_Dispatch_Manual::FLD_DOCUMENT_TYPES => [
+                                [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => array_merge([
+                                    '__foo' => 'bar',
+                                ], $id ? ['id' => $id] : [])],
+                            ],
+                        ],
+                    ]],
+                ],
+            ]],
+        ]);
+
+        try {
+            $createFun();
+            $this->fail('validation should fail');
+        } catch (Tinebase_Exception_Record_Validation) {}
+
+        try {
+            $createFun('wrongId');
+            $this->fail('validation should fail');
+        } catch (Tinebase_Exception_Record_Validation) {}
+
+        try {
+            $customer = $createFun(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP);
+        } catch (Tinebase_Exception_Record_Validation) {
+            $this->fail('validation should NOT fail');
+        }
+
+        $this->assertSame(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $customer[Sales_Model_Customer::FLD_DEBITORS][0][Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG]
+            [Sales_Model_EDocument_Dispatch_Custom::FLD_DISPATCH_CONFIGS][0][Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG]
+            [Sales_Model_EDocument_Dispatch_Abstract::FLD_DOCUMENT_TYPES][0][Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE]);
+    }
+
     public function testSearchEmptyDateTimeFilter()
     {
         Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
@@ -381,6 +424,8 @@ class Sales_JsonTest extends TestCase
 
     public function testChangeCustomersDebitorNumber(): void
     {
+        Sales_Controller_Debitor::getInstance()->delete(Sales_Controller_Debitor::getInstance()->getAll());
+        
         $customer = $this->_instance->saveCustomer([
             'name' => Tinebase_Record_Abstract::generateUID(),
             Sales_Model_Customer::FLD_DEBITORS => [[

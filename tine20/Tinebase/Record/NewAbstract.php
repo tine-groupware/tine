@@ -452,6 +452,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
                         $this->{$fieldName} = new $modelName($_data[$fieldName], $this->bypassFilters, true);
                         $this->{$fieldName}->runConvertToRecord();  
                     }
+                } elseif (self::TYPE_KEY_FIELD === $config[self::TYPE]) {
+                    if (isset($_data[$fieldName][self::ID])) {
+                        $this->{$fieldName} = $_data[$fieldName][self::ID];
+                    }
                 }
             }
         }
