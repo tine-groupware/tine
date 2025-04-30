@@ -10,8 +10,8 @@
  */
 class Calendar_Model_EventType extends Tinebase_Record_Abstract
 {
-    const MODEL_NAME_PART = 'EventType';
-    const TABLE_NAME = 'cal_event_type';
+    public const MODEL_NAME_PART = 'EventType';
+    public const TABLE_NAME = 'cal_event_type';
 
     /**
      * application the record belongs to
