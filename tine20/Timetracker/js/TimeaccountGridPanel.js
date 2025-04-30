@@ -115,6 +115,23 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     },
 
     /**
+     * Return CSS class to apply to rows depending upon record data
+     *
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Integer} index
+     * @return {String}
+     */
+    getViewRowClass: function(record, index) {
+        let className = '';
+        const budget = record.get('budget') ?? 0;
+        const percent = budget > 0 ? Math.round((record.get('budget_booked_hours') ?? 0) / (budget * 60) * 100) : 0;
+        if (percent >= 100) {
+            className += 'flag_flagged ';
+        }
+        return className;
+    },
+
+    /**
      * add custom items to context menu
      *
      * @return {Array}
