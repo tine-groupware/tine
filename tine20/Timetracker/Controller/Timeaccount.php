@@ -104,7 +104,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
 
                 if (!$confirmHeader) {
                     $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-                    $timesheetTitles = null;
                     $totalCount = 0;
                     $timesheetTitles = '<div style="max-height: 300px; overflow-y: auto; padding: 5px;">'; // Start with a container that has scrolling
                     $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
@@ -147,6 +146,11 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                 }
             }
         }
+
+        if (!empty($_record->budget) && $_record->budget !== $_oldRecord->budget) {
+            $_record->budget_booked_hours = Timetracker_Controller_Timeaccount::getInstance()->getBudgetBookedHoursByTimeaccountId($_record->getId());
+            $_record->budget_filled_level = round(($_record->budget_booked_hours / $_record->budget), 2) * 100;
+        }
     }
 
     /**
@@ -161,22 +165,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
         $this->_resolveTimesheets($updatedRecord, $currentRecord);
-    }
-
-    /**
-     * inspect update of one record
-     * @param $_record
-     * @param $_oldRecord
-     * @return  void
-     */
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
-
-        if (!empty($_record->budget) && $_record->budget !== $_oldRecord->budget) {
-            $_record->budget_booked_hours = Timetracker_Controller_Timeaccount::getInstance()->getBudgetBookedHoursByTimeaccountId($_record->getId());
-            $_record->budget_filled_level = round(($_record->budget_booked_hours / $_record->budget), 2) * 100;
-        }
     }
 
     /**
