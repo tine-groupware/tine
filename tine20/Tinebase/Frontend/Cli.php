@@ -1126,7 +1126,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (! $actionQueue->hasAsyncBackend()) {
                 $message = 'QUEUE INACTIVE';
             } else {
-                $actionLRQueue = Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
+                if ($queueConfig->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING}) {
+                    $actionLRQueue = Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN);
+                } else {
+                    $actionLRQueue = null;
+                }
                 try {
                     if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
                             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
@@ -1195,69 +1199,71 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
 
 
-                    if (null === ($lastLRDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION))) {
-                        throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION .
-                            ' not set');
-                    }
-                    if (null === ($lastLRDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE))) {
-                        throw new Tinebase_Exception('state ' .
-                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE . ' not set');
-                    }
-                    $lastLRDuration = floatval($lastLRDuration);
-                    $lastLRDurationUpdate = intval($lastLRDurationUpdate);
+                    if ($actionLRQueue) {
+                        if (null === ($lastLRDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION))) {
+                            throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION .
+                                ' not set');
+                        }
+                        if (null === ($lastLRDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE))) {
+                            throw new Tinebase_Exception('state ' .
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE . ' not set');
+                        }
+                        $lastLRDuration = floatval($lastLRDuration);
+                        $lastLRDurationUpdate = intval($lastLRDurationUpdate);
 
-                    $now = time();
-                    $diff = 0;
-                    if (false !== ($currentJobId = $actionLRQueue->peekJobId())) {
-                        if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
-                                'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID))) {
-                            if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE))) {
-                                throw new Tinebase_Exception('state ' .
-                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE . ' not set');
-                            }
-                            if (($diff = $now - intval($lastChange)) > (15 * 60)) {
-                                throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
-                            }
+                        $now = time();
+                        $diff = 0;
+                        if (false !== ($currentJobId = $actionLRQueue->peekJobId())) {
+                            if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
+                                    'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID))) {
+                                if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                        Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE))) {
+                                    throw new Tinebase_Exception('state ' .
+                                        Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE . ' not set');
+                                }
+                                if (($diff = $now - intval($lastChange)) > (15 * 60)) {
+                                    throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
+                                }
 
+                            } else {
+                                Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE, (string)$now);
+                                Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, $currentJobId);
+                            }
                         } else {
                             Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE, (string)$now);
-                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, $currentJobId);
+                                Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, '');
                         }
-                    } else {
-                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-                            Tinebase_Application::STATE_ACTION_QUEUE_LR_LAST_JOB_ID, '');
-                    }
 
-                    if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT}) {
-                        throw new Tinebase_Exception('last duration > '
-                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT} . ' sec - ' . $lastLRDuration);
-                    }
-                    if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT}) {
-                        throw new Tinebase_Exception('last duration update > '
-                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastLRDurationUpdate));
-                    }
+                        if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT}) {
+                            throw new Tinebase_Exception('last duration > '
+                                . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_CRIT} . ' sec - ' . $lastLRDuration);
+                        }
+                        if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT}) {
+                            throw new Tinebase_Exception('last duration update > '
+                                . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT} . ' sec - ' . ($now - $lastLRDurationUpdate));
+                        }
 
-                    if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
-                        $warn = 'last job id change > '
-                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
-                    }
+                        if ($diff > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
+                            $warn = 'last job id change > '
+                                . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $diff;
+                        }
 
-                    if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
-                        $warn = 'last duration > '
-                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $lastLRDuration;
-                    }
+                        if ($lastLRDuration > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} && null === $warn) {
+                            $warn = 'last duration > '
+                                . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DURATION_WARN} . ' sec - ' . $lastLRDuration;
+                        }
 
-                    if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN}
-                        && null === $warn
-                    ) {
-                        $warn = 'last duration update > '
-                            . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN} . ' sec - '
-                            . ($now - $lastLRDurationUpdate);
+                        if ($now - $lastLRDurationUpdate > $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN}
+                            && null === $warn
+                        ) {
+                            $warn = 'last duration update > '
+                                . $queueConfig->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN} . ' sec - '
+                                . ($now - $lastLRDurationUpdate);
+                        }
                     }
 
                     $queueState = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
@@ -1283,8 +1289,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                                 ->{Tinebase_Config::ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT};
                     }
 
-                    $queueSizeLR = $actionLRQueue->getQueueSize();
-                    if (null === $warn && $actionLRQueue->getDaemonStructSize() > $queueConfig
+                    $queueSizeLR = $actionLRQueue?->getQueueSize() ?: 0;
+                    if (null === $warn && $actionLRQueue && $actionLRQueue->getDaemonStructSize() > $queueConfig
                             ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT}) {
                         $warn = 'LR daemon struct size > ' . $queueConfig
                                 ->{Tinebase_Config::ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT};
