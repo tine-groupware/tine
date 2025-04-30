@@ -811,6 +811,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
             $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
         }
+        if (!$_attendee->displaycontainer_id) {
+            $_attendee->displaycontainer_id = null;
+        }
 
         /** @var Calendar_Model_Attender $createdAttendee */
         $createdAttendee = $this->_attendeeBackend->create($_attendee);
@@ -834,6 +837,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
             $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
+        }
+        if (!$_attendee->displaycontainer_id) {
+            $_attendee->displaycontainer_id = null;
         }
         
         return $this->_attendeeBackend->update($_attendee);
