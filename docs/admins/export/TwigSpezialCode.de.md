@@ -1,19 +1,6 @@
 Spezieller tine Twig-Code:
 ====
 
-Neue Zeile
-----
-Das Template erzeugt bei Export nur eine neue Zeile, wenn es auch auszugebende Daten gibt.  
-Im Normalfall würde im Template ein `Umbruch = [Enter]` oder ein sogenannter `weicher Umbruch = [Enter] + [Shift]` gesetzt werden, um z.B. die einzelnen (Adress)Daten in einer neuen Zeile auszugeben.
-
-***Beispiele:***  
-
-`{twig:addNewLine(record.adr_two_street)}${twig:addNewLine(record.adr_two_street2)}${twig:record.adr_two_postalcode}${twig:addNewLine(record.adr_two_locality)}${twig:addNewLine(record.adr_two_region)}${twig:addNewLine(record. adr_two_countryname)}`
-
-oder
-
-`{{addNewLine(record.customfields.intentions.value)}}`
-
 Farbsteuerung in Abhängigkeit von Dateninhalten
 ----
 Die Farbsteuerung kann z.B. in einzelnen Zellen von Tabellen genutzt werden.  
