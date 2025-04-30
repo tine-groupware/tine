@@ -422,7 +422,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             $deviceCode = $deviceCodeCreateFun();
         }
 
-        $uri = Tinebase_Core::getUrl() . '/oauth2/device/user';
+        $uri = Tinebase_Core::getUrl() . '/sso/oauth2/device/user';
         $response = new \Laminas\Diactoros\Response(
             headers: [
                 'Content-Type' => 'application/json',
