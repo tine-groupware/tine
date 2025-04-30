@@ -721,12 +721,7 @@ class Setup_Controller
                     }
                 }
 
-                if (Setup_SchemaTool::hasSchemaUpdates(true)) {
-                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                        ' pending schema updates found, this should not happen!');
-                    if ($options['strict']) {
-                        throw new Setup_Backend_Exception_NotImplemented('missing schema updates in update scripts');
-                    }
+                if (Setup_SchemaTool::hasSchemaUpdates(true, $options['strict'])) {
                     Setup_SchemaTool::updateAllSchema();
                 }
 
