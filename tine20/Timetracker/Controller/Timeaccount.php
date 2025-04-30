@@ -164,6 +164,22 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     }
 
     /**
+     * inspect update of one record
+     * @param $_record
+     * @param $_oldRecord
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        if (!empty($_record->budget) && $_record->budget !== $_oldRecord->budget) {
+            $_record->budget_booked_hours = Timetracker_Controller_Timeaccount::getInstance()->getBudgetBookedHoursByTimeaccountId($_record->getId());
+            $_record->budget_filled_level = round(($_record->budget_booked_hours / $_record->budget), 2) * 100;
+        }
+    }
+
+    /**
      * inspects delete action
      *
      * @param array $_ids
@@ -410,6 +426,82 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                     'is_cleared' => true,
                 ]));
             }
+        }
+    }
+
+    /**
+     * implement logic for each controller in this function
+     *
+     * @param Tinebase_Event_Abstract $_eventObject
+     */
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        switch (get_class($_eventObject)) {
+            case Tinebase_Event_Record_Delete::class:
+            case Tinebase_Event_Record_Update::class:
+                if ($_eventObject->observable instanceof Timetracker_Model_Timesheet) {
+                    $newDuration = $_eventObject->observable->duration ?? 0;
+                    $oldDuration = $_eventObject->oldRecord->duration ?? 0;
+                    if ($newDuration !== $oldDuration) {
+                        $timeaccountId = $_eventObject->observable->timeaccount_id['id'] ??  $_eventObject->observable->timeaccount_id;
+                        $timeaccount = $this->get($timeaccountId);
+                        if (empty($timeaccount->budget)) {
+                            return;
+                        }
+                        if (empty($timeaccount->budget_booked_hours)) {
+                            $timeaccount->budget_booked_hours = Timetracker_Controller_Timeaccount::getInstance()->getBudgetBookedHoursByTimeaccountId($timeaccount->getId());
+                        } else {
+                            if ($_eventObject->observable->is_deleted) {
+                                $newDuration = -$newDuration;
+                            }
+                            $timeaccount->budget_booked_hours = $timeaccount->budget_booked_hours + (($newDuration - $oldDuration) / 60);
+                        }
+                        $timeaccount->budget_filled_level = round(($timeaccount->budget_booked_hours / $timeaccount->budget), 2) * 100;
+                        $updatedTimeaccount = Timetracker_Controller_Timeaccount::getInstance()->update($timeaccount);
+                    }
+                }
+                break;
+        }
+    }
+
+    public static function calculateBudgetInHours()
+    {
+        try {
+            $taController = Timetracker_Controller_Timeaccount::getInstance();
+            $filterData = [
+                'field' => 'budget',
+                'operator' => 'greater',
+                'value' => 0
+            ];
+            $timeaccounts = $taController->search(new Timetracker_Model_TimeaccountFilter([$filterData]));
+            foreach ($timeaccounts as $timeaccount) {
+                $timeaccount->budget_booked_hours = $taController->getBudgetBookedHoursByTimeaccountId($timeaccount->getId());
+                $updatedTimeaccount = Timetracker_Controller_Timeaccount::getInstance()->update($timeaccount);
+            }
+        } catch (Exception $e) {
+            Tinebase_Exception::class::log($e);
+        } finally {
+            return true;
+        }
+    }
+
+    public static function getBudgetBookedHoursByTimeaccountId($timeaccountId)
+    {
+        $budgetBookedHours = 0;
+        try {
+            $filterData = [
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timeaccountId],
+            ];
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, $filterData);
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
+
+            foreach ($timesheets as $timesheet) {
+                $budgetBookedHours += $timesheet->duration;
+            }
+        } catch (Exception $e) {
+            Tinebase_Exception::class::log($e);
+        } finally {
+            return $budgetBookedHours / 60;
         }
     }
 }

@@ -979,19 +979,20 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         break;
                     }
 
-                    $date = $_eventObject->oldRecord ?
-                        ($_eventObject->oldRecord->start_date->isEarlier($_eventObject->observable->start_date) ?
-                            $_eventObject->oldRecord->start_date : $_eventObject->observable->start_date)
-                        : $_eventObject->observable->start_date;
-                    // context async / sync
-                    $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
-                    if (isset($context['tsSyncron'])) {
-                        $this->calculateReportsForAccountId($_eventObject->observable->account_id, $date);
-                    } else {
-                        Tinebase_ActionQueue::getInstance()->queueAction(HumanResources_Controller_DailyWTReport::class
-                            . '.calculateReportsForAccountId', $_eventObject->observable->account_id, $date);
+                    if (Timetracker_Controller_Timesheet::getInstance()->isTSDateChanged($_eventObject->observable, $_eventObject->oldRecord)) {
+                        $date = $_eventObject->oldRecord ?
+                            ($_eventObject->oldRecord->start_date->isEarlier($_eventObject->observable->start_date) ?
+                                $_eventObject->oldRecord->start_date : $_eventObject->observable->start_date)
+                            : $_eventObject->observable->start_date;
+                        // context async / sync
+                        $context = (array)HumanResources_Controller_DailyWTReport::getInstance()->getRequestContext();
+                        if (isset($context['tsSyncron'])) {
+                            $this->calculateReportsForAccountId($_eventObject->observable->account_id, $date);
+                        } else {
+                            Tinebase_ActionQueue::getInstance()->queueAction(HumanResources_Controller_DailyWTReport::class
+                                . '.calculateReportsForAccountId', $_eventObject->observable->account_id, $date);
+                        }
                     }
-
                 } elseif ($_eventObject->observable instanceof HumanResources_Model_FreeTime) {
                     /* order matters start */
                     $tsRaii = new Tinebase_RAII(Timetracker_Controller_Timesheet::getInstance()->assertPublicUsage());
