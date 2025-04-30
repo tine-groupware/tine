@@ -1613,9 +1613,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         // rebuild paths
-        if ($this->_isRecordPathFeatureEnabled() && ($updatedRecord::generatesPaths() ||
-                ($record->has('relations') &&
-                    $this->_checkRelationsForPathGeneratingModels($record, $currentRecord)))) {
+        if ($this->_isRecordPathFeatureEnabled() && $updatedRecord::generatesPaths()) {
             Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
         }
 
@@ -1762,45 +1760,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 $record->relations->removeRecordsById($remove);
             }
         }
-    }
-
-    /**
-     * @param Tinebase_Record_Interface $newRecord
-     * @param Tinebase_Record_Interface|null $currentRecord
-     * @return bool
-     */
-    protected function _checkRelationsForPathGeneratingModels(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $currentRecord = null)
-    {
-        if (is_array($newRecord->relations)) {
-            foreach ($newRecord->relations as $relation) {
-                if (Tinebase_Model_Relation::DEGREE_CHILD !== $relation['related_degree'] &&
-                        Tinebase_Model_Relation::DEGREE_PARENT !== $relation['related_degree']) {
-                    continue;
-                }
-                /** @var Tinebase_Record_Interface $model */
-                $model = $relation['related_model'];
-                if ($model::generatesPaths()) {
-                    return true;
-                }
-            }
-        }
-
-        if (null !== $currentRecord && is_object($currentRecord->relations)) {
-            /** @var Tinebase_Model_Relation $relation */
-            foreach ($currentRecord->relations as $relation) {
-                if (Tinebase_Model_Relation::DEGREE_CHILD !== $relation->related_degree &&
-                    Tinebase_Model_Relation::DEGREE_PARENT !== $relation->related_degree) {
-                    continue;
-                }
-                /** @var Tinebase_Record_Interface $model */
-                $model = $relation->related_model;
-                if ($model::generatesPaths()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**
