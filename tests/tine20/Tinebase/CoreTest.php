@@ -69,6 +69,12 @@ class Tinebase_CoreTest extends TestCase
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
     }
 
+    public function testFailedApplicationInstance(): void
+    {
+        $this->expectException(Tinebase_Exception_NotFound::class);
+        Tinebase_Core::getApplicationInstance(Tinebase_Model_AreaLockConfig::class);
+    }
+    
     public function testGetDispatchServerActiveSync()
     {
         $request = Tinebase_Http_Request::fromString(
