@@ -63,12 +63,12 @@ class SSO_Controller extends Tinebase_Controller_Event
                 self::class, 'publicOAuthDeviceAuth', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-            $routeCollector->addRoute(['GET'], '/oauth2/device/user[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->addRoute(['GET', 'POST'], '/oauth2/device/user[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicOAuthDeviceUser', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-            $routeCollector->addRoute(['POST'], '/oauth2/device/user[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
-                self::class, 'publicOAuthDeviceUserPost', [
+            $routeCollector->addRoute(['POST'], '/oauth2/device/userlogin[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOAuthDeviceUserLogin', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
             $routeCollector->post('/oauth2/register', (new Tinebase_Expressive_RouteHandler(
@@ -331,7 +331,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
-    public static function publicOAuthDeviceUserPost(?string $userCode = null): \Psr\Http\Message\ResponseInterface
+    public static function publicOAuthDeviceUserLogin(?string $userCode = null): \Psr\Http\Message\ResponseInterface
     {
         if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
             return self::serviceNotEnabled();
@@ -344,7 +344,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         if (Tinebase_Core::getUser()) {
-            $e = (new Tinebase_Exception_Auth_Redirect())->setUrl((string)$request->getUri());
+            $e = (new Tinebase_Exception_Auth_Redirect())->setUrl(str_replace('/sso/oauth2/device/userlogin', '/sso/oauth2/device/user', (string)$request->getUri()));
         } else {
             $e = new Tinebase_Exception_Auth_PwdRequired('Wrong username or password!');
         }
@@ -360,18 +360,22 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        $parsedBody = $request->getParsedBody();
 
-        if ($user = Tinebase_Core::getUser()) {
-            if (null === $userCode) {
-                // TODO FIXME render user dialog
-                return static::getOAuthErrorResponse('invalid_request', 'user dialog should be rendered here');
-            }
-
+        $deviceCode = null;
+        if ($userCode) {
             $deviceCode = SSO_Controller_OAuthDeviceCode::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_OAuthDeviceCode::class, [
                     [TMFA::FIELD => SSO_Model_OAuthDeviceCode::FLD_USER_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $userCode],
                     [TMFA::FIELD => SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()],
                 ]))->getFirstRecord();
+        }
+
+        if ($user = Tinebase_Core::getUser()) {
+            if (! ($parsedBody['confirmed'] ?? false)) {
+                // TODO FIXME render user dialog
+                return static::getOAuthErrorResponse('invalid_request', 'user dialog should be rendered here');
+            }
 
             if (null === $deviceCode) {
                 // TODO FIXME
@@ -388,7 +392,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         return static::renderLoginPage(
-            data: ['url' => (string)$request->getUri()],
+            data: ['url' => str_replace('/sso/oauth2/device/user', '/sso/oauth2/device/userlogin', (string)$request->getUri())],
             url: (string)$request->getUri()
         );
     }
@@ -403,14 +407,13 @@ class SSO_Controller extends Tinebase_Controller_Event
             return static::getOAuthErrorResponse('invalid_request');
         }
 
-        try {
-            $oauthDevice = SSO_Controller_OAuthDevice::getInstance()->get($clientId);
-        } catch (Tinebase_Exception_NotFound) {
+        if (null === ($rp = (new SSO_Facade_OAuth2_ClientRepository)->getClientEntity($clientId)?->getRelyingPart()) ||
+                null === $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS}->find(SSO_Model_OAuthGrant::FLD_GRANT, SSO_Config::OAUTH2_GRANTS_DEVICE_CODE)) {
             return static::getOAuthErrorResponse('invalid_client');
         }
 
         $deviceCodeCreateFun = fn() => SSO_Controller_OAuthDeviceCode::getInstance()->create(new SSO_Model_OAuthDeviceCode([
-            SSO_Model_OAuthDeviceCode::FLD_DEVICE_ID => $oauthDevice->getId(),
+            SSO_Model_OAuthDeviceCode::FLD_RELYING_PARTY_ID => $rp->getId(),
             SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addMinute(16), // add one more minute than we tell the client
             SSO_Model_OAuthDeviceCode::FLD_USER_CODE => strtoupper(Tinebase_Record_Abstract::generateUID(5) . '-' . Tinebase_Record_Abstract::generateUID(5)),
         ]));
