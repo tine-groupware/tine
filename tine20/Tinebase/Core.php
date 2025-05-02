@@ -409,9 +409,6 @@ class Tinebase_Core
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Params: application: ' . $_applicationName . ' / model: ' . $_modelName);
-        
         $cacheKey = $_applicationName . '_' . $_modelName . '_' . ($_ignoreACL?1:0);
         if (isset(self::$appInstanceCache[$cacheKey])) {
             return self::$appInstanceCache[$cacheKey];
@@ -432,22 +429,15 @@ class Tinebase_Core
             // app controllers are called "App_Controller_Model", most Tinebase controllers are just "Tinebase_Model"
             $controllerName .= '_Controller';
         }
-        
+
         if (! empty($modelName)) {
             $modelName = preg_replace('/^' . $appName . '_' . 'Model_/', '', $modelName);
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
                 $controllerNameModel = $controllerName . '_Controller_' . $modelName;
                 if (! class_exists($controllerNameModel)) {
-                    if ($appName === 'Tinebase') {
-                        // NOTE: Tinebase controllers do not always belong to a model, we just use the $_applicationName param here
-                        //       -> this helps for using the correct actions/controller in actionQueue
-                        $controllerNameModel = $_applicationName;
-                    }
-                    if (! class_exists($controllerNameModel)) {
-                        throw new Tinebase_Exception_NotFound('No Application Controller found (checked classes '
-                            . $controllerName . '_' . $modelName . ' and ' . $controllerNameModel . ')!');
-                    }
+                    throw new Tinebase_Exception_NotFound('No Application Controller found (checked classes '
+                        . $controllerName . '_' . $modelName . ' and ' . $controllerNameModel . ')!');
                 }
             }
             $controllerName = $controllerNameModel;
