@@ -15,12 +15,17 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
 {
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE018_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE018_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -39,9 +44,15 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
     public function update001()
     {
         Setup_SchemaTool::updateSchema([
-            SSO_Model_OAuthDevice::class,
             SSO_Model_OAuthDeviceCode::class,
         ]);
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.1', self::RELEASE018_UPDATE001);
+    }
+
+    public function update002()
+    {
+        $this->_backend->dropTable('sso_oauth_device', SSO_Config::APP_NAME);
+
+        $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
     }
 }
