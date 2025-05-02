@@ -671,7 +671,7 @@ class Tinebase_Helper
     }
     public static function ipAddressMatchNetmasks($netmasks)
     {
-        if ($ip = self::getIpAddress() && !empty($netmasks)) {
+        if (($ip = self::getIpAddress()) && !empty($netmasks)) {
             foreach ($netmasks as $netmask) {
                 if (Factory::parseRangeString($netmask)?->contains($ip)) {
                     return true;
