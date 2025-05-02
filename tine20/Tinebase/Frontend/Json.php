@@ -1859,4 +1859,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         return $_communityNumber;
     }
+
+
+    /**
+     * @param $bodyContent
+     * @return string
+     */
+    public function purifyHTML($bodyContent)
+    {
+        $result = Felamimail_Controller_Message::getInstance()->purifyBodyContent($bodyContent);
+        return  $result;
+    }
 }

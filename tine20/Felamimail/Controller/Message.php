@@ -837,7 +837,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
-                $body = $this->_purifyBodyContent($body, $_message->getId());
+                $body = $this->purifyBodyContent($body, $_message->getId());
                 $bodyCharCountAfter = strlen($body);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -880,7 +880,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $messageId
      * @return string
      */
-    protected function _purifyBodyContent($_content, $messageId = null)
+    public function purifyBodyContent($_content, $messageId = null)
     {
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../library/HTMLPurifier'));
@@ -1507,12 +1507,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
                 }
                 $message->body = str_replace("\r", '', $message['body']);
-                $message->body = $this->_purifyBodyContent($message->body);
+                $message->body = $this->purifyBodyContent($message->body);
             }
         } else {
             $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
             $message = Felamimail_Model_Message::createFromMime($content,  $mimeType);
-            $message->body = $this->_purifyBodyContent($message->body);
+            $message->body = $this->purifyBodyContent($message->body);
         }
 
         $message->setId($node->getId());

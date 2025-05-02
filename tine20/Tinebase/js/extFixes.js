@@ -49,7 +49,34 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
                 }
              };
         }
-    }()
+    }(),
+    onClipboardEvent: async function (event) {
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const plainText = clipboardData.getData('text/plain');
+        const htmlText = clipboardData.getData('text/html');
+        let result = {
+            method: 'InsertText',
+            content: plainText
+        };
+        event.preventDefault();
+
+        if (htmlText) {
+            try {
+                const app = Tine.Tinebase.appMgr.get('Tinebase');
+                if (await Ext.MessageBox.confirm(
+                    app.i18n._('Confirm'),
+                    app.i18n._('Do you want to copy the HTML content with styles?'),
+                ) === 'yes') {
+                    const html = await Tine.Tinebase.purifyHTML(htmlText);
+                    result = {
+                        method: 'InsertHTML',
+                        content: html
+                    }
+                }
+            } catch (e) {}
+        }
+        this.execCmd(result.method, result.content);
+    },
 });
 
 /**

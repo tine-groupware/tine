@@ -831,6 +831,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             if(Ext.isIE || Ext.isWebKit || Ext.isOpera){
                 Ext.EventManager.on(doc, 'keydown', this.fixKeys, this);
             }
+            dbody.addEventListener('paste', this.onClipboardEvent.bind(this));
     
             this.plugins.forEach((plugin) => {
                 //fixme: default dropEl(textarea) does not work , we have to use body as element

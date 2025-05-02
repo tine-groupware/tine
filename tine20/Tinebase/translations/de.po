@@ -1202,7 +1202,7 @@ msgstr ""
 msgid "Personal container"
 msgstr "Persönlicher Ordner"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal container"
 msgstr "%s's persönlicher Ordner"
 
@@ -1230,7 +1230,7 @@ msgstr "Ein Container mit diesem Namen existiert bereits."
 msgid "renaming is currently only possible if no models are assigned"
 msgstr "Umbenennen ist derzeit nur möglich, wenn keine Models zugewiesen sind"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal files"
 msgstr "Persönliche Dateien von %s"
 
@@ -1252,7 +1252,7 @@ msgstr[1] "Feiertagskalender"
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
 
-#, python-format
+#, python-format, php-format
 msgid "Status %s is not valid."
 msgstr ""
 
@@ -1390,7 +1390,7 @@ msgstr "MFA versandt angestoßen"
 msgid "Anyone"
 msgstr "Jeder"
 
-#, python-format
+#, python-format, php-format
 msgid "The following fields weren't imported: %s"
 msgstr "Die folgenden Felder wurden nicht importiert: %s"
 
@@ -4807,7 +4807,7 @@ msgstr "geändert"
 msgid "Scheduler task failed"
 msgstr "Geplante-Aufgabe fehlgeschlagen"
 
-#, python-format
+#, python-format, php-format
 msgid "Your scheduler task %s has failed %d times."
 msgstr "Ihre geplante Aufgabe %s ist %d mal fehlgeschlagen."
 
@@ -4835,8 +4835,79 @@ msgstr "Tine 2.0 URL"
 msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
+msgid "Suppress Exception Traces"
+msgstr ""
+
+msgid "Role receiving support requests"
+msgstr ""
+
+msgid "Support Request"
+msgstr ""
+
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
+
+msgid "Destination source already exists:"
+msgstr ""
+
+msgid "Node name may not be changed in update"
+msgstr ""
+
+msgid "Video Tutorials"
+msgstr ""
+
+msgid "Technical Documentation"
+msgstr ""
+
+msgid "FAQ"
+msgstr ""
+
+msgid "There where Errors:"
+msgstr ""
+
+msgid "({e.code}) { e.message }"
+msgstr ""
+
+msgid "Do you want to copy the HTML content with styles?"
+msgstr "Möchten Sie den HTML Inhalt mit Formaten kopieren?"
+
+msgid "Translation Problem"
+msgstr ""
+
+msgid ""
+"A problem, with the translations was detected, trying to reload client..."
+msgstr ""
+
+msgid "Copied to clipboard"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr ""
+
+msgid "Compose Email"
+msgstr ""
+
+msgid "Open link in new window"
+msgstr ""
+
+msgid "Select { itemName } ..."
+msgstr ""
+
+msgid "Disable automatic time shuffle"
+msgstr ""
+
+msgid "redirecting ..."
+msgstr ""
+
+msgid "Right side columns fractional"
+msgstr ""
+
+msgid "Neighbours only"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
 
 #, python-brace-format
 msgid "Login with {0} account"
