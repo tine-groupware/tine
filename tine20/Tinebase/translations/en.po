@@ -177,6 +177,9 @@ msgstr "Database Configuration"
 msgid "Logger Configuration"
 msgstr "Logger Configuration"
 
+msgid "Suppress Exception Traces"
+msgstr "Suppress Exception Traces"
+
 msgid "MFA Bypass Netmasks"
 msgstr "MFA Bypass Netmasks"
 
@@ -803,6 +806,9 @@ msgstr "currency symbol"
 msgid "Path to custom favicon."
 msgstr "Path to custom favicon."
 
+msgid "Role receiving support requests"
+msgstr "Role receiving support requests"
+
 msgid "Filesystem settings"
 msgstr "Filesystem settings"
 
@@ -916,9 +922,6 @@ msgstr "Max amount in total"
 
 msgid "Max amount per filter"
 msgstr "Max amount per filter"
-
-msgid "Enable Password Less Login"
-msgstr "Enable Password Less Login"
 
 msgid "Quota settings"
 msgstr "Quota settings"
@@ -1054,9 +1057,6 @@ msgstr "Template for SMS New Password"
 msgid "Template for SMS New Password with parameters: app, user, contact, password"
 msgstr "Template for SMS New Password with parameters: app, user, contact, password"
 
-msgid "Your new {{ app.branding.title }} password is: {{ password }}"
-msgstr "Your new {{ app.branding.title }} password is: {{ password }}"
-
 msgid "User type"
 msgstr "User type"
 
@@ -1095,7 +1095,7 @@ msgstr "Filter configuration for site record pickers. Sites can be a special typ
 msgid "Personal container"
 msgstr "Personal container"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal container"
 msgstr "%s's personal container"
 
@@ -1117,7 +1117,7 @@ msgstr "A container with this name already exists."
 msgid "renaming is currently only possible if no models are assigned"
 msgstr "renaming is currently only possible if no models are assigned"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal files"
 msgstr "%s's personal files"
 
@@ -1130,6 +1130,9 @@ msgstr "The new password must be different from the old one."
 msgid "Old pin is wrong."
 msgstr "Old pin is wrong."
 
+msgid "Support Request"
+msgstr "Support Request"
+
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
 msgstr[0] "Bank Holiday Calendar"
@@ -1139,7 +1142,7 @@ msgstr[1] "Bank Holiday Calendars"
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "A Message has been filed to this record. Subject: {0}"
 
-#, python-format
+#, python-format, php-format
 msgid "Status %s is not valid."
 msgstr "Status %s is not valid."
 
@@ -1149,6 +1152,12 @@ msgstr "Email address {0} not in allowed domains [{1}] or invalid"
 
 msgid "Email account already exists"
 msgstr "Email account already exists"
+
+msgid "Destination source already exists:"
+msgstr "Destination source already exists:"
+
+msgid "Email account or alias/forward already exists"
+msgstr "Email account or alias/forward already exists"
 
 msgid "Area is locked"
 msgstr "Area is locked"
@@ -1217,6 +1226,9 @@ msgstr "Total: "
 msgid "Data"
 msgstr "Data"
 
+msgid "Node name may not be changed in update"
+msgstr "Node name may not be changed in update"
+
 msgid "The following files have changed:"
 msgstr "The following files have changed:"
 
@@ -1270,7 +1282,7 @@ msgstr "MFA send out triggered"
 msgid "Anyone"
 msgstr "Anyone"
 
-#, python-format
+#, python-format, php-format
 msgid "The following fields weren't imported: %s"
 msgstr "The following fields weren't imported: %s"
 
@@ -1290,6 +1302,15 @@ msgstr "About {0}"
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr "Learn more about {0}"
+
+msgid "Video Tutorials"
+msgstr "Video Tutorials"
+
+msgid "Technical Documentation"
+msgstr "Technical Documentation"
+
+msgid "FAQ"
+msgstr "FAQ"
 
 msgid "Ok"
 msgstr "Ok"
@@ -1536,6 +1557,12 @@ msgstr "Rate-Limit"
 msgid "This method is rate-limited and you sent too many requests."
 msgstr "This method is rate-limited and you sent too many requests."
 
+msgid "There where Errors:"
+msgstr "There where Errors:"
+
+msgid "({e.code}) { e.message }"
+msgstr "({e.code}) { e.message }"
+
 msgid "Service Unavailable"
 msgstr "Service Unavailable"
 
@@ -1583,6 +1610,12 @@ msgstr "Method Not Found / Insufficent Permissions"
 
 msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
 msgstr "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Do you want to copy the HTML content with styles?"
+msgstr "Do you want to copy the HTML content with styles?"
 
 msgid "Outdated Browser"
 msgstr "Outdated Browser"
@@ -2111,6 +2144,12 @@ msgstr "tine needs to be updated or is not installed yet."
 msgid "Please wait or contact your administrator"
 msgstr "Please wait or contact your administrator"
 
+msgid "Translation Problem"
+msgstr "Translation Problem"
+
+msgid "A problem, with the translations was detected, trying to reload client..."
+msgstr "A problem, with the translations was detected, trying to reload client..."
+
 msgid "Total    Uploads"
 msgstr "Total    Uploads"
 
@@ -2177,6 +2216,13 @@ msgstr "choose other {0}..."
 
 msgid "Not a valid time"
 msgstr "Not a valid time"
+
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr "\"{value}\" was copied to clipboard"
 
 msgid "Job Title"
 msgstr "Job Title"
@@ -2652,9 +2698,6 @@ msgstr "Action:"
 msgid "Enter description"
 msgstr "Enter description"
 
-msgid "Close"
-msgstr "Close"
-
 msgid "delete"
 msgstr "delete"
 
@@ -3081,6 +3124,9 @@ msgstr "Save config"
 msgid "Reload config"
 msgstr "Reload config"
 
+msgid "Compose Email"
+msgstr "Compose Email"
+
 msgid "Gets assigned automatically"
 msgstr "Gets assigned automatically"
 
@@ -3117,11 +3163,17 @@ msgstr "Edit copy"
 msgid "Search for {0} ..."
 msgstr "Search for {0} ..."
 
+msgid "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
+msgstr "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
+
 msgid "Searching..."
 msgstr "Searching..."
 
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "You tried to link a record with itself. This is not allowed!"
+
+msgid "Open link in new window"
+msgstr "Open link in new window"
 
 msgid "Search for records ..."
 msgstr "Search for records ..."
@@ -3454,6 +3506,9 @@ msgstr "has notes"
 msgid "This is a multilingual field:"
 msgstr "This is a multilingual field:"
 
+msgid "Select { itemName } ..."
+msgstr "Select { itemName } ..."
+
 #, python-brace-format
 msgid "Transition from {current} to {target} is not allowed."
 msgstr "Transition from {current} to {target} is not allowed."
@@ -3638,6 +3693,27 @@ msgstr "no site association"
 msgid "tag name"
 msgstr "tag name"
 
+msgid "Add a new personal tag"
+msgstr "Add a new personal tag"
+
+msgid "Add New Personal Tag"
+msgstr "Add New Personal Tag"
+
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Please note: You create a personal tag. Only you can see it!"
+
+msgid "Enter tag name:"
+msgstr "Enter tag name:"
+
+msgid "Notice"
+msgstr "Notice"
+
+msgid "The minimum tag length is three."
+msgstr "The minimum tag length is three."
+
+msgid "Could not create tag."
+msgstr "Could not create tag."
+
 msgid "Add Tags"
 msgstr "Add Tags"
 
@@ -3652,18 +3728,6 @@ msgstr "Detach tag(s)"
 
 msgid "Select Tag(s) to detach"
 msgstr "Select Tag(s) to detach"
-
-msgid "Add a new personal tag"
-msgstr "Add a new personal tag"
-
-msgid "Add New Personal Tag"
-msgstr "Add New Personal Tag"
-
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Please note: You create a personal tag. Only you can see it!"
-
-msgid "Enter tag name:"
-msgstr "Enter tag name:"
 
 msgid "No Tags to display"
 msgstr "No Tags to display"
@@ -3719,15 +3783,6 @@ msgstr[1] "Deleting Tags"
 
 msgid "Could not delete Tag(s)."
 msgstr "Could not delete Tag(s)."
-
-msgid "Notice"
-msgstr "Notice"
-
-msgid "The minimum tag length is three."
-msgstr "The minimum tag length is three."
-
-msgid "Could not create tag."
-msgstr "Could not create tag."
 
 msgid "Could not update tag."
 msgstr "Could not update tag."
@@ -4215,6 +4270,9 @@ msgstr[1] "Scheduler tasks"
 msgid "Configuration"
 msgstr "Configuration"
 
+msgid "Disable automatic time shuffle"
+msgstr "Disable automatic time shuffle"
+
 msgid "Last run"
 msgstr "Last run"
 
@@ -4370,7 +4428,7 @@ msgstr "modified"
 msgid "Scheduler task failed"
 msgstr "Scheduler task failed"
 
-#, python-format
+#, python-format, php-format
 msgid "Your scheduler task %s has failed %d times."
 msgstr "Your scheduler task %s has failed %d times."
 
@@ -4397,3 +4455,15 @@ msgstr "Tine 2.0 URL"
 
 msgid "Shared folders"
 msgstr "Shared folders"
+
+msgid "redirecting ..."
+msgstr "redirecting ..."
+
+msgid "Right side columns fractional"
+msgstr "Right side columns fractional"
+
+msgid "Neighbours only"
+msgstr "Neighbours only"
+
+msgid "Preview"
+msgstr "Preview"
