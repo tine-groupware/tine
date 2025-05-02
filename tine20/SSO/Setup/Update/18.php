@@ -16,6 +16,7 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
+    protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -32,6 +33,10 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE018_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -54,5 +59,15 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
         $this->_backend->dropTable('sso_oauth_device', SSO_Config::APP_NAME);
 
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
+    }
+
+    public function update003()
+    {
+        foreach (SSO_Controller_RelyingParty::getInstance()->getAll() as $rp) {
+            $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->isValid(); // set new default values re oauth grants
+            SSO_Controller_RelyingParty::getInstance()->update($rp);
+        }
+
+        $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
     }
 }

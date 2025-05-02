@@ -407,8 +407,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             return static::getOAuthErrorResponse('invalid_request');
         }
 
-        if (null === ($rp = (new SSO_Facade_OAuth2_ClientRepository)->getClientEntity($clientId)?->getRelyingPart()) ||
-                null === $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS}->find(SSO_Model_OAuthGrant::FLD_GRANT, SSO_Config::OAUTH2_GRANTS_DEVICE_CODE)) {
+        if (null === ($rp = (new SSO_Facade_OAuth2_ClientRepository(SSO_Config::OAUTH2_GRANTS_DEVICE_CODE))->getClientEntity($clientId)?->getRelyingPart())) {
             return static::getOAuthErrorResponse('invalid_client');
         }
 

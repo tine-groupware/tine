@@ -222,6 +222,7 @@ class SSO_PublicAPITest extends TestCase
         $this->assertArrayHasKey('error', $body);
         $this->assertSame('authorization_pending', $body['error']);
 
+        Tinebase_Core::setUser($this->_originalTestUser); // publicToken sets anonymous user
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/device/user/' . $userCode, 'POST'))
                 ->withParsedBody([
