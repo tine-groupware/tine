@@ -54,6 +54,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
 
     // don't create and show users system mail account
     public const XPROP_FMAIL_SKIP_MAILACCOUNT = 'emailSkipFmailAccount';
+    public const XPROP_HAS_RANDOM_PWD = 'hasRandomPwd';
 
     public const USER_TYPE_SYSTEM = 'system';
     public const USER_TYPE_USER = 'user';

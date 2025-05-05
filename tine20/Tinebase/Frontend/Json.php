@@ -221,43 +221,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function changePassword($oldPassword, $newPassword)
     {
-        return $this->_changePwOrPin($oldPassword, $newPassword);
-    }
-
-    /**
-     * @param ?string $oldPassword
-     * @param ?string $newPassword
-     * @param string $pwType
-     * @return array
-     */
-    protected function _changePwOrPin(?string $oldPassword, ?string $newPassword, string $pwType = 'password')
-    {
-        $response = array(
-            'success'      => TRUE
-        );
-
         try {
-            Tinebase_Controller::getInstance()->changePassword((string) $oldPassword, (string) $newPassword, $pwType);
+            Tinebase_Controller::getInstance()->changePassword((string) $oldPassword, (string) $newPassword);
         } catch (Tinebase_Exception $e) {
-            $response = array(
+            return [
                 'success'      => false,
                 'errorMessage' => $e->getMessage()
-            );
+            ];
         }
 
-        return $response;
-    }
-
-    /**
-     * change pin of user
-     *
-     * @param  string $oldPassword the old password
-     * @param  string $newPassword the new password
-     * @return array
-     */
-    public function changePin($oldPassword, $newPassword)
-    {
-        return $this->_changePwOrPin($oldPassword, $newPassword, 'pin');
+        return [
+            'success' => true,
+        ];
     }
 
     /**

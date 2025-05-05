@@ -1132,7 +1132,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                         Tinebase_Core::setUser($user);
 
                         $pw = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
-                        $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
+                        $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser([
                             'accountLoginName' => $loginName,
                             'accountEmailAddress' => $data->email,
                             'accountStatus' => 'enabled',
@@ -1140,7 +1140,8 @@ class SSO_Controller extends Tinebase_Controller_Event
                             'openid' => $ssoIdp->getId() . ':' . $data->sub,
                             'accountLastName' => $data->name ?? $loginName,
                             'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?: Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                        ])), $pw, $pw);
+                            'xprops' => [Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD => true],
+                        ]), $pw, $pw);
                     } catch (Tinebase_Exception $e) {
                         $e->setLogLevelMethod('notice');
                         $e->setLogToSentry(false);

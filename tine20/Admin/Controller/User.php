@@ -179,6 +179,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         $this->_userBackend->setPassword($_account, $_password, true, $_mustChange);
+        if ($_account->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD] ?? false) {
+            unset($_account->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD]);
+            Tinebase_User::getInstance()->updateUserInSqlBackend($_account);
+        }
         
         Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . 
