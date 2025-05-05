@@ -1794,9 +1794,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_AccessDenied('you do not have access to modlogs');
         }
 
-        $result = array(
-            'results'   => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($sequence, $limit)->toArray(),
-        );
+        $result = [
+            'results' => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(
+                $sequence, $limit)->toArray(),
+        ];
         $result['totalcount'] = count($result['results']);
         $result['primaryTinebaseId'] = Tinebase_Core::getTinebaseId();
 

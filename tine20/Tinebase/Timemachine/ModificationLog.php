@@ -488,7 +488,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             'sort'  => 'instance_seq'
         ));
 
-        return $this->_backend->search($filter, $paging);
+        $result = $this->_backend->search($filter, $paging);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($result) . ' modlogs with instance seq > ' . $currentSeq);
+        }
+
+        return $result;
     }
 
     /**
