@@ -74,7 +74,13 @@ class Tinebase_CoreTest extends TestCase
         $this->expectException(Tinebase_Exception_NotFound::class);
         Tinebase_Core::getApplicationInstance(Tinebase_Model_AreaLockConfig::class);
     }
-    
+
+    public function testGetTinebaseApplicationInstance(): void
+    {
+        $controller = Tinebase_Core::getApplicationInstance(Tinebase_FileSystem_RecordAttachments::class);
+        self::assertTrue($controller instanceof Tinebase_FileSystem_RecordAttachments);
+    }
+
     public function testGetDispatchServerActiveSync()
     {
         $request = Tinebase_Http_Request::fromString(
