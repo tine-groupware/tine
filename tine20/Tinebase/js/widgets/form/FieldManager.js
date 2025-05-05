@@ -284,7 +284,11 @@ Tine.widgets.form.FieldManager = function() {
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
                         // NOTE: it's hard to compute height here as enableTbar, hideHeaders is calculated on runtime
-                        field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
+                        if (fieldDefinition.uiconfig) {
+                            field.height = fieldDefinition.uiconfig.height || 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */;
+                        } else {
+                            field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */;
+                        }
                         if (_.get(fieldDefinition, 'config.dependentRecords', false) || _.get(fieldDefinition, 'config.storage') === 'json') {
                             // @TODO use different widget here (e.g. quickadd gird)
                             var modelConf = field.recordClass.getModelConfiguration() || {};
