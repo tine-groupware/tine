@@ -436,8 +436,15 @@ class Tinebase_Core
             if (! class_exists($controllerNameModel)) {
                 $controllerNameModel = $controllerName . '_Controller_' . $modelName;
                 if (! class_exists($controllerNameModel)) {
-                    throw new Tinebase_Exception_NotFound('No Application Controller found (checked classes '
-                        . $controllerName . '_' . $modelName . ' and ' . $controllerNameModel . ')!');
+                    if ($appName === 'Tinebase' && ! str_contains($_applicationName, '_Model_')) {
+                        // NOTE: Tinebase controllers do not always belong to a model, we just use the $_applicationName param here
+                        //       -> this helps for using the correct actions/controller in actionQueue
+                        $controllerNameModel = $_applicationName;
+                    }
+                    if (! class_exists($controllerNameModel)) {
+                        throw new Tinebase_Exception_NotFound('No Application Controller found (checked classes '
+                            . $controllerName . '_' . $modelName . ' and ' . $controllerNameModel . ')!');
+                    }
                 }
             }
             $controllerName = $controllerNameModel;
@@ -455,11 +462,13 @@ class Tinebase_Core
         }
 
         if (! isset($controller)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Getting instance of ' . $controllerName);
-
-            $controller = call_user_func(array($controllerName, 'getInstance'));
-            self::$appInstanceCache[$cacheKey] = $controller;
+            if (method_exists($controllerName, 'getInstance')) {
+                $controller = call_user_func([$controllerName, 'getInstance']);
+                self::$appInstanceCache[$cacheKey] = $controller;
+            } else {
+                throw new Tinebase_Exception_NotFound('No Application Controller found: '
+                    . $controllerName . ' has no method getInstance()');
+            }
         }
         
         return $controller;
