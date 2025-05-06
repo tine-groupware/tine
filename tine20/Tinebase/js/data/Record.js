@@ -573,7 +573,7 @@ Record.getDefaultData = function(recordClass, defaults) {
     const dd = JSON.parse(JSON.stringify(modelConfig.defaultData));
 
     // find container by selection or use defaultContainer by registry
-    if (modelConfig.containerProperty) {
+    if (modelConfig.containerProperty &&! modelConfig.extendsContainer) {
         if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
             var app = Tine.Tinebase.appMgr.get(appName),
                 registry = app.getRegistry(),
