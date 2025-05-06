@@ -494,41 +494,35 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param string $_oldPassword
      * @param string $_newPassword
-     * @param string $_pwType
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function changePassword($_oldPassword, $_newPassword, $_pwType = 'password')
+    public function changePassword($_oldPassword, $_newPassword)
     {
-        if ($_pwType === 'password' && ! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
             throw new Tinebase_Exception_AccessDenied('Password change not allowed.');
         }
 
         $user = Tinebase_Core::getUser();
         $loginName = $user->accountLoginName;
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . " change $_pwType for $loginName");
+            . " change password for $loginName");
 
-        if ($_pwType === 'password') {
-            if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
-                throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
-            }
-            if ($_oldPassword == $_newPassword) {
-                // @Todo translation didn work
-                throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
-            }
-            Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
-            Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = null;
-            Tinebase_Core::get(Tinebase_Core::SESSION)->currentAccount->password_must_change = false;
-        } else {
-            $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
-            $pinAuth->setIdentity($loginName)->setCredential($_oldPassword);
-            $authResult = $pinAuth->authenticate();
-            if (! $authResult->isValid()) {
-                throw new Tinebase_Exception_SystemGeneric('Old pin is wrong.'); // _('Old pin is wrong.')
-            }
-            Tinebase_User::getInstance()->setPin($user, $_newPassword);
+        if ((!($user->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD] ?? false)) && !Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
+            throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
+        }
+        if ($_oldPassword == $_newPassword) {
+            // @Todo translation didn work
+            throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
+        }
+        Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
+        Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = null;
+        Tinebase_Core::get(Tinebase_Core::SESSION)->currentAccount->password_must_change = false;
+
+        if ($user->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD] ?? false) {
+            unset($user->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD]);
+            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
     }
     
