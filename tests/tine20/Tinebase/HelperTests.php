@@ -92,4 +92,13 @@ class Tinebase_HelperTests extends \PHPUnit\Framework\TestCase
         }
         self::assertEquals('H.-H.einer@nopel.opel', $punyCodedAddress);
     }
+
+    public function testIpAddressMatchNetmasks()
+    {
+        $_SERVER['HTTP_X_REAL_IP'] = '127.0.0.1';
+        $byPassMasks = [
+            '127.0.0.1'
+        ];
+        self::assertTrue(Tinebase_Helper::ipAddressMatchNetmasks($byPassMasks));
+    }
 }
