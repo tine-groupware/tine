@@ -276,8 +276,20 @@ class Tinebase_DateTime extends DateTime implements \Stringable
         }
         
         $cmpTZ = $this->getTimezone();
-        
-        if ($cmpTZ != $_date->getTimezone()) {
+        try {
+            $hasDifferentTZ = $cmpTZ != $_date->getTimezone();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " "
+                    . $e->getMessage()
+                    . ' $cmpTZ: ' . $cmpTZ->getName()
+                    . ' $_dateTZ: ' . $_date->getTimezone()->getName()
+                );
+            }
+            $hasDifferentTZ = true;
+        }
+
+        if ($hasDifferentTZ) {
             $_date = clone $_date;
             $_date->setTimezone($cmpTZ);
         };
