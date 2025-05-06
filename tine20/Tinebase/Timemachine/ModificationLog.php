@@ -1694,29 +1694,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 $transactionManager->rollBack();
 
-                // notify configured email addresses about replication failure
-                $config = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE);
-                if (is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
-                        count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
-
-                    $plain = "Error applying modlog: \n" . print_r($modification->toArray(), true);
-                    $plain .= "\n\n" . $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
-                    $subject = 'replication client error';
-                    if (! empty(Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL})) {
-                        $subject .= ' (' . Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL} . ')';
-                    }
-
-                    foreach ($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
-                        $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
-                        try {
-                            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients,
-                                $subject, $plain);
-                        } catch (Exception $e) {
-                            // skipping recipient
-                            Tinebase_Exception::log($e);
-                        }
-                    }
-                }
+                $plain = "Error applying modlog:" . PHP_EOL . print_r($modification->toArray(), true);
+                $plain .= PHP_EOL . PHP_EOL . $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
+                self::notifyReplicationFailure($plain);
 
                 // must not happen, continuing pointless!
                 return false;
@@ -1733,6 +1713,30 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     public static function getModLogFields(): array
     {
         return array_merge(['seq', 'is_deleted'], static::$_metaProperties);
+    }
+
+    public static function notifyReplicationFailure(string $plain, string $subject = 'replication client error')
+    {
+        // notify configured email addresses about replication failure
+        $config = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE);
+        if (is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
+            count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
+
+            if (! empty(Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL})) {
+                $subject .= ' (' . Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL} . ')';
+            }
+
+            foreach ($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
+                $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
+                try {
+                    Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients,
+                        $subject, $plain);
+                } catch (Exception $e) {
+                    // skipping recipient
+                    Tinebase_Exception::log($e);
+                }
+            }
+        }
     }
 
     /**
