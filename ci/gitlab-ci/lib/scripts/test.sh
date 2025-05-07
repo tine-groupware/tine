@@ -151,7 +151,7 @@ test_phpunit() {
 
 
     log "testing ..."
-    cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+    cmd="php -d pcov.directory=$TINE20ROOT/tine20 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
 
     if test -n "${ARG_FILTER}"; then
         cmd="${cmd} --filter ${ARG_FILTER}"
