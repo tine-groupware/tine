@@ -2679,4 +2679,72 @@ fi';
 
         return 0;
     }
+
+    public function exportGroupListIds(): int
+    {
+        $this->_checkAdminRight();
+
+        $backend = new Tinebase_Backend_Sql([
+            Tinebase_Backend_Sql::TABLE_NAME => 'groups',
+            Tinebase_Backend_Sql::MODEL_NAME => Tinebase_Model_Group::class,
+            Tinebase_Backend_Sql::MODLOG_ACTIVE => false,
+        ]);
+
+        $groups = $backend->getAll()->filter(fn($group) => $group->list_id);
+
+        foreach ($groups as $group) {
+            echo $group->getId() . ';' . $group->list_id . PHP_EOL;
+        }
+
+        return 0;
+    }
+
+    public function setGroupsListIds(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($opts, ['file']);
+        if (!($fh = fopen($args['file'], 'r'))) {
+            echo 'can\'t open file ' . $args['file'] . PHP_EOL;
+            return 1;
+        }
+        
+        $db = Tinebase_Core::getDb();
+
+        while ($row = fgetcsv($fh, separator: ';')) {
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+            $groupId = $row[0];
+            $listId = $row[1];
+
+            try {
+                if (false === ($oldListId = $db->query('SELECT list_id FROM ' . SQL_TABLE_PREFIX . 'groups WHERE id = ' . $db->quoteInto('?', $groupId))->fetchColumn())) {
+                    throw new Tinebase_Exception_NotFound('group not found');
+                }
+                if (null === $oldListId) {
+                    throw new Tinebase_Exception_UnexpectedValue('old list id is null');
+                }
+
+                $db->update(SQL_TABLE_PREFIX . 'groups', ['list_id' => $listId], 'id = ' . $db->quoteInto('?', $groupId));
+                // addressbook_lists has foreign key constraints that will update adb_list_m_role / addressbook_list_members
+                $db->update(SQL_TABLE_PREFIX . 'addressbook_lists', ['id' => $listId], 'id = ' . $db->quoteInto('?', $oldListId));
+
+                $db->update(SQL_TABLE_PREFIX . 'notes', ['record_id' => $listId], 'record_id = ' . $db->quoteInto('?', $oldListId) . ' AND record_model = "' . Addressbook_Model_List::class . '"');
+
+                $db->update(SQL_TABLE_PREFIX . 'cal_attendee', ['user_id' => $listId], 'user_id = ' . $db->quoteInto('?', $oldListId));
+
+                $db->update(SQL_TABLE_PREFIX . 'relations', ['own_id' => $listId], 'own_id = ' . $db->quoteInto('?', $oldListId) . ' AND own_model = "' . Addressbook_Model_List::class . '" AND own_backend = "Sql"');
+                $db->update(SQL_TABLE_PREFIX . 'relations', ['related_id' => $listId], 'related_id = ' . $db->quoteInto('?', $oldListId) . ' AND related_model = "' . Addressbook_Model_List::class . '"');
+
+
+                $transaction->release();
+            } catch (Exception $e) {
+                echo 'failed to process row: "' . $row[0] . ';' . $row[1] . '"' . PHP_EOL;
+                echo get_class($e) . ': ' . $e->getMessage() . PHP_EOL . PHP_EOL;
+            }
+
+            unset($transaction);
+        }
+
+        return 0;
+    }
 }
