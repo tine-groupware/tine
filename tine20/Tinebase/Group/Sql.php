@@ -939,7 +939,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function __importGroupMembers($_options = null)
     {
-        //nothing to do
+        // nothing to do
         return null;
     }
 
@@ -954,7 +954,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                     $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                     $record = new Tinebase_Model_Group($diff->diff);
                     $this->addGroup($record);
-                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                            . __LINE__ . ' Group record ' . print_r($record->toArray(), true));
+                    }
+                    if ($record->list_id) {
+                        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
+                    }
                     break;
 
                 case Tinebase_Timemachine_ModificationLog::UPDATED:
@@ -1027,8 +1033,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $record = $this->getGroupById($modification->record_id);
             $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                . __LINE__ . ' Undoing diff ' . print_r($diff->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                    . __LINE__ . ' Undoing diff ' . print_r($diff->toArray(), true));
+            }
 
             // this undo will (re)load and populate members property if required
             $record->undo($diff);

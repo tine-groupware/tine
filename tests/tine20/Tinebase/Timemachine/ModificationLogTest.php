@@ -747,6 +747,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $this->assertEquals($group->list_id, $newGroup->list_id, 'list id not equal');
         $list = Addressbook_Controller_List::getInstance()->get($newGroup->list_id);
         $this->assertEquals($newGroup->name, $list->name, 'list name not equal');
+        $this->assertEquals($newGroup->getId(), $list->group_id, 'group_id not equal');
 
         $groupController->setGroupMembers($newGroup->getId(), [Zend_Registry::get('personas')['sclever']->getId()]);
 
