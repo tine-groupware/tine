@@ -122,12 +122,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
         Tinebase_Group::syncGroups();
         $reCreatedGroup = Tinebase_Group::getInstance()->getGroupById($group['id']);
-        $this->assertNotSame($reCreatedGroup->list_id, $group['list_id']);
-        try {
-            Addressbook_Controller_List::getInstance()->get($group['list_id']);
-            $this->fail('list should not be undeleted');
-        } catch (Tinebase_Exception_NotFound $tenf) {}
-        Addressbook_Controller_List::getInstance()->get($reCreatedGroup->list_id);
+        $this->assertEquals($reCreatedGroup->list_id, $group['list_id']);
+        Addressbook_Controller_List::getInstance()->get($group['list_id']);
     }
     
     /**

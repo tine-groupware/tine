@@ -848,6 +848,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             'xprops' => $group->xprops,
         ));
 
+        if ($group->list_id) {
+            $list->setId($group->list_id);
+        }
+
         if (! empty($list->email)) {
             $this->_checkEmailAddress($list->email);
         }

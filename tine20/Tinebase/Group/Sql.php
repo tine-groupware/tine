@@ -953,8 +953,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 case Tinebase_Timemachine_ModificationLog::CREATED:
                     $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                     $record = new Tinebase_Model_Group($diff->diff);
-                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                     $this->addGroup($record);
+                    Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                     break;
 
                 case Tinebase_Timemachine_ModificationLog::UPDATED:
@@ -1280,6 +1280,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 if (!empty($group->list_id)) {
                     $oldListId = $group->list_id;
                     $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
+                    unset($group->list_id);
                     Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
                     if ($group->list_id !== $oldListId) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
