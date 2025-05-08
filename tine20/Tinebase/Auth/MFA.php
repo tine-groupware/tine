@@ -47,10 +47,10 @@ final class Tinebase_Auth_MFA
         self::$_instances = [];
     }
 
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool
     {
         try {
-            return $this->_adapter->sendOut($_userCfg);
+            return $this->_adapter->sendOut($_userCfg, $user);
         } catch (Tinebase_Exception $e) {
             $e->setLogToSentry(false);
             $e->setLogLevelMethod('notice');

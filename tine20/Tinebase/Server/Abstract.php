@@ -328,22 +328,22 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         }
     }
 
-    final static protected function _checkRateLimit($frontend, $_method = '*')
+    /**
+     * @param string $frontend
+     * @param string $_method
+     * @return void
+     * @throws Tinebase_Exception_RateLimit
+     */
+    final static protected function _checkRateLimit(string $frontend, string $_method = '*'): void
     {
         $rateLimit = new Tinebase_Server_RateLimit();
-        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : Tinebase_Core::USER_ANONYMOUS;
-
         if ($rateLimit->hasRateLimit($frontend, $_method)) {
             if (! $rateLimit->check($frontend, $_method)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    $definition = $rateLimit->getLimitDefinition($frontend, $_method);
                     Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . ' User ' . $user . ' hit rate limit: '
-                        .  print_r($definition, true));
+                        __METHOD__ . '::' . __LINE__ . ' Rate limit hit for : ' . $frontend . '.' . $_method);
                 }
-
-                $terl = new Tinebase_Exception_RateLimit($frontend . ' Method is rate-limited: ' . $_method);
-                throw $terl;
+                throw new Tinebase_Exception_RateLimit($frontend . ' Method is rate-limited: ' . $_method);
             }
         }
     }
