@@ -164,6 +164,9 @@ class SSO_PublicAPITest extends TestCase
             $xml);
     }
 
+    /**
+     * @group needsbuild
+     */
     public function testOAuthDeviceTokenCall()
     {
         $clientId = 'unittest';

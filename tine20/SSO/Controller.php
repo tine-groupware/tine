@@ -363,23 +363,30 @@ class SSO_Controller extends Tinebase_Controller_Event
         $parsedBody = $request->getParsedBody();
 
         $deviceCode = null;
+        $relyingParty = null;
         if ($userCode) {
             $deviceCode = SSO_Controller_OAuthDeviceCode::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_OAuthDeviceCode::class, [
                     [TMFA::FIELD => SSO_Model_OAuthDeviceCode::FLD_USER_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $userCode],
                     [TMFA::FIELD => SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()],
                 ]))->getFirstRecord();
+
+            if ($deviceCode) {
+                $relyingParty = SSO_Controller_RelyingParty::getInstance()->get($deviceCode->{SSO_Model_OAuthDeviceCode::FLD_RELYING_PARTY_ID});
+            }
         }
 
         if ($user = Tinebase_Core::getUser()) {
-            if (! ($parsedBody['confirmed'] ?? false)) {
-                // TODO FIXME render user dialog
-                return static::getOAuthErrorResponse('invalid_request', 'user dialog should be rendered here');
-            }
-
-            if (null === $deviceCode) {
-                // TODO FIXME
-                return static::getOAuthErrorResponse('invalid_request', 'failed, failure msg should be displayed here ... and user dialog rendered again I guess');
+            $confirmed = $parsedBody['confirmed'] ?? false;
+            if (! $confirmed || null === $deviceCode) {
+                return static::renderLoginPage(
+                    rp: $relyingParty,
+                    data: [
+                        'isDeviceAuth' => true,
+                        'user' => $user->accountDisplayName,
+                        'userCode' => $userCode,
+                    ] + ($confirmed && !$deviceCode ? ['deviceError' => true] : [])
+                );
             }
 
             $deviceCode->{SSO_Model_OAuthDeviceCode::FLD_APPROVED_BY} = $user->getId();
@@ -387,13 +394,23 @@ class SSO_Controller extends Tinebase_Controller_Event
             $deviceCode->{SSO_Model_OAuthDeviceCode::FLD_VALID_UNTIL} = Tinebase_DateTime::now()->addMinute(3);
             SSO_Controller_OAuthDeviceCode::getInstance()->update($deviceCode);
 
-            // TODO FIXME
-            return static::getOAuthErrorResponse('invalid_request', 'succeeded, success msg should be displayed here');
+            return static::renderLoginPage(
+                rp: $relyingParty,
+                data: [
+                    'isDeviceAuth' => true,
+                    'user' => $user->accountDisplayName,
+                    'success' => true,
+                ]
+            );
         }
 
         return static::renderLoginPage(
-            data: ['url' => str_replace('/sso/oauth2/device/user', '/sso/oauth2/device/userlogin', (string)$request->getUri())],
-            url: (string)$request->getUri()
+            rp: $relyingParty,
+            data: [
+                'isDeviceAuth' => true,
+                'userCode' => $userCode,
+            ],
+            url: str_replace('/sso/oauth2/device/user', '/sso/oauth2/device/userlogin', (string)$request->getUri()),
         );
     }
 
@@ -858,7 +875,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
 
         $initialData = [
-            'sso' => $data, // TODO FIXME is 'url' to be in here <- or down below in $url [which is not being used by the code!]
+            'sso' => $data,
             'relyingParty' => $rp ? [
                 SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
                 SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
@@ -872,15 +889,14 @@ class SSO_Controller extends Tinebase_Controller_Event
                 'data' => $mfaEx->toArray(),
             ];
         }
-
+        if ($url) {
+            $initialData['url'] = $url;
+        }
         $data = [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
             'initialData' => json_encode($initialData),
         ];
-        if ($url) {
-            $data['url'] = $url;
-        }
 
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', $data);
     }

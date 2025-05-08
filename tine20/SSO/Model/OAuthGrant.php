@@ -41,6 +41,8 @@ class SSO_Model_OAuthGrant extends Tinebase_Record_NewAbstract
         self::MODEL_NAME => self::MODEL_NAME_PART,
         self::RECORD_NAME => 'OAuth2 Grant',
         self::RECORDS_NAME => 'OAuth2 Grants', // ngettext('OAuth2 Grant', 'OAuth2 Grants', n)
+        self::TITLE_PROPERTY => self::FLD_GRANT,
+        self::IS_METADATA_MODEL_FOR => self::FLD_GRANT,
 
         self::FIELDS => [
             self::ID                        => [

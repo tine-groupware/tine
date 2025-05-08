@@ -57,7 +57,7 @@ class SSO_Config extends Tinebase_Config_Abstract
         ],
         self::OAUTH2_GRANTS         => [
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => false,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [

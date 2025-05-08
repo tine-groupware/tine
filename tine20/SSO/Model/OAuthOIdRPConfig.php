@@ -45,6 +45,12 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
         self::RECORD_NAME => 'OAuth2 Relying Party Config',
         self::RECORDS_NAME => 'OAuth2 Relying Party Configs', // ngettext('OAuth2 Relying Party Config', 'OAuth2 Relying Party Configs', n)
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_OAUTH2_GRANTS
+            ]
+        ],
+
         self::FIELDS => [
             self::FLD_REDIRECT_URLS     => [
                 self::TYPE                  => self::TYPE_JSON,
@@ -80,6 +86,9 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
                     self::APP_NAME                  => SSO_Config::APP_NAME,
                     self::MODEL_NAME                => SSO_Model_OAuthGrant::MODEL_NAME_PART,
                     self::STORAGE                   => self::TYPE_JSON,
+                ],
+                self::UI_CONFIG             => [
+                    ''
                 ],
             ],
         ]

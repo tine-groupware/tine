@@ -591,6 +591,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (this.isMetadataModelFor) {
                 const mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor);
                 if (_.get(mappingFieldDef, 'fieldDefinition.type') !== 'record') {
+                    this.allowMetadataForEditing = false;
                     Object.assign(searchComboConfig, Tine.widgets.form.FieldManager.get(this.recordClass.getMeta('appName'), this.recordClass, this.isMetadataModelFor, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID), {
                         allowBlank: true,
                     });
