@@ -376,17 +376,12 @@ php-unit-nogitlabci-tests-built-parallel:
       when: never
     - !reference [.php-unit-nogitlabci-tests-built, rules]
 
-php-unit-update-tests:
+
+.php-unit-update-tests:
   extends: .abstract_jobs.php_unit_cache
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
-    PHP_VERSION: "8.1"
-    DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
-    TINE_VERSION_LTS: "2022.11"
-    TINE_VERSION_BE: "2023.11"
-    TINE_VERSION_BETA: ""
-    TINE_VERSION_NEXT: "2024.11"
   needs: []
   stage: test
   timeout: 2h
@@ -439,6 +434,13 @@ php-unit-update-tests:
     - |
       log "testing"
       test_phpunit
+
+
+php-unit-update-tests:
+  variables:
+    PHP_VERSION: "8.1"
+    DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
+  extends: .php-unit-update-tests
   rules:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
