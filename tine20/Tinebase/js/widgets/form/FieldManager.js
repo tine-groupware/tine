@@ -93,6 +93,7 @@ Tine.widgets.form.FieldManager = function() {
                 app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || fieldDefinition.appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
+            if (_.get(fieldDefinition, 'config.validate'))  delete fieldDefinition.config.validate; // server only
             Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {});
 
             if (fieldType === 'virtual' && fieldDefinition.config) {

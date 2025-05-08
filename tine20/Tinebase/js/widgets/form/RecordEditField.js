@@ -64,7 +64,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
     },
     
     setValue : function(v, owningRecord){
-        this.recordData = _.get(v, 'data', v);
+        this.recordData = Tine.Tinebase.common.assertComparable(_.get(v, 'data', v));
         this.recordData = ((_.isString(this.recordData) && this.recordData === '[]') || (_.isArray(this.recordData) && this.recordData.length === 0)) ? {} : this.recordData; // transform server defaults
         this.assertRecordClass(owningRecord);
 
