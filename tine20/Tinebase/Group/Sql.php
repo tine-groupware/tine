@@ -953,11 +953,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 case Tinebase_Timemachine_ModificationLog::CREATED:
                     $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
                     $record = new Tinebase_Model_Group($diff->diff);
-                    $this->addGroup($record);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                            . __LINE__ . ' Group record ' . print_r($record->toArray(), true));
+                    try {
+                        $this->getGroupById($record->getId());
+                        // we already have it
+                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                        $this->addGroup($record);
                     }
+
                     if ($record->list_id) {
                         Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($record);
                     }
