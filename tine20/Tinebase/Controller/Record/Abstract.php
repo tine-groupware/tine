@@ -284,8 +284,8 @@ abstract class Tinebase_Controller_Record_Abstract
         return function () use ($oldvalues) {
             $this->doContainerACLChecks($oldvalues['containerACLChecks']);
             $this->doRightChecks($oldvalues['rightChecks']);
-            if ($oldvalues['currentUser']) {
-                Tinebase_Core::setUser($oldvalues['currentUser']);
+            if (!$oldvalues['currentUser']) {
+                Tinebase_Core::unsetUser();
             }
             if (isset($oldvalues['doGrantChecks'])) {
                 $this->doGrantChecks($oldvalues['doGrantChecks']);

@@ -143,7 +143,9 @@ class Tinebase_Server_RateLimit
     protected function _getId(string $frontend, string $method)
     {
         $prefix = $this->_config['redis']['prefix'] ?? '';
-        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : Tinebase_Core::USER_ANONYMOUS;
+        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER)
+            ? Tinebase_Core::getUser()->accountLoginName
+            : Tinebase_Core::USER_ANONYMOUS;
         return $prefix . '_ratelimit_'. $user . '_' . $frontend . '_' . $method;
     }
 
