@@ -18,7 +18,7 @@
 interface Tinebase_Auth_MFA_AdapterInterface
 {
     public function __construct(Tinebase_Record_Interface $_config, string $id);
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool;
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool;
     public function validate($_data, Tinebase_Model_MFA_UserConfig $_userCfg): bool;
     public function getClientPasswordLength(): ?int;
 }

@@ -331,7 +331,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     final static protected function _checkRateLimit($_method)
     {
         $rateLimit = new Tinebase_Server_RateLimit();
-        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : 'anon';
+        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER)  && Tinebase_Core::getUser() ? Tinebase_Core::getUser()->accountLoginName : 'anon';
         if ($rateLimit->hasRateLimit($user, $_method)) {
             if (! $rateLimit->check($user, $_method)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
