@@ -66,7 +66,7 @@ class Tinebase_Server_RateLimit
             return false;
         };
 
-        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : Tinebase_Core::USER_ANONYMOUS;
+        $user = $this->_getUsername();
         $ip = Tinebase_Helper::getIpAddress();
 
         $allMatched = [];
@@ -111,6 +111,16 @@ class Tinebase_Server_RateLimit
         return null;
     }
 
+    protected function _getUsername(): string
+    {
+        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser() : null;
+        if ($user) {
+            return $user->accountLoginName;
+        } else {
+            return Tinebase_Core::USER_ANONYMOUS;
+        }
+    }
+
     /**
      * @param string $method
      * @return bool
@@ -143,9 +153,7 @@ class Tinebase_Server_RateLimit
     protected function _getId(string $frontend, string $method)
     {
         $prefix = $this->_config['redis']['prefix'] ?? '';
-        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER)
-            ? Tinebase_Core::getUser()->accountLoginName
-            : Tinebase_Core::USER_ANONYMOUS;
+        $user = $this->_getUsername();
         return $prefix . '_ratelimit_'. $user . '_' . $frontend . '_' . $method;
     }
 
