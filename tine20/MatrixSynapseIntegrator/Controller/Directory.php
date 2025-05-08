@@ -48,7 +48,7 @@ class MatrixSynapseIntegrator_Controller_Directory extends Tinebase_Controller_R
                 WHERE auth_provider LIKE 'oidc-%';"
             );
     
-        foreach ($query as $$user) {
+        foreach ($query as $user) {
             $users[$user["external_id"]] = [
                 "id" => $user["id"],
                 "local_id" => $user["local_id"],
