@@ -38,7 +38,7 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
         return (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH};
     }
 
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool
     {
         $pinLength = (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH};
         if ($pinLength < 3 || $pinLength > 10) throw new Tinebase_Exception('pin length needs to be between 3 and 10');
@@ -100,15 +100,21 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
                 return false;
             }
 
+            $userRaii = null;
+            if (!Tinebase_Core::getUser()) {
+                $userRaii = new Tinebase_RAII(Admin_Controller_JWTAccessRoutes::getInstance()->assertPublicUsage());
+            }
+
             $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_SmsUserConfig::FLD_AUTH_TOKEN} =
                 Admin_Controller_JWTAccessRoutes::getInstance()->getNewJWT([
-                    Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => Tinebase_Core::getUser()->getId(),
+                    Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $user->getId(),
                     Admin_Model_JWTAccessRoutes::FLD_ROUTES => [
                         Tinebase_Controller::class . '::postSendSupportRequest',
                     ],
                     Admin_Model_JWTAccessRoutes::FLD_TTL => Tinebase_DateTime::now()->addMinute(30),
                 ], keyBits: 1024); // 1024 bits are significantly faster than 2048 and we are only valid for 30 minutes
 
+            unset($userRaii);
             return true;
         }
         return false;
