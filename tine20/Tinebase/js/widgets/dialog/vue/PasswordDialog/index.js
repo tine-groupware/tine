@@ -70,7 +70,8 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.widgets.dialog.Mod
             clipboard: this.hasPwGen,
             pwMandatoryByPolicy: this.policyConfig?.pwIsMandatory || false,
 
-            injectKey: this.injectKey
+            injectKey: this.injectKey,
+            additionalFields: this.additionalFields
         })
 
         this.injected['genPW'] = this.genPW.bind(this)
