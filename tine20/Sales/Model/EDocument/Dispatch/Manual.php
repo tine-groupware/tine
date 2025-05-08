@@ -21,7 +21,7 @@ class Sales_Model_EDocument_Dispatch_Manual extends Sales_Model_EDocument_Dispat
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::RECORD_NAME] = 'Manual Dispatching'; // gettext('GENDER_Manual Dispatching')
         $_definition[self::RECORDS_NAME] = 'Manual Dispatchings'; // ngettext('Manual Dispatching', 'Manual Dispatchings', n)
-        $_definition[self::TITLE_PROPERTY] = self::FLD_INSTRUCTIONS;
+        $_definition[self::TITLE_PROPERTY] = 'Dispatch manual: {{ record.instructions }}';
 
         $_definition[self::FIELDS][self::FLD_INSTRUCTIONS] = [
             self::TYPE              => self::TYPE_TEXT,
