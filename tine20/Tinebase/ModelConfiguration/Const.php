@@ -37,6 +37,10 @@ class Tinebase_ModelConfiguration_Const {
     public const CONTROLLER_HOOK_BEFORE_UPDATE = '_controllerHookBeforeUpdate';
     public const CONVERTERS = 'converters';
     public const COLUMNS = 'columns';
+    /**
+     * sub of uiconfig, config for columnManager
+     */
+    public const COLUMN_CONFIG = 'columnConfig';
     public const COPY_OMIT = 'copyOmit';
     public const COPY_RELATIONS = 'copyRelations';
 
@@ -86,6 +90,11 @@ class Tinebase_ModelConfiguration_Const {
 
     public const FIELD = 'field';
     public const FIELDS = 'fields';
+
+    /**
+     * sub of uiconfig, config for fieldManager
+     */
+    public const FIELDS_CONFIG = 'fieldConfig';
     public const FIELD_NAME = 'fieldName';
     public const FILTER = 'filter';
     public const FILTER_CLASS_NAME = 'filterClassName';

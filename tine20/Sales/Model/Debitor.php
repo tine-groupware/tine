@@ -351,6 +351,12 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     'copyMetadataForProps'          => [
                         Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS,
                     ],
+                    self::FIELDS_CONFIG             => [
+                        'plugins'                       => [[
+                            'ptype'                         => 'tb-grid-one-is-true',
+                            'field'                         => Sales_Model_PaymentMeans::FLD_DEFAULT,
+                        ]]
+                    ]
                 ],
             ],
         ],
