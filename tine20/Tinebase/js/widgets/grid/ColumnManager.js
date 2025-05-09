@@ -338,6 +338,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.width = config.defaultWidth;
             }
 
+            Object.assign(config, fieldDefinition?.uiconfig?.columnConfig || {})
             return config;
         },
         
