@@ -7,6 +7,7 @@
  */
 import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
 import {getDefaultLayoutClasses} from "../../util/responsiveLayout";
+import "./OneIsTruePlugin";
 
 Ext.ns('Tine.widgets.grid');
 
