@@ -988,7 +988,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    public function dispatchDocument(string $model, string $documentId): bool
+    public function dispatchDocument(string $model, string $documentId, bool $redispatch = false): bool
     {
         /** @var Tinebase_Record_Interface $model */
         /** @var Sales_Controller_Document_Abstract $docCtrl */
@@ -996,7 +996,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to lock stuff */
 
-        return $docCtrl::dispatchDocument($documentId);
+        return $docCtrl::dispatchDocument($documentId, $redispatch);
     }
 
     public function createFollowupDocument(array $documentTransition): array
