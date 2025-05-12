@@ -40,7 +40,7 @@ variables:
   PHP_VERSION: "8.3"
 
   # "Codename for build"
-  CODENAME: "Next"
+  CODENAME: "Liva"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
