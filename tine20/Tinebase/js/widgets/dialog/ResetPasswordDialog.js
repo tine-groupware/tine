@@ -214,7 +214,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         _.defer(() => {
             const isPasswordEmpty = el.getValue().length === 0;
             this.getForm().findField('password_must_change').setDisabled(false);
-            if (this.sendPWDViaSMSCheckbox) sendPWDViaSMSCheckbox.setDisabled(isPasswordEmpty);
+            if (this.sendPWDViaSMSCheckbox) this.sendPWDViaSMSCheckbox.setDisabled(isPasswordEmpty);
             this.buttonApply.setDisabled(!this.allowEmptyPassword && isPasswordEmpty);
             this.onUpdateSMSNewPasswordTemplate();
         })
