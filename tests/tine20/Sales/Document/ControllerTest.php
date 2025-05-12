@@ -451,6 +451,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 new Sales_Model_EDocument_Dispatch_DynamicConfig([
                     Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Manual::class,
                     Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Manual([
+                        Sales_Model_EDocument_Dispatch_Manual::FLD_INSTRUCTIONS => 'do some of this and then that',
                         Sales_Model_EDocument_Dispatch_Manual::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [
                             new Sales_Model_EDocument_Dispatch_DocumentType([
                                 Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,

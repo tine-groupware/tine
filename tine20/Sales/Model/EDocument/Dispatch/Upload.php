@@ -21,7 +21,7 @@ class Sales_Model_EDocument_Dispatch_Upload extends Sales_Model_EDocument_Dispat
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::RECORD_NAME] = 'Upload'; // gettext('GENDER_Upload')
         $_definition[self::RECORDS_NAME] = 'Uploads'; // ngettext('Upload', 'Uploads', n)
-        $_definition[self::TITLE_PROPERTY] = self::FLD_URL;
+        $_definition[self::TITLE_PROPERTY] = 'Upload to: {{ record.url }}';
 
         $_definition[self::FIELDS][self::FLD_URL] = [
             self::TYPE              => self::TYPE_STRING,
