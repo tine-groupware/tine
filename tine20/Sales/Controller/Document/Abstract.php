@@ -679,7 +679,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         ];
     }
 
-    public static function dispatchDocument(string $documentId): bool
+    public static function dispatchDocument(string $documentId, bool $redispatch = false): bool
     {
         /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to row lock stuff */
         // we only want to dispatch a specific document once at a time, so we lock manually
@@ -692,7 +692,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
         /** @var Sales_Model_Document_Abstract $document */
         $document = static::getInstance()->get($documentId);
-        if (!$document->isBooked() || $document::getStatusField() === Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH) {
+        if (!$document->isBooked() || (!$redispatch && $document::getStatusField() === Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH)) {
             throw new Tinebase_Exception_SystemGeneric('document needs to be booked and not in status manual dispatch');
         }
 
