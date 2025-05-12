@@ -1,6 +1,7 @@
 AccountPicker = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     recordClass: 'Admin.EmailAccount',
-    wtf: 'fuckfuckfuc',
+
+    allowPersonal: false,
 
     initComponent: function() {
         this.recordProxy = new Tine.Tinebase.data.RecordProxy({
@@ -9,6 +10,12 @@ AccountPicker = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
             recordClass: Tine.Tinebase.data.RecordMgr.get(this.recordClass),
             idProperty: 'id'
         });
+
+        if (this.allowPersonal !== true && !this.additionalFilters) {
+            this.additionalFilters = [
+                { field: 'type', operator: 'startswith', value: 'shared' }
+            ]
+        }
 
         AccountPicker.superclass.initComponent.call(this)
     }

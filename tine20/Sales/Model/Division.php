@@ -250,7 +250,9 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                     self::MODEL_NAME                => 'EmailAccount',
                 ],
                 self::UI_CONFIG                 => [
-                    'xtype'                         => 'felamimail-admin-accountpicker',
+                    self::FIELDS_CONFIG             => [
+                        'xtype'                         => 'felamimail-admin-accountpicker',
+                    ],
                 ],
             ],
         ],
