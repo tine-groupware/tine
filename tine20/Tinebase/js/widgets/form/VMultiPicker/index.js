@@ -212,10 +212,14 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     searchRecordByText: Ext.emptyFn,
 
     removeRecordById: function(id) {
+        // NOTE: getValue get's overwritten e.g. in filterToolbar
+        const getValue = _.bind(Tine.Tinebase.widgets.form.VMultiPicker.prototype.getValue, this)
+
         this.props.records.delete(id)
         // _.delete(this.props.records, rec => rec.getId() === id)
         this.renderUI()
-        const newValue = JSON.stringify(this.getValue())
+        this.value = getValue()
+        const newValue = JSON.stringify(this.value)
         this.fireEvent('change', this, Tine.Tinebase.common.assertComparable(JSON.parse(newValue)))
         this.fireEvent('select', this, Tine.Tinebase.common.assertComparable(JSON.parse(newValue)))
     },
