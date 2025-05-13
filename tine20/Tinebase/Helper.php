@@ -681,4 +681,19 @@ class Tinebase_Helper
 
         return false;
     }
+
+    /**
+     * generate a random html color code
+     *
+     * @return string
+     */
+    public static function generateRandomColor(): string
+    {
+        mt_srand((int)microtime()*1000000);
+        $color = '';
+        while (strlen($color) < 6) {
+            $color .= sprintf("%02X", mt_rand(0, 255));
+        }
+        return $color;
+    }
 }
