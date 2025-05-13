@@ -28,14 +28,11 @@ Für andere Datentypen muss jedoch spezifiziert werden wie diese ausgegeben werd
 
 Werte von Feldern können Objekte wie Datum und Uhrzeit (`Tinebase_DateTime`) Datensätze (`Tinebase_Record_Abstract`) oder Listen von Datensätzen (`Tinebase_Record_RecordSet`) sein. In diesem Fall kann auf die Eigenschaften und Funktionen der Objekte direkt mit einem `.` dereferenziert werden.
 
-
-
-
 Funktionen
 ---
 Neben den im Twig Standard enthaltenen [Funktionen](https://twig.symfony.com/doc/2.x/functions/index.html) sind folgende spezielle Funktionen verfügbar:
 
-* `addNewLine($str)` fügt einen Zeilenumbruch ein, wenn der übergebene Wert ein nicht leerer Text ist
+* `addNewLine($str)` fügt einen Zeilenumbruch ein, wenn der übergebene Wert ein nicht leerer Text ist.
 
     Beispiel:  
     ~~~
@@ -45,32 +42,93 @@ Neben den im Twig Standard enthaltenen [Funktionen](https://twig.symfony.com/doc
        Hinweis:  
        > Wird im Template für die Ausgabe einzelner (Adress)Daten ein `Umbruch = [Enter]` oder ein sogenannter `weicher Umbruch = [Enter] + [Shift]` gesetzt, wird bei leerem String eine Leerzeile ausgegeben.
 
-* `config($key, $app='')` gibt den entsprechenden Konfigurationswert zurück
-* `dateFormat($date, $format)` Übersetzt und formatiert das gegebene Datums-Objekt in die Sprache des Nutzenden (oder - je nachdem - des Datensatzes). Wenn das Format der Zielsprache gewünscht ist, sind die Formate `'date'`, `'time'` oder `'datetime` anzugeben. Ansonsten kann das Format frei mit [ISO Format Codes](https://examples.mashupguide.net/lib/ZendFramework-0.9.3-Beta/documentation/end-user/core/de/zend.date.constants.html#zend.date.constants.selfdefinedformats) bestimmt werden.
+* `config($key, $app='')` gibt den entsprechenden Konfigurationswert zurück.
+
+* `dateFormat($date, $format)` übersetzt und formatiert das gegebene Datums-Objekt in die Sprache des Nutzenden (oder - je nachdem - des Datensatzes). Wenn das Format der Zielsprache gewünscht ist, sind die Formate `'date'`, `'time'` oder `'datetime` anzugeben. Ansonsten kann das Format frei mit [ISO Format Codes](https://examples.mashupguide.net/lib/ZendFramework-0.9.3-Beta/documentation/end-user/core/de/zend.date.constants.html#zend.date.constants.selfdefinedformats) bestimmt werden.
+
+    Beispiele:  
+    ~~~
+    {{ dateFormat(date, 'date') }}  
+
+    {{dateFormat(date,'dd MMMM YYYY') }}  
+    
+    {{dateFormat(export.groupdata, 'EEEE dd. MMMM YYYY')}}  
+    ~~~
+
 * `filterBySubProperty($records, $property, $subProperty, $value)` 
+
 * `findBySubProperty($records, $property, $subProperty, $value)` 
-* `formatMessage(string $msg, array $data)` 
+
+* `formatMessage(string $msg, array $data)` übersetzt Texte, bei denen Variablen enthalten sind.
+
+    Beispiele:  
+    ~~~
+    {%if (record.getConfiguration().recordName == 'Invoice')%}{{ formatMessage('Payable within {days} days without deducation.', {'days': record.credit_term}) }} {%endif%}
+    
+    {{ formatMessage('plus { tax }% tax', {'tax': record.id}) }}
+    ~~~
+
 * `getCountryByCod($code)` 
-* ` getStaticData($key)` 
-* `keyField($appName, $keyFieldName, $key, $locale = null)` 
-* `ngettext($singular, $plural, $number)` übersetzt die gegebene plurale Form
+
+* `getStaticData($key)` gibt eine Variable aus - siehe auch `setStaticData($key, $data)`.
+
+    Beispiel:  
+    ~~~
+    {{getStaticData('var_n')}}
+    ~~~
+
+* `keyField($appName, $keyFieldName, $key, $locale = null)` gibt Schlüsselfelder mit den richtigen Namen aus.
+
+    Beispiel:  
+    ~~~
+    ${twig:keyField('Calendar', 'eventStatus', record.status)}
+    ~~~
+
+* `ngettext($singular, $plural, $number)` übersetzt die gegebene plurale Form.
+
 * `relationTranslateModel($model)` 
+
 * `renderModel($modelName)` 
+
 * `renderTitle($record, $modelName)` 
+
 * `sanitizeFileName($string)` 
-* `setStaticData($key, $data)` 
-* `translate($str)` übersetzt den gegebenen Text in die Sprache des Nutzenden (oder je nachdem des Datensatzes)
-kurze Beschreibung vorhanden
-* `_($str)` ist ein alias für `translate($str)`
+
+* `setStaticData($key, $data)` setzt eine Variable mit gewünschtem Inhalt - siehe auch `getStaticData($key)`.
+
+    Beispiele:  
+    ~~~
+    {{setStaticData('var_n',record.document_number)}}
+
+    {% if record.document_number%}{{setStaticData('var_number',record.document_number)}}{% else %}{{setStaticData('var_number',record.proformaNumber)}}{% endif %}
+
+    {{setStaticData('var_date',dateFormat(record.date, 'dd.MM.YYYY'))}}
+    ~~~
+
+* `translate($str)` übersetzt den gegebenen Text in die Sprache des Nutzenden (oder je nachdem des Datensatzes).
+
+    Beispiel:  
+    ~~~
+    {{ translate('Customer Number')}}
+    ~~~
+
+       Hinweis:  
+       > bei manchen Text-Formatierungen in einem Template, wie Ausgabe in GROSSBUCHSTABEN, muss die Formatierung in den Befehl gesetzt werden
+       {{record.getConfiguration().recordName |upper}}
+
+* `_($str)` ist ein alias für `translate($str)`.
 
 Filter
 ---
 Neben den im Twig Standard enthaltenen [Filtern](https://twig.symfony.com/doc/2.x/filters/index.html) sind folgende spezielle Filter verfügbar:
 
-* `accountLoginChars($str)` filtert Login-Zeichen eines Account
-* `preg_replace($subject, $pattern, $replacement, $limit, $count)` sucht und ersetzt mit regulären Ausdrücken, siehe https://www.php.net/preg_replace
-* `removeSpace($str)` filtert Leerzeichen aus einem String
-* `transliterate($str)` filtert bestimmte Zeichen eines Strings und wandelt diese in andere Zeichen/String (z.B. UTF8)
+* `accountLoginChars($str)` filtert Login-Zeichen eines Account.
+
+* `preg_replace($subject, $pattern, $replacement, $limit, $count)` sucht und ersetzt mit regulären Ausdrücken, siehe https://www.php.net/preg_replace.
+
+* `removeSpace($str)` filtert Leerzeichen aus einem String.
+
+* `transliterate($str)` filtert bestimmte Zeichen eines Strings und wandelt diese in andere Zeichen/String um (z.B. UTF8).
 
 Erweiterungen
 ---
