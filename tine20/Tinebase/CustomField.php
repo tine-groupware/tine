@@ -1090,4 +1090,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         return $this->_backendValue->create($_record);
     }
+
+    public function getConfigBackend(): Tinebase_CustomField_Config
+    {
+        return $this->_backendConfig;
+    }
 }
