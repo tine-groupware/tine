@@ -3967,7 +3967,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         return $record;
     }
 
-    protected function _addTempfileAttachment($record, $filename, $tempFile)
+    protected function _addTempfileAttachment($record, $filename, $tempFile): ?Tinebase_Model_Tree_Node
     {
         try {
             $node = Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $filename, $tempFile);
@@ -4040,7 +4040,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         }
     }
 
-    public function fileMessageAttachment($location, $message, $attachment, $forceOverwrite = false)
+    public function fileMessageAttachment($location, $message, $attachment, $forceOverwrite = false): ?Tinebase_Model_Tree_Node
     {
         $recordId = is_array($location['record_id']) && isset($location['record_id']['id'])
             ? $location['record_id']['id']
@@ -4052,12 +4052,7 @@ HumanResources_CliTests.testSetContractsEndDate */
             $attachment['partId']);
         $filename = $this->_getfiledAttachmentFilename($attachment, $message);
 
-        $node = $this->_addTempfileAttachment($record, $filename, $tempFile);
-        if (! $node) {
-            return null;
-        }
-
-        return $record;
+        return $this->_addTempfileAttachment($record, $filename, $tempFile);
     }
 
     protected function _getfiledAttachmentFilename($attachment, $message)

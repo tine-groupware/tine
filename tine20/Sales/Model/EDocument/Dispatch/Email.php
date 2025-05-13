@@ -111,10 +111,11 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             ], true);
             $msg = Felamimail_Controller_Message_Send::getInstance()->sendMessage($msg);
             // TODO FIXME this is not concurrency safe at all!!! need to fix this code in felamimail
-            $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder(
-                Felamimail_Controller_Account::getInstance()->getSystemFolder($fmAccountId, Felamimail_Model_Folder::FOLDER_SENT),
-                $msg
-            );
+            if (null === ($sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder(
+                    Felamimail_Controller_Account::getInstance()->getSystemFolder($fmAccountId, Felamimail_Model_Folder::FOLDER_SENT),
+                    $msg))) {
+                throw new Tinebase_Exception_Backend('could not find sent message in sent folder');
+            }
 
         } catch (Throwable $t) {
             Tinebase_Exception::log($t);
@@ -133,6 +134,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             return false;
         }
 
+        /** @var Felamimail_Model_Message $sentMessage */
         $dispatchHistory = new Sales_Model_Document_DispatchHistory([
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => $document::class,
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => $document->getId(),
@@ -142,6 +144,10 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
                 Sales_Model_Document_DispatchHistory::DH_TYPE_WAIT_FOR_FEEDBACK : Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS,
             Sales_Model_Document_DispatchHistory::FLD_DISPATCH_ID => $dispatchId,
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
+            Sales_Model_Document_DispatchHistory::FLD_XPROPS => [
+                'fmAccountId' => $fmAccountId,
+                'sentMsgId' => $sentMessage->messageuid,
+            ],
         ]);
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
@@ -149,7 +155,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
         Sales_Controller_Document_DispatchHistory::getInstance()->fileMessageAttachment(
             ['record_id' => $addedHistoryId],
             $sentMessage,
-            ['partId' => null, 'name' => 'email']
+            ['partId' => null, 'filename' => 'email.eml']
         );
         $transaction->release();
 

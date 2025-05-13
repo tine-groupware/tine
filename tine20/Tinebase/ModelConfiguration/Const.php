@@ -127,6 +127,7 @@ class Tinebase_ModelConfiguration_Const {
     public const FLD_ORIGINAL_ID = 'original_id';
     public const FLD_RELATIONS = 'relations';
     public const FLD_TAGS = 'tags';
+    public const FLD_XPROPS = 'xprops';
     public const FORCE_VALUES = 'forceValues';
     /**
      * valid for the config of fields of type record(s). Defines virtual field in foreign record which holds own record(s)

@@ -1614,9 +1614,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $parent;
     }
 
-    protected function _createNodeFromTempfile($targetPath, $filename, $tempFile, $_forceOverwrite = false)
+    protected function _createNodeFromTempfile($targetPath, $filename, $tempFile, $_forceOverwrite = false): ?Tinebase_Model_Tree_Node
     {
         try {
+            /** @var Tinebase_Model_Tree_Node $node */
             $node = $this->createNodes(
                 array($targetPath . '/' . $filename),
                 Tinebase_Model_Tree_FileObject::TYPE_FILE,
@@ -1651,7 +1652,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         return $targetPath;
     }
 
-    public function fileMessageAttachment($location, $message, $attachment, $forceOverwrite = false)
+    public function fileMessageAttachment($location, $message, $attachment, $forceOverwrite = false): ?Tinebase_Model_Tree_Node
     {
         if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
             return parent::fileMessageAttachment($location, $message, $attachment, $forceOverwrite);
@@ -1665,9 +1666,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $filename = $this->_getfiledAttachmentFilename($attachment, $message);
         $targetPath = $this->_getLocationTargetPath($location);
-        $node = $this->_createNodeFromTempfile($targetPath, $filename, $tempFile, $forceOverwrite);
-
-        return $node ? $this->get($node->parent_id) : false;
+        return $this->_createNodeFromTempfile($targetPath, $filename, $tempFile, $forceOverwrite);
     }
 
     /**
