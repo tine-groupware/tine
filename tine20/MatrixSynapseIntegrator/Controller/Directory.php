@@ -96,6 +96,7 @@ class MatrixSynapseIntegrator_Controller_Directory extends Tinebase_Controller_R
 
         // select from tine20_accounts and tine20_addressbook where tine20_accounts.id in synapse users
         $tineIds = array_keys($synapseUsers);
+        // @phpstan-ignore-next-line
         $query = $pdo->prepare(
             "SELECT
                 tine20_accounts.id,
