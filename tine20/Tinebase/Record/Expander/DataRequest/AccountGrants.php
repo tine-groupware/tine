@@ -53,7 +53,9 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
                             }
                         }
                     }
-                    $record->setAccountGrants($grants);
+                    if ($grants) {
+                        $record->setAccountGrants($grants);
+                    }
                     return $record->{Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS};
                 } elseif (!$delegateRecord instanceof Tinebase_Record_Interface) {
                     if (!isset($funcCache[$delegateRecord])) {

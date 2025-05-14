@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,6 +25,7 @@ class Sales_Setup_Uninitialize extends Setup_Uninitialize
         Sales_Scheduler_Task::removeUpdateProductLifespanTask($scheduler);
         Sales_Scheduler_Task::removeCreateAutoInvoicesDailyTask($scheduler);
         Sales_Scheduler_Task::removeCreateAutoInvoicesMonthlyTask($scheduler);
+        Sales_Scheduler_Task::removeEMailDispatchResponseMinutelyTask($scheduler);
     }
 
     protected function _uninitializeCustomFields()

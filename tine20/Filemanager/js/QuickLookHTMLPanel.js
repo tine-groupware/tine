@@ -8,24 +8,20 @@
 
 const HTMLPanel = Ext.extend(Ext.Panel, {
     border: false,
+    url: '',
+    contentType: '',
 
     initComponent: function() {
-        const record = this.nodeRecord;
-
-        const contentType = record.get('contenttype');
-        const iconCls = Tine.Tinebase.common.getMimeIconCls(contentType);
-        const url = Tine.Filemanager.Model.Node.getDownloadUrl(record);
+        const iconCls = Tine.Tinebase.common.getMimeIconCls(this.contentType);
 
         this.html = `<iframe
-            class="sales-quicklook-edocuemnt"
-            style="width: 100%; height: 100%; border: none;"
-            src="${url}&disposition=inline"
+            class="sales-quicklook-edocuemnt dark-reverse"
+            style="width: 100%; height: 100%; border: none; background-color: white"
+            src="${this.url}&disposition=inline"
         />`;
 
         HTMLPanel.superclass.initComponent.call(this);
     },
-
-
 });
 
 Ext.reg('Filemanager.QuickLookHTMLPanel', HTMLPanel);

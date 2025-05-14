@@ -1846,4 +1846,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = Felamimail_Controller_Message::getInstance()->purifyBodyContent($bodyContent);
         return  $result;
     }
+
+    public function getPreviewsFromTempFile($tempFileId)
+    {
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+        $_node = new Tinebase_Model_Tree_Node([
+            'id' => $tempFileId,
+            'name'      => $tempFile->name,
+            'tempFile'  => $tempFile,
+            'hash'  =>  sha1($tempFileId),
+            'size'     =>  $tempFile->size,
+            'type'  =>  Tinebase_Model_Tree_FileObject::TYPE_FILE
+        ], true);
+
+        $result = Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node);
+
+        return $_node->preview_count ?? 0;
+    }
 }

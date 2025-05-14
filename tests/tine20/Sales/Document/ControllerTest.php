@@ -565,6 +565,11 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS)->count());
     }
 
+    public static function onCommitCallback(): void
+    {
+        throw new Tinebase_Exception();
+    }
+
     public function testDispatchDocument()
     {
         if (null === ($smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP))
@@ -619,6 +624,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE} = Sales_Model_EDocument_Dispatch_Email::class;
         $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG} = new Sales_Model_EDocument_Dispatch_Email([
             Sales_Model_EDocument_Dispatch_Email::FLD_EMAIL => $this->_originalTestUser->accountEmailAddress,
+            Sales_Model_EDocument_Dispatch_Email::FLD_EXPECTS_FEEDBACK => true,
             Sales_Model_EDocument_Dispatch_Email::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [
                 new Sales_Model_EDocument_Dispatch_DocumentType([
                     Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
@@ -639,8 +645,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
             Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS => 10,
             Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
-            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
             Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
                 new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
@@ -707,11 +714,24 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         unset($cleanMsgsRaii);
 
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'onCommitCallback']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('unreachable');
+        } catch (Tinebase_Exception) {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
+
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(Sales_Model_Document_Invoice::STATUS_MANUAL_DISPATCH, $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS});
         $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
-        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->find(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS)?->attachments->count());
-/*
+        $this->assertSame(1, ($dispatchHistory = $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->find(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_WAIT_FOR_FEEDBACK))?->attachments->count());
+        $this->assertSame('email.eml', $dispatchHistory->attachments->getFirstRecord()->name);
+        $this->assertArrayHasKey('sentMsgId', $dispatchHistory->xprops());
+        $this->assertSame($msg->messageuid, $dispatchHistory->xprops()['sentMsgId']);
+        $this->assertSame($dispatchFMAccount->getId(), $dispatchHistory->xprops()['fmAccountId'] ?? null);
+
         // create reply
         $unitTestAccount = Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class,  [
                 ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM],
@@ -721,12 +741,17 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $msg = new Felamimail_Model_Message([
             'account_id' => $unitTestAccount->getId(),
             'subject' => 'dispatch reply',
-            'to' => $account->email,
-            'body' => 'y',
+            'to' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
+            'body' => 'unittest',
+            'headers' => [
+                'X-zre-state' => true,
+                'In-Reply-to' => $dispatchHistory->xprops()['sentMsgId'],
+            ],
         ], true);
+
         Felamimail_Controller_Message_Send::getInstance()->sendMessage($msg);
 
-        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+        Felamimail_Controller_Cache_Folder::getInstance()->update($dispatchFMAccount);
         Felamimail_Controller_Cache_Message::getInstance()->updateCache($inbox, 10, getrandmax()); // TODO FIXME better use update flag -1/0 or such
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
@@ -738,10 +763,19 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 $imapBackend->removeMessage($uid);
             }
         });
-        //$this->assertSame(1, $dispatchMsgs->count(), print_r($dispatchMsgs->subject, true));
-        $this->assertContains('dispatch reply', $dispatchMsgs/ *->getFirstRecord()* /->subject);
 
-        unset($cleanMsgsRaii);*/
+        $this->assertTrue(Sales_Controller_Document_DispatchHistory::getInstance()->readEmailDispatchResponses());
+        unset($cleanMsgsRaii);
+
+        Sales_Controller_Document_DispatchHistory::clearOnCommitCallbackCache();
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'onCommitCallback']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('unreachable');
+        } catch (Tinebase_Exception) {}
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(Sales_Model_Document_Invoice::STATUS_DISPATCHED, $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS});
     }
 
 
