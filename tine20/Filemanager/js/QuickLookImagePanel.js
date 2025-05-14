@@ -16,7 +16,7 @@ const ImagePanel = Ext.extend(Ext.Panel, {
         const iconCls = Tine.Tinebase.common.getMimeIconCls(this.contentType);
 
         this.html = `<div class="filemanager-quicklook-image">
-          <img class="dark-reverse" style="max-width: 100%; max-height: 100%; object-fit: contain; background-color: white" src="${this.url}"/>
+          <img class="dark-reverse" style="max-width: 100%; max-height: 100%; object-fit: contain;" src="${this.url}"/>
         </div>`;
         ImagePanel.superclass.initComponent.call(this);
     },
