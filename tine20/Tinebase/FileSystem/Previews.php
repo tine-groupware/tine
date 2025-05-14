@@ -269,7 +269,7 @@ class Tinebase_FileSystem_Previews
      */
     public function createPreviewsFromNode(Tinebase_Model_Tree_Node $node)
     {
-        if (!$this->canNodeHavePreviews($node)) {
+         if (!$this->canNodeHavePreviews($node)) {
             return true;
         }
 
@@ -279,7 +279,7 @@ class Tinebase_FileSystem_Previews
 
         $flySystem = $node->flysystem ? Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem) : null;
         if (!$flySystem) {
-            $path = $this->_fsController->getRealPathForHash($node->hash);
+            $path = $node?->tempFile?->path ?? $this->_fsController->getRealPathForHash($node->hash);
             if (!is_file($path)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' file ' . $node->getId() . ' '
@@ -394,8 +394,9 @@ class Tinebase_FileSystem_Previews
             if ((int)$node->preview_count !== $maxCount) {
                 $this->_fsController->updatePreviewCount($node->hash, $maxCount);
             }
-
-
+            if ($node?->tempFile?->path) {
+                $node->preview_count = $maxCount;
+            }
 
             foreach ($files as $name => &$blob) {
                 $tempFile = Tinebase_TempFile::getTempPath();
