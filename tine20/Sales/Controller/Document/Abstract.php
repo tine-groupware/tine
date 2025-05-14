@@ -702,11 +702,18 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $missingDocTypes = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG}->getMissingDocumentTypes($document);
 
         // order matters, edocument may embed any of the other documents
+        $reloadDocument = false;
         if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $missingDocTypes)) {
             (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $documentId);
+            $reloadDocument = true;
         }
         if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT, $missingDocTypes) && static::class === Sales_Controller_Document_Invoice::class) {
             Sales_Controller_Document_Invoice::getInstance()->createEDocument($documentId);
+            $reloadDocument = true;
+        }
+
+        if ($reloadDocument) {
+            $document = static::getInstance()->get($documentId);
         }
 
         /** @var Sales_Model_EDocument_Dispatch_Interface $dispatcher */
