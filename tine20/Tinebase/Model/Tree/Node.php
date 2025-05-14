@@ -108,11 +108,12 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 10,
+        self::VERSION       => 11,
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,
+        self::HAS_XPROPS    => true,
         'modlogActive'      => true,
         self::HAS_DELETED_TIME_UNIQUE => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
