@@ -51,6 +51,9 @@ variables:
   # "Rewrite composer lock to pull packages from cache."
   COMPOSER_LOCK_REWRITE: "true"
 
+  # Applications to install for tests. Can be all comma separated list with out spaces of application names
+  TINE20_APPLICATION_TO_INSTALL: all
+
   # Test Jobs
   # Variable are switched on with the string "true" and off with the string "false".
   # No test job must run if RUN_NO_TESTS is true.
