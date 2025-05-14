@@ -500,7 +500,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      *
      * @param $tmpfileId
      */
-    public function downloadTempfile($tmpfileId)
+    public function downloadTempfile($tmpfileId, $disposition = 'attachment')
     {
         $this->checkAuth();
 
@@ -516,10 +516,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
 
             $filemanagerHttpFrontend = new Filemanager_Frontend_Http();
-            $filemanagerHttpFrontend->downloadFile($file->path, null);
+            $filemanagerHttpFrontend->downloadFile($file->path, null, null , $disposition);
         }
 
-        $this->_downloadTempFile($tmpFile, $tmpFile->path);
+        $this->_downloadTempFile($tmpFile, $tmpFile->path, $disposition);
         exit;
     }
 
@@ -580,6 +580,32 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         exit;
+    }
+
+    /**
+     * download preview by temp file
+     *
+     * @param $_tempFileId
+     * @param $_type
+     * @param int $_num
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function downloadPreviewByTempFile($_tempFileId, $_type, $_num = 0)
+    {
+        $this->checkAuth();
+
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
+        $_node = new Tinebase_Model_Tree_Node([
+            'id' => $_tempFileId,
+            'name'      => $tempFile->name,
+            'tempFile'  => $tempFile,
+            'hash'  =>  sha1($_tempFileId),
+            'size'     =>  $tempFile->size,
+            'type'  =>  Tinebase_Model_Tree_FileObject::TYPE_FILE
+        ], true);
+
+        $this->_downloadPreview($_node, $_type, $_num);
     }
 
     /**

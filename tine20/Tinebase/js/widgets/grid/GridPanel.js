@@ -2570,7 +2570,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 Tine.Filemanager.QuickLookPanel.openWindow({
                     record: this.getStore().getAt(row),
                     initialApp: this.app,
-                    sm: sm
+                    sm: sm,
+                    requiredGrant: false,
                 });
             }
         }
