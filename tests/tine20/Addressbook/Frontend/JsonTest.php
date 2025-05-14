@@ -414,7 +414,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
      * @param array $_tags
      * @return array contact data
      */
-    protected function _addContact($_orgName = NULL, $_forceCreation = FALSE, $_tags = NULL)
+    protected function _addContact($_orgName = null, $_forceCreation = false, $_tags = null): array
     {
         $newContactData = $this->_getContactData($_orgName);
         if ($_tags !== NULL) {
@@ -843,9 +843,17 @@ class Addressbook_Frontend_JsonTest extends TestCase
     {
         $contact = $this->_addContact();
 
-        $contact = $this->_uit->getContact($contact['id']);
+        $contact = $this->_uit->getContact($contact);
 
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
+    }
+
+    public function testGetContactWithIdArray()
+    {
+        $contact = $this->_addContact();
+
+        self::expectException(Tinebase_Exception_InvalidArgument::class);
+        $this->_uit->getContact(['id' => $contact]);
     }
 
     public function testTelNormalizedNotWriteable()
@@ -1066,8 +1074,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $this->_uit->deleteContacts($contact['id']);
 
-        $this->expectException('Tinebase_Exception_NotFound');
-        $contact = $this->_uit->getContact($contact['id']);
+        $this->expectException(Tinebase_Exception_NotFound::class);
+        $this->_uit->getContact($contact['id']);
     }
 
     /**
