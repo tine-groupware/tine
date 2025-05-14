@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -22,6 +22,9 @@ class SSO_Config extends Tinebase_Config_Abstract
 
     public const OAUTH2 = 'oauth2';
     public const OAUTH2_KEYS = 'keys';
+    public const OAUTH2_GRANTS = 'grants';
+    public const OAUTH2_GRANTS_AUTHORIZATION_CODE = 'authorization_code';
+    public const OAUTH2_GRANTS_DEVICE_CODE = 'device_code';
 
     public const SAML2 = 'saml2';
     public const SAML2_ENTITYID = 'entityid';
@@ -52,6 +55,27 @@ class SSO_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => true,
         ],
+        self::OAUTH2_GRANTS         => [
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    [
+                        'id' => self::OAUTH2_GRANTS_AUTHORIZATION_CODE,
+                        'value' => self::OAUTH2_GRANTS_AUTHORIZATION_CODE,
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::OAUTH2_GRANTS_DEVICE_CODE,
+                        'value' => self::OAUTH2_GRANTS_DEVICE_CODE,
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+            ],
+        ],
         self::OAUTH2                => [
             //_('Oauth2')
             self::LABEL                 => 'Oauth2',
@@ -68,7 +92,7 @@ class SSO_Config extends Tinebase_Config_Abstract
                 self::OAUTH2_KEYS           => [
                     self::TYPE                  => self::TYPE_ARRAY,
                     self::DEFAULT_STR           => []
-                ]
+                ],
             ],
             self::DEFAULT_STR           => [],
         ],

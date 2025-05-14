@@ -24,6 +24,7 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
     public const FLD_REDIRECT_URLS = 'redirect_urls';
     public const FLD_SECRET = 'secret';
     public const FLD_IS_CONFIDENTIAL = 'is_confidential';
+    public const FLD_OAUTH2_GRANTS = 'oauth2_grants';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -43,6 +44,12 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
         self::MODEL_NAME => self::MODEL_NAME_PART,
         self::RECORD_NAME => 'OAuth2 Relying Party Config',
         self::RECORDS_NAME => 'OAuth2 Relying Party Configs', // ngettext('OAuth2 Relying Party Config', 'OAuth2 Relying Party Configs', n)
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_OAUTH2_GRANTS
+            ]
+        ],
 
         self::FIELDS => [
             self::FLD_REDIRECT_URLS     => [
@@ -66,7 +73,24 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL           => 0,
-            ]
+            ],
+            self::FLD_OAUTH2_GRANTS     => [
+                self::TYPE                  => self::TYPE_RECORDS,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::DEFAULT_VALUE =>  [[Tinebase_Core::class, 'createInstance'], Tinebase_Record_RecordSet::class, SSO_Model_OAuthGrant::class, [
+                        [SSO_Model_OAuthGrant::FLD_GRANT => SSO_Config::OAUTH2_GRANTS_AUTHORIZATION_CODE],
+                    ]],
+                    [Tinebase_Record_Validator_SubValidate::class],
+                ],
+                self::CONFIG                => [
+                    self::APP_NAME                  => SSO_Config::APP_NAME,
+                    self::MODEL_NAME                => SSO_Model_OAuthGrant::MODEL_NAME_PART,
+                    self::STORAGE                   => self::TYPE_JSON,
+                ],
+                self::UI_CONFIG             => [
+                    ''
+                ],
+            ],
         ]
     ];
 }

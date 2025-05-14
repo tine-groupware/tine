@@ -164,16 +164,30 @@ class SSO_PublicAPITest extends TestCase
             $xml);
     }
 
+    /**
+     * @group needsbuild
+     */
     public function testOAuthDeviceTokenCall()
     {
-        $oauthDevice = SSO_Controller_OAuthDevice::getInstance()->create(new SSO_Model_OAuthDevice([
-            SSO_Model_OAuthDevice::FLD_NAME => 'unittest',
+        $clientId = 'unittest';
+        /*$relyingParty = */SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
+            SSO_Model_RelyingParty::FLD_NAME => $clientId,
+            SSO_Model_RelyingParty::FLD_LABEL => 'unittest label',
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
+                SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
+                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
+                SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS   => new Tinebase_Record_RecordSet(SSO_Model_OAuthGrant::class, [[
+                    SSO_Model_OAuthGrant::FLD_GRANT => SSO_Config::OAUTH2_GRANTS_DEVICE_CODE,
+                ]]),
+            ]),
         ]));
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/device/auth', 'POST'))
                 ->withParsedBody([
-                    'client_id' => $oauthDevice->getId(),
+                    'client_id' => $clientId,
                 ])
         );
 
@@ -197,7 +211,7 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/token', 'POST'))
                 ->withParsedBody([
-                    'client_id' => $oauthDevice->getId(),
+                    'client_id' => $clientId,
                     'device_code' => $deviceCode,
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
                 ])
@@ -211,12 +225,20 @@ class SSO_PublicAPITest extends TestCase
         $this->assertArrayHasKey('error', $body);
         $this->assertSame('authorization_pending', $body['error']);
 
+        Tinebase_Core::setUser($this->_originalTestUser); // publicToken sets anonymous user
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/device/user/' . $userCode, 'POST'))
+                ->withParsedBody([
+                    'confirmed' => 1,
+                ])
+        );
+
         SSO_Controller::publicOAuthDeviceUser($userCode);
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/token', 'POST'))
                 ->withParsedBody([
-                    'client_id' => $oauthDevice->getId(),
+                    'client_id' => $clientId,
                     'device_code' => $deviceCode,
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
                 ])

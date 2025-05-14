@@ -99,7 +99,6 @@ Tine.widgets.form.FieldManager = function() {
 
             if (_.get(fieldDefinition, 'config.validate'))  delete fieldDefinition.config.validate; // server only
             Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {}, fieldDefinition.uiconfig?.fieldConfig || {});
-
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);

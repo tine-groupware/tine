@@ -32,8 +32,41 @@ msgstr "Relying Parties"
 msgid "External Identity Providers"
 msgstr "External Identity Providers"
 
+msgid "Authentication Successfully"
+msgstr "Authentication Successfully"
+
+#, python-brace-format
+msgid "Please proceed with {0}."
+msgstr "Please proceed with {0}."
+
+msgid "Please proceed with your device or programm."
+msgstr "Please proceed with your device or programm."
+
+msgid "You can close this page now."
+msgstr "You can close this page now."
+
+msgid "Could not Find Device"
+msgstr "Could not Find Device"
+
+msgid "No device authentication request found, please recheck your code!"
+msgstr "No device authentication request found, please recheck your code!"
+
+msgid "Enter Device Code"
+msgstr "Enter Device Code"
+
+#, python-brace-format
+msgid "Please enter the device code for {0}."
+msgstr "Please enter the device code for {0}."
+
+msgid "Please enter the device code provided by external device or programm."
+msgstr "Please enter the device code provided by external device or programm."
+
 msgid "SSO"
 msgstr "SSO"
+
+#, python-brace-format
+msgid "Login for {0} (external device/programm)"
+msgstr "Login for {0} (external device/programm)"
 
 #, python-brace-format
 msgid "After successful login you will be redirected to {0}"
@@ -72,6 +105,52 @@ msgstr[1] "External Identity Providers"
 msgid "Description"
 msgstr "Description"
 
+msgid "Show on Login Screen"
+msgstr "Show on Login Screen"
+
+msgid "Label"
+msgstr "Label"
+
+msgid "Logo Light"
+msgstr "Logo Light"
+
+msgid "Logo Dark"
+msgstr "Logo Dark"
+
+msgid "Allow assignment of existing local accounts"
+msgstr "Allow assignment of existing local accounts"
+
+msgid "Allow reassignment of existing local accounts"
+msgstr "Allow reassignment of existing local accounts"
+
+msgid "Allow creation of new local accounts"
+msgstr "Allow creation of new local accounts"
+
+msgid "Allow local login of assigned accounts"
+msgstr "Allow local login of assigned accounts"
+
+msgid "Require local MFA"
+msgstr "Require local MFA"
+
+msgid "Update local properties"
+msgstr "Update local properties"
+
+msgid "Primary group for created local accounts"
+msgstr "Primary group for created local accounts"
+
+msgid "OAuth Device Code"
+msgid_plural "OAuth Device Codes"
+msgstr[0] "OAuth Device Code"
+msgstr[1] "OAuth Device Codes"
+
+msgid "OAuth2 Grant"
+msgid_plural "OAuth2 Grants"
+msgstr[0] "OAuth2 Grant"
+msgstr[1] "OAuth2 Grants"
+
+msgid "OAuth Grant"
+msgstr "OAuth Grant"
+
 msgid "OAuth2 Relying Party Config"
 msgid_plural "OAuth2 Relying Party Configs"
 msgstr[0] "OAuth2 Relying Party Config"
@@ -87,9 +166,6 @@ msgid "Relying Party"
 msgid_plural "Relying Parties"
 msgstr[0] "Relying Party"
 msgstr[1] "Relying Parties"
-
-msgid "Label"
-msgstr "Label"
 
 msgid "Logo"
 msgstr "Logo"

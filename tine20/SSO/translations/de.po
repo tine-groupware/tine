@@ -19,7 +19,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 msgid "PasswordLess Login"
-msgstr ""
+msgstr "Kennwortlose Anmeldung"
 
 msgid "Oauth2"
 msgstr ""
@@ -36,8 +36,41 @@ msgstr ""
 msgid "External Identity Providers"
 msgstr ""
 
+msgid "Authentication Successfully"
+msgstr "Authentifizierung erfolgreich"
+
+#, python-brace-format
+msgid "Please proceed with {0}."
+msgstr "Bitte fahren Sie mit {0} fort."
+
+msgid "Please proceed with your device or programm."
+msgstr "Bitte fahren Sie mit Ihrem Gerät oder Programm fort."
+
+msgid "You can close this page now."
+msgstr "Sie können diese Seite jetzt schließen."
+
+msgid "Could not Find Device"
+msgstr "Gerät konnte nicht gefunden werden"
+
+msgid "No device authentication request found, please recheck your code!"
+msgstr "Keine Anfrage zur Geräteauthentifizierung gefunden, bitte überprüfen Sie Ihren Code erneut!"
+
+msgid "Enter Device Code"
+msgstr "Gerätecode eingeben"
+
+#, python-brace-format
+msgid "Please enter the device code for {0}."
+msgstr "Bitte geben Sie den Gerätecode für {0} ein."
+
+msgid "Please enter the device code provided by external device or programm."
+msgstr "Bitte geben Sie den vom externen Gerät oder Programm bereitgestellten Gerätecode ein."
+
 msgid "SSO"
 msgstr ""
+
+#, python-brace-format
+msgid "Login for {0} (external device/programm)"
+msgstr "Anmeldung für {0} (externes Gerät/Programm)"
 
 #, python-brace-format
 msgid "After successful login you will be redirected to {0}"
@@ -76,6 +109,52 @@ msgstr[1] ""
 msgid "Description"
 msgstr "Beschreibung"
 
+msgid "Show on Login Screen"
+msgstr ""
+
+msgid "Label"
+msgstr "Bezeichnung"
+
+msgid "Logo Light"
+msgstr ""
+
+msgid "Logo Dark"
+msgstr ""
+
+msgid "Allow assignment of existing local accounts"
+msgstr ""
+
+msgid "Allow reassignment of existing local accounts"
+msgstr ""
+
+msgid "Allow creation of new local accounts"
+msgstr ""
+
+msgid "Allow local login of assigned accounts"
+msgstr ""
+
+msgid "Require local MFA"
+msgstr ""
+
+msgid "Update local properties"
+msgstr ""
+
+msgid "Primary group for created local accounts"
+msgstr ""
+
+msgid "OAuth Device Code"
+msgid_plural "OAuth Device Codes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "OAuth2 Grant"
+msgid_plural "OAuth2 Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "OAuth Grant"
+msgstr ""
+
 msgid "OAuth2 Relying Party Config"
 msgid_plural "OAuth2 Relying Party Configs"
 msgstr[0] ""
@@ -91,9 +170,6 @@ msgid "Relying Party"
 msgid_plural "Relying Parties"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Label"
-msgstr "Bezeichnung"
 
 msgid "Logo"
 msgstr "Logo"

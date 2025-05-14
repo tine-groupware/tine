@@ -65,13 +65,12 @@ class SSO_Facade_OpenIdConnect_DeviceCodeGrant extends SSO_Facade_OpenIdConnect_
             throw new OAuthServerException('device_code is not valid', 0, 'access_denied');
         }
 
-        $clientEntity = new SSO_Facade_OAuth2_ClientEntity(new SSO_Model_RelyingParty([
-            SSO_Model_RelyingParty::FLD_NAME => $deviceCode->getIdFromProperty(SSO_Model_OAuthDeviceCode::FLD_DEVICE_ID),
-            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
-                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS => ['/'],
-                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
-            ], true),
-        ], true));
+        /** @var SSO_Model_RelyingParty $rp */
+        $rp = SSO_Controller_RelyingParty::getInstance()->get(
+            $deviceCode->getIdFromProperty(SSO_Model_OAuthDeviceCode::FLD_RELYING_PARTY_ID)
+        );
+        $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS} = ['/'];
+        $clientEntity = new SSO_Facade_OAuth2_ClientEntity($rp);
 
         $authRequest = new \Idaas\OpenID\RequestTypes\AuthenticationRequest();
         $authRequest->setAuthorizationApproved(true);
@@ -86,7 +85,7 @@ class SSO_Facade_OpenIdConnect_DeviceCodeGrant extends SSO_Facade_OpenIdConnect_
         $request = $request->withParsedBody([
             'code' => $token,
             'client_id' => $clientEntity->getIdentifier(),
-            'client_secret' => 'notsosecret',
+            'client_secret' => $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_SECRET},
             'redirect_uri' => '/',
         ]);
 

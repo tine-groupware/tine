@@ -24,7 +24,7 @@ class SSO_Model_OAuthDeviceCode extends Tinebase_Record_NewAbstract
 
     public const FLD_USER_CODE = 'user_code';
     public const FLD_VALID_UNTIL = 'valid_until';
-    public const FLD_DEVICE_ID = 'device_id';
+    public const FLD_RELYING_PARTY_ID = 'relying_party_id';
     public const FLD_APPROVED_BY = 'approved_by';
 
     /**
@@ -51,8 +51,8 @@ class SSO_Model_OAuthDeviceCode extends Tinebase_Record_NewAbstract
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
             self::INDEXES => [
-                self::FLD_DEVICE_ID => [
-                    self::COLUMNS => [self::FLD_DEVICE_ID],
+                self::FLD_RELYING_PARTY_ID => [
+                    self::COLUMNS => [self::FLD_RELYING_PARTY_ID],
                 ]
             ],
             self::UNIQUE_CONSTRAINTS => [
@@ -64,11 +64,11 @@ class SSO_Model_OAuthDeviceCode extends Tinebase_Record_NewAbstract
 
         self::ASSOCIATIONS => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
-                self::FLD_DEVICE_ID => [
-                    'targetEntity' => SSO_Model_OAuthDevice::class,
-                    'fieldName' => self::FLD_DEVICE_ID,
+                self::FLD_RELYING_PARTY_ID => [
+                    'targetEntity' => SSO_Model_RelyingParty::class,
+                    'fieldName' => self::FLD_RELYING_PARTY_ID,
                     'joinColumns' => [[
-                        'name' => self::FLD_DEVICE_ID,
+                        'name' => self::FLD_RELYING_PARTY_ID,
                         'referencedColumnName'  => 'id'
                     ]],
                 ],
@@ -76,12 +76,12 @@ class SSO_Model_OAuthDeviceCode extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS => [
-            self::FLD_DEVICE_ID         => [
+            self::FLD_RELYING_PARTY_ID         => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LENGTH                => 40,
                 self::CONFIG                => [
                     self::APP_NAME              => SSO_Config::APP_NAME,
-                    self::MODEL_NAME            => SSO_Model_OAuthDevice::MODEL_NAME_PART,
+                    self::MODEL_NAME            => SSO_Model_RelyingParty::MODEL_NAME_PART,
                     self::FIXED_LENGTH          => true,
                 ],
             ],
