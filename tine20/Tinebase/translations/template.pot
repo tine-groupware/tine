@@ -180,6 +180,9 @@ msgstr ""
 msgid "Logger Configuration"
 msgstr ""
 
+msgid "Suppress Exception Traces"
+msgstr ""
+
 msgid "MFA Bypass Netmasks"
 msgstr ""
 
@@ -831,6 +834,9 @@ msgstr ""
 msgid "Path to custom favicon."
 msgstr ""
 
+msgid "Role receiving support requests"
+msgstr ""
+
 msgid "Filesystem settings"
 msgstr ""
 
@@ -950,9 +956,6 @@ msgid "Max amount in total"
 msgstr ""
 
 msgid "Max amount per filter"
-msgstr ""
-
-msgid "Enable Password Less Login"
 msgstr ""
 
 msgid "Quota settings"
@@ -1094,9 +1097,6 @@ msgid ""
 "Template for SMS New Password with parameters: app, user, contact, password"
 msgstr ""
 
-msgid "Your new {{ app.branding.title }} password is: {{ password }}"
-msgstr ""
-
 msgid "User type"
 msgstr ""
 
@@ -1174,6 +1174,9 @@ msgstr ""
 msgid "Old pin is wrong."
 msgstr ""
 
+msgid "Support Request"
+msgstr ""
+
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
 msgstr[0] ""
@@ -1192,6 +1195,12 @@ msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr ""
 
 msgid "Email account already exists"
+msgstr ""
+
+msgid "Destination source already exists:"
+msgstr ""
+
+msgid "Email account or alias/forward already exists"
 msgstr ""
 
 msgid "Area is locked"
@@ -1261,6 +1270,9 @@ msgid "Total: "
 msgstr ""
 
 msgid "Data"
+msgstr ""
+
+msgid "Node name may not be changed in update"
 msgstr ""
 
 msgid "The following files have changed:"
@@ -1335,6 +1347,15 @@ msgstr ""
 
 #, python-brace-format
 msgid "Learn more about {0}"
+msgstr ""
+
+msgid "Video Tutorials"
+msgstr ""
+
+msgid "Technical Documentation"
+msgstr ""
+
+msgid "FAQ"
 msgstr ""
 
 msgid "Ok"
@@ -1592,6 +1613,12 @@ msgstr ""
 msgid "This method is rate-limited and you sent too many requests."
 msgstr ""
 
+msgid "There where Errors:"
+msgstr ""
+
+msgid "({e.code}) { e.message }"
+msgstr ""
+
 msgid "Service Unavailable"
 msgstr ""
 
@@ -1650,6 +1677,12 @@ msgstr ""
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Do you want to copy the HTML content with styles?"
 msgstr ""
 
 msgid "Outdated Browser"
@@ -2217,6 +2250,13 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
+msgid "Translation Problem"
+msgstr ""
+
+msgid ""
+"A problem, with the translations was detected, trying to reload client..."
+msgstr ""
+
 msgid "Total    Uploads"
 msgstr ""
 
@@ -2282,6 +2322,13 @@ msgid "choose other {0}..."
 msgstr ""
 
 msgid "Not a valid time"
+msgstr ""
+
+msgid "Copied to clipboard"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
 msgstr ""
 
 msgid "Job Title"
@@ -2770,9 +2817,6 @@ msgstr ""
 msgid "Enter description"
 msgstr ""
 
-msgid "Close"
-msgstr ""
-
 msgid "delete"
 msgstr ""
 
@@ -3212,6 +3256,9 @@ msgstr ""
 msgid "Reload config"
 msgstr ""
 
+msgid "Compose Email"
+msgstr ""
+
 msgid "Gets assigned automatically"
 msgstr ""
 
@@ -3249,10 +3296,18 @@ msgstr ""
 msgid "Search for {0} ..."
 msgstr ""
 
+msgid ""
+"{recordGender, select, male {No matching {recordsName} found} female {No "
+"matching {recordsName} found} other {No matching {recordsName} found}}"
+msgstr ""
+
 msgid "Searching..."
 msgstr ""
 
 msgid "You tried to link a record with itself. This is not allowed!"
+msgstr ""
+
+msgid "Open link in new window"
 msgstr ""
 
 msgid "Search for records ..."
@@ -3599,6 +3654,9 @@ msgstr ""
 msgid "This is a multilingual field:"
 msgstr ""
 
+msgid "Select { itemName } ..."
+msgstr ""
+
 #, python-brace-format
 msgid "Transition from {current} to {target} is not allowed."
 msgstr ""
@@ -3793,6 +3851,27 @@ msgstr ""
 msgid "tag name"
 msgstr ""
 
+msgid "Add a new personal tag"
+msgstr ""
+
+msgid "Add New Personal Tag"
+msgstr ""
+
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr ""
+
+msgid "Enter tag name:"
+msgstr ""
+
+msgid "Notice"
+msgstr ""
+
+msgid "The minimum tag length is three."
+msgstr ""
+
+msgid "Could not create tag."
+msgstr ""
+
 msgid "Add Tags"
 msgstr ""
 
@@ -3806,18 +3885,6 @@ msgid "Detach tag(s)"
 msgstr ""
 
 msgid "Select Tag(s) to detach"
-msgstr ""
-
-msgid "Add a new personal tag"
-msgstr ""
-
-msgid "Add New Personal Tag"
-msgstr ""
-
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr ""
-
-msgid "Enter tag name:"
 msgstr ""
 
 msgid "No Tags to display"
@@ -3873,15 +3940,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Could not delete Tag(s)."
-msgstr ""
-
-msgid "Notice"
-msgstr ""
-
-msgid "The minimum tag length is three."
-msgstr ""
-
-msgid "Could not create tag."
 msgstr ""
 
 msgid "Could not update tag."
@@ -4385,6 +4443,9 @@ msgstr[1] ""
 msgid "Configuration"
 msgstr ""
 
+msgid "Disable automatic time shuffle"
+msgstr ""
+
 msgid "Last run"
 msgstr ""
 
@@ -4569,73 +4630,6 @@ msgstr ""
 msgid "Shared folders"
 msgstr ""
 
-msgid "Suppress Exception Traces"
-msgstr ""
-
-msgid "Role receiving support requests"
-msgstr ""
-
-msgid "Support Request"
-msgstr ""
-
-msgid "Destination source already exists:"
-msgstr ""
-
-msgid "Email account or alias/forward already exists"
-msgstr ""
-
-msgid "Node name may not be changed in update"
-msgstr ""
-
-msgid "Video Tutorials"
-msgstr ""
-
-msgid "Technical Documentation"
-msgstr ""
-
-msgid "FAQ"
-msgstr ""
-
-msgid "There where Errors:"
-msgstr ""
-
-msgid "({e.code}) { e.message }"
-msgstr ""
-
-msgid "Do you want to copy the HTML content with styles?"
-msgstr ""
-
-msgid "Translation Problem"
-msgstr ""
-
-msgid ""
-"A problem, with the translations was detected, trying to reload client..."
-msgstr ""
-
-msgid "Copied to clipboard"
-msgstr ""
-
-#, python-brace-format
-msgid "\"{value}\" was copied to clipboard"
-msgstr ""
-
-msgid "Compose Email"
-msgstr ""
-
-msgid ""
-"{recordGender, select, male {No matching {recordsName} found} female {No "
-"matching {recordsName} found} other {No matching {recordsName} found}}"
-msgstr ""
-
-msgid "Open link in new window"
-msgstr ""
-
-msgid "Select { itemName } ..."
-msgstr ""
-
-msgid "Disable automatic time shuffle"
-msgstr ""
-
 msgid "redirecting ..."
 msgstr ""
 
@@ -4646,4 +4640,19 @@ msgid "Neighbours only"
 msgstr ""
 
 msgid "Preview"
+msgstr ""
+
+msgid "Didn't receive the SMS?"
+msgstr ""
+
+msgid "Send Support request to admin?"
+msgstr ""
+
+msgid "Please enter the message:"
+msgstr ""
+
+msgid "Support request has been sent"
+msgstr ""
+
+msgid "I didn't receive a SMS message."
 msgstr ""

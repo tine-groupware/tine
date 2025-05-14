@@ -3864,7 +3864,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     ['id' => Tinebase_Model_ActionLog::TYPE_ADD_USER_CONFIRMATION,   'value' => 'Add User Confirmation', 'icon' => null, 'system' => true], //_('Add User Confirmation')
                     ['id' => Tinebase_Model_ActionLog::TYPE_DELETION,                'value' => 'Deletion',              'icon' => null, 'system' => true], //_('Deletion')
                     ['id' => Tinebase_Model_ActionLog::TYPE_EMAIL_NOTIFICATION,      'value' => 'Email Notification',    'icon' => null, 'system' => true], //_('Email Notification')
-                    ['id' => Tinebase_Model_ActionLog::TYPE_SUPPORT_REQUEST,         'value' => 'Support request',       'icon' => null, 'system' => true], //_('Support request')
+                    ['id' => Tinebase_Model_ActionLog::TYPE_SUPPORT_REQUEST,         'value' => 'Support Request',       'icon' => null, 'system' => true], //_('Support Request')
                 ]
             ],
         ],

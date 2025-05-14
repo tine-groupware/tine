@@ -25,13 +25,21 @@
       variant="primary"
       class="mb-2"
     >{{ window.i18n._('Generate password') }}</BButton>
+    <div class="me-3 d-flex mt-4">
+      <Component
+        v-for="(item, idx) in _additionalFields"
+        :is="item.__component"
+        :key="idx"
+        :itemCfg="item"
+      />
+    </div>
   </div>
-
 </template>
 
 <script setup>
 import PasswordField from '../components/PasswordField.vue'
-import { ref, inject, computed } from 'vue'
+import { ref, inject, computed, markRaw } from 'vue'
+import ExtAction from '../../../../TineBar/barItems/ExtAction.vue'
 
 const props = defineProps({
   passwordLabel: { type: String, default: 'Password' },
@@ -41,8 +49,8 @@ const props = defineProps({
   locked: { type: Boolean, default: true },
   clipboard: { type: Boolean, default: true },
   pwMandatoryByPolicy: { type: Boolean, default: true },
-
-  injectKey: { type: String }
+  injectKey: { type: String },
+  additionalFields: { type: Array, default: () => [] }
 })
 
 const { genPW, eventBus } = inject(props.injectKey)
@@ -67,6 +75,17 @@ const getValue = () => passwordFieldRef.value?.getValue() || ''
 const disableok = computed(() => props.allowBlank ? false : passwordFieldRef.value?.getValue()?.length === 0)
 
 const initialFocus = computed(() => passwordFieldRef.value.$inputEl)
+
+const _additionalFields = computed(() => {
+  let t = _.sortBy(props.additionalFields, item => {
+    return item.registerdItemPos
+  })
+  t = t.map(item => {
+    item.__component = item.__component || markRaw(ExtAction)
+    return item
+  })
+  return t
+})
 
 defineExpose({ getValue, disableok, initialFocus })
 </script>

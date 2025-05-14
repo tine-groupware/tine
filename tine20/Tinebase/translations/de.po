@@ -1244,7 +1244,7 @@ msgid "Old pin is wrong."
 msgstr "Die alte PIN ist falsch."
 
 msgid "Support Request"
-msgstr ""
+msgstr "Supportanfrage"
 
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
@@ -4901,6 +4901,24 @@ msgstr ""
 
 msgid "Preview"
 msgstr ""
+
+msgid "Didn't receive the SMS?"
+msgstr "Haben Sie die SMS nicht erhalten?"
+
+msgid "Send Support request to admin?"
+msgstr "Supportanfrage an den Administrator senden?"
+
+msgid "Please enter the message:"
+msgstr "Bitte geben Sie die Nachricht ein"
+
+msgid "Support request has been sent"
+msgstr "Ihr Supportanfrage wurde gesendet."
+
+msgid "I didn't receive a SMS message."
+msgstr "Ich habe die SMS nicht erhalten"
+
+msgid "Send the support request to admin"
+msgstr "Supportanfrage an den Administrator senden"
 
 msgid "Your new {{ app.branding.title }} password is: {{ password }}"
 msgstr "Ihr neues {{ app.branding.title }} Passwort ist: {{ password }}"

@@ -1238,7 +1238,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Export_Abstract::class, 'expressiveApi'))->toArray());
 
             $routeCollector->post('/sendSupportRequest', (new Tinebase_Expressive_RouteHandler(
-                Tinebase_Controller::class, 'postSendSupportRequest'))->toArray());
+                Tinebase_Controller::class, 'postSendSupportRequest', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
         });
 
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1281,6 +1283,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         try {
             $roleName = Tinebase_Config::getInstance()->{Tinebase_Config::SUPPORT_REQUEST_NOTIFICATION_ROLE};
+
             if (!$roleName) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending support request' . PHP_EOL);
                 return new \Laminas\Diactoros\Response;
@@ -1288,12 +1291,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             /** @var \Psr\Http\Message\ServerRequestInterface $request */
             $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
-            if (!is_array($post = $request->getParsedBody()) || !($post['msg'] ?? false)) {
+            $post = json_decode((string)$request->getBody(), true);
+            if (!is_array($post) || !($post['message'] ?? false)) {
                 return new \Laminas\Diactoros\Response(status: 400);
             }
 
             // TODO FIXME make sure msg is pure text, no potentially malicious email content
-            $messagePlain = strip_tags($post['msg']);
+            $user = Tinebase_User::getInstance()->getUserByLoginName($post['accountLoginName']);
 
             $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
             $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
@@ -1301,18 +1305,20 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 ->contact_id;
 
             $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
-                Tinebase_Core::getUser()->accountId));
+                $user->accountId));
             $translate = Tinebase_Translation::getTranslation(_locale: $locale);
             $subject = $translate->_('Support Request');
+            $messagePlain = strip_tags($post['message']);
 
             Tinebase_Notification::getInstance()->send(
-                Tinebase_Core::getUser(),
+                $user,
                 $recipients,
                 $subject,
                 $messagePlain
             );
-
-            return new \Laminas\Diactoros\Response;
+            $response = new \Laminas\Diactoros\Response();
+            $response->getBody()->write(json_encode(['success' => true]));
+            return new $response;
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }

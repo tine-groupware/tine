@@ -1135,6 +1135,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     static public function getEmailFields(): array
     {
+        if (count(static::$_emailFields) === 0) {
+            return [
+                'email' => 'email',
+                'email_home' => 'email_home'
+            ];
+        }
         return static::$_emailFields;
     }
 
