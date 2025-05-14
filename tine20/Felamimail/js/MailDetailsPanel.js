@@ -480,6 +480,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                     onNavigateAttachment: this.onNavigateAttachment,
                                     sm: this.grid?.getGrid()?.getSelectionModel(),
                                     initialAttachmentIdx: idx !== 'all' ? +idx : 0,
+                                    requiredGrant: false,
                                 });
                             },
                         }, {
@@ -636,7 +637,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     onNavigateAttachment: function(dir) {
         this.initialAttachmentIdx += dir;
         if (this.attachments?.[this.initialAttachmentIdx]) {
-            this.record = this.attachments[this.initialAttachmentIdx];
+            this.record = this.attachments[this.initialAttachmentIdx].cache;
             this.loadPreviewPanel();
         }
     },
@@ -660,9 +661,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 this.record = new Tine.Tinebase.Model.Tree_Node({name: 'Email has no attachemtns', path: ''});
                 return;
             }
-            this.attachments = _.map(this.record.get('attachments'), (attachment) => {
-                return new Tine.Tinebase.Model.Tree_Node(attachment);
-            });
+            this.attachments = attachments;
 
             // make sure we get the attachment caches
             attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record, true);
@@ -672,6 +671,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
 
         await Promise.all(promises).then((cachePromises) => {
+            if (!cachePromises.length) return;
             let resolvedAttachmentData = {};
             const validResponse = cachePromises.find((r) => {return r?.isPreviewReady && r?.cache;});
             if (validResponse) {

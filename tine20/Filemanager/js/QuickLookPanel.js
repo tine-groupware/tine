@@ -12,6 +12,9 @@ require('Filemanager/js/QuickLookRegistry');
 require('Filemanager/js/DocumentPreview');
 require('Filemanager/js/QuickLookMediaPanel');
 require('Filemanager/js/QuickLookHTMLPanel');
+require('Filemanager/js/QuickLookTextPanel');
+require('Filemanager/js/QuickLookImagePanel');
+require('Filemanager/js/QuickLookObjectPanel');
 
 Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
@@ -51,6 +54,8 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
     sm: null,
 
     border: false,
+
+    requiredGrant: 'downloadGrant',
 
     /**
      * init panel
@@ -140,7 +145,6 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
      */
     loadPreviewPanel: async function () {
         let previewPanel = null;
-        let previewPanelXtype = null;
 
         await this.handleAttachments();
         
@@ -150,29 +154,45 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
             previewPanel = this.cardPanel.get(this.cardPanelsByRecordId[this.record.id]);
         } else {
             const fileExtension = Tine.Filemanager.Model.Node.getExtension(this.record.get('name'));
-            if (this.registry.hasContentType(this.record.get('contenttype'))) {
-                previewPanelXtype = this.registry.getContentType(this.record.get('contenttype'));
-                Tine.log.info('Using ' + previewPanelXtype + ' to show ' + this.record.get('contenttype') + ' preview.');
-                previewPanel = Ext.create({
-                    xtype: previewPanelXtype,
-                    initialApp: this.initialApp,
-                    nodeRecord: this.record
-                });
+            const contentType = this.record.get('contenttype');
+            let previewPanelXtype = '';
+
+            if (this.registry.hasContentType(contentType)) {
+                previewPanelXtype = this.registry.getContentType(contentType);
             } else if (this.registry.hasExtension(fileExtension)) {
                 previewPanelXtype = this.registry.getExtension(fileExtension);
-                Tine.log.info('Using ' + previewPanelXtype + ' to show ' + this.record.get('contenttype') + ' preview.');
-                previewPanel = Ext.create({
-                    xtype: previewPanelXtype,
-                    initialApp: this.initialApp,
-                    nodeRecord: this.record
-                });
-            } else {
-                // use default doc preview panel
+            }
+
+            //const useOriginalSizeLimit = 30 * 1024 * 1024; // @TODO have pref or conf, but do we really need this for native browser preview ?
+            const isTempFile = !!_.get(this.record, 'json.input');
+            const hasRequiredGrant = this.requiredGrant ? _.get(this.record, `data.account_grants.${this.requiredGrant}`, false) : true;
+            const protectedContentTypes = [
+                'txt', 'rtf', 'odt', 'ods', 'odp', 'doc', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf'
+            ];
+            const previewFromDocumentServer = !previewPanelXtype || (!isTempFile && !hasRequiredGrant && protectedContentTypes.find((type) => {return fileExtension === type}));
+
+            if (previewFromDocumentServer) {
+                // use default secured doc preview panel
                 previewPanel = new Tine.Filemanager.DocumentPreview({
                     initialApp: this.initialApp,
                     record: this.record
                 });
+            } else {
+                const url = Tine.Filemanager.Model.Node.getDownloadUrl(
+                    this.record,
+                    this.record.get('revision'),
+                    (isTempFile || hasRequiredGrant ) ? 'attachment' : 'inline'
+                );
+
+                previewPanel = Ext.create({
+                    xtype: previewPanelXtype,
+                    initialApp: this.initialApp,
+                    nodeRecord: this.record,
+                    contentType: contentType,
+                    url: url
+                });
             }
+
             this.actionUpdater.updateActions([this.record]);
             this.cardPanelsByRecordId[this.record.id] = previewPanel.id;
             this.cardPanel.add(previewPanel);
@@ -224,7 +244,8 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
     onNavigateAttachment(dir) {
         if (this.attachments?.length > 1) {
-            this.record = this.attachments[((this.attachments.indexOf(this.record) || this.attachments.length) + dir)%this.attachments.length];
+            const caches = this.attachments.map(r => r?.cache ?? r);
+            this.record = caches[((caches.indexOf(this.record) || this.attachments.length) + dir)%this.attachments.length];
             this.loadPreviewPanel();
         }
     },

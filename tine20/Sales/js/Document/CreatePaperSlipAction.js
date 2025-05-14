@@ -201,6 +201,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         paperSlipConfig.force = e.ctrlKey || e.altKey
                         Tine.Filemanager.QuickLookPanel.openWindow({
                             id: record.id,
+                            requiredGrant: false,
                             contentPanelConstructorInterceptor: async (config) => {
                                 const isPopupWindow = config.window.popup
                                 const win = isPopupWindow ? config.window.popup : window
