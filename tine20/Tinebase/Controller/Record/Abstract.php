@@ -559,6 +559,15 @@ abstract class Tinebase_Controller_Record_Abstract
         bool $_aclProtect = true
     ) {
         $this->_checkRight(self::ACTION_GET);
+
+        // sanitize $_id['id']
+        if (! is_scalar($_id)) {
+            if (! $_id instanceof Tinebase_Record_Interface) {
+                if (is_array($_id) && isset($_id['id']) && ! is_scalar($_id['id'])) {
+                    throw new Tinebase_Exception_InvalidArgument('ID should be scalar');
+                }
+            }
+        }
         
         if (! $_id) { // yes, we mean 0, null, false, ''
             $record = new $this->_modelName(array(), true);
