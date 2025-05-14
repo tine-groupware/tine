@@ -191,3 +191,50 @@ test-install-demodata:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $TEST_INSTALL_DEMODATA_MERGE_REQUEST == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /test-install-demodata/
     - if: $PIPELINE_TYPE =~ /default-tests/
+
+release-update-tests:
+  extends: .php-unit-update-tests
+  script:
+    - !reference [.lib, script]
+    - |
+      git fetch --unshallow || true
+      cd tine20
+    - |
+      set -x
+      log "determining starting version"
+      export starting_version=$(test_release_update_test_determine_start_version)
+      if [ -z "${starting_version}" ]; then
+        log "could not determine staring version. RELEASE_UPDATE_TEST_START_REF needs to be set for not next(main)/beta/lts branches."
+        exit 1
+      fi
+      log "installing ${starting_version}"
+      git checkout ${starting_version}
+      test_composer_install
+      log install
+      tine20_install
+    - |
+      log "updating to current version"
+      git checkout ${CI_COMMIT_SHA}
+      test_composer_install
+      log update
+      su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
+  rules:
+    - if: $RELEASE_UPDATE_TEST == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-update-test/
+    - if: $RELEASE_UPDATE_TEST == "true"
+    - if: $PIPELINE_TYPE =~ /release-weekly(,|$)/
+      variables:
+        RELEASE_TYPE: weekly
+    - if: $PIPELINE_TYPE =~ /release-monthly(,|$)/
+      variables:
+        RELEASE_TYPE: monthly
+    - if: $PIPELINE_TYPE =~ /release-beta(,|$)/
+      variables:
+        RELEASE_TYPE: beta
+    - if: $PIPELINE_TYPE =~ /release-be(,|$)/
+      variables:
+        RELEASE_TYPE: be
+    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ && $RELEASE_UPDATE_TEST_START_REF
+      variables:
+        RELEASE_TYPE: customer
