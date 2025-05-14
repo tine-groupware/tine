@@ -56,6 +56,16 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update002()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        foreach ($this->_backend->getOwnForeignKeys(SSO_Model_OAuthDeviceCode::TABLE_NAME) as $fKey) {
+            $this->_backend->dropForeignKey(SSO_Model_OAuthDeviceCode::TABLE_NAME, $fKey['constraint_name']);
+        }
+
+        Setup_SchemaTool::updateSchema([
+            SSO_Model_OAuthDeviceCode::class,
+        ]);
+        
         $this->_backend->dropTable('sso_oauth_device', SSO_Config::APP_NAME);
 
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
