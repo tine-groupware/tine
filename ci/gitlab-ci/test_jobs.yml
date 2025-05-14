@@ -271,6 +271,6 @@ release-update-tests:
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         RELEASE_TYPE: be
-    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/
+    - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ && $RELEASE_UPDATE_TEST_START_REF
       variables:
         RELEASE_TYPE: customer
