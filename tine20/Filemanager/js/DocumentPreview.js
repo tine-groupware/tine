@@ -44,10 +44,6 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             this.app = Tine.Tinebase.appMgr.get('Filemanager');
         }
 
-        if (navigator.pdfViewerEnabled) {
-            this.nativelySupported.push('application/pdf');
-        }
-
         this.afterIsRendered().then(() => {
             this.el.on('contextmenu', (e) => {
                 e.stopEvent();
