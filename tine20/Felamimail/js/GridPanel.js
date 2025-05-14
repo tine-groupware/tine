@@ -1393,13 +1393,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             e.stopEvent();
         } else if (e.getTarget('.action_attach')) {
             if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-                const me = this;
-
                 Tine.Filemanager.QuickLookPanel.openWindow({
                     record: this.getStore().getAt(row),
                     initialApp: this.app,
                     sm: grid.getSelectionModel(),
-                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments
+                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments,
+                    requiredGrant: false,
                 });
             }
         } else {

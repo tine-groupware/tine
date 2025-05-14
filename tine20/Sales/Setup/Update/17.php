@@ -57,6 +57,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE036 = __CLASS__ . '::update036';
     protected const RELEASE017_UPDATE037 = __CLASS__ . '::update037';
     protected const RELEASE017_UPDATE038 = __CLASS__ . '::update038';
+    protected const RELEASE017_UPDATE039 = __CLASS__ . '::update039';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -206,6 +207,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE038 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update038',
+            ],
+            self::RELEASE017_UPDATE039 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update039',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -1073,5 +1078,18 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.38', self::RELEASE017_UPDATE038);
+    }
+
+    public function update039(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Sales_Scheduler_Task::addEMailDispatchResponseMinutelyTask(Tinebase_Core::getScheduler());
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_DispatchHistory::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.39', self::RELEASE017_UPDATE039);
     }
 }

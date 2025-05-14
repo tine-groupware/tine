@@ -35,6 +35,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
     public const FLD_DISPATCH_TRANSPORT = 'dispatch_transport';
     public const FLD_DISPATCH_REPORT = 'dispatch_report';
     public const FLD_DISPATCH_CONFIG = 'dispatch_config';
+    public const FLD_FEEDBACK_RECEIVED = 'feedback_received';
 
 
     /**
@@ -43,10 +44,11 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 5,
+        self::VERSION                       => 6,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
         self::HAS_ATTACHMENTS               => true,
+        self::HAS_XPROPS                    => true,
         self::EXPOSE_JSON_API               => true,
         self::CREATE_MODULE                 => true,
 
@@ -62,19 +64,22 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
         self::TABLE                         => [
             self::NAME                      => self::TABLE_NAME,
             self::INDEXES                   => [
-                self::FLD_DOCUMENT_ID  => [
+                self::FLD_DOCUMENT_ID           => [
                     self::COLUMNS                   => [self::FLD_DOCUMENT_ID],
+                ],
+                self::FLD_TYPE                  => [
+                    self::COLUMNS                   => [self::FLD_TYPE, self::FLD_FEEDBACK_RECEIVED],
                 ],
             ],
         ],
 
         self::FIELDS                        => [
-            self::FLD_DISPATCH_PROCESS      => [
+            self::FLD_DISPATCH_PROCESS          => [
                 self::TYPE                          => self::TYPE_VIRTUAL,
                 self::DOCTRINE_IGNORE               => true,
                 self::CONFIG                        => [
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::LABEL                 => 'Dispatch Process', // _('Dispatch Process')
+                    self::TYPE                          => self::TYPE_STRING,
+                    self::LABEL                         => 'Dispatch Process', // _('Dispatch Process')
                 ],
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
@@ -92,17 +97,17 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
 
             ],
             self::FLD_DISPATCH_TRANSPORT        => [
-                self::TYPE                      => self::TYPE_MODEL,
-                self::LABEL                     => 'Transport Method', // _('Transport Method')
-                self::CONFIG                    => [
-                    self::AVAILABLE_MODELS          => [
+                self::TYPE                          => self::TYPE_MODEL,
+                self::LABEL                         => 'Transport Method', // _('Transport Method')
+                self::CONFIG                        => [
+                    self::AVAILABLE_MODELS              => [
                         Sales_Model_EDocument_Dispatch_Custom::class,
                         Sales_Model_EDocument_Dispatch_Email::class,
                         Sales_Model_EDocument_Dispatch_Manual::class,
                         Sales_Model_EDocument_Dispatch_Upload::class,
                     ],
                 ],
-                self::UI_CONFIG => [
+                self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
             ],
@@ -111,7 +116,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
-                self::UI_CONFIG => [
+                self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
             ],
@@ -193,14 +198,19 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                     self::DISABLED                      => true,
                 ],
             ],
-            self::FLD_DISPATCH_CONFIG=> [
-                self::LABEL                     => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')
-                self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
-                self::NULLABLE                  => true,
-                self::CONFIG                    => [
-                    self::REF_MODEL_FIELD           => self::FLD_DISPATCH_TRANSPORT,
-                    self::PERSISTENT                => true,
+            self::FLD_DISPATCH_CONFIG           => [
+                self::LABEL                         => 'Electronic Document Transport Config', // _('Electronic Document Transport Config')
+                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
+                self::NULLABLE                      => true,
+                self::CONFIG                        => [
+                    self::REF_MODEL_FIELD               => self::FLD_DISPATCH_TRANSPORT,
+                    self::PERSISTENT                    => true,
                 ],
+            ],
+            self::FLD_FEEDBACK_RECEIVED         => [
+                self::LABEL                         => 'Feedback received', // _('Feedback received')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
             ],
         ],
     ];

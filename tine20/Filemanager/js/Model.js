@@ -38,14 +38,6 @@ Tine.Filemanager.Model.NodeMixin = {
             Tine.Tinebase.appMgr.get('Filemanager').getRoute(this.get('path'), this.get('type'))].join('/');
     },
 
-    /**
-     * returns download url for authenticated user
-     * @returns {String}
-     */
-    getDownloadUrl: function(revision) {
-        return Tine.Filemanager.Model.Node.getDownloadUrl(this, revision);
-    },
-
     mixinConfig: {
         before: {
             create(o, meta) {
@@ -137,7 +129,7 @@ Tine.Filemanager.Model.NodeMixin = {
             }));
         },
 
-        getDownloadUrl: function(record, revision) {
+        getDownloadUrl: function(record, revision, disposition = 'attachment') {
             if (_.isString(record)) record = {path: record, revision: revision, type: 'file'};
             record = record.data ? record : Tine.Tinebase.data.Record.setFromJson(record, Tine.Filemanager.Model.Node);
 
@@ -146,9 +138,10 @@ Tine.Filemanager.Model.NodeMixin = {
             const type = record.get('type');
             const [,root,modelName, recordId ] = String(path).split('/');
 
-            const httpRequest = {
+            let httpRequest = {
                 frontend: 'http',
-                revision: revision ?? record.get('revision')
+                revision: revision ?? record.get('revision'),
+                disposition: disposition
             };
             if (root === 'records') {
                 httpRequest.method = 'Tinebase.downloadRecordAttachment';
@@ -156,18 +149,27 @@ Tine.Filemanager.Model.NodeMixin = {
                 httpRequest.recordId = recordId;
                 httpRequest.modelName = modelName;
             } else {
-                if (!path) {
-                    Ext.Msg.alert(i18n._('Errors'), app.i18n._('Failed to download this file!'));
-                }
-                httpRequest.path = path;
-                if (type === 'file') {
-                    httpRequest.method = 'Filemanager.downloadFile';
-                    httpRequest.id = record.get('id');
-                }
-                if (type === 'folder') {
-                    httpRequest.method = 'Filemanager.downloadFolder';
-                    httpRequest.recursive = true;
-                    httpRequest.revision = null;
+                if (!!_.get(record, 'json.input')) {
+                    httpRequest = {
+                        method: 'Tinebase.downloadTempfile',
+                        requestType: 'HTTP',
+                        tmpfileId: record.data.id,
+                        disposition: disposition
+                    };
+                } else {
+                    if (!path) {
+                        Ext.Msg.alert(i18n._('Errors'), app.i18n._('Failed to download this file!'));
+                    }
+                    httpRequest.path = path;
+                    if (type === 'file') {
+                        httpRequest.method = 'Filemanager.downloadFile';
+                        httpRequest.id = record.get('id');
+                    }
+                    if (type === 'folder') {
+                        httpRequest.method = 'Filemanager.downloadFolder';
+                        httpRequest.recursive = true;
+                        httpRequest.revision = null;
+                    }
                 }
             }
             return  Ext.urlEncode(httpRequest, Tine.Tinebase.tineInit.requestUrl + '?');

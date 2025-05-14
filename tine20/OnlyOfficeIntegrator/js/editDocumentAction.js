@@ -46,8 +46,12 @@ Promise.all([
 
         handler: function () {
             const record = this.selections[0];
+            let recordData = record.toString();
+
             const tempFile = record.get('tempFile');
-            const recordData = tempFile ? JSON.stringify(tempFile) : record.toString();
+            if (tempFile) {
+                recordData = typeof tempFile === 'string' ? tempFile : typeof tempFile === 'object' ? JSON.stringify(tempFile) : tempFile;
+            }
 
             const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
                 // always validate cachePromises to get the correct recordData
