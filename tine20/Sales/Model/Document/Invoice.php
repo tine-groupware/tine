@@ -584,7 +584,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 )
             );
             if ($this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} && $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}) {
-                $modifier = $taxRate[self::NET_SUM] / $this->{Sales_Model_Document_Invoice::FLD_POSITIONS_NET_SUM};
+                $modifier = $taxRate[self::NET_SUM] / $this->{Sales_Model_Document_Invoice::FLD_NET_SUM};
                 $ublInvoice->addToAllowanceCharge((new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
                     ->setChargeIndicator(false)
                     ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
@@ -612,6 +612,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             );
         }
 
-        return $serializer->serialize($ublInvoice, 'xml');
+        $xml = $serializer->serialize($ublInvoice, 'xml');
+        return $xml;
     }
 }

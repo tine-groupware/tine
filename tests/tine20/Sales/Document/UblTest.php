@@ -93,17 +93,39 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         Tinebase_Record_Expander_DataRequest::clearCache();
 
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
         try {
             Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
-            Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+            Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
             $this->fail('expect to throw ' . Tinebase_Exception_HtmlReport::class);
         } catch (Tinebase_Exception_HtmlReport $e) {
             $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
             $this->assertSame(1, $invoice->attachments->count());
             $attachement = $invoice->attachments->getFirstRecord();
-            $this->assertSame($invoice->{SMDI::FLD_DOCUMENT_NUMBER} . '-xrechnung.validation.html', $attachement->name);
+            $this->assertSame($invoice->{SMDI::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml.validation.html', $attachement->name);
             $this->assertSame($e->getHtml(), file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($attachement, true)));
         }
+    }
+
+    public function testCustomerPercentageDiscount(): void
+    {
+        $product1 = $this->_createProduct();
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+            ], true),
+        ];
+        $customer = $this->_createCustomer(additionalCustomerData: ['discount' => 10]);
+
+        $invoice = $this->_createInvoice($positions, customer: $customer);
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 0.90, round(0.9 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
     }
 
     public function testPositionNetDiscount(): void
@@ -224,8 +246,12 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
 
-        $node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null);
+        $this->assertNotNull($node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null));
         ob_start();
         (new Sales_Frontend_Http)->getXRechnungView($node->getId());
         $html = ob_get_clean();
