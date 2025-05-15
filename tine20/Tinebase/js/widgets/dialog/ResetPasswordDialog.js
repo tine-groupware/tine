@@ -28,7 +28,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
 
         const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
         const smsTemplates = Tine.Tinebase.configManager.get('sms.sms_message_templates', 'Tinebase');
-        this.smsNewPasswordTemplate = smsTemplates?.['sms_new_password_template']?.[locale] ?? null;
+        this.smsNewPasswordTemplate = smsTemplates?.['sms_new_password_template']?.[locale] ?? '';
 
         this.twingEnv = getTwingEnv();
         const loader = this.twingEnv.getLoader();
