@@ -43,20 +43,23 @@ class EFile_Import_Csv extends Tinebase_Import_Csv_Abstract
 
         $this->basePath = Filemanager_Controller_Node::getInstance()
             ->addBasePath(EFile_Config::getInstance()->{EFile_Config::BASE_PATH}[0]);
+        if (isset($_options['path'])) {
+            $this->basePath = rtrim($this->basePath, '/') . '/' . $_options['path'];
+        }
     }
 
     protected function _processRawData($_data)
     {
         // FIXME log ignored lines
-        if (count($_data) < 5) {
+        if (count($_data) < 4) {
             return [];
         }
-        for ($i = 0; $i < 5; ++$i) {
+        for ($i = 0; $i < 4; ++$i) {
             if (!isset($_data[$i])) {
                 return [];
             }
         }
-        if (0 == strlen($_data[4])) {
+        if (0 == strlen($_data[3])) {
             return [];
         }
         return [$_data];
@@ -73,7 +76,7 @@ class EFile_Import_Csv extends Tinebase_Import_Csv_Abstract
         $history = &$this->history;
         $counterValue = null;
         /* attention $i usage further down below! */
-        for ($i = 0; $i < 3; ++$i) {
+        for ($i = 0; $i < 2; ++$i) {
             if (0 === strlen($_record[$i])) {
                 // FIXME LOG
                 return;
@@ -86,17 +89,17 @@ class EFile_Import_Csv extends Tinebase_Import_Csv_Abstract
                 break;
             }
         }
-        if (isset($_record[3]) && strlen($_record[3]) > 0) {
+        if (isset($_record[2]) && strlen($_record[2]) > 0) {
             /* beware of the $i */
-            if (3 !== $i) {
+            if (2 !== $i) {
                 // FIXME LOG
                 return;
             }
-            $counterValue = (int)$_record[3];
+            $counterValue = (int)$_record[2];
             $tierType = EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP;
         } else {
             /* beware of the $i */
-            if (3 === $i) {
+            if (2 === $i) {
                 // FIXME LOG
                 return;
             }
@@ -110,14 +113,14 @@ class EFile_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         // reload!
         $parent = Tinebase_FileSystem::getInstance()->get($parent->getId());
-        $newNodePath = $parentPath . $_record[4];
+        $newNodePath = $parentPath . $_record[3];
 
         $counter = $parent->{EFile_Config::TREE_NODE_FLD_TIER_COUNTER};
         if (!is_array($counter)) $counter = [];
-        if (isset($counter[$tierType]) && $counter[$tierType] >= $counterValue) {
+        if (isset($counter[EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN]) && $counter[EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN] >= $counterValue) {
             throw new Tinebase_Exception_UnexpectedValue('counterValue ' . $counterValue . ' to low for path ' . $newNodePath);
         }
-        $counter[$tierType] = $counterValue - 1;
+        $counter[EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN] = $counterValue - 1;
         $parent->{EFile_Config::TREE_NODE_FLD_TIER_COUNTER} = $counter;
         $this->treeNodeForcedBackend->updateMultiple([$parent->getId()], [
             EFile_Config::TREE_NODE_FLD_TIER_COUNTER => json_encode($counter)

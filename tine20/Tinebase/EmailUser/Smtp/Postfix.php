@@ -121,6 +121,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         // use this for adding an additional destination (accountname -> accountname)
         'accountnamedestination' => true,
         'allowOverwrite' => false,
+        'destinationisusername' => false,
     ];
     
     /**
@@ -182,7 +183,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         // select source from alias table
         // _userTable.emailUserId=_destinationTable.emailUserId
         $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']);
-        $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);
+        if ($this->_config['destinationisusername']) {
+            $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']);
+        } else {
+            $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);
+        }
 
         $select->joinLeft(
             array('aliases' => $this->_destinationTable), // Table
@@ -429,8 +434,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             return;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
-            . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
+                . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': '
+                . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
+        }
 
         if ($userIdField === 'userid') {
             $userId = $_smtpSettings[$this->_propertyMapping['emailUserId']];
@@ -454,10 +462,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             // check if in primary or secondary domains
             if (! empty($aliasAddress->email) && $this->_checkDomain($aliasAddress->email)) {
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
+                    $destination = $this->_config['destinationisusername']
+                        ? $_smtpSettings[$this->_propertyMapping['emailUsername']]
+                        : $_smtpSettings[$this->_propertyMapping['emailAddress']];
                     $destinationData = [
                         $userIdField  => $userId,
                         'source'      => $aliasAddress->email,
-                        'destination' => $_smtpSettings[$this->_propertyMapping['emailAddress']],
+                        'destination' => $destination,
                         'dispatch_address' => $aliasAddress->dispatch_address,
                     ];
                     $this->_checkIfDestinationExists($destinationData, $userIdField);
@@ -555,9 +566,6 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     {
         $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' raw data: ' . print_r($_rawdata, true));
-        
         foreach ($_rawdata as $key => $value) {
             $keyMapping = array_search($key, $this->_propertyMapping);
             if ($keyMapping !== FALSE) {
@@ -587,6 +595,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                         if (! empty($data[$keyMapping]) && $keyMapping === 'emailAliases') {
                             // get dispatch_address
                             $data[$keyMapping] = $this->_getDispatchAddress($_rawdata['userid'], $data[$keyMapping]);
+                        }
+
+                        if ( $this->_config['destinationisusername'] && $keyMapping === 'emailAliases') {
+                            foreach ($data[$keyMapping] as $key => $value) {
+                                if ($value['email'] === $_rawdata[$this->_propertyMapping['emailAddress']]) {
+                                    unset($data[$keyMapping][$key]);
+                                }
+                            }
                         }
 
                         break;

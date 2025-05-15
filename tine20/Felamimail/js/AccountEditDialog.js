@@ -1345,16 +1345,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.get('type') === 'system') {
             return;
         }
-        
-        const container = this.getForm().findField('container_id');
-        
-        if (this.record.data?.visibility === 'displayed' && container) {
-            if (! this.record.data?.contact_id?.container_id) {
-                this.record.data.contact_id = {
-                    'container_id' : container.getValue()
-                }
-            } else {
-                this.record.data.contact_id.container_id = container.getValue();
+
+        if (this.record.data?.visibility === 'displayed') {
+            this.record.data.contact_id = {
+                'id' : this.record.data?.contact_id,
+                'container_id' : this.getForm().findField('container_id')?.getValue()
             }
         }
     },

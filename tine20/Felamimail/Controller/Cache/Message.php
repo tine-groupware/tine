@@ -94,6 +94,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     private function __construct() {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+        $this->_modelName = Felamimail_Model_Message::class;
     }
     
     /**
