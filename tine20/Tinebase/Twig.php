@@ -165,6 +165,9 @@ class Tinebase_Twig
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
             return iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', $str));
         }));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('toRomanNumber', function($str) {
+            return (new NumberFormatter('@numbers=roman', NumberFormatter::DECIMAL))->format(intval($str));
+        }));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('accountLoginChars', function($str) {
             return preg_replace('/[^\w\-_.@\d+]/u', '', $str);
         }));
