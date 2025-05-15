@@ -738,6 +738,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.set('attendee', allAttendee);
 
+        // remove event_types ids
+        Ext.each(this.record.data.event_types, function(type) {
+            delete type.id;
+        }, this);
+
 
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);

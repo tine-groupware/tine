@@ -1422,6 +1422,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             Ext.each(record.data.attendee, function(attender) {
                 delete attender.id;
             }, this);
+
+            Ext.each(record.data.event_types, function(type) {
+                delete type.id;
+            }, this);
         }
 
         // @TODO move to common function with daysView::notifyDrop parts
