@@ -44,7 +44,7 @@ class EFile_Import_Csv extends Tinebase_Import_Csv_Abstract
         $this->basePath = Filemanager_Controller_Node::getInstance()
             ->addBasePath(EFile_Config::getInstance()->{EFile_Config::BASE_PATH}[0]);
         if (isset($_options['path'])) {
-            $this->basePath .= '/' . $_options['path'];
+            $this->basePath = rtrim($this->basePath, '/') . '/' . $_options['path'];
         }
     }
 

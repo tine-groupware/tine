@@ -334,7 +334,7 @@ class EFile_Controller extends Tinebase_Controller_Event
             } else {
                 $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(EFile_Config::APP_NAME));
                 $template = $twig->getEnvironment()->createTemplate($tokenTemplate);
-                $data['counter'] = $counter;
+                $data['counter'] = $counter[$counterTierType];
                 $tierToken = $template->render($data);
             }
 
