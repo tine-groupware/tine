@@ -1031,7 +1031,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'accountFullName',
                         allowBlank: false,
                         columnWidth: 0.5,
-                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('Full name is used to create the distinguishedName (DN) in AD integration')})]
+                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('The full name is used to create the distinguished name (DN) during Active Directory integration.')})]
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Login name'),
                         name: 'accountLoginName',
@@ -1299,7 +1299,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             editable: false,
             hidden: hidden ?? false,
             value: 'hidden',
-            store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]],
+            store: [['displayed', this.app.i18n.gettext('Display in address book')], ['hidden', this.app.i18n.gettext('Hide from address book')]],
             listeners: {
                 scope: scope,
                 select: function (combo, record) {
@@ -1320,7 +1320,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }, {
             xtype: 'tinerecordpickercombobox',
-            fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
+            fieldLabel: this.app.i18n.gettext('Saved in address book'),
             name: 'container_id',
             blurOnSelect: true,
             allowBlank: false,
@@ -1334,7 +1334,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 beforeselect: (combo, status, index) => {
                     Ext.MessageBox.confirm(
                         scope.app.i18n._('Confirm'),
-                        scope.app.i18n._('Do you want to move the contact to this addressbook?'),
+                        scope.app.i18n._('Would you like to move the contact to this address book?'),
                         (btn) => {
                             if (btn === 'yes') {
                                 combo.setValue(status.id);
@@ -1368,7 +1368,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     const selectedContainer = addressbookContainerCombo.selectedRecord;
 
                     let msg = scope.app.i18n._('The selected contact will be updated') + ` : <br><br><b>${status.data.n_fileas}</b><br>`
-                        + '<br>' + this.app.i18n.gettext('Saved in Addressbook') + ` : <b>${selectedContainer.data.name}</b><br>`;
+                        + '<br>' + this.app.i18n.gettext('Saved in address book') + ` : <b>${selectedContainer.data.name}</b><br>`;
 
                     Ext.MessageBox.confirm(
                         scope.app.i18n._('Confirm'),

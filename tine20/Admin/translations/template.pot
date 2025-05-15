@@ -94,11 +94,11 @@ msgid "Add, delete and edit containers and manage container grants."
 msgstr ""
 
 #: Acl/Rights.php:311
-msgid "Manage customfields"
+msgid "Manage custom fields"
 msgstr ""
 
 #: Acl/Rights.php:312
-msgid "Add and edit customfields."
+msgid "Add and edit custom fields."
 msgstr ""
 
 #: Acl/Rights.php:315
@@ -174,19 +174,19 @@ msgid "View personal and shared containers."
 msgstr ""
 
 #: Acl/Rights.php:351
-msgid "View customfields"
+msgid "View custom fields"
 msgstr ""
 
 #: Acl/Rights.php:352
-msgid "View customfields list."
+msgid "View custom fields list."
 msgstr ""
 
 #: Acl/Rights.php:355
-msgid "View serverinfo"
+msgid "View server info"
 msgstr ""
 
 #: Acl/Rights.php:356
-msgid "View serverinfo list."
+msgid "View server info list."
 msgstr ""
 
 #: Acl/Rights.php:359
@@ -424,7 +424,7 @@ msgid "Shared Tags"
 msgstr ""
 
 #: js/Admin.js:110
-msgid "Customfields"
+msgid "Custom Fields"
 msgstr ""
 
 #: js/Admin.js:123
@@ -626,9 +626,9 @@ msgstr ""
 msgid "Container Order"
 msgstr ""
 
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:121
-msgid "Customfield"
-msgid_plural "Customfields"
+#: js/customfield/Customfield.js:44
+msgid "Custom Field"
+msgid_plural "Custom Fields"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -767,6 +767,10 @@ msgstr ""
 msgid "UI Config"
 msgstr ""
 
+#: js/customfield/GridPanel.js:121
+msgid "Customfield"
+msgstr ""
+
 #: js/customfield/GridPanel.js:194
 msgid "This custom field is still in use!"
 msgstr ""
@@ -783,16 +787,15 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
-#: js/GroupEditDialog.js:86 js/user/EditDialog.js:1302
+#: js/GroupEditDialog.js:86
 msgid "Display in addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:86 js/user/EditDialog.js:1302
+#: js/GroupEditDialog.js:86
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:102 js/user/EditDialog.js:1323
-#: js/user/EditDialog.js:1371
+#: js/GroupEditDialog.js:102
 msgid "Saved in Addressbook"
 msgstr ""
 
@@ -1317,7 +1320,7 @@ msgid "Full Name"
 msgstr ""
 
 #: js/user/EditDialog.js:1034
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgid "The full name is used to create the distinguished name (DN) during Active Directory integration."
 msgstr ""
 
 #: js/user/EditDialog.js:1036 js/user/EditDialog.js:1098
@@ -1413,8 +1416,20 @@ msgstr ""
 msgid "SMTP"
 msgstr ""
 
+#: js/user/EditDialog.js:1302
+msgid "Display in address book"
+msgstr ""
+
+#: js/user/EditDialog.js:1302
+msgid "Hide from address book"
+msgstr ""
+
+#: js/user/EditDialog.js:1323 js/user/EditDialog.js:1371
+msgid "Saved in address book"
+msgstr ""
+
 #: js/user/EditDialog.js:1337
-msgid "Do you want to move the contact to this addressbook?"
+msgid "Would you like to move the contact to this address book?"
 msgstr ""
 
 #: js/user/EditDialog.js:1370

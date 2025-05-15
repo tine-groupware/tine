@@ -107,7 +107,7 @@ Tine.Admin.init = function () {
             viewRight: 'shared_tags',
             hidden: !Tine.Admin.showModule('sharedtags')
         }, {
-            text: translation.gettext('Customfields'),
+            text: translation.gettext('Custom Fields'),
             cls: "treemain",
             iconCls: 'admin-node-customfields',
             allowDrag: false,

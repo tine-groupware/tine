@@ -87,7 +87,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_CONTAINERS = 'manage_containers';
     
     /**
-     * the right to manage customfields
+     * the right to manage custom fields
      * @staticvar string
      */
     const MANAGE_CUSTOMFIELDS = 'manage_customfields';
@@ -147,7 +147,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const VIEW_CONTAINERS = 'view_containers';
     
     /**
-     * the right to customfields
+     * the right to custom fields
      * @staticvar string
      */
     const VIEW_CUSTOMFIELDS = 'view_customfields';
@@ -308,8 +308,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('Add, delete and edit containers and manage container grants.'),
             ),
             self::MANAGE_CUSTOMFIELDS   => array(
-                'text'          => $translate->_('Manage customfields'),
-                'description'   => $translate->_('Add and edit customfields.'),
+                'text'          => $translate->_('Manage custom fields'),
+                'description'   => $translate->_('Add and edit custom fields.'),
             ),
             self::MANAGE_IMPORTEXPORTDEFINITIONS => array(
                 'text'          => $translate->_('Manage import and export definitions'),
@@ -348,12 +348,12 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('View personal and shared containers.'),
             ),
             self::VIEW_CUSTOMFIELDS   => array(
-                'text'          => $translate->_('View customfields'),
-                'description'   => $translate->_('View customfields list.'),
+                'text'          => $translate->_('View custom fields'),
+                'description'   => $translate->_('View custom fields list.'),
             ),
             self::VIEW_SERVERINFO   => array(
-                'text'          => $translate->_('View serverinfo'),
-                'description'   => $translate->_('View serverinfo list.'),
+                'text'          => $translate->_('View server info'),
+                'description'   => $translate->_('View server info list.'),
             ),
             self::VIEW_QUOTA_USAGE => array(
                 'text'          => $translate->_('View quota usage'),

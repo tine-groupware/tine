@@ -94,12 +94,12 @@ msgid "Add, delete and edit containers and manage container grants."
 msgstr "Add, delete and edit containers and manage container grants."
 
 #: Acl/Rights.php:311
-msgid "Manage customfields"
-msgstr "Manage customfields"
+msgid "Manage custom fields"
+msgstr "Manage custom fields"
 
 #: Acl/Rights.php:312
-msgid "Add and edit customfields."
-msgstr "Add and edit customfields."
+msgid "Add and edit custom fields."
+msgstr "Add and edit custom fields."
 
 #: Acl/Rights.php:315
 msgid "Manage import and export definitions"
@@ -174,20 +174,20 @@ msgid "View personal and shared containers."
 msgstr "View personal and shared containers."
 
 #: Acl/Rights.php:351
-msgid "View customfields"
-msgstr "View customfields"
+msgid "View custom fields"
+msgstr "View custom fields"
 
 #: Acl/Rights.php:352
-msgid "View customfields list."
-msgstr "View customfields list."
+msgid "View custom fields list."
+msgstr "View custom fields list."
 
 #: Acl/Rights.php:355
-msgid "View serverinfo"
-msgstr "View serverinfo"
+msgid "View server info"
+msgstr "View server info"
 
 #: Acl/Rights.php:356
-msgid "View serverinfo list."
-msgstr "View serverinfo list."
+msgid "View server info list."
+msgstr "View server info list."
 
 #: Acl/Rights.php:359
 msgid "View quota usage"
@@ -424,8 +424,8 @@ msgid "Shared Tags"
 msgstr "Shared Tags"
 
 #: js/Admin.js:110
-msgid "Customfields"
-msgstr "Customfields"
+msgid "Custom Fields"
+msgstr "Custom Fields"
 
 #: js/Admin.js:123
 msgid "Computers"
@@ -626,11 +626,11 @@ msgstr "Container Name"
 msgid "Container Order"
 msgstr "Container Order"
 
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:121
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Customfield"
-msgstr[1] "Customfields"
+#: js/customfield/Customfield.js:44
+msgid "Custom Field"
+msgid_plural "Custom Fields"
+msgstr[0] "Custom Field"
+msgstr[1] "Custom Fields"
 
 #: js/customfield/Customfield.js:60
 msgid "Anyone"
@@ -767,6 +767,10 @@ msgstr "Sorting"
 msgid "UI Config"
 msgstr "UI Config"
 
+#: js/customfield/GridPanel.js:121
+msgid "Customfield"
+msgstr "Customfield"
+
 #: js/customfield/GridPanel.js:194
 msgid "This custom field is still in use!"
 msgstr "This custom field is still in use!"
@@ -783,16 +787,15 @@ msgstr "Group Name"
 msgid "Visibility"
 msgstr "Visibility"
 
-#: js/GroupEditDialog.js:86 js/user/EditDialog.js:1302
+#: js/GroupEditDialog.js:86
 msgid "Display in addressbook"
 msgstr "Display in addressbook"
 
-#: js/GroupEditDialog.js:86 js/user/EditDialog.js:1302
+#: js/GroupEditDialog.js:86
 msgid "Hide from addressbook"
 msgstr "Hide from addressbook"
 
-#: js/GroupEditDialog.js:102 js/user/EditDialog.js:1323
-#: js/user/EditDialog.js:1371
+#: js/GroupEditDialog.js:102
 msgid "Saved in Addressbook"
 msgstr "Saved in Addressbook"
 
@@ -1317,8 +1320,8 @@ msgid "Full Name"
 msgstr "Full Name"
 
 #: js/user/EditDialog.js:1034
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
-msgstr "Full name is used to create the distinguishedName (DN) in AD integration"
+msgid "The full name is used to create the distinguished name (DN) during Active Directory integration."
+msgstr "The full name is used to create the distinguished name (DN) during Active Directory integration."
 
 #: js/user/EditDialog.js:1036 js/user/EditDialog.js:1098
 #: js/user/GridPanel.js:196
@@ -1413,9 +1416,21 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
+#: js/user/EditDialog.js:1302
+msgid "Display in address book"
+msgstr "Display in address book"
+
+#: js/user/EditDialog.js:1302
+msgid "Hide from address book"
+msgstr "Hide from address book"
+
+#: js/user/EditDialog.js:1323 js/user/EditDialog.js:1371
+msgid "Saved in address book"
+msgstr "Saved in address book"
+
 #: js/user/EditDialog.js:1337
-msgid "Do you want to move the contact to this addressbook?"
-msgstr "Do you want to move the contact to this addressbook?"
+msgid "Would you like to move the contact to this address book?"
+msgstr "Would you like to move the contact to this address book?"
 
 #: js/user/EditDialog.js:1370
 msgid "The selected contact will be updated"

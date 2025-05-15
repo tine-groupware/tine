@@ -46,11 +46,11 @@ msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordne
 
 #: Acl/Rights.php:279
 msgid "Manage email accounts"
-msgstr ""
+msgstr "E-Mail Konten verwalten"
 
 #: Acl/Rights.php:280
 msgid "Add and edit shared and personal email accounts."
-msgstr ""
+msgstr "Persönliche und gemeinsame E-Mail Konten ansehen."
 
 #: Acl/Rights.php:283
 msgid "Manage applications"
@@ -109,11 +109,11 @@ msgid "Add, delete and edit containers and manage container grants."
 msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
 
 #: Acl/Rights.php:311
-msgid "Manage customfields"
+msgid "Manage custom fields"
 msgstr "Zusatzfelder verwalten"
 
 #: Acl/Rights.php:312
-msgid "Add and edit customfields."
+msgid "Add and edit custom fields."
 msgstr "Zusatzfelder anlegen und editieren."
 
 #: Acl/Rights.php:315
@@ -142,11 +142,11 @@ msgstr "Benutzerkonten ansehen (Liste und Details)"
 
 #: Acl/Rights.php:327
 msgid "View email accounts"
-msgstr ""
+msgstr "E-Mail Konten ansehen"
 
 #: Acl/Rights.php:328
 msgid "View shared and personal email accounts."
-msgstr ""
+msgstr "Persönliche und gemeinsame E-Mail Konten ansehen."
 
 #: Acl/Rights.php:331
 msgid "View applications"
@@ -189,19 +189,19 @@ msgid "View personal and shared containers."
 msgstr "Persönlichen und gemeinsame Container ansehen."
 
 #: Acl/Rights.php:351
-msgid "View customfields"
+msgid "View custom fields"
 msgstr "Zusatzfelder ansehen"
 
 #: Acl/Rights.php:352
-msgid "View customfields list."
+msgid "View custom fields list."
 msgstr "Liste der Zusatzfelder ansehen."
 
 #: Acl/Rights.php:355
-msgid "View serverinfo"
+msgid "View server info"
 msgstr "Serverinformationen ansehen"
 
 #: Acl/Rights.php:356
-msgid "View serverinfo list."
+msgid "View server info list."
 msgstr "Listen der Serverinformationen ansehen."
 
 #: Acl/Rights.php:359
@@ -302,11 +302,11 @@ msgstr "Datensatz muss gesetzt sein!"
 
 #: Controller/Quota.php:87
 msgid "Account email needs to be set!"
-msgstr ""
+msgstr "Konto E-Mail muss gesetzt sein!"
 
 #: Controller/Quota.php:105
 msgid "Email account not found."
-msgstr ""
+msgstr "E-Mail-Konto nicht gefunden."
 
 #: Controller/User.php:341
 msgid "Password is needed for system account creation"
@@ -331,7 +331,7 @@ msgstr "CSV Alle Daten"
 
 #: Frontend/Cli.php:780
 msgid "Notifications"
-msgstr "Notifizierungen"
+msgstr "Benachrichtigungen"
 
 #: js/AccessLog.js:104 js/Admin.js:137 js/Models.js:68
 msgid "Access Log"
@@ -439,7 +439,7 @@ msgid "Shared Tags"
 msgstr "Gemeinsame Tags"
 
 #: js/Admin.js:110
-msgid "Customfields"
+msgid "Custom Fields"
 msgstr "Zusatzfelder"
 
 #: js/Admin.js:123
@@ -448,7 +448,7 @@ msgstr "Computer"
 
 #: js/Admin.js:151
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: js/Admin.js:164
 msgid "Server Information"
@@ -460,7 +460,7 @@ msgstr "ActiveSync Geräte"
 
 #: js/Admin.js:200
 msgid "Email Accounts"
-msgstr ""
+msgstr "E-Mail Konten"
 
 #: js/Admin.js:220
 msgid "Import Export Definitions"
@@ -641,11 +641,11 @@ msgstr "Containername"
 msgid "Container Order"
 msgstr "Container Reihenfolge"
 
-#: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:121
-msgid "Customfield"
-msgid_plural "Customfields"
-msgstr[0] "Zusatzfeld"
-msgstr[1] "Zusatzfelder"
+#: js/customfield/Customfield.js:44
+msgid "Custom Field"
+msgid_plural "Custom Fields"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/customfield/Customfield.js:60
 msgid "Anyone"
@@ -782,6 +782,11 @@ msgstr "Sortierung"
 msgid "UI Config"
 msgstr "UI Konfiguration"
 
+#: js/customfield/GridPanel.js:121
+#, fuzzy
+msgid "Customfield"
+msgstr "Zusatzfeld"
+
 #: js/customfield/GridPanel.js:194
 msgid "This custom field is still in use!"
 msgstr "Ein Zusatzfeld ist noch in Benutzung!"
@@ -798,23 +803,22 @@ msgstr "Gruppenname"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-#: js/GroupEditDialog.js:86 js/user/EditDialog.js:1302
+#: js/GroupEditDialog.js:86
 msgid "Display in addressbook"
 msgstr "Zeige im Adressbuch"
 
-#: js/GroupEditDialog.js:86 js/user/EditDialog.js:1302
+#: js/GroupEditDialog.js:86
 msgid "Hide from addressbook"
 msgstr "Nicht im Adressbuch anzeigen"
 
-#: js/GroupEditDialog.js:102 js/user/EditDialog.js:1323
-#: js/user/EditDialog.js:1371
+#: js/GroupEditDialog.js:102
 msgid "Saved in Addressbook"
 msgstr "Gespeichert im Adressbuch"
 
 #: js/GroupEditDialog.js:113 js/Groups.js:243 js/user/EditDialog.js:1087
 #: js/user/GridPanel.js:199
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 #: js/GroupEditDialog.js:137
 msgid "Only system accounts can be added to Addressbook group"
@@ -835,7 +839,7 @@ msgstr "Bestätigen"
 
 #: js/Groups.js:52
 msgid "Are you sure you want to delete the selected groups?"
-msgstr ""
+msgstr "Möchten Sie die ausgewählten Gruppen wirklich löschen?"
 
 #: js/Groups.js:69
 msgid "Deleting group(s)..."
@@ -872,7 +876,7 @@ msgstr "Erstellungszeit"
 
 #: js/Groups.js:247
 msgid "Created by"
-msgstr ""
+msgstr "Erstellt von"
 
 #: js/Groups.js:248
 msgid "Last Modified Time"
@@ -880,7 +884,7 @@ msgstr "Änderungszeit"
 
 #: js/Groups.js:249
 msgid "Last Modified by"
-msgstr ""
+msgstr "Letzte Änderung von"
 
 #: js/ImportExportDefinitionEditDialog.js:53
 msgid "ImportExportDefinition"
@@ -1030,7 +1034,7 @@ msgstr "Rolle \"{0}\" bearbeiten"
 
 #: js/Roles.js:47
 msgid "Are you sure you want to delete the selected roles?"
-msgstr ""
+msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
 
 #: js/Roles.js:62
 msgid "Deleting role(s)..."
@@ -1115,7 +1119,7 @@ msgstr "Tag \"{0}\" bearbeiten"
 
 #: js/Tags.js:64
 msgid "Are you sure you want to delete the selected tags?"
-msgstr ""
+msgstr "Möchten Sie den/die markierten Tag/s wirklich löschen?"
 
 #: js/Tags.js:80
 msgid "Deleting tag(s)..."
@@ -1260,7 +1264,7 @@ msgstr "Nur Weiterleiten"
 
 #: js/user/EditDialog.js:761
 msgid "Email Alias"
-msgstr ""
+msgstr "E-Mail Alias"
 
 #: js/user/EditDialog.js:766
 msgid "Add an alias address..."
@@ -1268,7 +1272,7 @@ msgstr "E-Mail-Adresse hinzufügen..."
 
 #: js/user/EditDialog.js:777
 msgid "This alias can be used for sending emails."
-msgstr ""
+msgstr "Dieser Alias kann zum Versenden von E-Mails verwendet werden."
 
 #: js/user/EditDialog.js:804
 msgid "Domain not allowed"
@@ -1285,11 +1289,11 @@ msgstr "Weiterleitung zu sich selbst"
 
 #: js/user/EditDialog.js:833
 msgid "You are not allowed to set a forwarding email address that is identical to the users primary email or one of his aliases."
-msgstr ""
+msgstr "Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch ist."
 
 #: js/user/EditDialog.js:842
 msgid "Email Forward"
-msgstr ""
+msgstr "E-Mail weiterleiten"
 
 #: js/user/EditDialog.js:847
 msgid "Add a forwarding address..."
@@ -1332,7 +1336,7 @@ msgid "Full Name"
 msgstr "Vollständiger Name"
 
 #: js/user/EditDialog.js:1034
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgid "The full name is used to create the distinguished name (DN) during Active Directory integration."
 msgstr ""
 
 #: js/user/EditDialog.js:1036 js/user/EditDialog.js:1098
@@ -1378,7 +1382,7 @@ msgstr "Ungültiger Status"
 
 #: js/user/EditDialog.js:1144
 msgid "The blocked status is only valid if the user has attempted to log in with an incorrect password too many times. It is not possible to set this status here."
-msgstr ""
+msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
 
 #: js/user/EditDialog.js:1166 js/user/GridPanel.js:208
 msgid "Expires"
@@ -1428,13 +1432,25 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
+#: js/user/EditDialog.js:1302
+msgid "Display in address book"
+msgstr ""
+
+#: js/user/EditDialog.js:1302
+msgid "Hide from address book"
+msgstr ""
+
+#: js/user/EditDialog.js:1323 js/user/EditDialog.js:1371
+msgid "Saved in address book"
+msgstr ""
+
 #: js/user/EditDialog.js:1337
-msgid "Do you want to move the contact to this addressbook?"
+msgid "Would you like to move the contact to this address book?"
 msgstr ""
 
 #: js/user/EditDialog.js:1370
 msgid "The selected contact will be updated"
-msgstr ""
+msgstr "Der ausgewählte Kontakt wird aktualisiert."
 
 #: js/user/GridPanel.js:52
 msgid "Enable Account"
@@ -1450,7 +1466,7 @@ msgstr "Passwort zurücksetzen"
 
 #: js/user/GridPanel.js:200
 msgid "Email usage"
-msgstr ""
+msgstr "E-Mail-Nutzung"
 
 #: js/user/GridPanel.js:201
 msgid "Filesystem usage"
@@ -1513,6 +1529,27 @@ msgstr "Aufgaben Typ"
 #: Model/SchedulerTask.php:86
 msgid "Emails"
 msgstr "E-Mails"
+
+#~ msgid "Manage customfields"
+#~ msgstr "Zusatzfelder verwalten"
+
+#~ msgid "Add and edit customfields."
+#~ msgstr "Zusatzfelder anlegen und editieren."
+
+#~ msgid "View customfields"
+#~ msgstr "Zusatzfelder ansehen"
+
+#~ msgid "View customfields list."
+#~ msgstr "Liste der Zusatzfelder ansehen."
+
+#~ msgid "View serverinfo"
+#~ msgstr "Serverinformationen ansehen"
+
+#~ msgid "View serverinfo list."
+#~ msgstr "Listen der Serverinformationen ansehen."
+
+#~ msgid "Customfields"
+#~ msgstr "Zusatzfelder"
 
 #~ msgid "Manage e-mail accounts"
 #~ msgstr "E-Mail Konten verwalten"
