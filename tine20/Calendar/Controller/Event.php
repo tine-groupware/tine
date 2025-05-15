@@ -1532,8 +1532,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if ($_event->relations instanceof Tinebase_Record_RecordSet) {
                     $_event->relations->setId(null);
                 }
-            
-                foreach (array('attendee', 'notes', 'alarms') as $prop) {
+
+                foreach (array('attendee', 'notes', 'alarms', 'event_types') as $prop) {
                     if ($_event->{$prop} instanceof Tinebase_Record_RecordSet) {
                         $_event->{$prop}->setId(NULL);
                     }
