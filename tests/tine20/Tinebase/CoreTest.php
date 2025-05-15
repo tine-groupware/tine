@@ -83,6 +83,9 @@ class Tinebase_CoreTest extends TestCase
 
     public function testGetDispatchServerActiveSync()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ActiveSync')) {
+            self::markTestSkipped('ActiveSync is needed for the test');
+        }
         $request = Tinebase_Http_Request::fromString(
             "GET /index.php?frontend=activesync HTTP/1.1\r\n".
             "User-Agent: SAMSUNG-GT-I9300/101.403"
