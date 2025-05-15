@@ -23,10 +23,9 @@ class FieldTriggerPlugin {
     async init (field) {
         this.field = field
 
-        if (typeof field.initKeyEvents === 'function') {
-            field.initKeyEvents()
+        if (field.initKeyEvents) {
+            field.initKeyEvents();
         }
-
         field.setValue = field.setValue.createSequence(_.bind(this.assertState, this))
         field.clearValue = field.clearValue?.createSequence(_.bind(this.assertState, this))
         field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
