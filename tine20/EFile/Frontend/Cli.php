@@ -34,14 +34,14 @@ class EFile_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
         
-        $args = $this->_parseArgs($_opts, ['file', 'path']);
+        $args = $this->_parseArgs($_opts, ['file', 'path'], _splitSubArgs: false);
 
         if (!is_readable($args['file'])) {
             echo $args['file'] . ' is not readable' . PHP_EOL;
             return 1;
         }
 
-        $importer = new EFile_Import_Csv(['path' => $_opts['path']]);
+        $importer = new EFile_Import_Csv(['path' => $args['path']]);
         $importer->importFile($args['file']);
 
         return 0;
