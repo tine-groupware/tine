@@ -85,7 +85,8 @@ class Sales_Controller_Document_DispatchHistory extends Tinebase_Controller_Reco
                 $skipMsgCache = [];
             }
             $newSkipMsgCache = [];
-            
+
+            Felamimail_Controller_Cache_Message::getInstance()->doContainerACLChecks(false);
             foreach (Felamimail_Controller_Cache_Message::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
                         [TMFA::FIELD => 'folder_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $inbox->getId()],
                     ]), _onlyIds: ['id', 'messageuid']) as $msgId => $msgUid) {
@@ -102,7 +103,7 @@ class Sales_Controller_Document_DispatchHistory extends Tinebase_Controller_Reco
                     ], true);
                     $headers = Felamimail_Controller_Message::getInstance()->getMessageHeaders($msg);
 
-                    if (!($headers['x-zre-state'] ?? false) || !($msgDispatchHistories[$inReplyTo = ($headers['in-reply-to'] ?? null)] ?? false)) {
+                    if ('accepted' !== strtolower($headers['x-zre-state'] ?? '') || !($msgDispatchHistories[$inReplyTo = ($headers['in-reply-to'] ?? null)] ?? false)) {
                         $newSkipMsgCache[$msgUid] = ($skipMsgCache[$msgUid] ?? 0) + 1;
                         continue;
                     }
