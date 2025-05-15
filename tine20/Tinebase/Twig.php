@@ -159,8 +159,8 @@ class Tinebase_Twig
 
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('removeSpace', fn($str) => str_replace(' ', '', (string)$str)));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', fn($str) => iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', (string) $str))));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('toRomanNumber', fn($str) => (new NumberFormatter('@numbers=roman', NumberFormatter::DECIMAL))->format(intval($str))));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('accountLoginChars', fn($str) => preg_replace('/[^\w\-_.@\d+]/u', '', $str)));
-
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', fn($subject, $pattern, $replacement, int $limit=-1, int $count=null) => preg_replace($pattern, $replacement, $subject, $limit, $count)));
 
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
