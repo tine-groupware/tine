@@ -146,7 +146,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             Sales_Model_Document_DispatchHistory::FLD_PARENT_DISPATCH_ID => $parentDispatchId,
             Sales_Model_Document_DispatchHistory::FLD_XPROPS => [
                 'fmAccountId' => $fmAccountId,
-                'sentMsgId' => $sentMessage->messageuid,
+                'sentMsgId' => $sentMessage->message_id,
             ],
         ]);
 

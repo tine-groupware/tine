@@ -680,7 +680,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(1, ($dispatchHistory = $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->find(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_WAIT_FOR_FEEDBACK))?->attachments->count());
         $this->assertSame('email.eml', $dispatchHistory->attachments->getFirstRecord()->name);
         $this->assertArrayHasKey('sentMsgId', $dispatchHistory->xprops());
-        $this->assertSame($msg->messageuid, $dispatchHistory->xprops()['sentMsgId']);
+        $this->assertSame($msg->message_id, $dispatchHistory->xprops()['sentMsgId']);
         $this->assertSame($dispatchFMAccount->getId(), $dispatchHistory->xprops()['fmAccountId'] ?? null);
 
         // create reply
@@ -695,7 +695,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             'to' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
             'body' => 'unittest',
             'headers' => [
-                'X-zre-state' => true,
+                'X-zre-state' => 'Accepted',
                 'In-Reply-to' => $dispatchHistory->xprops()['sentMsgId'],
             ],
         ], true);
