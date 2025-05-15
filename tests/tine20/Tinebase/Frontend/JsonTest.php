@@ -696,33 +696,38 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         self::assertEquals($symbols['decimal'], $registryData['Tinebase']['decimalSeparator']);
 
-        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
-            $configuredSalesModels = array_keys($registryData['Sales']['models']);
-            self::assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
-                . print_r($configuredSalesModels, true));
-            $copyOmitFields = array(
-                'billed_in',
-                'invoice_id',
-                'status',
-                'cleared_at',
-                'relations',
-            );
-        } else {
-            $copyOmitFields = array(
-                'billed_in',
-                'status',
-                'cleared_at',
-                'relations',
-            );
-        }
+        if (Tinebase_Application::getInstance()->isInstalled('Timetracker')) {
+            if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+                $configuredSalesModels = array_keys($registryData['Sales']['models']);
+                self::assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
+                    . print_r($configuredSalesModels, true));
+                $copyOmitFields = array(
+                    'billed_in',
+                    'invoice_id',
+                    'status',
+                    'cleared_at',
+                    'relations',
+                );
+            } else {
+                $copyOmitFields = array(
+                    'billed_in',
+                    'status',
+                    'cleared_at',
+                    'relations',
+                );
+            }
 
-        self::assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
-        self::assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
-        self::assertTrue(is_array(($registryData['Timetracker']['relatableModels'][0])), 'relatableModels needs to be an numbered array');
+            self::assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
+            self::assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
+            self::assertTrue(is_array(($registryData['Timetracker']['relatableModels'][0])), 'relatableModels needs to be an numbered array');
+        }
 
         $this->_assertImportExportDefinitions($registryData);
 
-        self::assertTrue(isset($registryData['Felamimail']['models']['Account']), 'account model missing from registry');
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            self::assertTrue(isset($registryData['Felamimail']['models']['Account']),
+                'account model missing from registry');
+        }
 
         try {
             // check alias dispatch flag
@@ -742,6 +747,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     protected function _assertImportExportDefinitions($registryData)
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('Inventory')) {
+            return;
+        }
         // Inventory
         self::assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
             . print_r($registryData['Inventory']['models']['InventoryItem'], true));
