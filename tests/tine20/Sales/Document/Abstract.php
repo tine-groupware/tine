@@ -26,13 +26,13 @@ class Sales_Document_Abstract extends TestCase
         ], $data)));
     }
 
-    protected function _createCustomer(array $additionalBillingData = []): Sales_Model_Customer
+    protected function _createCustomer(array $additionalBillingData = [], array $additionalCustomerData = []): Sales_Model_Customer
     {
         $division = self::makeDefaultDivisonUblReady();
 
         $name = Tinebase_Record_Abstract::generateUID();
         /** @var Sales_Model_Customer $customer */
-        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer([
+        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array_merge([
             'name' => $name,
             'cpextern_id' => $this->_personas['sclever']->contact_id,
             'bic' => 'SOMEBIC',
@@ -61,7 +61,7 @@ class Sales_Document_Abstract extends TestCase
                 Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS => 'DE0987654321',
                 Sales_Model_Debitor::FLD_BUYER_REFERENCE => 'buy ref',
             ]],
-        ]));
+        ], $additionalCustomerData)));
 
         Tinebase_Record_Expander::expandRecord($customer);
         return $customer;
