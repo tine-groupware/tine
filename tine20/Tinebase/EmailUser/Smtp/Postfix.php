@@ -121,6 +121,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         // use this for adding an additional destination (accountname -> accountname)
         'accountnamedestination' => true,
         'allowOverwrite' => false,
+        'destinationisusername' => false,
     ];
     
     /**
@@ -429,8 +430,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             return;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
-            . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting aliases for '
+                . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': '
+                . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
+        }
 
         if ($userIdField === 'userid') {
             $userId = $_smtpSettings[$this->_propertyMapping['emailUserId']];
@@ -454,10 +458,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             // check if in primary or secondary domains
             if (! empty($aliasAddress->email) && $this->_checkDomain($aliasAddress->email)) {
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
+                    $destination = $this->_config['destinationisusername']
+                        ? $_smtpSettings[$this->_propertyMapping['emailUsername']]
+                        : $_smtpSettings[$this->_propertyMapping['emailAddress']];
                     $destinationData = [
                         $userIdField  => $userId,
                         'source'      => $aliasAddress->email,
-                        'destination' => $_smtpSettings[$this->_propertyMapping['emailAddress']],
+                        'destination' => $destination,
                         'dispatch_address' => $aliasAddress->dispatch_address,
                     ];
                     $this->_checkIfDestinationExists($destinationData, $userIdField);
