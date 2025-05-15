@@ -126,9 +126,9 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
             {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'datetime'},
-            {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: i18n._('Last Modified by'),                                                  field: 'last_modified_by',   valueType: 'user'},
             {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'datetime'},
-            {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            {label: i18n._('Created by'),                                                        field: 'created_by',         valueType: 'user'},
 
             {label: app.i18n._('Description'), field: 'description', operators: ['wordstartswith']},
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'datetime'},

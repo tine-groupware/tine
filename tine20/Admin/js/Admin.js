@@ -197,7 +197,7 @@ Tine.Admin.init = function () {
         if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
         ) {
             tree.push({
-                text: translation.gettext('E-mail Accounts'),
+                text: translation.gettext('Email Accounts'),
                 //pos: 850,
                 cls: "treemain",
                 iconCls: 'FelamimailIconCls',

@@ -123,7 +123,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         var AccountsStorage = this.accountsStorageCombo.getValue();
 
         if ((AccountsStorage === 'Ldap' || AccountsStorage === 'ActiveDirectory') && AccountsStorage !== this.originalAccountsStorage) {
-            Ext.Msg.confirm(this.app.i18n._('Delete all existing users and groups'), this.app.i18n._('Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?'), function (confirmbtn, value) {
+            Ext.Msg.confirm(this.app.i18n._('Delete all existing users and groups'), this.app.i18n._('Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?'), function (confirmbtn, value) {
                 if (confirmbtn === 'yes') {
                     this.doOnChangeAccountsStorage(AccountsStorage);
                 } else {

@@ -49,7 +49,7 @@ Tine.Admin.Groups.Main = {
          * onclick handler for deleteBtn
          */
         deleteGroup: function (button, event) {
-            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected groups?'), function (button) {
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Are you sure you want to delete the selected groups?'), function (button) {
                 if (button === 'yes') {
                 
                     var groupIds = [],
@@ -240,13 +240,13 @@ Tine.Admin.Groups.Main = {
             columns: [
                 { id: 'id', header: this.translation.gettext('ID'), hidden: true },
                 { id: 'name', header: this.translation.gettext('Name') },
-                { id: 'email', header: this.translation.gettext('E-mail') },
+                { id: 'email', header: this.translation.gettext('Email') },
                 { id: 'account_only', header: this.translation.gettext('Account only'), renderer: Tine.Tinebase.common.booleanRenderer},
                 { id: 'description', header: this.translation.gettext('Description') },
                 { id: 'creation_time',      header: i18n._('Creation Time'),          renderer: Tine.Tinebase.common.dateRenderer,        hidden: true },
-                { id: 'created_by',         header: i18n._('Created By'),             renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true },
+                { id: 'created_by',         header: i18n._('Created by'),             renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true },
                 { id: 'last_modified_time', header: i18n._('Last Modified Time'),     renderer: Tine.Tinebase.common.dateRenderer,        hidden: true },
-                { id: 'last_modified_by',   header: i18n._('Last Modified By'),       renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true }
+                { id: 'last_modified_by',   header: i18n._('Last Modified by'),       renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true }
             ]
         });
         

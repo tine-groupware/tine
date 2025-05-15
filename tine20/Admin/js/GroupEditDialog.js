@@ -110,7 +110,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }], [{
                     columnWidth: 0.5,
                     xtype: 'mirrortextfield',
-                    fieldLabel: this.app.i18n._('E-mail'),
+                    fieldLabel: this.app.i18n._('Email'),
                     name: 'email',
                     anchor: '100%',
                     vtype: 'email',

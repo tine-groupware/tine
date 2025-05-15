@@ -45,7 +45,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_APPS = 'manage_apps';
 
     /**
-     * the right to manage e-mail accounts
+     * the right to manage email accounts
      * @staticvar string
      */
     const MANAGE_EMAILACCOUNTS = 'manage_emailaccounts';
@@ -117,7 +117,7 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const VIEW_SHARED_TAGS = 'viewshared_tags';
 
     /**
-     * the right to view e-mail accounts
+     * the right to view email accounts
      * @staticvar string
      */
     const VIEW_EMAILACCOUNTS = 'view_emailaccounts';
@@ -276,8 +276,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('Add and edit users and groups, add group members, change user passwords.'),
             ),
             self::MANAGE_EMAILACCOUNTS   => array(
-                'text'          => $translate->_('Manage e-mail accounts'),
-                'description'   => $translate->_('Add and edit shared and personal e-mail accounts.'),
+                'text'          => $translate->_('Manage email accounts'),
+                'description'   => $translate->_('Add and edit shared and personal email accounts.'),
             ),
             self::MANAGE_APPS   => array(
                 'text'          => $translate->_('Manage applications'),
@@ -324,8 +324,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('View accounts list and details.'),
             ),
             self::VIEW_EMAILACCOUNTS   => array(
-                'text'          => $translate->_('View e-mail accounts'),
-                'description'   => $translate->_('View shared and personal e-mail accounts.'),
+                'text'          => $translate->_('View email accounts'),
+                'description'   => $translate->_('View shared and personal email accounts.'),
             ),
             self::VIEW_APPS   => array(
                 'text'          => $translate->_('View applications'),

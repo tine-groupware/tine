@@ -105,7 +105,11 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     public static function getTranslatedRightDescriptions()
     {
         $translate = Tinebase_Translation::getTranslation('Calendar');
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
         $rightDescriptions = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared calendars'),

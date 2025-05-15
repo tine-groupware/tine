@@ -730,12 +730,10 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-msgid "Event Type"
-msgid_plural "Event Types"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Site"
+msgstr ""
+
+msgid "Search for sites ..."
 msgstr ""
 
 msgid "View"
@@ -1198,6 +1196,11 @@ msgstr ""
 msgid "Cancel this action"
 msgstr ""
 
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
@@ -1265,26 +1268,6 @@ msgid "Event (as organizer)"
 msgstr ""
 
 msgid "Event attendee"
-msgstr ""
-
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Calendar Hierarchy/Name"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Maximum number of attendee"
-msgstr ""
-
-msgid "Default attendee status"
-msgstr ""
-
-msgid "Busy Type"
 msgstr ""
 
 msgid "Resource Grant"
@@ -1388,6 +1371,125 @@ msgstr ""
 msgid "The grant to access events marked as private in this calendar"
 msgstr ""
 
+msgid "Calendar Hierarchy/Name"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Maximum number of attendee"
+msgstr ""
+
+msgid "Default attendee status"
+msgstr ""
+
+msgid "Busy Type"
+msgstr ""
+
+<<<<<<< Updated upstream
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Invite Resource"
+msgstr ""
+
+msgid "The grant to invite the resource to an event"
+msgstr ""
+
+msgid "Resource status"
+msgstr ""
+
+msgid "The grant to set the resource attendee status"
+msgstr ""
+
+msgid "Resource notification"
+msgstr ""
+
+msgid "The grant to receive notifications for this resource"
+msgstr ""
+
+msgid "Read Resource"
+msgstr ""
+
+msgid "The grant to read the resource itself"
+msgstr ""
+
+msgid "The grant to edit the resource itself"
+msgstr ""
+
+msgid "Export Resource"
+msgstr ""
+
+msgid "The grant to export the resource itself"
+msgstr ""
+
+msgid "Sync Resource"
+msgstr ""
+
+msgid "The grant to synchronise the resource itself"
+msgstr ""
+
+msgid "Resource Admin"
+msgstr ""
+
+msgid "The grant to administrate the resource itself"
+msgstr ""
+
+msgid "Add Events"
+msgstr ""
+
+msgid "The grant to directly add events into this resource calendar"
+msgstr ""
+
+msgid "Read Events"
+msgstr ""
+
+msgid "The grant to read events from this resource calendar"
+msgstr ""
+
+msgid "Export Events"
+msgstr ""
+
+msgid "The grant to export events from this resource calendar"
+msgstr ""
+
+msgid "Sync Events"
+msgstr ""
+
+msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
+msgstr ""
+
+msgid "Events Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events from this resource calendar"
+msgstr ""
+
+msgid "Edit Events"
+msgstr ""
+
+msgid "The grant to edit events directly saved in this resource calendar"
+msgstr ""
+
+msgid "Delete Events"
+msgstr ""
+
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr ""
+
+msgid "Free Busy"
+msgstr ""
+
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr ""
+
+msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+
+=======
+>>>>>>> Stashed changes
 msgid "WK"
 msgstr ""
 
@@ -1636,6 +1738,9 @@ msgstr ""
 msgid "fourth"
 msgstr ""
 
+msgid "fifth"
+msgstr ""
+
 msgid "last"
 msgstr ""
 
@@ -1700,6 +1805,11 @@ msgstr ""
 msgid "Organizer timezone"
 msgstr ""
 
+msgid "Event Type"
+msgid_plural "Event Types"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Short Name"
 msgstr ""
 
@@ -1742,9 +1852,6 @@ msgid "Yearly on the %1$s of %2$s"
 msgstr ""
 
 msgid "second to last"
-msgstr ""
-
-msgid "fifth"
 msgstr ""
 
 msgid "st"
