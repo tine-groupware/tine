@@ -560,18 +560,16 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             return $result;
         }
 
-        $newResult = array();
+        $newResult = $result;
+        $newResult[Tinebase_Model_ContainerContent::ACTION_CREATE] = [];
+        $newResult[Tinebase_Model_ContainerContent::ACTION_UPDATE] = [];
         $backend = Calendar_Controller_Event::getInstance()->getBackend();
 
-        foreach ($result as $action => $value) {
-            if (!is_array($value)) {
-                $newResult[$action] = $value;
-                continue;
-            }
-
+        foreach ([
+                    Tinebase_Model_ContainerContent::ACTION_CREATE => $result[Tinebase_Model_ContainerContent::ACTION_CREATE],
+                    Tinebase_Model_ContainerContent::ACTION_UPDATE => $result[Tinebase_Model_ContainerContent::ACTION_UPDATE],
+                ] as $action => $value) {
             $ids = $backend->resolveToBaseEventsEventually(array_keys($value), $this->_container->getId());
-
-            $newResult[$action] = array();
             foreach($ids as $id) {
                 $newResult[$action][$id] = $id . $this->_suffix;
             }
