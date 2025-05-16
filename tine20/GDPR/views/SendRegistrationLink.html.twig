@@ -1,0 +1,25 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% block subject %}
+    {% if dipr != '' %}
+        {{ 'Confirm your E-mail address' }}
+    {% else -%}
+        {{ 'Confirm your registration' }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div>{{ 'Hello ' }}  {{ contact.getTitle() | default('user') }} </div>
+    <div>{{ 'thank you for your registration, to complete the registration, please confirm your e-mail address via this link ' }} : <a href="{{ link }}">Confirm E-Mail address</a></div><br>
+    {#    {% if localized_dip_name != '' and localized_dip_name == 'Newsletter' %}#}
+    {#        <div>{{ 'We sill send our latest news to you !' }}</div>#}
+    {#    {% endif %}#}
+    <div>{{ 'Thank you.' }}</div>
+    <div>{{ 'Your %1$s Team' | format(app.branding.title) }}</div>
+{#    <div><img src="{{ app.branding.logoContent.getBody() | data_uri }}" width="135" height="50" /></div>#}
+{% endblock %}

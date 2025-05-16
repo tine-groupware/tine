@@ -1,0 +1,34 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+    localizeString(dipr.name, app.user.locale)
+    localizeString(dipr.description, app.user.locale)
+#}
+
+{#
+file: tine20/GDPR/js/ConsentClient/src/EmailPage.vue
+url: GDPR/view/manageConsent
+#}
+
+{% block emailPageWelcomeTextTemplate %}
+    <h1>{{ 'Anmeldung' }}</h1>
+    <div class="my-4">
+        {% if dipr != '' %}
+            <p>{{ 'Melden Sie sich an, dann senden wir Ihnen künftig Neuigkeiten und Nachrichten rund um unsere Dienstleitungen.' }}</p>
+            <div class="my-1">
+                <p><b>{{ localizeString(dipr.name, browserLocale|default(app.user.locale)) }}</b></p>
+                <p>{{ 'Ihre Daten verwenden wir ausschließlich zum dem angegebenen Zweck, Sie können jederzeit die Löschung Ihrer Daten veranlassen.' }}</p>
+            </div>
+        {% else -%}
+            <p>{{ 'Tragen Sie Ihre E-Mail-Adresse ein, um sich anzumelden.' }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block afterSendEmailTemplate %}
+    <h1>{{ '' }}</h1>
+    <div class="my-4">
+        <p>{{ "Wir haben Ihnen einen Link zur Bestätigung an die angegebene E-Mail-Adresse geschickt. Bitte prüfen Sie Ihren Posteingang." }}</p>
+    </div>
+{% endblock %}

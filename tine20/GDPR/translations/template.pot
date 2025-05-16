@@ -43,19 +43,25 @@ msgstr ""
 msgid "Default data provenance for ADB contacts"
 msgstr ""
 
-msgid "Manage consent page explain text"
-msgstr ""
-
-msgid "Manage consent Email template"
-msgstr ""
-
 msgid "Languages Available"
 msgstr ""
 
 msgid "List of the language in which the multilingual texts are laid out."
 msgstr ""
 
-msgid "Consent management for"
+msgid "Subscription container id"
+msgstr ""
+
+msgid "Subscription container id in Addressbook."
+msgstr ""
+
+msgid "GDPR registration secret string"
+msgstr ""
+
+msgid "GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable"
+msgstr ""
+
+msgid "GDPR template path"
 msgstr ""
 
 msgid "Data provenances"
@@ -106,31 +112,31 @@ msgstr ""
 msgid "GDPR Intended Purpose"
 msgstr ""
 
-#, python-brace-format
-msgid "I am not {email}"
+msgid "Description"
 msgstr ""
 
-msgid "Data intended purpose"
-msgid_plural "Data intended purposes"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Status"
+msgstr ""
+
+msgid "Manage"
 msgstr ""
 
 msgid "Not decided"
 msgstr ""
 
+msgid "Agree"
+msgstr ""
+
 msgid "Withdraw date"
+msgstr ""
+
+msgid "Withdraw"
 msgstr ""
 
 msgid "Agreement date"
 msgstr ""
 
-msgid "Enter your email address"
-msgstr ""
-
-msgid "Get my link"
+msgid "Send"
 msgstr ""
 
 msgid "I hereby withdraw the following data intended purpose"
@@ -155,6 +161,16 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Confirm"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+#, python-brace-format
+msgid "I am not {email}"
+msgstr ""
+
+msgid "Go to my manage consent link"
 msgstr ""
 
 msgid "Data Intended purpose of this mass mailing"
@@ -206,7 +222,18 @@ msgstr ""
 msgid "Compose mass mail without recipients"
 msgstr ""
 
-msgid "Description"
+msgid "Data intended purpose"
+msgid_plural "Data intended purposes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Hide from self registration"
+msgstr ""
+
+msgid "Hide from self service"
+msgstr ""
+
+msgid "Registration link"
 msgstr ""
 
 msgid "GENDER_Data intended purpose"
@@ -235,8 +262,14 @@ msgstr ""
 msgid "Enter your email"
 msgstr ""
 
-msgid "Thank you for using GDPR module\""
+msgid "E-mail"
 msgstr ""
 
-msgid "To review or edit your consent please use the following link:"
+msgid "First Name"
+msgstr ""
+
+msgid "Last Name"
+msgstr ""
+
+msgid "Organization"
 msgstr ""

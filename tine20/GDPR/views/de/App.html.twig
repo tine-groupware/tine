@@ -1,0 +1,25 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+    localizeString(dipr.name, app.user.locale)
+    localizeString(dipr.description, app.user.locale)
+#}
+
+{#
+file: tine20/GDPR/js/ConsentClient/src/App.vue
+#}
+
+{% block impressionTemplate %}
+    <div>
+        <a>{{ 'Metaways' }}</a><br>
+        <a>{{ 'Straße 1' }}</a><br>
+        <a>{{ '12345 Hamburg' }}</a><br>
+        <a>{{ 'Deutschland' }}</a>
+    </div>
+    <div>
+        <a>{{ 'footer-de@metaways.de' }}</a><br>
+        <a href="">Link-Impressum</a>
+    </div>
+{% endblock %}

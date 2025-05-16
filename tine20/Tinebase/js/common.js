@@ -581,6 +581,10 @@ const common = {
         return '<div class="dark-reverse" style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
     },
 
+    urlRenderer: function (url) {
+        return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + Tine.Tinebase.EncodingHelper.encode(url, 'shorttext') + '</a>';
+    },
+
     /**
      * foreign record renderer
      *
