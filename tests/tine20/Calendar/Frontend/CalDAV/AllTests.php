@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -22,6 +22,7 @@ class Calendar_Frontend_CalDAV_AllTests
         $suite->addTestSuite(Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest::class);
         $suite->addTestSuite(Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest::class);
         $suite->addTestSuite(Calendar_Frontend_CalDAV_ProxyTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CalDAV_ScheduleOutboxTest::class);
         $suite->addTestSuite(Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest::class);
         return $suite;
     }

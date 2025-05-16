@@ -250,9 +250,14 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      */
     protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
+        return static::convertToTinebaseDateTime($dateTimeProperty, $_useUserTZ);
+    }
+
+    public static function convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, bool $_useUserTZ = false): Tinebase_DateTime
+    {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::getUserTimezone());
-        
+
         if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
 
@@ -260,16 +265,16 @@ abstract class Tinebase_Convert_VCalendar_Abstract
             $isDate = (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE');
 
             $tz = ($_useUserTZ || $isFloatingTime || $isDate) ?
-                (string) Tinebase_Core::getUserTimezone() : 
+                (string) Tinebase_Core::getUserTimezone() :
                 $dateTime->getTimezone();
-            
+
             $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         } else {
             $result = new Tinebase_DateTime($dateTimeProperty->getValue());
         }
-        
+
         date_default_timezone_set($defaultTimezone);
-        
+
         return $result;
     }
 
