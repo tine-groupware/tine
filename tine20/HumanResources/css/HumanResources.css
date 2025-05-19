@@ -66,6 +66,10 @@
     background-image:url(../../images/icon-set/icon_calendar_strahl.svg) !important;
 }
 
+.RevenueAnalysis {
+    background-image:url(../../images/icon-set/icon_cashbook.svg) !important;
+}
+
 .hr-freetimeplanning-daycell {
     box-sizing: border-box;
     text-align: center;

@@ -23,6 +23,7 @@ import './DivisionEditDialog'
 import './Timetracker/hooks'
 import './AttendanceRecorder'
 import './freeTimeType'
+import './RevenueAnalysisPanel'
 
 Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
 
@@ -36,6 +37,14 @@ Tine.HumanResources.Application = Ext.extend(Tine.Tinebase.Application, {
                 xtype: 'humanresources.freetimeplanning'
             });
         }
+        if (this.featureEnabled(('revenueAnalysis'))) {
+            Tine.widgets.MainScreen.registerContentType('HumanResources', {
+                contentType: 'RevenueAnalysis',
+                text: this.i18n._('Revenue Analysis'),
+                xtype: 'humanresources.revenueanalysis'
+            });
+        }
+
     },
 
     /**
