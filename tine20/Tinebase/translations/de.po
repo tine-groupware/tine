@@ -1188,8 +1188,8 @@ msgstr ""
 msgid "Email Notification"
 msgstr ""
 
-msgid "Support request"
-msgstr ""
+msgid "Support Request"
+msgstr "Supportanfrage"
 
 msgid "Site Filter"
 msgstr "Standort Filter"
@@ -1242,9 +1242,6 @@ msgstr "Das neue Passwort muss sich vom alten unterscheiden."
 
 msgid "Old pin is wrong."
 msgstr "Die alte PIN ist falsch."
-
-msgid "Support Request"
-msgstr "Supportanfrage"
 
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
@@ -2129,6 +2126,24 @@ msgstr ""
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "{mfaDevice.device_name} Sicherheitscode"
 
+msgid "Didn't receive the SMS?"
+msgstr "Haben Sie die SMS nicht erhalten?"
+
+msgid "Send Support request to admin?"
+msgstr "Supportanfrage an den Administrator senden?"
+
+msgid "Please enter the message:"
+msgstr "Bitte geben Sie die Nachricht ein"
+
+msgid "Success"
+msgstr "Erfolg"
+
+msgid "Support request has been sent"
+msgstr "Ihr Supportanfrage wurde gesendet."
+
+msgid "I didn't receive a SMS message."
+msgstr "Ich habe die SMS nicht erhalten"
+
 msgid "Token required"
 msgstr "Token erforderlich"
 
@@ -2318,9 +2333,6 @@ msgstr "Wiederhole {0}"
 #, python-brace-format
 msgid "Changing {0}"
 msgstr "Ändere {0}"
-
-msgid "Success"
-msgstr "Erfolg"
 
 #, python-brace-format
 msgid "Your {0} has been changed."
@@ -4902,20 +4914,13 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-msgid "Didn't receive the SMS?"
-msgstr "Haben Sie die SMS nicht erhalten?"
-
-msgid "Send Support request to admin?"
-msgstr "Supportanfrage an den Administrator senden?"
-
-msgid "Please enter the message:"
-msgstr "Bitte geben Sie die Nachricht ein"
-
-msgid "Support request has been sent"
-msgstr "Ihr Supportanfrage wurde gesendet."
-
-msgid "I didn't receive a SMS message."
-msgstr "Ich habe die SMS nicht erhalten"
+msgid ""
+"The character string {{ password }} is automatically replaced by the "
+"password when the message is sent and must be included in the message."
+msgstr ""
+"Die Zeichenkette {{ password }} wird beim Versenden der Nachricht "
+"automatisch durch das Passwort ersetzt und muss in der Nachricht enthalten "
+"sein."
 
 msgid "Send the support request to admin"
 msgstr "Supportanfrage an den Administrator senden"

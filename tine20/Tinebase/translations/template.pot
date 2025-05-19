@@ -1123,7 +1123,7 @@ msgstr ""
 msgid "Email Notification"
 msgstr ""
 
-msgid "Support request"
+msgid "Support Request"
 msgstr ""
 
 msgid "Site Filter"
@@ -1172,9 +1172,6 @@ msgid "The new password must be different from the old one."
 msgstr ""
 
 msgid "Old pin is wrong."
-msgstr ""
-
-msgid "Support Request"
 msgstr ""
 
 msgid "Bank Holiday Calendar"
@@ -1992,6 +1989,24 @@ msgstr ""
 msgid "Security code from {mfaDevice.device_name}"
 msgstr ""
 
+msgid "Didn't receive the SMS?"
+msgstr ""
+
+msgid "Send Support request to admin?"
+msgstr ""
+
+msgid "Please enter the message:"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Support request has been sent"
+msgstr ""
+
+msgid "I didn't receive a SMS message."
+msgstr ""
+
 msgid "Token required"
 msgstr ""
 
@@ -2162,9 +2177,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Changing {0}"
-msgstr ""
-
-msgid "Success"
 msgstr ""
 
 #, python-brace-format
@@ -4642,17 +4654,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-msgid "Didn't receive the SMS?"
-msgstr ""
-
-msgid "Send Support request to admin?"
-msgstr ""
-
-msgid "Please enter the message:"
-msgstr ""
-
-msgid "Support request has been sent"
-msgstr ""
-
-msgid "I didn't receive a SMS message."
+msgid ""
+"The character string {{ password }} is automatically replaced by the "
+"password when the message is sent and must be included in the message."
 msgstr ""

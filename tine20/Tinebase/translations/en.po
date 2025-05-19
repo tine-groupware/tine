@@ -1163,8 +1163,8 @@ msgstr "Deletion"
 msgid "Email Notification"
 msgstr "Email Notification"
 
-msgid "Support request"
-msgstr "Support request"
+msgid "Support Request"
+msgstr "Support Request"
 
 msgid "Site Filter"
 msgstr "Site Filter"
@@ -1217,9 +1217,6 @@ msgstr "The new password must be different from the old one."
 
 msgid "Old pin is wrong."
 msgstr "Old pin is wrong."
-
-msgid "Support Request"
-msgstr "Support Request"
 
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
@@ -2089,6 +2086,24 @@ msgstr ""
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "Security code from {mfaDevice.device_name}"
 
+msgid "Didn't receive the SMS?"
+msgstr "Didn't receive the SMS?"
+
+msgid "Send Support request to admin?"
+msgstr "Send Support request to admin?"
+
+msgid "Please enter the message:"
+msgstr "Please enter the message:"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Support request has been sent"
+msgstr "Support request has been sent"
+
+msgid "I didn't receive a SMS message."
+msgstr "I didn't receive a SMS message."
+
 msgid "Token required"
 msgstr "Token required"
 
@@ -2269,9 +2284,6 @@ msgstr "Repeat new {0}"
 #, python-brace-format
 msgid "Changing {0}"
 msgstr "Changing {0}"
-
-msgid "Success"
-msgstr "Success"
 
 #, python-brace-format
 msgid "Your {0} has been changed."
@@ -4817,20 +4829,15 @@ msgstr "Neighbours only"
 msgid "Preview"
 msgstr "Preview"
 
-msgid "Didn't receive the SMS?"
-msgstr "Didn't receive the SMS?"
+msgid ""
+"The character string {{ password }} is automatically replaced by the "
+"password when the message is sent and must be included in the message."
+msgstr ""
+"The character string {{ password }} is automatically replaced by the "
+"password when the message is sent and must be included in the message."
 
-msgid "Send Support request to admin?"
-msgstr "Send Support request to admin?"
-
-msgid "Please enter the message:"
-msgstr "Please enter the message:"
-
-msgid "Support request has been sent"
-msgstr "Support request has been sent"
-
-msgid "I didn't receive a SMS message."
-msgstr "I didn't receive a SMS message."
+msgid "Support request"
+msgstr "Support request"
 
 msgid "Enable Password Less Login"
 msgstr "Enable Password Less Login"
