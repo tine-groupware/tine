@@ -195,6 +195,12 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         const mobilePhones = phoneFields.map((phoneField) => {
             return [phoneField.fieldName, contact?.data?.[phoneField.fieldName], `${contact?.data?.[phoneField.fieldName]} [${phoneField.label}]`];
         });
+        const smsMfaConfig =  this.record.get('mfa_configs') ? this.record.get('mfa_configs').find((mfaConfig) => {
+            return mfaConfig.config_class === 'Tinebase_Model_MFA_SmsUserConfig';
+        }): null;
+        if (smsMfaConfig?.config?.cellphonenumber) {
+            mobilePhones.push(['mfa', smsMfaConfig.config.cellphonenumber, `${smsMfaConfig.config.cellphonenumber} [MFA]`])
+        }
         this.phoneCombo.store.loadData(mobilePhones);
     },
 
