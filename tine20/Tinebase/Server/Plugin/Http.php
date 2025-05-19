@@ -24,7 +24,8 @@ class Tinebase_Server_Plugin_Http implements Tinebase_Server_Plugin_Interface
     {
         if (null !== $request->getQuery('method') || null !== $request->getPost('method') ||
             (($request::METHOD_GET === $request->getMethod() || $request::METHOD_POST === $request->getMethod()) &&
-                    trim($request->getUri()->getPath(), '/') === trim(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH), '/')) ) {
+                    (trim($request->getUri()->getPath(), '/') === trim(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH), '/') ||
+                        $request->getUri()->getPath() === '/index.php')) ) {
                 return new Tinebase_Server_Http();
         }
         return null;

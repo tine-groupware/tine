@@ -23,16 +23,14 @@ class ActiveSync_Server_PluginTests extends TestCase
     public function testServerGetParameter()
     {
         $request = Tinebase_Http_Request::fromString(
-            "POST /index.php?frontend=activesync HTTP/1.1\r\n".
+            "POST /Microsoft-Server-ActiveSync HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "Depth: 0\r\n".
             "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7"
         );
         
-        $request->setQuery(new Zend\Stdlib\Parameters(array('frontend' => 'activesync')));
-        
         $server = Tinebase_Core::getDispatchServer($request);
         
-        $this->assertInstanceOf('ActiveSync_Server_Http', $server);
+        $this->assertInstanceOf(ActiveSync_Server_Http::class, $server);
     }
 }

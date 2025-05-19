@@ -24,9 +24,7 @@ class ActiveSync_Server_Plugin implements Tinebase_Server_Plugin_Interface
      */
     public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
-        if ((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') || // legacy
-            ($request->getQuery('frontend') === 'activesync')
-        ) {
+        if (str_starts_with($request->getUri()->getPath(), '/Microsoft-Server-ActiveSync')) {
             return new ActiveSync_Server_Http();
         }
 

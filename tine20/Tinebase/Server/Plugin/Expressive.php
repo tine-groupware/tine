@@ -9,6 +9,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Psr\Http\Message\RequestInterface;
+
 /**
  * server plugin to dispatch Expressive requests
  *
@@ -19,8 +21,11 @@ class Tinebase_Server_Plugin_Expressive implements Tinebase_Server_Plugin_Interf
 {
     public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
+        Tinebase_Core::initFramework();
+
         /**************************** JSON API *****************************/
-        if (null !== $request->getQuery(Tinebase_Server_Expressive::QUERY_PARAM_DO_EXPRESSIVE)) {
+        if (null !== $request->getQuery(Tinebase_Server_Expressive::QUERY_PARAM_DO_EXPRESSIVE) ||
+                (Tinebase_Expressive_Middleware_FastRoute::getRouteInfo(Tinebase_Core::getContainer()->get(RequestInterface::class))[0] ?? FastRoute\Dispatcher::NOT_FOUND) !== FastRoute\Dispatcher::NOT_FOUND) {
             return new Tinebase_Server_Expressive();
         }
         return null;

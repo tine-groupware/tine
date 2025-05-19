@@ -20,19 +20,7 @@ class Tinebase_Server_Plugin_WebDAV implements Tinebase_Server_Plugin_Interface
 {
     public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
-        /**************************** WebDAV / CardDAV / CalDAV API **********************************
-         * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
-         * RewriteRule ^/$            /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         *
-         * RewriteRule ^/addressbooks /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         * RewriteRule ^/calendars    /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         * RewriteRule ^/principals   /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         * RewriteRule ^/webdav       /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         */
-        if ($request->getQuery('frontend') === 'webdav' &&
-            !($request->getMethod() == \Laminas\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
-
-        ) {
+        if ($request->getQuery('frontend') === 'webdav') {
             return new Tinebase_Server_WebDAV();
         }
 

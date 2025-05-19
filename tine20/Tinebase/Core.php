@@ -482,6 +482,12 @@ class Tinebase_Core
      */
     public static function initFramework()
     {
+        static $initDone = false;
+        if ($initDone) {
+            return;
+        }
+        $initDone = true;
+
         Tinebase_Core::setupBuildConstants();
 
         self::setupSentry();

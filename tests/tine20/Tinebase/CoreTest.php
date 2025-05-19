@@ -54,19 +54,6 @@ class Tinebase_CoreTest extends TestCase
         $server = Tinebase_Core::getDispatchServer($request);
         
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
-        
-        
-        $request = Tinebase_Http_Request::fromString(
-            "POST /index.php HTTP/1.1\r\n".
-            "Content-Type: application/json\r\n".
-            "\r\n".
-            '{"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}'
-        );
-        Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
-        
-        $server = Tinebase_Core::getDispatchServer($request);
-        
-        $this->assertInstanceOf('Tinebase_Server_Json', $server);
     }
 
     public function testFailedApplicationInstance(): void
@@ -79,22 +66,6 @@ class Tinebase_CoreTest extends TestCase
     {
         $controller = Tinebase_Core::getApplicationInstance(Tinebase_FileSystem_RecordAttachments::class);
         self::assertTrue($controller instanceof Tinebase_FileSystem_RecordAttachments);
-    }
-
-    public function testGetDispatchServerActiveSync()
-    {
-        if (! Tinebase_Application::getInstance()->isInstalled('ActiveSync')) {
-            self::markTestSkipped('ActiveSync is needed for the test');
-        }
-        $request = Tinebase_Http_Request::fromString(
-            "GET /index.php?frontend=activesync HTTP/1.1\r\n".
-            "User-Agent: SAMSUNG-GT-I9300/101.403"
-        );
-        $request->setQuery(new \Zend\Stdlib\Parameters(array('frontend' => 'activesync')));
-        
-        $server = Tinebase_Core::getDispatchServer($request);
-        
-        $this->assertInstanceOf('ActiveSync_Server_Http', $server);
     }
     
     public function testGetDispatchServerWebDAV()

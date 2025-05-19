@@ -21,9 +21,7 @@ class Tinebase_Server_Plugin_Json implements Tinebase_Server_Plugin_Interface
     public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
         /**************************** JSON API *****************************/
-        if (($request->getHeaders('X-TINE20-REQUEST-TYPE') && $request->getHeaders('X-TINE20-REQUEST-TYPE')->getFieldValue() === 'JSON')  ||
-            ($request->getHeaders('CONTENT-TYPE') && str_starts_with($request->getHeaders('CONTENT-TYPE')->getFieldValue(), 'application/json')) ||
-            ($request->getPost('requestType') === 'JSON') ||
+        if ($request->getHeaders('X-TINE20-REQUEST-TYPE', null)?->getFieldValue() === 'JSON'  ||
             ($request->getMethod() == \Laminas\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
         ) {
             return new Tinebase_Server_Json();

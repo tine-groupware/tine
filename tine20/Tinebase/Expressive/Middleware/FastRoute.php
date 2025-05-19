@@ -26,21 +26,10 @@ use \Laminas\Diactoros\Response;
  */
 class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 {
-    /**
-     * Process an incoming server request and return a response, optionally delegating
-     * to the next middleware component to create the response.
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Server\RequestHandlerInterface $delegate
-     * @throws Tinebase_Exception_UnexpectedValue
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' processing...');
 
-        $dispatcher = $this->_getDispatcher();
+    public static function getRouteInfo(ServerRequestInterface $request): array
+    {
+        $dispatcher = static::_getDispatcher();
 
         $uri = $request->getUri()->getPath();
 
@@ -58,7 +47,24 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), fn($headers, $name) => $headers .= PHP_EOL . $name . ': ' . ('authorization' === strtolower((string) $name) ? '*****' : $request->getHeaderLine($name)), ''));
 
-        $routeInfo = $dispatcher->dispatch($request->getMethod(), $uri);
+        return $dispatcher->dispatch($request->getMethod(), $uri);
+    }
+
+    /**
+     * Process an incoming server request and return a response, optionally delegating
+     * to the next middleware component to create the response.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Server\RequestHandlerInterface $delegate
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+            . __LINE__ . ' processing...');
+
+        $routeInfo = static::getRouteInfo($request);
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
@@ -92,7 +98,7 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
     /**
      * @return \FastRoute\Dispatcher
      */
-    protected function _getDispatcher()
+    protected static function _getDispatcher()
     {
         if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             $enabledApplications = new Tinebase_Record_RecordSet(Tinebase_Model_Application::class);
@@ -108,12 +114,12 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $appsHash = Tinebase_Helper::arrayHash($apps, true);
 
         try {
-            $cachedDispatcher = $this->_getCachedDispatcher($enabledApplications, $appsHash);
+            $cachedDispatcher = static::_getCachedDispatcher($enabledApplications, $appsHash);
         } catch (RuntimeException $runtimeException) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' Got exception: ' . $runtimeException->getMessage() . ' - clear cache & trying again');
             clearstatcache();
-            $cachedDispatcher = $this->_getCachedDispatcher($enabledApplications, $appsHash);
+            $cachedDispatcher = static::_getCachedDispatcher($enabledApplications, $appsHash);
         }
         return $cachedDispatcher;
     }
@@ -126,7 +132,7 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      * @param string $appsHash
      * @return \FastRoute\Dispatcher
      */
-    protected function _getCachedDispatcher(Tinebase_Record_RecordSet $enabledApplications, string $appsHash)
+    protected static function _getCachedDispatcher(Tinebase_Record_RecordSet $enabledApplications, string $appsHash)
     {
         return \FastRoute\cachedDispatcher(function (\FastRoute\RouteCollector $r) use ($enabledApplications) {
             /** @var Tinebase_Model_Application $application */
@@ -140,14 +146,14 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         }, [
             'cacheFile' => Tinebase_Core::getCacheDir() . '/route.cache.'
                 . $appsHash,
-            'cacheDisabled' => $this->_isCacheDisabled(),
+            'cacheDisabled' => static::_isCacheDisabled(),
         ]);
     }
 
     /**
      * @return bool
      */
-    protected function _isCacheDisabled()
+    protected static function _isCacheDisabled()
     {
         return TINE20_BUILDTYPE === 'DEVELOPMENT' || Tinebase_Core::inMaintenanceMode();
     }
