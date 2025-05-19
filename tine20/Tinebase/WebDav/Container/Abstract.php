@@ -124,7 +124,25 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         
         return new $objectClass($this->_container, $object);
     }
-    
+
+    public function getChildrenNames(): array
+    {
+        $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+        $filter = new $filterClass(array(
+            array(
+                'field'     => 'container_id',
+                'operator'  => 'equals',
+                'value'     => $this->_container->getId()
+            )
+        ));
+
+        $result = [];
+        foreach($this->_getController()->search($filter, _onlyIds: true, _action: 'sync') as $id) {
+            $result[$id] = $id . $this->_suffix;
+        }
+        return $result;
+    }
+
     /**
      * Returns an array with all the child nodes
      *
@@ -477,7 +495,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     
     /**
      * 
-     * @return Tinebase_Controller_Record_Interface
+     * @return Tinebase_Controller_Record_Abstract
      */
     protected function _getController()
     {
@@ -582,9 +600,14 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
             return $result;
         }
 
-        $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
-        if (null === $resultSet) {
-            return null;
+        if (0 === $syncToken) {
+            $result[Tinebase_Model_ContainerContent::ACTION_CREATE] = $this->getChildrenNames();
+            return $result;
+        } else {
+            $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
+            if (null === $resultSet) {
+                return null;
+            }
         }
 
         $unSets = [
