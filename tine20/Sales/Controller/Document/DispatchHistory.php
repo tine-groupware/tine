@@ -120,7 +120,13 @@ class Sales_Controller_Document_DispatchHistory extends Tinebase_Controller_Reco
                     $dispatchHistory->{DispatchHistory::FLD_TYPE} = DispatchHistory::DH_TYPE_SUCCESS;
                     $dispatchHistory->attachments = null;
                     $dispatchHistory->xprops = null;
-                    $this->create($dispatchHistory);
+                    $addedHistoryId = $this->create($dispatchHistory)->getId();
+
+                    Sales_Controller_Document_DispatchHistory::getInstance()->fileMessageAttachment(
+                        ['record_id' => $addedHistoryId],
+                        Felamimail_Controller_Cache_Message::getInstance()->get($msg->getId()),
+                        ['partId' => null, 'filename' => 'email.eml']
+                    );
 
                     $transaction->release();
                     $newSkipMsgCache[$msgUid] = 3;
