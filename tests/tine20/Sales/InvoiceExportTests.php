@@ -128,6 +128,10 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
      */
     public function testSpecialExportInvoice()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('Timetracker')) {
+            self::markTestSkipped('test needs Timetracker');
+        }
+
         $this->_createFullFixtures();
     
         $date = clone $this->_referenceDate;

@@ -249,8 +249,11 @@ class Admin_ControllerTest extends TestCase
 
     public function testRoleUpdateReplication()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            self::markTestSkipped('ExampleApplication needs to be installed');
+        }
+
         $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
-        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         $userGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         $exampleApplication = Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication');
 

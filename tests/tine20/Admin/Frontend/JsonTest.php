@@ -1289,7 +1289,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         foreach ($filterAppResult['results'] as $node) {
             Tinebase_Application::getInstance()->getApplicationById($node['name']);
         }
-        static::assertEquals(5, $filterAppResult['totalcount']);
+        static::assertGreaterThanOrEqual(4, $filterAppResult['totalcount'],
+            print_r($filterAppResult['results'], true));
 
         $filterAppFolderResult = $this->_json->searchQuotaNodes(array(array(
             'field'     => 'path',

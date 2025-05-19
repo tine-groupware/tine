@@ -18,8 +18,10 @@ class SSO_AllTests
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('All SSO tests');
-        $suite->addTestSuite(SSO_JsonTest::class);
-        $suite->addTestSuite(SSO_PublicAPITest::class);
+        if (Tinebase_Application::getInstance()->isInstalled('SSO')) {
+            $suite->addTestSuite(SSO_JsonTest::class);
+            $suite->addTestSuite(SSO_PublicAPITest::class);
+        }
 
         return $suite;
     }

@@ -20,6 +20,14 @@ class Tinebase_Server_JsonTests extends TestCase
 {
     protected $_imapConf = null;
 
+    protected function setUp(): void
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Inventory')) {
+            self::markTestSkipped('Tests need Inventory app');
+        }
+        parent::setUp();
+    }
+
     /**
      * tear down tests
      */
