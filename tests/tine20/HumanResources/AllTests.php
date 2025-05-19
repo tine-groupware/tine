@@ -18,23 +18,25 @@ class HumanResources_AllTests
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 HumanResources All Tests');
-        $suite->addTestSuite(HumanResources_BL_DailyWTReport_CalculateBreakTimeTest::class);
-        $suite->addTestSuite(HumanResources_BL_DailyWTReport_LimitWorkingTimeTest::class);
-        $suite->addTestSuite(HumanResources_CliTests::class);
-        $suite->addTestSuite(HumanResources_Controller_AttendanceControllerTests::class);
-        $suite->addTestSuite(HumanResources_Controller_ContractTests::class);
-        $suite->addTestSuite(HumanResources_Controller_DailyWTReportTests::class);
-        $suite->addTestSuite(HumanResources_Controller_EmployeeTests::class);
-        $suite->addTestSuite(HumanResources_Controller_StreamTests::class);
-        $suite->addTestSuite(HumanResources_Export_MonthlyWTReportTest::class);
-        $suite->addTestSuite(HumanResources_Import_DemoDataTest::class);
-        $suite->addTestSuite(HumanResources_Import_DivisionTest::class);
-        $suite->addTestSuite(HumanResources_JsonTests::class);
-        $suite->addTestSuite(HumanResources_Json_StreamTests::class);
-        $suite->addTestSuite(HumanResources_ModelConfigurationTest::class);
-        $suite->addTestSuite(HumanResources_Model_BLDailyWTReport_ConfigTest::class);
-        $suite->addTestSuite(HumanResources_Model_WorkingTimeSchemeTest::class);
-        $suite->addTestSuite(HumanResources_Controller_FreeTimeTests::class);
+        if (Tinebase_Application::getInstance()->isInstalled('HumanResources')) {
+            $suite->addTestSuite(HumanResources_BL_DailyWTReport_CalculateBreakTimeTest::class);
+            $suite->addTestSuite(HumanResources_BL_DailyWTReport_LimitWorkingTimeTest::class);
+            $suite->addTestSuite(HumanResources_CliTests::class);
+            $suite->addTestSuite(HumanResources_Controller_AttendanceControllerTests::class);
+            $suite->addTestSuite(HumanResources_Controller_ContractTests::class);
+            $suite->addTestSuite(HumanResources_Controller_DailyWTReportTests::class);
+            $suite->addTestSuite(HumanResources_Controller_EmployeeTests::class);
+            $suite->addTestSuite(HumanResources_Controller_StreamTests::class);
+            $suite->addTestSuite(HumanResources_Export_MonthlyWTReportTest::class);
+            $suite->addTestSuite(HumanResources_Import_DemoDataTest::class);
+            $suite->addTestSuite(HumanResources_Import_DivisionTest::class);
+            $suite->addTestSuite(HumanResources_JsonTests::class);
+            $suite->addTestSuite(HumanResources_Json_StreamTests::class);
+            $suite->addTestSuite(HumanResources_ModelConfigurationTest::class);
+            $suite->addTestSuite(HumanResources_Model_BLDailyWTReport_ConfigTest::class);
+            $suite->addTestSuite(HumanResources_Model_WorkingTimeSchemeTest::class);
+            $suite->addTestSuite(HumanResources_Controller_FreeTimeTests::class);
+        }
         return $suite;
     }
 

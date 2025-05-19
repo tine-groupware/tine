@@ -24,10 +24,11 @@ class ExampleApplication_AllTests
     public static function suite()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 ExampleApplication All Tests');
-        
-        $suite->addTestSuite('ExampleApplication_JsonTest');
-        $suite->addTestSuite('ExampleApplication_ImportTest');
-        $suite->addTestSuite('ExampleApplication_ControllerTest');
+        if (Tinebase_Application::getInstance()->isInstalled('ExampleApplication')) {
+            $suite->addTestSuite('ExampleApplication_JsonTest');
+            $suite->addTestSuite('ExampleApplication_ImportTest');
+            $suite->addTestSuite('ExampleApplication_ControllerTest');
+        }
         return $suite;
     }
 

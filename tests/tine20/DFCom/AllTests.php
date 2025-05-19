@@ -18,11 +18,12 @@ class DFCom_AllTests
 {
     public static function suite()
     {
-        $suite = new PHPUnit\Framework\TestSuite('Tine 2.0 CFCom All Tests');
-        
-        $suite->addTestSuite(DFCom_HTTPAPIv1Test::class);
-        $suite->addTestSuite(DFCom_JsonTest::class);
-        $suite->addTestSuite(DFCom_RecordHandler_TimeAccountingTest::class);
+        $suite = new PHPUnit\Framework\TestSuite('Tine 2.0 DFCom All Tests');
+        if (Tinebase_Application::getInstance()->isInstalled('DFCom')) {
+            $suite->addTestSuite(DFCom_HTTPAPIv1Test::class);
+            $suite->addTestSuite(DFCom_JsonTest::class);
+            $suite->addTestSuite(DFCom_RecordHandler_TimeAccountingTest::class);
+        }
         return $suite;
     }
 
