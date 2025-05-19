@@ -154,6 +154,7 @@ myGrid.on('render', function(grid) {
                 mouseover: this.onTargetOver,
                 mouseout: this.onTargetOut,
                 mousemove: this.onMouseMove,
+                click: this.onTargetOver,
                 scope: this
             });
             this.target = t;

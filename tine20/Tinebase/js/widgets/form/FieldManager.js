@@ -113,7 +113,7 @@ Tine.widgets.form.FieldManager = function() {
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             if (fieldDefinition.description) {
                 // class icon_dialog_info needs to be defined in css of app
-                field.fieldLabel += '<span class="field-description" ext:qtip="' + Ext.util.Format.htmlEncode(i18n._hidden(fieldDefinition.description)) + '" />'
+                field.fieldLabel += this.getDescriptionHTML(i18n._hidden(fieldDefinition.description));
             }
             if (field.emptyText) {
                 field.emptyText = i18n._hidden(field.emptyText);
@@ -513,6 +513,11 @@ Tine.widgets.form.FieldManager = function() {
          */
         getKey: function(params) {
             return params.join('_');
+        },
+
+        getDescriptionHTML: function (description) {
+            //todo: implement onclick with pop up dialog, extend ext:qtip
+            return '<span class="field-description" ext:qtip="' + Ext.util.Format.htmlEncode(description) + '"/>';
         }
     };
 }();
