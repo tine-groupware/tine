@@ -428,7 +428,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         $expander->expand($allDips);
         $dataIntendedPurpose = $allDips->getFirstRecord();
         $dataIntendedPurpose[GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE] = true;
-        $dataIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->update($dataIntendedPurpose);
+        GDPR_Controller_DataIntendedPurpose::getInstance()->update($dataIntendedPurpose);
 
         $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByContactId($createdContact->getId());
         $responseData = json_decode($response->getBody(), true);
@@ -440,10 +440,16 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
     public function testPublicApiPostRegisterForDataIntendedPurpose()
     {
         $account = TestServer::getInstance()->getTestEmailAccount();
+        if (! $account) {
+            self::markTestSkipped('test needs mail account');
+        }
         $requestData = [
             'email' => $account->email,
         ];
         $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+        if (! $request) {
+            self::markTestSkipped('test needs REQUEST');
+        }
         $request->getHeaders()->addHeader(new Zend\Http\Header\Authorization('basic ' . base64_encode(':testpwd')));
         $request->setContent(json_encode($requestData));
 
@@ -473,6 +479,11 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
 
     public function testPublicApiPostRegisterFromToken()
     {
+        $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+        if (! $request) {
+            self::markTestSkipped('test needs REQUEST');
+        }
+
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if (empty($imapConfig)) {
             static::markTestSkipped('no mail configuration');
@@ -499,7 +510,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             'n_given' =>  'Lars',
             'org_name' => 'aglio e olio',
         ];
-        $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+
         $request->getHeaders()->addHeader(new Zend\Http\Header\Authorization('basic ' . base64_encode(':testpwd')));
         $request->setContent(json_encode($requestData));
 
