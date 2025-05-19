@@ -3055,6 +3055,9 @@ msgstr "Bitte geben Sie das neue Passwort ein:"
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr "Das Passwort ist gemäß der Passwortrichtlinie abgelaufen und muss geändert werden."
 
+msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
+msgstr "Die Zeichenkette {{ password }} wird beim Versenden der Nachricht automatisch durch das Passwort ersetzt und muss in der Nachricht enthalten sein."
+
 msgid "Password Must Change"
 msgstr "Passwort muss geändert werden"
 

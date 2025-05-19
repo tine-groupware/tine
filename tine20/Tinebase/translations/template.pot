@@ -3038,6 +3038,9 @@ msgstr ""
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr ""
 
+msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
+msgstr ""
+
 msgid "Password Must Change"
 msgstr ""
 

@@ -46,6 +46,8 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
             preserveElStyle: true
         })
 
+        const validationText = i18n._('The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message.');
+
         this.items = [{
             border: false,
             frame: true,
@@ -129,7 +131,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                         },
                         columnWidth: 0.5
                     }, {
-                        fieldLabel: i18n.gettext('SMS Message'),
+                        fieldLabel: i18n.gettext('SMS Message') + Tine.widgets.form.FieldManager.getDescriptionHTML(validationText),
                         xtype: 'textarea',
                         name: 'sms_new_password_template',
                         anchor: '100%',
@@ -142,7 +144,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                         tpl: this.smsNewPasswordTemplate,
                         validator: function (value) {
                             if (!value.includes('{{ password }}')) {
-                                return 'message should include {{ password }}';
+                                return validationText;
                             } else {
                                 return true;
                             }
@@ -197,6 +199,12 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         const mobilePhones = phoneFields.map((phoneField) => {
             return [phoneField.fieldName, contact?.data?.[phoneField.fieldName], `${contact?.data?.[phoneField.fieldName]} [${phoneField.label}]`];
         });
+        const smsMfaConfig =  this.record.get('mfa_configs') ? this.record.get('mfa_configs').find((mfaConfig) => {
+            return mfaConfig.config_class === 'Tinebase_Model_MFA_SmsUserConfig';
+        }): null;
+        if (smsMfaConfig?.config?.cellphonenumber) {
+            mobilePhones.push(['mfa', smsMfaConfig.config.cellphonenumber, `${smsMfaConfig.config.cellphonenumber} [MFA]`])
+        }
         this.phoneCombo.store.loadData(mobilePhones);
     },
 
