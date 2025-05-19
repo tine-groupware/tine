@@ -65,6 +65,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
     const FEATURE_WORKING_TIME_ACCOUNTING = 'workingTimeAccounting';
 
     /**
+     * enable revenue analysis
+     *
+     * @string
+     */
+    const FEATURE_REVENUE_ANALYSIS = 'revenueAnalysis';
+
+    /**
      * attendance recorder default description
      * 
      * @stering
@@ -202,6 +209,14 @@ class HumanResources_Config extends Tinebase_Config_Abstract
                     //_('Enable Working Time Tracking')
                     self::DESCRIPTION           => 'Activate to enable working time tracking and reporting',
                     //_('Activate to enable working time tracking and reporting')
+                    self::TYPE                  => self::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
+                self::FEATURE_REVENUE_ANALYSIS => [
+                    self::LABEL                 => 'Enable Revenue Analytics',
+                    //_('Enable Revenue Analytics')
+                    self::DESCRIPTION           => 'Activate to enable revenue analytics',
+                    //_('Activate to enable revenue analytics')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
