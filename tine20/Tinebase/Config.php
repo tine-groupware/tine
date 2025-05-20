@@ -147,6 +147,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
 
+
+    /**
+     * the default currency
+     *
+     * @var string
+     */
+    const DEFAULT_CURRENCY = 'defaultCurrency';
+
     /**
      * DELETED_DATA_RETENTION_TIME
      *
@@ -814,8 +822,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const BRANDING_SHOPURL = 'branding_shopUrl';
     const BRANDING_BUGSURL = 'branding_bugreportUrl';
     const BRANDING_DESCRIPTION = 'branding_description';
-
-    const CURRENCY_SYMBOL = 'currencySymbol';
 
     /**
      * @var string
@@ -1954,6 +1960,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => true,
             self::DEFAULT_STR => 'user role'
         ),
+        self::DEFAULT_CURRENCY => array(
+            // _('Default Currency')
+            'label'                 => 'Default Currency',
+            // _('The currency defined here is used as default currency in the customerd edit dialog.')
+            'description'           => 'The currency defined here is used as default currency in the customerd edit dialog.',
+            'type'                  => 'string',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            'default'               => 'EUR'
+        ),
         self::DELETED_DATA_RETENTION_TIME => [
             self::LABEL                 => 'Deleted Data Retention Time', // _('Deleted Data Retention Time')
             self::DESCRIPTION           => 'Deleted Data Retention Time (in months)',
@@ -2971,17 +2988,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
             self::DEFAULT_STR => TRUE,
-        ),
-        self::CURRENCY_SYMBOL => array(
-            //_('currency symbol')
-            self::LABEL => 'currency symbol',
-            //_('Path to custom favicon.')
-            self::DESCRIPTION => 'Define currency symbol to be used.',
-            self::TYPE => 'string',
-            self::DEFAULT_STR => '€',
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE => false,
-            self::SETBYSETUPMODULE => false,
         ),
         self::SUPPORT_REQUEST_NOTIFICATION_ROLE => [
             self::LABEL => 'Role receiving support requests', //_('Role receiving support requests')

@@ -264,6 +264,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
                 'type'    => self::TYPE_STRING,
+                self::SPECIAL_TYPE    => self::SPECIAL_TYPE_CURRENCY,
                 'group'   => 'accounting',
                 self::NULLABLE => true,
                 self::LENGTH => 4,

@@ -245,6 +245,8 @@ class Tinebase_ModelConfiguration_Const {
     public const SPECIAL_TYPE_URL = 'url';
     public const SPECIAL_TYPE_COUNTRY = 'country';
 
+    public const SPECIAL_TYPE_CURRENCY = 'currency';
+
     public const STORAGE = 'storage';
     public const SUPPORTED_FORMATS = 'supportedFormats';
     /**

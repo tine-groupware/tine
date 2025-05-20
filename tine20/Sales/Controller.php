@@ -117,7 +117,8 @@ class Sales_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
 
-        Sales_Controller_Customer::validateCurrencyCode($config['ownCurrency']);
+        $currency = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_CURRENCY);
+        Sales_Controller_Customer::validateCurrencyCode($currency);
         
         $properties = Sales_Config::getProperties();
         
