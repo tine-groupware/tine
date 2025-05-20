@@ -106,13 +106,10 @@ msgstr ""
 msgid "{{ code }} is your {{ app.branding.title }} security code."
 msgstr ""
 
-msgid ""
-"MFA send out failed, please try again or check with your system administrator"
+msgid "MFA send out failed, please try again or check with your system administrator"
 msgstr ""
 
-msgid ""
-"MFA validation failed, please try again or check with your system "
-"administrator"
+msgid "MFA validation failed, please try again or check with your system administrator"
 msgstr ""
 
 msgid "GENDER_Key Field Record"
@@ -345,9 +342,7 @@ msgstr ""
 msgid "Show Advanced Search"
 msgstr ""
 
-msgid ""
-"Show toggle button to switch on or off the advanced search for the "
-"quickfilter"
+msgid "Show toggle button to switch on or off the advanced search for the quickfilter"
 msgstr ""
 
 msgid "Remeber Popup Size"
@@ -394,9 +389,7 @@ msgstr ""
 msgid "Cronjob Disabled"
 msgstr ""
 
-msgid ""
-"triggerAsyncEvents does not do anything and monitoringCheckCron does not "
-"alert"
+msgid "triggerAsyncEvents does not do anything and monitoringCheckCron does not alert"
 msgstr ""
 
 msgid "Cronuser ID"
@@ -435,9 +428,7 @@ msgstr ""
 msgid "Status Info"
 msgstr ""
 
-msgid ""
-"If this is enabled, Tine 2.0 provides status information on https://tine20."
-"domain/Tinebase/_status"
+msgid "If this is enabled, Tine 2.0 provides status information on https://tine20.domain/Tinebase/_status"
 msgstr ""
 
 msgid "Allowed Origins"
@@ -494,9 +485,7 @@ msgstr ""
 msgid "Sentry service URI"
 msgstr ""
 
-msgid ""
-"URI of the sentry service in the following format: https://<key>:"
-"<secret>@mysentry.domain/<project>"
+msgid "URI of the sentry service in the following format: https://<key>:<secret>@mysentry.domain/<project>"
 msgstr ""
 
 msgid "Sentry Loglevel Bitmask"
@@ -562,8 +551,7 @@ msgstr ""
 msgid "Support NTLM V2 authentication"
 msgstr ""
 
-msgid ""
-"Support NTLM V2 authentication and store account password as ntlm v2 hash"
+msgid "Support NTLM V2 authentication and store account password as ntlm v2 hash"
 msgstr ""
 
 msgid "Update NTLM V2 password has on login"
@@ -572,9 +560,7 @@ msgstr ""
 msgid "NTLM V2 password hash encryption key"
 msgstr ""
 
-msgid ""
-"Encryption key used to encrypt and decrypt the NTLM V2 password hash when "
-"stored in the database."
+msgid "Encryption key used to encrypt and decrypt the NTLM V2 password hash when stored in the database."
 msgstr ""
 
 msgid "User password policy"
@@ -649,8 +635,7 @@ msgstr ""
 msgid "Automatic bugreports"
 msgstr ""
 
-msgid ""
-"Always send bugreports, even on timeouts and other exceptions / failures."
+msgid "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
 msgid "License Type"
@@ -677,24 +662,19 @@ msgstr ""
 msgid "Alarms sent each job"
 msgstr ""
 
-msgid ""
-"Allows to configure the maximum number of alarm notifications in each run of "
-"sendPendingAlarms (0 = no limit)"
+msgid "Allows to configure the maximum number of alarm notifications in each run of sendPendingAlarms (0 = no limit)"
 msgstr ""
 
 msgid "Account deactivation notfication"
 msgstr ""
 
-msgid ""
-"Send E-Mail to user if the account is deactivated or the user tries to login "
-"with deactivated account"
+msgid "Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account"
 msgstr ""
 
 msgid "Role change allowed"
 msgstr ""
 
-msgid ""
-"Allows to configure which user is allowed to switch to another users account"
+msgid "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
 msgid "Max username length"
@@ -712,17 +692,13 @@ msgstr ""
 msgid "conf.d folder name"
 msgstr ""
 
-msgid ""
-"Folder for additional config files (conf.d) - NOTE: this is only used if set "
-"in config.inc.php!"
+msgid "Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!"
 msgstr ""
 
 msgid "Maintenance mode enabled"
 msgstr ""
 
-msgid ""
-"Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users "
-"having the maintenance right can login) and \"all\""
+msgid "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 msgstr ""
 
 msgid "Version check enabled"
@@ -731,9 +707,7 @@ msgstr ""
 msgid "Custom Javascript includes for Fat-Client"
 msgstr ""
 
-msgid ""
-"An array of javascript files to include for the fat client. This files might "
-"be stored outside the docroot of the webserver."
+msgid "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver."
 msgstr ""
 
 msgid "custom title"
@@ -817,9 +791,7 @@ msgstr ""
 msgid "List of WebDav agent strings that will be denied"
 msgstr ""
 
-msgid ""
-"List of WebDav agent strings that will be denied. Expects a list of regular "
-"expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
+msgid "List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
 msgstr ""
 
 msgid "Enable SyncToken plugin"
@@ -858,17 +830,13 @@ msgstr ""
 msgid "Filesystem number of revisions"
 msgstr ""
 
-msgid ""
-"Filesystem number of revisions being kept before they are automatically "
-"deleted."
+msgid "Filesystem number of revisions being kept before they are automatically deleted."
 msgstr ""
 
 msgid "Filesystem months of revisions"
 msgstr ""
 
-msgid ""
-"Filesystem number of months revisions being kept before they are "
-"automatically deleted."
+msgid "Filesystem number of months revisions being kept before they are automatically deleted."
 msgstr ""
 
 msgid "Filesystem index content"
@@ -907,8 +875,7 @@ msgstr ""
 msgid "Max file size for preview service."
 msgstr ""
 
-msgid ""
-"Max per preview preview service error count, for trying to generate preview."
+msgid "Max per preview preview service error count, for trying to generate preview."
 msgstr ""
 
 msgid "X size of thumbnail images."
@@ -941,9 +908,7 @@ msgstr ""
 msgid "Filesystem show current usage"
 msgstr ""
 
-msgid ""
-"Show fileSystem nodes current usage in grid panel, it affects Admin and "
-"Filemanager. check Tinebase_Tree_Node for possible values."
+msgid "Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values."
 msgstr ""
 
 msgid "Filter sync token settings"
@@ -1018,9 +983,7 @@ msgstr ""
 msgid "Tine20 URL"
 msgstr ""
 
-msgid ""
-"The full URL including scheme, hostname, optional port and optional uri part "
-"under which tine20 is reachable."
+msgid "The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable."
 msgstr ""
 
 msgid "Tine20 URL Used For JS Client"
@@ -1050,9 +1013,7 @@ msgstr ""
 msgid "Municipality Key duplicate check fields"
 msgstr ""
 
-msgid ""
-"These fields are checked when a new Municipality Key is created. If a record "
-"with the same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new Municipality Key is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
 msgid "Note Type"
@@ -1093,8 +1054,7 @@ msgstr ""
 msgid "Template for SMS New Password"
 msgstr ""
 
-msgid ""
-"Template for SMS New Password with parameters: app, user, contact, password"
+msgid "Template for SMS New Password with parameters: app, user, contact, password"
 msgstr ""
 
 msgid "User type"
@@ -1129,9 +1089,7 @@ msgstr ""
 msgid "Site Filter"
 msgstr ""
 
-msgid ""
-"Filter configuration for site record pickers. Sites can be a special type of "
-"contacts/groups for example defined by this filter."
+msgid "Filter configuration for site record pickers. Sites can be a special type of contacts/groups for example defined by this filter."
 msgstr ""
 
 msgid "Personal container"
@@ -1150,9 +1108,7 @@ msgstr ""
 msgid "Personal containers can have only one owner!"
 msgstr ""
 
-msgid ""
-"You are not allowed to delete this Container. Please define another "
-"container as the default addressbook for internal contacts!"
+msgid "You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!"
 msgstr ""
 
 msgid "A container with this name already exists."
@@ -1169,9 +1125,6 @@ msgid "Maximum number of users reached."
 msgstr ""
 
 msgid "The new password must be different from the old one."
-msgstr ""
-
-msgid "Old pin is wrong."
 msgstr ""
 
 msgid "Bank Holiday Calendar"
@@ -1212,9 +1165,7 @@ msgstr ""
 msgid "Invalid Relations"
 msgstr ""
 
-msgid ""
-"You tried to create a relation which is forbidden by the constraints config "
-"of one of the models."
+msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
 msgstr ""
 
 msgid "Wrong month format!"
@@ -1415,8 +1366,7 @@ msgstr ""
 msgid "Missing Applications"
 msgstr ""
 
-msgid ""
-"There are no applications enabled for you. Please contact your administrator."
+msgid "There are no applications enabled for you. Please contact your administrator."
 msgstr ""
 
 msgid "Search for Application ..."
@@ -1437,9 +1387,7 @@ msgstr ""
 msgid "MFA device missing"
 msgstr ""
 
-msgid ""
-"No matching MFA device for this area found. Configure a matching device "
-"please."
+msgid "No matching MFA device for this area found. Configure a matching device please."
 msgstr ""
 
 msgid "Try again?"
@@ -1552,9 +1500,7 @@ msgstr ""
 msgid "The last action you made was potentially not performed correctly."
 msgstr ""
 
-msgid ""
-"Please help improving this software and notify the vendor. Include a brief "
-"description of what you where doing when the error occurred."
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 msgstr ""
 
 msgid "Description"
@@ -1590,18 +1536,13 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-msgid ""
-"Sorry, your request could not be completed because the required data could "
-"not be found. In most cases this means that someone already deleted the "
-"data. Please refresh your current view."
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 msgstr ""
 
 msgid "Concurrent Updates"
 msgstr ""
 
-msgid ""
-"Someone else saved this record while you where editing the data. You need to "
-"reload and make your changes again."
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 msgstr ""
 
 msgid "Rate-Limit"
@@ -1619,10 +1560,7 @@ msgstr ""
 msgid "Service Unavailable"
 msgstr ""
 
-msgid ""
-"The server is currently unable to handle the request due to a temporary "
-"overloading, maintenance or misconfiguration of the server. Please try again "
-"or contact your administrator."
+msgid "The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator."
 msgstr ""
 
 msgid "Server Message:"
@@ -1640,40 +1578,31 @@ msgstr ""
 msgid "Timeout"
 msgstr ""
 
-msgid ""
-"Sorry, some timeout occured while processing your request. Please reload "
-"your browser, try again or contact your administrator."
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
 msgid "No Response"
 msgstr ""
 
-msgid ""
-"Sorry, the Server did not respond any data. Please reload your browser, try "
-"again or contact your administrator."
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
 msgid "Out of Resources"
 msgstr ""
 
-msgid ""
-"Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
-"your administrator."
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr ""
 
 msgid "No Role Memberships"
 msgstr ""
 
-msgid ""
-"Your user account has no role memberships. Please contact your administrator."
+msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-msgid ""
-"You tried to access a function that is not available. Please reload your "
-"browser, try again or contact your administrator."
+msgid "You tried to access a function that is not available. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
 msgid "Close"
@@ -1689,120 +1618,6 @@ msgid "You need a current Browser to use this program."
 msgstr ""
 
 msgid "License"
-msgstr ""
-
-msgid "Login"
-msgstr ""
-
-msgid "Username"
-msgstr ""
-
-msgid "Password"
-msgstr ""
-
-msgid "Certificate detected. Please, press Login button to proceed."
-msgstr ""
-
-msgid "Login via OpenID Connect"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} is made for you"
-msgstr ""
-
-#, python-brace-format
-msgid ""
-"{0} wants to make business collaboration easier and more enjoyable - for "
-"your needs! So you are warmly welcome to discuss with us, bring in ideas and "
-"get help."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Homepage"
-msgstr ""
-
-msgid "Translations"
-msgstr ""
-
-#, python-brace-format
-msgid "Translation state of {0}: {1}%."
-msgstr ""
-
-#, python-brace-format
-msgid ""
-"If the state of your language is not satisfying, or if you miss a language, "
-"please consider becoming a {0} translator."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} Translation Howto"
-msgstr ""
-
-msgid "Detailed Language Statistics"
-msgstr ""
-
-#, python-brace-format
-msgid "Your {0} license expired."
-msgstr ""
-
-#, python-brace-format
-msgid "{0} trial"
-msgstr ""
-
-#, python-brace-format
-msgid ""
-"Your {0} license is expired! Users cannot login any more. Please contact "
-"Metaways Infosystems GmbH to buy a new license."
-msgstr ""
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr ""
-
-msgid "Powered by:"
-msgstr ""
-
-msgid "online open source groupware and crm"
-msgstr ""
-
-#, python-brace-format
-msgid "about {0} minutes"
-msgstr ""
-
-msgid "Tine 2.0 needs your help"
-msgstr ""
-
-msgid ""
-"We regularly need your feedback to make the next Tine 2.0 releases fit your "
-"needs even better. Help us and yourself by participating:"
-msgstr ""
-
-msgid "participate!"
-msgstr ""
-
-msgid "Languages"
-msgstr ""
-
-msgid "Duration"
-msgstr ""
-
-msgid "Browser incompatible"
-msgstr ""
-
-msgid "Your browser is not supported by Tine 2.0."
-msgstr ""
-
-msgid "Browser incompatible?"
-msgstr ""
-
-msgid ""
-"You are using an unrecognized browser. This could result in unexpected "
-"behaviour."
-msgstr ""
-
-msgid "You might try one of these browsers:"
 msgstr ""
 
 #, python-brace-format
@@ -1833,10 +1648,65 @@ msgstr ""
 msgid "Please fix the errors noted."
 msgstr ""
 
-msgid "Redirecting to SSO Identity Provider"
+msgid "Please enter your login data"
 msgstr ""
 
-msgid "Please enter your login data"
+msgid "Error"
+msgstr ""
+
+msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+#, python-brace-format
+msgid "Login with {0} account"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Login with Password?"
+msgstr ""
+
+msgid "Or"
+msgstr ""
+
+msgid "Login with Passkey"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "Browser incompatible"
+msgstr ""
+
+msgid "Your browser is not supported by Tine 2.0."
+msgstr ""
+
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr ""
+
+msgid "You might try one of these browsers:"
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license expired."
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+
+#, python-brace-format
+msgid "{0} trial"
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+
+msgid "Powered by:"
 msgstr ""
 
 #, python-brace-format
@@ -1903,16 +1773,10 @@ msgstr ""
 msgid "Multi Factor Authentication"
 msgstr ""
 
-msgid ""
-"We strongly encourage you to enable Multi-Factor Authentication for added "
-"security."
+msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
 msgstr ""
 
-msgid ""
-"Multi-Factor Authentication adds an extra layer of protection to logins. "
-"Once enabled & configured, each time you sing in you will be asked to enter "
-"both your username & password as well as a second factor such as a security "
-"code."
+msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
 msgstr ""
 
 msgid "Multi Factor Authentication Device Configuration"
@@ -1921,17 +1785,13 @@ msgstr ""
 msgid "Secret Key"
 msgstr ""
 
-msgid ""
-"Please note: After saving you can not view this autogenerated secret key "
-"again!"
+msgid "Please note: After saving you can not view this autogenerated secret key again!"
 msgstr ""
 
 msgid "Generating secret key ..."
 msgstr ""
 
-msgid ""
-"Existing secret keys can't be viewed. You need to generate a new one if the "
-"old got lost."
+msgid "Existing secret keys can't be viewed. You need to generate a new one if the old got lost."
 msgstr ""
 
 msgid "for"
@@ -1941,9 +1801,7 @@ msgid "MFA secret required"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This area is locked. To unlock it you need to provide the secret from your "
-"Multi factor authentication device {mfaDevice.device_name}."
+msgid "This area is locked. To unlock it you need to provide the secret from your Multi factor authentication device {mfaDevice.device_name}."
 msgstr ""
 
 #, python-brace-format
@@ -1954,9 +1812,7 @@ msgid "Authenticator code required"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This area is locked. To unlock it you need to provide the code from your "
-"authenticator app {mfaDevice.device_name}."
+msgid "This area is locked. To unlock it you need to provide the code from your authenticator app {mfaDevice.device_name}."
 msgstr ""
 
 #, python-brace-format
@@ -1967,9 +1823,7 @@ msgid "PIN required"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This area is locked. To unlock it you need to provide your {mfaDevice."
-"device_name} secret."
+msgid "This area is locked. To unlock it you need to provide your {mfaDevice.device_name} secret."
 msgstr ""
 
 #, python-brace-format
@@ -1980,9 +1834,7 @@ msgid "SMS security code required"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This area is locked. To unlock it we send a securitycode to via {mfaDevice."
-"device_name}."
+msgid "This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}."
 msgstr ""
 
 #, python-brace-format
@@ -2011,9 +1863,7 @@ msgid "Token required"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This area is locked. To unlock it you need to provide your token from your "
-"{mfaDevice.device_name}."
+msgid "This area is locked. To unlock it you need to provide your token from your {mfaDevice.device_name}."
 msgstr ""
 
 #, python-brace-format
@@ -2026,10 +1876,7 @@ msgstr ""
 msgid "This area is locked. To unlock it you need to provide your password."
 msgstr ""
 
-msgid "Error"
-msgstr ""
-
-msgid "FIDO2 WebAuthn authentication failed. Try again?"
+msgid "Password"
 msgstr ""
 
 msgid "Yubico OTP required"
@@ -2054,8 +1901,7 @@ msgid_plural "FIDO2 WebAuthn Devices"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid ""
-"Please open the following URL in your Browser for more security key options"
+msgid "Please open the following URL in your Browser for more security key options"
 msgstr ""
 
 msgid "Configuring FIDO2 WebAuthn Device ..."
@@ -2064,10 +1910,7 @@ msgstr ""
 msgid "FIDO2 WebAuthn Device is configured."
 msgstr ""
 
-msgid ""
-"This installation requires user verification for FIDO2 devices. Firefox does "
-"not support user verification. You need to use a different browser to use "
-"FIDO2."
+msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
 msgstr ""
 
 msgid "Unsupported Configuration"
@@ -2078,10 +1921,7 @@ msgid "see {url} for details"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This installation requires user verification for FIDO2 devices. Firefox for "
-"{OS} does not support user verification ({details}). You need to use a "
-"different browser to use FIDO2."
+msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
 msgstr ""
 
 msgid "FIDO2 WebAuthn registration failed. Try again?"
@@ -2265,8 +2105,7 @@ msgstr ""
 msgid "Translation Problem"
 msgstr ""
 
-msgid ""
-"A problem, with the translations was detected, trying to reload client..."
+msgid "A problem, with the translations was detected, trying to reload client..."
 msgstr ""
 
 msgid "Total    Uploads"
@@ -2388,8 +2227,7 @@ msgstr ""
 msgid "Show Original Image"
 msgstr ""
 
-msgid ""
-"When preference is locked, normal user can not edit the preference anymore."
+msgid "When preference is locked, normal user can not edit the preference anymore."
 msgstr ""
 
 msgid "no decimals allowed"
@@ -2448,9 +2286,7 @@ msgstr ""
 msgid "Toggle selection"
 msgstr ""
 
-msgid ""
-"This file might potentially harm your computer. Therefore it got quarantined "
-"and cannot be edited or downloaded."
+msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
 msgstr ""
 
 msgid "quarantined"
@@ -2463,26 +2299,17 @@ msgid "Cannot open new window"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"An attempt to open a new window failed. When clicking OK, the opening "
-"procedure will be tried again. To avoid this message, please deactivate your "
-"browsers popup blocker for {0}"
+msgid "An attempt to open a new window failed. When clicking OK, the opening procedure will be tried again. To avoid this message, please deactivate your browsers popup blocker for {0}"
 msgstr ""
 
 msgid "Window can be closed"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"This Window can be closed now. To avoid this message please deactivate your "
-"browsers popup blocker for {0}"
+msgid "This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}"
 msgstr ""
 
-msgid ""
-"The window you want to work with is backgrounded. Your browser doesn't "
-"support to foreground the window for you, so you need to use your operating "
-"systems window switching features. Please send complaints to your browser "
-"vendor!"
+msgid "The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
 msgstr ""
 
 msgid "Preparing print, please wait..."
@@ -2548,6 +2375,9 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
+msgid "Private"
+msgstr ""
+
 msgid "Created By"
 msgstr ""
 
@@ -2568,10 +2398,22 @@ msgstr[1] ""
 msgid "Remove {0}"
 msgstr ""
 
+msgid "Visibility"
+msgstr ""
+
+msgid "for all"
+msgstr ""
+
+msgid "only for the creator of the note"
+msgstr ""
+
 msgid "Enter new note:"
 msgstr ""
 
 msgid "Add Note"
+msgstr ""
+
+msgid "Restricted To"
 msgstr ""
 
 msgid "Timestamp"
@@ -2756,6 +2598,9 @@ msgstr ""
 msgid "Creation Time"
 msgstr ""
 
+msgid "Username"
+msgstr ""
+
 msgid "Please enter your credentials"
 msgstr ""
 
@@ -2847,9 +2692,7 @@ msgstr ""
 msgid "Copy {0}"
 msgstr ""
 
-msgid ""
-"{gender, select, male {Add New {recordName}} female {Add New {recordName}} "
-"other {Add New {recordName}}}"
+msgid "{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}"
 msgstr ""
 
 #, python-brace-format
@@ -2938,9 +2781,7 @@ msgstr ""
 msgid "You need to select an option!"
 msgstr ""
 
-msgid ""
-"Following you find a list of all supported import formats and a sample file, "
-"how Tine 2.0 expects your file to look like."
+msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
 msgstr ""
 
 msgid "Following you find a list of all supported import formats."
@@ -2952,8 +2793,7 @@ msgstr ""
 msgid "Choose Import File"
 msgstr ""
 
-msgid ""
-"Please choose the file that contains the records you want to add to Tine 2.0"
+msgid "Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr ""
 
 #, python-brace-format
@@ -2963,9 +2803,7 @@ msgstr ""
 msgid "What should the file you upload look like?"
 msgstr ""
 
-msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You "
-"will have to manually adjust your file so Tine 2.0 can handle it."
+msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
 msgid "Please select the import format of the file you want to upload"
@@ -3051,8 +2889,7 @@ msgid "{0} of them where identified as duplicates."
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"From the identified duplicates {0} will be merged into the existing records."
+msgid "From the identified duplicates {0} will be merged into the existing records."
 msgstr ""
 
 #, python-brace-format
@@ -3080,9 +2917,7 @@ msgstr ""
 msgid "Different Values"
 msgstr ""
 
-msgid ""
-"This field has different values. Editing this field will overwrite the old "
-"values."
+msgid "This field has different values. Editing this field will overwrite the old values."
 msgstr ""
 
 #, python-brace-format
@@ -3109,8 +2944,7 @@ msgid "{0} {1} has been updated properly."
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"{0} {1} have invalid data after updating. These {1} have not been changed."
+msgid "{0} {1} have invalid data after updating. These {1} have not been changed."
 msgstr ""
 
 #, python-brace-format
@@ -3165,9 +2999,10 @@ msgstr ""
 msgid "Please enter the new Password:"
 msgstr ""
 
-msgid ""
-"Password is expired in accordance with the password policy and needs to be "
-"changed"
+msgid "Password is expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
 msgstr ""
 
 msgid "Password Must Change"
@@ -3280,8 +3115,7 @@ msgstr ""
 msgid "Please select a file with one of the following extensions:"
 msgstr ""
 
-msgid ""
-"Some fields are  multilingual. Click here to select language to display."
+msgid "Some fields are  multilingual. Click here to select language to display."
 msgstr ""
 
 msgid "Search for Model..."
@@ -3308,9 +3142,7 @@ msgstr ""
 msgid "Search for {0} ..."
 msgstr ""
 
-msgid ""
-"{recordGender, select, male {No matching {recordsName} found} female {No "
-"matching {recordsName} found} other {No matching {recordsName} found}}"
+msgid "{recordGender, select, male {No matching {recordsName} found} female {No matching {recordsName} found} other {No matching {recordsName} found}}"
 msgstr ""
 
 msgid "Searching..."
@@ -3326,17 +3158,13 @@ msgid "Search for records ..."
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria "
-"or view-options."
+msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
 msgstr ""
 
 msgid "Image"
 msgstr ""
 
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:"
 msgstr ""
 
 msgid "Pause upload"
@@ -3499,9 +3327,6 @@ msgstr ""
 msgid "and"
 msgstr ""
 
-msgid "or"
-msgstr ""
-
 msgid "add new filter"
 msgstr ""
 
@@ -3548,15 +3373,11 @@ msgid "Start definition"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria, "
-"view-options or the {1} you search in."
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria, "
-"view-options or change the module you search in."
+msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."
 msgstr ""
 
 msgid "Move Details Panel To"
@@ -3601,12 +3422,7 @@ msgstr ""
 msgid "No {0} to display"
 msgstr ""
 
-msgid ""
-"{recordGender, select, male {{recordCount, plural, one {# {recordName} "
-"selected} other {# {recordsName} selected}}} female {{recordCount, plural, "
-"one {# {recordName} selected} other {# {recordsName} selected}}} other "
-"{{recordCount, plural, one {# {recordName} selected} other {# {recordsName} "
-"selected}}}}"
+msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
 msgstr ""
 
 msgid "Records"
@@ -3625,6 +3441,27 @@ msgid "Last Modified By"
 msgstr ""
 
 msgid "Grid Panel Key Bindings"
+msgstr ""
+
+msgid "select all visible rows"
+msgstr ""
+
+msgid "copy record"
+msgstr ""
+
+msgid "edit record"
+msgstr ""
+
+msgid "new record"
+msgstr ""
+
+msgid "find"
+msgstr ""
+
+msgid "focus grid"
+msgstr ""
+
+msgid "reload grid"
 msgstr ""
 
 #, python-brace-format
@@ -3692,9 +3529,6 @@ msgid "ID already exists"
 msgstr ""
 
 msgid "ID needs to follow the syntax PARENTID:ID"
-msgstr ""
-
-msgid "Language"
 msgstr ""
 
 msgid "Setting new language..."
@@ -3793,15 +3627,11 @@ msgid "Child"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"The maximum number of {0} with the type \"{1}\" is reached. Please change "
-"the type of this relation"
+msgid "The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"The maximum number of {0}s with the type \"{1}\" is reached at the {2} you "
-"added. Please change the type of this relation or edit the {2}"
+msgid "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
 msgid "Contents of Related Folder"
@@ -3810,9 +3640,7 @@ msgstr ""
 msgid "No Dialog"
 msgstr ""
 
-msgid ""
-"The Record can't be opened. There doesn't exist any dialog for editing this "
-"Record!"
+msgid "The Record can't be opened. There doesn't exist any dialog for editing this Record!"
 msgstr ""
 
 msgid "Attachments: Anyone who has access to the record can see the data"
@@ -3831,15 +3659,11 @@ msgstr ""
 msgid "No access to {0}"
 msgstr ""
 
-msgid ""
-"The record you tried to link is already linked. Please edit the existing "
-"link."
+msgid "The record you tried to link is already linked. Please edit the existing link."
 msgstr ""
 
 #, python-brace-format
-msgid ""
-"The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only "
-"once!"
+msgid "The {1} \"{2}\" is already used in the Field \"{0}\" and can be linked only once!"
 msgstr ""
 
 msgid "Delete { ownRecordName }?"
@@ -3855,6 +3679,9 @@ msgid "Remove { ownRecordName } relation to this { relatedRecordName } only"
 msgstr ""
 
 msgid "Site"
+msgstr ""
+
+msgid "GENDER_Site"
 msgstr ""
 
 msgid "no site association"
@@ -4001,15 +3828,10 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-msgid ""
-"{gender, select, male {New {containerName}} female {New {containerName}} "
-"other {New {containerName}}}"
+msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
 msgstr ""
 
-msgid ""
-"{gender, select, male {Please enter the name for the new {containerName}:} "
-"female {Please enter the name for the new {containerName}:} other {Please "
-"enter the name for the new {containerName}:}}"
+msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
 msgstr ""
 
 #, python-brace-format
@@ -4020,30 +3842,20 @@ msgstr ""
 msgid "You have to supply a {0} name!"
 msgstr ""
 
-msgid ""
-"{gender, select, male {No {containerName} added} female {No {containerName} "
-"added} other {No {containerName} added}}"
+msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
 msgstr ""
 
-msgid ""
-"{gender, select, male {You have to supply a {containerName} name!} female "
-"{You have to supply a {containerName} name!} other {You have to supply a "
-"{containerName} name!}}"
+msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
 msgstr ""
 
 #, python-brace-format
 msgid "Creating {0}..."
 msgstr ""
 
-msgid ""
-"{gender, select, male {Rename {containerName}} female {Rename "
-"{containerName}} other {Rename {containerName}}}"
+msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
 msgstr ""
 
-msgid ""
-"{gender, select, male {Please enter the new name for the {containerName}:} "
-"female {Please enter the new name for the {containerName}:} other {Please "
-"enter the new name for the {containerName}:}}"
+msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
 msgstr ""
 
 #, python-brace-format
@@ -4090,6 +3902,9 @@ msgid "Status"
 msgstr ""
 
 msgid "Order"
+msgstr ""
+
+msgid "Version"
 msgstr ""
 
 msgid "Area Lock Configuration"
@@ -4192,6 +4007,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Number"
+msgstr ""
+
+msgid "Cost Center"
+msgstr ""
+
+msgid "Cost Bearer"
 msgstr ""
 
 msgid "GENDER_Evaluation Dimension"
@@ -4391,6 +4212,12 @@ msgstr ""
 msgid "Bevölkerungsstand"
 msgstr ""
 
+msgid "Restricted to"
+msgstr ""
+
+msgid "If active, it is only visible for the creator of this note"
+msgstr ""
+
 msgid "GENDER_Numbering Range"
 msgstr ""
 
@@ -4415,6 +4242,12 @@ msgid "Prefix"
 msgstr ""
 
 msgid "Number is Editable"
+msgstr ""
+
+msgid "Max Requests"
+msgstr ""
+
+msgid "Period"
 msgstr ""
 
 msgid "RoleMember"
@@ -4590,8 +4423,7 @@ msgstr ""
 msgid "File double-clicking action"
 msgstr ""
 
-msgid ""
-"Which action should be executed by default when a file is double-clicked."
+msgid "Which action should be executed by default when a file is double-clicked."
 msgstr ""
 
 msgid "GENDER_Text"
@@ -4652,9 +4484,4 @@ msgid "Neighbours only"
 msgstr ""
 
 msgid "Preview"
-msgstr ""
-
-msgid ""
-"The character string {{ password }} is automatically replaced by the "
-"password when the message is sent and must be included in the message."
 msgstr ""
