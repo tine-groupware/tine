@@ -40,6 +40,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     const OPTION_USE_EXTERNAL_ID_UID = 'useExternalIdUid';
 
     public static $cutypeMap = array(
+        Calendar_Model_Attender::USERTYPE_EMAIL         => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_GROUP         => 'GROUP',

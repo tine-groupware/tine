@@ -17,6 +17,9 @@
  */
 class Calendar_Frontend_iMIP
 {
+
+    protected bool $_inAutoProcess = false;
+
     /**
      * auto process given iMIP component 
      * 
@@ -28,13 +31,7 @@ class Calendar_Frontend_iMIP
      */
     public function autoProcess(Calendar_Model_iMIP $_iMIP, $_retry = true)
     {
-        if ($_iMIP->method == Calendar_Model_iMIP::METHOD_COUNTER) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
-                __METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component with COUNTER method "
-                . "-> must always be processed manually");
-            return false;
-        }
-
+        $this->_inAutoProcess = true;
         try {
             if (! $this->getExistingEvent($_iMIP, TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' .
@@ -50,6 +47,8 @@ class Calendar_Frontend_iMIP
             } else {
                 throw $zdbse;
             }
+        } finally {
+            $this->_inAutoProcess = false;
         }
     }
     
@@ -324,7 +323,7 @@ class Calendar_Frontend_iMIP
      * 
      * @todo this needs to be splitted into assertExternalOrganizer / assertInternalOrganizer
      */
-    protected function _assertOrganizer($_iMIP, $_assertExistence, $_assertOriginator, $_assertAccount = false)
+    protected function _assertOrganizer($_iMIP, $_assertExistence, $_assertOriginator, $_assertAccount = false, $_assertOwn = false)
     {
         $result = TRUE;
         
@@ -355,32 +354,28 @@ class Calendar_Frontend_iMIP
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer user account is not possible");
             $result = FALSE;
         }
+
+        if ($_assertOwn && (!$organizer || $organizer->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId())) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} requires to be organizer");
+            $result = false;
+        }
         
         return $result;
     }
 
     /**
      * find existing event by uid
-     *
-     * @param Calendar_Model_iMIP $_iMIP
-     * @param bool $_refetch
-     * @param bool $_getDeleted
-     * @return NULL|Tinebase_Record_Interface
      */
-    public function getExistingEvent($_iMIP, $_refetch = FALSE, $_getDeleted = FALSE)
+    public function getExistingEvent(Calendar_Model_iMIP $_iMIP, bool $_refetch = false, bool $_getDeleted = false): ?Calendar_Model_Event
     {
         if ($_refetch || ! $_iMIP->existing_event instanceof Calendar_Model_Event)
         {
-            /** @var Calendar_Model_Event $iMIPEvent */
             $iMIPEvent = $_iMIP->getEvent();
-
             $event = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($iMIPEvent->uid,
                 $iMIPEvent->hasExternalOrganizer(), 'get', Tinebase_Model_Grants::GRANT_READ, $_getDeleted);
-
             if (null !== $event) {
                 Calendar_Model_Attender::resolveAttendee($event['attendee'], true, $event);
             }
-
             $_iMIP->existing_event = $event;
         }
 
@@ -710,35 +705,108 @@ class Calendar_Frontend_iMIP
         //  - send message
         //  - mark iMIP message ANSWERED
     }
-    
-    /**
-    * counter precondition
-    *
-    * @param  Calendar_Model_iMIP   $_iMIP
-    * @return boolean
-    *
-    * @todo implement
-    */
-    protected function _checkCounterPreconditions($_iMIP)
+
+    protected function _checkCounterPreconditions(Calendar_Model_iMIP $_iMIP): bool
     {
-        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing COUNTER is not supported yet');
-    
-        return FALSE;
+        if (null === $this->getExistingEvent($_iMIP, _refetch: false, _getDeleted: true)) {
+            $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, 'event not found');
+            return false;
+        }
+        return $this->_assertOrganizer($_iMIP, _assertExistence: true, _assertOriginator: false, _assertOwn: true);
     }
-    
-    /**
-    * process counter
-    *
-    * @param  Calendar_Model_iMIP   $_iMIP
-    *
-    * @todo implement
-    */
-    protected function _processCounter($_iMIP)
+
+    protected function _processCounter(Calendar_Model_iMIP $_iMIP, ?string $_status = null)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " with status " . $_status);
+
+        if ($this->_inAutoProcess) {
+            // we generate a diff of what the counter offer of the originator is and present that to the client
+            $this->_autoProcessCounter($_iMIP);
+            return $_iMIP;
+        }
+
         // some attendee suggests to change the event
         // status: ACCEPT => update event, send notifications to all
         // status: DECLINE => send DECLINECOUNTER to originator
-        // mark message ANSWERED
+        if (Calendar_Model_Attender::STATUS_ACCEPTED === $_status) {
+            $event = $_iMIP->mergeEvent($_iMIP->existing_event);
+            Calendar_Controller_MSEventFacade::getInstance()->update($event);
+
+        } elseif (Calendar_Model_Attender::STATUS_DECLINED === $_status) {
+            Calendar_Model_Attender::resolveAttendee($_iMIP->existing_event->attendee);
+            if ($attendee = Calendar_Model_Attender::getAttendeeByEmail($_iMIP->existing_event->attendee, $_iMIP->originator)) {
+
+                Calendar_Controller_EventNotifications::getInstance()->sendNotificationToAttender(
+                    _attender: $attendee,
+                    _event: $_iMIP->existing_event,
+                    _updater: Tinebase_Core::getUser(),
+                    _action: 'declineCounter',
+                    _notificationLevel: null
+                );
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' originator ' . $_iMIP->originator . ' not found in attendee list, no decline counter email sent');
+            }
+
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('status ' . $_status . ' not supported in COUNTER');
+        }
+        return true;
+    }
+
+    protected function _autoProcessCounter(Calendar_Model_iMIP $_iMIP): void
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
+
+        $event = $_iMIP->getEvent();
+        $omit = array_diff_key(array_fill_keys(Calendar_Model_Event::getConfiguration()->fieldKeys, true), [
+            'dtstart' => false,
+            'dtend' => false,
+            'summary' => false,
+        ]);
+        // TODO FIXME handle ATTACHE => attachments?
+        /* TODO FIXME spec says attendee can be countered ... but google calendar only sends the countering attendee as attendee -> we ignore it, maybe allow by client header, for ms365 etc.?
+         *if ($event->attendee) {
+         *   unset($omit['attendee']);
+        *}
+         */
+        // TODO FIXME handle CATEGORIES => tags
+        // TODO FIXME handle CLASS => it defaults to public, so we dont know if it came or not...
+        if (null !== $event->description) {
+            unset($omit['description']);
+        }
+        if ($event->exdate && $_iMIP->existing_event->exdate) {
+            unset($omit['exdate']);
+        }
+        if ($event->location) {
+            unset($omit['location']);
+        }
+        if ($event->rrule) {
+            unset($omit['rrule']);
+        }
+        if ($event->rrule_until) {
+            unset($omit['rrule_until']);
+        }
+        if ($event->status) {
+            unset($omit['status']);
+        }
+        // TODO FIXME handle TRANSP => it defaults to TRANSP_OPAQUE, so we dont know if it came or not...
+        if ($event->url) {
+            unset($omit['url']);
+        }
+        if ($event->alarms) {
+            unset($omit['alarms']);
+        }
+        /*
+         * IANA-PROPERTY
+            X-PROPERTY
+        IANA-COMPONENT
+        X-COMPONENT
+         */
+
+        $diff = $_iMIP->existing_event->diff($event, array_keys($omit));
+        $_iMIP->xprops()['counterDiff'] = array_keys($diff->diff);
     }
     
     /**

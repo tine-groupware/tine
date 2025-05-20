@@ -230,7 +230,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Incoming iMIP ics \n"
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Incoming iMIP ics \n"
                     . $this->{self::FLD_ICS});
             }
 
