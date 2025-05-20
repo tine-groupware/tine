@@ -865,25 +865,25 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $fromEmail = 'unittestalias@' . $this->_mailDomain;
 
         // search subject
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'subjectfilter']], []);
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => 'subjectfilter']], []);
         $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
         // search to email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $this->_personas['jsmith']->accountEmailAddress]], []);
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $this->_personas['jsmith']->accountEmailAddress]], []);
         $this->assertEquals($this->_personas['jsmith']->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
         // search from email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $fromEmail]], []);
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $fromEmail]], []);
         $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
         // search from cc
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'jmcblack']], []);
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => 'jmcblack']], []);
         $this->assertEquals($this->_personas['jmcblack']->accountEmailAddress, $result['results'][0]['cc'][0], print_r($result['results'][0]['cc'], true));
         // search from name #1
         $result = $this->_json->searchMessages([
-            ['field' => 'query', 'operator' => 'wordstartswith', 'value' => $this->_originalTestUser->accountLastName],
+            ['field' => 'query', 'operator' => 'contains', 'value' => $this->_originalTestUser->accountLastName],
         ], ['limit' => 1]);
         $this->assertCount(1, $result['results']);
         // search from name #2
         $result = $this->_json->searchMessages([
-            ['field' => 'query', 'operator' => 'wordstartswith', 'value' => ($acf = trim(preg_replace('/\\W/', ' ', $this->_originalTestUser->accountFirstName)))]
+            ['field' => 'query', 'operator' => 'contains', 'value' => ($acf = trim(preg_replace('/\\W/', ' ', $this->_originalTestUser->accountFirstName)))]
         ], ['limit' => 1]);
         $this->assertCount(1, $result['results'], 'could not find mail by accountFirstName: "' . $acf . '"');
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>17.5</version>
+    <version>17.6</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -503,7 +503,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>19</version>
+            <version>20</version>
             <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
@@ -528,6 +528,10 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>aggregated_data</name>
+                    <type>text</type>
                 </field>
                 <field>
                     <name>subject</name>
@@ -653,21 +657,7 @@
                     </field>
                 </index>
                 <index>
-                    <name>from_email_ft</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>from_email</name>
-                    </field>
-                </index>
-                <index>
                     <name>from_name</name>
-                    <field>
-                        <name>from_name</name>
-                    </field>
-                </index>
-                <index>
-                    <name>from_name_ft</name>
-                    <fulltext>true</fulltext>
                     <field>
                         <name>from_name</name>
                     </field>
@@ -700,34 +690,6 @@
                         <ondelete>cascade</ondelete>
                         <onupdate>cascade</onupdate>
                     </reference>
-                </index>
-                <index>
-                    <name>to_list</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>to_list</name>
-                    </field>
-                </index>
-                <index>
-                    <name>cc_list</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>cc_list</name>
-                    </field>
-                </index>
-                <index>
-                    <name>bcc_list</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>bcc_list</name>
-                    </field>
-                </index>
-                <index>
-                    <name>subject</name>
-                    <fulltext>true</fulltext>
-                    <field>
-                        <name>subject</name>
-                    </field>
                 </index>
             </declaration>
         </table>
