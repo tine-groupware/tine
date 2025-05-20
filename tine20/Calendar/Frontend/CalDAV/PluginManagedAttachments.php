@@ -149,7 +149,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
             }
         }
         rewind($inputStream);
-        
+        //todo: fix avscan process for attachments ?
         list ($attachmentId) = Tinebase_FileSystem::getInstance()->createFileBlob($inputStream);
         
         switch ($getVars['action']) {

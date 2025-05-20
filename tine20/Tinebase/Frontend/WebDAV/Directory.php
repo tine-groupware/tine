@@ -177,7 +177,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 throw new Sabre\DAV\Exception('data should be a resource');
             }
 
-            if (true !== Tinebase_FileSystem::getInstance()->fclose($handle, false)) {
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
                 throw new Sabre\DAV\Exception('Tinebase_FileSystem::fclose failed for path ' . $path);
             }
 

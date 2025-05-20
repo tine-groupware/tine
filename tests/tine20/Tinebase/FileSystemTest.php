@@ -1261,6 +1261,26 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
     }
 
+    public function testAVModeUnittestLargeFileFound()
+    {
+        $oldConfig = clone Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM};
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            'unittest';
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_QUEUE_FSIZE} = 1;
+        Tinebase_FileSystem_AVScan_Factory::registerScanner('unittest', Tinebase_FileSystem_TestAVScanner::class);
+        Tinebase_FileSystem_TestAVScanner::$desiredResult = new Tinebase_FileSystem_AVScan_Result(
+            Tinebase_FileSystem_AVScan_Result::RESULT_FOUND, 'unittest virus');
+
+        $now = Tinebase_DateTime::now();
+        $file = $this->testCreateFile('avModeUnittestFound.txt',
+            'shubidubidulala');
+        $node = Tinebase_FileSystem::getInstance()->stat($file);
+        static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
+        static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
+        static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM} = $oldConfig;
+    }
+
     /**
      * @group nogitlabciad
      */

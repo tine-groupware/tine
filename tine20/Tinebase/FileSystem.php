@@ -631,7 +631,7 @@ class Tinebase_FileSystem implements
                         $this->fclose($fh);
                     }
                 }
-                $this->_updateFileObject($parentNode, $createdNode, null, $destinationNode->hash);
+                $this->updateFileObject($parentNode, $createdNode, null, $destinationNode->hash);
                 $createdNode = $this->get($createdNode->getId());
             } else {
                 $createdNode = $this->_createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
@@ -719,7 +719,7 @@ class Tinebase_FileSystem implements
                     $hashFile = 'flySystem'; // we need to set a true-ish string value here
                     $avResult = null; // FIXME todo add avScanning for FlySystem
                 } else {
-                    [$hash, $hashFile, $avResult] = $this->createFileBlob($handle, $avscan);
+                    list ($hash, $hashFile, $avResult) = $this->createFileBlob($handle, $options, $avscan);
                 }
 
                 try {
@@ -731,7 +731,7 @@ class Tinebase_FileSystem implements
 
                     $parentFolder = $this->stat($parentPath);
 
-                    $this->_updateFileObject($parentFolder, $options['tine20']['node'], null, $hash, $hashFile, $avResult);
+                    $this->updateFileObject($parentFolder, $options['tine20']['node'], null, $hash, $hashFile, $avResult);
 
                     $this->clearStatCache($options['tine20']['path']);
 
@@ -774,7 +774,7 @@ class Tinebase_FileSystem implements
      * @param Tinebase_FileSystem_AVScan_Result $_avResult
      * @return Tinebase_Model_Tree_FileObject
      */
-    protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, Tinebase_Model_Tree_Node $_node, ?\Tinebase_Model_Tree_FileObject $_fileObject = null, $_hash = null, $_hashFile = null, $_avResult = null)
+    public function updateFileObject(Tinebase_Model_Tree_Node $_parentNode, Tinebase_Model_Tree_Node $_node, Tinebase_Model_Tree_FileObject $_fileObject = null, $_hash = null, $_hashFile = null, $_avResult = null)
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
         $currentFileObject = $_fileObject ?: $this->_fileObjectBackend->get($_node->object_id);
@@ -2468,7 +2468,7 @@ class Tinebase_FileSystem implements
      * @throws Tinebase_Exception_NotImplemented
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public function createFileBlob($contents, $avscan = true)
+    public function createFileBlob($contents, $options = null, $avscan = true)
     {
         if (! is_resource($contents)) {
             throw new Tinebase_Exception_NotImplemented('please implement me!');
@@ -2514,7 +2514,17 @@ class Tinebase_FileSystem implements
 
         // AV scan
         if ($avscan) {
-            $avResult = $this->avScanHashFile($hashFile);
+            $fileSize = filesize($hashFile);
+            $queueSize = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_AVSCAN_QUEUE_FSIZE};
+            if ($fileSize && $fileSize > $queueSize) {
+                $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, 'processing avscan in queue');
+                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase.avScanHashFile',
+                    $hashFile,
+                    $options
+                );
+            } else {
+                $avResult = $this->avScanHashFile($hashFile);
+            }
         } else {
             $avResult = null;
         }
@@ -2537,7 +2547,7 @@ class Tinebase_FileSystem implements
                 throw new Tinebase_Exception_UnexpectedValue('failed to unlink corrupt hash file');
             }
 
-            return $this->createFileBlob($contents);
+            return $this->createFileBlob($contents, $options);
         }
         
         return array($hash, $hashFile, $avResult);
@@ -2751,7 +2761,7 @@ class Tinebase_FileSystem implements
             $fileObject->description = $_node->description;
             $fileObject->flysystem = $_node->flysystem;
             $fileObject->flypath = $_node->flypath;
-            $this->_updateFileObject($this->get($currentNodeObject->parent_id), $currentNodeObject, $fileObject, $_node->hash);
+            $this->updateFileObject($this->get($currentNodeObject->parent_id), $currentNodeObject, $fileObject, $_node->hash);
 
             if ($currentNodeObject->acl_node !== $_node->acl_node) {
                 // update acl_node of subtree if changed
@@ -3685,7 +3695,7 @@ class Tinebase_FileSystem implements
                         if ($listing->isFile()) {
                             $createdNode = $this->createFileTreeNode($node, $childName);
                             $flyPath = rtrim($node->flypath, '/') . '/' . $childName;
-                            $this->_updateFileObject($node, $createdNode, null,
+                            $this->updateFileObject($node, $createdNode, null,
                                 Tinebase_Controller_Tree_FlySystem::getHashForPath($flyPath, $flySystem), 'flySystem');
 
                             $newNode = $this->_getTreeNodeBackend()->get($createdNode->getId());
