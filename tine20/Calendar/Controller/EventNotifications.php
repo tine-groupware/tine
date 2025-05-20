@@ -506,15 +506,20 @@
       * @param $action
       * @param $sendLevel
       * @param $_updates
-      * @return bool
       * @throws Tinebase_Exception_AccessDenied
       * @throws Tinebase_Exception_NotFound
       */
-     protected function _handleResourceNotifications($attender, &$recipients, &$action, &$sendLevel, $_updates)
+     protected function _handleResourceNotifications($attender, &$recipients, &$action, &$sendLevel, $_updates): void
      {
          // Add additional recipients for resources
          if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE) {
-             return true;
+             return;
+         }
+
+         if ($attender->status === Calendar_Model_Attender::STATUS_DECLINED) {
+             $recipients = array(); // this enforces no email being send
+             $sendLevel = self::NOTIFICATION_LEVEL_NONE; // this speeds up the exit, no need to render the email and then not send it
+             return;
          }
 
          $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
@@ -523,8 +528,9 @@
          if ($resource->suppress_notification) {
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                  . " Do not send Notifications for this resource: ". $resource->name);
-             $recipients = array();
-             return true;
+             $recipients = array(); // this enforces no email being send
+             $sendLevel = self::NOTIFICATION_LEVEL_NONE; // this speeds up the exit, no need to render the email and then not send it
+             return;
          }
 
          // Set custom status booked
@@ -546,8 +552,6 @@
          $recipients = array_merge($recipients,
              Calendar_Controller_Resource::getInstance()->getNotificationRecipients($resource)
          );
-
-         return true;
      }
      
     
