@@ -179,6 +179,9 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
                             app.getFolderStore().updateFolder(folderRecord);
                             selectedNode.removeAll();
                         }
+                        app.getMainScreen().getCenterPanel().loadGridData({
+                            removeStrategy: 'keepBuffered'
+                        });
                         selectedNode.getUI().removeClass("x-tree-node-loading");
                     }
                 });
