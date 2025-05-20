@@ -88,7 +88,9 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
                 if (!isset($containerCache[$containerId])) {
                     $containerCache[$containerId] = $func($record, $func);
                 }
-                $record->setAccountGrants($containerCache[$containerId]);
+                if ($containerCache[$containerId]) {
+                    $record->setAccountGrants($containerCache[$containerId]);
+                }
             }
         }
 
