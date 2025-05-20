@@ -130,9 +130,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
            }
         });
-        
-        var currency = Tine.Sales.registry.get('config').ownCurrency.value;
-        
+
         return {
             xtype: 'tabpanel',
             defaults: {
@@ -229,7 +227,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 name: 'currency',
                                 fieldLabel: this.app.i18n._('Currency'),
-                                value: currency,
+                                xtype: 'widget-currencycombo',
                                 allowBlank: false
                             },  {
                                 name: 'vat_procedure',

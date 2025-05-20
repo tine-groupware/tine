@@ -547,7 +547,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             case Sales_Config::INVOICE_DISCOUNT_SUM:
                 $value = $this->{self::FLD_POSITION_DISCOUNT_SUM};
                 $value = round((float)$value, 2);
-                return sprintf('%01.2f ', $value) . Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL);
+                return sprintf('%01.2f ', $value) . Tinebase_Core::getDefaultCurrencySymbol();
         }
         return '';
     }

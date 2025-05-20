@@ -1711,7 +1711,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             switch ($_type) {
                 case Tinebase_ModelConfiguration_Const::TYPE_MONEY:
                     $_value = sprintf('%01.2f ' .
-                        Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL}, round((float)$_value, 2));
+                        Tinebase_Core::getDefaultCurrencySymbol(), round((float)$_value, 2));
                     break;
                 default:
                     break;

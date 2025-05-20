@@ -148,8 +148,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
            }
         });
-        
-        var currency = Tine.Sales.registry.get('config').ownCurrency.value;
 
         return {
             xtype: 'tabpanel',
@@ -235,8 +233,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldManager('vat_procedure')
                             ], [{
                                 name: 'currency',
+                                xtype: 'widget-currencycombo',
                                 fieldLabel: this.app.i18n._('Currency'),
-                                value: currency
                             }, {
                                 name: 'currency_trans_rate',
                                 fieldLabel: this.app.i18n._('Currency Translation Rate'),
