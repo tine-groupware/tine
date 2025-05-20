@@ -221,6 +221,7 @@
       "ext-libxml": "8.1",
       "ext-mbstring": "8.1",
       "ext-openssl": "8.1",
+      "ext-redis": "8.1",
       "ext-xml": "8.1",
       "ext-xmlreader": "8.1",
       "ext-xmlwriter": "8.1",
