@@ -131,6 +131,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'message_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'aggregated_data'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         // virtual field = $record['from_name'] . ' <' . $record['from_email'] . '>'
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
