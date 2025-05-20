@@ -357,20 +357,16 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 allowBlank: false,
                 columnWidth: 0.75,
             }, {
-                fieldLabel: i18n._('Private'),
+                fieldLabel: i18n._('Visibility'),
                 name: 'restrictedTo',
                 anchor: '100%',
-                xtype: 'checkbox',
+                xtype: 'combo',
                 columnWidth: 0.25,
                 value: false,
-                listeners : {
-                    render: function(c) {
-                        new Ext.ToolTip ({
-                            target: c.getEl(),
-                            html: i18n._('If active, it is only visible for the creator of this note')
-                        });
-                    }
-                }
+                store: [
+                    [ false, this.app.i18n._('for all') ],
+                    [ true, this.app.i18n._('only for the creator of the note') ],
+                ],
             },{
                 xtype: 'textarea',
                 name: 'notification',
