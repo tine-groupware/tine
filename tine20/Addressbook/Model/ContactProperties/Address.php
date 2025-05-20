@@ -147,7 +147,7 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
                                                    Addressbook_Model_ContactProperties_Definition $def): void
     {
         switch ($def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE}) {
-            case 'record':
+            case Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD:
                 /*$cfc->xprops('definition')[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS] = [
                     '_jsonExpander' => [
                         Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -178,7 +178,7 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
                     $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
                 }
                 break;
-            case 'records':
+            case Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORDS:
             default:
                 throw new Tinebase_Exception_NotImplemented(
                     $def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE} . ' is not implemented');
