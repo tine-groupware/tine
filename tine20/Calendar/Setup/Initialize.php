@@ -74,7 +74,7 @@ class Calendar_Setup_Initialize extends Setup_Initialize
         ))));
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "I'm organizer", //_("I'm organizer")
+            'name'              => "I'm an organizer", //_("I'm an organizer")
             'description'       => "Events I'm the organizer of", // _("Events I'm the organizer of")
             'filters'           => array(
                 array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT)

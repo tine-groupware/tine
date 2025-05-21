@@ -278,7 +278,7 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
         }, []);
 
         this.menu.items.push({
-            text: this.app.i18n._('Side bar color'),
+            text: this.app.i18n._('Sidebar Color'),
             menu: sidebarItems
         });
 

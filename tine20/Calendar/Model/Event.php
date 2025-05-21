@@ -709,8 +709,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'priority':          return $t->_('Priority');
             case 'status':            return $t->_('Status');
             case 'summary':           return $t->_('Summary');
-            case 'url':               return $t->_('Url');
-            case 'rrule':             return $t->_('Recurrance rule');
+            case 'URL':               return $t->_('URL');
+            case 'rrule':             return $t->_('Recurrence Rule');
             case 'is_all_day_event':  return $t->_('Is all day event');
             case 'originator_tz':     return $t->_('Organizer timezone');
             default:                  return $_field;

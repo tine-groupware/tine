@@ -591,7 +591,7 @@
         $messageSubject = '';
         switch ($_action) {
             case 'alarm':
-                $messageSubject = sprintf($translate->_('Alarm for event "%1$s" at %2$s'), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Alarm for the event "%1$s" at %2$s'), $_event->summary, $startDateString);
                 break;
             case 'created':
                 $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
@@ -647,12 +647,12 @@
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_TENTATIVE:
-                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for event "%2$s" at %3$s'),
+                                    $messageSubject = sprintf($translate->_('Tentative response from %1$s for the event "%2$s" at %3$s'),
                                         $attender->getName(), $_event->summary, $startDateString);
                                     break;
                                     
                                 case Calendar_Model_Attender::STATUS_NEEDSACTION:
-                                    $messageSubject = sprintf($translate->_('No response from %1$s for event "%2$s" at %3$s'),
+                                    $messageSubject = sprintf($translate->_('No response from %1$s for the event "%2$s" at %3$s'),
                                         $attender->getName(), $_event->summary, $startDateString);
                                     break;
 
@@ -660,11 +660,11 @@
                                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                                         __METHOD__ . '::' . __LINE__ . ' Unknown status for attender '
                                         . print_r($attender->toArray(), true));
-                                    $messageSubject = sprintf($translate->_('Unknown status update from %1$s for event "%2$s" at %3$s'),
+                                    $messageSubject = sprintf($translate->_('Unknown status update from %1$s for the event "%2$s" at %3$s'),
                                         $attender->getName(), $_event->summary, $startDateString);
                             }
                         } else {
-                            $messageSubject = sprintf($translate->_('Attendee changes for event "%1$s" at %2$s' ),
+                            $messageSubject = sprintf($translate->_('Attendee changes for the event "%1$s" at %2$s' ),
                                 $_event->summary, $startDateString);
                         }
                         
@@ -677,7 +677,7 @@
                 break;
 
             case 'tentative':
-                $messageSubject = sprintf($translate->_('Tentative event notification for event "%1$s" at %2$s' ), $_event->summary, $startDateString);
+                $messageSubject = sprintf($translate->_('Tentative event notification for the event "%1$s" at %2$s' ), $_event->summary, $startDateString);
                 break;
 
             default:

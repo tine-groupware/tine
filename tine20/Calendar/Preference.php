@@ -194,22 +194,22 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             ),
             self::WEB_EVENT_TITLE_TEMPLATE => [
                 'label'         => $translate->_('Web Event Title Template'),
-                'description'   => $translate->_('How to build event titles in web ui.'),
+                'description'   => $translate->_('How to build event titles in web UI.'),
             ],
             self::NOTIFICATION_LEVEL => array(
                 'label'         => $translate->_('Get Notification Emails'),
                 'description'   => $translate->_('The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to "Never"'),
             ),
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
-                'label'         => $translate->_('Send Notifications Emails of own Actions'),
-                'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+                'label'         => $translate->_('Send notification emails for your own actions.'),
+                'description'   => $translate->_('Get notification emails for actions you did yourself'),
             ),
             self::SEND_NOTIFICATION_FOR_TENTATIVE => array(
-                'label'         => $translate->_('Send Notifications Emails of tentative events'),
-                'description'   => $translate->_('Get notifications emails of tentative events'),
+                'label'         => $translate->_('Send notification emails of tentative events'),
+                'description'   => $translate->_('Get notification emails of tentative events'),
             ),
             self::SEND_ALARM_NOTIFICATIONS => array(
-                'label'         => $translate->_('Send Alarm Notifications Emails'),
+                'label'         => $translate->_('Send Alarm Notification Emails'),
                 'description'   => $translate->_('Get event alarms via email'),
             ),
             self::DEFAULTALARM_ENABLED => array(
@@ -229,8 +229,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'description'   => $translate->_('Increment of event time steps'),
             ),
             self::DEFAULT_EVENTS_RRIVATE => array(
-                'label'         => $translate->_('Default set Events to privat'),
-                'description'   => $translate->_('If enabled every created event is always privat'),
+                'label'         => $translate->_('Default set events to privat'),
+                'description'   => $translate->_('If enabled, every created event is always private.'),
             ),
             self::FIRSTDAYOFWEEK => array(
                 'label'         => $translate->_('First Day of Week'),
@@ -238,15 +238,15 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             ),
             self::DEFAULT_CALENDAR_STRATEGY => array(
                 'label'         => $translate->_('Default calendar strategy'),
-                'description'   => $translate->_('The calendar for new events if no container is selected'),
+                'description'   => $translate->_('The calendar for new events, if no container is selected.'),
             ),
             self::REMOVE_FILTERS_ON_SELECT_CONTAINER => array(
                 'label'         => $translate->_('Remove all filters on change selection'),
-                'description'   => $translate->_('On Calendar Change will remove all filters')
+                'description'   => $translate->_('Changing the calendar will remove all filters.')
             ),
             self::FIXED_CALENDARS => array(
                 'label'         => $translate->_('Fixed Calendars'),
-                'description'   => $translate->_('Calendars always selected regardless of all filter parameters.'),
+                'description'   => $translate->_('Calendars are always selected, regardless of any filter parameters.'),
             ),
         );
         
@@ -362,7 +362,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
                 // need to put the translations strings here because they were not found in the xml below :/
-                // _('Never') _('On invitation and cancellation only') _('On time changes') _('On all updates but attendee responses') _('On attendee responses too')
+                // _('Never') _('Only on invitation and cancellation.') _('On time changes') _('On all updates, except attendee responses.') _('On attendee responses too')
                 $preference->value      = Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
@@ -372,7 +372,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         </option>
                         <option>
                             <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCEL . '</value>
-                            <label>'. $translate->_('On invitation and cancellation only') . '</label>
+                            <label>'. $translate->_('Only on invitation and cancellation.') . '</label>
                         </option>
                         <option>
                             <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE . '</value>
@@ -380,7 +380,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         </option>
                         <option>
                             <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_UPDATE . '</value>
-                            <label>'. $translate->_('On all updates but attendee responses') . '</label>
+                            <label>'. $translate->_('On all updates, except attendee responses.') . '</label>
                         </option>
                         <option>
                             <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE . '</value>

@@ -146,7 +146,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     searchComboConfig: {useEditPlugin: false},
                                     requiredGrant: 'editGrant',
                                     recordEditPluginConfig: {allowCreateNew: false},
-                                    emptyText: this.app.i18n._('Search for sites ...'),
+                                    emptyText: this.app.i18n._('Search for sites...'),
                                     additionalFilterSpec: {
                                         config: {
                                             name: 'siteFilter',
@@ -286,8 +286,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 listeners: {
                                     beforeselect: (combo, status, index) => {
                                         Ext.MessageBox.confirm(
-                                            this.app.i18n._('Update Status for all Attendee?'),
-                                            this.app.i18n._('You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?'), function (btn) {
+                                            this.app.i18n._('Update status for all attendees?'),
+                                            this.app.i18n._('You are about to change the status of the event itself, not just your own. Do you really want to change the event status for all attendees?'), function (btn) {
                                                 if (btn === 'yes') {
                                                     combo.setValue(status.id);
                                                 }
@@ -384,7 +384,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 grow: false,
                                 preventScrollbars:false,
                                 anchor:'100% 100%',
-                                emptyText: this.app.i18n._('Enter description'),
+                                emptyText: this.app.i18n._('Enter a description'),
                                 requiredGrant: 'editGrant'
                             }]
                         }),
@@ -796,7 +796,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.app.featureEnabled('featureEventNotificationConfirmation') && !+this.record.get('mute')) {
             Ext.MessageBox.confirm(
                 this.app.i18n._('Send Notification?'),
-                this.app.i18n._('Changes to this event might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
+                this.app.i18n._('Changes to this event may trigger notifications. Click the button labeled "Notifications are enabled" to switch to "Notifications are disabled".'),
                 function (button) {
                     if (button === 'yes') {
                         Tine.Calendar.EventEditDialog.superclass.onApplyChanges.call(this,closeWindow);
@@ -836,16 +836,16 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             endTime = this.adjustTimeToUserPreference(dtEndField.getValue(), 'daysviewendtime');
         
         if (! Ext.isDate(dtEnd)) {
-            dtEndField.markInvalid(this.app.i18n._('End date is not valid'));
+            dtEndField.markInvalid(this.app.i18n._('The end date is not valid'));
             return false;
         } else if (Ext.isDate(dtStart) && dtEnd.getTime() - dtStart.getTime() <= 0) {
-            dtEndField.markInvalid(this.app.i18n._('End date must be after start date'));
+            dtEndField.markInvalid(this.app.i18n._('The end date must be after the start date'));
             return false;
         } else if (! Tine.Tinebase.configManager.get('daysviewallowallevents', 'Calendar')
                 && this.getForm().findField('is_all_day_event').checked === false
                 && !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && dtEnd > endTime)
         {
-            dtEndField.markInvalid(this.app.i18n._('End time is not allowed to be after the configured time.'));
+            dtEndField.markInvalid(this.app.i18n._('The end time cannot be later than the configured time.'));
             return false;
         } else {
             dtEndField.clearInvalid();
@@ -881,14 +881,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             startTime = this.adjustTimeToUserPreference(dtStartField.getValue(), 'daysviewstarttime');
         
         if (! Ext.isDate(dtStart)) {
-            dtStartField.markInvalid(this.app.i18n._('Start date is not valid'));
+            dtStartField.markInvalid(this.app.i18n._('The start date is not valid'));
             return false;
         } else if (! Tine.Tinebase.configManager.get('daysviewallowallevents', 'Calendar')
                 && this.getForm().findField('is_all_day_event').checked === false
                 && !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar')
                 && dtStart < startTime)
         {
-            dtStartField.markInvalid(this.app.i18n._('Start date is not allowed to be before the configured time.'));
+            dtStartField.markInvalid(this.app.i18n._('The start date cannot be earlier than the configured time.'));
             return false;
         } else {
             dtStartField.clearInvalid();

@@ -76,7 +76,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: false,
                         name: 'email',
                         vtype: 'email',
-                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though.')})]
+                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('The email address of the resource is required to identify it in external calendar applications and synchronized devices. Therefore, the email address must be unique. However, it does not need to be a valid, existing address.')})]
                     },  new Tine.Tinebase.widgets.keyfield.ComboBox({
                         app: 'Calendar',
                         keyFieldName: 'resourceTypes',

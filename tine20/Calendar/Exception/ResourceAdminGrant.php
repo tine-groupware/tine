@@ -21,7 +21,7 @@ class Calendar_Exception_ResourceAdminGrant extends Calendar_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'The right Resource Admin must be set once.'; //_('The right Resource Admin must be set once.')
+    protected $message = 'The correct Resource Admin must be set once.'; //_('The correct Resource Admin must be set once.')
 
     /**
      * @see SPL Exception

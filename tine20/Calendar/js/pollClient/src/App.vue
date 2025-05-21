@@ -28,8 +28,8 @@
           <div class="col-md-6 col-sm-12 greetings-text">
             <p>
               <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
-              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This is a closed poll. No Attendee can be added.')}}</span>
-              <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is closed already')}}</span>
+              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This poll is closed. No attendees can be added.')}}</span>
+              <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is already closed.')}}</span>
             </p>
           </div>
           <div class="col-md-6 col-sm-12 text-end">
@@ -135,7 +135,7 @@
       <div>
         <b-modal ref="linkInfo" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
           <p>{{formatMessage('Use your personal link please.')}}</p>
-          <p>{{formatMessage('We have sent it to your E-Mail account again.')}}</p>
+          <p>{{formatMessage('We have sent it to your email address again.')}}</p>
           <p>{{formatMessage('If you did not receive the link, please contact the organiser.')}}</p>
         </b-modal>
       </div>
