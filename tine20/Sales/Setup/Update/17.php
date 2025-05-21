@@ -58,6 +58,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE037 = __CLASS__ . '::update037';
     protected const RELEASE017_UPDATE038 = __CLASS__ . '::update038';
     protected const RELEASE017_UPDATE039 = __CLASS__ . '::update039';
+    protected const RELEASE017_UPDATE040 = __CLASS__ . '::update040';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -211,6 +212,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE039 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update039',
+            ],
+            self::RELEASE017_UPDATE040 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update040',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -1091,5 +1096,22 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.39', self::RELEASE017_UPDATE039);
+    }
+
+    public function update040(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_EDocument_VATEX::class,
+            Sales_Model_EDocument_VATEXLocalization::class,
+        ]);
+
+        Sales_Setup_Initialize::initializeEDocumentVATEX();
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.40', self::RELEASE017_UPDATE040);
     }
 }

@@ -173,7 +173,16 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_SALES_TAX_RATE => 0,
             ], true),
         ];
-        $invoice = $this->_createInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE]);
+        $customer = $this->_createCustomer();
+        try {
+            $this->_createInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_NON_TAXABLE], customer: $customer);
+            $this->fail('expect system generic exception thrown');
+        } catch (Tinebase_Exception_SystemGeneric) {}
+
+        $invoice = $this->_createInvoice($positions, [
+                SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_NON_TAXABLE,
+                SMDI::FLD_VATEX_ID => Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-132')->getId(),
+            ], customer: $customer);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);

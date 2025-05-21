@@ -88,6 +88,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
         $this->_inspectDefaultBoilerplates($_record);
 
+        $this->_inspectVAT($_record);
+
         parent::_inspectBeforeCreate($_record);
 
         // important! after _inspectDenormalization in parent::_inspectBeforeCreate
@@ -95,6 +97,15 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
 
         $this->_inspectServicePeriod($_record);
+    }
+
+    protected function _inspectVAT(Sales_Model_Document_Abstract $_record): void
+    {
+        if ($_record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) && Sales_Config::VAT_PROCEDURE_TAXABLE !==
+                $_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} && empty($_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID})) {
+            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_(
+                'For non-standard VAT procedures an exemption reason needs to be provided'));
+        }
     }
 
     protected function _inspectAutoCreateValues(Sales_Model_Document_Abstract $document): void
@@ -282,6 +293,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         if ($_record->isBooked()) {
             $this->_inspectBeforeForBookedRecord($_record, $_oldRecord);
         }
+
+        $this->_inspectVAT($_record);
 
         // lets check if positions got removed and if that would affect our precursor documents
         if (null !== $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS}) {

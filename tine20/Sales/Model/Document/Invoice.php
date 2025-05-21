@@ -576,7 +576,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 )
                 ->setTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                    ->setTaxExemptionReasonCode($taxId === 'AE' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-AE') : ($taxId === 'G' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-G'): null))
+                    ->setTaxExemptionReasonCode($taxId === 'S' ? null : new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode($this->{self::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE}))
                     ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))

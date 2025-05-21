@@ -67,6 +67,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_NET_SUM = 'net_sum';
     public const FLD_VAT_PROCEDURE = 'vat_procedure';
+    public const FLD_VATEX_ID = 'vatex_id';
     public const FLD_SALES_TAX = 'sales_tax';
     public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
 
@@ -194,6 +195,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::FLD_CONTACT_ID => [],
                 self::FLD_BOILERPLATES => [],
+                self::FLD_VATEX_ID => [],
             ]
         ],
 
@@ -446,10 +448,19 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::READ_ONLY                     => true,
                 ],
             ],
-            self::FLD_VAT_PROCEDURE => [
-                self::LABEL => 'VAT Procedure', // _('VAT Procedure')
-                self::TYPE => self::TYPE_KEY_FIELD,
-                self::NAME => Sales_Config::VAT_PROCEDURES,
+            self::FLD_VAT_PROCEDURE             => [
+                self::LABEL                         => 'VAT Procedure', // _('VAT Procedure')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::VAT_PROCEDURES,
+            ],
+            self::FLD_VATEX_ID                  => [
+                self::LABEL                         => 'VAT Exemption', // _('VAT Exemption')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::NULLABLE                      => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_EDocument_VATEX::MODEL_NAME_PART,
+                ],
             ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
