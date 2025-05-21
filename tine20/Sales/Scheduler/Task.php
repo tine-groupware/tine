@@ -55,7 +55,7 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
         self::_addTaskIfItDoesNotExist(
             Sales_Controller_Invoice::class,
             'createAutoInvoicesTask',
-            '30 8 1 * * ',
+            '55 5 2-31 * *',
             $_scheduler,
             'createAutoInvoicesDailyTask'
         );
@@ -85,7 +85,7 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
         self::_addTaskIfItDoesNotExist(
             Sales_Controller_Invoice::class,
             'createAutoInvoicesTask',
-            '55 5 2-31 * *',
+            '0 8 1 * *',
             $_scheduler,
             'createAutoInvoicesMonthlyTask'
         );
