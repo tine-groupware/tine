@@ -262,7 +262,7 @@ class Tinebase_Scheduler_Task
             // use a temp file for the writer
             $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'schedular_task');
             $writer = new Zend_Log_Writer_Stream($tmpPath);
-            $priority = $this->_config['loglevel'] ?? 6;
+            $priority = $this->_config['loglevel'] ?? 5;
             $writer->addFilter(new Zend_Log_Filter_Priority($priority));
             Tinebase_Core::getLogger()->addWriter($writer);
         } else {
@@ -273,6 +273,11 @@ class Tinebase_Scheduler_Task
         try {
             $result = call_user_func_array($classMethod, $callable[self::ARGS] ?? []);
             if ($sendNotification) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Task ' . $taskName . ' has been executed ' . ($result ? 'successfully' : 'with a failure'));
+                };
                 $notificationBody = file_get_contents($tmpPath);
                 // send the file contents as notification to configured email
                 $this->_sendNotification($callable, $notificationBody);
@@ -320,7 +325,8 @@ class Tinebase_Scheduler_Task
             
             $subject = $taskName . ' notification';
             $messageBody = "$subject: \n\n" . print_r($infoData, true);
-            
+            $messageBody = mb_substr($messageBody, 0, 1048576); // limit body size to 1 MB
+
             foreach ($emails as $recipient) {
                 $contact = [new Addressbook_Model_Contact(['email' => $recipient], true)];
                 Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $contact, $subject, $messageBody);
