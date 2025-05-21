@@ -150,7 +150,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
-                        emptyText: this.app.i18n._('Enter description...'),
+                        emptyText: this.app.i18n._('Enter a description'),
                         name: 'description',
                         xtype: 'textarea',
                         height: 200

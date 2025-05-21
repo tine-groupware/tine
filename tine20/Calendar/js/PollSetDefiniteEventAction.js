@@ -17,7 +17,7 @@ Tine.Calendar.eventActions.setDefiniteEventAction = {
     app: 'Calendar',
     requiredGrant: 'editGrant',
     allowMultiple: false,
-    text: 'Set as a definite event', // _('Set as definite event')
+    text: 'Set as a definite event', // _('Set as a definite event')
     disabled: true,
     iconCls: 'cal-polls-set-definite-action',
     scope: this,

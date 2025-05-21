@@ -37,43 +37,43 @@ msgid "Create new shared calendars"
 msgstr "Neuen gemeinsamen Kalender anlegen"
 
 msgid "manage shared calendar favorites"
-msgstr ""
+msgstr "Gemeinsame Kalender-Favoriten verwalten"
 
 msgid "Create or update shared calendar favorites"
-msgstr ""
+msgstr "Gemeinsame Kalender-Favoriten erstellen oder bearbeiten"
 
 msgid "manage resources"
 msgstr "Ressourcen verwalten"
 
 msgid "Full rights to administrate resources"
-msgstr ""
+msgstr "Alle Rechte um Ressourcen zu Administrieren"
 
 msgid "manage event types"
 msgstr "Terminarten verwalten"
 
 msgid "Right to manage event types"
-msgstr ""
+msgstr "Das Recht Terminarten zu verwalten"
 
 msgid "You can only apply one grants filter at a time."
-msgstr ""
+msgstr "Es kann nicht mehr als einen Rechtefilter geben"
 
 msgid "Fixed Calendars"
 msgstr "Feste Kalender"
 
 msgid "Calendars always selected regardless of all filter parameters. A valid use case could be to force the display of an certain holiday calendar."
-msgstr ""
+msgstr "Kalender, die immer angezeigt werden sollen. Ein Beispiel dafür ist ein Schulferien-Kalender."
 
 msgid "Crop Days"
 msgstr "Tage begrenzen"
 
 msgid "Crop the calendar view to the configured start and end time."
-msgstr ""
+msgstr "Konfigurierte Start- und Endzeit der begrenzten Kalenderansicht."
 
 msgid "Crop Days Limit Override"
 msgstr "Begrenzte Kalenderansicht überschreiten"
 
 msgid "Allow events outside the defined start and end times."
-msgstr ""
+msgstr "Erlaube Termin außerhalb der definierten Start- und Endzeit."
 
 msgid "Week View Mouse Wheel Increment"
 msgstr "Wochenansicht Mausrad Inkrement"
@@ -90,10 +90,10 @@ msgid "Organizer"
 msgstr "Organisator*in"
 
 msgid "Available Event Statuses"
-msgstr ""
+msgstr "Verfügbare Terminstatus"
 
-msgid "Possible Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization."
-msgstr ""
+msgid "Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization."
+msgstr "Verfügbare Terminstatus. Bitte beachten sie, dass zusätzliche Termin Status andere Kalender-System bei Exports oder Synchronisation beeinträchtigen können."
 
 msgid "Confirmed"
 msgstr "Bestätigt"
@@ -105,10 +105,10 @@ msgid "Canceled"
 msgstr "Entfällt"
 
 msgid "Available Event Classes"
-msgstr ""
+msgstr "Verfügbare Termin Klassifikationen"
 
-msgid "Possible Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization."
-msgstr ""
+msgid "Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization."
+msgstr "Verfügbare Termin Klassifikationen. Bitte beachten sie, dass zusätzliche Termin Klassifikationen andere Kalender-System bei Exports oder Synchronisation beeinträchtigen können."
 
 msgid "Public"
 msgstr "Öffentlich"
@@ -120,10 +120,10 @@ msgid "Confidential"
 msgstr "Vertraulich"
 
 msgid "Available Event Transparencies"
-msgstr ""
+msgstr "Verfügbare Termindurchsichtigkeit"
 
-msgid "Possible Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization."
-msgstr ""
+msgid "Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization."
+msgstr "Verfügbare Termindurchsichtigkeiten. Bitte beachten Sie, dass zusätzliche Einstellungen zur Termindurchsichtigkeit andere Kalendersysteme bei Export oder Synchronisation beeinträchtigen können."
 
 msgid "Transparent"
 msgstr "Transparent"
@@ -132,10 +132,10 @@ msgid "Opaque"
 msgstr "Undurchsichtig"
 
 msgid "Available Attendee Statuses"
-msgstr ""
+msgstr "Verfügbare Status der Teilnehmer*innen"
 
-msgid "Possible Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization."
-msgstr ""
+msgid "Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization."
+msgstr "Verfügbare Status der Teilnehmer*innen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
 msgid "No response"
 msgstr "Keine Antwort"
@@ -147,10 +147,10 @@ msgid "Declined"
 msgstr "Abgesagt"
 
 msgid "Available Attendee Roles"
-msgstr ""
+msgstr "Verfügbare Rollen für Teilnehmer*innen"
 
-msgid "Possible Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization."
-msgstr ""
+msgid "Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization."
+msgstr "Verfügbare Rollen für Teilnehmer*innen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
 
 msgid "Required"
 msgstr "Erforderlich"
@@ -162,9 +162,9 @@ msgid "Organizer has implicit edit grant"
 msgstr "Organisator*in hat implizites Bearbeiten Recht"
 
 msgid "Available Resource Types"
-msgstr ""
+msgstr "Verfügbare Ressourcen Typen"
 
-msgid "Possible Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization."
+msgid "Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization."
 msgstr "Verfügbare Ressourcen Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
 
 msgid "Resource"
@@ -206,9 +206,9 @@ msgid "Travel"
 msgstr "Reise"
 
 msgid "Available Free/Busy Types"
-msgstr ""
+msgstr "Verfügbare Frei/Belegt Typen"
 
-msgid "Possible Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization."
+msgid "Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization."
 msgstr "Mögliche Frei/Belegt Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
 
 msgid "Free"
@@ -769,7 +769,7 @@ msgid "Update status for all attendees?"
 msgstr ""
 
 msgid "You are about to change the status of the event itself, not just your own. Do you really want to change the event status for all attendees?"
-msgstr ""
+msgstr "Sie sind dabei, den Status des gesamten Termins (nicht nur Ihren eigenen) zu ändern. Möchten Sie wirklich den Status für alle Teilnehmenden ändern?"
 
 msgid "non-blocking"
 msgstr "nicht-blockierend"
@@ -778,7 +778,7 @@ msgid "Description"
 msgstr "Beschreibung"
 
 msgid "Enter a description"
-msgstr ""
+msgstr "Bitte geben Sie eine Beschreibung an"
 
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen werden unterdrückt"
@@ -919,7 +919,7 @@ msgid "The event of this message does not exist"
 msgstr "Der Termin von dieser Nachricht existiert nicht"
 
 msgid "The sender is not authorized to update the event"
-msgstr ""
+msgstr "Der Absendende ist nicht berechtigt, den Termin zu aktualisieren."
 
 msgid "This message has already been processed."
 msgstr "Diese Nachricht wurde bereits verarbeitet"
@@ -1040,7 +1040,7 @@ msgid "Update Existing Events"
 msgstr "Existierende Termine aktualisieren"
 
 msgid "Update already existing events"
-msgstr ""
+msgstr "Erzwinge Aktualisierung existierender Termine"
 
 msgid "Force Update for Existing Events"
 msgstr "Erzwinge Aktualisierung existierender Termine"
@@ -1061,10 +1061,10 @@ msgid "Import only basic data (i.e., without attendees, alarms, UID, ...)."
 msgstr "Nur Basis-Daten (ohne Alarme, Teilnehmende, ...) importieren"
 
 msgid "Add Attendee to Import Data"
-msgstr ""
+msgstr "Teilnehmende Person zu den Importdaten hinzufügen"
 
 msgid "Ignore Import Data and Replace Attendee"
-msgstr ""
+msgstr "Teilnehmende Person ersetzen und Importdaten ignorieren"
 
 msgid "Keep Existing Attendee"
 msgstr "Vorhandene Teilnehmende beibehalten"
@@ -1073,7 +1073,7 @@ msgid "Do not remove attendees from existing events that are not in the import d
 msgstr "Teilnehmende nicht entfernen, wenn sie nicht in den Importdaten enthalten sind"
 
 msgid "Force Organizer for new Events"
-msgstr ""
+msgstr "Organisator*in für neue Termine erzwingen"
 
 #, python-brace-format
 msgid "Importing {0}"
@@ -1129,7 +1129,7 @@ msgid "Paste event \"{0}\""
 msgstr "Event \"{0}\" einfügen"
 
 msgid "Set as a definite event"
-msgstr ""
+msgstr "Definitiven Termin festlegen"
 
 msgid "Set my response"
 msgstr "Meine Antwort setzen"
@@ -1221,9 +1221,6 @@ msgstr "Diese Aktion abbrechen"
 
 msgid "Update Status for all Attendee?"
 msgstr "Status für alle Teilnehmenden ändern?"
-
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
-msgstr "Sie sind dabei, den Gesamtterminstatus (nicht nur Ihren eigenen) zu ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
 
 msgid "Attender"
 msgid_plural "Attendee"
@@ -1541,9 +1538,6 @@ msgstr "Sie müssen exakt einen Termin als definitiven Termin auswählen."
 msgid "Setting definite event"
 msgstr "Setze den definitiven Termin"
 
-msgid "Set as definite event"
-msgstr "Definitiven Termin festlegen"
-
 msgid "Set this date as the definite event?"
 msgstr "Dieses Datum als definitiven Termin festlegen?"
 
@@ -1568,9 +1562,6 @@ msgstr "Benachrichtigungen unterdrücken"
 
 msgid "Color"
 msgstr "Farbe"
-
-msgid "Enter description..."
-msgstr "Bitte geben Sie eine Beschreibung an."
 
 msgid "Grants"
 msgstr "Zugriffsrechte"
@@ -2020,6 +2011,33 @@ msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
 
 msgid "You can review the poll results here:"
 msgstr "Sie können die Umfrageergebnisse hier einsehen:"
+
+#~ msgid "Set as definite event"
+#~ msgstr "Definitiven Termin festlegen"
+
+#~ msgid "Enter description..."
+#~ msgstr "Bitte geben Sie eine Beschreibung an."
+
+#~ msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
+#~ msgstr "Sie sind dabei, den Gesamtterminstatus (nicht nur Ihren eigenen) zu ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
+
+#~ msgid "Possible Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization."
+#~ msgstr "Verfügbare Terminstatus. Bitte beachten sie, dass zusätzliche Termin Status andere Kalender-System bei Exports oder Synchronisation beeinträchtigen können."
+
+#~ msgid "Possible Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization."
+#~ msgstr "Verfügbare Termin Klassifikationen. Bitte beachten sie, dass zusätzliche Termin Klassifikationen andere Kalender-System bei Exports oder Synchronisation beeinträchtigen können."
+
+#~ msgid "Possible Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization."
+#~ msgstr "Verfügbare Termindurchsichtigkeiten. Bitte beachten Sie, dass zusätzliche Einstellungen zur Termindurchsichtigkeit andere Kalendersysteme bei Export oder Synchronisation beeinträchtigen können."
+
+#~ msgid "Possible Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization."
+#~ msgstr "Verfügbare Status der Teilnehmer*innen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+
+#~ msgid "Possible Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization."
+#~ msgstr "Verfügbare Ressourcen Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
+
+#~ msgid "Possible Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization."
+#~ msgstr "Mögliche Frei/Belegt Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
 
 #~ msgid "This contact has been automatically added by the system as an event attender"
 #~ msgstr "Dieser Kontakt wurde automatisch bei der Synchronisation angelegt"

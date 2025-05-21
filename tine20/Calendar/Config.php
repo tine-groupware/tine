@@ -338,8 +338,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::EVENT_STATUS => [
             //_('Available Event Statuses')
             'label'                 => 'Available Event Statuses',
-            //_('Possible Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization.')
-            'description'           => 'Possible Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization.',
+            //_('Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -355,8 +355,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::EVENT_CLASSES => [
             //_('Available Event Classes')
             'label'                 => 'Available Event Classes',
-            //_('Possible Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization.')
-            'description'           => 'Possible Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization.',
+            //_('Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -372,8 +372,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::EVENT_TRANSPARENCIES => [
             //_('Available Event Transparencies')
             'label'                 => 'Available Event Transparencies',
-            //_('Possible Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization.')
-            'description'           => 'Possible Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization.',
+            //_('Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -388,8 +388,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::ATTENDEE_STATUS => array(
                                    //_('Available Attendee Statuses')
             'label'                 => 'Available Attendee Statuses',
-                                   //_('Possible Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization.')
-            'description'           => 'Possible Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization.',
+                                   //_('Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
             'clientRegistryInclude' => TRUE,
@@ -407,8 +407,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::ATTENDEE_ROLES => array(
                                    //_('Available Attendee Roles')
             'label'                 => 'Available Attendee Roles',
-                                   //_('Possible Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization.')
-            'description'           => 'Possible Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization.',
+                                   //_('Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => Calendar_Model_AttendeeRole::class),
             'clientRegistryInclude' => TRUE,
@@ -434,8 +434,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::RESOURCE_TYPES => array(
             //_('Available Resource Types')
             'label'                 => 'Available Resource Types',
-            //_('Possible Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization.')
-            'description'           => 'Possible Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization.',
+            //_('Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization.')
+            'description'           => 'Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => Calendar_Model_ResourceType::class),
             'clientRegistryInclude' => TRUE,
@@ -461,8 +461,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::FREEBUSY_TYPES => array(
             //_('Available Free/Busy Types')
             'label'                 => 'Available Free/Busy Types',
-            //_('Possible Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization.')
-            'description'           => 'Possible Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization.',
+            //_('Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization.')
+            'description'           => 'Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,

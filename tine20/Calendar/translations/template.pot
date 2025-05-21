@@ -75,7 +75,7 @@ msgstr ""
 msgid "Available Event Statuses"
 msgstr ""
 
-msgid "Possible Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization."
+msgid "Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Confirmed"
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Available Event Classes"
 msgstr ""
 
-msgid "Possible Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization."
+msgid "Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Public"
@@ -105,7 +105,7 @@ msgstr ""
 msgid "Available Event Transparencies"
 msgstr ""
 
-msgid "Possible Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization."
+msgid "Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Transparent"
@@ -117,7 +117,7 @@ msgstr ""
 msgid "Available Attendee Statuses"
 msgstr ""
 
-msgid "Possible Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization."
+msgid "Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "No response"
@@ -132,7 +132,7 @@ msgstr ""
 msgid "Available Attendee Roles"
 msgstr ""
 
-msgid "Possible Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization."
+msgid "Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Required"
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Available Resource Types"
 msgstr ""
 
-msgid "Possible Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization."
+msgid "Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Resource"
@@ -191,7 +191,7 @@ msgstr ""
 msgid "Available Free/Busy Types"
 msgstr ""
 
-msgid "Possible Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization."
+msgid "Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Free"
@@ -1205,9 +1205,6 @@ msgstr ""
 msgid "Update Status for all Attendee?"
 msgstr ""
 
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
-msgstr ""
-
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] ""
@@ -1524,9 +1521,6 @@ msgstr ""
 msgid "Setting definite event"
 msgstr ""
 
-msgid "Set as definite event"
-msgstr ""
-
 msgid "Set this date as the definite event?"
 msgstr ""
 
@@ -1550,9 +1544,6 @@ msgid "Suppress notification"
 msgstr ""
 
 msgid "Color"
-msgstr ""
-
-msgid "Enter description..."
 msgstr ""
 
 msgid "Grants"
