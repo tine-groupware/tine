@@ -278,7 +278,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Company Address', // _('Company Address')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 1,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'record',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
             Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
                 'businessAddressCity' => 'adr_one.locality',
@@ -305,7 +305,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Private Address', // _('Private Address')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 2,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'record',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
             Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
@@ -330,7 +330,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 10,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Email::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
             Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
                 'email1Address' => 'email',
@@ -344,7 +344,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 15,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Email::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
             Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
@@ -359,7 +359,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 30,
             Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Phone', // _('Phone')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
         ]));
 
@@ -370,7 +370,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 35,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
         ]));
@@ -382,7 +382,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 20,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CELL', 'WORK']],
         ]));
 
@@ -393,7 +393,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 25,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CELL', 'HOME']],
         ]));
@@ -405,7 +405,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 40,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['FAX', 'WORK']],
         ]));
 
@@ -416,7 +416,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 45,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['FAX', 'HOME']],
         ]));
@@ -428,7 +428,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 50,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Url::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
         ]));
 
@@ -439,7 +439,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 55,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Url::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
         ]));
@@ -451,7 +451,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 29,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_InstantMessenger::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
         ]));
 
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
@@ -461,7 +461,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 60,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['X-EVOLUTION-ASSISTANT']],
         ]));
         
@@ -472,7 +472,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 65,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CAR']],
         ]));
         
@@ -483,7 +483,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 70,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['PAGER']],
         ]));
         
@@ -494,7 +494,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 75,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['X-EVOLUTION-CALLBACK']],
         ]));
         
@@ -505,7 +505,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 80,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
-            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['PREF']],
         ]));
 

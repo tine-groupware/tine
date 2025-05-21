@@ -92,7 +92,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
                                                    Addressbook_Model_ContactProperties_Definition $def): void
     {
         switch ($def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE}) {
-            case 'inline':
+            case Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE:
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE                      => self::TYPE_STRING,
                     self::LENGTH                    => 255,
@@ -107,7 +107,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
                     $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
                 }
                 break;
-            case 'records':
+            case  Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORDS:
                 /*$cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE => self::TYPE_RECORD,
                     self::CONFIG => [
@@ -120,7 +120,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
                     $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
                 }
                 break;*/
-            case 'record':
+            case  Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD:
             default:
                 throw new Tinebase_Exception_NotImplemented(
                     $def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE} . ' is not implemented');
