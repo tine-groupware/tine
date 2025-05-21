@@ -11,12 +11,15 @@
 <script setup>
 import { computed, onBeforeMount, ref, inject } from 'vue'
 import { useElementSize } from '@vueuse/core'
+import { BPopover } from 'bootstrap-vue-next'
 
 const props = defineProps({
   record: Object,
   truncate: { type: Boolean, default: false },
   maxDisplayLength: { type: Number, default: 30 },
-  minDisplayLength: { type: Number, default: 10 }
+  minDisplayLength: { type: Number, default: 10 },
+  id: { type: String, required: true },
+  showPopover: { type: Boolean, default: false }
 })
 
 const recordRenderer = inject('recordRenderer')
@@ -26,8 +29,8 @@ const emits = defineEmits(['remove'])
 const displayTitle = computed(() => {
   const t = title.value
   return props.truncate
-    ? t?.length < props.minDisplayLength ? t : t.substring(0, props.minDisplayLength).trim().concat('...')
-    : t?.length < props.maxDisplayLength ? t : t.substring(0, props.maxDisplayLength).trim().concat('...')
+    ? t?.length <= props.minDisplayLength ? t : t.substring(0, props.minDisplayLength).trim()
+    : t?.length <= props.maxDisplayLength ? t : t.substring(0, props.maxDisplayLength).trim()
 })
 
 const title = ref('')
@@ -53,9 +56,29 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="containerRef" class="record d-flex text-nowrap" @click.stop>
-    <div class="flex-grow-1">{{displayTitle}}&nbsp;&nbsp;</div>
-    <div class="remove-record" @click.stop="emits('remove')">X</div>
+  <div ref="containerRef" class="record d-flex" @click.stop :id="`${id}-record-div`">
+    <div class="flex-grow-1">
+      {{showPopover ? displayTitle : title}}
+    </div>
+    <div
+      v-if="showPopover && title.length > (truncate ? minDisplayLength : maxDisplayLength)"
+      class="tabler-icons-dots"
+    />
+    <div class="remove-record ms-1 tabler-icons-cross" @click.stop="emits('remove')"/>
+    <BPopover
+      v-if="showPopover && title.length > (truncate ? minDisplayLength : maxDisplayLength)"
+      :target="`${id}-record-div`"
+      click
+      realtime
+      placement="top"
+      container="body"
+      class="bootstrap-scope"
+      :delay="0"
+    >
+      <div class="record d-flex" @click.stop>
+        <div class="flex-grow-1">{{title}}&nbsp;&nbsp;</div>
+      </div>
+    </BPopover>
   </div>
 </template>
 
@@ -70,10 +93,31 @@ defineExpose({
   margin-right: 2px;
   margin-left: 2px;
   cursor: pointer;
+  margin-top: 1px;
 }
 
 .record:active{
   background-color: #0062a7;
+}
+
+.tabler-icons-dots {
+  background-image: url(../../../node_modules/@tabler/icons/icons/outline/dots.svg) !important;
+  width: 15px;
+  height: 13px;
+  background-repeat: no-repeat;
+  background-size: 13px 13px;
+  background-position: center !important;
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.tabler-icons-cross {
+  background-image: url(../../../node_modules/@tabler/icons/icons/outline/x.svg) !important;
+  width: 13px;
+  height: 13px;
+  background-repeat: no-repeat;
+  background-size: 13px 13px;
+  background-position: center !important;
+  filter: invert(1) hue-rotate(180deg);
 }
 
 </style>
