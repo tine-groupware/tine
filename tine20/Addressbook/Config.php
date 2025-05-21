@@ -149,6 +149,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
 
     const INSTALLATION_REPRESENTATIVE = 'installationRepresentative';
 
+    CONST CONTACT_PROPERTY_LINK_TYPES = 'contactPropertyLinkTypes';
+
     /**
      * (FEATURE_LIST_VIEW-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -272,6 +274,34 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'default'               => 'disabled'
         ),
+        self::CONTACT_PROPERTY_LINK_TYPES => [
+            self::LABEL              => 'Contact Property Link Types', //_('Contact Property Link Types')
+            self::DESCRIPTION        => 'Contact Property Link Types', //_('Contact Property Link Types')
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_INLINE,
+                        'value' => 'Inline', //_('Inline')
+                        'icon' => null,
+                        'system' => true
+                    ], [
+                        'id' => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+                        'value' => 'Record', //_('Record)
+                        'icon' => null,
+                        'system' => true
+                    ], [
+                        'id' => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORDS,
+                        'value' => 'Records', //_('Records')
+                        'icon' => null,
+                        'system' => true
+                    ],
+                ],
+            ],
+        ],
         self::CONTACT_TYPES => [
             self::LABEL                 => 'Contact types available', // _('Contact types available')
             self::DESCRIPTION           => 'Possible contact types', // _('Possible contact types')
