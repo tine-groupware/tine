@@ -132,13 +132,15 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
             ],
             self::FLD_LINK_TYPE                 => [
                 self::LABEL                         => 'Link Type', // _('Link Type')
-                self::TYPE                          => self::TYPE_STRING,
-                self::SHY                           => true,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Addressbook_Config::CONTACT_PROPERTY_LINK_TYPES,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                     [Zend_Validate_InArray::class, [self::LINK_TYPE_INLINE, self::LINK_TYPE_RECORD, self::LINK_TYPE_RECORDS]],
+
                 ],
+                self::SHY                           => true,
             ],
             self::FLD_GRANT_MATRIX              => [
                 self::LABEL                         => 'Grant Matrix', // _('Grant Matrix')
