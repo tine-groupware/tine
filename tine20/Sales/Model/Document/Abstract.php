@@ -919,13 +919,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $tax = round($salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
                             $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
                             $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} )), 2);
-                    if ($tax) {
-                        $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                            self::TAX_RATE => $taxRate,
-                            self::TAX_SUM => $tax,
-                            self::NET_SUM => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
-                        ];
-                    }
+                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                        self::TAX_RATE => $taxRate,
+                        self::TAX_SUM => $tax,
+                        self::NET_SUM => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
+                    ];
                     return $carry + $tax;
                 }, 0) : 0;
             $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
@@ -937,13 +935,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         round(($netSum = round(($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
                             $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}), 2))
                         * $taxRate / 100, 2);
-                    if ($tax) {
-                        $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                            self::TAX_RATE => $taxRate,
-                            self::TAX_SUM => $tax,
-                            self::NET_SUM => $netSum,
-                        ];
-                    }
+                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                        self::TAX_RATE => $taxRate,
+                        self::TAX_SUM => $tax,
+                        self::NET_SUM => $netSum,
+                    ];
                     return $carry + $tax;
                 }, 0) : 0;
 
