@@ -614,6 +614,11 @@ class Setup_Controller
         // application / application_state tables
         // NOTE: this function, this code here will be executed every time somebody does update
 
+        // update numberables (we might have numberables in user or addressbook models...)
+        if (! $this->_backend->tableExists(Tinebase_Model_NumberableConfig::TABLE_NAME)) {
+            $update17 = new Tinebase_Setup_Update_17($this->_backend);
+            $update17->update003();
+        }
     }
 
     /**
@@ -675,7 +680,7 @@ class Setup_Controller
             $classes = [self::class => $this];
 
             try {
-                $this->_prepareUpdate(Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly(), $options['skipQueueCheck']);
+                $this->_prepareUpdate($user, $options['skipQueueCheck']);
 
                 foreach ($updatesByPrio as $prio => $updates) {
                     foreach ($updates as $update) {
