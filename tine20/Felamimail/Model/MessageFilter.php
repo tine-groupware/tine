@@ -46,21 +46,15 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'query'         => array(
             'filter'        => Tinebase_Model_Filter_Query::class,
             'options'       => array(
-                'fields' => array('subject', 'from_email_ft', 'from_name_ft', 'to_list', 'cc_list', 'bcc_list'),
+                'fields' => array('aggregated_data'),
                 'modelName' => Felamimail_Model_Message::class,
-                'ignoreFullTextConfig' => true,
             )
         ),
         'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'subject'       => array('filter' => Tinebase_Model_Filter_FullText::class),
+        'aggregated_data'=> array('filter' => Tinebase_Model_Filter_Text::class),
+        'subject'       => array('filter' => Tinebase_Model_Filter_Text::class),
         'from_email'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'from_email_ft' => array('filter' => Tinebase_Model_Filter_FullText::class, 'options' => [
-            'field'         => 'from_email',
-        ]),
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'from_name_ft'  => array('filter' => Tinebase_Model_Filter_FullText::class, 'options' => [
-            'field'         => 'from_name',
-        ]),
         'received'      => array('filter' => Tinebase_Model_Filter_DateTime::class),
         'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
         'message_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -69,11 +63,11 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     // custom filters
         'path'          => array('custom' => true),
         'to'            => array('filter' => Felamimail_Model_RecipientFilter::class),
-        'to_list'       => array('filter' => Tinebase_Model_Filter_FullText::class),
+        'to_list'       => array('filter' => Tinebase_Model_Filter_Text::class),
         'cc'            => array('filter' => Felamimail_Model_RecipientFilter::class),
-        'cc_list'       => array('filter' => Tinebase_Model_Filter_FullText::class),
+        'cc_list'       => array('filter' => Tinebase_Model_Filter_Text::class),
         'bcc'           => array('filter' => Felamimail_Model_RecipientFilter::class),
-        'bcc_list'      => array('filter' => Tinebase_Model_Filter_FullText::class),
+        'bcc_list'      => array('filter' => Tinebase_Model_Filter_Text::class),
         'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_msg_flag.flag')),
         'account_id'    => array('custom' => true),
         'tag'           => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(

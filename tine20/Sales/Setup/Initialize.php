@@ -99,6 +99,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
     {
         self::initializeEDocumentEAS();
         self::initializeEDocumentPaymentMeansCode();
+        self::initializeEDocumentVATEX();
     }
 
     public static function initializeEDocumentEAS(): void
@@ -110,6 +111,53 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 Sales_Model_EDocument_EAS::FLD_CODE => $eas[0],
                 Sales_Model_EDocument_EAS::FLD_REMARK => $eas[2],
             ]));
+        }
+    }
+
+    public static function initializeEDocumentVATEX(): void
+    {
+        static::_importVatExData(json_decode(file_get_contents(__DIR__ . '/VATEX_1.json'), true), 'en');
+        static::_importVatExData(json_decode(file_get_contents(__DIR__ . '/VATEX_1_DE.json'), true), 'de');
+    }
+
+    protected static function _importVatExData(array $vatexData, string $lang): void
+    {
+        $vatexCtrl = Sales_Controller_EDocument_VATEX::getInstance();
+        foreach ($vatexData['daten'] as $row) {
+            if (null === ($vatex = $vatexCtrl->getByCode($row[0]))) {
+                $vatexCtrl->create(new Sales_Model_EDocument_VATEX([
+                    Sales_Model_EDocument_VATEX::FLD_CODE => $row[0],
+                    Sales_Model_EDocument_VATEX::FLD_NAME => [[
+                        Sales_Model_EDocument_VATEXLocalization::FLD_LANGUAGE => $lang,
+                        Sales_Model_EDocument_VATEXLocalization::FLD_TEXT => $row[1],
+                    ]],
+                    Sales_Model_EDocument_VATEX::FLD_DESCRIPTION => [[
+                        Sales_Model_EDocument_VATEXLocalization::FLD_LANGUAGE => $lang,
+                        Sales_Model_EDocument_VATEXLocalization::FLD_TEXT => $row[2],
+                    ]],
+                    Sales_Model_EDocument_VATEX::FLD_REMARK => array_merge([], $row[3] ? [[
+                        Sales_Model_EDocument_VATEXLocalization::FLD_LANGUAGE => $lang,
+                        Sales_Model_EDocument_VATEXLocalization::FLD_TEXT => $row[3],
+                    ]] : []),
+                ]));
+            } else {
+                Tinebase_Record_Expander::expandRecord($vatex);
+                foreach ([
+                             Sales_Model_EDocument_VATEX::FLD_NAME => 1,
+                             Sales_Model_EDocument_VATEX::FLD_DESCRIPTION => 2,
+                             Sales_Model_EDocument_VATEX::FLD_REMARK => 3,
+                         ] as $property => $offset) {
+                    if (null === ($text = $vatex->{$property}->find(Sales_Model_EDocument_VATEXLocalization::FLD_LANGUAGE, $lang))) {
+                        $vatex->{$property}->addRecord(new Sales_Model_EDocument_VATEXLocalization([
+                            Sales_Model_EDocument_VATEXLocalization::FLD_LANGUAGE => $lang,
+                            Sales_Model_EDocument_VATEXLocalization::FLD_TEXT => $row[$offset],
+                        ], true));
+                    } else {
+                        $text->{Sales_Model_EDocument_VATEXLocalization::FLD_TEXT} = $row[$offset];
+                    }
+                }
+                $vatexCtrl->update($vatex);
+            }
         }
     }
 

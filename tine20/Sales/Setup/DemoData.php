@@ -418,7 +418,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'url' => 'https://www.elko-elektronik.de',
                 'discount' => 0,
                 'name_shorthand' => 'ELKO',
-                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_STANDARD,
                 'vatid' => 'DE456789123',
                 'debitor' => [
                     Sales_Model_Debitor::FLD_NAME => 'ELKO Elektronik und Söhne',
@@ -439,7 +439,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'url' => 'https://www.platt-reifen.de',
                 'discount' => 0,
                 'name_shorthand' => 'PLATT',
-                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_STANDARD,
                 'vatid' => 'DE567891234',
                 'debitor' => [
                     Sales_Model_Debitor::FLD_NAME => 'Reifenlieferant Gebrüder Platt',
@@ -457,7 +457,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'url' => 'https://www.frische-fische-hamburg.de',
                 'discount' => 15.2,
                 'name_shorthand' => 'FrischeFische',
-                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_STANDARD,
                 'vatid' => 'DE678912345',
                 'debitor' => [
                     Sales_Model_Debitor::FLD_NAME => 'Frische Fische Gmbh & Co. KG',

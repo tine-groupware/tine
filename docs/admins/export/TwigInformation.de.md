@@ -30,7 +30,8 @@ Werte von Feldern können Objekte wie Datum und Uhrzeit (`Tinebase_DateTime`) Da
 
 Funktionen
 ---
-Neben den im Twig Standard enthaltenen [Funktionen](https://twig.symfony.com/doc/2.x/functions/index.html) sind folgende spezielle Funktionen verfügbar:
+Neben den im Twig Standard enthaltenen [Funktionen](https://twig.symfony.com/doc/2.x/functions/index.html) sind folgende spezielle Funktionen verfügbar:  
+*Wir versuchen diese Dokumentation aktuell zu halten, alternativ sind weitere Infos unter https://github.com/tine-groupware/tine/blob/main/tine20/Tinebase/Twig.php#L140) zu finden.*
 
 * `addNewLine($str)` fügt einen Zeilenumbruch ein, wenn der übergebene Wert ein nicht leerer Text ist.
 
@@ -120,7 +121,7 @@ Neben den im Twig Standard enthaltenen [Funktionen](https://twig.symfony.com/doc
 
 Filter
 ---
-Neben den im Twig Standard enthaltenen [Filtern](https://twig.symfony.com/doc/2.x/filters/index.html) sind folgende spezielle Filter verfügbar:
+Neben den im Twig Standard enthaltenen [Filtern](https://twig.symfony.com/doc/2.x/filters/index.html) sind folgende spezielle Filter verfügbar: 
 
 * `accountLoginChars($str)` filtert Login-Zeichen eines Account.
 
