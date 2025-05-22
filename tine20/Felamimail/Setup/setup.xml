@@ -530,6 +530,10 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
+                    <name>aggregated_data</name>
+                    <type>text</type>
+                </field>
+                <field>
                     <name>subject</name>
                     <type>text</type>
                 </field>

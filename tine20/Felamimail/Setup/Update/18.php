@@ -16,7 +16,7 @@ class Felamimail_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
-    protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
+    public const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -64,36 +64,44 @@ class Felamimail_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update003(): void
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        if (!$this->hasApplicationUpdateRan(Felamimail_Config::APP_NAME, Felamimail_Setup_Update_17::RELEASE017_UPDATE006)) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
 
-        Felamimail_Controller::getInstance()->truncateEmailCache();
-        try {
-            $this->_backend->dropIndex('felamimail_cache_message', 'from_email_ft');
-        } catch (Zend_Db_Statement_Exception) {}
-        try {
-            $this->_backend->dropIndex('felamimail_cache_message', 'from_name_ft');
-        } catch (Zend_Db_Statement_Exception) {}
-        try {
-            $this->_backend->dropIndex('felamimail_cache_message', 'to_list');
-        } catch (Zend_Db_Statement_Exception) {}
-        try {
-            $this->_backend->dropIndex('felamimail_cache_message', 'cc_list');
-        } catch (Zend_Db_Statement_Exception) {}
-        try {
-            $this->_backend->dropIndex('felamimail_cache_message', 'bcc_list');
-        } catch (Zend_Db_Statement_Exception) {}
-        try {
-            $this->_backend->dropIndex('felamimail_cache_message', 'subject');
-        } catch (Zend_Db_Statement_Exception) {}
+            Felamimail_Controller::getInstance()->truncateEmailCache();
+            try {
+                $this->_backend->dropIndex('felamimail_cache_message', 'from_email_ft');
+            } catch (Zend_Db_Statement_Exception) {
+            }
+            try {
+                $this->_backend->dropIndex('felamimail_cache_message', 'from_name_ft');
+            } catch (Zend_Db_Statement_Exception) {
+            }
+            try {
+                $this->_backend->dropIndex('felamimail_cache_message', 'to_list');
+            } catch (Zend_Db_Statement_Exception) {
+            }
+            try {
+                $this->_backend->dropIndex('felamimail_cache_message', 'cc_list');
+            } catch (Zend_Db_Statement_Exception) {
+            }
+            try {
+                $this->_backend->dropIndex('felamimail_cache_message', 'bcc_list');
+            } catch (Zend_Db_Statement_Exception) {
+            }
+            try {
+                $this->_backend->dropIndex('felamimail_cache_message', 'subject');
+            } catch (Zend_Db_Statement_Exception) {
+            }
 
-        if (!$this->_backend->columnExists('aggregated_data', 'felamimail_cache_message')) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
-                <name>aggregated_data</name>
-                <type>text</type>
-            </field>');
-            $this->_backend->addCol('felamimail_cache_message', $declaration, 3);
+            if (!$this->_backend->columnExists('aggregated_data', 'felamimail_cache_message')) {
+                $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>aggregated_data</name>
+                    <type>text</type>
+                </field>');
+                $this->_backend->addCol('felamimail_cache_message', $declaration, 3);
+            }
         }
-
+        
         if ($this->getTableVersion('felamimail_cache_message') < 20) {
             $this->setTableVersion('felamimail_cache_message', 20);
         }
