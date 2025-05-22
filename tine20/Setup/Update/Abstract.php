@@ -143,6 +143,18 @@ class Setup_Update_Abstract
         return $application;
     }
 
+    public function hasApplicationUpdateRan(string $_applicationName, string $_updateKey): bool
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+        $appState = Tinebase_Application::getInstance()->getApplicationState($application->getId(),
+            Tinebase_Application::STATE_UPDATES, true);
+        if ($appState === null || !($state = json_decode($appState, true))) {
+            $state = [];
+        }
+
+        return isset($state[$_updateKey]);
+    }
+    
     /**
      * get version number of a given table
      * version is stored in database table "applications_tables"
