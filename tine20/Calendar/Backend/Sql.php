@@ -1069,7 +1069,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // we might want to return is_deleted = true here! so no condition to filter deleted events!
         // select e.id, e.base_event_id, be.container_id, at.display_container_id
         // from tine20_cal_events as e left join tine20_cal_events as be on e.base_event_id = be.id
-        // left join tine20_cal_attende as at on be.id = at.calid and at.display_contain_id = ?
+        // left join tine20_cal_attendee as at on be.id = at.calid and at.display_contain_id = ?
         $events = $this->_db->query('SELECT e.id, e.base_event_id, be.container_id, at.displaycontainer_id FROM ' .
             $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) . ' AS e LEFT JOIN ' .
             $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) .
@@ -1123,9 +1123,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function increaseSeqsForContainerId($containerId)
     {
-        $stmt = $this->_db->query('SELECT ev.id FROM tine20_cal_events AS ev WHERE ev.is_deleted = 0 AND ' .
-            'ev.recurid IS NULL AND (ev.container_id = ' . $this->_db->quote($containerId) . ' OR ev.id IN (
-            SELECT cal_event_id FROM tine20_cal_attendee WHERE displaycontainer_id = ' . $this->_db->quote($containerId) . ')) GROUP BY ev.id');
+        $stmt = $this->_db->query('SELECT ev.id FROM '
+            . $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName)
+            . ' AS ev WHERE ev.is_deleted = 0 AND ' .
+            'ev.recurid IS NULL AND (ev.container_id = ' . $this->_db->quote($containerId)
+            . ' OR ev.id IN (SELECT cal_event_id FROM '
+            . $this->_db->quoteIdentifier($this->_tablePrefix . Calendar_Backend_Sql_Attendee::TABLENAME) .
+            ' WHERE displaycontainer_id = ' . $this->_db->quote($containerId)
+            . ')) GROUP BY ev.id');
 
         $result = $stmt->fetchAll();
         if (empty($result)) {
