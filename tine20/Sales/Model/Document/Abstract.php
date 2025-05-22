@@ -18,6 +18,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @subpackage  Model
  *
  * @property Tinebase_Record_RecordSet $positions
+ * @property Sales_Model_EDocument_VATEX $vatex_id
  */
 abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
@@ -67,6 +68,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_NET_SUM = 'net_sum';
     public const FLD_VAT_PROCEDURE = 'vat_procedure';
+    public const FLD_VATEX_ID = 'vatex_id';
     public const FLD_SALES_TAX = 'sales_tax';
     public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
 
@@ -194,6 +196,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::FLD_CONTACT_ID => [],
                 self::FLD_BOILERPLATES => [],
+                self::FLD_VATEX_ID => [],
             ]
         ],
 
@@ -446,10 +449,23 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::READ_ONLY                     => true,
                 ],
             ],
-            self::FLD_VAT_PROCEDURE => [
-                self::LABEL => 'VAT Procedure', // _('VAT Procedure')
-                self::TYPE => self::TYPE_KEY_FIELD,
-                self::NAME => Sales_Config::VAT_PROCEDURES,
+            self::FLD_VAT_PROCEDURE             => [
+                self::LABEL                         => 'VAT Procedure', // _('VAT Procedure')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::VAT_PROCEDURES,
+            ],
+            self::FLD_VATEX_ID                  => [
+                self::LABEL                         => 'VAT Exemption', // _('VAT Exemption')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::NULLABLE                      => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_EDocument_VATEX::MODEL_NAME_PART,
+                ],
+                self::SHY                           => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
@@ -847,7 +863,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     {
         /** @var Sales_Model_DocumentPosition_Abstract $position */
         foreach ($this->{self::FLD_POSITIONS} ?? [] as $position) {
-            if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE
+            if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_STANDARD
                     && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
             }
@@ -1130,7 +1146,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} = $product->{Sales_Model_Product::FLD_DEFAULT_GROUPING};
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_SORTING} = $product->{Sales_Model_Product::FLD_DEFAULT_SORTING};
 
-        if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE && Sales_Config::PRICE_TYPE_GROSS ===
+        if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_STANDARD && Sales_Config::PRICE_TYPE_GROSS ===
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE}) {
            $position->computePrice();
            $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = Sales_Config::PRICE_TYPE_NET;

@@ -110,6 +110,8 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         unset($_definition[self::FIELDS][self::FLD_INVOICE_DISCOUNT_PERCENTAGE]);
         unset($_definition[self::FIELDS][self::FLD_NET_SUM]);
         unset($_definition[self::FIELDS][self::FLD_VAT_PROCEDURE]);
+        unset($_definition[self::FIELDS][self::FLD_VATEX_ID]);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_VATEX_ID]);
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX]);
         unset($_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE]);
         unset($_definition[self::FIELDS][self::FLD_GROSS_SUM]);
