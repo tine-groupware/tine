@@ -225,13 +225,13 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
     
     return [
         {filtertype: 'tine.felamimail.folder.filtermodel', app: app},
-        {label: app.i18n._('Subject'),     field: 'subject',       operators: ['wordstartswith'], valueType: 'fulltext'},
-        {label: app.i18n._('Subject/From/To'),  field: 'query',    operators: ['wordstartswith'], valueType: 'fulltext'},
+        {label: app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
+        {label: app.i18n._('Subject/From/To'),  field: 'query',    operators: ['contains']},
         {label: app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
         {label: app.i18n._('From (Name)'), field: 'from_name',     operators: ['contains']},
-        {label: app.i18n._('To'),          field: 'to_list',       operators: ['wordstartswith'], valueType: 'fulltext'},
-        {label: app.i18n._('Cc'),          field: 'cc_list',       operators: ['wordstartswith'], valueType: 'fulltext'},
-        {label: app.i18n._('Bcc'),         field: 'bcc_list',      operators: ['wordstartswith'], valueType: 'fulltext'},
+        {label: app.i18n._('To'),          field: 'to_list',       operators: ['contains']},
+        {label: app.i18n._('Cc'),          field: 'cc_list',       operators: ['contains']},
+        {label: app.i18n._('Bcc'),         field: 'bcc_list',      operators: ['contains']},
         {label: app.i18n._('Flags'),       field: 'flags',         filtertype: 'tinebase.multiselect', app: app, multiselectFieldConfig: {
             valueStore: Tine.Felamimail.loadFlagsStore()
         }},
