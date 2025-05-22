@@ -101,11 +101,28 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
     protected function _inspectVAT(Sales_Model_Document_Abstract $_record): void
     {
-        if ($_record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) && Sales_Config::VAT_PROCEDURE_TAXABLE !==
-                $_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} && empty($_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID})) {
-            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_(
-                'For non-standard VAT procedures an exemption reason needs to be provided'));
-        }
+         if (!$_record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE)) {
+             return;
+         }
+
+         if (null === ($vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE}))) {
+             throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE . ' ' . $_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} . ' not supported');
+         }
+         if (!is_array($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX})) {
+             $_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = null;
+         } elseif (count($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}) === 1) {
+             $_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = Sales_Controller_EDocument_VATEX::getInstance()->getByCode($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}[0])->getId();
+         } else {
+             if (empty($_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID})) {
+                 throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_(
+                     'For selected VAT procedure an exemption reason needs to be provided'));
+             }
+             $vatEx = Sales_Controller_EDocument_VATEX::getInstance()->get($_record->getIdFromProperty(Sales_Model_Document_Abstract::FLD_VATEX_ID));
+             if (!in_array($vatEx->{Sales_Model_EDocument_VATEX::FLD_CODE}, $vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX})) {
+                 throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_(
+                     'Selected VAT procedure and selected VAT exemption reason are not compatible'));
+             }
+         }
     }
 
     protected function _inspectAutoCreateValues(Sales_Model_Document_Abstract $document): void

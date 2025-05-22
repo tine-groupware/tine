@@ -153,10 +153,11 @@ class Sales_Config extends Tinebase_Config_Abstract
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
 
     const VAT_PROCEDURES = 'vatProcedures';
-    const VAT_PROCEDURE_TAXABLE = 'taxable';
-    const VAT_PROCEDURE_NON_TAXABLE = 'nonTaxable';
+    const VAT_PROCEDURE_STANDARD = 'standard'; // was taxable
+    const VAT_PROCEDURE_OUTSIDE_TAX_SCOPE = 'outsideTaxScope'; // was nonTaxable
     const VAT_PROCEDURE_REVERSE_CHARGE = 'reverseCharge';
-    const VAT_PROCEDURE_EXPORT = 'export';
+    const VAT_PROCEDURE_FREE_EXPORT_ITEM = 'freeExportItem'; // was export
+    const VAT_PROCEDURE_ZERO_RATED_GOODS = 'zeroRatedGoods';
 
     const REVERSE_CHANGE_TEMPLATE = 'reverseChargeTemplate';
 
@@ -1368,38 +1369,53 @@ class Sales_Config extends Tinebase_Config_Abstract
             //_('Possible VAT Procedures')
             self::DESCRIPTION        => 'Possible VAT Procedures',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [self::RECORD_MODEL => Sales_Model_EDocument_VATProcedure::class],
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => [
                 self::RECORDS => [
                     [
-                        'id' => self::VAT_PROCEDURE_TAXABLE,
-                        //_('Taxable')
-                        'value' => 'Taxable',
+                        'id' => self::VAT_PROCEDURE_STANDARD,
+                        //_('Standard rate')
+                        'value' => 'Standard rate',
                         'icon' => null,
                         'system' => true,
+                        Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305 => 'S',
                     ], [
-                        'id' => self::VAT_PROCEDURE_NON_TAXABLE,
-                        //_('Non taxable')
-                        'value' => 'Non taxable',
+                        'id' => self::VAT_PROCEDURE_OUTSIDE_TAX_SCOPE,
+                        //_('Services outside scope of tax')
+                        'value' => 'Services outside scope of tax',
                         'icon' => null,
                         'system' => true,
+                        Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305 => 'O',
+                        Sales_Model_EDocument_VATProcedure::FLD_VATEX => ['vatex-eu-o'],
                     ], [
                         'id' => self::VAT_PROCEDURE_REVERSE_CHARGE,
                         //_('Reverse charge')
                         'value' => 'Reverse charge',
                         'icon' => null,
                         'system' => true,
+                        Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305 => 'AE',
+                        Sales_Model_EDocument_VATProcedure::FLD_VATEX => ['vatex-eu-ae'],
                     ], [
-                        'id' => self::VAT_PROCEDURE_EXPORT,
-                        //_('Export outside EU')
-                        'value' => 'Export outside EU',
+                        'id' => self::VAT_PROCEDURE_FREE_EXPORT_ITEM,
+                        //_('Free export item, tax not charged')
+                        'value' => 'Free export item, tax not charged',
                         'icon' => null,
                         'system' => true,
-                    ],
+                        Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305 => 'G',
+                        Sales_Model_EDocument_VATProcedure::FLD_VATEX => ['vatex-eu-g'],
+                    ], [
+                        'id' => self::VAT_PROCEDURE_ZERO_RATED_GOODS,
+                        //_('Zero rated goods')
+                        'value' => 'Zero rated goods',
+                        'icon' => null,
+                        'system' => true,
+                        Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305 => 'Z',
+                    ]
                 ],
-                self::DEFAULT_STR => self::VAT_PROCEDURE_TAXABLE,
+                self::DEFAULT_STR => self::VAT_PROCEDURE_STANDARD,
             ],
         ],
         self::REVERSE_CHANGE_TEMPLATE => [

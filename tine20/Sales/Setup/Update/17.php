@@ -59,6 +59,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE038 = __CLASS__ . '::update038';
     protected const RELEASE017_UPDATE039 = __CLASS__ . '::update039';
     protected const RELEASE017_UPDATE040 = __CLASS__ . '::update040';
+    protected const RELEASE017_UPDATE041 = __CLASS__ . '::update041';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -216,6 +217,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE040 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update040',
+            ],
+            self::RELEASE017_UPDATE041 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update041',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -1113,5 +1118,55 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         Sales_Setup_Initialize::initializeEDocumentVATEX();
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.40', self::RELEASE017_UPDATE040);
+    }
+
+    public function update041(): void
+    {
+        /** @var Tinebase_Record_Interface $model */
+        foreach ([
+                    Sales_Model_Customer::class,
+                    Sales_Model_Document_Invoice::class,
+                    Sales_Model_Document_Offer::class,
+                    Sales_Model_Document_Order::class,
+                 ] as $model) {
+            foreach ([
+                        'taxable' => 'standard',
+                        'nonTaxable' => 'outsideTaxScope',
+                        'export' => 'freeExportItem',
+                     ] as $old => $new) {
+                $this->_db->update(
+                    SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                    [Sales_Model_Customer::FLD_VAT_PROCEDURE => $new],
+                    Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . $old . '"'
+                );
+            }
+        }
+
+        $ae = Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-ae');
+        $g = Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-g');
+        $o = Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-o');
+        foreach ([
+                     Sales_Model_Document_Invoice::class,
+                     Sales_Model_Document_Offer::class,
+                     Sales_Model_Document_Order::class,
+                 ] as $model) {
+            $this->_db->update(
+                SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                [Sales_Model_Document_Abstract::FLD_VATEX_ID => $ae->getId()],
+                Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE . '"'
+            );
+            $this->_db->update(
+                SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                [Sales_Model_Document_Abstract::FLD_VATEX_ID => $g->getId()],
+                Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . Sales_Config::VAT_PROCEDURE_FREE_EXPORT_ITEM . '"'
+            );
+            $this->_db->update(
+                SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                [Sales_Model_Document_Abstract::FLD_VATEX_ID => $o->getId()],
+                Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . Sales_Config::VAT_PROCEDURE_OUTSIDE_TAX_SCOPE . '"'
+            );
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.41', self::RELEASE017_UPDATE041);
     }
 }

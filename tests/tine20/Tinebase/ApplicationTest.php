@@ -444,6 +444,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_EDocument_PaymentMeansCode::class,
                 Sales_Model_EDocument_VATEX::class,
                 Sales_Model_EDocument_VATEXLocalization::class,
+                Sales_Model_EDocument_VATProcedure::class,
                 Sales_Model_Einvoice_XRechnung::class,
                 Sales_Model_Invoice::class,
                 Sales_Model_InvoiceCleared::class,
