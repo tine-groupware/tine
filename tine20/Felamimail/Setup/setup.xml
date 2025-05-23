@@ -582,10 +582,6 @@
                     <type>text</type>
                 </field>
                 <field>
-                    <name>aggregated_data</name>
-                    <type>text</type>
-                </field>
-                <field>
                     <name>has_attachment</name>
                     <type>boolean</type>
                     <default>false</default>
