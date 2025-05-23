@@ -81,8 +81,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         ]);
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::NULLABLE] = true;
-        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
-            Sales_Controller_Document_Invoice::class . '::documentNumberConfigOverride';
 
         $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
 

@@ -298,7 +298,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
-                self::QUERY_FILTER              => true,
+                self::QUERY_FILTER                  => true,
             ],
             self::FLD_DOCUMENT_DATE             => [
                 self::LABEL                         => 'Document Date', //_('Document Date')

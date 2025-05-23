@@ -22,6 +22,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
+    protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
 
 
     static protected $_allUpdates = [
@@ -47,6 +48,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE018_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -139,7 +144,6 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         }
 
         Setup_SchemaTool::updateSchema($models);
-
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
     }
 
@@ -162,5 +166,54 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Product::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
+    }
+
+    public function update006(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_PurchaseInvoice::class,
+        ]);
+
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+        $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
+        foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll() as $oldPI) {
+            $oldPI->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_PurchaseInvoice::class, 'Sql', $oldPI->getId());
+
+            // dunned_at
+            // payment_method
+            // discount
+            // price_gross2
+
+            $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
+                Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER => $oldPI->number,
+                Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS => $oldPI->is_payed ? Sales_Model_Document_PurchaseInvoice::STATUS_PAID :
+                    ($oldPI->is_approved ? Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED : Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED),
+                Sales_Model_Document_PurchaseInvoice::FLD_DESCRIPTION => $oldPI->description,
+                Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $oldPI->date,
+                //Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT => $oldPI->due_in, // TODO FIXME?
+                Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT => $oldPI->due_at,
+                Sales_Model_Document_PurchaseInvoice::FLD_PAY_AT => $oldPI->pay_at,
+                Sales_Model_Document_PurchaseInvoice::FLD_PAID_AT => $oldPI->payed_at,
+                Sales_Model_Document_PurchaseInvoice::FLD_OVER_DUE_AT => $oldPI->overdue_at,
+                Sales_Model_Document_PurchaseInvoice::FLD_NET_SUM => $oldPI->price_net,
+                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_GROSS_SUM => $oldPI->price_gross,
+                Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX => $oldPI->price_tax,
+                Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => [[
+                    Sales_Model_Document_PurchaseInvoice::TAX_RATE => $oldPI->sales_tax,
+                    Sales_Model_Document_PurchaseInvoice::TAX_SUM => $oldPI->price_tax,
+                    Sales_Model_Document_PurchaseInvoice::NET_SUM => $oldPI->price_net,
+                ]],
+                Sales_Model_Document_PurchaseInvoice::FLD_GROSS_SUM => $oldPI->price_total,
+                Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER'),
+                Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER'),
+            ]));
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
+
+        $transaction->release();
     }
 }

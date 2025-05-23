@@ -151,6 +151,7 @@
     "sabre/vobject": "^4.5",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "dev-pu/pm/replaceAssertOptions as v1.19.9",
+    "smalot/pdfparser": "^2.12",
     "spomky-labs/otphp": "^10.0",
     "strobotti/php-jwk": "^1.4",
     "symfony/cache": "^5.3",

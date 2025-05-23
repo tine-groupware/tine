@@ -120,6 +120,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                         Sales_Model_Document_Invoice::class,
                         Sales_Model_Document_Offer::class,
                         Sales_Model_Document_Order::class,
+                        Sales_Model_Document_PurchaseInvoice::class,
                     ],
                 ],
                 self::VALIDATORS                    => [
@@ -130,6 +131,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                         Sales_Model_Document_Invoice::class,
                         Sales_Model_Document_Offer::class,
                         Sales_Model_Document_Order::class,
+                        Sales_Model_Document_PurchaseInvoice::class,
                     ]],
                 ],
                 self::UI_CONFIG                     => [

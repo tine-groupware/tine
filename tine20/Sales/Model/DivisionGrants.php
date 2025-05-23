@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -25,6 +25,7 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
     public const GRANT_ADMIN_DOCUMENT_INVOICE = Sales_Model_Document_Invoice::MODEL_NAME_PART . '_' . self::GRANT_ADMIN;
     public const GRANT_ADMIN_DOCUMENT_OFFER = Sales_Model_Document_Offer::MODEL_NAME_PART . '_' . self::GRANT_ADMIN;
     public const GRANT_ADMIN_DOCUMENT_ORDER = Sales_Model_Document_Order::MODEL_NAME_PART . '_' . self::GRANT_ADMIN;
+    public const GRANT_ADMIN_DOCUMENT_PURCHASE_INVOICE = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART . '_' . self::GRANT_ADMIN;
 
     public const GRANT_READ_DEBITOR = Sales_Model_Debitor::MODEL_NAME_PART . '_' . self::GRANT_READ;
 
@@ -32,6 +33,7 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
     public const GRANT_READ_DOCUMENT_INVOICE = Sales_Model_Document_Invoice::MODEL_NAME_PART . '_' . self::GRANT_READ;
     public const GRANT_READ_DOCUMENT_OFFER = Sales_Model_Document_Offer::MODEL_NAME_PART . '_' . self::GRANT_READ;
     public const GRANT_READ_DOCUMENT_ORDER = Sales_Model_Document_Order::MODEL_NAME_PART . '_' . self::GRANT_READ;
+    public const GRANT_READ_DOCUMENT_PURCHASE_INVOICE = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART . '_' . self::GRANT_READ;
 
 
     /**
@@ -59,6 +61,8 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
             self::GRANT_ADMIN_DOCUMENT_DELIVERY,
             self::GRANT_READ_DOCUMENT_INVOICE,
             self::GRANT_ADMIN_DOCUMENT_INVOICE,
+            self::GRANT_READ_DOCUMENT_PURCHASE_INVOICE,
+            self::GRANT_ADMIN_DOCUMENT_PURCHASE_INVOICE,
             self::GRANT_ADMIN,
         ];
     }
@@ -98,6 +102,14 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
             self::GRANT_ADMIN_DOCUMENT_ORDER => [
                 self::LABEL         => 'Admin Orders', // _('Admin Orders')
                 self::DESCRIPTION   => 'The permission to administrate the division\'s order documents.', // _('The permission to administrate the division\'s order documents.')
+            ],
+            self::GRANT_READ_DOCUMENT_PURCHASE_INVOICE => [
+                self::LABEL         => 'Read Purchase Invoices', // _('Read Purchase Invoices')
+                self::DESCRIPTION   => 'The grant to read the division\'s purchase invoice documents.', // _('The grant to read the division\'s purchase invoice documents.')
+            ],
+            self::GRANT_ADMIN_DOCUMENT_PURCHASE_INVOICE => [
+                self::LABEL         => 'Admin Purchase Invoices', // _('Admin Purchase Invoices')
+                self::DESCRIPTION   => 'The grant to administrate the division\'s purchase invoice documents.', // _('The grant to administrate the division\'s purchase invoice documents.')
             ],
             self::GRANT_READ_DOCUMENT_DELIVERY => [
                 self::LABEL         => 'Read Deliveries', // _('Read Deliveries')

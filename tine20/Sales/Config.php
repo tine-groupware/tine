@@ -61,6 +61,7 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
 
     public const EDOCUMENT = 'edocument';
+    public const EDOCUMENT_SVC_BASE_URL = 'svc_base_url';
     public const VALIDATION_SVC = 'validation_svc';
     public const VIEW_SVC = 'view_svc';
     const CUSTOMER_CONTACT_PERSON_FILTER = 'customerContactPersonFilter';
@@ -176,6 +177,9 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const DOCUMENT_REVERSAL_STATUS_NOT_REVERSED = 'notReversed';
     public const DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED = 'partiallyReversed';
     public const DOCUMENT_REVERSAL_STATUS_REVERSED = 'reversed';
+
+    public const DOCUMENT_PURCHASE_INVOICE_STATUS = 'documentPurchaseInvoiceStatus';
+    public const DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS = 'documentPurchaseInvoiceStatusTransitions';
 
     /**
      * offer status
@@ -438,6 +442,83 @@ class Sales_Config extends Tinebase_Config_Abstract
                 [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP],
                 [Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT],
             ]],
+        ],
+        self::DOCUMENT_PURCHASE_INVOICE_STATUS => [
+            //_('Purchase Invoice Stati')
+            self::LABEL              => 'Purchase Invoice Stati',
+            //_('Possible Purchase Invoice Stati')
+            self::DESCRIPTION        => 'Possible Purchase Invoice Stati',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_Status::class,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
+                        //_('Approval Requested (unbooked, open)')
+                        'value' => 'Approval Requested (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_REVERSAL => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
+                        //_('Approved (booked, open)')
+                        'value' => 'Approved (booked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_REVERSAL => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                        //_('Paid (booked, closed)')
+                        'value' => 'Paid (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        Sales_Model_Document_Status::FLD_REVERSAL => false,
+                        'system' => true
+                    ],
+                ],
+                self::DEFAULT_STR => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
+            ],
+        ],
+        self::DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS => [
+            //_('Purchase Invoice Status Transitions')
+            self::LABEL              => 'Purchase Invoice Status Transitions',
+            //_('Purchase Invoice Status Transitions')
+            self::DESCRIPTION        => 'Purchase Invoice Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                    ]
+                ],
+                Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                    ]
+                ],
+                Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                    ]
+                ],
+            ]
         ],
         self::DOCUMENT_OFFER_STATUS => [
             //_('Offer Status')
@@ -769,7 +850,16 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
             self::CONTENT               => [
+                self::EDOCUMENT_SVC_BASE_URL          => [
+                    self::LABEL                 => 'EDocument Service Base URL',
+                    //_('EDocument Service Base')
+                    self::DESCRIPTION           => 'EDocument Service Base URL',
+                    //_('EDocument Service Base')
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::DEFAULT_STR           => '',
+                ],
                 self::VALIDATION_SVC => [
                     self::LABEL                 => 'Validation Service URL',
                     //_('Validation Service URL')
