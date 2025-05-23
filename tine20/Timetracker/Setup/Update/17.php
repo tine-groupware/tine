@@ -19,6 +19,8 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
     public const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     public const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     public const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
+    public const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
+    public const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
 
 
     static protected $_allUpdates = [
@@ -39,6 +41,10 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
             ],
+            self::RELEASE017_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE017_UPDATE000          => [
@@ -48,6 +54,10 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE017_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
     ];
@@ -130,5 +140,40 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Setup_SchemaTool::updateSchema([
+            Timetracker_Model_Timesheet::class,
+        ]);
+
+        $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
+    }
+
+    public function update007()
+    {
+        $tsBackend = Timetracker_Controller_Timesheet::getInstance()->getBackend();
+        
+        if (!empty($delegator = Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR})) {
+            $fn = fn($ts) => call_user_func($delegator, $ts, $ts);
+        } else {
+            $tas = Timetracker_Controller_Timeaccount::getInstance()->getBackend()->getAll();
+            $fn = function($ts) use($tas) {
+                if ($ta = $tas->getById($ts->timeaccount_id)) {
+                    $ts->{Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
+                }
+            };
+        }
+
+        /** @var Timetracker_Model_Timesheet $ts */
+        foreach ($tsBackend->getAll() as $ts) {
+            $fn($ts);
+            if ($ts->isDirty()) {
+                $tsBackend->update($ts);
+            }
+        }
+
+        $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.7', self::RELEASE017_UPDATE007);
     }
 }
