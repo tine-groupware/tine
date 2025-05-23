@@ -1050,7 +1050,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
     public function testInvoiceModelPriceCalcultionGrossPrice(): void
     {
         $invoice = new Sales_Model_Document_Invoice([
-            Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
+            Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_STANDARD,
             Sales_Model_Document_Invoice::FLD_POSITIONS => [
                 $position = new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,

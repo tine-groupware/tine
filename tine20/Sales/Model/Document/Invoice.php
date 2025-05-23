@@ -192,25 +192,16 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (($pm = $this->{self::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true))->count() !== 1) {
             throw new Tinebase_Exception_UnexpectedValue('only one payment means allowed');
         }
+        if ($this->{self::FLD_VATEX_ID} && ! $this->{self::FLD_VATEX_ID} instanceof Sales_Model_EDocument_VATEX) {
+            throw new Tinebase_Exception_UnexpectedValue(self::FLD_VATEX_ID . ' not resolved');
+        }
         $pm = $pm->getFirstRecord();
         /** @var Sales_Model_PaymentMeans $pm */
 
-        switch($this->{self::FLD_VAT_PROCEDURE}) {
-            case Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE:
-                $taxId = 'AE';
-                break;
-            case Sales_Config::VAT_PROCEDURE_EXPORT:
-                $taxId = 'G';
-                break;
-            case Sales_Config::VAT_PROCEDURE_NON_TAXABLE:
-                $taxId = 'E';
-                break;
-            case Sales_Config::VAT_PROCEDURE_TAXABLE:
-                $taxId = 'S';
-                break;
-            default:
-                throw new Tinebase_Exception_UnexpectedValue(self::FLD_VAT_PROCEDURE . ' ' . $this->{self::FLD_VAT_PROCEDURE} . ' not supported');
+        if (null === ($vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($this->{self::FLD_VAT_PROCEDURE}))) {
+            throw new Tinebase_Exception_UnexpectedValue(self::FLD_VAT_PROCEDURE . ' ' . $this->{self::FLD_VAT_PROCEDURE} . ' not supported');
         }
+        $taxId = $vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305};
 
         $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
         if ($billingAddress->{Sales_Model_Address::FLD_LANGUAGE} !== $this->{self::FLD_DOCUMENT_LANGUAGE}) {
@@ -297,6 +288,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         )] : [],
                         $division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID} ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
                             (new UBL21\Common\CommonBasicComponents\ID($division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID}))->setSchemeID('SEPA')
+                        )] : [],
+                        $division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
+                            (new UBL21\Common\CommonBasicComponents\ID($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}))
                         )] : []
                     ))
                     ->setEndpointID($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} && $division->{Sales_Model_Division::FLD_EAS_ID} ?
@@ -457,7 +451,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             }
         }
 
-        if ($vatId = $debitor->{Sales_Model_Debitor::FLD_VAT_IDENTIFIER} ?: $customer->vatid) {
+        if ('O' !== $taxId && ($vatId = $debitor->{Sales_Model_Debitor::FLD_VAT_IDENTIFIER} ?: $customer->vatid)) {
             $customerParty->getParty()->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
                 ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($vatId))
                 ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
@@ -466,7 +460,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             );
         }
 
-        if ($division->{Sales_Model_Division::FLD_VAT_NUMBER}) {
+        if ('O' !== $taxId && $division->{Sales_Model_Division::FLD_VAT_NUMBER}) {
             $supplierParty
                 ->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
                     ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($division->{Sales_Model_Division::FLD_VAT_NUMBER}))
@@ -534,7 +528,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                     ->addToClassifiedTaxCategory((new \UBL21\Common\CommonAggregateComponents\ClassifiedTaxCategory)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                        ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}))
+                        ->setPercent('O' === $taxId ? null : new \UBL21\Common\CommonBasicComponents\Percent($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                         )
@@ -576,7 +570,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 )
                 ->setTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                    ->setTaxExemptionReasonCode($taxId === 'AE' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-AE') : ($taxId === 'G' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-G'): null))
+                    ->setTaxExemptionReasonCode($this->{self::FLD_VATEX_ID} ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode($this->{self::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE}) : null)
                     ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
@@ -597,7 +591,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                     ->addToTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                        ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
+                        ->setPercent('O' === $taxId ? null : new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                         )
