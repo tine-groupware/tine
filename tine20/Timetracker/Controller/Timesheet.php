@@ -346,7 +346,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-        $this->_calcClearedAmount($_record);
+        $this->_calcAmounts($_record);
     }
 
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -371,7 +371,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-        $this->_calcClearedAmount($_record, $_oldRecord);
+        $this->_calcAmounts($_record, $_oldRecord);
 
         if ($this->isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
             //reset invoicing related fields to find the invoice positions
@@ -420,17 +420,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         return $record->duration != $oldRecord->duration || $record->start_date != $oldRecord->start_date || $record->start_time != $oldRecord->start_time;
     }
 
-    protected function _calcClearedAmount(Timetracker_Model_Timesheet $ts, ?Timetracker_Model_Timesheet $oldTs = null): void
+    protected function _calcAmounts(Timetracker_Model_Timesheet $ts, ?Timetracker_Model_Timesheet $oldTs = null): void
     {
-        if (!$ts->is_cleared) {
-            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = null;
-            return;
-        }
-        if ($oldTs?->is_cleared) {
-            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = $oldTs?->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT};
-            return;
-        }
-
         if (!empty($delegator = Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR})) {
             call_user_func($delegator, $ts, $oldTs);
             return;
@@ -443,6 +434,16 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $ta = Timetracker_Controller_Timeaccount::getInstance()->get($ts->getIdFromProperty('timeaccount_id'));
         } finally {
             $taCtrl->doContainerACLChecks($oldAcl);
+        }
+        $ts->{Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
+
+        if (!$ts->is_cleared) {
+            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = null;
+            return;
+        }
+        if ($oldTs?->is_cleared) {
+            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = $oldTs?->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT};
+            return;
         }
 
         $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
