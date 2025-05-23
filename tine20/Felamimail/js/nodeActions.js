@@ -179,9 +179,12 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
                             app.getFolderStore().updateFolder(folderRecord);
                             selectedNode.removeAll();
                         }
+                        folder.set('cache_status', 'pending');
+                        folder.commit();
                         app.getMainScreen().getCenterPanel().loadGridData({
                             removeStrategy: 'keepBuffered'
                         });
+                        app.checkMailsDelayedTask.delay(0);
                         selectedNode.getUI().removeClass("x-tree-node-loading");
                     }
                 });
