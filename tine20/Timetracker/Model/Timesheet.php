@@ -28,6 +28,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     const MODEL_NAME_PART = 'Timesheet';
 
     public const FLD_CLEARED_AMOUNT = 'cleared_amount';
+    public const FLD_RECORDED_AMOUNT = 'recorded_amount';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -42,7 +43,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 10,
+        'version'           => 11,
         'recordName'        => 'Timesheet',
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
         'hasRelations'      => true,
@@ -207,6 +208,11 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 self::TYPE              => self::TYPE_MONEY,
                 self::LABEL             => 'Cleared amount', // _('Cleared amount')
                 self::NULLABLE          => true,
+            ],
+            self::FLD_RECORDED_AMOUNT => [
+                self::TYPE              => self::TYPE_MONEY,
+                self::LABEL             => 'Recorded amount', // _('Recorded amount')
+                self::DEFAULT_VAL       => 0,
             ],
             // TODO combine those three fields like this?
             // TODO create individual fields in MC and Doctrine Mapper? how to handle filter/validators/labels/...?
