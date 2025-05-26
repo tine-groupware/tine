@@ -15,7 +15,7 @@
  * @package     Sales
  * @subpackage  Model
  */
-class Sales_Model_Einvoice_XRechnung extends Tinebase_Record_NewAbstract implements Sales_Model_Einvoice_PresetInterface
+class Sales_Model_Einvoice_XRechnung extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Einvoice_XRechnung';
 
@@ -34,9 +34,4 @@ class Sales_Model_Einvoice_XRechnung extends Tinebase_Record_NewAbstract impleme
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = null;
-
-    public function getPresetClassName(): string
-    {
-        return Sales_EDocument_Einvoicing_Preset_XRechnung::class;
-    }
 }
