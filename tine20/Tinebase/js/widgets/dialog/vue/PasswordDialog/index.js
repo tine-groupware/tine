@@ -74,31 +74,12 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.widgets.dialog.Mod
             additionalFields: this.additionalFields
         })
 
-        this.injected['genPW'] = this.genPW.bind(this)
+        this.injected['genPW'] = Tine.Tinebase.widgets.form.PasswordTriggerField.prototype.genPW.bind(this)
 
         const { default: PasswordDialog } = await import(/* webpackChunkName: "Tinebase/js/vPasswordDialog"*/'./PasswordDialog.vue')
 
         this.dlgContentComponent = PasswordDialog
         this.postInit()
-    },
-
-    /**
-     * Generate pw
-     */
-    genPW: function () {
-        var policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy');
-
-        const config = {
-            minLength: policyConfig ? policyConfig.pwPolicyMinLength : 12,
-            minWordChars: policyConfig ? policyConfig.pwPolicyMinWordChars : 5,
-            minUppercaseChars: policyConfig ? policyConfig.pwPolicyMinUppercaseChars : 1,
-            minSpecialChars: policyConfig ? policyConfig.pwPolicyMinSpecialChars : 1,
-            minNumericalChars: policyConfig ? policyConfig.pwPolicyMinNumbers : 1
-        };
-
-        var gen = new Tine.Tinebase.PasswordGenerator(config);
-
-        return gen.generatePassword()
     },
 
     openWindow: function () {
