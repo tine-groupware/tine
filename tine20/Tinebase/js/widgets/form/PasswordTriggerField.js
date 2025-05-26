@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import RecordEditFieldTriggerPlugin from "./RecordEditFieldTriggerPlugin";
+import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin";
+
 Ext.ns('Tine.Tinebase.widgets.form');
 
 /**
@@ -17,6 +20,13 @@ Ext.ns('Tine.Tinebase.widgets.form');
  * @extends     Ext.form.TriggerField
  */
 Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTriggerField, {
+
+    /**
+     * @cfg {Boolean} hasPwGen
+     * dialog provides password generation action
+     */
+    hasPwGen: false,
+
     /**
      * @cfg {Boolean} unLockable: true,
      */
@@ -53,8 +63,41 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         if (!this.unLockable) {
             this.afterIsRendered().then(() => { this.getTrigger(0).hide(); });
         }
-    
+        this.plugins = this.plugins || [];
+
+        if (this.hasPwGen) {
+            this.passwordFieldTriggerPlugin = new FieldTriggerPlugin({
+                disabled: false,
+                triggerClass: 'action_managePermissions',
+                text: i18n._('Generate password'),
+                qtip: i18n._('Generate password'),
+                onTriggerClick: () => {
+                    const pw = this.genPW();
+                    this.setValue(pw);
+                },
+            });
+            this.plugins.push(this.passwordFieldTriggerPlugin);
+        }
+
         Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initComponent.apply(this, arguments);
+    },
+
+    /**
+     * Generate pw
+     */
+    genPW: function () {
+        const policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy');
+
+        let config = {
+            minLength: policyConfig ? policyConfig.pwPolicyMinLength : 12,
+            minWordChars: policyConfig ? policyConfig.pwPolicyMinWordChars : 5,
+            minUppercaseChars: policyConfig ? policyConfig.pwPolicyMinUppercaseChars : 1,
+            minSpecialChars: policyConfig ? policyConfig.pwPolicyMinSpecialChars : 1,
+            minNumericalChars: policyConfig ? policyConfig.pwPolicyMinNumbers : 1
+        };
+
+        const gen = new Tine.Tinebase.PasswordGenerator(config);
+        return gen.generatePassword();
     },
 
     initPreventBrowserPasswordManager: function() {
