@@ -53,23 +53,23 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEVICE_LIST_STATUS => [
             //_('Device List Status')
             'label'                 => 'Device List Status',
-            //_('Possible list status from device list feedback records.')
-            'description'           => 'Possible list status from device list feedback records.',
+            //_('Possible list statuses based on device list feedback records')
+            'description'           => 'Possible list statuses based on device list feedback records',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'default'               => [
                 'records' => array(
-                    ['id' =>   -1, 'value' => 'List was send to device', 'system' => true], //_('List was send to device')
-                    ['id' =>    0, 'value' => 'List was taken over', 'system' => true], //_('List was taken over')
+                    ['id' =>   -1, 'value' => 'List was sent to device', 'system' => true], //_('List was sent to device')
+                    ['id' =>    0, 'value' => 'List has been accepted', 'system' => true], //_('List has been accepted')
                     ['id' =>    1, 'value' => 'Generic error', 'system' => true], //_('Generic error')
                     ['id' => 1001, 'value' => 'Invalid label', 'system' => true], //_('Invalid label')
                     ['id' => 1002, 'value' => 'Unknown list', 'system' => true], //_('Unknown list')
                     ['id' => 1003, 'value' => 'Parameter missing', 'system' => true], //_('Parameter missing')
-                    ['id' => 1004, 'value' => 'Error in list line', 'system' => true], //_('Error in list line')
+                    ['id' => 1004, 'value' => 'Error in list row', 'system' => true], //_('Error in list row')
                     ['id' => 1005, 'value' => 'List is ignored', 'system' => true], //_('List is ignored')
                     ['id' => 1006, 'value' => 'Duplicate list definition', 'system' => true], //_('Duplicate list definition')
-                    ['id' => 1007, 'value' => 'An other list upgrade is in progress', 'system' => true], //_('An other list upgrade is in progress')
+                    ['id' => 1007, 'value' => 'Another list upgrade is in progress', 'system' => true], //_('Another list upgrade is in progress')
                 ),
                 'default' => 0
             ]

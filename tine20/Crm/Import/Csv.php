@@ -228,7 +228,7 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
         $translate = Tinebase_Translation::getTranslation('Crm');
 
         $containerName = Tinebase_Container::getInstance()->get($leads->getFirstRecord()->container_id)->name;
-        $view->lang_importedLeads = sprintf($translate->_('The following leads have just been imported into lead list %s'), $containerName);
+        $view->lang_importedLeads = sprintf($translate->_('The following leads have just been imported into the lead list %s'), $containerName);
         $view->importedLeads = $leads;
 
         $plain = $view->render('importNotificationPlain.php');

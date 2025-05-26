@@ -33,7 +33,7 @@ class Crm_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,
-            'description'       => "All leads I have read grants for", // _("All leads I have read grants for")
+            'description'       => "All leads I have read access to", // _("All leads I have read access to")
             'filters'           => array(
                 array('field' => 'leadstate_id',    'operator' => 'notin',  'value' => $closedStatus),
             ),
@@ -41,7 +41,7 @@ class Crm_Setup_Initialize extends Setup_Initialize
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me", // _("Last modified by me")
-            'description'       => "All leads that I have last modified", // _("All leads that I have last modified")
+            'description'       => "All leads I last modified", // _("All leads I last modified")
             'filters'           => array(array(
                 'field'     => 'last_modified_by',
                 'operator'  => 'equals',
@@ -51,7 +51,7 @@ class Crm_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My leads",                              // _("My leads")
-            'description'       => "All leads that I am responsible for",   // _("All leads that I am responsible for")
+            'description'       => "All leads I am responsible for",   // _("All leads I am responsible for")
             'filters'           => array(array(
                 'field'     => 'contact',
                 'operator'  => 'AND',

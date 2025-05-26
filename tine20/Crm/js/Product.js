@@ -214,7 +214,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.ProductPickerCombo = new Tine.Crm.ProductPickerCombo({
             anchor: '90%',
-            emptyText: this.app.i18n._('Search for Products to add ...'),
+            emptyText: this.app.i18n._('Search for products to add...'),
             productsStore: this.store,
             blurOnSelect: true,
             recordClass: Tine.Sales.Model.Product,

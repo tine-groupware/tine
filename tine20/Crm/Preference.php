@@ -34,7 +34,7 @@ class Crm_Preference extends Tinebase_Preference_Abstract
 
     /**
      * have name of default favorite an a central palce
-     * _("All leads")
+     * _("All Leads")
      */
     const DEFAULTPERSISTENTFILTER_NAME = "All leads";
     
@@ -84,17 +84,17 @@ class Crm_Preference extends Tinebase_Preference_Abstract
             ),
             /*
             self::NOTIFICATION_LEVEL => array(
-                'label'         => $translate->_('Get Notification E-mails'),
-                'description'   => $translate->_('The level of actions you want to be notified about.'),
+                'label'         => $translate->_('Get Notification Emails'),
+                'description'   => $translate->_('The level of actions you want to receive notifications for.'),
             ),
             */
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
-                'label'         => $translate->_('Send Notifications e-mails for own actions'),
-                'description'   => $translate->_('Get notifications e-mails for actions you did yourself'),
+                'label'         => $translate->_('Send notification emails for your own actions'),
+                'description'   => $translate->_('Get notification emails for your own actions'),
             ),
             self::DEFAULTPERSISTENTFILTER  => array(
                 'label'         => $translate->_('Default Favorite'),
-                'description'   => $translate->_('The default favorite which is loaded on crm startup'),
+                'description'   => $translate->_('The default favorite that is loaded on CRM startup'),
             ),
         );
         

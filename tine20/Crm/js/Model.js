@@ -102,7 +102,7 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Crm.Model.Lead},
             {label: app.i18n._('Lead name'),   field: 'lead_name' },
             {
-                label: app.i18n._('Leadstate'),
+                label: app.i18n._('Lead State'),
                 field: 'leadstate_id',
                 filtertype: 'tine.widget.keyfield.filter',
                 app: app,
@@ -110,14 +110,14 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             },
             {label: app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
             {
-                label: app.i18n._('Leadsource'),
+                label: app.i18n._('Lead Source'),
                 field: 'leadsource_id',
                 filtertype: 'tine.widget.keyfield.filter',
                 app: app,
                 keyfieldName: 'leadsources'
             },
             {
-                label: app.i18n._('Leadtype'),
+                label: app.i18n._('Lead Type'),
                 field: 'leadtype_id',
                 filtertype: 'tine.widget.keyfield.filter',
                 app: app,

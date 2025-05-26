@@ -24,37 +24,34 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "manage shared lead folders"
+msgid "Manage shared lead folders"
 msgstr "Gemeinsame Leads Ordner bearbeiten"
 
 msgid "Create new shared lead folders"
 msgstr "Anlegen von gemeinsamen Leads Ordnern"
 
-msgid "manage shared leads favorites"
+msgid "Manage shared lead favorites"
 msgstr "Gemeinsame Lead-Favoriten verwalten"
 
-msgid "Create or update shared leads favorites"
+msgid "Create or update shared lead favorites"
 msgstr "Gemeinsame Lead-Favoriten erstellen oder bearbeiten"
 
-msgid "controls sending notification of Leads"
+msgid "send notification"
+msgstr ""
+
+msgid "Controls the sending of notifications about leads"
 msgstr "Steuert das versenden von Benachrichtigungen für Leads"
 
-msgid "send notification)description"
-msgstr ""
-
-msgid "send notification to all access container"
+msgid "Send notification to all access containers"
 msgstr "Versendet Benachrichtigungen an alle, die Zugriff auf den Container haben"
 
-msgid "send notification to responsible"
+msgid "Send notification to the responsible person"
 msgstr "Versendet Benachrichtigungen zum Verantwortlichen"
 
-msgid "send notification to responsible)description"
-msgstr ""
-
-msgid "send notification to customer"
+msgid "Send notification to the customer"
 msgstr "Versendet Benachrichtigungen zum Kunden"
 
-msgid "send notification to partner"
+msgid "Send notification to the partner"
 msgstr "Versendet Benachrichtigungen zum Partner"
 
 msgid "Lead States Available"
@@ -87,7 +84,7 @@ msgstr "schreibgeschützt"
 msgid "Lead Sources Available"
 msgstr "Verfügbare Lead Quellen"
 
-msgid "Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed."
+msgid "Possible lead sources. If a source is marked as archived, leads from that source are treated as closed."
 msgstr "Mögliche Lead-Quelle. Wenn eine Quelle als archiviert markiert ist, werden Leads dieser Quelle als geschlossen behandelt."
 
 msgid "Lead Types Available"
@@ -105,10 +102,10 @@ msgstr "Partner"
 msgid "Reseller"
 msgstr "Reseller"
 
-msgid "Enabled Features"
+msgid "Enabled features"
 msgstr "Feature aktivieren"
 
-msgid "Enabled Features in CRM Application."
+msgid "Enabled features in CRM application."
 msgstr "Features in der CRM Applikation aktivieren."
 
 msgid "Lead Import"
@@ -117,22 +114,22 @@ msgstr "Lead Import"
 msgid "Lead Notification Confirmation"
 msgstr ""
 
-msgid "Add new task on lead import"
+msgid "Add a new task on lead import"
 msgstr "Füge eine neue Aufgabe beim Lead Import hinzu"
 
-msgid "Automatically creates a task for the responsible person if a new lead is imported."
+msgid "Automatically creates a task for the responsible person when a new lead is imported."
 msgstr "Lege automatisch eine neue Aufgabe für die verantwortliche Person an, wenn ein neuer Lead importiert wird."
 
-msgid "Send notification e-mail on lead import"
+msgid "Send notification email on lead import"
 msgstr "Sende Benachrichtigungen beim Lead Import"
 
-msgid "Sends an e-mail to all responsible persons for the imported leads."
+msgid "Sends an email to all responsible persons for the imported leads."
 msgstr "Sende für die importierten Leads eine E-Mail an alle verantwortlichen Personen."
 
 msgid "Lead duplicate check fields"
-msgstr "Lead-Dublettencheck Felder"
+msgstr "Felder zur Überprüfung doppelter Leads"
 
-msgid "These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new lead is created. If a record with the same data in these fields is found, a duplicate exception is thrown."
 msgstr "Diese Felder werden überprüft, wenn ein neuer Lead angelegt wird. Wenn ein Datensatz mit den selben Daten in diesem Feld gefunden wird, wird eine Dubletten Warnung geworfen."
 
 msgid "State"
@@ -187,7 +184,7 @@ msgstr "Lead %s wurde gelöscht"
 msgid "Lead %s has been created"
 msgstr "Lead %s wurde angelegt"
 
-msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
+msgid "This lead state is set to read-only. Therefore, updating this lead is not possible."
 msgstr "Der Status dieses Leads wurde auf schreibgeschützt gesetzt. Es ist daher nicht möglich, diesen Lead zu aktualisieren."
 
 msgid "CSV all data"
@@ -196,13 +193,13 @@ msgstr ""
 msgid "Lead Data"
 msgstr "Lead-Daten"
 
-msgid "Leadstate"
+msgid "Lead State"
 msgstr "Status"
 
-msgid "Leadtype"
+msgid "Lead Type"
 msgstr "Typ"
 
-msgid "Leadsource"
+msgid "Lead Source"
 msgstr "Quelle"
 
 msgid "End Scheduled"
@@ -218,7 +215,7 @@ msgid "Telephone"
 msgstr "Telefon"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 msgid "Tasks"
 msgstr "Aufgaben"
@@ -248,7 +245,7 @@ msgid "Edit new lead"
 msgstr "Neuen Lead bearbeiten"
 
 #, python-format
-msgid "The following leads have just been imported into lead list %s"
+msgid "The following leads have just been imported into the lead list %s"
 msgstr "Die folgenden Leads wurden soeben in die Lead Liste %s importiert"
 
 #, python-format
@@ -256,7 +253,7 @@ msgid "%s new leads have been imported"
 msgstr "%s neue Leads wurden importiert"
 
 msgid "Lead CSV import"
-msgstr "Lead CSV import"
+msgstr "Lead CSV Import"
 
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Importierte Liste (###CURRENTDATE###)"
@@ -264,10 +261,10 @@ msgstr "Importierte Liste (###CURRENTDATE###)"
 msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Leads importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
 
-msgid "Please choose the Lead to add the contacts to"
+msgid "Please select the lead to add the contacts to"
 msgstr "Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
 
-msgid "Please select the attenders' role"
+msgid "Please select the attendee's role"
 msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 
 msgid "Lead"
@@ -300,7 +297,7 @@ msgstr "Kontakttyp auf Partner setzen"
 msgid "Change contact type"
 msgstr "Kontakttyp ändern"
 
-msgid "Search for Contacts to add ..."
+msgid "Search for contacts to add..."
 msgstr "Kontakte zum Hinzufügen suchen..."
 
 msgid "Name"
@@ -327,13 +324,13 @@ msgstr "Benachrichtigungen werden unterdrückt"
 msgid "Send Notification?"
 msgstr "Benachrichtigung senden?"
 
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr "Änderungen an diesem Lead können Benachrichtigungen senden. Drücken Sie die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu \"Benachrichtigung werden unterdrückt\" zu wechseln."
+msgid "Changes to this lead might send notifications. Press the button \"Notifications are enabled\" to switch to \"Notifications are disabled\""
+msgstr "Änderungen an diesem Lead können Benachrichtigungen senden. Drücken Sie die Taste \"Benachrichtigungen werden nicht unterdrückt\", um zu \"Benachrichtigungen werden unterdrückt\" zu wechseln."
 
-msgid "You do not have the run right for the Tasks application or it is not activated."
+msgid "You do not have the run permission for the Tasks application, or it is not activated."
 msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen oder sie ist deaktiviert."
 
-msgid "You do not have the run right for the Sales application or it is not activated."
+msgid "You do not have the run permission for the Sales application, or it is not activated."
 msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
 
 msgid "Enter lead name"
@@ -366,14 +363,17 @@ msgstr "Handy"
 msgid "Fax"
 msgstr "Fax"
 
-msgid "E-Mail"
-msgstr "Email"
-
 msgid "Web"
 msgstr "Webseite"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Leadtype"
+msgstr "Typ"
+
+msgid "Leadsource"
+msgstr "Quelle"
 
 msgid "Lead name"
 msgstr "Lead-Name"
@@ -418,13 +418,13 @@ msgstr "Schnellsuche"
 msgid "Last Modified Time"
 msgstr "Zuletzt geändert"
 
-msgid "Last Modified By"
+msgid "Last Modified by"
 msgstr "Zuletzt geändert von"
 
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
-msgid "Created By"
+msgid "Created by"
 msgstr "Angelegt von"
 
 msgid "X Lead"
@@ -445,7 +445,7 @@ msgstr "Preis"
 msgid "Quantity"
 msgstr "Anzahl"
 
-msgid "Search for Products to add ..."
+msgid "Search for products to add..."
 msgstr "Produkte zum Hinzufügen suchen..."
 
 msgid "No Tasks to display"
@@ -454,8 +454,8 @@ msgstr "Keine Aufgaben vorhanden"
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-msgid "Add a task..."
-msgstr "Aufgabe hinzufügen..."
+msgid "Add a Task..."
+msgstr ""
 
 msgid "Percent"
 msgstr "Prozent"
@@ -469,7 +469,7 @@ msgstr ""
 msgid "Show Closed"
 msgstr ""
 
-msgid "All leads"
+msgid "All Leads"
 msgstr "Alle Leads"
 
 msgid "Default Lead List"
@@ -478,38 +478,156 @@ msgstr "Standard-Leadliste"
 msgid "The default list for new leads"
 msgstr "Die Standard-Leadliste, in der neue Leads angelegt werden"
 
-msgid "Get Notification E-mails"
+msgid "Get Notification Emails"
 msgstr "Empfangen von Benachrichtigungs-E-Mails"
 
-msgid "The level of actions you want to be notified about."
+msgid "The level of actions you want to receive notifications for."
 msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen."
 
-msgid "Send Notifications e-mails for own actions"
+msgid "Send notification emails for your own actions"
 msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
-msgid "Get notifications e-mails for actions you did yourself"
+msgid "Get notification emails for your own actions"
 msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 msgid "Default Favorite"
 msgstr "Standard Favorit"
 
-msgid "The default favorite which is loaded on crm startup"
-msgstr "Der Standard Favorit der beim öffnen des Crm geladen wird"
+msgid "The default favorite that is loaded on CRM startup"
+msgstr "Der Standard Favorit der beim öffnen des CRM geladen wird"
 
-msgid "All leads I have read grants for"
+msgid "All leads I have read access to"
 msgstr "Alle Leads für die ich Lese-Rechte habe"
 
 msgid "Last modified by me"
 msgstr "Zuletzt von mir bearbeitet"
 
-msgid "All leads that I have last modified"
+msgid "All leads I last modified"
 msgstr "Alle Leads, die ich zuletzt bearbeitet habe"
 
 msgid "My leads"
 msgstr "Meine Leads"
 
-msgid "All leads that I am responsible for"
+msgid "All leads I am responsible for"
 msgstr "Alle Leads, für die ich verantwortlich bin"
 
 msgid "Leads with overdue tasks"
 msgstr "Leads mit überfälligen Aufgaben"
+
+#~ msgid "manage shared lead folders"
+#~ msgstr "Gemeinsame Leads Ordner bearbeiten"
+
+#~ msgid "manage shared leads favorites"
+#~ msgstr "Gemeinsame Lead-Favoriten verwalten"
+
+#~ msgid "Create or update shared leads favorites"
+#~ msgstr "Gemeinsame Lead-Favoriten erstellen oder bearbeiten"
+
+#~ msgid "controls sending notification of Leads"
+#~ msgstr "Steuert das versenden von Benachrichtigungen für Leads"
+
+#~ msgid "send notification to all access container"
+#~ msgstr "Versendet Benachrichtigungen an alle, die Zugriff auf den Container haben"
+
+#~ msgid "send notification to responsible"
+#~ msgstr "Versendet Benachrichtigungen zum Verantwortlichen"
+
+#~ msgid "send notification to customer"
+#~ msgstr "Versendet Benachrichtigungen zum Kunden"
+
+#~ msgid "send notification to partner"
+#~ msgstr "Versendet Benachrichtigungen zum Partner"
+
+#~ msgid "Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed."
+#~ msgstr "Mögliche Lead-Quelle. Wenn eine Quelle als archiviert markiert ist, werden Leads dieser Quelle als geschlossen behandelt."
+
+#~ msgid "Enabled Features"
+#~ msgstr "Feature aktivieren"
+
+#~ msgid "Enabled Features in CRM Application."
+#~ msgstr "Features in der CRM Applikation aktivieren."
+
+#~ msgid "Add new task on lead import"
+#~ msgstr "Füge eine neue Aufgabe beim Lead Import hinzu"
+
+#~ msgid "Automatically creates a task for the responsible person if a new lead is imported."
+#~ msgstr "Lege automatisch eine neue Aufgabe für die verantwortliche Person an, wenn ein neuer Lead importiert wird."
+
+#~ msgid "Send notification e-mail on lead import"
+#~ msgstr "Sende Benachrichtigungen beim Lead Import"
+
+#~ msgid "Sends an e-mail to all responsible persons for the imported leads."
+#~ msgstr "Sende für die importierten Leads eine E-Mail an alle verantwortlichen Personen."
+
+#~ msgid "These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+#~ msgstr "Diese Felder werden überprüft, wenn ein neuer Lead angelegt wird. Wenn ein Datensatz mit den selben Daten in diesem Feld gefunden wird, wird eine Dubletten Warnung geworfen."
+
+#~ msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
+#~ msgstr "Der Status dieses Leads wurde auf schreibgeschützt gesetzt. Es ist daher nicht möglich, diesen Lead zu aktualisieren."
+
+#~ msgid "Leadstate"
+#~ msgstr "Status"
+
+#, python-format
+#~ msgid "The following leads have just been imported into lead list %s"
+#~ msgstr "Die folgenden Leads wurden soeben in die Lead Liste %s importiert"
+
+#~ msgid "Please choose the Lead to add the contacts to"
+#~ msgstr "Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
+
+#~ msgid "Please select the attenders' role"
+#~ msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
+
+#~ msgid "Search for Contacts to add ..."
+#~ msgstr "Kontakte zum Hinzufügen suchen..."
+
+#~ msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+#~ msgstr "Änderungen an diesem Lead können Benachrichtigungen senden. Drücken Sie die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu \"Benachrichtigung werden unterdrückt\" zu wechseln."
+
+#~ msgid "You do not have the run right for the Tasks application or it is not activated."
+#~ msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen oder sie ist deaktiviert."
+
+#~ msgid "You do not have the run right for the Sales application or it is not activated."
+#~ msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
+
+#~ msgid "E-Mail"
+#~ msgstr "Email"
+
+#~ msgid "Search for Products to add ..."
+#~ msgstr "Produkte zum Hinzufügen suchen..."
+
+#~ msgid "Add a task..."
+#~ msgstr "Aufgabe hinzufügen..."
+
+#~ msgid "All leads"
+#~ msgstr "Alle Leads"
+
+#~ msgid "Get Notification E-mails"
+#~ msgstr "Empfangen von Benachrichtigungs-E-Mails"
+
+#~ msgid "The level of actions you want to be notified about."
+#~ msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen."
+
+#~ msgid "Send Notifications e-mails for own actions"
+#~ msgstr "Sende Benachrichtigungen über eigene Änderungen"
+
+#~ msgid "Get notifications e-mails for actions you did yourself"
+#~ msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+
+#~ msgid "The default favorite which is loaded on crm startup"
+#~ msgstr "Der Standard Favorit der beim öffnen des Crm geladen wird"
+
+#~ msgid "All leads I have read grants for"
+#~ msgstr "Alle Leads für die ich Lese-Rechte habe"
+
+#~ msgid "All leads that I have last modified"
+#~ msgstr "Alle Leads, die ich zuletzt bearbeitet habe"
+
+#~ msgid "All leads that I am responsible for"
+#~ msgstr "Alle Leads, für die ich verantwortlich bin"
+
+#~ msgid "Last Modified By"
+#~ msgstr "Zuletzt geändert von"
+
+#~ msgid "Created By"
+#~ msgstr "Angelegt von"
