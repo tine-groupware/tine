@@ -451,7 +451,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         if (this.hiddenField){
             this.hiddenField.value = Ext.value(value, '');
         }
-
+        // assertState executed before Ext.ux.form.ClearableComboBox.setValue , the trigger[0] was not updated in time
+        if (this.selectedRecord && this.triggers && this.disableClearer !== true && !this.readOnly) {
+            this.triggers[0].show();
+        }
         const setValue = _.bind(Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue, this);
         if (text && text.registerReplacer) {
             text.registerReplacer((text) => {
