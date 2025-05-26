@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Please select core data from tree ..."
+msgid "Please select the core data from the tree..."
 msgstr ""
 
 msgid "Core Data"

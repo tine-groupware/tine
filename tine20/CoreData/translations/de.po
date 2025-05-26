@@ -18,8 +18,8 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Please select core data from tree ..."
-msgstr "Bitte wählen Sie Stammdaten aus der Baumansicht ..."
+msgid "Please select the core data from the tree..."
+msgstr "Bitte wählen Sie Stammdaten aus der Baumansicht aus..."
 
 msgid "Core Data"
 msgstr "Stammdaten"
@@ -32,3 +32,6 @@ msgstr "Applikationsdaten"
 
 msgid "CoreData"
 msgstr "Stammdaten"
+
+#~ msgid "Please select core data from tree ..."
+#~ msgstr "Bitte wählen Sie Stammdaten aus der Baumansicht ..."

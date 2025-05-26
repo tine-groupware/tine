@@ -55,7 +55,7 @@ class Courses_Setup_Initialize extends Setup_Initialize
             $translation = Tinebase_Translation::getTranslation('Courses');
             $school = new Tinebase_Model_Department(array(
                 'name' => $translation->_('School'),
-                'description' => $translation->_('Defaul school for Courses application'),
+                'description' => $translation->_('Default school for the Courses application'),
             ));
             Tinebase_Department::getInstance()->create($school);
         }

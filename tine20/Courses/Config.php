@@ -113,8 +113,8 @@ class Courses_Config extends Tinebase_Config_Abstract
         self::ADDITIONAL_GROUP_MEMBERSHIPS => array(
             //_('Additional Group Memberships')
             'label'                 => 'Additional Group Memberships',
-            //_('Array of IDs of Groups students can be members of')
-            'description'           => 'Array of IDs of Groups students can be members of',
+            //_('Array of group IDs that students can be members of')
+            'description'           => 'Array of group IDs that students can be members of',
             'type'                  => 'array',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
@@ -153,32 +153,32 @@ class Courses_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
         ),
         self::STUDENTS_GROUP => array(
-        //_('Students Group')
-            'label'                 => 'Students Group',
-        //_('Students Group')
-            'description'           => 'Students Group',
+        //_('Student Group')
+            'label'                 => 'Student Group',
+        //_('Student Group')
+            'description'           => 'Student Group',
             'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
         ),
         self::STUDENTS_IMPORT_DEFINITION => array(
-        //_('Students Import Definition')
-            'label'                 => 'Students Import Definition',
-        //_('Students Import Definition')
-            'description'           => 'Students Import Definition',
+        //_('Student Import Definition')
+            'label'                 => 'Student Import Definition',
+        //_('Student Import Definition')
+            'description'           => 'Student Import Definition',
             'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
         ),
         self::STUDENT_LOGINNAME_PREFIX => array(
-        //_('Students login name prefix')
+        //_('Student login name prefix')
             'label'                 => 'Student login name prefix',
             'description'           => 'Student login name prefix',
             'type'                  => 'int',
             'clientRegistryInclude' => TRUE,
         ),
         self::STUDENT_PASSWORD_SUFFIX => array(
-            //_('Students password suffix')
-            'label'                 => 'Students password suffix',
-            'description'           => 'Students password suffix',
+            //_('Student password suffix')
+            'label'                 => 'Student password suffix',
+            'description'           => 'Student password suffix',
             'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
         ),

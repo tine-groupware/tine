@@ -83,7 +83,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             failure: function(result, request){
                 Ext.MessageBox.alert(
                     this.app.i18n._('Failed'), 
-                    this.app.i18n._('Some error occured while trying to update the courses.')
+                    this.app.i18n._('An error occurred while trying to update the courses')
                 );
             },
             scope: this

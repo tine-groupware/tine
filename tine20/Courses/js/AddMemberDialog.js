@@ -83,7 +83,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        var title = this.windowTitle || this.app.i18n._('Add new member to course');
+        var title = this.windowTitle || this.app.i18n._('Add a new member to a course');
         this.window.setTitle(title);
         
         this.getForm().loadRecord(this.record);
@@ -118,7 +118,7 @@ Tine.Courses.AddMemberDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
             
         } else {
-            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the noted errors.'));
         }
     }
 });

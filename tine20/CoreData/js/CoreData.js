@@ -85,7 +85,7 @@ Tine.CoreData.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
                 this[contentType + this.centerPanelClassNameSuffix] = new Ext.Panel({
                     // TODO improve wording/styling
                     border: false,
-                    html: this.app.i18n._('Please select core data from tree ...')
+                    html: this.app.i18n._('Please select the core data from the tree...')
                 });
             } else {
                 // try to find grid in Core Data Manager

@@ -20,35 +20,35 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 3.4.2\n"
 
-msgid "Add new user"
-msgstr "Neuen Benutzer hinzufügen"
+msgid "Add a new user"
+msgstr "Eine neue Person hinzufügen"
 
-msgid "Add new user as member to a course"
-msgstr "Einen neuen Benutzer als Schüler zur Klasse hinzufügen"
+msgid "Add a new user as a member to a course"
+msgstr "Eine neue Person als Schüler*in zur Klasse hinzufügen"
 
-msgid "Add existing user"
-msgstr "Bestehenden Benutzer hinzufügen"
+msgid "Add an existing user"
+msgstr "Bereits vorhandene Person hinzufügen"
 
-msgid "Add existing user as member to a course"
-msgstr "Einen bestehenden Benutzer als Schüler zur Klasse hinzufügen"
+msgid "Add an existing user as a member to a course"
+msgstr "Eine bereits vorhandene Person als Schüler*in zur Klasse hinzufügen"
 
-msgid "Manage shared courses favorites"
+msgid "Manage shared course favorites"
 msgstr "Verwalte geteilte Kurs-Favoriten"
 
-msgid "Create or update shared courses favorites"
+msgid "Create or update shared course favorites"
 msgstr "Erstelle oder aktualisiere geteilte Kurs-Favoriten"
 
 msgid "Set additional memberships"
 msgstr "Weitere Mitgliedschaften setzen"
 
-msgid "Set additional course member group memberships"
+msgid "Set additional group memberships for course members"
 msgstr "Weitere Gruppen-Mitgliedschaften für Kurs-Mitglieder setzen"
 
 msgid "Additional Group Memberships"
 msgstr "Weitere Gruppen-Mitgliedschaften"
 
-msgid "Array of IDs of Groups students can be members of"
-msgstr ""
+msgid "Array of group IDs that students can be members of"
+msgstr "Array von Gruppen-IDs, denen Schüler*innen angehören können"
 
 msgid "Internet Access"
 msgstr "Internetzugang"
@@ -71,26 +71,26 @@ msgstr "Internet Zugangsgruppe (AN)"
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Zugangsgruppe (GEFILTERT)"
 
-msgid "Students Group"
-msgstr "Studentengruppe"
+msgid "Student Group"
+msgstr "Gruppe von Schüler*innen"
 
-msgid "Students Import Definition"
-msgstr "Schülerimportdefinition"
+msgid "Student Import Definition"
+msgstr "Importdefinition für Schüler*innen"
 
-msgid "Students login name prefix"
-msgstr "Studenten-Loginnamen Prefix"
+msgid "Student login name prefix"
+msgstr "Präfix für Loginnamen von Schüler*innen"
 
-msgid "Students password suffix"
-msgstr "Schüler Passwort Suffix"
+msgid "Student password suffix"
+msgstr "Passwort-Suffix für Schüler*innen"
 
 msgid "Teacher password"
-msgstr "Lehrer Passwort"
+msgstr "Passwort für Lehrende"
 
 msgid "Student username schema"
-msgstr "Benutzernamensschema für Schüler"
+msgstr "Benutzernamensschema für Schüler*innen"
 
 msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
-msgstr "Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
+msgstr "Benutzernamensschema für Schüler*innen (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
 
 msgid "Samba user settings"
 msgstr "Samba-Benutzereinstellungen"
@@ -110,10 +110,10 @@ msgstr[0] "Klasse"
 msgstr[1] "Klassen"
 
 msgid "Teacher"
-msgstr "Lehrer"
+msgstr "Lehrerende"
 
 msgid "Teacher Account"
-msgstr "Lehrer Zugang"
+msgstr "Zugang für Lehrende"
 
 msgid "My course"
 msgstr "Meine Klasse"
@@ -124,19 +124,19 @@ msgstr "Vorname"
 msgid "Last Name"
 msgstr "Nachname"
 
-msgid "Add new member to course"
+msgid "Add a new member to a course"
 msgstr "Neues Mitglied zur Klasse hinzufügen"
 
 msgid "Errors"
 msgstr "Fehler"
 
-msgid "Please fix the errors noted."
+msgid "Please fix the noted errors."
 msgstr "Bitte beheben Sie die genannten Fehler."
 
 msgid "Import course members"
 msgstr "Klassenmitglieder importieren"
 
-msgid "Add new member"
+msgid "Add a new member"
 msgstr "Neues Mitglied hinzufügen"
 
 msgid "Course Name"
@@ -160,7 +160,7 @@ msgstr "unbekannt"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-msgid "Please enter the new Password."
+msgid "Please enter the new password."
 msgstr "Bitte geben sie das neue Password ein."
 
 msgid "Name"
@@ -172,7 +172,7 @@ msgstr "Typ"
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-msgid "Some error occured while trying to update the courses."
+msgid "An error occurred while trying to update the courses"
 msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
 
 msgid "Quick Search"
@@ -186,14 +186,68 @@ msgstr[1] "Klassentypen"
 msgid "All courses"
 msgstr "Alle Klassen"
 
-msgid "The default favorite which is loaded on Classes startup"
+msgid "The default favorite that is loaded when Classes start up."
 msgstr "Standardfilter, der beim Starten der Klassenverwaltung geladen wird"
 
 msgid "School"
 msgstr "Schule"
 
-msgid "Defaul school for Courses application"
-msgstr "Default Schule für Klassen Applikation "
+msgid "Default school for the Courses application"
+msgstr "Standard Schule für die Klassen Applikation"
 
 msgid "Courses"
 msgstr "Klassen"
+
+#~ msgid "Add new user"
+#~ msgstr "Neuen Benutzer hinzufügen"
+
+#~ msgid "Add new user as member to a course"
+#~ msgstr "Einen neuen Benutzer als Schüler zur Klasse hinzufügen"
+
+#~ msgid "Add existing user"
+#~ msgstr "Bestehenden Benutzer hinzufügen"
+
+#~ msgid "Add existing user as member to a course"
+#~ msgstr "Einen bestehenden Benutzer als Schüler zur Klasse hinzufügen"
+
+#~ msgid "Manage shared courses favorites"
+#~ msgstr "Verwalte geteilte Kurs-Favoriten"
+
+#~ msgid "Create or update shared courses favorites"
+#~ msgstr "Erstelle oder aktualisiere geteilte Kurs-Favoriten"
+
+#~ msgid "Set additional course member group memberships"
+#~ msgstr "Weitere Gruppen-Mitgliedschaften für Kurs-Mitglieder setzen"
+
+#~ msgid "Students Group"
+#~ msgstr "Studentengruppe"
+
+#~ msgid "Students Import Definition"
+#~ msgstr "Schülerimportdefinition"
+
+#~ msgid "Students login name prefix"
+#~ msgstr "Studenten-Loginnamen Prefix"
+
+#~ msgid "Students password suffix"
+#~ msgstr "Schüler Passwort Suffix"
+
+#~ msgid "Add new member to course"
+#~ msgstr "Neues Mitglied zur Klasse hinzufügen"
+
+#~ msgid "Please fix the errors noted."
+#~ msgstr "Bitte beheben Sie die genannten Fehler."
+
+#~ msgid "Add new member"
+#~ msgstr "Neues Mitglied hinzufügen"
+
+#~ msgid "Please enter the new Password."
+#~ msgstr "Bitte geben sie das neue Password ein."
+
+#~ msgid "Some error occured while trying to update the courses."
+#~ msgstr "Beim aktualisieren der Klasse(n) trat ein Fehler auf."
+
+#~ msgid "The default favorite which is loaded on Classes startup"
+#~ msgstr "Standardfilter, der beim Starten der Klassenverwaltung geladen wird"
+
+#~ msgid "Defaul school for Courses application"
+#~ msgstr "Default Schule für Klassen Applikation "
