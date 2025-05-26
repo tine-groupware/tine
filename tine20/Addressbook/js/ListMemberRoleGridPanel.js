@@ -60,7 +60,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             fields:  [
                 {name: 'n_fileas'},
                 {name: 'memberroles', sortType: this.listMemberRoleRenderer},
-                {name: 'email'},
+                {name: 'preferred_email'},
             ],
         });
 
@@ -127,7 +127,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     initColumns: function() {
         this.columns = this.getColumns();
         this.editors = [];
-        var visibleColumns = ["n_fileas", "email", "memberroles"];
+        var visibleColumns = ["n_fileas", "preferred_email", "memberroles"];
         Ext.each(this.columns, function(value, idx) {
             this.columns[idx].sortable = true;
             if (visibleColumns.indexOf(this.columns[idx].id) === -1) {
@@ -142,6 +142,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                 });
                 this.columns[idx].editor = this.editors[idx];
             }
+            if (this.columns[idx].id === "preferred_email") {
+                this.columns[idx].renderer = Tine.Addressbook.ContactGridPanel.preferredEmailRenderer;
+            }
         }, this);
     },
 
@@ -155,11 +158,11 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
         // NOTE: contact grid basecols have memberroles with different data layout
         baseCols = _.filter(baseCols, function(c) {return c.id !== 'memberroles'});
-        baseCols = _.filter(baseCols, function(c) {return c.id !== 'email'});
+        baseCols = _.filter(baseCols, function(c) {return c.id !== 'preferred_email'});
 
         return baseCols.concat([
             { id: 'memberroles', header: this.app.i18n._('List Roles'), renderer: this.listMemberRoleRenderer },
-            { id: 'email', header: this.app.i18n._('Email'), renderer: this.preferredEmailRenderer }
+            { id: 'preferred_email', header: this.app.i18n._('Preferred E-Mail'), renderer: this.preferredEmailRenderer }
         ]);
     },
 
