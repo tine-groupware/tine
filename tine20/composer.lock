@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "884a3de75031787b54689beea7c2d604",
+    "content-hash": "644c30164e62bf10375e17ac2a567987",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2625,107 +2625,6 @@
                 }
             ],
             "time": "2024-02-24T14:12:14+00:00"
-        },
-        {
-            "name": "josemmo/einvoicing",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Kronos-IT-Support-Consulting/einvoicing.git",
-                "reference": "16d6e46718985ed0c049b7f05f9177c2f09254a8"
-            },
-            "require": {
-                "josemmo/uxml": "^0.1.4",
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "ext-openssl": "*",
-                "phan/phan": "*",
-                "phpdocumentor/reflection": "^3.0|^5.1",
-                "symfony/phpunit-bridge": "*"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Einvoicing\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "José Miguel Moreno",
-                    "email": "josemmo@pm.me",
-                    "homepage": "https://github.com/josemmo"
-                }
-            ],
-            "description": "Library for reading and creating European-compliant electronic invoices (EN 16931)",
-            "homepage": "https://github.com/josemmo/einvoicing",
-            "keywords": [
-                "cii",
-                "invoice",
-                "invoicing",
-                "peppol",
-                "ubl"
-            ],
-            "time": "2024-09-05T14:20:25+00:00"
-        },
-        {
-            "name": "josemmo/uxml",
-            "version": "v0.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/josemmo/uxml.git",
-                "reference": "bcd7d8e410285c642116294e01581374d6be696f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/josemmo/uxml/zipball/bcd7d8e410285c642116294e01581374d6be696f",
-                "reference": "bcd7d8e410285c642116294e01581374d6be696f",
-                "shasum": ""
-            },
-            "require": {
-                "lib-libxml": "*",
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "phan/phan": "*",
-                "symfony/phpunit-bridge": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "UXML\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "José Miguel Moreno",
-                    "email": "josemmo@pm.me",
-                    "homepage": "https://github.com/josemmo"
-                }
-            ],
-            "description": "Uncomplicated XML manipulation library with a clean and concise syntax",
-            "homepage": "https://github.com/josemmo/uxml",
-            "keywords": [
-                "xml"
-            ],
-            "support": {
-                "issues": "https://github.com/josemmo/uxml/issues",
-                "source": "https://github.com/josemmo/uxml/tree/v0.1.4"
-            },
-            "time": "2022-05-28T16:43:25+00:00"
         },
         {
             "name": "jumbojett/openid-connect-php",
@@ -15686,7 +15585,6 @@
     ],
     "minimum-stability": "RC",
     "stability-flags": {
-        "josemmo/einvoicing": 20,
         "jumbojett/openid-connect-php": 20,
         "simplesamlphp/simplesamlphp": 20,
         "validator/livr": 20
@@ -15710,6 +15608,7 @@
         "ext-libxml": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
+        "ext-redis": "*",
         "ext-xml": "*",
         "ext-xmlreader": "*",
         "ext-xmlwriter": "*",
@@ -15733,6 +15632,7 @@
         "ext-libxml": "8.1",
         "ext-mbstring": "8.1",
         "ext-openssl": "8.1",
+        "ext-redis": "8.1",
         "ext-xml": "8.1",
         "ext-xmlreader": "8.1",
         "ext-xmlwriter": "8.1",
