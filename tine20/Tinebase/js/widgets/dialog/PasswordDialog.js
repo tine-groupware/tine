@@ -121,7 +121,12 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
             text: i18n._('Generate password'),
             minWidth: 70,
             iconCls: 'action_managePermissions',
-            handler: this.onPWGen.createDelegate(me),
+            handler: () => {
+                const pw = Tine.Tinebase.widgets.form.PasswordTriggerField.prototype.genPW();
+                this.passwordField.setValue(pw);
+                // revalidate button
+                this.onChange(this.passwordField);
+            },
             scope: this
         });
 
@@ -159,10 +164,6 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
         };
 
         var gen = new Tine.Tinebase.PasswordGenerator(config);
-
-        this.passwordField.setValue(gen.generatePassword());
-        // revalidate button
-        this.onChange(this.passwordField);
     },
 
     onKeyDown: function(f, e) {
