@@ -149,6 +149,15 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
                 $fun();
             }
         }
+
+        $fun = function() {
+            Setup_Controller::getInstance()->clearCache(false);
+        };
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+        } else {
+            $fun();
+        }
     }
 
     protected function removeDimensionFromModel(Tinebase_Model_EvaluationDimension $dimension, array $models): void
@@ -173,6 +182,15 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
                     $fun();
                 }
             }
+        }
+
+        $fun = function() {
+            Setup_Controller::getInstance()->clearCache(false);
+        };
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+        } else {
+            $fun();
         }
     }
 
