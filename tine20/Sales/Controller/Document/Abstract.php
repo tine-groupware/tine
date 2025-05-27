@@ -105,7 +105,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
              return;
          }
 
-         if (null === ($vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE}))) {
+         if (false === ($vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE}))) {
              throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE . ' ' . $_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} . ' not supported');
          }
          if (!is_array($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX})) {
