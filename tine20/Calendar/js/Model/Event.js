@@ -503,6 +503,10 @@ Event.getFilterModel = function() {
                 defaultAll: true
             },
             {
+                app: app,
+                filtertype: 'calendar.weekday',
+            },
+            {
                 label: app.i18n._('Classification'),
                 gender: app.i18n._('GENDER_Classification'),
                 field: 'class',

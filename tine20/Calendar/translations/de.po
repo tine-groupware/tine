@@ -1713,6 +1713,9 @@ msgstr "Suche..."
 msgid "Search Event"
 msgstr "Suche Termin"
 
+msgid "Event Weekday"
+msgstr "Termin Wochentag"
+
 msgid "Mini Calendar"
 msgstr "Mini Kalender"
 

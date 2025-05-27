@@ -122,6 +122,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             filters: this.defaultFilters || [],
             onFilterChange: this.refresh.createDelegate(this, [false]),
             getAllFilterData: this.getAllFilterData.createDelegate(this),
+            getFilterModel: this.getFilterModel.createDelegate(this),
         });
         
         this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
@@ -142,6 +143,31 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.initMessageBus();
         Tine.Calendar.MainScreenCenterPanel.superclass.initComponent.call(this);
     },
+
+    /**
+     * returns filterModel
+     *
+     * @return {Tine.widgets.grid.FilterModel}
+     * @param field
+     */
+    getFilterModel: function(field) {
+        let filterModel = Tine.widgets.grid.FilterToolbar.prototype.getFilterModel.call(this.filterToolbar, field);
+
+        Object.entries(this.filterToolbar.filterToolbars).forEach((ftb) => {
+            const filterToolbar = ftb[1];
+            const weekdayFilterIdx = filterToolbar.fieldStore.find('field', 'weekday');
+            if (!this.activeView.includes('Grid') && weekdayFilterIdx > -1) {
+                this.weekdayFilterIdx = weekdayFilterIdx;
+                this.weekdayFilter = filterToolbar.fieldStore.getAt(this.weekdayFilterIdx);
+                filterToolbar.fieldStore.removeAt(this.weekdayFilterIdx);
+            }
+            if (this.activeView.includes('Grid') && weekdayFilterIdx === -1) {
+                filterToolbar.fieldStore.insert(this.weekdayFilterIdx, this.weekdayFilter);
+            }
+        })
+        return filterModel;
+    },
+
 
     initMessageBus: function() {
         this.postalSubscriptions = [];
@@ -670,7 +696,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         return options.params.filter;
     },
-    
+
     getCustomfieldFilters: Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters,
     
     
@@ -1646,15 +1672,43 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (this.rendered) {
-            // update filter panel
-            if(this.filterToolbar) {
-                this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
-            }
             // update container tree
             Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
             
             // update attendee filter grid
             Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getAttendeeFilter().setFilterValue(store.proxy.jsonReader.jsonData.filter);
+
+            // update filter panel
+            if(this.filterToolbar) {
+                this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
+
+                const filterData = this.getAllFilterData();
+                const id = filterData[0]['filters'][0]['id'] ?? null;
+                if (!id) return;
+                const ftb = this.filterToolbar.filterToolbars[id];
+
+                if (!this.activeView.includes('Grid')) {
+                    const weekdayFilters = ftb.filterStore.query('field', 'weekday');
+
+                    if (weekdayFilters.length > 0) {
+                        ftb.supressEvents = true;
+                        weekdayFilters.each((weekdayFilter) => {
+                            ftb.deleteFilter(weekdayFilter);
+                        })
+                        ftb.supressEvents = false;
+                        this.weekdayFilters = weekdayFilters;
+                    }
+                } else {
+                    if (this.weekdayFilters?.length > 0) {
+                        ftb.supressEvents = true;
+                        this.weekdayFilters.each((weekdayFilter) => {
+                            ftb.addFilter(weekdayFilter);
+                        })
+                        ftb.supressEvents = false;
+                        this.weekdayFilters = [];
+                    }
+                }
+            }
         }
     },
     

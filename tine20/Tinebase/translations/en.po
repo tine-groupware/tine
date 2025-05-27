@@ -3296,6 +3296,12 @@ msgstr "starts with"
 msgid "ends with"
 msgstr "ends with"
 
+msgid "starts-on"
+msgstr "starts-on"
+
+msgid "ends-on"
+msgstr "ends-on"
+
 msgid "defined by"
 msgstr "defined by"
 

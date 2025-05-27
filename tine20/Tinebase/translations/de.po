@@ -3691,6 +3691,12 @@ msgstr "beginnt mit"
 msgid "ends with"
 msgstr "endet mit"
 
+msgid "starts-on"
+msgstr "startet am"
+
+msgid "ends-on"
+msgstr "endet am"
+
 msgid "defined by"
 msgstr "definiert durch"
 
