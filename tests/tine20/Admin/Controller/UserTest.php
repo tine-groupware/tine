@@ -398,6 +398,29 @@ class Admin_Controller_UserTest extends TestCase
         }
     }
 
+    public function testAddUserWithContact()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $pw = Tinebase_Record_Abstract::generateUID(10);
+        $userToCreate = TestCase::getTestUser();
+        $userToCreate->accountEmailAddress = 'phpunit' . Tinebase_Record_Abstract::generateUID(10) . '@mail.test';
+        $userToCreate->contact_id = new Addressbook_Model_Contact([
+                'id'   =>   Tinebase_Record_Abstract::generateUID(40),
+                'n_family'  => $userToCreate->accountLastName,
+                'n_fileas' => $userToCreate->accountDisplayName,
+                'n_fn' => $userToCreate->accountFullName,
+                'n_given' => $userToCreate->accountFirstName,
+                'email' => $userToCreate->accountEmailAddress,
+                'org_name'  => 'test',
+                'container_id' => Addressbook_Controller::getDefaultInternalAddressbook(),
+            ]
+        );
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $conatct = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
+        self::assertEquals('test', $conatct->org_name);
+    }
+
     public function testUpdateUserRemoveMail()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
