@@ -162,11 +162,11 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public static function checkForbiddenFile($name)
     {
         if (in_array($name, self::$_forbiddenNames)) {
-            throw new Sabre\DAV\Exception\Forbidden('forbidden name');
+            throw new Sabre\DAV\Exception\Forbidden('forbidden name' . ' : ' . $name);
         } else if (substr($name, 0, 2) == '._') {
-            throw new Sabre\DAV\Exception\Forbidden('no resource files accepted');
+            throw new Sabre\DAV\Exception\Forbidden('no resource files accepted' . ' : ' . $name);
         } else if (preg_match(Tinebase_Model_Tree_Node::FILENAME_FORBIDDEN_CHARS_EXP, $name, $matches)) {
-            throw new Sabre\DAV\Exception\Forbidden('Illegal characters: ' . print_r($matches, true));
+            throw new Sabre\DAV\Exception\Forbidden('Illegal characters: ' . $name . ' => ' . print_r($matches, true));
         }
     }
 
