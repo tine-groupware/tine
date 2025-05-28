@@ -60,6 +60,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE039 = __CLASS__ . '::update039';
     protected const RELEASE017_UPDATE040 = __CLASS__ . '::update040';
     protected const RELEASE017_UPDATE041 = __CLASS__ . '::update041';
+    protected const RELEASE017_UPDATE042 = __CLASS__ . '::update042';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -221,6 +222,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE041 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update041',
+            ],
+            self::RELEASE017_UPDATE042 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update042',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -1168,5 +1173,35 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.41', self::RELEASE017_UPDATE041);
+    }
+
+    public function update042(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Customer::class,
+            Sales_Model_Document_Customer::class,
+        ]);
+
+        /** @var Tinebase_Record_Interface $model */
+        foreach ([
+                     Sales_Model_Document_Customer::class,
+                 ] as $model) {
+            foreach ([
+                         'taxable' => 'standard',
+                         'nonTaxable' => 'outsideTaxScope',
+                         'export' => 'freeExportItem',
+                     ] as $old => $new) {
+                $this->_db->update(
+                    SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                    [Sales_Model_Customer::FLD_VAT_PROCEDURE => $new],
+                    Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . $old . '"'
+                );
+            }
+        }
+
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.42', self::RELEASE017_UPDATE042);
     }
 }
