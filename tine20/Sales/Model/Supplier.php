@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -33,7 +33,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 4,
+        self::VERSION       => 5,
         'recordName'        => 'Supplier', // gettext('GENDER_Supplier')
         'recordsName'       => 'Suppliers', // ngettext('Supplier', 'Suppliers', n)
         'hasRelations'      => TRUE,
