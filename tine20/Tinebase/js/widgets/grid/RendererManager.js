@@ -178,7 +178,7 @@ Tine.widgets.grid.RendererManager = function() {
 
                         renderer = renderer.createSequence(function (value, metadata, record) {
                             if (metadata) {
-                                metadata.css = 'tine-gird-cell-number';
+                                metadata.css += ' tine-gird-cell-number';
                             }
                         });
 
