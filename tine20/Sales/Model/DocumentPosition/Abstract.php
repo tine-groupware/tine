@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -327,7 +327,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER                  => true,
                 self::LENGTH                        => 255,
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_DESCRIPTION               => [
