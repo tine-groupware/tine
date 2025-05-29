@@ -19,7 +19,7 @@ const AbstractMixin = {
     setFromProduct(product, lang, document) {
         const productClass = Tine.Sales.Model.Product;
         const productData = product.data || product;
-        const vatProcedure = _.get(document, 'vat_procedure', 'taxable');
+        const vatProcedure = _.get(document, 'vat_procedure', 'standard');
 
         if (!lang) {
             const languagesAvailableDef = _.get(productClass.getModelConfiguration(), 'languagesAvailable')
@@ -48,7 +48,7 @@ const AbstractMixin = {
         this.set('grouping', productData.default_grouping);
         this.set('sorting', productData.default_sorting);
 
-        if (vatProcedure !== 'taxable' && this.get('unit_price_type') === 'gross') {
+        if (vatProcedure !== 'standard' && this.get('unit_price_type') === 'gross') {
             this.computePrice();
             this.set('unit_price', this.get('unit_price') - (this.get('sales_tax') || 0))
             this.set('unit_price_type', 'net')

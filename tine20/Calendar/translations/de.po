@@ -749,6 +749,16 @@ msgstr "Ursprungskalender"
 msgid "Colors"
 msgstr "Farben"
 
+msgid "Use Light-Mode Colors"
+msgstr "Nutze Farben des Hellen Modus"
+
+msgid ""
+"In dark mode event colors are inverted for better readability. If you want "
+"to see the original colors of light mode check this option."
+msgstr ""
+"Im dunklen Modus werden Termin-Farben zur besseren lesbarkeit invertiert. "
+"Nutzen sie diese Option um die Originalfarbe des hellen Modus zu sehen."
+
 msgid "Side bar color"
 msgstr "Farbe der Seitenleiste"
 
@@ -2192,15 +2202,11 @@ msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
 msgid "You can review the poll results here:"
 msgstr "Sie können die Umfrageergebnisse hier einsehen:"
 
-msgid "Use Light-Mode Colors"
-msgstr "Nutze Farben des Hellen Modus"
+msgid "GENDER_Event Type"
+msgstr "female"
 
-msgid ""
-"In dark mode event colors are inverted for better readability. If you want "
-"to see the original colors of light mode check this option."
-msgstr ""
-"Im dunklen Modus werden Termin-Farben zur besseren lesbarkeit invertiert. "
-"Nutzen sie diese Option um die Originalfarbe des hellen Modus zu sehen."
+msgid "GENDER_Poll"
+msgstr "female"
 
 msgid "and classification"
 msgstr "und Klassifikation"

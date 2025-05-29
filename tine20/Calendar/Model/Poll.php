@@ -33,7 +33,7 @@ class Calendar_Model_Poll extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         'version'           => 1,
-        'recordName'        => 'Poll',
+        'recordName'        => 'Poll',  // gettext('GENDER_Poll')
         'recordsName'       => 'Polls', // ngettext('Poll', 'Polls', n)
         'containerProperty' => 'container_id',
         'titleProperty'     => 'name',
