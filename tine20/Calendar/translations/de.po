@@ -753,6 +753,9 @@ msgstr "Termin Ort"
 msgid "URL"
 msgstr "URL"
 
+msgid "GENDER_Event Type"
+msgstr "female"
+
 msgid "Event Type"
 msgid_plural "Event Types"
 msgstr[0] "Terminart"
@@ -1489,6 +1492,9 @@ msgstr "Kalender von {name}"
 
 msgid "An unexpected error occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
+
+msgid "GENDER_Poll"
+msgstr "female"
 
 msgid "Poll"
 msgid_plural "Polls"
