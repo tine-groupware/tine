@@ -287,9 +287,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         positions.forEach((positionData, idx) => {
                             const position = Tine.Tinebase.data.Record.setFromJson(positionData, fields['positions'].recordClass)
                             const productTaxRate = _.get(positionData, 'product_id.salestaxrate', 0)
-                            if (record.id === 'taxable' && position.get('sales_tax_rate') === 0 && productTaxRate) {
+                            if (record.id === 'standard' && position.get('sales_tax_rate') === 0 && productTaxRate) {
                                 position.set('sales_tax_rate', productTaxRate)
-                            } else if (record.id !== 'taxable' && position.get('sales_tax_rate')) {
+                            } else if (record.id !== 'standard' && position.get('sales_tax_rate')) {
                                 if (position.get('unit_price_type') === 'gross') {
                                     position.set('unit_price', position.get('unit_price') - (position.get('sales_tax')/position.get('quantity') || 0))
                                     position.set('unit_price_type', 'net')
