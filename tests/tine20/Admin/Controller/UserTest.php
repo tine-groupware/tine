@@ -401,6 +401,7 @@ class Admin_Controller_UserTest extends TestCase
     public function testAddUserWithContact()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_skipIfLDAPBackend();
 
         $pw = Tinebase_Record_Abstract::generateUID(10);
         $userToCreate = TestCase::getTestUser();
@@ -416,6 +417,7 @@ class Admin_Controller_UserTest extends TestCase
                 'container_id' => Addressbook_Controller::getDefaultInternalAddressbook(),
             ]
         );
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
         $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
         $conatct = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
         self::assertEquals('test', $conatct->org_name);
