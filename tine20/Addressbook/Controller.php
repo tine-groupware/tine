@@ -91,7 +91,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     try {
                         $contact = $_eventObject->account->contact_id;
                         if ($contact instanceof Addressbook_Model_Contact) {
-                            $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+                            $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                                 . ' create user contact with data : ' . print_r($contact, true));
                         }
