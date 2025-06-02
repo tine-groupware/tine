@@ -12,8 +12,13 @@ ARG DOCKER_HUB_PROXY=""
 
 
 
+
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:jammy as php8.1
-RUN apt-get update \
+ARG APT_MIRROR=""
+COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
+COPY ci/dockerimage/sources.list.d/jammy.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
+RUN apt-mirror activate \
+ && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php \
     php-apcu \
@@ -34,6 +39,7 @@ RUN apt-get update \
     php-yaml \
     php-zip \
  && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate \
  && ln -s /etc/php/8.1 /etc/php/default \
  && ln -s /usr/sbin/php-fpm8.1 /usr/sbin/php-fpm \
  && echo "php" > /etc/php/container-php-package-name
@@ -42,7 +48,11 @@ RUN apt-get update \
 
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.2
-RUN apt-get update \
+ARG APT_MIRROR=""
+COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
+COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y software-properties-common \
  && add-apt-repository -y ppa:ondrej/php \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
@@ -65,6 +75,7 @@ RUN apt-get update \
     php8.2-yaml \
     php8.2-zip \
  && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate \
  && ln -s /etc/php/8.2 /etc/php/default \
  && ln -s /usr/sbin/php-fpm8.2 /usr/sbin/php-fpm \
  && echo "php8.2" > /etc/php/container-php-package-name
@@ -73,7 +84,11 @@ RUN apt-get update \
 
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.3
-RUN apt-get update \
+ARG APT_MIRROR=""
+COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
+COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
+RUN apt-mirror activate \
+ && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php \
     php-apcu \
@@ -94,6 +109,7 @@ RUN apt-get update \
     php-yaml \
     php-zip \
  && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate \
  && ln -s /etc/php/8.3 /etc/php/default \
  && ln -s /usr/sbin/php-fpm8.3 /usr/sbin/php-fpm \
  && echo "php" > /etc/php/container-php-package-name
@@ -106,8 +122,10 @@ FROM ${DOCKER_HUB_PROXY}hairyhenderson/gomplate:stable-alpine as gomplate
 FROM ${PHP_IMAGE} as base
 ARG TINE20ROOT=/usr/share
 ENV TINE20ROOT=$TINE20ROOT
+ARG APT_MIRROR=""
 # todo: install nginx brotli
-RUN apt-get update \
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y \
     busybox \
     default-jre \
@@ -120,7 +138,8 @@ RUN apt-get update \
     tnef \
     gnupg \
     cron \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate
 COPY --from=gomplate /bin/gomplate /usr/bin/gomplate
 RUN mkdir /usr/local/busybox \
  && busybox --install /usr/local/busybox
@@ -181,14 +200,17 @@ CMD ["/usr/local/bin/entrypoint"]
 
 
 FROM ${BASE_IMAGE} as test
+ARG APT_MIRROR=""
 # todo: install coreutils and build-base
-RUN apt-get update \
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y \
     rsync \
     composer \
     npm \
     nodejs \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate
 COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
 COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
@@ -198,24 +220,30 @@ COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini
 
 
 FROM ${BASE_IMAGE} as dev
+ARG APT_MIRROR=""
 # todo move tesseract to base image, if ocr is tested
-RUN apt-get update \
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y \
     composer \
     $(cat /etc/php/container-php-package-name)-xdebug \
     tesseract-ocr \
     tesseract-ocr-deu \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate
 
 
 
 
 FROM ${BASE_IMAGE} as dependency
+ARG APT_MIRROR=""
 # todo: install coreutils and build-base
-RUN apt-get update \
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y \
     composer \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate
 # used to inject http auth credentials for git repos
 COPY ci/dockerimage/utility/.gitconfig /root/.gitconfig
 COPY tine20/library ${TINE20ROOT}/tine20/library
@@ -228,6 +256,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-ansi --no-prog
 
 FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine as jsdependency
 ARG TINE20ROOT=/usr/share
+ARG APT_MIRROR=""
 RUN apk add git
 COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
@@ -298,12 +327,15 @@ FROM ${BUILD_IMAGE} as build-copy
 
 
 FROM ${BASE_IMAGE} as built
+ARG APT_MIRROR=""
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 RUN echo '*/1 * * * * sh -c "cd /usr/share/tine20; php tine20.php --method Tinebase.triggerAsyncEvents"' | /bin/crontab -u tine20 -
-RUN apt-get update \
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y \
     vim \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate
 HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health
 
 
@@ -312,14 +344,17 @@ HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health
 FROM ${BUILT_IMAGE} as test-built
 ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_PACKAGE=php7
+ARG APT_MIRROR=""
 # todo: install coreutils and build-base
-RUN apt-get update \
+RUN apt-mirror activate \
+ && apt-get update \
  && apt-get install -y \
     rsync \
     composer \
     npm \
     nodejs \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate
 COPY etc /config
 COPY --from=source-copy ${TINE20ROOT}/tests ${TINE20ROOT}/tests
 COPY --from=source-copy ${TINE20ROOT}/scripts ${TINE20ROOT}/scripts
