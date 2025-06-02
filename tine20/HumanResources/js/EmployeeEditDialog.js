@@ -145,7 +145,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         firstRow.push(Tine.widgets.form.RecordPickerManager.get('HumanResources', 'Division', {
                 name: 'division_id',
                 fieldLabel: this.app.i18n._('Division'),
-                allowBlank: true
+                allowBlank: false
         }));
 
         firstRow.push({
