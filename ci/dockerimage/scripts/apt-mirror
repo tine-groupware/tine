@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ -n "$APT_MIRROR" ]; then
+    if [ "$1" == "activate" ]; then
+        mv /etc/apt/sources.list /etc/apt/sources.list.save || true
+        mv /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.save || true
+        sed s#APT_MIRROR#${APT_MIRROR}#g /etc/apt/sources.list.d/ubuntu-mirror.list.save > /etc/apt/sources.list.d/ubuntu-mirror.list
+    fi
+
+    if [ "$1" == "deactivate" ]; then
+        mv /etc/apt/sources.list.save /etc/apt/sources.list || true
+        mv /etc/apt/sources.list.d/ubuntu.sources.save /etc/apt/sources.list.d/ubuntu.sources || true
+        rm /etc/apt/sources.list.d/ubuntu-mirror.list
+    fi
+fi

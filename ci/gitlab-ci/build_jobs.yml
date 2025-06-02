@@ -74,7 +74,8 @@ docker-build-dev:
       --opt platform=linux/${ARCH} \
       --opt target=dev \
       --opt build-arg:PHP_IMAGE=php${PHP_VERSION} \
-      --opt build-arg:DOCKER_HUB_PROXY=${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/
+      --opt build-arg:DOCKER_HUB_PROXY=${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/ \
+      --opt build-arg:APT_MIRROR=${APT_MIRROR}
   timeout: 2h
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev/

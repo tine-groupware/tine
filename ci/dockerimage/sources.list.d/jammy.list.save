@@ -1,0 +1,3 @@
+deb APT_MIRROR/ubuntu jammy main restricted universe
+deb APT_MIRROR/ubuntu jammy-updates main restricted universe
+deb APT_MIRROR/ubuntu jammy-security main restricted universe
