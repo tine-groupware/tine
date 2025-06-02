@@ -273,6 +273,9 @@ msgstr "Umsatzziel: { target }"
 msgid "Turnover Recorded: { recorded }"
 msgstr "Erfasster Umsatz: { recorded }"
 
+msgid "Turnover Cleared: { cleared }"
+msgstr "Abgerechneter Umsatz { cleared }"
+
 msgid "timeframe"
 msgstr "Zeitrahmen"
 

@@ -96,6 +96,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
             'duration' => 'duration',
             'accounting_time_billable' => null,  // taken from _foreignTables
             Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT => Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT,
+            Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT => Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT,
         );
         
         $this->_foreignTables['is_billable_combined']['select'] = array(
