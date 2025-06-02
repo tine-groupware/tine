@@ -38,19 +38,6 @@ class Felamimail_Scheduler_Task extends Tinebase_Scheduler_Task
             . ' Saved task Felamimail_Controller_MessageExpectedAnswer::checkExpectedAnswer in scheduler.');
     }
 
-    /**
-     * remove check expected answer task from scheduler
-     *
-     * @param Tinebase_Scheduler $_scheduler
-     */
-    public static function removeCheckExpectedAnswerTask(Tinebase_Scheduler $_scheduler)
-    {
-        $_scheduler->removeTask('Felamimail_Controller_MessageExpectedAnswer::checkExpectedAnswer');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed task Felamimail_Controller_MessageExpectedAnswer::checkExpectedAnswer from scheduler.');
-    }
-
     public static function addPruneAttachmentCacheTask(Tinebase_Scheduler $_scheduler)
     {
         self::_addTaskIfItDoesNotExist(

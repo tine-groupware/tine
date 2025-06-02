@@ -65,13 +65,4 @@ class GDPR_Setup_Uninitialize extends Setup_Uninitialize
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
     }
-
-    /**
-     * uninit scheduler tasks
-     */
-    protected function _uninitializeSchedulerTasks()
-    {
-        $scheduler = Tinebase_Core::getScheduler();
-        GDPR_Scheduler_Task::removeDeleteExpiredDataTask($scheduler);
-    }
 }

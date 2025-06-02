@@ -38,19 +38,6 @@ class HumanResources_Scheduler_Task extends Tinebase_Scheduler_Task
             . ' Saved task HumanResources_Controller_DailyWTReport::CalculateDailyWorkingTimeReportsTask in scheduler.');
     }
 
-    /**
-     * remove CalculateDailyWorkingTimeReportsTask task from scheduler
-     *
-     * @param Tinebase_Scheduler $_scheduler
-     */
-    public static function removeCalculateDailyWorkingTimeReportsTask(Tinebase_Scheduler $_scheduler)
-    {
-        $_scheduler->removeTask('HumanResources_Controller_DailyWTReport::CalculateDailyWorkingTimeReportsTask');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed task HumanResources_Controller_DailyWTReport::CalculateDailyWorkingTimeReportsTask from scheduler.');
-    }
-
     public static function addAttendanceRecorderRunBLTask(Tinebase_Scheduler $_scheduler): void
     {
         if ($_scheduler->hasTask('HumanResources_Controller_AttendanceRecorder::runBLPipes')) {
@@ -65,13 +52,5 @@ class HumanResources_Scheduler_Task extends Tinebase_Scheduler_Task
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task HumanResources_Controller_AttendanceRecorder::runBLPipes in scheduler.');
-    }
-
-    public static function removeAttendanceRecorderRunBLTask(Tinebase_Scheduler $_scheduler): void
-    {
-        $_scheduler->removeTask('HumanResources_Controller_AttendanceRecorder::runBLPipes');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed task HumanResources_Controller_AttendanceRecorder::runBLPipes from scheduler.');
     }
 }
