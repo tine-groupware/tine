@@ -65,6 +65,17 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
+                    }), Ext.apply(
+                    new Ext.Button({
+                        text: this.app.i18n._('Export'),
+                        tooltip: this.app.i18n._('Export all data'),
+                        scope: this,
+                        handler: this.exportRecords,
+                        iconCls: 'action_export'
+                    }), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
                     })]
             }]
         });
@@ -170,6 +181,35 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
 
         this.grid.getView().refresh();
         this.hideLoadMask()
+    },
+
+    exportRecords: async function () {
+        const columns = _.filter(this.grid.getColumnModel().config, {hidden: false})
+        const data = [_.map(columns, 'header')]
+
+        _.forEach(this.store.data.items, (r) => {
+            data.push(_.map(columns, (column) => {
+                const value = r.get(column.dataIndex);
+                return this.quoteCsv(Ext.util.Format.stripTags(column.renderer ? column.renderer(value, null, r) : value)) || '';
+            }))
+        })
+
+        const csvContent = "data:text/csv;charset=utf-8,"
+            + data.map(e => e.join(",")).join("\n");
+
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", "revenue_analysis.csv");
+        document.body.appendChild(link);
+        link.click();
+    },
+
+    quoteCsv: function(v) {
+        v = String(v).replace(/"/g, '""');
+        if (v.search(/("|,|\n)/g) >= 0)
+            v = '"' + v + '"';
+
+        return v;
     },
 
     onPeriodChange: function(pp, period) {
