@@ -149,6 +149,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
                 'group'   => 'accounting',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 self::NULLABLE => true,
+                self::SPECIAL_TYPE    => self::SPECIAL_TYPE_CURRENCY,
             ),
             'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')

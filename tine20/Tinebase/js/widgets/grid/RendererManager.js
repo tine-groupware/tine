@@ -187,6 +187,17 @@ Tine.widgets.grid.RendererManager = function() {
                     }
                     break;
                 case 'string':
+                    renderer = this.defaultRenderer;
+                    if (fieldDefinition.hasOwnProperty('specialType')) {
+                        switch (fieldDefinition.specialType) {
+                            case 'currency':
+                                renderer = Tine.Tinebase.common.currencyRenderer;
+                                break;
+                            default:
+                                renderer = this.defaultRenderer;
+                        }
+                    }
+                    break;
                 case 'text':
                 case 'fulltext':
                     renderer = this.defaultRenderer;
