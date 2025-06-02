@@ -3368,6 +3368,13 @@ class Tinebase_FileSystem implements
         return $success;
     }
 
+    public function checkNodeACL(Tinebase_Model_Tree_Node $_node, string $_action = 'get', bool $_topLevelAllowed = true, bool $_throw = true): bool
+    {
+        return $this->checkPathACL(
+            Tinebase_Model_Tree_Node_Path::createFromStatPath($this->getPathOfNode($_node, true, true)),
+            $_action, $_topLevelAllowed, $_throw);
+    }
+
     /**
      * check acl of path
      *
