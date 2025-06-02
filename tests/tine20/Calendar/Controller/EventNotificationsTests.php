@@ -500,7 +500,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         self::flushMailer();
         $persistentEvent = $this->_eventController->create($event);
-        $this->_assertMail('jmcblack', 'Recurrance rule:    Daily', 'body');
+        $this->_assertMail('jmcblack', 'Recurrence rule:    Daily', 'body');
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
@@ -584,7 +584,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $this->_assertMail('sclever', 'Alarm for event');
+        $this->_assertMail('sclever', 'Alarm for the event');
         $this->_assertMail('pwulf');
     }
     
@@ -612,7 +612,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $this->_assertMail('pwulf', 'Alarm for event');
+        $this->_assertMail('pwulf', 'Alarm for the event');
         $this->_assertMail('sclever');
         
     }

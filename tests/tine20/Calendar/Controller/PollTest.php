@@ -610,7 +610,7 @@ EOT;
             $confirmationMessage = $messages[0];
             $this->assertEquals('john@doe.net', $confirmationMessage->getRecipients()[0]);
             $text = $confirmationMessage->getBodyText()->getContent();
-            $this->assertStringContainsString('Thank you for attendening', $text);
+            $this->assertStringContainsString('Thank you for attending', $text);
             $this->assertStringNotContainsString('Array', $text, 'notification did not cope with resolved stuff');
 
         } finally {
