@@ -125,20 +125,18 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if (['', null, undefined].indexOf(v) >= 0 && nullable) {
             return '';
         }
-
-        var _ = window.lodash,
-            currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
+        let currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
 
         if (!_.isNumber(v)) {
             v = Number(v);
         }
 
-        var locale = Tine.Tinebase.registry.get('locale').locale;
+        let locale = Tine.Tinebase.registry.get('locale').locale;
 
         if (locale.includes('_')) {
             locale = locale.split('_')[0];
         }
-        if( (metadata && metadata.zeroMoney && v == '0')) {
+        if( (metadata && metadata.zeroMoney && v === '0')) {
             return '';
         }
         return v.toLocaleString(locale,{minimumFractionDigits: 2, maximumFractionDigits: 2}) + " " + currencySymbol;

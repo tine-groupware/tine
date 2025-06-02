@@ -116,7 +116,8 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
                 'type'    => 'text',
-                'group'   => 'accounting'
+                self::SPECIAL_TYPE    => self::SPECIAL_TYPE_CURRENCY,
+                'group'   => 'accounting',
             ),
             'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')

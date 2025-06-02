@@ -12,6 +12,7 @@
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\Intl\Currencies;
 use Psr\Http\Message\RequestInterface;
 use Tinebase_Model_Filter_Abstract as TMFA;
 
@@ -1849,7 +1850,7 @@ class Tinebase_Core
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
             'thousandSeparator' => $symbols['group'],
             'decimalSeparator'  => $symbols['decimal'],
-            'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
+            'currencySymbol'    => Tinebase_Core::getDefaultCurrencySymbol(),
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
             'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
             'brandingLogo'      => 'logo',
@@ -1870,6 +1871,13 @@ class Tinebase_Core
         ];
 
         return $registryData;
+    }
+
+    public static function getDefaultCurrencySymbol()
+    {
+        $defaultCurrency = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_CURRENCY);
+        $symbol = Currencies::getSymbol($defaultCurrency);
+        return $symbol;
     }
 
     /**

@@ -157,6 +157,11 @@ Tine.widgets.grid.ColumnManager = function() {
                     if (fieldDefinition?.label) {
                         type = fieldDefinition.label;
                     }
+
+                    if (fieldDefinition.specialType === 'currency') {
+                        config.minWidth = 50;
+                        config.maxWidth = 100;
+                    }
                 }
             }
             type = type.toLowerCase();
@@ -176,7 +181,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.tooltip = window.i18n._('Attachments');
                 config.resizeable = false;
             }
-            
+
             if (type === 'image') {
                 config.minWidth = 20;
                 config.defaultWidth = 25;
