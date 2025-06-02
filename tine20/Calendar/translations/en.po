@@ -594,8 +594,8 @@ msgstr "Choose \"Group\" to filter by the group as a whole. Choose \"Member of G
 msgid "Member of Group"
 msgstr "Member of Group"
 
-msgid "Loading Groupmembers..."
-msgstr "Loading Groupmembers..."
+msgid "Loading Group Members..."
+msgstr "Loading Group Members..."
 
 msgid "Remove Attendee"
 msgstr "Remove Attendee"
@@ -1935,11 +1935,11 @@ msgid_plural "Relations"
 msgstr[0] "Relation"
 msgstr[1] "Relations"
 
-msgid "First name, ĺast name"
-msgstr "First name, ĺast name"
+msgid "First name, last name"
+msgstr "First name, last name"
 
-msgid "E-Mail address"
-msgstr "E-Mail address"
+msgid "Email address"
+msgstr "Email address"
 
 msgid "General terms and conditions"
 msgstr "General terms and conditions"

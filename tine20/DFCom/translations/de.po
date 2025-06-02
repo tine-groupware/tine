@@ -43,7 +43,7 @@ msgid "Parameter missing"
 msgstr "Parameter fehlt"
 
 msgid "Error in list row"
-msgstr "Fehler in der Listezeile"
+msgstr "Fehler in der Listenzeile"
 
 msgid "List is ignored"
 msgstr "Liste wird ignoriert"
@@ -116,7 +116,7 @@ msgid "List status"
 msgstr "Listenstatus"
 
 msgid "Control Commands Based on List Feedback"
-msgstr "Kontroll Kommandos bei Listen-Rückmeldung"
+msgstr "Kontrollbefehle bei der Listenrückmeldung"
 
 msgid "Type"
 msgstr "Typ"

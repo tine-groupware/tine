@@ -230,7 +230,7 @@ msgid "Filter timeslot for CalDAV events with SyncToken"
 msgstr "Filter Zeitpunkt für CalDAV Termine mit SyncToken"
 
 msgid "Timeslot for the Event Notifications"
-msgstr "Alter für Termineerinnerungen"
+msgstr "Alter für Terminerinnerungen"
 
 msgid "How many weeks in the past event notifications should be sent."
 msgstr "Für wie lange in der Vergangenheit (in Wochen) Termin Benachrichtigungen versendet werden sollen."
@@ -281,7 +281,7 @@ msgid "Calendar Year View"
 msgstr "Kalender Jahres Ansicht"
 
 msgid "Adds year view to Calendar"
-msgstr "Fügt JAhres Ansicht zum Kalender hinzu"
+msgstr "Fügt Jahresansicht zum Kalender hinzu"
 
 msgid "Calendar Extended Context Menu Actions"
 msgstr "Erweiterte Kalender Kontextmenü Aktionen"
@@ -611,11 +611,11 @@ msgstr "Wähle \"Gruppe\" um die gesamte Gruppe zu filtern. Wähle \"Mitglied de
 msgid "Member of Group"
 msgstr "Mitglied der Gruppe"
 
-msgid "Loading Groupmembers..."
+msgid "Loading Group Members..."
 msgstr "Lade Gruppenmitglieder..."
 
 msgid "Remove Attendee"
-msgstr "Teilnehmende enfernen"
+msgstr "Teilnehmende entfernen"
 
 msgid "Use as event location"
 msgstr "Als Terminort übernehmen"
@@ -634,7 +634,7 @@ msgid "View Resource"
 msgstr "Ressource ansehen"
 
 msgid "Anyone"
-msgstr "Jeder"
+msgstr "Jede*r"
 
 msgid "No Information"
 msgstr "Keine Angabe"
@@ -1952,10 +1952,10 @@ msgid_plural "Relations"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen"
 
-msgid "First name, ĺast name"
+msgid "First name, last name"
 msgstr "Vorname, Nachname"
 
-msgid "E-Mail address"
+msgid "Email address"
 msgstr "E-Mail Adresse"
 
 msgid "General terms and conditions"
@@ -2011,6 +2011,15 @@ msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
 
 msgid "You can review the poll results here:"
 msgstr "Sie können die Umfrageergebnisse hier einsehen:"
+
+#~ msgid "Loading Groupmembers..."
+#~ msgstr "Lade Gruppenmitglieder..."
+
+#~ msgid "First name, ĺast name"
+#~ msgstr "Vorname, Nachname"
+
+#~ msgid "E-Mail address"
+#~ msgstr "E-Mail Adresse"
 
 #~ msgid "Set as definite event"
 #~ msgstr "Definitiven Termin festlegen"

@@ -371,7 +371,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         }
                     }
 
-                    // resolve groupmembers
+                    // resolve group members
                     if (type === 'group' && !this.showMemberOfType) {
                         this.resolveListMembers(o.record.get('user_id'));
                     } else {
@@ -410,7 +410,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             members = Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
             fbInfoUpdate = [];
 
-        var mask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading Groupmembers...")});
+        var mask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading Group Members...")});
         mask.show();
 
         Tine.Calendar.resolveGroupMembers(members, function(attendeesData) {

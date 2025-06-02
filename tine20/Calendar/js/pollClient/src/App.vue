@@ -68,10 +68,10 @@
                 </tr>
                 <tr v-if="activeAttendee.user_id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
                   <td class="table-info name-field">
-                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, ĺast name')"
+                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, last name')"
                            class="form-control name-field" v-bind:class="{highlight: this.highlightName}"
                            @input="highlightName = false" required />
-                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('E-Mail address')"
+                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('Email address')"
                            class="form-control email-field" v-bind:class="{highlight: this.highlightEmail}"
                            @input="highlightEmail = false" required />
                   </td>

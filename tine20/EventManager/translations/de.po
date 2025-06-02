@@ -54,7 +54,7 @@ msgid "Speaker"
 msgstr "vortragende Person"
 
 msgid "Moderator"
-msgstr "Moderatorin"
+msgstr "Moderator*in"
 
 msgid "Source"
 msgstr "Quelle"
@@ -69,7 +69,7 @@ msgid "Confirmed"
 msgstr "Bestätigt"
 
 msgid "Member Status"
-msgstr "Mitgliedstatus"
+msgstr "Mitgliedsstatus"
 
 msgid "Member"
 msgstr "Mitglied"
@@ -117,13 +117,13 @@ msgid "Sign Up"
 msgstr "Anmelden"
 
 msgid "Event Information"
-msgstr ""
+msgstr "Eventinformationen"
 
 msgid "Event Options"
-msgstr ""
+msgstr "Eventoptionen"
 
 msgid "Registrations"
-msgstr ""
+msgstr "Registrierung"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -182,7 +182,7 @@ msgstr ""
 msgid "Available places"
 msgstr ""
 
-msgid "Double Opt in"
+msgid "Double Opt-in"
 msgstr ""
 
 msgid "Event Registrations"
@@ -205,11 +205,14 @@ msgstr[1] ""
 msgid "Price"
 msgstr ""
 
-msgid "Url"
-msgstr "Url"
+msgid "URL"
+msgstr "URL"
 
 msgid "EventManager"
 msgstr ""
+
+#~ msgid "Url"
+#~ msgstr "Url"
 
 #~ msgid "Live time of token subscriptions"
 #~ msgstr "Laufzeit von Token-Abonnements"

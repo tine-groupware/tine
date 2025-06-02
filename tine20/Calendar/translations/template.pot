@@ -594,7 +594,7 @@ msgstr ""
 msgid "Member of Group"
 msgstr ""
 
-msgid "Loading Groupmembers..."
+msgid "Loading Group Members..."
 msgstr ""
 
 msgid "Remove Attendee"
@@ -1935,10 +1935,10 @@ msgid_plural "Relations"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "First name, ĺast name"
+msgid "First name, last name"
 msgstr ""
 
-msgid "E-Mail address"
+msgid "Email address"
 msgstr ""
 
 msgid "General terms and conditions"

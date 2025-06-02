@@ -220,7 +220,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
-                self::LABEL => 'Double Opt in', // _('Double Opt in')
+                self::LABEL => 'Double Opt-in', // _('Double Opt-in')
                 self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_OPTIONS => [
