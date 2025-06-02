@@ -49,23 +49,6 @@ Tine.Tinebase.Model.Country = Tine.Tinebase.data.Record.create([
 });
 
 /**
- * Model of a country
- */
-Tine.Tinebase.Model.Currency = Tine.Tinebase.data.Record.create([
-    { name: 'shortName' },
-    { name: 'translatedName' },
-    { name: 'symbol' }
-], {
-    appName: 'Tinebase',
-    modelName: 'Currency',
-    idProperty: 'shortName',
-    titleProperty: 'symbol',
-    // ngettext('Currency', 'Currencies', n); gettext('Currency');
-    recordName: 'Currency',
-    recordsName: 'Currencies'
-});
-
-/**
  * Model of a language
  */
 Tine.Tinebase.Model.Language = Ext.data.Record.create([

@@ -10,7 +10,6 @@
  */
 
 use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Intl\Locales;
 
 
@@ -149,37 +148,6 @@ class Tinebase_Translation
                 );
             }
     
-            self::$_countryLists[$language] = $results;
-        }
-
-        return array('results' => self::$_countryLists[$language]);
-    }
-
-    /**
-     * get list of translated currency names
-     *
-     * @param ?Zend_Locale $locale
-     * @return array list of currencies
-     */
-    public static function getCurrencyList(?Zend_Locale $locale = null)
-    {
-        $locale = $locale ?: Tinebase_Core::getLocale();
-        $language = $locale->getLanguage();
-
-        //try lazy loading of translated currency list
-        if (empty(self::$_countryLists[$language])) {
-            $currencies = Currencies::getNames($locale);
-            asort($currencies);
-            $results = [];
-            foreach($currencies as $shortName => $translatedName) {
-                $array = explode(':', $translatedName);
-                $results[] = array(
-                    'shortName'         => $shortName,
-                    'translatedName'    => array_shift($array),
-                    'symbol'            => array_pop($array),
-                );
-            }
-
             self::$_countryLists[$language] = $results;
         }
 
@@ -645,7 +613,6 @@ class Tinebase_Translation
             'CountryList'    => array('path' => 'Territory', 'value' => 2),
             'Territory'      => array('path' => 'Territory', 'value' => 1),
             'CityToTimezone' => array('path' => 'CityToTimezone'),
-            'CurrencyList'   => array('path' => 'CurrencyList'),
         );
 
         $zendLocale = new Zend_Locale($_locale);
@@ -659,20 +626,6 @@ class Tinebase_Translation
                     foreach ($countries as $key => $value) {
                         $value = preg_replace("/\"/", '\"', $value);
                         $jsContent .= "'$key':\"$value\",";
-                    }
-                    // remove last comma
-                    $jsContent = chop($jsContent, ",");
-                    $jsContent .= "},";
-                }
-            } else if ($name == 'CurrencyList') {
-                $currencies = Currencies::getNames($_locale);
-                if (is_array($currencies) ) {
-                    $jsContent .= "$name:{";
-                    asort($currencies);
-                    foreach ($currencies as $key => $value) {
-                        $value = preg_replace("/\"/", '\"', $value);
-                        $symbol = Currencies::getSymbol($key);
-                        $jsContent .= "'$key':\"$value:$symbol\",";
                     }
                     // remove last comma
                     $jsContent = chop($jsContent, ",");

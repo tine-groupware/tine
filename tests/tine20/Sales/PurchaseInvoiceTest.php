@@ -191,7 +191,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $arrayData = $doc->getActiveSheet()->rangeToArray('A2:Z3');
 
         $this->assertTrue(false !== ($offset = array_search(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_('Price Net'), $arrayData[0])));
-        $this->assertSame('10.00 ' . Tinebase_Core::getDefaultCurrencySymbol(),
+        $this->assertSame('10.00 ' . Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL},
             $arrayData[1][$offset]);
         $this->assertTrue(false !== ($offset = array_search(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_('Date of invoice'), $arrayData[0])));
         $date = new Zend_Date($purchase['date']);

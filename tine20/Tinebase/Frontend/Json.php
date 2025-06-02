@@ -93,16 +93,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Tinebase_Translation::getCountryList();
     }
-
-    /**
-     * get list of translated currency names
-     **
-     * @return array list of currencies
-     */
-    public function getCurrencyList()
-    {
-        return Tinebase_Translation::getCurrencyList();
-    }
     
     /**
      * returns list of all available translations
