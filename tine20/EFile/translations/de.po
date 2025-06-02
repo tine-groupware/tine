@@ -18,154 +18,207 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Config.php:53 Config.php:54
 msgid "Base paths"
 msgstr ""
 
+#: Config.php:68
 msgid "Retention Periods"
 msgstr "Aufbewahrungsfristen"
 
+#: Config.php:69
 msgid "Available retention periods"
 msgstr "Verfügbare Aufbewahrungsfristen"
 
+#: Config.php:74
 msgid "6 Years"
 msgstr "6 Jahre"
 
+#: Config.php:75
 msgid "10 Years"
 msgstr "10 Jahre"
 
+#: Config.php:76
 msgid "Eternally"
 msgstr "Ewig"
 
+#: Config.php:82 Model/FileMetadata.php:212
 msgid "Disposal Type"
 msgstr "Aussonderungsart"
 
+#: Config.php:83
 msgid "Available disposal types"
 msgstr "Verfügbare Aussonderungs-Arten"
 
+#: Config.php:88
 msgid "Quashed"
 msgstr "Kassiert (Vernichtet)"
 
+#: Config.php:89
 msgid "Archived"
 msgstr "Archiviert"
 
+#: Config.php:95 Config.php:96
 msgid "eFile Tier Reference Number Prefix"
 msgstr "eAkten Ebenen-Nummer Präfix"
 
+#: Config.php:110 Config.php:111
 msgid "eFile Token Template"
 msgstr "eAkten Ebenen-Nummer Vorlage"
 
+#: Config.php:123 Config.php:124 Setup/Initialize.php:54
 msgid "eFile Tier Type"
 msgstr "eAkten Ebenen-Typ"
 
+#: Config.php:130 js/tierTypes.js:23
 msgid "Case"
 msgstr "Vorgang"
 
+#: Config.php:131 js/tierTypes.js:31
 msgid "Document"
 msgstr "Dokument"
 
+#: Config.php:132 js/tierTypes.js:27
 msgid "Document Directory"
 msgstr "Dokumentenordner"
 
+#: Config.php:133 js/tierTypes.js:15
 msgid "File"
 msgstr "Akte"
 
+#: Config.php:134 js/tierTypes.js:11
 msgid "File Group"
 msgstr "Aktengruppe"
 
+#: Config.php:135 js/tierTypes.js:7
 msgid "Master Plan"
 msgstr "Rahmenaktenplan"
 
+#: Config.php:136 js/tierTypes.js:19
 msgid "Sub File"
 msgstr "Teilakte"
 
+#: Controller.php:505
 msgid "EFile node names may not contain:"
 msgstr ""
 
+#: js/Application.js:21 js/createEFileAction.js:74
 msgid "Electronic File"
 msgstr "eAkte"
 
+#: js/createEFileAction.js:21
 #, python-brace-format
 msgid "Create new {0} Folder"
 msgstr "Neuen {0} Ordner anlegen"
 
+#: js/createEFileAction.js:39
 #, python-brace-format
 msgid "Name of the new {0} folder:"
 msgstr "Name des neuen {0} Ordners"
 
+#: js/createEFileAction.js:43
 msgid "Name"
 msgstr "Name"
 
+#: js/createEFileAction.js:51
 msgid "Note: A number prefix will be automatically assigned when creating this folder."
 msgstr "Hinweis: Beim Anlegen des Ordners wird wird automatisch eine Ebenen-Nummer vorangestellt."
 
+#: js/nodeEFileHookPanel.js:27 Setup/setup.xml:4
 msgid "eFile"
 msgstr "eAkte"
 
+#: js/nodeEFileHookPanel.js:47
 msgid "Enter contents"
 msgstr "Inhalt hinzufügen"
 
+#: js/nodeEFileHookPanel.js:48
 msgid "Contents"
 msgstr "Inhalt"
 
+#: js/nodeFileMetadataPanel.js:19
 msgid "Jump to File"
 msgstr "Zur Akte springen"
 
+#: js/nodeFileMetadataPanel.js:121
 msgid "Metadata entered here is automatically inherited in newly created e-files."
 msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
 
+#: Model/FileMetadata.php:113
 msgid "Duration Start"
 msgstr "Laufzeit von"
 
+#: Model/FileMetadata.php:119
 msgid "Duration End"
 msgstr "Laufzeit bis"
 
+#: Model/FileMetadata.php:126
 msgid "Commissioned Office"
 msgstr "Aktenführende Stelle"
 
+#: Model/FileMetadata.php:132
 msgid "File is Hybrid (a corresponding paper file exists)"
 msgstr "Hybridakte (Es gibt eine korrespondierende Papierakte)"
 
+#: Model/FileMetadata.php:139
 msgid "Location of Paper File"
 msgstr "Standort der Papierakte"
 
+#: Model/FileMetadata.php:146
 msgid "File is Closed"
 msgstr "Die Akte ist geschlossen"
 
+#: Model/FileMetadata.php:148 Model/FileMetadata.php:157
+#: Model/FileMetadata.php:172 Model/FileMetadata.php:184
+#: Model/FileMetadata.php:193
 msgid "Final Decree"
 msgstr "Schlussverfügung"
 
+#: Model/FileMetadata.php:155
 msgid "Final Decree Date"
 msgstr "Datum Schlussverfügung"
 
+#: Model/FileMetadata.php:170
 msgid "Final Decree by"
 msgstr "Schlussverfügung durch"
 
+#: Model/FileMetadata.php:182
 msgid "Retention Period"
 msgstr "Aufbewahrungsfrist"
 
+#: Model/FileMetadata.php:191
 msgid "Retention Period End Date"
 msgstr "Ende der Aufbewahrungsfrist"
 
+#: Model/FileMetadata.php:200
 msgid "File is Disposed"
 msgstr "Die Akte ist ausgesondert"
 
+#: Model/FileMetadata.php:202 Model/FileMetadata.php:214
+#: Model/FileMetadata.php:223 Model/FileMetadata.php:233
 msgid "Disposal"
 msgstr "Aussonderung"
 
+#: Model/FileMetadata.php:221
 msgid "Disposal Date"
 msgstr "Aussonderungsdatum"
 
+#: Model/FileMetadata.php:231
 msgid "Archive Name"
 msgstr "Archivname"
 
+#: Setup/Initialize.php:82
 msgid "eFile File Metadata"
 msgstr "eAkten Metadaten"
 
+#: Setup/Initialize.php:114
 msgid "eFile Tier Token"
 msgstr "eAkten Ebenen-Nummer"
 
+#: Setup/Initialize.php:137
 msgid "eFile Tier Reference Number"
 msgstr "Aktenzeichen"
 
+#: Setup/Initialize.php:160
 msgid "eFile Tier Counter"
 msgstr "eAkten Ebenen-Zähler"

@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,154 +13,207 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Config.php:53 Config.php:54
 msgid "Base paths"
 msgstr "Base paths"
 
+#: Config.php:68
 msgid "Retention Periods"
 msgstr "Retention Periods"
 
+#: Config.php:69
 msgid "Available retention periods"
 msgstr "Available retention periods"
 
+#: Config.php:74
 msgid "6 Years"
 msgstr "6 Years"
 
+#: Config.php:75
 msgid "10 Years"
 msgstr "10 Years"
 
+#: Config.php:76
 msgid "Eternally"
 msgstr "Eternally"
 
+#: Config.php:82 Model/FileMetadata.php:212
 msgid "Disposal Type"
 msgstr "Disposal Type"
 
+#: Config.php:83
 msgid "Available disposal types"
 msgstr "Available disposal types"
 
+#: Config.php:88
 msgid "Quashed"
 msgstr "Quashed"
 
+#: Config.php:89
 msgid "Archived"
 msgstr "Archived"
 
+#: Config.php:95 Config.php:96
 msgid "eFile Tier Reference Number Prefix"
 msgstr "eFile Tier Reference Number Prefix"
 
+#: Config.php:110 Config.php:111
 msgid "eFile Token Template"
 msgstr "eFile Token Template"
 
+#: Config.php:123 Config.php:124 Setup/Initialize.php:54
 msgid "eFile Tier Type"
 msgstr "eFile Tier Type"
 
+#: Config.php:130 js/tierTypes.js:23
 msgid "Case"
 msgstr "Case"
 
+#: Config.php:131 js/tierTypes.js:31
 msgid "Document"
 msgstr "Document"
 
+#: Config.php:132 js/tierTypes.js:27
 msgid "Document Directory"
 msgstr "Document Directory"
 
+#: Config.php:133 js/tierTypes.js:15
 msgid "File"
 msgstr "File"
 
+#: Config.php:134 js/tierTypes.js:11
 msgid "File Group"
 msgstr "File Group"
 
+#: Config.php:135 js/tierTypes.js:7
 msgid "Master Plan"
 msgstr "Master Plan"
 
+#: Config.php:136 js/tierTypes.js:19
 msgid "Sub File"
 msgstr "Sub File"
 
+#: Controller.php:505
 msgid "EFile node names may not contain:"
 msgstr "EFile node names may not contain:"
 
+#: js/Application.js:21 js/createEFileAction.js:74
 msgid "Electronic File"
 msgstr "Electronic File"
 
+#: js/createEFileAction.js:21
 #, python-brace-format
 msgid "Create new {0} Folder"
 msgstr "Create new {0} Folder"
 
+#: js/createEFileAction.js:39
 #, python-brace-format
 msgid "Name of the new {0} folder:"
 msgstr "Name of the new {0} folder:"
 
+#: js/createEFileAction.js:43
 msgid "Name"
 msgstr "Name"
 
+#: js/createEFileAction.js:51
 msgid "Note: A number prefix will be automatically assigned when creating this folder."
 msgstr "Note: A number prefix will be automatically assigned when creating this folder."
 
+#: js/nodeEFileHookPanel.js:27 Setup/setup.xml:4
 msgid "eFile"
 msgstr "eFile"
 
+#: js/nodeEFileHookPanel.js:47
 msgid "Enter contents"
 msgstr "Enter contents"
 
+#: js/nodeEFileHookPanel.js:48
 msgid "Contents"
 msgstr "Contents"
 
+#: js/nodeFileMetadataPanel.js:19
 msgid "Jump to File"
 msgstr "Jump to File"
 
+#: js/nodeFileMetadataPanel.js:121
 msgid "Metadata entered here is automatically inherited in newly created e-files."
 msgstr "Metadata entered here is automatically inherited in newly created e-files."
 
+#: Model/FileMetadata.php:113
 msgid "Duration Start"
 msgstr "Duration Start"
 
+#: Model/FileMetadata.php:119
 msgid "Duration End"
 msgstr "Duration End"
 
+#: Model/FileMetadata.php:126
 msgid "Commissioned Office"
 msgstr "Commissioned Office"
 
+#: Model/FileMetadata.php:132
 msgid "File is Hybrid (a corresponding paper file exists)"
 msgstr "File is Hybrid (a corresponding paper file exists)"
 
+#: Model/FileMetadata.php:139
 msgid "Location of Paper File"
 msgstr "Location of Paper File"
 
+#: Model/FileMetadata.php:146
 msgid "File is Closed"
 msgstr "File is Closed"
 
+#: Model/FileMetadata.php:148 Model/FileMetadata.php:157
+#: Model/FileMetadata.php:172 Model/FileMetadata.php:184
+#: Model/FileMetadata.php:193
 msgid "Final Decree"
 msgstr "Final Decree"
 
+#: Model/FileMetadata.php:155
 msgid "Final Decree Date"
 msgstr "Final Decree Date"
 
+#: Model/FileMetadata.php:170
 msgid "Final Decree by"
 msgstr "Final Decree by"
 
+#: Model/FileMetadata.php:182
 msgid "Retention Period"
 msgstr "Retention Period"
 
+#: Model/FileMetadata.php:191
 msgid "Retention Period End Date"
 msgstr "Retention Period End Date"
 
+#: Model/FileMetadata.php:200
 msgid "File is Disposed"
 msgstr "File is Disposed"
 
+#: Model/FileMetadata.php:202 Model/FileMetadata.php:214
+#: Model/FileMetadata.php:223 Model/FileMetadata.php:233
 msgid "Disposal"
 msgstr "Disposal"
 
+#: Model/FileMetadata.php:221
 msgid "Disposal Date"
 msgstr "Disposal Date"
 
+#: Model/FileMetadata.php:231
 msgid "Archive Name"
 msgstr "Archive Name"
 
+#: Setup/Initialize.php:82
 msgid "eFile File Metadata"
 msgstr "eFile File Metadata"
 
+#: Setup/Initialize.php:114
 msgid "eFile Tier Token"
 msgstr "eFile Tier Token"
 
+#: Setup/Initialize.php:137
 msgid "eFile Tier Reference Number"
 msgstr "eFile Tier Reference Number"
 
+#: Setup/Initialize.php:160
 msgid "eFile Tier Counter"
 msgstr "eFile Tier Counter"
