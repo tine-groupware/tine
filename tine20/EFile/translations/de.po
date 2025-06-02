@@ -25,7 +25,7 @@ msgid "Retention Periods"
 msgstr "Aufbewahrungsfristen"
 
 msgid "Available retention periods"
-msgstr "Verfügbare Aufbewahrungsfristen bcd"
+msgstr "Verfügbare Aufbewahrungsfristen"
 
 msgid "6 Years"
 msgstr "6 Jahre"
