@@ -13,207 +13,154 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Config.php:53 Config.php:54
 msgid "Base paths"
 msgstr ""
 
-#: Config.php:68
 msgid "Retention Periods"
 msgstr ""
 
-#: Config.php:69
 msgid "Available retention periods"
 msgstr ""
 
-#: Config.php:74
 msgid "6 Years"
 msgstr ""
 
-#: Config.php:75
 msgid "10 Years"
 msgstr ""
 
-#: Config.php:76
 msgid "Eternally"
 msgstr ""
 
-#: Config.php:82 Model/FileMetadata.php:212
 msgid "Disposal Type"
 msgstr ""
 
-#: Config.php:83
 msgid "Available disposal types"
 msgstr ""
 
-#: Config.php:88
 msgid "Quashed"
 msgstr ""
 
-#: Config.php:89
 msgid "Archived"
 msgstr ""
 
-#: Config.php:95 Config.php:96
 msgid "eFile Tier Reference Number Prefix"
 msgstr ""
 
-#: Config.php:110 Config.php:111
 msgid "eFile Token Template"
 msgstr ""
 
-#: Config.php:123 Config.php:124 Setup/Initialize.php:54
 msgid "eFile Tier Type"
 msgstr ""
 
-#: Config.php:130 js/tierTypes.js:23
 msgid "Case"
 msgstr ""
 
-#: Config.php:131 js/tierTypes.js:31
 msgid "Document"
 msgstr ""
 
-#: Config.php:132 js/tierTypes.js:27
 msgid "Document Directory"
 msgstr ""
 
-#: Config.php:133 js/tierTypes.js:15
 msgid "File"
 msgstr ""
 
-#: Config.php:134 js/tierTypes.js:11
 msgid "File Group"
 msgstr ""
 
-#: Config.php:135 js/tierTypes.js:7
 msgid "Master Plan"
 msgstr ""
 
-#: Config.php:136 js/tierTypes.js:19
 msgid "Sub File"
 msgstr ""
 
-#: Controller.php:505
-msgid "EFile node names may not contain:"
+msgid "eFile node names may not contain:"
 msgstr ""
 
-#: js/Application.js:21 js/createEFileAction.js:74
 msgid "Electronic File"
 msgstr ""
 
-#: js/createEFileAction.js:21
 #, python-brace-format
 msgid "Create new {0} Folder"
 msgstr ""
 
-#: js/createEFileAction.js:39
 #, python-brace-format
 msgid "Name of the new {0} folder:"
 msgstr ""
 
-#: js/createEFileAction.js:43
 msgid "Name"
 msgstr ""
 
-#: js/createEFileAction.js:51
 msgid "Note: A number prefix will be automatically assigned when creating this folder."
 msgstr ""
 
-#: js/nodeEFileHookPanel.js:27 Setup/setup.xml:4
 msgid "eFile"
 msgstr ""
 
-#: js/nodeEFileHookPanel.js:47
 msgid "Enter contents"
 msgstr ""
 
-#: js/nodeEFileHookPanel.js:48
 msgid "Contents"
 msgstr ""
 
-#: js/nodeFileMetadataPanel.js:19
 msgid "Jump to File"
 msgstr ""
 
-#: js/nodeFileMetadataPanel.js:121
-msgid "Metadata entered here is automatically inherited in newly created e-files."
+msgid "Metadata entered here is automatically inherited by newly created eFiles."
 msgstr ""
 
-#: Model/FileMetadata.php:113
 msgid "Duration Start"
 msgstr ""
 
-#: Model/FileMetadata.php:119
 msgid "Duration End"
 msgstr ""
 
-#: Model/FileMetadata.php:126
 msgid "Commissioned Office"
 msgstr ""
 
-#: Model/FileMetadata.php:132
-msgid "File is Hybrid (a corresponding paper file exists)"
+msgid "This file is Hybrid (a corresponding paper file exists)"
 msgstr ""
 
-#: Model/FileMetadata.php:139
 msgid "Location of Paper File"
 msgstr ""
 
-#: Model/FileMetadata.php:146
-msgid "File is Closed"
+msgid "This file is Closed"
 msgstr ""
 
-#: Model/FileMetadata.php:148 Model/FileMetadata.php:157
-#: Model/FileMetadata.php:172 Model/FileMetadata.php:184
-#: Model/FileMetadata.php:193
 msgid "Final Decree"
 msgstr ""
 
-#: Model/FileMetadata.php:155
 msgid "Final Decree Date"
 msgstr ""
 
-#: Model/FileMetadata.php:170
 msgid "Final Decree by"
 msgstr ""
 
-#: Model/FileMetadata.php:182
 msgid "Retention Period"
 msgstr ""
 
-#: Model/FileMetadata.php:191
 msgid "Retention Period End Date"
 msgstr ""
 
-#: Model/FileMetadata.php:200
 msgid "File is Disposed"
 msgstr ""
 
-#: Model/FileMetadata.php:202 Model/FileMetadata.php:214
-#: Model/FileMetadata.php:223 Model/FileMetadata.php:233
 msgid "Disposal"
 msgstr ""
 
-#: Model/FileMetadata.php:221
 msgid "Disposal Date"
 msgstr ""
 
-#: Model/FileMetadata.php:231
 msgid "Archive Name"
 msgstr ""
 
-#: Setup/Initialize.php:82
 msgid "eFile File Metadata"
 msgstr ""
 
-#: Setup/Initialize.php:114
 msgid "eFile Tier Token"
 msgstr ""
 
-#: Setup/Initialize.php:137
 msgid "eFile Tier Reference Number"
 msgstr ""
 
-#: Setup/Initialize.php:160
 msgid "eFile Tier Counter"
 msgstr ""

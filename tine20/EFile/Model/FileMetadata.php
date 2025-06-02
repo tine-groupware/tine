@@ -129,7 +129,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL => 0,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL => 'File is Hybrid (a corresponding paper file exists)', // _('File is Hybrid (a corresponding paper file exists)');
+                self::LABEL => 'This file is Hybrid (a corresponding paper file exists)', // _('This file is Hybrid (a corresponding paper file exists)');
             ],
             self::FLD_PAPER_LOCATION => [
                 self::TYPE => self::TYPE_STRING,
@@ -143,7 +143,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL => 0,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL => 'File is Closed', // _('File is Closed')
+                self::LABEL => 'This file is Closed', // _('This file is Closed')
                 self::UI_CONFIG => [
                     'group' => 'Final Decree' // _('Final Decree');
                 ],
