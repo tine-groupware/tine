@@ -39,7 +39,6 @@ require('./Model/ImportExportDefinition');
 
 require('./widgets/CountryFilter');
 require('./widgets/SiteFilter');
-require('./widgets/CurrencyCombo');
 
 require('./widgets/dialog/ResetPasswordDialog');
 

@@ -42,7 +42,6 @@ Tine.widgets.form.FieldManager = function() {
         specialTypeMap: {
             password: 'tw-passwordTriggerField',
             country: 'widget-countrycombo',
-            currency: 'widget-currencycombo',
             url: 'urlfield',
             email: 'tw-emailField'
         },

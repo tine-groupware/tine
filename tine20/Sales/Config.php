@@ -227,7 +227,13 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const INVOICE_CLEARED = 'invoiceCleared';
-
+    
+    /**
+     * the own currency
+     *
+     * @var string
+     */
+    const OWN_CURRENCY = 'ownCurrency';
     
     /**
      * invoices module feature
@@ -1000,6 +1006,16 @@ class Sales_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => 'string'
+        ),
+        self::OWN_CURRENCY => array(
+            // _('Own Currency')
+            'label'                 => 'Own Currency',
+            // _('The currency defined here is used as default currency in the customerd edit dialog.')
+            'description'           => 'The currency defined here is used as default currency in the customerd edit dialog.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 'EUR'
         ),
         self::LANGUAGES_AVAILABLE => [
             self::LABEL                 => 'Languages Available', //_('Languages Available')

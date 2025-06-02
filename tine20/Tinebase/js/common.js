@@ -582,25 +582,6 @@ Tine.Tinebase.common = {
     },
 
     /**
-     * currency renderer
-     *
-     * @param currency
-     */
-    currencyRenderer: function(currency) {
-        let result = currency;
-        const currencyList = Locale.getTranslationList('CurrencyList');
-        if (currencyList) {
-            for (const [shortName, translatedName] of Object.entries(currencyList)) {
-                const values = String(translatedName).split(':');
-                if (shortName.includes(currency)) {
-                    result = shortName !== values[1] ? `${shortName} - ${values[1]}` : shortName;
-                }
-            }
-        }
-        return result;
-    },
-
-    /**
      * foreign record renderer
      *
      * @param record

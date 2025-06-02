@@ -149,17 +149,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(count($list['results']) > 200);
     }
 
-    /**
-     * test getCurrencyList
-     *
-     */
-    public function testGetCurrencyList()
-    {
-        $list = $this->_instance->getCurrencyList();
-        $this->assertTrue(count($list['results']) > 200);
-    }
-
-
     public function testRestoreRevision()
     {
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
