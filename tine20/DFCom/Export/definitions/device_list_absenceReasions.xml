@@ -3,8 +3,8 @@
     <model>HumanResources_Model_FreeTimeType</model>
     <name>DFCom_device_list_absenceReasons</name>
     <deviceName>absenceReasons</deviceName>
-    <!-- _('Absence Reasons Device List') -->
-    <label>Absence Reasons Device List</label>
+    <!-- _('Device List for Absence Reasons') -->
+    <label>Device List for Absence Reasons</label>
     <type>export</type>
     <plugin>Tinebase_Export_CsvNew</plugin>
     <filter>[{"field": "allow_booking", "operator": "equals", "value": true}]</filter>

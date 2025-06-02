@@ -13,235 +13,178 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Config.php:54
 msgid "Device List Status"
 msgstr ""
 
-#: Config.php:56
-msgid "Possible list status from device list feedback records."
+msgid "Possible list statuses based on device list feedback records"
 msgstr ""
 
-#: Config.php:63
-msgid "List was send to device"
+msgid "List was sent to device"
 msgstr ""
 
-#: Config.php:64
-msgid "List was taken over"
+msgid "List has been accepted"
 msgstr ""
 
-#: Config.php:65
 msgid "Generic error"
 msgstr ""
 
-#: Config.php:66
 msgid "Invalid label"
 msgstr ""
 
-#: Config.php:67
 msgid "Unknown list"
 msgstr ""
 
-#: Config.php:68
 msgid "Parameter missing"
 msgstr ""
 
-#: Config.php:69
-msgid "Error in list line"
+msgid "Error in list row"
 msgstr ""
 
-#: Config.php:70
 msgid "List is ignored"
 msgstr ""
 
-#: Config.php:71
 msgid "Duplicate list definition"
 msgstr ""
 
-#: Config.php:72
-msgid "An other list upgrade is in progress"
+msgid "Another list upgrade is in progress"
 msgstr ""
 
-#: Config.php:78
 msgid "Device List Percentage"
 msgstr ""
 
-#: Config.php:80
-msgid "Device list with Percentage entries."
+msgid "Device list containing percentage entries."
 msgstr ""
 
-#: Config.php:103
 msgid "Initial AuthKey for Device Setup"
 msgstr ""
 
-#: Config.php:105
-msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+msgid "Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup."
 msgstr ""
 
-#: Config.php:112
 msgid "Default Container for Devices"
 msgstr ""
 
-#: Config.php:114
-msgid "The container where new devices are created in."
+msgid "The container where new devices are created."
 msgstr ""
 
-#: Config.php:121
-msgid "Default Devices Lists"
+msgid "Default Device Lists"
 msgstr ""
 
-#: Config.php:123
-msgid "List export definition names to load into devices per default."
+msgid "List export definition names that are loaded into devices by default."
 msgstr ""
 
-#: Config.php:130
 msgid "Device Record Handlers"
 msgstr ""
 
-#: Config.php:132
-msgid "Handler class for given device record."
+msgid "Handler class for a given device record."
 msgstr ""
 
-#: Controller/Device.php:108
 msgid "New Device"
 msgstr ""
 
-#: Export/definitions/device_list_absenceReasions.xml:6
-#: Export/definitions/device_list_timeaccounts.xml:8
-msgid "Absence Reasons Device List"
+msgid "Device List for Absence Reasons"
 msgstr ""
 
-#: Export/definitions/device_list_employee.xml:6
-msgid "Employee Device List"
+msgid "Device List for Employee"
 msgstr ""
 
-#: Model/DeviceList.php:40
 msgid "Device list"
 msgid_plural "Device lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/DeviceList.php:81 Model/Device.php:62 Model/DeviceRecord.php:90
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/DeviceList.php:97 Model/Device.php:119
 msgid "Name"
 msgstr ""
 
-#: Model/DeviceList.php:104
 msgid "Export Definition"
 msgstr ""
 
-#: Model/DeviceList.php:112
 msgid "Active list version"
 msgstr ""
 
-#: Model/DeviceList.php:122
 msgid "List status"
 msgstr ""
 
-#: Model/DeviceList.php:128
-msgid "Control Commands on List Feedback"
+msgid "Control Commands Based on List Feedback"
 msgstr ""
 
-#: Model/Device.php:95
 msgid "Type"
 msgstr ""
 
-#: Model/Device.php:103
 msgid "Serial number"
 msgstr ""
 
-#: Model/Device.php:111
 msgid "Auth key"
 msgstr ""
 
-#: Model/Device.php:126
 msgid "Description"
 msgstr ""
 
-#: Model/Device.php:134
 msgid "Location"
 msgstr ""
 
-#: Model/Device.php:142
 msgid "Timezone"
 msgstr ""
 
-#: Model/Device.php:150
 msgid "Firmware"
 msgstr ""
 
-#: Model/Device.php:157
 msgid "Setup Version"
 msgstr ""
 
-#: Model/Device.php:164
 msgid "Setup Status"
 msgstr ""
 
-#: Model/Device.php:170
 msgid "Last seen"
 msgstr ""
 
-#: Model/Device.php:178
 msgid "Cellular data"
 msgstr ""
 
-#: Model/Device.php:186
 msgid "GPRS alive counter"
 msgstr ""
 
-#: Model/Device.php:194
 msgid "GPRS data"
 msgstr ""
 
-#: Model/Device.php:202
 msgid "Digital status"
 msgstr ""
 
-#: Model/Device.php:208
 msgid "Lists"
 msgstr ""
 
-#: Model/Device.php:222
 msgid "Control Commands"
 msgstr ""
 
-#: Model/DeviceRecord.php:43
 msgid "Device Record"
 msgid_plural "Device Records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/DeviceRecord.php:49
 msgid "Device Records Container"
 msgid_plural "Device Records Containers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/DeviceRecord.php:105
 msgid "Device Table"
 msgstr ""
 
-#: Model/DeviceRecord.php:111
 msgid "Data"
 msgstr ""
 
-#: Model/DeviceRecord.php:118
 msgid "Processed by"
 msgstr ""
 
-#: RecordHandler/TimeAccounting.php:234 RecordHandler/TimeAccounting.php:243
 msgid "Clock in: %1$s"
 msgstr ""
 
-#: RecordHandler/TimeAccounting.php:235 RecordHandler/TimeAccounting.php:261
 msgid "Clock out: %1$s"
 msgstr ""
 
-#: Setup/Initialize.php:74 Setup/Initialize.php:95
 msgid "Transponder Id"
 msgstr ""

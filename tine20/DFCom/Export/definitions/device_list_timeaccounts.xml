@@ -5,7 +5,7 @@
     <deviceName>_timeaccounts</deviceName>
     <controlCommands>setDeviceVariable('TAListLoaded', 1);
 triggerEventChain('projectTime');</controlCommands>
-    <!-- _('Absence Reasons Device List') -->
+    <!-- _('Device List for Absence Reasons') -->
     <label>Timeaccounts Device List</label>
     <type>export</type>
     <plugin>Tinebase_Export_CsvNew</plugin>

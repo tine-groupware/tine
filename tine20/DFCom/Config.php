@@ -77,8 +77,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEVICE_LISTE_PERCENTAGE => [
             //_('Device List Percentage')
             'label'                 => 'Device List Percentage',
-            //_('Device list with Percentage entries.')
-            'description'           => 'Device list with Percentage entries.',
+            //_('Device list containing percentage entries.')
+            'description'           => 'Device list containing percentage entries.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
@@ -102,8 +102,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::SETUP_AUTH_KEY => [
             //_('Initial AuthKey for Device Setup')
             'label'                 => 'Initial AuthKey for Device Setup',
-            //_('Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup.')
-            'description'           => 'Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup.',
+            //_('Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup.')
+            'description'           => 'Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
@@ -111,17 +111,17 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEFAULT_DEVICE_CONTAINER => [
             //_('Default Container for Devices')
             'label'                 => 'Default Container for Devices',
-            //_('The container where new devices are created in.')
-            'description'           => 'The container where new devices are created in.',
+            //_('The container where new devices are created.')
+            'description'           => 'The container where new devices are created.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
         ],
         self::DEFAULT_DEVICE_LISTS => [
-            //_('Default Devices Lists')
-            'label'                 => 'Default Devices Lists',
-            //_('List export definition names to load into devices per default.')
-            'description'           => 'List export definition names to load into devices per default.',
+            //_('Default Device Lists')
+            'label'                 => 'Default Device Lists',
+            //_('List export definition names that are loaded into devices by default.')
+            'description'           => 'List export definition names that are loaded into devices by default.',
             'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
@@ -129,8 +129,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEVICE_RECORD_HANDLERS => [
             //_('Device Record Handlers')
             'label'                 => 'Device Record Handlers',
-            //_('Handler class for given device record.')
-            'description'           => 'Handler class for given device record.',
+            //_('Handler class for a given device record.')
+            'description'           => 'Handler class for a given device record.',
             'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,

@@ -18,235 +18,217 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:54
 msgid "Device List Status"
 msgstr "Gerätelistenstatus"
 
-#: Config.php:56
-msgid "Possible list status from device list feedback records."
-msgstr "Mögliche Gerätelistenstatus der Listen Rückmeldungs-Datensätze."
+msgid "Possible list statuses based on device list feedback records"
+msgstr "Mögliche Status der Gerätelisten in den Rückmeldungs-Datensätzen."
 
-#: Config.php:63
-msgid "List was send to device"
+msgid "List was sent to device"
 msgstr "Liste wurde zum Gerät gesendet"
 
-#: Config.php:64
-msgid "List was taken over"
+msgid "List has been accepted"
 msgstr "Liste wurde übernommen"
 
-#: Config.php:65
 msgid "Generic error"
 msgstr "Allgemeiner Fehler"
 
-#: Config.php:66
 msgid "Invalid label"
 msgstr "Ungültiger Bezeichner"
 
-#: Config.php:67
 msgid "Unknown list"
 msgstr "Unbekannte Liste"
 
-#: Config.php:68
 msgid "Parameter missing"
 msgstr "Parameter fehlt"
 
-#: Config.php:69
-msgid "Error in list line"
+msgid "Error in list row"
 msgstr "Fehler in der Listezeile"
 
-#: Config.php:70
 msgid "List is ignored"
 msgstr "Liste wird ignoriert"
 
-#: Config.php:71
 msgid "Duplicate list definition"
 msgstr "Doppelte Listendefinition"
 
-#: Config.php:72
-msgid "An other list upgrade is in progress"
+msgid "Another list upgrade is in progress"
 msgstr "Eine weitere Listen-Aktualisierung ist im Gange"
 
-#: Config.php:78
 msgid "Device List Percentage"
 msgstr ""
 
-#: Config.php:80
-msgid "Device list with Percentage entries."
+msgid "Device list containing percentage entries."
 msgstr ""
 
-#: Config.php:103
 msgid "Initial AuthKey for Device Setup"
 msgstr "Authentifikationsschlüssel für die Geräte Einrichtung"
 
-#: Config.php:105
-msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+msgid "Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup."
 msgstr "Muss als Standard der globalen Variable authKey (max 20 Zeichen) im DataFox Studio Geräte-Setup gesetzt werden."
 
-#: Config.php:112
 msgid "Default Container for Devices"
 msgstr "Standard Ordner für Geräte"
 
-#: Config.php:114
-msgid "The container where new devices are created in."
+msgid "The container where new devices are created."
 msgstr "Der Ordner in dem neue Geräte erstellt werden."
 
-#: Config.php:121
-msgid "Default Devices Lists"
+msgid "Default Device Lists"
 msgstr "Standard Gerätelisten"
 
-#: Config.php:123
-msgid "List export definition names to load into devices per default."
+msgid "List export definition names that are loaded into devices by default."
 msgstr "Listen Export-Definitions-Namen die standardmäßig in das Gerät geladen werden."
 
-#: Config.php:130
 msgid "Device Record Handlers"
 msgstr "Geräte-Datensatz Handler"
 
-#: Config.php:132
-msgid "Handler class for given device record."
+msgid "Handler class for a given device record."
 msgstr "Handler Klasse für angegebenen Geräte-Datensatz."
 
-#: Controller/Device.php:108
 msgid "New Device"
 msgstr "Neue Geräteliste"
 
-#: Export/definitions/device_list_absenceReasions.xml:6
-#: Export/definitions/device_list_timeaccounts.xml:8
-msgid "Absence Reasons Device List"
-msgstr "Abwesenheitsgründe Geräte Liste"
+msgid "Device List for Absence Reasons"
+msgstr "Geräte Liste für Abwesenheitsgründe"
 
-#: Export/definitions/device_list_employee.xml:6
-msgid "Employee Device List"
-msgstr "Mitarbeiter Geräte Liste"
+msgid "Device List for Employee"
+msgstr "Geräte Liste für Mitarbeiter"
 
-#: Model/DeviceList.php:40
 msgid "Device list"
 msgid_plural "Device lists"
 msgstr[0] "Geräteliste"
 msgstr[1] "Gerätelisten"
 
-#: Model/DeviceList.php:81 Model/Device.php:62 Model/DeviceRecord.php:90
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] "Gerät"
 msgstr[1] "Geräte"
 
-#: Model/DeviceList.php:97 Model/Device.php:119
 msgid "Name"
 msgstr "Name"
 
-#: Model/DeviceList.php:104
 msgid "Export Definition"
 msgstr "Export Definition"
 
-#: Model/DeviceList.php:112
 msgid "Active list version"
 msgstr "Version der aktiven Liste"
 
-#: Model/DeviceList.php:122
 msgid "List status"
 msgstr "Listenstatus"
 
-#: Model/DeviceList.php:128
-msgid "Control Commands on List Feedback"
+msgid "Control Commands Based on List Feedback"
 msgstr "Kontroll Kommandos bei Listen-Rückmeldung"
 
-#: Model/Device.php:95
 msgid "Type"
 msgstr "Typ"
 
-#: Model/Device.php:103
 msgid "Serial number"
 msgstr "Seriennummer"
 
-#: Model/Device.php:111
 msgid "Auth key"
 msgstr "Authentifikationsschlüssel"
 
-#: Model/Device.php:126
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/Device.php:134
 msgid "Location"
 msgstr "Standort"
 
-#: Model/Device.php:142
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: Model/Device.php:150
 msgid "Firmware"
 msgstr "Firmware"
 
-#: Model/Device.php:157
 msgid "Setup Version"
 msgstr "Setup Version"
 
-#: Model/Device.php:164
 msgid "Setup Status"
 msgstr ""
 
-#: Model/Device.php:170
 msgid "Last seen"
 msgstr "Letzter Kontakt"
 
-#: Model/Device.php:178
 msgid "Cellular data"
 msgstr "Mobilfunkdaten"
 
-#: Model/Device.php:186
 msgid "GPRS alive counter"
 msgstr "GPRS Aktivitätszähler"
 
-#: Model/Device.php:194
 msgid "GPRS data"
 msgstr "GPRS Daten"
 
-#: Model/Device.php:202
 msgid "Digital status"
 msgstr "Digital Status"
 
-#: Model/Device.php:208
 msgid "Lists"
 msgstr "Listen"
 
-#: Model/Device.php:222
 msgid "Control Commands"
 msgstr "Steuer Kommandos"
 
-#: Model/DeviceRecord.php:43
 msgid "Device Record"
 msgid_plural "Device Records"
 msgstr[0] "Geräte Datensatz"
 msgstr[1] "Geräte Datensätze"
 
-#: Model/DeviceRecord.php:49
 msgid "Device Records Container"
 msgid_plural "Device Records Containers"
 msgstr[0] "Geräte Datensatz Ordner"
 msgstr[1] "Geräte Datensatz Ordner"
 
-#: Model/DeviceRecord.php:105
 msgid "Device Table"
 msgstr "Geräte Tabelle"
 
-#: Model/DeviceRecord.php:111
 msgid "Data"
 msgstr "Daten"
 
-#: Model/DeviceRecord.php:118
 msgid "Processed by"
 msgstr ""
 
-#: RecordHandler/TimeAccounting.php:234 RecordHandler/TimeAccounting.php:243
 msgid "Clock in: %1$s"
 msgstr "Kommen: %1$s"
 
-#: RecordHandler/TimeAccounting.php:235 RecordHandler/TimeAccounting.php:261
 msgid "Clock out: %1$s"
 msgstr "Gehen: %1$s"
 
-#: Setup/Initialize.php:74 Setup/Initialize.php:95
 msgid "Transponder Id"
 msgstr ""
+
+#~ msgid "Possible list status from device list feedback records."
+#~ msgstr "Mögliche Gerätelistenstatus der Listen Rückmeldungs-Datensätze."
+
+#~ msgid "List was send to device"
+#~ msgstr "Liste wurde zum Gerät gesendet"
+
+#~ msgid "List was taken over"
+#~ msgstr "Liste wurde übernommen"
+
+#~ msgid "Error in list line"
+#~ msgstr "Fehler in der Listezeile"
+
+#~ msgid "An other list upgrade is in progress"
+#~ msgstr "Eine weitere Listen-Aktualisierung ist im Gange"
+
+#~ msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+#~ msgstr "Muss als Standard der globalen Variable authKey (max 20 Zeichen) im DataFox Studio Geräte-Setup gesetzt werden."
+
+#~ msgid "The container where new devices are created in."
+#~ msgstr "Der Ordner in dem neue Geräte erstellt werden."
+
+#~ msgid "Default Devices Lists"
+#~ msgstr "Standard Gerätelisten"
+
+#~ msgid "List export definition names to load into devices per default."
+#~ msgstr "Listen Export-Definitions-Namen die standardmäßig in das Gerät geladen werden."
+
+#~ msgid "Handler class for given device record."
+#~ msgstr "Handler Klasse für angegebenen Geräte-Datensatz."
+
+#~ msgid "Absence Reasons Device List"
+#~ msgstr "Abwesenheitsgründe Geräte Liste"
+
+#~ msgid "Employee Device List"
+#~ msgstr "Mitarbeiter Geräte Liste"
+
+#~ msgid "Control Commands on List Feedback"
+#~ msgstr "Kontroll Kommandos bei Listen-Rückmeldung"
