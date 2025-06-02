@@ -186,7 +186,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
             self::fail('should throw Tinebase_Exception_UnexpectedValue');
         } catch (Tinebase_Exception_UnexpectedValue $e) {
             $translate = Tinebase_Translation::getTranslation('Admin');
-            self::assertEquals($translate->_("Account Email needs to be set!"), $e->getMessage());
+            self::assertEquals($translate->_("Account email needs to be set!"), $e->getMessage());
         }
 
         try {
