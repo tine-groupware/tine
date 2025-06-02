@@ -4,9 +4,9 @@
  * 
  * @package     ExampleApplication
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -21,20 +21,20 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
 {
     use Tinebase_Record_PerspectiveTrait;
 
-    const FLD_CONTAINER_ID = 'container_id';
-    const FLD_DATETIME = 'datetime';
-    const FLD_DESCRIPTION = 'description';
-    const FLD_NAME = 'name';
-    const FLD_NUMBER_INT = 'number_int';
-    const FLD_NUMBER_STR = 'number_str';
-    const FLD_ONE_TO_ONE = 'one_to_one';
-    const FLD_PERSPECTIVE = 'perspective';
-    const FLD_PERSP_DT = 'persp_dt';
-    const FLD_REASON = 'reason';
-    const FLD_STATUS = 'status';
+    public const FLD_CONTAINER_ID = 'container_id';
+    public const FLD_DATETIME = 'datetime';
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_NAME = 'name';
+    public const FLD_NUMBER_INT = 'number_int';
+    public const FLD_NUMBER_STR = 'number_str';
+    public const FLD_ONE_TO_ONE = 'one_to_one';
+    public const FLD_PERSPECTIVE = 'perspective';
+    public const FLD_PERSP_DT = 'persp_dt';
+    public const FLD_REASON = 'reason';
+    public const FLD_STATUS = 'status';
 
-    const MODEL_NAME_PART = 'ExampleRecord';
-    const TABLE_NAME = 'example_application_record';
+    public const MODEL_NAME_PART = 'ExampleRecord';
+    public const TABLE_NAME = 'example_application_record';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
