@@ -143,6 +143,7 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
                 if (name && name.registerReplacer) {
                     name.registerReplacer((name) => {
                         resolve(name);
+                        return true;
                     });
                 } else {
                     resolve(name);
