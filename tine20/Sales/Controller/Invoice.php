@@ -1532,6 +1532,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
             $preceedingInvoice = $invoice->relations->find('type', 'REVERSAL')?->related_record;
 
+            $vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($customer->{Sales_Model_Customer::FLD_VAT_PROCEDURE});
+
+
             // type (invoice_type) => REVERSAL => storno gibt verknüpfung
 
             $ublInvoice = new Sales_Model_Document_Invoice([
@@ -1575,6 +1578,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     ])
                 ]) : null,
             ]);
+
+            if (count($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}) === 1) {
+                $ublInvoice->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = Sales_Controller_EDocument_VATEX::getInstance()->getByCode($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}[0]);
+            }
 
             if (empty($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}) || 0 === $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->count()) {
                 $ublInvoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS} =
