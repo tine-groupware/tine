@@ -116,6 +116,7 @@ class HTMLProxy extends Expression {
 
   /**
    * register a custom replacer method for this proxy
+   * NOTE: replacer needs to return bool true to mark a successfully replacement
    * @param {Function} fn
    */
   registerReplacer (fn) {
@@ -128,7 +129,10 @@ class HTMLProxy extends Expression {
    */
   asString () {
     return new Promise(resolve => {
-      this.registerReplacer(resolve)
+      this.registerReplacer((text) => {
+        resolve(text)
+        return true
+      })
     })
   }
 }

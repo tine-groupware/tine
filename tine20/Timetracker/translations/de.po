@@ -137,6 +137,13 @@ msgstr "Faktor"
 msgid "Budget in hours"
 msgstr "Projektzeitbudget in Stunden"
 
+msgid ""
+"All timesheet durations are aggregated here, no matter if they are billable "
+"or not"
+msgstr ""
+"Alle Dauer der Stundenzettel werden hier aggregiert, unabhängig davon, ob "
+"sie abrechenbar sind oder nicht."
+
 msgid "Status"
 msgstr "Status"
 
@@ -368,6 +375,9 @@ msgstr "Abrechenbar setzen"
 msgid "The grant to manage clearing of Timesheets"
 msgstr "Das Recht, Stundenzettel auf abgerechnet zu setzen"
 
+msgid "Project time budget in hours"
+msgstr "Projektzeitbudget in Stunden"
+
 msgid "Price"
 msgstr "Preis"
 
@@ -388,6 +398,12 @@ msgstr "Faktor"
 
 msgid "Stream"
 msgstr "Stream"
+
+msgid "Budget level in %"
+msgstr "Budget Füllstand in %"
+
+msgid "Budget booked hours"
+msgstr "Budget gebuchte Stunden"
 
 msgid "hour"
 msgstr "Stunde"
@@ -492,21 +508,8 @@ msgstr "Abgerechnete Zeitkonten"
 msgid "Timetracker"
 msgstr "Zeiterfassung"
 
-msgid ""
-"All timesheet durations are aggregated here, no matter if they are billable "
-"or not"
-msgstr ""
-"Alle Dauer der Stundenzettel werden hier aggregiert, unabhängig davon, ob "
-"sie abrechenbar sind oder nicht."
-
-msgid "Project time budget in hours"
-msgstr "Projektzeitbudget in Stunden"
-
-msgid "Budget level in %"
-msgstr "Budget Füllstand in %"
-
-msgid "Budget booked hours"
-msgstr "Budget gebuchte Stunden"
+msgid "Turnover Cleared: { cleared }"
+msgstr "Abgerechneter Umsatz { cleared }"
 
 #, python-format
 msgid ""
