@@ -200,7 +200,7 @@ const getTwingEnv = function () {
 
     twingEnv.addFunction(new TwingFunction('renderTitle', function (recordData, modelName) {
       const title = Tine.Tinebase.data.Record.setFromJson(recordData, modelName)?.getTitle()
-      return Promise.resolve(title.asString ? title.asString() : title)
+      return Promise.resolve(title.asString())
     }))
 
     /**

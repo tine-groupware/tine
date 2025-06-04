@@ -228,10 +228,8 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         return new Promise(function (fulfill, reject) {
             me.prepareData(component).then(function(data) {
                 me.generateBody(component, data).then(async function(bodyHtml) {
-                    let title = me.getTitle(component);
-                    if (title.asString) {
-                        title = await title.asString();
-                    }
+                    let title = await me.getTitle(component).asString();
+
                     if (Ext.isThenable(title)) {
                         title = await title;
                     }

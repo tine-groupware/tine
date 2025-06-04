@@ -73,10 +73,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
             valueRecord.phantom = true;
         }
         Promise.resolve().then(async () => {
-            let text = valueRecord ? valueRecord.getTitle() || '...' : '';
-            if (text && text.asString) {
-                text = await text.asString();
-            }
+            let text = valueRecord ? await valueRecord.getTitle().asString() || '...' : '';
             Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, text);
         });
 
