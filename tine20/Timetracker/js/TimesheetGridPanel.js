@@ -31,10 +31,6 @@ Ext.namespace('Tine.Timetracker');
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     recordClass: 'Tine.Timetracker.Model.Timesheet',
-    defaultSortInfo: {field: 'start_date', direction: 'DESC'},
-    gridConfig: {
-        autoExpandColumn: 'description'
-    },
     multipleEdit: true,
 
     /**
@@ -52,6 +48,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     multipleEditRequiredRight: 'manage_timeaccounts',
 
     initComponent: function() {
+        this.defaultSortInfo = {field: 'start_date', direction: 'DESC'};
+        this.gridConfig = Object.assign({
+            autoExpandColumn: 'description'
+        }, this.gridConfig || {});
+
         this.defaultFilters = [
             {field: 'start_date', operator: 'within', value: 'weekThis'},
             {field: 'account_id', operator: 'equals', value: Tine.Tinebase.registry.get('currentAccount')}
