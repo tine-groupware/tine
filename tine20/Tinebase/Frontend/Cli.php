@@ -1064,7 +1064,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if ($usagePercentage >= 99) {
                 $message = 'QUOTA LIMIT REACHED | ' . $quotaValueString;
                 $result = 2;
-            } elseif ($usagePercentage >= 80) {
+            } elseif ($usagePercentage >= $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA}) {
                 $message = 'QUOTA LIMIT WARN | ' . $quotaValueString;
                 $result = 1;
             } else {
