@@ -463,6 +463,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                     setValue(text);
                     this.value = value;
                 }
+                return true
             });
         } else {
             setValue(text);

@@ -109,8 +109,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 qtitle: this.app.i18n._('Turnover Statistics'),
                 qtip:
                     this.app.formatMessage('Turnover Target: { target }', {target: Ext.util.Format.money(data.turnOverGoal)}) + "<br>" +
-                    this.app.formatMessage('Turnover Recorded: { recorded }', {recorded: Ext.util.Format.money(data.clearedAmount || 0)}),
-                percent: Math.round(100 * (data.clearedAmount || 0) / data.turnOverGoal)
+                    this.app.formatMessage('Turnover Recorded: { recorded }', {recorded: Ext.util.Format.money(data.recordedAmount || 0)}) + "<br>" +
+                    this.app.formatMessage('Turnover Cleared: { cleared }', {cleared: Ext.util.Format.money(data.clearedAmount || 0)}),
+                percent: Math.round(100 * (data.recordedAmount || 0) / data.turnOverGoal)
             }));
         }
         this.pagingToolbar.items.get('to-label')[!! data.turnOverGoal ? 'show' : 'hide']();
