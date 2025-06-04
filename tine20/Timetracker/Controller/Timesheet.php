@@ -445,6 +445,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = $oldTs?->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT};
             return;
         }
+
+        $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
     }
 
     protected function fireEvent(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null)
