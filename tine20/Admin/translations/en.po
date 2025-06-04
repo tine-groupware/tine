@@ -843,9 +843,6 @@ msgstr "Usage:&#160;"
 msgid "System Tag"
 msgstr "System Tag"
 
-msgid "Send SMS message with new password"
-msgstr "Send SMS message with new password"
-
 msgid "Allowed Domains"
 msgstr "Allowed Domains"
 

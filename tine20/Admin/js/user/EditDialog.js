@@ -159,7 +159,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record: this.record,
                 contactRecord: this.contactRecordPicker.selectedRecord,
                 editDialog: this,
-                windowTitle: this.app.i18n._('Send SMS message with new password'),
             });
 
             passwordDialog.openWindow();

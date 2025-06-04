@@ -858,9 +858,6 @@ msgstr "Verwendung:&#160;"
 msgid "System Tag"
 msgstr "System Tag"
 
-msgid "Send SMS message with new password"
-msgstr "SMS Nachricht mit neuem Passwort senden"
-
 msgid "Allowed Domains"
 msgstr "Erlaubte Domänen"
 
