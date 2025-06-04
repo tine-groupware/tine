@@ -317,6 +317,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $totalresult['totalsumbillable'] = $result['sum_accounting_time_billable'];
             $totalresult['totalcount'] = $result['count'];
             $totalresult['clearedAmount'] = (int)$result['sum_cleared_amount'];
+            $totalresult['recordedAmount'] = (int)$result['sum_recorded_amount'];
             if (isset($result['turnOverGoal'])) {
                 $totalresult['turnOverGoal'] = $result['turnOverGoal'];
             }

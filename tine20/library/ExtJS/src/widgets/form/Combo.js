@@ -501,6 +501,10 @@ var combo = new Ext.form.ComboBox({
                     this.focusClass = '';
                     Ext.form.TriggerField.superclass.onBlur.call(this);
                     this.focusClass = focusClass;
+                    _.delay(() => {
+                        // NOTE: we need to wait until quickadd handlers have run :-/
+                        this.hasFocus = true;
+                    }, 500);
                 }, 100)
             }, this);
         }
