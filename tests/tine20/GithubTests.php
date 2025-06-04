@@ -4,7 +4,7 @@
  *
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Michael Spahn <m.spahn@metaways.de>
- * @copyright    Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -33,12 +33,12 @@ class GithubTests
         $suite->addTestSuite(Calendar_Frontend_CalDAVTest::class);
         $suite->addTestSuite(Calendar_Frontend_Json_PollTest::class);
         $suite->addTestSuite(Calendar_Frontend_Json_ResourceTest::class);
-        $suite->addTestSuite(Calendar_Frontend_PollRoutingTest::class);
         $suite->addTestSuite(Calendar_Frontend_CliTest::class);
 
         // some more json tests
         $suite->addTestSuite(Timetracker_JsonTest::class);
         $suite->addTestSuite(Tinebase_Frontend_JsonTest::class);
+        $suite->addTestSuite(Sales_JsonTest::class);
 
         return $suite;
     }
