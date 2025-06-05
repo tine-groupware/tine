@@ -73,13 +73,6 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     protected $_canSupportDelegations = true;
     
     /**
-     * the current path
-     * 
-     * @var string
-     */
-    protected $_path;
-    
-    /**
      * @var array
      */
     protected $_pathParts;
@@ -106,14 +99,15 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
     /**
      * contructor
-     * 
-     * @param string $path          the current path
+     *
+     * @param string $_path the current path
      * @param array  $options       options
      */
-    public function __construct($path, $options = array())
+    public function __construct(/**
+     * the current path
+     */
+    protected $_path, $options = array())
     {
-        $this->_path        = $path;
-
         // handle legacy (throw WARN/NOTICE in log?)
         if ($options === true) {
             $options = array(
@@ -179,9 +173,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         $properties = $mkCol->getMutations();
         return $this->_createContainer(array(
-            'name'  => isset($properties['{DAV:}displayname']) ? $properties['{DAV:}displayname'] : $name,
+            'name'  => $properties['{DAV:}displayname'] ?? $name,
             'uuid'  => $name,
-            'color' => isset($properties['{http://apple.com/ns/ical/}calendar-color']) ? substr($properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7) : null
+            'color' => isset($properties['{http://apple.com/ns/ical/}calendar-color']) ? substr((string) $properties['{http://apple.com/ns/ical/}calendar-color'], 0, 7) : null
         ));
     }
     
@@ -196,25 +190,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             return $this->_instanceCache[__FUNCTION__][$name];
         }
 
-        switch (count($this->_getPathParts())) {
-            # path == /<applicationPrefix> (for example calendars)
-            # return folders for currentuser, other users and 'shared' folder
-            # $name can be
-            # * contact_id of user
-            # * 'shared'
-            case 1:
-                $child = $this->_getToplevelTree($name);
-                break;
-
-            # path == /<applicationPrefix>/<contactid>|'shared'
-            # list container
-            case 2:
-                $child = $this->_getContainerTree($name);
-                break;
-
-            default:
-                throw new Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
-        }
+        $child = match (count($this->_getPathParts())) {
+            1 => $this->_getToplevelTree($name),
+            2 => $this->_getContainerTree($name),
+            default => throw new Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found"),
+        };
 
         $this->_instanceCache[__FUNCTION__][$name] = $child;
 
@@ -241,7 +221,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     // check if it exists only
                     $this->_getUser($name);
 
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $message = "Directory $this->_path/$name not found";
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . ' ' . $message);
@@ -315,10 +295,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             } else if ($this->_containerModel === 'Tinebase_Model_Tree_Node') {
                 $directory = $this->_getSharedNode($name);
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
 
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
+        } catch (Tinebase_Exception_InvalidArgument) {
             // invalid container id provided
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
@@ -341,7 +321,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' First try to fetch container by uuid ..');
                 $container = Tinebase_Container::getInstance()->getByProperty((string) $name, 'uuid');
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' If that fails by id ...');
 
@@ -387,7 +367,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             try {
                 $accountId = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()))->accountId;
 
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
             }
         }
@@ -399,10 +379,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 $directory = $this->_getPersonalNode($name, $accountId);
             }
 
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
 
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
+        } catch (Tinebase_Exception_InvalidArgument) {
             // invalid container id provided
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
@@ -425,7 +405,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             // first try to fetch by uuid ...
             try {
                 $container = Tinebase_Container::getInstance()->getByProperty((string) $name, 'uuid');
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // ... if that fails by id
                 $container = Tinebase_Container::getInstance()->getContainerById($name);
             }
@@ -510,23 +490,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             return $this->_instanceCache[__FUNCTION__];
         }
 
-        switch (count($this->_getPathParts())) {
-            # path == /<applicationPrefix> (for example calendars)
-            # return folders for currentuser, other users and 'shared' folder
-            case 1:
-                $children = $this->_getPersonalChildren();
-                break;
-
-            # path == /<applicationPrefix>/<contactid>|'shared'
-            # list container
-            case 2:
-                $children = $this->_getSharedChildren();
-                break;
-
-            default:
-                throw new Sabre\DAV\Exception\NotFound("Path $this->_path not found");
-                break;
-        }
+        $children = match (count($this->_getPathParts())) {
+            1 => $this->_getPersonalChildren(),
+            2 => $this->_getSharedChildren(),
+            default => throw new Sabre\DAV\Exception\NotFound("Path $this->_path not found"),
+        };
 
         $this->_instanceCache[__FUNCTION__] = $children;
         return $children;
@@ -569,7 +537,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         ($this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName);
 
                     $children[] = $this->getChild($folderId);
-                } catch (\Sabre\DAV\Exception\NotFound $sdavenf) {
+                } catch (\Sabre\DAV\Exception\NotFound) {
                     // ignore contacts not found
                 }
             }
@@ -591,7 +559,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             } else {
                 try {
                     $accountId = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()))->accountId;
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     throw new \Sabre\DAV\Exception\NotFound("Path $this->_path not found");
                 }
             }
@@ -625,7 +593,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         foreach ($containers as $container) {
             try {
                 $children[] = $this->getChild($this->_useIdAsName ? $container->getId() : $container->name);
-            } catch (\Sabre\DAV\Exception\NotFound $sdavenf) {
+            } catch (\Sabre\DAV\Exception\NotFound) {
                 // ignore containers not found
             }
         }
@@ -662,7 +630,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             return false;
         }
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+            [$backend, $version] = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
             $clientSupportsDelegations = in_array($backend, array(
                 Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX,
                 Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID,
@@ -767,12 +735,12 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
 
                     $this->_name = $this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName;
 
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    list(, $this->_name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+                } catch (Tinebase_Exception_NotFound) {
+                    [, $this->_name] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
                 }
 
             } else {
-                list(, $this->_name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+                [, $this->_name] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
             }
         }
         return $this->_name;
@@ -790,7 +758,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         if (count($this->_getPathParts()) === 2 && $this->getName() !== Tinebase_Model_Container::TYPE_SHARED) {
             try {
                 $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 return null;
             }
             
@@ -870,7 +838,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         try {
                             $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
                             $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
-                        } catch (Tinebase_Exception_NotFound $tenf) {
+                        } catch (Tinebase_Exception_NotFound) {
                             continue 2;
                         }
                         
@@ -992,7 +960,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 if ($path->isDefaultACLsPath()) {
                     try {
                         $container = Tinebase_FileSystem::getInstance()->createAclNode($statpath, $path->getDefaultAcls());
-                    } catch (Tinebase_Exception_SystemGeneric $tesg) {
+                    } catch (Tinebase_Exception_SystemGeneric) {
                         // node already exists
                         $container = Tinebase_FileSystem::getInstance()->stat($statpath);
                     }
@@ -1003,7 +971,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             } else {
                 throw Tinebase_Exception_AccessDenied('wrong model');
             }
-        } catch (Tinebase_Exception_AccessDenied $tead) {
+        } catch (Tinebase_Exception_AccessDenied) {
             throw new \Sabre\DAV\Exception\Forbidden($permissionDeniedMessage);
         }
 
@@ -1018,7 +986,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     protected function _getApplicationName()
     {
         if (! $this->_applicationName) {
-            $this->_applicationName = Tinebase_Helper::array_value(0, explode('_', get_class($this)));
+            $this->_applicationName = Tinebase_Helper::array_value(0, explode('_', static::class));
         }
         
         return $this->_applicationName;
@@ -1067,7 +1035,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         if ($this->_useIdAsName) {
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->get($_id);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
+            } catch (Tinebase_Exception_AccessDenied) {
                 throw new \Sabre\DAV\Exception\Forbidden('No permission to get user / contact');
             }
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $contact->account_id, 'Tinebase_Model_FullUser');

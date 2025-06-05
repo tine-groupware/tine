@@ -358,6 +358,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                 Tinebase_Record_NewAbstract::TYPE_STRING,
                 Tinebase_Record_NewAbstract::TYPE_STRING_AUTOCOMPLETE,
                 Tinebase_Record_NewAbstract::TYPE_FULLTEXT,
+                Tinebase_Record_NewAbstract::TYPE_STRICTFULLTEXT,
                 Tinebase_Record_NewAbstract::TYPE_TEXT,
             ])) {
                 $obj->$property = Tinebase_Core::filterInputForDatabase($obj->$property);

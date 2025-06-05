@@ -33,6 +33,6 @@ class Tinebase_MimeType
 
     final public function getMimeTypeForExtention(string $extension): ?string
     {
-        return isset($this->_mimeTypes[$extension]) ? $this->_mimeTypes[$extension] : null;
+        return $this->_mimeTypes[$extension] ?? null;
     }
 }

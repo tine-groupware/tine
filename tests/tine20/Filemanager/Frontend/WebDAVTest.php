@@ -1321,7 +1321,7 @@ EOS
         $rc = fopen('php://temp', 'r');
         $etag = $parent->createFile('AR-0394xa5 = GS-00sb064', $rc);
         fclose($rc);
-        self::assertRegExp('/"[a-z0-9]+"/', $etag);
+        self::assertMatchesRegularExpression('/"[a-z0-9]+"/', $etag);
     }
 
     public function testUpdateFileWithOCMTime()
@@ -1518,7 +1518,59 @@ EOS
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
     }
-    
+
+    public function testDeleteFileInSharedWithoutDeleteGrantFromSiblingFolder()
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+        $node->createDirectory('dir1');
+        $nodeDir1 = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1');
+        $filename = dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png';
+        $etag = $nodeDir1->createFile('tine_logo.png', fopen($filename, 'r'));
+        $fileNode = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1/tine_logo.png');
+
+        $testSyncUser = $this->_personas['sclever'];
+
+        //dir1 has delete grant
+        $treeNodeDir1 = $nodeDir1->getNode();
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($treeNodeDir1);
+        $treeNodeDir1->grants->addRecord(new Tinebase_Model_Grants([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $testSyncUser->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_SYNC => true,
+            Tinebase_Model_Grants::GRANT_DELETE => true,
+        ]));
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir1, $treeNodeDir1->grants);
+        $result = Tinebase_Core::getUser()->hasGrant($treeNodeDir1, Tinebase_Model_Grants::GRANT_DELETE, 'Tinebase_Model_Tree_Node');
+        $this->assertTrue($result, 'test sync user should have delete grant in shared folder dir1');
+
+        //dir2 has no delete grant
+        $nodeDir1->createDirectory('dir2');
+        $nodeDir2 = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1/dir2');
+        $treeNodeDir2 = $nodeDir2->getNode();
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($treeNodeDir2);
+        foreach ($treeNodeDir2->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId() || $grant->account_type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                $grant->adminGrant = false;
+                $grant->deleteGrant = false;
+            }
+        }
+        // change current user to test the sync ability
+        Tinebase_Core::setUser($testSyncUser);
+
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir2, $treeNodeDir2->grants);
+        $result = Tinebase_Core::getUser()->hasGrant($treeNodeDir2, Tinebase_Model_Grants::GRANT_DELETE, 'Tinebase_Model_Tree_Node');
+        $this->assertFalse($result, 'test sync user should not have delete grant in shared folder dir2');
+        $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared/dir1/tine_logo.png');
+        try {
+            $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1/tine_logo.png');
+            $this->fail('should not find sync state for folder');
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof \Sabre\DAV\Exception\NotFound);
+        }
+    }
+
+
     /**
      * @return Filemanager_Frontend_WebDAV_Directory
      */

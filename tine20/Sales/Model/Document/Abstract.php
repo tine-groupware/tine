@@ -18,12 +18,17 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @subpackage  Model
  *
  * @property Tinebase_Record_RecordSet $positions
+ * @property Sales_Model_EDocument_VATEX $vatex_id
  */
 abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
+    public const EXCLUDE_FROM_DOCUMENT_SEQ = 'exclDocSeq';
+
     public const STATUS_REVERSAL = 'REVERSAL';
+    public const STATUS_DISPATCHED = 'DISPATCHED';
+    public const STATUS_MANUAL_DISPATCH = 'MANUAL_DISPATCH';
 
     public const TAX_RATE = 'tax_rate';
     public const TAX_SUM = 'tax_sum';
@@ -63,6 +68,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_NET_SUM = 'net_sum';
     public const FLD_VAT_PROCEDURE = 'vat_procedure';
+    public const FLD_VATEX_ID = 'vatex_id';
     public const FLD_SALES_TAX = 'sales_tax';
     public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
 
@@ -80,6 +86,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_CONTRACT_ID = 'contract_id';
 
     public const FLD_ATTACHED_DOCUMENTS = 'attached_documents';
+
+    public const FLD_DISPATCH_HISTORY = 'dispatch_history';
+
+    public const FLD_DOCUMENT_SEQ = 'document_seq';
 
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
@@ -178,12 +188,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
                     ],
                 ],
-                self::FLD_ATTACHED_DOCUMENTS => [
+                self::FLD_ATTACHED_DOCUMENTS => [],
+                self::FLD_DISPATCH_HISTORY  => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Document_AttachedDocument::FLD_DISPATCH_HISTORY => [],
+                        self::FLD_ATTACHMENTS => [],
                     ],
                 ],
                 self::FLD_CONTACT_ID => [],
+                self::FLD_BOILERPLATES => [],
+                self::FLD_VATEX_ID => [],
             ]
         ],
 
@@ -436,10 +449,23 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::READ_ONLY                     => true,
                 ],
             ],
-            self::FLD_VAT_PROCEDURE => [
-                self::LABEL => 'VAT Procedure', // _('VAT Procedure')
-                self::TYPE => self::TYPE_KEY_FIELD,
-                self::NAME => Sales_Config::VAT_PROCEDURES,
+            self::FLD_VAT_PROCEDURE             => [
+                self::LABEL                         => 'VAT Procedure', // _('VAT Procedure')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::VAT_PROCEDURES,
+            ],
+            self::FLD_VATEX_ID                  => [
+                self::LABEL                         => 'VAT Exemption', // _('VAT Exemption')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::NULLABLE                      => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_EDocument_VATEX::MODEL_NAME_PART,
+                ],
+                self::SHY                           => true,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
@@ -511,9 +537,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Attached Documents', // _('Attached Documents')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
-                    self::DEPENDENT_RECORDS             => true,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_ID,
                 ],
             ],
             self::FLD_PAYMENT_MEANS             => [
@@ -525,9 +552,28 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::STORAGE                       => self::TYPE_JSON,
                     // only Invoice needs one default set (means selected)
                 ],
+                // important not so set any filter / validation defaults as default handling is done in the controller!
                 self::DEFAULT_VAL                   => '[]',
                 self::CONVERTERS                    => [
                     [Tinebase_Model_Converter_JsonRecordSetDefault::class, []],
+                ],
+            ],
+            self::FLD_DISPATCH_HISTORY          => [
+                self::LABEL                         => 'Dispatch History', // _('Dispatch History')
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID,
+                    self::EXCLUDE_FROM_DOCUMENT_SEQ     => true,
+                ],
+            ],
+            self::FLD_DOCUMENT_SEQ              => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::DEFAULT_VAL                   => 1,
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
                 ],
             ],
         ]
@@ -558,8 +604,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
 
-        $type = strtolower(str_replace('Document_', '', static::MODEL_NAME_PART));
-        $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::REF_ID_FIELD] = $type . '_id';
+        $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_DISPATCH_HISTORY][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => static::class,
+        ];
     }
 
     public function isBooked(): bool
@@ -813,7 +863,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     {
         /** @var Sales_Model_DocumentPosition_Abstract $position */
         foreach ($this->{self::FLD_POSITIONS} ?? [] as $position) {
-            if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE
+            if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_STANDARD
                     && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
             }
@@ -885,13 +935,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $tax = round($salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
                             $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
                             $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} )), 2);
-                    if ($tax) {
-                        $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                            self::TAX_RATE => $taxRate,
-                            self::TAX_SUM => $tax,
-                            self::NET_SUM => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
-                        ];
-                    }
+                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                        self::TAX_RATE => $taxRate,
+                        self::TAX_SUM => $tax,
+                        self::NET_SUM => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
+                    ];
                     return $carry + $tax;
                 }, 0) : 0;
             $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
@@ -903,13 +951,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         round(($netSum = round(($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
                             $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}), 2))
                         * $taxRate / 100, 2);
-                    if ($tax) {
-                        $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                            self::TAX_RATE => $taxRate,
-                            self::TAX_SUM => $tax,
-                            self::NET_SUM => $netSum,
-                        ];
-                    }
+                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
+                        self::TAX_RATE => $taxRate,
+                        self::TAX_SUM => $tax,
+                        self::NET_SUM => $netSum,
+                    ];
                     return $carry + $tax;
                 }, 0) : 0;
 
@@ -1100,7 +1146,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} = $product->{Sales_Model_Product::FLD_DEFAULT_GROUPING};
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_SORTING} = $product->{Sales_Model_Product::FLD_DEFAULT_SORTING};
 
-        if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE && Sales_Config::PRICE_TYPE_GROSS ===
+        if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_STANDARD && Sales_Config::PRICE_TYPE_GROSS ===
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE}) {
            $position->computePrice();
            $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = Sales_Config::PRICE_TYPE_NET;
@@ -1121,7 +1167,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         foreach ($this->{self::FLD_ATTACHED_DOCUMENTS} as $attachedDoc) {
             switch ($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE}) {
                 case Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP:
-                case Sales_Model_Document_AttachedDocument::TYPE_UBL:
+                case Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT:
                     $this->{self::FLD_ATTACHED_DOCUMENTS}->removeById($attachedDoc->getId());
                     if ($this->{self::FLD_ATTACHMENTS} instanceof Tinebase_Record_RecordSet) {
                         $this->{self::FLD_ATTACHMENTS}->removeById($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
@@ -1130,6 +1176,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
+        $this->{self::FLD_PRECURSOR_DOCUMENTS} = null;
+        $this->{static::getStatusField()} = null;
+        $this->{self::FLD_REVERSAL_STATUS} = null;
+        $this->{self::FLD_DISPATCH_HISTORY} = null;
+        $this->{self::FLD_DOCUMENT_SEQ} = 1;
+
         parent::prepareForCopy();
+
+        $this->isValid();
     }
 }

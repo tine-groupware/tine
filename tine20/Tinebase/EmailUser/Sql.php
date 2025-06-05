@@ -456,7 +456,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         try {
             Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userId);
             throw new Tinebase_Exception_SystemGeneric('Could not overwrite existing email user.');
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Delete obsolete email user ' .$userId);
             $this->deleteUserById($userId);
         }
@@ -495,6 +495,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         $updateData = array_intersect_key($updateData, $this->getSchema());
         try {
             $this->_db->update($this->_userTable, $updateData, $where);
+            $this->_afterAddOrUpdate($emailUserData);
         } catch (Zend_Db_Statement_Exception $zdse) {
             if (! Tinebase_Exception::isDbDuplicate($zdse)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user');
@@ -504,12 +505,11 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             } else {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Duplicate: '
                     . $zdse);
-                $translate = Tinebase_Translation::getTranslation('Tinebase');
-                throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
+                $translate = Tinebase_Translation::getTranslation();
+                throw new Tinebase_Exception_SystemGeneric($translate->_(
+                    'Email account or alias/forward already exists'));
             }
         }
-
-        $this->_afterAddOrUpdate($emailUserData);
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -817,8 +817,8 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
     protected function _getEmailHome($emailUsername, $localPart = null, $domain = null)
     {
         if ($localPart === null || $domain === null) {
-            if (strpos($emailUsername, '@') !== false) {
-                list($localPart, $usernamedomain) = explode('@', $emailUsername, 2);
+            if (str_contains((string) $emailUsername, '@')) {
+                [$localPart, $usernamedomain] = explode('@', (string) $emailUsername, 2);
                 $domain = empty($this->_config['domain']) ? $usernamedomain : $this->_config['domain'];
             } else {
                 $localPart = $emailUsername;
@@ -861,7 +861,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             ."--no-create-info "
             ."--single-transaction --max_allowed_packet=512M "
             ."--opt --no-tablespaces "
-            . escapeshellarg($this->_config['dbname']) . ' '
+            . escapeshellarg((string) $this->_config['dbname']) . ' '
             . escapeshellarg($this->_userTable)
             .' --where="' . "domain='$domain'" . '"'
             ." | bzip2 > $backupDir/tine20_dovecot.sql.bz2";

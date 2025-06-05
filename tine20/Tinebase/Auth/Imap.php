@@ -68,9 +68,10 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
     }
 
     /**
-     * @return self
+     * @return never
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function getAuthByEmailBackend()
+    public function getAuthByEmailBackend(): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call ' . __METHOD__);
     }

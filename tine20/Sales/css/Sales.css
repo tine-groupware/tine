@@ -137,3 +137,31 @@
 .SalesTracExpandPositions {
     background-image:url(../../images/icon-set/icon_list_unselect.svg) !important;
 }
+
+.SalesEinvoice_XRechnung, .SalesEDocument {
+    background-image:url(../../images/icon-set/icon_file_sourcecode.svg) !important;
+}
+
+.SalesEDocument_Dispatch_Email {
+    background-image:url(../../images/icon-set/icon_email_out.svg) !important;
+}
+
+.SalesEDocument_Dispatch_Upload {
+    background-image:url(../../images/icon-set/icon_upload.svg) !important;
+}
+
+.SalesEDocument_Dispatch_Manual {
+    background-image:url(../../images/icon-set/icon_list_personal.svg) !important;
+}
+
+.SalesEDocument_Dispatch_Custom {
+    background-image:url(../../images/icon-set/icon_filemanager_bearbeiten.svg) !important;
+}
+
+.SalesDocument_DispatchHistory {
+    background-image:url(../../images/icon-set/icon_time_export.svg) !important;
+}
+
+.sales-complete-dispatch {
+    background-image:url(../../images/icon-set/icon_tasks.svg) !important;
+}

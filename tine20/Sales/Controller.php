@@ -117,7 +117,8 @@ class Sales_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
 
-        Sales_Controller_Customer::validateCurrencyCode($config['ownCurrency']);
+        $currency = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_CURRENCY);
+        Sales_Controller_Customer::validateCurrencyCode($currency);
         
         $properties = Sales_Config::getProperties();
         
@@ -256,8 +257,18 @@ class Sales_Controller extends Tinebase_Controller_Event
             $customer = $contact->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
 
             if (! $customer) {
+                $name = $contact->n_fn;
+                if (! empty($contact->salutation)) {
+                    $salutations = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION);
+                    $record = $salutations->records->getById($contact->salutation);
+                    $translation = Tinebase_Translation::getTranslation('Addressbook');
+                    $name = $translation->_($record->value) . ' ' . $name;
+                }
+                if (! empty($contact->org_name)) {
+                    $name = $contact->org_name . ' - ' . $name;
+                }
                 $customer = new Sales_Model_Customer([
-                    'name' => $contact->n_fn,
+                    'name' => $name,
                     'cpextern_id' => $contact->getId(),
                     'relations' => [[
                         'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,

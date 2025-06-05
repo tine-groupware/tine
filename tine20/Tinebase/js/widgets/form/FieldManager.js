@@ -13,6 +13,7 @@ import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
 import 'widgets/form/LocalizedField';
 import 'widgets/form/UrlField';
+import 'widgets/form/EmailField';
 
 /**
  * central form field manager
@@ -39,7 +40,11 @@ Tine.widgets.form.FieldManager = function() {
         CATEGORY_PROPERTYGRID: 'propertyGrid',
 
         specialTypeMap: {
-            password : 'tw-passwordTriggerField'
+            password: 'tw-passwordTriggerField',
+            country: 'widget-countrycombo',
+            currency: 'widget-currencycombo',
+            url: 'urlfield',
+            email: 'tw-emailField'
         },
 
         /**
@@ -93,8 +98,8 @@ Tine.widgets.form.FieldManager = function() {
                 app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || fieldDefinition.appName),
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
-            Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {});
-
+            if (_.get(fieldDefinition, 'config.validate'))  delete fieldDefinition.config.validate; // server only
+            Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {}, fieldDefinition.uiconfig?.fieldConfig || {});
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
@@ -109,7 +114,7 @@ Tine.widgets.form.FieldManager = function() {
             field.fieldLabel = i18n._hidden(fieldDefinition.label || fieldDefinition.fieldName);
             if (fieldDefinition.description) {
                 // class icon_dialog_info needs to be defined in css of app
-                field.fieldLabel += '<span class="field-description" ext:qtip="' + Ext.util.Format.htmlEncode(i18n._hidden(fieldDefinition.description)) + '" />'
+                field.fieldLabel += this.getDescriptionHTML(i18n._hidden(fieldDefinition.description));
             }
             if (field.emptyText) {
                 field.emptyText = i18n._hidden(field.emptyText);
@@ -176,11 +181,13 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
+                        field.allowNegative = false;
                     }
 
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'minutes') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'minutes';
+                        field.allowNegative = false;
                     }
 
                     if (fieldDefinition.max) {
@@ -278,7 +285,11 @@ Tine.widgets.form.FieldManager = function() {
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
                         // NOTE: it's hard to compute height here as enableTbar, hideHeaders is calculated on runtime
-                        field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
+                        if (fieldDefinition.uiconfig) {
+                            field.height = fieldDefinition.uiconfig.height || 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */;
+                        } else {
+                            field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */;
+                        }
                         if (_.get(fieldDefinition, 'config.dependentRecords', false) || _.get(fieldDefinition, 'config.storage') === 'json') {
                             // @TODO use different widget here (e.g. quickadd gird)
                             var modelConf = field.recordClass.getModelConfiguration() || {};
@@ -328,7 +339,11 @@ Tine.widgets.form.FieldManager = function() {
                 case 'text':
                 case 'fulltext':
                     field.xtype = 'textarea';
-                    field.height = 70; // 5 lines
+                    if (fieldDefinition.uiconfig) {
+                        field.height = fieldDefinition.uiconfig.height || 70;
+                    } else {
+                        field.height = 70; // 5 lines
+                    }
                     break;
                 case 'stringAutocomplete':
                     field.xtype = 'tine.widget.field.AutoCompleteField';
@@ -499,6 +514,11 @@ Tine.widgets.form.FieldManager = function() {
          */
         getKey: function(params) {
             return params.join('_');
+        },
+
+        getDescriptionHTML: function (description) {
+            //todo: implement onclick with pop up dialog, extend ext:qtip
+            return '<span class="field-description" ext:qtip="' + Ext.util.Format.htmlEncode(description) + '"/>';
         }
     };
 }();

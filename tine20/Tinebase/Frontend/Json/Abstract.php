@@ -22,14 +22,14 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * get totalcount from controller
      */
-    const TOTALCOUNT_CONTROLLER  = 'controller';
+    public const TOTALCOUNT_CONTROLLER  = 'controller';
 
     /**
      * get totalcount by just counting resultset
      */
-    const TOTALCOUNT_COUNTRESULT = 'countresult';
+    public const TOTALCOUNT_COUNTRESULT = 'countresult';
 
-    const REQUEST_CONTEXT_EXPANDER = 'expander';
+    public const REQUEST_CONTEXT_EXPANDER = 'expander';
 
     /**
      * default model (needed for application starter -> defaultContentType)
@@ -160,7 +160,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $clientData = [];
         if ($request = Tinebase_Core::getRequest()) {
             foreach ($request->getHeaders() as $header) {
-                if (strpos(($name = strtoupper($header->getFieldName())), 'X-TINE20-REQUEST-CONTEXT-') === 0) {
+                if (str_starts_with($name = strtoupper((string) $header->getFieldName()), 'X-TINE20-REQUEST-CONTEXT-')) {
                     $name = strtolower(substr($name, strlen('X-TINE20-REQUEST-CONTEXT-')));
                     $clientData[$name] = $header->getFieldValue();
                 }
@@ -250,13 +250,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
 
     /**
-     * @param mixed $_paging
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return Tinebase_Model_Pagination
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _preparePaginationParameter($_paging, Tinebase_Model_Filter_FilterGroup $_filter = null)
+    protected function _preparePaginationParameter(mixed $_paging, Tinebase_Model_Filter_FilterGroup $_filter = null)
     {
         if ($_paging instanceof Tinebase_Model_Pagination) {
             return $_paging;
@@ -346,7 +345,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
     protected function _copy(string $id, bool $persist, Tinebase_Controller_Record_Interface $ctrl): array
     {
-        return $this->_recordToJson($ctrl->copy($id, $persist));
+        if ($persist) {
+            return $this->_recordToJson($ctrl->copy($id, $persist));
+        } else {
+            return $ctrl->copy($id, $persist)->toArray();
+        }
     }
 
     /**
@@ -505,11 +508,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $this->_setRequestContext($_controller);
         }
 
-        if (! is_array($_ids) && strpos($_ids, '[') !== false) {
+        if (! is_array($_ids) && str_contains($_ids, '[')) {
             $_ids = $this->_prepareParameter($_ids);
         }
         $args = array_merge(array($_ids), $additionalArguments);
-        call_user_func_array(array($_controller, 'delete'), $args);
+        call_user_func_array($_controller->delete(...), $args);
 
         return array(
             'status'    => 'success'
@@ -633,7 +636,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $raii = null;
         if (isset($this->_currentRequestContext[self::REQUEST_CONTEXT_EXPANDER])
-                && is_array($clientExpander = json_decode($this->_currentRequestContext[self::REQUEST_CONTEXT_EXPANDER], true))
+                && is_array($clientExpander = json_decode((string) $this->_currentRequestContext[self::REQUEST_CONTEXT_EXPANDER], true))
                 && $mc = $_record::getConfiguration()) {
             $oldExpander = $mc->jsonExpander;
             $mc->setJsonExpander($clientExpander);
@@ -772,11 +775,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         }
         try {
-            $defaultName = $this->_defaultImportDefinitionName
-                ? $this->_defaultImportDefinitionName
-                : strtolower($application->name . '_tine_import_csv');
+            $defaultName = $this->_defaultImportDefinitionName ?: strtolower($application->name . '_tine_import_csv');
             $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName($defaultName);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if (count($_importDefinitions) > 0) {
                 $defaultDefinition = $_importDefinitions->getFirstRecord();
             } else {
@@ -796,10 +797,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _getPluginForFilterModel($filterModel)
     {
-        if (isset(self::$_filterPlugins[$filterModel])) {
-            return self::$_filterPlugins[$filterModel];
-        }
-        return $filterModel;
+        return self::$_filterPlugins[$filterModel] ?? $filterModel;
     }
 
     /**
@@ -835,7 +833,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Calling ' . $apiMethod . ' with controller '
-                . get_class($modelController) . ' args: ' . print_r($args, true));
+                . $modelController::class . ' args: ' . print_r($args, true));
 
             switch ($apiMethod) {
                 case 'get':

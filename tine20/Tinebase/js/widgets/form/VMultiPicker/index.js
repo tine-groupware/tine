@@ -184,7 +184,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             if (newValue !== oldValue) {
                 // NOTE: with stringify and parse we get rid of the proxies
                 this.fireEvent('select', this, record)
-                this.fireEvent('change', this, JSON.parse(newValue), JSON.parse(oldValue))
+                this.fireEvent('change', this, Tine.Tinebase.common.assertComparable(JSON.parse(newValue)), Tine.Tinebase.common.assertComparable(JSON.parse(oldValue)))
             }
             // @TODO: don't rerender / reinit all stuff here?!
             this.renderUI()
@@ -212,12 +212,16 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     searchRecordByText: Ext.emptyFn,
 
     removeRecordById: function(id) {
+        // NOTE: getValue get's overwritten e.g. in filterToolbar
+        const getValue = _.bind(Tine.Tinebase.widgets.form.VMultiPicker.prototype.getValue, this)
+
         this.props.records.delete(id)
         // _.delete(this.props.records, rec => rec.getId() === id)
         this.renderUI()
-        const newValue = JSON.stringify(this.getValue())
-        this.fireEvent('change', this, JSON.parse(newValue))
-        this.fireEvent('select', this, JSON.parse(newValue))
+        this.value = getValue()
+        const newValue = JSON.stringify(this.value)
+        this.fireEvent('change', this, Tine.Tinebase.common.assertComparable(JSON.parse(newValue)))
+        this.fireEvent('select', this, Tine.Tinebase.common.assertComparable(JSON.parse(newValue)))
     },
 
     onTriggerClick: function() {
@@ -238,12 +242,12 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
      * @returns {Array<Object>|*[]}
      */
     getValue: function(){
-        return this.props ?
+        return Tine.Tinebase.common.assertComparable(this.props ?
             this.props.records ?
                 // this.props.records
                 _.map(Array.from(this.props.records.values()), val => val.getData())
                 : []
-            : []
+            : [])
     },
 
     setValue: function(value, editDialog) {

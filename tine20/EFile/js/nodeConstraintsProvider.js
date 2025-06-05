@@ -9,7 +9,7 @@ validatorFactory().then((validator) => {
             || (basePaths.indexOf(path) > -1 && path !== '/shared/' ? 'masterPlan' : null);
         
         let isAllowed = true;
-        if (parentTierType && ['create', 'move'].indexOf(action) >= 0) {
+        if (parentTierType && ['create', 'move', 'copy'].indexOf(action) >= 0) {
             isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
                 const nodeType = _.get(node, 'data.type', _.get(node, 'type'));
                 const nodeTierType = _.get(node, 'data.efile_tier_type', _.get(node, 'efile_tier_type'))
@@ -24,11 +24,7 @@ validatorFactory().then((validator) => {
             }, true);
         }
 
-        if (action === 'copy') {
-            isAllowed = false;
-        }
-        
-        if (action === 'move') {
+        if (action === 'move' || action === 'copy') {
             isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
                 const nodeTierType =_.get(node, 'data.efile_tier_type', _.get(node, 'efile_tier_type'));
 

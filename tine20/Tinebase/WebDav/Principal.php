@@ -33,21 +33,13 @@ class Tinebase_WebDav_Principal extends \Sabre\DAVACL\Principal implements \Sabr
      * (non-PHPdoc)
      * @see \Sabre\DAV\ICollection::getChild()
      */
-    public function getChild($name) 
+    public function getChild($name)
     {
-        switch ($name) {
-            case 'calendar-proxy-read':
-                return new \Sabre\CalDAV\Principal\ProxyRead($this->principalBackend, $this->principalProperties);
-                
-                break;
-                
-            case 'calendar-proxy-write':
-                return new \Sabre\CalDAV\Principal\ProxyWrite($this->principalBackend, $this->principalProperties);
-                
-                break;
-        }
-
-        throw new \Sabre\DAV\Exception\NotFound('Node with name ' . $name . ' was not found');
+        return match ($name) {
+            'calendar-proxy-read' => new \Sabre\CalDAV\Principal\ProxyRead($this->principalBackend, $this->principalProperties),
+            'calendar-proxy-write' => new \Sabre\CalDAV\Principal\ProxyWrite($this->principalBackend, $this->principalProperties),
+            default => throw new \Sabre\DAV\Exception\NotFound('Node with name ' . $name . ' was not found'),
+        };
     }
 
     /**
@@ -77,7 +69,7 @@ class Tinebase_WebDav_Principal extends \Sabre\DAVACL\Principal implements \Sabr
             
             return true;
             
-        } catch (\Sabre\DAV\Exception\NotFound $e) {
+        } catch (\Sabre\DAV\Exception\NotFound) {
             return false;
         }
     }

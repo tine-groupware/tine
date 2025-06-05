@@ -39,6 +39,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_configuredModels = [
         Admin_Model_SchedulerTask::MODEL_NAME_PART,
         Admin_Model_SchedulerTask_Import::MODEL_NAME_PART,
+        Admin_Model_EmailAccount::MODEL_NAME_PART,
     ];
 
     /**
@@ -509,12 +510,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         parent::_setRequestContext(Admin_Controller_User::getInstance());
 
         if (is_array($account)) {
-            if (isset($account['accountPrimaryGroup']) && is_array($account['accountPrimaryGroup']) && isset($account['accountPrimaryGroup']['id'])) {
-                $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
+            if ($account['accountId'] ?? false) {
+                $account = Tinebase_User::getInstance()->getFullUserById($account['accountId']);
+            } else {
+                try {
+                    $account = Tinebase_User::getInstance()->getFullUserByLoginName($account['accountLoginName']);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    return array(
+                        'success' => false
+                    );
+                }
             }
-            $account = new Tinebase_Model_FullUser($account);
         } else {
-            $account = Tinebase_User::factory(Tinebase_User::getConfiguredBackend())->getFullUserById($account);
+            $account = Tinebase_User::getInstance()->getFullUserById($account);
         }
 
         Tinebase_Core::getLogger()->addReplacement($password);
@@ -935,6 +944,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRole($roleId)
     {
+        // this may take longer
+        $this->_longRunningRequest(60);
         $role = array();
         if ($roleId) {
             $role = Admin_Controller_Role::getInstance()->get($roleId)->toArray();
@@ -1374,7 +1385,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
 
-        if ($sieve && isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
+        if ($sieve && isset($result['type'])
+            && $result['type'] !== Felamimail_Model_Account::TYPE_USER_EXTERNAL
+            && $result['type'] !== Felamimail_Model_Account::TYPE_SHARED_EXTERNAL
+        ) {
             try {
                 $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
                 $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);

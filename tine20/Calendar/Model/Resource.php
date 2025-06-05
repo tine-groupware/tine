@@ -55,7 +55,7 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'hierarchy'            => array('allowEmpty' => true          ),
         'description'          => array('allowEmpty' => true          ),
         'email'                => array('allowEmpty' => true          ),
-        'max_number_of_people' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'max_number_of_people' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                 => array('allowEmpty' => false         ),
         // location and site are virtual fields
         'location'             => array('allowEmpty' => true          ),
@@ -68,8 +68,8 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'notes'                => array('allowEmpty' => true          ),
         'grants'               => array('allowEmpty' => true          ),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'customfields'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'customfields'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'color'                => array('allowEmpty' => true),
     );
     

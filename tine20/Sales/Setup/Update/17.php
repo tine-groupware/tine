@@ -50,6 +50,18 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE029 = __CLASS__ . '::update029';
     protected const RELEASE017_UPDATE030 = __CLASS__ . '::update030';
     protected const RELEASE017_UPDATE031 = __CLASS__ . '::update031';
+    protected const RELEASE017_UPDATE032 = __CLASS__ . '::update032';
+    protected const RELEASE017_UPDATE033 = __CLASS__ . '::update033';
+    protected const RELEASE017_UPDATE034 = __CLASS__ . '::update034';
+    protected const RELEASE017_UPDATE035 = __CLASS__ . '::update035';
+    protected const RELEASE017_UPDATE036 = __CLASS__ . '::update036';
+    protected const RELEASE017_UPDATE037 = __CLASS__ . '::update037';
+    protected const RELEASE017_UPDATE038 = __CLASS__ . '::update038';
+    protected const RELEASE017_UPDATE039 = __CLASS__ . '::update039';
+    protected const RELEASE017_UPDATE040 = __CLASS__ . '::update040';
+    protected const RELEASE017_UPDATE041 = __CLASS__ . '::update041';
+    protected const RELEASE017_UPDATE042 = __CLASS__ . '::update042';
+    protected const RELEASE017_UPDATE043 = __CLASS__ . '::update043';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -62,10 +74,21 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 self::FUNCTION_CONST => 'update012',
             ],
         ],
+        // ACHTUNG column rename!!!
+        (self::PRIO_NORMAL_APP_STRUCTURE - 5) => [
+            self::RELEASE017_UPDATE032 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update032',
+            ],
+        ],
         (self::PRIO_NORMAL_APP_STRUCTURE - 4) => [
             self::RELEASE017_UPDATE030 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update030',
+            ],
+            self::RELEASE017_UPDATE036 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update036',
             ],
         ],
         (self::PRIO_NORMAL_APP_STRUCTURE - 3) => [
@@ -169,6 +192,42 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update031',
             ],
+            self::RELEASE017_UPDATE033 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update033',
+            ],
+            self::RELEASE017_UPDATE034 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update034',
+            ],
+            self::RELEASE017_UPDATE035 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update035',
+            ],
+            self::RELEASE017_UPDATE037 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update037',
+            ],
+            self::RELEASE017_UPDATE038 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update038',
+            ],
+            self::RELEASE017_UPDATE039 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update039',
+            ],
+            self::RELEASE017_UPDATE040 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update040',
+            ],
+            self::RELEASE017_UPDATE041 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update041',
+            ],
+            self::RELEASE017_UPDATE042 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update042',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
             self::RELEASE017_UPDATE000 => [
@@ -190,6 +249,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE022 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update022',
+            ],
+            self::RELEASE017_UPDATE043 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update043',
             ],
         ],
     ];
@@ -682,6 +745,11 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         if ($this->_backend->tableExists(Sales_Model_Division::TABLE_NAME)
                 && $this->_backend->columnExists(Sales_Model_Division::FLD_NAME, Sales_Model_Division::TABLE_NAME)) {
+            if (!$this->_backend->tableExists(Sales_Model_DivisionBankAccount::TABLE_NAME)) {
+                Setup_SchemaTool::updateSchema([
+                    Sales_Model_DivisionBankAccount::class,
+                ]);
+            }
             return;
         }
 
@@ -921,8 +989,235 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Sales_Model_Debitor::class,
+            Sales_Model_Document_Debitor::class,
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.31', self::RELEASE017_UPDATE031);
+    }
+
+    public function update032(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->_backend->tableExists(Sales_Model_Debitor::TABLE_NAME) &&
+                ($this->_backend->columnExists('edocument_dispatch_type', Sales_Model_Debitor::TABLE_NAME)
+                || $this->_backend->columnExists('edocument_transport', Sales_Model_Debitor::TABLE_NAME))) {
+            if ($this->_backend->columnExists('edocument_transport', Sales_Model_Debitor::TABLE_NAME)) {
+                $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME
+                    . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Email\'');
+            }
+            if (!$this->_backend->columnExists('edocument_dispatch_config', Sales_Model_Debitor::TABLE_NAME)) {
+                $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME
+                    . ' ADD COLUMN edocument_dispatch_config longtext NOT NULL');
+            }
+            if ($this->_backend->columnExists('edocument_transport', Sales_Model_Document_Debitor::TABLE_NAME)) {
+                $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME
+                    . ' CHANGE COLUMN edocument_transport edocument_dispatch_type varchar(255) DEFAULT \'Sales_Model_EDocument_Dispatch_Email\'');
+            }
+            if (!$this->_backend->columnExists('edocument_dispatch_config', Sales_Model_Document_Debitor::TABLE_NAME)) {
+                $this->_db->query('ALTER TABLE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME
+                    . ' ADD COLUMN edocument_dispatch_config longtext NOT NULL');
+            }
+            
+            foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
+                $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Manual::class . '" WHERE edocument_dispatch_type = "download"');
+                $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_type = "' . Sales_Model_EDocument_Dispatch_Email::class . '", edocument_dispatch_config = "{\\"document_types\\":[{\\"document_type\\":\\"paperslip\\"},{\\"document_type\\":\\"edocument\\"}]}" WHERE edocument_dispatch_type = "email"');
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.32', self::RELEASE017_UPDATE032);
+    }
+
+    public function update033(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Division::class,
+            Sales_Model_Document_AttachedDocument::class,
+            Sales_Model_Document_Debitor::class,
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_DispatchHistory::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+        ]);
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME . ' SET ' .
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS . ' = "DISPATCHED" WHERE ' .
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS . ' = "SHIPPED"');
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Offer::TABLE_NAME . ' SET ' .
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS . ' = "DISPATCHED" WHERE ' .
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS . ' = "RELEASED"');
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.33', self::RELEASE017_UPDATE033);
+    }
+
+    public function update034(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_DispatchHistory::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.34', self::RELEASE017_UPDATE034);
+    }
+
+    public function update035(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Boilerplate::class,
+            Sales_Model_Document_Boilerplate::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.35', self::RELEASE017_UPDATE035);
+    }
+
+    public function update036(): void
+    {
+        $this->divisionUpdate();
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.36', self::RELEASE017_UPDATE036);
+    }
+
+    public function update037(): void
+    {
+        foreach ([SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME, SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME] as $table) {
+            $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_config = REPLACE(edocument_dispatch_config, \'"ubl\', \'"edocument\') WHERE edocument_dispatch_config LIKE \'%"document_type\\\\\\\\":\\\\\\\\"ubl\\\\\\\\"%\'');
+            $this->_db->query('UPDATE ' . $table . ' SET edocument_dispatch_config = REPLACE(edocument_dispatch_config, \'"document_type":"ubl"\', \'"document_type":"edocument"\') WHERE edocument_dispatch_config LIKE \'%"document_type":"ubl"%\'');
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.37', self::RELEASE017_UPDATE037);
+    }
+
+    public function update038(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_DispatchHistory::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.38', self::RELEASE017_UPDATE038);
+    }
+
+    public function update039(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Sales_Scheduler_Task::addEMailDispatchResponseMinutelyTask(Tinebase_Core::getScheduler());
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_DispatchHistory::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.39', self::RELEASE017_UPDATE039);
+    }
+
+    public function update040(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_EDocument_VATEX::class,
+            Sales_Model_EDocument_VATEXLocalization::class,
+        ]);
+
+        Sales_Setup_Initialize::initializeEDocumentVATEX();
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.40', self::RELEASE017_UPDATE040);
+    }
+
+    public function update041(): void
+    {
+        /** @var Tinebase_Record_Interface $model */
+        foreach ([
+                    Sales_Model_Customer::class,
+                    Sales_Model_Document_Invoice::class,
+                    Sales_Model_Document_Offer::class,
+                    Sales_Model_Document_Order::class,
+                 ] as $model) {
+            foreach ([
+                        'taxable' => 'standard',
+                        'nonTaxable' => 'outsideTaxScope',
+                        'export' => 'freeExportItem',
+                     ] as $old => $new) {
+                $this->_db->update(
+                    SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                    [Sales_Model_Customer::FLD_VAT_PROCEDURE => $new],
+                    Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . $old . '"'
+                );
+            }
+        }
+
+        $ae = Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-ae');
+        $g = Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-g');
+        $o = Sales_Controller_EDocument_VATEX::getInstance()->getByCode('vatex-eu-o');
+        foreach ([
+                     Sales_Model_Document_Invoice::class,
+                     Sales_Model_Document_Offer::class,
+                     Sales_Model_Document_Order::class,
+                 ] as $model) {
+            $this->_db->update(
+                SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                [Sales_Model_Document_Abstract::FLD_VATEX_ID => $ae->getId()],
+                Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE . '"'
+            );
+            $this->_db->update(
+                SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                [Sales_Model_Document_Abstract::FLD_VATEX_ID => $g->getId()],
+                Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . Sales_Config::VAT_PROCEDURE_FREE_EXPORT_ITEM . '"'
+            );
+            $this->_db->update(
+                SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                [Sales_Model_Document_Abstract::FLD_VATEX_ID => $o->getId()],
+                Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . Sales_Config::VAT_PROCEDURE_OUTSIDE_TAX_SCOPE . '"'
+            );
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.41', self::RELEASE017_UPDATE041);
+    }
+
+    public function update042(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Customer::class,
+            Sales_Model_Document_Customer::class,
+        ]);
+
+        /** @var Tinebase_Record_Interface $model */
+        foreach ([
+                     Sales_Model_Document_Customer::class,
+                 ] as $model) {
+            foreach ([
+                         'taxable' => 'standard',
+                         'nonTaxable' => 'outsideTaxScope',
+                         'export' => 'freeExportItem',
+                     ] as $old => $new) {
+                $this->_db->update(
+                    SQL_TABLE_PREFIX . $model::getConfiguration()->getTableName(),
+                    [Sales_Model_Customer::FLD_VAT_PROCEDURE => $new],
+                    Sales_Model_Customer::FLD_VAT_PROCEDURE . ' = "' . $old . '"'
+                );
+            }
+        }
+
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.42', self::RELEASE017_UPDATE042);
+    }
+
+    public function update043(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        foreach ([SQL_TABLE_PREFIX . 'sales_suppliers', SQL_TABLE_PREFIX . Sales_Model_Customer::TABLE_NAME] as $table) {
+            $this->_db->query('UPDATE ' . $table . ' SET currency = "EUR" WHERE LOWER(currency) IN ("euro", "eur")');
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.43', self::RELEASE017_UPDATE043);
     }
 }

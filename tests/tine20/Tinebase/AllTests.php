@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -84,6 +84,7 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_FileSystem_PreviewTest::class);
         $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2LiveTest::class);
         $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2Test::class);
+        $suite->addTestSuite(Tinebase_FileLocationTest::class);
 
 
         $suite->addTest(Tinebase_User_AllTests::suite());

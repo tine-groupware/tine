@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -38,11 +38,11 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
         return (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH};
     }
 
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool
     {
         $pinLength = (int)$this->_config->{Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH};
         if ($pinLength < 3 || $pinLength > 10) throw new Tinebase_Exception('pin length needs to be between 3 and 10');
-        $pin = sprintf('%0' . $pinLength .'d', random_int(1, pow(10, $pinLength) - 1));
+        $pin = sprintf('%0' . $pinLength .'d', random_int(1, 10 ** $pinLength - 1));
 
         $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->isValid();
 
@@ -63,17 +63,13 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
         $message .= '\n\n@{{ app.websiteUrl }} {{ code }}';
 
         $twig = new \Twig\Environment(new \Twig\Loader\ArrayLoader());
-        $twig->addFilter(new \Twig\TwigFilter('alnum', function($data) {
-            return preg_replace('/[^0-9a-zA-Z]+/', '', $data);
-        }));
+        $twig->addFilter(new \Twig\TwigFilter('alnum', fn($data) => preg_replace('/[^0-9a-zA-Z]+/', '', $data)));
         $twig->addFilter(new \Twig\TwigFilter('gsm7', function(string $data) {
             static $converter = null;
             if (null === $converter) $converter = new BenMorel\GsmCharsetConverter\Converter();
             return $converter->cleanUpUtf8String($data, true);
         }));
-        $twig->addFilter(new \Twig\TwigFilter('ucs2', function(string $data) {
-            return iconv('ucs-2', 'utf-8', iconv('utf-8', 'ucs-2//TRANSLIT', $data));
-        }));
+        $twig->addFilter(new \Twig\TwigFilter('ucs2', fn(string $data) => iconv('ucs-2', 'utf-8', iconv('utf-8', 'ucs-2//TRANSLIT', $data))));
 
         $message = $twig->createTemplate($message)->render(array_merge($genericHttpAdapter->getTwigContext(), [
             'code' => $pin
@@ -99,6 +95,22 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage()) ;
                 return false;
             }
+
+            $userRaii = null;
+            if (!Tinebase_Core::getUser()) {
+                $userRaii = new Tinebase_RAII(Admin_Controller_JWTAccessRoutes::getInstance()->assertPublicUsage());
+            }
+
+            $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_SmsUserConfig::FLD_AUTH_TOKEN} =
+                Admin_Controller_JWTAccessRoutes::getInstance()->getNewJWT([
+                    Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $user->getId(),
+                    Admin_Model_JWTAccessRoutes::FLD_ROUTES => [
+                        Tinebase_Controller::class . '::postSendSupportRequest',
+                    ],
+                    Admin_Model_JWTAccessRoutes::FLD_TTL => Tinebase_DateTime::now()->addMinute(30),
+                ], keyBits: 1024); // 1024 bits are significantly faster than 2048 and we are only valid for 30 minutes
+
+            unset($userRaii);
             return true;
         }
         return false;

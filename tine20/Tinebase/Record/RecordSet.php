@@ -25,7 +25,7 @@
  * @method getIdFromProperty($_property, $_getIdFromRecord = true) - see \Tinebase_Record_Abstract::getIdFromProperty
  * @method applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null) - see \Tinebase_Record_Abstract::applyFieldGrants
  */
-class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess
+class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess, \Stringable
 {
     /**
      * class name of records this instance can hold
@@ -73,7 +73,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             throw new Tinebase_Exception_InvalidArgument('Class ' . $_className . ' does not exist');
         }
         // TODO switch to is_iterable() when we no longer support PHP < 7.0
-        if (! (is_array($_records) || $_records instanceof \Traversable)) {
+        if (! (is_iterable($_records))) {
             throw new Tinebase_Exception_InvalidArgument('Given records need to be iterable');
         }
         $this->_recordClass = $_className;
@@ -90,7 +90,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
                     $this->addRecord($toAdd);
                 } catch (Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' silently skip. Failed to create record ' . $this->_recordClass . ' with message: ' . get_class($e) .': ' . $e->getMessage() . ' with data: ' . print_r($record, true));
+                        . ' silently skip. Failed to create record ' . $this->_recordClass . ' with message: ' . $e::class .': ' . $e->getMessage() . ' with data: ' . print_r($record, true));
                 }
             }
         }
@@ -127,7 +127,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         if (! $_record instanceof $this->_recordClass) {
             throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class ('
-                . get_class($_record) . ') Should be ' . $this->_recordClass);
+                . $_record::class . ') Should be ' . $this->_recordClass);
         }
 
         $recordId = $_record->getId();
@@ -137,8 +137,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         }
 
         $this->_listOfRecords[] = $_record;
-        end($this->_listOfRecords);
-        $index = key($this->_listOfRecords);
+        $index = array_key_last($this->_listOfRecords);
         
         // maintain indices
         if ($recordId || 0 === $recordId || '0' === $recordId) {
@@ -257,7 +256,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getIndexById($_id)
     {
-        return (isset($this->_idMap[$_id]) || array_key_exists($_id, $this->_idMap)) ? $this->_idMap[$_id] : false;
+        return $this->_idMap[$_id] ?? (is_numeric($_id) ?
+            (is_string($_id) ? ($this->_idMap[intval($_id)] ?? false) : ($this->_idMap[(string)$_id] ?? false))
+            : false);
     }
     
     /**
@@ -281,7 +282,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getByIndex($index)
     {
-        return (isset($this->_listOfRecords[$index])) ? $this->_listOfRecords[$index] : false;
+        return $this->_listOfRecords[$index] ?? false;
     }
     
     /**
@@ -368,12 +369,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     
     /**
      * sets given property in all member records of this set
-     * 
+     *
      * @param string $_name
-     * @param mixed $_value
      * @return void
      */
-    public function __set($_name, $_value)
+    public function __set($_name, mixed $_value)
     {
         foreach ($this->_listOfRecords as $record) {
             $record->$_name = $_value;
@@ -418,7 +418,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     *
     * @return string
     */
-    public function __toString()
+    public function __toString(): string
     {
        return print_r($this->toArray(), TRUE);
     }
@@ -504,16 +504,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     public function removeFirst()
     {
         if (count($this->_listOfRecords) > 0) {
-            reset($this->_listOfRecords);
-            $this->offsetUnset(key($this->_listOfRecords));
+            $this->offsetUnset(array_key_first($this->_listOfRecords));
         }
     }
 
     public function removeLast()
     {
         if (count($this->_listOfRecords) > 0) {
-            end($this->_listOfRecords);
-            $this->offsetUnset(key($this->_listOfRecords));
+            $this->offsetUnset(array_key_last($this->_listOfRecords));
         }
     }
 
@@ -882,7 +880,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         if ($_pagination !== NULL && $_pagination->sort) {
             $sortField = is_array($_pagination->sort) ? $_pagination->sort[0] : $_pagination->sort;
-            $this->sort($sortField, ($_pagination->dir) ? $_pagination->dir : 'ASC');
+            $this->sort($sortField, $_pagination->dir ?: 'ASC');
         }
         
         return $this;
@@ -920,10 +918,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * convert recordset, array of ids or records to array of ids
      *
-     * @param  mixed  $_mixed
      * @return array
      */
-    public static function getIdsFromMixed($_mixed)
+    public static function getIdsFromMixed(mixed $_mixed)
     {
         if ($_mixed instanceof Tinebase_Record_RecordSet) { // Record set
             $ids = $_mixed->getArrayOfIds();

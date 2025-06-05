@@ -469,7 +469,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (this.nodeAcceptsContents(attr) && attr.container?.account_grants) {
             condition = true;
             Ext.each(grants, function(grant) {
-                condition = condition && attr.container.account_grants[grant];
+                // on server side you need one of the grants! 2025-05-16 if you need all grants you modified function parameter
+                condition = condition || attr.container.account_grants[grant];
             }, this);
         }
 
@@ -604,7 +605,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                         this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
                             tag: 'span',
                             html: '&nbsp;&#9673;&nbsp',
-                            style: {color: appendedNode.attributes.container.color || '#808080'}
+                            style: {color: appendedNode.attributes.container.color || '#808080'},
+                            cls: 'dark-reverse'
                         }, true);
                     }
                 }, appendedNode.ui);

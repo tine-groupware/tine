@@ -18,16 +18,16 @@ class Tinebase_ImageHelper
     /**
      * preserves ratio and cropes image on the oversize side
      */
-    const RATIOMODE_PRESERVANDCROP = 0;
+    public const RATIOMODE_PRESERVANDCROP = 0;
     /**
      * preserves ratio and does not crop image. Resuling image dimension is less
      * than requested on one dimension as this dim is not filled  
      */
-    const RATIOMODE_PRESERVNOFILL = 1;
+    public const RATIOMODE_PRESERVNOFILL = 1;
     /**
      * max pixels allowed per edge for resize operations
      */
-    const MAX_RESIZE_PX = 2000;
+    public const MAX_RESIZE_PX = 2000;
     /**
      * scales given image to given size
      * 
@@ -124,17 +124,12 @@ class Tinebase_ImageHelper
     public static function getMime($fileExt)
     {
         $ext = strtolower(str_replace('/^\./', '', $fileExt));
-        switch ($ext) {
-            case 'png':
-                return 'image/png';
-            case 'jpg':
-            case 'jpeg':
-                return 'image/jpeg';
-            case 'gif':
-                return 'image/gif';
-            default:
-                return '';
-        }
+        return match ($ext) {
+            'png' => 'image/png',
+            'jpg', 'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            default => '',
+        };
     }
 
     /**
@@ -184,7 +179,7 @@ class Tinebase_ImageHelper
      */
     public static function getDataUrl($imagePath)
     {
-        if (substr($imagePath, 0, 5) === 'data:') {
+        if (str_starts_with($imagePath, 'data:')) {
             return $imagePath;
         }
 
@@ -195,17 +190,91 @@ class Tinebase_ImageHelper
             $blob = Tinebase_Helper::getFileOrUriContents($imagePath);
             $mime = '';
 
-            if (substr($imagePath, -4) === '.ico') {
+            if (str_ends_with($imagePath, '.ico')) {
                 $mime = 'image/x-icon';
             } elseif ($blob) {
                 $info = self::getImageInfoFromBlob($blob);
                 $mime = $info['mime'];
             }
 
-            $dataUrl = 'data:' . $mime . ';base64,' . base64_encode($blob);
+            $dataUrl = 'data:' . $mime . ';base64,' . base64_encode((string) $blob);
             Tinebase_Core::getCache()->save($dataUrl, $cacheId);
         }
 
         return $dataUrl;
+    }
+
+    /**
+     * create watermark
+     *
+     * @param Tinebase_Model_Image $_image
+     * @param string $font
+     * @param float $fontsize
+     * @param string $watermarktext
+     * @param array $configWatermark
+     *
+     */
+    public static function createWatermark(Tinebase_Model_Image $_image, $font, $fontsize, $watermarktext, $configWatermark = null)
+    {
+
+        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
+        file_put_contents($tmpPath, $_image->blob);
+
+        switch ($_image->mime) {
+            case ('image/png'):
+                $img = imagecreatefrompng($tmpPath);
+                $imgDumpFunction = 'imagepng';
+                break;
+            case ('image/jpeg'):
+                $img = imagecreatefromjpeg($tmpPath);
+                $imgDumpFunction = 'imagejpeg';
+                break;
+            case ('image/gif'):
+                $img = imagecreatefromgif($tmpPath);
+                $imgDumpFunction = 'imagegif';
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_image->mime);
+        }
+
+        $color = imagecolorallocate($img, 0, 0, 0);
+        $backgroundColor = imagecolorallocatealpha($img, 255, 255, 255, 90);
+        $positionX1 = 0;
+        $positionY2 = 0;
+        if (isset($configWatermark)) {
+            if (isset($configWatermark['x'])) {
+                $positionX1 = $configWatermark['x'];
+            }
+            if (isset($configWatermark['y'])) {
+                $positionY2 = $configWatermark['y'];
+            }
+        }
+
+        $watermarktextCount = strlen($watermarktext);
+        // does not work because of "imageloadfont():
+        // Product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully"
+        /*$fontLoaded = imageloadfont($font);
+        $fontWidth = imagefontwidth($fontLoaded);
+        $fontHeight = imagefontheight($fontLoaded);
+        $fontFactor = $fontsize / $fontHeight;
+        $positionX2 = $positionX1 + $watermarktextCount * ($fontWidth * $fontFactor);
+        $positionY1 = $positionY2 - $fontsize;*/
+
+        /*if ($positionX2 > $_image->width) {
+            $widthFactor = $positionX2 / $_image->width;
+            $fontsize = $fontsize / $widthFactor;
+            $fontFactor = $fontsize / $fontHeight;
+            $positionX2 = $positionX1 + $watermarktextCount * ($fontWidth * $fontFactor);
+            $positionY1 = $positionY2 - $fontsize;
+        }*/
+
+        $positionY1 = $positionY2 - 10;
+        $positionX2 = $_image->width;
+
+        imagefilledrectangle($img, $positionX1, $positionY1, $positionX2, $positionY2, $backgroundColor);
+        imagettftext($img, $fontsize, 0, $positionX1, $positionY2, $color, $font, $watermarktext);
+        $imgDumpFunction($img, $tmpPath);
+        $_image->blob = file_get_contents($tmpPath);
+        unlink($tmpPath);
     }
 }

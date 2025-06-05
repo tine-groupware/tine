@@ -1213,6 +1213,38 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         return $allAttendees;
     }
+
+    public static function getAttendeeByEmail(Tinebase_Record_RecordSet $attendees, string $email): ?Calendar_Model_Attender
+    {
+        $email = strtolower($email);
+        $secondaryMatch = null;
+        /** @var Calendar_Model_Attender $attendee */
+        foreach ($attendees as $attendee) {
+            if (self::USERTYPE_EMAIL === $attendee->user_type) {
+                if (strtolower($attendee->user_email) === $email) {
+                    return $attendee;
+                }
+            } elseif ($attendee->user_id instanceof Addressbook_Model_Contact) {
+                if (strtolower($attendee->user_id->email ?? '') === $email) {
+                    return $attendee;
+                }
+                if (null === $secondaryMatch) {
+                    foreach (Addressbook_Model_Contact::getEmailFields() as $emailField) {
+                        if (strtolower($attendee->user_id->{$emailField} ?? '') === $email) {
+                            $secondaryMatch = $attendee;
+                            break;
+                        }
+                    }
+                }
+            } elseif ($attendee->user_type === self::USERTYPE_RESOURCE) {
+                if (strtolower($attendee->getResolvedUser()->email) === $email) {
+                    return $attendee;
+                }
+            }
+        }
+
+        return $secondaryMatch;
+    }
     
     /**
      * resolves given attendee for json representation

@@ -57,29 +57,30 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     recordClass: null,
     
     getFormItems: function() {
-        return new Tine.widgets.grid.PickerGridPanel({
+        this.gridPanel = new Tine.widgets.grid.PickerGridPanel({
             height: 'auto',
             searchComboConfig: {app: this.app},
             recordClass: Tine.Tinebase.Model.Tag,
-            store: this.store,
+            store: new Ext.data.SimpleStore({
+                fields: Tine.Tinebase.Model.Tag
+            }),
+            listeners: {
+                change: (grid, value) => {
+                    this.manageOkBtn();
+                }
+            },
             labelRenderer: Tine.Tinebase.common.tagRenderer
         });
+        return this.gridPanel;
     },
     
     manageOkBtn: function() {
         if (this.okButton) {
-            this.okButton.setDisabled(! this.store.getCount());
+            this.okButton.setDisabled(! this.gridPanel.store.getCount());
         }
     },
     
     handleClick: function() {
-        this.store = new Ext.data.SimpleStore({
-            fields: Tine.Tinebase.Model.Tag
-        });
-
-        this.store.on('add', this.manageOkBtn, this);
-        this.store.on('remove', this.manageOkBtn, this);
-        
         this.win = Tine.WindowFactory.getWindow({
             layout: 'fit',
             width: 300,
@@ -101,11 +102,11 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
                     iconCls: 'action_cancel'
                 }, this.okButton = new Ext.Button({
                     text: i18n._('Ok'),
-                    disabled: this.store ? !this.store.getCount() : true,
+                    disabled: this.gridPanel.store ? !this.gridPanel.store.getCount() : true,
                     minWidth: 70,
                     scope: this,
                     handler: this.onOk,
-                    iconCls: 'action_saveAndClose'
+                    iconCls: 'action_saveAndClose',
                 })]
             }]
         });
@@ -116,8 +117,8 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     onOk: function() {
-        var tags = [];
-        this.store.each(function(r) {
+        const tags = [];
+        this.gridPanel.store.each(function(r) {
             tags.push(r.data);
         }, this);
         
@@ -128,10 +129,10 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
         
         this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: i18n._('Attaching Tag')});
         this.loadMask.show();
-        
-        var filter = this.selectionModel.getSelectionFilter();
-        var filterModel = this.recordClass.getMeta('appName') + '_Model_' +  this.recordClass.getMeta('modelName') + 'Filter';
-        
+
+        const filter = this.selectionModel.getSelectionFilter();
+        const filterModel = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName') + 'Filter';
+
         // can't use Ext direct because the timeout is not configurable
         //Tine.Tinebase.attachTagToMultipleRecords(filter, filterModel, tag, this.onSuccess.createDelegate(this));
         Ext.Ajax.request({

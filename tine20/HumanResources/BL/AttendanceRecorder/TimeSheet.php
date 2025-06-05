@@ -65,6 +65,8 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         $employeeRaii = new Tinebase_RAII(HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
         $timesheetRaii = new Tinebase_RAII(Timetracker_Controller_Timesheet::getInstance()->assertPublicUsage());
         $timeaccountRaii = new Tinebase_RAII(Timetracker_Controller_Timeaccount::getInstance()->assertPublicUsage());
+        $oldUser = Tinebase_Core::getUser();
+        $oldUserRaii = new Tinebase_RAII(fn() => Tinebase_Core::getUser()->getId() !== $oldUser->getId() ? Tinebase_Core::setUser($oldUser) : null);
 
         foreach (array_unique($_data->data->{HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID}) as $accountId) {
             if (Tinebase_Core::getUser()->getId() !== $accountId) {
@@ -203,6 +205,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
             }
         }
 
+        unset($oldUserRaii);
         unset($employeeRaii);
         unset($timesheetRaii);
         unset($timeaccountRaii);

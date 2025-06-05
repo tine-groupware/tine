@@ -75,6 +75,10 @@ class Calendar_Frontend_CalDAV_PluginAutoSchedule extends \Sabre\DAV\ServerPlugi
                 $principalId = $node->getName();
                 return new \Sabre\DAV\Xml\Property\Href(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/inbox');
             });
+            $propFind->handle('{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}schedule-outbox-URL', function () use ($node) {
+                $principalId = $node->getName();
+                return new \Sabre\DAV\Xml\Property\Href(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/outbox');
+            });
         }
     }
 }

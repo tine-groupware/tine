@@ -17,12 +17,12 @@
  */
 class Tinebase_Auth_NtlmV2
 {
-    const AUTH_SUCCESS = 1;
-    const AUTH_FAILURE = -1;
-    const AUTH_FAULTY_NTLM = -2;
-    const AUTH_NOT_NTLM = -3;
-    const AUTH_PHASE_NOT_STARTED = -4;
-    const AUTH_PHASE_ONE = -5;
+    public const AUTH_SUCCESS = 1;
+    public const AUTH_FAILURE = -1;
+    public const AUTH_FAULTY_NTLM = -2;
+    public const AUTH_NOT_NTLM = -3;
+    public const AUTH_PHASE_NOT_STARTED = -4;
+    public const AUTH_PHASE_ONE = -5;
 
     protected static $_isEnabled = null;
 
@@ -109,7 +109,7 @@ class Tinebase_Auth_NtlmV2
 
         header('HTTP/1.1 401 Unauthorized');
         if (self::AUTH_PHASE_ONE === $phase) {
-            header('WWW-Authenticate: NTLM ' . trim(base64_encode($this->_response)));
+            header('WWW-Authenticate: NTLM ' . trim(base64_encode((string) $this->_response)));
         } else {
             header('WWW-Authenticate: NTLM');
         }
@@ -135,12 +135,12 @@ class Tinebase_Auth_NtlmV2
         }
 
         $auth = $auth->getFieldValue();
-        if (substr($auth, 0, 5) !== 'NTLM ') {
+        if (!str_starts_with((string) $auth, 'NTLM ')) {
             return self::AUTH_NOT_NTLM;
         }
 
-        $this->_msg = base64_decode(substr($auth, 5));
-        if (substr($this->_msg, 0, 8) !== "NTLMSSP\x00") {
+        $this->_msg = base64_decode(substr((string) $auth, 5));
+        if (!str_starts_with($this->_msg, "NTLMSSP\x00")) {
             return self::AUTH_FAULTY_NTLM;
         }
 
@@ -246,7 +246,7 @@ class Tinebase_Auth_NtlmV2
         if (function_exists('random_bytes')) {
             try {
                 return random_bytes($length);
-            } catch (Exception $e) {}
+            } catch (Exception) {}
         }
         if (function_exists('openssl_random_pseudo_bytes') &&
             false !== ($result = openssl_random_pseudo_bytes($length))) {
@@ -259,7 +259,7 @@ class Tinebase_Auth_NtlmV2
             }
         } else {
             for ($i = 0; $i < $length; $i++) {
-                $result .= chr(rand(0, 255));
+                $result .= chr(random_int(0, 255));
             }
         }
         return $result;
@@ -332,7 +332,7 @@ class Tinebase_Auth_NtlmV2
 
         $clientblob = substr($ntlmresponse, 16);
         $clientblobhash = substr($ntlmresponse, 0, 16);
-        if (substr($clientblob, 0, 8) != "\x01\x01\x00\x00\x00\x00\x00\x00") {
+        if (!str_starts_with($clientblob, "\x01\x01\x00\x00\x00\x00\x00\x00")) {
             $this->_error = 'NTLMv2 response required. Please force your client to use NTLMv2.';
             return null;
         }
@@ -347,7 +347,7 @@ class Tinebase_Auth_NtlmV2
     protected function _get_ntlm_user_hash($user) {
         try {
             $this->_user = Tinebase_User::getInstance()->getFullUserByLoginName($user);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return false;
         }
         /** @noinspection PhpUndefinedMethodInspection */
@@ -378,7 +378,7 @@ class Tinebase_Auth_NtlmV2
         if (null === static::$_isEnabled) {
             if (Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_SUPPORT_NTLMV2} &&
                     !empty(Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY}) &&
-                    get_class(Tinebase_User::getInstance()) === Tinebase_User_Sql::class) {
+                    Tinebase_User::getInstance()::class === Tinebase_User_Sql::class) {
                 static::$_isEnabled = true;
             } else {
                 static::$_isEnabled = false;

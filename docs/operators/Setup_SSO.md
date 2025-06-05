@@ -27,6 +27,10 @@ sudo chown $(docker-compose exec  web sh -c "id tine20 -u"):$(docker-compose exe
 sudo chmod 660 ./conf.d/sso_cert.* ./conf.d/sso_key.*
 ~~~
 
+!!! note sso_cert.crt needs to contain both CERTIFICATE and PUBLIC KEY strings!
+
+To check if you have a valid config, you can call this URL: https://my.tine.url/sso/saml2/idpmetadata
+
 ### 3) Create config
 
 ``` php title="./conf.d/sso.inc.php"

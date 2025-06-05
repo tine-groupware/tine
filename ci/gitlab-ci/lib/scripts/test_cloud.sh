@@ -1,16 +1,11 @@
 test_cloud_generate_deployment_name() {
-    deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-
-    if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-        # remove trailing /
-        deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-    fi
+    deployment_name=$MAJOR_COMMIT_REF_NAME
 
     if [ "$RELEASE_TYPE" == "nightly" ]; then
         deployment_name=nightly-$deployment_name
     fi
 
-    echo -n $deployment_name | sed 's/\./-/g'
+    echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
 }
 
 test_cloud_deploy() {

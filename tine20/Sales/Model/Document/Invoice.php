@@ -36,7 +36,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
      */
     public const STATUS_PROFORMA = 'PROFORMA';
     public const STATUS_BOOKED = 'BOOKED';
-    public const STATUS_SHIPPED = 'SHIPPED';
     public const STATUS_PAID = 'PAID';
 
 
@@ -85,6 +84,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             Sales_Controller_Document_Invoice::class . '::documentNumberConfigOverride';
 
+        $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
+
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_DOCUMENT_PROFORMA_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
@@ -93,7 +94,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 self::SHY                       => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable_String::PREFIX     => 'PI-', // _('PI-')
+                    Tinebase_Numberable_String::PREFIX     => $translate->_('PI-'),
                     Tinebase_Numberable_String::ZEROFILL   => 7,
                     Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
                     Tinebase_Numberable::CONFIG_OVERRIDE   =>
@@ -191,27 +192,23 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (($pm = $this->{self::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true))->count() !== 1) {
             throw new Tinebase_Exception_UnexpectedValue('only one payment means allowed');
         }
+        if ($this->{self::FLD_VATEX_ID} && ! $this->{self::FLD_VATEX_ID} instanceof Sales_Model_EDocument_VATEX) {
+            throw new Tinebase_Exception_UnexpectedValue(self::FLD_VATEX_ID . ' not resolved');
+        }
         $pm = $pm->getFirstRecord();
         /** @var Sales_Model_PaymentMeans $pm */
 
-        switch($this->{self::FLD_VAT_PROCEDURE}) {
-            case Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE:
-                $taxId = 'AE';
-                break;
-            case Sales_Config::VAT_PROCEDURE_EXPORT:
-                $taxId = 'G';
-                break;
-            case Sales_Config::VAT_PROCEDURE_NON_TAXABLE:
-                $taxId = 'E';
-                break;
-            case Sales_Config::VAT_PROCEDURE_TAXABLE:
-                $taxId = 'S';
-                break;
-            default:
-                throw new Tinebase_Exception_UnexpectedValue(self::FLD_VAT_PROCEDURE . ' ' . $this->{self::FLD_VAT_PROCEDURE} . ' not supported');
+        if (null === ($vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($this->{self::FLD_VAT_PROCEDURE}))) {
+            throw new Tinebase_Exception_UnexpectedValue(self::FLD_VAT_PROCEDURE . ' ' . $this->{self::FLD_VAT_PROCEDURE} . ' not supported');
         }
+        $taxId = $vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305};
 
         $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
+        if ($billingAddress->{Sales_Model_Address::FLD_LANGUAGE} !== $this->{self::FLD_DOCUMENT_LANGUAGE}) {
+            $billAdrT = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, new Zend_Locale($billingAddress->{Sales_Model_Address::FLD_LANGUAGE}));
+        } else {
+            $billAdrT = $t;
+        }
 
         $this->calculatePricesIncludingPositions();
 
@@ -286,15 +283,18 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             ->setAccountingSupplierParty((new \UBL21\Common\CommonAggregateComponents\AccountingSupplierParty())
                 ->setParty(($supplierParty = new \UBL21\Common\CommonAggregateComponents\Party())
                     ->setPartyIdentification(array_merge(
-                        $debitor->{Sales_Model_Debitor::FLD_SELLER_IDENTIFIER} ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
-                            new UBL21\Common\CommonBasicComponents\ID($debitor->{Sales_Model_Debitor::FLD_SELLER_IDENTIFIER})
+                        trim((string)$debitor->{Sales_Model_Debitor::FLD_SELLER_IDENTIFIER}) ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
+                            new UBL21\Common\CommonBasicComponents\ID(trim((string)$debitor->{Sales_Model_Debitor::FLD_SELLER_IDENTIFIER}))
                         )] : [],
-                        $division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID} ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
-                            (new UBL21\Common\CommonBasicComponents\ID($division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID}))->setSchemeID('SEPA')
+                        trim((string)$division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID}) ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
+                            (new UBL21\Common\CommonBasicComponents\ID(trim((string)$division->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID})))->setSchemeID('SEPA')
+                        )] : [],
+                        trim((string)$division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}) ? [(new \UBL21\Common\CommonAggregateComponents\PartyIdentification())->setID(
+                            (new UBL21\Common\CommonBasicComponents\ID(trim((string)$division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID})))
                         )] : []
                     ))
-                    ->setEndpointID($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} && $division->{Sales_Model_Division::FLD_EAS_ID} ?
-                        (new \UBL21\Common\CommonBasicComponents\EndpointID($division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS}))->setSchemeID($division->{Sales_Model_Division::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE})
+                    ->setEndpointID(trim((string)$division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS}) && $division->{Sales_Model_Division::FLD_EAS_ID} ?
+                        (new \UBL21\Common\CommonBasicComponents\EndpointID(trim((string)$division->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS})))->setSchemeID($division->{Sales_Model_Division::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE})
                         : null
                     )
                     ->setPartyLegalEntity([(new \UBL21\Common\CommonAggregateComponents\PartyLegalEntity())
@@ -305,10 +305,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setAddressLine(array_merge(
                             [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
                                 ->setLine(new \UBL21\Common\CommonBasicComponents\Line($division->{Sales_Model_Division::FLD_ADDR_PREFIX1}))],
-                            $division->{Sales_Model_Division::FLD_ADDR_PREFIX2} ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                ->setLine(new \UBL21\Common\CommonBasicComponents\Line($division->{Sales_Model_Division::FLD_ADDR_PREFIX2}))] : [],
-                            $division->{Sales_Model_Division::FLD_ADDR_PREFIX3} ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                ->setLine(new \UBL21\Common\CommonBasicComponents\Line($division->{Sales_Model_Division::FLD_ADDR_PREFIX3}))] : []
+                            trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX2}) ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                                ->setLine(new \UBL21\Common\CommonBasicComponents\Line(trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX2})))] : [],
+                            trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX3}) ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                                ->setLine(new \UBL21\Common\CommonBasicComponents\Line(trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX3})))] : []
                         ))
                         ->setPostalZone(new \UBL21\Common\CommonBasicComponents\PostalZone($division->{Sales_Model_Division::FLD_ADDR_POSTAL}))
                         ->setCityName(new \UBL21\Common\CommonBasicComponents\CityName($division->{Sales_Model_Division::FLD_ADDR_LOCALITY}))
@@ -325,24 +325,38 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             )
             ->setAccountingCustomerParty(($customerParty = new \UBL21\Common\CommonAggregateComponents\AccountingCustomerParty())
                 ->setParty((new \UBL21\Common\CommonAggregateComponents\Party())
-                    ->setEndpointID($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS} && $debitor->{Sales_Model_Debitor::FLD_EAS_ID} ?
-                        (new \UBL21\Common\CommonBasicComponents\EndpointID($debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}))->setSchemeID($debitor->{Sales_Model_Debitor::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE})
+                    ->setEndpointID(trim((string)$debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}) && $debitor->{Sales_Model_Debitor::FLD_EAS_ID} ?
+                        (new \UBL21\Common\CommonBasicComponents\EndpointID(trim((string)$debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS})))->setSchemeID($debitor->{Sales_Model_Debitor::FLD_EAS_ID}->{Sales_Model_EDocument_EAS::FLD_CODE})
                         : null
                     )
+                    ->setPartyName(trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX1}) ? [(new \UBL21\Common\CommonAggregateComponents\PartyName)->setName(new \UBL21\Common\CommonBasicComponents\Name(trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX1})))] : [])
                     ->setPartyLegalEntity([(new \UBL21\Common\CommonAggregateComponents\PartyLegalEntity())
-                        ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName($billingAddress->{Sales_Model_Address::FLD_NAME} ?: $this->{self::FLD_CUSTOMER_ID}->name))
+                        ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName(trim((string)$billingAddress->{Sales_Model_Address::FLD_NAME}) ?: $this->{self::FLD_CUSTOMER_ID}->name))
                     ])
                     ->setPostalAddress((new \UBL21\Common\CommonAggregateComponents\PostalAddress())
-                        ->setAddressLine($billingAddress->{Sales_Model_Address::FLD_STREET} ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                            ->setLine(new \UBL21\Common\CommonBasicComponents\Line($billingAddress->{Sales_Model_Address::FLD_STREET}))
-                        ] : [])
-                        ->setPostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE} ? new \UBL21\Common\CommonBasicComponents\PostalZone($billingAddress->{Sales_Model_Address::FLD_POSTALCODE}) : null)
-                        ->setCityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY} ? new \UBL21\Common\CommonBasicComponents\CityName($billingAddress->{Sales_Model_Address::FLD_LOCALITY}) : null)
-                        ->setCountry($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME} ? (new \UBL21\Common\CommonAggregateComponents\Country())
-                            ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode(strtoupper($billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME})))
+                        ->setStreetName(
+                            trim((string)$billingAddress->{Sales_Model_Address::FLD_POBOX}) || trim((string)$billingAddress->{Sales_Model_Address::FLD_STREET}) ?
+                                new \UBL21\Common\CommonBasicComponents\StreetName(
+                                    trim((string)$billingAddress->{Sales_Model_Address::FLD_POBOX}) ?
+                                        ($billAdrT->_('Postbox') . ' ' . trim((string)$billingAddress->{Sales_Model_Address::FLD_POBOX}))
+                                        : trim((string)$billingAddress->{Sales_Model_Address::FLD_STREET})
+                                ) : null
+                             )
+                        ->setAdditionalStreetName(trim((string)$billingAddress->{Sales_Model_Address::FLD_POBOX}) && trim((string)$billingAddress->{Sales_Model_Address::FLD_STREET}) ?
+                            new \UBL21\Common\CommonBasicComponents\AdditionalStreetName(trim((string)$billingAddress->{Sales_Model_Address::FLD_STREET})) : null)
+                        ->setPostalZone(trim((string)$billingAddress->{Sales_Model_Address::FLD_POSTALCODE}) ? new \UBL21\Common\CommonBasicComponents\PostalZone(trim((string)$billingAddress->{Sales_Model_Address::FLD_POSTALCODE})) : null)
+                        ->setCityName(trim((string)$billingAddress->{Sales_Model_Address::FLD_LOCALITY}) ? new \UBL21\Common\CommonBasicComponents\CityName(trim((string)$billingAddress->{Sales_Model_Address::FLD_LOCALITY})) : null)
+                        ->setCountrySubentity(trim((string)$billingAddress->{Sales_Model_Address::FLD_REGION}) ? new \UBL21\Common\CommonBasicComponents\CountrySubentity(trim((string)$billingAddress->{Sales_Model_Address::FLD_REGION})) : null)
+                        ->setCountry(trim((string)$billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME}) ? (new \UBL21\Common\CommonAggregateComponents\Country())
+                            ->setIdentificationCode(new \UBL21\Common\CommonBasicComponents\IdentificationCode(strtoupper(trim((string)$billingAddress->{Sales_Model_Address::FLD_COUNTRYNAME}))))
                             : null
                         )
                     )
+                    ->setContact((trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX3}) || trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX2}) || trim((string)$billingAddress->{Sales_Model_Address::FLD_EMAIL})) ?
+                        (new \UBL21\Common\CommonAggregateComponents\Contact())
+                            ->setName(trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX3}) || trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX2}) ? new \UBL21\Common\CommonBasicComponents\Name(trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX3}) . (trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX3}) && trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX2}) ? PHP_EOL : '') . trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX2})): null)
+                            ->setElectronicMail(trim((string)$billingAddress->{Sales_Model_Address::FLD_EMAIL}) ? new \UBL21\Common\CommonBasicComponents\ElectronicMail(trim((string)$billingAddress->{Sales_Model_Address::FLD_EMAIL})) : null)
+                        : null)
                 )
             )
             ->setLegalMonetaryTotal(($legalMonetaryTotal = new \UBL21\Common\CommonAggregateComponents\LegalMonetaryTotal)
@@ -399,15 +413,15 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
         // BT-10: Buyer reference
         if (trim((string)$this->{self::FLD_BUYER_REFERENCE})) {
-            $ublInvoice->setBuyerReference(new \UBL21\Common\CommonBasicComponents\BuyerReference($this->{self::FLD_BUYER_REFERENCE}));
+            $ublInvoice->setBuyerReference(new \UBL21\Common\CommonBasicComponents\BuyerReference(trim((string)$this->{self::FLD_BUYER_REFERENCE})));
         } else {
             $ublInvoice->setBuyerReference(new \UBL21\Common\CommonBasicComponents\BuyerReference($t->_('Not provided by buyer')));
         }
         // BT-11: Project reference 'cac:ProjectReference' 'cbc:ID'
-        if ($this->{self::FLD_PROJECT_REFERENCE}) {
+        if (trim((string)$this->{self::FLD_PROJECT_REFERENCE})) {
             $ublInvoice->setProjectReference([
                 (new \UBL21\Common\CommonAggregateComponents\ProjectReference())
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PROJECT_REFERENCE}))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID(trim((string)$this->{self::FLD_PROJECT_REFERENCE})))
             ]);
         }
         // BT-12: Contract reference
@@ -420,7 +434,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         // BT-13: Purchase order reference
         if ($this->{self::FLD_PURCHASE_ORDER_REFERENCE} || $precursorOrder) {
             $ublInvoice->setOrderReference((new \UBL21\Common\CommonAggregateComponents\OrderReference)
-                ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_PURCHASE_ORDER_REFERENCE} ?: 'NA'))
+                ->setID(new \UBL21\Common\CommonBasicComponents\ID(trim((string)$this->{self::FLD_PURCHASE_ORDER_REFERENCE}) ?: 'NA'))
                 // BT-14: Sales order reference
                 ->setSalesOrderID($precursorOrder ? new \UBL21\Common\CommonBasicComponents\SalesOrderID($precursorOrder->{Sales_Model_Document_Order::FLD_DOCUMENT_NUMBER}) : null)
             );
@@ -428,38 +442,38 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
         if ($buyerContact) {
             $customerParty->getParty()->setContact(($bContact = new \UBL21\Common\CommonAggregateComponents\Contact())
-                ->setName(new \UBL21\Common\CommonBasicComponents\Name($buyerContact->n_fn)));
-            if ($buyerContact->tel_work) {
-                $bContact->setTelephone(new \UBL21\Common\CommonBasicComponents\Telephone($buyerContact->tel_work));
+                ->setName(new \UBL21\Common\CommonBasicComponents\Name($buyerContact->n_fileas)));
+            if (trim((string)$buyerContact->tel_work)) {
+                $bContact->setTelephone(new \UBL21\Common\CommonBasicComponents\Telephone(trim((string)$buyerContact->tel_work)));
             }
-            if ($buyerContact->email) {
-                $bContact->setElectronicMail(new \UBL21\Common\CommonBasicComponents\ElectronicMail($buyerContact->email));
+            if (trim((string)$buyerContact->email)) {
+                $bContact->setElectronicMail(new \UBL21\Common\CommonBasicComponents\ElectronicMail(trim((string)$buyerContact->email)));
             }
         }
 
-        if ($customer->vatid) {
+        if ('O' !== $taxId && ($vatId = $debitor->{Sales_Model_Debitor::FLD_VAT_IDENTIFIER} ?: $customer->vatid)) {
             $customerParty->getParty()->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
-                ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($customer->vatid))
+                ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($vatId))
                 ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                 )
             );
         }
 
-        if ($division->{Sales_Model_Division::FLD_VAT_NUMBER}) {
+        if ('O' !== $taxId && trim((string)$division->{Sales_Model_Division::FLD_VAT_NUMBER})) {
             $supplierParty
                 ->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
-                    ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($division->{Sales_Model_Division::FLD_VAT_NUMBER}))
+                    ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID(trim((string)$division->{Sales_Model_Division::FLD_VAT_NUMBER})))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                     )
                 );
         }
         // BT-32 // 'FC' aus validen xrechnungen rausgesucht, ist nicht in codeliste, unklar wo das herkommt
-        if ($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}) {
+        if (trim((string)$division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID})) {
             $supplierParty
                 ->addToPartyTaxScheme((new \UBL21\Common\CommonAggregateComponents\PartyTaxScheme())
-                    ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID($division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID}))
+                    ->setCompanyID(new \UBL21\Common\CommonBasicComponents\CompanyID(trim((string)$division->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID})))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme())
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('FC'))
                     )
@@ -467,7 +481,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         }
 
         if ($isStorno) {
-            $refDoc = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD};
+            if (is_string($refDoc = $this->{self::FLD_PRECURSOR_DOCUMENTS}->getFirstRecord()->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD})) {
+                $refDoc = Sales_Controller_Document_Invoice::getInstance()->get($refDoc);
+            }
             // BG-3: Preceding invoice reference
             $ublInvoice->addToBillingReference((new \UBL21\Common\CommonAggregateComponents\BillingReference)
                 ->setInvoiceDocumentReference((new \UBL21\Common\CommonAggregateComponents\InvoiceDocumentReference)
@@ -512,7 +528,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                     ->addToClassifiedTaxCategory((new \UBL21\Common\CommonAggregateComponents\ClassifiedTaxCategory)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                        ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}))
+                        ->setPercent('O' === $taxId ? null : new \UBL21\Common\CommonBasicComponents\Percent($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                         )
@@ -526,8 +542,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setCurrencyID('EUR')
                     )
                 )
-                ->setNote($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION} ?
-                    [new \UBL21\Common\CommonBasicComponents\Note($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION})]
+                ->setNote(trim((string)$position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION}) ?
+                    [new \UBL21\Common\CommonBasicComponents\Note(trim((string)$position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION}))]
                     : null
                 )
             );
@@ -554,7 +570,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 )
                 ->setTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                    ->setTaxExemptionReasonCode($taxId === 'AE' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-AE') : ($taxId === 'G' ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode('VATEX-EU-G'): null))
+                    ->setTaxExemptionReasonCode($this->{self::FLD_VATEX_ID} ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode($this->{self::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE}) : null)
                     ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
@@ -562,7 +578,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 )
             );
             if ($this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} && $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}) {
-                $modifier = $taxRate[self::NET_SUM] / $this->{Sales_Model_Document_Invoice::FLD_POSITIONS_NET_SUM};
+                $modifier = $taxRate[self::NET_SUM] / $this->{Sales_Model_Document_Invoice::FLD_NET_SUM};
                 $ublInvoice->addToAllowanceCharge((new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
                     ->setChargeIndicator(false)
                     ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
@@ -575,7 +591,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                     ->addToTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                        ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
+                        ->setPercent('O' === $taxId ? null : new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                         )
@@ -590,6 +606,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             );
         }
 
-        return $serializer->serialize($ublInvoice, 'xml');
+        $xml = $serializer->serialize($ublInvoice, 'xml');
+        return $xml;
     }
 }

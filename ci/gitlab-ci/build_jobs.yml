@@ -44,34 +44,44 @@ docker_build_built:
 #     - if: $DOCKER_BUILD_BUILT_ARM64 == "true"
 #     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built-arm64/
 
-docker_build_dev:
-  extends: .abstract_jobs.docker
-  stage: build2
-  script:
+docker-build-dev:
+  image:
+    name: moby/buildkit:master
+    entrypoint: [ "sh", "-c" ]
+  before_script:
     - !reference [.lib, script]
-    - docker_build_image_dev
+    - mkdir -p ~/.docker
+    - echo "{\"auths\":{\"${REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${REGISTRY_USER}" "${REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"${CI_DEPENDENCY_PROXY_SERVER}\":{\"auth\":\"$(printf "%s:%s" "${CI_DEPENDENCY_PROXY_USER}" "${CI_DEPENDENCY_PROXY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > ~/.docker/config.json
+  parallel:
+      matrix:
+        - ARCH: amd64
+          PHP_VERSION:
+            - "8.1"
+            - "8.2"
+            - "8.3"
+            - "8.4"
+        - ARCH: arm64
+          PHP_VERSION:
+            - "8.1"
+            - "8.2"
+            - "8.3"
+            - "8.4"
+  script:  
+    - |
+      buildctl-daemonless.sh build \
+      --frontend=dockerfile.v0 \
+      --local context="${CI_PROJECT_DIR}" \
+      --local dockerfile=${CI_PROJECT_DIR}/ci/dockerimage \
+      --output type=image,\"name=${REGISTRY}/dev-commit:${IMAGE_TAG}-${ARCH}\",push=true \
+      --opt platform=linux/${ARCH} \
+      --opt target=dev \
+      --opt build-arg:PHP_IMAGE=php${PHP_VERSION} \
+      --opt build-arg:DOCKER_HUB_PROXY=${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/ \
+      --opt build-arg:APT_MIRROR=${APT_MIRROR}
+  timeout: 2h
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev/
-    - !reference [deploy-dev-image-to-gitlab, rules]
-    - !reference [deploy-dev-image-to-dockerhub, rules]
-  timeout: 60m
-  interruptible: true
-docker_build_dev_arm64:
-  services:
-    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
-      alias: docker
-  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
-  extends: docker_build_dev
-  variables:
-    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
-    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
-  tags:
-    - arm64
-  allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev-arm64/
-    - !reference [deploy-dev-image-to-gitlab-arm64, rules]
-    - !reference [deploy-dev-image-to-dockerhub-arm64, rules]
+    - !reference [.release-dev-image-to-dockerhub, rules]
 
 docker_build_test:
   extends: .abstract_jobs.docker

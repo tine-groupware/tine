@@ -46,7 +46,8 @@ class Sales_Import_Product_Csv extends Tinebase_Import_Csv_Generic
         }
 
         foreach ($mc->fields as $key => $field) {
-            if ($field[Sales_Model_Product::TYPE] !== Sales_Model_Product::TYPE_RECORDS ||
+            if (! isset($field[Sales_Model_Product::TYPE]) ||
+                $field[Sales_Model_Product::TYPE] !== Sales_Model_Product::TYPE_RECORDS ||
                 $field[Sales_Model_Product::CONFIG][Sales_Model_Product::RECORD_CLASS_NAME] !==
                 Sales_Model_ProductLocalization::class) {
                 continue;

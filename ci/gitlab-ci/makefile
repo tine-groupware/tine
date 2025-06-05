@@ -7,8 +7,8 @@ lib.yml: $(scripts_sources) $(entry_points_sources) makefile
 	printf "# build: ci/gitlab-ci && make lib.yml\n\n" >> lib.yml
 	printf ".lib:\n" >> lib.yml;
 	printf "  script:\n" >> lib.yml;
-	printf "    - |\n" >> lib.yml;
 	for f in $(scripts_sources); do  \
+		printf "    - |\n" >> lib.yml; \
 		printf "      # $$f\n" >> lib.yml; \
 		sed -e 's/^/      /' $$f >> lib.yml; \
 		printf "\n\n" >> lib.yml; \

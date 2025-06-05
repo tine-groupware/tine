@@ -59,28 +59,28 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * 
      * @var string
      */
-    const TYPE_FOLDER = 'folder';
+    public const TYPE_FOLDER = 'folder';
     
     /**
      * object type: file
      * 
      * @var string
      */
-    const TYPE_FILE   = 'file';
+    public const TYPE_FILE   = 'file';
 
     /**
      * object type: preview
      *
      * @var string
      */
-    const TYPE_PREVIEW = 'preview';
+    public const TYPE_PREVIEW = 'preview';
 
     /**
      * object type: link
      *
      * @var string
      */
-    const TYPE_LINK = 'link';
+    public const TYPE_LINK = 'link';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

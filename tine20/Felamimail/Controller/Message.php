@@ -65,7 +65,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     private function __construct()
     {
         $this->_modelName = 'Felamimail_Model_Message';
-        $this->_doContainerACLChecks = FALSE;
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
 
         $this->_cacheController = Felamimail_Controller_Cache_Message::getInstance();
@@ -103,6 +102,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if (!$this->_doContainerACLChecks) {
+            return;
+        }
+
         $accountFilter = $_filter->getFilter('account_id');
 
         // force a $accountFilter filter (ACL) / all accounts of user
@@ -837,7 +840,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
-                $body = $this->_purifyBodyContent($body, $_message->getId());
+                $body = $this->purifyBodyContent($body, $_message->getId());
                 $bodyCharCountAfter = strlen($body);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -880,7 +883,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $messageId
      * @return string
      */
-    protected function _purifyBodyContent($_content, $messageId = null)
+    public function purifyBodyContent($_content, $messageId = null)
     {
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../library/HTMLPurifier'));
@@ -1507,12 +1510,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
                 }
                 $message->body = str_replace("\r", '', $message['body']);
-                $message->body = $this->_purifyBodyContent($message->body);
+                $message->body = $this->purifyBodyContent($message->body);
             }
         } else {
             $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
             $message = Felamimail_Model_Message::createFromMime($content,  $mimeType);
-            $message->body = $this->_purifyBodyContent($message->body);
+            $message->body = $this->purifyBodyContent($message->body);
         }
 
         $message->setId($node->getId());
@@ -1626,16 +1629,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if ($draftFolder) {
                     $draftFolderIds[] = $draftFolder->getId();
                 }
-            } catch (Exception $e) {
-                if (($e instanceof Felamimail_Exception_IMAPServiceUnavailable
-                        || $e instanceof Felamimail_Exception_IMAPInvalidCredentials)
-                ) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e);
-                    }
-                } else {
-                    Tinebase_Exception::log($e);
+            } catch (Felamimail_Exception_IMAPServiceUnavailable
+                | Felamimail_Exception_IMAPInvalidCredentials
+                | Tinebase_Exception_AccessDenied $e
+            ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
             }
         }
 
@@ -1653,7 +1655,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $headers = $this->getMessageHeaders($record, null, true);
                 return isset($headers['x-tine20-autosaved']);
             });
-            $this->_backend->delete($messages->getId());
+            if (count($messages) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Remove ' . count($messages) . ' auto-saved messages from Drafts');
+                }
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($messages,
+                    [Zend_Mail_Storage::FLAG_DELETED]);
+            }
         } catch (Exception $e) {
             if (!$e instanceof Felamimail_Exception_IMAPMessageNotFound &&
                 !$e instanceof Felamimail_Exception_IMAPInvalidCredentials

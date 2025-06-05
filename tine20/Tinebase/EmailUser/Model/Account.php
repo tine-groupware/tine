@@ -21,73 +21,78 @@ abstract class Tinebase_EmailUser_Model_Account extends Tinebase_Record_NewAbstr
      * secure connection setting for no secure connection
      *
      */
-    const SECURE_NONE = 'none';
+    public const SECURE_NONE = 'none';
 
     /**
      * secure connection setting for tls
      *
      */
-    const SECURE_TLS = 'tls';
+    public const SECURE_TLS = 'tls';
 
     /**
      * secure connection setting for ssl
      *
      */
-    const SECURE_SSL = 'ssl';
+    public const SECURE_SSL = 'ssl';
 
     /**
      * adb list account
      */
-    const TYPE_ADB_LIST = 'adblist';
+    public const TYPE_ADB_LIST = 'adblist';
 
     /**
      * shared account
      */
-    const TYPE_SHARED = 'shared';
+    public const TYPE_SHARED_INTERNAL = 'shared';
+
+    /**
+     * shared account (external))
+     */
+    public const TYPE_SHARED_EXTERNAL = 'sharedExternal';
 
     /**
      * system account
      */
-    const TYPE_SYSTEM = 'system';
+    public const TYPE_SYSTEM = 'system';
     
     /**
      * user defined account
      */
-    const TYPE_USER = 'user';
+    public const TYPE_USER_EXTERNAL = 'user';
 
     /**
      * user defined account on internal mail system
      */
-    const TYPE_USER_INTERNAL = 'userInternal';
+    public const TYPE_USER_INTERNAL = 'userInternal';
 
     /**
      * display format: plain
      *
      */
-    const DISPLAY_PLAIN = 'plain';
+    public const DISPLAY_PLAIN = 'plain';
     
     /**
      * display format: html
      *
      */
-    const DISPLAY_HTML = 'html';
+    public const DISPLAY_HTML = 'html';
     
     /**
      * signature position above quote
      *
      */
-    const SIGNATURE_ABOVE_QUOTE = 'above';
+    public const SIGNATURE_ABOVE_QUOTE = 'above';
     
     /**
      * signature position above quote
      *
      */
-    const SIGNATURE_BELOW_QUOTE = 'below';
+    public const SIGNATURE_BELOW_QUOTE = 'below';
     
     /**
      * display format: content type
      *
      * -> depending on content_type => text/plain show as plain text
      */
-    const DISPLAY_CONTENT_TYPE = 'content_type';
+    public const DISPLAY_CONTENT_TYPE = 'content_type';
 }

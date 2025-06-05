@@ -113,21 +113,22 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         self::flushMailer();
         $event->setId(null);
         $event->uid = null;
-        /*$secondEvent =*/ Calendar_Controller_MSEventFacade::getInstance()->create($event);
+        $secondEvent = Calendar_Controller_MSEventFacade::getInstance()->create($event);
         //$this->_eventController->create($event);
 
         $messages = self::getMessages();
-        $this->assertEquals(2, count($messages), 'expected exactly two mails');
+        $this->assertEquals(1, count($messages), 'expected exactly two mails');
         $this->assertStringContainsString('Meeting Room declined event', $messages[0]->getSubject());
 
-        $bodyPart = $messages[1]->getBodyText(FALSE);
+        $bodyPart = $messages[0]->getBodyText(FALSE);
         $s = fopen('php://temp','r+');
         fputs($s, $bodyPart->getContent());
         rewind($s);
         $bodyPartStream = new Zend_Mime_Part($s);
         $bodyPartStream->encoding = $bodyPart->encoding;
         $bodyText = $bodyPartStream->getDecodedContent();
-        $this->assertStringContainsString('Meeting Room (Required, Declined)', $bodyText);
+        [,,,$translate] = Calendar_Controller_EventNotifications::getNotificationPreferences($secondEvent->attendee->find('status', Calendar_Model_Attender::STATUS_NEEDSACTION), $secondEvent);
+        $this->assertStringContainsString('Meeting Room (' . $translate->_('Required') . ', ' . $translate->_('Declined'). ')', $bodyText);
     }
     
     /**
@@ -485,6 +486,13 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testRecuringExceptions()
     {
+        $jmcblack =  $this->_getPersona('jmcblack');
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblack->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
         $year = Tinebase_DateTime::now()->subYear(2)->format('Y');
         $from = new Tinebase_DateTime($year . '-03-01 00:00:00');
         $until = new Tinebase_DateTime($year . '-03-31 23:59:59');
@@ -1548,6 +1556,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testNotificationForNonAttendeeOrganizer()
     {
         $jmcblack =  $this->_getPersona('jmcblack');
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblack->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
         $event = $this->_getEvent(/*now = */ true);
         
         // remove organizer attendee

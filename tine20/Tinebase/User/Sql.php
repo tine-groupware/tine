@@ -112,7 +112,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         parent::registerPlugin($plugin);
 
         if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
-            $className = get_class($plugin);
+            $className = $plugin::class;
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Registering " . $className . ' SQL plugin.');
@@ -125,7 +125,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $result = parent::removePlugin($plugin);
 
-        $className = is_object($plugin) ? get_class($plugin) : $plugin;
+        $className = is_object($plugin) ? $plugin::class : $plugin;
 
         if (isset($this->_sqlPlugins[$className]) && $this->_sqlPlugins[$className] instanceof Tinebase_User_Plugin_SqlInterface) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -274,15 +274,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         foreach ($this->_sqlPlugins as $plugin) {
             try {
                 if ($plugin instanceof Tinebase_User_Plugin_LdapInterface) {
-                    throw new Tinebase_Exception_InvalidArgument('LDAP plugin ' . get_class($plugin)
+                    throw new Tinebase_Exception_InvalidArgument('LDAP plugin ' . $plugin::class
                         . ' should not be registered as sql plugin');
                 }
                 $this->_inspectCRUD($plugin, $user, null, 'inspectGetUserByProperty');
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // do nothing
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
-                         . ' User sql plugin "' . get_class($plugin) . '" failure');
+                         . ' User sql plugin "' . $plugin::class . '" failure');
                 Tinebase_Exception::log($e);
             }
         }
@@ -307,7 +307,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 if (isset($syncUser->xprops()['uidnumber'])) {
                     $user->xprops()['uidnumber'] = $syncUser->xprops()['uidnumber'];
                 }
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                     __METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $user->getId());
             }
@@ -337,14 +337,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
         }
         
-        switch ($_property) {
-            case 'accountId':
-                $value = Tinebase_Model_User::convertUserIdToInt($_value);
-                break;
-            default:
-                $value = $_value;
-                break;
-        }
+        $value = match ($_property) {
+            'accountId' => Tinebase_Model_User::convertUserIdToInt($_value),
+            default => $_value,
+        };
         
         $select = $this->_getUserSelectObject($_getDeleted)
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping[$_property]) . ' = ?', $value));
@@ -753,7 +749,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         try {
             $user = $this->getUserByPropertyFromSqlBackend('accountLoginName', $_loginName, 'Tinebase_Model_FullUser');
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // nothing todo => is no existing user
             return null;
         }
@@ -920,21 +916,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * @param mixed $plugin
-     * @param mixed $user
-     * @param mixed $newUserProperties
      * @param string $method (add|update|inspectGetUserByProperty|delete)
      *
      * TODO support different imap/smtp xprops
      */
-    protected function _inspectCRUD($plugin, $user, $newUserProperties, $method)
+    protected function _inspectCRUD(mixed $plugin, mixed $user, mixed $newUserProperties, $method)
     {
         if ($method !== 'inspectGetUserByProperty') {
             $method = 'inspect' . ucfirst($method) . 'User';
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Calling CRUD method ' . $method . ' in plugin ' . (is_object($plugin) ? get_class($plugin) : $plugin));
+            . ' Calling CRUD method ' . $method . ' in plugin ' . (is_object($plugin) ? $plugin::class : $plugin));
 
         // add email user xprops here if configured
         if (Tinebase_EmailUser::isEmailUserPlugin($plugin) && Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
@@ -950,13 +943,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * @param mixed $plugin
-     * @param mixed $user
-     * @param mixed $newUserProperties
      * @param string $method (inspectAddUser|inspectUpdateUser|inspectGetUserByProperty|inspectDeleteUser)
      * @throws Zend_Db_Adapter_Exception
      */
-    protected function _inspectEmailPluginCRUD($plugin, $user, $newUserProperties, string $method)
+    protected function _inspectEmailPluginCRUD(mixed $plugin, mixed $user, mixed $newUserProperties, string $method)
     {
         if ($method === 'inspectAddUser' && empty($user->accountEmailAddress)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -972,7 +962,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $externalDomain = false;
         }
 
-        $xprop = strpos(get_class($plugin), 'Imap') !== false
+        $xprop = str_contains($plugin::class, 'Imap')
             ? Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP
             : Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP;
 
@@ -1003,7 +993,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . ' Calling ' . get_class($plugin) . '::' . $method);
+            __METHOD__ . '::' . __LINE__ . ' Calling ' . $plugin::class . '::' . $method);
 
         try {
             call_user_func_array([$plugin, $method], $params);
@@ -1329,10 +1319,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * delete a user (delayed; its marked deleted, disabled, hidden and stripped from groups and roles immediately. Full delete and event are fired "async" via actionQueue)
      *
-     * @param  mixed  $_userId
      * @return Tinebase_Model_FullUser  the delete user
      */
-    public function deleteUserInSqlBackend($_userId)
+    public function deleteUserInSqlBackend(mixed $_userId)
     {
         if ($_userId instanceof Tinebase_Model_FullUser) {
             $user = $_userId;
@@ -1459,10 +1448,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
     /**
      * send deactivation email to user
-     * 
-     * @param mixed $accountId
      */
-    public function sendDeactivationNotification($accountId)
+    public function sendDeactivationNotification(mixed $accountId)
     {
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DEACTIVATION_NOTIFICATION)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -1479,7 +1466,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $translate = Tinebase_Translation::getTranslation('Tinebase');
             
             $view = new Zend_View();
-            $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
+            $view->setScriptPath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
             
             $view->translate            = $translate;
             $view->accountLoginName     = $user->accountLoginName;
@@ -1669,7 +1656,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                         $this->updateUser($record);
                     }
                 } catch (Tinebase_Exception_NotFound $e) {
-                    if (strpos($e->getMessage(), 'User with accountId') !== 0) throw $e;
+                    if (!str_starts_with($e->getMessage(), 'User with accountId')) throw $e;
                 }
                 break;
 
@@ -1677,7 +1664,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 try {
                     $this->deleteUser($modification->record_id);
                 } catch (Tinebase_Exception_NotFound $e) {
-                    if (strpos($e->getMessage(), 'User with accountId') !== 0) throw $e;
+                    if (!str_starts_with($e->getMessage(), 'User with accountId')) throw $e;
                 }
                 break;
 
@@ -1746,14 +1733,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected function _addJustEmailDomainAfterReplication(Tinebase_Model_FullUser $user)
     {
-        if (empty($user->accountEmailAddress) || strpos($user->accountEmailAddress, '@') === false) {
+        if (empty($user->accountEmailAddress) || !str_contains($user->accountEmailAddress, '@')) {
             return;
         }
         if (empty($config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray()) ||
                 !isset($config['primarydomain'])) {
             return;
         }
-        list($userPart, /*$domainPart*/) = explode('@', $user->accountEmailAddress);
+        [$userPart, ] = explode('@', $user->accountEmailAddress);
         $user->accountEmailAddress = $userPart . '@' . $config['primarydomain'];
     }
 

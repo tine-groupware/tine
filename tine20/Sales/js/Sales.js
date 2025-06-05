@@ -4,7 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,12 +20,13 @@ import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
 import './Document/BookDocumentAction';
+import './Document/CopyDocumentAction';
 import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
 import './Document/DispatchDocumentAction';
-import './Document/AttachedDocument/ShowDispatchHistory';
-import './Document/AttachedDocument/ManageAttachmentAction';
-import './Document/TracAction';
+// import './Document/AttachedDocument/ShowDispatchHistory';
+// import './Document/AttachedDocument/ManageAttachmentAction';
+import './Document/TrackAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';
 import './EDocument/QuickLookPanel';

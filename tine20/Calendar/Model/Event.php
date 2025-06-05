@@ -941,6 +941,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_RESOURCE_ATTENDEE) {
                 $keys[] = 'container_id';
             }
+            if (static::$_freebusyCleanUpVisibilty > Calendar_Config::FREEBUSY_INFO_ALLOW_CALENDAR) {
+                $keys[] = 'class';
+            }
 
             static::$_freebusyCleanUpKeys = array_flip($keys);
         }
@@ -1211,8 +1214,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             try {
                 $container = Tinebase_Container::getInstance()->getContainerById($container);
             } catch (Tinebase_Exception_NotFound $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                }
                 return false;
             }
         }

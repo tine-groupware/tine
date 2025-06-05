@@ -17,7 +17,7 @@
  */
 class Tinebase_Model_MFA_PinConfig extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'MFA_PinConfig';
+    public const MODEL_NAME_PART = 'MFA_PinConfig';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

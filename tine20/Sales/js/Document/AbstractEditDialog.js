@@ -3,8 +3,10 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import FieldTriggerPlugin from "../../../Tinebase/js/ux/form/FieldTriggerPlugin";
+
 Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
@@ -35,13 +37,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return false;
         }
 
-        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+        const booked = this.getForm().findField(this.statusFieldName).store.data.items.find((r) => r.id === this.record.get(this.statusFieldName)).json.booked
+        if (!booked && this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
             icon: Ext.MessageBox.QUESTION,
             buttons: Ext.MessageBox.YESNO,
             title: this.app.formatMessage('Change Document Date?'),
             msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
         }) === 'yes') {
-            this.record.set('date', new Date().clearTime());
+            this.getForm().findField('date').setValue(new Date().clearTime());
         }
 
         if (this.record.phantom) {
@@ -97,6 +100,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         })
 
         Object.keys(sums).forEach((fld) => {
+            sums[fld] = this.recordClass.toFixed(sums[fld])
             if (this.recordClass.hasField(fld)) {
                 this.record.set(fld, sums[fld])
             }
@@ -116,21 +120,23 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (document_price_type === 'gross') {
             // sales_tax & sales_tax_by_rate
             // ok discount is already applied -> lower sales_tax_by_rate by discount rate
-            this.record.set('sales_tax', Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
-                sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum') / this.record.get('positions_gross_sum'))
+            this.record.set('sales_tax', this.recordClass.toFixed(Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
+                sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum') / this.record.get('positions_gross_sum')) || 0
                 return a + sums['sales_tax_by_rate'][rate]
-            }, 0))
-            this.record.set('net_sum', this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax'))
+            }, 0)))
+            this.record.set('net_sum', this.recordClass.toFixed(this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax')))
             this.getForm().findField('net_sum')?.setValue(this.record.get('net_sum'))
         } else {
-            this.record.set('sales_tax', Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
+            this.record.set('sales_tax', this.recordClass.toFixed(Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
                 sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) || 0)) * rate / 100
                 return a + sums['sales_tax_by_rate'][rate]
-            }, 0))
+            }, 0)))
 
-            this.record.set('gross_sum', this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))
+            this.record.set('gross_sum', this.recordClass.toFixed(this.recordClass.toFixed(this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))))
             this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
         }
+        this.record.set('invoice_discount_sum', this.recordClass.toFixed(this.record.get('invoice_discount_sum')))
+        this.record.set('net_sum', this.recordClass.toFixed(this.record.get('net_sum')))
 
         // reformat sales_tax_by_rate
         this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
@@ -164,7 +170,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.getForm().findField('service_period_start')?.setValue(minPosServiceStart);
             servicePeriodAdopted = true
         }
-        const serviceEnd = this.getForm().findField('service_period_start')?.getValue();
+        const serviceEnd = this.getForm().findField('service_period_end')?.getValue();
         const maxServiceEnd = _.reduce(positions, (maxDate, pos) => {
             return !maxDate ? pos.service_period_end : (pos.service_period_end > maxDate ? pos.service_period_end : maxDate)
         }, null)
@@ -260,7 +266,18 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fields['document_language'].setValue(record?.get('language'))
                         }
                         fields['buyer_reference'].setValue(_.get(record, 'data.debitor_id.buyer_reference', ''))
+                        this.record.set('debitor_id', _.get(record, 'data.debitor_id', null))
                     }
+                    config.plugins = config.plugins || []
+                    config.plugins.push(new FieldTriggerPlugin({
+                        triggerClass: 'SalesDebitor',
+                        qtip: this.app.i18n._('Open Debitor'),
+                        onTriggerClick: () => {
+                            // @TODO open document debitor once dispatch config gets denormalized
+                            const debitorId = this.record.get('debitor_id').original_id
+                            Tine.Sales.DebitorEditDialog.openWindow({recordId: debitorId, record: {id: debitorId}, mode: 'remote'})
+                        }
+                    }))
                     // more logic in Tine.Sales.AddressSearchCombo
                     break;
                 case 'vat_procedure':
@@ -270,9 +287,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         positions.forEach((positionData, idx) => {
                             const position = Tine.Tinebase.data.Record.setFromJson(positionData, fields['positions'].recordClass)
                             const productTaxRate = _.get(positionData, 'product_id.salestaxrate', 0)
-                            if (record.id === 'taxable' && position.get('sales_tax_rate') === 0 && productTaxRate) {
+                            if (record.id === 'standard' && position.get('sales_tax_rate') === 0 && productTaxRate) {
                                 position.set('sales_tax_rate', productTaxRate)
-                            } else if (record.id !== 'taxable' && position.get('sales_tax_rate')) {
+                            } else if (record.id !== 'standard' && position.get('sales_tax_rate')) {
                                 if (position.get('unit_price_type') === 'gross') {
                                     position.set('unit_price', position.get('unit_price') - (position.get('sales_tax')/position.get('quantity') || 0))
                                     position.set('unit_price_type', 'net')

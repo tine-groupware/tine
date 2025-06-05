@@ -32,8 +32,8 @@ test_prepare_working_dir() {
     if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
         # COMPOSER custom cache
         # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-        export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-        mkdir -p ${COMPOSER_CACHE_DIR}
+        # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+        # mkdir -p ${COMPOSER_CACHE_DIR}
 
         log "instaling custom app ..."
         customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -151,7 +151,7 @@ test_phpunit() {
 
 
     log "testing ..."
-    cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+    cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
 
     if test -n "${ARG_FILTER}"; then
         cmd="${cmd} --filter ${ARG_FILTER}"
@@ -165,6 +165,9 @@ test_phpunit() {
         cmd="${cmd} --group ${ARG_GROUP}"
     fi
 
+    mkdir -p ${CI_PROJECT_DIR}/coverage    
+    cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+
     cmd="${cmd} ${ARG_TEST}";
 
     echo ${cmd};
@@ -174,4 +177,24 @@ test_phpunit() {
 # log in blue
 log() {
     echo -e "\033[0;34m"$@"\033[0m"
+}
+
+test_release_update_test_determine_start_version () {
+    # we can automatically determine the start version for main, beta and be. - git describe only works for lts and be, as other branches are "contaminated" with different tags 
+    if [ -z "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
+        if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
+            git describe --tags --abbrev=0 origin/${TINE_VERSION_BE}
+            return
+        fi
+
+        if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BE}" ]; then
+            git describe --tags --abbrev=0 origin/${TINE_VERSION_LTS}
+            return
+        fi
+    fi
+
+    if [ -n "${RELEASE_UPDATE_TEST_START_REF}" ]; then
+        echo ${RELEASE_UPDATE_TEST_START_REF}
+        return
+    fi
 }

@@ -193,7 +193,6 @@ module.exports = {
         mainFields: ["browser", "browserify", "module", "main"],
         // we need an absolut path here so that apps can resolve modules too
         modules: [
-            path.resolve(__dirname, "../.."),
             __dirname,
             path.resolve(__dirname, "node_modules")
         ],
@@ -205,10 +204,19 @@ module.exports = {
             'process': require.resolve('process/browser'),
             'stream': require.resolve("stream-browserify"),
         },
-        alias: {
+        alias: Object.assign({
             // convinence alias
             "tine-vue$": path.resolve(__dirname, "node_modules/vue/dist/vue.runtime.esm-bundler.js"),
             "Ext": path.resolve(__dirname, "../../library/ExtJS/src/"),
-        }
+            // "images": `${baseDir}/images`
+        }, fs.readdirSync(baseDir).reduce((accu, baseName) => {
+            if (fs.existsSync(`${baseDir}/${baseName}/js`)) {
+                accu[`${baseName}/js`] = `${baseDir}/${baseName}/js/` // legacy for import '*/js/*' syntax
+                accu[`${baseName}`] = `${baseDir}/${baseName}/js/`
+            }
+            return accu
+        }, {}))
     }
 };
+
+// console.error(module.exports.resolve.alias)

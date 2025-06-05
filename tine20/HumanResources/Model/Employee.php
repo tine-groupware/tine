@@ -338,7 +338,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             'supervisor_id' => array(
                 'label' => 'Supervisor', //_('Supervisor')
                 'type'  => 'record',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'config' => array(
                     'appName'       => 'HumanResources',
@@ -377,7 +377,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'nullable' => true,
             ),
             'contracts' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Contracts', // _('Contracts')
                 'type'       => 'records',
                 'config'     => array(
@@ -394,7 +394,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 ],
             ),
             'costcenters' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label'      => 'Cost Centers', // _('Cost Centers')
                 'type'       => 'records',
                 'config'     => array(

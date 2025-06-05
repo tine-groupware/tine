@@ -62,6 +62,7 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS,
             Sales_Model_Document_Order::FLD_REVERSAL_STATUS,
             Sales_Model_Document_Order::FLD_PAYMENT_MEANS,
+            Sales_Model_Document_Order::FLD_DISPATCH_HISTORY,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

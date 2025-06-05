@@ -77,10 +77,10 @@ class Tinebase_Relations
                 $appController = Tinebase_Core::getApplicationInstance($relation->related_model);
                 try {
                     $appController->getBackend()->get($relation->related_id);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     continue;
                 }
-            } catch(Tinebase_Exception_AccessDenied $tead) {
+            } catch(Tinebase_Exception_AccessDenied) {
                 // we just undelete it...
             }
 
@@ -138,8 +138,9 @@ class Tinebase_Relations
         $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
-        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds);
+        $toDel = $this->_getToDeleteIds($currentRelations, $relationsIds, $relations);
         $toUpdate = array_intersect($currentIds, $relationsIds);
+
         foreach ($relations as $key => $relation) {
             if (!empty($id = $relation->getId()) && !in_array($id, $toDel) && !in_array($id, $toUpdate)) {
                 $toAdd[] = $key;
@@ -208,11 +209,14 @@ class Tinebase_Relations
     }
 
     /**
-     * @param $currentRelations
+     * @param Tinebase_Record_RecordSet $currentRelations
      * @param array $relationsIds
+     * @param Tinebase_Record_RecordSet $relations
      * @return array
      */
-    protected function _getToDeleteIds($currentRelations, $relationsIds)
+    protected function _getToDeleteIds(Tinebase_Record_RecordSet $currentRelations,
+                                       array $relationsIds,
+                                       Tinebase_Record_RecordSet $relations): array
     {
         $deleteIds = [];
         foreach ($currentRelations as $relation) {
@@ -220,7 +224,34 @@ class Tinebase_Relations
                 $deleteIds[] = $relation->getId();
             }
         }
+        return array_merge($deleteIds, $this->_getDeletedRecordRelations($currentRelations, $relationsIds, $relations));
+    }
 
+    protected function _getDeletedRecordRelations(Tinebase_Record_RecordSet $currentRelations,
+                                                  array $relationsIds,
+                                                  Tinebase_Record_RecordSet $relations): array
+    {
+        $deleteIds = [];
+        foreach (array_diff($relationsIds, $currentRelations->getArrayOfIds()) as $relationIdToCheck) {
+            $relation = $relations->getById($relationIdToCheck);
+            $controller = Tinebase_Core::getApplicationInstance(_applicationName: $relation->related_model, _ignoreACL: true);
+            if (! $controller instanceof Tinebase_Controller_Record_Abstract) {
+                // can't check this relation...
+                continue;
+            }
+            $acl = $controller->doContainerACLChecks(false);
+            try {
+                $controller->get($relation->related_id);
+            } catch (Tinebase_Exception_NotFound) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Removing no longer valid relation - related record has been deleted: ' . $relation->related_id);
+                }
+                $deleteIds[] = $relation->getId();
+            } finally {
+                $controller->doContainerACLChecks($acl);
+            }
+        }
         return $deleteIds;
     }
 
@@ -251,14 +282,11 @@ class Tinebase_Relations
                     $relations->removeRecord($relation);
                     $relation->setId($subset->getFirstRecord()->getId());
                     $relations->addRecord($relation);
-                    //$result[] = $subset->getFirstRecord()->getId();
                 }
             }
         }
 
-        $result = $relations->getArrayOfIds();
-
-        return $result;
+        return $relations->getArrayOfIds();
     }
 
     /**
@@ -277,7 +305,7 @@ class Tinebase_Relations
         
         foreach ($models as $model) {
         
-            $ownModel = explode('_Model_', $model);
+            $ownModel = explode('_Model_', (string) $model);
         
             if (! class_exists($model) || ! in_array($ownModel[0], $allApplications)) {
                 continue;
@@ -322,7 +350,7 @@ class Tinebase_Relations
         
                     $j=0;
                     foreach ($cItem['config'] as $conf) {
-                        $max = explode(':',$conf['max']);
+                        $max = explode(':',(string) $conf['max']);
                         $ownConfigItem['config'][$j]['max'] = intval($max[0]);
         
                         $foreignConfigItem['config'][$j] = $conf;
@@ -352,7 +380,7 @@ class Tinebase_Relations
      */
     public function addRelation(Tinebase_Model_Relation $relation, Tinebase_Record_Interface $record)
     {
-        $model = get_class($record);
+        $model = $record::class;
         // TODO allow different backends?
         $backend = 'Sql';
         $relations = $this->getRelations($model, $backend, $record->getId() /* ignore acl? ... ? */);
@@ -426,7 +454,8 @@ class Tinebase_Relations
                 if (isset($myConstraints[$idGroup]) && ($config['max'] > 0 && $config['max'] < $myConstraints[$idGroup])) {
                 
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Constraints validation failed from the own side! ' . print_r($cc, 1));
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Constraints validation failed from the own side! ' . print_r($cc, 1));
                     }
                     throw new Tinebase_Exception_InvalidRelationConstraints();
                 }
@@ -619,7 +648,7 @@ class Tinebase_Relations
                             $appController->getAlarms($records);
                         }
                     } else {
-                        throw new Tinebase_Exception_AccessDenied('Controller ' . get_class($appController)
+                        throw new Tinebase_Exception_AccessDenied('Controller ' . $appController::class
                             . ' has no method ' . $getMultipleMethod);
                     }
                 } catch (Tinebase_Exception_AccessDenied $tea) {
@@ -627,13 +656,13 @@ class Tinebase_Relations
                         __METHOD__ . '::' . __LINE__
                         . ' Removing relations from result. Got exception: ' . $tea->getMessage());
                     $removeReason = Tinebase_Model_Relation::REMOVED_BY_ACL;
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                         __METHOD__ . '::' . __LINE__ . ' Could not find controller for model: ' . $modelName
                         . '! you have broken relations: ' . join(',', $relations->id));
                     $_relations->removeRecords($relations);
                     continue;
-                } catch (Tinebase_Exception_AreaLocked $teal) {
+                } catch (Tinebase_Exception_AreaLocked) {
                     $removeReason = Tinebase_Model_Relation::REMOVED_BY_AREA_LOCK;
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__
@@ -788,7 +817,7 @@ class Tinebase_Relations
         // get relations if not yet present OR use relation search here
         if (empty($record->relations)) {
             $backendType = 'Sql';
-            $modelName = get_class($record);
+            $modelName = $record::class;
             $record->relations = $this->getRelations($modelName, $backendType, $record->getId(), NULL, array(), $ignoreACL);
         }
 

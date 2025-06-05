@@ -71,16 +71,13 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                                         'Int',
                                         'default'       => 0            ),
         // can be array for multiple sort rows
-        'sort'                 => array('allowEmpty'    => true,
-                                        'default'       => NULL         ),
+        'sort'                 => array('allowEmpty'    => true,),
         // can be array of sort dirs for multiple sort rows
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
                                         'default'       => 'ASC'        ),
-        'model'                => array('allowEmpty'    => true,
-                                        'default'       => NULL         ),
-        'group'                => array('allowEmpty'    => true,
-                                        'default'       => NULL         ),
+        'model'                => array('allowEmpty'    => true),
+        'group'                => array('allowEmpty'    => true),
     );
 
     protected static $context = [];
@@ -128,7 +125,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         try {
             if (++$recursion > 1) return false;
 
-            list($application,) = explode('_', $this->model, 2);
+            [$application, ] = explode('_', $this->model, 2);
             $this->_customFields = Tinebase_CustomField::getInstance()
                 ->getCustomFieldsForApplication($application, $this->model)->getClone()
                 ->filter(fn($rec) => $rec->name = '#' . $rec->name);
@@ -495,8 +492,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     {
         $order = array();
         foreach ((array)$this->sort as $index => $sort) {
-            if ($tableName && $_schema && strpos($sort, '.') === false
-                && ! preg_match('/foreignSortCol/', $sort)
+            if ($tableName && $_schema && !str_contains((string) $sort, '.')
+                && ! preg_match('/foreignSortCol/', (string) $sort)
                 && array_key_exists($tableName, $_schema) && !in_array($sort, array_keys($_schema[$tableName]))
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
@@ -504,7 +501,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 continue;
             }
 
-            if (strpos($sort, '(') === false && strpos($sort, '.') === false) {
+            if (!str_contains((string) $sort, '(') && !str_contains((string) $sort, '.')) {
                 $found = false;
                 foreach ($columns as $col) {
                     if ($col[1] === $sort) {
@@ -555,7 +552,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 $_data['sort'] = [$_data['sort']];
             }
             foreach ($_data['sort'] as &$val) {
-                if (!preg_match('/^[#\w\.\-]+$/', $val)) {
+                if (!preg_match('/^[#\w\.\-]+$/', (string) $val)) {
                     $val = '';
                 }
             }

@@ -40,7 +40,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _setOptions(array $_options)
     {
-        $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
+        $_options['ignoreAcl'] ??= false;
         
         $this->_options = $_options;
     }
@@ -95,7 +95,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
             try{
                 $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
                 $node->path = $this->_path->flatpath;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $node = new Tinebase_Model_Tree_Node(array(
                     'name' => 'root',
                     'path' => '/',

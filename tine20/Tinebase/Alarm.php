@@ -108,7 +108,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         // loop alarms and call sendAlarm in controllers
         /** @var Tinebase_Model_Alarm $alarm */
         foreach ($alarms as $alarm) {
-            list($appName, , $itemName) = explode('_', $alarm->model);
+            [$appName, , $itemName] = explode('_', $alarm->model);
             try {
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
             } catch (Tinebase_Exception_AccessDenied $tead) {
@@ -206,7 +206,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
      */
     public function setAlarmsOfRecord(Tinebase_Record_Interface $_record, $_alarmsProperty = 'alarms')
     {
-        $model = get_class($_record);
+        $model = $_record::class;
         $alarms = $_record->{$_alarmsProperty};
         
         $currentAlarms = $this->getAlarmsOfRecord($model, $_record);
@@ -227,7 +227,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             if ($alarm->id) {
                 try {
                     $this->_backend->update($alarm);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $alarm->id = null;
                 }
             }

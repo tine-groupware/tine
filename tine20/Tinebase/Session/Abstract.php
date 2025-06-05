@@ -21,12 +21,12 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     /**
      * Default session directory name
      */
-    const SESSION_DIR_NAME = 'tine20_sessions';
+    public const SESSION_DIR_NAME = 'tine20_sessions';
     
     /**
      * constant for session namespace (tinebase) registry index
      */
-    const SESSION = 'session';
+    public const SESSION = 'session';
     
     protected static $_sessionEnabled = false;
     protected static $_isSetupSession = false;
@@ -280,15 +280,15 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
 
             case 'Redis':
                 if ($config->session) {
-                    $host = ($config->session->host) ? $config->session->host : 'localhost';
-                    $port = ($config->session->port) ? $config->session->port : 6379;
+                    $host = $config->session->host ?: 'localhost';
+                    $port = $config->session->port ?: 6379;
                     if ($config->session && $config->session->prefix) {
                         $prefix = $config->session->prefix;
                     } else {
                         $prefix = ($config->database && $config->database->tableprefix)
                             ? $config->database->tableprefix : 'tine';
                     }
-                    if (strpos($prefix, '_') === false) {
+                    if (!str_contains($prefix, '_')) {
                         $prefix .= '_';
                     }
                     $prefix = $prefix . 'SESSION_';
@@ -389,7 +389,7 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
             throw new Zend_Session_Exception('Session not enabled for request');
         }
 
-        $sessionNamespace = (is_null($sessionNamespace)) ? get_called_class() . '_Namespace' : $sessionNamespace;
+        $sessionNamespace = (is_null($sessionNamespace)) ? static::class . '_Namespace' : $sessionNamespace;
 
         try {
            return self::_getSessionNamespace($sessionNamespace);

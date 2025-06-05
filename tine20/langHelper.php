@@ -289,6 +289,22 @@ function generatePOTFiles($opts)
         `find . -type f -iname "*.vue" -exec sed "s/\"formatMessage/formatMessage/g" {} \; > $tempExtractDir/vueStrings.js`;
 
         `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.vue" -or -type f -iname "*.xml" -or -iname "*.twig" \
+        | grep -v node_modules | sort -d -f \
+        | xgettext \
+          --no-wrap \
+          --force-po \
+          --omit-header \
+          --output=translations/template.pot \
+          --language=Python \
+          --join-existing \
+          --from-code=utf-8 \
+          --keyword=formatMessage \
+          --keyword=translate \
+          --files-from=- \
+          2> /dev/null`;
+
+        # need to extract php files again separately
+        `find . -type f -iname "*.php" \
         | grep -v node_modules | sort -d -f | \
         xgettext \
           --no-wrap \
@@ -296,7 +312,7 @@ function generatePOTFiles($opts)
           --omit-header \
           --join-existing \
           --output=translations/template.pot \
-          --language=Python \
+          --language=PHP \
           --from-code=utf-8 \
           --keyword=formatMessage \
           --keyword=translate \

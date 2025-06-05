@@ -274,13 +274,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     flex: 1,
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields, field => {
-                        return field.specialType?.match(/^Addressbook_Model_ContactProperties_(Phone|Email)/) && !field.disabled;
+                        const matched = field.specialType?.match(/^Addressbook_Model_ContactProperties_(Phone|Email)/) && !field.disabled;
+                        if (matched && this.fixedFields && this.fixedFields.indexOfKey(field.key) >= 0) {
+                            field.uiconfig.readOnly = true;
+                        }
+                        return matched;
                     }), ['uiconfig.order'])
                 }), contactPropertiesGrid({
                     flex: 1,
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields,field => {
-                        return field.specialType?.match(/^Addressbook_Model_ContactProperties_(Url|InstantMessenger)/) && !field.disabled;
+                        const matched = field.specialType?.match(/^Addressbook_Model_ContactProperties_(Url|InstantMessenger)/) && !field.disabled;
+                        if (matched && this.fixedFields && this.fixedFields.indexOfKey(field.key) >= 0) {
+                            field.uiconfig.readOnly = true;
+                        }
+                        return matched;
                     }).concat(
                         _.find(this.recordClass.getModelConfiguration().fields, {fieldName: 'language'})
                     ), ['uiconfig.order'])
@@ -581,8 +589,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     onAfterRecordLoad: function () {
         let container = this.record.get('container_id')
 
-        if ( !this.record.id && ( !Ext.isObject(container) || !container.id ) ) {
-            container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'))
+        if (container) {
+            if (Ext.isString(container)) {
+                container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', container);
+            } else if (!Ext.isObject(container) || !container.id || !this.record.id) {
+                container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'))
+            }
             this.record.set('container_id', container)
         }
 

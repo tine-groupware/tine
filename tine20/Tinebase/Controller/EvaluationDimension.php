@@ -149,6 +149,15 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
                 $fun();
             }
         }
+
+        $fun = function() {
+            Setup_Controller::getInstance()->clearCache(false);
+        };
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+        } else {
+            $fun();
+        }
     }
 
     protected function removeDimensionFromModel(Tinebase_Model_EvaluationDimension $dimension, array $models): void
@@ -173,6 +182,15 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
                     $fun();
                 }
             }
+        }
+
+        $fun = function() {
+            Setup_Controller::getInstance()->clearCache(false);
+        };
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+        } else {
+            $fun();
         }
     }
 
@@ -220,7 +238,7 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         }
 
         foreach (array_keys($_fields) as $property) {
-            if (strpos($property, 'eval_dim_') === 0) {
+            if (str_starts_with($property, 'eval_dim_')) {
                 if (!array_key_exists($property, $table[TMCC::INDEXES])) {
                     $table[TMCC::INDEXES][$property] = [
                         TMCC::COLUMNS => [$property]

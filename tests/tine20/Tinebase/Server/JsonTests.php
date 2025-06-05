@@ -18,19 +18,21 @@ use Psr\Http\Message\RequestInterface;
  */
 class Tinebase_Server_JsonTests extends TestCase
 {
-    protected bool $_resetRateLimitConfig = false;
     protected $_imapConf = null;
+
+    protected function setUp(): void
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Inventory')) {
+            self::markTestSkipped('Tests need Inventory app');
+        }
+        parent::setUp();
+    }
 
     /**
      * tear down tests
      */
     protected function tearDown(): void
     {
-        if ($this->_resetRateLimitConfig) {
-            $rateLimit = new Tinebase_Server_RateLimit();
-            $rateLimit->purge(Tinebase_Core::getUser()->accountLoginName, 'Inventory.searchInventoryItems');
-            Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, []);
-        }
         if ($this->_imapConf !== null) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_imapConf);
             Tinebase_EmailUser::clearCaches();
@@ -214,6 +216,73 @@ class Tinebase_Server_JsonTests extends TestCase
         ), $smdArray['services']['Inventory.importInventoryItems']);
     }
 
+    public function testMFALoginSms()
+    {
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'userunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'sms',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_SmsUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_SmsUserConfig([
+                    Tinebase_Model_MFA_SmsUserConfig::FLD_CELLPHONENUMBER => '1234567890',
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([
+            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['sms'],
+        ], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'sms',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_SmsUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_GenericSmsConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_GenericSmsAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => [
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_URL => 'https://shoo.tld/restapi/message',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_BODY => '{"encoding":"auto","body":"{{ message }}","originator":"{{ app.branding.title }}","recipients":["{{ cellphonenumber }}"],"route":"2345"}',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_METHOD => 'POST',
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_HEADERS => [
+                    'Auth-Bearer' => 'unittesttokenshaaaaalalala'
+                ],
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_TTL => 600,
+                Tinebase_Model_MFA_GenericSmsConfig::FLD_PIN_LENGTH => 6,
+            ]
+        ]);
+        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
+
+        $mfa = Tinebase_Auth_MFA::getInstance('sms');
+        $mfa->getAdapter()->setHttpClientConfig([
+            'adapter' => ($httpClientTestAdapter = new Tinebase_ZendHttpClientAdapter())
+        ]);
+        $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
+
+        $mfaId = $this->_originalTestUser->mfa_configs->getFirstRecord()->getId();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $loginData = [
+            'username' => $credentials['username'],
+            'password' => $credentials['password'],
+            'MFAUserConfigId' => $mfaId,
+            'MFAPassword' => '',
+        ];
+        // we don't have core user before logged in
+        $this->_originalTestUser = Tinebase_Core::getUser();
+
+        $session = Tinebase_Session::getSessionNamespace();
+        try {
+            $session->currentAccount = null;
+            Tinebase_Core::unsetUser();
+            $resultString = $this->_handleRequest('Tinebase.login', $loginData, true);
+            $result = Tinebase_Helper::jsonDecode($resultString);
+            self::assertEquals('mfa required', $result['error']['message'] ?? '', print_r($result, true));
+        } finally {
+            $session->currentAccount = $this->_originalTestUser;
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+    }
+
     /**
      * @group ServerTests
      */
@@ -381,24 +450,51 @@ class Tinebase_Server_JsonTests extends TestCase
      */
     public function testRateLimit()
     {
-        $this->_resetRateLimitConfig = true;
-        $config = [
-            Tinebase_Core::getUser()->accountLoginName => [[
-                'method' => 'Inventory.searchInventoryItems',
-                'maxrequests' => 1,
-                'period' => 3600, // per hour
-            ]]
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_FRONTENDS][Tinebase_Server_Json::class] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD => 'Inventory.searchInventoryItems',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS => 1,
+                Tinebase_Model_RateLimit::FLD_PERIOD => 3600, // per hour
+            ]
         ];
-        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $config);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
 
         $params = [
             'filter' => [],
             'paging' => [],
         ];
-        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params);
-        self::assertStringContainsString('{"result":{"totalcount":', $response);
         $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
-        self::assertStringContainsString('{"error":{"code":-32000,"message":"Method is rate-limited: Inventory.searchInventoryItems"', $response);
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        self::assertStringContainsString('Method is rate-limited: Inventory.searchInventoryItems', $response);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testRateLimitByUser()
+    {
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_USER]['*'] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD => 'Inventory.search*',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS => 1,
+                Tinebase_Model_RateLimit::FLD_PERIOD => 3600, // per hour
+            ]
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
+
+        $params = [
+            'filter' => [],
+            'paging' => [],
+        ];
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        self::assertStringContainsString('Method is rate-limited: Inventory.searchInventoryItems', $response);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
     }
 
     /**

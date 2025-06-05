@@ -340,3 +340,6 @@ msgstr "Aufgaben ohne Verantwortlichen"
 
 msgid "Tasks"
 msgstr "Aufgaben"
+
+msgid "Create New Task"
+msgstr "Neue Aufgabe anlegen"

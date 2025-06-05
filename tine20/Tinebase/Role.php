@@ -116,7 +116,7 @@ class Tinebase_Role extends Tinebase_Acl_Roles
             default:
                 try {
                     Tinebase_Timemachine_ModificationLog::defaultApply($_modification, $this);
-                } catch (Tinebase_Exception_NotFound $tenf) {}
+                } catch (Tinebase_Exception_NotFound) {}
         }
     }
 }

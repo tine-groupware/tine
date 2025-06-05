@@ -14,7 +14,13 @@ use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 class SSO_Facade_OAuth2_ClientRepository implements ClientRepositoryInterface
 {
+    public function __construct(
+        protected string $requiredGrant = SSO_Config::OAUTH2_GRANTS_AUTHORIZATION_CODE
+    ) {}
 
+    /**
+     * we only return authorization grant enabled RPs
+     */
     public function getClientEntity($clientIdentifier): ?SSO_Facade_OAuth2_ClientEntity
     {
         $rp = SSO_Controller_RelyingParty::getInstance()->search(
@@ -23,7 +29,7 @@ class SSO_Facade_OAuth2_ClientRepository implements ClientRepositoryInterface
                 ['field' => SSO_Model_RelyingParty::FLD_CONFIG_CLASS, 'operator' => 'equals', 'value' =>
                     SSO_Model_OAuthOIdRPConfig::class],
             ]))->getFirstRecord();
-        return $rp ? new SSO_Facade_OAuth2_ClientEntity($rp) : null;
+        return $rp?->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS}->find(SSO_Model_OAuthGrant::FLD_GRANT, $this->requiredGrant) ? new SSO_Facade_OAuth2_ClientEntity($rp) : null;
     }
 
     public function validateClient($clientIdentifier, $clientSecret, $grantType): bool

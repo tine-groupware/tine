@@ -259,7 +259,9 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         ['name', 'description', 'email', 'account_only'].forEach((fieldName) => {this.getForm().findField(fieldName).setReadOnly(!allowEditSysFields)});
         
         this.memberGridPanel.setReadOnly(!allowEditSysFields);
-        this.mailingListPanel.setReadOnly(!allowEditSysFields || !containerData?.account_grants?.editGrant);
+        if (this.mailingListPanel) {
+            this.mailingListPanel.setReadOnly(!allowEditSysFields || !containerData?.account_grants?.editGrant);
+        }
         
         this.doLayout();
     }

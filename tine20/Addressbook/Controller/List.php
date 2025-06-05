@@ -848,6 +848,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             'xprops' => $group->xprops,
         ));
 
+        if ($group->list_id) {
+            $list->setId($group->list_id);
+        }
+
         if (! empty($list->email)) {
             $this->_checkEmailAddress($list->email);
         }
@@ -855,10 +859,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         // add modlog info
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($list, 'create');
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Add new list ' . $group->name);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($list->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Add new list ' . $group->name);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($list->toArray(), true));
+        }
 
         /** @var Addressbook_Model_List $list */
         $list = $this->_backend->create($list);

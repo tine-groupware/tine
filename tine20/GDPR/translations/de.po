@@ -48,20 +48,26 @@ msgstr "Standard"
 msgid "Default data provenance for ADB contacts"
 msgstr "Standard Datenherkunft für Adressbuch Kontakte"
 
-msgid "Manage consent page explain text"
-msgstr "Erklärungstext für Seite zur Verwaltung von Einwilligungen"
-
-msgid "Manage consent Email template"
-msgstr "E-Mail Schablone für Verwaltung von Einwilligungen"
-
 msgid "Languages Available"
 msgstr "Verfügbare Sprachen"
 
 msgid "List of the language in which the multilingual texts are laid out."
 msgstr "Liste der Sprache in denen die mehrsprachigen Texte gelegt werden."
 
-msgid "Consent management for"
-msgstr "Consent management für"
+msgid "Subscription container id"
+msgstr ""
+
+msgid "Subscription container id in Addressbook."
+msgstr ""
+
+msgid "GDPR registration secret string"
+msgstr ""
+
+msgid "GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable"
+msgstr ""
+
+msgid "GDPR template path"
+msgstr ""
 
 msgid "Data provenances"
 msgstr "Datenherkünfte"
@@ -82,7 +88,7 @@ msgid "Must not be contacted"
 msgstr "Darf nicht kontaktiert werden"
 
 msgid "This Contact withdrawed usage of his data for any purpose."
-msgstr "Dieser Kontakt hat die Erlaubnis zur Verwendung seiner Daten in jeder Weise wiederrufen."
+msgstr "Dieser Kontakt hat die Erlaubnis zur Verwendung seiner Daten in jeder Weise Widerrufen."
 
 msgid "Expiry Date"
 msgstr "Ablaufdatum"
@@ -111,32 +117,32 @@ msgstr "Abgelaufene anzeigen"
 msgid "GDPR Intended Purpose"
 msgstr "DSGVO Verwendungszweck"
 
-#, python-brace-format
-msgid "I am not {email}"
-msgstr "Ich bin nicht {email}"
-
-msgid "Data intended purpose"
-msgid_plural "Data intended purposes"
-msgstr[0] "Verwendungszweck"
-msgstr[1] "Verwendungszwecke"
+msgid "Description"
+msgstr "Beschreibung"
 
 msgid "Status"
 msgstr "Status"
 
+msgid "Manage"
+msgstr "Verwalten"
+
 msgid "Not decided"
 msgstr "Nicht entschieden"
 
+msgid "Agree"
+msgstr "Zustimmen"
+
 msgid "Withdraw date"
-msgstr "Wiederrufsdatum"
+msgstr "Widerrufsdatum"
+
+msgid "Withdraw"
+msgstr "Widerrufen"
 
 msgid "Agreement date"
 msgstr "Zustimmungsdatum"
 
-msgid "Enter your email address"
-msgstr "Ihre E-Mail Adresse eingeben"
-
-msgid "Get my link"
-msgstr "Meinen Link bekommen"
+msgid "Send"
+msgstr "Abschicken"
 
 msgid "I hereby withdraw the following data intended purpose"
 msgstr "Hiermit widerrufe ich die Verarbeitung meiner Daten zum folgenden Zweck"
@@ -145,7 +151,7 @@ msgid "I hereby accept the following data intended purpose"
 msgstr "Hiermit akzeptiere ich die Verarbeitung meiner Daten zum folgenden Zweck"
 
 msgid "Withdraw comment"
-msgstr "Wiederrufskommentar"
+msgstr "Widerrufskommentar"
 
 msgid "Agreement comment"
 msgstr "Zustimmungskommentar"
@@ -161,6 +167,16 @@ msgstr "Abbrechen"
 
 msgid "Confirm"
 msgstr "Bestätigen"
+
+msgid "Register"
+msgstr "Registrieren"
+
+#, python-brace-format
+msgid "I am not {email}"
+msgstr "Ich bin nicht {email}"
+
+msgid "Go to my manage consent link"
+msgstr "Mein Link zur Verwaltung der Zustimmung"
 
 msgid "Data Intended purpose of this mass mailing"
 msgstr "Verwendungszweck dieser Massen-Mail"
@@ -185,7 +201,7 @@ msgid "as contact has not consent to this purpose"
 msgstr "weil der Kontakt diesem Verwendungszweck nicht zugestimmt hat"
 
 msgid "as consent date has expired"
-msgstr "weil das Zustimmung wiederrufen wurde"
+msgstr "weil das Zustimmung Widerrufen wurde"
 
 msgid "consent date is set but not reached yet"
 msgstr "Das eingestellte Zustimmungsdatum ist noch nicht erreicht"
@@ -211,8 +227,19 @@ msgstr "Alle Kontakte, die diesem Verwendungszweck zugestimmt haben, als Empfän
 msgid "Compose mass mail without recipients"
 msgstr "Keine Empfänger der Massenmail hinzufügen"
 
-msgid "Description"
-msgstr "Beschreibung"
+msgid "Data intended purpose"
+msgid_plural "Data intended purposes"
+msgstr[0] "Verwendungszweck"
+msgstr[1] "Verwendungszwecke"
+
+msgid "Hide from self registration"
+msgstr ""
+
+msgid "Hide from self service"
+msgstr ""
+
+msgid "Registration link"
+msgstr ""
 
 msgid "GENDER_Data intended purpose"
 msgstr "male"
@@ -240,8 +267,14 @@ msgstr "DSGVO Datenablaufdatum"
 msgid "Enter your email"
 msgstr "Ihre E-Mail eingeben"
 
-msgid "Thank you for using GDPR module\""
-msgstr "Danke für die Nutzung des DSGVO Moduls"
+msgid "E-mail"
+msgstr "E-mail"
 
-msgid "To review or edit your consent please use the following link:"
-msgstr "Um ihre Einwilligungen zu verwalten folgen sie bitte diesem Link:"
+msgid "First Name"
+msgstr "Vorname"
+
+msgid "Last Name"
+msgstr "Nachname"
+
+msgid "Organization"
+msgstr "Unternehmen"

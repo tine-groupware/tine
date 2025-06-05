@@ -27,7 +27,7 @@ interface Tinebase_ActionQueue_Backend_Interface
      *
      * @param  mixed $message Message to send to the active queue
      */
-    public function send($message);
+    public function send(mixed $message);
 
     /**
      * return queue length

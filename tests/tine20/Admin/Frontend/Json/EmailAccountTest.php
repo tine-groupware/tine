@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -70,11 +70,11 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     {
         $this->_uit = $this->_json;
         $account = $this->_testSimpleRecordApi(
-            'EmailAccount', // use non-existant model to make simple api test work
+            'EmailAccount', // use non-existent model to make simple api test work
             'name',
             null,
             true,
-            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()],
+            ['type' => Felamimail_Model_Account::TYPE_SHARED_INTERNAL, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()],
             false
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
@@ -99,7 +99,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         return array_merge([
             'name' => 'unittest shared account',
             'email' => 'shared' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain(),
-            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'type' => Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
             'password' => '123',
             'grants' => [
                 [
@@ -184,13 +184,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $accountdata = self::getSharedAccountData(true, $accountdata);
         $account = $this->_json->saveEmailAccount($accountdata);
         self::assertEquals($accountdata['email'], $account['email']);
-        self::assertTrue(isset($account['grants']), 'grants missing');
-        self::assertEquals(1, count($account['grants']));
-        self::assertTrue(isset($account['grants'][0]['account_name']), 'account_id missing: '. print_r($account['grants'], true));
-        self::assertTrue(is_array($account['grants'][0]['account_name']), 'account_id needs to be resolved: '
-            . print_r($account['grants'], true));
-        self::assertEquals(1, $account['grants'][0]['addGrant'], 'add grant should be set: '
-            . print_r($account['grants'], true));
+        $this->_assertSharedAccount($account);
 
         $account['display_format'] = Felamimail_Model_Account::DISPLAY_PLAIN;
         // client sends empty pws - should not be changed!
@@ -222,6 +216,18 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         } else {
             return Admin_Controller_EmailAccount::getInstance()->get($account->getId());
         }
+    }
+
+    protected function _assertSharedAccount(array $account)
+    {
+        self::assertTrue(isset($account['grants']), 'grants missing');
+        self::assertEquals(1, count($account['grants']));
+        self::assertTrue(isset($account['grants'][0]['account_name']), 'account_id missing: '. print_r($account['grants'], true));
+        self::assertTrue(is_array($account['grants'][0]['account_name']), 'account_id needs to be resolved: '
+            . print_r($account['grants'], true));
+        self::assertEquals(1, $account['grants'][0]['addGrant'], 'add grant should be set: '
+            . print_r($account['grants'], true));
+
     }
 
     public function testEmailAccountApiSharedDuplicateAccount()
@@ -293,7 +299,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => Tinebase_Core::getUser()->accountEmailAddress,
-            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'type' => Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
             'password' => '123',
         ];
         try {
@@ -338,7 +344,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $credentials = TestServer::getInstance()->getTestCredentials();
         $accountdata = [
             'email' => Tinebase_Core::getUser()->accountEmailAddress,
-            'type' => Felamimail_Model_Account::TYPE_USER,
+            'type' => Felamimail_Model_Account::TYPE_USER_EXTERNAL,
             'user' => Tinebase_Core::getUser()->accountEmailAddress,
             'password' => $credentials['password'],
             'user_id' => $this->_personas['sclever']->toArray(),
@@ -366,7 +372,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
-            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'type' => Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
             'password' => '123',
         ];
         $account = $this->_json->saveEmailAccount($accountdata);
@@ -386,7 +392,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->_uit = $this->_json;
         $accountdata = [
             'email' => 'shooo@' . TestServer::getPrimaryMailDomain(),
-            'type' => Felamimail_Model_Account::TYPE_SHARED,
+            'type' => Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
             'password' => '123',
         ];
         $account = $this->_json->saveEmailAccount($accountdata);
@@ -732,7 +738,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
 
         $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
         $this->_emailAccounts[] = $emailAccount;
-        $this->_convertAccount($emailAccount, $user, Felamimail_Model_Account::TYPE_SHARED);
+        $this->_convertAccount($emailAccount, $user, Felamimail_Model_Account::TYPE_SHARED_INTERNAL);
         $updatedUser = Admin_Controller_User::getInstance()->get($user->getId());
         self::assertEmpty($updatedUser->accountEmailAddress);
         self::assertFalse(isset($updatedUser->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP]),
@@ -750,13 +756,13 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
      */
     protected function _convertAccount(Felamimail_Model_Account $emailAccount, $user, $convertTo, $checkUserMail = true): array
     {
-        if ($emailAccount->type !== Felamimail_Model_Account::TYPE_SHARED) {
+        if ($emailAccount->type !== Felamimail_Model_Account::TYPE_SHARED_INTERNAL) {
             $emailAccount->migration_approved = 1;
             Admin_Controller_EmailAccount::getInstance()->update($emailAccount);
         }
 
         $emailAccountArray = $emailAccount->toArray();
-        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED) {
+        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED_INTERNAL) {
             $emailAccountArray['password'] = Tinebase_Record_Abstract::generateUID(10);
         } else if (in_array($convertTo, [
             Felamimail_Model_Account::TYPE_SYSTEM,
@@ -790,7 +796,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         }
 
         // add current user to shared account
-        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED) {
+        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED_INTERNAL) {
             $convertedAccount['grants'][] = [
                 'readGrant' => true,
                 'editGrant' => true,
@@ -801,7 +807,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
             $this->_json->saveEmailAccount($convertedAccount);
         }
 
-        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED || $testUserAccount) {
+        if ($convertTo === Felamimail_Model_Account::TYPE_SHARED_INTERNAL || $testUserAccount) {
             $this->_sendMessageWithAccount($convertedAccount);
         }
 
@@ -832,7 +838,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
 
         Felamimail_Controller_AccountTest::checkInternalUserAccount($internalAccount);
 
-        return $this->_convertAccount($internalAccount, $user, Felamimail_Model_Account::TYPE_SHARED);
+        return $this->_convertAccount($internalAccount, $user, Felamimail_Model_Account::TYPE_SHARED_INTERNAL);
     }
 
     /**
@@ -1019,7 +1025,6 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         self::assertEmpty($result);
     }
 
-
     public function testListAsMailinglistUpdateXprops()
     {
         $adbJson = new Addressbook_Controller_ListTest();
@@ -1038,5 +1043,37 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         $account['adb_list']['xprops'][Addressbook_Model_List::XPROP_SIEVE_REPLY_TO] = 'both';
         $account = $this->_json->saveEmailAccount($account);
         static::assertEquals('both', $account['adb_list']['xprops'][Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]);
+    }
+
+    public function testEmailAccountApiSharedExternalAccount()
+    {
+        $this->_uit = $this->_json;
+        // just use default system account as shared account
+        $systemAccount = Felamimail_Controller_Account::getInstance()->getSystemAccount();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $accountData = self::getSharedAccountData(data: [
+            'type' => Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
+            'email' => $systemAccount->email,
+            'user' => $credentials['username'],
+            'password' => $credentials['password'],
+            'host' => $systemAccount->host,
+        ]);
+        $accountDataCreated = $this->_json->saveEmailAccount($accountData);
+        $this->_emailAccounts[] = $accountDataCreated;
+        $this->_assertSharedAccount($accountDataCreated);
+
+        $account = new Felamimail_Model_Account($accountDataCreated);
+        $account->resolveCredentials(false);
+        self::assertEquals($credentials['username'], $account->user);
+        self::assertEquals($credentials['password'], $account->password);
+
+        // try to find account in user accounts
+        $result = Felamimail_Controller_Account::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'id', 'value' => $account->getId()]
+            ]))->getFirstRecord();
+        self::assertNotNull($result);
+
+        $this->_uit->deleteEmailAccounts($account->getId());
     }
 }

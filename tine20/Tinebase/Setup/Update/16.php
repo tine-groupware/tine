@@ -13,15 +13,16 @@
  */
 class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
 {
-    const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
-    const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
-    const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
-    const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
-    const RELEASE016_UPDATE006 = __CLASS__ . '::update006';
-    const RELEASE016_UPDATE007 = __CLASS__ . '::update007';
-    const RELEASE016_UPDATE008 = __CLASS__ . '::update008';
+    public const RELEASE016_UPDATE000 = self::class . '::update000';
+    public const RELEASE016_UPDATE001 = self::class . '::update001';
+    public const RELEASE016_UPDATE002 = self::class . '::update002';
+    public const RELEASE016_UPDATE003 = self::class . '::update003';
+    public const RELEASE016_UPDATE004 = self::class . '::update004';
+    public const RELEASE016_UPDATE005 = self::class . '::update005';
+    public const RELEASE016_UPDATE006 = self::class . '::update006';
+    public const RELEASE016_UPDATE007 = self::class . '::update007';
+    public const RELEASE016_UPDATE008 = self::class . '::update008';
+    public const RELEASE016_UPDATE009 = self::class . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE => [
@@ -64,6 +65,12 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
                 self::FUNCTION_CONST => 'update003',
             ]
         ],
+        self::PRIO_NORMAL_APP_UPDATE        => [
+            self::RELEASE016_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
+            ]
+        ]
     ];
 
     public function update000()
@@ -190,5 +197,43 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Tinebase', '16.8', self::RELEASE016_UPDATE008);
+    }
+    public function update009()
+    {
+        if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
+            $pageNumber = 0;
+            $pageCount = 10;
+            $counter = 0;
+            $models = [
+                ['model' => 'Felamimail_Model_Account', 'application' => 'Felamimail']
+            ];
+            foreach ($models as $model) {
+                do {
+                    $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog')
+                        ->limitPage(++$pageNumber, $pageCount)
+                        ->where('new_value like "%\"password\":%"')
+                        ->where($this->_db->quoteIdentifier('application_id') . ' = ?',
+                            Tinebase_Application::getInstance()->getApplicationByName($model['application'])->getId())
+                        ->where($this->_db->quoteIdentifier('record_type') . ' = ?', $model['model']);
+                    $stmt = $select->query();
+                    $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+                    foreach ($rows as $row) {
+                        if (!str_contains((string) $row['new_value'], '"password":null')) {
+                            Tinebase_Core::getDB()->update(SQL_TABLE_PREFIX . 'timemachine_modlog', [
+                                'new_value' => preg_replace('/"password":"[^"]+"/', '"password":"******"', $row['new_value'])
+                            ], 'id = ' . Tinebase_Core::getDb()->quote($row['id']));
+                            $counter++;
+                        }
+                    }
+                } while (count($rows) >= $pageCount);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Updated ' . $counter . ' modlog records from record_type'
+                    . $model['model']);
+            }
+        }
+
+        $this->addApplicationUpdate('Tinebase', '16.9', self::RELEASE016_UPDATE009);
     }
 }

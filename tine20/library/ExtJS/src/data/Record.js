@@ -8,7 +8,7 @@
 const { extend, isPrimitive, isEmpty } = require("Ext/core/core/Ext");
 const Field = require("Ext/data/DataField");
 const MixedCollection = require("Ext/util/MixedCollection");
-const { get, isFunction, isUndefined, forEach } = require('lodash');
+const { get, isFunction, isUndefined, forEach, difference } = require('lodash');
 
 /**
  * @class Record
@@ -405,32 +405,15 @@ rec.{@link #commit}(); // updates the view
     /**
      * Creates a copy (clone) of this Record.
      * @param {String} id (optional) A new Record id, defaults to the id
-     * of the record being copied. See <code>{@link #id}</code>. 
-     * To generate a phantom record with a new id use:<pre><code>
-var rec = record.copy(); // clone the record
-Record.id(rec); // automatically generate a unique sequential id
-     * </code></pre>
+     * of the record being copied. See {@link #id}.
+     * To generate a phantom record with a new id use:
+     var rec = record.copy(); // clone the record
+     Ext.data.Record.id(rec); // automatically generate a unique sequential id
+     *
      * @return {Record}
      */
     copy : function(newId) {
-        const data = this.getData();
-        data[this.idProperty] = isUndefined(newId) ? data[this.idProperty] : newId;
-        const copy = Tine.Tinebase.data.Record.setFromJson(data, this.constructor);
-        forEach(this.data, (v, k) => {
-            if (isFunction(get(v, 'copy'))) {
-                this.data[k] = v.copy();
-            }
-        });
-        forEach(this.__metaFields, (m) => {
-            if (this.hasOwnProperty(m)) {
-                copy[m] = this[m];
-            }
-        });
-        copy.modified = [];
-        forEach(this.modified, (v, k) => {
-            copy.modified[k] = isFunction(get(v, 'copy')) ? v.copy() : this.modified[k];
-        });
-        return copy;
+        return new this.constructor(Ext.apply({}, this.data), newId || this.id);
     },
 
     /**

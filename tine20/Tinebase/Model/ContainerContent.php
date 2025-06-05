@@ -25,22 +25,22 @@ class Tinebase_Model_ContainerContent extends Tinebase_Record_Abstract
     /**
      * create action
      */
-    const ACTION_CREATE = 'create';
+    public const ACTION_CREATE = 'create';
     
     /**
      * update action
      */
-    const ACTION_UPDATE = 'update';
+    public const ACTION_UPDATE = 'update';
     
     /**
      * delete action
      */
-    const ACTION_DELETE = 'delete';
+    public const ACTION_DELETE = 'delete';
 
     /**
      * undelete action
      */
-    const ACTION_UNDELETE = 'undelete';
+    public const ACTION_UNDELETE = 'undelete';
     
     /**
      * key in $_validators/$_properties array for the filed which 

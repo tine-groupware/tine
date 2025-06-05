@@ -48,12 +48,12 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             }
         }
 
-        if (strpos($format, 'new') === 0) {
+        if (str_starts_with($format, 'new')) {
             $format = strtolower(substr($format, 3));
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . get_class($export) . ')'
+            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . $export::class . ')'
                 . ' in format ' . $format .
             ' / options: ' . print_r($_options, TRUE)
         );
@@ -139,7 +139,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $format = 'txt';
             $switchFormat = 'error';
         } catch (Exception $e) {
-            if (strpos(get_class($e), 'Zend_Db') === 0) {
+            if (str_starts_with($e::class, 'Zend_Db')) {
                 throw $e;
             }
             Tinebase_Exception::log($e);
@@ -244,9 +244,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         $fileSystem = Tinebase_FileSystem::getInstance();
 
         $request = Tinebase_Core::getRequest();
-        $syncHeader = $request->getHeader('X-TINE20-PREVIEWSERVICE-SYNC');
+        $syncHeader = ($request->getHeader('X-TINE20-PREVIEWSERVICE-SYNC') ?: null)?->getFieldValue() ?? false;
 
-        if ('regenerate' === $syncHeader) {
+        if ('regenerate' === $syncHeader || $_node->preview_count === 0) {
             Tinebase_FileSystem_Previews::getInstance()->deletePreviews([$_node->hash]);
             if (false === Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node)) {
                 $this->_handleFailure(); // defaults 500
@@ -256,14 +256,14 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         $previewNode = null;
         try {
             $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if ('true' === $syncHeader) {
                 if (false === Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node)) {
                     $this->_handleFailure(); // defaults 500
                 }
                 try {
                     $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $this->_handleFailure(404);
                 }
             } else {
@@ -320,7 +320,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Model_TempFile $tempFile
      * @param string $filesystemPath
      */
-    protected function _downloadTempFile(Tinebase_Model_TempFile $tempFile, $filesystemPath)
+    protected function _downloadTempFile(Tinebase_Model_TempFile $tempFile, $filesystemPath, $disposition = 'attachment')
     {
         Tinebase_Core::setExecutionLifeTime(0);
 
@@ -329,7 +329,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 . ' Download tempfile' . print_r($tempFile->toArray(), TRUE));
         }
 
-        $this->_prepareHeader($tempFile->name, $tempFile->contenttype);
+        $this->_prepareHeader($tempFile->name, $tempFile->type, $disposition);
         $this->_passthrough($filesystemPath);
     }
 
@@ -343,9 +343,11 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false, $disposition = 'attachment')
     {
-        if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+        $requiredGrant = $disposition === 'inline' ? Tinebase_Model_Grants::GRANT_READ : Tinebase_Model_Grants::GRANT_DOWNLOAD;
+
+        if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, $requiredGrant)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' User has no download grant for node ' . $node->getId());
+                __METHOD__ . '::' . __LINE__ . ' User has no ' . $requiredGrant . ' grant for node ' . $node->getId());
             $this->_handleFailure(403);
         }
 

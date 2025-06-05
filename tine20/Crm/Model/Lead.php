@@ -146,7 +146,7 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
             'end'            => [
                 self::LABEL                 => 'End',
                 self::TYPE                  => self::TYPE_DATETIME,
-                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ],
             'description'            => [
                 self::LABEL                 => 'Description',

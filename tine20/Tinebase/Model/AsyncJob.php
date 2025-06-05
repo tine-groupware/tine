@@ -22,19 +22,19 @@ class Tinebase_Model_AsyncJob extends Tinebase_Record_Abstract
      * pending status
      *
      */
-    const STATUS_RUNNING = 'running';
+    public const STATUS_RUNNING = 'running';
     
     /**
      * failure status
      *
      */
-    const STATUS_FAILURE = 'failure';
+    public const STATUS_FAILURE = 'failure';
 
     /**
      * success status
      *
      */
-    const STATUS_SUCCESS = 'success';
+    public const STATUS_SUCCESS = 'success';
 
     /**
      * identifier field name

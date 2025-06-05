@@ -24,12 +24,12 @@ class Tinebase_Cache_PerRequest
     /**
      * persistent cache entry only visible for one user
      */
-    const VISIBILITY_PRIVATE = 'private';
+    public const VISIBILITY_PRIVATE = 'private';
 
     /**
      * persistent cache entry visible for all users
      */
-    const VISIBILITY_SHARED  = 'shared';
+    public const VISIBILITY_SHARED  = 'shared';
     
     /**
      * the cache
@@ -210,7 +210,7 @@ class Tinebase_Cache_PerRequest
                         if ($this->_verboseLog) {
                             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ... not found in zend cache');
                         }
-                        
+
                         throw new Tinebase_Exception_NotFound('cacheId not found');
                     }
                     // race condition... is the value really false or did just somebody add the value to the cache?

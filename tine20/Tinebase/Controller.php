@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -20,13 +20,13 @@ use \Psr\Http\Message\RequestInterface;
  */
 class Tinebase_Controller extends Tinebase_Controller_Event
 {
-    const SYNC_CLASS_CONTACTS = 'Contacts';
-    const SYNC_CLASS_EVENTS = 'Events';
-    const SYNC_CLASS_TASKS = 'Tasks';
-    const SYNC_CLASS_EMAIL = 'Email';
+    public const SYNC_CLASS_CONTACTS = 'Contacts';
+    public const SYNC_CLASS_EVENTS = 'Events';
+    public const SYNC_CLASS_TASKS = 'Tasks';
+    public const SYNC_CLASS_EMAIL = 'Email';
 
-    const SYNC_API_ACTIVESYNC = 'ActiveSync';
-    const SYNC_API_DAV = 'DAV';
+    public const SYNC_API_ACTIVESYNC = 'ActiveSync';
+    public const SYNC_API_DAV = 'DAV';
 
     public const PAM_VALIDATE_REQUEST_TYPE = 'PAMvalidate';
 
@@ -179,7 +179,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
     }
 
-    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg, ?Tinebase_Model_FullUser $user)
+    protected function _throwMFAException(Tinebase_Model_AreaLockConfig $config, Tinebase_Record_RecordSet $feCfg, ?Tinebase_Model_FullUser $user): never
     {
         $e = new Tinebase_Exception_AreaLocked('mfa required');
         $e->setUser($user);
@@ -273,7 +273,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $_accessLog->account_id = $user->getId();
             $_accessLog->login_name = $user->accountLoginName;
             
-        } catch (Tinebase_Exception_NotFound $e) {
+        } catch (Tinebase_Exception_NotFound) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Account ' . $_username . ' not found in account storage.');
             $_accessLog->result = Tinebase_Auth::FAILURE_IDENTITY_NOT_FOUND;
         } catch (Zend_Db_Adapter_Exception $zdae) {
@@ -400,7 +400,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
              **/
             $cookieHeaders = array();
             foreach (headers_list() as $headerString) {
-                if (strpos($headerString, 'Set-Cookie: TINE20SESSID=') === 0) {
+                if (str_starts_with($headerString, 'Set-Cookie: TINE20SESSID=')) {
                     array_push($cookieHeaders, $headerString);
                 }
             }
@@ -494,41 +494,35 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param string $_oldPassword
      * @param string $_newPassword
-     * @param string $_pwType
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function changePassword($_oldPassword, $_newPassword, $_pwType = 'password')
+    public function changePassword($_oldPassword, $_newPassword)
     {
-        if ($_pwType === 'password' && ! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::PASSWORD_CHANGE, TRUE)) {
             throw new Tinebase_Exception_AccessDenied('Password change not allowed.');
         }
 
         $user = Tinebase_Core::getUser();
         $loginName = $user->accountLoginName;
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . " change $_pwType for $loginName");
+            . " change password for $loginName");
 
-        if ($_pwType === 'password') {
-            if (!Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
-                throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
-            }
-            if ($_oldPassword == $_newPassword) {
-                // @Todo translation didn work
-                throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
-            }
-            Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
-            Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = null;
-            Tinebase_Core::get(Tinebase_Core::SESSION)->currentAccount->password_must_change = false;
-        } else {
-            $pinAuth = Tinebase_Auth_Factory::factory(Tinebase_Auth::PIN);
-            $pinAuth->setIdentity($loginName)->setCredential($_oldPassword);
-            $authResult = $pinAuth->authenticate();
-            if (! $authResult->isValid()) {
-                throw new Tinebase_Exception_SystemGeneric('Old pin is wrong.'); // _('Old pin is wrong.')
-            }
-            Tinebase_User::getInstance()->setPin($user, $_newPassword);
+        if ((!($user->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD] ?? false)) && !Tinebase_Auth::getInstance()->isValidPassword($loginName, $_oldPassword)) {
+            throw new Tinebase_Exception_InvalidArgument('Old password is wrong.');
+        }
+        if ($_oldPassword == $_newPassword) {
+            // @Todo translation didn work
+            throw new Tinebase_Exception_SystemGeneric('The new password must be different from the old one.'); // _('The new password must be different from the old one.')
+        }
+        Tinebase_User::getInstance()->setPassword($user, $_newPassword, true, false);
+        Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword = null;
+        Tinebase_Core::get(Tinebase_Core::SESSION)->currentAccount->password_must_change = false;
+
+        if ($user->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD] ?? false) {
+            unset($user->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD]);
+            Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
     }
     
@@ -614,12 +608,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function getImage($application, $identifier, $location = '')
     {
-        if ($location === 'vfs') {
+        if ($location === Tinebase_Model_Image::LOCATION_VFS) {
             $node = Tinebase_FileSystem::getInstance()->get($identifier);
             $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . Tinebase_FileSystem::getInstance()->getPathOfNode($node, /* $getPathAsString */ true);
             $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($path));
 
-        } else if ($application == 'Tinebase' && $location == 'tempFile') {
+        } else if ($location === Tinebase_Model_Image::LOCATION_VFS_WATERMARK) {
+            $parentNode = Tinebase_FileSystem::getInstance()->get($identifier);
+            $watermark = Tinebase_FileSystem_RecordAttachments::getInstance()->getWatermark($parentNode);
+            $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . Tinebase_FileSystem::getInstance()->getPathOfNode($watermark, /* $getPathAsString */ true);
+            $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($path));
+
+        } else if ($application == 'Tinebase' && $location == Tinebase_Model_Image::LOCATION_TEMP_FILE) {
             $tempFile = Tinebase_TempFile::getInstance()->getTempFile($identifier);
             $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
 
@@ -642,7 +642,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 throw new Tinebase_Exception_UnexpectedValue('broken image');
             }
         }
-
 
         return $image;
     }
@@ -671,7 +670,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $startTime = time();
             /** @var DirectoryIterator $di */
             foreach (new DirectoryIterator($cacheDir) as $di) {
-                if (strpos($di->getFilename(), '.') === false && $di->isDir()) {
+                if (!str_contains($di->getFilename(), '.') && $di->isDir()) {
                     /** @var DirectoryIterator $fileIterator */
                     foreach (new DirectoryIterator($cacheDir . $di->getFilename()) as $fileIterator) {
                         if ($fileIterator->isFile() && $fileIterator->getCTime() < $time) {
@@ -696,7 +695,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $config = Tinebase_Core::getConfig();
         $backendType = Tinebase_Session_Abstract::getConfiguredSessionBackendType();
         
-        if (strpos($backendType, 'File') === 0) {
+        if (str_starts_with((string) $backendType, 'File')) {
             $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400;
             $path = Tinebase_Session_Abstract::getSessionDir();
             
@@ -740,7 +739,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function testSpy($filename=NULL, $sleep=0, $fail=NULL)
     {
-        $filename = $filename ? $filename : ('/tmp/'.__METHOD__);
+        $filename = $filename ?: '/tmp/'.__METHOD__;
         $counter = file_exists($filename) ? (int) file_get_contents($filename) : 0;
         
         file_put_contents($filename, ++$counter);
@@ -763,7 +762,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        switch (get_class($_eventObject)) {
+        switch ($_eventObject::class) {
             case Admin_Event_DeleteGroup::class:
                 foreach ($_eventObject->groupIds as $groupId) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -977,9 +976,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $userCfg = $userConfigIntersection->getById($mfaId);
             // FE send provider and password -> validate it
             if (!empty($password)) {
-                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($userCfg) {
-                            return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
-                        }) as $areaCfg) {
+                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(fn($rec) => in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS})) as $areaCfg) {
                     if (!$areaCfg->getBackend()->hasValidAuth()) {
                         $areaLock->unlock(
                             $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
@@ -993,13 +990,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 return;
             } else {
                 if (!Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
-                        ->sendOut($userCfg)) {
+                        ->sendOut($userCfg, $user)) {
                     throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation()
                         ->_('MFA send out failed, please try again or check with your system administrator'));
                 } else {
                     // success, FE to render input field
                     $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
-                        Tinebase_Model_MFA_UserConfig::class, [$userConfigIntersection->getById($mfaId)]), $user);
+                        Tinebase_Model_MFA_UserConfig::class, [$userCfg]), $user);
                 }
             }
         } else {
@@ -1069,7 +1066,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return ($session instanceof Zend_Session_Namespace && isset($session->userAccountChanged))
                 ? $session->userAccountChanged
                 : false;
-        } catch (Zend_Session_Exception $zse) {
+        } catch (Zend_Session_Exception) {
             return !! Tinebase_Core::get('userAccountChanged');
         }
     }
@@ -1239,6 +1236,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             $routeCollector->addRoute(['GET', 'POST'], '/export/{definitionId}', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Export_Abstract::class, 'expressiveApi'))->toArray());
+
+            $routeCollector->post('/sendSupportRequest', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'postSendSupportRequest', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
         });
 
         $r->addGroup('/autodiscover', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1277,6 +1279,52 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         });
     }
 
+    public function postSendSupportRequest(): \Psr\Http\Message\ResponseInterface
+    {
+        try {
+            $roleName = Tinebase_Config::getInstance()->{Tinebase_Config::SUPPORT_REQUEST_NOTIFICATION_ROLE};
+
+            if (!$roleName) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending support request' . PHP_EOL);
+                return new \Laminas\Diactoros\Response;
+            }
+
+            /** @var \Psr\Http\Message\ServerRequestInterface $request */
+            $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+            $post = json_decode((string)$request->getBody(), true);
+            if (!is_array($post) || !($post['message'] ?? false)) {
+                return new \Laminas\Diactoros\Response(status: 400);
+            }
+
+            // TODO FIXME make sure msg is pure text, no potentially malicious email content
+            $user = Tinebase_User::getInstance()->getUserByLoginName($post['accountLoginName']);
+
+            $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
+            $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
+            $recipients = Tinebase_User::getInstance()->getMultiple(array_unique($recipientIds), Tinebase_Model_FullUser::class)
+                ->contact_id;
+
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                $user->accountId));
+            $translate = Tinebase_Translation::getTranslation(_locale: $locale);
+            $subject = $translate->_('Support Request');
+            $messagePlain = strip_tags($post['message']);
+
+            Tinebase_Notification::getInstance()->send(
+                $user,
+                $recipients,
+                $subject,
+                $messagePlain
+            );
+            $response = new \Laminas\Diactoros\Response();
+            $response->getBody()->write(json_encode(['success' => true]));
+            return new $response;
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+        return (new \Laminas\Diactoros\Response(status: 500));
+    }
+
     public function publicPostAuthPAMvalidate(): \Psr\Http\Message\ResponseInterface
     {
         try {
@@ -1290,13 +1338,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             try {
                 $user = Tinebase_User::getInstance()->getFullUserByLoginName($body['user']);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 return $this->_publicPostAuthPAMvalidateReturnStatus(false);
             }
             if (isset($body['required-group'])) {
                 try {
                     $group = Tinebase_Group::getInstance()->getGroupByName($body['required-group']);
-                } catch (Tinebase_Exception_Record_NotDefined $tenf) {
+                } catch (Tinebase_Exception_Record_NotDefined) {
                     return $this->_publicPostAuthPAMvalidateReturnError('required group does not exist');
                 }
                 if (!in_array($group->getId(), Tinebase_Group::getInstance()->getGroupMemberships($user))) {
@@ -1323,32 +1371,32 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                         continue;
                     }
                 }
-                if (strlen($body['pass']) <= $mfaLength) {
+                if (strlen((string) $body['pass']) <= $mfaLength) {
                     continue;
                 }
-                if (Tinebase_Auth::getInstance()->authenticate($body['user'], substr($body['pass'], 0, 0 - $mfaLength))
+                if (Tinebase_Auth::getInstance()->authenticate($body['user'], substr((string) $body['pass'], 0, 0 - $mfaLength))
                         ->getCode() !== Tinebase_Auth::SUCCESS) {
                     continue;
                 }
 
                 $this->setRequestContext([
-                    'MFAPassword' => substr($body['pass'], 0 - $mfaLength),
+                    'MFAPassword' => substr((string) $body['pass'], 0 - $mfaLength),
                     'MFAId' => $uConf->getId(),
                 ]);
 
                 try {
-                    if ($this->login($body['user'], substr($body['pass'], 0, 0 - $mfaLength), Tinebase_Core::getRequest(), self::PAM_VALIDATE_REQUEST_TYPE)) {
+                    if ($this->login($body['user'], substr((string) $body['pass'], 0, 0 - $mfaLength), Tinebase_Core::getRequest(), self::PAM_VALIDATE_REQUEST_TYPE)) {
                         return $this->_publicPostAuthPAMvalidateReturnStatus(true);
                     }
-                } catch (Tinebase_Exception_AreaUnlockFailed $teauf) {
+                } catch (Tinebase_Exception_AreaUnlockFailed) {
                     $this->_publicPostAuthPAMvalidateReturnStatus(false);
                 }
             }
 
             return $this->_publicPostAuthPAMvalidateReturnStatus(false);
-        } catch (Tinebase_Exception_MaintenanceMode $temm) {
+        } catch (Tinebase_Exception_MaintenanceMode) {
             return $this->_publicPostAuthPAMvalidateReturnError('maintenance mode is on');
-        } catch (Exception $e) {
+        } catch (Exception) {
             return $this->_publicPostAuthPAMvalidateReturnError('internal server error');
         }
     }
@@ -1459,7 +1507,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
             try {
                 $imapBackend = Tinebase_EmailUser::getInstance();
-            } catch (Tinebase_Exception_Backend $teb) {
+            } catch (Tinebase_Exception_Backend) {
                 $imapBackend = null;
             }
 
@@ -1686,7 +1734,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $size = '135x50';
         }
 
-        $mime = urldecode($mime);
+        $mime = urldecode((string) $mime);
         if (! in_array($mime, array_merge(\Tinebase_ImageHelper::getSupportedImageMimeTypes(), ['image/svg+xml']))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown mime: ' . $mime
@@ -1708,7 +1756,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $path = Tinebase_Core::getLogo($type, $colorSchema, $mime === 'image/svg+xml');
             $blob = Tinebase_Helper::getFileOrUriContents($path);
 
-            if ($mime === 'image/svg+xml' && substr($blob, 0, 5) === '<?xml') {
+            if ($mime === 'image/svg+xml' && str_starts_with((string) $blob, '<?xml')) {
                 $imageBlob = $blob;
             } else {
                 $mime = $mime !== 'image/svg+xml' ? $mime : 'image/png'; // fallback to png
@@ -1733,7 +1781,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $response = new \Laminas\Diactoros\Response();
         $response->getBody()->write($imageBlob);
 
-        $mime = $mime === 'image/svg+xml' && substr($imageBlob, 0, 5) === '<?xml' ? $mime : 'image/png';
+        $mime = $mime === 'image/svg+xml' && str_starts_with((string) $imageBlob, '<?xml') ? $mime : 'image/png';
         return $response
             ->withAddedHeader('Content-Type', $mime);
     }
@@ -1746,7 +1794,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
             Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
 
-            if (null === ($queueState = json_decode(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+            if (null === ($queueState = json_decode((string) Tinebase_Application::getInstance()->getApplicationState('Tinebase',
                     Tinebase_Application::STATE_ACTION_QUEUE_STATE), true))) {
                 $queueState = [
                     'lastFullCheck' => 0,
@@ -1764,10 +1812,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 'actionQueueLR' => ['dataWarn' => 60, 'dataErr' => 5 * 60],
             ];
 
-            foreach ([
+            foreach (array_merge([
                         'actionQueue' => Tinebase_ActionQueue::getInstance(),
+                    ], Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING} ? [
                         'actionQueueLR' => Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)
-                     ] as $qName => $actionQueue) {
+                    ] : []) as $qName => $actionQueue) {
 
                 $missingQueueKeys = [];
                 $missingDaemonKeys = [];
@@ -1858,13 +1907,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_ACTIVE} &&
                 Tinebase_ActionQueue::getInstance()->hasAsyncBackend()) {
             Tinebase_ActionQueue::getInstance()->executeAction([
-                'action'    => 'Tinebase.measureActionQueue',
-                'params'    => [microtime(true)]
+                'action' => 'Tinebase.measureActionQueue',
+                'params' => [microtime(true)]
             ]);
-            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->executeAction([
-                'action'    => 'Tinebase.measureActionQueueLongRun',
-                'params'    => [microtime(true)]
-            ]);
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::ACTIONQUEUE}->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING}) {
+                Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->executeAction([
+                    'action' => 'Tinebase.measureActionQueueLongRun',
+                    'params' => [microtime(true)]
+                ]);
+            }
         }
         return true;
     }
@@ -1936,7 +1987,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             foreach ($userIds as $userId) {
                 try {
                     $user = Tinebase_User::getInstance()->getFullUserById($userId);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $userId);
                 }
                 $newUserIds[] = $user->getId();

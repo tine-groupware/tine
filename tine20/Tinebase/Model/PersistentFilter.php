@@ -93,8 +93,8 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
                 }
             } else {
                 try {
-                    $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $_data['filters'] = static::getFilterGroup($_data['model'], $_data['filters']);
+                } catch (Tinebase_Exception_NotFound) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                         Tinebase_Core::getLogger()->warn(
                             __METHOD__ . '::' . __LINE__ . ' ' . $errorMessage
@@ -124,7 +124,7 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
         parent::setFromJsonInUsersTimezone($_data);
         
         if (isset($filtersData)) {
-            $this->filters = $this->getFilterGroup($_data['model'], $filtersData, TRUE);
+            $this->filters = static::getFilterGroup($_data['model'], $filtersData, TRUE);
         }
     }
     

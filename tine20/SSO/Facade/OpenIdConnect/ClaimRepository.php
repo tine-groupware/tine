@@ -30,6 +30,7 @@ class SSO_Facade_OpenIdConnect_ClaimRepository implements ClaimRepositoryInterfa
             'family_name',
             'email',
             'groups',
+            'tine/matrix_synapse_integrator/matrix_id'
         ];
     }
 
@@ -43,6 +44,7 @@ class SSO_Facade_OpenIdConnect_ClaimRepository implements ClaimRepositoryInterfa
             'family_name',
             'email',
             'groups',
+            'tine/matrix_synapse_integrator/matrix_id'
         ], $json ?? []);
     }
 }

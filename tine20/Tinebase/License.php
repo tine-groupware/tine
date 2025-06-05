@@ -25,17 +25,17 @@ class Tinebase_License
      * 'limitedUserTime' => limited by time and users
      * 'onDemand'    => days = 365, maxUsersExisting = 0, separate way of reporting the current users
      */
-    const LICENSE_TYPE_LIMITED_USER         = 'limitedUser';
-    const LICENSE_TYPE_LIMITED_TIME         = 'limitedTime';
-    const LICENSE_TYPE_LIMITED_USER_TIME    = 'limitedUserTime';
-    const LICENSE_TYPE_ON_DEMAND            = 'onDemand';
+    public const LICENSE_TYPE_LIMITED_USER         = 'limitedUser';
+    public const LICENSE_TYPE_LIMITED_TIME         = 'limitedTime';
+    public const LICENSE_TYPE_LIMITED_USER_TIME    = 'limitedUserTime';
+    public const LICENSE_TYPE_ON_DEMAND            = 'onDemand';
     
     /**
      * license status
      */
-    const STATUS_NO_LICENSE_AVAILABLE = 'status_no_license_available';
-    const STATUS_LICENSE_INVALID = 'status_license_invalid';
-    const STATUS_LICENSE_OK = 'status_license_ok';
+    public const STATUS_NO_LICENSE_AVAILABLE = 'status_no_license_available';
+    public const STATUS_LICENSE_INVALID = 'status_license_invalid';
+    public const STATUS_LICENSE_OK = 'status_license_ok';
 
     /**
      * @var Tinebase_License_Interface

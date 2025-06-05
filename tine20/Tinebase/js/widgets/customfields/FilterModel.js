@@ -108,6 +108,8 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
         Ext.each(cfConfigs, function(cfConfig) {
             try {
                 var cfDefinition = cfConfig.get('definition');
+                if (_.get(cfDefinition,'uiconfig.disabled')) return;
+
                 switch (cfDefinition.type) {
                     case 'record':
                         if (_.get(window, cfDefinition.recordConfig.value.records)) {

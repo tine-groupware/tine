@@ -131,7 +131,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             $offset = 0;
             foreach ($shadowPathParts as $sPart) {
                 ++$offset;
-                if (0 === strpos($sPart, $shadowPart)) {
+                if (str_starts_with($sPart, $shadowPart)) {
                     break;
                 }
             }
@@ -226,7 +226,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 
         try {
             $pathNeighbours = $_record->getPathNeighbours();
-        } catch (Tinebase_Exception_Record_StopPathBuild $e) {
+        } catch (Tinebase_Exception_Record_StopPathBuild) {
             $this->_recursionCounter--;
             if (0 === $this->_recursionCounter)
             {
@@ -320,7 +320,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 
             foreach($queue as $params) {
                 if (false !== $params) {
-                    call_user_func_array(array($this, 'rebuildPaths'), $params);
+                    call_user_func_array($this->rebuildPaths(...), $params);
                 }
             }
         }

@@ -114,15 +114,14 @@ class Tinebase_TransactionManager
     /**
      * starts a transaction
      *
-     * @param   mixed $_transactionable
      * @return  string transactionId
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function startTransaction($_transactionable)
+    public function startTransaction(mixed $_transactionable)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . "  startTransaction request");
-        if (! in_array($_transactionable, $this->_openTransactionables)) {
+        if (! in_array($_transactionable, $this->_openTransactionables, true)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                 __METHOD__ . '::' . __LINE__ . "  new transactionable. Starting transaction on this resource");
             if ($_transactionable instanceof Zend_Db_Adapter_Abstract) {
@@ -213,12 +212,9 @@ class Tinebase_TransactionManager
                 foreach ($afterCallbacks as $callable) {
                     try {
                         call_user_func_array($callable[0], $callable[1]);
-                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                    } catch (Tinebase_Exception_AccessDenied | Tinebase_Exception_NotFound | RedisException $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                            __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     } catch (Exception $e) {
                         // we don't want to fail after we committed. Otherwise, a rollback maybe triggered outside which
                         // actually can't roll back anything anymore as we already committed.
@@ -279,10 +275,10 @@ class Tinebase_TransactionManager
     /**
      * register a callable to call just before the real commit happens
      *
-     * @param array $callable
+     * @param array|callable $callable
      * @param array $param
      */
-    public function registerOnCommitCallback(array $callable, array $param = array())
+    public function registerOnCommitCallback(array|callable $callable, array $param = array())
     {
         $this->_onCommitCallbacks[] = array($callable, $param);
     }
@@ -344,6 +340,18 @@ class Tinebase_TransactionManager
     {
         if (false !== ($pos = array_search($_transactionable, $this->_openTransactionables, true))) {
             unset($this->_openTransactionables[$pos]);
+        }
+    }
+
+    public function unitTestRemoveTransactionables()
+    {
+        $this->_openTransactionables = [];
+    }
+
+    public function unitTestAddTransactionable($_transactionable)
+    {
+        if (false === array_search($_transactionable, $this->_openTransactionables, true)) {
+            $this->_openTransactionables[] = $_transactionable;
         }
     }
 }

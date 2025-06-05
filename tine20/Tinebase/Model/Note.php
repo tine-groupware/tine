@@ -37,49 +37,49 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
      *
      * @staticvar string
      */
-    const SYSTEM_NOTE_NAME_NOTE = 'note';
+    public const SYSTEM_NOTE_NAME_NOTE = 'note';
     
     /**
      * system note type: telephone
      *
      * @staticvar string
      */
-    const SYSTEM_NOTE_NAME_TELEPHONE = 'telephone';
+    public const SYSTEM_NOTE_NAME_TELEPHONE = 'telephone';
     
     /**
      * system note type: email
      *
      * @staticvar string
      */
-    const SYSTEM_NOTE_NAME_EMAIL = 'email';
+    public const SYSTEM_NOTE_NAME_EMAIL = 'email';
     
     /**
      * system note type: created
      * 
      * @staticvar string
      */
-    const SYSTEM_NOTE_NAME_CREATED = 'created';
+    public const SYSTEM_NOTE_NAME_CREATED = 'created';
     
     /**
      * system note type: changed
      * 
      * @staticvar string
      */
-    const SYSTEM_NOTE_NAME_CHANGED = 'changed';
+    public const SYSTEM_NOTE_NAME_CHANGED = 'changed';
 
     /**
      * system note type: avscan
      *
      * @staticvar string
      */
-    const SYSTEM_NOTE_AVSCAN = 'avscan';
+    public const SYSTEM_NOTE_AVSCAN = 'avscan';
 
     /**
      * system note type: revealPassword
      *
      * @staticvar string
      */
-    const SYSTEM_NOTE_REVEAL_PASSWORD = 'revealPassword';
+    public const SYSTEM_NOTE_REVEAL_PASSWORD = 'revealPassword';
 
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -193,7 +193,7 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
             try {
                 $creator = Tinebase_User::getInstance()->getUserById($this->created_by);
             }
-            catch (Tinebase_Exception_NotFound $e) {
+            catch (Tinebase_Exception_NotFound) {
                 $creator = Tinebase_User::getInstance()->getNonExistentUser();
             }
              

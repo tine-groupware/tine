@@ -8,24 +8,42 @@ beforeAll(async () => {
 });
 
 describe('mainScreen', () => {
-    let Apps = ['Admin', 'Adressbuch', 'Dateimanager', 'Kalender', 'Crm', 'Aufgaben', 'E-Mail', 'Sales', 'Human Resources', 'Zeiterfassung', 'Inventarisierung'];
-
+    //let Apps = ['Admin', 'Adressbuch', 'Dateimanager', 'Kalender', 'Crm', 'Aufgaben', 'E-Mail', 'Sales', 'Human Resources', 'Zeiterfassung', 'Inventarisierung'];
+    let Apps = [
+        {text:'Admin', id:'admin'},
+        {text:'Adressbuch', id:'addressbook'},
+        {text:'Aufgaben', id:'tasks'},
+        {text:'BeispielAnwendung', id:'exampleapplication'},
+        {text:'Crm', id:'crm'},
+        {text:'DFCom', id:'dfcom'},
+        {text:'Dateimanager', id:'filemanager'},
+        {text:'FAQ', id:'simplefaq'},
+        {text:'E-Mail', id:'felamimail'},
+        {text:'EventManager', id:'eventmanager'},
+        {text:'Human Resources', id:'humanresources'},
+        {text:'Inventarisierung', id:'inventory'},
+        {text:'Kalender', id:'calendar'},
+        {text:'Klassen', id:'courses'},
+        {text:'Lesezeichen', id:'bookmarks'},
+        {text:'Projekte', id:'projects'},
+        {text:'Sales', id:'sales'},
+        {text:'Stammdaten', id:'coredata'},
+        {text:'Zeiterfassung', id:'timetracker'}
+    ];
     test('all apps', async () => {
+        await page.waitForSelector('.action_menu.application-menu-btn');
         for (let i = 0; i < Apps.length; i++) {
+            await expect(page).toClick('.action_menu.application-menu-btn');
+            await page.waitForSelector('.popover-body');
             try {
-                await page.waitForTimeout(1000);
-                await expect(page).toClick('.action_menu.application-menu-btn');
-                await page.waitForTimeout(1000);
-                await expect(page).toClick('.application-menu-item__text', {text: Apps[i]});
+                await expect(page).toClick('.application-menu-item__text', {text: Apps[i].text});
+                await page.waitForSelector('#tine-docked-app-'+Apps[i].id);
             } catch (e) {
-                //console.log('Application ' + Apps[i] + ' don´t install');
+                //console.log('Application ' + Apps[i] + ' isn\'t install');
             }
         }
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.action_menu.application-menu-btn');
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.application-menu-item__text', {text: 'Adressbuch'});
-        await page.waitForTimeout(5000);
+        await expect(page).toClick('#tine-docked-app-addressbook');
+        await page.waitForSelector('.tine-bar__active-app' , {text: 'Adressbuch'});
         await page.screenshot({path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
     })
 });
@@ -34,10 +52,11 @@ describe('usersettings', () => {
     let newPage;
     let settings;
     test('open usersettings', async () => {
+        await page.waitForTimeout(2000);
         await page.click('.account-user-avatar');
         await page.waitForTimeout(2000);
-        settings = await page.$$('.main-menu-item__icon.action_adminMode');
-        await settings[0].hover();
+        settings = await expect(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
+        await settings.hover();
         await page.screenshot({
             path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}
@@ -45,9 +64,9 @@ describe('usersettings', () => {
     });
     test('usersettings', async () => {
         newPage = lib.getNewWindow();
-        await settings[0].click();
+        await settings.click();
         newPage = await newPage;
-        await newPage.waitForTimeout(2000);
+        await newPage.waitForTimeout(5000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});
     });
 

@@ -17,16 +17,13 @@
  */
 class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backend_Interface
 {
-    protected $_options;
-    
     /**
      * Constructor
      *
-     * @param  array  $options  An array having configuration data
+     * @param array $_options An array having configuration data
      */
-    public function __construct($options)
+    public function __construct(protected $_options)
     {
-        $this->_options = $options;
     }
 
     /**
@@ -62,9 +59,9 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      *
      * @param  integer  $jobId  the id of the job
      * @throws Tinebase_Exception_NotImplemented
-     * @return array           the job
+     * @return never
      */
-    public function receive($jobId)
+    public function receive($jobId): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -75,7 +72,7 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      * @param  string  $jobId  the id of the job
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function delete($jobId)
+    public function delete($jobId): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }

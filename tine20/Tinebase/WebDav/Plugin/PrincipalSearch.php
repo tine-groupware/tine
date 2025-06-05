@@ -65,7 +65,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
         $server->xml->namespaceMap[\Sabre\CalDAV\Plugin::NS_CALDAV] = 'cal';
         $server->xml->namespaceMap[\Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
 
-        $server->on('report',array($this,'report'));
+        $server->on('report',$this->report(...));
         
         array_push($server->protectedProperties,
             // CalendarServer extensions

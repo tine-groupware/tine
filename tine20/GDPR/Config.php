@@ -34,9 +34,11 @@ class GDPR_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_ADB_CONTACT_DATA_PROVENANCE = 'defaultADBContactDataProvenance';
-    const MANAGE_CONSENT_PAGE_EXPLAIN_TEXT = 'manageConsentPageExplainText';
-    const MANAGE_CONSENT_EMAIL_TEMPLATE = 'manageConsentEmailTemplate';
+
     const LANGUAGES_AVAILABLE = 'languagesAvailable';
+    const SUBSCRIPTION_CONTAINER_ID = 'subscriptionContainerId';
+    const JWT_SECRET = 'jwtSecret';
+    const TEMPLATE_PATH = 'templatePath';
 
     /**
      * (non-PHPdoc)
@@ -78,34 +80,6 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => '',
         ],
-        self::MANAGE_CONSENT_PAGE_EXPLAIN_TEXT => [
-            //_('Manage consent page explain text')
-            self::LABEL                 => 'Manage consent page explain text',
-            //_('Manage consent page explain text')
-            self::DESCRIPTION           => 'Manage consent page explain text',
-            self::TYPE                  => self::TYPE_ARRAY,
-            self::CLIENTREGISTRYINCLUDE => false,
-            self::SETBYADMINMODULE      => true,
-            self::SETBYSETUPMODULE      => true,
-            self::DEFAULT_STR           => [
-                'en' => 'Example GDPR text',
-                'de' => 'Beispiel Text für GDPR'
-            ],
-        ],
-        self::MANAGE_CONSENT_EMAIL_TEMPLATE => [
-            //_('Manage consent Email template')
-            self::LABEL                 => 'Manage consent Email template',
-            //_('Manage consent Email template')
-            self::DESCRIPTION           => 'Manage consent Email template',
-            self::TYPE                  => self::TYPE_ARRAY,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::SETBYSETUPMODULE      => true,
-            self::DEFAULT_STR           => [
-                'de' => '<a href="{{manageconstentlink}}">Abmelden</a>',
-                'en' => '<a href="{{manageconstentlink}}">Unsubscribe</a>'
-            ],
-        ],
         self::LANGUAGES_AVAILABLE => [
             self::LABEL                 => 'Languages Available', //_('Languages Available')
             self::DESCRIPTION           => 'List of the language in which the multilingual texts are laid out.', //_('List of the language in which the multilingual texts are laid out.')
@@ -120,6 +94,30 @@ class GDPR_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR           => 'en',
             ],
+        ],
+        self::SUBSCRIPTION_CONTAINER_ID => [
+            self::LABEL                 => 'Subscription container id', //_('Subscription container id')
+            self::DESCRIPTION           => 'Subscription container id in Addressbook.', //_('Subscription container id in Addressbook.')
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+        ],
+        self::JWT_SECRET => [
+            //_('GDPR registration secret string')
+            self::LABEL                 => 'GDPR registration secret string',
+            //_('GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable')
+            self::DESCRIPTION           => 'GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::TEMPLATE_PATH => [
+            //_('GDPR template path')
+            self::LABEL                 => 'GDPR template path',
+            //_('GDPR template path')
+            self::DESCRIPTION           => 'GDPR template path',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
         ],
     ];
     

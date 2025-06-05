@@ -18,7 +18,60 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
         const i18n = new Locale.Gettext();
         i18n.textdomain('SSO');
         const rpInfo = window.initialData.relyingParty;
+        const url = window.initialData.url || `${window.location.href}`;
 
+        if (_.get(window, 'initialData.sso.isDeviceAuth') && _.get(window, 'initialData.sso.user')) {
+            (async () => {
+                if (_.get(window, 'initialData.sso.success')) {
+                    await Ext.Msg.show({
+                        buttons: null,
+                        icon: Ext.MessageBox.INFO_SUCCESS,
+                        title: i18n._('Authentication Successfully'),
+                        closeable: false,
+                        msg: (rpInfo.label ?
+                            String.format(i18n._('Please proceed with {0}.'), rpInfo.label) :
+                            i18n._('Please proceed with your device or programm.')) + '<br /><br />' + i18n._('You can close this page now.')
+                    });
+                }
+
+                if (_.get(window, 'initialData.sso.deviceError')) {
+                    await Ext.Msg.show({
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.ERROR,
+                        title: i18n._('Could not Find Device'),
+                        msg: i18n._('No device authentication request found, please recheck your code!'),
+                    });
+                }
+                Ext.Msg.show({
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.QUESTION,
+                    title: i18n._('Enter Device Code'),
+                    msg: rpInfo.label ?
+                        String.format(i18n._('Please enter the device code for {0}.'), rpInfo.label) :
+                        i18n._('Please enter the device code provided by external device or programm.'),
+                    closeable: false,
+                    prompt: true,
+                    value: initialData.sso.userCode || '',
+                    fn: async (btn, userCode) => {
+                        document.body.innerHTML =`
+                            <body>
+                                <p class="pulsate">Authenticating Device...</p>
+                                <form method="post" action="${url.replace(/device\/user\/.*$/, `device/user/${userCode}`)}">
+                                    <input type="hidden" name="confirmed" value="1"/>
+                                    <input type="submit" value="continue" style="display: none;"/>
+                                </form>
+                                <style>
+                                    .pulsate {animation: pulsate 1s ease-out; animation-iteration-count: infinite;}
+                                    @keyframes pulsate {0% { opacity: 0.5; } 50% { opacity: 1.0; } 100% { opacity: 0.5; }}
+                                </style>
+                            </body>`;
+                        document.getElementsByTagName("form")[0].submit()
+
+                    }
+                });
+            })();
+            return false
+        }
         mainCardPanel.layout.container.remove(Tine.loginPanel);
         Tine.loginPanel = new Tine.Tinebase.LoginPanel({
             defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
@@ -27,13 +80,16 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
             // headsUpText: i18n._('SSO'),
             infoText:
                 (rpInfo.logo ? '<img class="tb-login-infotext-logo" src="' + rpInfo.logo + '" />' : '') +
-                (rpInfo.label ? '<p class="tb-login-infotext-label">' + String.format(i18n._('After successful login you will be redirected to {0}'), rpInfo.label)  + '</p>' : '') +
+                (rpInfo.label ? '<p class="tb-login-infotext-label">' + (window.initialData.sso?.userCode ?
+                    String.format(i18n._('Login for {0} (external device/programm)'), rpInfo.label) :
+                    String.format(i18n._('After successful login you will be redirected to {0}'), rpInfo.label))  +
+                '</p>' : '') +
                 (rpInfo.description ? '<p class="tb-login-infotext-description">' + rpInfo.description + '</p>' : ''),
             scope: this,
             onLoginPress: function (additionalParams) {
                 Ext.MessageBox.wait(window.i18n._hidden('Logging you in...'), window.i18n._hidden('Please wait'));
 
-                const url = window.initialData.url || `${window.location.href}`;
+
                 const values = this.getFormValue()
                 const formData = new FormData();
                 formData.append('username', values.username);

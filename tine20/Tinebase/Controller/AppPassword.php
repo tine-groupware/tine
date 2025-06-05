@@ -102,9 +102,9 @@ class Tinebase_Controller_AppPassword extends Tinebase_Controller_Record_Abstrac
     protected function _inspectPwd(Tinebase_Model_AppPassword $_record): void
     {
         $appPwd = $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN};
-        if (strlen($appPwd) !== Tinebase_Controller_AppPassword::PWD_LENGTH || strpos($appPwd, Tinebase_Controller_AppPassword::PWD_SUFFIX) !== Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) {
+        if (strlen((string) $appPwd) !== Tinebase_Controller_AppPassword::PWD_LENGTH || strpos((string) $appPwd, Tinebase_Controller_AppPassword::PWD_SUFFIX) !== Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) {
             return;
         }
-        $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN} = sha1($appPwd);
+        $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN} = sha1((string) $appPwd);
     }
 }

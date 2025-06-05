@@ -1,14 +1,13 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  * 
  * @package     Felamimail
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo        move more fields (like folder names) to xprops)
  * @todo        convert to MCV2
  */
 
@@ -156,7 +155,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null
                 ],
                 self::LENGTH => 40,
             ],
@@ -164,16 +162,21 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::LABEL => 'Type', // _('Type')
                 self::NAME => 'mailAccountType',
+                self::CONFIG => [
+                    self::APPLICATION => Felamimail_Config::APP_NAME,
+                ],
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER],
+                    Zend_Filter_Input::DEFAULT_VALUE => Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
                      ['InArray', [
                          Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,
-                         Tinebase_EmailUser_Model_Account::TYPE_USER,
-                         Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                         Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
+                         Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
+                         Tinebase_EmailUser_Model_Account::TYPE_SHARED_EXTERNAL,
                          Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
                          Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
-                     ]]
+                     ]],
+                ],
             ],
             'name' => [
                 self::TYPE => self::TYPE_STRING,
@@ -235,7 +238,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 # self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class => null,
@@ -413,7 +415,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SHY => true,
             ],
             'signatures' => [
-                self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 self::LABEL => 'Signatures', // _('Signatures')
                 self::TYPE => self::TYPE_RECORDS,
                 self::NULLABLE => true,
@@ -495,7 +497,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 # self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::OMIT_MOD_LOG => true,
                 self::INPUT_FILTERS             => [
@@ -571,7 +572,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::INPUT_FILTERS             => [],
                 self::NULLABLE                  => true,
@@ -581,6 +581,9 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LABEL => 'Auto-move notifications', // _('Auto-move notifications')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NAME => Felamimail_Config::SIEVE_NOTIFICATION_MOVE_STATUS,
+                self::CONFIG => [
+                    self::APPLICATION => Felamimail_Config::APP_NAME,
+                ],
             ],
             'sieve_vacation' => [
                 self::TYPE => self::TYPE_VIRTUAL,
@@ -607,7 +610,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::NULLABLE                  => true
             ],
@@ -847,7 +849,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
 
-            if ($this->type === self::TYPE_SYSTEM || $this->type === self::TYPE_USER || $this->type === self::TYPE_USER_INTERNAL) {
+            if (in_array($this->type, [
+                self::TYPE_SYSTEM,
+                self::TYPE_USER_EXTERNAL,
+                self::TYPE_USER_INTERNAL
+            ])) {
                 $credentials = Tinebase_Core::getUserCredentialCache();
                 if (! $credentials) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
@@ -868,7 +874,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     return false;
                 }
                 $credentialCachePwd = substr($credentials->password, 0, 24);
-            } elseif ($this->type === self::TYPE_SHARED || $this->type === self::TYPE_ADB_LIST) {
+            } elseif (in_array($this->type, [
+                self::TYPE_SHARED_INTERNAL,
+                self::TYPE_SHARED_EXTERNAL,
+                self::TYPE_ADB_LIST,
+            ])) {
                 $credentialCachePwd = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
             } else {
                 throw new Tinebase_Exception_UnexpectedValue('type ' . $this->type . ' unknown or empty');
@@ -886,7 +896,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     $credentialsBackend->getCachedCredentials($credentials);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     // try shared credentials key if external account + configured
-                    if ($this->type === self::TYPE_USER) {
+                    if ($this->type === self::TYPE_USER_EXTERNAL) {
                         $credentials->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
                         try {
                             $credentialsBackend->getCachedCredentials($credentials);
@@ -988,5 +998,13 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         $converter = Tinebase_Convert_Factory::factory($this);
         $json = $converter->fromTine20Model(clone $this);
         $this->signature = isset($json['signature']) ? $json['signature'] : null;
+    }
+
+    public function isExternalAccount(): bool
+    {
+        return in_array($this->type, [
+            Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
+            Tinebase_EmailUser_Model_Account::TYPE_SHARED_EXTERNAL,
+        ]);
     }
 }

@@ -18,25 +18,28 @@ use Tinebase_Model_Filter_Abstract as TMFA;
 
 class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 {
-    protected const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
-    protected const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
-    protected const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
-    protected const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
-    protected const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
-    protected const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
-    protected const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
-    protected const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
-    protected const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
-    protected const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
-    protected const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
-    protected const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
-    protected const RELEASE017_UPDATE012 = __CLASS__ . '::update012';
-    protected const RELEASE017_UPDATE013 = __CLASS__ . '::update013';
-    protected const RELEASE017_UPDATE014 = __CLASS__ . '::update014';
-    protected const RELEASE017_UPDATE015 = __CLASS__ . '::update015';
-    protected const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
-    protected const RELEASE017_UPDATE017 = __CLASS__ . '::update017';
-
+    protected const RELEASE017_UPDATE000 = self::class . '::update000';
+    protected const RELEASE017_UPDATE001 = self::class . '::update001';
+    protected const RELEASE017_UPDATE002 = self::class . '::update002';
+    protected const RELEASE017_UPDATE003 = self::class . '::update003';
+    protected const RELEASE017_UPDATE004 = self::class . '::update004';
+    protected const RELEASE017_UPDATE005 = self::class . '::update005';
+    protected const RELEASE017_UPDATE006 = self::class . '::update006';
+    protected const RELEASE017_UPDATE007 = self::class . '::update007';
+    protected const RELEASE017_UPDATE008 = self::class . '::update008';
+    protected const RELEASE017_UPDATE009 = self::class . '::update009';
+    protected const RELEASE017_UPDATE010 = self::class . '::update010';
+    protected const RELEASE017_UPDATE011 = self::class . '::update011';
+    protected const RELEASE017_UPDATE012 = self::class . '::update012';
+    protected const RELEASE017_UPDATE013 = self::class . '::update013';
+    protected const RELEASE017_UPDATE014 = self::class . '::update014';
+    protected const RELEASE017_UPDATE015 = self::class . '::update015';
+    protected const RELEASE017_UPDATE016 = self::class . '::update016';
+    protected const RELEASE017_UPDATE017 = self::class . '::update017';
+    protected const RELEASE017_UPDATE018 = self::class . '::update018';
+    protected const RELEASE017_UPDATE019 = self::class . '::update019';
+    protected const RELEASE017_UPDATE020 = self::class . '::update020';
+    protected const RELEASE017_UPDATE021 = self::class . '::update021';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -49,6 +52,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE002 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update002',
+            ],
+            self::RELEASE017_UPDATE003 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update003',
             ],
             self::RELEASE017_UPDATE005 => [
                 self::CLASS_CONST => self::class,
@@ -64,10 +71,6 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             ],
         ],
         self::PRIO_TINEBASE_STRUCTURE => [
-            self::RELEASE017_UPDATE003 => [
-                self::CLASS_CONST => self::class,
-                self::FUNCTION_CONST => 'update003',
-            ],
             self::RELEASE017_UPDATE004 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update004',
@@ -96,6 +99,14 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update014',
             ],
+            self::RELEASE017_UPDATE020 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update020',
+            ],
+            self::RELEASE017_UPDATE021 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update021',
+            ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
             self::RELEASE017_UPDATE000 => [
@@ -110,6 +121,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update011',
             ],
+            self::RELEASE017_UPDATE019 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update019',
+            ],
         ],
         (self::PRIO_NORMAL_APP_UPDATE + 1) => [
             self::RELEASE017_UPDATE006 => [
@@ -119,6 +134,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE017 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update017',
+            ],
+            self::RELEASE017_UPDATE018 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update018',
             ],
         ],
     ];
@@ -402,7 +421,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         foreach ($this->_db->query('SELECT id, bucket_key FROM ' . $backend->getTablePrefix() . $backend->getTableName() .
             ' WHERE model = "MeetingManager_Model_Meeting" AND property = "meeting_number"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             if (empty($row['bucket_key'])) continue;
-            $buckets = explode('#', $row['bucket_key']);
+            $buckets = explode('#', (string) $row['bucket_key']);
             if ('meeting_number' === $buckets[count($buckets)-1]) {
                 continue;
             }
@@ -411,8 +430,8 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
         foreach ($this->_db->query('select model, property, additional_key, count(*) as c from ' . $backend->getTablePrefix() . $backend->getTableName() . ' group by model, property, additional_key having c > 1')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             foreach ($this->_db->query('select id, bucket_key from ' . $backend->getTablePrefix() . $backend->getTableName() . ' where model = "' . $row['model'] . '" AND property = "' . $row['property'] . '" AND additional_key = "' . $row['additional_key'] . '"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row1) {
-                if (str_starts_with($row1['bucket_key'], $row['model'] . '#' . $row['property'])) {
-                    $this->_db->query('update ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET additional_key = "' . trim(substr($row1['bucket_key'], strlen($row['model'] . '#' . $row['property'])), '#') . '" WHERE id = "' . $row1['id'] . '"');
+                if (str_starts_with((string) $row1['bucket_key'], $row['model'] . '#' . $row['property'])) {
+                    $this->_db->query('update ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET additional_key = "' . trim(substr((string) $row1['bucket_key'], strlen($row['model'] . '#' . $row['property'])), '#') . '" WHERE id = "' . $row1['id'] . '"');
                 }
             }
         }
@@ -453,9 +472,9 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                     $this->_db->quoteInto('bucket = ?', $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY})
                 );
 
-                if (str_ends_with($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
-                    $bucketKey = substr($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
-                        strrpos($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
+                if (str_ends_with((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
+                    $bucketKey = substr((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
+                        strrpos((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
                     $this->_db->update(
                         SQL_TABLE_PREFIX . 'numberable',
                         ['bucket' => $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}],
@@ -464,5 +483,41 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 }
             }
         }
+    }
+
+    public function update018(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        // create missing fulltext index
+        Setup_SchemaTool::updateAllSchema();
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.18', self::RELEASE017_UPDATE018);
+    }
+
+    public function update019(): void
+    {
+        Tinebase_Scheduler::getInstance()->spreadTasks(true);
+        Tinebase_Scheduler::getInstance()->spreadTasks(false);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.19', self::RELEASE017_UPDATE019);
+    }
+
+    public function update020(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_SchedulerTask::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.20', self::RELEASE017_UPDATE020);
+    }
+
+    public function update021(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_Node::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.21', self::RELEASE017_UPDATE021);
     }
 }

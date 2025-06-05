@@ -43,7 +43,7 @@ Tine.Felamimail.nodeActions.folderActions = [
     'MoveFolderAction',
     'EmptyFolderAction',
     'rename',
-    'delete',
+    'DeleteFolderAction',
 ];
 
 /**
@@ -62,6 +62,7 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
     action.setDisabled(false);
     
     const node = records[0];
+    const selModel = node?.ownerTree?.selModel;
     const record = new Tine.Felamimail.Model.Account(node.attributes);
     const app = action.app;
     const folder = app.getFolderStore().getById(record.id);
@@ -121,9 +122,9 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
         const isTrashFolder = (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/^junk$/i)) ?? false;
         const isFolderSelectable = folder.get('is_selectable');
         const isSystemFolder = folder.isSystemFolder();
-        
+
         action.baseAction.setHidden(!folderActions.includes(action.itemId) && !isFolderSelectable);
-        
+
         switch (action.itemId) {
             case 'MarkFolderSeenAction':
             case 'AddFolderAction':
@@ -134,12 +135,72 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
                 break;
             case 'MoveFolderAction':
             case 'rename':
-            case 'delete':
+            case 'DeleteFolderAction':
                 action.baseAction.setHidden(isSystemFolder || isTrashFolder);
                 break;
         }
+
+        if (action.initialConfig.text.includes('{0}')) {
+            action.setText(String.format(app.i18n._(action.initialConfig.text), app.i18n.n_('Folder', 'Folders', selModel?.selNodes?.length)));
+        }
+        if (selModel?.selNodes?.length > 1) {
+            action.baseAction.setHidden(!action.allowMultiple);
+        }
     }
 };
+
+/**
+ * one or multiple nodes, all need deleteGrant
+ */
+Tine.Felamimail.nodeActions.DeleteFolderAction = {
+    app: 'Felamimail',
+    requiredGrant: 'deleteGrant',
+    allowMultiple: true,
+    text: 'Delete {0}', // _('Delete {0}')
+    itemId: 'DeleteFolderAction',
+    disabled: true,
+    iconCls: 'action_delete',
+    scope: this,
+    handler: async function (action) {
+        if (!action.node) return;
+        const app = action.app;
+        const selectedNode = action.node;
+        const selModel = selectedNode?.ownerTree?.selModel;
+        const selectedNodes = selModel?.selNodes;
+        const account = action.account;
+        const folderStore = selectedNode.ownerTree.folderStore;
+
+        this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
+            modal: true,
+            allowCancel: false,
+            height: 180,
+            width: 350,
+            title: app.i18n._('Do you really want to delete the following folders?'),
+            text: selectedNodes.map((n) => n.attributes.localname).join('</br>'),
+            scope: this,
+            handler: async function (button) {
+                if (button === 'yes') {
+                    await selectedNodes.reduce(async (prev, selectedNode) => {
+                        const folder = selectedNode.attributes;
+                        try {
+                            selectedNode.getUI().addClass("x-tree-node-loading");
+                            const result = await Tine.Felamimail.deleteFolder(folder.globalname, account.id);
+                            selectedNode.getUI().removeClass("x-tree-node-loading");
+                            selectedNode.remove();
+                            folderStore.remove(folderStore.getById(selectedNode.id));
+                        } catch (e) {
+                            Tine.Felamimail.folderBackend.handleRequestException(e.data);
+                        }
+                        return Promise.resolve();
+                    }, Promise.resolve());
+                }
+            }
+        });
+
+    },
+    actionUpdater: Tine.Felamimail.nodeActions.actionUpdater
+};
+
 
 /**
  * Empty Folder
@@ -154,24 +215,40 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
         const app = action.app;
         const folder = action.folder;
         const selectedNode = action.node;
-        
+
         try {
             if (selectedNode) {
-                Ext.MessageBox.confirm(
-                    app.i18n._('Empty Folder'),
-                    app.i18n._('Do you really want to delete all the messages in this folder?'),
-                    async function (button) {
-                        if (button === 'yes') {
-                            selectedNode.getUI().addClass("x-tree-node-loading");
-                            const result = await Tine.Felamimail.emptyFolder(folder.id);
-                            const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+                Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+                    title: app.i18n._('Empty Folder'),
+                    questionText: app.i18n._('Do you really want to delete all the messages in this folder?'),
+                    allowCancel: true,
+                    height: 170,
+                    scope: this,
+                    options: [
+                        {text: app.i18n._('Only delete the messages from this folder'), name: 'current', checked: true},
+                        {text: app.i18n._('Delete all messages and subfolders'), name: 'all'}
+                    ],
+
+                    handler: async function (option) {
+                        const deleteSubfolders = option === 'all';
+
+                        selectedNode.getUI().addClass("x-tree-node-loading");
+                        const result = await Tine.Felamimail.emptyFolder(folder.id, deleteSubfolders);
+                        const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+
+                        if (deleteSubfolders) {
                             app.getFolderStore().updateFolder(folderRecord);
                             selectedNode.removeAll();
-                            selectedNode.getUI().removeClass("x-tree-node-loading");
                         }
-                    },
-                    this
-                );
+                        folder.set('cache_status', 'pending');
+                        folder.commit();
+                        app.getMainScreen().getCenterPanel().loadGridData({
+                            removeStrategy: 'keepBuffered'
+                        });
+                        app.checkMailsDelayedTask.delay(0);
+                        selectedNode.getUI().removeClass("x-tree-node-loading");
+                    }
+                });
             } else {
                 folder.set('cache_unreadcount', 0);
             }
@@ -296,28 +373,34 @@ Tine.Felamimail.nodeActions.EditNotificationAction = {
 
 Tine.Felamimail.nodeActions.MarkFolderSeenAction = {
     app: 'Felamimail',
-    text: 'Mark Folder as read', // _('Mark Folder as read')
+    text: 'Mark {0} as read', // _('Mark {0} as read')
     itemId: 'MarkFolderSeenAction',
     iconCls: 'action_mark_read',
+    allowMultiple: true,
     scope: this,
     handler: function(action) {
         if (!action.node) return;
         const app = action.app;
-        const folder = action.folder;
         const selectedNode = action.node;
+        const folderStore = app.getFolderStore();
+        const selModel = selectedNode?.ownerTree?.selModel;
+        const folderIds = selModel?.selNodes.map((n) => n.attributes.folder_id);
+        if (folderIds.length === 0) return;
+
         const filter = [
-            {field: 'folder_id', operator: 'equals', value: folder.id}, 
+            {field: 'folder_id', operator: 'in', value: folderIds},
             {field: 'flags', operator: 'notin', value: ['\\Seen']}
         ];
         
         Tine.Felamimail.messageBackend.addFlags(filter, '\\Seen', {
             callback: function() {
-                folder.set('cache_unreadcount', 0);
-                if (selectedNode) {
-                    app.getMainScreen().getCenterPanel().loadGridData({
-                        removeStrategy: 'keepBuffered'
-                    });
-                }
+                selModel?.selNodes.forEach((selectedNode) => {
+                    const folder = folderStore.getById(selectedNode.id);
+                    folder.set('cache_unreadcount', 0);
+                })
+                app.getMainScreen().getCenterPanel().loadGridData({
+                    removeStrategy: 'keepBuffered'
+                });
             }
         });
     },
@@ -337,7 +420,7 @@ Tine.Felamimail.nodeActions.UpdateFolderCacheAction = {
         const folder = action.folder;
         const selectedNode = action.node;
         const treePanel = selectedNode.ownerTree;
-        
+
         try {
             treePanel.getSelectionModel().clearSelections();
             selectedNode.getUI().addClass("x-tree-node-loading");
@@ -365,7 +448,7 @@ Tine.Felamimail.nodeActions.ApproveMigrationAction = {
     itemId: 'ApproveMigrationAction',
     iconCls: 'action_approve_migration',
     scope: this,
-    qtip: 'Agree that this account can be transferred to other users',
+    qtip: 'Agree that this account can be transferred to other users', // _('Agree that this account can be transferred to other users')
     handler: async function(action) {
         if (!action.node) return;
         const app = action.app;
@@ -394,18 +477,21 @@ Tine.Felamimail.nodeActions.ApproveMigrationAction = {
 
 Tine.Felamimail.nodeActions.MoveFolderAction = {
     app: 'Felamimail',
-    text: 'Move Folder', // _('Move Folder')
+    text: 'Move {0}', // _('Move {0}')
     itemId: 'MoveFolderAction',
     iconCls: 'action_move',
+    allowMultiple: true,
     scope: this,
     handler: function(action) {
         if (!action.node) return;
         const app = action.app;
         const account = action.account;
-        const folder = action.folder;
         const selectedNode = action.node;
         const treePanel = selectedNode.ownerTree;
-        
+        const selModel = treePanel?.selModel;
+        const selectedNodes = selModel?.selNodes ?? [];
+        const folderStore = treePanel.folderStore;
+
         treePanel.getSelectionModel().clearSelections();
         const selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
             sourceType: 'folder',
@@ -416,37 +502,41 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
                     selectPanel.close();
                     newParentNode = treePanel.getNodeById(newParentNode.id); // switch context
                     const parentGlobalname = newParentNode.attributes.globalname;
+                    newParentNode.getUI().addClass("x-tree-node-loading");
+                    const newNodes = [];
 
-                    if (parentGlobalname.replace(new RegExp(`^${folder.get('globalname').replace('.', '\.')}`), '') !== parentGlobalname) {
-                        return Ext.Msg.alert(app.i18n._('Invalid Selection'), app.i18n._('You cannot move the folder to an own sub folder!'));
-                    }
+                    await selectedNodes.reduce(async (prev, selectedNode) => {
+                        const folder = selectedNode.attributes;
+                        if (parentGlobalname.replace(new RegExp(`^${folder.globalname.replace('.', '\.')}`), '') !== parentGlobalname) {
+                            return Ext.Msg.alert(app.i18n._('Invalid Selection'), app.i18n._('You cannot move the folder to an own sub folder!'));
+                        }
+                        const newGlobalName = _.compact([parentGlobalname, folder.localname]).join(account.get('delimiter'));
+                        try {
+                            selectedNode.getUI().addClass("x-tree-node-loading");
+                            const result = await Tine.Felamimail.moveFolder(newGlobalName, folder.globalname, account.id);
+                            newNodes.push(result);
+                            selectedNode.getUI().removeClass("x-tree-node-loading");
+                            selectedNode.remove();
+                            folderStore.remove(folderStore.getById(selectedNode.id));
+                        } catch (e) {
+                            Tine.Felamimail.folderBackend.handleRequestException(e.data);
+                        }
+                        return Promise.resolve();
+                    }, Promise.resolve());
 
-                    const newGlobalName = _.compact([parentGlobalname, folder.get('localname')]).join(account.get('delimiter'));
-                    
-                    try {
-                        selectedNode.getUI().addClass("x-tree-node-loading");
-                        newParentNode.getUI().addClass("x-tree-node-loading");
-                        
-                        const result = await Tine.Felamimail.moveFolder(newGlobalName, folder.get('globalname'), account.id);
-                        const folderStore = newParentNode.ownerTree.folderStore;
-                        newParentNode.appendChild(newParentNode.ownerTree.loader.createNode(result));
-                        selectedNode.remove();
-                        folderStore.remove(folderStore.getById(selectedNode.id));
-                        
-                        const newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+                    newNodes.forEach((record) => {
+                        const newChildNode = newParentNode.ownerTree.loader.createNode(record);
+                        newParentNode.appendChild(newChildNode);
+                        const newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: record});
                         folderStore.getById(newParentNode.id)?.set('has_children', true);
                         folderStore.add([newRecord]);
 
                         treePanel.initNewFolderNode(newRecord);
                         newParentNode.expand(false, false, () => {
-                            treePanel.getNodeById(selectedNode.id).select();
+                            treePanel.getNodeById(newRecord.id).select();
                         });
-                    } catch (e) {
-                        Tine.Felamimail.folderBackend.handleRequestException(e.data);
-                    } finally {
-                        selectedNode.getUI().removeClass("x-tree-node-loading");
-                        newParentNode.getUI().removeClass("x-tree-node-loading");
-                    }
+                    })
+                    newParentNode.getUI().removeClass("x-tree-node-loading");
                 }
             }
         });

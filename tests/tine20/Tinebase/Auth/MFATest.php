@@ -381,7 +381,7 @@ class Tinebase_Auth_MFATest extends TestCase
         ]);
         $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
 
-        $this->assertTrue($mfa->sendOut($this->_originalTestUser->mfa_configs->getFirstRecord()),
+        $this->assertTrue($mfa->sendOut($this->_originalTestUser->mfa_configs->getFirstRecord(), $this->_originalTestUser),
             'sendOut didn\'t succeed');
         $sessionData = Tinebase_Session::getSessionNamespace()->{Tinebase_Auth_MFA_GenericSmsAdapter::class};
         $this->assertIsArray($sessionData, 'session data not set properly');
@@ -440,7 +440,7 @@ class Tinebase_Auth_MFATest extends TestCase
         ]);
         $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
 
-        $this->assertTrue($mfa->sendOut($this->_originalTestUser->mfa_configs->getFirstRecord()),
+        $this->assertTrue($mfa->sendOut($this->_originalTestUser->mfa_configs->getFirstRecord(), $this->_originalTestUser),
             'sendOut didn\'t succeed');
         $sessionData = Tinebase_Session::getSessionNamespace()->{Tinebase_Auth_MFA_GenericSmsAdapter::class};
         $this->assertIsArray($sessionData, 'session data not set properly');

@@ -407,6 +407,12 @@ msgstr "Löschen"
 msgid "Do you really want to delete the following files?"
 msgstr "Möchten Sie folgende Datei(en) löschen?"
 
+msgid "Copy"
+msgstr "Kopieren"
+
+msgid "Copy Items"
+msgstr "Einträge Kopieren"
+
 msgid "Move"
 msgstr "Verschieben"
 

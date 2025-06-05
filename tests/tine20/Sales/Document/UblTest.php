@@ -17,10 +17,20 @@ use Sales_Model_DocumentPosition_Invoice as SMDPI;
  */
 class Sales_Document_UblTest extends Sales_Document_Abstract
 {
+    protected $oldPreviewSvc = null;
 
-    protected function _createInvoice(array $positions, array $invoiceData = []): SMDI
+    public function setUp(): void
     {
-        $customer = $this->_createCustomer();
+        parent::setUp();
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+    }
+
+    protected function _createInvoice(array $positions, array $invoiceData = [], ?Sales_Model_Customer $customer = null): SMDI
+    {
+        if (null === $customer) {
+            $customer = $this->_createCustomer();
+        }
 
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new SMDI(array_merge([
@@ -36,8 +46,13 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         return $invoice;
     }
 
-    protected function _assertUblXml(SMDI $invoice, float $taxExclValue, float $taxInclValue): void
+    protected function _assertUblXml(SMDI $invoice, float $taxExclValue, float $taxInclValue): SimpleXMLElement
     {
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+
         $this->assertNotNull($node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null));
         //echo file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($node, true));
         $xml = new SimpleXMLElement(file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)));
@@ -48,6 +63,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame($taxExclValue, (float)$taxExclAmount[0]);
         $this->assertIsArray($taxInclAmount = $xml->xpath('/ubl:Invoice/cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount'));
         $this->assertSame($taxInclValue, (float)$taxInclAmount[0]);
+
+        return $xml;
     }
 
     public function testUblValidationFail(): void
@@ -76,17 +93,39 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         Tinebase_Record_Expander_DataRequest::clearCache();
 
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
         try {
             Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
-            Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+            Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
             $this->fail('expect to throw ' . Tinebase_Exception_HtmlReport::class);
         } catch (Tinebase_Exception_HtmlReport $e) {
             $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
             $this->assertSame(1, $invoice->attachments->count());
             $attachement = $invoice->attachments->getFirstRecord();
-            $this->assertSame($invoice->{SMDI::FLD_DOCUMENT_NUMBER} . '-xrechnung.validation.html', $attachement->name);
+            $this->assertSame($invoice->{SMDI::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml.validation.html', $attachement->name);
             $this->assertSame($e->getHtml(), file_get_contents('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($attachement, true)));
         }
+    }
+
+    public function testCustomerPercentageDiscount(): void
+    {
+        $product1 = $this->_createProduct();
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+            ], true),
+        ];
+        $customer = $this->_createCustomer(additionalCustomerData: ['discount' => 10]);
+
+        $invoice = $this->_createInvoice($positions, customer: $customer);
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 0.90, round(0.9 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
     }
 
     public function testPositionNetDiscount(): void
@@ -118,6 +157,102 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
         $this->_assertUblXml($invoice, 5.89, round(5.89 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+    }
+
+    public function testVatZeroReverse(): void
+    {
+        $product1 = $this->_createProduct();
+
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => 0,
+            ], true),
+        ];
+
+        $invoice = $this->_createInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE]);
+        $this->assertInstanceOf(Sales_Model_EDocument_VATEX::class, $invoice->{SMDI::FLD_VATEX_ID});
+        $this->assertSame('vatex-eu-ae', $invoice->{SMDI::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE});
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 1, 1);
+    }
+
+    public function testVatZeroExport(): void
+    {
+        $product1 = $this->_createProduct();
+
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => 0,
+            ], true),
+        ];
+        $invoice = $this->_createInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_FREE_EXPORT_ITEM]);
+        $this->assertInstanceOf(Sales_Model_EDocument_VATEX::class, $invoice->{SMDI::FLD_VATEX_ID});
+        $this->assertSame('vatex-eu-g', $invoice->{SMDI::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE});
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 1, 1);
+    }
+
+    public function testVatZeroOutsideTaxScope(): void
+    {
+        $product1 = $this->_createProduct();
+
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => 0,
+            ], true),
+        ];
+        $invoice = $this->_createInvoice($positions, [
+            SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_OUTSIDE_TAX_SCOPE,
+        ]);
+        $this->assertInstanceOf(Sales_Model_EDocument_VATEX::class, $invoice->{SMDI::FLD_VATEX_ID});
+        $this->assertSame('vatex-eu-o', $invoice->{SMDI::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE});
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 1, 1);
+    }
+
+    public function testVatZeroRatedGoods(): void
+    {
+        $product1 = $this->_createProduct();
+
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => 0,
+            ], true),
+        ];
+        $invoice = $this->_createInvoice($positions, [
+            SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_ZERO_RATED_GOODS,
+        ]);
+        $this->assertNull($invoice->{SMDI::FLD_VATEX_ID});
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->_assertUblXml($invoice, 1, 1);
     }
 
     public function testPositionGrossDiscount(): void
@@ -207,8 +342,12 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
 
-        $node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null);
+        $this->assertNotNull($node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null));
         ob_start();
         (new Sales_Frontend_Http)->getXRechnungView($node->getId());
         $html = ob_get_clean();
@@ -261,6 +400,10 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         Sales_Controller_Division::getInstance()->update($division);
 
         $product1 = $this->_createProduct();
+        $customer = $this->_createCustomer([
+            Sales_Model_Address::FLD_PREFIX2 => 'pre2',
+            Sales_Model_Address::FLD_PREFIX3 => 'pre3',
+        ]);
 
         $positions = [
             new SMDPI([
@@ -283,10 +426,13 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                     ]),
                 ])
             ])
-        ]);
+        ], $customer);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        $this->_assertUblXml($invoice, 10, round(10 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+        $xml = $this->_assertUblXml($invoice, 10, round(10 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+
+        $this->assertIsArray($customerPartyName = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:Name'));
+        $this->assertSame('pre3' . PHP_EOL . 'pre2', (string)$customerPartyName[0]);
     }
 }

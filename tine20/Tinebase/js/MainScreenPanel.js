@@ -241,7 +241,12 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
                 return false;
             }
 
-            this.setActiveCenterPanel(app.getMainScreen(), true);
+            const mainScreenPanel = app.getMainScreen();
+            if (! mainScreenPanel) {
+                Tine.log.err('App has no main screen / main screen right not set');
+                return false;
+            }
+            this.setActiveCenterPanel(mainScreenPanel, true);
 
             this.app = app;
             this.onAppActivate(app);
@@ -268,7 +273,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
      */
     setActiveCenterPanel: function(panel, keep) {
         if (panel.app) {
-            // neede for legacy handling
+            // needed for legacy handling
             this.app = panel.app;
         }
         var cardPanel = this.getCenterPanel();
@@ -285,7 +290,8 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
      * @param {Bool} keep keep panel
      */
     setActiveContentPanel: function(panel, keep) {
-        Tine.log.warn('Tine.Tinebase.MainScreenPanel.setActiveContentPanel is deprecated, use <App>.Mainscreen.setActiveContentPanel instead ' + new Error().stack);
+        Tine.log.warn('Tine.Tinebase.MainScreenPanel.setActiveContentPanel is deprecated,'
+            + ' use <App>.Mainscreen.setActiveContentPanel instead ' + new Error().stack);
         return this.app.getMainScreen().setActiveContentPanel(panel, keep);
     },
 

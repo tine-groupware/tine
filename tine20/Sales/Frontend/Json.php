@@ -74,6 +74,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
         Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
         Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Manual::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Email::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Upload::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Custom::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DynamicConfig::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DocumentType::MODEL_NAME_PART,
         Sales_Model_PaymentMeans::MODEL_NAME_PART,
 //        'OrderConfirmation',
 //        'PurchaseInvoice',
@@ -86,7 +92,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Boilerplate',
         'Invoice',
     );
-    
+
     /**
      * the constructor
      */
@@ -121,7 +127,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_configuredModels[] = 'OrderConfirmation';
         }
     }
-    
+
     /**
      * Returns registry data of the application.
      *
@@ -141,7 +147,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultContractContainer' => $sharedContainer->toArray(),
         );
     }
-    
+
     /**
      * Sets the config for Sales
      * @param array $config
@@ -150,7 +156,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Sales_Controller::getInstance()->setConfig($config);
     }
-    
+
     /**
      * Get Config for Sales
      * @return array
@@ -857,12 +863,12 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ])->toArray();
     }
 
-    public function getApplicableBoilerplates(string $type, string $date = null, string $customerId = null, string $category = null, string $language = null)
+    public function getApplicableBoilerplates(string $type, ?string $date = null, ?string $customerId = null, ?string $category = null, ?string $language = null, ?bool $isDefault = null)
     {
         if ($date) {
             $date = new Tinebase_DateTime($date);
         }
-        $result = Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates($type, $date, $customerId, $category, $language);
+        $result = Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates($type, $date, $customerId, $category, $language, $isDefault);
         return [
             'totalcount' => $result->count(),
             'results' => array_values($this->_multipleRecordsToJson($result)),
@@ -881,10 +887,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
-        $document = $docCtrl->get($documentId);
-        $docCtrl->createEDocument($document);
-
-        $result = $this->_recordToJson($docCtrl->get($documentId));
+        $result = $this->_recordToJson($docCtrl->createEDocument($documentId));
 
         $transaction->release();
 
@@ -930,16 +933,35 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_ConcurrencyConflict('document seq increase during export, please try again');
         }
 
-        $name = Tinebase_Model_Tree_Node::sanitizeName(($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE} ?? Tinebase_DateTime::now())->format('Y-m-d') . '_' .
-            ($document->isBooked() ? '' : 'Proforma-') .
-            ($document->isBooked() || !$document->has(Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER) ?
-                $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} :
-                $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) .
-            ($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} ?
-                '-' . $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE} : '') . '.pdf');
+        $name = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+            Tinebase_Twig::TWIG_LOADER =>
+                new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_PAPERSLIP_NAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_NAME_TMPL}),
+            Tinebase_Twig::TWIG_AUTOESCAPE => false,
+        ]))->load(Sales_Config::INVOICE_PAPERSLIP_NAME_TMPL)->render([
+            'document' => $document,
+            'date' => Tinebase_DateTime::now()->format('Y-m-d'),
+        ]);
 
         if ($node = $document->attachments->find('name', $name)) {
             $document->attachments->removeRecord($node);
+            if (Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL}) {
+                $replaceName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+                    Tinebase_Twig::TWIG_LOADER =>
+                        new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL}),
+                    Tinebase_Twig::TWIG_AUTOESCAPE => false,
+                ]))->load(Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL)->render([
+                    'document' => $document,
+                    'node' => $node,
+                    'date' => Tinebase_DateTime::now()->format('Y-m-d'),
+                ]);
+                $path = Tinebase_FileSystem::getInstance()->getPathOfNode($node);
+                array_walk($path, fn(&$path) => $path = $path['name']);
+                $oldPath = '/' . implode('/', $path);
+                array_pop($path);
+                $document->attachments->addRecord(
+                    Tinebase_FileSystem::getInstance()->rename($oldPath, '/'. join('/', $path) . '/' . $replaceName)
+                );
+            }
         }
         $document->attachments->addRecord(new Tinebase_Model_Tree_Node(['name' => $name, 'tempFile' => $stream], true));
         $document = $docCtrl->update($document);
@@ -948,28 +970,39 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, []);
         }
         if (($attachedDocument = $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $attachmentId))) {
-            $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->seq + 1;
+            $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
         } else {
             $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
                 Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP,
                 Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
-                Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $document->seq + 1,
-            ]));
+                Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1,
+            ], true));
         }
         $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
-            ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->seq)
-            ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} !== Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT)
-            ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->seq + 1;
+            ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ})
+            ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} === Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT)
+            ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
         $result = $this->_recordToJson($docCtrl->update($document));
 
         $transaction->release();
         return $result;
     }
 
+    public function dispatchDocument(string $model, string $documentId, bool $redispatch = false): bool
+    {
+        /** @var Tinebase_Record_Interface $model */
+        /** @var Sales_Controller_Document_Abstract $docCtrl */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+
+        /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to lock stuff */
+
+        return $docCtrl::dispatchDocument($documentId, $redispatch);
+    }
+
     public function createFollowupDocument(array $documentTransition): array
     {
-        /** @var Sales_Model_Document_Transition $documentTransition */
         $documentTransition = $this->_jsonToRecord($documentTransition, Sales_Model_Document_Transition::class);
+        /** @var Sales_Model_Document_Transition $documentTransition */
 
         return $this->_recordToJson(
             Sales_Controller_Document_Abstract::executeTransition($documentTransition)

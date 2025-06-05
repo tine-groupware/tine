@@ -73,10 +73,14 @@ msgstr ""
 msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
 msgstr ""
 
-msgid "The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?"
+msgid ""
+"The Invoice you tried to edit is cleared already, change date will rebill "
+"the invoice, do you still want to execute this action?"
 msgstr ""
 
-msgid "The related Timeaccount is already closed, do you still want to execute this action?"
+msgid ""
+"The related Timeaccount is already closed, do you still want to execute this "
+"action?"
 msgstr ""
 
 msgid "Add Timesheet"
@@ -150,7 +154,10 @@ msgstr ""
 msgid "Update Timesheets?"
 msgstr ""
 
-msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgid ""
+"Attention: There are timesheets that have not yet been accounted. If you "
+"continue, they will be set to accounted. This action cannot be undone. "
+"Continue anyway?"
 msgstr ""
 
 msgid "Timeaccount Favorites"
@@ -230,7 +237,8 @@ msgstr ""
 msgid "The selected Time Account is already closed."
 msgstr ""
 
-msgid "The selected Time Account is already closed. Do you wish to continue anyway?"
+msgid ""
+"The selected Time Account is already closed. Do you wish to continue anyway?"
 msgstr ""
 
 msgid "Workingtime:"
@@ -451,4 +459,18 @@ msgid "Timeaccounts already billed"
 msgstr ""
 
 msgid "Timetracker"
+msgstr ""
+
+msgid ""
+"All timesheet durations are aggregated here, no matter if they are billable "
+"or not"
+msgstr ""
+
+msgid "Project time budget in hours"
+msgstr ""
+
+msgid "Budget level in %"
+msgstr ""
+
+msgid "Budget booked hours"
 msgstr ""

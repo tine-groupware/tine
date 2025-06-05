@@ -99,7 +99,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
             $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
         }
 
-        if (strpos($this->_operator, 'not') === 0) {
+        if (str_starts_with($this->_operator, 'not')) {
             if ($this->_valueIsNull) {
                 $_select->where($this->_getQuotedFieldName($_backend) . ' IS NOT NULL');
             } elseif (!empty($this->_foreignIds)) {
@@ -139,7 +139,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     protected function _getGenericFilterInformation()
     {
-        list($appName, , $filterName) = explode('_', static::class);
+        [$appName, , $filterName] = explode('_', static::class);
         
         $result = array(
             'linkType'      => 'foreignId',
@@ -148,7 +148,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
         );
         
         if (isset($this->_options['modelName'])) {
-            list(,, $modelName) = explode('_', $this->_options['modelName']);
+            [, , $modelName] = explode('_', (string) $this->_options['modelName']);
             $result['modelName'] = $modelName;
         }
         

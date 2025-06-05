@@ -1091,11 +1091,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @todo coding style (-> _clear)
      */
-    protected function clear($app,$model)
+    protected function clear($app,$model,$additionalFilter = [])
     {
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , array_merge([
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
-        ]);
+        ], $additionalFilter));
         $controller =  Tinebase_Core::getApplicationInstance($app,$model); // @TODO seem not good...
         $controller::getInstance()->deleteByFilter($filter);
     }
@@ -1138,7 +1138,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param $filePath
      * @return array
      */
-    protected function _createTestNode($nodeName, $filePath)
+    protected function _createTestNode($nodeName, $filePath): array
     {
         $user = Tinebase_Core::getUser();
         $container = Tinebase_FileSystem::getInstance()->getPersonalContainer(
@@ -1452,5 +1452,41 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         )), array(
             'sort' => array('note_type_id', 'creation_time')
         ));
+    }
+
+    public function resetTransactionTransactionable(): void
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+    }
+
+    public function restartTransaction(): void
+    {
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+    }
+
+    /**
+     * return a test person
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getPersona($loginName): Tinebase_Model_FullUser
+    {
+        if ($this->_personas === null) {
+            $this->_getPersonas();
+        }
+        return $this->_personas[$loginName];
+    }
+
+    /**
+     * returns an array of test persons
+     *
+     * @return array
+     */
+    protected function _getPersonas(): array
+    {
+        if ($this->_personas === null) {
+            $this->_personas = Zend_Registry::get('personas');
+        }
+        return $this->_personas;
     }
 }

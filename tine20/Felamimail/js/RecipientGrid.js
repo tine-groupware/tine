@@ -227,6 +227,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     initColumnModel: function() {
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
             lazyInit: false,
+            listEmptyText: false,
             listeners: {
                 scope: this,
                 specialkey: this.onSearchComboSpecialkey,
@@ -240,14 +241,16 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         const value = _.compact(_.map(pastedData.replace(/\r?\n+/g, '\n').split('\n'), (email) => {
                             return String(email).replace(/^[,;]+|[,;]+$/, '');
                         })).join(',').replace(/^[,;]+|[,;]+$/, '');
-                        
+
                         if (!this.loadMask) {
                             this.loadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
                         }
                         this.loadMask.show();
            
                         const contacts = await Tine.Tinebase.common.findContactsByEmailString(value);
+                        this.searchCombo.setRawValue('');
                         await this.updateRecipientsToken(null, contacts);
+
                         this.loadMask.hide();
                     })
                 },
@@ -394,11 +397,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     onSearchComboSelect: async function (combo, value , startValue) {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSelect()');
     
-        if (value === '') {
+        if (!value || !value?.data) {
             this.onDelete();
             return;
         }
-        const token = value.data ?? '';
+        const token = value.data;
         await this.updateRecipientsToken(this.lastEditedRecord, [token], null , true);
         combo.selectedRecord = null;
     },

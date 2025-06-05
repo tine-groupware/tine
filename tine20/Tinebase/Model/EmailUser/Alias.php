@@ -21,10 +21,10 @@
  */
 class Tinebase_Model_EmailUser_Alias extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'EmailUser_Alias';
+    public const MODEL_NAME_PART = 'EmailUser_Alias';
 
-    const FLDS_EMAIL = 'email';
-    const FLDS_DISPATCH_ADDRESS = 'dispatch_address';
+    public const FLDS_EMAIL = 'email';
+    public const FLDS_DISPATCH_ADDRESS = 'dispatch_address';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

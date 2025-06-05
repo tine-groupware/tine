@@ -4,6 +4,10 @@ Replication
 
 Version: Pelle 2024.11
 
+## Podcast zum Thema
+
+[tine-groupware.de/podcast/31-mandantenfaehigkeit-und-replikation](https://www.tine-groupware.de/podcast/31-mandantenfaehigkeit-und-replikation/)
+
 ## Was macht die Replikation?
 
 Die Replikation sorgt dafür, dass bestimmte Daten von einer Primärinstanzen auf beliebig viele weitere Mandanten/Instanzen („Replicas“) verteilt werden.
@@ -50,9 +54,9 @@ skip multiple (10 in the example) modlogs
 
     $ php tine20.php --method Tinebase.increaseReplicationMasterId  -- count=10
 
-scheduler default settings: the replication is run on the slave every hour.
+scheduler default settings: the replication is run on the replica every hour.
 
-herausfinden, auf welchem modlog-stand der client gerade ist
+herausfinden, auf welchem modlog-stand der replica gerade ist
 
     mysql> select * from tine20_applications where name = 'Tinebase';
     +------------------------------------------+----------+---------+-------+---------+---------------------------------------------------------------------------------------------------+
@@ -62,9 +66,9 @@ herausfinden, auf welchem modlog-stand der client gerade ist
     +------------------------------------------+----------+---------+-------+---------+---------------------------------------------------------------------------------------------------+
     1 row in set (0.00 sec)
 
-"replicationMasterId":"12303" -> this is the id of the latest modlog that has been replicated from master.
+"replicationMasterId":"12303" -> this is the id of the latest modlog that has been replicated from primary.
 
-to find the current modlog from master:
+to find the current modlog from primary:
 
     mysql> select * from tine20_timemachine_modlog where instance_seq = 12303\G
     *************************** 1. row ***************************
@@ -130,21 +134,21 @@ if the role (rights/members) replication fails, this has to be resolved "by hand
 
 maybe it is event necessary to create a new admin user/role with --create_admin!
 
-### Problem: Data has been deleted on Slave
+### Problem: Data has been deleted on Replica
 
-es kann sein, dass auf dem master daten verändert werden, die auf dem slave
+es kann sein, dass auf dem master daten verändert werden, die auf dem replica
  bereits gelöscht sind. in diesem Fall macht man am besten ein undelete auf dem
  slave. falls das nicht geht, muss die änderung geskippt werden.
 
 ### Problem: Concurrency Conflict
 
-die gleichen felder eines records wurden auf dem master und slave geändert.
+die gleichen felder eines records wurden auf dem primary und replica geändert.
 
-lösung: entweder die änderung auf dem slave rückgängig machen oder skip modlog.
+lösung: entweder die änderung auf dem replica rückgängig machen oder skip modlog.
 
 ### Problem: Update/Install Script Fail
 
-update/install skript prüft nicht, ob man auf dem slave ist und legt
+update/install skript prüft nicht, ob man auf dem replica ist und legt
  evtl daten doppelt an.
 
     $setup = new Setup_Update_Abstract(Setup_Backend_Factory::factory());

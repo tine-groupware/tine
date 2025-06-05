@@ -51,7 +51,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
                 return allowed && node.id !== targetNode.id
             }, true);
             
-            if (action === 'move') {
+            if (action === 'move' || action === 'copy') {
                 isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
                     return allowed
                         // delete grant for all sources required
@@ -443,9 +443,38 @@ Tine.Filemanager.nodeActions.Delete = {
 };
 
 /**
- * one node with readGrant
+ * one or multiple nodes with read, edit AND deleteGrant
  */
-// Tine.Filemanager.nodeActions.Copy = {};
+Tine.Filemanager.nodeActions.Copy = {
+    app: 'Filemanager',
+    requiredGrant: 'editGrant',
+    allowMultiple: true,
+    text: 'Copy', // _('Copy')
+    disabled: true,
+    actionType: 'edit',
+    scope: this,
+    iconCls: 'action_editcopy',
+    handler: function() {
+        const app = this.initialConfig.app,
+            records = this.initialConfig.selections;
+
+        const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+            windowTitle: app.i18n._('Copy Items'),
+            singleSelect: true,
+            mode: 'target',
+            constraint: (targetNode) => {
+                return Tine.Filemanager.nodeActionsMgr.checkConstraints('copy', targetNode, records);
+            }
+        });
+
+        filePickerDialog.on('apply', function(node) {
+            Tine.Filemanager.nodeBackend.copyNodes(records, node[0], null, true);
+        });
+
+        filePickerDialog.openWindow();
+    }
+};
+
 
 /**
  * one or multiple nodes with read, edit AND deleteGrant
@@ -507,6 +536,7 @@ Tine.Filemanager.nodeActions.Download = {
             && (
                 String(_.get(records, '[0].data.path', '')).match(/^\/records/)
                 || _.get(records, '[0].data.account_grants.downloadGrant', false)
+                || _.get(records, '[0].json.input', false)
             );
 
         action.setDisabled(!enabled || isQuarantined);
@@ -529,7 +559,15 @@ Tine.Filemanager.nodeActions.Preview = {
         let record = _.get(this, 'initialConfig.selections[0]') ||_.get(this, 'initialConfig.filteredContainer');
         let initialApp = this.initialConfig.initialApp;
 
-        if (record && record.get('type') === 'file') {
+        if (record.get('input')) {
+            const tempFile = record.get('tempFile');
+            record = Tine.Tinebase.data.Record.setFromJson(Object.assign(record.data, {
+                type: 'file',
+                contenttype: tempFile.type
+            }), Tine.Filemanager.Model.Node);
+        }
+
+        if (record.get?.('type') === 'file') {
             if (!record.constructor?.getPhpClassName?.()) {
                 if (record.get('object_id')) {
                     record = new Tine.Tinebase.Model.Tree_Node(record.data);
@@ -543,11 +581,20 @@ Tine.Filemanager.nodeActions.Preview = {
             Tine.Filemanager.QuickLookPanel.openWindow({
                 record: record,
                 initialApp: initialApp || null,
-                sm: this.initialConfig.sm
+                sm: this.initialConfig.sm,
             });
         }
     },
-    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
+    actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        records = records.map((record) => {
+            if (record.get('input')) {
+                return Tine.Tinebase.data.Record.setFromJson(Object.assign(record.data, {type: 'file'}), Tine.Filemanager.Model.Node);
+            }
+            return record;
+        });
+
+        Tine.Filemanager.nodeActions.actionUpdater(action, grants, records, isFilterSelect, filteredContainers);
+    },
 };
 
 /**

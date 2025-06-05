@@ -30,40 +30,44 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     /**
      * preserves ratio and cropes image on the oversize side
      */
-    const RATIOMODE_PRESERVANDCROP = 0;
-    
+    public const RATIOMODE_PRESERVANDCROP = 0;
+
     /**
      * preserves ratio and does not crop image. Resuling image dimension is less
      * than requested on one dimension as this dim is not filled  
      */
-    const RATIOMODE_PRESERVNOFILL = 1;
-    
+    public const RATIOMODE_PRESERVNOFILL = 1;
+
+    public const LOCATION_VFS = 'vfs';
+    public const LOCATION_VFS_WATERMARK = 'vfs_watermark';
+    public const LOCATION_TEMP_FILE = 'tempFile';
+
     protected $_identifier = 'id';
-    
+
     /**
      * application the record belongs to
      *
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     protected $_validators = array(
         // image identifiers
-        'id'          => array('presence' => 'required', 'allowEmpty' => false, /*'Alnum'*/ ),
+        'id'          => array('presence' => 'required', 'allowEmpty' => false ),
         'application' => array('presence' => 'required', 'allowEmpty' => false, 'Alnum' ),
-        'location'    => array('default' => '', 'allowEmpty' => true, 'Alnum', ),
-        
+        'location'    => array('default' => '', 'allowEmpty' => true ),
+
         // image properties
         'width'       => array('allowEmpty' => true, 'Int' ),
         'height'      => array('allowEmpty' => true, 'Int' ),
         'bits'        => array('allowEmpty' => true, 'Int' ),
         'channels'    => array('allowEmpty' => true, 'Int' ),
         'mime'        => array('allowEmpty' => true, array('InArray', array('image/png', 'image/jpeg', 'image/gif'))),
-    
+
         // binary data
         'blob'        => array('allowEmpty' => true)
     );
-    
+
     /**
      * returns image from given path
      * 
@@ -79,7 +83,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         $imgBlob = file_get_contents($_path);
         return self::getImageFromBlob($imgBlob);
     }
-    
+
     /**
      * returns image from given blob
      *
@@ -90,7 +94,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     {
         return new Tinebase_Model_Image(Tinebase_ImageHelper::getImageInfoFromBlob($_blob), true);
     }
-    
+
     /**
      * returns image from imageURL
      * 
@@ -103,7 +107,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         $image = Tinebase_Controller::getInstance()->getImage($params['application'], $params['id'], $params['location']);
         return $image;
     }
-    
+
     /**
      * parses an imageURL
      * 
@@ -114,14 +118,14 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     public static function parseImageURL($_imageURL)
     {
         $params = array();
-        parse_str(parse_url($_imageURL, PHP_URL_QUERY), $params);
+        parse_str(parse_url((string) $_imageURL, PHP_URL_QUERY), $params);
         if (!empty($params['application']) && !empty($params['id'])) {
             return $params;
         } else {
             throw new Tinebase_Exception_InvalidArgument("$_imageURL is not a valid imageURL");
         }
     }
-    
+
     /**
      * returns an image url
      * @param string     $appName    the name of the application
@@ -137,7 +141,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
             . $appName . '&location=' . $location . '&id='
             . $id . '&width=' . $width . '&height=' . $height . '&ratiomode='.$ratiomode;
     }
-    
+
     /**
      * scales given image to given size
      * 
@@ -150,7 +154,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     {
         $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
         file_put_contents($tmpPath, $this->blob);
-        
+
         switch ($this->mime) {
             case ('image/png'):
                 $src_image = imagecreatefrompng($tmpPath);
@@ -207,7 +211,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
                 break;
         }
         $imgDumpFunction($dst_image, $tmpPath);
-        
+
         $this->width = $dst_width;
         $this->height = $dst_height;
         $this->blob = file_get_contents($tmpPath);
@@ -250,23 +254,15 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     {
         if ($this->mime != $_mime) {
             $img = @imagecreatefromstring($this->blob);
-            
+
             $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
-            switch ($_mime) {
-                case ('image/png'):
-                    imagepng($img, $tmpPath, 0);
-                    break;
-                case ('image/jpeg'):
-                    imagejpeg($img, $tmpPath, 100);
-                    break;
-                case ('image/gif'):
-                    imagegif($img, $tmpPath);
-                    break;
-                default:
-                    throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_mime);
-                    break;
-            }
-            
+            match ($_mime) {
+                'image/png' => imagepng($img, $tmpPath, 0),
+                'image/jpeg' => imagejpeg($img, $tmpPath, 100),
+                'image/gif' => imagegif($img, $tmpPath),
+                default => throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_mime),
+            };
+
             $blob = file_get_contents($tmpPath);
             unlink($tmpPath);
         } else {
@@ -323,7 +319,7 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
 
         return $blob;
     }
-    
+
     /**
      * returns image extension from mime type
      * 
@@ -332,19 +328,14 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     public function getImageExtension()    
     {
         $extension = '';
-        
-        switch ( $this->mime ) {
-            case 'image/png':
-                $extension = '.png';
-                break;
-            case 'image/jpeg':
-                $extension = '.jpg';
-                break;
-            case 'image/gif':
-                $extension = '.gif';
-                break;
-        }
-        
+
+        $extension = match ($this->mime) {
+            'image/png' => '.png',
+            'image/jpeg' => '.jpg',
+            'image/gif' => '.gif',
+            default => $extension,
+        };
+
         return $extension;
     }
 

@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2018-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Firebase\JWT\JWT;
+
 /**
  * Test class for GDPR_Controller_DataIntendedPurposeRecord
  */
@@ -25,7 +27,9 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
     protected function setUp(): void
 {
         parent::setUp();
-
+        if (empty(GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET})) {
+            GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET} = 'test';
+        }
         $this->_dataIntendedPurpose1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
                 'name' => [[
@@ -397,7 +401,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         } catch (Tinebase_Exception_Record_Validation) {}
     }
 
-    public function testPublicApiGetManageConsent()
+    public function testPublicApiGetManageConsentByContactId()
     {
         $contact = new Addressbook_Model_Contact([
             'n_given' => Tinebase_Record_Abstract::generateUID() . 'unittest',
@@ -407,7 +411,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
 
         /** @var Addressbook_Model_Contact $createdContact */
         $createdContact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsent($createdContact->getId());
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByContactId($createdContact->getId());
         $responseData = json_decode($response->getBody(), true);
         $dipCount = $responseData['allDataIntendedPurposes'];
 
@@ -424,12 +428,102 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         $expander->expand($allDips);
         $dataIntendedPurpose = $allDips->getFirstRecord();
         $dataIntendedPurpose[GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE] = true;
-        $dataIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->update($dataIntendedPurpose);
+        GDPR_Controller_DataIntendedPurpose::getInstance()->update($dataIntendedPurpose);
 
-        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsent($createdContact->getId());
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByContactId($createdContact->getId());
         $responseData = json_decode($response->getBody(), true);
         $dipCountNew = $responseData['allDataIntendedPurposes'];
 
         static::assertEquals(count($dipCount), count($dipCountNew) + 1, 'dip with self service enabled should not be shown');
+    }
+
+    public function testPublicApiPostRegisterForDataIntendedPurpose()
+    {
+        $account = TestServer::getInstance()->getTestEmailAccount();
+        if (! $account) {
+            self::markTestSkipped('test needs mail account');
+        }
+        $requestData = [
+            'email' => $account->email,
+        ];
+        $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+        if (! $request) {
+            self::markTestSkipped('test needs REQUEST');
+        }
+        $request->getHeaders()->addHeader(new Zend\Http\Header\Authorization('basic ' . base64_encode(':testpwd')));
+        $request->setContent(json_encode($requestData));
+
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiPostRegisterForDataIntendedPurpose();
+        $responseData = json_decode($response->getBody(), true);
+        $this->assertEquals($responseData, ['success' => true]);
+    }
+
+    public function testPublicApiGetRegisterFromToken()
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(GDPR_Model_DataIntendedPurpose::class, [
+            ['field' => GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE, 'operator' => 'equals', 'value' => false]
+        ]);
+        $dip = GDPR_Controller_DataIntendedPurpose::getInstance()->search($filter)->getFirstRecord();
+
+        $key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET};
+        $token = JWT::encode([
+            'email' => 'test@mail.test',
+            'issue_date' => Tinebase_DateTime::today(),
+            'dipId' =>  $dip->getId(),
+        ], $key, 'HS256');
+
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetRegisterFromToken($token);
+        $responseData = json_decode($response->getBody(), true);
+        $this->assertEquals('test@mail.test', $responseData['email']);
+    }
+
+    public function testPublicApiPostRegisterFromToken()
+    {
+        $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+        if (! $request) {
+            self::markTestSkipped('test needs REQUEST');
+        }
+
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        if (empty($imapConfig)) {
+            static::markTestSkipped('no mail configuration');
+        }
+
+        // update message cache and check result
+        static::resetMailer();
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(GDPR_Model_DataIntendedPurpose::class, [
+            ['field' => GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE, 'operator' => 'equals', 'value' => false]
+        ]);
+        $dip = GDPR_Controller_DataIntendedPurpose::getInstance()->search($filter)->getFirstRecord();
+
+        $key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET};
+        $token = JWT::encode([
+            'email' => 'test@mail.test',
+            'issue_date' => Tinebase_DateTime::today(),
+            'dipId' =>  $dip->getId(),
+        ], $key, 'HS256');
+        // user can fill the registration form
+        $requestData = [
+            'email' => 'test@mail.test',
+            'n_family' =>  'Kneschke',
+            'n_given' =>  'Lars',
+            'org_name' => 'aglio e olio',
+        ];
+
+        $request->getHeaders()->addHeader(new Zend\Http\Header\Authorization('basic ' . base64_encode(':testpwd')));
+        $request->setContent(json_encode($requestData));
+
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiPostRegisterFromToken($token);
+        $responseData = json_decode($response->getBody(), true);
+
+        $containerId = GDPR_Config::getInstance()->{GDPR_Config::SUBSCRIPTION_CONTAINER_ID};
+        $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
+            array('field' => 'email', 'operator' => 'equals', 'value' => 'test@mail.test'),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $containerId),
+        )), null, true);
+
+        $this->assertEquals(1, count($contacts));
+        $this->assertArrayHasKey('current_contact', $responseData);
     }
 }

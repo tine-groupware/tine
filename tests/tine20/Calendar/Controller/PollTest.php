@@ -151,7 +151,7 @@ class Calendar_Controller_PollTest extends TestCase
         $response = $this->_uit->publicApiGetPoll($pollId, $userKey, $authKey);
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertRegexp('/mismatch/', (string)$response->getBody());
+        $this->assertMatchesRegularExpression('/mismatch/', (string)$response->getBody());
     }
 
     /**
@@ -332,7 +332,7 @@ EOT;
         $response = $this->_uit->publicApiUpdateAttendeeStatus($pollData['id']);
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertRegexp('/poll is closed/', (string)$response->getBody());
+        $this->assertMatchesRegularExpression('/poll is closed/', (string)$response->getBody());
     }
 
     public function testPublicApiUpdateAttenderStatusNoAttendee()
@@ -437,7 +437,7 @@ EOT;
         $response = $this->_uit->publicApiAddAttendee($pollData['id']);
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertRegexp('/poll is locked/', (string)$response->getBody());
+        $this->assertMatchesRegularExpression('/poll is locked/', (string)$response->getBody());
     }
 
     public function testPublicApiAddAttenderClosedPoll()
@@ -462,7 +462,7 @@ EOT;
          $response = $this->_uit->publicApiAddAttendee($poll['id']);
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertRegexp('/poll is closed/', (string)$response->getBody());
+        $this->assertMatchesRegularExpression('/poll is closed/', (string)$response->getBody());
     }
 
     /**
@@ -488,7 +488,7 @@ EOT;
         $response = $this->_uit->publicApiAddAttendee($pollData['id']);
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertRegexp('/please log in/', (string)$response->getBody());
+        $this->assertMatchesRegularExpression('/please log in/', (string)$response->getBody());
     }
 
     /**
@@ -557,7 +557,7 @@ EOT;
 
 //        // other strategy
 //        $this->assertEquals(401, $response->getStatusCode());
-//        $this->assertRegexp('/use personal link/', (string)$response->getBody());
+//        $this->assertMatchesRegularExpression('/use personal link/', (string)$response->getBody());
 
         // its allowed for the moment
         $this->assertEquals(200, $response->getStatusCode());

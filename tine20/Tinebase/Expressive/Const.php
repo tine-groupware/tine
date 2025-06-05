@@ -17,5 +17,5 @@
  */
 class Tinebase_Expressive_Const
 {
-    const ROUTE_HANDLER = 'tine20RouteHandler';
+    public const ROUTE_HANDLER = 'tine20RouteHandler';
 }

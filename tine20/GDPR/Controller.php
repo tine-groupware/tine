@@ -95,20 +95,32 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
     public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
     {
         $routeCollector->addGroup('/GDPR', function (\FastRoute\RouteCollector $routeCollector) {
-            $routeCollector->get('/view/manageConsent[/{contactId}]', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->get('/view[/{path:.+}]', (new Tinebase_Expressive_RouteHandler(
                 GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiMainScreen', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-            $routeCollector->get('/search/manageConsent[/{email}]', (new Tinebase_Expressive_RouteHandler(
-                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiSearchManageConsent', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
             $routeCollector->get('/manageConsent[/{contactId}]', (new Tinebase_Expressive_RouteHandler(
-                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetManageConsent', [
+                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetManageConsentByContactId', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
             $routeCollector->post('/manageConsent/{contactId}', (new Tinebase_Expressive_RouteHandler(
-            GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiPostManageConsent', [
+            GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiPostManageConsentByContactId', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/register/for[/{dipId}]', (new Tinebase_Expressive_RouteHandler(
+                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetRegisterForDataIntendedPurpose', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->post('/register/for[/{dipId}]', (new Tinebase_Expressive_RouteHandler(
+                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiPostRegisterForDataIntendedPurpose', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/register/{token}', (new Tinebase_Expressive_RouteHandler(
+                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetRegisterFromToken', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->post('/register/{token}', (new Tinebase_Expressive_RouteHandler(
+                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiPostRegisterFromToken', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });

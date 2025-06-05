@@ -267,7 +267,7 @@ class Tinebase_Frontend_Cli_Abstract
                 $this->_createImportDemoData();
                 break;
             case "set":
-                $set = isset($data['set']) ? $data['set'] : null;
+                $set = $data['set'] ?? null;
                 $this->_createImportDemoDataFromSet($set);
                 break;
             case "eml":
@@ -372,7 +372,7 @@ class Tinebase_Frontend_Cli_Abstract
             try {
                 $importer->importDemodata();
                 echo 'Imported CSV Demo Data for ' . $model . "\n";
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // model has no import files
             }
         }
@@ -395,7 +395,7 @@ class Tinebase_Frontend_Cli_Abstract
         try {
             $importer->importDemodata();
             echo 'Set Demo Data was created successfully' . chr(10) . chr(10);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // model has no import files
         }
     }
@@ -445,10 +445,10 @@ class Tinebase_Frontend_Cli_Abstract
         
         $result = array();
         foreach ($args as $idx => $arg) {
-            if (strpos($arg, '=') !== false) {
-                list($key, $value) = explode('=', $arg);
+            if (str_contains((string) $arg, '=')) {
+                [$key, $value] = explode('=', (string) $arg);
                 if ($_splitSubArgs) {
-                    if (strpos($value, ',') !== false) {
+                    if (str_contains($value, ',')) {
                         $value = explode(',', $value);
                     }
                     $value = str_replace('"', '', $value);
@@ -512,7 +512,7 @@ class Tinebase_Frontend_Cli_Abstract
         }
 
         if ((isset($args['definition']) || array_key_exists('definition', $args)))  {
-            if (preg_match("/\.xml/", $args['definition'])) {
+            if (preg_match("/\.xml/", (string) $args['definition'])) {
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
                     $args['definition'],
                     Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
@@ -760,7 +760,7 @@ class Tinebase_Frontend_Cli_Abstract
                 ['field' => 'type', 'operator' => 'equals', 'value' => $args['type']],
             ]))->getArrayOfIds();
         } else if (isset($args['container_id'])) {
-            $containers = explode(',', $args['container_id']);
+            $containers = explode(',', (string) $args['container_id']);
         } else {
             throw new Tinebase_Exception_InvalidArgument('type (personal|shared) or container_id required');
         }
@@ -797,21 +797,21 @@ class Tinebase_Frontend_Cli_Abstract
      */
     protected function _getVObjectExportFilename($container, $args, $extension)
     {
-        $path = isset($args['path']) ? $args['path'] : Tinebase_Core::getTempDir();
+        $path = $args['path'] ?? Tinebase_Core::getTempDir();
         if ($container->type === Tinebase_Model_Container::TYPE_SHARED) {
             $owner = 'shared';
         } else {
             try {
                 $user = Tinebase_User::getInstance()->getFullUserById($container->owner_id);
                 $owner = $user->accountLoginName;
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 $owner = $container->owner_id;
             }
         }
 
         return $path . DIRECTORY_SEPARATOR . $owner
             // . '_' . $container->name
-            . '_' . substr($container->getId(), 0, 8) . '.' . $extension;
+            . '_' . substr((string) $container->getId(), 0, 8) . '.' . $extension;
     }
 
     /**
@@ -858,9 +858,9 @@ class Tinebase_Frontend_Cli_Abstract
                     $tempFile = Tinebase_TempFile::getInstance()->createTempFile($file);
                     $nodePath = Tinebase_Model_Tree_Node_Path::createFromRealPath($options['fm_path'] ,
                         Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
-                    $targetPath = $nodePath->statpath . '/' . basename($file);
+                    $targetPath = $nodePath->statpath . '/' . basename((string) $file);
                     Tinebase_FileSystem::getInstance()->copyTempfile($tempFile, $targetPath);
-                    echo 'Exported to Filemanager path ' . $options['fm_path'] . '/' . basename($file) ."\n";
+                    echo 'Exported to Filemanager path ' . $options['fm_path'] . '/' . basename((string) $file) ."\n";
                 }
             } else {
                 foreach ($filename as $fn) {

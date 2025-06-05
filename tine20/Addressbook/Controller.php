@@ -85,6 +85,22 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         switch (get_class($_eventObject)) {
+            case Admin_Event_BeforeAddAccount::class:
+                /** @var Admin_Event_UpdateAccount $_eventObject */
+                if ($_eventObject->account->contact_id) {
+                    try {
+                        $contact = $_eventObject->account->contact_id;
+                        if ($contact instanceof Addressbook_Model_Contact) {
+                            $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                                . ' create user contact with data : ' . print_r($contact, true));
+                        }
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . ' ' . __LINE__
+                            . ' can not create user contact : ' . $e->getMessage());
+                    }
+                }
+                break;
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;

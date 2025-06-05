@@ -59,7 +59,7 @@ class Tinebase_Setup_DemoData_ImportSet
             throw new Tinebase_Exception('yaml extension required');
         }
 
-        $importDir = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR
+        $importDir = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR
             . $this->_application->name . DIRECTORY_SEPARATOR . 'Setup' . DIRECTORY_SEPARATOR . 'DemoData'
             . DIRECTORY_SEPARATOR;
 
@@ -90,7 +90,7 @@ class Tinebase_Setup_DemoData_ImportSet
     {
         if (isset($setData['sets'])) {
             foreach ($setData['sets'] as $set) {
-                list($app, $yml) = explode('/', $set);
+                [$app, $yml] = explode('/', (string) $set);
                 $importer = new Tinebase_Setup_DemoData_ImportSet($app, [
                     'files' => [$yml]]);
                 $importer->importDemodata();
@@ -98,7 +98,7 @@ class Tinebase_Setup_DemoData_ImportSet
         } else if (isset($setData['files'])) {
             foreach ($setData['files'] as $file) {
                 // @todo handle missing parts
-                list($app, $model, $definition, $file) = explode('/', $file);
+                [$app, $model, $definition, $file] = explode('/', (string) $file);
                 $modelName = $app . '_Model_' . $model;
                 $importer = new Tinebase_Setup_DemoData_Import($modelName, [
                     'definition' => $definition,
@@ -106,7 +106,7 @@ class Tinebase_Setup_DemoData_ImportSet
                 ]);
                 try {
                     $importer->importDemodata();
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     // model has no import files
                 }
             }

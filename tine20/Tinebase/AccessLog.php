@@ -302,7 +302,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             'li'         => Tinebase_DateTime::now(),
             'result'     => $authResult->getCode(),
             'clienttype' => $clientIdString,
-            'login_name' => mb_substr($authResult->getIdentity(), 0, 63),
+            'login_name' => mb_substr((string) $authResult->getIdentity(), 0, 63),
             'user_agent' => mb_substr($userAgent, 0, 254),
         ), true);
         
@@ -322,7 +322,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             try {
                 $previousAccessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
                 $accessLog->merge($previousAccessLog);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // ignore
             }
         }

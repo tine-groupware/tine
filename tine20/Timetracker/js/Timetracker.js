@@ -33,6 +33,18 @@ Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'is_ope
     return record.get('is_open') ? i18n._('open') : i18n._('closed');
 });
 
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'budget_filled_level', function(row, index, record) {
+    const budget = record.get('budget') ?? 0;
+    if (budget === 0) return null;
+    const percent = record.get('budget_filled_level') ?? 0;
+    const level = percent < 80 ? 'Below' : (percent < 100 ? 'Over' : 'Limit');
+    return Ext.ux.PercentRenderer({
+        percent: percent,
+        colorClass : `PercentRenderer-progress-bar${level}`
+    });
+});
+
+
 // add renderer for invoice position gridpanel
 Tine.Timetracker.HumanHourRenderer = function(value) {
     return Ext.util.Format.round(value, 2);

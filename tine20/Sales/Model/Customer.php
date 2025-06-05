@@ -264,6 +264,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
                 'type'    => self::TYPE_STRING,
+                self::SPECIAL_TYPE    => self::SPECIAL_TYPE_CURRENCY,
                 'group'   => 'accounting',
                 self::NULLABLE => true,
                 self::LENGTH => 4,
@@ -286,7 +287,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 'inputFilters' => array('Zend_Filter_Empty' => null),
             ),
             'postal' => [
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
                 self::TYPE              => self::TYPE_RECORD,
                 self::DOCTRINE_IGNORE   => true,
                 self::CONFIG            => [

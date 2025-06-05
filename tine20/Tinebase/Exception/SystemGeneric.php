@@ -85,7 +85,7 @@ class Tinebase_Exception_SystemGeneric extends Tinebase_Exception_ProgramFlow
                 'message'       => $translation->_($this->getMessage()),
                 'title'         => $translation->_($this->getTitle()),
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
             return array(
                 'code'          => $this->getCode(),
                 'message'       => $this->getMessage(),

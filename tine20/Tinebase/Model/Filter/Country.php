@@ -32,9 +32,7 @@ class Tinebase_Model_Filter_Country extends Tinebase_Model_Filter_Text
             $expandedCountries = [];
             $countries = Tinebase_Translation::getCountryList();
             foreach ($this->_value as $country) {
-                $filtered = array_filter($countries['results'], function ($value) use ($country) {
-                    return $value['shortName'] === $country;
-                });
+                $filtered = array_filter($countries['results'], fn($value) => $value['shortName'] === $country);
                 $expandedCountries[] = array_pop($filtered);
             }
             $result['value'] = $expandedCountries;

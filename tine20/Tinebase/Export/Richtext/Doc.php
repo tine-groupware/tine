@@ -58,7 +58,7 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_AbstractDeprecated im
      */
     public function getDownloadFilename($_appName = null, $_format = null)
     {
-        return 'letter_' . strtolower($_appName) . '.docx';
+        return 'letter_' . strtolower((string) $_appName) . '.docx';
     }
     
     /**
@@ -188,7 +188,7 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_AbstractDeprecated im
      */
     public function getDocument()
     {
-        return $this->_docTemplate ? $this->_docTemplate : $this->_docObject;
+        return $this->_docTemplate ?: $this->_docObject;
     }
 
     

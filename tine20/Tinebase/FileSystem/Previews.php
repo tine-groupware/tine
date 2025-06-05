@@ -195,7 +195,7 @@ class Tinebase_FileSystem_Previews
             return $this->createPreviewsFromNode($node);
         } catch (Zend_Db_Statement_Exception $zdse) {
             // this might throw Deadlock exceptions - ignore those
-            if (strpos($zdse->getMessage(), 'Deadlock') !== false) {
+            if (str_contains($zdse->getMessage(), 'Deadlock')) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' Ignoring deadlock / skipping preview generation - Error: '
                     . $zdse->getMessage());
@@ -219,13 +219,47 @@ class Tinebase_FileSystem_Previews
                 {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size
             || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
                 {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT} < $node->preview_error_count
+            || ! $this->_checkMinimalImageSize($node)
         ) {
             return false;
         }
 
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
-
         return $this->isSupportedFileExtension($fileExtension);
+    }
+
+    /**
+     * check if node is image, if image has dimensions < 5px, (for example tracking pixel or horizontal lines)
+     * => do not create preview
+     *
+     * @param Tinebase_Model_Tree_Node $node
+     * @return bool
+     */
+    protected function _checkMinimalImageSize(Tinebase_Model_Tree_Node $node): bool
+    {
+        if (! in_array($node->contenttype, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+            return true;
+        }
+        $path = Tinebase_FileSystem::getInstance()->getFilesystemPathByHash($node->hash);
+        $imageSize = @getimagesize($path);
+        if (!$imageSize) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not read image file from path: '
+                    . $path
+                );
+            }
+            return false;
+        } else if ($imageSize[0] < 10 || $imageSize[1] < 10) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Image too small for preview ('
+                    . $imageSize[0] . 'x' . $imageSize[1] . ')'
+                );
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -235,7 +269,7 @@ class Tinebase_FileSystem_Previews
      */
     public function createPreviewsFromNode(Tinebase_Model_Tree_Node $node)
     {
-        if (!$this->canNodeHavePreviews($node)) {
+         if (!$this->canNodeHavePreviews($node)) {
             return true;
         }
 
@@ -245,7 +279,7 @@ class Tinebase_FileSystem_Previews
 
         $flySystem = $node->flysystem ? Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem) : null;
         if (!$flySystem) {
-            $path = $this->_fsController->getRealPathForHash($node->hash);
+            $path = $node?->tempFile?->path ?? $this->_fsController->getRealPathForHash($node->hash);
             if (!is_file($path)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' file ' . $node->getId() . ' '
@@ -360,8 +394,9 @@ class Tinebase_FileSystem_Previews
             if ((int)$node->preview_count !== $maxCount) {
                 $this->_fsController->updatePreviewCount($node->hash, $maxCount);
             }
-
-
+            if ($node?->tempFile?->path) {
+                $node->preview_count = $maxCount;
+            }
 
             foreach ($files as $name => &$blob) {
                 $tempFile = Tinebase_TempFile::getTempPath();
@@ -489,7 +524,7 @@ class Tinebase_FileSystem_Previews
 
         try {
             $this->_fsController->stat($this->_getBasePath() . '/' . substr($_node->hash, 0, 3) . '/' . substr($_node->hash, 3));
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return false;
         }
 
@@ -504,9 +539,9 @@ class Tinebase_FileSystem_Previews
         $basePath = $this->_getBasePath();
         foreach($_hashes as $hash) {
             try {
-                $this->_fsController->rmdir($basePath . '/' . substr($hash, 0, 3) . '/' . substr($hash, 3), true);
+                $this->_fsController->rmdir($basePath . '/' . substr((string) $hash, 0, 3) . '/' . substr((string) $hash, 3), true);
                 // these hashes are unchecked, there may not be previews for them! => catch, no logging (debug at most)
-            } catch(Tinebase_Exception_NotFound $tenf) {}
+            } catch(Tinebase_Exception_NotFound) {}
         }
     }
 

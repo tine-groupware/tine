@@ -25,28 +25,28 @@ class Tinebase_Application
      * application enabled
      *
      */
-    const ENABLED  = 'enabled';
+    public const ENABLED  = 'enabled';
     
     /**
      * application disabled
      *
      */
-    const DISABLED = 'disabled';
+    public const DISABLED = 'disabled';
 
-    const STATE_ACTION_QUEUE_LR_LAST_DURATION = 'actionQueueLRLastDuration';
-    const STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE = 'actionQueueLRLastDurationUpdate';
-    const STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
-    const STATE_ACTION_QUEUE_LR_LAST_JOB_ID = 'actionQueueLastJobId';
-    const STATE_ACTION_QUEUE_LAST_DURATION = 'actionQueueLastDuration';
-    const STATE_ACTION_QUEUE_LAST_DURATION_UPDATE = 'actionQueueLastDurationUpdate';
-    const STATE_ACTION_QUEUE_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
-    const STATE_ACTION_QUEUE_LAST_JOB_ID = 'actionQueueLastJobId';
-    const STATE_ACTION_QUEUE_STATE = 'actionQueueState';
-    const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
-    const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
-    const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
-    const STATE_REPLICATION_PRIMARY_TB_ID = 'replicationPrimaryTBId';
-    const STATE_UPDATES = 'updates';
+    public const STATE_ACTION_QUEUE_LR_LAST_DURATION = 'actionQueueLRLastDuration';
+    public const STATE_ACTION_QUEUE_LR_LAST_DURATION_UPDATE = 'actionQueueLRLastDurationUpdate';
+    public const STATE_ACTION_QUEUE_LR_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
+    public const STATE_ACTION_QUEUE_LR_LAST_JOB_ID = 'actionQueueLastJobId';
+    public const STATE_ACTION_QUEUE_LAST_DURATION = 'actionQueueLastDuration';
+    public const STATE_ACTION_QUEUE_LAST_DURATION_UPDATE = 'actionQueueLastDurationUpdate';
+    public const STATE_ACTION_QUEUE_LAST_JOB_CHANGE = 'actionQueueLastJobChange';
+    public const STATE_ACTION_QUEUE_LAST_JOB_ID = 'actionQueueLastJobId';
+    public const STATE_ACTION_QUEUE_STATE = 'actionQueueState';
+    public const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
+    public const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
+    public const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
+    public const STATE_REPLICATION_PRIMARY_TB_ID = 'replicationPrimaryTBId';
+    public const STATE_UPDATES = 'updates';
 
 
     /**
@@ -202,9 +202,9 @@ class Tinebase_Application
         
         if ($filter === null && $pagination === null) {
             try {
-                return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__,
+                return Tinebase_Cache_PerRequest::getInstance()->load(self::class, __METHOD__,
                     'allApplications', Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // do nothing
             }
         }
@@ -214,7 +214,7 @@ class Tinebase_Application
         if ($filter === null && $pagination === null) {
             // cache result in persistent shared cache too
             // cache will be cleared, when an application will be added or updated
-            Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, 'allApplications', $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            Tinebase_Cache_PerRequest::getInstance()->save(self::class, __METHOD__, 'allApplications', $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         }
         
         return $result;
@@ -222,7 +222,7 @@ class Tinebase_Application
 
     public function clearCache()
     {
-        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, __CLASS__ . '::getApplications', 'allApplications');
+        Tinebase_Cache_PerRequest::getInstance()->reset(self::class, self::class . '::getApplications', 'allApplications');
     }
 
     /**
@@ -247,7 +247,7 @@ class Tinebase_Application
             // check if app code exists
             // @todo cache results?
             foreach ($result as $app) {
-                if (!file_exists(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . $app->name)) {
+                if (!file_exists(dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . $app->name)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
                         Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' APP ' . $app->name . ' is no longer available');
                     $result->removeRecord($app);
@@ -318,9 +318,9 @@ class Tinebase_Application
         try {
             $app = $this->getApplicationById($applicationId);
             return ($checkEnabled) ? ($app->status === self::ENABLED) : TRUE;
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return FALSE;
-        } catch (Zend_Db_Statement_Exception $tenf) {
+        } catch (Zend_Db_Statement_Exception) {
             // database tables might be not available yet
             // @see 0011338: First Configuration fails after Installation
             return FALSE;
@@ -506,7 +506,7 @@ class Tinebase_Application
      */
     public function resetClassCache($method = null)
     {
-        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, $method);
+        Tinebase_Cache_PerRequest::getInstance()->reset(self::class, $method);
         
         return $this;
     }
@@ -570,13 +570,12 @@ class Tinebase_Application
      * gets the current application state
      * we better do a select for update always
      *
-     * @param mixed $_applicationId
      * @param string $_stateName
      * @param bool $_forUpdate
      * @return null|string
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getApplicationState($_applicationId, $_stateName, $_forUpdate = false)
+    public function getApplicationState(mixed $_applicationId, $_stateName, $_forUpdate = false)
     {
         $id = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
 
@@ -822,9 +821,7 @@ class Tinebase_Application
             if (!class_exists(($controllerClass))) {
                 try {
                     $controllerInstance = Tinebase_Core::getApplicationInstance($app->name, '', true);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    continue;
-                } catch (Tinebase_Exception_AccessDenied $tead) {
+                } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
                     continue;
                 }
             } else {
@@ -843,23 +840,22 @@ class Tinebase_Application
     /**
      * extract model and app name from model name
      *
-     * @param mixed $modelOrApplication
      * @param null $model
      * @return array
      */
-    public static function extractAppAndModel($modelOrApplication, $model = null)
+    public static function extractAppAndModel(mixed $modelOrApplication, $model = null)
     {
         if (! $modelOrApplication instanceof Tinebase_Model_Application && $modelOrApplication instanceof Tinebase_Record_Interface) {
-            $modelOrApplication = get_class($modelOrApplication);
+            $modelOrApplication = $modelOrApplication::class;
         }
 
         // modified (some model names can have both . and _ in their names and we should treat them as JS model name
-        if (strpos($modelOrApplication, '_') && ! strpos($modelOrApplication, '.')) {
+        if (strpos((string) $modelOrApplication, '_') && ! strpos((string) $modelOrApplication, '.')) {
             // got (complete) model name name as first param
-            list($appName, /*$i*/, $modelName) = explode('_', $modelOrApplication, 3);
-        } else if (strpos($modelOrApplication, '.')) {
+            [$appName, , $modelName] = explode('_', (string) $modelOrApplication, 3);
+        } else if (strpos((string) $modelOrApplication, '.')) {
             // got (complete) model name name as first param (JS style)
-            list(/*$j*/, $appName, /*$i*/, $modelName) = explode('.', $modelOrApplication, 4);
+            [, $appName, , $modelName] = explode('.', (string) $modelOrApplication, 4);
         } else {
             $appName = $modelOrApplication;
             $modelName = $model;
@@ -929,8 +925,8 @@ class Tinebase_Application
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
 
         try {
-            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $applicationId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
-        } catch (Tinebase_Exception_NotFound $tenf) {}
+            return Tinebase_Cache_PerRequest::getInstance()->load(self::class, __METHOD__, $applicationId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        } catch (Tinebase_Exception_NotFound) {}
 
         $grantModels = [];
         $application = $this->getApplicationById($applicationId);
@@ -944,7 +940,7 @@ class Tinebase_Application
             }
         }
 
-        Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $applicationId, $grantModels, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        Tinebase_Cache_PerRequest::getInstance()->save(self::class, __METHOD__, $applicationId, $grantModels, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         return $grantModels;
     }
 }

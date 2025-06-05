@@ -120,6 +120,13 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
 
     public function testInvitationToExceptionOnly()
     {
+        $jmcblackContactId = $this->_personas['jmcblack']->contact_id;
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblackContactId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
         $cctrl = Calendar_Controller_Event::getInstance();
         $event = $this->_getEvent(true);
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;COUNT=5';
@@ -132,7 +139,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
             Tinebase_DateTime::now()->addWeek(1));
         $allEvents[2]->dtstart->subMinute(1);
         $allEvents[2]->dtend->subMinute(1);
-        $allEvents[2]->attendee->addRecord($this->_createAttender($this->_personas['jmcblack']->contact_id));
+        $allEvents[2]->attendee->addRecord($this->_createAttender($jmcblackContactId));
         $recurException = $cctrl->createRecurException($allEvents[2]);
 
         Tinebase_Core::setUser($this->_personas['jmcblack']);

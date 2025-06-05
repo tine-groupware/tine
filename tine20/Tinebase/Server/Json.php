@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -40,7 +40,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         Tinebase_AreaLock::getInstance()->activatedByFE();
 
         $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
-        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        $this->_body    = $body ?? fopen('php://input', 'r');
 
         // only for debugging
         //Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " raw request: " . $request->__toString());
@@ -124,7 +124,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 Tinebase_Core::startCoreSession();
             } catch (Tinebase_Exception_NotFound | Zend_Session_Exception $e) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .' Starting session failed: ' .
-                    get_class($e) . ' ' . $e->getMessage());
+                    $e::class . ' ' . $e->getMessage());
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 Tinebase_Session::expireSessionCookie();
             }
@@ -135,7 +135,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 Tinebase_Core::initFramework();
             } catch (Throwable $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' .
-                    get_class($e) . ' ' . $e->getMessage());
+                    $e::class . ' ' . $e->getMessage());
                 $exception = $e;
             }
         }
@@ -152,7 +152,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             throw new Tinebase_Exception_SystemGeneric('Got empty JSON request');
         }
 
-        if (substr($json, 0, 1) == '[') {
+        if (str_starts_with($json, '[')) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' batched request');
             $isBatchedRequest = true;
@@ -200,7 +200,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Got non-json response, last json error: ' . json_last_error_msg() . ' ' . get_class($e) . ' ' .
+                    . ' Got non-json response, last json error: ' . json_last_error_msg() . ' ' . $e::class . ' ' .
                     $e->getMessage());
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -220,7 +220,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $output = (string) $output;
             } catch (Throwable $e) {
                 $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg() . ' ' .
-                    get_class($e) . ' ' . $e->getMessage());
+                    $e::class . ' ' . $e->getMessage());
                 $output = $this->_handleException($this->_request, $exception);
             }
         }
@@ -241,8 +241,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
         $requestData = $this->_stripPasswordsFromRequestData($requestData);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' is JSON request. rawdata: ' . var_export($requestData, true));
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' JSON request - raw data: ' . var_export($requestData, true));
     }
 
     /**
@@ -256,6 +256,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 if (isset($requestData[$i]["params"][$field])) {
                     $requestData[$i]["params"][$field] = "*******";
                 }
+            }
+            // TODO add more methods
+            //      get this from SMD?
+            if ($request['method'] === 'Admin.resetPassword') {
+                $requestData[$i]['params'][1] = "*******";
             }
         }
         return $requestData;
@@ -316,7 +321,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         ) {
             $masterFiles = array();
             
-            $dirname = dirname(__FILE__) . '/../../';
+            $dirname = __DIR__ . '/../../';
             foreach ($classes as $class => $namespace) {
                 $masterFiles[] = $dirname . str_replace('_', '/', $class) . '.php';
             }
@@ -334,7 +339,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
 
                 $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
-                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon') .
+                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : Tinebase_Core::USER_ANONYMOUS) .
                     ($appPwd ? $appPwd->getId() : ''));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -407,7 +412,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 throw new Tinebase_Exception_ClientOutdated();
             }
             if (!Tinebase_Session::isStarted() || !Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
-                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
+                $jsonKey = $_SERVER['HTTP_X_TINE20_JSONKEY'] ?? '';
                 $this->_checkJsonKey($method, $jsonKey);
             }
             
@@ -417,7 +422,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             self::_checkAreaLock($method);
-            self::_checkRateLimit($method);
+            self::_checkRateLimit(Tinebase_Server_Json::class, $method);
             
             $this->_methods[] = $method;
 
@@ -435,8 +440,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             return $response;
             
         } catch (Throwable $exception) {
-            if ($retries < 2 && $exception instanceof Zend_Db_Statement_Exception && strpos($exception->getMessage(),
-                    'Deadlock found') !== false) {
+            if ($retries < 2 && $exception instanceof Zend_Db_Statement_Exception && str_contains($exception->getMessage(),
+                    'Deadlock found')) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Tinebase_Exception::log($exception);
                 Tinebase_Exception::log(new Tinebase_Exception_Backend('Deadlock found, retrying: ' . $retries));
@@ -457,10 +462,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     {
         $suppressTrace = Tinebase_Core::getConfig()->get(Tinebase_Config::SUPPRESS_EXCEPTION_TRACES);
         if ($exception instanceof Tinebase_Exception_ProgramFlow) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $exception::class . ' -> ' .
                 $exception->getMessage());
         } else {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $exception::class . ' -> ' .
                 $exception->getMessage());
             Tinebase_Exception::log($exception);
         }
@@ -664,6 +669,20 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     )),
                 ),
                 'help'   => 'Save ' . $simpleModelName . '',
+                'plural' => false,
+            ),
+            'copy' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'recordData',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'boolean',
+                        'name' => 'persist',
+                    )),
+                ),
+                'help'   => 'Copy ' . $simpleModelName . ' persistent or just phantom',
                 'plural' => false,
             ),
             'delete' => array(

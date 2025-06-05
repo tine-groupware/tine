@@ -19,6 +19,7 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -51,6 +52,10 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE017_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
     ];
@@ -123,5 +128,18 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
             HumanResources_Model_Contract::class,
         ]);
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
+    }
+
+    public function update006(): void
+    {
+        $this->getDb()->update(
+            SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME,
+            [
+                HumanResources_Model_FreeTime::FLD_TYPE_STATUS => new Zend_Db_Expr('NULL'),
+            ],
+            "type = 'vacation' AND type_status IS NOT NULL"
+        );
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
     }
 }

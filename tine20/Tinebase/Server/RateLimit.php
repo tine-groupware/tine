@@ -32,7 +32,7 @@ class Tinebase_Server_RateLimit
     {
         $cacheConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::CACHE);
         $active = strtolower($cacheConfig->backend) === 'redis';
-        $redisConfig = isset($cacheConfig['redis']) ? $cacheConfig['redis'] : $cacheConfig;
+        $redisConfig = $cacheConfig['redis'] ?? $cacheConfig;
         $this->_config = [
             'active' => $active,
             'redis' => $redisConfig,
@@ -40,65 +40,121 @@ class Tinebase_Server_RateLimit
         ];
     }
 
-    public function hasRateLimit(string $user, string $method)
+    public function hasRateLimit(string $frontend, string $method)
     {
         if (! $this->_config['active']) {
             return false;
         }
 
-        if (!isset($this->_config['ratelimits'][$user])) {
-            return false;
-        }
-
-        $definition = $this->getLimitDefinition($user, $method);
+        $definition = $this->getLimitDefinition($frontend, $method);
         return ($definition !== null
             && array_key_exists('maxrequests', $definition)
             && array_key_exists('period', $definition)
         );
     }
 
-    public function getLimitDefinition(string $user, string $method): ?array
+    public function getLimitDefinition(string $frontend, string $method): ?array
     {
-        $limits = array_filter($this->_config['ratelimits'][$user], function($ratelimit) use ($method) {
-            return $ratelimit['method'] === $method;
-        });
+        $ratelimitConfigs = $this->_config['ratelimits'];
 
-        return count($limits) > 0 ? array_pop($limits) : null;
+        $matchesMethod = function($pattern, $methodToMatch) {
+            $regexPattern = str_replace(['*', '/'], ['.*', '\/'], $pattern);
+            $match = preg_match('/^' . $regexPattern . '$/', $methodToMatch) === 1;
+            if ($match) {
+                return true;
+            }
+            return false;
+        };
+
+        $user = $this->_getUsername();
+        $ip = Tinebase_Helper::getIpAddress();
+
+        $allMatched = [];
+        $rateLimitArray = $ratelimitConfigs->toArray();
+
+        foreach ($rateLimitArray as $group => $groupRateLimits) {
+            foreach ($groupRateLimits as $key => $groupRateLimit) {
+                $matched = false;
+                if ($group === Tinebase_Config::RATE_LIMITS_IP) {
+                    $matched = Tinebase_Helper::ipAddressMatchNetmasks([$key]);
+                }
+                if ($group === Tinebase_Config::RATE_LIMITS_USER) {
+                    $matched = $key === $user;
+                }
+                if ($group === Tinebase_Config::RATE_LIMITS_FRONTENDS) {
+                    $matched = $key === $frontend;
+                }
+                if ($matched || $key === '*') {
+                    foreach ($groupRateLimit as $rateLimit) {
+                        if ($matchesMethod($rateLimit['method'], $method)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ . ' Found matched rate limit config from group "' . $group . '" with key "' . $key . '"');
+                            // Store with information needed for sorting
+                            $allMatched[] = [
+                                'keyPriority' => ($matched) ? 0 : 1,
+                                'group' => $group,
+                                'key' => $key,
+                                'rateLimit' => $rateLimit
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        if (count($allMatched) > 0){
+            $matched = array_shift($allMatched);
+            $matched['rateLimit']['name'] = $frontend . '_' . $ip . '_' . $user . '_' . $method;
+            return $matched['rateLimit'];
+        }
+
+        return null;
+    }
+
+    protected function _getUsername(): string
+    {
+        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser() : null;
+        if ($user) {
+            return $user->accountLoginName;
+        } else {
+            return Tinebase_Core::USER_ANONYMOUS;
+        }
     }
 
     /**
-     * @param string $user
      * @param string $method
      * @return bool
      */
-    public function check(string $user, string $method): bool
+    public function check(string $frontend, string $method): bool
     {
-        $rateLimit = $this->_getRateLimit($user, $method);
-        $id = $this->_getId($user, $method);
+        $rateLimit = $this->_getRateLimit($frontend, $method);
+        $id = $this->_getId($frontend, $method);
         return $rateLimit->check($id);
     }
 
-    protected function _getRateLimit(string $user, string $method): RateLimit
+    protected function _getRateLimit(string $frontend, string $method): RateLimit
     {
         $adapter = $this->_getAdapter();
-        $rateLimitDefinition = $this->getLimitDefinition($user, $method);
-        return new RateLimit($user . '_' . $method,
+        $rateLimitDefinition = $this->getLimitDefinition($frontend, $method);
+        return new RateLimit(
+            $rateLimitDefinition['name'],
             $rateLimitDefinition['maxrequests'],
             $rateLimitDefinition['period'],
             $adapter);
     }
 
-    public function purge(string $user, string $method): void
+    public function purge( string $frontend, string $method): void
     {
-        $rateLimit = $this->_getRateLimit($user, $method);
-        $id = $this->_getId($user, $method);
+        $rateLimit = $this->_getRateLimit($frontend, $method);
+        $id = $this->_getId($frontend, $method);
         $rateLimit->purge($id);
     }
 
-    protected function _getId(string $user, string $method)
+    protected function _getId(string $frontend, string $method)
     {
         $prefix = $this->_config['redis']['prefix'] ?? '';
-        return $prefix . '_ratelimit_'. $user . '_' . $method;
+        $user = $this->_getUsername();
+        return $prefix . '_ratelimit_'. $user . '_' . $frontend . '_' . $method;
     }
 
     protected function _getAdapter(): RedisAdapter

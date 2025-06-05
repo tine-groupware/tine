@@ -261,6 +261,524 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
     }
 
+    public function testFailedEmailDispatch()
+    {
+
+        if (null === ($smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP))
+            || null === ($imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP))) {
+            $this->markTestSkipped('email needs to be configured for test');
+            // TODO FIXME is that so? create subset of test to work without email?
+        }
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+        $inbox = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, 'INBOX');
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($inbox, 10, getrandmax()); //  TODO FIXME better use update flag -1/0 or such
+
+        $imapBackend = Felamimail_Backend_ImapFactory::factory($account);
+        $imapBackend->selectFolder('INBOX');
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            ['field' => 'folder_id', 'operator' => 'equals', 'value' => $inbox->getId()],
+        ]);
+        foreach (Felamimail_Controller_Message::getInstance()->search($filter) as $msg) {
+            $imapBackend->removeMessage($msg->messageuid);
+            Felamimail_Controller_Message::getInstance()->delete($msg);
+        }
+
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
+        if (null === ($dispatchFMAccount = Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                [TMFA::FIELD => 'email', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'dispatch@' . TestServer::getPrimaryMailDomain()]
+            ]))->getFirstRecord())) {
+            $dispatchFMAccount = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
+                'name' => 'unittest sales dispatch account',
+                'email' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
+                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
+                'user_id' => Tinebase_Core::getUser()->getId(),
+                'host' => $imapConfig->hostname,
+                'ssl' => $imapConfig->ssl,
+                'port' => $imapConfig->port,
+                'user' => $testCredentials['username'],
+                'password' => $testCredentials['password'],
+                'smtp_host' => $smtpConfig->hostname,
+                'smtp_ssl' => $smtpConfig->ssl,
+                'smtp_auth' => $smtpConfig->auth,
+                'smtp_port' => $smtpConfig->port,
+                'smtp_user' => $testCredentials['username'],
+                'smtp_password' => $testCredentials['password'],
+            ]));
+        }
+
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $customer = $this->_createCustomer();
+        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE} = Sales_Model_EDocument_Dispatch_Email::class;
+        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG} = new Sales_Model_EDocument_Dispatch_Email([
+            Sales_Model_EDocument_Dispatch_Email::FLD_EMAIL => 'fail@' . TestServer::getPrimaryMailDomain(),
+            Sales_Model_EDocument_Dispatch_Email::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [
+                new Sales_Model_EDocument_Dispatch_DocumentType([
+                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
+                ]),
+                new Sales_Model_EDocument_Dispatch_DocumentType([
+                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
+                ]),
+            ]),
+        ], true);
+        $customer = Sales_Controller_Customer::getInstance()->update($customer);
+
+
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID} = $dispatchFMAccount->getId();
+        Sales_Controller_Division::getInstance()->update($division);
+
+        $product = $this->_createProduct();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                ], true),
+            ])
+        ]));
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        $previewRaii = new Tinebase_RAII(fn () => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc);
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $exportPdfRaii = new Tinebase_RAII(fn () => Sales_Export_DocumentPdf::$previewService = null);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+
+        (new Sales_Frontend_Json)->dispatchDocument(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_FAIL)->count());
+    }
+
+    public function testAttachmentNames(): void
+    {
+        $customer = $this->_createCustomer();
+        $product = $this->_createProduct();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                ], true),
+            ])
+        ]));
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        $previewRaii = new Tinebase_RAII(fn () => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc);
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $exportPdfRaii = new Tinebase_RAII(fn () => Sales_Export_DocumentPdf::$previewService = null);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(1, $invoice->attachments->count());
+        $this->assertSame(Tinebase_DateTime::today()->format('Y-m-d')
+            . '_Proforma-' . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} . '.pdf', ($node = $invoice->attachments->getFirstRecord())->name);
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+        $this->assertSame($node->getId(), $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(2, $invoice->attachments->count());
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertNotNull($attachedDoc = $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $node->getId()));
+        $this->assertNotSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+        $this->assertSame(Tinebase_DateTime::today()->format('Y-m-d')
+            . '_Proforma-' . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} . '.pdf', ($proformaNode = $invoice->attachments->getById($node->getId()))->name);
+        $this->assertSame(Tinebase_DateTime::today()->format('Y-m-d') . '_'
+            . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '.pdf', ($node = $invoice->attachments->find(fn($rec) => $rec->getId() !== $node->getId(), null))?->name);
+        $this->assertNotNull($attachedDoc = $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $node->getId()));
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+
+        $modLogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(Sales_Config::APP_NAME, $invoice->getId())->sort('seq', 'DESC');
+        $diff = new Tinebase_Model_Diff(json_decode($modLogs->getFirstRecord()->new_value, true));
+        $this->assertArrayNotHasKey(Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS, $diff->diff);
+
+        // test replacement of attachment
+        $oldPaperReplace = Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL};
+        $oldPaperRaii = new Tinebase_RAII(fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL} = $oldPaperReplace);
+        Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL} = '';
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(2, $invoice->attachments->count());
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertGreaterThan($node->seq, $invoice->attachments->getById($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID})->seq);
+        $this->assertSame(Tinebase_DateTime::today()->format('Y-m-d') . '_'
+            . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '.pdf', ($node = $invoice->attachments->find(fn($rec) => $rec->getId() !== $proformaNode->getId(), null))?->name);
+        $this->assertNotNull($attachedDoc = $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $node->getId()));
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+
+        // test rename of attachment
+        Sales_Config::getInstance()->{Sales_Config::INVOICE_PAPERSLIP_RENAME_TMPL} = '{{ node.creation_time.toString() ~ "-" ~ node.name }}';
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(3, $invoice->attachments->count());
+        $this->assertSame(3, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(4, $invoice->attachments->count());
+        $this->assertSame(4, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
+        // test replacement of attachment
+        $oldEDocReplace = Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL};
+        $oldEDocRaii = new Tinebase_RAII(fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} = $oldEDocReplace);
+        Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} = '';
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(4, $invoice->attachments->count());
+        $this->assertSame(4, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
+        // test rename of attachment
+        Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} = '{{ node.creation_time.toString() ~ "-" ~ node.name }}';
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(5, $invoice->attachments->count());
+        $this->assertSame(5, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
+        unset($oldPaperRaii);
+        unset($oldEDocRaii);
+    }
+
+    public function testCustomDispatchDocument(): void
+    {
+        $customer = $this->_createCustomer();
+        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE} = Sales_Model_EDocument_Dispatch_Custom::class;
+        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG} = new Sales_Model_EDocument_Dispatch_Custom([
+            Sales_Model_EDocument_Dispatch_Custom::FLD_DISPATCH_CONFIGS => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DynamicConfig::class, [
+                new Sales_Model_EDocument_Dispatch_DynamicConfig([
+                    Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Manual::class,
+                    Sales_Model_EDocument_Dispatch_DynamicConfig::FLD_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Manual([
+                        Sales_Model_EDocument_Dispatch_Manual::FLD_INSTRUCTIONS => 'do some of this and then that',
+                        Sales_Model_EDocument_Dispatch_Manual::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [
+                            new Sales_Model_EDocument_Dispatch_DocumentType([
+                                Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
+                            ]),
+                        ]),
+                    ]),
+                ]),
+            ]),
+        ], true);
+        $customer = Sales_Controller_Customer::getInstance()->update($customer);
+
+        $product = $this->_createProduct();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                ], true),
+            ])
+        ]));
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        $previewRaii = new Tinebase_RAII(fn () => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc);
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $exportPdfRaii = new Tinebase_RAII(fn () => Sales_Export_DocumentPdf::$previewService = null);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+
+        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+        foreach ($invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS} as $attachedDoc) {
+            $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE});
+        }
+
+        (new Sales_Frontend_Json)->dispatchDocument(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(3, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_SUCCESS)->count());
+    }
+
+    public static function onCommitCallback(): void
+    {
+        throw new Tinebase_Exception();
+    }
+
+    public function testDispatchDocument()
+    {
+        if (null === ($smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP))
+            || null === ($imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP))) {
+            $this->markTestSkipped('email needs to be configured for test');
+            // TODO FIXME is that so? create subset of test to work without email?
+        }
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+        $inbox = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, 'INBOX');
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($inbox, 10, getrandmax()); //  TODO FIXME better use update flag -1/0 or such
+
+        $imapBackend = Felamimail_Backend_ImapFactory::factory($account);
+        $imapBackend->selectFolder('INBOX');
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            ['field' => 'folder_id', 'operator' => 'equals', 'value' => $inbox->getId()],
+        ]);
+        foreach (Felamimail_Controller_Message::getInstance()->search($filter) as $msg) {
+            $imapBackend->removeMessage($msg->messageuid);
+            Felamimail_Controller_Message::getInstance()->delete($msg);
+        }
+
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
+        if (null === ($dispatchFMAccount = Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            [TMFA::FIELD => 'email', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'dispatch@' . TestServer::getPrimaryMailDomain()]
+        ]))->getFirstRecord())) {
+            $dispatchFMAccount = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
+                'name' => 'unittest sales dispatch account',
+                'email' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
+                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
+                'user_id' => Tinebase_Core::getUser()->getId(),
+                'host' => $imapConfig->hostname,
+                'ssl' => $imapConfig->ssl,
+                'port' => $imapConfig->port,
+                'user' => $testCredentials['username'],
+                'password' => $testCredentials['password'],
+                'smtp_host' => $smtpConfig->hostname,
+                'smtp_ssl' => $smtpConfig->ssl,
+                'smtp_auth' => $smtpConfig->auth,
+                'smtp_port' => $smtpConfig->port,
+                'smtp_user' => $testCredentials['username'],
+                'smtp_password' => $testCredentials['password'],
+            ]));
+        }
+
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $customer = $this->_createCustomer();
+        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE} = Sales_Model_EDocument_Dispatch_Email::class;
+        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG} = new Sales_Model_EDocument_Dispatch_Email([
+            Sales_Model_EDocument_Dispatch_Email::FLD_EMAIL => $this->_originalTestUser->accountEmailAddress,
+            Sales_Model_EDocument_Dispatch_Email::FLD_EXPECTS_FEEDBACK => true,
+            Sales_Model_EDocument_Dispatch_Email::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [
+                new Sales_Model_EDocument_Dispatch_DocumentType([
+                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
+                ]),
+                new Sales_Model_EDocument_Dispatch_DocumentType([
+                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
+                ]),
+            ]),
+        ], true);
+        $customer = Sales_Controller_Customer::getInstance()->update($customer);
+
+
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID} = $dispatchFMAccount->getId();
+        Sales_Controller_Division::getInstance()->update($division);
+
+        $product = $this->_createProduct();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS => 10,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                ], true),
+            ])
+        ]));
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        $previewRaii = new Tinebase_RAII(fn () => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc);
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $exportPdfRaii = new Tinebase_RAII(fn () => Sales_Export_DocumentPdf::$previewService = null);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertSame(0, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+        foreach ($invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS} as $attachedDoc) {
+            $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ}, $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE});
+        }
+
+        (new Sales_Frontend_Json)->dispatchDocument(Sales_Model_Document_Invoice::class, $invoice->getId());
+
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account);
+        $inbox = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, 'INBOX');
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($inbox, 10, getrandmax()); // TODO FIXME better use update flag -1/0 or such
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            ['field' => 'folder_id', 'operator' => 'equals', 'value' => $inbox->getId()],
+        ]);
+        $dispatchMsgs = Felamimail_Controller_Message::getInstance()->search($filter);
+        $cleanMsgsRaii = new Tinebase_RAII(function() use($dispatchMsgs, $imapBackend) {
+            foreach ($dispatchMsgs->messageuid as $uid) {
+                $imapBackend->removeMessage($uid);
+            }
+        });
+        $this->assertSame(1, $dispatchMsgs->count(), print_r($dispatchMsgs->subject, true));
+        $locale = new Zend_Locale($invoice->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+        $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $locale);
+        /** @var Felamimail_Model_Message $msg */
+        $msg = Felamimail_Controller_Message::getInstance()->getCompleteMessage($dispatchMsgs->getFirstRecord());
+        $this->assertStringStartsWith($t->_('Invoice') . ' ' . $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER}, $msg->subject);
+        $this->assertStringContainsString($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER}, $msg->getPlainTextBody());
+
+        unset($cleanMsgsRaii);
+
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'onCommitCallback']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('unreachable');
+        } catch (Tinebase_Exception) {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(Sales_Model_Document_Invoice::STATUS_MANUAL_DISPATCH, $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS});
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->count());
+        $this->assertSame(1, ($dispatchHistory = $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->find(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_WAIT_FOR_FEEDBACK))?->attachments->count());
+        $this->assertSame('email.eml', $dispatchHistory->attachments->getFirstRecord()->name);
+        $this->assertArrayHasKey('sentMsgId', $dispatchHistory->xprops());
+        $this->assertSame($msg->message_id, $dispatchHistory->xprops()['sentMsgId']);
+        $this->assertSame($dispatchFMAccount->getId(), $dispatchHistory->xprops()['fmAccountId'] ?? null);
+
+        // create reply
+        $unitTestAccount = Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class,  [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM],
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+            ]
+        ))->getFirstRecord();
+        $msg = new Felamimail_Model_Message([
+            'account_id' => $unitTestAccount->getId(),
+            'subject' => 'dispatch reply',
+            'to' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
+            'body' => 'unittest',
+            'headers' => [
+                'X-zre-state' => 'Accepted',
+                'In-Reply-to' => $dispatchHistory->xprops()['sentMsgId'],
+            ],
+        ], true);
+
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($msg);
+
+        Felamimail_Controller_Cache_Folder::getInstance()->update($dispatchFMAccount);
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($inbox, 10, getrandmax()); // TODO FIXME better use update flag -1/0 or such
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            ['field' => 'folder_id', 'operator' => 'equals', 'value' => $inbox->getId()],
+        ]);
+        $dispatchMsgs = Felamimail_Controller_Message::getInstance()->search($filter);
+        $cleanMsgsRaii = new Tinebase_RAII(function() use($dispatchMsgs, $imapBackend) {
+            foreach ($dispatchMsgs->messageuid as $uid) {
+                $imapBackend->removeMessage($uid);
+            }
+        });
+
+        $this->assertTrue(Sales_Controller_Document_DispatchHistory::getInstance()->readEmailDispatchResponses());
+        unset($cleanMsgsRaii);
+
+        Sales_Controller_Document_DispatchHistory::clearOnCommitCallbackCache();
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([static::class, 'onCommitCallback']);
+        try {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->fail('unreachable');
+        } catch (Tinebase_Exception) {}
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(Sales_Model_Document_Invoice::STATUS_DISPATCHED, $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS});
+    }
+
+
     public function testCopyInvoice(): void
     {
         $customer = $this->_createCustomer();
@@ -311,6 +829,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         Tinebase_Record_Expander::expandRecord($order, fullExpansion: true);
         $this->assertSame(1, $order->{Sales_Model_Document_Order::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Order::FLD_NOTES}->count());
 
+        $copyOrder = Sales_Controller_Document_Order::getInstance()->copy($order->getId(), false);
+        $this->assertInstanceOf(Sales_Model_Document_Address::class, $copyOrder->{Sales_Model_Document_Order::FLD_RECIPIENT_ID});
+        $this->assertNull($copyOrder->{Sales_Model_Document_Order::FLD_RECIPIENT_ID}->getId());
+
+        $copyOrder = (new Sales_Frontend_Json())->copyDocument_Order($order->getId(), false);
+        $this->assertIsArray($copyOrder[Sales_Model_Document_Order::FLD_RECIPIENT_ID]);
+        $this->assertNull($copyOrder[Sales_Model_Document_Order::FLD_RECIPIENT_ID]['id']);
+
         $invoice = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
@@ -338,7 +864,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
         $ublAttachmentId = $invoice->attachments->getFirstRecord()->getId();
         $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
-            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT,
             Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $ublAttachmentId,
             Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $invoice->seq,
         ], true));
@@ -380,6 +906,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
     public function testInvoiceStorno()
     {
+        $this->clear(Sales_Config::APP_NAME, Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART);
+
         $customer = $this->_createCustomer();
         $product1 = $this->_createProduct();
         $product2 = $this->_createProduct();
@@ -446,17 +974,38 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]));
         $this->assertSame(0, $result->count());
 
-        Tinebase_Record_Expander::expandRecord($invoice);
-
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        if (!($oldSvc = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL})) {
+            Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'http://here.there/path';
+        }
+        $previewRaii = new Tinebase_RAII(fn () => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = $oldSvc);
+        Sales_Export_DocumentPdf::$previewService = new Tinebase_FileSystem_TestPreviewService();
+        $exportPdfRaii = new Tinebase_RAII(fn () => Sales_Export_DocumentPdf::$previewService = null);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+
+        unset($previewRaii);
+        unset($exportPdfRaii);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+
         $this->assertNotNull($attachment = $invoice->attachments->find('name', $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
-        $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
+        $this->assertSame(2, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}->count());
         $this->assertSame($attachment->getId(), $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
-            ->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
-        $this->assertSame($invoice->seq, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
+            ->find(Sales_Model_Document_AttachedDocument::FLD_TYPE, Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT)->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
             ->getFirstRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_SEQ}, $invoice->{Sales_Model_Document_Invoice::FLD_ATTACHED_DOCUMENTS}
+            ->getLastRecord()->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
 
@@ -474,7 +1023,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ]));
 
-        $this->assertNotNull($storno->attachments->find('name', $storno->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
+        $this->assertNull($storno->attachments->find('name', $storno->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml'));
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
@@ -501,7 +1050,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
     public function testInvoiceModelPriceCalcultionGrossPrice(): void
     {
         $invoice = new Sales_Model_Document_Invoice([
-            Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_TAXABLE,
+            Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_STANDARD,
             Sales_Model_Document_Invoice::FLD_POSITIONS => [
                 $position = new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
@@ -547,11 +1096,12 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY => $cat->getId(),
         ]));
 
-        $this->assertSame($cat->eval_dim_cost_center, $order->eval_dim_cost_center->getId());
+        self::assertIsObject($order->eval_dim_cost_center);
+        self::assertSame($cat->eval_dim_cost_center, $order->eval_dim_cost_center->getId());
 
         Tinebase_Record_Expander::expandRecord($order);
-        $this->assertNotNull($order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID});
-        $this->assertSame($customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId(), $order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Document_Debitor::FLD_ORIGINAL_ID});
+        self::assertNotNull($order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID});
+        self::assertSame($customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId(), $order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Document_Debitor::FLD_ORIGINAL_ID});
     }
 
     public function testCustomerFilterForDocuments()
@@ -694,7 +1244,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ],
         ]));
 
-        $offer->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} = Sales_Model_Document_Offer::STATUS_RELEASED;
+        $offer->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} = Sales_Model_Document_Offer::STATUS_DISPATCHED;
         $offer = Sales_Controller_Document_Offer::getInstance()->update($offer);
 
         Tinebase_Record_Expander_DataRequest::clearCache();
@@ -759,8 +1309,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_Invoice::getConfiguration()->jsonExpander);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Invoice::class, [$invoice]));
 
-        $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-            new Zend_Locale($invoice->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
+        $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
 
         $inTranslated = $translate->_('IN-');
         $piTranslated = $translate->_('PI-');
@@ -798,8 +1347,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_Delivery::getConfiguration()->jsonExpander);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Delivery::class, [$delivery]));
 
-        $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
-            new Zend_Locale($delivery->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
+        $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
 
         $dnTranslated = $translate->_('DN-');
         $pdTranslated = $translate->_('PD-');

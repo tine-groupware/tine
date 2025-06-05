@@ -52,7 +52,7 @@ class Tinebase_Log_Formatter_Json extends Tinebase_Log_Formatter
             $config = Tinebase_Core::getConfig();
             $tineUrlConfig = $config->{Tinebase_Config::TINE20_URL};
             if ($tineUrlConfig) {
-                $parse = parse_url($tineUrlConfig);
+                $parse = parse_url((string) $tineUrlConfig);
                 if (is_array($parse) && array_key_exists('host', $parse)) {
                     self::$_tenant = $parse['host'];
                 }

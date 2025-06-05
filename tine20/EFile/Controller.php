@@ -275,7 +275,7 @@ class EFile_Controller extends Tinebase_Controller_Event
         }
     }
 
-    public static function nameChildByParent($_parent, $_child, $_recursive = false, $_updateChild = false)
+    public static function nameChildByParent(Tinebase_Model_Tree_Node $_parent, Tinebase_Model_Tree_Node $_child, bool $_recursive = false, bool $_updateChild = false): void
     {
         // strip token from node name
         if (strlen((string)$_child->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN}) > 0 && strpos($_child->name,
@@ -288,7 +288,8 @@ class EFile_Controller extends Tinebase_Controller_Event
             self::setExtendedDefaults($_parent, $_child);
         }
 
-        $prefixConf = EFile_Config::getInstance()->{EFile_Config::TIER_REFNUMBER_PREFIX};
+        $parentConfig = $_parent->xprops()['efile_config'] ?? [];
+        $prefixConf = array_merge(EFile_Config::getInstance()->{EFile_Config::TIER_REFNUMBER_PREFIX}, $parentConfig[EFile_Config::TIER_REFNUMBER_PREFIX] ?? []);
         $tierType = $_child->{EFile_Config::TREE_NODE_FLD_TIER_TYPE};
         if (EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN === $tierType &&
                 !$_parent->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}) {
@@ -297,7 +298,7 @@ class EFile_Controller extends Tinebase_Controller_Event
             $prefix = $prefixConf[$tierType];
         }
 
-        $tokenTemplateConf = EFile_Config::getInstance()->{EFile_Config::TIER_TOKEN_TEMPLATE};
+        $tokenTemplateConf = array_merge(EFile_Config::getInstance()->{EFile_Config::TIER_TOKEN_TEMPLATE}, $parentConfig[EFile_Config::TIER_TOKEN_TEMPLATE] ?? []);
         $tierToken = '';
         if (isset($tokenTemplateConf[$tierType])) {
             $tokenTemplate = $tokenTemplateConf[$tierType];
@@ -328,7 +329,14 @@ class EFile_Controller extends Tinebase_Controller_Event
                 EFile_Config::TREE_NODE_FLD_TIER_COUNTER => json_encode($counter)
             ]);
 
-            $tierToken = sprintf($tokenTemplate, $counter[$counterTierType]);
+            if (false === strpos($tokenTemplate, '{')) {
+                $tierToken = sprintf($tokenTemplate, $counter[$counterTierType]);
+            } else {
+                $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(EFile_Config::APP_NAME));
+                $template = $twig->getEnvironment()->createTemplate($tokenTemplate);
+                $data['counter'] = $counter[$counterTierType];
+                $tierToken = $template->render($data);
+            }
 
             $namePart = $tierToken . self::TIER_TOKEN_SEPERATOR;
             if (strpos($_child->name, $namePart) !== 0) {

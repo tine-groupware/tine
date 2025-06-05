@@ -112,7 +112,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         try {
             $roleMemberships = $this->getRoleMemberships($_accountId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $roleMemberships = array();
         }
         
@@ -204,9 +204,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
 
-        $result = $result->filter(function(Tinebase_Model_Application $app) {
-            return Tinebase_License::getInstance()->isPermitted($app->name);
-        });
+        $result = $result->filter(fn(Tinebase_Model_Application $app) => Tinebase_License::getInstance()->isPermitted($app->name));
 
         return $result;
     }
@@ -598,12 +596,11 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      * set all roles an user is member of
      *
      * @param  array $_account as role member ("account_type" => account type, "account_id" => account id)
-     * @param  mixed $_roleIds
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function setRoleMemberships($_account, $_roleIds)
+    public function setRoleMemberships($_account, mixed $_roleIds)
     {
         if ($_roleIds instanceof Tinebase_Record_RecordSet) {
             $_roleIds = $_roleIds->getArrayOfIds();
@@ -669,7 +666,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             $this->_getDb()->insert(SQL_TABLE_PREFIX . 'role_accounts', $data);
 
             $this->_writeModLogForRole($oldRole);
-        } catch (Zend_Db_Statement_Exception $e) {
+        } catch (Zend_Db_Statement_Exception) {
             // account is already member of this group
         }
         
@@ -689,10 +686,9 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     /**
      * remove one member from the role
      *
-     * @param  mixed $_roleId
      * @param  array $_account as role member ("type" => account type, "id" => account id)
      */
-    public function removeRoleMember($_roleId, $_account)
+    public function removeRoleMember(mixed $_roleId, $_account)
     {
         /** @var Tinebase_Model_Role $oldRole */
         try {
@@ -861,7 +857,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         
         $rightsInvalidateCache = array();
         foreach ($roleRights as $right) {
-            $rightsInvalidateCache[] = strtoupper($right['right']) . Tinebase_Application::getInstance()->getApplicationById($right['application_id'])->name;
+            $rightsInvalidateCache[] = strtoupper((string) $right['right']) . Tinebase_Application::getInstance()->getApplicationById($right['application_id'])->name;
         }
         
         // @todo can be further improved, by only selecting the users which are members of this role

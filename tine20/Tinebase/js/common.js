@@ -10,7 +10,7 @@
 
 /*global Ext, Tine, Locale*/
 
-const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact } = require('lodash')
+const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact, cloneDeep } = require('lodash')
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
 /**
  * static common helpers
@@ -578,7 +578,30 @@ const common = {
         // normalize
         color = String(color).replace('#', '');
 
-        return '<div style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
+        return '<div class="dark-reverse" style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
+    },
+
+    urlRenderer: function (url) {
+        return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + Tine.Tinebase.EncodingHelper.encode(url, 'shorttext') + '</a>';
+    },
+
+    /**
+     * currency renderer
+     *
+     * @param currency
+     */
+    currencyRenderer: function(currency) {
+        let result = currency;
+        const currencyList = Locale.getTranslationList('CurrencyList');
+        if (currencyList) {
+            for (const [shortName, translatedName] of Object.entries(currencyList)) {
+                const values = String(translatedName).split(':');
+                if (shortName.includes(currency)) {
+                    result = shortName !== values[1] ? `${shortName} - ${values[1]}` : shortName;
+                }
+            }
+        }
+        return result;
     },
 
     /**
@@ -688,10 +711,12 @@ const common = {
      * assert that given object is comparable
      *
      * @param {mixed} o
+     * @param {bool} clone
      * @return {mixed} o
      */
-    assertComparable: function(o) {
+    assertComparable: function(o, clone) {
         if (isObject(o) || isArray(o)) {
+            if (clone) o = cloneDeep(o);
             common.applyComparableToString(o);
         }
 

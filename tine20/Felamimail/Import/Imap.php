@@ -18,9 +18,9 @@
 class Felamimail_Import_Imap extends Tinebase_Import_Abstract
 {
     /**
-     * @var Felamimail_Model_Account
+     * @var ?Felamimail_Model_Account
      */
-    protected $_account;
+    protected ?Felamimail_Model_Account $_account = null;
 
     /**
      * @var Tinebase_Record_RecordSet
@@ -93,7 +93,7 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
 
     /**
      * create/init mail account
-     * - mail account type: Tinebase_EmailUser_Model_Account::TYPE_USER
+     * - mail account type: Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL
      * - user: current user
      *
      * @return void
@@ -107,15 +107,29 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
     protected function _initAccount()
     {
         $email = 'felamimailimport@' . $this->_options['host'];
-        $this->_account = Felamimail_Controller_Account::getInstance()->search(
+        /** @var Felamimail_Model_Account $account */
+        $account = Felamimail_Controller_Account::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
                 ['field' => 'email', 'operator' => 'equals', 'value' => $email]
-        ]))->getFirstRecord();
+            ]))->getFirstRecord();
+
+        if ($account) {
+            // check if user matches, if not -> discard old account
+            // TODO maybe check other props (like mailserver,...), too?
+            $imapConf = $account->getImapConfig();
+            if ($imapConf['user'] !== $this->_options['user']) {
+                Felamimail_Controller_Account::getInstance()->delete([$account->getId()]);
+            } else {
+                $this->_account = $account;
+            }
+        }
+
         if (! $this->_account) {
-            $this->_account = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
+            /** @var Felamimail_Model_Account $account */
+            $account = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
                 'name' => 'Felamimail Import Account',
                 'email' => $email,
-                'type' => Tinebase_EmailUser_Model_Account::TYPE_USER,
+                'type' => Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
                 'user_id' => Tinebase_Core::getUser()->getId(),
                 'host' => $this->_options['host'],
                 'ssl' => $this->_options['ssl'],
@@ -123,6 +137,7 @@ class Felamimail_Import_Imap extends Tinebase_Import_Abstract
                 'user' => $this->_options['user'],
                 'password' => $this->_options['password'],
             ]));
+            $this->_account = $account;
         }
     }
 

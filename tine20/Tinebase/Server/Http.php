@@ -40,7 +40,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         Tinebase_AreaLock::getInstance()->activatedByFE();
 
         $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
-        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        $this->_body    = $body ?? fopen('php://input', 'r');
         
         $server = new Tinebase_Http_Server();
         $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
@@ -76,7 +76,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     $definitions = self::_getModelConfigMethods('Tinebase_Server_Http');
                     $server->loadFunctions($definitions);
 
-                    $applicationParts = explode('.', $this->getRequestMethod());
+                    $applicationParts = explode('.', (string) $this->getRequestMethod());
                     $applicationName = ucfirst($applicationParts[0]);
 
                     if (Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
@@ -107,7 +107,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             $this->_method = $this->getRequestMethod();
 
             self::_checkAreaLock($this->_method);
-            
+            self::_checkRateLimit(Tinebase_Server_Http::class, $this->_method);
+
             $response = $server->handle($_REQUEST);
             if ($response instanceof \Laminas\Diactoros\Response) {
                 $emitter = new \Zend\HttpHandlerRunner\Emitter\SapiEmitter();
@@ -125,11 +126,17 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 header('HTTP/1.0 403 Forbidden');
             }
 
-        } catch (Tinebase_Exception_AreaLocked $e) {
+        } catch (Tinebase_Exception_RateLimit $ter) {
+            Tinebase_Exception::log($ter, false);
+
+            if (!headers_sent()) {
+                header('HTTP/1.0 429 Too Many Requests');
+            }
+        }
+        catch (Tinebase_Exception_AreaLocked) {
             if (!headers_sent()) {
                 header('HTTP/1.0 403 Forbidden');
             }
-
         } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);
             

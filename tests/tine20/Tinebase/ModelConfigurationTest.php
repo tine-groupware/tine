@@ -11,6 +11,15 @@
  */
 class Tinebase_ModelConfigurationTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Timetracker')) {
+            self::markTestSkipped('Timetracker is needed for the tests');
+        }
+
+        parent::setUp();
+    }
+
     protected function tearDown(): void
     {
         if (Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::DISABLED)
@@ -132,6 +141,9 @@ class Tinebase_ModelConfigurationTest extends TestCase
 
     public function testModelExpanderWithoutRecordApp()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('Inventory')) {
+            self::markTestSkipped('Inventory is needed for the test');
+        }
         // disable Sales
         Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::DISABLED);
         $inventoryMC = Inventory_Model_InventoryItem::getConfiguration();

@@ -253,9 +253,9 @@ describe('Contacts', () => {
             await expect(popupWindow).toMatchElement('button', {text: 'Adresse einlesen'});
             await expect(popupWindow).toClick('button', {text: 'Adresse einlesen'});
             await popupWindow.waitForSelector('.ext-mb-textarea');
-            await expect(popupWindow).toFill('.ext-mb-textarea', 'Max Mustermann \nBeispielweg 1 \n \n354234 Musterdorf !');
+            await expect(popupWindow).toFill('.ext-mb-textarea', 'Max Mustermann Beispielweg 1 354234 Musterdorf !');
             await popupWindow.screenshot({path: 'screenshots/Adressbuch/11_adressbuch_kontakt_neu_einlesen.png'});
-            await popupWindow.click('.x-tool-close');
+            await expect(popupWindow).toClick('button.btn-close');
         });
 
         test.skip('add Tag', async () => {

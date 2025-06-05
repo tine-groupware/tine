@@ -43,7 +43,7 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
             if (!renderers[key]) {
                 renderers[key] = (id) => {
                     if (!id) return "";
-                    const record = store ? store.getById(id) : null;
+                    const record = store ? store.getById(_.get(id, 'id', id)) : null;
                     const i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id);
                     const icon = record ? record.get('icon') : null;
                     let string = '';

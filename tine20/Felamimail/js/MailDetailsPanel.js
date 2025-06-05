@@ -176,18 +176,14 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
      * @private
      */
     initTemplate: function() {
+        const grid = this.grid;
 
         this.tpl = new Ext.XTemplate(
-            '{[this.showSpamToolbar(values)]}',
-            '<div class="preview-panel-felamimail">',
-            '{[this.showInfo(values)]}',
-            '{[this.showAttachments(values.attachments, values)]}',
-            '{[this.showFileLocations(values)]}',
-            '<div class="preview-panel-felamimail-preparedPart"></div>',
-            '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
-            '</div>',{
+            '{[this.showStapledEffect(values)]}',
+            {
                 app: this.app,
                 panel: this,
+                // Keep all your existing methods
                 encode: function(value) {
                     if (value) {
                         // it should be enough to replace only 2 or more spaces
@@ -199,19 +195,81 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         return '';
                     }
                 },
+                // Show the stapled effect for multiple selection
+                showStapledEffect: function(values) {
+                    let count = 1;
+                    if (grid?.grid) {
+                        const selModel = grid.grid.getSelectionModel();
+                        const selections = selModel.getSelections();
+                        count = selections.length;
+                    }
+
+                    const maxLayers = Ext.isTouchDevice ? 5 : 3;
+                    const layer = Math.min(count, maxLayers);
+
+                    let html = '<div class="email-stapled-container">';
+                    // Get the last 'layer' number of cards
+                    const cardIndexes = Array.from({ length: count }, (_, i) => i + 1).slice(-layer);
+
+                    // Create each card in the stack
+                    cardIndexes.forEach((value, i) => {
+                        const zIndex = 10 + i;
+                        const isLastCard = i === layer - 1;
+                        let cardStyle = `z-index: ${zIndex};`;
+
+                        // Different styling based on device and card count
+                        if (layer > 1) {
+                            if (Ext.isTouchDevice) {
+                                const ratio = 99 - (layer - i);
+                                cardStyle += `
+                                  width: calc(${ratio}% - 20px);
+                                  height: calc(100% - 50px);
+                                  top: ${i * 5}px;
+                                `;
+                            } else {
+                                const rotation = [-1, 0, 1][value % 3];
+                                cardStyle += `
+                                  width: calc(100% - 50px);
+                                  height: calc(100% - 50px);
+                                  transform: rotate(${rotation}deg);
+                                  top: 15px;
+                                `;
+                            }
+                        }
+
+                        html += `<div class="email-stapled-card" style="${cardStyle}">`;
+
+                        if (isLastCard) {
+                            html += this.showSpamToolbar(values);
+                            html += '<div class="preview-panel-felamimail">';
+                            html += this.showInfo(values);
+                            html += this.showAttachments(values.attachments, values);
+                            html += this.showFileLocations(values);
+                            html += '<div class="preview-panel-felamimail-preparedPart"></div>';
+                            html += '<div class="preview-panel-felamimail-body">';
+                            html += this.showBody(values.body, values);
+                            html += '</div>';
+                        }
+
+                        html += '</div>';
+                    });
+
+                    html += '</div>';
+                    return html;
+                },
                 showSpamToolbar: function(messageData) {
                     const app = Tine.Tinebase.appMgr.get('Felamimail');
                     const account = app.getAccountStore().getById(messageData.account_id);
                     const folder = app.getFolderStore().getById(messageData.folder_id);
                     if (!folder || !account || account.get('type') === 'user' || !messageData.is_spam_suspicions) return '';
-                    
+
                     const html = '<span style="width: 60%; padding: 5px;">'
                         + app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"') + '</span>';
                     const aboutAction = `<span id="action_about" class="felamimail-action"><span class="felamimail-location-icon action_about"></span></span>`;
                     const actions =
                         '<span id="spam_action_spam" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-spam"></span><span>' + app.i18n._('Yes, it is SPAM') + '</span></span>' +
                         '<span id="spam_action_ham" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-ham"></span><span>' + app.i18n._('No, it is not') + '</span></span>' ;
-                    
+
                     return `<div id="spam_toolbar" class="felamimail_spam_suspicions_toolbar">${html}${aboutAction}<span>${actions}</span></div>`;
                 },
                 linkifyEmail(name, email) {
@@ -272,7 +330,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     if (body) {
                         var account = this.app.getActiveAccount();
                         if (account && (account.get('display_format') === 'plain' ||
-                                (account.get('display_format') === 'content_type' && messageData.body_content_type === 'text/plain'))
+                            (account.get('display_format') === 'content_type' && messageData.body_content_type === 'text/plain'))
                         ) {
                             var width = this.panel.body.getWidth()-25,
                                 height = this.panel.body.getHeight()-90,
@@ -329,7 +387,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     let fileLocations = _.get(messageData, 'fileLocations', []);
                     const fileLocationBlock =  document.createElement('div');
                     fileLocationBlock.className = 'preview-panel-felamimail-filelocations';
-                    
+
                     if (fileLocations.length) {
                         let app = Tine.Tinebase.appMgr.get('Felamimail');
                         const html = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations, ', ');
@@ -422,6 +480,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                     onNavigateAttachment: this.onNavigateAttachment,
                                     sm: this.grid?.getGrid()?.getSelectionModel(),
                                     initialAttachmentIdx: idx !== 'all' ? +idx : 0,
+                                    requiredGrant: false,
                                 });
                             },
                         }, {
@@ -578,7 +637,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     onNavigateAttachment: function(dir) {
         this.initialAttachmentIdx += dir;
         if (this.attachments?.[this.initialAttachmentIdx]) {
-            this.record = this.attachments[this.initialAttachmentIdx];
+            this.record = this.attachments[this.initialAttachmentIdx].cache;
             this.loadPreviewPanel();
         }
     },
@@ -602,9 +661,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 this.record = new Tine.Tinebase.Model.Tree_Node({name: 'Email has no attachemtns', path: ''});
                 return;
             }
-            this.attachments = _.map(this.record.get('attachments'), (attachment) => {
-                return new Tine.Tinebase.Model.Tree_Node(attachment);
-            });
+            this.attachments = attachments;
 
             // make sure we get the attachment caches
             attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record, true);
@@ -614,6 +671,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
 
         await Promise.all(promises).then((cachePromises) => {
+            if (!cachePromises.length) return;
             let resolvedAttachmentData = {};
             const validResponse = cachePromises.find((r) => {return r?.isPreviewReady && r?.cache;});
             if (validResponse) {

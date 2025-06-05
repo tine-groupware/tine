@@ -116,7 +116,7 @@ class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
 
             try {
                 $node = $this->server->tree->getNodeForPath($principal);
-            } catch (\Sabre\DAV\Exception\NotFound $e) {
+            } catch (\Sabre\DAV\Exception\NotFound) {
                 continue;
             }
             if ($node instanceof \Sabre\DAVACL\IPrincipal) {

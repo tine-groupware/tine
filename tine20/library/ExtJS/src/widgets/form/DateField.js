@@ -428,10 +428,8 @@ dateField.setValue('2006-05-04');
 
     // private
     beforeBlur : function(){
-        var v = this.parseDate(this.getRawValue());
-        if(v){
-            this.setValue(v);
-        }
+        const v = this.parseDate(this.getRawValue()) ?? '';
+        this.setValue(v);
     }
 
     /**

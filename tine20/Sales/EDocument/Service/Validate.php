@@ -55,15 +55,17 @@ class Sales_EDocument_Service_Validate
         }
 
         $errors = [];
-        foreach ($xml->children('rep', true)->scenarioMatched->validationStepResult as $node) {
-            foreach ($node->attributes() as $attribute) {
-                if ($attribute->getName() === 'valid' && (string)$attribute === 'true') {
-                    continue 2;
+        if (null === ($xml->children('rep', true)->assessment->accept->explanation ?? null)) {
+            foreach ($xml->children('rep', true)->scenarioMatched->validationStepResult as $node) {
+                foreach ($node->attributes() as $attribute) {
+                    if ($attribute->getName() === 'valid' && (string)$attribute === 'true') {
+                        continue 2;
+                    }
                 }
-            }
-            foreach ($node->children('rep', true) as $errNode) {
-                $err = (string)$errNode;
-                $errors[] = $err;
+                foreach ($node->children('rep', true) as $errNode) {
+                    $err = (string)$errNode;
+                    $errors[] = $err;
+                }
             }
         }
 

@@ -17,7 +17,14 @@
  */
 class Tinebase_Model_Sms_MockAdapter extends Tinebase_Model_Sms_GenericHttpAdapter
 {
-    const MODEL_NAME_PART = 'Sms_MockAdapter';
+    public const MODEL_NAME_PART = 'Sms_MockAdapter';
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = null;
 
     public function send(Tinebase_Model_Sms_SendConfig $config): bool
     {

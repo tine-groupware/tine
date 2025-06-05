@@ -188,8 +188,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Registering " . print_r($this->_options, true));
         
-        $this->_userUUIDAttribute  = strtolower($this->_options['userUUIDAttribute']);
-        $this->_groupUUIDAttribute = strtolower($this->_options['groupUUIDAttribute']);
+        $this->_userUUIDAttribute  = strtolower((string) $this->_options['userUUIDAttribute']);
+        $this->_groupUUIDAttribute = strtolower((string) $this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
         $this->_userBaseFilter     = $this->_options['userFilter'];
         $this->_userSearchScope    = $this->_options['userSearchScope'];
@@ -222,7 +222,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function registerLdapPlugin(Tinebase_User_Plugin_LdapInterface $plugin)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . get_class($plugin) . ' LDAP plugin.');
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Registering " . $plugin::class . ' LDAP plugin.');
         
         $plugin->setLdap($this->_ldap);
         $this->_ldapPlugins[] = $plugin;
@@ -261,7 +261,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $attributes,
             $_sort !== null ? $this->_rowNameMapping[$_sort] : null
         );
-        
+
         $result = new Tinebase_Record_RecordSet($_accountClass);
 
         // nothing to be done anymore
@@ -271,7 +271,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         foreach ($accounts as $account) {
             $accountObject = $this->_ldap2User($account, $_accountClass);
-            
+
             if ($accountObject) {
                 $result->addRecord($accountObject);
             }
@@ -328,7 +328,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         foreach ($ldapCollection as $data) {
             $row = array('dn' => $data['dn']);
             foreach ($attributes as $key) {
-                $lowerKey = strtolower($key);
+                $lowerKey = strtolower((string) $key);
                 if (isset($data[$lowerKey]) && isset($data[$lowerKey][0])) {
                     $row[$key] = $data[$lowerKey][0];
                 }
@@ -368,7 +368,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if ('accountId' === $_property && ! $_accountId instanceof Tinebase_Model_FullUser) {
             try {
                 $_accountId = $this->getFullUserById($_accountId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // user might not exist, yet (i.e. was just added via \Tinebase_User_ActiveDirectory::addUserToSyncBackend)
             }
         }
@@ -690,7 +690,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             foreach ($this->_ldapPlugins as $plugin) {
                 $plugin->inspectDeleteUser($_userId);
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' user not found in sync backend: ' . $_userId);
         }
@@ -876,8 +876,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         sort($allUidNumbers);
 
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  Existing uidnumbers " . print_r($allUidNumbers, true));
-        $minUidNumber = isset($this->_options['minUserId']) ? $this->_options['minUserId'] : 1000;
-        $maxUidNumber = isset($this->_options['maxUserId']) ? $this->_options['maxUserId'] : 65000;
+        $minUidNumber = $this->_options['minUserId'] ?? 1000;
+        $maxUidNumber = $this->_options['maxUserId'] ?? 65000;
 
         $numUsers = count($allUidNumbers);
         if ($numUsers == 0 || $allUidNumbers[$numUsers-1] < $minUidNumber) {
@@ -981,13 +981,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         break;
 
                     case 'accountEmailAddress':
-                        if ('' !== trim($value[0])) {
+                        if ('' !== trim((string) $value[0])) {
                             $accountArray[$keyMapping] = $value[0];
                         }
                         break;
 
                     case 'accountLoginName':
-                        $accountArray[$keyMapping] = strtolower($value[0]);
+                        $accountArray[$keyMapping] = strtolower((string) $value[0]);
                         break;
 
                     default:
@@ -1186,7 +1186,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $ldapData['homedirectory'] = '/dev/null';
         }
         
-        $ldapData['objectclass'] = isset($_ldapEntry['objectclass']) ? $_ldapEntry['objectclass'] : array();
+        $ldapData['objectclass'] = $_ldapEntry['objectclass'] ?? array();
         
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements

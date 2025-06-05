@@ -225,6 +225,8 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
      * name of container (plural)
      */
     containersName: 'containers',
+
+    requiredGrants: null,
     
     /**
      * @cfg {Tine.Tinebase.data.Record} recordClass
@@ -295,6 +297,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
             appName: this.recordClass.getMeta('appName'),
             containerName: this.containerName,
             containersName: this.containersName,
+            requiredGrants: this.requiredGrants,
             listeners: {
                 scope: this, 
                 select: this.onContainerSelect

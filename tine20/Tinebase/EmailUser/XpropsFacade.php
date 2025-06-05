@@ -20,8 +20,8 @@ class Tinebase_EmailUser_XpropsFacade
     /**
      * record xprops for email user ids (for example in dovecot/postfix sql)
      */
-    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
-    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+    public const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    public const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
      * @param Tinebase_Record_Abstract $record
@@ -161,9 +161,7 @@ class Tinebase_EmailUser_XpropsFacade
     public static function getEmailUserId($record, $xprop = self::XPROP_EMAIL_USERID_IMAP, $userIdAsFallback = true)
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
-            $result = isset($record->xprops()[$xprop])
-                ? $record->xprops()[$xprop]
-                : ($userIdAsFallback ? $record->getId() : null);
+            $result = $record->xprops()[$xprop] ?? ($userIdAsFallback ? $record->getId() : null);
             if (! $result) {
                 // check if we get user id from imap or smtp user
                 if ($xprop === self::XPROP_EMAIL_USERID_IMAP

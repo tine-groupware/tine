@@ -50,28 +50,28 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             case 'within':
                 filter.numberfield.hide();
                 filter.datePicker.hide();
-                filter.textfield.hide();
+                filter.monthPicker.hide();
                 filter.withinCombo.show();
                 filter.formFields.value = filter.withinCombo;
                 break;
             case 'inweek':
                 filter.withinCombo.hide();
                 filter.datePicker.hide();
-                filter.textfield.hide();
+                filter.monthPicker.hide()
                 filter.numberfield.show();
                 filter.formFields.value = filter.numberfield;
                 break;
             case 'equals':
-                filter.withinCombo.hide();
-                filter.datePicker.hide();
-                filter.numberfield.hide();
-                filter.textfield.show();
-                filter.formFields.value = filter.textfield;
+                filter.numberfield.hide()
+                filter.withinCombo.hide()
+                filter.datePicker.hide()
+                filter.monthPicker.show()
+                filter.formFields.value = filter.monthPicker
                 break;
             default:
                 filter.withinCombo.hide();
                 filter.numberfield.hide();
-                filter.textfield.hide();
+                filter.monthPicker.hide()
                 filter.datePicker.show();
                 filter.formFields.value = filter.datePicker;
         }
@@ -90,24 +90,97 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      */
     dateValueRenderer: function(filter, el) {
         var operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator;
-        
-        if (! filter.textfield) {
-            filter.textfield = new Ext.ux.form.ClearableTextField({
+        const me = this
+
+        if (! filter.monthPicker) {
+            filter.monthPicker = new Ext.form.ComboBox({
+                hidden: operator !== 'equals',
                 filter: filter,
-                hidden: true,
                 renderTo: el,
-                value: filter.data.value ? filter.data.value : '',
-                emptyText: this.emptyText,
+                mode: 'local',
+                lazyInit: false,
+                forceSelection: true,
+                hideTrigger: true,
+                editable: false,
                 listeners: {
-                    scope: this,
-                    change: function() { this.onFiltertrigger() },
-                    specialkey: function(field, e){
+                    'specialkey': function(field, e) {
                         if(e.getKey() == e.ENTER){
-                            this.onFiltertrigger();
+                            me.onFiltertrigger();
                         }
-                    }
+                    },
+                    'select': function(c) {
+                        if (c.getValue() != 'period') {
+                            me.onFiltertrigger();
+                        }
+                    },
+                    scope: this
                 }
-            });
+            })
+            filter.monthPicker.origGetValue = filter.monthPicker.getValue;
+            filter.monthPicker.getValue = function(v) {
+                v = this.origGetValue()
+                if (v && v.from && Ext.isDate(v.from)) {
+                    v = v.from.format('Y-m')
+                }
+                if (this.pp.value && this.pp.value.from) {
+                    v = this.pp.value.from.format('Y-m')
+                }
+                return v
+            }
+            filter.monthPicker.origSetValue = filter.monthPicker.setValue
+            filter.monthPicker.setValue = function (v) {
+                if (! this.pp) {
+                    this.pp = new Ext.ux.form.PeriodPicker({
+                        range: 'month',
+                        availableRanges: 'month',
+                        periodIncludesUntil: true,
+                        cls: 'x-pp-combo',
+                        'renderTo': this.wrap
+                    });
+                    filter.monthPicker.on('resize', function(cmp, w) {
+                        this.pp.setSize(w-18);
+                    });
+                    this.pp.on('change', me.onFiltertrigger, me , {buffer: 250});
+                    filter.monthPicker.on('resize', function(cmp, w) {
+                        this.pp.setSize(w-18);
+                    });
+                }
+                this.pp.show()
+                if (v.from) {
+                    this.pp.setValue(v)
+                    return
+                }
+
+                let value = {from: null, until: null}
+                if (Ext.isString(v) && v.match(/^[0-9]{4}-[0-9]{2}$/)) {
+                    value.from = new Date(v+'-01')
+                    value.until = new Date(v+'-28')
+                }
+                if (Ext.isDate(v)) {
+                    value.from = v
+                    value.until = v
+                }
+                this.pp.setValue(value)
+            }
+
+            filter.monthPicker.origOnSelect = filter.monthPicker.onSelect;
+            filter.monthPicker.onSelect = function() {
+                this.manualSelect = true;
+                return this.origOnSelect.apply(this, arguments)
+            }
+
+            const today = new Date()
+            let monthValue = today.format('Y-m')
+            if (filter.data.value) {
+                if (filter.data.value.from) {
+                    monthValue = filter.data.value
+                }
+
+                if (filter.data.value.toString().match(/^[0-9]{4}-[0-9]{2}$/)) {
+                    monthValue = filter.data.value
+                }
+            }
+            filter.monthPicker.setValue(monthValue)
         }
         
         if (operator != 'equals') {

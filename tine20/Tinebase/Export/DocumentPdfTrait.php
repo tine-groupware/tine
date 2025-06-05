@@ -110,7 +110,7 @@ trait Tinebase_Export_DocumentPdfTrait
 
         if (null !== $_target) {
             if (is_resource($_target)) {
-                fwrite($_target, $result);
+                fwrite($_target, (string) $result);
             } else {
                 file_put_contents($_target, $result);
             }

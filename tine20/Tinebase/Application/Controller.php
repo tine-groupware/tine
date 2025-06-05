@@ -31,7 +31,7 @@ class Tinebase_Application_Controller extends Tinebase_Controller_Abstract
     /**
      * Instance of Controller Object.
      */
-    public static function getInstance()
+    public static function getInstance(): never
     {
         throw new Tinebase_Exception('Use the constructor');
     }

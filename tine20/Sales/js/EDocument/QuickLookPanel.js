@@ -39,4 +39,6 @@ Ext.reg('Sales.EDocumentQuickLookPanel', EDocumentQuickLookPanel);
 
 // NOTE: xml should be quicklooked with an ace by default. we need a mechanism to switch views if multiple registrations
 //       are there for the same contentType/extension
-Tine.Filemanager.QuickLookRegistry.registerContentType('application/xml', 'Sales.EDocumentQuickLookPanel');
+if (_.isFunction(_.get(Tine, 'Filemanager.QuickLookRegistry.registerContentType'))) {
+    Tine.Filemanager.QuickLookRegistry.registerContentType('application/xml', 'Sales.EDocumentQuickLookPanel');
+}

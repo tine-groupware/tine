@@ -76,7 +76,7 @@ class SSO_PublicAPITest extends TestCase
             SSO_Model_RelyingParty::FLD_NAME => 'https://localhost:8443/auth/saml2/sp/metadata.php',
             SSO_Model_RelyingParty::FLD_LABEL => 'moodle',
             SSO_Model_RelyingParty::FLD_DESCRIPTION => 'desc',
-            SSO_Model_RelyingParty::FLD_LOGO => 'logo',
+            SSO_Model_RelyingParty::FLD_LOGO_LIGHT => 'logo',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_Saml2RPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_Saml2RPConfig([
                 SSO_Model_Saml2RPConfig::FLD_NAME => 'moodle',
@@ -92,10 +92,11 @@ class SSO_PublicAPITest extends TestCase
     }
 
     /**
-     * @throws Tinebase_Exception
-     * @throws Zend_Session_Exception
      *
      * @group needsbuild
+     *
+     * @throws Tinebase_Exception
+     * @throws Zend_Session_Exception
      */
     public function testSaml2LoginPage()
     {
@@ -114,7 +115,7 @@ class SSO_PublicAPITest extends TestCase
         $this->assertStringContainsString('},"relyingParty":{', $response);
         $this->assertStringContainsString('"label":"moodle"', $response);
         $this->assertStringContainsString('"description":"desc"', $response);
-        $this->assertStringContainsString('"logo":"logo"', $response);
+        $this->assertStringContainsString('"logo_light":"logo"', $response);
     }
 
     protected function createSAMLRequest()
@@ -161,6 +162,96 @@ class SSO_PublicAPITest extends TestCase
         $this->assertStringContainsString(
             '<saml:Attribute Name="Klasse" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"><saml:AttributeValue xsi:type="xs:string">Users</saml:AttributeValue></saml:Attribute>',
             $xml);
+    }
+
+    /**
+     * @group needsbuild
+     */
+    public function testOAuthDeviceTokenCall()
+    {
+        $clientId = 'unittest';
+        /*$relyingParty = */SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
+            SSO_Model_RelyingParty::FLD_NAME => $clientId,
+            SSO_Model_RelyingParty::FLD_LABEL => 'unittest label',
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
+                SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
+                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
+                SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS   => new Tinebase_Record_RecordSet(SSO_Model_OAuthGrant::class, [[
+                    SSO_Model_OAuthGrant::FLD_GRANT => SSO_Config::OAUTH2_GRANTS_DEVICE_CODE,
+                ]]),
+            ]),
+        ]));
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/device/auth', 'POST'))
+                ->withParsedBody([
+                    'client_id' => $clientId,
+                ])
+        );
+
+        Tinebase_Core::unsetUser();
+        $coreSession = Tinebase_Session::getSessionNamespace();
+        if (isset($coreSession->currentAccount)) {
+            unset($coreSession->currentAccount);
+        }
+
+        $response = SSO_Controller::publicOAuthDeviceAuth();
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertIsArray($body = json_decode($body, true));
+        $this->assertArrayHasKey('device_code', $body);
+        $deviceCode = $body['device_code'];
+        $this->assertArrayHasKey('user_code', $body);
+        $userCode = $body['user_code'];
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/token', 'POST'))
+                ->withParsedBody([
+                    'client_id' => $clientId,
+                    'device_code' => $deviceCode,
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
+                ])
+        );
+
+        $response = SSO_Controller::publicToken();
+        $this->assertSame(400, $response->getStatusCode());
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+        $this->assertIsArray($body = json_decode($body, true));
+        $this->assertArrayHasKey('error', $body);
+        $this->assertSame('authorization_pending', $body['error']);
+
+        Tinebase_Core::setUser($this->_originalTestUser); // publicToken sets anonymous user
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/device/user/' . $userCode, 'POST'))
+                ->withParsedBody([
+                    'confirmed' => 1,
+                ])
+        );
+
+        SSO_Controller::publicOAuthDeviceUser($userCode);
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/sso/oauth2/token', 'POST'))
+                ->withParsedBody([
+                    'client_id' => $clientId,
+                    'device_code' => $deviceCode,
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
+                ])
+        );
+
+        $response = SSO_Controller::publicToken();
+        $this->assertSame(200, $response->getStatusCode());
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+        $bodyDecoded = json_decode($body, true);
+        $this->assertIsArray($bodyDecoded, $body);
+        $this->assertArrayHasKey('access_token', $bodyDecoded);
+        $this->assertArrayHasKey('id_token', $bodyDecoded);
     }
 
     /**

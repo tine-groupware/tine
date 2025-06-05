@@ -55,7 +55,7 @@ class Tinebase_Exception extends Exception
     public function __construct($message = null, $code = 0, $previous = null)
     {
         if (! $this->_appName) {
-            $c = explode('_', get_class($this));
+            $c = explode('_', static::class);
             $this->_appName = $c[0];
         }
         
@@ -63,7 +63,7 @@ class Tinebase_Exception extends Exception
             $this->_title = 'Exception ({0})'; // _('Exception ({0})')
         }
         
-        parent::__construct(($message ? $message : $this->message), $code, $previous);
+        parent::__construct(($message ?: $this->message), $code, $previous);
     }
     
     /**
@@ -98,18 +98,28 @@ class Tinebase_Exception extends Exception
      */
     protected static function _replaceBasePath($_string)
     {
-        $basePath = dirname(dirname(__FILE__));
+        $basePath = dirname(__FILE__, 2);
         return str_replace($basePath, '...', $_string);
     }
-    
+
+    public static function wrap(Throwable $t, string $logLevel, bool $logToSentry): Tinebase_Exception
+    {
+        if (!$t instanceof Tinebase_Exception) {
+            $t = new Tinebase_Exception($t->getMessage(), previous: $t);
+        }
+        $t->setLogToSentry($logToSentry);
+        $t->setLogLevelMethod($logLevel);
+
+        return $t;
+    }
+
     /**
      * log exception (remove confidential information from trace)
-     * 
+     *
      * @param Throwable $exception
      * @param boolean $suppressTrace
-     * @param mixed $additionalData
      */
-    public static function log(Throwable $exception, $suppressTrace = null, $additionalData = null)
+    public static function log(Throwable $exception, $suppressTrace = null, mixed $additionalData = null)
     {
         if (! is_object(Tinebase_Core::getLogger())) {
             // no logger -> exception happened very early
@@ -132,12 +142,12 @@ class Tinebase_Exception extends Exception
         $logMethod = $exception instanceof Tinebase_Exception ? $exception->getLogLevelMethod() : 'err';
         $logLevel = strtoupper($logMethod);
 
-        Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $exception->getFile() . ':' . $exception->getLine() . ' ' . get_class($exception)
+        Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $exception->getFile() . ':' . $exception->getLine() . ' ' . $exception::class
             . ' -> ' . $exception->getMessage());
 
         $previous = $exception->getPrevious();
         while ($previous) {
-            Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $previous->getFile() . ':' . $previous->getLine() . ' ' . get_class($previous)
+            Tinebase_Core::getLogger()->$logMethod(__METHOD__ . '::' . __LINE__ . ' ' . $previous->getFile() . ':' . $previous->getLine() . ' ' . $previous::class
                 . ' -> ' . $previous->getMessage());
             $previous = $previous->getPrevious();
         }

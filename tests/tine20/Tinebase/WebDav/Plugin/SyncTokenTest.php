@@ -125,7 +125,14 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
 
     public function testSyncCollectionEmptyContainer()
     {
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['jmcblack']);
+        $jmcblack =  $this->_getPersona('jmcblack');
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblack->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
+        Tinebase_Core::set(Tinebase_Core::USER, $jmcblack);
 
         $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['jmcblack']->getId());
         $request = new Sabre\HTTP\Request('REPORT', $uri, [], '<?xml version="1.0" encoding="UTF-8"?>

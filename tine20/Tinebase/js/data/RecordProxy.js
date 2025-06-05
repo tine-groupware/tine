@@ -114,6 +114,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     transId: null,
 
     /**
+     * request context with tine20 prefix
+     * @property transId
+     */
+    requestContext: {},
+
+    /**
      * TODO is this really needed?
      */
     onDestroyRecords: Ext.emptyFn,
@@ -230,6 +236,10 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
 
         options = options || {};
         options.params = options.params || {};
+        options.headers = {
+            ...this.requestContext,
+            ...options.headers
+        };
         options.beforeSuccess = function(response) {
             const serverRecord = this.recordReader(response);
             _.defer(() => {
@@ -586,5 +596,11 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             topic: [this.appName, this.modelName, action].join('.'),
             data: recordData
         });
+    },
+
+    setRequestContext(ctx) {
+        this.requestContext = _.reduce(Object.keys(ctx), (accu, key) => {
+            return _.set(accu, `X-TINE20-REQUEST-CONTEXT-${key.toUpperCase()}`, encodeURIComponent(ctx[key]));
+        }, {})
     }
 });

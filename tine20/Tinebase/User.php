@@ -22,10 +22,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * 
      * @var string
      */
-    const ACTIVEDIRECTORY = 'ActiveDirectory';
-    const LDAP   = 'Ldap';
-    const SQL    = 'Sql';
-    const TYPO3  = 'Typo3';
+    public const ACTIVEDIRECTORY = 'ActiveDirectory';
+    public const LDAP   = 'Ldap';
+    public const SQL    = 'Sql';
+    public const TYPO3  = 'Typo3';
     
     /**
      * user status constants
@@ -34,46 +34,46 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * 
      * @todo use constants from model
      */
-    const STATUS_BLOCKED  = 'blocked';
-    const STATUS_DISABLED = 'disabled';
-    const STATUS_ENABLED  = 'enabled';
-    const STATUS_EXPIRED  = 'expired';
+    public const STATUS_BLOCKED  = 'blocked';
+    public const STATUS_DISABLED = 'disabled';
+    public const STATUS_ENABLED  = 'enabled';
+    public const STATUS_EXPIRED  = 'expired';
     
     /**
      * Key under which the default user group name setting will be stored/retrieved
      *
      */
-    const DEFAULT_USER_GROUP_NAME_KEY = 'defaultUserGroupName';
+    public const DEFAULT_USER_GROUP_NAME_KEY = 'defaultUserGroupName';
     
     /**
      * Key under which the default admin group name setting will be stored/retrieved
      *
      */
-    const DEFAULT_ADMIN_GROUP_NAME_KEY = 'defaultAdminGroupName';
+    public const DEFAULT_ADMIN_GROUP_NAME_KEY = 'defaultAdminGroupName';
 
     /**
      * Key under which the default anonymous group name setting will be stored/retrieved
      *
      */
-    const DEFAULT_ANONYMOUS_GROUP_NAME_KEY = 'defaultAnonymousGroupName';
+    public const DEFAULT_ANONYMOUS_GROUP_NAME_KEY = 'defaultAnonymousGroupName';
 
-    const SYSTEM_USER_CRON = 'cronuser';
-    const SYSTEM_USER_REPLICATION = 'replicationuser';
-    const SYSTEM_USER_ANONYMOUS = 'anonymoususer';
-    const SYSTEM_USER_CALENDARSCHEDULING = 'calendarscheduling';
-    const SYSTEM_USER_SETUP = 'setupuser';
+    public const SYSTEM_USER_CRON = 'cronuser';
+    public const SYSTEM_USER_REPLICATION = 'replicationuser';
+    public const SYSTEM_USER_ANONYMOUS = 'anonymoususer';
+    public const SYSTEM_USER_CALENDARSCHEDULING = 'calendarscheduling';
+    public const SYSTEM_USER_SETUP = 'setupuser';
 
     /**
      * Do the user sync with the options as configured in the config.
      * see Tinebase_Config:: TODO put key here
      * for details and default behavior
      */
-    const SYNC_WITH_CONFIG_OPTIONS = 'sync_with_config_options';
+    public const SYNC_WITH_CONFIG_OPTIONS = 'sync_with_config_options';
 
     /**
      * Key under which the default replication group name setting will be stored/retrieved
      */
-    const DEFAULT_REPLICATION_GROUP_NAME_KEY = 'defaultReplicationGroupName';
+    public const DEFAULT_REPLICATION_GROUP_NAME_KEY = 'defaultReplicationGroupName';
 
     protected static $_contact2UserMapping = array(
         'n_family'      => 'accountLastName',
@@ -307,7 +307,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Created user backend of type ' . get_class($result));
+            . ' Created user backend of type ' . $result::class);
 
         return $result;
     }
@@ -368,13 +368,12 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * Setting will not be written to Database or Filesystem.
      * To persist the change call {@see saveBackendConfiguration()}
      *
-     * @param mixed $_value
      * @param string $_key
      * @param boolean $_applyDefaults
      * @throws Tinebase_Exception_InvalidArgument
      * @todo generalize this (see Tinebase_Auth::setBackendConfiguration)
      */
-    public static function setBackendConfiguration($_value, $_key = null, $_applyDefaults = false)
+    public static function setBackendConfiguration(mixed $_value, $_key = null, $_applyDefaults = false)
     {
         $defaultValues = self::$_backendConfigurationDefaults[self::getConfiguredBackend()];
         
@@ -393,7 +392,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 return;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Setting backend key ' . $_key . ' to ' . (preg_match('/password|pwd|pass|passwd/i', $_key) ? '********' : $_value));
+                ' Setting backend key ' . $_key . ' to ' . (preg_match('/password|pwd|pass|passwd/i', (string) $_key) ? '********' : $_value));
             
             self::$_backendConfiguration[$_key] = $_value;
         }
@@ -522,7 +521,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * 
      * @todo switch to new primary group if it could not be found
      */
-    public static function syncUser($username, $options = array())
+    public static function syncUser(mixed $username, $options = array())
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
             return null;
@@ -613,7 +612,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                         . " Remove invalid user: " . $username);
                     // this will fire a delete event
                     $userBackend->deleteUserInSqlBackend($invalidUser);
-                } catch (Tinebase_Exception_NotFound $ten) {
+                } catch (Tinebase_Exception_NotFound) {
                     // do nothing
                 }
 
@@ -669,7 +668,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         }
 
-        Addressbook_Controller_Contact::getInstance()->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
+        Addressbook_Controller_Contact::getInstance()->setRequestContext($oldRequestContext ?? array());
         Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerAcl);
 
         return $syncedUser;
@@ -801,7 +800,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
     {
         try {
             $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
-        } catch (Tinebase_Exception_Record_NotDefined $tern) {
+        } catch (Tinebase_Exception_Record_NotDefined) {
             try {
                 $group = self::_getPrimaryGroupFromSyncBackend($user);
             } catch (Tinebase_Exception $te) {
@@ -814,7 +813,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Assign default user group: ' . $group->name);
                 }
-                $user->accountPrimaryGroup = $group;
+                $user->accountPrimaryGroup = $group->getId();
             }
         }
         
@@ -838,14 +837,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
         } else {
             try {
                 $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+            } catch (Tinebase_Exception_Record_NotDefined) {
                 throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
             }
             try {
                 $groupBackend->getGroupByName($group->name);
                 throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
 
-            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+            } catch (Tinebase_Exception_Record_NotDefined) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . " Adding group " . $group->name);
@@ -886,7 +885,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $hook = Tinebase_Config::getInstance()->getHookClass(Tinebase_Config::SYNC_USER_HOOK_CLASS, 'syncUser');
         if ($hook) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Calling ' . get_class($hook) . '::syncUser() ...');
+                . ' Calling ' . $hook::class . '::syncUser() ...');
 
             try {
                 $result = call_user_func_array(array($hook, 'syncUser'), array($user, $userProperties));
@@ -1126,7 +1125,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         foreach ($result as $user) {
             try {
                 $sqlBackend->setPassword($user['entryUUID'], $user['userPassword'], FALSE);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Could not find user with id ' . $user['entryUUID'] . ' in SQL backend.');
             }
@@ -1217,7 +1216,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'accountLastName'       => $adminLastName,
             'accountDisplayName'    => $adminLastName . ', ' . $adminFirstName,
             'accountFirstName'      => $adminFirstName,
-            'accountExpires'        => (isset($_options['expires'])) ? $_options['expires'] : NULL,
+            'accountExpires'        => $_options['expires'] ?? NULL,
             'accountEmailAddress'   => $adminEmailAddress,
             'groups'                => $adminGroup->getId(),
         ));
@@ -1248,12 +1247,12 @@ class Tinebase_User implements Tinebase_Controller_Interface
             // add the admin account to all groups
             $groupsBackend->addGroupMember($adminGroup, $user);
             $groupsBackend->addGroupMember($userGroup, $user);
-        } catch (Tinebase_Exception_NotFound $ten) {
+        } catch (Tinebase_Exception_NotFound) {
             Admin_Controller_User::getInstance()->create($user, $adminPassword, $adminPassword, true);
         }
 
         $addressBookController->doContainerACLChecks($oldAcl);
-        $addressBookController->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
+        $addressBookController->setRequestContext($oldRequestContext ?? array());
     }
 
     /**
@@ -1275,7 +1274,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Use existing system user ' . $accountLoginName);
             return $systemUser;
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // continue
         }
 
@@ -1366,7 +1365,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     // user might have been deleted -> undelete
                     try {
                         $systemUser = $userBackend->getUserByLoginName($accountLoginName, Tinebase_Model_FullUser::class);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         $userBackend->undelete($accountLoginName);
                         $systemUser = $userBackend->getUserByLoginName($accountLoginName, Tinebase_Model_FullUser::class);
                     }
@@ -1428,17 +1427,17 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $pass = '';
 
         for ($i = 0; $i < $length; $i++) {
-            $pass .= $used_symbols[rand(0, $symbols_length)];
+            $pass .= $used_symbols[random_int(0, $symbols_length)];
         }
 
         for ($i = 0; $i < $upperCase; $i++) {
             $pass = substr($pass, 1) ;
-            $pass .= $symbolsUpper[rand(0, strlen($symbolsUpper) - 1)];
+            $pass .= $symbolsUpper[random_int(0, strlen($symbolsUpper) - 1)];
         }
 
         for ($i = 0; $i < $numSpecialChar; $i++) {
             $pass = substr($pass, 1) ;
-            $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
+            $pass .= $symbolsSpecialChars[random_int(0, strlen($symbolsSpecialChars) - 1)];
         }
 
         return str_shuffle($pass);

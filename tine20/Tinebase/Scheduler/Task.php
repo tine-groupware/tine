@@ -24,38 +24,38 @@ class Tinebase_Scheduler_Task
      * 
      * @var string
      */
-    const TASK_TYPE_MINUTELY = '* * * * *';
+    public const TASK_TYPE_MINUTELY = '* * * * *';
     
     /**
      * hourly task
      * 
      * @var string
      */
-    const TASK_TYPE_HOURLY = '0 * * * *';
+    public const TASK_TYPE_HOURLY = '0 * * * *';
 
     /**
      * daily task
      * 
      * @var string
      */
-    const TASK_TYPE_DAILY = '0 0 * * *';
+    public const TASK_TYPE_DAILY = '0 0 * * *';
 
     /**
      * weekly task (thursdays)
      *
      * @var string
      */
-    const TASK_TYPE_WEEKLY = '0 1 * * 4';
+    public const TASK_TYPE_WEEKLY = '0 1 * * 4';
 
     /**
      * monthly task (first day of month at 2 am)
      */
-    const TASK_TYPE_MONTHLY = '0 2 1 * *';
+    public const TASK_TYPE_MONTHLY = '0 2 1 * *';
 
-    const CLASS_NAME = 'class';
-    const CONTROLLER = 'controller';
-    const METHOD_NAME = 'method';
-    const ARGS = 'args';
+    public const CLASS_NAME = 'class';
+    public const CONTROLLER = 'controller';
+    public const METHOD_NAME = 'method';
+    public const ARGS = 'args';
 
     /**
      * measures the time spend in run() method in seconds
@@ -110,10 +110,10 @@ class Tinebase_Scheduler_Task
         $this->_cron = $options['cron'];
         $this->_cronObject = Cron\CronExpression::factory($this->_cron);
         $this->_callables = $options['callables'];
-        $this->_config = isset($options['config']) ? $options['config'] : null;
-        $this->_config_class = isset($options['config_class']) ? $options['config_class'] : null;
-        $this->_emails = isset($options['emails']) ? $options['emails'] : null;
-        $this->_name = isset($options['name']) ? $options['name'] : null;
+        $this->_config = $options['config'] ?? null;
+        $this->_config_class = $options['config_class'] ?? null;
+        $this->_emails = $options['emails'] ?? null;
+        $this->_name = $options['name'] ?? null;
     }
 
     public function toArray()
@@ -213,7 +213,7 @@ class Tinebase_Scheduler_Task
                     $class = $callable[self::CLASS_NAME];
                 }
 
-                list($appName) = explode('_', $class);
+                [$appName] = explode('_', (string) $class);
                 if (true !== Tinebase_Application::getInstance()->isInstalled($appName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::'
                         . __LINE__ . ' Application ' . $appName . ' is not installed for scheduler job');
@@ -262,7 +262,7 @@ class Tinebase_Scheduler_Task
             // use a temp file for the writer
             $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'schedular_task');
             $writer = new Zend_Log_Writer_Stream($tmpPath);
-            $priority = $this->_config['loglevel'] ?? 6;
+            $priority = $this->_config['loglevel'] ?? 5;
             $writer->addFilter(new Zend_Log_Filter_Priority($priority));
             Tinebase_Core::getLogger()->addWriter($writer);
         } else {
@@ -273,6 +273,11 @@ class Tinebase_Scheduler_Task
         try {
             $result = call_user_func_array($classMethod, $callable[self::ARGS] ?? []);
             if ($sendNotification) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Task ' . $taskName . ' has been executed ' . ($result ? 'successfully' : 'with a failure'));
+                };
                 $notificationBody = file_get_contents($tmpPath);
                 // send the file contents as notification to configured email
                 $this->_sendNotification($callable, $notificationBody);
@@ -311,7 +316,7 @@ class Tinebase_Scheduler_Task
         
         try {
             $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
-            $emails = is_array($this->_emails) ? $this->_emails : explode(',', $this->_emails);
+            $emails = is_array($this->_emails) ? $this->_emails : explode(',', (string) $this->_emails);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -320,7 +325,8 @@ class Tinebase_Scheduler_Task
             
             $subject = $taskName . ' notification';
             $messageBody = "$subject: \n\n" . print_r($infoData, true);
-            
+            $messageBody = mb_substr($messageBody, 0, 1048576); // limit body size to 1 MB
+
             foreach ($emails as $recipient) {
                 $contact = [new Addressbook_Model_Contact(['email' => $recipient], true)];
                 Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $contact, $subject, $messageBody);

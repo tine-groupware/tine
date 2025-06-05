@@ -17,15 +17,15 @@
  */
 class Tinebase_Model_MFA_GenericSmsConfig extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'MFA_GenericSmsConfig';
+    public const MODEL_NAME_PART = 'MFA_GenericSmsConfig';
 
-    const FLD_SYSTEM_SMS_NAME = 'system_sms';
-    const FLD_BODY = 'body';
-    const FLD_HEADERS = 'headers';
-    const FLD_METHOD = 'method';
-    const FLD_PIN_LENGTH = 'pin_length';
-    const FLD_PIN_TTL = 'pin_ttl';
-    const FLD_URL = 'url';
+    public const FLD_SYSTEM_SMS_NAME = 'system_sms';
+    public const FLD_BODY = 'body';
+    public const FLD_HEADERS = 'headers';
+    public const FLD_METHOD = 'method';
+    public const FLD_PIN_LENGTH = 'pin_length';
+    public const FLD_PIN_TTL = 'pin_ttl';
+    public const FLD_URL = 'url';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

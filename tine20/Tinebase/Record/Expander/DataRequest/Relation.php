@@ -12,22 +12,18 @@
 
 class Tinebase_Record_Expander_DataRequest_Relation extends Tinebase_Record_Expander_DataRequest
 {
-    protected $_model;
-    protected $_backend;
     protected $_ids;
 
-    public function __construct($_model, $_backend, $_ids, $_callback)
+    public function __construct(protected $_model, protected $_backend, $_ids, $_callback)
     {
         parent::__construct(Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_RELATION,
             Tinebase_Relations::getInstance(), [], $_callback);
-        $this->_model = $_model;
-        $this->_backend = $_backend;
-        $this->_ids[$_model][$_backend] = $_ids;
+        $this->_ids[$this->_model][$this->_backend] = $_ids;
     }
 
     public function merge(Tinebase_Record_Expander_DataRequest $_dataRequest)
     {
-        $ids = $_dataRequest->ids[$_dataRequest->_model][$_dataRequest->_backend] ?? [];
+        $ids = $_dataRequest->_ids[$_dataRequest->_model][$_dataRequest->_backend] ?? [];
         if (!isset($this->_ids[$_dataRequest->_model])) {
             $this->_ids[$_dataRequest->_model] = [$_dataRequest->_backend => $ids];
         } elseif (!isset($this->_ids[$_dataRequest->_model][$_dataRequest->_backend])) {

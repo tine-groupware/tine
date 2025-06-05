@@ -63,7 +63,7 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             do {
                 if (null === ($user = Tinebase_Core::getUser()) && $request->hasHeader('Authorization')) {
                     foreach ($request->getHeader('Authorization') as $authHeader) {
-                        if (strpos($authHeader, 'Bearer ') === 0) {
+                        if (str_starts_with($authHeader, 'Bearer ')) {
                             $token = substr($authHeader, 7);
                             try {
                                 Admin_Controller_JWTAccessRoutes::doRouteAuth($routeHandler->getName(), $token);

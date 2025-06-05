@@ -258,4 +258,19 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $result = $this->_json->searchExampleRecords($filter, []);
         self::assertGreaterThanOrEqual(1, $result['totalcount']);
     }
+
+    public function testExampleRecordApi()
+    {
+        $container = $this->_getTestContainer(ExampleApplication_Config::APP_NAME,
+            ExampleApplication_Model_ExampleRecord::class);
+        $this->_testSimpleRecordApi(
+            ExampleApplication_Model_ExampleRecord::MODEL_NAME_PART,
+            ExampleApplication_Model_ExampleRecord::FLD_NAME,
+            ExampleApplication_Model_ExampleRecord::FLD_DESCRIPTION,
+            true,
+            [
+                ExampleApplication_Model_ExampleRecord::FLD_CONTAINER_ID => $container->getId(),
+            ]
+        );
+    }
 }

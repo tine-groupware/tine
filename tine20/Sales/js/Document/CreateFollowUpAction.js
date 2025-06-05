@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
@@ -12,13 +12,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     // from -> to
     const allowedTransitions = {
         Offer: {
-            Offer: {isReversal: false},
-            Order: {}
+            Order: {},
+            Offer: {isReversal: false}
         },
         Order: {
-            Order: {isReversal: true},
             Delivery: {},
             Invoice: {},
+            Order: {isReversal: true},
         },
         Delivery: {
             Delivery: {isReversal: true},
@@ -41,7 +41,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
         const statusFieldName = `${sourceType.toLowerCase()}_status`
         const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
-        const reversedStatus = _.find(statusDef.records, { reversal: true })
+        const reversedStatus = _.find(statusDef.records, { reversal: true }) || {id: 'doctype-without-reversals'}
 
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Create { targetRecordName }', { targetRecordName }),
@@ -94,6 +94,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                     // @TODO: maybe we should define default booked state somehow? e.g. offer should be accepted (not only send) or let the user select?
                     const bookedState = statusDef.records.find((r) => { return r.booked })
+                    const booked = selections.reduce((a, s) => { return a && statusDef.records.find((r) => r.id === s.get(statusFieldName))?.booked }, true)
                     mask.show()
 
                     try {
@@ -101,18 +102,18 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         const notToday = _.reduce(unbooked, (acc, record) => {
                             return _.concat(acc, record.get('date') && record.get('date').format('Ymd') !== new Date().format('Ymd') ? record : []);
                         }, [])
-                        _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                        !booked && notToday.length ? _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                             title: app.formatMessage('Change Document Date?'),
                             questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
                             allowMultiple: true,
                             allowEmpty: true,
-                            allowCancel: false,
+                            allowCancel: true,
                             height: notToday.length * 30 + 100,
                             options: notToday.map((source) => {
-                                return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
+                                return { text: source.getTitle() || ' - ' + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: notToday.length === 1, source }
                             })
-                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) });
-                    } catch (e) {/* USERABORT -> continue */ }
+                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()) }) : null;
+                    } catch (e) {/* USERABORT */ mask.hide(); return; }
 
                     await unbooked.asyncForEach(async (record) => {
                         record.set(statusFieldName, bookedState.id)
@@ -202,6 +203,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                 mask.hide()
                 if (errorMsgs.length) {
+                    console.error(errorMsgs)
                     await Ext.MessageBox.show({
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.WARNING,
@@ -230,8 +232,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         Object.keys(allowedTransitions[sourceType]).forEach((targetType) => {
             const action = getFollowUpAction(sourceType, targetType, allowedTransitions[sourceType][targetType])
             const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ContextMenu`, action, 2)
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 30)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ContextMenu`, action, 44)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 34)
             Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 40)
         })
     })

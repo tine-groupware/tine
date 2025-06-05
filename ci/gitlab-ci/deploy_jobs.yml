@@ -1,60 +1,124 @@
-deploy-dev-image-to-gitlab:
-  extends: .abstract_jobs.docker
+.release-dev-image-to-dockerhub:
+  image: ${CI_REGISTRY}/se/util-images/image-tools:1.0.0-mw0
   stage: deploy
-  script:
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh dev
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
-  timeout: 20m
-  interruptible: false
-deploy-dev-image-to-gitlab-arm64:
-  services:
-    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
-      alias: docker
-  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
-  extends: deploy-dev-image-to-gitlab
-  variables:
-    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
-    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
-  tags:
-    - arm64
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
-
-deploy-dev-image-to-dockerhub:
-  extends: .abstract_jobs.docker
-  stage: deploy
+  before_script:
+    - skopeo login --compat-auth-file ~/.docker/config.json --username "${REGISTRY_USER}" --password "${REGISTRY_PASSWORD}" ${REGISTRY}
+    - skopeo login --compat-auth-file ~/.docker/config.json --username "${DOCKERHUB_USER}" --password "${DOCKERHUB_TOKEN}" index.docker.io
   script:
     - !reference [.lib, script]
-    - docker_hub_deploy dev dev $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}
+    - docker_registry_release_dev_image docker.io/tinegroupware/dev
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
-    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-dev-image-to-dockerhub/
+    - if: $RELEASE_DEV_IMAGE_TO_DOCKERHUB == "true"
     - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
-  timeout: 20m
-  interruptible: false
-deploy-dev-image-to-dockerhub-arm64:
-  services:
-    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
-      alias: docker
-  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
-  extends: deploy-dev-image-to-dockerhub
+# needs can not contain variables, therefore we need to write out all job. this should be equivalent to the following, but the following dose not work:
+# needs:
+#   - job: docker_build_dev_new
+#     parallel:
+#       matrix:
+#         - ARCH: $ARCH
+#           PHP_VERSION: $PHP_VERSION
+# parallel:
+#   matrix:
+#     - ARCH: amd64
+#       PHP_VERSION:
+#         - "8.1"
+#         - "8.2"
+#         - "8.3"
+#     - ARCH: arm64
+#       PHP_VERSION:
+#         - "8.1"
+#         - "8.2"
+#         - "8.3"
+# A less verbose solution might be not using needs, but we do not want to wait for arm64 builds to finish, before releasing amd64 builds. ((Emulated) Arm builds are slow (x10).)
+release-dev-image-to-dockerhub [amd64, 8.1]:
+  extends: .release-dev-image-to-dockerhub
   variables:
-    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
-    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
-  tags:
-    - arm64
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
-    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "true"
-    - if: $PIPELINE_TYPE =~ /build-dev-images(,|$)/
-
-
-
+    ARCH: amd64
+    PHP_VERSION: "8.1"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: amd64
+            PHP_VERSION: "8.1"
+release-dev-image-to-dockerhub [amd64, 8.2]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: amd64
+    PHP_VERSION: "8.2"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: amd64
+            PHP_VERSION: "8.2"
+release-dev-image-to-dockerhub [amd64, 8.3]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: amd64
+    PHP_VERSION: "8.3"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: amd64
+            PHP_VERSION: "8.3"
+release-dev-image-to-dockerhub [amd64, 8.4]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: amd64
+    PHP_VERSION: "8.4"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: amd64
+            PHP_VERSION: "8.4"
+release-dev-image-to-dockerhub [arm64, 8.1]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: arm64
+    PHP_VERSION: "8.1"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: arm64
+            PHP_VERSION: "8.1"
+release-dev-image-to-dockerhub [arm64, 8.2]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: arm64
+    PHP_VERSION: "8.2"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: arm64
+            PHP_VERSION: "8.2"
+release-dev-image-to-dockerhub [arm64, 8.3]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: arm64
+    PHP_VERSION: "8.3"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: arm64
+            PHP_VERSION: "8.3"
+release-dev-image-to-dockerhub [arm64, 8.4]:
+  extends: .release-dev-image-to-dockerhub
+  variables:
+    ARCH: arm64
+    PHP_VERSION: "8.4"
+  needs:
+    - job: docker-build-dev
+      parallel:
+        matrix:
+          - ARCH: arm64
+            PHP_VERSION: "8.4"
 
 deploy-built-image-to-dockerhub:
   extends: .abstract_jobs.docker

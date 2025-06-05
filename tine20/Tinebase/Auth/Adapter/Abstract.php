@@ -11,11 +11,6 @@
 abstract class Tinebase_Auth_Adapter_Abstract implements Tinebase_Auth_Interface
 {
     /**
-     * @var array
-     */
-    protected $_options;
-
-    /**
      * @var string
      */
     protected $_credential;
@@ -27,13 +22,12 @@ abstract class Tinebase_Auth_Adapter_Abstract implements Tinebase_Auth_Interface
 
     /**
      * Tinebase_Auth_Adapter_Abstract constructor.
-     * @param array $options
+     * @param array $_options
      * @param string $username
      * @param string $password
      */
-    public function __construct($options, $username = null, $password = null)
+    public function __construct(protected $_options, $username = null, $password = null)
     {
-        $this->_options = $options;
         if ($username) {
             $this->_identity = $username;
         }

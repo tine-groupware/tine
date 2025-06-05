@@ -18,9 +18,11 @@ class Courses_AllTests
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Courses All Tests');
-        $suite->addTestSuite(Courses_JsonTest::class);
-        $suite->addTestSuite(Courses_CliTest::class);
-        $suite->addTestSuite(Courses_ImportTest::class);
+        if (Tinebase_Application::getInstance()->isInstalled('Courses')) {
+            $suite->addTestSuite(Courses_JsonTest::class);
+            $suite->addTestSuite(Courses_CliTest::class);
+            $suite->addTestSuite(Courses_ImportTest::class);
+        }
         return $suite;
     }
 

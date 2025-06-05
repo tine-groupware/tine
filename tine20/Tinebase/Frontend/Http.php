@@ -20,7 +20,7 @@
  */
 class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
-    const REQUEST_TYPE = 'HttpPost';
+    public const REQUEST_TYPE = 'HttpPost';
 
     protected $_applicationName = Tinebase_Config::APP_NAME;
     
@@ -55,7 +55,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 header('HTTP/1.0 403 Forbidden');
                 exit;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             header('HTTP/1.0 403 Forbidden');
             exit;
         }
@@ -197,9 +197,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
 
-        $filesToWatch = $filesToWatch ? $filesToWatch : $this->_getFilesToWatch($_fileType);
+        $filesToWatch = $filesToWatch ?: $this->_getFilesToWatch($_fileType);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(self::class . '::' . __METHOD__
             . ' (' . __LINE__ .') Got files to watch: ' . print_r($filesToWatch, true));
 
         // cache for one day
@@ -210,20 +210,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // remove Pragma header from session
         header_remove('Pragma');
 
-        $clientETag = isset($_SERVER['If_None_Match'])
-            ? $_SERVER['If_None_Match']
-            : (isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] : '');
+        $clientETag = $_SERVER['If_None_Match'] ?? $_SERVER['HTTP_IF_NONE_MATCH'] ?? '';
 
-        if (preg_match('/[a-f0-9]{40}/', $clientETag, $matches)) {
+        if (preg_match('/[a-f0-9]{40}/', (string) $clientETag, $matches)) {
             $clientETag = $matches[0];
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(self::class . '::' . __METHOD__
             . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
 
-        $serverETag = md5(implode('', array_map(function($fileName) {
-            return file_exists($fileName) ? md5_file($fileName) : '';
-        }, $filesToWatch)));
+        $serverETag = md5(implode('', array_map(fn($fileName) => file_exists($fileName) ? md5_file($fileName) : '', $filesToWatch)));
 
         if ($clientETag == $serverETag) {
             header("HTTP/1.0 304 Not Modified");
@@ -236,12 +232,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 if (file_exists($file)) {
                     readfile($file);
                 } else {
-                    if (preg_match('/^Tinebase/', $file)) {
+                    if (preg_match('/^Tinebase/', (string) $file)) {
                         // this is critical!
                         throw new Tinebase_Exception('client file does not exist: ' . $file);
                     } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(
-                            __CLASS__ . '::' . __METHOD__
+                            self::class . '::' . __METHOD__
                             . ' (' . __LINE__ .') File ' . $file . ' does not exist');
                     }
                 }
@@ -366,22 +362,22 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $this->checkAuth();
 
         // close session to allow other requests
-        Tinebase_Session::writeClose(true);
+        Tinebase_Session::writeClose();
         
         $clientETag      = null;
         $ifModifiedSince = null;
         
         if (isset($_SERVER['If_None_Match'])) {
-            $clientETag     = trim($_SERVER['If_None_Match'], '"');
-            $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
+            $clientETag     = trim((string) $_SERVER['If_None_Match'], '"');
+            $ifModifiedSince = trim((string) $_SERVER['If_Modified_Since'], '"');
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH']) && isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
-            $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
-            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
+            $clientETag     = trim((string) $_SERVER['HTTP_IF_NONE_MATCH'], '"');
+            $ifModifiedSince = trim((string) $_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
 
         try {
             $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
-        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+        } catch (Tinebase_Exception_UnexpectedValue) {
             $this->_handleFailure(404);
         }
 
@@ -481,7 +477,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $recordController = Tinebase_Core::getApplicationInstance($modelName);
         try {
             $record = $recordController->get($recordId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
         
@@ -500,7 +496,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      *
      * @param $tmpfileId
      */
-    public function downloadTempfile($tmpfileId)
+    public function downloadTempfile($tmpfileId, $disposition = 'attachment')
     {
         $this->checkAuth();
 
@@ -511,15 +507,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $filemanagerNodeController = Filemanager_Controller_Node::getInstance();
             try {
                 $file = $filemanagerNodeController->get($tmpfileId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 $this->_handleFailure(404);
             }
 
             $filemanagerHttpFrontend = new Filemanager_Frontend_Http();
-            $filemanagerHttpFrontend->downloadFile($file->path, null);
+            $filemanagerHttpFrontend->downloadFile($file->path, null, null , $disposition);
         }
 
-        $this->_downloadTempFile($tmpFile, $tmpFile->path);
+        $this->_downloadTempFile($tmpFile, $tmpFile->path, $disposition);
         exit;
     }
 
@@ -555,7 +551,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $path = ltrim($_path, '/');
 
             try {
-                if (strpos($path, 'records/') === 0) {
+                if (str_starts_with($path, 'records/')) {
                     $pathParts = explode('/', $path);
                     /** @var Tinebase_Controller_Record_Abstract $controller */
                     $controller = Tinebase_Core::getApplicationInstance($pathParts[1]);
@@ -566,7 +562,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . $_appId . '/folders/' . $path);
                     $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord, $_revision);
                 }
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
             }
         } else {
@@ -580,6 +576,32 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         exit;
+    }
+
+    /**
+     * download preview by temp file
+     *
+     * @param $_tempFileId
+     * @param $_type
+     * @param int $_num
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function downloadPreviewByTempFile($_tempFileId, $_type, $_num = 0)
+    {
+        $this->checkAuth();
+
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
+        $_node = new Tinebase_Model_Tree_Node([
+            'id' => $_tempFileId,
+            'name'      => $tempFile->name,
+            'tempFile'  => $tempFile,
+            'hash'  =>  sha1($_tempFileId),
+            'size'     =>  $tempFile->size,
+            'type'  =>  Tinebase_Model_Tree_FileObject::TYPE_FILE
+        ], true);
+
+        $this->_downloadPreview($_node, $_type, $_num);
     }
 
     /**

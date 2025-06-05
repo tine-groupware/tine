@@ -40,9 +40,13 @@ class SSO_Controller_ExIdpDomain extends Tinebase_Controller_Record_Abstract
 
     protected function _checkRight($_action)
     {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
         if (in_array($_action, ['create', 'update', 'delete']) &&
             !Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_SSO)) {
-            return false;
+            throw new Tinebase_Exception_AccessDenied('You do not have the right manage sso');
         }
         parent::_checkRight($_action);
     }

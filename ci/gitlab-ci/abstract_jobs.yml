@@ -50,7 +50,6 @@
     TINE20_CACHING_REDIS_HOST: cache
     TINE20_SESSION_BACKEND: Redis
     TINE20_SESSION_HOST: cache
-    TINE20_APPLICATION_TO_INSTALL: all
     TINE20_LOGGER_ADDITIONALWRITERS_FILENAME: ${CI_PROJECT_DIR}/tine20.log
     TINE20_LOGGER_ADDITIONALWRITERS_PRIORITY: 7
     TINE20_LOGGER_FILENAME: /var/log/tine20/tine20.log # do not log to php://stdout it breaks php unit 8.5 processIsolation
@@ -64,7 +63,7 @@
     TINE20_ACCEPTED_TERMS_VERSION: 1000
     TINE20_LICENSE_PATH: "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem" # be default use test license from cloned tine repo
     ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci
-    ARG_TEST: AllTests
+    ARG_TEST: AllTests.php
     ARG_FILTER: $PHPUNIT_FILTER
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/tine20/
     ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfix_tables.sql
@@ -125,10 +124,14 @@
     paths:
       - ${CI_PROJECT_DIR}/tine20.log
       - ${CI_PROJECT_DIR}/phpunit-report.xml
+      - ${CI_PROJECT_DIR}/phpunit-coverage.xml
     expire_in: 1 day
     when: always
     reports:
       junit: ${CI_PROJECT_DIR}/phpunit-report.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: ${CI_PROJECT_DIR}/phpunit-coverage.xml
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
@@ -241,6 +244,7 @@
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
     - !reference [.lib, script]
     - docker_registry_login ${REGISTRY} ${REGISTRY_USER} ${REGISTRY_PASSWORD}
+    - docker_registry_login ${CI_DEPENDENCY_PROXY_SERVER} ${CI_DEPENDENCY_PROXY_USER} ${CI_DEPENDENCY_PROXY_PASSWORD}
     - |
       WAIT_TIME=0
       until [ $WAIT_TIME -eq 60 ] || docker version > /dev/null 2>&1

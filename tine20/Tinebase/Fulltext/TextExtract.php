@@ -68,7 +68,7 @@ class Tinebase_Fulltext_TextExtract
     {
         $fulltextConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FULLTEXT);
         $this->_javaBin = escapeshellcmd($fulltextConfig->{Tinebase_Config::FULLTEXT_JAVABIN});
-        $this->_tikaJar = escapeshellarg($fulltextConfig->{Tinebase_Config::FULLTEXT_TIKAJAR});
+        $this->_tikaJar = escapeshellarg((string) $fulltextConfig->{Tinebase_Config::FULLTEXT_TIKAJAR});
     }
 
     /**
@@ -102,7 +102,7 @@ class Tinebase_Fulltext_TextExtract
                     }
                     return $tempFileName;
                 }
-            } catch (League\Flysystem\UnableToRetrieveMetadata $e) {
+            } catch (League\Flysystem\UnableToRetrieveMetadata) {
             }
             $blobFileName = Tinebase_TempFile::getTempPath();
             $raii = new Tinebase_RAII(fn() => @unlink($blobFileName));
@@ -174,7 +174,7 @@ class Tinebase_Fulltext_TextExtract
             if (file_exists($tempFileName)) {
                 try {
                     unlink($tempFileName);
-                } catch (Throwable $t) {
+                } catch (Throwable) {
                     // ignore race condition
                 }
             }

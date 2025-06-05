@@ -37,6 +37,9 @@ msgstr ""
 msgid "Shared System Account"
 msgstr ""
 
+msgid "Shared External Account"
+msgstr ""
+
 msgid "Additional Personal System Account"
 msgstr ""
 
@@ -282,13 +285,13 @@ msgstr ""
 msgid "Recipient address rejected"
 msgstr ""
 
-msgid "Original message not found, email was moved or deleted"
-msgstr ""
-
 msgid "Invalid address format"
 msgstr ""
 
-#, python-format
+msgid "Decryption Error: Maybe your shared credential cache key is longer than 24 chars?"
+msgstr ""
+
+#, python-format, php-format
 msgid "Error: %s"
 msgstr ""
 
@@ -298,6 +301,7 @@ msgstr ""
 msgid "My Mail Download Links"
 msgstr ""
 
+#, php-format
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
@@ -691,6 +695,12 @@ msgstr ""
 msgid "{0} as default mailer"
 msgstr ""
 
+msgid "No e-mail account assigned"
+msgstr ""
+
+msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
+msgstr ""
+
 msgid "New mails"
 msgstr ""
 
@@ -894,6 +904,36 @@ msgid "Error Filing Message"
 msgstr ""
 
 msgid "Could not file message."
+msgstr ""
+
+msgid "Ctrl+N / Ctrl+M : Compose message"
+msgstr ""
+
+msgid "Ctrl+L : Forward message"
+msgstr ""
+
+msgid "Ctrl+R : Reply message"
+msgstr ""
+
+msgid "Ctrl+Shift+R : Reply to all"
+msgstr ""
+
+msgid "A / Ctrl+S : File message"
+msgstr ""
+
+msgid "Ctrl+O / Enter : Open message"
+msgstr ""
+
+msgid "1 : Toggle highlighting"
+msgstr ""
+
+msgid "M : Mark read/unread"
+msgstr ""
+
+msgid "J : Mark message as SPAM"
+msgstr ""
+
+msgid "Shift+J : Mark message as HAM"
 msgstr ""
 
 msgid "Send Reading Confirmation"
@@ -1168,10 +1208,23 @@ msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
 
+#, python-brace-format
+msgid "Delete {0}"
+msgstr ""
+
+msgid "Do you really want to delete the following folders?"
+msgstr ""
+
 msgid "Empty Folder"
 msgstr ""
 
 msgid "Do you really want to delete all the messages in this folder?"
+msgstr ""
+
+msgid "Only delete the messages from this folder"
+msgstr ""
+
+msgid "Delete all messages and subfolders"
 msgstr ""
 
 msgid "Add Folder"
@@ -1203,16 +1256,21 @@ msgstr ""
 msgid "Edit Account"
 msgstr ""
 
-msgid "Mark Folder as read"
+#, python-brace-format
+msgid "Mark {0} as read"
 msgstr ""
 
 msgid "Update Folder List"
 msgstr ""
 
+msgid "Agree that this account can be transferred to other users"
+msgstr ""
+
 msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
 msgstr ""
 
-msgid "Move Folder"
+#, python-brace-format
+msgid "Move {0}"
 msgstr ""
 
 msgid "Invalid Selection"
@@ -1676,4 +1734,10 @@ msgid "All mails with the draft flag"
 msgstr ""
 
 msgid "Can not combine \"allow external\" and \"allow only members\""
+msgstr ""
+
+msgid "Forward and forwarded email as .eml in attachment"
+msgstr ""
+
+msgid "Only forwarded email as .eml in attachment"
 msgstr ""

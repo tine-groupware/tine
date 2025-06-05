@@ -25,7 +25,13 @@ class Sales_OfferControllerTests extends TestCase
         $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Offer Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-    
+
+    public function setUp(): void
+    {
+        Tinebase_Core::getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'sales_numbers');
+        parent::setUp();
+    }
+
     /**
      * checks if the number is always set to the correct value
      */

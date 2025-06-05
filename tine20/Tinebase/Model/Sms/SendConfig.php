@@ -19,12 +19,12 @@
  */
 class Tinebase_Model_Sms_SendConfig extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'Sms_SendConfig';
+    public const MODEL_NAME_PART = 'Sms_SendConfig';
 
-    const FLD_ADAPTER_CLASS = 'adapter_class';
-    const FLD_ADAPTER_CONFIG = 'adapter_config';
-    const FLD_MESSAGE = 'message';
-    const FLD_RECIPIENT_NUMBER = 'recipient_number';
+    public const FLD_ADAPTER_CLASS = 'adapter_class';
+    public const FLD_ADAPTER_CONFIG = 'adapter_config';
+    public const FLD_MESSAGE = 'message';
+    public const FLD_RECIPIENT_NUMBER = 'recipient_number';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

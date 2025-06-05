@@ -440,6 +440,53 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             $wt . ' (2 ' . $added . ': 02:00 (10:00 - 12:00) - , 02:00 (17:30 - 19:30) - )', $note->note);
     }
 
+    public function testCalculateReportWithMissingTAGrants(): void
+    {
+        $this->_createBasicData();
+
+        $this->_createTimesheets();
+
+        $division = HumanResources_Controller_Division::getInstance()->get($this->employee->getIdFromProperty('division_id'));
+        Tinebase_Container::getInstance()->addGrants($division->container_id, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['jsmith']->getId(), [
+                HumanResources_Model_DivisionGrants::READ_TIME_DATA,
+                HumanResources_Model_DivisionGrants::READ_OWN_DATA,
+            ], true);
+
+        Tinebase_Core::setUser($this->_personas['jsmith']);
+
+        try {
+            Timetracker_Controller_Timeaccount::getInstance()->get($this->wtTAid);
+            $this->fail('wtTA should not be accessible');
+        } catch (Tinebase_Exception_AccessDenied) {}
+
+        // create report
+        $start = new Tinebase_DateTime('2018-08-01 00:00:00');
+        $end = new Tinebase_DateTime('2018-08-31 23:59:59');
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+
+        // assert!
+        self::assertGreaterThanOrEqual(3, $calcResult['created'], print_r($calcResult, true));
+        self::assertGreaterThanOrEqual(0, $calcResult['updated'], print_r($calcResult, true));
+        self::assertEquals(0, $calcResult['errors']);
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        self::assertGreaterThanOrEqual(3, count($result), 'should have more than (or equal) 3 daily reports');
+
+        // check times
+        foreach ([
+                    '2018-08-02 00:00:00' => 6 * 3600 - 1800,
+                    '2018-08-06 00:00:00' => 5 * 3600 - 1800,
+                    '2018-08-07 00:00:00' => 5 * 3600 - 1800,
+                    '2018-08-08 00:00:00' => 2 * 3600,
+                 ] as $day => $workTime) {
+            $report = $result->find('date', $day);
+            self::assertNotNull($report);
+            self::assertEquals($workTime, $report->working_time_actual);
+            // @todo add more assertions (absence_time*, evaluation_period*, break_time*, working_time_target, working_time_correction, ...)
+        }
+    }
+
     public function testCalculateReportsForEmployeeTimesheetsWithStartAndEnd()
     {
         $this->_createBasicData();
@@ -650,10 +697,12 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
             ->getWorkingTimeAccount($this->employee)->getId();
 
         if ($this->wtTAid) {
+            $newTs = new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class);
             foreach ($this->_ts as $ts) {
                 $ts->timeaccount_id = $this->wtTAid;
-                $ts->seq = Timetracker_Controller_Timesheet::getInstance()->update($ts)->seq;
+                $newTs->addRecord(Timetracker_Controller_Timesheet::getInstance()->update($ts));
             }
+            $this->_ts = $newTs;
         }
     }
 }

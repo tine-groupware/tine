@@ -75,7 +75,7 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
                     'controllerClassName'   => 'Tinebase_RoleRight',
                     'refIdField'            => 'role_id',
                 ),
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
             'members'           => array(
                 'label'             => 'Members', // _('Members')
@@ -86,7 +86,7 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
                     'controllerClassName'   => 'Tinebase_RoleMember',
                     'refIdField'            => 'role_id',
                 ),
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
             ),
         )
     );
@@ -96,7 +96,7 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }

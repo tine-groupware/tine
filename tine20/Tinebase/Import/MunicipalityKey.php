@@ -42,7 +42,7 @@ class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
 
         if (null === $this->_bevoelkerungsstand && $this->_worksheet && $this->_worksheet->cellExists('J5') &&
                 preg_match('/(\d\d)\.(\d\d)\.(\d\d\d\d)/',
-                    $this->_worksheet->getCell('J5')->getValue(), $m)) {
+                    (string) $this->_worksheet->getCell('J5')->getValue(), $m)) {
             $this->_bevoelkerungsstand = new Tinebase_DateTime($m[3] . '-' . $m[2] . '-' . $m[1]);
             $this->_bevoelkerungsstand->hasTime(false);
         }
@@ -58,8 +58,8 @@ class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
    {
        $data = [];
        foreach ($_data as $key => $value) {
-           if (null === $this->_gebietsstand && $value && strpos($value, 'Gebietsstand') !== false &&
-                    preg_match('/Gebietsstand.*(\d\d)\.(\d\d)\.(\d\d\d\d)/', $value, $m)) {
+           if (null === $this->_gebietsstand && $value && str_contains((string) $value, 'Gebietsstand') &&
+                    preg_match('/Gebietsstand.*(\d\d)\.(\d\d)\.(\d\d\d\d)/', (string) $value, $m)) {
                $this->_gebietsstand = new Tinebase_DateTime($m[3] . '-' . $m[2] . '-' . $m[1]);
                $this->_gebietsstand->hasTime(false);
            }

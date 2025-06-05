@@ -69,8 +69,23 @@ class Tinebase_CoreTest extends TestCase
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
     }
 
+    public function testFailedApplicationInstance(): void
+    {
+        $this->expectException(Tinebase_Exception_NotFound::class);
+        Tinebase_Core::getApplicationInstance(Tinebase_Model_AreaLockConfig::class);
+    }
+
+    public function testGetTinebaseApplicationInstance(): void
+    {
+        $controller = Tinebase_Core::getApplicationInstance(Tinebase_FileSystem_RecordAttachments::class);
+        self::assertTrue($controller instanceof Tinebase_FileSystem_RecordAttachments);
+    }
+
     public function testGetDispatchServerActiveSync()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ActiveSync')) {
+            self::markTestSkipped('ActiveSync is needed for the test');
+        }
         $request = Tinebase_Http_Request::fromString(
             "GET /index.php?frontend=activesync HTTP/1.1\r\n".
             "User-Agent: SAMSUNG-GT-I9300/101.403"

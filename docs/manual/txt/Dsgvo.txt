@@ -29,7 +29,7 @@ image::Dsgvo/1_dsgvo_datenherkunft.png[id="fig_datenherkunft",width="100%"]
 
 Im Kontakt-Bearbeiten-Dialog finden Sie nun den neuen Reiter menu:[DSGVO]. Hier wird die Liste der Verwendungszwecke für diesen Datensatz geführt mit entsprechenden Zustimmungen bzw. Widerrufungen. Über die Checkbox menu:[Darf nicht kontaktiert werden] können alle Einträge widerrufen werden.
 
-Verwendungszwecke können nur wiederrufen und nicht direkt gelöscht werden. Dies dient der lückenlosen Dokumentation im Zustimmungsverlauf.
+Verwendungszwecke können nur Widerrufen und nicht direkt gelöscht werden. Dies dient der lückenlosen Dokumentation im Zustimmungsverlauf.
 
 //////////////////
         SCREENSHOT

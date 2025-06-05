@@ -29,10 +29,6 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
      */
     layout: 'fit',
 
-    nativelySupported: [
-        'image/jpeg', 'image/png', 'image/gif', 'image/apng', 'image/avif', 'image/svg+xml', 'image/webp',
-    ],
-
     initComponent: function () {
         this.addEvents(
             /**
@@ -66,8 +62,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
     },
 
     loadPreview: function () {
-        var _ = window.lodash,
-            me = this,
+        let me = this,
             recordClass = this.record.constructor,
             records = [];
 
@@ -81,10 +76,6 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             records.push(this.record);
         }
 
-        records = _.filter(records, (record) => {
-            return this.useOriginal(record) || !!+record.get('preview_count');
-        });
-
         if (! records.length) {
             this.fireEvent('noPreviewAvailable');
             return;
@@ -94,8 +85,8 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             layout: 'anchor',
             bodyStyle: 'overflow-y: scroll;'
         }));
-        this.afterIsRendered().then(async () => {
 
+        this.afterIsRendered().then(async () => {
             const isRendered = records.map((record) => {
                 return me.addPreviewPanelForRecord(me, record);
             });
@@ -104,47 +95,91 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
         });
     },
 
-    useOriginal: function(record) {
-        const useOriginalSizeLimit = 0.5*1024*1024; // @TODO have pref or conf
-        const nativelySupported = this.nativelySupported.indexOf(record.get('contenttype')) >=0;
-        return nativelySupported && (record.get('size') <= useOriginalSizeLimit || !+record.get('preview_count'));
-    },
 
-    addPreviewPanelForRecord: function (me, record) {
+    addPreviewPanelForRecord: async function (me, record) {
         const path = record.get('path');
         const revision = record.get('revision');
+        const contenttype = record.get('contenttype');
         const urls = [];
+        const isTempFile = !!_.get(record, 'json.input');
+        const previewCount = record.get('preview_count');
 
-        if (this.useOriginal(record)) {
-            urls.push(Tine.Filemanager.Model.Node.getDownloadUrl(record));
-        } else {
-            _.range(record.get('preview_count')).forEach((previewNumber) => {
-                urls.push(Ext.urlEncode({
+        const generatePreviewUrl = (previewNumber) => {
+            const baseParams = {
+                frontend: 'http',
+                _type: 'previews',
+                _num: previewNumber,
+            };
+
+            if (isTempFile) {
+                return Ext.urlEncode({
+                    ...baseParams,
+                    method: 'Tinebase.downloadPreviewByTempFile',
+                    _tempFileId: record.json.tempFile.id,
+                }, Tine.Tinebase.tineInit.requestUrl + '?');
+            } else {
+                return Ext.urlEncode({
+                    ...baseParams,
                     method: 'Tinebase.downloadPreview',
-                    frontend: 'http',
                     _path: path,
                     _appId: me.initialApp ? me.initialApp.id : me.app.id,
-                    _type: 'previews',
-                    _num: previewNumber,
-                    _revision: revision
-                }, Tine.Tinebase.tineInit.requestUrl + '?'));
-            });
+                    _revision: revision,
+                }, Tine.Tinebase.tineInit.requestUrl + '?');
+            }
+        };
+
+        if (isTempFile) {
+            this.loadMask = new Ext.LoadMask(this.el, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
+            this.loadMask.show();
+
+            await Tine.Tinebase.getPreviewsFromTempFile(record.json.tempFile.id)
+                .then((result) => {
+                    if (result === 0) {
+                        this.fireEvent('noPreviewAvailable');
+                    }
+                    record.set('preview_count', result);
+                })
+                .catch((e) => {})
+            this.loadMask.hide();
+        } else if (!+previewCount) {
+            urls.push(generatePreviewUrl(0));
         }
 
-        const isRendered = urls.map((url) => {
+        _.range(previewCount).forEach((previewNumber) => {
+            urls.push(generatePreviewUrl(previewNumber));
+        });
+
+        const isFetched = urls.map((url) => {
+            return new Promise(async (resolve) => {
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-TINE20-PREVIEWSERVICE-SYNC': true,
+                        }
+                    })
+                    const data = await response.blob().then(
+                        blob => new Promise((resolve, reject) => {
+                            resolve(URL.createObjectURL(blob));
+                        })
+                    )
+                    resolve(data);
+                } catch (e) {
+                    resolve('');
+                }
+            });
+        });
+        const results = await Promise.all(isFetched);
+
+        const isRendered = results.map((data) => {
             return new Promise((resolve) => {
                 me.previewContainer.add({
-                    html: '<img style="width: 100%;" src="' + url + '" /><div class="filemanager-quicklook-protect" />',
+                    html: `<img style="width: 100%;" src="${data}" /><div class="filemanager-quicklook-protect" />`,
                     xtype: 'panel',
                     cls: 'dark-reverse',
                     frame: true,
                     border: true,
-                    // NOTE: some browsers do not load the img event though the img tag is rendered into the dom
-                    //       the deferred hide/show cycle fixes this issue
-                    afterRender: (c) => { _.defer(() => { c.hide(); c.show(); resolve() }) }
                 });
             });
-
         });
 
         me.doLayout();

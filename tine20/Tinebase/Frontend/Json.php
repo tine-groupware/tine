@@ -20,7 +20,7 @@ use Jumbojett\OpenIDConnectClient;
  */
 class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
-    const REQUEST_TYPE = 'JSON-RPC';
+    public const REQUEST_TYPE = 'JSON-RPC';
 
     /**
      * the application name
@@ -93,6 +93,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return Tinebase_Translation::getCountryList();
     }
+
+    /**
+     * get list of translated currency names
+     **
+     * @return array list of currencies
+     */
+    public function getCurrencyList()
+    {
+        return Tinebase_Translation::getCurrencyList();
+    }
     
     /**
      * returns list of all available translations
@@ -136,7 +146,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // save in cookie (expires in 365 days)
         if ($setcookie) {
-            setcookie('TINE20LOCALE', $localeString, time()+60*60*24*365);
+            setcookie('TINE20LOCALE', $localeString, ['expires' => time()+60*60*24*365]);
         }
         
         return array(
@@ -203,8 +213,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $filter = new Tinebase_Model_RoleFilter($filter);
         
-        $paging['sort'] = isset($paging['sort']) ? $paging['sort'] : 'name';
-        $paging['dir'] = isset($paging['dir']) ? $paging['dir'] : 'ASC';
+        $paging['sort'] ??= 'name';
+        $paging['dir'] ??= 'ASC';
         
         $result['results'] = Tinebase_Acl_Roles::getInstance()->searchRoles($filter, new Tinebase_Model_Pagination($paging))->toArray();
         $result['totalcount'] = Tinebase_Acl_Roles::getInstance()->searchCount($filter);
@@ -221,43 +231,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function changePassword($oldPassword, $newPassword)
     {
-        return $this->_changePwOrPin($oldPassword, $newPassword);
-    }
-
-    /**
-     * @param ?string $oldPassword
-     * @param ?string $newPassword
-     * @param string $pwType
-     * @return array
-     */
-    protected function _changePwOrPin(?string $oldPassword, ?string $newPassword, string $pwType = 'password')
-    {
-        $response = array(
-            'success'      => TRUE
-        );
-
         try {
-            Tinebase_Controller::getInstance()->changePassword((string) $oldPassword, (string) $newPassword, $pwType);
+            Tinebase_Controller::getInstance()->changePassword((string) $oldPassword, (string) $newPassword);
         } catch (Tinebase_Exception $e) {
-            $response = array(
+            return [
                 'success'      => false,
                 'errorMessage' => $e->getMessage()
-            );
+            ];
         }
 
-        return $response;
-    }
-
-    /**
-     * change pin of user
-     *
-     * @param  string $oldPassword the old password
-     * @param  string $newPassword the new password
-     * @return array
-     */
-    public function changePin($oldPassword, $newPassword)
-    {
-        return $this->_changePwOrPin($oldPassword, $newPassword, 'pin');
+        return [
+            'success' => true,
+        ];
     }
 
     /**
@@ -445,7 +430,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // NOTE: this function makes a new instance of a class whose name is given by user input.
         //       we need to do some sanitising first!
         /** @noinspection PhpUnusedLocalVariableInspection */
-        list($appName, $modelString, $filterGroupName) = explode('_', $_filterName);
+        [$appName, $modelString, $filterGroupName] = explode('_', $_filterName);
         if ($modelString !== 'Model') {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
             die('go away!');
@@ -468,7 +453,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param mixed  $tag       string|array existing and non-existing tag
      * @return array
      */
-    public function attachTagToMultipleRecords($filterData, $filterName, $tag)
+    public function attachTagToMultipleRecords($filterData, $filterName, mixed $tag)
     {
         $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
@@ -485,7 +470,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param mixed  $tags         array of existing and non-existing tags
      * @return void
      */
-    public function attachMultipleTagsToMultipleRecords($filterData, $filterName, $tags)
+    public function attachMultipleTagsToMultipleRecords($filterData, $filterName, mixed $tags)
     {
         $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
@@ -505,7 +490,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param mixed  $tag       string|array existing and non-existing tag
      * @return array
      */
-    public function detachTagsFromMultipleRecords($filterData, $filterName, $tag)
+    public function detachTagsFromMultipleRecords($filterData, $filterName, mixed $tag)
     {
         $this->_longRunningRequest();
         $filter = $this->_getFilterGroup($filterData, $filterName);
@@ -632,15 +617,24 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
 
+        $user = null;
+        try {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
+        } catch(Tinebase_Exception_NotFound) {}
+        if (null !== $user && $user->openid && ($pos = strpos($user->openid, ':')) && Tinebase_Application::getInstance()->isInstalled('SSO')) {
+            try {
+                if (!SSO_Controller_ExternalIdp::getInstance()->get(substr($user->openid, 0, $pos))->{SSO_Model_ExternalIdp::FLD_ALLOW_LOCAL_LOGIN} &&
+                        !SSO_Controller::passwordLessLogin($username)) {
+                    return $this->_getLoginFailedResponse();
+                }
+            } catch(Tinebase_Exception_NotFound) {}
+        }
+
         if (empty($password)) {
             if (Tinebase_Application::getInstance()->isInstalled('SSO')
                 && SSO_Controller::passwordLessLogin($username)) {
                 return $this->_getLoginSuccessResponse($username);
             }
-            $user = null;
-            try {
-                $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
-            } catch(Tinebase_Exception_NotFound) {}
             if (null !== $user) {
                 if (Tinebase_Controller::getInstance()->passwordLessLogin($user, $MFAUserConfigId, $MFAPassword, self::REQUEST_TYPE)) {
                     return $this->_getLoginSuccessResponse($username);
@@ -688,7 +682,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         try {
             $response['assetHash'] = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
-        } catch (Exception $e) {}
+        } catch (Exception) {}
         
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $response['encourage_mfa'] = true;
@@ -856,7 +850,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             try {
                 $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
-            } catch (Addressbook_Exception_NotFound $aenf) {
+            } catch (Addressbook_Exception_NotFound) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) /** @noinspection PhpUndefinedMethodInspection */
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' User not found in Addressbook: ' . $user->accountDisplayName);
@@ -905,9 +899,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'sessionLifeTime' => Tinebase_Session_Abstract::getSessionLifetime(),
             'licenseExpiredSince'=> $license->getLicenseExpiredSince(),
             'licenseExpire' => $license->getLicenseExpireEstimate(),
-            'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
-            'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
+            'primarydomain' => $smtpConfig['primarydomain'] ?? '',
+            'secondarydomains' => $smtpConfig['secondarydomains'] ?? '',
+            'additionaldomains' => $smtpConfig['additionaldomains'] ?? '',
             'allowExternalEmail' => ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail,
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
             'hasSmsAdapters'   => count($smsAdapterConfig) > 0,
@@ -915,6 +909,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $userRegistryData['encourage_mfa'] = true;
+        }
+        if (Tinebase_Core::get(Tinebase_Core::SESSION)->{SSO_Model_ExternalIdp::SESSION_KEY}) {
+            $userRegistryData[SSO_Model_ExternalIdp::SESSION_KEY] = Tinebase_Core::get(Tinebase_Core::SESSION)->{SSO_Model_ExternalIdp::SESSION_KEY};
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -1177,11 +1174,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             usort($result, function($a, $b) use ($allPrefs) {
                 $a = (int) array_search($a['name'], $allPrefs);
                 $b = (int) array_search($b['name'], $allPrefs);
-                
-                if ($a == $b) {
-                    return 0;
-                }
-                return ($a < $b) ? -1 : 1;
+                return $a <=> $b;
             });
             
         } else {
@@ -1203,7 +1196,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $decodedData = $this->_prepareParameter($data);
         $result = array();
-        $accountId = $accountId === null ? Tinebase_Core::getUser()->getId() : $accountId;
+        $accountId ??= Tinebase_Core::getUser()->getId();
 
         if ($accountId !== Tinebase_Core::getUser()->getId() 
             && !Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
@@ -1526,9 +1519,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $paging = new Tinebase_Model_Pagination(array('sort' => $property));
 
         $values = array_unique(array_map(
-            function ($value) {
-                return trim($value);
-            },
+            fn($value) => trim((string) $value),
             $controller->search($filter, $paging)->{$property}
         ));
 
@@ -1718,7 +1709,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if ($sources->count() > 1) {
                 throw new Tinebase_Exception_UnexpectedValue('can not copy multiple sources into one target file');
             }
-            $fs->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($targetPath)), 'add');
+            $fs->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname((string) $targetPath)), 'add');
         } else {
             $fs->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($targetPath), 'add');
         }
@@ -1788,9 +1779,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_AccessDenied('you do not have access to modlogs');
         }
 
-        $result = array(
-            'results'   => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($sequence, $limit)->toArray(),
-        );
+        $result = [
+            'results' => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(
+                $sequence, $limit)->toArray(),
+        ];
         $result['totalcount'] = count($result['results']);
         $result['primaryTinebaseId'] = Tinebase_Core::getTinebaseId();
 
@@ -1849,8 +1841,36 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset($_communityNumber['id'])) {
             try {
                 return Tinebase_Controller_MunicipalityKey::getInstance()->get($_communityNumber['id'])->toArray();
-            } catch (Tinebase_Exception_NotFound $tenf) {}
+            } catch (Tinebase_Exception_NotFound) {}
         }
         return $_communityNumber;
+    }
+
+
+    /**
+     * @param $bodyContent
+     * @return string
+     */
+    public function purifyHTML($bodyContent)
+    {
+        $result = Felamimail_Controller_Message::getInstance()->purifyBodyContent($bodyContent);
+        return  $result;
+    }
+
+    public function getPreviewsFromTempFile($tempFileId)
+    {
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+        $_node = new Tinebase_Model_Tree_Node([
+            'id' => $tempFileId,
+            'name'      => $tempFile->name,
+            'tempFile'  => $tempFile,
+            'hash'  =>  sha1($tempFileId),
+            'size'     =>  $tempFile->size,
+            'type'  =>  Tinebase_Model_Tree_FileObject::TYPE_FILE
+        ], true);
+
+        $result = Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_node);
+
+        return $_node->preview_count ?? 0;
     }
 }

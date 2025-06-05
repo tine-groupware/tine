@@ -77,7 +77,7 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
             . ' grantsData: ' . print_r($grantsData, true));
 
         foreach ($grantsData as $grantData) {
-            $givenGrants = explode(',', $grantData['account_grants']);
+            $givenGrants = explode(',', (string) $grantData['account_grants']);
             foreach ($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
             }

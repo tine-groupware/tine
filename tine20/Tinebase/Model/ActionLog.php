@@ -19,20 +19,20 @@
  */
 class Tinebase_Model_ActionLog extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'ActionLog';
+    public const MODEL_NAME_PART = 'ActionLog';
 
-    const TABLE_NAME = 'actionlog';
+    public const TABLE_NAME = 'actionlog';
 
-    const FLD_ACTION_TYPE = 'action_type';
-    const FLD_USER = 'user';
-    const FLD_DATETIME = 'datetime';
-    const FLD_DATA = 'data';
+    public const FLD_ACTION_TYPE = 'action_type';
+    public const FLD_USER = 'user';
+    public const FLD_DATETIME = 'datetime';
+    public const FLD_DATA = 'data';
 
-    const TYPE_ADD_USER_CONFIRMATION = 'add_user_confirmation';
-    const TYPE_DELETION = 'deletion';
-    const TYPE_EMAIL_NOTIFICATION = 'emailNotification';
-    const TYPE_SUPPORT_REQUEST = 'supportRequest';
-    const TYPE_DATEV_EMAIL = 'datevEmail';
+    public const TYPE_ADD_USER_CONFIRMATION = 'add_user_confirmation';
+    public const TYPE_DELETION = 'deletion';
+    public const TYPE_EMAIL_NOTIFICATION = 'emailNotification';
+    public const TYPE_SUPPORT_REQUEST = 'supportRequest';
+    public const TYPE_DATEV_EMAIL = 'datevEmail';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -72,7 +72,6 @@ class Tinebase_Model_ActionLog extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_USER,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null
                 ],
                 self::LENGTH => 40,
             ],

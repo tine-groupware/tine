@@ -6,7 +6,7 @@ persistence:
 database:
   username: tine
   name: {{ .Values.instance }}
-  host: dev-db-mariadb
+  host: vdb01-test-k8s.tine20.net
 redis:
-  host: dev-redis-master
+  host: vdb01-test-k8s.tine20.net
   prefix: {{ .Values.instance }}

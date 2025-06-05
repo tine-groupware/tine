@@ -263,7 +263,7 @@ class Tinebase_EmailUser
             throw new Tinebase_Exception_NotFound("No backend in config for type $configType found.");
         }
 
-        $backend = ucfirst(strtolower($configType)) . '_' . ucfirst(strtolower($config['backend']));
+        $backend = ucfirst(strtolower($configType)) . '_' . ucfirst(strtolower((string) $config['backend']));
 
         if (!isset(self::$_supportedBackends[$backend])) {
             throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");
@@ -352,7 +352,7 @@ class Tinebase_EmailUser
                     'secondarydomains',
                     self::$_configs[Tinebase_Config::SMTP]
                 )) &&
-                    preg_match("~^ldaps?://~i", self::$_configs[Tinebase_Config::SMTP]['secondarydomains'])
+                    preg_match("~^ldaps?://~i", (string) self::$_configs[Tinebase_Config::SMTP]['secondarydomains'])
             ) {
                 self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl(
                     self::$_configs[Tinebase_Config::SMTP]['secondarydomains']
@@ -368,7 +368,7 @@ class Tinebase_EmailUser
         if ($convertDomainsToUnicode) {
             foreach (['primarydomain', 'secondarydomains', 'additionaldomains'] as $domainKey) {
                 if (isset(self::$_configs[$_configType][$domainKey])) {
-                    $domains = explode(',', self::$_configs[$_configType][$domainKey]);
+                    $domains = explode(',', (string) self::$_configs[$_configType][$domainKey]);
                     foreach ($domains as $idx => $domain) {
                         $domains[$idx] = Tinebase_Helper::convertDomainToUnicode($domain);
                     }
@@ -389,7 +389,7 @@ class Tinebase_EmailUser
      */
     private static function _getSecondaryDomainsFromLdapUrl($_ldapUrl)
     {
-        $ldap_url = parse_url($_ldapUrl);
+        $ldap_url = parse_url((string) $_ldapUrl);
         $ldap_url['path'] = substr($ldap_url['path'], 1);
         $query = explode('?', $ldap_url['query']);
         (count($query) > 0) ? $ldap_url['attributes'] = explode(',', $query[0]) : $ldap_url['attributes'] = array();
@@ -446,7 +446,7 @@ class Tinebase_EmailUser
             $allowedDomains = array($config['primarydomain']);
             if (! empty($config['secondarydomains'])) {
                 // merge primary and secondary domains + trim whitespaces
-                if (preg_match("~^ldaps?://~i", $config['secondarydomains'])) {
+                if (preg_match("~^ldaps?://~i", (string) $config['secondarydomains'])) {
                     // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
                     $config['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl($config['secondarydomains']);
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -456,7 +456,7 @@ class Tinebase_EmailUser
                         );
                     }
                 }
-                $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
+                $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', (string) $config['secondarydomains']));
             }
             if ($_includeAdditional) {
                 $allowedDomains = array_merge($allowedDomains, self::getAdditionalDomains($config));
@@ -473,7 +473,7 @@ class Tinebase_EmailUser
 
         $result = [];
         if (! empty($config['additionaldomains'])) {
-            $result = preg_split('/\s*,\s*/', $config['additionaldomains']);
+            $result = preg_split('/\s*,\s*/', (string) $config['additionaldomains']);
         }
         return $result;
     }
@@ -514,7 +514,7 @@ class Tinebase_EmailUser
                 }
                 $domain = null;
             } else {
-                list(, $domain) = explode('@', $_email, 2);
+                [, $domain] = explode('@', $_email, 2);
             }
 
             if (! in_array($domain, $allowedDomains)) {
@@ -551,13 +551,12 @@ class Tinebase_EmailUser
     }
 
     /**
-     * @param mixed $plugin
      * @return false|int
      */
-    public static function isEmailUserPlugin($plugin)
+    public static function isEmailUserPlugin(mixed $plugin)
     {
-        $pluginName = is_object($plugin) ? get_class($plugin) : $plugin;
-        return preg_match('/^Tinebase_EmailUser/', $pluginName);
+        $pluginName = is_object($plugin) ? $plugin::class : $plugin;
+        return preg_match('/^Tinebase_EmailUser/', (string) $pluginName);
     }
 
     /**
@@ -600,7 +599,7 @@ class Tinebase_EmailUser
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                . __LINE__ . ' Email backend does not support existence check: ' . get_class($emailUserBackend));
+                . __LINE__ . ' Email backend does not support existence check: ' . $emailUserBackend::class);
             }
         }
     }
@@ -673,7 +672,7 @@ class Tinebase_EmailUser
         if (
             $account && ! in_array($account->type, [
                 Felamimail_Model_Account::TYPE_SYSTEM,
-                Felamimail_Model_Account::TYPE_SHARED,
+                Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_ADB_LIST
             ])
@@ -686,7 +685,7 @@ class Tinebase_EmailUser
             try {
                 $imapEmailBackend->checkMasterUserTable();
                 return true;
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 return false;
             }
         }

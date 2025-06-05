@@ -55,7 +55,7 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_Local extends Tinebase_Record_
         if ($basePath = realpath($this->{self::FLD_BASE_PATH})) {
             $basePath = rtrim($basePath, '/') . '/';
             foreach ($basePaths as $bp) {
-                if (str_starts_with($basePath, rtrim($bp, '/') . '/')) {
+                if (str_starts_with($basePath, rtrim((string) $bp, '/') . '/')) {
                     $validBasePath = true;
                     break;
                 }

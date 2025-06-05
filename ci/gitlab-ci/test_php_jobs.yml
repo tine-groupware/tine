@@ -28,6 +28,11 @@ php-unit-all-tests-source-sequential:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+  after_script:
+    - |
+      if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
+        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/coverage/ s3://tine-phpunit-coverage/${CI_COMMIT_REF_NAME}/
+      fi
   needs: []
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "sequential"
@@ -127,7 +132,7 @@ php-unit-setup-tests-source:
 php-unit-servertests-source:
   extends: .php-unit-all-tests-source
   variables:
-    ARG_TEST: AllServerTests
+    ARG_TEST: AllServerTests.php
   timeout: 30m
   rules:
     - if: $RUN_NO_TESTS == "true"
@@ -311,7 +316,7 @@ php-unit-all-tests-built-parallel:
     NODE_TOTAL: 1
     NODE_INDEX: 1
     ARG_IMAGE: test-built
-    ARG_TEST: Tinebase/AllTests
+    ARG_TEST: Tinebase/AllTests.php
   needs:
     - docker_build_built
   rules:
@@ -371,17 +376,12 @@ php-unit-nogitlabci-tests-built-parallel:
       when: never
     - !reference [.php-unit-nogitlabci-tests-built, rules]
 
-php-unit-update-tests:
+
+.php-unit-update-tests:
   extends: .abstract_jobs.php_unit_cache
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
-    PHP_VERSION: "8.1"
-    DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
-    TINE_VERSION_LTS: "2022.11"
-    TINE_VERSION_BE: "2023.11"
-    TINE_VERSION_BETA: ""
-    TINE_VERSION_NEXT: "2024.11"
   needs: []
   stage: test
   timeout: 2h
@@ -434,6 +434,13 @@ php-unit-update-tests:
     - |
       log "testing"
       test_phpunit
+
+
+php-unit-update-tests:
+  variables:
+    PHP_VERSION: "8.1"
+    DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
+  extends: .php-unit-update-tests
   rules:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never

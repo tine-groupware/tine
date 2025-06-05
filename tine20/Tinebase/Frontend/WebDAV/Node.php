@@ -19,8 +19,6 @@
 abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\DAV\IProperties,
     Tinebase_Frontend_WebDAV_IRenamable
 {
-    protected $_path;
-
     /**
      * @var Tinebase_Model_Tree_Node
      */
@@ -35,19 +33,17 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     protected static $_CONTENT_LENGTH;
 
-    public function __construct($_path)
+    public function __construct(protected $_path)
     {
-        $this->_path      = $_path;
-
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $_path);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $this->_path);
 
         try {
-            $this->_node = Tinebase_FileSystem::getInstance()->stat($_path);
-        } catch (Tinebase_Exception_NotFound $tenf) {}
+            $this->_node = Tinebase_FileSystem::getInstance()->stat($this->_path);
+        } catch (Tinebase_Exception_NotFound) {}
 
         if (! $this->_node) {
-            throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
+            throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $this->_path . ' not found');
         }
 
         // You cannot rely on HTTP_* in some cases, see https://www.php.net/reserved.variables.server comment #15
@@ -61,7 +57,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     public function getName()
     {
-        list(, $basename) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        [, $basename] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $basename);
@@ -99,7 +95,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     {
         self::checkForbiddenFile($name);
 
-        list($dirname,) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        [$dirname, ] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
                 , 'add', true, false, $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path)) ||
@@ -120,7 +116,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
 
     public function rename(string $newPath)
     {
-        list($dirname,) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        [$dirname, ] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
                 , 'delete', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
@@ -167,11 +163,11 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
     public static function checkForbiddenFile($name)
     {
         if (in_array($name, self::$_forbiddenNames)) {
-            throw new Sabre\DAV\Exception\Forbidden('forbidden name');
-        } else if (substr($name, 0, 2) == '._') {
-            throw new Sabre\DAV\Exception\Forbidden('no resource files accepted');
+            throw new Sabre\DAV\Exception\Forbidden('forbidden name' . ' : ' . $name);
+        } else if (str_starts_with($name, '._')) {
+            throw new Sabre\DAV\Exception\Forbidden('no resource files accepted' . ' : ' . $name);
         } else if (preg_match(Tinebase_Model_Tree_Node::FILENAME_FORBIDDEN_CHARS_EXP, $name, $matches)) {
-            throw new Sabre\DAV\Exception\Forbidden('Illegal characters: ' . print_r($matches, true));
+            throw new Sabre\DAV\Exception\Forbidden('Illegal characters: ' . $name . ' => ' . print_r($matches, true));
         }
     }
 

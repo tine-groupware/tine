@@ -17,13 +17,13 @@
  */
 class Tinebase_Model_MFA_UserConfig extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'MFA_UserConfig';
+    public const MODEL_NAME_PART = 'MFA_UserConfig';
 
-    const FLD_ID = 'id';
-    const FLD_MFA_CONFIG_ID = 'mfa_config_id';
-    const FLD_CONFIG = 'config';
-    const FLD_CONFIG_CLASS = 'config_class';
-    const FLD_NOTE = 'note';
+    public const FLD_ID = 'id';
+    public const FLD_MFA_CONFIG_ID = 'mfa_config_id';
+    public const FLD_CONFIG = 'config';
+    public const FLD_CONFIG_CLASS = 'config_class';
+    public const FLD_NOTE = 'note';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

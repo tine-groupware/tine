@@ -656,6 +656,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_deleteRecord = Tine.Filemanager.nodeActionsMgr.get('delete');
         this.action_download = Tine.Filemanager.nodeActionsMgr.get('download');
         this.action_moveRecord = Tine.Filemanager.nodeActionsMgr.get('move');
+        this.action_copyRecord = Tine.Filemanager.nodeActionsMgr.get('copy');
         this.action_publish = Tine.Filemanager.nodeActionsMgr.get('publish');
         this.action_systemLink = Tine.Filemanager.nodeActionsMgr.get('systemLink');
         this.action_preview = Tine.Filemanager.nodeActionsMgr.get('preview', {
@@ -708,6 +709,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_deleteRecord,
             'rename',
             this.action_moveRecord,
+            this.action_copyRecord,
             this.action_download,
             'resume',
             'pause',
@@ -734,6 +736,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_deleteRecord, 
                 'rename', 
                 this.action_moveRecord,
+                this.action_copyRecord,
                 this.action_download,
                 this.action_editFile, 
                 this.action_publish, 

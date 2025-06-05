@@ -100,7 +100,7 @@ const activeApp = computed(() => {
   const dockState = Tine.Tinebase.MainScreen.getDock().vueProps.state || null
   if (!dockState) return ''
   const _activeApp = Tine.Tinebase.appMgr.getAll().find(app => app.name === dockState.activeApp)
-  return _activeApp.getTitle()
+  return _activeApp ? _activeApp.getTitle() : 'No valid main screen found'
 })
 
 const appMenuVisible = ref(false)

@@ -23,7 +23,7 @@ use \Zend\Stratigility\MiddlewarePipe;
  */
 class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
-    const QUERY_PARAM_DO_EXPRESSIVE = 'doRouting';
+    public const QUERY_PARAM_DO_EXPRESSIVE = 'doRouting';
 
     /**
      * the request
@@ -79,7 +79,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
             if (Tinebase_Session::sessionExists()) {
                 try {
                     Tinebase_Core::startCoreSession();
-                } catch (Zend_Session_Exception $zse) {
+                } catch (Zend_Session_Exception) {
                     // expire session cookie for client
                     Tinebase_Session::expireSessionCookie();
                 }
@@ -175,5 +175,10 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
         $oldEmitter = $this->_emitter;
         $this->_emitter = $emitter;
         return $oldEmitter;
+    }
+
+    public static function checkRateLimit($method): void
+    {
+        self::_checkRateLimit('Tinebase_Server_Expressive', $method);
     }
 }

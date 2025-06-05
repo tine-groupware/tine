@@ -145,14 +145,16 @@
 /**** preview *****/
 
 .preview-panel-felamimail {
-    padding: 5px;
-    overflow: hidden;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
 }
 
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
     overflow: auto;
     padding: 10px;
+    flex-shrink: 0; /* Don't allow this section to shrink */
 }
 
 .preview-panel-felamimail-header-row {
@@ -178,17 +180,48 @@
 }
 
 .preview-panel-felamimail-attachments {
-    margin: 5px 0;
-    padding: 3px;
+    padding: 10px;
     background-color: #e8e8e8;
 }
 
+.preview-panel-felamimail-preparedPart {
+    flex-shrink: 0;
+}
+
+.email-stapled-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.dark-mode .email-stapled-card {
+    background-color: #dddddd;
+}
+
+.email-stapled-card {
+    position: absolute;
+    width: calc(100% - 20px);
+    max-height: calc(100% - 20px);
+    border-radius: 4px;
+    background-color: #ffffff;
+    box-shadow: 0 0 2px grey;
+    transform-origin: center center;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide overflow at the card level */
+    margin: 10px;
+}
+
 /* note: el tyle of html areas underling textarea are copied to iframe*/
-.felamimail-message-body-html, 
+.felamimail-message-body-html,
 .preview-panel-felamimail-body {
-    overflow: auto;
+    overflow: hidden;
     font-size: 13px;
-    padding: 10px;
+    padding: 15px;
+    flex-shrink: 0;
 }
 
 .preview-panel-felamimail-body ul {
@@ -403,6 +436,7 @@
 .preview-panel-felamimail-filelocations,
 .felamimail-compose-info .x-panel-body {
     background-color: #ffffaa;
+    padding: 5px;
 }
 
 .felamimail-compose-info .x-form-item {
@@ -488,10 +522,37 @@ em.emoji {
     text-overflow: ellipsis;
 }
 
-.felamimail-message-icon {
+.felamimail-message-icon,
+.felamimail-message-icon-container {
     width: 16px;
     height: 16px;
-    background-size: 16px 16px;
     background-repeat: no-repeat;
     margin: 0 2px;
+}
+
+.felamimail-message-icon-container {
+    min-height: 16px;
+    min-width: 16px;
+    position: relative;
+    display: inline-block;
+}
+
+.felamimail-message-icon-container.has-multiple-icons .felamimail-message-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.felamimail-message-icon-container.has-multiple-icons .answered {
+    position: relative;
+    z-index: 2;
+    top: 2px;
+    right: 2px;
+}
+
+.felamimail-message-icon-container.has-multiple-icons .passed {
+    position: absolute;
+    bottom: 3px;
+    left: 5px;
+    opacity: 0.6;
+    z-index: 1;
 }

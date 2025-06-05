@@ -5,11 +5,9 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
-
-use Firebase\JWT\JWT;
 
 /**
  * cli server for Admin
@@ -55,32 +53,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         $route = (array)$args['route'];
 
-        // create new private and public key
-        $new_key_pair = openssl_pkey_new(array(
-            "private_key_bits" => 2048,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        ));
-        openssl_pkey_export($new_key_pair, $private_key_pem);
-
-
-        $jwtAccessRoute = new Admin_Model_JWTAccessRoutes([
-            Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $accountId,
-            Admin_Model_JWTAccessRoutes::FLD_KEYID => Tinebase_Record_Abstract::generateUID(),
-            Admin_Model_JWTAccessRoutes::FLD_ISSUER => Tinebase_Record_Abstract::generateUID(),
-            Admin_Model_JWTAccessRoutes::FLD_KEY => $private_key_pem,
-            Admin_Model_JWTAccessRoutes::FLD_ROUTES => $route,
-        ]);
-
-        $token = JWT::encode(
-            payload: ['iss' => $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_ISSUER}],
-            key: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEY},
-            alg: 'RS512',
-            keyId: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEYID}
-        );
-
-        Admin_Controller_JWTAccessRoutes::getInstance()->create($jwtAccessRoute);
-
-        echo PHP_EOL . $token . PHP_EOL;
+        echo PHP_EOL . Admin_Controller_JWTAccessRoutes::getInstance()->getNewJWT([
+                Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $accountId,
+                Admin_Model_JWTAccessRoutes::FLD_ROUTES => $route,
+            ]) . PHP_EOL;
 
         return 0;
     }
@@ -920,7 +896,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 ['field' => 'type', 'operator' => 'in', 'value' => [
                     Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
                     Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
-                    Tinebase_EmailUser_Model_Account::TYPE_SHARED,
+                    Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
                     Tinebase_EmailUser_Model_Account::TYPE_USER_INTERNAL,
                 ]],
                 ['field' => 'email', 'operator' => 'equals', 'value' => $result['email']]

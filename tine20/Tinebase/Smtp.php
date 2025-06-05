@@ -111,7 +111,7 @@ class Tinebase_Smtp
     {
         if ($_transport) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' Setting SMTP transport: ' . get_class($_transport));
+                __METHOD__ . '::' . __LINE__ . ' Setting SMTP transport: ' . $_transport::class);
             self::$_defaultTransport = $_transport;
         } else {
             self::$_defaultTransport = NULL;
@@ -143,7 +143,7 @@ class Tinebase_Smtp
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $transport) {
             Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Send Message using SMTP transport: '
-                . get_class($transport));
+                . $transport::class);
         }
         
         if (! $_mail->getMessageId()) {

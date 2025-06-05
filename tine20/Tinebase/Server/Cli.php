@@ -45,8 +45,8 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         $result = self::$_anonymousMethods;
         
         // check if application cli frontend defines its own anonymous methods
-        if ($method && strpos($method, '.') !== false) {
-            list($application, $cliMethod) = explode('.', $method);
+        if ($method && str_contains($method, '.')) {
+            [$application, $cliMethod] = explode('.', $method);
             $class = $application . '_Frontend_Cli';
             if (@class_exists($class)) {
                 $object = new $class;
@@ -140,7 +140,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
     public function getRequestMethod()
     {
         $opts = Tinebase_Core::get('opts');
-        return (isset($opts->method)) ? $opts->method : NULL;
+        return $opts->method ?? NULL;
     }
     
     /**

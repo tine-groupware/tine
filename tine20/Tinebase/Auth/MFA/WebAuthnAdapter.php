@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -34,7 +34,7 @@ class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInte
         return null;
     }
 
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool
     {
         return true;
     }
@@ -46,7 +46,7 @@ class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInte
             ->getAdapter()->getConfig();
         try {
             Tinebase_Auth_Webauthn::webAuthnAuthenticate($config, $_data);
-        } catch (Exception $e) {
+        } catch (Exception) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' webauthn mfa validation failed');
             return false;

@@ -251,15 +251,14 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         return $this->_backend->getLastRun();
     }
 
-    public function spreadTasks()
+    public function spreadTasks(bool $hourly): void
     {
         $toUpdate = [];
 
         /** @var Tinebase_Model_SchedulerTask $task */
         foreach ($this->_backend->getAll('RAND()') as $task) {
-
-            // not minutely
-            if (preg_match('/^\d+( .*)$/', $task->config->getCron(), $m)) {
+            if (!$task->{Tinebase_Model_SchedulerTask::FLD_DISABLE_AUTO_SHUFFLE}
+                    && preg_match($hourly ? '/^\d+( \* .*)$/' : '/^\d+ 0?[0-6]( .*)$/', $task->config->getCron(), $m)) {
                 $toUpdate[] = [
                     'record'  => $task,
                     'matches' => $m
@@ -268,13 +267,24 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         }
 
         if (($count = count($toUpdate)) < 2) return;
-        $spread = 60 / $count;
+        $spread = ($hourly ? 60 : 6 * 60) / $count;
         $start = 0.0;
+        $hour = 0;
 
         foreach ($toUpdate as $data) {
             $minute = floor($start);
-            if ($minute > 59) $minute = 59;
-            $data['record']->config->setCron($minute . $data['matches'][1]);
+            while ($minute > 59) {
+                if ($hourly) {
+                    $minute = 59;
+                } else {
+                    $minute -= 60;
+                    $start -= 60;
+                    if ($hour < 6) {
+                        ++$hour;
+                    }
+                }
+            }
+            $data['record']->config->setCron($minute . ($hourly ? '' : ' ' . $hour) . $data['matches'][1]);
             $this->_backend->update($data['record']);
             $start += $spread;
         }
@@ -289,6 +299,15 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $this->spreadTasks();
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        if (!$_createdRecord->{Tinebase_Model_SchedulerTask::FLD_DISABLE_AUTO_SHUFFLE}) {
+            $cron = $_createdRecord->config->getCron();
+            if (preg_match('/^\d+( \* .*)$/', $cron, $m)) {
+                $this->spreadTasks(true);
+            } elseif (preg_match('/^\d+ 0?[0-6]( .*)$/', $cron, $m)) {
+                $this->spreadTasks(false);
+            }
+        }
     }
 }

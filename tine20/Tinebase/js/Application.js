@@ -300,7 +300,7 @@ Tine.Tinebase.featureEnabled = function(featureName) {
 
 Tine.Tinebase.fieldUiFeatureEnabled = function(fieldconfig) {
     const feature = _.get(fieldconfig, 'uiconfig.feature')
-    return !(feature && !Tine.Tinebase.appMgr.get(feature.appName).featureEnabled(feature.feature));
+    return !(feature && !(Tine.Tinebase.appMgr.get(feature.appName) && Tine.Tinebase.appMgr.get(feature.appName)?.featureEnabled(feature.feature)));
 };
 
 Tine.Tinebase.Application.Tinebase = {

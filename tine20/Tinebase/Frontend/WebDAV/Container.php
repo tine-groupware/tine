@@ -61,7 +61,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         // no acl check?...
         try {
             Tinebase_FileSystem::getInstance()->stat($this->_path);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $statpath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path);
             if ($statpath->isDefaultACLsPath()) {
                 Tinebase_FileSystem::getInstance()->createAclNode($this->_path, $statpath->getDefaultAcls());
@@ -208,7 +208,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             if (!Tinebase_Core::getUser()->hasGrant($childNode, Tinebase_Model_Grants::GRANT_READ)) {
                 throw new Sabre\DAV\Exception\Forbidden('You do not have access');
             }
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
         }
         
@@ -233,7 +233,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         try {
             $childNodes = Tinebase_FileSystem::getInstance()->scanDir($this->_path);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $this->_path . ' not found');
         }
         // Loop through the directory, and create objects for each node
@@ -242,7 +242,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
                     $children[] = $this->getChild($node->name);
                 }
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // skip
             }
         }
@@ -259,7 +259,7 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     {
         try {
             $node = Tinebase_FileSystem::getInstance()->stat($this->_path);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $this->_path . ' not found');
         }
         return '"' . (empty($node->hash) ? sha1($node->object_id) : $node->hash) . '"';

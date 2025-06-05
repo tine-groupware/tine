@@ -763,115 +763,70 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     oneColumnRenderer: function(folderId, metadata, record) {
-        const block = document.createElement('div');
-        
-        const flagIcons = record.getFlagIcons();
-        const flagIconEls = flagIcons.map((icon) => {
-            const iconEl = document.createElement('img');
-            iconEl.id = icon.name;
-            iconEl.className = 'felamimail-message-icon ' + (icon?.cls || "");
-            iconEl.src = (icon?.src || '');
-            iconEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(icon?.qtip || ''));
-            if (icon?.visibility) iconEl.style.visibility = icon.visibility;
-            return iconEl;
-        });
-        
-        // unread icon
-        let unreadIconEl = flagIconEls.find((item) => item.id === 'seen');
-        if (!unreadIconEl) {
-            unreadIconEl = document.createElement('img');
-            unreadIconEl.id = 'empty';
-            unreadIconEl.className = 'felamimail-message-icon ';
-            unreadIconEl.src = 'images/icon-set/empty.svg';
-        }
-        
-        // sender
-        const senderEl = document.createElement('div');
-        senderEl.innerHTML = Ext.util.Format.htmlEncode(record.data.from_name ?? record.data.from_email);
-        senderEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.from_email));
-        
-        // recipient
-        const recipientEl = document.createElement('div');
-        const recipients = record.data.to.map((to) => { return to?.n_fileas || to?.email || to;});
-        const extra = recipients.length > 2 ? ' ...' : '';
-        recipientEl.innerHTML =  Ext.util.Format.htmlEncode(recipients.slice(0, 2).join(' & ') + extra);
-        
-        // attachment
-        const attachmentEl = document.createElement('div');
-        attachmentEl.innerHTML = '<div class="felamimail-message-icon action_attach tine-grid-row-action-icon"/>';
-        attachmentEl.style.visibility = record?.data?.has_attachment ? 'visible' : 'hidden';
-        
-        // receivedDate
-        const receivedDateEl = document.createElement('div');
+        const formatDate = (date) => {
+            if (Ext.isFunction(date.format)) {
+                const isToday = date.format('Y-m-d') === new Date().format('Y-m-d');
+                const isThisWeek = date.between(new Date().add(Date.DAY, -7), new Date());
+                const isThisYear = date.format('Y') === new Date().format('Y');
+
+                let formatted = date.format('l').substr(0, 2) + Ext.util.Format.date(date, ' d/m');
+                if (isThisWeek) formatted = date.format('l').substr(0, 2) + Ext.util.Format.date(date, ' d/m H:i');
+                if (isToday) formatted = Ext.util.Format.date(date, 'H:i');
+                if (!isThisYear) formatted = Ext.util.Format.date(date, 'd.m.Y');
+
+                return formatted;
+            }
+            return date;
+        };
+
+        const icons = record.getFlagIcons();
+        const leftIcons = icons.filter(icon => ['passed', 'answered'].includes(icon.name));
+        const rightIcons = icons.filter(icon => ['spam', 'encrypted', 'tine20'].includes(icon.name));
+        const unreadIcon = icons.find(icon => 'seen' === icon.name);
         const date = record.data?.received ?? '';
-        let formattedDate = date;
-        let qtip = date;
-        if (Ext.isFunction(date.format)) {
-            const isToday = date.format('Y-m-d') === new Date().format('Y-m-d');
-            const isThisWeek = date.between(new Date().add(Date.DAY, -7), new Date());
-            const isThisYear = date.format('Y') === new Date().format('Y');
-            formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m');
-            if (isThisWeek) formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m H:i');
-            if (isToday) formattedDate = Ext.util.Format.date(date, 'H:i');
-            if (!isThisYear) formattedDate = Ext.util.Format.date(date, 'd.m.Y');
-            qtip = date.format('H:i:s d/m/y');
-        }
-        receivedDateEl.innerHTML = formattedDate;
-        receivedDateEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(qtip));
-        
-        // subject
-        const subjectEl = document.createElement('div');
-        subjectEl.innerHTML = Ext.util.Format.htmlEncode(record.data.subject);
-        subjectEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.subject));
-        
-        
-        // flags
-        const displayIcons = ['answered', 'passed', 'spam', 'encrypted', 'tine20'];
-        const flags = flagIconEls.filter((iconEl) => displayIcons.includes(iconEl.id));
-        
-        // tags
-        const tagsEl = document.createElement('div');
-        tagsEl.innerHTML =  Tine.Tinebase.common.tagsRenderer(record.data.tags);
-        
-        const row1 =  document.createElement('div');
-        const row1Left = document.createElement('div');
-        const row1Right =  document.createElement('div');
-        row1.className = 'felamimail-message-title';
-        row1Left.className = 'felamimail-message-title-row';
-        row1Right.className = 'felamimail-message-title-row';
-        senderEl.className = 'felamimail-message-title-text-small';
-        recipientEl.className = 'felamimail-message-title-text-small';
-        row1Left.appendChild(unreadIconEl);
-        
-        if (this.sentFolderSelected) {
-            row1Left.appendChild(recipientEl);
-        } else {
-            row1Left.appendChild(senderEl);
-        }
-        row1Right.appendChild(receivedDateEl);
-        
-        const row2 = document.createElement('div');
-        const row2Left = document.createElement('div');
-        const row2Right =  document.createElement('div');
-        row2.className = 'felamimail-message-title';
-        row2Left.className = 'felamimail-message-title-row';
-        row2Right.className = 'felamimail-message-title-row';
-        row2Right.style.minWidth = '50px';
-        subjectEl.className = 'felamimail-message-title-text-medium';
-        
-        row2Left.appendChild(attachmentEl);
-        row2Left.appendChild(subjectEl);
-        row2Right.appendChild(tagsEl);
-        flags.forEach((flagEl) => row2Right.appendChild(flagEl));
-        
-        row1.appendChild(row1Left);
-        row1.appendChild(row1Right);
-        row2.appendChild(row2Left);
-        row2.appendChild(row2Right);
-        block.appendChild(row1);
-        block.appendChild(row2);
-        
-        return  block.outerHTML;
+
+        const createImageElements = (icons) => {
+            return icons.map(icon => `
+                <img 
+                  src="${icon.src || ''}" 
+                  class="felamimail-message-icon ${icon.cls || icon.name || ''}" 
+                  id="${icon.name}"
+                  alt="${icon.name}"
+                  ${icon.qtip ? `ext:qtip="${icon.qtip}"` : ''}
+                >
+              `).join('');
+        };
+
+        const html = `
+          <div class="email-list-item">
+            <div class="felamimail-message-title">
+              <div class="felamimail-message-title-row">
+                <div class="felamimail-message-icon-container">
+                    ${unreadIcon ? createImageElements([unreadIcon]) : '<div class="felamimail-message-icon"></div>'}
+                </div>
+                <div class="felamimail-message-title-text-small">${Ext.util.Format.htmlEncode(record.data.from_name || record.data.from_email)}</div>
+              </div>
+              <div class="felamimail-message-title-row">
+                <div class="email-date" ext:qtip="${date.format('H:i:s d/m/y')}">${formatDate(date)}</div>
+              </div>
+            </div>
+            <div class="felamimail-message-title">
+              <div class="felamimail-message-title-row">
+                <div class="felamimail-message-icon-container ${leftIcons.length > 1 ? 'has-multiple-icons' : ''}">
+                    ${createImageElements(leftIcons)}
+                </div>
+                <div class="felamimail-message-title-text-medium">${Ext.util.Format.htmlEncode(record.data.subject)}</div>
+              </div>
+              <div class="felamimail-message-title-row" style="min-width: 50px">
+                <div class="email-tags">${Tine.Tinebase.common.tagsRenderer(record.data.tags)}</div>
+                ${createImageElements(rightIcons)}
+                ${record.data.has_attachment ? '<div class="felamimail-message-icon action_attach tine-grid-row-action-icon"></div>' : ''}
+              </div>
+            </div>
+          </div>
+        `;
+
+        return  html.trim();
     },
 
     /**
@@ -1346,16 +1301,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     getKeyBindingData() {
         const data = [
-            'Ctrl+N / Ctrl+M : Compose message',
-            'Ctrl+L : Forward message',
-            'Ctrl+R : Reply message',
-            'Ctrl+Shift+R : Reply to all',
-            'A / Ctrl+S : File message',
-            'Ctrl+O / Enter : Open message',
-            '1 : Toggle highlighting',
-            'M : Mark read/unread',
-            'J : Mark message as SPAM',
-            'Shift+J : Mark message as HAM',
+            this.app.i18n._('Ctrl+N / Ctrl+M : Compose message'),
+            this.app.i18n._('Ctrl+L : Forward message'),
+            this.app.i18n._('Ctrl+R : Reply message'),
+            this.app.i18n._('Ctrl+Shift+R : Reply to all'),
+            this.app.i18n._('A / Ctrl+S : File message'),
+            this.app.i18n._('Ctrl+O / Enter : Open message'),
+            this.app.i18n._('1 : Toggle highlighting'),
+            this.app.i18n._('M : Mark read/unread'),
+            this.app.i18n._('J : Mark message as SPAM'),
+            this.app.i18n._('Shift+J : Mark message as HAM'),
         ];
         return data.map((item) => this.app.i18n._(item));
     },
@@ -1438,13 +1393,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             e.stopEvent();
         } else if (e.getTarget('.action_attach')) {
             if (Tine.Tinebase.appMgr.isEnabled('Filemanager')) {
-                const me = this;
-
                 Tine.Filemanager.QuickLookPanel.openWindow({
                     record: this.getStore().getAt(row),
                     initialApp: this.app,
                     sm: grid.getSelectionModel(),
-                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments
+                    handleAttachments: Tine.Felamimail.MailDetailsPanel.prototype.quicklookHandleAttachments,
+                    requiredGrant: false,
                 });
             }
         } else {
@@ -1857,11 +1811,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     value: [msg.data.id]
                 }];
 
+                // getTitle might need to registerReplacer
+                let title = config.record.getTitle();
+                if (title && title.asString) {
+                    title = await title.asString();
+                }
+
                 const locations = [{
                     type: 'attachment',
                     model: 'Tasks_Model_Task',
                     record_id: config.record.data,
-                    record_title: config.record.getTitle()
+                    record_title: title
                 }];
                 
                 await Tine.Felamimail.fileMessages(messageFilter, locations)

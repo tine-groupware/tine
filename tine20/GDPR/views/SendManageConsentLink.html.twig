@@ -1,0 +1,20 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% block subject %}
+    {{ 'Link to consent management' }}
+{% endblock %}
+
+{% block body %}
+    <div>{{ 'Hello ' }}  {{ contact.getTitle() | default('user') }} </div>
+    <div>{{ 'you can use this link to manage the purpose for which we may contact you : ' }}<a href="{{ link }}">Manage my subscription</a></div>
+    <div>{{ 'Thank you.' }}</div>
+    <div>{{ 'Your %1$s Team' | format(app.branding.title) }}</div>
+    <div><img src="{{ app.branding.logoContent.getBody() | data_uri }}" width="135" height="50" /></div>
+{% endblock %}
+
+

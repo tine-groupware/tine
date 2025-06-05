@@ -91,6 +91,21 @@ class Calendar_JsonTests extends Calendar_TestCase
             ->deleteUserPref(Calendar_Preference::DEFAULTCALENDAR);
     }
 
+    public function testCreateExternalAttendeeWithStringContainerId()
+    {
+        $eventData = $this->_getEvent();
+        $eventData->attendee->addRecord($attendee = $this->_createAttender(
+            Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+                'email' => 'a@b.de',
+                'n_fn' => 'a b',
+            ]))
+        ));
+        $attendee->displaycontainer_id = '';
+
+        $this->_uit->saveEvent($eventData->toArray());
+        // this used to fail because of the empty string in displaycontainer_id
+    }
+
     /**
      * testCreateEvent
      * 

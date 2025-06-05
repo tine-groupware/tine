@@ -9,8 +9,8 @@
 -->
 <template>
   <div class="d-flex align-items-center">
-    <div ref="itemContainerRef" :class="config.iconCls" @click="config?.handler" class="action-bar-item"/>
-    <a class="action-bar-item__text" v-if="itemCfg._showText" @click="config?.handler">
+    <div ref="itemContainerRef" v-if="config.iconCls" :class="config.iconCls" @click="config?.handler" class="action-bar-item"/>
+    <a class="action-bar-item__text" v-if="itemCfg._showText || config.showText" @click="config?.handler">
       {{config.text}}
     </a>
   </div>
@@ -42,14 +42,14 @@ const config = computed(() => props.itemCfg.initialConfig)
 .action-bar-item__text{
   cursor: pointer;
   font-size: 13px;
-  color: white;
+  color: black;
 
   .dark-mode &{
     filter: invert(1);
   }
 
   &:hover{
-    color: white;
+    color: black;
     border-bottom: transparent 3px solid;
   }
 }

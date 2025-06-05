@@ -1,3 +1,11 @@
+/*
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
 const abstractAction = Ext.extend(Ext.Action, {
 
 
@@ -24,32 +32,21 @@ const abstractAction = Ext.extend(Ext.Action, {
     //     action.baseAction.setDisabled(!enabled) // WTF?
     // },
     handler: async function(cmp) {
-        // @TODO working with this might be a bad idea as it's excecuted here only and not in constructor?
-
-
         // this.recordsName = recordClass.getRecordsName()
         this.selections = [...this.initialConfig.selections]
         this.errors = []
         this.errorMsgs = []
-        this.editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
-        this.maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen }).getEl()
+        this.editDialog = cmp.editDialog || cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.Tinebase.dialog.Dialog})
+        this.maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen || c instanceof  Tine.Tinebase.dialog.Dialog}).getEl()
         this.mask = new Ext.LoadMask(this.maskEl, { msg: this.maskMsg || this.app.i18n._('Please wait...') })
 
-        this.unbooked = this.selections.reduce((unbooked, record) => {
-            record.noProxy = true // kill grid autoSave
-            const status = record.get(this.statusFieldName)
-            return unbooked.concat(this.statusDef.records.find((r) => { return r.id === status })?.booked ? [] : [record])
-        }, [])
-
-        // if (editDialog) {
-        //     try {
-        //         await editDialog.isValid()
-        //     } catch (e) {
-        //         return
-        //     }
-        // }
-        //
-        // this.handle(options)
+        if (this.statusDef && this.statusFieldName) {
+            this.unbooked = this.selections.reduce((unbooked, record) => {
+                record.noProxy = true // kill grid autoSave
+                const status = record.get(this.statusFieldName)
+                return unbooked.concat(this.statusDef.records.find((r) => { return r.id === status })?.booked ? [] : [record])
+            }, [])
+        }
     }
 });
 

@@ -20,6 +20,7 @@ Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
     displayField: 'modelName',
     valueField: 'className',
     mode: 'local',
+    useRecordName: false,
 
     initComponent() {
         const availableModels = this.availableModels?.map((model) => { return Tine.Tinebase.data.RecordMgr.get(model) });
@@ -31,7 +32,7 @@ Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
             fields: ['className', 'modelName'],
             data: Tine.Tinebase.data.RecordMgr.items.reduce((models, recordClass) => {
                 const className = recordClass.getPhpClassName();
-                let name = recordClass.getRecordsName();
+                let name = this.useRecordName ? recordClass.getRecordName() : recordClass.getRecordsName();
 
                 name = !name || name === 'records'? recordClass.getMeta('modelName') : name;
                 const label = (this.includeAppName ? recordClass.getAppName() + ' ' : '') + name + (this.includeClassName ? ` (${className})` : '');

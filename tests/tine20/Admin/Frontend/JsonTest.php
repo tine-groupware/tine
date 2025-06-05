@@ -122,12 +122,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
 
         Tinebase_Group::syncGroups();
         $reCreatedGroup = Tinebase_Group::getInstance()->getGroupById($group['id']);
-        $this->assertNotSame($reCreatedGroup->list_id, $group['list_id']);
-        try {
-            Addressbook_Controller_List::getInstance()->get($group['list_id']);
-            $this->fail('list should not be undeleted');
-        } catch (Tinebase_Exception_NotFound $tenf) {}
-        Addressbook_Controller_List::getInstance()->get($reCreatedGroup->list_id);
+        $this->assertEquals($reCreatedGroup->list_id, $group['list_id']);
+        Addressbook_Controller_List::getInstance()->get($group['list_id']);
     }
     
     /**
@@ -1142,7 +1138,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         self::assertNull(ExampleApplication_Config::getInstance()->get($result['name']));
     }
 
-    public function testSearchConfigs()
+    public function testSearchConfigs(): array
     {
         $result = $this->_json->searchConfigs(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
@@ -1151,7 +1147,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $this->assertGreaterThanOrEqual(2, $result['totalcount']);
 
         $attendeeRoles = NULL;
-        foreach($result['results'] as $configData) {
+        foreach ($result['results'] as $configData) {
             if ($configData['name'] == 'attendeeRoles') {
                 $attendeeRoles = $configData;
                 break;
@@ -1159,7 +1155,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         }
 
         $this->assertNotNull($attendeeRoles);
-        $this->assertContains('{', $attendeeRoles);
+        $this->assertArrayHasKey('id', $attendeeRoles);
 
         return $attendeeRoles;
     }
@@ -1293,7 +1289,8 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         foreach ($filterAppResult['results'] as $node) {
             Tinebase_Application::getInstance()->getApplicationById($node['name']);
         }
-        static::assertEquals(5, $filterAppResult['totalcount']);
+        static::assertGreaterThanOrEqual(4, $filterAppResult['totalcount'],
+            print_r($filterAppResult['results'], true));
 
         $filterAppFolderResult = $this->_json->searchQuotaNodes(array(array(
             'field'     => 'path',

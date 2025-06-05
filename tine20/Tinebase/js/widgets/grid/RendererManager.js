@@ -39,7 +39,7 @@ Tine.widgets.grid.RendererManager = function() {
          * default renderer - quote content
          */
         defaultRenderer: function(value) {
-            return [null, undefined].indexOf(value) < 0 ? Ext.util.Format.htmlEncode(value) : '';
+            return [null, undefined].indexOf(value) < 0 ? `<span ext:qtip="${Tine.Tinebase.common.doubleEncode(value)}">${Ext.util.Format.htmlEncode(value)}</span>` : '';
         },
 
         /**
@@ -67,6 +67,8 @@ Tine.widgets.grid.RendererManager = function() {
                 renderer = Tine.widgets.grid.attachmentRenderer;
             } else if (fieldName == 'color') {
                 renderer = Tine.Tinebase.common.colorRenderer;
+            } else if (fieldName === 'url') {
+                renderer = Tine.Tinebase.common.urlRenderer;
             }
 
             return renderer;
@@ -178,13 +180,24 @@ Tine.widgets.grid.RendererManager = function() {
 
                         renderer = renderer.createSequence(function (value, metadata, record) {
                             if (metadata) {
-                                metadata.css = 'tine-gird-cell-number';
+                                metadata.css += ' tine-gird-cell-number';
                             }
                         });
 
                     }
                     break;
                 case 'string':
+                    renderer = this.defaultRenderer;
+                    if (fieldDefinition.hasOwnProperty('specialType')) {
+                        switch (fieldDefinition.specialType) {
+                            case 'currency':
+                                renderer = Tine.Tinebase.common.currencyRenderer;
+                                break;
+                            default:
+                                renderer = this.defaultRenderer;
+                        }
+                    }
+                    break;
                 case 'text':
                 case 'fulltext':
                     renderer = this.defaultRenderer;
@@ -254,7 +267,7 @@ Tine.widgets.grid.RendererManager = function() {
                     break;
                 case 'model':
                     renderer = (classname, metaData, record) => {
-                        const recordClass = Tine.Tinebase.data.RecordMgr.get(classname);
+                        const recordClass = Tine.Tinebase.data.RecordMgr.get(_.get(classname, 'className', classname));
                         return recordClass ? recordClass.getRecordName() : classname;
                     };
                     break;

@@ -310,6 +310,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Admin' => array(
                 Admin_Model_Config::class,
+                Admin_Model_EmailAccount::class,
                 Admin_Model_JWTAccessRoutes::class,
                 Admin_Model_SambaMachine::class,
                 Admin_Model_SchedulerTask::class,
@@ -364,6 +365,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Filemanager' => array(
                 Filemanager_Model_DownloadLink::class,
+                Filemanager_Model_FileLocation::class,
                 Filemanager_Model_Node::class,
             ),
             'HumanResources' => array(
@@ -441,6 +443,9 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Document_Order::class,
                 Sales_Model_EDocument_EAS::class,
                 Sales_Model_EDocument_PaymentMeansCode::class,
+                Sales_Model_EDocument_VATEX::class,
+                Sales_Model_EDocument_VATEXLocalization::class,
+                Sales_Model_EDocument_VATProcedure::class,
                 Sales_Model_Einvoice_XRechnung::class,
                 Sales_Model_Invoice::class,
                 Sales_Model_InvoiceCleared::class,
@@ -509,6 +514,9 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_EmailUser_Forward::class,
                 Tinebase_Model_EvaluationDimension::class,
                 Tinebase_Model_EvaluationDimensionItem::class,
+                Tinebase_Model_FileLocation::class,
+                Tinebase_Model_FileLocation_RecordAttachment::class,
+                Tinebase_Model_FileLocation_TreeNode::class,
                 Tinebase_Model_FilterSyncToken::class,
                 Tinebase_Model_FullUser::class,
                 Tinebase_Model_Grants::class,
@@ -541,6 +549,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_PersistentFilterGrant::class,
                 Tinebase_Model_PersistentObserver::class,
                 Tinebase_Model_Preference::class,
+                Tinebase_Model_RateLimit::class,
                 Tinebase_Model_Registration::class,
                 Tinebase_Model_Relation::class,
                 Tinebase_Model_Role::class,

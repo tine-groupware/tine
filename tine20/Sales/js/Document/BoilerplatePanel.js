@@ -42,7 +42,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
 
     onRecordLoad: async function(editDialog, record) {
         const boilerplates = record.get('boilerplates') || [];
-        this.store.loadData(boilerplates);
+        this.store.loadData([...boilerplates]);
         this.onBoilerplatesLoad(editDialog);
 
         this.loadBoilerplatesIf(editDialog, record);
@@ -54,7 +54,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             let field = editDialog.getForm().findField(fieldName);
             boilerplate.set('boilerplate', field.getValue());
         });
-        record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data')));
+        record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data'), true));
 
         // e.g. on lang change
         await this.loadBoilerplatesIf(editDialog, record);
@@ -128,7 +128,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
         const statusField = this.editDialog.fields[this.editDialog.statusFieldName]
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
 
-        if (String(this.gabpArgs) !== String(gabpArgs) && !booked) {
+        if (!this.editDialog.loadRequest && !booked && String(this.gabpArgs) !== String(gabpArgs)) {
             this.gabpArgs = gabpArgs;
             const { results } = await Tine.Sales.getApplicableBoilerplates(...gabpArgs);
             this.applicableBoilerplatesData = results;
@@ -141,7 +141,6 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
                     applicableBoilerplate.data.original_id = applicableBoilerplate.id; // don't modify
                     this.store.addSorted(applicableBoilerplate);
                 } else {
-                    //@TODO: don't replace when document is in closed state -> even don't ask!
                     const isEqual = existingBoilerplate.get('boilerplate') === applicableBoilerplate.get('boilerplate');
                     const existingIsLocallyChanged = !!+existingBoilerplate.get('locally_changed');
                     const applicableIsNewer = applicableBoilerplate.getMTime() > existingBoilerplate.getMTime();
@@ -170,7 +169,7 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
                 }
             });
 
-            record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data')));
+            record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data'), true));
             this.onBoilerplatesLoad(editDialog);
         }
     },

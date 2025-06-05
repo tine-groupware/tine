@@ -9,6 +9,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
+use \IPLib\Factory;
+
 /**
  * Helper class
  *
@@ -19,11 +21,10 @@ class Tinebase_Helper
     /**
      * returns one value of an array, identified by its key
      *
-     * @param mixed $_key
      * @param array $_array
      * @return mixed
      */
-    public static function array_value($_key, array $_array)
+    public static function array_value(mixed $_key, array $_array)
     {
         return (isset($_array[$_key]) || array_key_exists($_key, $_array)) ? $_array[$_key] : NULL;
     }
@@ -68,12 +69,12 @@ class Tinebase_Helper
         $powers = 'KMGTPEZY';
         $power = 0;
 
-        if (preg_match('/(\d+)\s*([' . $powers . '])/', $value, $matches)) {
+        if (preg_match('/(\d+)\s*([' . $powers . '])/', (string) $value, $matches)) {
             $value = $matches[1];
             $power = strpos($powers, $matches[2]) + 1;
         }
 
-        return (int)$value * pow(1024, $power);
+        return (int)$value * 1024 ** $power;
     }
     
     /**
@@ -104,7 +105,7 @@ class Tinebase_Helper
         $format = ($format === NULL) ? '%01.2f %s' : (string) $format;
 
         // IEC prefixes (binary)
-        if ($si == FALSE OR strpos($force_unit, 'i') !== FALSE)
+        if ($si == FALSE OR str_contains((string) $force_unit, 'i'))
         {
             $units = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
             $mod   = 1024;
@@ -122,7 +123,7 @@ class Tinebase_Helper
             $power = ($bytes > 0) ? floor(log($bytes, $mod)) : 0;
         }
 
-        return sprintf($format, $bytes / pow($mod, $power), $units[$power]);
+        return sprintf($format, $bytes / $mod ** $power, $units[$power]);
     }
 
     /**
@@ -138,7 +139,7 @@ class Tinebase_Helper
         
         try {
             // try to find the .git dir
-            $dir = realpath(dirname(dirname(dirname(__FILE__)))) . '/.git';
+            $dir = realpath(dirname(__FILE__, 3)) . '/.git';
             if (file_exists($dir)) {
                 $HEAD = trim(str_replace('ref: ', '', @file_get_contents("$dir/HEAD")));
                 $explodedHead = explode('/', $HEAD);
@@ -159,7 +160,7 @@ class Tinebase_Helper
                 }
             }
             $revision = "$branch: $rev ($date)";
-        } catch (Exception $e) {
+        } catch (Exception) {
             $revision = 'not resolvable';
         }
         
@@ -247,7 +248,7 @@ class Tinebase_Helper
         }
         
         foreach ($_arr as $s) {
-            if (strcasecmp($_str, $s) == 0) {
+            if (strcasecmp($_str, (string) $s) == 0) {
                 return true;
             }
         }
@@ -316,7 +317,7 @@ class Tinebase_Helper
      * @param  mixed        $insert be careful, if you want to insert an array as a value, put your value array into an array as the only element!
      * @return bool
      */
-    public static function arrayInsertAfterKey(array &$array, $key, $insert): bool
+    public static function arrayInsertAfterKey(array &$array, $key, mixed $insert): bool
     {
         if (is_int($key)) {
             // -1 means after the last element => we transform it to count(), otherwise +1 would make it 0, not what we want
@@ -353,7 +354,7 @@ class Tinebase_Helper
         
         try {
             Zend_Json::decode($string);
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
         
@@ -413,15 +414,14 @@ class Tinebase_Helper
      * Prepare function input to be an array. Input maybe already an array or (empty) text.
      * Starting PHP 7 Zend_Json::decode can't handle empty strings.
      *
-     * @param mixed $jsonOrArray
      * @return array
      * @throws Zend_Json_Exception
      */
-    public static function jsonDecode($jsonOrArray)
+    public static function jsonDecode(mixed $jsonOrArray)
     {
         if (is_array($jsonOrArray)) {
             return $jsonOrArray;
-        } else if (empty($jsonOrArray) || trim($jsonOrArray) == '') {
+        } else if (empty($jsonOrArray) || trim((string) $jsonOrArray) == '') {
             return array();
         } else {
             try {
@@ -455,7 +455,7 @@ class Tinebase_Helper
      */
     public static function getFileOrUriContents($filenameOrUrl, array $options = [])
     {
-        if (strpos($filenameOrUrl, 'http') === 0) {
+        if (str_starts_with($filenameOrUrl, 'http')) {
             try {
                 $client = Tinebase_Core::getHttpClient($filenameOrUrl);
                 // 0011054: Problems with ScheduledImport of external ics calendars
@@ -491,7 +491,7 @@ class Tinebase_Helper
      */
     public static function getFilename($filenameOrUrl, $throwException = true)
     {
-        if (strpos($filenameOrUrl, 'http') === 0) {
+        if (str_starts_with($filenameOrUrl, 'http')) {
             // TODO use "real" tempfile?
             // fetch file and save in tempfile
             $content = self::getFileOrUriContents($filenameOrUrl);
@@ -504,7 +504,7 @@ class Tinebase_Helper
             $filename = $filenameOrUrl;
             $baseDir = dirname(__DIR__) . '/';
 
-            if (strpos($filename, '://') === false) {
+            if (!str_contains($filename, '://')) {
                 // relative to tine20 root
                 if ('/' !== $filename[0]) {
                     $filename = $baseDir . $filename;
@@ -538,7 +538,7 @@ class Tinebase_Helper
         }
         $file = fopen($tempPath, 'w');
         if ($file) {
-            fwrite($file, $content);
+            fwrite($file, (string) $content);
             return $tempPath;
         }
 
@@ -566,8 +566,8 @@ class Tinebase_Helper
      */
     public static function convertDomain(string $domain, string $converterFunction = 'idn_to_utf8')
     {
-        if (strpos($domain, '@') !== false) {
-            list($emailpart, $domainpart) = explode('@', $domain);
+        if (str_contains($domain, '@')) {
+            [$emailpart, $domainpart] = explode('@', $domain);
             $convertedMailPart = call_user_func_array($converterFunction, [
                 $emailpart,
                 IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46
@@ -603,13 +603,13 @@ class Tinebase_Helper
     public static function hasShellExec(): bool
     {
         $disabledFunctions = strtolower((string) ini_get('disable_functions'));
-        return strpos($disabledFunctions, 'shell_exec') === false;
+        return !str_contains($disabledFunctions, 'shell_exec');
     }
 
     public static function isHashId($string): bool
     {
         return (
-            !ctype_digit($string)
+            !ctype_digit((string) $string)
             && is_string($string)
             && strlen($string) === 40
             && preg_match('/^[a-f0-9]+$/', $string)
@@ -639,7 +639,7 @@ class Tinebase_Helper
     <form method="POST" action="' . $redirectUrl . '">';
             foreach ($postData as $name => $value) {
                 $html .= '      <input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
-                    . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>';
+                    . '" value="' . htmlspecialchars((string) $value, ENT_HTML5 | ENT_COMPAT) . '"/>';
             }
             $html .= '
       <input type="submit" value="continue" style="display: none;"/>
@@ -660,5 +660,40 @@ class Tinebase_Helper
 </html>';
 
             return $html;
+    }
+
+    public static function getIpAddress()
+    {
+        if (($_SERVER['HTTP_X_REAL_IP'] ?? false) && $ip = Factory::parseAddressString($_SERVER['HTTP_X_REAL_IP']) ) {
+            return $ip;
+        }
+        return false;
+    }
+    public static function ipAddressMatchNetmasks($netmasks)
+    {
+        if (($ip = self::getIpAddress()) && !empty($netmasks)) {
+            foreach ($netmasks as $netmask) {
+                if (Factory::parseRangeString($netmask)?->contains($ip)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * generate a random html color code
+     *
+     * @return string
+     */
+    public static function generateRandomColor(): string
+    {
+        mt_srand((int)microtime()*1000000);
+        $color = '';
+        while (strlen($color) < 6) {
+            $color .= sprintf("%02X", mt_rand(0, 255));
+        }
+        return $color;
     }
 }

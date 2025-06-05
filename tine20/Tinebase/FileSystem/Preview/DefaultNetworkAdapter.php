@@ -12,17 +12,14 @@
 
 class Tinebase_FileSystem_Preview_DefaultNetworkAdapter implements Tinebase_FileSystem_Preview_NetworkAdapter
 {
-    protected $_url;
-
     /**
      * Tinebase_FileSystem_Preview_NetworkAdapter constructor.
      * @param $url
      * @param $licensePath
      * @param $caPath
      */
-    public function __construct($url)
+    public function __construct(protected $_url)
     {
-        $this->_url = $url;
     }
     
     /**

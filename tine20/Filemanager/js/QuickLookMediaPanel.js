@@ -8,19 +8,17 @@
 
 const MediaPanel = Ext.extend(Ext.Panel, {
     border: false,
+    url: '',
+    contentType: '',
 
     initComponent: function() {
-        const record = this.nodeRecord;
-
-        const contentType = record.get('contenttype');
-        const tag = contentType.match(/^audio/) ? 'audio' : 'video';
-        const iconCls = tag === 'audio' ? Tine.Tinebase.common.getMimeIconCls(contentType) : '';
-        const url = Tine.Filemanager.Model.Node.getDownloadUrl(record);
+        const tag = this.contentType.match(/^audio/) ? 'audio' : 'video';
+        const iconCls = tag === 'audio' ? Tine.Tinebase.common.getMimeIconCls(this.contentType) : '';
 
         this.html = `
         <div class="filemanager-quicklook-mediapanel ${iconCls}">
             <${tag} controls autoplay controlsList="nodownload">
-              <source src="${url}" type="${contentType}" />
+              <source src="${this.url}" type="${this.contentType}" />
             </${tag}>
         </div>`;
 

@@ -38,23 +38,23 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
     /**
      * supported validity
      */
-    const VALIDITY_ONCE = 'once';
-    const VALIDITY_SESSION = 'session';
-    const VALIDITY_LIFETIME = 'lifetime';
-    const VALIDITY_PRESENCE = 'presence';
+    public const VALIDITY_ONCE = 'once';
+    public const VALIDITY_SESSION = 'session';
+    public const VALIDITY_LIFETIME = 'lifetime';
+    public const VALIDITY_PRESENCE = 'presence';
 
     /**
      * some predefined areas
      */
-    const AREA_LOGIN = 'Tinebase_login';
-    const AREA_DATASAFE = 'Tinebase_datasafe';
+    public const AREA_LOGIN = 'Tinebase_login';
+    public const AREA_DATASAFE = 'Tinebase_datasafe';
 
     /**
      * supported providers
      */
-    const PROVIDER_PIN = 'pin';
-    const PROVIDER_USERPASSWORD = 'userpassword';
-    const PROVIDER_TOKEN = 'token';
+    public const PROVIDER_PIN = 'pin';
+    public const PROVIDER_USERPASSWORD = 'userpassword';
+    public const PROVIDER_TOKEN = 'token';
 
     /** @var string|null */
     protected $_key;
@@ -189,7 +189,7 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
     {
         $areas = explode('.', $area);
         foreach ($this->_properties[self::FLD_AREAS] as $testArea) {
-            $testAreas = explode('.', $testArea);
+            $testAreas = explode('.', (string) $testArea);
             foreach ($areas as $key => $val) {
                 if (!isset($testAreas[$key])) {
                     return true;
@@ -211,29 +211,18 @@ class Tinebase_Model_AreaLockConfig extends Tinebase_Record_Abstract
         if (!$user->mfa_configs) {
             return new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         }
-        return $user->mfa_configs->filter(function($val) {
-            return in_array($val->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $this->{self::FLD_MFAS});
-        });
+        return $user->mfa_configs->filter(fn($val) => in_array($val->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $this->{self::FLD_MFAS}));
     }
 
     public function getBackend(): Tinebase_AreaLock_Interface
     {
         if (null === $this->_backend) {
-            switch (strtolower($this->{Tinebase_Model_AreaLockConfig::FLD_VALIDITY})) {
-                case Tinebase_Model_AreaLockConfig::VALIDITY_SESSION:
-                case Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME:
-                    $this->_backend = new Tinebase_AreaLock_Session($this);
-                    break;
-                case Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE:
-                    $this->_backend = new Tinebase_AreaLock_Presence($this);
-                    break;
-                // case Tinebase_Model_AreaLockConfig::VALIDITY_DEFINEDBYPROVIDER:
-                // case Tinebase_Model_AreaLockConfig::VALIDITY_ONCE:
-                // @todo add support
-                default:
-                    throw new Tinebase_Exception_InvalidArgument('validity ' .
-                        $this->{Tinebase_Model_AreaLockConfig::FLD_VALIDITY} . ' not supported yet');
-            }
+            $this->_backend = match (strtolower((string) $this->{Tinebase_Model_AreaLockConfig::FLD_VALIDITY})) {
+                Tinebase_Model_AreaLockConfig::VALIDITY_SESSION, Tinebase_Model_AreaLockConfig::VALIDITY_LIFETIME => new Tinebase_AreaLock_Session($this),
+                Tinebase_Model_AreaLockConfig::VALIDITY_PRESENCE => new Tinebase_AreaLock_Presence($this),
+                default => throw new Tinebase_Exception_InvalidArgument('validity ' .
+                    $this->{Tinebase_Model_AreaLockConfig::FLD_VALIDITY} . ' not supported yet'),
+            };
         }
         return $this->_backend;
     }

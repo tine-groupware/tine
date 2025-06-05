@@ -12,10 +12,12 @@ beforeAll(async () => {
 describe('mainScreen', () => {
     test('import', async () => {
         try {
-            await expect(page).toClick('.t-app-inventory button', {text: 'Einträge importieren'});
+            await page.waitForTimeout(2000);
+            await expect(page).toClick('.t-app-inventory button', {text: 'Einträge importieren', visible: true});
         } catch (e) {
-            await page.click('.x-btn-image.x-toolbar-more-icon');
-            await page.click('.x-menu-item-icon action_import');
+            await page.waitForTimeout(1000);
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon', {visible: true});
+            await page.click('.x-menu-item-icon action_import', {text: 'Einträge importieren', visible: true});
         }
         let newPage = await lib.getNewWindow();
         await newPage.waitForXPath('//button');

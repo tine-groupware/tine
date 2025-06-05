@@ -30,10 +30,9 @@ abstract class Tinebase_Frontend_Abstract implements Tinebase_Frontend_Interface
      * Prepare function input to be an array. Input maybe already an array or (empty) text.
      * Starting PHP 7 Zend_Json::decode can't handle empty strings.
      *
-     * @param  mixed $_dataAsArrayOrJson
      * @return array
      */
-    protected function _prepareParameter($_dataAsArrayOrJson)
+    protected function _prepareParameter(mixed $_dataAsArrayOrJson)
     {
         return Tinebase_Helper::jsonDecode($_dataAsArrayOrJson);
     }

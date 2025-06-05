@@ -91,7 +91,7 @@ class Tinebase_Tree implements Tinebase_Controller_Interface
                         Tinebase_FileSystem::getInstance()->setGrantsForNode($record, $record->grants);
                         //Tinebase_Tree_NodeGrants::getInstance()->setGrants($record);
                     }
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     break;
                 }
                 break;
@@ -99,7 +99,7 @@ class Tinebase_Tree implements Tinebase_Controller_Interface
             case Tinebase_Timemachine_ModificationLog::DELETED:
                 try {
                     $treeBackend->softDelete(array($_modification->record_id));
-                } catch (Tinebase_Exception_NotFound $tenf) {}
+                } catch (Tinebase_Exception_NotFound) {}
                 break;
 
             default:

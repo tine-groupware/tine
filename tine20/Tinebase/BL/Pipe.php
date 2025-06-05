@@ -24,9 +24,9 @@
  */
 class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
 {
-    const CONF_CLASSES = 'confClasses';
-    const CONF_CLASS = 'class';
-    const CONF_CLASS_OPTIONS = 'classOptions';
+    public const CONF_CLASSES = 'confClasses';
+    public const CONF_CLASS = 'class';
+    public const CONF_CLASS_OPTIONS = 'classOptions';
 
     /**
      * @var Tinebase_Record_RecordSet $_config of type Tinebase_Model_BLConfig
@@ -53,10 +53,8 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
 
         if ($_sort) {
             $this->_config->sort(
-                function(Tinebase_Model_BLConfig $val1, Tinebase_Model_BLConfig $val2) {
-                    return $val1->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}
-                        ->cmp($val2->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD});
-                });
+                fn(Tinebase_Model_BLConfig $val1, Tinebase_Model_BLConfig $val2) => $val1->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}
+                    ->cmp($val2->{Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD}));
         }
     }
 
@@ -83,7 +81,7 @@ class Tinebase_BL_Pipe implements Tinebase_BL_PipeContext
         /** @var Tinebase_Model_BLConfig $config */
         foreach ($this->_config as $config) {
             if (! is_subclass_of($config->configRecord, Tinebase_BL_ElementConfigInterface::class)) {
-                throw new Tinebase_Exception_NotImplemented(get_class($config->configRecord) . ' does not implement ' .
+                throw new Tinebase_Exception_NotImplemented($config->configRecord::class . ' does not implement ' .
                     Tinebase_BL_ElementConfigInterface::class);
             }
             // it is mandatory to recreate the elements here as they are supposed to support state

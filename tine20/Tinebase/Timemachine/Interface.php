@@ -37,7 +37,7 @@
  */
 interface Tinebase_Timemachine_Interface
 {
-    
+
     /**
      * Returns ids(strings) of records which where created in a given timespan.
      * 
@@ -48,7 +48,7 @@ interface Tinebase_Timemachine_Interface
      * @access public
      */
     public function getCreated( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter );
-    
+
     /**
      * Returns uids(strings) of records which where modified in a given timespan.
      * 
@@ -59,7 +59,7 @@ interface Tinebase_Timemachine_Interface
      * @access public
      */
     public function getModified( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter );
-    
+
     /**
      * Returns ids(strings) of records which where deleted in a given timespan.
      * 
@@ -70,7 +70,7 @@ interface Tinebase_Timemachine_Interface
      * @access public
      */
     public function getDeleted( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter );
-    
+
     /**
      * Returns a record as it was at a given point in history
      * 
@@ -80,7 +80,7 @@ interface Tinebase_Timemachine_Interface
      * @access public
      */
     public function getRecord( $_id,  Tinebase_DateTime $_at );
-    
+
     /**
      * Returns a set of records as they where at a given point in history
      * 

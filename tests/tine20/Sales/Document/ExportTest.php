@@ -15,14 +15,9 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
 {
     protected function createExportData()
     {
-        $boilerplate1 = Sales_Controller_Boilerplate::getInstance()->create(
-            Sales_BoilerplateControllerTest::getBoilerplate([
-                Sales_Model_Boilerplate::FLD_NAME => 'pretext'
-            ]));
-        $boilerplate2 = Sales_Controller_Boilerplate::getInstance()->create(
-            Sales_BoilerplateControllerTest::getBoilerplate([
-                Sales_Model_Boilerplate::FLD_NAME => 'posttext'
-            ]));
+        $boilerplate1 = ($boilers = Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates(Sales_Model_Document_Offer::class, language: 'de'))->find(Sales_Model_Boilerplate::FLD_NAME, 'Pretext');
+        $boilerplate2 = $boilers->find(Sales_Model_Boilerplate::FLD_NAME, 'Posttext');
+
         $customer = $this->_createCustomer();
         $customer->postal->{Sales_Model_Address::FLD_POSTALCODE} = '99999';
         Sales_Controller_Customer::getInstance()->update($customer);
@@ -62,7 +57,7 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
     public function testExportSimpleDocumentDocxOverwrite()
     {
         $document = $this->createExportData();
-        $document[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_RELEASED;
+        $document[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_DISPATCHED;
         (new Sales_Frontend_Json())->saveDocument_Offer($document);
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Offer::class, [

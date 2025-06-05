@@ -17,12 +17,12 @@
  */
 class Tinebase_Model_Sms_GenericHttpAdapter extends Tinebase_Record_NewAbstract implements Tinebase_Sms_AdapterInterface
 {
-    const MODEL_NAME_PART = 'Sms_GenericHttpAdapter';
+    public const MODEL_NAME_PART = 'Sms_GenericHttpAdapter';
 
-    const FLD_BODY = 'body';
-    const FLD_HEADERS = 'headers';
-    const FLD_METHOD = 'method';
-    const FLD_URL = 'url';
+    public const FLD_BODY = 'body';
+    public const FLD_HEADERS = 'headers';
+    public const FLD_METHOD = 'method';
+    public const FLD_URL = 'url';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

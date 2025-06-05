@@ -183,12 +183,12 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         $yPos = 800;
         $yPosImage = 720;
         $translate = Tinebase_Translation::getTranslation('Tinebase');
-        
+
         // add page
         if (!isset($this->pages[$this->_pageNumber])) {
             $this->pages[] = $this->newPage(Zend_Pdf_Page::SIZE_A4);
         }        
-        
+
         // title
         if ( !empty($_title) ) {
             $this->pages[$this->_pageNumber]->setFont($this->_font, 18);
@@ -197,11 +197,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 
         // title icon
         if ( !empty($_titleIcon) ) {
-            $titleImage = dirname(dirname(dirname(__FILE__))).$_titleIcon;
+            $titleImage = dirname(__FILE__, 3).$_titleIcon;
             $icon = Zend_Pdf_Image::imageWithPath($titleImage);
             $this->pages[$this->_pageNumber]->drawImage( $icon, $xPos-35, $yPos-20, $xPos-3, $yPos+12 );
         }
-        
+
         // subtitle
         if ( !empty($_subtitle) ) {
             $yPos -= 20;
@@ -217,10 +217,10 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
             foreach ($_tags as $tag) {
                 $tagsString .= $tag['name'] . ' ';
             }            
-            
+
             $this->_writeText($tagsString, $xPos, $yPos);
         }
-        
+
         // write note (3 lines)
         if ( !empty($_note) ) {
             $lineCharCount = 95;
@@ -230,14 +230,14 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 $noteArray[2] .= "[...]";
             }
             $noteArray = array_slice ($noteArray, 0, 3);
-    
+
             foreach ( $noteArray as $chunk ) {
                 $yPos -= 20;
                 $this->pages[$this->_pageNumber]->setFont($this->_font, 10);
                 $this->_writeText($chunk, $xPos, $yPos);
             }
         }
-        
+
         // photo
         if ( $_image !== NULL ) {
             //$xPos += 450;
@@ -245,7 +245,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         }
 
         // debug record
-        
+
         // fill data array for table
         $data = array ();
         foreach ( $_record as $recordRow ) {
@@ -254,9 +254,9 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
                     array_pop ( $data );
                 }
-                
+
                 $data[] = array ( $recordRow['label'], "separator" );
-                
+
             } elseif ( !empty($recordRow['value']) ) {
                 $data[] = array ( $recordRow['label'], $recordRow['value']   );
             }
@@ -265,15 +265,15 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         if ( sizeof($data) > 0 && $data[sizeof($data)-1][1] === 'separator' ) {
             array_pop ( $data );
         }
-                
+
         // add linked objects (i.e. contacts for lead export)
         if ( !empty($_linkedObjects) ) {
-            
+
             // loop linked objects and remove empty rows (with empty value)
             foreach ( $_linkedObjects as $linked ) {
                 if ( is_array($linked[1]) ) {
                     foreach ( $linked[1] as $value ) {
-                        if ( !empty($value) && !preg_match("/^[\s]*$/",$value) ) {
+                        if ( !empty($value) && !preg_match("/^[\s]*$/",(string) $value) ) {
                             $data[] = $linked;
                             break;
                         }
@@ -283,20 +283,20 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
                 }                
             }            
         }
-        
+
         // debug $data
-        
+
         // create table
         if ( !empty($data) ) {
             $this->_createTable($data, 50, 710, $_tableBorder);
         }
-                
+
         // write footer
         $this->_createFooter();
-        
+
         // increase page number
         $this->_pageNumber++;
-        
+
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created PDF export page for record: ' . print_r($_record, TRUE));
     }            
 
@@ -320,7 +320,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      */
     public function getDownloadFilename($_appName = null, $_format = null)
     {
-        return 'export_' . strtolower($_appName) . '.' . $_format;
+        return 'export_' . strtolower((string) $_appName) . '.' . $_format;
     }
         
     /**
@@ -458,7 +458,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      */
     protected function _writeText($_string, $_xPos, $_yPos, $_page = NULL) {
     
-        $page = ($_page !== NULL) ? $_page : $this->_pageNumber;
+        $page = $_page ?? $this->_pageNumber;
         
         $string = @iconv('utf-8', 'utf-8//IGNORE', $_string);
         
@@ -519,8 +519,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      */
     protected function _drawIcon($_icon, $_xPos, $_yPos)
     {
-        $iconFilename = dirname(dirname(dirname(__FILE__))).$_icon;
-        if (is_file($iconFilename) && strpos($iconFilename, '.svg') === false) {
+        $iconFilename = dirname(__FILE__, 3).$_icon;
+        if (is_file($iconFilename) && !str_contains($iconFilename, '.svg')) {
             $icon = Zend_Pdf_Image::imageWithPath($iconFilename);
             $this->pages[$this->_pageNumber]->drawImage($icon, $_xPos-170, $_yPos-6, $_xPos-154, $_yPos + 10);
         } else {

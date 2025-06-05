@@ -28,9 +28,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 {
     use Tinebase_Export_FileLocationTrait;
 
-    const ROW_TYPE_RECORD = 'record';
-    const ROW_TYPE_GENERIC_HEADER = 'genericHeader';
-    const ROW_TYPE_GROUP_HEADER = 'groupHeader';
+    public const ROW_TYPE_RECORD = 'record';
+    public const ROW_TYPE_GENERIC_HEADER = 'genericHeader';
+    public const ROW_TYPE_GROUP_HEADER = 'groupHeader';
 
     /**
      * default export definition name
@@ -288,9 +288,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_applicationName = $this->_filter->getApplicationName();
         }
 
-        $this->_controller = ($_controller !== null)
-            ? $_controller
-            : $this->_getController(isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
+        $this->_controller = $_controller ?? $this->_getController(isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
 
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
@@ -313,7 +311,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($this->_config->templateFileId,
                     true));
                 $this->_templateFileName = $path->streamwrapperpath;
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
         if (isset($_additionalOptions['template'])) {
@@ -321,7 +319,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode($_additionalOptions['template'],
                     true));
                 $this->_templateFileName = $path->streamwrapperpath;
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
         }
         if ($this->_templateFileName && !in_array($templateFileExtension = pathinfo($this->_templateFileName, PATHINFO_EXTENSION), [
@@ -352,13 +350,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (isset($_additionalOptions['sortInfo'])) {
             if (isset($this->_sortInfo['sort'])) {
                 $this->_sortInfo['sort'] = array_unique(array_merge((array)$this->_sortInfo['sort'],
-                    (array)((isset($_additionalOptions['sortInfo']['field']) ?
-                        $_additionalOptions['sortInfo']['field'] : $_additionalOptions['sortInfo']['sort']))));
+                    (array)(($_additionalOptions['sortInfo']['field'] ?? $_additionalOptions['sortInfo']['sort']))));
             } else {
                 if (isset($_additionalOptions['sortInfo']['field'])) {
                     $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];
-                    $this->_sortInfo['dir'] = isset($_additionalOptions['sortInfo']['direction']) ?
-                        $_additionalOptions['sortInfo']['direction'] : 'ASC';
+                    $this->_sortInfo['dir'] = $_additionalOptions['sortInfo']['direction'] ?? 'ASC';
                 } else {
                     $this->_sortInfo = $_additionalOptions['sortInfo'];
                 }
@@ -419,7 +415,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                      as $keyField) {
                 $this->_keyFields[$keyField->propertyName] = [
                     'name' => $keyField->name,
-                    'application' => $keyField->application ? $keyField->application : $this->_applicationName
+                    'application' => $keyField->application ?: $this->_applicationName
                 ];
             }
         }
@@ -491,7 +487,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         $filename = basename($path);
         $dir = dirname($path);
 
-        if (strpos($path, 'tine20://') === 0) {
+        if (str_starts_with($path, 'tine20://')) {
             $prefix = 'tine20://';
             $dir = dirname(substr($path, 9));
 
@@ -508,7 +504,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         foreach ($files as $key => $file) {
             $matches = 0;
             foreach ($matchingData as $needle) {
-                if (strpos($file, $needle) !== false) {
+                if (str_contains($file, (string) $needle)) {
                     ++$matches;
                 }
             }
@@ -523,21 +519,21 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected function _parseTemplatePath($_path)
     {
-        if (strpos($_path, 'tine20://') !== 0) {
+        if (!str_starts_with((string) $_path, 'tine20://')) {
             return $_path;
         }
 
         $versionConstraint = null;
-        if (preg_match('#/([^/]+)-v([\. \d\^\~\|]+)(\.[^./]+)$#', $_path, $match) && preg_match('/\d/', $match[2])) {
+        if (preg_match('#/([^/]+)-v([\. \d\^\~\|]+)(\.[^./]+)$#', (string) $_path, $match) && preg_match('/\d/', $match[2])) {
             $versionConstraint = $match[2];
             $startsWith = $match[1];
             $endsWith = $match[3];
         } else {
-            $pathParts = pathinfo($_path);
+            $pathParts = pathinfo((string) $_path);
             $startsWith = $pathParts['filename'];
             $endsWith = '.' . $pathParts['extension'];
         }
-        $dir = dirname(substr($_path, 9));
+        $dir = dirname(substr((string) $_path, 9));
         $parent = Tinebase_FileSystem::getInstance()->stat($dir);
         $match = null;
         $matchVersion = null;
@@ -850,7 +846,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             Tinebase_Twig::TWIG_AUTOESCAPE  => 'json',
             Tinebase_Twig::TWIG_LOADER      => new Twig\Loader\ChainLoader(array(
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
-                    array($this, '_getTwigSource'))))
+                    $this->_getTwigSource(...))))
         ];
         
         $this->_twig = new Tinebase_Twig($this->_locale, $this->_translate, $options);
@@ -1138,9 +1134,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $validators = null;
             $cfNameLabelMap = $this->_customFieldsNameLocalLabelMapping;
             $instance = $this;
-            $stringifyCallBack = function($val) use ($instance) {
-                return $instance->_convertToString($val);
-            };
+            $stringifyCallBack = fn($val) => $instance->_convertToString($val);
             if (!empty($this->_expandCustomFields)) {
                 $validators = $_records->getFirstRecord()->getValidators();
                 foreach ($this->_expandCustomFields as $field => $label) {
@@ -1180,9 +1174,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $val->value = new Tinebase_CustomField_Value($val->value, $val->definition, $stringifyCallBack,
                         $val->application_id);
                 });
-                uksort($cfs, function($a, $b) use($cfNameLabelMap) {
-                    return strcmp($cfNameLabelMap[$a], $cfNameLabelMap[$b]);
-                });
+                uksort($cfs, fn($a, $b) => strcmp((string) $cfNameLabelMap[$a], (string) $cfNameLabelMap[$b]));
                 $record->customfields = $cfs;
                 if (null !== $validators) {
                     $record->setValidators($validators);
@@ -1290,7 +1282,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 $recordsClass = $_records->getRecordClassName();
                 $resolveForeignIdFields = $recordsClass::getResolveForeignIdFields();
                 // TODO switch to is_iterable() when we no longer support PHP < 7.0
-                if (is_array($resolveForeignIdFields) || $resolveForeignIdFields instanceof \Traversable) {
+                if (is_iterable($resolveForeignIdFields)) {
                     foreach ($resolveForeignIdFields as $key => $value) {
                         if ($key === 'recursive') {
                             $value = array_keys($value);
@@ -1307,8 +1299,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             $this->_keyFields = [];
             foreach ($this->_modelConfig->keyfieldFields as $property) {
                 $this->_keyFields[$property] = [
-                    'application' => isset($this->_modelConfig->getFields()[$property]['application']) ?
-                        $this->_modelConfig->getFields()[$property]['application'] : $this->_applicationName,
+                    'application' => $this->_modelConfig->getFields()[$property]['application'] ?? $this->_applicationName,
                     'name' => $this->_modelConfig->getFields()[$property]['name'],
                 ];
             }
@@ -1658,11 +1649,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     }
 
     /**
-     * @param mixed $_value
      * @param ?string $_type
      * @return string
      */
-    protected function _convertToString($_value, ?string $_type = null)
+    protected function _convertToString(mixed $_value, ?string $_type = null)
     {
         if (is_object($_value)) {
             if ($this->_rawData) {
@@ -1683,17 +1673,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 }
             } else {
                 if ($_value instanceof DateTime) {
-                    switch ($_type) {
-                        case Tinebase_ModelConfiguration_Const::TYPE_TIME:
-                            $format = 'time';
-                            break;
-                        case Tinebase_ModelConfiguration_Const::TYPE_DATE:
-                            $format = 'date';
-                            break;
-                        case Tinebase_ModelConfiguration_Const::TYPE_DATETIME:
-                        default:
-                            $format = $this->_config->datetimeformat;
-                    }
+                    $format = match ($_type) {
+                        Tinebase_ModelConfiguration_Const::TYPE_TIME => 'time',
+                        Tinebase_ModelConfiguration_Const::TYPE_DATE => 'date',
+                        default => $this->_config->datetimeformat,
+                    };
                     $_value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, null, null,
                         $format);
                 } elseif ($_value instanceof Tinebase_Model_CustomField_Config) {
@@ -1727,7 +1711,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             switch ($_type) {
                 case Tinebase_ModelConfiguration_Const::TYPE_MONEY:
                     $_value = sprintf('%01.2f ' .
-                        Tinebase_Config::getInstance()->{Tinebase_Config::CURRENCY_SYMBOL}, round((float)$_value, 2));
+                        Tinebase_Core::getDefaultCurrencySymbol(), round((float)$_value, 2));
                     break;
                 default:
                     break;
@@ -1856,7 +1840,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     }
 
     public function strikeText($text){
-        $splitText = preg_split('//u', $text, null, PREG_SPLIT_NO_EMPTY);
+        $splitText = preg_split('//u', (string) $text, null, PREG_SPLIT_NO_EMPTY);
         return implode(IntlChar::chr(822), $splitText) . IntlChar::chr(822);
     }
 

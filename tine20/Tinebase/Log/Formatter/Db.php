@@ -37,8 +37,8 @@ class Tinebase_Log_Formatter_Db extends Tinebase_Log_Formatter
 
         $timestamp = new Tinebase_DateTime($data['timestamp']);
         $data['timestamp'] = $timestamp->toString();
-        if (mb_strlen($data['message']) > self::MAX_MESSAGE_SIZE) {
-            $data['message'] = mb_substr($event['message'], 0, self::MAX_MESSAGE_SIZE) . ' ...';
+        if (mb_strlen((string) $data['message']) > self::MAX_MESSAGE_SIZE) {
+            $data['message'] = mb_substr((string) $event['message'], 0, self::MAX_MESSAGE_SIZE) . ' ...';
         }
 
         return $data;

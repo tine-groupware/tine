@@ -92,11 +92,7 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 fieldLabel: this.app.i18n._('Language'),
                 name: 'language',
                 requiredGrant: 'editGrant'
-            }, {
-                name: 'email',
-                fieldLabel: this.app.i18n._('Email'),
-                columnWidth: .6
-            }/*, this.clipboardButton*/],[{
+            }, this.fieldManager('email', {columnWidth: .6})], [{
                columnWidth: .045,
                xtype:'button',
                iconCls: 'applyContactData',
@@ -124,26 +120,16 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.fieldManager('prefix2', {columnWidth: 1})
             ], [
                 this.fieldManager('prefix3', {columnWidth: 1})
-            ], [{
-                name: 'street',
-                fieldLabel: this.app.i18n._('Street')
-            }, {
-                name: 'pobox',
-                fieldLabel: this.app.i18n._('Postbox')
-            }], [{
-                name: 'postalcode',
-                fieldLabel: this.app.i18n._('Postalcode')
-            }, {
-                name: 'locality',
-                fieldLabel: this.app.i18n._('Locality')
-            }], [{
-                name: 'region',
-                fieldLabel: this.app.i18n._('Region')
-            }, {
-                xtype: 'widget-countrycombo',
-                name: 'countryname',
-                fieldLabel: this.app.i18n._('Country')
-            }]
+            ], [
+                this.fieldManager('street'),
+                this.fieldManager('pobox')
+            ], [
+                this.fieldManager('postalcode'),
+                this.fieldManager('locality')
+            ], [
+                this.fieldManager('region'),
+                this.fieldManager('countryname')
+            ]
         ];
         
         if (this.addressType == 'billing') {

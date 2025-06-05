@@ -10,11 +10,8 @@
 
 class Tinebase_Export_TwigExtensionCacheBust implements Twig\Extension\ExtensionInterface
 {
-    protected $_name;
-
-    public function __construct($_name)
+    public function __construct(protected $_name)
     {
-        $this->_name = $_name;
     }
 
     /**

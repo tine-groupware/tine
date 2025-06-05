@@ -23,19 +23,19 @@
  */
 class Tinebase_Expressive_RouteHandler
 {
-    const IGNORE_MAINTENANCE_MODE = 'ignoreMaintenanceMode';
-    const IS_PUBLIC = 'isPublic';
-    const PUBLIC_USER_ROLES = 'publicUserRoles';
-    const UNAUTHORIZED_REDIRECT_LOGIN = 'unauthRedirectLogin';
-    const CLASS_NAME = 'class';
-    const METHOD = 'method';
-    const NAME = 'name';
+    public const IGNORE_MAINTENANCE_MODE = 'ignoreMaintenanceMode';
+    public const IS_PUBLIC = 'isPublic';
+    public const PUBLIC_USER_ROLES = 'publicUserRoles';
+    public const UNAUTHORIZED_REDIRECT_LOGIN = 'unauthRedirectLogin';
+    public const CLASS_NAME = 'class';
+    public const METHOD = 'method';
+    public const NAME = 'name';
 
     /**
      * pipeInject data should be an array of arrays containing the PIPE_INJECT_* data
      */
-    const PIPE_INJECT = 'pipeInject';
-    const PIPE_INJECT_CLASS = 'pIClass';
+    public const PIPE_INJECT = 'pipeInject';
+    public const PIPE_INJECT_CLASS = 'pIClass';
 
     /**
      * @var array
@@ -184,7 +184,7 @@ class Tinebase_Expressive_RouteHandler
      */
     public function getApplicationName()
     {
-        return current(explode('_', $this->_class));
+        return current(explode('_', (string) $this->_class));
     }
 
     /**
@@ -217,6 +217,8 @@ class Tinebase_Expressive_RouteHandler
         } else {
             $callable = [new $this->_class, $this->_method];
         }
+
+        Tinebase_Server_Expressive::checkRateLimit($this->_class . '.' . $this->_method);
 
         return call_user_func_array($callable, $orderedParams);
     }

@@ -12,6 +12,18 @@
     <listeners>
         <listener class="LogListener" file="LogListener.php" />
     </listeners>
+    <coverage>
+        <include>
+            <directory suffix=".php">../../tine20</directory>
+        </include>
+
+        <exclude
+            ><directory>../../tine20/vendor</directory>
+            <directory>../../tine20/library</directory>
+            <directory>../../tine20/Zend</directory>
+        </exclude>
+    </coverage>
+
     <!-- <filter>
           code coverage blacklisting
          <blacklist>

@@ -23,14 +23,14 @@
 
 class Tinebase_Model_AuthToken extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'AuthToken';
-    const TABLE_NAME = 'auth_token';
+    public const MODEL_NAME_PART = 'AuthToken';
+    public const TABLE_NAME = 'auth_token';
 
-    const FLD_AUTH_TOKEN = 'auth_token';
-    const FLD_ACCOUNT_ID = 'account_id';
-    const FLD_VALID_UNTIL = 'valid_until';
-    const FLD_CHANNELS = 'channels';
-    const FLD_MAX_TTL = 'max_ttl';
+    public const FLD_AUTH_TOKEN = 'auth_token';
+    public const FLD_ACCOUNT_ID = 'account_id';
+    public const FLD_VALID_UNTIL = 'valid_until';
+    public const FLD_CHANNELS = 'channels';
+    public const FLD_MAX_TTL = 'max_ttl';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

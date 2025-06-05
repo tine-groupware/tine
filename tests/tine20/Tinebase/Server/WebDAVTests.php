@@ -563,4 +563,25 @@ EOS
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/d:current-user-principal');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
     }
+
+    /**
+     * @group ServerTests
+     */
+    public function testRateLimit()
+    {
+        $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $configs = $oldConfigs;
+        $configs[Tinebase_Config::RATE_LIMITS_FRONTENDS][Tinebase_Server_WebDAV::class] = [
+            [
+                Tinebase_Model_RateLimit::FLD_METHOD            =>  '*',
+                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  1,
+                Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600
+            ]
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
+        $result = $this->testServer(true);
+        $result = $this->testServer(true);
+        self::assertNull($result);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
+    }
 }

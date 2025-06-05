@@ -31,6 +31,13 @@ class Tinebase_Exception_Confirmation extends Tinebase_Exception_ProgramFlow
     protected $_info = NULL;
 
     /**
+     * send second request with rejected confirm header value from client
+     *
+     * @var string
+     */
+    protected $_sendRequestOnRejection = false;
+
+    /**
      * the constructor
      *
      * @param string $_message
@@ -70,6 +77,26 @@ class Tinebase_Exception_Confirmation extends Tinebase_Exception_ProgramFlow
     }
 
     /**
+     * set send request on rejection
+     *
+     * @param $_sendRequestOnRejection
+     */
+    public function setSendRequestOnRejection($_sendRequestOnRejection)
+    {
+        $this->_sendRequestOnRejection = $_sendRequestOnRejection;
+    }
+
+    /**
+     * get send request on rejection
+     *
+     * @param $_sendRequestOnRejection
+     */
+    public function getSendRequestOnRejection()
+    {
+        return $this->_sendRequestOnRejection;
+    }
+
+    /**
      * returns info as array
      *
      * @return array
@@ -77,7 +104,8 @@ class Tinebase_Exception_Confirmation extends Tinebase_Exception_ProgramFlow
     public function toArray(): array
     {
         return [
-            'info'     => $this->getInfo()
+            'info'     => $this->getInfo(),
+            'sendRequestOnRejection'    => $this->_sendRequestOnRejection,
         ];
     }
 }

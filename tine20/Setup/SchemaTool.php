@@ -218,7 +218,7 @@ class Setup_SchemaTool
         }
     }
 
-    public static function hasSchemaUpdates()
+    public static function hasSchemaUpdates(bool $logError = false, bool $throwException = false): bool
     {
         $em = self::getEntityManager();
         $tool = new SchemaTool($em);
@@ -238,8 +238,16 @@ class Setup_SchemaTool
                 && $val !== "ALTER TABLE tine20_sales_sales_invoices CHANGE is_auto is_auto TINYINT(1) DEFAULT '0', CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL";
         });
 
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' pending schema updates found: ' . print_r($sqls, true));
+        if (!empty($sqls)) {
+            $message = 'Pending schema updates found: ' . print_r($sqls, true);
+            if ($throwException) {
+                throw new Setup_Exception_InvalidSchema($message);
+            } else {
+                $logMethod = $logError ? 'err' : 'debug';
+                Setup_Core::getLogger()->{$logMethod}(__METHOD__ . '::' . __LINE__ .
+                    ' ' . $message);
+            }
+        }
 
         return !empty($sqls);
     }

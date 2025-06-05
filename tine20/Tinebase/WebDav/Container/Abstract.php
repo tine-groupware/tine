@@ -26,11 +26,6 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     protected $_application;
     
     protected $_applicationName;
-
-    /**
-     * @var string|Tinebase_Model_Container|Tinebase_Model_Tree_Node
-     */
-    protected $_container;
     
     protected $_controller;
     
@@ -46,10 +41,9 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      * @param  Tinebase_Model_Container|Tinebase_Model_Tree_Node    $_container
      * @param  boolean                                              $_useIdAsName
      */
-    public function __construct($_container, $_useIdAsName = false)
+    public function __construct(protected $_container, $_useIdAsName = false)
     {
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $this->_container   = $_container;
         $this->_useIdAsName = (boolean)$_useIdAsName;
     }
     
@@ -79,9 +73,9 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     {
         try {
             Tinebase_Container::getInstance()->deleteContainer($this->_container);
-        } catch (Tinebase_Exception_AccessDenied $tead) {
+        } catch (Tinebase_Exception_AccessDenied) {
             throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
-        } catch (Tinebase_Exception_Record_SystemContainer $ters) {
+        } catch (Tinebase_Exception_Record_SystemContainer) {
             throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete system container');
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
@@ -130,7 +124,25 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         
         return new $objectClass($this->_container, $object);
     }
-    
+
+    public function getChildrenNames(): array
+    {
+        $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
+        $filter = new $filterClass(array(
+            array(
+                'field'     => 'container_id',
+                'operator'  => 'equals',
+                'value'     => $this->_container->getId()
+            )
+        ));
+
+        $result = [];
+        foreach($this->_getController()->search($filter, _onlyIds: true, _action: 'sync') as $id) {
+            $result[$id] = $id . $this->_suffix;
+        }
+        return $result;
+    }
+
     /**
      * Returns an array with all the child nodes
      *
@@ -216,10 +228,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
                     try {
                         $group = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
-                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                        // skip group
-                        continue 2;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_Record_NotDefined|Tinebase_Exception_NotFound) {
                         // skip group
                         continue 2;
                     }
@@ -231,7 +240,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
                     try {
                         $role = Tinebase_Acl_Roles::getInstance()->getRoleById($grant->account_id);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         // skip role
                         continue 2;
                     }
@@ -243,10 +252,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
                     try {
                         $fulluser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id, 'Tinebase_Model_FullUser');
-                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                    } catch (Tinebase_Exception_Record_NotDefined) {
                         // skip group
                         continue 2;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         // skip user
                         continue 2;
                     }
@@ -466,7 +475,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                     break;
 
                 case '{http://apple.com/ns/ical/}calendar-color':
-                    $this->_container->color = substr($value, 0, 7);
+                    $this->_container->color = substr((string) $value, 0, 7);
                     break;
 
                 case '{http://apple.com/ns/ical/}calendar-order':
@@ -486,7 +495,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     
     /**
      * 
-     * @return Tinebase_Controller_Record_Interface
+     * @return Tinebase_Controller_Record_Abstract
      */
     protected function _getController()
     {
@@ -591,9 +600,14 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
             return $result;
         }
 
-        $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
-        if (null === $resultSet) {
-            return null;
+        if (0 === $syncToken) {
+            $result[Tinebase_Model_ContainerContent::ACTION_CREATE] = $this->getChildrenNames();
+            return $result;
+        } else {
+            $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
+            if (null === $resultSet) {
+                return null;
+            }
         }
 
         $unSets = [

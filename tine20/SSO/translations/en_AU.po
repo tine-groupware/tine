@@ -32,7 +32,40 @@ msgstr ""
 msgid "External Identity Providers"
 msgstr ""
 
+msgid "Authentication Successfully"
+msgstr ""
+
+#, python-brace-format
+msgid "Please proceed with {0}."
+msgstr ""
+
+msgid "Please proceed with your device or programm."
+msgstr ""
+
+msgid "You can close this page now."
+msgstr ""
+
+msgid "Could not Find Device"
+msgstr ""
+
+msgid "No device authentication request found, please recheck your code!"
+msgstr ""
+
+msgid "Enter Device Code"
+msgstr ""
+
+#, python-brace-format
+msgid "Please enter the device code for {0}."
+msgstr ""
+
+msgid "Please enter the device code provided by external device or programm."
+msgstr ""
+
 msgid "SSO"
+msgstr ""
+
+#, python-brace-format
+msgid "Login for {0} (external device/programm)"
 msgstr ""
 
 #, python-brace-format
@@ -72,6 +105,52 @@ msgstr[1] ""
 msgid "Description"
 msgstr ""
 
+msgid "Show on Login Screen"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Logo Light"
+msgstr ""
+
+msgid "Logo Dark"
+msgstr ""
+
+msgid "Allow assignment of existing local accounts"
+msgstr ""
+
+msgid "Allow reassignment of existing local accounts"
+msgstr ""
+
+msgid "Allow creation of new local accounts"
+msgstr ""
+
+msgid "Allow local login of assigned accounts"
+msgstr ""
+
+msgid "Require local MFA"
+msgstr ""
+
+msgid "Update local properties"
+msgstr ""
+
+msgid "Primary group for created local accounts"
+msgstr ""
+
+msgid "OAuth Device Code"
+msgid_plural "OAuth Device Codes"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "OAuth2 Grant"
+msgid_plural "OAuth2 Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "OAuth Grant"
+msgstr ""
+
 msgid "OAuth2 Relying Party Config"
 msgid_plural "OAuth2 Relying Party Configs"
 msgstr[0] ""
@@ -87,9 +166,6 @@ msgid "Relying Party"
 msgid_plural "Relying Parties"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Label"
-msgstr ""
 
 msgid "Logo"
 msgstr ""

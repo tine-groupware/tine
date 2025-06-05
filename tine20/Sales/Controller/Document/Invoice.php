@@ -51,6 +51,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Invoice::FLD_DESCRIPTION,
             Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [
@@ -130,31 +131,29 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
     }
 
-    public function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
+    public function createEDocument(string $documentId): Sales_Model_Document_Invoice
     {
-        parent::_inspectAfterSetRelatedDataCreate($createdRecord, $record);
-        $this->createEInvoiceAttachment($createdRecord);
+        /** @var Sales_Model_Document_Invoice $document */
+        $document = $this->get($documentId);
+        $this->_createEDocument($document);
+        return $document;
     }
 
-    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
-    {
-        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
-        $this->createEInvoiceAttachment($updatedRecord, $currentRecord);
-    }
-
-    public function createEDocument(Tinebase_Record_Interface $record): void
-    {
-        $this->createEInvoiceAttachment($record);
-    }
-
-    protected function createEInvoiceAttachment(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
+    protected function _createEDocument(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): ?Sales_Model_Document_Abstract
     {
         if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
-            return;
+            return null;
         }
 
         $stream = null;
-        $attachmentName = str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.xml');
+        $attachmentName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+            Tinebase_Twig::TWIG_LOADER =>
+                new Tinebase_Twig_CallBackLoader(__METHOD__, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_NAME_TMPL}),
+            Tinebase_Twig::TWIG_AUTOESCAPE => false,
+        ]))->load(__METHOD__)->render([
+            'document' => $record,
+        ]);
+
         try {
             if (!($stream = fopen('php://temp', 'r+'))) {
                 throw new Tinebase_Exception('cant create temp stream');
@@ -166,7 +165,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
                     throw $t;
                 }
-                return;
+                return null;
             }
             rewind($stream);
 
@@ -185,7 +184,25 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                     . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
             }
 
-            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '-xrechnung.validation.html')))->count() > 0) {
+            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '.validation.html')))->count() > 0) {
+                if (Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} && ($node = $remove->find('name', $attachmentName))) {
+                    $replaceName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+                        Tinebase_Twig::TWIG_LOADER =>
+                            new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL}),
+                        Tinebase_Twig::TWIG_AUTOESCAPE => false,
+                    ]))->load(Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL)->render([
+                        'document' => $record,
+                        'node' => $node,
+                        'date' => Tinebase_DateTime::now()->format('Y-m-d'),
+                    ]);
+                    $path = Tinebase_FileSystem::getInstance()->getPathOfNode($node);
+                    array_walk($path, fn(&$path) => $path = $path['name']);
+                    $oldPath = '/' . implode('/', $path);
+                    array_pop($path);
+                    Tinebase_FileSystem::getInstance()->rename($oldPath, '/'. join('/', $path) . '/' . $replaceName);
+                    Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+                    $remove = $record->attachments->filter(fn($rec) => str_ends_with($rec->name, '.validation.html'));
+                }
                 $record->attachments->removeRecords($remove);
                 Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($record);
             }
@@ -197,24 +214,26 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, []);
             }
             if (($attachedDocument = $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $attachmentId))) {
-                $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
+                $attachedDocument->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
             } else {
                 $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
-                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_UBL,
+                    Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT,
                     Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $attachmentId,
-                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->seq + 1,
-                ]));
+                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1,
+                ], true));
             }
             $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
-                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->seq)
-                ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} !== Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT)
-                ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->seq + 1;
+                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ})
+                ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} === Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP)
+                ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
 
             $updatedRecord = $this->update($record);
             $record->attachments = $updatedRecord->attachments;
             $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = $updatedRecord->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS};
             $record->seq = $updatedRecord->seq;
+            $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} = $updatedRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
             $record->last_modified_time = $updatedRecord->last_modified_time;
+            return $updatedRecord;
 
         } catch (Tinebase_Exception_HtmlReport $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
@@ -233,12 +252,12 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             $stream = fopen('php://temp', 'w+');
             fwrite($stream, $e->getHtml());
             rewind($stream);
-            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '-xrechnung.validation.html')))->count() > 0) {
+            if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '.validation.html')))->count() > 0) {
                 $record->attachments->removeRecords($remove);
             }
 
             $record->attachments->addRecord(new Tinebase_Model_Tree_Node([
-                'name' => str_replace('/', '-', $record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} . '-xrechnung.validation.html'),
+                'name' => $attachmentName . '.validation.html',
                 'tempFile' => $stream,
             ], true));
 

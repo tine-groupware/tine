@@ -311,7 +311,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'type' => Tinebase_Model_Tag::TYPE_SHARED,
                 'name' => $tagName,
                 'description' => 'this is the shared tag ' . $tagName,
-                'color' => '#' . $this->_generateRandomColor(),
+                'color' => '#' . Tinebase_Helper::generateRandomColor(),
                 'appList' => $appList,
             )));
 
@@ -324,20 +324,5 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             )));
             Tinebase_Tags::getInstance()->setContexts(array('any'), $tag);
         }
-    }
-    
-    /**
-     * generate a random html color code
-     * 
-     * @return string
-     */
-    protected function _generateRandomColor()
-    {
-        mt_srand((int)microtime()*1000000);
-        $color = '';
-        while (strlen($color) < 6) {
-            $color .= sprintf("%02X", mt_rand(0, 255));
-        }
-        return $color;
     }
 }

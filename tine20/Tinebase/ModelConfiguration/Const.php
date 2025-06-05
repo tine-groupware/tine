@@ -37,6 +37,10 @@ class Tinebase_ModelConfiguration_Const {
     public const CONTROLLER_HOOK_BEFORE_UPDATE = '_controllerHookBeforeUpdate';
     public const CONVERTERS = 'converters';
     public const COLUMNS = 'columns';
+    /**
+     * sub of uiconfig, config for columnManager
+     */
+    public const COLUMN_CONFIG = 'columnConfig';
     public const COPY_OMIT = 'copyOmit';
     public const COPY_RELATIONS = 'copyRelations';
 
@@ -46,12 +50,16 @@ class Tinebase_ModelConfiguration_Const {
     public const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
 
     public const DB_COLUMNS = 'dbColumns';
+    public const DEFAULT_FROM_CONFIG = 'defaultFromConfig';
     /**
      * default sort info
      *
      * example: ['field' => 'number', 'direction' => 'DESC']
      */
     public const DEFAULT_SORT_INFO = 'defaultSortInfo';
+    /**
+     * evaluated from doctrine only! has nothing to do with record validation default or empty value
+     */
     public const DEFAULT_VAL = 'default';
     /**
      * config for default value
@@ -82,6 +90,11 @@ class Tinebase_ModelConfiguration_Const {
 
     public const FIELD = 'field';
     public const FIELDS = 'fields';
+
+    /**
+     * sub of uiconfig, config for fieldManager
+     */
+    public const FIELDS_CONFIG = 'fieldConfig';
     public const FIELD_NAME = 'fieldName';
     public const FILTER = 'filter';
     public const FILTER_CLASS_NAME = 'filterClassName';
@@ -102,6 +115,7 @@ class Tinebase_ModelConfiguration_Const {
      */
     public const FILTER_MODEL = 'filterModel';
     public const FILTER_OPTIONS = 'filterOptions';
+    public const FIXED_LENGTH = 'fixedLength';
     public const FLAGS = 'flags';
     public const FLD_ACCOUNT_GRANTS = 'account_grants';
     public const FLD_ALARMS = 'alarms';
@@ -114,6 +128,7 @@ class Tinebase_ModelConfiguration_Const {
     public const FLD_ORIGINAL_ID = 'original_id';
     public const FLD_RELATIONS = 'relations';
     public const FLD_TAGS = 'tags';
+    public const FLD_XPROPS = 'xprops';
     public const FORCE_VALUES = 'forceValues';
     /**
      * valid for the config of fields of type record(s). Defines virtual field in foreign record which holds own record(s)
@@ -215,6 +230,7 @@ class Tinebase_ModelConfiguration_Const {
     public const RESPONSIVE_LEVEL = 'responsiveLevel';
     public const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
+    public const SET_DEFAULT_INSTANCE = 'setDefaultInstance';
     /**
      * frontends do not show this field in grids per default
      */
@@ -224,9 +240,14 @@ class Tinebase_ModelConfiguration_Const {
     public const SPECIAL_TYPE = 'specialType';
     public const SPECIAL_TYPE_DISCOUNT = 'discount';
     public const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
+    public const SPECIAL_TYPE_EMAIL = 'email';
     public const SPECIAL_TYPE_PASSWORD = 'password';
     public const SPECIAL_TYPE_PERCENT = 'percent';
     public const SPECIAL_TYPE_URL = 'url';
+    public const SPECIAL_TYPE_COUNTRY = 'country';
+    public const SPECIAL_TYPE_CURRENCY = 'currency';
+
+    public const SPECIAL_TYPE_MONTH = 'month';
     public const STORAGE = 'storage';
     public const SUPPORTED_FORMATS = 'supportedFormats';
     /**
@@ -304,7 +325,7 @@ class Tinebase_ModelConfiguration_Const {
     public const UI_CONFIG_LAYOUT_MEDIUM = 'medium';
     public const UI_CONFIG_LAYOUT_BIG = 'big';
     public const UI_CONFIG_LAYOUT_LARGE = 'large';
-
+    public const VALIDATE = 'validate';
     public const VALIDATORS = 'validators';
     public const VERSION = 'version';
 }

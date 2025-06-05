@@ -7,6 +7,7 @@
  */
 import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
 import {getDefaultLayoutClasses} from "../../util/responsiveLayout";
+import "./OneIsTruePlugin";
 
 Ext.ns('Tine.widgets.grid');
 
@@ -1111,7 +1112,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // exports from export definitions
         this.actions_export = Tine.widgets.exportAction.getExportButton(this.recordClass, {
             exportFunction: exportFunction,
-            gridPanel: this
+            gridPanel: this,
         }, Tine.widgets.exportAction.SCOPE_MULTI, additionalItems);
 
         if (this.actions_export) {
@@ -2378,6 +2379,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 id: cfConfig.id,
                 header: cfConfig.get('definition').label,
                 dataIndex: '#' + cfConfig.get('name'),
+                type: cfConfig.get('definition').type,
                 renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
                 sortable: !!this.recordClass.getModelConfiguration(),
                 hidden: true
@@ -2568,7 +2570,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 Tine.Filemanager.QuickLookPanel.openWindow({
                     record: this.getStore().getAt(row),
                     initialApp: this.app,
-                    sm: sm
+                    sm: sm,
+                    requiredGrant: false,
                 });
             }
         }

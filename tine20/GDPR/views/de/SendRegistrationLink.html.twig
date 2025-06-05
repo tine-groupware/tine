@@ -1,0 +1,26 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% block subject %}
+    {% if dipr != '' %}
+        {{ 'Bestätigen Sie Ihre E-Mail-Adresse' }}
+    {% else -%}
+        {{ 'Bestätigung Ihrer Anmeldung' }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div>{{ 'Hallo ' }}  {{ contact.getTitle() | default('Kunde/Kundin') }} </div><br>
+    <div>{{ 'vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link ' }} : <a href="{{ link }}">E-Mail-Adresse bestätigen</a></div><br>
+    {#    {% if localized_dip_name != '' and localized_dip_name == 'Newsletter' %}#}
+    {#        <div>{{ 'We sill send our latest news to you !' }}</div>#}
+    {#    {% endif %}#}
+    <div>{{ 'Viele Grüße' }}</div>
+    <div>{{ 'Ihr %1$s Team' | format(app.branding.title) }}</div>
+    <div><img src="{{ app.branding.logoContent.getBody() | data_uri }}" style="margin: 20px 0; max-width: 80px;" /></div>
+    {#    <div><img alt="{{ app.branding.title }}" src="https://metaways.tine20.net/logo" width="135" height="50" /></div>#}
+{% endblock %}

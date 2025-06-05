@@ -52,6 +52,8 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     initComponent: function() {
         this.app = Ext.isString(this.app) ? Tine.Tinebase.appMgr.get(this.app) : this.app;
 
+        this.emptyText = this.emptyText || this.app.formatMessage('Select { itemName } ...', { itemName: this.fieldLabel });
+
         // get keyField config
         this.keyFieldConfig = this.app.getRegistry().get('config')[this.keyFieldName];
         if (!this.keyFieldConfig) {
@@ -94,6 +96,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     },
 
     setValue(value, record) {
+        value = value?.id || value;
         const allowedTargetStatus = this.transitions ? this.transitions.value[value || '']?.targetStatus : null;
 
         this.store.each((record) => {

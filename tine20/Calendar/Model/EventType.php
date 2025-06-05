@@ -10,8 +10,8 @@
  */
 class Calendar_Model_EventType extends Tinebase_Record_Abstract
 {
-    const MODEL_NAME_PART = 'EventType';
-    const TABLE_NAME = 'cal_event_type';
+    public const MODEL_NAME_PART = 'EventType';
+    public const TABLE_NAME = 'cal_event_type';
 
     /**
      * application the record belongs to
@@ -34,7 +34,7 @@ class Calendar_Model_EventType extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = array(
         'version'           => 1,
-        'recordName'        => 'Event Type',
+        'recordName'        => 'Event Type',  // gettext('GENDER_Event Type')
         'recordsName'       => 'Event Types', // ngettext('Event Type', 'Event Types', n)
         'containerProperty' => NULL,
         'titleProperty'     => 'name',

@@ -18,7 +18,7 @@
  */
 class Tinebase_Backend_Scheduler extends Tinebase_Backend_Sql
 {
-    const TABLE_NAME = 'scheduler_task';
+    public const TABLE_NAME = 'scheduler_task';
 
     public function __construct()
     {

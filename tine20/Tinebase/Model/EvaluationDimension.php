@@ -135,7 +135,7 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
         [$appId] = explode('_', $model, 2);
         $appId = Tinebase_Application::getInstance()->getApplicationByName($appId)->getId();
 
-        $fldName = 'eval_dim_' . str_replace(' ', '_', strtolower($this->{self::FLD_NAME}));
+        $fldName = 'eval_dim_' . str_replace(' ', '_', strtolower((string) $this->{self::FLD_NAME}));
 
         $definition = [
             Tinebase_Model_CustomField_Config::DEF_FIELD => [

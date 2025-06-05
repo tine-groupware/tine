@@ -12,7 +12,8 @@ class FieldTriggerPlugin {
     visible = true
     qtip = null
     preserveElStyle = false
-
+    hideOnEmptyValue = false
+    hideOnInvalidValue = false
     #trigger
     
     constructor(config) {
@@ -21,6 +22,15 @@ class FieldTriggerPlugin {
     
     async init (field) {
         this.field = field
+
+        if (field.initKeyEvents) {
+            field.initKeyEvents();
+        }
+        field.setValue = field.setValue.createSequence(_.bind(this.assertState, this))
+        field.clearValue = field.clearValue?.createSequence(_.bind(this.assertState, this))
+        field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
+        field.setDisabled = field.setDisabled.createSequence(_.bind(this.assertState, this))
+        field.on('keydown', this.assertState, this, { buffer: 50 })
 
         await field.afterIsRendered()
         const wrap = field.el.parent('.x-form-field-wrap') ||
@@ -54,6 +64,19 @@ class FieldTriggerPlugin {
             field.el.autoBoxAdjust = false;
             field.onResize(wrap.getWidth(), wrap.getHeight());
         }
+
+        this.assertState()
+    }
+
+    assertState() {
+        this.#trigger?.setStyle({
+            right: _.transform(this.field.plugins, (pos, plugin) => {
+                if (plugin === this) return false
+                if (plugin instanceof FieldTriggerPlugin && plugin.visible) pos.push(plugin)
+            }, []).length * 16 + (this.field.getTriggerWidth?.() || 0) + 'px'
+        })
+
+        this.setVisible((!this.hideOnEmptyValue || this.field.getValue()) && (!this.hideOnInvalidValue || this.field.isValid()));
     }
 
     setTriggerClass(triggerClass) {

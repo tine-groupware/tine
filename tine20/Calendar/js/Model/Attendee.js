@@ -306,8 +306,12 @@ Attendee.getAttendeeStore.getSignature = function(attendee) {
     var _ = window.lodash;
 
     attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
-    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, attendee.role]
-        .join(Attendee.getAttendeeStore.signatureDelimiter);
+    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, _.map(attendee.crewscheduling_roles, (csRole) => {
+            return (csRole.role.id || csRole.role) + ':' + _.map(csRole.data?.event_types || csRole.event_types, (eventType) => {
+                return eventType.data?.id || eventType.id;
+            }).join('&')
+        }).join(',')]
+    .join(Attendee.getAttendeeStore.signatureDelimiter);
 };
 
 Attendee.getAttendeeStore.fromSignature = function(signatureId) {
@@ -317,7 +321,7 @@ Attendee.getAttendeeStore.fromSignature = function(signatureId) {
         cal_event_id: ids[0],
         user_type: ids[1],
         user_id: ids[2],
-        role: ids[3]
+        crewscheduling_roles: ids[3] // @TODO do we need to dehydrate here?
     });
 }
 

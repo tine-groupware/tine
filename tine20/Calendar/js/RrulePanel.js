@@ -381,7 +381,8 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             width: 260,
             listWidth: 200,
             allowNodeSelect: true,
-            recordClass: Tine.Calendar.Model.Event
+            recordClass: Tine.Calendar.Model.Event,
+            requiredGrants: ['freebusyGrant','readGrant']
         });
 
         if (this.app.featureEnabled('featureRecurExcept')) {

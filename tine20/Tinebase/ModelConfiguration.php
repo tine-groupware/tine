@@ -104,6 +104,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property bool       $hasPerspectives
  * @property bool       $hasSystemCustomFields
  * @property bool       $skipLegacyJsonConvert
+ * @property bool       $hasDeletedTimeUnique
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
@@ -537,6 +538,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * float       money         value and currency  float    float                         int               Tinebase_Model_Filter_Int
      * note: money is an own type so we can separate currency
      * money                     Float               float    float                         float             Tinebase_Model_Filter_Int
+     * string      month         Month               varchar  string                        string            Tinebase_Model_Filter_Text
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
@@ -891,6 +893,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         'datetime_separated_time' => Tinebase_Model_Filter_Date::class,
         'datetime_separated_tz' => Tinebase_Model_Filter_Text::class,
         'date'                  => Tinebase_Model_Filter_Date::class,
+        'month'                 => Tinebase_Model_Filter_Month::class,
         'datetime'              => Tinebase_Model_Filter_DateTime::class,
         'time'                  => Tinebase_Model_Filter_Time::class,
         'string'                => Tinebase_Model_Filter_Text::class,
@@ -939,8 +942,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * @var array
     */
     protected $_validatorMapping = array(
-        self::TYPE_RECORD    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'relation'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'hexcolor'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '#969696', Zend_Filter_Input::VALIDATE => array('Regex' => '/^#[0-9a-fA-F]{6}$/'))
     );
 
@@ -1069,10 +1070,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 $modelsSystemCFs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($this->_appName,
                     $this->_appName . '_Model_' . $this->_modelName, Tinebase_Model_CustomField_Grant::GRANT_READ,
                     true);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // during install app may not be there yet
-                $modelsSystemCFs = [];
-            } catch (Zend_Db_Exception $e) {
+            } catch (Tinebase_Exception_NotFound|Zend_Db_Exception) {
                 // during install app may not be there yet
                 $modelsSystemCFs = [];
             }
@@ -1104,7 +1102,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 'shy' => true,
                 'sortable' => false,
                 'type' => 'custom',
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL)
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true)
             ];
         }
 
@@ -1119,7 +1117,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     self::MODEL_NAME => Tinebase_Model_Relation::MODEL_NAME_PART,
                 ],
                 self::FILTER_DEFINITION => [],
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit' => ! $this->_copyRelations
             ];
         }
@@ -1227,7 +1225,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 'label' => 'Tags',
                 'sortable' => false,
                 'type' => 'tag', 
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'useGlobalTranslation' => TRUE,
                 'filterDefinition' => array(
                     'key'     => 'tag',
@@ -1293,7 +1291,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         if ($this->_modlogActive) {
             // notes are needed if modlog is active
             $this->_hasNotes = true;
-            $this->_fields['notes']              = array('label' => NULL,                 'type' => 'note',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 'useGlobalTranslation' => TRUE);
+            $this->_fields['notes']              = array('label' => NULL,                 'type' => 'note',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE);
             $this->_fields['created_by']         = array('label' => 'Created By',         'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
             $this->_fields['creation_time']      = array('label' => 'Creation Time',      'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'nullable' => true);
             $this->_fields['last_modified_by']   = array('label' => 'Last Modified By',   'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
@@ -1318,11 +1316,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             ];
 
         } elseif ($this->_hasNotes) {
-            $this->_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
+            $this->_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
         }
 
         if ($this->_denormalizationOf) {
-            list($app, $model) = explode('_Model_', $this->_denormalizationOf);
+            [$app, $model] = explode('_Model_', (string) $this->_denormalizationOf);
             $this->_fields[self::FLD_ORIGINAL_ID] = [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::NULLABLE              => true,
@@ -1413,8 +1411,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             switch($fieldDef[self::TYPE]) {
                 case self::TYPE_KEY_FIELD:
                     $fieldDef['length'] = 40;
-                    $keyFieldAppName = isset($fieldDef['config']['application']) ? $fieldDef['config']['application']
-                        : $this->_applicationName;
+                    $keyFieldAppName = $fieldDef['config']['application'] ?? $this->_applicationName;
                     if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
                         $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
                         $keyField = null;
@@ -1423,9 +1420,27 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                             throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
                                 $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
 
-                            // yes array_key_exists, as you should be able to set default to null
-                        } elseif ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
+                        }
+                        // yes array_key_exists, as you should be able to set default to null
+                        if ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
                             $fieldDef[self::DEFAULT_VAL] = $keyField->default;
+                        }
+                        // yes array_key_exists, as you should be able to set default to null
+                        if ($keyField && !array_key_exists(Zend_Filter_Input::DEFAULT_VALUE, $fieldDef[self::VALIDATORS] ?? []) && is_scalar($keyField->default)) {
+                            $fieldDef[self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] = $keyField->default;
+                        }
+                        // yes array_key_exists, as you should be able to set default to null
+                        if ($keyField && !array_key_exists(Zend_Filter_Empty::class, $fieldDef[self::INPUT_FILTERS] ?? []) && is_scalar($keyField->default)) {
+                            $fieldDef[self::INPUT_FILTERS][Zend_Filter_Empty::class] = $keyField->default;
+                        }
+                        if ($fieldDef[self::CONFIG][self::VALIDATE] ?? false) {
+                            if ($keyField && !array_key_exists(Tinebase_Record_Filter_RecordId::class, $fieldDef[self::INPUT_FILTERS] ?? [])) {
+                                $fieldDef[self::INPUT_FILTERS][Tinebase_Record_Filter_RecordId::class] = false;
+                            }
+                            // yes array_key_exists, as you should be able to set default to null
+                            if ($keyField && (!array_key_exists(self::VALIDATORS, $fieldDef) || array_reduce((array)$fieldDef[self::VALIDATORS], fn($carry, $item) => $carry && (!is_array($item) || ($item[0] ?? null) !== Tinebase_Record_Validator_KeyField::class), true))) {
+                                $fieldDef[self::VALIDATORS][] = [Tinebase_Record_Validator_KeyField::class, $keyField, $fieldDef[self::NULLABLE] ?? false];
+                            }
                         }
                     }
                     break;
@@ -1434,8 +1449,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     if (!isset($fieldDef['modlogOmit'])) {
                         $fieldDef['modlogOmit'] = true;
                     }
-                    $fieldDef['config']['sortable'] = $fieldDef['config']['sortable'] ??
-                        (($fieldDef['config'][self::TYPE] ?? null) === self::TYPE_RELATION);
+                    $fieldDef['config']['sortable'] ??= ($fieldDef['config'][self::TYPE] ?? null) === self::TYPE_RELATION;
                     $virtualField = $fieldDef['config'];
                     $virtualField['key'] = $fieldKey;
                     if ((isset($virtualField['default']))) {
@@ -1543,7 +1557,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             }
 
             if (isset($fieldDef[self::IS_VIRTUAL])) {
-                $virtualField = isset($fieldDef['config']) ? $fieldDef['config'] : [];
+                $virtualField = $fieldDef['config'] ?? [];
                 $virtualField['key'] = $fieldKey;
                 $this->_virtualFields[$fieldKey] = $virtualField;
             }
@@ -1616,13 +1630,36 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 }
             }
 
+            if ($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG] ?? false) {
+                if (!($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::APP_NAME] ?? false)) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires app name');
+                }
+                if (!($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::CONFIG] ?? false)) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires config key');
+                }
+                if ($this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] ?? false) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires zend default validator not to be set');
+                }
+                $defaultValue = Tinebase_Config::getAppConfig($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::APP_NAME])
+                    ->{$fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::CONFIG]};
+                $fieldDef[Zend_Filter_Input::DEFAULT_VALUE] = $this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] = $defaultValue;
+                $fieldDef[self::INPUT_FILTERS][Tinebase_Record_Filter_CallableEmpty::class] = $defaultValue;
+                foreach ($this->_filters[$fieldKey] ?? [] as $filter) {
+                    if ($filter instanceof Tinebase_Record_Filter_CallableEmpty) {
+                        throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires callable empty filter not to be set');
+                    } elseif ($filter instanceof Zend_Filter_Empty) {
+                        throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires zend empty input filter not to be set');
+                    }
+                }
+                $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_CallableEmpty($defaultValue);
+            }
+
             $this->_addToModlogOmit($fieldDef, $fieldKey);
             $this->_addToPasswordFields($fieldDef, $fieldKey);
 
             // set converters
             foreach ((isset($fieldDef['converters']) && is_array($fieldDef['converters'])) ? $fieldDef['converters'] :
-                         (isset($this->_converterDefaultMapping[$fieldDef[self::TYPE]]) ?
-                             $this->_converterDefaultMapping[$fieldDef[self::TYPE]] : []) as $converter) {
+                         ($this->_converterDefaultMapping[$fieldDef[self::TYPE]] ?? []) as $converter) {
                 if (!isset($this->_converters[$fieldKey])) {
                     $this->_converters[$fieldKey] = [];
                 }
@@ -1704,7 +1741,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             if (empty($fieldDef[self::FILTER_DEFINITION])) {
                 return;
             }
-            $key = isset($fieldDef['filterDefinition']['key']) ? $fieldDef['filterDefinition']['key'] : $fieldKey;
+            $key = $fieldDef['filterDefinition']['key'] ?? $fieldKey;
             if (isset($this->_filterModel[$key])) {
                 return;
             }
@@ -1722,7 +1759,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 return;
             }
             $type = $fieldDef[self::TYPE];
-            $config = isset($fieldDef['config']) ? $fieldDef['config'] : null;
+            $config = $fieldDef['config'] ?? null;
             if (self::TYPE_VIRTUAL === $type && isset($fieldDef['config']) && isset($fieldDef['config'][self::TYPE]) &&
                     (self::TYPE_RELATION === $fieldDef['config'][self::TYPE] || self::TYPE_RELATIONS ===
                         $fieldDef['config'][self::TYPE])) {
@@ -1782,7 +1819,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     && null !== ($backend = $appInstance->getBackend())) {
                     $tableName = $backend->getTableName();
                 }
-            } catch (Tinebase_Exception_NotFound $tenf) {}
+            } catch (Tinebase_Exception_NotFound) {}
         }
 
         return $tableName;
@@ -1793,10 +1830,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         if (!isset($this->_fields[$field])) {
             throw new Tinebase_Exception($field . ' is not a property of ' . $this->_modelName);
         }
-        if (isset($this->_fields[$field][self::TABLE])) {
-            return $this->_fields[$field][self::TABLE];
-        }
-        return $this->getTableName();
+        return $this->_fields[$field][self::TABLE] ?? $this->getTableName();
     }
 
     /**
@@ -1983,13 +2017,30 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             case self::TYPE_MODEL:
             case 'string':
             case 'text':
-            case 'fulltext':
-            case self::TYPE_STRICTFULLTEXT:
             case 'integer':
             case self::TYPE_BIGINT:
             case 'float':
             case 'boolean':
             case 'container':
+                break;
+            case 'fulltext':
+            case self::TYPE_STRICTFULLTEXT:
+                foreach ($this->_table[self::INDEXES] ?? [] as &$index) {
+                    if ([$fieldKey] === ($index[self::COLUMNS] ?? [])) {
+                        if (array_key_exists(self::FLAGS, $index)) {
+                            if ([self::TYPE_FULLTEXT] === $index[self::FLAGS]) {
+                                break 2;
+                            }
+                        } else {
+                            $index[self::FLAGS] = [self::TYPE_FULLTEXT];
+                            break 2;
+                        }
+                    }
+                }
+                $this->_table[self::INDEXES][$fieldKey . '_ft'] = [
+                    self::COLUMNS   => [$fieldKey],
+                    self::FLAGS     => [self::TYPE_FULLTEXT],
+                ];
                 break;
             case 'datetime_separated_date':
             case 'date':
@@ -2009,15 +2060,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 $this->_timeFields[] = $fieldKey;
                 break;
             case 'user':
-                $fieldDef['config'] = array(
-                    'length'                  => 40,
+                $fieldDef[self::LENGTH] = 40;
+                $fieldDef[self::CONFIG] = array_merge($fieldDef[self::CONFIG] ?? [], [
                     'appName'                 => 'Tinebase',
                     'modelName'               => 'User',
                     'type'                    => self::TYPE_RECORD,
                     'recordClassName'         => Tinebase_Model_User::class,
                     'controllerClassName'     => Tinebase_User::class,
                     'filterClassName'         => Tinebase_Model_FullUserFilter::class,
-                );
+                ]);
                 $this->_recordFields[$fieldKey] = $fieldDef;
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
@@ -2044,8 +2095,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                         break;
                     }
                 }
-                $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
-                $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
+                $fieldDef['config']['controllerClassName'] ??= $this->_getPhpClassName($fieldDef['config'], 'Controller');
+                $fieldDef['config']['filterClassName'] ??= $this->_getPhpClassName($fieldDef['config']) . 'Filter';
 
                 // resolve self or circular references
                 static::$deNormalizationCache[$this->_appName . '_Model_' . $this->_modelName] = $this->_denormalizationOf ?: false;
@@ -2089,7 +2140,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                         $this->_setFieldFilterModel($fieldDef, $fieldKey);
                     }
                 }
-                $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
+                $fieldDef['config']['dependentRecords'] ??= false;
                 if ($fieldDef[self::TYPE] === self::TYPE_RECORD) {
                     if ($fieldDef[self::CONFIG][self::REF_ID_FIELD] ?? false) {
                         $fieldDef[self::DOCTRINE_IGNORE] = true;
@@ -2119,15 +2170,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 }
                 break;
             case self::TYPE_DYNAMIC_RECORD:
+                if ($fieldDef[self::CONFIG][self::SET_DEFAULT_INSTANCE] ?? false) {
+                    $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_DynamicRecordDefault;
+                }
                 if (!isset($this->_converters[$fieldKey])) {
                     if (isset($fieldDef[self::CONFIG][self::REF_MODEL_FIELD]) || isset($fieldDef[self::CONFIG][self::MODEL_NAME])) {
                         $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_DynamicRecord(
-                            isset($fieldDef[self::CONFIG][self::REF_MODEL_FIELD]) ?
-                                $fieldDef[self::CONFIG][self::REF_MODEL_FIELD] : null,
-                            isset($fieldDef[self::CONFIG][self::PERSISTENT]) ?
-                                $fieldDef[self::CONFIG][self::PERSISTENT] : false,
-                            isset($fieldDef[self::CONFIG][self::MODEL_NAME]) ?
-                                $fieldDef[self::CONFIG][self::MODEL_NAME] : null
+                            $fieldDef[self::CONFIG][self::REF_MODEL_FIELD] ?? null,
+                            $fieldDef[self::CONFIG][self::PERSISTENT] ?? false,
+                            $fieldDef[self::CONFIG][self::MODEL_NAME] ?? null
                         )];
                     }
                 }
@@ -2221,7 +2272,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      */
     protected function _isAvailable($_fieldConfig)
     {
-        $fieldConfig = isset($_fieldConfig['config']) ? $_fieldConfig['config'] : $_fieldConfig;
+        $fieldConfig = $_fieldConfig['config'] ?? $_fieldConfig;
 
         $result = true;
         if (isset($fieldConfig['appName'])) {
@@ -2412,7 +2463,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
 
             switch ($fieldConfig[self::TYPE]) {
                 case 'virtual':
-                    $virtualConfig = isset($fieldConfig['config']) ? $fieldConfig['config'] : null;
+                    $virtualConfig = $fieldConfig['config'] ?? null;
                     if (! isset($virtualConfig[self::TYPE]) || ($virtualConfig[self::TYPE] !== self::TYPE_RELATION &&
                             self::TYPE_RELATIONS !== $virtualConfig[self::TYPE])) {
                         throw new Tinebase_Exception_NotImplemented('supports only relation virtual type');

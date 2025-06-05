@@ -84,11 +84,124 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $this->_inspectBeforeForBookedRecord($_record);
         }
 
+        $this->_inspectAutoCreateValues($_record);
+
+        $this->_inspectDefaultBoilerplates($_record);
+
+        $this->_inspectVAT($_record);
+
         parent::_inspectBeforeCreate($_record);
 
         // important! after _inspectDenormalization in parent::_inspectBeforeCreate
         // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
+
+        $this->_inspectServicePeriod($_record);
+    }
+
+    protected function _inspectVAT(Sales_Model_Document_Abstract $_record): void
+    {
+         if (!$_record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE)) {
+             return;
+         }
+
+         if (false === ($vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE}))) {
+             throw new Tinebase_Exception_UnexpectedValue(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE . ' ' . $_record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} . ' not supported');
+         }
+         if (!is_array($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX})) {
+             $_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = null;
+         } elseif (count($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}) === 1) {
+             $_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = Sales_Controller_EDocument_VATEX::getInstance()->getByCode($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}[0])->getId();
+         } else {
+             if (empty($_record->{Sales_Model_Document_Abstract::FLD_VATEX_ID})) {
+                 throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_(
+                     'For selected VAT procedure an exemption reason needs to be provided'));
+             }
+             $vatEx = Sales_Controller_EDocument_VATEX::getInstance()->get($_record->getIdFromProperty(Sales_Model_Document_Abstract::FLD_VATEX_ID));
+             if (!in_array($vatEx->{Sales_Model_EDocument_VATEX::FLD_CODE}, $vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX})) {
+                 throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_(
+                     'Selected VAT procedure and selected VAT exemption reason are not compatible'));
+             }
+         }
+    }
+
+    protected function _inspectAutoCreateValues(Sales_Model_Document_Abstract $document): void
+    {
+        if ($document->has(Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE) && empty($document->{Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE}) &&
+                !empty($document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}?->{Sales_Model_Debitor::FLD_BUYER_REFERENCE})) {
+            $document->{Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE} = $document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE};
+        }
+
+        if ($document->has(Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS) && empty($document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS}) &&
+                !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->credit_term)) {
+            $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->credit_term;
+        }
+
+        if ($document->has(Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE) && empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) &&
+                empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM}) &&
+                intval($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) === 0 &&
+                intval($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM}) === 0 &&
+                !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->discount)) {
+            $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
+            $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->discount;
+        }
+
+        if ($document->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) && empty($document->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE}) &&
+                !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->{Sales_Model_Customer::FLD_VAT_PROCEDURE})) {
+            $document->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Customer::FLD_VAT_PROCEDURE};
+        }
+
+        if ($document->has(Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE) && empty($document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}) &&
+                !empty($document->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}?->{Sales_Model_Address::FLD_LANGUAGE})) {
+            $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE} = $document->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_LANGUAGE};
+        }
+    }
+
+    protected function _inspectDefaultBoilerplates(Sales_Model_Document_Abstract $document): void
+    {
+        if (null !== $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES}) {
+            return;
+        }
+        $document->{Sales_Model_Document_Abstract::FLD_BOILERPLATES} =
+            Sales_Controller_Boilerplate::getInstance()->getApplicableBoilerplates(
+                type: $document::class,
+                language: $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE},
+                isDefault: true,
+            );
+    }
+
+    protected function _inspectServicePeriod(Sales_Model_Document_Abstract $document): void
+    {
+        if (!$document->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet ||
+                !$document->has(Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START)) {
+            return;
+        }
+
+        $min = null;
+        $max = null;
+        $document->{Sales_Model_Document_Abstract::FLD_POSITIONS}->find(
+            function(Sales_Model_DocumentPosition_Abstract $position) use(&$min, &$max) {
+                if (null === $min ||
+                    (null !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_START}
+                        && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_START}->isEarlier($min))) {
+                    $min = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_START};
+                }
+                if (null === $max ||
+                    (null !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_END}
+                        && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_END}->isLater($max))) {
+                    $max = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SERVICE_PERIOD_END};
+                }
+                return false;
+            }, null);
+
+        if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} || (null !== $min &&
+                $min->isEarlier($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START}))) {
+            $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_START} = $min;
+        }
+        if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} || (null !== $max &&
+                $max->isLater($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
+            $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} = $max;
+        }
     }
 
     protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
@@ -198,6 +311,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $this->_inspectBeforeForBookedRecord($_record, $_oldRecord);
         }
 
+        $this->_inspectVAT($_record);
+
         // lets check if positions got removed and if that would affect our precursor documents
         if (null !== $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS}) {
             if (!$_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
@@ -252,6 +367,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
         // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
+
+        $this->_inspectServicePeriod($_record);
     }
 
     protected function _inspectBeforeForBookedOldRecord(Sales_Model_Document_Abstract $_record, Sales_Model_Document_Abstract $_oldRecord)
@@ -271,7 +388,11 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS};
                 continue;
             }
-            $_record->{$field} = $_oldRecord->{$field};
+            if ($_oldRecord->{$field} instanceof Tinebase_Record_RecordSet || $_oldRecord->{$field} instanceof Tinebase_Record_Interface) {
+                $_record->{$field} = clone $_oldRecord->{$field};
+            } else {
+                $_record->{$field} = $_oldRecord->{$field};
+            }
         }
     }
 
@@ -324,6 +445,34 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         if ($updatedRecord->{$this->_documentStatusField} !== $currentRecord->{$this->_documentStatusField}) {
             Tinebase_Event::fireEvent(new Sales_Event_DocumentStatusChange($updatedRecord, $currentRecord));
         }
+    }
+
+    protected function _writeModLog($_newRecord, $_oldRecord)
+    {
+        $modLogs = parent::_writeModLog($_newRecord, $_oldRecord);
+        if (null === $_newRecord || null === $_oldRecord) {
+            return $modLogs;
+        }
+
+        $mcFields = $_newRecord::getConfiguration()->fields;
+        /** @var Tinebase_Model_ModificationLog $modLog */
+        foreach ($modLogs as $modLog) {
+            foreach (array_diff(array_keys(($diff = json_decode($modLog->new_value, true))['diff'] ?? []), Tinebase_ModelConfiguration::$genericProperties) as $property) {
+
+                if ($mcFields[$property][Tinebase_ModelConfiguration_Const::CONFIG][Sales_Model_Document_Abstract::EXCLUDE_FROM_DOCUMENT_SEQ] ?? false) {
+                    continue;
+                }
+
+                $_newRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
+                $diff['diff'][Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ] = $_newRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
+                $diff['oldData'][Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ] = $_oldRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ};
+                $modLog->new_value = json_encode($diff);
+                $this->_backend->updateMultiple([$_newRecord->getId()], [Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ => $_newRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ}]);
+                break 2;
+            }
+        }
+
+        return $modLogs;
     }
 
     /**
@@ -560,19 +709,48 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         ];
     }
 
-    public function copy(string $id, bool $persist): Tinebase_Record_Interface
+    public static function dispatchDocument(string $documentId, bool $redispatch = false): bool
     {
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
-        $copy = parent::copy($id, false);
+        /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to row lock stuff */
+        // we only want to dispatch a specific document once at a time, so we lock manually
+        // TODO FIXME aquire and try are reversed, fix it
+        if (!Tinebase_Core::acquireMultiServerLock($lockId = __METHOD__ . $documentId, false)) {
+            throw new Tinebase_Exception_SystemGeneric('an other dispatch is currently running');
+        }
+        $unlock = new Tinebase_RAII(fn() => Tinebase_Core::releaseMultiServerLock($lockId));
+        $mailAccountRAII = new Tinebase_RAII(Admin_Controller_EmailAccount::getInstance()->assertPublicUsage());
 
-        $copy->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = null;
-
-        if ($persist) {
-            $copy = $this->create($copy);
+        /** @var Sales_Model_Document_Abstract $document */
+        $document = static::getInstance()->get($documentId);
+        if (!$document->isBooked() || (!$redispatch && $document::getStatusField() === Sales_Model_Document_Abstract::STATUS_MANUAL_DISPATCH)) {
+            throw new Tinebase_Exception_SystemGeneric('document needs to be booked and not in status manual dispatch');
         }
 
-        $transaction->release();
+        $debitor = Sales_Controller_Debitor::getInstance()->get($document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}
+            ->getIdFromProperty(Sales_Model_Document_Abstract::FLD_ORIGINAL_ID));
 
-        return $copy;
+        $missingDocTypes = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG}->getMissingDocumentTypes($document);
+
+        // order matters, edocument may embed any of the other documents
+        $reloadDocument = false;
+        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP, $missingDocTypes)) {
+            (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $documentId);
+            $reloadDocument = true;
+        }
+        if (in_array(Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT, $missingDocTypes) && static::class === Sales_Controller_Document_Invoice::class) {
+            Sales_Controller_Document_Invoice::getInstance()->createEDocument($documentId);
+            $reloadDocument = true;
+        }
+
+        if ($reloadDocument) {
+            $document = static::getInstance()->get($documentId);
+        }
+
+        /** @var Sales_Model_EDocument_Dispatch_Interface $dispatcher */
+        $dispatcher = $debitor->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG};
+        $result = $dispatcher->dispatch($document);
+        unset($mailAccountRAII);
+        unset($unlock);
+        return $result;
     }
 }

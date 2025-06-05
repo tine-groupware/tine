@@ -706,7 +706,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $groupController->modlogActive(true);
 
         $group = new Tinebase_Model_Group(array('name' => 'unittest test group'));
-        $group = $groupController->addGroup($group);
+        $group = Admin_Controller_Group::getInstance()->create($group);
 
         $groupController->addGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
         $groupController->removeGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
@@ -736,7 +736,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         }
         $this->assertTrue($notFound, 'roll back did not work...');
 
-        // create the group
+        // create the group & list
         $mod = $groupModifications->getFirstRecord();
         $groupModifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
@@ -744,6 +744,10 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $newGroup = $groupController->getGroupById($group->getId());
         $this->assertEquals($group->name, $newGroup->name);
         $this->assertEmpty($groupController->getGroupMembers($newGroup->getId()), 'group members not empty');
+        $this->assertEquals($group->list_id, $newGroup->list_id, 'list id not equal');
+        $list = Addressbook_Controller_List::getInstance()->get($newGroup->list_id);
+        $this->assertEquals($newGroup->name, $list->name, 'list name not equal');
+        $this->assertEquals($newGroup->getId(), $list->group_id, 'group_id not equal');
 
         $groupController->setGroupMembers($newGroup->getId(), [Zend_Registry::get('personas')['sclever']->getId()]);
 

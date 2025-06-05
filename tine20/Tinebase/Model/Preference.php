@@ -23,31 +23,31 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
      * normal user/group preference
      *
      */
-    const TYPE_USER = 'user';
+    public const TYPE_USER = 'user';
     
     /**
      * default preference for anyone who has no specific preference
      *
      */
-    const TYPE_DEFAULT = 'default';
+    public const TYPE_DEFAULT = 'default';
 
     /**
      * admin default preference
      *
      */
-    const TYPE_ADMIN = 'admin';
+    public const TYPE_ADMIN = 'admin';
     
     /**
      * admin forced preference (can not be changed by users)
      *
      */
-    const TYPE_FORCED = 'forced';
+    public const TYPE_FORCED = 'forced';
 
     /**
      * default preference value
      *
      */
-    const DEFAULT_VALUE = '_default_';
+    public const DEFAULT_VALUE = '_default_';
     
     /**
      * identifier field name
@@ -114,7 +114,7 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
                             $container = Tinebase_Container::getInstance()->getContainerById($containerId);
                             // TODO should be converted to array by json frontend
                             $containers[] = $container->toArray();
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             // not found / no access / ...
                         }
                     }

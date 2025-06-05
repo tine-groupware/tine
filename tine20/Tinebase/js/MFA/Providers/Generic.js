@@ -26,7 +26,8 @@ class Generic extends Abstract {
         passwordFieldLabel: me.passwordFieldLabel,
         allowEmptyPassword: false,
         hasPwGen: false,
-        locked: !me.isOTP
+        locked: !me.isOTP,
+        additionalFields: me.additionalFields
       })
       pwDlg.openWindow()
       pwDlg.on('apply', async (password) => {

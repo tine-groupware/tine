@@ -35,10 +35,10 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
             . ' ' . print_r(Tinebase_WebDav_XMLUtil::splitPath($path), true));
         
         try {
-            list($appModel, $id) = Tinebase_WebDav_XMLUtil::splitPath($path);
-            list($appName, $records, $model) = explode('/', $appModel);
+            [$appModel, $id] = Tinebase_WebDav_XMLUtil::splitPath($path);
+            [$appName, $records, $model] = explode('/', (string) $appModel);
             $this->_record = Tinebase_Core::getApplicationInstance($appName, $model)->get($id);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('Record ' . $path . ' not found');
         }
         
@@ -136,7 +136,7 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
      */
     function getName()
     {
-        list(, $basename) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        [, $basename] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $basename);

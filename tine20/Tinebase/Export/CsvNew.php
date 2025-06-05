@@ -132,7 +132,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      * @param string $_value
      * @throws Tinebase_Exception_NotImplemented
      */
-    protected function _setValue($_key, $_value)
+    protected function _setValue($_key, $_value): never
     {
         throw new Tinebase_Exception_NotImplemented('no templates for csv');
     }
@@ -197,7 +197,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
                 $dataElement = '';
             }
             if ($charset != 'utf8') {
-                $dataElement = iconv('utf-8', $charset, $dataElement);
+                $dataElement = iconv('utf-8', (string) $charset, (string) $dataElement);
             }
             if ($writeDelimiter) {
                 $string .= $delimiter;

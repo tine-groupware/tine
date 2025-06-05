@@ -276,6 +276,9 @@ class Admin_Controller_UserTest extends TestCase
         $userInBackend = $emailUserBackend->getRawUserById($xpropsUser);
         self::assertFalse($userInBackend, 'email user should be deleted: '
             . print_r($userInBackend, true));
+        if (Tinebase_Application::getInstance()->isInstalled('SaasInstance')) {
+            Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_DELETION, ormore: true);
+        }
     }
 
     public function testAddUserAdbContainer()
@@ -340,7 +343,7 @@ class Admin_Controller_UserTest extends TestCase
         $user->contact_id = $newContact->getId();
 
         Admin_Controller_User::getInstance()->setRequestContext([
-            'sms-phone-number' => 1234567890,
+            'sms-phone-number' => '01234567890',
             'sms-new-password-template' => 'Your new {{ app.branding.title }} unit test password is: {{ password }}'
         ]);
 
@@ -355,7 +358,6 @@ class Admin_Controller_UserTest extends TestCase
         static::assertEquals($newContact->email, $user->accountEmailAddress, 'new contact email should be the same as user email');
         static::assertEquals($newContact->n_fn, $user->accountFullName);
         static::assertEquals($newContact->n_fileas, $user->accountDisplayName);
-
     }
 
     public function testUpdateUserWithEmailButNoPassword()
@@ -396,6 +398,31 @@ class Admin_Controller_UserTest extends TestCase
         }
     }
 
+    public function testAddUserWithContact()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_skipIfLDAPBackend();
+
+        $pw = Tinebase_Record_Abstract::generateUID(10);
+        $userToCreate = TestCase::getTestUser();
+        $userToCreate->accountEmailAddress = 'phpunit' . Tinebase_Record_Abstract::generateUID(10) . '@mail.test';
+        $userToCreate->contact_id = new Addressbook_Model_Contact([
+                'id'   =>   Tinebase_Record_Abstract::generateUID(40),
+                'n_family'  => $userToCreate->accountLastName,
+                'n_fileas' => $userToCreate->accountDisplayName,
+                'n_fn' => $userToCreate->accountFullName,
+                'n_given' => $userToCreate->accountFirstName,
+                'email' => $userToCreate->accountEmailAddress,
+                'org_name'  => 'test',
+                'container_id' => Addressbook_Controller::getDefaultInternalAddressbook(),
+            ]
+        );
+        $this->_usernamesToDelete[] = $userToCreate->accountLoginName;
+        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $conatct = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
+        self::assertEquals('test', $conatct->org_name);
+    }
+
     public function testUpdateUserRemoveMail()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -433,16 +460,17 @@ class Admin_Controller_UserTest extends TestCase
     {
         // try to set type for new user (without feature)
         $user = $this->_createTestUser([
-            'type' => 'somethin',
+            'type' => Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER,
         ]);
-        self::assertNull($user->type);
+        self::assertSame(Tinebase_Model_FullUser::USER_TYPE_USER, $user->type);
 
         // try to set type for user (with feature)
         $features = Admin_Config::getInstance()->{Admin_Config::ENABLED_FEATURES};
         $features[Admin_Config::FEATURE_CHANGE_USER_TYPE] = true;
         Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
 
-        $user->type = 'somethin';
+        $user->type = Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER;
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         $updatedUser = Admin_Controller_User::getInstance()->update($user);
         self::assertEquals($user->type, $updatedUser->type);
     }

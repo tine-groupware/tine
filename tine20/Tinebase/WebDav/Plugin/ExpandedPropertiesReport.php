@@ -66,7 +66,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
     {
         $this->server = $server;
 
-        $server->on('propFind',array($this,'propFind'));
+        $server->on('propFind',$this->propFind(...));
     }
 
     public function propFind(\Sabre\DAV\PropFind $propFind, \Sabre\DAV\INode $node)

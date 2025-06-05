@@ -10,6 +10,7 @@
  */
 
 use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Intl\Locales;
 
 
@@ -47,10 +48,10 @@ class Tinebase_Translation
         $availableTranslations = array();
 
         // look for po files in Tinebase 
-        $officialTranslationsDir = dirname(__FILE__) . "/../$appName/translations";
+        $officialTranslationsDir = __DIR__ . "/../$appName/translations";
         foreach(scandir($officialTranslationsDir) as $poFile) {
-            if (substr($poFile, -3) == '.po') {
-                list ($localestring, $suffix) = explode('.', $poFile);
+            if (str_ends_with($poFile, '.po')) {
+                [$localestring, $suffix] = explode('.', $poFile);
                 $availableTranslations[$localestring] = array(
                     'path' => "$officialTranslationsDir/$poFile" 
                 );
@@ -111,10 +112,8 @@ class Tinebase_Translation
             
             $locale = new Zend_Locale($localestring);
             $availableTranslations[$localestring]['locale'] = $localestring;
-            $availableTranslations[$localestring]['language'] = isset($language[1]) ? 
-                $language[1] : Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale);
-            $availableTranslations[$localestring]['region'] = isset($region[1]) ? 
-                $region[1] : Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale);
+            $availableTranslations[$localestring]['language'] = $language[1] ?? Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale);
+            $availableTranslations[$localestring]['region'] = $region[1] ?? Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale);
         }
 
         ksort($availableTranslations);
@@ -148,6 +147,37 @@ class Tinebase_Translation
                 );
             }
     
+            self::$_countryLists[$language] = $results;
+        }
+
+        return array('results' => self::$_countryLists[$language]);
+    }
+
+    /**
+     * get list of translated currency names
+     *
+     * @param ?Zend_Locale $locale
+     * @return array list of currencies
+     */
+    public static function getCurrencyList(?Zend_Locale $locale = null)
+    {
+        $locale = $locale ?: Tinebase_Core::getLocale();
+        $language = $locale->getLanguage();
+
+        //try lazy loading of translated currency list
+        if (empty(self::$_countryLists[$language])) {
+            $currencies = Currencies::getNames($locale);
+            asort($currencies);
+            $results = [];
+            foreach($currencies as $shortName => $translatedName) {
+                $array = explode(':', $translatedName);
+                $results[] = array(
+                    'shortName'         => $shortName,
+                    'translatedName'    => array_shift($array),
+                    'symbol'            => array_pop($array),
+                );
+            }
+
             self::$_countryLists[$language] = $results;
         }
 
@@ -341,9 +371,9 @@ class Tinebase_Translation
         
         $availableTranslations = self::getAvailableTranslations();
         $info = (isset($availableTranslations[$localeString]) || array_key_exists($localeString, $availableTranslations)) ? $availableTranslations[$localeString] : array('locale' => $localeString);
-        $baseDir = ((isset($info['path']) || array_key_exists('path', $info)) ? dirname($info['path']) . '/..' : dirname(__FILE__)) . '/..';
+        $baseDir = ((isset($info['path']) || array_key_exists('path', $info)) ? dirname((string) $info['path']) . '/..' : __DIR__) . '/..';
         
-        $defaultDir = dirname(__FILE__) . "/..";
+        $defaultDir = __DIR__ . "/..";
         
         $genericTranslationFile = "$baseDir/Tinebase/js/Locale/static/generic-$localeString.js";
         $genericTranslationFile = is_readable($genericTranslationFile) ? $genericTranslationFile : "$defaultDir/Tinebase/js/Locale/static/generic-$localeString.js";
@@ -373,7 +403,7 @@ class Tinebase_Translation
             ));
             $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
             
-            $cacheId = __CLASS__ . "_". __FUNCTION__ . "_{$localeString}";
+            $cacheId = self::class . "_". __FUNCTION__ . "_{$localeString}";
             
             $jsTranslations = $cache->load($cacheId);
         }
@@ -431,7 +461,7 @@ class Tinebase_Translation
      */
     public static function getTranslationDirs()
     {
-        $tine20path = dirname(__File__) . "/..";
+        $tine20path = __DIR__ . "/..";
         
         $langDirs = array();
         $d = dir($tine20path);
@@ -503,7 +533,7 @@ class Tinebase_Translation
         // 2008-08-25 \s -> \n as there are situations when whitespace like space breaks the thing!
         $po = preg_replace('/"(\n+)"/', '', $po);
         // Create a singular version of plural defined words
-        preg_match_all('/msgid "(.*?)"\nmsgid_plural ".*"\nmsgstr\[0\] "(.*?)"\n/', $po, $plurals);
+        preg_match_all('/msgid "(.*?)"\nmsgid_plural ".*"\nmsgstr\[0\] "(.*?)"\n/', (string) $po, $plurals);
         for ($i = 0; $i < count($plurals[0]); $i++) {
             $po = $po . "\n".'msgid "' . $plurals[1][$i] . '"' . "\n" . 'msgstr "' . $plurals[2][$i] . '"' . "\n";
         }
@@ -548,8 +578,8 @@ class Tinebase_Translation
     public static function dateToStringInTzAndLocaleFormat(DateTime $date = null, $timezone = null, Zend_Locale $locale = null, $part = 'datetime', $addWeekday = false)
     {
         $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
-        $timezone = ($timezone !== null) ? $timezone : Tinebase_Core::getUserTimezone();
-        $locale = ($locale !== null) ? $locale : Tinebase_Core::getLocale();
+        $timezone ??= Tinebase_Core::getUserTimezone();
+        $locale ??= Tinebase_Core::getLocale();
         
         $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);
@@ -561,14 +591,11 @@ class Tinebase_Translation
             }
             $timeString = $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
 
-            switch ($part) {
-                case 'date':
-                    return $dateString;
-                case 'time':
-                    return $timeString;
-                default:
-                    return $dateString . ' ' . $timeString;
-            }
+            return match ($part) {
+                'date' => $dateString,
+                'time' => $timeString,
+                default => $dateString . ' ' . $timeString,
+            };
         } else {
             return $date->toString($part, $locale);
         }
@@ -577,8 +604,8 @@ class Tinebase_Translation
 
     public function generateTranslationLists($_locale = null, $_path = null)
     {
-        $defaultDir = dirname(__FILE__) . '/js/Locale/static/';
-        $path = $_path ? $_path : $defaultDir;
+        $defaultDir = __DIR__ . '/js/Locale/static/';
+        $path = $_path ?: $defaultDir;
 
         $localelist = $_locale ? [$_locale] : Locales::getLocales();
 
@@ -613,6 +640,7 @@ class Tinebase_Translation
             'CountryList'    => array('path' => 'Territory', 'value' => 2),
             'Territory'      => array('path' => 'Territory', 'value' => 1),
             'CityToTimezone' => array('path' => 'CityToTimezone'),
+            'CurrencyList'   => array('path' => 'CurrencyList'),
         );
 
         $zendLocale = new Zend_Locale($_locale);
@@ -626,6 +654,20 @@ class Tinebase_Translation
                     foreach ($countries as $key => $value) {
                         $value = preg_replace("/\"/", '\"', $value);
                         $jsContent .= "'$key':\"$value\",";
+                    }
+                    // remove last comma
+                    $jsContent = chop($jsContent, ",");
+                    $jsContent .= "},";
+                }
+            } else if ($name == 'CurrencyList') {
+                $currencies = Currencies::getNames($_locale);
+                if (is_array($currencies) ) {
+                    $jsContent .= "$name:{";
+                    asort($currencies);
+                    foreach ($currencies as $key => $value) {
+                        $value = preg_replace("/\"/", '\"', $value);
+                        $symbol = Currencies::getSymbol($key);
+                        $jsContent .= "'$key':\"$value:$symbol\",";
                     }
                     // remove last comma
                     $jsContent = chop($jsContent, ",");

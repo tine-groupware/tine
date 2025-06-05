@@ -31,7 +31,7 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
 
     public static function expandRecord(Tinebase_Record_Interface $record, bool $fullExpansion = false): void
     {
-        static::expandRecords(new Tinebase_Record_RecordSet(get_class($record), [$record]), $record::getConfiguration(), $fullExpansion);
+        static::expandRecords(new Tinebase_Record_RecordSet($record::class, [$record]), $record::getConfiguration(), $fullExpansion);
     }
 
     public static function expandRecords(Tinebase_Record_RecordSet $records, ?Tinebase_ModelConfiguration $mc = null, bool $fullExpansion = false): void
@@ -86,12 +86,12 @@ class Tinebase_Record_Expander extends Tinebase_Record_Expander_Abstract
         $this->_dataToFetch[$_dataRequest->prio][$key][] = $_dataRequest;
     }
 
-    protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
+    protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
     }
 
-    protected function _setData(Tinebase_Record_RecordSet $_data)
+    protected function _setData(Tinebase_Record_RecordSet $_data): never
     {
         throw new Tinebase_Exception_NotImplemented('do not call this method on ' . self::class);
     }

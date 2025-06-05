@@ -10,19 +10,10 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-class Tinebase_CustomField_Value
+class Tinebase_CustomField_Value implements \Stringable
 {
-    protected $_value;
-    protected $_definition;
-    protected $_callback;
-    protected $_application_id;
-
-    public function __construct($value, $_definition, $callback, $application_id)
+    public function __construct(protected $_value, protected $_definition, protected $_callback, protected $_application_id)
     {
-        $this->_value = $value;
-        $this->_definition = $_definition;
-        $this->_callback = $callback;
-        $this->_application_id = $application_id;
     }
 
     /**
@@ -34,18 +25,18 @@ class Tinebase_CustomField_Value
     }
 
     /**
-     * @return mixed
+     * @return string
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Zend_Json_Exception
      */
-    public function __toString()
+    public function __toString(): string
     {
         if (empty($this->_value)) {
-            return ($this->_callback)($this->_value);
+            return (string) ($this->_callback)($this->_value);
         }
 
-        $type = strtolower($this->_definition['type']);
+        $type = strtolower((string) $this->_definition['type']);
         try {
             switch ($type) {
                 case 'record':
@@ -67,9 +58,7 @@ class Tinebase_CustomField_Value
                         // TODO probably the decode can be removed?
                         $value = $controller->getMultiple(Tinebase_Helper::jsonDecode($this->_value));
                     }
-                    $value->sort(function(Tinebase_Record_Interface $a, Tinebase_Record_Interface $b) {
-                        return strcmp($a->getTitle(), $b->getTitle());
-                    }, null, 'function');
+                    $value->sort(fn(Tinebase_Record_Interface $a, Tinebase_Record_Interface $b) => strcmp($a->getTitle(), $b->getTitle()), null, 'function');
                     break;
                 case 'keyfield':
                     $keyfield = Tinebase_Config_KeyField::create($this->_definition->keyFieldConfig->value
@@ -87,6 +76,6 @@ class Tinebase_CustomField_Value
             $value = $this->_value;
         }
 
-        return ($this->_callback)($value);
+        return (string) ($this->_callback)($value);
     }
 }

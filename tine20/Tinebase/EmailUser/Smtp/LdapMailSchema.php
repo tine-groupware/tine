@@ -56,7 +56,7 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
         
         if (isset($_ldapEntry['mail'])) foreach ($_ldapEntry['mail'] as $mail) {
             if (isset($_user['accountEmailAddress']) && ($_user['accountEmailAddress'] != $mail)) {
-                in_array(substr(strrchr($mail, "@"), 1), $allowedDomains)
+                in_array(substr(strrchr((string) $mail, "@"), 1), $allowedDomains)
                     ? $emailAliases[] = $mail
                     : $this->_unmanagedMailAdresses[] = $mail;
             }

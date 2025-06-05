@@ -47,10 +47,10 @@ final class Tinebase_Auth_MFA
         self::$_instances = [];
     }
 
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool
     {
         try {
-            return $this->_adapter->sendOut($_userCfg);
+            return $this->_adapter->sendOut($_userCfg, $user);
         } catch (Tinebase_Exception $e) {
             $e->setLogToSentry(false);
             $e->setLogLevelMethod('notice');
@@ -145,19 +145,8 @@ final class Tinebase_Auth_MFA
     public static function checkMFABypass(): bool
     {
         // mfa free netmasks:
-        if (($_SERVER['HTTP_X_REAL_IP'] ?? false) &&
-            !empty($byPassMasks = Tinebase_Config::getInstance()->{Tinebase_Config::MFA_BYPASS_NETMASKS}) &&
-            ($ip = Factory::parseAddressString($_SERVER['HTTP_X_REAL_IP']))
-        ) {
-            foreach ($byPassMasks as $netmask) {
-                if (Factory::parseRangeString($netmask)?->contains($ip)) {
-                    // bypassing
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        $byPassMasks = Tinebase_Config::getInstance()->{Tinebase_Config::MFA_BYPASS_NETMASKS};
+        return Tinebase_Helper::ipAddressMatchNetmasks($byPassMasks);
     }
 
     /**
@@ -165,9 +154,9 @@ final class Tinebase_Auth_MFA
      */
     private function __clone() {}
 
-    private Tinebase_Auth_MFA_AdapterInterface $_adapter;
+    private readonly Tinebase_Auth_MFA_AdapterInterface $_adapter;
 
-    private Tinebase_Model_MFA_Config $_config;
+    private readonly Tinebase_Model_MFA_Config $_config;
 
     /**
      * holds the instances of the singleton

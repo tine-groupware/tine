@@ -22,10 +22,10 @@
  */
 class Tinebase_Model_BLConfig extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'BLConfig';
+    public const MODEL_NAME_PART = 'BLConfig';
 
-    const FLDS_CLASSNAME = 'classname';
-    const FLDS_CONFIG_RECORD = 'configRecord';
+    public const FLDS_CLASSNAME = 'classname';
+    public const FLDS_CONFIG_RECORD = 'configRecord';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

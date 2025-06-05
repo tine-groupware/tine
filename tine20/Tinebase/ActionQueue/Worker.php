@@ -17,7 +17,7 @@
  */
 class Tinebase_ActionQueue_Worker extends Console_Daemon
 {
-    const EXECUTION_METHOD_DISPATCH = 'dispatch';
+    public const EXECUTION_METHOD_DISPATCH = 'dispatch';
 
     protected $_stopped = false;
 
@@ -170,7 +170,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                 // we are unable to process the job
                 // probably the retry count is exceeded
                 // push message to dead letter queue
-                $this->_actionQueue->delete($jobId, true);
+                $this->_actionQueue->delete($jobId);
                 
                 continue;
             }

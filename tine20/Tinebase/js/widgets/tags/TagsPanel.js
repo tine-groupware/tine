@@ -59,18 +59,16 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         
         // init recordTagsStore
         this.tags = [];
-        var that = this;
-        
         this.recordTagsStore = new Ext.data.JsonStore({
             id: 'id',
             fields: Tine.Tinebase.Model.Tag,
             data: this.tags,
-            scope: that,
+            scope: this,
             listeners: {
-                add: that.onChange,
-                load: that.onChange,
-                remove: that.onChange,
-                scope: that
+                add: this.onChange,
+                load: this.onChange,
+                remove: this.onChange,
+                scope: this
             }
         });
         
@@ -107,24 +105,6 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             layout: 'column',
             items: [
                 Ext.apply(this.searchField, {columnWidth: .99}),
-                this.addTagButton = new Ext.Button({
-                    text: '',
-                    width: 16,
-                    iconCls: 'action_add',
-                    tooltip: i18n._('Add a new personal tag'),
-                    scope: this,
-                    hidden: !Tine.Tinebase.common.hasRight('use_personal_tags', this.app.appName),
-                    handler: function() {
-                        Ext.Msg.prompt(i18n._('Add New Personal Tag'),
-                                       i18n._('Please note: You create a personal tag. Only you can see it!') + ' <br />' + i18n._('Enter tag name:'),
-                            function(btn, text) {
-                                if (btn == 'ok'){
-                                    this.onTagAdd(text);
-                                }
-                            },
-                        this, false, this.searchField.lastQuery);
-                    }
-                })
             ]
 
         });
@@ -266,8 +246,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                     tagsToDelete.push(selectedTags[i].id);
                                 }
                             }
-                            
-                            // @todo use correct strings: Realy -> Really / disapear -> disappear
+
                             Ext.MessageBox.confirm(
                                 i18n.ngettext('Really delete selected tag?', 'Really delete selected tags?', selectedTags.length),
                                 i18n.ngettext('The selected tag will be deleted and disappear for all entries',
@@ -333,75 +312,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     getFormField: function() {
         return this.formField.items;
     },
-    
-    /**
-     * @private
-     */
-    onTagAdd: function(tagName) {
-        if (tagName.length < 3) {
-            Ext.Msg.show({
-               title: i18n._('Notice'),
-               msg: i18n._('The minimum tag length is three.'),
-               buttons: Ext.Msg.OK,
-               animEl: 'elId',
-               icon: Ext.MessageBox.INFO
-            });
-        } else {
-            var isAttached = false;
-            this.recordTagsStore.each(function(tag){
-                if(tag.data.name == tagName) {
-                    isAttached = true;
-                }
-            },this);
-            
-            if (!isAttached) {
-                var tagToAttach = false;
-/*
-                @todo check if tag exist here
-                this.availableTagsStore.each(function(tag){
-                    if(tag.data.name == tagName) {
-                        tagToAttach = tag;
-                    }
-                }, this);*/
-                
-                if (!tagToAttach) {
-                    tagToAttach = new Tine.Tinebase.Model.Tag({
-                        name: tagName,
-                        type: 'personal',
-                        description: '',
-                        color: '#FFFFFF'
-                    });
-                    
-                    if (! Ext.isIE) {
-                        this.el.mask();
-                    }
-                    Ext.Ajax.request({
-                        params: {
-                            method: 'Tinebase.saveTag', 
-                            tag: tagToAttach.data
-                        },
-                        success: function(_result, _request) {
-                            var tagData = Ext.util.JSON.decode(_result.responseText);
-                            var newTag = new Tine.Tinebase.Model.Tag(tagData, tagData.id);
-                            this.recordTagsStore.add(newTag);
-                            
-                            // reset avail tag store
-                            //this.availableTagsStore.lastOptions = null;
-                            this.searchField.lastQuery = null;
-                            this.el.unmask();
-                        },
-                        failure: function ( result, request) {
-                            Ext.MessageBox.alert(i18n._('Failed'), i18n._('Could not create tag.'));
-                            this.el.unmask();
-                        },
-                        scope: this 
-                    });
-                } else {
-                    this.recordTagsStore.add(tagToAttach);
-                }
-            }
-        }
-    },
+
     onTagUpdate: function(tag) {
         if (tag.get('name').length < 3) {
             Ext.Msg.show({
@@ -503,7 +414,6 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
     setDisabled: function(disabled) {
         // disable combo, btn, context
         this.tagsPanel.searchField.setDisabled(disabled);
-        this.tagsPanel.addTagButton.setDisabled(disabled);
     }
 
 });

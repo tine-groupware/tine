@@ -54,7 +54,7 @@ class Tinebase_Convert_FullUser_Json extends Tinebase_Convert_Json
                 try {
                     $val['effectiveAndLocalQuota'] = $fileSystem->getEffectiveAndLocalQuota(
                         $fileSystem->stat($personalPath . $val['accountId']));
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' did not find personal folder for account ' . $val['accountId']);
                 }

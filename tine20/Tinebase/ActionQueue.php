@@ -36,9 +36,9 @@
  */
  class Tinebase_ActionQueue
  {
-     const BACKEND_DIRECT = 'Direct';
-     const BACKEND_REDIS  = 'Redis';
-     const QUEUE_LONG_RUN = Tinebase_Config::ACTIONQUEUE_LONG_RUNNING;
+     public const BACKEND_DIRECT = 'Direct';
+     public const BACKEND_REDIS  = 'Redis';
+     public const QUEUE_LONG_RUN = Tinebase_Config::ACTIONQUEUE_LONG_RUNNING;
      
      /**
       * holds queue instance
@@ -161,7 +161,7 @@
     protected function __construct($_queue, $_forceBackend = null)
     {
         $options = [];
-        $backend = null === $_forceBackend ? self::BACKEND_DIRECT : $_forceBackend;
+        $backend = $_forceBackend ?? self::BACKEND_DIRECT;
         $this->_config = Tinebase_Core::getConfig()->{Tinebase_Config::ACTIONQUEUE};
 
         /** @noinspection PhpUndefinedFieldInspection */
@@ -170,12 +170,12 @@
             $options = $this->_config->toArray();
 
             if (null === $_forceBackend) {
-                $backend = (isset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]) || array_key_exists(Tinebase_Config::ACTIONQUEUE_BACKEND, $options)) ? ucfirst(strtolower($options[Tinebase_Config::ACTIONQUEUE_BACKEND])) : $backend;
+                $backend = (isset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]) || array_key_exists(Tinebase_Config::ACTIONQUEUE_BACKEND, $options)) ? ucfirst(strtolower((string) $options[Tinebase_Config::ACTIONQUEUE_BACKEND])) : $backend;
             }
             unset($options[Tinebase_Config::ACTIONQUEUE_BACKEND]);
             unset($options[Tinebase_Config::ACTIONQUEUE_ACTIVE]);
 
-            if (null !== $_queue) {
+            if (null !== $_queue && (self::QUEUE_LONG_RUN !== $_queue || $this->_config->{Tinebase_Config::ACTIONQUEUE_LONG_RUNNING})) {
                 if (!isset($options['queueName'])) {
                     $options['queueName'] = Tinebase_ActionQueue_Backend_Redis::QUEUE_NAME;
                 }
@@ -187,8 +187,7 @@
                             Tinebase_Config::ACTIONQUEUE_QUEUES);
                     }
                     $options['queueName'] =
-                        isset($this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue]['queueName']) ?
-                            $this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue]['queueName'] : $_queue;
+                        $this->_config->{Tinebase_Config::ACTIONQUEUE_QUEUES}[$_queue]['queueName'] ?? $_queue;
                 } else {
                     $options['queueName'] .= $this->_config->{self::QUEUE_LONG_RUN} ?: '';
                 }
@@ -224,7 +223,7 @@
         if (
             ! is_array($message)
             || ! isset($message['action'])
-            || strpos($message['action'], '.') === FALSE
+            || !str_contains((string) $message['action'], '.')
         ) {
             throw new Tinebase_Exception_NotFound('Could not execute action, invalid message/action param');
         }
@@ -232,7 +231,7 @@
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __LINE__ . '::' . __METHOD__ . " executing action: '{$message['action']}'");
         
-        list($appName, $actionName) = explode('.', $message['action']);
+        [$appName, $actionName] = explode('.', (string) $message['action']);
         $controller = Tinebase_Core::getApplicationInstance($appName, '', true);
     
         if (! method_exists($controller, $actionName)) {
@@ -292,8 +291,8 @@
         if (true === static::$waitForTransactionManager && Tinebase_TransactionManager::getInstance()
                 ->hasOpenTransactions()) {
             if (count($this->_messageCache) === 0) {
-                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([$this, 'transactionCommit']);
-                Tinebase_TransactionManager::getInstance()->registerOnRollbackCallback([$this, 'transactionRollback']);
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($this->transactionCommit(...));
+                Tinebase_TransactionManager::getInstance()->registerOnRollbackCallback($this->transactionRollback(...));
             }
             $this->_messageCache[] = $message;
             return null;
@@ -364,6 +363,6 @@
       */
     public function getBackendType()
     {
-        return get_class($this->_queue);
+        return $this->_queue::class;
     }
 }

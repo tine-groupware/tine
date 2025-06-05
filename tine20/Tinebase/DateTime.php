@@ -23,17 +23,17 @@
  * NOTE: This class has nothing to do with localisation! If you need localisation
  *       use Zend_Date!
  */
-class Tinebase_DateTime extends DateTime
+class Tinebase_DateTime extends DateTime implements \Stringable
 {
-    const TIMEZONE_UTC = "UTC";
+    public const TIMEZONE_UTC = "UTC";
     
-    const MODIFIER_SECOND   = 'sec';
-    const MODIFIER_MINUTE   = 'min';
-    const MODIFIER_HOUR     = 'hour';
-    const MODIFIER_DAY      = 'day';
-    const MODIFIER_WEEK     = 'week';
-    const MODIFIER_MONTH    = 'month';
-    const MODIFIER_YEAR     = 'year';
+    public const MODIFIER_SECOND   = 'sec';
+    public const MODIFIER_MINUTE   = 'min';
+    public const MODIFIER_HOUR     = 'hour';
+    public const MODIFIER_DAY      = 'day';
+    public const MODIFIER_WEEK     = 'week';
+    public const MODIFIER_MONTH    = 'month';
+    public const MODIFIER_YEAR     = 'year';
     public const ISO8601_REGEX = '/^\d{4}(-\d\d(-\d\d([T ]\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?$/i';
 
     /**
@@ -123,7 +123,7 @@ class Tinebase_DateTime extends DateTime
             $this->setTimezone('UTC');
         }
 
-        list ($h, $m, $i) = explode(' ', $this->format('H i s'));
+        [$h, $m, $i] = explode(' ', $this->format('H i s'));
         parent::setTime($h, $m, $i, 0);
     }
     
@@ -145,7 +145,7 @@ class Tinebase_DateTime extends DateTime
      */
     public function __call($name, $arguments)
     {
-        if (strpos($name, 'php52compat_') === FALSE) {
+        if (!str_contains($name, 'php52compat_')) {
             return call_user_func_array(array($this, "php52compat_$name"), $arguments);
         }
         throw new Tinebase_Exception_InvalidArgument('unknown method: ' . str_replace('php52compat_', '', $name));
@@ -276,8 +276,20 @@ class Tinebase_DateTime extends DateTime
         }
         
         $cmpTZ = $this->getTimezone();
-        
-        if ($cmpTZ != $_date->getTimezone()) {
+        try {
+            $hasDifferentTZ = $cmpTZ != $_date->getTimezone();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " "
+                    . $e->getMessage()
+                    . ' $cmpTZ: ' . $cmpTZ->getName()
+                    . ' $_dateTZ: ' . $_date->getTimezone()->getName()
+                );
+            }
+            $hasDifferentTZ = true;
+        }
+
+        if ($hasDifferentTZ) {
             $_date = clone $_date;
             $_date->setTimezone($cmpTZ);
         };
@@ -582,7 +594,7 @@ class Tinebase_DateTime extends DateTime
     public function modifyTime(DateInterval $diff)
     {
         $timeString = $this->getClone()->add($diff)->format('H:i:s');
-        list($hours, $minutes, $seconds) = explode(':', $timeString);
+        [$hours, $minutes, $seconds] = explode(':', $timeString);
 
         return $this->setTime($hours, $minutes, $seconds);
     }
@@ -609,7 +621,7 @@ class Tinebase_DateTime extends DateTime
      * 
      * @return String
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->format("Y-m-d H:i:s");
     }
@@ -637,7 +649,7 @@ class Tinebase_DateTime extends DateTime
      */
     public function setHour($modify)
     {
-        list ($i, $s) = explode(' ', $this->format('i s'));
+        [$i, $s] = explode(' ', $this->format('i s'));
         
         $this->setTime($modify, $i, $s);
         return $this;
@@ -654,7 +666,7 @@ class Tinebase_DateTime extends DateTime
      */
     public function setMinute($modify)
     {
-        list ($h, $s) = explode(' ', $this->format('H s'));
+        [$h, $s] = explode(' ', $this->format('H s'));
         
         $this->setTime($h, $modify, $s);
         return $this;
@@ -671,7 +683,7 @@ class Tinebase_DateTime extends DateTime
      */
     public function setSecond($modify)
     {
-        list ($h, $i) = explode(' ', $this->format('H i'));
+        [$h, $i] = explode(' ', $this->format('H i'));
         
         $this->setTime($h, $i, $modify);
         return $this;
@@ -694,7 +706,7 @@ class Tinebase_DateTime extends DateTime
         
         // if we contain no time info, we are timezone invariant
         if ($this->_hasTime === FALSE) {
-            call_user_func_array(array($this, 'setDate'), explode('-', $date));
+            call_user_func_array($this->setDate(...), explode('-', $date));
             $this->setTime(0,0,0);
         }
         

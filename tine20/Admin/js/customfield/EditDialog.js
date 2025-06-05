@@ -49,7 +49,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * ui properties for customfield
      * @type {Array}
      */
-    uiconfigFields: ['order', 'group', 'tab', 'key'],
+    uiconfigFields: ['order', 'group', 'tab', 'key', 'disabled'],
     
     /**
      * type of field with stores
@@ -536,6 +536,10 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Key'),
                     name: 'key',
                     maxLength: 50
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Disabled'),
+                    name: 'disabled'
                 }]
             }, {
                 xtype: 'hidden',
@@ -618,7 +622,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Admin.CustomfieldEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 500,
-        height: 700,
+        height: 750,
         name: Tine.Admin.CustomfieldEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.CustomfieldEditDialog',
         contentPanelConstructorConfig: config

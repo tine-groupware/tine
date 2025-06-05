@@ -26,11 +26,11 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 
     public function triggerMFA(string $userMfaId): bool
     {
-        if (null === ($userCfg = Tinebase_Auth_MFA::getAccountsMFAUserConfig($userMfaId, Tinebase_Core::getUser()))) {
+        if (null === ($userCfg = Tinebase_Auth_MFA::getAccountsMFAUserConfig($userMfaId, $user = Tinebase_Core::getUser()))) {
             throw new Tinebase_Exception_NotFound('User has no mfa configuration for id ' . $userMfaId);
         }
         return Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
-            ->sendOut($userCfg);
+            ->sendOut($userCfg, $user);
     }
 
     public function lock(string $areaLockName): array
@@ -74,16 +74,12 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
                     Tinebase_Model_AreaLockConfig::FLD_AREA_NAME, $areaLockName)) {
                 $mfaIds = $areaLock->{Tinebase_Model_AreaLockConfig::FLD_MFAS};
             }
-            $mfas = $mfas->filter(function($val) use($mfaIds) {
-                return in_array($val->{Tinebase_Model_MFA_Config::FLD_ID}, $mfaIds);
-            });
+            $mfas = $mfas->filter(fn($val) => in_array($val->{Tinebase_Model_MFA_Config::FLD_ID}, $mfaIds));
         }
         if ($mfas instanceof Tinebase_Record_RecordSet &&
                 ($mfaUserConfigs = Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId())->mfa_configs) instanceof Tinebase_Record_RecordSet) {
-            $result = $mfaUserConfigs->filter(function ($val) use ($mfas) {
-                return $mfas->find(Tinebase_Model_MFA_Config::FLD_ID,
-                    $val->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}) !== null;
-            })->toArray();
+            $result = $mfaUserConfigs->filter(fn($val) => $mfas->find(Tinebase_Model_MFA_Config::FLD_ID,
+                $val->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}) !== null)->toArray();
         }
 
         return $result;
@@ -202,7 +198,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
 
         // do the tedious task of getting the mfa user config "ready"
         try {
-            $mfa->setPersistUserConfigDelegator(function() { return true; });
+            $mfa->setPersistUserConfigDelegator(fn() => true);
             $testUserCfg->updateUserNewRecordCallback($user, Tinebase_User::getInstance()->getFullUserById(Tinebase_Core::getUser()->getId()));
             $testUserCfg->runConvertToData();
             $user->mfa_configs->removeById($testUserCfg->getId());
@@ -220,7 +216,7 @@ class Tinebase_Frontend_Json_AreaLock extends  Tinebase_Frontend_Json_Abstract
                     throw $e;
                 }
             } else {
-                $mfa->sendOut($testUserCfg);
+                $mfa->sendOut($testUserCfg, $user);
                 $e = new Tinebase_Exception_AreaLocked($translation->_('MFA send out triggered'));
                 $e->setMFAUserConfigs(new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class, [$userCfg]));
                 throw $e;

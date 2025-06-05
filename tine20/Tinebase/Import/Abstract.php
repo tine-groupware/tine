@@ -166,10 +166,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * append stream filter for correct linebreaks
      * - iconv with IGNORE
      * - replace linebreaks
-     * 
-     * @param mixed $resource
      */
-    protected function _appendStreamFilters($resource)
+    protected function _appendStreamFilters(mixed $resource)
     {
         if (! is_resource($resource) || ! isset($this->_options['useStreamFilter']) || ! $this->_options['useStreamFilter']) {
             return;
@@ -179,7 +177,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             require_once 'StreamFilter/ConvertMbstring.php';
             $filter = 'convert.mbstring';
         } else if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
-            if (preg_match('/^MAC-?CENTRALEUROPE$/', $this->_options['encoding'])) {
+            if (preg_match('/^MAC-?CENTRALEUROPE$/', (string) $this->_options['encoding'])) {
                 $encoding = $this->_getSupportedMacCharset();
             } else {
                 $encoding = $this->_options['encoding'];
@@ -222,10 +220,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     
     /**
      * do something before the import
-     * 
-     * @param mixed $_resource
      */
-    protected function _beforeImport($_resource = NULL)
+    protected function _beforeImport(mixed $_resource = NULL)
     {
     }
 
@@ -239,18 +235,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * get raw data of a single record
      *
-     * @param  mixed $_resource
      * @return array|boolean|null
      */
-    abstract protected function _getRawData(&$_resource);
+    abstract protected function _getRawData(mixed &$_resource);
 
     /**
      * do import: loop data -> convert to records -> import records
-     * 
-     * @param mixed $_resource
+     *
      * @param array $_clientRecordDatas
      */
-    protected function _doImport($_resource = NULL, $_clientRecordDatas = array())
+    protected function _doImport(mixed $_resource = NULL, $_clientRecordDatas = array())
     {
         $clientRecordDatas = $this->_sortClientRecordsByIndex($_clientRecordDatas);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -263,7 +257,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $recordToImport = null;
             try {
                 // client record overwrites record in import data (only if set)
-                $clientRecordData = isset($clientRecordDatas[$recordIndex]['recordData']) ? $clientRecordDatas[$recordIndex]['recordData'] : NULL;
+                $clientRecordData = $clientRecordDatas[$recordIndex]['recordData'] ?? NULL;
                 if ($clientRecordData && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                     Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Client record: ' . print_r($clientRecordData, TRUE));
                 }
@@ -287,7 +281,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                         
                         // just add autotags to record (if id is available)
                         if ($recordToImport->getId()) {
-                            $record = call_user_func(array($this->_controller, 'get'), $recordToImport->getId());
+                            $record = call_user_func($this->_controller->get(...), $recordToImport->getId());
                             $this->_addAutoTags($record);
                             call_user_func(array($this->_controller, $this->_options['updateMethod']), $record);
                         }
@@ -366,7 +360,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (! empty($mappedData)) {
             foreach ($mappedData as $idx => $recordArray) {
                 $convertedData = $this->_doConversions($recordArray);
-                $mappedData[$idx] = array_merge($convertedData, $this->_addData($convertedData));
+                $mappedData[$idx] = array_merge($convertedData, $this->_addData());
             }
             $result = $mappedData;
             
@@ -415,7 +409,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $script = $this->_options['postMappingHook']['path'];
         //The path given in the xml is not dynamic. Therefore it must be absolute or relative to the tine20 directory.
         if ($script[0] !== DIRECTORY_SEPARATOR) {
-            $basedir = dirname(dirname(dirname(__FILE__)));
+            $basedir = dirname(__FILE__, 3);
             $script = $basedir . DIRECTORY_SEPARATOR . $script;
         }
 
@@ -427,7 +421,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 
         try {
             $jsonReceivedData = shell_exec(escapeshellcmd($script) . " $jDataToSend");
-        } catch (Exception $e) {
+        } catch (Exception) {
             $jsonReceivedData = null;
 
             throw new Tinebase_Exception('Could not execute script: ' . $script);
@@ -438,7 +432,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             throw new Tinebase_Exception_UnexpectedValue("Something went wrong by decoding the received json data!");
         }
         
-        if (strpos($jsonReceivedData, '[') === 0) {
+        if (str_starts_with($jsonReceivedData, '[')) {
             $return = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
             foreach ($returnJDecodedData as $key => $val)
                 $return[$key] = $val;
@@ -479,7 +473,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _convertDates($data)
     {
         foreach ($this->_additionalOptions['dates'] as $date) {
-            if (!isset($data[$date]) || $data[$date] instanceof Tinebase_DateTime || preg_match(Tinebase_DateTime::ISO8601_REGEX, $data[$date])) {
+            if (!isset($data[$date]) || $data[$date] instanceof Tinebase_DateTime || preg_match(Tinebase_DateTime::ISO8601_REGEX, (string) $data[$date])) {
                 continue;
             }
             if (!empty($data[$date]) && $data[$date] != 'today') {
@@ -535,7 +529,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         } else if (isset($this->_options['encoding'])) {
             $encoding = $this->_options['encoding'];
             $encodingFn = 'iconv';
-            $result = @iconv($encoding, $this->_options['encodingTo'] . '//TRANSLIT', $string);
+            $result = @iconv((string) $encoding, $this->_options['encodingTo'] . '//TRANSLIT', $string);
         }
 
         if (isset($encoding) && isset($encodingFn) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
@@ -624,7 +618,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     
     protected function _splitBySeparator($separator, $value)
     {
-        return preg_split('/\s*' . $separator . '\s*/', $value);
+        return preg_split('/\s*' . $separator . '\s*/', (string) $value);
     }
 
     /**
@@ -683,9 +677,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $unreplaced = $targetField = $field['targetFieldData'];
         $recordArray = $relation['related_record'];
         foreach ($recordArray as $key => $value) {
-            if (preg_match('/' . preg_quote($key, '/') . '/', $targetField) && is_scalar($value)) {
-                $targetField = preg_replace('/' . preg_quote($key, '/') . '/', $value, $targetField);
-                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key, '/') . '/', '', $unreplaced);
+            if (preg_match('/' . preg_quote((string) $key, '/') . '/', (string) $targetField) && is_scalar($value)) {
+                $targetField = preg_replace('/' . preg_quote((string) $key, '/') . '/', $value, $targetField);
+                $unreplaced = preg_replace('/^[, ]*' . preg_quote((string) $key, '/') . '/', '', $unreplaced);
             }
         }
 
@@ -711,12 +705,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         // check if related record exists
         $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
-        $operator = isset($field['operator']) ? $field['operator'] : 'equals';
+        $operator = $field['operator'] ?? 'equals';
         
         $filterValueToAdd = '';
         if (isset($field['filterValueAdd'])) {
             if ($field['filter'] === 'query') {
-                $filters = explode(',', $field['filterValueAdd']);
+                $filters = explode(',', (string) $field['filterValueAdd']);
                 foreach ($filters as $newFilter) {
                     if(isset($data[$newFilter])) {
                         $filterValueToAdd = $filterValueToAdd . ' ' . $data[$newFilter];
@@ -760,7 +754,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     . ' Create new related record');
             }
             $recordArray = array(
-                (isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value
+                ($field['related_field'] ?? $field['filter']) => $value
             );
             if (! empty($filterValueToAdd)) {
                 $recordArray[str_replace($relationType . '_', '', $field['filterValueAdd'])] = trim($filterValueToAdd);
@@ -768,10 +762,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 
             // add more data for this relation if available
             foreach ($data as $key => $value) {
-                $regex = '/^' . preg_quote($relationType, '/') . '_/';
-                if (preg_match($regex, $key)) {
+                $regex = '/^' . preg_quote((string) $relationType, '/') . '_/';
+                if (preg_match($regex, (string) $key)) {
                     $relatedField = preg_replace($regex, '', $key);
-                    $recordArray[$relatedField] = trim($value);
+                    $recordArray[$relatedField] = trim((string) $value);
                 }
             }
 
@@ -896,7 +890,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tag');
         foreach ($_tags as $tagData) {
             $tagData = (is_array($tagData)) ? $tagData : array('name' => $tagData);
-            $tagName = trim($tagData['name']);
+            $tagName = trim((string) $tagData['name']);
     
             // only check non-empty tags
             if (empty($tagName)) {
@@ -940,7 +934,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             try {
                 $tag = Tinebase_Tags::getInstance()->get($_tagData['id']);
                 return $tag;
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Could not find tag by id: ' . $_tagData['id']);
             }
@@ -949,7 +943,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         try {
             $tag = Tinebase_Tags::getInstance()->getTagByName($name, Tinebase_Model_TagRight::USE_RIGHT, NULL);
             return $tag;
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Could not find tag by name: ' . $name);
         }
@@ -1224,7 +1218,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _handleDuplicateExceptions(Tinebase_Exception_Duplicate $ted, $recordIndex, $record = null, $allowToResolveDuplicates = true)
     {
         $duplicates = $ted->getData();
-        $resolveStrategy = isset($this->_options['duplicateResolveStrategy']) ? $this->_options['duplicateResolveStrategy'] : null;
+        $resolveStrategy = $this->_options['duplicateResolveStrategy'] ?? null;
 
         $foundOldDuplicate = false;
         foreach ($duplicates as $duplicate) {
@@ -1334,7 +1328,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $stream = fopen('php://memory', 'r+');
         try {
             stream_filter_append($stream, 'convert.iconv.MAC-CENTRALEUROPE/UTF-8//IGNORE');
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return 'MACCENTRALEUROPE';
         } finally {
             fclose($stream);

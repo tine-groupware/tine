@@ -140,7 +140,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             $ldapData['gidnumber']     = $this->_generateGidNumber();
 
             $domainConfig = $this->getDomainConfiguration();
-            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $domainConfig['domainName']));
+            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', (string) $domainConfig['domainName']));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
@@ -372,7 +372,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         
         try {
             $accountMetaData = $this->_getAccountMetaData($_accountId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) 
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_accountId);
             return;
@@ -577,19 +577,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     protected function _decodeGroupId($groupId)
     {
-        switch ($this->_groupUUIDAttribute) {
-            case 'objectguid':
-                return Tinebase_Ldap::decodeGuid($groupId);
-                break;
-                
-            case 'objectsid':
-                return Tinebase_Ldap::decodeSid($groupId);
-                break;
-                
-            default:
-                return $groupId;
-                break;
-        }
+        return match ($this->_groupUUIDAttribute) {
+            'objectguid' => Tinebase_Ldap::decodeGuid($groupId),
+            'objectsid' => Tinebase_Ldap::decodeSid($groupId),
+            default => $groupId,
+        };
     }
     
     /**
@@ -600,15 +592,10 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     protected function _encodeAccountId($accountId)
     {
-        switch ($this->_userUUIDAttribute) {
-            case 'objectguid':
-                return Tinebase_Ldap::encodeGuid($accountId);
-                break;
-                
-            default:
-                return $accountId;
-                break;
-        }
+        return match ($this->_userUUIDAttribute) {
+            'objectguid' => Tinebase_Ldap::encodeGuid($accountId),
+            default => $accountId,
+        };
         
     }
     
@@ -620,15 +607,10 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     protected function _encodeGroupId($groupId)
     {
-        switch ($this->_groupUUIDAttribute) {
-            case 'objectguid':
-                return Tinebase_Ldap::encodeGuid($groupId);
-                break;
-                
-            default:
-                return $groupId;
-                break;
-        }
+        return match ($this->_groupUUIDAttribute) {
+            'objectguid' => Tinebase_Ldap::encodeGuid($groupId),
+            default => $groupId,
+        };
     }
     
     /**

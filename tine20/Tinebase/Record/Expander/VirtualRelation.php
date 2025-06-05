@@ -14,11 +14,8 @@ use Tinebase_ModelConfiguration_Const as MCC;
 
 class Tinebase_Record_Expander_VirtualRelation extends Tinebase_Record_Expander_Property
 {
-    protected $_cfg;
-
-    public function __construct($_cfg, $_model, $_property, $_expanderDefinition, Tinebase_Record_Expander $_rootExpander)
+    public function __construct(protected $_cfg, $_model, $_property, $_expanderDefinition, Tinebase_Record_Expander $_rootExpander)
     {
-        $this->_cfg = $_cfg;
         parent::__construct($_model, $_property, $_expanderDefinition, $_rootExpander);
     }
 

@@ -23,7 +23,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
     /**
      * @const integer timeout in seconds
      */
-    const ASYNC_REQUEST_TIMEOUT = 1200;
+    public const ASYNC_REQUEST_TIMEOUT = 1200;
 
     public function __construct()
     {
@@ -61,12 +61,12 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
      *
      * {@inheritDoc}
      *
-     * @param $filePaths array of file Paths to convert
-     * @param array $config
-     * @return array|bool
+     * @param array $_filePaths of file Paths to convert
+     * @param array $_config
+     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getPreviewsForFiles(array $filePaths, array $config)
+    public function getPreviewsForFiles(array $_filePaths, array $_config)
     {
         throw new Tinebase_Exception_NotImplemented("GetPreviewsForFiles not implemented in Preview_ServiceV1");
     }
@@ -140,7 +140,7 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
             if ($response != null) {
                 switch ((int)$response->getStatus()) {
                     case 200:
-                        $responseJson = json_decode($response->getBody(), true);
+                        $responseJson = json_decode((string) $response->getBody(), true);
                         if (is_array($responseJson)) {
                             return $this->_processJsonResponse($responseJson);
                         } else {
@@ -244,11 +244,11 @@ class Tinebase_FileSystem_Preview_ServiceV1 implements Tinebase_FileSystem_Previ
     /**
      * Merges multiple pdf files into a single one.
      *
-     * @param $filePaths array of file paths
+     * @param array $filePaths of file paths
      * @param bool $synchronousRequest
-     * @return string path to file
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function mergePdfFiles($filePaths, $synchronousRequest = false)
+    public function mergePdfFiles(array $filePaths, bool $synchronousRequest = false)
     {
         throw new Tinebase_Exception_NotImplemented("MergePdfFiles not implemented in Preview_ServiceV1");
     }

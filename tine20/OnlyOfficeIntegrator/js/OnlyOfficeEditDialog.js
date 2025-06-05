@@ -425,8 +425,12 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow = function(config) {
     });
 
     win.on('beforeclose', (w) => {
-        const record = config.__OOIGetRecord();
-        Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose(win, {... record.data});
+        let recordData = config.recordData;
+        if (config?.__OOIGetRecord?.()) {
+            const record = config.__OOIGetRecord();
+            recordData = {... record.data};
+        }
+        Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose(win, recordData);
     });
 
     return win;

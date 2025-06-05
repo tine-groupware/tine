@@ -223,4 +223,29 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ], true);
         Tinebase_CustomField::getInstance()->addCustomField($cf);
     }
+
+    protected function _initializePersistentObserver()
+    {
+        static::addPeristentObserverTT();
+    }
+
+    public static function addPeristentObserverTT()
+    {
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver(
+            new Tinebase_Model_PersistentObserver([
+                'observable_model'      => Timetracker_Model_Timesheet::class,
+                'observer_model'        => Timetracker_Controller_Timeaccount::class,
+                'observer_identifier'   => 'calculateBudgetUpdate',
+                'observed_event'        => Tinebase_Event_Record_Update::class,
+            ])
+        );
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver(
+            new Tinebase_Model_PersistentObserver([
+                'observable_model'      => Timetracker_Model_Timesheet::class,
+                'observer_model'        => Timetracker_Controller_Timeaccount::class,
+                'observer_identifier'   => 'calculateBudgetDelete',
+                'observed_event'        => Tinebase_Event_Record_Delete::class,
+            ])
+        );
+    }
 }

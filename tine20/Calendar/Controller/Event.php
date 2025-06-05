@@ -1532,8 +1532,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if ($_event->relations instanceof Tinebase_Record_RecordSet) {
                     $_event->relations->setId(null);
                 }
-            
-                foreach (array('attendee', 'notes', 'alarms') as $prop) {
+
+                foreach (array('attendee', 'notes', 'alarms', 'event_types') as $prop) {
                     if ($_event->{$prop} instanceof Tinebase_Record_RecordSet) {
                         $_event->{$prop}->setId(NULL);
                     }
@@ -2501,11 +2501,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectDelete(array $_ids) {
         $events = $this->_backend->getMultiple($_ids);
-        
-        foreach ($events as $event) {
 
-            if ($this->_doContainerACLChecks && Tinebase_Core::isReplicationSlave() && $event->isReplicable()) {
-                throw new Tinebase_Exception_AccessDenied('replicatable events are read-only on the slaves!');
+        /** @var Calendar_Model_Event $event */
+        foreach ($events as $event) {
+            if ($this->_doContainerACLChecks && Tinebase_Core::isReplica() && $event->isReplicable()) {
+                throw new Tinebase_Exception_AccessDenied('Replicable events are read-only on the replicas!');
             }
 
             // implicitly delete persistent recur instances of series
@@ -3693,6 +3693,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->change_type: ' .
                         $_modification->change_type);
             }
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            // we skip the rrule problems here
+            Tinebase_Exception::log($teuv);
         } finally {
             $this->_doContainerACLChecks = $oldDoContainerAcl;
             $this->_sendNotifications = $oldSendNotifications;

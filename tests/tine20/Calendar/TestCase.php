@@ -164,30 +164,6 @@ abstract class Calendar_TestCase extends TestCase
         return $this->_personasDefaultCals;
     }
     
-    /** return a test person
-     * @return Tinebase_Model_FullUser
-     */
-    protected function _getPersona($loginName)
-    {
-        if ($this->_personas === NULL) {
-            $this->_getPersonas();
-        }
-        return $this->_personas[$loginName];
-    }
-    
-    /**
-     * returns an array of test persons
-     * 
-     * @return array
-     */
-    protected function _getPersonas()
-    {
-        if ($this->_personas === NULL) {
-            $this->_personas = Zend_Registry::get('personas');
-        }
-        return $this->_personas;
-    }
-    
     /**
      * returns a test user
      * 

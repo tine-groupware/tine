@@ -23,13 +23,11 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
     public const REFID = 'refId';
 
     protected $_property;
-    protected $_persistent;
     protected $_staticModel;
 
-    public function __construct(?string $_property, $_persistent = false, ?string $_staticModel = null)
+    public function __construct(?string $_property, protected $_persistent = false, ?string $_staticModel = null)
     {
         $this->_property = $_property;
-        $this->_persistent = $_persistent;
         $this->_staticModel = $_staticModel;
     }
 
@@ -52,9 +50,12 @@ class Tinebase_Model_Converter_DynamicRecord implements Tinebase_Model_Converter
         if (true === $this->_persistent && is_string($blob)) {
             $blob = json_decode($blob, true);
         }
-        if (!empty($model) && is_array($blob) && strpos($model, '_Model_') && class_exists($model)) {
-            $newRecord = new $model($blob, $record->byPassFilters());
+        if (is_string($model) && is_array($blob) && strpos($model, '_Model_') && class_exists($model)) {
+            $newRecord = new $model($blob, true);
             $newRecord->runConvertToRecord();
+            if (!$record->byPassFilters()) {
+                $newRecord->isValid(true);
+            }
             return $newRecord;
         }
         return $blob;

@@ -26,9 +26,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     use Tinebase_ActiveDirectory_DomainConfigurationTrait;
 
     // see http://www.selfadsi.de/ads-attributes/user-userAccountControl.htm for more constants
-    const ACCOUNTDISABLE = 2;
-    const PASSWD_CANT_CHANGE = 64;
-    const NORMAL_ACCOUNT = 512;
+    public const ACCOUNTDISABLE = 2;
+    public const PASSWD_CANT_CHANGE = 64;
+    public const NORMAL_ACCOUNT = 512;
 
     /**
      * mapping of ldap attributes to class properties
@@ -422,19 +422,11 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     protected function _decodeAccountId($accountId)
     {
-        switch ($this->_userUUIDAttribute) {
-            case 'objectguid':
-                return Tinebase_Ldap::decodeGuid($accountId);
-                break;
-                
-            case 'objectsid':
-                return Tinebase_Ldap::decodeSid($accountId);
-                break;
-
-            default:
-                return $accountId;
-                break;
-        }
+        return match ($this->_userUUIDAttribute) {
+            'objectguid' => Tinebase_Ldap::decodeGuid($accountId),
+            'objectsid' => Tinebase_Ldap::decodeSid($accountId),
+            default => $accountId,
+        };
     }
     
     /**
@@ -445,15 +437,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     protected function _encodeAccountId($accountId)
     {
-        switch ($this->_userUUIDAttribute) {
-            case 'objectguid':
-                return Tinebase_Ldap::encodeGuid($accountId);
-                break;
-                
-            default:
-                return $accountId;
-                break;
-        }
+        return match ($this->_userUUIDAttribute) {
+            'objectguid' => Tinebase_Ldap::encodeGuid($accountId),
+            default => $accountId,
+        };
         
     }
     
@@ -563,7 +550,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public static function convertADTimestamp($timestamp)
     {
-        return new Tinebase_DateTime(bcsub(bcdiv($timestamp, '10000000'), '11644473600'));
+        return new Tinebase_DateTime(bcsub(bcdiv((string) $timestamp, '10000000'), '11644473600'));
     }
 
     /**
@@ -716,7 +703,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             /** @noinspection PhpUndefinedMethodInspection */
             $ldapData['gidnumber'] = Tinebase_Group::getInstance()->resolveGidNumber($_user->accountPrimaryGroup);
             
-            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $domainConfig['domainName']));
+            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', (string) $domainConfig['domainName']));
         }
         
         if (isset($_user->sambaSAM) && $_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
@@ -727,7 +714,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             
         }
         
-        $ldapData['objectclass'] = isset($_ldapEntry['objectclass']) ? $_ldapEntry['objectclass'] : array();
+        $ldapData['objectclass'] = $_ldapEntry['objectclass'] ?? array();
         
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements

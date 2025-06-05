@@ -21,10 +21,10 @@
 
 class Tinebase_Model_AuthTokenChannelConfig extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'AuthTokenConfig';
+    public const MODEL_NAME_PART = 'AuthTokenConfig';
 
-    const FLDS_NAME = 'name';
-    const FLDS_TOKEN_CREATE_HOOK = 'token_create_hook';
+    public const FLDS_NAME = 'name';
+    public const FLDS_TOKEN_CREATE_HOOK = 'token_create_hook';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

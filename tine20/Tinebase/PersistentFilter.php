@@ -138,7 +138,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
         try {
             $pfilters = self::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
                 array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName($_appName)->getId()),
-                array('field' => 'account_id', 'operator' => 'equals', 'value' => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $_accountId ?: Tinebase_Core::getUser()->getId()),
             )));
         } catch (Tinebase_Exception $e) {
             Tinebase_Exception::log($e);

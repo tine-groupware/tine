@@ -31,7 +31,8 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Electronic Address Schema', // ngettext('Electronic Address Schema', 'Electronic Address Schemas', n)
         self::RECORDS_NAME                  => 'Electronic Address Schemas', // gettext('GENDER_Electronic Address Schema')
-        self::TITLE_PROPERTY                => self::FLD_NAME,
+        self::TITLE_PROPERTY                => '{{ name }} - {{ remark }}',
+        self::DEFAULT_SORT_INFO             => [self::FIELD => self::FLD_NAME],
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
         self::HAS_DELETED_TIME_UNIQUE       => true,

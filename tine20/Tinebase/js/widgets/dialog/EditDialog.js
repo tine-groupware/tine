@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import waitFor from "util/waitFor.es6"
+
 Ext.ns('Tine.widgets.dialog');
 
 /**
@@ -479,6 +481,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * generic form layout
      */
     getFormItems: function() {
+        let plugin
         return {
             xtype: 'tabpanel',
             border: false,
@@ -492,6 +495,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }, {
                 ptype: 'ux.itemregistry',
                 key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
+            }, plugin = {
+                init: Ext.emptyFn
             }],
             items:_.concat([
                 {
@@ -501,7 +506,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     frame: true,
                     layout: 'border',
                     defaults: { autoScroll: true },
-                    items: [Ext.applyIf(this.getRecordFormItems(), {
+                    items: [Ext.applyIf(this.getRecordFormItems(plugin), {
                         region: 'center',
                         xtype: 'columnform',
                         labelAlign: 'top',
@@ -574,10 +579,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         } : [];
     },
 
-    getRecordFormItems: function() {
+    getRecordFormItems: function(plugin) {
         return new Tine.widgets.form.RecordForm({
             recordClass: this.recordClass,
-            editDialog: this
+            editDialog: this,
+            tapPanelPlugin: plugin
         });
     },
 
@@ -645,6 +651,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             }
         }, this)
+    },
+
+    /**
+     * checks if data is modified since last save/commit
+     */
+    isModified: async function() {
+        if (this.isDestroyed || !this.record) return;
+        await waitFor( () => !this.loadRequest, 250);
+        this.onRecordUpdate();
+        return this.record.isModified();
     },
 
     /**
@@ -1088,7 +1104,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @returns {boolean}
      */
     isNewRecord: function () {
-        return !this.record || !(this.record.get && this.record.id )
+        return !this.record || !(this.record.get && this.record.id ) || this.record.phantom;
     },
 
     setReadOnly: function(readOnly) {
@@ -1300,7 +1316,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     /**
      * helper function to async force save
      *
-     * @return {Promise<record>}
+     * @return {Promise<recordData>}
      */
     async applyChanges() {
         return new Promise((resolve, reject) => {

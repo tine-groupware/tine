@@ -183,7 +183,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $group->setFromJsonInUsersTimezone($recordData);
         $memberData = isset($recordData['members']) ? $recordData['members'] : [];
 
-        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => false]);
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         $savedRecord = $this->_controller->saveCourseAndGroup($course, $group, $memberData);
 
         return $this->_recordToJson($savedRecord);
@@ -198,7 +198,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteCourses($ids)
     {
 
-        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => false]);
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         return $this->_delete($ids, $this->_controller);
     }
 

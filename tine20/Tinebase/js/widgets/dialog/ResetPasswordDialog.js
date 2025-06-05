@@ -17,9 +17,10 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
     allowEmptyPassword: false,
     record: null,
     contactRecord: null,
+    editDialog: null,
 
     initComponent: function() {
-        this.windowTitle = i18n._('Set new password');
+        this.windowTitle = this.windowTitle || i18n._('Set new password');
         this.questionText = i18n._('Please enter the new Password:');
         const accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend === 'Ldap' || accountBackend === 'ActiveDirectory');
@@ -28,7 +29,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
 
         const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
         const smsTemplates = Tine.Tinebase.configManager.get('sms.sms_message_templates', 'Tinebase');
-        this.smsNewPasswordTemplate = smsTemplates?.['sms_new_password_template']?.[locale] ?? null;
+        this.smsNewPasswordTemplate = smsTemplates?.['sms_new_password_template']?.[locale] ?? '';
 
         this.twingEnv = getTwingEnv();
         const loader = this.twingEnv.getLoader();
@@ -45,6 +46,8 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
             qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
             preserveElStyle: true
         })
+
+        const validationText = i18n._('The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message.');
 
         this.items = [{
             border: false,
@@ -129,7 +132,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                         },
                         columnWidth: 0.5
                     }, {
-                        fieldLabel: i18n.gettext('SMS Message'),
+                        fieldLabel: i18n.gettext('SMS Message') + Tine.widgets.form.FieldManager.getDescriptionHTML(validationText),
                         xtype: 'textarea',
                         name: 'sms_new_password_template',
                         anchor: '100%',
@@ -142,7 +145,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                         tpl: this.smsNewPasswordTemplate,
                         validator: function (value) {
                             if (!value.includes('{{ password }}')) {
-                                return 'message should include {{ password }}';
+                                return validationText;
                             } else {
                                 return true;
                             }
@@ -164,9 +167,6 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                 html: '<br>'
             })
         }
-        this.on('apply', async function() {
-            this.fireEvent('selected', this.nodes);
-        }, this);
 
         Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.initComponent.call(this);
     },
@@ -197,6 +197,12 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         const mobilePhones = phoneFields.map((phoneField) => {
             return [phoneField.fieldName, contact?.data?.[phoneField.fieldName], `${contact?.data?.[phoneField.fieldName]} [${phoneField.label}]`];
         });
+        const smsMfaConfig =  this.record.get('mfa_configs') ? this.record.get('mfa_configs').find((mfaConfig) => {
+            return mfaConfig.config_class === 'Tinebase_Model_MFA_SmsUserConfig';
+        }): null;
+        if (smsMfaConfig?.config?.cellphonenumber) {
+            mobilePhones.push(['mfa', smsMfaConfig.config.cellphonenumber, `${smsMfaConfig.config.cellphonenumber} [MFA]`])
+        }
         this.phoneCombo.store.loadData(mobilePhones);
     },
 
@@ -214,44 +220,48 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         _.defer(() => {
             const isPasswordEmpty = el.getValue().length === 0;
             this.getForm().findField('password_must_change').setDisabled(false);
-            if (this.sendPWDViaSMSCheckbox) sendPWDViaSMSCheckbox.setDisabled(isPasswordEmpty);
             this.buttonApply.setDisabled(!this.allowEmptyPassword && isPasswordEmpty);
-            this.onUpdateSMSNewPasswordTemplate();
+            if (this.hasSmsAdapters) {
+                if (this.sendPWDViaSMSCheckbox) this.sendPWDViaSMSCheckbox.setDisabled(isPasswordEmpty);
+                this.onUpdateSMSNewPasswordTemplate();
+            }
         })
-    },
-
-    getEventData: function (event) {
-        if (event === 'apply') {
-            this.record.set('accountPassword', this.getForm().findField('password').getValue());
-            return this.record;
-        }
     },
 
     onButtonApply: async function() {
-        if (!this.hasSmsAdapters || !this.sendPWDViaSMSCheckbox.checked) {
-            return Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.onButtonApply.apply(this, arguments);
-        }
-        if (!this.phoneCombo.validate()) return;
-        if (!this.smsTemplate.validate()) return;
-
+        if (!this.passwordField.validate()) return false;
         const passwordMustChange = this.getForm().findField('password_must_change').getValue();
-        const smsPhoneNumber = this.phoneCombo.getValue();
         const password = this.passwordField.getValue();
-        const smsNewPasswordTemplate = this.smsTemplate.getValue();
+        let context = {};
 
-        await Tine.Admin.resetPassword.setRequestContext({
-            'sms-phone-number':     smsPhoneNumber ?? '',
-            'sms-new-password-template': smsNewPasswordTemplate ?? '',
-        })
-        .call(this, this.record, password, passwordMustChange)
-        .then((response) => {
+        if (this.hasSmsAdapters && this.sendPWDViaSMSCheckbox.checked) {
+            if (!this.phoneCombo.validate() || !this.smsTemplate.validate()) return false;
+
+            context = {
+                'sms-phone-number':     this.phoneCombo.getValue() ?? '',
+                'sms-new-password-template': this.smsTemplate.getValue() ?? '',
+            };
+        }
+
+        if (this.editDialog) {
+            this.record.set('accountPassword', password);
+            this.record.set('password_must_change', passwordMustChange)
+
+            if (this.editDialog?.recordProxy) {
+                this.editDialog.recordProxy.setRequestContext(context);
+            }
             return Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.onButtonApply.apply(this, arguments);
-        })
-        .catch((e) => {
-            Ext.Msg.alert(i18n._('Errors'), i18n._(e.data.message));
-        })
+        } else {
+            await Tine.Admin.resetPassword.setRequestContext(context)
+                .call(this, this.record, password, passwordMustChange)
+                .then((response) => {
+                    return Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.onButtonApply.apply(this, arguments);
+                })
+                .catch((e) => {
+                    Ext.Msg.alert(i18n._('Errors'), i18n._(e.data.message));
+                })
+        }
     },
-
 
     /**
      * Creates a new pop up dialog/window (acc. configuration)

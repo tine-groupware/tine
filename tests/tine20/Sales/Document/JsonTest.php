@@ -142,15 +142,15 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             $app->status = Tinebase_Application::DISABLED;
             Tinebase_Application::getInstance()->updateApplication($app);
             $document = $this->_instance->createPaperSlip(SMDOffer::class, $document['id']);
-            $this->assertSame($document['seq'], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($document[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
             $document = $this->_instance->getDocument_Offer($document['id']);
-            $this->assertSame($document['seq'], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($document[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $document[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
 
             $newDocument = $this->_instance->createPaperSlip(SMDOffer::class, $document['id']);
             $this->assertNotSame($newDocument['seq'], $document['seq']);
-            $this->assertSame($newDocument['seq'], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($newDocument[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
             $newDocument = $this->_instance->getDocument_Offer($document['id']);
-            $this->assertSame($newDocument['seq'], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
+            $this->assertSame($newDocument[Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ], $newDocument[Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS][0][Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ]);
 
         } finally {
             Sales_Export_DocumentPdf::$previewService = null;
@@ -493,7 +493,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
         $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSAL_STATUS]);
-        $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_RELEASED;
+        $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_DISPATCHED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
         $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSAL_STATUS]);
 
@@ -555,7 +555,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             Sales_Model_DocumentPosition_Offer::FLD_UNIT_PRICE => 100,
             Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
         ];
-        $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_RELEASED;
+        $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_DISPATCHED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
         $this->assertNotSame($customer->getId(), $savedDocument[SMDOffer::FLD_CUSTOMER_ID]['id']);
         $this->assertSame($customer->getId(), $savedDocument[SMDOffer::FLD_CUSTOMER_ID]['original_id']);

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -32,7 +32,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
         return 6;
     }
 
-    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg): bool
+    public function sendOut(Tinebase_Model_MFA_UserConfig $_userCfg, Tinebase_Model_FullUser $user): bool
     {
         return true;
     }
@@ -60,7 +60,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
                 );
                 try {
                     $result = $otp->verify($_data);
-                } catch (RuntimeException $re) {
+                } catch (RuntimeException) {
                     $result = false;
                 }
                 if ($result) {
@@ -88,7 +88,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
             try {
                 $result = !in_array($_data, $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED}) &&
                     $otp->verify($_data, null, 1);
-            } catch (RuntimeException $re) {
+            } catch (RuntimeException) {
                 $result = false;
             }
             if ($result) {

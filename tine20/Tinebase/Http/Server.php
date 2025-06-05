@@ -80,7 +80,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      */
     public function __construct()
     {
-        set_exception_handler(array($this, "fault"));
+        set_exception_handler($this->fault(...));
         $this->_reflection = new Zend_Server_Reflection();
 
         parent::__construct();
@@ -106,7 +106,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                     || ($method instanceof Zend_Server_Reflection_Method && $method->isPublic())
                 ) {
                     $request_keys = array_keys($request);
-                    array_walk($request_keys, array(__CLASS__, "lowerCase"));
+                    array_walk($request_keys, self::lowerCase(...));
                     $request = array_combine($request_keys, $request);
 
                     $func_args = $method->getParameters();
@@ -130,7 +130,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                             } else {
                                 $object = $method->getDeclaringClass()->newInstance();
                             }
-                        } catch (Exception $e) {
+                        } catch (Exception) {
                             throw new Zend_Json_Server_Exception('Error instantiating class ' . $class . ' to invoke method ' . $method->getName(), 500);
                         }
 
@@ -182,7 +182,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         }
 
         foreach ($request as $key => $value) {
-            if (substr($key, 0, 3) == 'arg') {
+            if (str_starts_with((string) $key, 'arg')) {
                 $key = str_replace('arg', '', $key);
                 $calling_args[$key] = $value;
             }
@@ -267,7 +267,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
             }
         }
 
-        echo $error['msg'] . "\n";
+        echo htmlentities(strip_tags($error['msg'])) . "\n";
     }
     
     /**
@@ -354,6 +354,6 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      */
     public static function lowerCase(&$value)
     {
-        return $value = strtolower($value);
+        return $value = strtolower((string) $value);
     }    
 }

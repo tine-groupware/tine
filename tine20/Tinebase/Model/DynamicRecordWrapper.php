@@ -22,10 +22,10 @@
  */
 class Tinebase_Model_DynamicRecordWrapper extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'DynamicRecordWrapper';
+    public const MODEL_NAME_PART = 'DynamicRecordWrapper';
 
-    const FLD_MODEL_NAME = 'model_name';
-    const FLD_RECORD = 'record';
+    public const FLD_MODEL_NAME = 'model_name';
+    public const FLD_RECORD = 'record';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)

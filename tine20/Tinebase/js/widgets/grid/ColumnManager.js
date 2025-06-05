@@ -165,6 +165,11 @@ Tine.widgets.grid.ColumnManager = function() {
                     if (fieldDefinition?.label) {
                         type = fieldDefinition.label;
                     }
+
+                    if (fieldDefinition.specialType === 'currency') {
+                        config.minWidth = 50;
+                        config.maxWidth = 100;
+                    }
                 }
             }
             type = type.toLowerCase();
@@ -184,7 +189,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.tooltip = window.i18n._('Attachments');
                 config.resizeable = false;
             }
-            
+
             if (type === 'image') {
                 config.minWidth = 20;
                 config.defaultWidth = 25;
@@ -208,15 +213,14 @@ Tine.widgets.grid.ColumnManager = function() {
                 ,'data', 'datetime', 'datetime_separated_tz' 
             ].includes(type)) {
                 let width = 120;
-                
+                let wkdayWidth = 0;
                 if (field) {
                     const format = Tine.widgets.grid.RendererManager.getDateTimeFormat(field);
-                    const wkdayWidth = _.indexOf(format?.Date ?? format, 'wkday') >= 0 ? 15 : 0;
-                    width += wkdayWidth;
+                    if ( _.indexOf(format?.Date ?? format, 'wkday') >= 0) wkdayWidth = 15;
                 }
-                 config.minWidth = 65;
-                 config.defaultWidth = width;
-                 config.maxWidth = 135;
+                 config.minWidth = 75 + wkdayWidth;
+                 config.defaultWidth = width += wkdayWidth;
+                 config.maxWidth = 160;
             }
             
             if (type === 'tag') {
@@ -347,6 +351,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.width = config.defaultWidth;
             }
 
+            Object.assign(config, fieldDefinition?.uiconfig?.columnConfig || {})
             return config;
         },
         

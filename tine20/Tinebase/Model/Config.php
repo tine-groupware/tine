@@ -20,11 +20,11 @@
  */
 class Tinebase_Model_Config extends Tinebase_Record_Abstract 
 {
-    const NOTSET = '###NOTSET###';
+    public const NOTSET = '###NOTSET###';
 
-    const SOURCE_FILE     = 'FILE';
-    const SOURCE_DB       = 'DB';
-    const SOURCE_DEFAULT  = 'DEFAULT';
+    public const SOURCE_FILE     = 'FILE';
+    public const SOURCE_DB       = 'DB';
+    public const SOURCE_DEFAULT  = 'DEFAULT';
 
     /**
      * identifier

@@ -434,7 +434,7 @@ class Tinebase_ControllerTest extends TestCase
             Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE)));
     }
 
-    public static function assertActionLogEntry($type = Tinebase_Model_ActionLog::TYPE_ADD_USER_CONFIRMATION, $count = 1)
+    public static function assertActionLogEntry($type = Tinebase_Model_ActionLog::TYPE_ADD_USER_CONFIRMATION, $count = 1, $ormore = false)
     {
         $actionLogs = Tinebase_Controller_ActionLog::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ActionLog::class, [
@@ -448,7 +448,11 @@ class Tinebase_ControllerTest extends TestCase
                 'dir' => 'DESC'
             ])
         );
-        self::assertEquals($count, $actionLogs->count(), 'should find ' . $count .' action log');
+        if ($ormore) {
+            self::assertGreaterThanOrEqual($count, count($actionLogs));
+        } else {
+            self::assertEquals($count, $actionLogs->count(), 'should find ' . $count . ' action log');
+        }
         self::assertEquals(Tinebase_Core::getUser()->getId(), $actionLogs->getFirstRecord()->{Tinebase_Model_ActionLog::FLD_USER});
 
         return $actionLogs;

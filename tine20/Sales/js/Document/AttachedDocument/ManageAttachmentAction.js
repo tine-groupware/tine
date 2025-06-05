@@ -7,6 +7,7 @@
  */
 
 /**
+ * @TODO rework - not longer appropriate with new dispatchConfig
  * additional action for attachmentGrids to in/exclude attachments to dispatchments
  */
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
@@ -59,7 +60,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 if (cmp.operation === 'exclude') {
                     _.remove(this.editDialog.record.get('attached_documents'), {node_id: record.id})
                 } else {
-                    // note: setting paperslip or ubl to supporting_document might lead to trubble... let's hope for edicated users
+                    // note: setting paperslip or edocument to supporting_document might lead to trubble... let's hope for edicated users
                     attached_documents.push({id: Tine.Tinebase.data.Record.generateUID(), type: 'supporting_document', node_id: record.id, created_for_seq: 0})
                 }
             })

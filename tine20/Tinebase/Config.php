@@ -7,167 +7,175 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo remove all deprecated stuff
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
-    const APP_NAME = 'Tinebase';
+    public const APP_NAME = 'Tinebase';
 
     /**
      * the current Tinebase version
      *
      * @var int
      */
-    const TINEBASE_VERSION = 18;
+    public const TINEBASE_VERSION = 18;
 
     /**
      * access log rotation in days
      *
      * @var string
      */
-    const ACCESS_LOG_ROTATION_DAYS = 'accessLogRotationDays';
+    public const ACCESS_LOG_ROTATION_DAYS = 'accessLogRotationDays';
 
     /**
      * area locks
      *
      * @var string
      */
-    const AREA_LOCKS = 'areaLocks';
+    public const AREA_LOCKS = 'areaLocks';
 
     /**
      * MFA providers
      *
      * @var string
      */
-    const MFA = 'mfa';
+    public const MFA = 'mfa';
 
     /**
      * encourage MFA at login
      *
      * @var string
      */
-    const MFA_ENCOURAGE = 'mfa_encourage';
+    public const MFA_ENCOURAGE = 'mfa_encourage';
 
-    const MFA_BYPASS_NETMASKS = 'mfa_bypass_netmasks';
+    public const MFA_BYPASS_NETMASKS = 'mfa_bypass_netmasks';
 
     /**
      * authentication backend config
      *
      * @var string
      */
-    const AUTHENTICATIONBACKEND = 'Tinebase_Authentication_BackendConfiguration';
+    public const AUTHENTICATIONBACKEND = 'Tinebase_Authentication_BackendConfiguration';
 
     /**
      * authentication backend type config
      *
      * @var string
      */
-    const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
+    public const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
 
     /**
      * allow authentication by email as optional replacement for username too
      *
      * @var string
      */
-    const AUTHENTICATION_BY_EMAIL = 'authenticationByEmail';
+    public const AUTHENTICATION_BY_EMAIL = 'authenticationByEmail';
 
-    const AUTH_TOKEN_CHANNELS = 'authTokenChanels';
-    const AUTH_TOKEN_DEFAULT_TTL = 'authTokenDefaultTTL';
+    public const AUTH_TOKEN_CHANNELS = 'authTokenChanels';
+    public const AUTH_TOKEN_DEFAULT_TTL = 'authTokenDefaultTTL';
 
     /**
      * save automatic alarms when creating new record
      *
      * @var string
      */
-    const AUTOMATICALARM = 'automaticalarm';
+    public const AUTOMATICALARM = 'automaticalarm';
 
     /**
      * availableLanguages
      *
      * @var string
      */
-    const AVAILABLE_LANGUAGES = 'availableLanguages';
+    public const AVAILABLE_LANGUAGES = 'availableLanguages';
 
     /**
      * build type
      *
      * @const string
      */
-    const BUILD_TYPE = 'buildtype';
+    public const BUILD_TYPE = 'buildtype';
 
-    const BROADCASTHUB = 'broadcasthub';
-    const BROADCASTHUB_ACTIVE = 'active';
-    const BROADCASTHUB_URL = 'url';
-    const BROADCASTHUB_REDIS = 'redis';
-    const BROADCASTHUB_REDIS_HOST = 'host';
-    const BROADCASTHUB_REDIS_PORT = 'port';
-    const BROADCASTHUB_PUBSUBNAME = 'pubsubname';
+    public const BROADCASTHUB = 'broadcasthub';
+    public const BROADCASTHUB_ACTIVE = 'active';
+    public const BROADCASTHUB_URL = 'url';
+    public const BROADCASTHUB_REDIS = 'redis';
+    public const BROADCASTHUB_REDIS_HOST = 'host';
+    public const BROADCASTHUB_REDIS_PORT = 'port';
+    public const BROADCASTHUB_PUBSUBNAME = 'pubsubname';
 
     /**
      * CACHE
      *
      * @var string
      */
-    const CACHE = 'caching';
-    const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
+    public const CACHE = 'caching';
+    public const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
 
-    const DBLOGGER = 'dblogger';
+    public const DBLOGGER = 'dblogger';
 
     /**
      * DEFAULT_APP
      *
      * @var string
      */
-    const DEFAULT_APP = 'defaultApp';
+    public const DEFAULT_APP = 'defaultApp';
 
     /**
      * DEFAULT_LOCALE
      *
      * @var string
      */
-    const DEFAULT_LOCALE = 'defaultLocale';
+    public const DEFAULT_LOCALE = 'defaultLocale';
 
     /**
      * DEFAULT_LOCALE_AUTO
      *
      * @var string
      */
-    const DEFAULT_LOCALE_AUTO = 'auto';
+    public const DEFAULT_LOCALE_AUTO = 'auto';
 
     /**
      * default user role
      */
-    const DEFAULT_USER_ROLE_NAME = 'defaultUserRoleName';
+    public const DEFAULT_USER_ROLE_NAME = 'defaultUserRoleName';
 
     /**
      * default user role
      */
-    const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
+    public const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
+
+
+    /**
+     * the default currency
+     *
+     * @var string
+     */
+    public const DEFAULT_CURRENCY = 'defaultCurrency';
 
     /**
      * DELETED_DATA_RETENTION_TIME
      *
      * @var string
      */
-    const DELETED_DATA_RETENTION_TIME = 'deletedDataRetentionTime';
+    public const DELETED_DATA_RETENTION_TIME = 'deletedDataRetentionTime';
 
     /**
      * @var string
      */
-    const EVENT_HOOK_CLASS = 'eventHookClass';
+    public const EVENT_HOOK_CLASS = 'eventHookClass';
 
     /**
      * @var string
      */
-    const EXTERNAL_DATABASE = 'externalDatabase';
+    public const EXTERNAL_DATABASE = 'externalDatabase';
 
     /**
      * emailUserIdInXprops
      */
-    const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
+    public const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
 
     /**
      * database
@@ -181,14 +189,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const INTERNET_PROXY = 'internetProxy';
+    public const INTERNET_PROXY = 'internetProxy';
 
     /**
      * imap conf name
      * 
      * @var string
      */
-    const IMAP = 'imap';
+    public const IMAP = 'imap';
 
     /**
      * imap useSystemAccount
@@ -217,141 +225,144 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     public const RATE_LIMITS = 'rateLimits';
+    public const RATE_LIMITS_USER = 'user';
+    public const RATE_LIMITS_IP = 'ip';
+    public const RATE_LIMITS_FRONTENDS = 'frontends';
 
     /**
      * default sales tax
      *
      * @var string
      */
-    const SALES_TAX = 'salesTax';
+    public const SALES_TAX = 'salesTax';
 
     /**
      * smtp conf name
      * 
      * @var string
      */
-    const SMTP = 'smtp';
+    public const SMTP = 'smtp';
 
     /**
      * sieve conf name
      * 
      * @var string
      */
-    const SIEVE = 'sieve';
+    public const SIEVE = 'sieve';
 
     /**
      * trusted proxy config
      *
      * @var string
      */
-    const TRUSTED_PROXIES = 'trustedProxies';
+    public const TRUSTED_PROXIES = 'trustedProxies';
 
     /**
      * user backend config
      * 
      * @var string
      */
-    const USERBACKEND = 'Tinebase_User_BackendConfiguration';
+    public const USERBACKEND = 'Tinebase_User_BackendConfiguration';
 
-    const USERBACKEND_UNAVAILABLE_SINCE = 'userBackendUnavailableSince';
-    const ACCOUNT_TWIG = 'accountTwig';
-    const ACCOUNT_TWIG_DISPLAYNAME = 'accountDisplayName';
-    const ACCOUNT_TWIG_FULLNAME = 'accountFullName';
-    const ACCOUNT_TWIG_LOGIN = 'accountLoginName';
-    const ACCOUNT_TWIG_EMAIL = 'accountEmailAddress';
+    public const USERBACKEND_UNAVAILABLE_SINCE = 'userBackendUnavailableSince';
+    public const ACCOUNT_TWIG = 'accountTwig';
+    public const ACCOUNT_TWIG_DISPLAYNAME = 'accountDisplayName';
+    public const ACCOUNT_TWIG_FULLNAME = 'accountFullName';
+    public const ACCOUNT_TWIG_LOGIN = 'accountLoginName';
+    public const ACCOUNT_TWIG_EMAIL = 'accountEmailAddress';
 
     /**
      * sync options for user backend
      *
      * @var string
      */
-    const SYNCOPTIONS = 'syncOptions';
+    public const SYNCOPTIONS = 'syncOptions';
 
-    const PWD_CANT_CHANGE = 'pwdCantChange';
+    public const PWD_CANT_CHANGE = 'pwdCantChange';
 
     /**
      * user backend writes user pw to sql
      *
      * @var string
      */
-    const USERBACKEND_WRITE_PW_TO_SQL = 'writePwToSql';
+    public const USERBACKEND_WRITE_PW_TO_SQL = 'writePwToSql';
 
     /**
      * user backend type config
      * 
      * @var string
      */
-    const USERBACKENDTYPE = 'Tinebase_User_BackendType';
+    public const USERBACKENDTYPE = 'Tinebase_User_BackendType';
 
     /**
      * cron_disabled
      *
      * @var string
      */
-    const CRON_DISABLED = 'cron_disabled';
+    public const CRON_DISABLED = 'cron_disabled';
 
     /**
      * cronjob user id
      * 
      * @var string
      */
-    const CRONUSERID = 'cronuserid';
+    public const CRONUSERID = 'cronuserid';
 
     /**
      * setup user id
      *
      * @var string
      */
-    const SETUPUSERID = 'setupuserid';
+    public const SETUPUSERID = 'setupuserid';
 
     /**
      * FEATURE_SHOW_ADVANCED_SEARCH
      *
      * @var string
      */
-    const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
+    public const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
 
     /**
      * FEATURE_SHOW_ADVANCED_SEARCH
      *
      * @const string
      */
-    const FEATURE_CREATE_PREVIEWS = 'featureCreatePreviews';
+    public const FEATURE_CREATE_PREVIEWS = 'featureCreatePreviews';
 
     /**
      * FEATURE_REMEMBER_POPUP_SIZE
      *
      * @var string
      */
-    const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
+    public const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
 
     /**
      * FEATURE_FULLTEXT_INDEX
      *
      * @var string
      */
-    const FEATURE_FULLTEXT_INDEX = 'featureFullTextIndex';
+    public const FEATURE_FULLTEXT_INDEX = 'featureFullTextIndex';
 
-    const CACHED_CONFIG_PATH = 'cachedConfigPath';
+    public const CACHED_CONFIG_PATH = 'cachedConfigPath';
 
     /**
      * FEATURE_PATH
      *
      * @var string
      */
-    const FEATURE_SEARCH_PATH = 'featureSearchPath';
+    public const FEATURE_SEARCH_PATH = 'featureSearchPath';
 
-    const FEATURE_AUTODISCOVER = 'autodiscover';
+    public const FEATURE_AUTODISCOVER = 'autodiscover';
 
-    const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
+    public const FEATURE_AUTODISCOVER_MAILCONFIG = 'autodiscoverMailConfig';
 
     /**
      * Community identification Number
      * 
      */
-    const FEATURE_COMMUNITY_IDENT_NR = 'municipalityKey';
+    public const FEATURE_COMMUNITY_IDENT_NR = 'municipalityKey';
 
-    const IMPORT_EXPORT_DEFAULT_CONTAINER = 'importExportDefaultContainer';
+    public const IMPORT_EXPORT_DEFAULT_CONTAINER = 'importExportDefaultContainer';
 
 
     /**
@@ -359,86 +370,86 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * 
      * @var string
      */
-    const PAGETITLEPOSTFIX = 'pagetitlepostfix';
+    public const PAGETITLEPOSTFIX = 'pagetitlepostfix';
 
     /**
      * logout redirect url
      * 
      * @var string
      */
-    const REDIRECTURL = 'redirectUrl';
+    public const REDIRECTURL = 'redirectUrl';
     
     /**
      * redirect always
      * 
      * @var string
      */
-    const REDIRECTALWAYS = 'redirectAlways';
+    public const REDIRECTALWAYS = 'redirectAlways';
     
     /**
      * Config key for Setting "Redirect to referring site if exists?"
      * 
      * @var string
      */
-    const REDIRECTTOREFERRER = 'redirectToReferrer';
+    public const REDIRECTTOREFERRER = 'redirectToReferrer';
     
     /**
      * Config key for configuring allowed origins of the json frontend
      *  
      * @var string
      */
-    const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
+    public const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
 
     /**
      * Config key for configuring allowed health check ips
      *
      * @var string
      */
-    const ALLOWEDHEALTHCHECKIPS = 'allowedHealthCheckIPs';
+    public const ALLOWEDHEALTHCHECKIPS = 'allowedHealthCheckIPs';
 
     /**
      * Config key for acceptedTermsVersion
      * @var string
      */
-    const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
+    public const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
 
     /**
      * Config key for using nominatim service
      * @var string
      */
-    const USE_NOMINATIM_SERVICE = 'useNominatimService';
+    public const USE_NOMINATIM_SERVICE = 'useNominatimService';
 
     /**
      * Config key for nominatim service url
      * @var string
      */
-    const NOMINATIM_SERVICE_URL = 'nominatimServiceUrl';
+    public const NOMINATIM_SERVICE_URL = 'nominatimServiceUrl';
 
     /**
      * Config key for using map panel
      * @var string
      */
-    const USE_MAP_SERVICE = 'useMapService';
+    public const USE_MAP_SERVICE = 'useMapService';
 
     /**
      * Config key for map service url
      * @var string
      */
-    const MAP_SERVICE_URL = 'mapServiceUrl';
+    public const MAP_SERVICE_URL = 'mapServiceUrl';
 
     /**
      * disable ldap certificate check
      *
      * @var string
      */
-    const LDAP_DISABLE_TLSREQCERT = 'ldapDisableTlsReqCert';
+    public const LDAP_DISABLE_TLSREQCERT = 'ldapDisableTlsReqCert';
 
     /**
      * overwritten ldap fields
      *
      * @var string
      */
-    const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
+    public const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
 
     /**
      * uri for sentry service (https://sentry.io)
@@ -469,68 +480,68 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const SYNC_USER_ACCOUNT_STATUS = 'syncUserAccountStatus';
+    public const SYNC_USER_ACCOUNT_STATUS = 'syncUserAccountStatus';
 
     /**
      * configure hook class for user sync
      *
      * @var string
      */
-    const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
+    public const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
 
-    const SYNC_USER_DISABLED = 'syncUserDisabled';
+    public const SYNC_USER_DISABLED = 'syncUserDisabled';
 
-    const SYNC_USER_OF_GROUPS = 'syncUserOfGroups';
-    const SYNC_DEVIATED_PRIMARY_GROUP_UUID = 'syncDeviatedPrimaryGroupUUID';
+    public const SYNC_USER_OF_GROUPS = 'syncUserOfGroups';
+    public const SYNC_DEVIATED_PRIMARY_GROUP_UUID = 'syncDeviatedPrimaryGroupUUID';
 
     /**
      * configure if user contact data should be synced from sync backend, default yes
      *
      * @var string
      */
-    const SYNC_USER_CONTACT_DATA = 'syncUserContactData';
+    public const SYNC_USER_CONTACT_DATA = 'syncUserContactData';
 
     /**
      * configure if user contact photo should be synced from sync backend, default yes
      *
      * @var string
      */
-    const SYNC_USER_CONTACT_PHOTO = 'syncUserContactPhoto';
+    public const SYNC_USER_CONTACT_PHOTO = 'syncUserContactPhoto';
 
     /**
      * configure if deleted users from sync back should be deleted in sql backend, default yes
      *
      * @var string
      */
-    const SYNC_DELETED_USER = 'syncDeletedUser';
+    public const SYNC_DELETED_USER = 'syncDeletedUser';
 
     /**
      * configure when user should be removed from sql after it is removed from sync backend
      *
      * @var boolean
      */
-    const SYNC_USER_DELETE_AFTER = 'syncUserDeleteAfter';
+    public const SYNC_USER_DELETE_AFTER = 'syncUserDeleteAfter';
 
     /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
      * 
      * @var string
      */
-    const SESSIONIPVALIDATION = 'sessionIpValidation';
+    public const SESSIONIPVALIDATION = 'sessionIpValidation';
     
     /**
      * Config key for session user agent validation -> if this is set to FALSE no Zend_Session_Validator_HttpUserAgent is registered
      * 
      * @var string
      */
-    const SESSIONUSERAGENTVALIDATION = 'sessionUserAgentValidation';
+    public const SESSIONUSERAGENTVALIDATION = 'sessionUserAgentValidation';
     
     /**
      * filestore directory
      * 
      * @var string
      */
-    const FILESDIR = 'filesdir';
+    public const FILESDIR = 'filesdir';
     
     /**
      * xls export config
@@ -538,170 +549,170 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @deprecated move to app config
      * @var string
      */
-    const XLSEXPORTCONFIG = 'xlsexportconfig';
+    public const XLSEXPORTCONFIG = 'xlsexportconfig';
     
     /**
      * app defaults
      *
      * @var string
      */
-    const APPDEFAULTS = 'appdefaults';
+    public const APPDEFAULTS = 'appdefaults';
     
     /**
     * REUSEUSERNAME_SAVEUSERNAME
     *
     * @var string
     */
-    const REUSEUSERNAME_SAVEUSERNAME = 'saveusername';
+    public const REUSEUSERNAME_SAVEUSERNAME = 'saveusername';
         
     /**
     * PASSWORD_CHANGE
     *
     * @var string
     */
-    const PASSWORD_CHANGE = 'changepw';
+    public const PASSWORD_CHANGE = 'changepw';
 
     /**
      * ALLOW_BROWSER_PASSWORD_MANAGER
      *
      * @var string
      */
-    const ALLOW_BROWSER_PASSWORD_MANAGER = 'allowBrowserPasswordManager';
+    public const ALLOW_BROWSER_PASSWORD_MANAGER = 'allowBrowserPasswordManager';
     
     /**
      * USER_PASSWORD_POLICY
      *
      * @var string
      */
-    const USER_PASSWORD_POLICY= 'userPwPolicy';
+    public const USER_PASSWORD_POLICY= 'userPwPolicy';
 
-    const CHECK_AT_LOGIN = 'checkAtLogin';
+    public const CHECK_AT_LOGIN = 'checkAtLogin';
 
     /**
      * DOWNLOAD_PASSWORD_POLICY
      *
      * @var string
      */
-    const DOWNLOAD_PASSWORD_POLICY= 'downloadPwPolicy';
+    public const DOWNLOAD_PASSWORD_POLICY= 'downloadPwPolicy';
 
     /**
      * PASSWORD_MANDATORY
      *
      * @var string
      */
-    const PASSWORD_MANDATORY = 'pwIsMandatory';
+    public const PASSWORD_MANDATORY = 'pwIsMandatory';
     
     /**
      * PASSWORD_POLICY_ACTIVE
      *
      * @var string
      */
-    const PASSWORD_POLICY_ACTIVE = 'pwPolicyActive';
+    public const PASSWORD_POLICY_ACTIVE = 'pwPolicyActive';
     
     /**
      * PASSWORD_POLICY_ONLYASCII
      *
      * @var string
      */
-    const PASSWORD_POLICY_ONLYASCII = 'pwPolicyOnlyASCII';
+    public const PASSWORD_POLICY_ONLYASCII = 'pwPolicyOnlyASCII';
     
     /**
      * PASSWORD_POLICY_MIN_LENGTH
      *
      * @var string
      */
-    const PASSWORD_POLICY_MIN_LENGTH = 'pwPolicyMinLength';
+    public const PASSWORD_POLICY_MIN_LENGTH = 'pwPolicyMinLength';
     
     /**
      * PASSWORD_POLICY_MIN_WORD_CHARS
      *
      * @var string
      */
-    const PASSWORD_POLICY_MIN_WORD_CHARS = 'pwPolicyMinWordChars';
+    public const PASSWORD_POLICY_MIN_WORD_CHARS = 'pwPolicyMinWordChars';
     
     /**
      * PASSWORD_POLICY_MIN_UPPERCASE_CHARS
      *
      * @var string
      */
-    const PASSWORD_POLICY_MIN_UPPERCASE_CHARS = 'pwPolicyMinUppercaseChars';
+    public const PASSWORD_POLICY_MIN_UPPERCASE_CHARS = 'pwPolicyMinUppercaseChars';
     
     /**
      * PASSWORD_POLICY_MIN_SPECIAL_CHARS
      *
      * @var string
      */
-    const PASSWORD_POLICY_MIN_SPECIAL_CHARS = 'pwPolicyMinSpecialChars';
+    public const PASSWORD_POLICY_MIN_SPECIAL_CHARS = 'pwPolicyMinSpecialChars';
     
     /**
      * PASSWORD_POLICY_MIN_NUMBERS
      *
      * @var string
      */
-    const PASSWORD_POLICY_MIN_NUMBERS = 'pwPolicyMinNumbers';
+    public const PASSWORD_POLICY_MIN_NUMBERS = 'pwPolicyMinNumbers';
     
     /**
      * PASSWORD_POLICY_FORBID_USERNAME
      *
      * @var string
      */
-    const PASSWORD_POLICY_FORBID_USERNAME = 'pwPolicyForbidUsername';
+    public const PASSWORD_POLICY_FORBID_USERNAME = 'pwPolicyForbidUsername';
 
     /**
      * PASSWORD_POLICY_CHANGE_AFTER
      *
      * @var string
      */
-    const PASSWORD_POLICY_CHANGE_AFTER = 'pwPolicyChangeAfter';
+    public const PASSWORD_POLICY_CHANGE_AFTER = 'pwPolicyChangeAfter';
 
     /**
      * PASSWORD_SUPPORT_NTLMV2
      *
      * @var string
      */
-    const PASSWORD_SUPPORT_NTLMV2 = 'pwSupportNtlmV2';
+    public const PASSWORD_SUPPORT_NTLMV2 = 'pwSupportNtlmV2';
 
     /**
      * PASSWORD_NTLMV2_ENCRYPTION_KEY
      *
      * @var string
      */
-    const PASSWORD_NTLMV2_ENCRYPTION_KEY = 'pwNtlmV2EncryptionKey';
+    public const PASSWORD_NTLMV2_ENCRYPTION_KEY = 'pwNtlmV2EncryptionKey';
 
     /**
      * PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN
      *
      * @var string
      */
-    const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
+    public const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
 
     /**
      * license type
      *
      * @var string
      */
-    const LICENSE_TYPE = 'licenseType';
+    public const LICENSE_TYPE = 'licenseType';
 
     /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
      */
-    const AUTOMATIC_BUGREPORTS = 'automaticBugreports';
+    public const AUTOMATIC_BUGREPORTS = 'automaticBugreports';
     
     /**
      * LAST_SESSIONS_CLEANUP_RUN
      *
      * @var string
      */
-    const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
+    public const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
     
     /**
      * WARN_LOGIN_FAILURES
      *
      * @var string
      */
-    const WARN_LOGIN_FAILURES = 'warnLoginFailures';
+    public const WARN_LOGIN_FAILURES = 'warnLoginFailures';
 
     public const SETUP_SKIP_UPDATE_MAX_USER_CHECK = 'setupSkipUpdateMaxUserCheck';
 
@@ -710,21 +721,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const ANYONE_ACCOUNT_DISABLED = 'anyoneAccountDisabled';
+    public const ANYONE_ACCOUNT_DISABLED = 'anyoneAccountDisabled';
     
     /**
      * ALARMS_EACH_JOB
      *
      * @var string
      */
-    const ALARMS_EACH_JOB = 'alarmsEachJob';
+    public const ALARMS_EACH_JOB = 'alarmsEachJob';
     
     /**
      * ACCOUNT_DEACTIVATION_NOTIFICATION
      *
      * @var string
      */
-    const ACCOUNT_DEACTIVATION_NOTIFICATION = 'accountDeactivationNotification';
+    public const ACCOUNT_DEACTIVATION_NOTIFICATION = 'accountDeactivationNotification';
 
     /**
      * ACCOUNT_DELETION_EVENTCONFIGURATION
@@ -745,7 +756,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const ROLE_CHANGE_ALLOWED = 'roleChangeAllowed';
+    public const ROLE_CHANGE_ALLOWED = 'roleChangeAllowed';
 
     public const SMS = 'sms';
 
@@ -758,238 +769,240 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const MAX_USERNAME_LENGTH = 'max_username_length';
+    public const MAX_USERNAME_LENGTH = 'max_username_length';
 
     /**
      * USER_PIN
      *
      * @var string
      */
-    const USER_PIN = 'userPin';
+    public const USER_PIN = 'userPin';
 
     /**
      * USER_PIN_MIN_LENGTH
      *
      * @var string
      */
-    const USER_PIN_MIN_LENGTH = 'userPinMinLength';
+    public const USER_PIN_MIN_LENGTH = 'userPinMinLength';
 
     /**
      * conf.d folder name
      *
      * @var string
      */
-    const CONFD_FOLDER = 'confdfolder';
+    public const CONFD_FOLDER = 'confdfolder';
 
     /**
      * maintenance mode
      *
      * @var string
      */
-    const MAINTENANCE_MODE = 'maintenanceMode';
-    const MAINTENANCE_MODE_OFF = 'off';
-    const MAINTENANCE_MODE_ON = 'on';
-    const MAINTENANCE_MODE_NORMAL = 'normal';
-    const MAINTENANCE_MODE_ALL = 'all';
-    const MAINTENANCE_MODE_FLAGS = 'flags';
-    const MAINTENANCE_MODE_FLAG_SKIP_APPS = 'skipApps';
-    const MAINTENANCE_MODE_FLAG_ONLY_APPS = 'onlyApps';
-    const MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN = 'allowAdminLogin';
+    public const MAINTENANCE_MODE = 'maintenanceMode';
+    public const MAINTENANCE_MODE_OFF = 'off';
+    public const MAINTENANCE_MODE_ON = 'on';
+    public const MAINTENANCE_MODE_NORMAL = 'normal';
+    public const MAINTENANCE_MODE_ALL = 'all';
+    public const MAINTENANCE_MODE_FLAGS = 'flags';
+    public const MAINTENANCE_MODE_FLAG_SKIP_APPS = 'skipApps';
+    public const MAINTENANCE_MODE_FLAG_ONLY_APPS = 'onlyApps';
+    public const MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN = 'allowAdminLogin';
 
     /**
      * @var string
      */
-    const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
+    public const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
 
-    const INSTALL_LOGO = 'install_logo'; // legacy
-    const INSTALL_LOGO_LIGHT_SVG = 'install_logo_light_svg';
-    const INSTALL_LOGO_LIGHT = 'install_logo_light';
-    const INSTALL_LOGO_DARK_SVG = 'install_logo_dark_svg';
-    const INSTALL_LOGO_DARK = 'install_logo_dark';
-    const WEBSITE_URL = 'website_url';
+    public const INSTALL_LOGO = 'install_logo'; // legacy
+    public const INSTALL_LOGO_LIGHT_SVG = 'install_logo_light_svg';
+    public const INSTALL_LOGO_LIGHT = 'install_logo_light';
+    public const INSTALL_LOGO_DARK_SVG = 'install_logo_dark_svg';
+    public const INSTALL_LOGO_DARK = 'install_logo_dark';
+    public const WEBSITE_URL = 'website_url';
 
-    const BRANDING_LOGO = 'branding_logo'; // legacy
-    const BRANDING_LOGO_LIGHT_SVG = 'branding_logo_light_svg';
-    const BRANDING_LOGO_LIGHT = 'branding_logo_light';
-    const BRANDING_LOGO_DARK_SVG = 'branding_logo_dark_svg';
-    const BRANDING_LOGO_DARK = 'branding_logo_dark';
-    const BRANDING_FAVICON = 'branding_favicon';
-    const BRANDING_FAVICON_SVG = 'branding_favicon_svg';
-    const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
-    const BRANDING_TITLE = 'branding_title';
-    const BRANDING_WEBURL = 'branding_weburl';
-    const BRANDING_HELPURL = 'branding_helpUrl';
-    const BRANDING_SHOPURL = 'branding_shopUrl';
-    const BRANDING_BUGSURL = 'branding_bugreportUrl';
-    const BRANDING_DESCRIPTION = 'branding_description';
-
-    const CURRENCY_SYMBOL = 'currencySymbol';
+    public const BRANDING_LOGO = 'branding_logo'; // legacy
+    public const BRANDING_LOGO_LIGHT_SVG = 'branding_logo_light_svg';
+    public const BRANDING_LOGO_LIGHT = 'branding_logo_light';
+    public const BRANDING_LOGO_DARK_SVG = 'branding_logo_dark_svg';
+    public const BRANDING_LOGO_DARK = 'branding_logo_dark';
+    public const BRANDING_FAVICON = 'branding_favicon';
+    public const BRANDING_FAVICON_SVG = 'branding_favicon_svg';
+    public const BRANDING_MASKICON_COLOR = 'branding_maskicon_color';
+    public const BRANDING_TITLE = 'branding_title';
+    public const BRANDING_WEBURL = 'branding_weburl';
+    public const BRANDING_HELPURL = 'branding_helpUrl';
+    public const BRANDING_SHOPURL = 'branding_shopUrl';
+    public const BRANDING_BUGSURL = 'branding_bugreportUrl';
+    public const BRANDING_DESCRIPTION = 'branding_description';
 
     /**
      * @var string
      */
-    const USE_LOGINNAME_AS_FOLDERNAME = 'useLoginnameAsFoldername';
+    public const USE_LOGINNAME_AS_FOLDERNAME = 'useLoginnameAsFoldername';
 
     /**
      * @var string
      */
-    const DENY_WEBDAV_CLIENT_LIST = 'denyWebDavClientList';
+    public const DENY_WEBDAV_CLIENT_LIST = 'denyWebDavClientList';
 
     /**
      * @var string
      */
-    const VERSION_CHECK = 'versionCheck';
+    public const VERSION_CHECK = 'versionCheck';
 
     /**
      * WEBDAV_SYNCTOKEN_ENABLED
      *
      * @var string
      */
-    const WEBDAV_SYNCTOKEN_ENABLED = 'webdavSynctokenEnabled';
+    public const WEBDAV_SYNCTOKEN_ENABLED = 'webdavSynctokenEnabled';
 
-    const WEBFINGER_REL_HANDLER = 'webfingerRelHandler';
-
-    /**
-     * @var string
-     */
-    const REPLICATION_MASTER = 'replicationMaster';
+    public const WEBFINGER_REL_HANDLER = 'webfingerRelHandler';
 
     /**
      * @var string
      */
-    const REPLICATION_SLAVE = 'replicationSlave';
+    public const REPLICATION_MASTER = 'replicationMaster';
 
     /**
      * @var string
      */
-    const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
-
-    const REPLICATION_IS_PRIMARY = 'replicationIsPrimary';
+    public const REPLICATION_SLAVE = 'replicationSlave';
 
     /**
      * @var string
      */
-    const STATUS_INFO = 'statusInfo';
+    public const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
+
+    public const REPLICATION_IS_PRIMARY = 'replicationIsPrimary';
 
     /**
      * @var string
      */
-    const MASTER_URL = 'masterURL';
+    public const STATUS_INFO = 'statusInfo';
 
     /**
      * @var string
      */
-    const MASTER_USERNAME = 'masterUsername';
+    public const MASTER_URL = 'masterURL';
 
     /**
      * @var string
      */
-    const MASTER_PASSWORD = 'masterPassword';
+    public const MASTER_USERNAME = 'masterUsername';
+
+    /**
+     * @var string
+     */
+    public const MASTER_PASSWORD = 'masterPassword';
+
+    public const NUM_OF_MODLOGS = 'numOfModlogs';
 
     /**
      * var string
      */
-    const STATUS_API_KEY = 'statusApiKey';
+    public const STATUS_API_KEY = 'statusApiKey';
 
     /**
      * var string
      */
-    const METRICS_API_KEY = 'metricsApiKey';
+    public const METRICS_API_KEY = 'metricsApiKey';
 
     /**
      * @var string
      */
-    const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
+    public const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
 
-    const FULLTEXT = 'fulltext';
-    const FULLTEXT_BACKEND = 'backend';
-    const FULLTEXT_JAVABIN = 'javaBin';
-    const FULLTEXT_TIKAJAR = 'tikaJar';
-    const FULLTEXT_QUERY_FILTER = 'queryFilter';
+    public const FULLTEXT = 'fulltext';
+    public const FULLTEXT_BACKEND = 'backend';
+    public const FULLTEXT_JAVABIN = 'javaBin';
+    public const FULLTEXT_TIKAJAR = 'tikaJar';
+    public const FULLTEXT_QUERY_FILTER = 'queryFilter';
 
-    const FILESYSTEM = 'filesystem';
-    const FILESYSTEM_DEFAULT_GRANTS = 'defaultGrants';
-    const FILESYSTEM_MODLOGACTIVE = 'modLogActive';
-    const FILESYSTEM_NUMKEEPREVISIONS = 'numKeepRevisions';
-    const FILESYSTEM_MONTHKEEPREVISIONS = 'monthKeepRevisions';
-    const FILESYSTEM_INDEX_CONTENT = 'index_content';
-    const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
-    const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
-    const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
-    const FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL = 'previewServiceVerifySsl';
-    const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
-    const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
-    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
-    const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
-    const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X = 'previewDocumentPreviewSizeX';
-    const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y = 'previewDocumentPreviewSizeY';
-    const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X = 'previewImagePreviewSizeX';
-    const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y = 'previewImagePreviewSizeY';
-    const FILESYSTEM_PREVIEW_IGNORE_PROXY = 'previewPreviewIgnoreProxy';
-    const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
-    const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
-    const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
-    const FILESYSTEM_AVSCAN_URL = 'avscanURL';
-    const FILESYSTEM_AVSCAN_NOTIFICATION_ROLE = 'avscanNotificationRole';
-    const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
-    const FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS = 'flySystemLocalBasePaths';
+    public const FILESYSTEM = 'filesystem';
+    public const FILESYSTEM_DEFAULT_GRANTS = 'defaultGrants';
+    public const FILESYSTEM_MODLOGACTIVE = 'modLogActive';
+    public const FILESYSTEM_NUMKEEPREVISIONS = 'numKeepRevisions';
+    public const FILESYSTEM_MONTHKEEPREVISIONS = 'monthKeepRevisions';
+    public const FILESYSTEM_INDEX_CONTENT = 'index_content';
+    public const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
+    public const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
+    public const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
+    public const FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL = 'previewServiceVerifySsl';
+    public const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
+    public const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
+    public const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
+    public const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_Y = 'previewThumbnailSizeY';
+    public const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_X = 'previewDocumentPreviewSizeX';
+    public const FILESYSTEM_PREVIEW_DOCUMENT_PREVIEW_SIZE_Y = 'previewDocumentPreviewSizeY';
+    public const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_X = 'previewImagePreviewSizeX';
+    public const FILESYSTEM_PREVIEW_IMAGE_PREVIEW_SIZE_Y = 'previewImagePreviewSizeY';
+    public const FILESYSTEM_PREVIEW_IGNORE_PROXY = 'previewPreviewIgnoreProxy';
+    public const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
+    public const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
+    public const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
+    public const FILESYSTEM_AVSCAN_URL = 'avscanURL';
+    public const FILESYSTEM_AVSCAN_NOTIFICATION_ROLE = 'avscanNotificationRole';
+    public const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
+    public const FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS = 'flySystemLocalBasePaths';
 
-    const ACTIONQUEUE = 'actionqueue';
-    const ACTIONQUEUE_ACTIVE = 'active';
-    const ACTIONQUEUE_BACKEND = 'backend';
-    const ACTIONQUEUE_CLEAN_DS = 'cleanDS';
-    const ACTIONQUEUE_CLEAN_DS_LONG_RUNNING = 'cleanDSlongRunning';
-    const ACTIONQUEUE_HOST = 'host';
-    const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
-    const ACTIONQUEUE_PORT = 'port';
-    const ACTIONQUEUE_NAME = 'queueName';
-    const ACTIONQUEUE_MONITORING_DURATION_WARN = 'durationWarn';
-    const ACTIONQUEUE_MONITORING_LASTUPDATE_WARN = 'lastUpdateWarn';
-    const ACTIONQUEUE_MONITORING_DURATION_CRIT = 'durationCrit';
-    const ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT = 'lastUpdateCrit';
-    const ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT = 'daemonStructSizeCrit';
-    const ACTIONQUEUE_LR_MONITORING_DURATION_WARN = 'LRdurationWarn';
-    const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN = 'LRlastUpdateWarn';
-    const ACTIONQUEUE_LR_MONITORING_DURATION_CRIT = 'LRdurationCrit';
-    const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT = 'LRlastUpdateCrit';
-    const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
-    const ACTIONQUEUE_QUEUES = 'queues';
+    public const ACTIONQUEUE = 'actionqueue';
+    public const ACTIONQUEUE_ACTIVE = 'active';
+    public const ACTIONQUEUE_BACKEND = 'backend';
+    public const ACTIONQUEUE_CLEAN_DS = 'cleanDS';
+    public const ACTIONQUEUE_CLEAN_DS_LONG_RUNNING = 'cleanDSlongRunning';
+    public const ACTIONQUEUE_HOST = 'host';
+    public const ACTIONQUEUE_LONG_RUNNING = 'longRunning';
+    public const ACTIONQUEUE_PORT = 'port';
+    public const ACTIONQUEUE_NAME = 'queueName';
+    public const ACTIONQUEUE_MONITORING_DURATION_WARN = 'durationWarn';
+    public const ACTIONQUEUE_MONITORING_LASTUPDATE_WARN = 'lastUpdateWarn';
+    public const ACTIONQUEUE_MONITORING_DURATION_CRIT = 'durationCrit';
+    public const ACTIONQUEUE_MONITORING_LASTUPDATE_CRIT = 'lastUpdateCrit';
+    public const ACTIONQUEUE_MONITORING_DAEMONSTRCTSIZE_CRIT = 'daemonStructSizeCrit';
+    public const ACTIONQUEUE_LR_MONITORING_DURATION_WARN = 'LRdurationWarn';
+    public const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_WARN = 'LRlastUpdateWarn';
+    public const ACTIONQUEUE_LR_MONITORING_DURATION_CRIT = 'LRdurationCrit';
+    public const ACTIONQUEUE_LR_MONITORING_LASTUPDATE_CRIT = 'LRlastUpdateCrit';
+    public const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
+    public const ACTIONQUEUE_QUEUES = 'queues';
 
-    const QUOTA = 'quota';
-    const QUOTA_SHOW_UI = 'showUI';
-    const QUOTA_INCLUDE_REVISION = 'includeRevision';
-    const QUOTA_SOFT_QUOTA = 'softQuota';
-    const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
-    const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
-    const QUOTA_TOTALINMB = 'totalInMB';
-    const QUOTA_FILESYSTEM_TOTALINMB = 'filesystemTotalInMB';
-    const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
-    const QUOTA_NOTIFICATION_ADDRESSES = 'quotaNotificationAddresses';
-    const QUOTA_MONITORING = 'quotaMonitoring';
+    public const QUOTA = 'quota';
+    public const QUOTA_SHOW_UI = 'showUI';
+    public const QUOTA_INCLUDE_REVISION = 'includeRevision';
+    public const QUOTA_SOFT_QUOTA = 'softQuota';
+    public const QUOTA_SQ_NOTIFICATION_ROLE = 'softQuotaNotificationRole';
+    public const QUOTA_SKIP_IMAP_QUOTA = 'skipImapQuota';
+    public const QUOTA_TOTALINMB = 'totalInMB';
+    public const QUOTA_FILESYSTEM_TOTALINMB = 'filesystemTotalInMB';
+    public const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
+    public const QUOTA_NOTIFICATION_ADDRESSES = 'quotaNotificationAddresses';
+    public const QUOTA_MONITORING = 'quotaMonitoring';
 
-    const TINE20_URL = 'tine20URL';
-    const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
+    public const TINE20_URL = 'tine20URL';
+    public const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
 
-    const FILTER_SYNC_TOKEN = 'filterSyncToken';
-    const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
-    const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
-    const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
+    public const FILTER_SYNC_TOKEN = 'filterSyncToken';
+    public const FILTER_SYNC_TOKEN_CLEANUP_MAX_TOTAL = 'cleanUpMaxTotal';
+    public const FILTER_SYNC_TOKEN_CLEANUP_MAX_FILTER = 'cleanUpMaxFilter';
+    public const FILTER_SYNC_TOKEN_CLEANUP_MAX_AGE = 'cleanUpMaxAge';
 
-    const NOTE_TYPE = 'noteType';
+    public const NOTE_TYPE = 'noteType';
+
+    const SUPPORT_REQUEST_NOTIFICATION_ROLE = 'supportRequestNotificationRole';
 
     /**
      * Grad der Verstädterung (CummunityIdentificationNumber)
      * 
      * @var string
      */
-    const GRAD_DER_VERSTAEDTERUNG = 'gradVerstaedterung';
+    public const GRAD_DER_VERSTAEDTERUNG = 'gradVerstaedterung';
 
     /**
      * fields for lead record duplicate check
      *
      * @var string
      */
-    const MUNICIPALITYKEY_DUP_FIELDS = 'municipalityKeyDupFields';
+    public const MUNICIPALITYKEY_DUP_FIELDS = 'municipalityKeyDupFields';
     
 
     /**
@@ -997,26 +1010,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var string
      */
-    const ACTION_LOG_TYPES = 'actionLogTypes';
+    public const ACTION_LOG_TYPES = 'actionLogTypes';
 
     /**
      * user types
      *
      * @var string
      */
-    const USER_TYPES = 'userTypes';
+    public const USER_TYPES = 'userTypes';
 
     /**
      * Filter configuration for site record pickers
      * @var string
      */
-    const SITE_FILTER = 'siteFilter';
-    const FEATURE_SITE = 'featureSite';
+    public const SITE_FILTER = 'siteFilter';
+    public const FEATURE_SITE = 'featureSite';
 
     /**
      * scheduler user task fail notification threshold
      */
-    const SCHEDULER_USER_TASK_FAIL_NOTIFICATION_THRESHOLD = 'userTaskFailNotificationThreshold';
+    public const SCHEDULER_USER_TASK_FAIL_NOTIFICATION_THRESHOLD = 'userTaskFailNotificationThreshold';
 
     /**
      * (non-PHPdoc)
@@ -1191,6 +1204,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     ],
                     'provider_class'        => 'Tinebase_Auth_MFA_WebAuthnAdapter',
                     'user_config_class'     => 'Tinebase_Model_MFA_WebAuthnUserConfig'
+                ], [
+                    'id'                    => 'YUBICO',
+                    'allow_self_service'    => true,
+                    'provider_config_class' => 'Tinebase_Model_MFA_YubicoOTPConfig',
+                    'provider_config'       => [],
+                    'provider_class'        => 'Tinebase_Auth_MFA_YubicoOTPAdapter',
+                    'user_config_class'     => 'Tinebase_Model_MFA_YubicoOTPUserConfig'
                 ]]
             ],
         ),
@@ -1343,6 +1363,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "additionaldomains":"another.test,onemore.test" (string - comma separated)
          * "instanceName":"tine.test" (string)
          * "accountnamedestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
+         * "destinationisusername": false (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createAliasDestinations)
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
          * "preventSecondaryDomainUsername": true
@@ -1491,7 +1512,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
                 self::ERROR_NOTIFICATION_LIST   => array(
                     self::TYPE => Tinebase_Config::TYPE_ARRAY,
-                )
+                ),
+                // number of mod logs to apply in each run
+                self::NUM_OF_MODLOGS => [
+                    self::TYPE => Tinebase_Config::TYPE_INT,
+                    self::DEFAULT_STR => 100,
+                ]
             )
         ),
         self::FULLTEXT => array(
@@ -1945,6 +1971,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => true,
             self::DEFAULT_STR => 'user role'
         ),
+        self::DEFAULT_CURRENCY => array(
+            // _('Default Currency')
+            'label'                 => 'Default Currency',
+            // _('The currency defined here is used as default currency in the customerd edit dialog.')
+            'description'           => 'The currency defined here is used as default currency in the customerd edit dialog.',
+            'type'                  => 'string',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            'default'               => 'EUR'
+        ),
         self::DELETED_DATA_RETENTION_TIME => [
             self::LABEL                 => 'Deleted Data Retention Time', // _('Deleted Data Retention Time')
             self::DESCRIPTION           => 'Deleted Data Retention Time (in months)',
@@ -2174,25 +2211,71 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR => array()
         ),
         /**
-         * Configure rate limits by user and method
+         * Configure rate limits by user / ip / frontends
          *
-         * example:
+         * - group priority : user > IP > frontends
+         * - both rate limit key and method are validated by regex , exact match has higher priority than wildcard '*'
+         * - example config:
          *
-         * ['LOGIN_NAME' => [
-         *   'method' => 'Felamimail.searchMessages',
-         *   'maxrequests' => 100,
-         *   'period' => 3600, // per hour
-         * ]]
-         */
+         *  $key   => [
+         *      [
+         *          Tinebase_Model_RateLimit::FLD_METHOD            =>  'Filemanager.save*', // all save methods in Filemanager_Frontend_Json
+         *          Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  100, // times
+         *          Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600 // minutes
+         *      ]
+         *  ]
+         *
+         * - frontend method regex examples:
+         *      Tinebase_Server_Expressive   => 'GDPR_Controller_DataIntendedPurposeRecord.publicApiPostManageConsent',
+         *      Tinebase_Server_Json         => 'Felamimail.search*',
+         *      Tinebase_Server_WebDAV       => // todo: support methods or request uri regex like 'PROPFIND.calendar*'
+         *      Tinebase_Server_Http         => 'Felamimail.getResource',
+         *
+        **/
         self::RATE_LIMITS => [
             self::LABEL                 => 'Rate Limits',
             self::DESCRIPTION           => 'Configure rate limits by user and method',
-            self::TYPE                  => self::TYPE_ARRAY,
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
-            self::DEFAULT_STR           => [],
+            self::CONTENT               => [
+                // key is the user login name, eg: 'tine20admin' or Tinebase_Core::USER_ANONYMOUS
+                self::RATE_LIMITS_USER   => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                // key is the netmask, eg: '10.0.10.10',
+                self::RATE_LIMITS_IP   => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [],
+                ],
+                self::RATE_LIMITS_FRONTENDS   => [
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::DEFAULT_STR           => [
+                        'Tinebase_Server_Expressive'   => [],
+                        'Tinebase_Server_Json'      => [],
+                        'Tinebase_Server_WebDAV'    => [],
+                        'Tinebase_Server_Http'     => [],
+                        // possible fallback config for all frontends
+                        /*
+                        '*'     => [
+                            [
+                                Tinebase_Model_RateLimit::FLD_METHOD            =>  '*',
+                                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  10000,
+                                Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600
+                            ],
+                        ],
+                        */
+                    ],
+                ],
+            ]
         ],
+
         self::SALES_TAX => array(
             //_('Sales Tax Default')
             self::LABEL => 'Sales Tax Default',
@@ -3060,17 +3143,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE,
             self::DEFAULT_STR => TRUE,
         ),
-        self::CURRENCY_SYMBOL => array(
-            //_('currency symbol')
-            self::LABEL => 'currency symbol',
-            //_('Path to custom favicon.')
-            self::DESCRIPTION => 'Define currency symbol to be used.',
-            self::TYPE => 'string',
-            self::DEFAULT_STR => '€',
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE => false,
-            self::SETBYSETUPMODULE => false,
-        ),
+        self::SUPPORT_REQUEST_NOTIFICATION_ROLE => [
+            self::LABEL => 'Role receiving support requests', //_('Role receiving support requests')
+            self::DESCRIPTION => 'Role receiving support requests',
+            self::TYPE => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+        ],
         self::FILESYSTEM => array(
             //_('Filesystem settings')
             self::LABEL => 'Filesystem settings',
@@ -3791,7 +3871,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     ['id' => Tinebase_Model_ActionLog::TYPE_ADD_USER_CONFIRMATION,   'value' => 'Add User Confirmation', 'icon' => null, 'system' => true], //_('Add User Confirmation')
                     ['id' => Tinebase_Model_ActionLog::TYPE_DELETION,                'value' => 'Deletion',              'icon' => null, 'system' => true], //_('Deletion')
                     ['id' => Tinebase_Model_ActionLog::TYPE_EMAIL_NOTIFICATION,      'value' => 'Email Notification',    'icon' => null, 'system' => true], //_('Email Notification')
-                    ['id' => Tinebase_Model_ActionLog::TYPE_SUPPORT_REQUEST,         'value' => 'Support request',       'icon' => null, 'system' => true], //_('Support request')
+                    ['id' => Tinebase_Model_ActionLog::TYPE_SUPPORT_REQUEST,         'value' => 'Support Request',       'icon' => null, 'system' => true], //_('Support Request')
                 ]
             ],
         ],
@@ -3835,10 +3915,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     protected static $_serverPlugins = array(
         Tinebase_Server_Plugin_Expressive::class   => 15,
-        Tinebase_Server_Plugin_Json::class      => 80,
+        Tinebase_Server_Plugin_Json::class      => 79,
         Tinebase_Server_Plugin_WebDAV::class    => 80,
         Tinebase_Server_Plugin_Cli::class        => 90,
-        Tinebase_Server_Plugin_Http::class      => 100
+        Tinebase_Server_Plugin_Http::class      => 100,
+        Tinebase_Server_Plugin_WebDAVCatchAll::class => 110,
     );
 
     /**
@@ -3935,7 +4016,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     {
                         // add definition here till we have a better place
                         try {
-                            $type = isset($definition['type']) ? $definition['type'] : null;
+                            $type = $definition['type'] ?? null;
                             if ($type) {
                                 $val = static::resolveRecordValue($config->{$name}, $definition);
                                 $configRegistryItem = new Tinebase_Config_Struct(array(

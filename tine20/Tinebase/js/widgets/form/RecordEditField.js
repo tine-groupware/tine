@@ -48,7 +48,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
     assertRecordClass: function(owningRecord) {
         if (! owningRecord) return;
 
-        // if the field is a dynamicReccord, get classname and adopt this.recordClass
+        // if the field is a dynamicRecord, get classname and adopt this.recordClass
         this.owningRecord = owningRecord;
         const owningRecordClass = _.get(this.owningRecord, 'constructor');
         const owningRecordFieldDefinitions = _.get(owningRecordClass, 'getFieldDefinitions') ? owningRecordClass.getFieldDefinitions() : null;
@@ -56,14 +56,22 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         const classNameField = _.get(ownFieldDefinition, 'config.refModelField');
         const className = _.get(this.owningRecord, 'data.'+classNameField)
             || _.get(ownFieldDefinition, 'config.modelName'); // not yet dynamic field :)
+        const currentRecordClass = this.recordClass;
         this.recordClass = className ? Tine.Tinebase.data.RecordMgr.get(className) || this.recordClass : this.recordClass;
+        if (currentRecordClass !== this.recordClass) {
+            this.setValue(this.recordData, owningRecord)
+        }
     },
     
     setValue : function(v, owningRecord){
-        this.recordData = _.get(v, 'data', v);
+        this.recordData = Tine.Tinebase.common.assertComparable(_.get(v, 'data', v));
+        this.recordData = ((_.isString(this.recordData) && this.recordData === '[]') || (_.isArray(this.recordData) && this.recordData.length === 0)) ? {} : this.recordData; // transform server defaults
         this.assertRecordClass(owningRecord);
-    
+
         const valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
+        if (valueRecord && this.recordClass && !this.recordData.hasOwnProperty(this.recordClass.getMeta('idProperty'))) {
+            valueRecord.phantom = true;
+        }
         Promise.resolve().then(async () => {
             let text = valueRecord ? valueRecord.getTitle() || '...' : '';
             if (text && text.asString) {

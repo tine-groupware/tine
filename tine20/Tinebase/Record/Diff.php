@@ -106,9 +106,7 @@ class Tinebase_Record_Diff extends Tinebase_Record_Abstract
      */
     public function onlyEmptyValuesInOldData()
     {
-        $nonEmptyValues = array_filter($this->oldData, function($v) {
-            return ! empty($v);
-        });
+        $nonEmptyValues = array_filter($this->oldData, fn($v) => ! empty($v));
         return count($nonEmptyValues) === 0;
     }
 

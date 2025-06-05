@@ -22,28 +22,28 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      *
      * @staticvar string
      */
-    const ADMIN = 'admin';
+    public const ADMIN = 'admin';
     
     /**
      * the right to run an application
      *
      * @staticvar string
      */
-    const RUN = 'run';
+    public const RUN = 'run';
 
     /**
      * the right to see an application in the FE
      *
      * @staticvar string
      */
-    const MAINSCREEN = 'mainscreen';
+    public const MAINSCREEN = 'mainscreen';
     
     /**
      * the right to manage shared folders of an application
      *
      * @staticvar string
      */
-    const MANAGE_SHARED_FOLDERS = 'manage_shared_folders';
+    public const MANAGE_SHARED_FOLDERS = 'manage_shared_folders';
     
     /**
      * the right to manage shared favorites of an application
@@ -51,14 +51,14 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      * (e.g. MANAGE_SHARED_LEAD_FAVORITES for crm lead in Tinebase_Acl_Rights_Abstract)
      * @staticvar string
      */
-    const MANAGE_SHARED_FAVORITES = 'manage_shared_favorites';
+    public const MANAGE_SHARED_FAVORITES = 'manage_shared_favorites';
     
     /**
      * the right to use personal tags in an application
      * 
      * @staticvar string
      */
-    const USE_PERSONAL_TAGS = 'use_personal_tags';
+    public const USE_PERSONAL_TAGS = 'use_personal_tags';
     
     /**
      * get all possible application rights

@@ -23,31 +23,27 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      * use this if the concurrency checks are done differntly like in CalDAV
      * where the etag is checked
      */
-    const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
-    
-    protected $_version;
+    public const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
     
     protected $_modelName = null;
     
     /**
-     * @param string  $version  the version of the client
+     * @param string $_version the version of the client
      * @throws Tinebase_Exception
      */
-    public function __construct($version = null)
+    public function __construct(protected $_version = null)
     {
         if (! $this->_modelName) {
             throw new Tinebase_Exception('modelName is required');
         }
-        $this->_version = $version;
     }
 
     /**
      * returns VObject of input data
-     * 
-     * @param   mixed  $blob
+     *
      * @return  \Sabre\VObject\Component\VCalendar
      */
-    public static function getVObject($blob)
+    public static function getVObject(mixed $blob)
     {
         if ($blob instanceof \Sabre\VObject\Component\VCalendar) {
             return $blob;
@@ -61,7 +57,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
 
         try {
             $vcalendar = self::readVCalBlob($filteredBlob);
-        } catch (Sabre\VObject\ParseException $svpe) {
+        } catch (Sabre\VObject\ParseException) {
             // replace some linebreaks and \x00's
             $search = array("\r\n", "\x00");
             $replace = array("\n", '');
@@ -213,7 +209,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                 # TRIGGER;VALUE=DURATION:-PT1H15M
                 case 'DURATION':
                 default:
-                    $durationBaseTime = isset($vcomponent->DTSTART) ? $vcomponent->DTSTART : $vcomponent->DUE;
+                    $durationBaseTime = $vcomponent->DTSTART ?? $vcomponent->DUE;
                     $alarmTime = $this->_convertToTinebaseDateTime($durationBaseTime);
                     $alarmTime->setTimezone('UTC');
                     
@@ -254,9 +250,14 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      */
     protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
+        return static::convertToTinebaseDateTime($dateTimeProperty, $_useUserTZ);
+    }
+
+    public static function convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, bool $_useUserTZ = false): Tinebase_DateTime
+    {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::getUserTimezone());
-        
+
         if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
 
@@ -264,16 +265,16 @@ abstract class Tinebase_Convert_VCalendar_Abstract
             $isDate = (isset($dateTimeProperty['VALUE']) && strtoupper($dateTimeProperty['VALUE']) == 'DATE');
 
             $tz = ($_useUserTZ || $isFloatingTime || $isDate) ?
-                (string) Tinebase_Core::getUserTimezone() : 
+                (string) Tinebase_Core::getUserTimezone() :
                 $dateTime->getTimezone();
-            
+
             $result = new Tinebase_DateTime($dateTime->format(Tinebase_Record_Abstract::ISO8601LONG), $tz);
         } else {
             $result = new Tinebase_DateTime($dateTimeProperty->getValue());
         }
-        
+
         date_default_timezone_set($defaultTimezone);
-        
+
         return $result;
     }
 

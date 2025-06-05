@@ -25,6 +25,7 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
      * height of dialog window
      */
     windowHeight: 400,
+
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required if not appName is given)

@@ -30,29 +30,29 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * the right to send bugreports
      * @staticvar string
      */
-    const REPORT_BUGS = 'report_bugs';
+    public const REPORT_BUGS = 'report_bugs';
     
     /**
      * the right to check for new versions
      * @staticvar string
      */
-    const CHECK_VERSION = 'check_version';
+    public const CHECK_VERSION = 'check_version';
 
-    const MANAGE_NUMBERABLES = 'manage_numberables';
+    public const MANAGE_NUMBERABLES = 'manage_numberables';
 
     /**
      * the right to manage the own profile
      * @staticvar string
      */
-    const MANAGE_OWN_PROFILE = 'manage_own_profile';
+    public const MANAGE_OWN_PROFILE = 'manage_own_profile';
 
-    const MANAGE_BANK_ACCOUNTS = 'manage_bank_accounts';
+    public const MANAGE_BANK_ACCOUNTS = 'manage_bank_accounts';
     
     /**
      * the right to manage the own (client) state
      * @staticvar string
      */
-    const MANAGE_OWN_STATE = 'manage_own_state';
+    public const MANAGE_OWN_STATE = 'manage_own_state';
 
     public const MANAGE_EVALUATION_DIMENSIONS = 'manage_evaluation_dimensions';
 
@@ -60,43 +60,43 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * the right to use the installation in maintenance mode
      * @staticvar string
      */
-    const MAINTENANCE = 'maintenance';
+    public const MAINTENANCE = 'maintenance';
 
     /**
      * the right to access the replication data of all applications
      * @staticvar string
      */
-    const REPLICATION = 'replication';
+    public const REPLICATION = 'replication';
 
     /**
      * account type anyone
      * @staticvar string
      */
-    const ACCOUNT_TYPE_ANYONE   = 'anyone';
+    public const ACCOUNT_TYPE_ANYONE   = 'anyone';
     
     /**
      * account type user
      * @staticvar string
      */
-    const ACCOUNT_TYPE_USER     = 'user';
+    public const ACCOUNT_TYPE_USER     = 'user';
 
     /**
      * account type group
      * @staticvar string
      */
-    const ACCOUNT_TYPE_GROUP    = 'group';
+    public const ACCOUNT_TYPE_GROUP    = 'group';
 
     /**
      * account type role
      * @staticvar string
      */
-    const ACCOUNT_TYPE_ROLE     = 'role';
+    public const ACCOUNT_TYPE_ROLE     = 'role';
 
     /**
      * the right to be able to see license information (expiry, ...) in the frontend
      * @staticvar string
      */
-    const SHOW_LICENSE_INFO = 'show_license_info';
+    public const SHOW_LICENSE_INFO = 'show_license_info';
 
     /**
      * holds the instance of the singleton

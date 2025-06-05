@@ -12,22 +12,19 @@
  */
 class Tinebase_FileSystem_AVScan_Result
 {
-    const RESULT_OK = \Xenolope\Quahog\Client::RESULT_OK;
-    const RESULT_FOUND = \Xenolope\Quahog\Client::RESULT_FOUND;
-    const RESULT_ERROR = \Xenolope\Quahog\Client::RESULT_ERROR;
-    const RESULT_RELOADING = 'RELOADING';
+    public const RESULT_OK = \Xenolope\Quahog\Client::RESULT_OK;
+    public const RESULT_FOUND = \Xenolope\Quahog\Client::RESULT_FOUND;
+    public const RESULT_ERROR = \Xenolope\Quahog\Client::RESULT_ERROR;
+    public const RESULT_RELOADING = 'RELOADING';
 
     public $result;
-    public $message;
 
-    public function __construct($result, $message)
+    public function __construct($result, public $message)
     {
         if (self::RESULT_OK !== $result && self::RESULT_FOUND !== $result) {
             $this->result = self::RESULT_ERROR;
         } else {
             $this->result = $result;
         }
-
-        $this->message = $message;
     }
 }

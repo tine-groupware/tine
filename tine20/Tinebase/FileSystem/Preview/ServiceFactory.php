@@ -34,7 +34,7 @@ class Tinebase_FileSystem_Preview_ServiceFactory
                 $licenseClass = Tinebase_License::getInstance();
 
                 $licensePath = 'tine20://' . $licenseClass->getLicensePath();
-                $caPath = dirname($licenseClass->getCaFiles()[0]);
+                $caPath = dirname((string) $licenseClass->getCaFiles()[0]);
                 $url = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL};
 
                 $networkAdapter = new Tinebase_FileSystem_Preview_AuthNetworkAdapter($url, $licensePath, $caPath);

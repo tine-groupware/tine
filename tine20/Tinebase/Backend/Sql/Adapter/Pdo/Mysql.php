@@ -55,7 +55,7 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
      */
     public static function getCharsetFromConfigOrCache(&$dbConfigArray)
     {
-        $cacheId = md5(__CLASS__ . '::useUtf8mb4');
+        $cacheId = md5(self::class . '::useUtf8mb4');
         if (!isset($dbConfigArray['useUtf8mb4'])) {
             if (false !== ($result = Tinebase_Core::getCache()->load($cacheId))) {
                 $dbConfigArray['useUtf8mb4'] = $result;
@@ -79,7 +79,7 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
      */
     public static function supportsUTF8MB4($db)
     {
-        $cacheId = md5(__CLASS__ . '::useUtf8mb4');
+        $cacheId = md5(self::class . '::useUtf8mb4');
         if (false !== ($result = Tinebase_Core::getCache()->load($cacheId))) {
             return (boolean)$result;
         }
@@ -87,7 +87,7 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
         // empty db with innodb_large_prefix: on => utf8mb4
         if ((false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
                 ($str = $db->query('SHOW CREATE TABLE ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1)) &&
-                strpos($str, 'utf8mb4') === false
+                !str_contains($str, 'utf8mb4')
             ) || (!Setup_Backend_Mysql::dbSupportsVersion($db, 'mysql > 8') &&
                     Tinebase_Core::getDbVariable('innodb_large_prefix', $db) !== 'ON' &&
                     Setup_Backend_Mysql::dbSupportsVersion($db, 'mariadb < 10.3 | mysql > 5.5')

@@ -17,7 +17,7 @@ use Zend_RedisProxy as Redis;
  */
 class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend_Interface
 {
-    const QUEUE_NAME = 'TinebaseQueue';
+    public const QUEUE_NAME = 'TinebaseQueue';
 
     /** 
      * configurations for connecting with Redis-Queues
@@ -106,9 +106,9 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             $this->_redis->close();
         }
         
-        $host    = $host    ? $host    : $this->_options['host'];
-        $port    = $port    ? $port    : $this->_options['port'];
-        $timeout = $timeout ? $timeout : $this->_options['timeout'];
+        $host    = $host ?: $this->_options['host'];
+        $port    = $port ?: $this->_options['port'];
+        $timeout = $timeout ?: $this->_options['timeout'];
         
         $this->_redis = new Redis;
         if (! $this->_redis->connect($host, $port, $timeout)) {
@@ -133,7 +133,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' restored job from deadletter queue:' . $jobId);
                 return true;
-            } catch (RedisException $re) {
+            } catch (RedisException) {
                 // already exists
             }
         }
@@ -155,7 +155,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
                     $this->_redis->restore($this->_deadLetterStructName . ":" . $jobId, 0, $data);
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                         . ' Put job into deadletter queue:' . $jobId);
-                } catch (RedisException $re) {
+                } catch (RedisException) {
                     // already exists
                 }
             }
@@ -245,7 +245,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             array('data', 'sha1', 'retry', 'status')
         );
         
-        if (sha1($data['data']) != $data['sha1']) {
+        if (sha1((string) $data['data']) != $data['sha1']) {
             $e = new RuntimeException('sha1 checksum mismatch');
             Tinebase_Exception::log($e, null, $data);
             throw $e;

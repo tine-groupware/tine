@@ -57,7 +57,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
         $this->_config['domain'] = !empty($imapConfig['domain']) ? $imapConfig['domain'] : null;
         $this->_config['host']   = $imapConfig['host'];
         $this->_config['port']   = !empty($imapConfig['port']) ? $imapConfig['port'] : 143;
-        $this->_config['ssl']    = $imapConfig['ssl'] != 'none' ? strtoupper($imapConfig['ssl']) : false;
+        $this->_config['ssl']    = $imapConfig['ssl'] != 'none' ? strtoupper((string) $imapConfig['ssl']) : false;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' cyrus imap config: ' . print_r($this->_config, true));
@@ -127,7 +127,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
 
         $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
 
-        $quota = $this->_adminGetQuota($imap, $mailboxString);
+        $quota = $this->_adminGetQuota($mailboxString, $imap);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got quota: ' . print_r($quota, TRUE));
@@ -143,7 +143,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
         ));
 
         $_user->imapUser  = $emailUser;
-        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser ?? null);
     }
 
     /**
@@ -208,8 +208,8 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
      */
     protected function _setImapQuota(Tinebase_Model_FullUser $_user, Zend_Mail_Protocol_Imap $_imap = NULL, $_mailboxString = NULL)
     {
-        $imap = ($_imap !== NULL) ? $_imap : $this->_getImapConnection();
-        $mailboxString = ($_mailboxString !== NULL) ? $_mailboxString : $this->_getUserMailbox($_user->accountLoginName);
+        $imap = $_imap ?? $this->_getImapConnection();
+        $mailboxString = $_mailboxString ?? $this->_getUserMailbox($_user->accountLoginName);
         
         if (isset($_user->imapUser)) {
             $limit = ($_user->imapUser->emailMailQuota) > 0 ? $_user->imapUser->emailMailQuota / 1024 : null;
@@ -310,9 +310,9 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
      * @param  string  $mailbox  the mailbox (user.example)
      * @return array
      */
-    protected function _adminGetQuota(Zend_Mail_Protocol_Imap $_imap = NULL, $mailbox)
+    protected function _adminGetQuota($mailbox, Zend_Mail_Protocol_Imap $_imap = NULL)
     {
-        $imap = ($_imap !== NULL) ? $_imap : $this->_getImapConnection();
+        $imap = $_imap ?? $this->_getImapConnection();
         $imap->sendRequest('GETQUOTA', array($mailbox), $tag);
 
         $result = array();
@@ -320,8 +320,8 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
         while (! $imap->readLine($tokens, $tag)) {
             if ($tokens[0] == 'QUOTA') {
                 if (! empty($tokens[2]) && is_array($tokens[2])) {
-                    $result[strtoupper($tokens[2][0])] = array(
-                        'resource' => strtoupper($tokens[2][0]),
+                    $result[strtoupper((string) $tokens[2][0])] = array(
+                        'resource' => strtoupper((string) $tokens[2][0]),
                         'usage'    => $tokens[2][1],
                         'limit'    => $tokens[2][2]
                     );

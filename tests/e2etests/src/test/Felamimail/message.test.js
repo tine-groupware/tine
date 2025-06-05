@@ -23,14 +23,17 @@ describe('message', () => {
         await popupWindow.click('.search-item.x-combo-selected');
         await popupWindow.waitForTimeout(500); //wait for new mail line!
         await popupWindow.click('input[name=subject]');
-        await popupWindow.waitForTimeout(500); //musst wait for input!
+        await popupWindow.waitForTimeout(1000); //musst wait for input!
         await expect(popupWindow).toFill('input[name=subject]', 'message with attachment');
+        await popupWindow.waitForTimeout(1000);
 
         const fileToUpload = 'src/test/Felamimail/attachment.txt';
+        let filePickerWindow = lib.getNewWindow();
         await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
-        const filePickerWindow = await lib.getNewWindow();
-        await filePickerWindow.waitForTimeout(2000); //musst wait for input!
-        await expect(filePickerWindow).toClick('span',{text: 'Meine Ordner', clickCount: 2});
+        filePickerWindow = await filePickerWindow;
+        await filePickerWindow.waitForTimeout(8000); //musst wait for input!
+        let element = await filePickerWindow.$('[ext\\:tree-node-id="myUser"]');
+        await element.click({clickCount:2});
         await filePickerWindow.waitForTimeout(5000); //musst wait!
         await expect(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
         await filePickerWindow.waitForTimeout(2000); //musst wait!
@@ -39,11 +42,13 @@ describe('message', () => {
         await inputUploadHandle.uploadFile(fileToUpload);
         await filePickerWindow.waitForTimeout(1000);
         await expect(filePickerWindow).toClick('button', {text: 'Abbrechen'});
-        
+
+        let filePickerWindowNew = lib.getNewWindow();
         await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
-        const filePickerWindowNew = await lib.getNewWindow();
-        await filePickerWindowNew.waitForSelector('span',{text: 'Meine Ordner', timeout: 10000});
-        await expect(filePickerWindowNew).toClick('span',{text: 'Meine Ordner'});
+        filePickerWindowNew = await filePickerWindowNew;
+        await filePickerWindowNew.waitForTimeout(8000);
+        element = await filePickerWindowNew.$('[ext\\:tree-node-id="myUser"]');
+        await element.click({clickCount:2});
         await filePickerWindowNew.waitForTimeout(500);
         await expect(filePickerWindowNew).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
         await filePickerWindowNew.waitForTimeout(1000);
@@ -97,8 +102,9 @@ describe('message', () => {
 
     let attachment;
     test.skip('download attachments', async () => {
+        let popupWindow = lib.getNewWindow();
         newMail.click({clickCount: 2});
-        popupWindow = await lib.getNewWindow();
+        popupWindow = await popupWindow
         //await popupWindow.waitForSelector('.ext-el-mask');
         await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.waitForSelector('.tinebase-download-link');

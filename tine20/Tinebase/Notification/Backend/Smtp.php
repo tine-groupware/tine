@@ -55,7 +55,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
     public static function getNotificationAddress()
     {
         $emailNotification = Felamimail_Config::getInstance()->{Felamimail_Config::EMAIL_NOTIFICATION_EMAIL_FROM};
-        if (!$emailNotification || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $emailNotification)) {
+        if (!$emailNotification || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, (string) $emailNotification)) {
             $emailNotification = self::getFromAddress();
         }
         return $emailNotification;

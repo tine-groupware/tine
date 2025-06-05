@@ -13,11 +13,8 @@
  */
 class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record_Expander_DataRequest
 {
-    protected Tinebase_ModelConfiguration $parentMC;
-
-    public function __construct($prio, $controller, $ids, $mc, $callback, $getDeleted = false)
+    public function __construct($prio, $controller, $ids, protected Tinebase_ModelConfiguration $parentMC, $callback, $getDeleted = false)
     {
-        $this->parentMC = $mc;
         parent::__construct($prio, $controller, $ids, $callback, $getDeleted);
     }
 
@@ -56,7 +53,9 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
                             }
                         }
                     }
-                    $record->setAccountGrants($grants);
+                    if ($grants) {
+                        $record->setAccountGrants($grants);
+                    }
                     return $record->{Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS};
                 } elseif (!$delegateRecord instanceof Tinebase_Record_Interface) {
                     if (!isset($funcCache[$delegateRecord])) {
@@ -86,7 +85,9 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
                 if (!isset($containerCache[$containerId])) {
                     $containerCache[$containerId] = $func($record, $func);
                 }
-                $record->setAccountGrants($containerCache[$containerId]);
+                if ($containerCache[$containerId]) {
+                    $record->setAccountGrants($containerCache[$containerId]);
+                }
             }
         }
 

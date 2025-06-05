@@ -23,7 +23,7 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
      * use this as value to indicate that the boolfilter should not be applied at all
      * this can be handy if you need to set a filterline e.g. in UI without effect
      */
-    const VALUE_NOTSET = '#NOTSET#';
+    public const VALUE_NOTSET = '#NOTSET#';
 
     /**
      * @var array list of allowed operators
@@ -60,7 +60,7 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
         
          if (! empty($this->_options['fields'])) {
              foreach ((array) $this->_options['fields'] as $fieldName) {
-                 $quotedField = $db->quoteIdentifier(strpos($fieldName, '.') === false ? $_backend->getTableName() . '.' . $fieldName : $fieldName);
+                 $quotedField = $db->quoteIdentifier(!str_contains((string) $fieldName, '.') ? $_backend->getTableName() . '.' . $fieldName : $fieldName);
                  if ($value) {
                      $_select->where($quotedField . $action['sqlop'], $value);
                  } else {

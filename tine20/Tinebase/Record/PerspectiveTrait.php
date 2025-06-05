@@ -59,6 +59,6 @@ trait Tinebase_Record_PerspectiveTrait
 
     public function getPerspectiveKey(Tinebase_Record_Interface $record): string
     {
-        return get_class($record) . $record->getId();
+        return $record::class . $record->getId();
     }
 }

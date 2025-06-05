@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import {isUndefined} from "lodash";
+
 const { apply, extend, isPrimitive, isArray, isString } = require("Ext/core/core/Ext");
 const { emptyFn } = require("Ext/core/Ext-more");
 const { lowerFirst, get, set, find, forEach, isFunction, isObject, indexOf, map, difference, compact } = require('lodash');
@@ -331,6 +333,30 @@ extend(Record, ExtRecord, {
         });
         
         await Promise.all(pms);
+    },
+
+    copy: function(newId) {
+        const data = this.getData();
+        data[this.idProperty] = isUndefined(newId) ? data[this.idProperty] : newId;
+        const copy = Record.setFromJson(data, this.constructor);
+        forEach(this.data, (v, k) => {
+            if (isFunction(get(v, 'copy'))) {
+                copy.data[k] = v.copy();
+            }
+        });
+        forEach(this.__metaFields, (m) => {
+            if (this.hasOwnProperty(m)) {
+                copy[m] = this[m];
+            }
+        });
+        difference(Object.keys(data), this.fields.keys, ["__meta"]).forEach((k) => {
+            copy.data[k] = data[k];
+        });
+        copy.modified = [];
+        forEach(this.modified, (v, k) => {
+            copy.modified[k] = isFunction(get(v, 'copy')) ? v.copy() : this.modified[k];
+        });
+        return copy;
     }
 });
 
@@ -480,7 +506,7 @@ Record.create = function(o, meta) {
         return i18n._(p.appName);
     };
     f.getIconCls = function() {
-        return 'ApplicationIconCls ' + p.appName + 'IconCls ' + p.appName + p.recordName;
+        return 'ApplicationIconCls ' + p.appName + 'IconCls ' + p.appName + p.modelName;
     };
     /**
      * returns the php class name of the record itself or by the application(name) and model(name)
@@ -547,7 +573,7 @@ Record.getDefaultData = function(recordClass, defaults) {
     const dd = JSON.parse(JSON.stringify(modelConfig.defaultData));
 
     // find container by selection or use defaultContainer by registry
-    if (modelConfig.containerProperty) {
+    if (modelConfig.containerProperty &&! modelConfig.extendsContainer) {
         if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
             var app = Tine.Tinebase.appMgr.get(appName),
                 registry = app.getRegistry(),
@@ -621,6 +647,19 @@ Record.setFromJson = function(json, recordClass) {
 
     return record;
 };
+
+/**
+ * returns a clone of given record (in current window context)
+ *
+ * @param {Record} record
+ * @return {Record}
+ */
+Record.clone = function(record) {
+    const data = JSON.stringify(record.getData());
+    const recordClass = record.constructor.getPhpClassName()
+
+    return Record.setFromJson(data, recordClass);
+}
 
 /**
  * @type {Array}

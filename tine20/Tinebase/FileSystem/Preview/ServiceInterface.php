@@ -109,34 +109,16 @@ interface Tinebase_FileSystem_Preview_ServiceInterface
          ...
        ]
      *
-     * @param $filePaths array of file Paths to convert
+     * @param array $filePaths of file Paths to convert
      * @param array $config
      * @return array|bool
      * @throws Tinebase_FileSystem_Preview_BadRequestException
      */
     public function getPreviewsForFiles(array $filePaths, array $config);
 
-    /**
-     * Uses the DocumentPreviewService to generate pdfs for a documentfile.
-     *
-     * @param $filePath
-     * @param $synchronRequest bool should the request be prioritized
-     * @param array $intermediateFormats
-     * @return string file blob
-     * @Throws Tinebase_FileSystem_Preview_BadRequestException
-     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
-    */
     public function getPdfForFile($filePath, $synchronRequest = false, $intermediateFormats = []);
 
-    /**
-     * Merges multiple pdf files into a single one.
-     *
-     * @param $filePaths array of file paths
-     * @param $synchronousRequest
-     * @return string path to file
-     * @throws Tinebase_Exception_UnexpectedValue preview service did not succeed
-     */
-    public function mergePdfFiles($filePaths, $synchronousRequest = false);
+    public function mergePdfFiles(array $filePaths, bool $synchronousRequest = false);
 }
 
 

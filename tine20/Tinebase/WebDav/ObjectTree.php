@@ -26,8 +26,8 @@ class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\Tree
      */
     public function move($sourcePath, $destinationPath) {
 
-        list($sourceDir,) = Tinebase_WebDav_XMLUtil::splitPath($sourcePath);
-        list($destinationDir, $destinationName) = Tinebase_WebDav_XMLUtil::splitPath($destinationPath);
+        [$sourceDir, ] = Tinebase_WebDav_XMLUtil::splitPath($sourcePath);
+        [$destinationDir, $destinationName] = Tinebase_WebDav_XMLUtil::splitPath($destinationPath);
         $sourceNode = $this->getNodeForPath($sourcePath);
 
         if ($sourceDir===$destinationDir) {

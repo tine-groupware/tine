@@ -302,15 +302,28 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
 
     /**
      * delete missing events
-     * 
-     * @param $importedEvents
-     * @throws Exception
+     *
+     * @param Tinebase_Record_RecordSet $importedEvents
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    protected function _deleteMissing($importedEvents)
+    protected function _deleteMissing(Tinebase_Record_RecordSet $importedEvents): void
     {
         if ($this->_options['deleteMissing']) {
+            $container = Tinebase_Container::getInstance()->getContainerById($this->_options['container_id']);
+            if (Tinebase_Core::isReplica() && isset($container->xprops()[Calendar_Model_Event::XPROPS_REPLICATABLE])
+                && $container->xprops()[Calendar_Model_Event::XPROPS_REPLICATABLE]) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__
+                        . ' We cannot delete missing events from a replicable container on a replica');
+                }
+                return;
+            }
+
             $missingEventsFilter = new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_options['container_id']),
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()),
                 array('field' => 'uid', 'operator' => 'notin', 'value' => array_unique($importedEvents->uid)),
                 array('field' => 'period', 'operator' => 'within', 'value' => array(
                     'from'  => new Tinebase_DateTime('now'),
@@ -318,11 +331,13 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
                 ))
             ));
             $missingEvents = Calendar_Controller_Event::getInstance()->search($missingEventsFilter);
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Deleting ' . count($missingEvents) . ' missing events');
-
-            Calendar_Controller_Event::getInstance()->delete($missingEvents->id);
+            if ($missingEvents->count() > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Deleting ' . count($missingEvents) . ' missing events');
+                }
+                Calendar_Controller_Event::getInstance()->delete($missingEvents->id);
+            }
         }
     }
 

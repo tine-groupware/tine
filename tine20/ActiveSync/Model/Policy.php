@@ -60,7 +60,7 @@ class ActiveSync_Model_Policy extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'policy_key'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),

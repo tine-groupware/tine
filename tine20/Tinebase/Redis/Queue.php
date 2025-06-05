@@ -95,6 +95,6 @@ class Tinebase_Redis_Queue
             $data = NULL;
         }
         
-        return ($data) ? json_decode($data[1]) : NULL;
+        return ($data) ? json_decode((string) $data[1]) : NULL;
     }
 }

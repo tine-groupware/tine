@@ -806,6 +806,9 @@ msgstr "currency symbol"
 msgid "Path to custom favicon."
 msgstr "Path to custom favicon."
 
+msgid "Role receiving support requests"
+msgstr "Role receiving support requests"
+
 msgid "Filesystem settings"
 msgstr "Filesystem settings"
 
@@ -1080,8 +1083,8 @@ msgstr "Deletion"
 msgid "Email Notification"
 msgstr "Email Notification"
 
-msgid "Support request"
-msgstr "Support request"
+msgid "Support Request"
+msgstr "Support Request"
 
 msgid "Site Filter"
 msgstr "Site Filter"
@@ -1092,7 +1095,7 @@ msgstr "Filter configuration for site record pickers. Sites can be a special typ
 msgid "Personal container"
 msgstr "Personal container"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal container"
 msgstr "%s's personal container"
 
@@ -1114,7 +1117,7 @@ msgstr "A container with this name already exists."
 msgid "renaming is currently only possible if no models are assigned"
 msgstr "renaming is currently only possible if no models are assigned"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal files"
 msgstr "%s's personal files"
 
@@ -1123,9 +1126,6 @@ msgstr "Maximum number of users reached."
 
 msgid "The new password must be different from the old one."
 msgstr "The new password must be different from the old one."
-
-msgid "Old pin is wrong."
-msgstr "Old pin is wrong."
 
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
@@ -1136,7 +1136,7 @@ msgstr[1] "Bank Holiday Calendars"
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "A Message has been filed to this record. Subject: {0}"
 
-#, python-format
+#, python-format, php-format
 msgid "Status %s is not valid."
 msgstr "Status %s is not valid."
 
@@ -1146,6 +1146,12 @@ msgstr "Email address {0} not in allowed domains [{1}] or invalid"
 
 msgid "Email account already exists"
 msgstr "Email account already exists"
+
+msgid "Destination source already exists:"
+msgstr "Destination source already exists:"
+
+msgid "Email account or alias/forward already exists"
+msgstr "Email account or alias/forward already exists"
 
 msgid "Area is locked"
 msgstr "Area is locked"
@@ -1270,7 +1276,7 @@ msgstr "MFA send out triggered"
 msgid "Anyone"
 msgstr "Anyone"
 
-#, python-format
+#, python-format, php-format
 msgid "The following fields weren't imported: %s"
 msgstr "The following fields weren't imported: %s"
 
@@ -1602,6 +1608,9 @@ msgstr "You tried to access a function that is not available. Please reload your
 msgid "Close"
 msgstr "Close"
 
+msgid "Do you want to copy the HTML content with styles?"
+msgstr "Do you want to copy the HTML content with styles?"
+
 msgid "Outdated Browser"
 msgstr "Outdated Browser"
 
@@ -1832,6 +1841,24 @@ msgstr "This area is locked. To unlock it we send a securitycode to via {mfaDevi
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "Security code from {mfaDevice.device_name}"
 
+msgid "Didn't receive the SMS?"
+msgstr "Didn't receive the SMS?"
+
+msgid "Send Support request to admin?"
+msgstr "Send Support request to admin?"
+
+msgid "Please enter the message:"
+msgstr "Please enter the message:"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Support request has been sent"
+msgstr "Support request has been sent"
+
+msgid "I didn't receive a SMS message."
+msgstr "I didn't receive a SMS message."
+
 msgid "Token required"
 msgstr "Token required"
 
@@ -1992,9 +2019,6 @@ msgstr "Repeat new {0}"
 msgid "Changing {0}"
 msgstr "Changing {0}"
 
-msgid "Success"
-msgstr "Success"
-
 #, python-brace-format
 msgid "Your {0} has been changed."
 msgstr "Your {0} has been changed."
@@ -2150,6 +2174,13 @@ msgstr "choose other {0}..."
 
 msgid "Not a valid time"
 msgstr "Not a valid time"
+
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr "\"{value}\" was copied to clipboard"
 
 msgid "Job Title"
 msgstr "Job Title"
@@ -2367,11 +2398,23 @@ msgstr[1] "Edit {0}"
 msgid "Remove {0}"
 msgstr "Remove {0}"
 
+msgid "Visibility"
+msgstr "Visibility"
+
+msgid "for all"
+msgstr "for all"
+
+msgid "only for the creator of the note"
+msgstr "only for the creator of the note"
+
 msgid "Enter new note:"
 msgstr "Enter new note:"
 
 msgid "Add Note"
 msgstr "Add Note"
+
+msgid "Restricted To"
+msgstr "Restricted To"
 
 msgid "Timestamp"
 msgstr "Timestamp"
@@ -2959,6 +3002,9 @@ msgstr "Please enter the new Password:"
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr "Password is expired in accordance with the password policy and needs to be changed"
 
+msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
+msgstr "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
+
 msgid "Password Must Change"
 msgstr "Password Must Change"
 
@@ -3057,6 +3103,9 @@ msgstr "Save config"
 msgid "Reload config"
 msgstr "Reload config"
 
+msgid "Compose Email"
+msgstr "Compose Email"
+
 msgid "Gets assigned automatically"
 msgstr "Gets assigned automatically"
 
@@ -3101,6 +3150,9 @@ msgstr "Searching..."
 
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "You tried to link a record with itself. This is not allowed!"
+
+msgid "Open link in new window"
+msgstr "Open link in new window"
 
 msgid "Search for records ..."
 msgstr "Search for records ..."
@@ -3391,6 +3443,27 @@ msgstr "Last Modified By"
 msgid "Grid Panel Key Bindings"
 msgstr "Grid Panel Key Bindings"
 
+msgid "select all visible rows"
+msgstr "select all visible rows"
+
+msgid "copy record"
+msgstr "copy record"
+
+msgid "edit record"
+msgstr "edit record"
+
+msgid "new record"
+msgstr "new record"
+
+msgid "find"
+msgstr "find"
+
+msgid "focus grid"
+msgstr "focus grid"
+
+msgid "reload grid"
+msgstr "reload grid"
+
 #, python-brace-format
 msgid "Moving {0}"
 msgstr "Moving {0}"
@@ -3429,6 +3502,9 @@ msgstr "has notes"
 
 msgid "This is a multilingual field:"
 msgstr "This is a multilingual field:"
+
+msgid "Select { itemName } ..."
+msgstr "Select { itemName } ..."
 
 #, python-brace-format
 msgid "Transition from {current} to {target} is not allowed."
@@ -3605,11 +3681,35 @@ msgstr "Remove { ownRecordName } relation to this { relatedRecordName } only"
 msgid "Site"
 msgstr "Site"
 
+msgid "GENDER_Site"
+msgstr "GENDER_Site"
+
 msgid "no site association"
 msgstr "no site association"
 
 msgid "tag name"
 msgstr "tag name"
+
+msgid "Add a new personal tag"
+msgstr "Add a new personal tag"
+
+msgid "Add New Personal Tag"
+msgstr "Add New Personal Tag"
+
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Please note: You create a personal tag. Only you can see it!"
+
+msgid "Enter tag name:"
+msgstr "Enter tag name:"
+
+msgid "Notice"
+msgstr "Notice"
+
+msgid "The minimum tag length is three."
+msgstr "The minimum tag length is three."
+
+msgid "Could not create tag."
+msgstr "Could not create tag."
 
 msgid "Add Tags"
 msgstr "Add Tags"
@@ -3625,18 +3725,6 @@ msgstr "Detach tag(s)"
 
 msgid "Select Tag(s) to detach"
 msgstr "Select Tag(s) to detach"
-
-msgid "Add a new personal tag"
-msgstr "Add a new personal tag"
-
-msgid "Add New Personal Tag"
-msgstr "Add New Personal Tag"
-
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Please note: You create a personal tag. Only you can see it!"
-
-msgid "Enter tag name:"
-msgstr "Enter tag name:"
 
 msgid "No Tags to display"
 msgstr "No Tags to display"
@@ -3692,15 +3780,6 @@ msgstr[1] "Deleting Tags"
 
 msgid "Could not delete Tag(s)."
 msgstr "Could not delete Tag(s)."
-
-msgid "Notice"
-msgstr "Notice"
-
-msgid "The minimum tag length is three."
-msgstr "The minimum tag length is three."
-
-msgid "Could not create tag."
-msgstr "Could not create tag."
 
 msgid "Could not update tag."
 msgstr "Could not update tag."
@@ -3930,6 +4009,12 @@ msgstr[1] "Items"
 msgid "Number"
 msgstr "Number"
 
+msgid "Cost Center"
+msgstr "Cost Center"
+
+msgid "Cost Bearer"
+msgstr "Cost Bearer"
+
 msgid "GENDER_Evaluation Dimension"
 msgstr "GENDER_Evaluation Dimension"
 
@@ -4127,8 +4212,8 @@ msgstr "Gebietsstand"
 msgid "Bevölkerungsstand"
 msgstr "Bevölkerungsstand"
 
-msgid "Is Private"
-msgstr "Is Private"
+msgid "Restricted to"
+msgstr "Restricted to"
 
 msgid "If active, it is only visible for the creator of this note"
 msgstr "If active, it is only visible for the creator of this note"
@@ -4158,6 +4243,12 @@ msgstr "Prefix"
 
 msgid "Number is Editable"
 msgstr "Number is Editable"
+
+msgid "Max Requests"
+msgstr "Max Requests"
+
+msgid "Period"
+msgstr "Period"
 
 msgid "RoleMember"
 msgid_plural "RoleMembers"
@@ -4196,6 +4287,9 @@ msgstr[1] "Scheduler tasks"
 
 msgid "Configuration"
 msgstr "Configuration"
+
+msgid "Disable automatic time shuffle"
+msgstr "Disable automatic time shuffle"
 
 msgid "Last run"
 msgstr "Last run"
@@ -4352,7 +4446,7 @@ msgstr "modified"
 msgid "Scheduler task failed"
 msgstr "Scheduler task failed"
 
-#, python-format
+#, python-format, php-format
 msgid "Your scheduler task %s has failed %d times."
 msgstr "Your scheduler task %s has failed %d times."
 
@@ -4379,3 +4473,15 @@ msgstr "Tine 2.0 URL"
 
 msgid "Shared folders"
 msgstr "Shared folders"
+
+msgid "redirecting ..."
+msgstr "redirecting ..."
+
+msgid "Right side columns fractional"
+msgstr "Right side columns fractional"
+
+msgid "Neighbours only"
+msgstr "Neighbours only"
+
+msgid "Preview"
+msgstr "Preview"

@@ -327,6 +327,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
                     
                 case 'STATUS':
                     $task->status = $property->getValue();
+                    //Tasks_Config::getInstance()->{Tasks_Config::TASK_STATUS}->records->getById($property->getValue()) ?: Tasks_Model_Task::TASK_STATUS_NEEDS_ACTION;
                     
                     break;
                     
@@ -368,6 +369,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
                         } else {
                             $task->priority = $val;
                         }
+
                     }
                     
                     break;

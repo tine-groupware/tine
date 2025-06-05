@@ -119,7 +119,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
         try {
             $fromData = $this->_backend->getByProperty($_fromToken, 'filterSyncToken');
             $toData = $this->_backend->getByProperty($_toToken, 'filterSyncToken');
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return false;
         }
 

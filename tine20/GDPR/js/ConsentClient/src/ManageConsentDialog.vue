@@ -35,27 +35,18 @@ import {computed, defineProps, ref, watch,} from 'vue'
 import {useFormatMessage} from './index.es6'
 
 const { formatMessage } = useFormatMessage();
-
 const props = defineProps({
     record: {type: Object, default: null},
     modelValue: { type: Boolean, default: false}
 })
 
 const emits = defineEmits(['confirm', 'update:modelValue', 'close']);
-
 const modalTrigger = ref(false)
+
 watch(() => props.modelValue, newVal => { modalTrigger.value = newVal })
 watch(modalTrigger, newVal => { emits("update:modelValue", newVal) })
 
-const modalShow = ref(false);
 const consentStatus = ref(null);
-const consentOptions = computed(() => {
-  const status = props.record?.__record.status === 'Manage' ? 'Agree' : props.record?.__record.status;
-  return [
-    {value: status, text: formatMessage(status)},
-  ]
-})
-
 const dialogTitle = computed(() => {
   return formatMessage(props.record?.__record.status || '') + ': ' + formatMessage(props.record?.__record.name || '')
 })
@@ -69,7 +60,6 @@ watch(()=> props.modelValue, (newVal) => {
         comment.value = previousComment || "";
     }
 })
-
 const postConsent = async () => {
     const body = JSON.parse(JSON.stringify(props.record))
     delete body.__record
@@ -86,8 +76,7 @@ const postConsent = async () => {
             // add nothing to the body
             break;
     }
-    console.info("posting consent:", body)
-    // todo
+
     const contactId = window.location.href.split('/').pop();
     await fetch(`/GDPR/manageConsent/${contactId}`, {
         method: 'POST',

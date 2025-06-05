@@ -202,7 +202,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         }
         
         if ($_record->is_billable === false || $_record->is_billable === 0) {
-            $_record->accounting_time_factor = 0;
             $_record->accounting_time = 0;
         }
     }
@@ -347,7 +346,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-        $this->_calcClearedAmount($_record);
+        $this->_calcAmounts($_record);
     }
 
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -355,12 +354,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_createdRecord */
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
-        $this->_tsChanged($_createdRecord);
+        $this->fireEvent($_createdRecord);
     }
 
     /**
      * inspect update of one record
-     * 
+     *
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
@@ -372,9 +371,9 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
-        $this->_calcClearedAmount($_record, $_oldRecord);
+        $this->_calcAmounts($_record, $_oldRecord);
 
-        if ($this->_isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
+        if ($this->isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
             //reset invoicing related fields to find the invoice positions
             $_record->is_cleared = false;
             $_record->invoice_id = '';
@@ -386,8 +385,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
         /** @var Timetracker_Model_Timesheet $updatedRecord */
-        if ($this->_isTSDateChanged($updatedRecord, $currentRecord)) {
-            $this->_tsChanged($updatedRecord, $currentRecord);
+        if ($this->isTSDateChanged($updatedRecord, $currentRecord)) {
             //need to clear timesheet after generate invoice position
             if (!$updatedRecord->is_cleared && empty($updatedRecord->invoice_id) && !empty($currentRecord->invoice_id)) {
                 $result = Sales_Controller_Invoice::getInstance()->checkForUpdate($currentRecord->invoice_id);
@@ -398,6 +396,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 }
             }
         }
+        $this->fireEvent($updatedRecord, $currentRecord);
     }
 
     protected function _inspectDelete(array $_ids)
@@ -416,22 +415,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         return $_ids;
     }
 
-    protected function _isTSDateChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null): bool
+    public function isTSDateChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null): bool
     {
         return $record->duration != $oldRecord->duration || $record->start_date != $oldRecord->start_date || $record->start_time != $oldRecord->start_time;
     }
 
-    protected function _calcClearedAmount(Timetracker_Model_Timesheet $ts, ?Timetracker_Model_Timesheet $oldTs = null): void
+    protected function _calcAmounts(Timetracker_Model_Timesheet $ts, ?Timetracker_Model_Timesheet $oldTs = null): void
     {
-        if (!$ts->is_cleared) {
-            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = null;
-            return;
-        }
-        if ($oldTs?->is_cleared) {
-            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = $oldTs?->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT};
-            return;
-        }
-
         if (!empty($delegator = Timetracker_Config::getInstance()->{Timetracker_Config::TS_CLEARED_AMOUNT_DELEGATOR})) {
             call_user_func($delegator, $ts, $oldTs);
             return;
@@ -445,11 +435,21 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         } finally {
             $taCtrl->doContainerACLChecks($oldAcl);
         }
+        $ts->{Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
+
+        if (!$ts->is_cleared) {
+            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = null;
+            return;
+        }
+        if ($oldTs?->is_cleared) {
+            $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = $oldTs?->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT};
+            return;
+        }
 
         $ts->{Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT} = round(($ts->accounting_time / 60) * (float)$ta->price, 2);
     }
 
-    protected function _tsChanged(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null)
+    protected function fireEvent(Timetracker_Model_Timesheet $record, ?Timetracker_Model_Timesheet $oldRecord = null)
     {
         $event = new Tinebase_Event_Record_Update();
         $event->observable = $record;
@@ -534,9 +534,9 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             return true;
         }
 
-        
+
         $hasGrant = FALSE;
-        
+
         switch ($_action) {
             case 'get':
                 $hasGrant = (
@@ -560,7 +560,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                         ] : [])))
                     || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL)
                 );
-                
+
                 if ($hasGrant) {
                     foreach ($this->_fieldGrants as $field => $config) {
                         $fieldValue = $_record->$field;
@@ -580,7 +580,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                         ] : [])))
                     || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL)
                 );
-                
+
                 if ($hasGrant) {
                     foreach ($this->_fieldGrants as $field => $config) {
                         if (isset($_record->$field) && $_record->$field != $_oldRecord->$field) {
@@ -597,17 +597,17 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 );
                 break;
         }
-        
+
         if ($_throw && !$hasGrant) {
             throw new Tinebase_Exception_AccessDenied($_errorMessage);
         }
-        
+
         return $hasGrant;
     }
-    
+
     /**
      * Removes timeaccounts where current user has no access to
-     * 
+     *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
      */
@@ -619,7 +619,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
             return;
         }
-        
+
         switch ($_action) {
             case 'get':
                 $_filter->setRequiredGrants(array(
@@ -688,21 +688,12 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
     protected function _validateRelations($_record, $_oldRecord)
     {
-        $context = $this->getRequestContext();
-
-        if ($context && is_array($context) &&
-            (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
-                || array_key_exists('confirm', $context))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Force updating the timesheet');
-            return true;
-        }
+        $exception = null;
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
-        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-        $exception = null;
 
-        if ($_oldRecord && $this->_isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
+        if ($_oldRecord && $this->isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
             $exception = new Tinebase_Exception_Confirmation(
                 $translation->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?')
             );
@@ -715,7 +706,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         }
 
         if ($exception) {
-            throw $exception;
+            $context = $this->getRequestContext();
+            $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
+
+            if (!$confirmHeader) {
+                throw $exception;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Force updating the timesheet');
         }
 
         return true;

@@ -589,10 +589,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             const searchComboConfig = {...this.searchComboConfig || {}};
 
             if (this.isMetadataModelFor) {
-                var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
-                    mappingRecordClass = mappingFieldDef.getRecordClass();
-                this.searchRecordClass = mappingRecordClass;
-                Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
+                const mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor);
+                if (_.get(mappingFieldDef, 'fieldDefinition.type') !== 'record') {
+                    this.allowMetadataForEditing = false;
+                    Object.assign(searchComboConfig, Tine.widgets.form.FieldManager.get(this.recordClass.getMeta('appName'), this.recordClass, this.isMetadataModelFor, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID), {
+                        allowBlank: true,
+                    });
+                } else {
+                    this.searchRecordClass = mappingFieldDef.getRecordClass();
+                    Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
+                }
+
                 Object.assign(searchComboConfig, _.get(mappingFieldDef, 'fieldDefinition.uiconfig', {}));
                 searchComboConfig.useEditPlugin = searchComboConfig.hasOwnProperty('useEditPlugin') ? searchComboConfig.useEditPlugin : true;
             }
@@ -631,17 +638,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         if (this.isMetadataModelFor) {
-            var recordData = this.getRecordDefaults();
+            var recordData = Object.assign({}, this.recordClass.getDefaultData(), this.getRecordDefaults());
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
             // copy (reference data from metadata record, e.g. config class for dynamic metadata records)
             Ext.copyTo(recordData, recordData[this.isMetadataModelFor], picker.copyOnSelectProps);
+            if (picker.xtype === 'tw-modelpicker') {
+                recordData[this.isMetadataModelFor] = recordData[this.isMetadataModelFor].className;
+            }
+            if (picker.xtype === 'widget-keyfieldcombo') {
+                recordData[this.isMetadataModelFor] = recordData[this.isMetadataModelFor].id;
+            }
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             record.phantom = true;
 
             // check if already in
+            const probeMetaData = record.get(this.isMetadataModelFor);
             const existingRecord = this.store.findBy(function (r) {
                 const metaData = r.get(this.isMetadataModelFor) ?? '';
-                if (metaData && metaData.id === record.get(this.isMetadataModelFor).id) {
+                if ((metaData?.id || metaData) === (probeMetaData?.id || probeMetaData)) {
                     return true;
                 }
             }, this);
@@ -761,6 +775,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         me.store.clearData();
         _.each(recordsdata, function(recordData) {
             var record = Tine.Tinebase.data.Record.setFromJson(recordData, me.recordClass);
+            if (!recordData.hasOwnProperty(me.recordClass.getMeta('idProperty'))) {
+                record.phantom = true;
+            }
             me.store.addSorted(record);
         });
 

@@ -107,7 +107,7 @@ class Tinebase_Group_LdapPlugin_Samba
         // when we try to add a group, $_group has no id which leads to Tinebase_Exception_InvalidArgument in $this->_getGroupMetaData
         try {
             $metaData = $this->_getGroupMetaData($_group);
-        } catch (Tinebase_Exception_InvalidArgument $teia) {
+        } catch (Tinebase_Exception_InvalidArgument) {
             $metaData = array();
         }
         
@@ -192,20 +192,20 @@ class Tinebase_Group_LdapPlugin_Samba
     protected function _getGroupMetaData($_groupId)
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        
+
         $filter = Zend_Ldap_Filter::equals(
             $this->_options['groupUUIDAttribute'], Zend_Ldap::filterEscape($groupId)
         );
-        
+
         $result = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
             array('objectclass', 'sambasid')
         )->getFirst();
-        
+
         return $result;
-        
+
         /*
         } catch (Tinebase_Exception_NotFound $e) {
             throw new Exception("group with id $groupId not found");

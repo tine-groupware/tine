@@ -89,20 +89,22 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
 
         self::FIELDS          => [
             self::FLD_CUSTOMER_ID       => [
-                self::LABEL      => 'Customer',    // _('Customer')
-                self::TYPE       => self::TYPE_RECORD,
-                'sortable'   => false,
-                self::CONFIG => [
+                self::LABEL         => 'Customer',    // _('Customer')
+                self::TYPE          => self::TYPE_RECORD,
+                'sortable'          => false,
+                self::CONFIG        => [
                     self::APP_NAME     => Sales_Config::APP_NAME,
                     self::MODEL_NAME   => Sales_Model_Customer::MODEL_NAME_PART,
                     self::IS_PARENT => true,
                 ],
-                self::NULLABLE => true,
+                self::QUERY_FILTER  => true,
+                self::NULLABLE      => true,
             ],
             self::FLD_DEBITOR_ID       => [
-                self::LABEL      => 'Debitor Number',    // _('Debitor Number')
-                self::TYPE       => self::TYPE_RECORD,
-                'sortable'   => false,
+                self::LABEL         => 'Debitor Number',    // _('Debitor Number')
+                self::DESCRIPTION   => 'A buyer identifier (usually assigned by the seller), such as the customer number for accounting or the customer number for order management. Note: No standardized scheme is required for the creation of the buyer identifier. (BT-64 [EN 16931]).', // _('A buyer identifier (usually assigned by the seller), such as the customer number for accounting or the customer number for order management. Note: No standardized scheme is required for the creation of the buyer identifier. (BT-64 [EN 16931]).')
+                self::TYPE          => self::TYPE_RECORD,
+                'sortable'          => false,
                 self::CONFIG => [
                     self::APP_NAME     => Sales_Config::APP_NAME,
                     self::MODEL_NAME   => Sales_Model_Debitor::MODEL_NAME_PART,
@@ -117,89 +119,102 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER => true,
             ],
             self::FLD_LANGUAGE => [
-                self::LABEL                 => 'Language', // _('Language')
-                self::TYPE                  => self::TYPE_KEY_FIELD,
-                self::NAME                  => Sales_Config::LANGUAGES_AVAILABLE,
-                self::NULLABLE              => true,
+                self::LABEL         => 'Language', // _('Language')
+                self::DESCRIPTION   => 'Defines translation of the "Postbox" prefix in BT-50 [EN 16931].', // _('Defines translation of the "Postbox" prefix in BT-50 [EN 16931].')
+                self::TYPE          => self::TYPE_KEY_FIELD,
+                self::NAME          => Sales_Config::LANGUAGES_AVAILABLE,
+                self::NULLABLE      => true,
             ],
             self::FLD_EMAIL => [
-                self::LABEL => 'Email', // _('Email')
-                self::NULLABLE => true,
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => true,
+                self::LABEL         => 'Email', // _('Email')
+                self::DESCRIPTION   => 'An e-mail address of the contact point (BT-58 [EN 16931]).', // _('An e-mail address of the contact point (BT-58 [EN 16931]).')
+                self::NULLABLE      => true,
+                self::TYPE          => self::TYPE_STRING,
+                self::QUERY_FILTER  => true,
             ],
             self::FLD_NAME => [
                 self::LABEL         => 'Customer Name', // _('Customer Name')
+                self::DESCRIPTION   => 'The full name of the purchaser (default value if left blank is the "name" property of the corresponding customer) (BT-44 [EN 16931]).', // _('The full name of the purchaser (default value if left blank is the "name" property of the corresponding customer) (BT-44 [EN 16931]).')
                 self::NULLABLE      => true,
                 self::TYPE          => self::TYPE_STRING,
                 self::QUERY_FILTER  => true,
             ],
             self::FLD_PREFIX1 => [
                 self::LABEL         => 'Company / Organisation (Prefix 1)', //_('Company / Organisation (Prefix 1)')
+                self::DESCRIPTION   => 'A name by which the acquirer is known, if different from the acquirer\'s name (BT-45 [EN 16931]).', // _('A name by which the acquirer is known, if different from the acquirer\'s name (BT-45 [EN 16931]).')
                 self::NULLABLE      => TRUE,
                 self::TYPE          => self::TYPE_STRING,
                 self::QUERY_FILTER  => TRUE,
             ],
             self::FLD_PREFIX2 => [
-                self::LABEL             => 'Unit (Prefix 2)', //_('Unit (Prefix 2)')
-                self::NULLABLE          => TRUE,
-                self::TYPE              => self::TYPE_STRING,
-                self::QUERY_FILTER      => TRUE,
+                self::LABEL         => 'Unit (Prefix 2)', //_('Unit (Prefix 2)')
+                self::DESCRIPTION   => 'Contact person or contact point at the acquirer (e.g. name of a person, department or office name) - supplementary entry - (BT-56 [EN 16931]).', // _('Contact person or contact point at the acquirer (e.g. name of a person, department or office name) - supplementary entry - (BT-56 [EN 16931]).')
+                self::NULLABLE      => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::QUERY_FILTER  => TRUE,
             ],
             self::FLD_PREFIX3 => [
                 self::LABEL         => 'Recipient Name (Prefix 3)', //_('Recipient Name (Prefix 3)')
+                self::DESCRIPTION   => 'Contact person or contact point at the acquirer (e.g. name of a person, department or office name) (BT-56 [EN 16931]).', // _('Contact person or contact point at the acquirer (e.g. name of a person, department or office name) (BT-56 [EN 16931]).')
                 self::NULLABLE      => TRUE,
                 self::TYPE          => self::TYPE_STRING,
                 self::QUERY_FILTER  => TRUE,
             ],
             self::FLD_STREET => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'Street', //_('Street')
-                self::QUERY_FILTER => TRUE,
-                self::NULLABLE => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::LABEL         => 'Street', //_('Street')
+                self::DESCRIPTION   => 'The main line of an address. This is usually either the street and house number (BT-50 if no PO box is specified, otherwise BT-51 [EN 16931]).', // _('The main line of an address. This is usually either the street and house number (BT-50 if no PO box is specified, otherwise BT-51 [EN 16931]).')
+                self::QUERY_FILTER  => TRUE,
+                self::NULLABLE      => TRUE,
             ],
             self::FLD_POBOX => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'Postbox', //_('Postbox')
-                self::QUERY_FILTER => TRUE,
-                self::NULLABLE => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::LABEL         => 'Postbox', //_('Postbox')
+                self::DESCRIPTION   => 'Becomes the text "Postbox" followed by the mailbox number specified here in BT-50 [EN 16931].', // _('Becomes the text "Postbox" followed by the mailbox number specified here in BT-50 [EN 16931].')
+                self::QUERY_FILTER  => TRUE,
+                self::NULLABLE      => TRUE,
             ],
             self::FLD_POSTALCODE => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'Postalcode', //_('Postalcode')
-                self::QUERY_FILTER => TRUE,
-                self::NULLABLE => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::LABEL         => 'Postalcode', //_('Postalcode')
+                self::DESCRIPTION   => 'The zip code (BT-53 [EN 16931]).', // ('The zip code (BT-53 [EN 16931]).')
+                self::QUERY_FILTER  => TRUE,
+                self::NULLABLE      => TRUE,
             ],
             self::FLD_LOCALITY => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'Locality', //_('Locality')
-                self::QUERY_FILTER => TRUE,
-                self::NULLABLE => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::LABEL         => 'Locality', //_('Locality')
+                self::DESCRIPTION   => 'The name of the city or municipality in which the purchaser\'s address is located (BT-52 [EN 16931]).', // _('The name of the city or municipality in which the purchaser\'s address is located (BT-52 [EN 16931]).')
+                self::QUERY_FILTER  => TRUE,
+                self::NULLABLE      => TRUE,
             ],
             self::FLD_REGION => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'Region', //_('Region')
-                self::QUERY_FILTER => TRUE,
-                self::NULLABLE => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::DESCRIPTION   => 'The subdivision of a country (such as region, state, province, etc.) (BT-54 [EN 16931]).', // _('The subdivision of a country (such as region, state, province, etc.) (BT-54 [EN 16931]).')
+                self::LABEL         => 'Region', //_('Region')
+                self::QUERY_FILTER  => TRUE,
+                self::NULLABLE      => TRUE,
             ],
             self::FLD_COUNTRYNAME => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL   => 'Country', //_('Country')
-                self::DEFAULT_VAL => 'DE',
-                self::QUERY_FILTER => TRUE,
-                self::NULLABLE => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::SPECIAL_TYPE  => self::SPECIAL_TYPE_COUNTRY,
+                self::LABEL         => 'Country', //_('Country')
+                self::DESCRIPTION   => 'BT-55',
+                self::DEFAULT_VAL   => 'DE',
+                self::QUERY_FILTER  => TRUE,
+                self::NULLABLE      => TRUE,
             ],
             // we should drop this column, be aware of upgrade path though!
             // if you remove it here, Setup/Update/17.php ::update001 will remove it! though it is accessed by later update functions!!!
             self::FLD_CUSTOM1 => [
-                self::TYPE => self::TYPE_STRING,
-                self::NULLABLE => TRUE,
+                self::TYPE      => self::TYPE_STRING,
+                self::NULLABLE  => TRUE,
             ],
             self::FLD_TYPE => [
-                self::TYPE => self::TYPE_STRING,
-                self::LABEL => NULL,
-                self::DEFAULT_VAL => self::TYPE_POSTAL,
-                self::VALIDATORS => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LABEL         => NULL,
+                self::DEFAULT_VAL   => self::TYPE_POSTAL,
+                self::VALIDATORS    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     [Zend_Validate_InArray::class, [
                         self::TYPE_BILLING,
@@ -207,12 +222,12 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                         self::TYPE_POSTAL,
                     ]]
                 ],
-                self::QUERY_FILTER => TRUE
+                self::QUERY_FILTER  => TRUE
             ],
             self::FLD_FULLTEXT => [
                 'config' => [
                     'duplicateOmit' => TRUE,
-                    self::LABEL   => NULL
+                    self::LABEL     => NULL
                 ],
                 self::TYPE => self::TYPE_VIRTUAL,
             ],

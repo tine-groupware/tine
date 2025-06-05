@@ -145,7 +145,7 @@ Tine.Tinebase.tineInit = {
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window
                 e.preventDefault();
-            } else if (window.isMainWindow && e.ctrlKey && (e.getKey() === e.L || e.getKey() === e.DELETE)) {
+            } else if (window.isMainWindow && e.ctrlKey && !e.shiftKey && (e.getKey() === e.L || e.getKey() === e.DELETE)) {
                 // reload on ctrl-l
                 Tine.Tinebase.common.reload({
                     clearCache: true
@@ -231,7 +231,7 @@ Tine.Tinebase.tineInit = {
                     EditDialog.openWindow({recordId: recordId, record: {id: recordId}, mode: 'remote'});
                 }
             }
-            
+
             if (target && href && href !== '#' && href !== Tine.Tinebase.common.getUrl()) {
                 target.set({
                     href: decodeURI(href),
@@ -242,7 +242,33 @@ Tine.Tinebase.tineInit = {
                 // open internal links in same window (use router)
                 const mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
                 if (window === mainWindow) {
-                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
+                    const isInternal = (url) =>  {
+                        return new Promise((resolve) => {
+                            const notfound = Tine.Tinebase.router.notfound;
+                            const before = Tine.Tinebase.router.every.before;
+                            let result = true;
+                            try {
+                                Tine.Tinebase.router.configure({
+                                    notfound: function() {
+                                        result = false;
+                                        return false;
+                                    },
+                                    before: function() {
+                                        result = true;
+                                        return false;
+                                    },
+                                });
+                                Tine.Tinebase.router.dispatch('on', url.replace(/.*#/, ''))
+                            } finally {
+                                Tine.Tinebase.router.configure({
+                                    notfound: notfound,
+                                    before: before
+                                });
+                            }
+                            resolve(result);
+                        });
+                    }
+                    if (await isInternal(href)) {
                         target.set({
                             href: decodeURI(href),
                             target: "_self"
@@ -687,7 +713,7 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.router = new director.Router().init();
         Tine.Tinebase.router.configure({notfound: function () {
-            var defaultApp = Tine.Tinebase.appMgr.getDefault();
+            const defaultApp = Tine.Tinebase.appMgr.getDefault();
             if (defaultApp) {
                 Tine.Tinebase.router.setRoute(defaultApp.getRoute());
             }

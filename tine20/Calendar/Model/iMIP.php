@@ -4,24 +4,29 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * Model of an iMIP (RFC 6047) Message
  * 
- * @property    id               message <id>_<part> of iMIP mail part
- * @property    ics              ical string in UTF8
- * @property    event            iMIP message event
- * @property    method           method of iMIP transaction
- * @property    userAgent        userAgent origination iMIP transaction
- * @property    originator       originator /sender of iMIP transaction
- * @property    preconditions     array of checked processing preconditions
+ * @property    string                  $id               message <id>_<part> of iMIP mail part
+ * @property    string                  $ics              ical string in UTF8
+ * @property    ?Calendar_Model_Event   $event            iMIP message event
+ * @property    string                  $method           method of iMIP transaction
+ * @property    string                  $userAgent        userAgent origination iMIP transaction
+ * @property    string                  $originator       originator /sender of iMIP transaction
+ * @property    array                   $preconditions     array of checked processing preconditions
+ * @property    ?Calendar_Model_Event   $existing_event
+ * @property    bool                    $preconditionsChecked
+ *
  * @package     Calendar
  * @subpackage  Model
  */
-class Calendar_Model_iMIP extends Tinebase_Record_Abstract
+class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
 {
+    public const MODEL_NAME_PART = 'iMIP';
+
     /**
      * Used to publish an iCalendar object to one or more "Calendar Users".  
      * There is no interactivity between the publisher and any  other 
@@ -124,42 +129,73 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const PRECONDITION_NOTCANCELLED     = 'NOTCANCELLED';
 
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_Record_Abstract::_identifier
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_identifier = 'id';
-    
+    protected static $_configurationObject = NULL;
+
+
+    public const FLD_ICS = 'ics';
+    public const FLD_METHOD = 'method';
+    public const FLD_ORIGINATOR = 'originator';
+    public const FLD_USER_AGENT = 'userAgent';
+    public const FLD_EVENT = 'event';
+    public const FLD_EXISTING_EVENT = 'existing_event';
+    public const FLD_PRECONDITIONS = 'preconditions';
+    public const FLD_PRECONDITIONS_CHECKED = 'preconditionsChecked';
+
     /**
-     * @var Calendar_Convert_Event_VCalendar_Abstract
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
      */
-    protected $_converter = NULL;
-    
+    protected static $_modelConfiguration = [
+
+        self::HAS_XPROPS        => true,
+
+        self::APP_NAME          => Calendar_Config::APP_NAME,
+        self::MODEL_NAME        => self::MODEL_NAME_PART,
+
+        self::FIELDS            => [
+            self::FLD_ICS           => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_METHOD        => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_ORIGINATOR    => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_USER_AGENT    => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_EVENT         => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_EXISTING_EVENT => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_PRECONDITIONS => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+            self::FLD_PRECONDITIONS_CHECKED => [
+                self::TYPE              => self::TYPE_STRING,
+            ],
+        ],
+    ];
+
     /**
      * (non-PHPdoc)
-     * @see Tinebase_Record_Abstract::_validators
-     */
-    protected $_validators = array(
-        'id'                   => array('allowEmpty' => true,         ), 
-        'ics'                  => array('allowEmpty' => true          ),
-        'method'               => array('allowEmpty' => true,         ),
-        'originator'           => array('allowEmpty' => false,        ), // email adddress
-        'userAgent'            => array('allowEmpty' => true,         ),
-        'event'                => array('allowEmpty' => true          ),
-        'existing_event'       => array('allowEmpty' => true          ),
-        'preconditions'        => array('allowEmpty' => true          ),
-        'preconditionsChecked' => array('allowEmpty' => true          ),
-    );
-    
-    /**
-     * (non-PHPdoc)
+     * @throws Tinebase_Exception_Record_Validation
      * @see Tinebase_Record_Abstract::__set()
      */
     public function __set($_name, $_value)
     {
-        if ($_name == 'ics') {
-            unset($this->event);
+        if ($_name == self::FLD_ICS) {
+            unset($this->{self::FLD_EVENT});
         }
-        if ($_name == 'method') {
+        if ($_name == self::FLD_METHOD) {
             if (empty($_value)) {
                 $_value = self::METHOD_REQUEST;
             } else {
@@ -167,15 +203,16 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
             }
         }
         
-        return parent::__set($_name, $_value);
+        parent::__set($_name, $_value);
     }
     
     /**
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::__get()
+     * @throws Tinebase_Exception_Record_NotDefined
      */
     public function __get($_name) {
-        if ($_name == 'method' && !$this->_properties['method'] && $this->_properties['ics']) {
+        if ($_name == self::FLD_METHOD && !$this->_data[self::FLD_METHOD] && $this->_data[self::FLD_ICS]) {
             $this->getEvent();
         }
         
@@ -183,121 +220,83 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     }
     
     /**
-     * get event record
-     * 
-     * @return Calendar_Model_Event
+     * @throws Tinebase_Exception_Record_NotDefined
      */
-    public function getEvent()
+    public function getEvent(): Calendar_Model_Event
     {
-        if (! $this->event instanceof Calendar_Model_Event) {
-            if (! $this->ics) {
+        if (! $this->{self::FLD_EVENT} instanceof Calendar_Model_Event) {
+            if (! $this->{self::FLD_ICS}) {
                 throw new Tinebase_Exception_Record_NotDefined('ics is needed to generate event');
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Incoming iMIP ics \n"
-                    . $this->ics);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Incoming iMIP ics \n"
+                    . $this->{self::FLD_ICS});
             }
 
-            $this->event = $this->_getConverter()->toTine20Model($this->ics);
+            $this->{self::FLD_EVENT} = $this->_getConverter()->toTine20Model($this->{self::FLD_ICS});
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Event: ' . print_r($this->event->toArray(), true));
+                    . ' Event: ' . print_r($this->{self::FLD_EVENT}->toArray(), true));
             }
             
-            if (! $this->_properties['method']) {
-                $this->method = $this->_getConverter()->getMethod($this->ics);
+            if (! $this->{self::FLD_METHOD}) {
+                $this->{self::FLD_METHOD} = $this->_getConverter()->getMethod($this->{self::FLD_ICS});
             }
         }
         
-        return $this->event;
+        return $this->{self::FLD_EVENT};
     }
 
     /**
      * merge ics data into given event
-     * 
-     * @param Calendar_Model_Event $_event
      */
-    public function mergeEvent($_event)
+    public function mergeEvent(Calendar_Model_Event $_event): Calendar_Model_Event
     {
-        return $this->_getConverter()->toTine20Model($this->ics, $_event);
-    }
-    
-    /**
-     * get ics
-     * 
-     * @return string UTF8 ics
-     */
-    public function getIcs()
-    {
-        if (! $this->event instanceof Calendar_Model_Event) {
-            throw new Tinebase_Exception_Record_NotDefined('event is needed to generate ics');
-        }
-        
-        return $this->_getConverter()->fromTine20Model($this->event);
+        return $this->_getConverter()->toTine20Model($this->{self::FLD_ICS}, $_event);
     }
     
     /**
      * get ics converter
-     * 
-     * @return Calendar_Convert_Event_VCalendar_Abstract
      */
-    protected function _getConverter()
+    protected function _getConverter(): Calendar_Convert_Event_VCalendar_Abstract
     {
         if (! $this->_converter) {
-            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($this->userAgent);
-            $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+            $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(
+                ...Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($this->userAgent)
+            );
         }
         
         return $this->_converter;
     }
-    
-    /**
-     * add failed precondtion check
-     * 
-     * @param string $_preconditionName
-     * @param string $_message
-     */
-    public function addFailedPrecondition($_preconditionName, $_message)
+
+    public function addFailedPrecondition(string $_preconditionName, string $_message): void
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . " Preconditions check failed for " . $_preconditionName . ' with message: ' . $_message);
         
-        $this->_addPrecondition($_preconditionName, FALSE, $_message);
-    }
-    
-    /**
-     * add failed precondtion check
-     * 
-     * @param string $_preconditionName
-     * @param string $_message
-     */
-    public function addSuccessfulPrecondition($_preconditionName)
-    {
-        $this->_addPrecondition($_preconditionName, TRUE);
+        $this->_addPrecondition($_preconditionName, $_message);
     }
     
     /**
      * add precondition
-     * 
-     * @param string $_preconditionName
-     * @param boolean $_check
-     * @param string $_message
      */
-    protected function _addPrecondition($_preconditionName, $_check, $_message = NULL)
+    protected function _addPrecondition(string $_preconditionName, string $_message): void
     {
-        $preconditions = (is_array($this->preconditions)) ? $this->preconditions : array();
+        $preconditions = (is_array($this->{self::FLD_PRECONDITIONS})) ? $this->{self::FLD_PRECONDITIONS} : array();
         
         if (! isset($preconditions[$_preconditionName])) {
             $preconditions[$_preconditionName] = array();
         }
         
         $preconditions[$_preconditionName][] = array(
-            'check'     => $_check,
+            'check'     => false,
             'message'    => $_message,
         );
         
-        $this->preconditions = $preconditions;
+        $this->{self::FLD_PRECONDITIONS} = $preconditions;
     }
+
+    protected ?Calendar_Convert_Event_VCalendar_Abstract $_converter = null;
 }

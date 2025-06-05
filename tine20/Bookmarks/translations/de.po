@@ -32,6 +32,7 @@ msgid_plural "Bookmarks"
 msgstr[0] "Lesezeichen"
 msgstr[1] "Lesezeichen"
 
+#, fuzzy
 msgid "Bookmark List"
 msgid_plural "Bookmark Lists"
 msgstr[0] "Lesezeichenliste"
@@ -51,20 +52,3 @@ msgstr "Zugriffszähler"
 
 msgid "Bookmarks"
 msgstr "Lesezeichen"
-
-#~ msgid "Live time of token subscriptions"
-#~ msgstr "Laufzeit von Token-Abonnements"
-
-#~ msgid "Import html formated bookmarks"
-#~ msgstr "HTML formatierte Lesezeichen importieren"
-
-#~ msgid "Bookmark list"
-#~ msgid_plural "Bookmarks lists"
-#~ msgstr[0] "Lesezeichenliste"
-#~ msgstr[1] "Lesezeichenlisten"
-
-#~ msgid "Url"
-#~ msgstr "Url"
-
-#~ msgid "Access count"
-#~ msgstr "Zugriffszähler"

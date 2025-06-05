@@ -27,9 +27,9 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string $revision
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function downloadFile($path, $id, $revision = null)
+    public function downloadFile($path, $id, $revision = null, $disposition = 'attachment')
     {
-        $this->_downloadFileNodeByPathOrId($path, $id, $revision);
+        $this->_downloadFileNodeByPathOrId($path, $id, $revision, $disposition);
         exit;
     }
 
@@ -131,7 +131,7 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param null $revision
      * @throws Filemanager_Exception
      */
-    protected function _downloadFileNodeByPathOrId($path, $id, $revision = null)
+    protected function _downloadFileNodeByPathOrId($path, $id, $revision = null, $disposition = 'attachment')
     {
         $revision = $revision ?: null;
 
@@ -153,6 +153,6 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
 
-        $this->_downloadFileNode($node, $pathRecord->streamwrapperpath, $revision);
+        $this->_downloadFileNode($node, $pathRecord->streamwrapperpath, $revision, false, $disposition);
     }
 }

@@ -18,7 +18,7 @@ class Tinebase_Auth_PrivacyIdea extends Tinebase_Auth_Adapter_Abstract
      */
     public function authenticate()
     {
-        $allowEmpty = isset($this->_options['allowEmpty']) ? $this->_options['allowEmpty'] : true;
+        $allowEmpty = $this->_options['allowEmpty'] ?? true;
         $password = $this->_credential;
         $username = $this->_identity;
 
@@ -33,7 +33,7 @@ class Tinebase_Auth_PrivacyIdea extends Tinebase_Auth_Adapter_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Options: ' . print_r($this->_options, true));
 
-        $url = isset($this->_options['url']) ? $this->_options['url'] : 'https://localhost/validate/check';
+        $url = $this->_options['url'] ?? 'https://localhost/validate/check';
 
         $adapter = new Zend_Http_Client_Adapter_Socket();
 

@@ -52,22 +52,22 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
     public const TABLE_NAME = 'tree_nodes';
 
     // forbidden in windows, @see #202420
-    const FILENAME_FORBIDDEN_CHARS_EXP = '/[\/\\\:*?"<>|]/';
+    public const FILENAME_FORBIDDEN_CHARS_EXP = '/[\/\\\:*?"<>|]/';
 
-    const XPROPS_REVISION = 'revisionProps';
-    const XPROPS_REVISION_NODE_ID = 'nodeId';
-    const XPROPS_REVISION_ON = 'keep';
-    const XPROPS_REVISION_NUM = 'keepNum';
-    const XPROPS_REVISION_MONTH = 'keepMonth';
+    public const XPROPS_REVISION = 'revisionProps';
+    public const XPROPS_REVISION_NODE_ID = 'nodeId';
+    public const XPROPS_REVISION_ON = 'keep';
+    public const XPROPS_REVISION_NUM = 'keepNum';
+    public const XPROPS_REVISION_MONTH = 'keepMonth';
 
     /**
      * {"notificationProps":[{"active":true,....},{"active":true....},{....}]}
      */
-    const XPROPS_NOTIFICATION = 'notificationProps';
-    const XPROPS_NOTIFICATION_ACTIVE = 'active';
-    const XPROPS_NOTIFICATION_SUMMARY = 'summary';
-    const XPROPS_NOTIFICATION_ACCOUNT_ID = 'accountId';
-    const XPROPS_NOTIFICATION_ACCOUNT_TYPE = 'accountType';
+    public const XPROPS_NOTIFICATION = 'notificationProps';
+    public const XPROPS_NOTIFICATION_ACTIVE = 'active';
+    public const XPROPS_NOTIFICATION_SUMMARY = 'summary';
+    public const XPROPS_NOTIFICATION_ACCOUNT_ID = 'accountId';
+    public const XPROPS_NOTIFICATION_ACCOUNT_TYPE = 'accountType';
     
     /**
      * key in $_validators/$_properties array for the filed which
@@ -108,11 +108,12 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 10,
+        self::VERSION       => 11,
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
         'hasTags'           => true,
+        self::HAS_XPROPS    => true,
         'modlogActive'      => true,
         self::HAS_DELETED_TIME_UNIQUE => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
@@ -260,7 +261,6 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::LENGTH                    => 64,
                 'validators'                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::NULLABLE                  => true,
                 self::UNSIGNED                  => true,
@@ -651,14 +651,19 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             return true;
         }
         if ($this->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-            if (strlen((string)$this->name) === 3 &&
+            if (Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}
+                ->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}
+            ) {
+                if (strlen($this->name) === 3 &&
                     Tinebase_FileSystem_Previews::getInstance()->getBasePathNode()->getId() === $this->parent_id) {
-                return false;
-            }
-            if (strlen((string)$this->name) === 37 && null !== $this->parent_id &&
+                    return false;
+                }
+                if (strlen($this->name) === 37 && null !== $this->parent_id &&
                     Tinebase_FileSystem_Previews::getInstance()->getBasePathNode()->getId() ===
                     Tinebase_FileSystem::getInstance()->get($this->parent_id)->parent_id) {
-                return false;
+                    return false;
+                }
             }
             return true;
         }

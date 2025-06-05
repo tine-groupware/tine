@@ -12,18 +12,18 @@
  */
 class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
 {
-    const RELEASE014_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE014_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE014_UPDATE003 = __CLASS__ . '::update003';
-    const RELEASE014_UPDATE004 = __CLASS__ . '::update004';
-    const RELEASE014_UPDATE005 = __CLASS__ . '::update005';
-    const RELEASE014_UPDATE006 = __CLASS__ . '::update006';
-    const RELEASE014_UPDATE007 = __CLASS__ . '::update007';
-    const RELEASE014_UPDATE008 = __CLASS__ . '::update008';
-    const RELEASE014_UPDATE009 = __CLASS__ . '::update009';
-    const RELEASE014_UPDATE010 = __CLASS__ . '::update010';
-    const RELEASE014_UPDATE011 = __CLASS__ . '::update011';
-    const RELEASE014_UPDATE012 = __CLASS__ . '::update012';
+    public const RELEASE014_UPDATE001 = self::class . '::update001';
+    public const RELEASE014_UPDATE002 = self::class . '::update002';
+    public const RELEASE014_UPDATE003 = self::class . '::update003';
+    public const RELEASE014_UPDATE004 = self::class . '::update004';
+    public const RELEASE014_UPDATE005 = self::class . '::update005';
+    public const RELEASE014_UPDATE006 = self::class . '::update006';
+    public const RELEASE014_UPDATE007 = self::class . '::update007';
+    public const RELEASE014_UPDATE008 = self::class . '::update008';
+    public const RELEASE014_UPDATE009 = self::class . '::update009';
+    public const RELEASE014_UPDATE010 = self::class . '::update010';
+    public const RELEASE014_UPDATE011 = self::class . '::update011';
+    public const RELEASE014_UPDATE012 = self::class . '::update012';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -87,7 +87,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
                 Tinebase_Model_Tree_FileObject::class,
                 Tinebase_Model_Tree_Node::class
             ]);
-        } catch (Exception $e) {
+        } catch (Exception) {
             // sometimes this fails with: "PDOException: SQLSTATE[42000]: Syntax error or access violation:
             //                            1091 Can't DROP FOREIGN KEY `main_tree_nodes::parent_id--tree_nodes::id`;
             //                            check that it exists"
@@ -241,7 +241,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
                 try {
                     $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
                     break;
-                } catch (Exception $e) {}
+                } catch (Exception) {}
             } while (++$tries < 100);
         } else {
             $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();

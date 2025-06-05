@@ -415,24 +415,57 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $customers = array(
             array(
                 'name' => 'ELKO Elektronik und Söhne',
-                'url' => 'www.elko-elektronik.de',
+                'url' => 'https://www.elko-elektronik.de',
                 'discount' => 0,
                 'name_shorthand' => 'ELKO',
-                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_STANDARD,
+                'vatid' => 'DE456789123',
+                'debitor' => [
+                    Sales_Model_Debitor::FLD_NAME => 'ELKO Elektronik und Söhne',
+                    Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Email::class,
+                    Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Email([
+                        Sales_Model_EDocument_Dispatch_Email::FLD_EMAIL => 'rechnung@elko-elektronik.de',
+                        Sales_Model_EDocument_Dispatch_Abstract::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [[
+                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
+                        ], [
+                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
+                        ]]),
+                    ]),
+                ],
+
             ),
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
-                'url' => 'www.platt-reifen.de',
+                'url' => 'https://www.platt-reifen.de',
                 'discount' => 0,
                 'name_shorthand' => 'PLATT',
-                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_STANDARD,
+                'vatid' => 'DE567891234',
+                'debitor' => [
+                    Sales_Model_Debitor::FLD_NAME => 'Reifenlieferant Gebrüder Platt',
+                    Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Upload::class,
+                    Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Upload([
+                        Sales_Model_EDocument_Dispatch_Upload::FLD_URL => 'https://www.platt-reifen.de/lieferantenprotal/erechnungsupload/',
+                        Sales_Model_EDocument_Dispatch_Abstract::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [[
+                            Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
+                        ]]),
+                    ]),
+                ],
             ),
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',
-                'url' => 'www.frische-fische-hamburg.de',
+                'url' => 'https://www.frische-fische-hamburg.de',
                 'discount' => 15.2,
                 'name_shorthand' => 'FrischeFische',
-                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_STANDARD,
+                'vatid' => 'DE678912345',
+                'debitor' => [
+                    Sales_Model_Debitor::FLD_NAME => 'Frische Fische Gmbh & Co. KG',
+                    Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE => Sales_Model_EDocument_Dispatch_Manual::class,
+                    Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG => new Sales_Model_EDocument_Dispatch_Manual([
+                        Sales_Model_EDocument_Dispatch_Manual::FLD_INSTRUCTIONS => 'transfer via matrix to @rechnung:frische-fische-hamburg.de',
+                    ]),
+                ],
             ),
         );
 
@@ -460,10 +493,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $customer['currency'] = 'EUR';
             $customer['currency_trans_rate'] = 1;
             $customer[Sales_Model_Customer::FLD_DEBITORS] =
-                new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [[
+                new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [array_merge([
                     Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
-                    Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor'
-                ]], true);
+                    Sales_Model_Debitor::FLD_EAS_ID      => Sales_Controller_EDocument_EAS::getInstance()->getByCode('9930')->getId(),
+                    Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS => $customer['vatid'],
+                ], $customer['debitor'])], true);
 
             try {
                 $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
@@ -526,7 +560,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     Sales_Model_Customer::FLD_DEBITORS =>
                         new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [[
                             Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
-                            Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor '. $i
+                            Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor '. $i,
                         ]], true),
                 )));
                 $i++;
@@ -858,5 +892,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         }
 
         $this->_loadCostCentersAndDivisions();
+
+        $defaultDivision = Sales_Controller_Division::getInstance()->search()->getFirstRecord();
+        $defaultDivision->{Sales_Model_Division::FLD_NAME} = 'Tine Publications, Ltd';
+        $defaultDivision->{Sales_Model_Division::FLD_ADDR_PREFIX1} = 'Montgomery Street 589';
+        $defaultDivision->{Sales_Model_Division::FLD_ADDR_POSTAL} = 'BN1';
+        $defaultDivision->{Sales_Model_Division::FLD_ADDR_LOCALITY} = 'East Sussex';
+        $defaultDivision->{Sales_Model_Division::FLD_ADDR_REGION} = 'Brighton';
+        $defaultDivision->{Sales_Model_Division::FLD_ADDR_COUNTRY} = 'GB';
+        $defaultDivision->{Sales_Model_Division::FLD_CONTACT_NAME} = 'Mr. Sales';
+        $defaultDivision->{Sales_Model_Division::FLD_CONTACT_EMAIL} = 'sales@mail.test';
+        $defaultDivision->{Sales_Model_Division::FLD_CONTACT_PHONE} = '+441273-3766-373';
+        $defaultDivision->{Sales_Model_Division::FLD_TAX_REGISTRATION_ID} = '12345 67890';
+        $defaultDivision->{Sales_Model_Division::FLD_VAT_NUMBER} = 'GB123456789';
+        $defaultDivision->{Sales_Model_Division::FLD_EAS_ID} = Sales_Controller_EDocument_EAS::getInstance()->getByCode('9932')->getId();
+        $defaultDivision->{Sales_Model_Division::FLD_ELECTRONIC_ADDRESS} = 'GB123456789';
+        $defaultDivision->{Sales_Model_Division::FLD_SEPA_CREDITOR_ID} = 'GB98ZZZ09999999999';
+        Sales_Controller_Division::getInstance()->update($defaultDivision);
     }
 }

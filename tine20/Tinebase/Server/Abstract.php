@@ -107,7 +107,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         if ($header = $request->getHeaders('Authorization')) {
             return explode(
                 ":",
-                base64_decode(substr($header->getFieldValue(), 6)),  // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
+                base64_decode(substr((string) $header->getFieldValue(), 6)),  // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
                 2
             );
             
@@ -151,7 +151,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         // get all apps user has RUN right for
         try {
             $userApplications = Tinebase_Core::getUser() ? Tinebase_Core::getUser()->getApplications() : array();
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // session might be invalid, destroy it
             Tinebase_Session::destroyAndRemoveCookie();
             $userApplications = array();
@@ -202,7 +202,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                             'object'          => $object,
                             'callback'        => array(
                                 'type'   => 'instance',
-                                'class'  => get_class($object),
+                                'class'  => $object::class,
                                 'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
                             ),
                         ));
@@ -248,7 +248,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     final protected function _handleAppPwdAuth()
     {
         $authValue = $this->_request->getHeader('Authorization')->getFieldValue();
-        if (strpos($authValue, 'Basic ') !== 0 || false === ($authValue = base64_decode(substr($authValue, 6), true))
+        if (!str_starts_with((string) $authValue, 'Basic ') || false === ($authValue = base64_decode(substr((string) $authValue, 6), true))
                 || 2 !== count($authValue = explode(':', $authValue, 2))) {
             return false;
         }
@@ -260,12 +260,12 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 
         try {
             $user = Tinebase_User::getInstance()->getUserByLoginName($authValue[0], Tinebase_Model_FullUser::class);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             return false;
         }
         try {
             $encryptedPwd = sha1($appPwd);
-        } catch (Tinebase_Exception $e) {
+        } catch (Tinebase_Exception) {
             return false;
         }
 
@@ -286,7 +286,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
             if (!Tinebase_Session::sessionExists()) {
                 try {
                     Tinebase_Core::startCoreSession();
-                } catch (Zend_Session_Exception $zse) {
+                } catch (Zend_Session_Exception) {
                     $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
 
                     // expire session cookie for client
@@ -328,21 +328,22 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         }
     }
 
-    final static protected function _checkRateLimit($_method)
+    /**
+     * @param string $frontend
+     * @param string $_method
+     * @return void
+     * @throws Tinebase_Exception_RateLimit
+     */
+    final static protected function _checkRateLimit(string $frontend, string $_method = '*'): void
     {
         $rateLimit = new Tinebase_Server_RateLimit();
-        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : 'anon';
-        if ($rateLimit->hasRateLimit($user, $_method)) {
-            if (! $rateLimit->check($user, $_method)) {
+        if ($rateLimit->hasRateLimit($frontend, $_method)) {
+            if (! $rateLimit->check($frontend, $_method)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    $definition = $rateLimit->getLimitDefinition($user, $_method);
                     Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . ' User ' . $user . ' hit rate limit: '
-                        .  print_r($definition, true));
+                        __METHOD__ . '::' . __LINE__ . ' Rate limit hit for : ' . $frontend . '.' . $_method);
                 }
-
-                $terl = new Tinebase_Exception_RateLimit('Method is rate-limited: ' . $_method);
-                throw $terl;
+                throw new Tinebase_Exception_RateLimit($frontend . ' Method is rate-limited: ' . $_method);
             }
         }
     }
@@ -353,19 +354,12 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     public static function setHttpHeader($code)
     {
         if (! headers_sent()) {
-            switch ($code) {
-                case self::HTTP_ERROR_CODE_FORBIDDEN:
-                    header('HTTP/1.1 403 Forbidden');
-                    break;
-                case self::HTTP_ERROR_CODE_NOT_FOUND:
-                    header('HTTP/1.1 404 Not Found');
-                    break;
-                case self::HTTP_ERROR_CODE_SERVICE_UNAVAILABLE:
-                    header('HTTP/1.1 503 Service Unavailable');
-                    break;
-                default:
-                    header("HTTP/1.1 500 Internal Server Error");
-            }
+            match ($code) {
+                self::HTTP_ERROR_CODE_FORBIDDEN => header('HTTP/1.1 403 Forbidden'),
+                self::HTTP_ERROR_CODE_NOT_FOUND => header('HTTP/1.1 404 Not Found'),
+                self::HTTP_ERROR_CODE_SERVICE_UNAVAILABLE => header('HTTP/1.1 503 Service Unavailable'),
+                default => header("HTTP/1.1 500 Internal Server Error"),
+            };
         }
     }
 }

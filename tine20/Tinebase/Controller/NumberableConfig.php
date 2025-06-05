@@ -74,9 +74,9 @@ class Tinebase_Controller_NumberableConfig extends Tinebase_Controller_Record_Ab
 
     protected function _inspectBucketKey(Tinebase_Model_NumberableConfig $numCfg, ?Tinebase_Model_NumberableConfig $oldNumCfg = null)
     {
-        if (str_ends_with($numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . ($oldNumCfg ?: $numCfg)->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
-            $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} = substr($numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
-                strrpos($numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . ($oldNumCfg ?: $numCfg)->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
+        if (str_ends_with((string) $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . ($oldNumCfg ?: $numCfg)->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
+            $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} = substr((string) $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
+                strrpos((string) $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . ($oldNumCfg ?: $numCfg)->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
         }
         $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} =
             $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY} . '#' . $numCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX};

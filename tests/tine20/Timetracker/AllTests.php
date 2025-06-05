@@ -23,12 +23,14 @@ class Timetracker_AllTests
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Timetracker All Tests');
-        $suite->addTestSuite('Timetracker_JsonTest');
-        $suite->addTestSuite('Timetracker_ControllerTest');
-        $suite->addTestSuite('Timetracker_ExportTest');
-        $suite->addTestSuite('Timetracker_FilterTest');
-        $suite->addTestSuite('Timetracker_DoctrineModelTest');
-        $suite->addTestSuite('Timetracker_Import_AllTest');
+        if (Tinebase_Application::getInstance()->isInstalled('Timetracker')) {
+            $suite->addTestSuite('Timetracker_JsonTest');
+            $suite->addTestSuite('Timetracker_ControllerTest');
+            $suite->addTestSuite('Timetracker_ExportTest');
+            $suite->addTestSuite('Timetracker_FilterTest');
+            $suite->addTestSuite('Timetracker_DoctrineModelTest');
+            $suite->addTestSuite('Timetracker_Import_AllTest');
+        }
 
         return $suite;
     }

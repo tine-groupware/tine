@@ -138,7 +138,7 @@ var grid = new Ext.grid.GridPanel({
 });
      * </code></pre>
      */
-    groupTextTpl : '{text}',
+    groupTextTpl : '{[this.getGroupText(values)]}',
 
     /**
      * @cfg {String} groupMode Indicates how to construct the group identifier. <tt>'value'</tt> constructs the id using
@@ -167,7 +167,10 @@ var grid = new Ext.grid.GridPanel({
             this.startGroup = new Ext.XTemplate(
                 '<div id="{groupId}" class="x-grid-group {cls}">',
                     '<div id="{groupId}-hd" class="x-grid-group-hd" style="{style}"><div class="x-grid-group-title">', this.groupTextTpl ,'</div></div>',
-                    '<div id="{groupId}-bd" class="x-grid-group-body">'
+                    '<div id="{groupId}-bd" class="x-grid-group-body">',
+                {
+                    getGroupText: this.getGroupText
+                }
             );
         }
         this.startGroup.compile();
@@ -186,6 +189,10 @@ var grid = new Ext.grid.GridPanel({
     // private
     getGroups : function(){
         return this.hasRows() ? this.mainBody.dom.childNodes : [];
+    },
+
+    getGroupText: function(values) {
+        return values.text
     },
 
     // private

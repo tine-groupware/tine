@@ -220,7 +220,7 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
             if (config[i]?.dataIndex && initial) {
                 const fieldConfig = {
                     name: config[i]?.dataIndex,
-                    type: 'auto',
+                    type: config[i]?.type ?? 'auto',
                 };
                 const uiConfig = Tine.widgets.grid.ColumnManager.getColumnUIConfig(fieldConfig, null, config[i]);
                 const resolvedConfig = Tine.widgets.grid.ColumnManager.resolveUIConfigWidth(config[i], uiConfig);
@@ -608,7 +608,7 @@ myGrid.getColumnModel().setHidden(0, true); // hide column 0 (0 = the first colu
      */
     setHidden : function(colIndex, hidden, suppressEvent){
         var c = this.config[colIndex];
-        if(c.hidden !== hidden){
+        if(c && c.hidden !== hidden){
             c.hidden = hidden;
             this.totalWidth = null;
             if (!suppressEvent) {

@@ -50,12 +50,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      *
      * @param mixed $_data
      * @param boolean $_bypassFilters Bypass filters at object creation with data
-     * this is usefull when datas are for sure valid, e.g. after database query
+     *                                this is useful when data is for sure valid, e.g. after database query
      * @param boolean $_convertDates array with Tinebase_DateTime constructor parameters part and locale
-     *
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
+    public function __construct(mixed $_data = NULL, $_bypassFilters = false, $_convertDates = true);
 
     /**
      * returns the configuration object
@@ -119,7 +118,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param string $_name of property
      * @param mixed $_value of property
      */
-    public function __set($_name, $_value);
+    public function __set($_name, mixed $_value);
     
     /**
      * unsets record related properties
@@ -366,11 +365,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
 
     /**
      * @param string $_property
-     * @param mixed $_diffValue
-     * @param mixed $_oldValue
      * @return null|boolean
      */
-    public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue);
+    public function resolveConcurrencyUpdate($_property, mixed $_diffValue, mixed $_oldValue);
 
     /**
      * returns the id of a record property

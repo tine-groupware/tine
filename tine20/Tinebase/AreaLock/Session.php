@@ -20,7 +20,7 @@ class Tinebase_AreaLock_Session implements Tinebase_AreaLock_Interface
     /**
      * session namespace
      */
-    const AREALOCK_VALIDITY_SESSION_NAMESPACE = 'areaLockValidity';
+    public const AREALOCK_VALIDITY_SESSION_NAMESPACE = 'areaLockValidity';
 
     /**
      * @var Tinebase_Model_AreaLockConfig

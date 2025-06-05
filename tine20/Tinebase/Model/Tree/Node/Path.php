@@ -45,22 +45,22 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     /**
      * streamwrapper path prefix
      */
-    const STREAMWRAPPERPREFIX = 'tine20://';
+    public const STREAMWRAPPERPREFIX = 'tine20://';
     
     /**
      * root type
      */
-    const TYPE_ROOT = 'root';
+    public const TYPE_ROOT = 'root';
 
     /**
      * folders path part
      */
-    const FOLDERS_PART = 'folders';
+    public const FOLDERS_PART = 'folders';
 
     /**
      * records path part
      */
-    const RECORDS_PART = 'records';
+    public const RECORDS_PART = 'records';
 
     /**
      * key in $_validators/$_properties array for the field which 
@@ -106,9 +106,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * (non-PHPdoc)
      * @see Tinebase/Record/Tinebase_Record_Abstract::__toString()
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->flatpath;
+        return (string) $this->flatpath;
     }
     
     /**
@@ -169,7 +169,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                     $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $pathParts[3], 'Tinebase_Model_FullUser');
                     $containerType = Tinebase_FileSystem::FOLDER_TYPE_PERSONAL;
                     $pathParts[3] = $user->accountLoginName;
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     // not a user -> shared
                     $containerType = Tinebase_FileSystem::FOLDER_TYPE_SHARED;
                 }
@@ -235,7 +235,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     public function getParent()
     {
         if (! $this->parentrecord) {
-            list($this->parentrecord, $unused) = self::getParentAndChild($this->flatpath);
+            [$this->parentrecord, $unused] = self::getParentAndChild($this->flatpath);
         }
         return $this->parentrecord;
     }
@@ -278,7 +278,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         )) ? $this->containerType : $this->_getContainerType($pathParts);
         $this->containerOwner       = $this->_getContainerOwner($pathParts);
         $this->application          = $this->_getApplication($pathParts);
-        $this->statpath             = isset($this->statpath) ? $this->statpath : $this->_getStatPath($pathParts);
+        $this->statpath ??= $this->_getStatPath($pathParts);
         $this->realpath             = $this->_getRealPath($pathParts);
         $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
     }
@@ -316,7 +316,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getContainerType($_pathParts)
     {
-        $containerType = isset($_pathParts[2])? $_pathParts[2] : self::TYPE_ROOT;
+        $containerType = $_pathParts[2] ?? self::TYPE_ROOT;
         
         if (! in_array($containerType, array(
             Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
@@ -401,12 +401,12 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             if ($this->containerOwner) {
                 try {
                     $pathParts[3] = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->containerOwner, 'Tinebase_Model_FullUser')->getId();
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     // try again with id
                     $accountId = is_object($this->containerOwner) ? $this->containerOwner->getId() : $this->containerOwner;
                     try {
                         $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId, 'Tinebase_Model_FullUser');
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    } catch (Tinebase_Exception_NotFound) {
                         $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountDisplayName', $accountId, 'Tinebase_Model_FullUser');
                     }
                     $pathParts[3] = $user->getId();
@@ -445,11 +445,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $cfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_DEFAULT_GRANTS};
 
         foreach ($cfg as $glob => $grants) {
-            list($app, $appendix) = explode('/', $glob, 2);
+            [$app, $appendix] = explode('/', (string) $glob, 2);
             try {
                 $app = Tinebase_Application::getInstance()->getApplicationByName($app);
                 $glob = $app->getId() . '/' . $appendix;
-            } catch (Tinebase_Exception_NotFound $tenf) {}
+            } catch (Tinebase_Exception_NotFound) {}
 
             if (preg_match('#^/'. str_replace('#', '\\#', $glob) . '$#um', $this->statpath, $globMatches)) {
 
@@ -457,7 +457,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                     $arrToWalk = null;
                     if (is_array($grantData['account_id'])) {
                         $arrToWalk = &$grantData['account_id'];
-                    } elseif (strpos($grantData['account_id'], '$') !== false) {
+                    } elseif (str_contains((string) $grantData['account_id'], '$')) {
                         $arrToWalk = [&$grantData['account_id']];
                     }
                     if (null !== $arrToWalk) {
@@ -475,18 +475,13 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                     }
 
                     if (is_array($grantData['account_id'])) {
-                        switch ($grantData['account_type']) {
-                            case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                                $grantData['account_id'] = Tinebase_User::getInstance()->search(
-                                    new Tinebase_Model_FullUserFilter($grantData['account_id']))->getFirstRecord()->getId();
-                                break;
-                            case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                                $grantData['account_id'] = Tinebase_Group::getInstance()->search(
-                                    new Tinebase_Model_GroupFilter($grantData['account_id']))->getFirstRecord()->getId();
-                                break;
-                            default:
-                                throw new Tinebase_Exception_NotImplemented('account_type: ' . $grantData['account_type']);
-                        }
+                        $grantData['account_id'] = match ($grantData['account_type']) {
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_USER => Tinebase_User::getInstance()->search(
+                                new Tinebase_Model_FullUserFilter($grantData['account_id']))->getFirstRecord()->getId(),
+                            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP => Tinebase_Group::getInstance()->search(
+                                new Tinebase_Model_GroupFilter($grantData['account_id']))->getFirstRecord()->getId(),
+                            default => throw new Tinebase_Exception_NotImplemented('account_type: ' . $grantData['account_type']),
+                        };
                     }
                 }
                 unset($grantData);

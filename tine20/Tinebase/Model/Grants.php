@@ -25,50 +25,50 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
     /**
      * grant to read all records of a container / a single record
      */
-    const GRANT_READ     = 'readGrant';
+    public const GRANT_READ     = 'readGrant';
     
     /**
      * grant to add a record to a container
      */
-    const GRANT_ADD      = 'addGrant';
+    public const GRANT_ADD      = 'addGrant';
     
     /**
      * grant to edit all records of a container / a single record
      */
-    const GRANT_EDIT     = 'editGrant';
+    public const GRANT_EDIT     = 'editGrant';
     
     /**
      * grant to delete  all records of a container / a single record
      */
-    const GRANT_DELETE   = 'deleteGrant';
+    public const GRANT_DELETE   = 'deleteGrant';
 
 
     /**
      * grant to export all records of a container / a single record
      */
-    const GRANT_EXPORT = 'exportGrant';
+    public const GRANT_EXPORT = 'exportGrant';
     
     /**
      * grant to sync all records of a container / a single record
      */
-    const GRANT_SYNC = 'syncGrant';
+    public const GRANT_SYNC = 'syncGrant';
     
     /**
      * grant to administrate a container
      */
-    const GRANT_ADMIN    = 'adminGrant';
+    public const GRANT_ADMIN    = 'adminGrant';
 
 
     /**
      * grant to download file nodes
      */
-    const GRANT_DOWNLOAD = 'downloadGrant';
+    public const GRANT_DOWNLOAD = 'downloadGrant';
 
     /**
      * grant to publish nodes in Filemanager
      * @todo move to Filemanager_Model_Grant once we are able to cope with app specific grant classes
      */
-    const GRANT_PUBLISH = 'publishGrant';
+    public const GRANT_PUBLISH = 'publishGrant';
 
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -163,13 +163,13 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                         'presence' => 'required',
                         'allowEmpty' => true
                     ),
-                ], isset($allGrantsMC[$grant]) ? $allGrantsMC[$grant] : []);
+                ], $allGrantsMC[$grant] ?? []);
             }
         }
 
         parent::__construct($_data, $_bypassFilters, $_convertDates);
 
-        foreach ($this->getAllGrants() as $grant) {
+        foreach (static::getAllGrants() as $grant) {
             if (! $this->__isset($grant)) {
                 // initialize in case validators are switched off
                 $this->{$grant} = false;
@@ -269,7 +269,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
             return false;
         }
         
-        if (! in_array($grant, $this->getAllGrants()) || ! isset($this->{$grant}) || ! $this->{$grant}) {
+        if (! in_array($grant, static::getAllGrants()) || ! isset($this->{$grant}) || ! $this->{$grant}) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Grant not defined or not set');
             return false;
@@ -302,7 +302,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Set all available grants for ' . $this->account_type . ' with id ' . $this->account_id);
         
-        foreach ($this->getAllGrants() as $grant) {
+        foreach (static::getAllGrants() as $grant) {
             $this->$grant = true;
         }
         

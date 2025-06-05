@@ -123,7 +123,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         $userAccount = clone($this->_account);
         unset($userAccount->id);
-        $userAccount->type = Felamimail_Model_Account::TYPE_USER;
+        $userAccount->type = Felamimail_Model_Account::TYPE_USER_EXTERNAL;
         $userAccount = $this->_controller->create($userAccount);
 
         // deleting original account and check if user account is new default account
@@ -161,7 +161,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     public function testResetAccountCapabilities()
     {
         $account = clone($this->_account);
-        $account->type = Felamimail_Model_Account::TYPE_USER;
+        $account->type = Felamimail_Model_Account::TYPE_USER_EXTERNAL;
         $account->setId(null);
         $account = $this->_controller->create($account);
 
@@ -199,7 +199,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         $account = clone($this->_account);
         unset($account->id);
-        $account->type = Felamimail_Model_Account::TYPE_USER;
+        $account->type = Felamimail_Model_Account::TYPE_USER_EXTERNAL;
         $account->user = $testCredentials['username'];
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if (isset($imapConfig['domain']) && !empty($imapConfig['domain'])) {

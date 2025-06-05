@@ -83,7 +83,7 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
     {
         $key = $_class . '_#_' . $_field;
         if (isset($_config['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
-            list($objectClass, $method) = explode('::', $_config['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
+            [$objectClass, $method] = explode('::', (string) $_config['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
             $object = call_user_func($objectClass . '::getInstance');
             if (method_exists($object, $method)) {
                 $configOverride = call_user_func_array([$object, $method], [$_record]);

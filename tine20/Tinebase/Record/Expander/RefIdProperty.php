@@ -15,13 +15,11 @@ use Tinebase_ModelConfiguration_Const as MCC;
 class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Property
 {
     protected $_mccCfg = null;
-    protected $_singleRecord = false;
 
     public function __construct($_model, $_property, $_expanderDefinition, $_rootExpander,
-                                $_prio = self::DATA_FETCH_PRIO_DEPENDENTRECORD, $_singleRecord = false)
+                                $_prio = self::DATA_FETCH_PRIO_DEPENDENTRECORD, protected $_singleRecord = false)
     {
         $this->_mccCfg = $_expanderDefinition['fieldDefConfig'];
-        $this->_singleRecord = $_singleRecord;
 
         parent::__construct($_model, $_property, $_expanderDefinition, $_rootExpander, $_prio);
     }
@@ -41,7 +39,7 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
                     function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted))
                     ->setAdditionalFilter(array_merge($this->_mccCfg[MCC::ADD_FILTERS] ?? [], $this->_definitionFilter ?? []) ?: null)
                     ->setPaging(isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) : null)
-                    ->setFilterOptions(isset($this->_mccCfg[MCC::FILTER_OPTIONS]) ? $this->_mccCfg[MCC::FILTER_OPTIONS] : null)
+                    ->setFilterOptions($this->_mccCfg[MCC::FILTER_OPTIONS] ?? null)
                 );
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {

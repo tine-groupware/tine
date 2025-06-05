@@ -71,8 +71,8 @@ class Tinebase_Model_Department extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }        
 }

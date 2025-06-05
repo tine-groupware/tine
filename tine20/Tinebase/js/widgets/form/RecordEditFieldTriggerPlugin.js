@@ -29,14 +29,10 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
     async init (field) {
         this.visible = this.allowCreateNew
         await super.init(field)
-        this.assertState()
-        field.setValue = field.setValue.createSequence(_.bind(this.assertState, this))
-        field.clearValue = field.clearValue.createSequence(_.bind(this.assertState, this))
-        field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
-        field.setDisabled = field.setDisabled.createSequence(_.bind(this.assertState, this))
     }
     
     assertState() {
+        super.assertState.call(this);
         this.setVisible((!!this.field.selectedRecord || this.allowCreateNew));
         this.setTriggerClass(!!this.field.selectedRecord ? 'action_edit' : 'action_add');
 
@@ -81,6 +77,9 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
                             Ext.copyTo(record.json, this.field.selectedRecord.json, this.preserveJsonProps)
                         }
                         // here we loose record.json data from old record! -> update existing record? vs. have preserveJSON props? // not a problem?
+                        if (mode.match(/local/)) {
+                            this.field.setValue(record);
+                        }
                         this.field.onSelect(record, 0);
                     },
                     'cancel': () => {

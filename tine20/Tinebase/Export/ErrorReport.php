@@ -75,14 +75,14 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
 
     public function getContent()
     {
-        return get_class($this->_exception) . ': ' . $this->_exception->getMessage();
+        return $this->_exception::class . ': ' . $this->_exception->getMessage();
     }
 
     /**
      * generate export
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function generate()
+    public function generate(): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' not implementd');
     }
@@ -92,7 +92,7 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
      * @param string $_value
      * @throws Tinebase_Exception_NotImplemented
      */
-    protected function _setValue($_key, $_value)
+    protected function _setValue($_key, $_value): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' not implementd');
     }
@@ -101,7 +101,7 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
      * @param string $_value
      * @throws Tinebase_Exception_NotImplemented
      */
-    protected function _writeValue($_value)
+    protected function _writeValue($_value): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' not implementd');
     }

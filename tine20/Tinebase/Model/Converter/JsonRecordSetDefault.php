@@ -63,7 +63,7 @@ class Tinebase_Model_Converter_JsonRecordSetDefault implements Tinebase_Model_Co
         }
 
         if (! $fieldValue instanceof Tinebase_Record_RecordSet) {
-            if (is_array($fieldValue) || null === json_decode($fieldValue, true)) {
+            if (is_array($fieldValue) || null === json_decode((string) $fieldValue, true)) {
                 return json_encode($fieldValue);
             } else {
                 return $fieldValue;

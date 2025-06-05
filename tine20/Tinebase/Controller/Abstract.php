@@ -77,7 +77,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected $_maintenanceMode = null;
 
-    const APP_STATE_MAINTENANCE = 'maintenance';
+    public const APP_STATE_MAINTENANCE = 'maintenance';
 
 
     public function setRequestContext(array $context)
@@ -363,13 +363,13 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     protected function _getModelsFromAppDir()
     {
-        $modelsDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
+        $modelsDir = dirname(__FILE__, 3) . '/' . $this->_applicationName . '/Model/';
         if (! file_exists($modelsDir)) {
             return null;
         }
         
         try {
-            $modelDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
+            $modelDir = dirname(__FILE__, 3) . '/' . $this->_applicationName . '/Model/';
             if (! file_exists($modelDir)) {
                 return array();
             }

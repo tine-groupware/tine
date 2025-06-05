@@ -41,9 +41,9 @@
  */
 class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interface
 {
-    const CREATED = 'created';
-    const DELETED = 'deleted';
-    const UPDATED = 'updated';
+    public const CREATED = 'created';
+    public const DELETED = 'deleted';
+    public const UPDATED = 'updated';
 
     /**
      * Tablename SQL_TABLE_PREFIX . timemachine_modificationlog
@@ -219,7 +219,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
             try {
                 $app = Tinebase_Core::getApplicationInstance($model, '', true);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 $appNotFound = true;
             }
 
@@ -234,7 +234,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     if (!$app instanceof Tinebase_Controller_Record_Abstract) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . ' model: ' . $model . ' controller: ' . get_class($app)
+                                . ' model: ' . $model . ' controller: ' . $app::class
                                 . ' not an instance of Tinebase_Controller_Record_Abstract');
                         }
                         continue;
@@ -246,7 +246,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 if (!$backend instanceof Tinebase_Backend_Interface) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' model: ' . $model . ' backend: ' . get_class($backend)
+                        . ' model: ' . $model . ' backend: ' . $backend::class
                         . ' not an instance of Tinebase_Backend_Interface');
                     }
                     continue;
@@ -460,7 +460,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'seq',            'operator' => 'greater', 'value' => $newRecord->seq),
             array('field' => 'seq',            'operator' => 'less',    'value' => $currentSeq + 1),
-            array('field' => 'record_type',    'operator' => 'equals',  'value' => get_class($newRecord)),
+            array('field' => 'record_type',    'operator' => 'equals',  'value' => $newRecord::class),
             array('field' => 'record_id',      'operator' => 'equals',  'value' => $newRecord->getId()),
             array('field' => 'application_id', 'operator' => 'equals',  'value' => $applicationId),
         ));
@@ -488,7 +488,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             'sort'  => 'instance_seq'
         ));
 
-        return $this->_backend->search($filter, $paging);
+        $result = $this->_backend->search($filter, $paging);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($result) . ' modlogs with instance seq > ' . $currentSeq);
+        }
+
+        return $result;
     }
 
     /**
@@ -649,7 +656,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         if (! $newRecord->has('seq') || null === $newRecord->seq) {
             /** @noinspection PhpDeprecationInspection */
-            return $this->manageConcurrentUpdatesByTimestamp($newRecord, $curRecord, get_class($newRecord),
+            return $this->manageConcurrentUpdatesByTimestamp($newRecord, $curRecord, $newRecord::class,
                 'Sql', $newRecord->getId());
         }
 
@@ -845,7 +852,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $newRecordsRecord = $newRecord->$attribute->getById($modifiedRecord->getId());
             if ($newRecordsRecord && ($newRecordsRecord->has('seq') || $newRecordsRecord->has('last_modified_time'))) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Managing updates for ' . get_class($newRecordsRecord) . ' record ' . $newRecordsRecord->getId());
+                    . ' Managing updates for ' . $newRecordsRecord::class . ' record ' . $newRecordsRecord->getId());
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' new record: ' . print_r($newRecordsRecord->toArray(), TRUE));
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -902,7 +909,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Calling deprecated method. Model ' . $_model . ' should get a seq property.');
         
-        list($appName) = explode('_', $_model);
+        [$appName] = explode('_', $_model);
         
         // handle concurrent updates on unmodified records
         if (! $_newRecord->last_modified_time instanceof DateTime) {
@@ -962,9 +969,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             }
             $metaProps = static::$_metaProperties;
             $diffContext = (new Tinebase_Record_DiffContext())->setSubDiffOmitFieldsDelegator(
-                function(?Tinebase_ModelConfiguration $mc) use($metaProps) {
-                    return $mc ? array_merge($metaProps, $mc->modlogOmitFields) : $metaProps;
-                });
+                fn(?Tinebase_ModelConfiguration $mc) => $mc ? array_merge($metaProps, $mc->modlogOmitFields) : $metaProps);
             $diff = $_curRecord->diff($_newRecord, $diffContext->getSubDiffOmitFields($_newRecord::getConfiguration()),
                 $diffContext);
             if ($_newRecord->is_deleted && !$_curRecord->is_deleted) {
@@ -1091,7 +1096,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     protected function _getCommonModlog($_model, $_backend, $_updateMetaData = array(), $_recordId = NULL)
     {
         if (empty($_updateMetaData) || ! isset($_updateMetaData['last_modified_by']) ||  ! isset($_updateMetaData['last_modified_time'])) {
-            list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+            [$currentAccountId, $currentTime] = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
         } else {
             $currentAccountId = $_updateMetaData['last_modified_by'];
             $currentTime      = $_updateMetaData['last_modified_time'];
@@ -1104,15 +1109,15 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $client .= ' - no http user agent present';
         }
         
-        list($appName/*, $i, $modelName*/) = explode('_', $_model);
+        [$appName] = explode('_', $_model);
         $commonModLogEntry = new Tinebase_Model_ModificationLog(array(
             'application_id'       => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
             'record_id'            => $_recordId,
             'record_type'          => $_model,
             'record_backend'       => $_backend,
             'modification_time'    => $currentTime,
-            'modification_account' => $currentAccountId ? $currentAccountId : 'unknown',
-            'seq'                  => (isset($_updateMetaData['seq'])) ? $_updateMetaData['seq'] : 0,
+            'modification_account' => $currentAccountId ?: 'unknown',
+            'seq'                  => $_updateMetaData['seq'] ?? 0,
             'client'               => $client
         ), TRUE);
         
@@ -1317,7 +1322,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $bypassFilters = $_newRecord->bypassFilters;
         $_newRecord->bypassFilters = TRUE;
         
-        list($currentAccountId, $currentTime) = self::getCurrentAccountIdAndTime();
+        [$currentAccountId, $currentTime] = self::getCurrentAccountIdAndTime();
         
         // spoofing protection
         $_newRecord->created_by         = $_curRecord ? $_curRecord->created_by : NULL;
@@ -1377,7 +1382,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $newRecord->seq = (int) $newRecord->seq + 1;
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Increasing seq of ' . get_class($newRecord) . ' with id ' . $newRecord->getId() .
+                ' Increasing seq of ' . $newRecord::class . ' with id ' . $newRecord->getId() .
                 ' from ' . ($newRecord->seq - 1) . ' to ' . $newRecord->seq);
         }
     }
@@ -1594,8 +1599,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
             try {
                 /** @noinspection PhpUndefinedMethodInspection */
-                $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
-                /* TODO make the amount above configurable  */
+                $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId,
+                    $slaveConfiguration->{Tinebase_Config::NUM_OF_MODLOGS});
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 throw new Tinebase_Exception_Backend('could not getReplicationModificationLogs from master');
@@ -1675,7 +1680,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     Tinebase_Application::STATE_REPLICATION_MASTER_ID, $modification->instance_seq);
 
                 if (null !== $lock && !$lock->isLocked()) {
-                    throw new Tinebase_Exception_Backend('lock of type ' . get_class($lock) . ' lost lock');
+                    throw new Tinebase_Exception_Backend('lock of type ' . $lock::class . ' lost lock');
                 }
 
                 $transactionManager->commitTransaction($transactionId);
@@ -1689,29 +1694,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 $transactionManager->rollBack();
 
-                // notify configured email addresses about replication failure
-                $config = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE);
-                if (is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
-                        count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
-
-                    $plain = "Error applying modlog: \n" . print_r($modification->toArray(), true);
-                    $plain .= "\n\n" . $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
-                    $subject = 'replication client error';
-                    if (! empty(Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL})) {
-                        $subject .= ' (' . Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL} . ')';
-                    }
-
-                    foreach ($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
-                        $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
-                        try {
-                            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients,
-                                $subject, $plain);
-                        } catch (Exception $e) {
-                            // skipping recipient
-                            Tinebase_Exception::log($e);
-                        }
-                    }
-                }
+                $plain = "Error applying modlog:" . PHP_EOL . print_r($modification->toArray(), true);
+                $plain .= PHP_EOL . PHP_EOL . $e->getMessage() . PHP_EOL . PHP_EOL . $e->getTraceAsString();
+                self::notifyReplicationFailure($plain);
 
                 // must not happen, continuing pointless!
                 return false;
@@ -1730,6 +1715,30 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         return array_merge(['seq', 'is_deleted'], static::$_metaProperties);
     }
 
+    public static function notifyReplicationFailure(string $plain, string $subject = 'replication client error')
+    {
+        // notify configured email addresses about replication failure
+        $config = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE);
+        if (is_array($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) &&
+            count($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST}) > 0) {
+
+            if (! empty(Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL})) {
+                $subject .= ' (' . Tinebase_Config::getInstance()->{Tinebase_Config::TINE20_URL} . ')';
+            }
+
+            foreach ($config->{Tinebase_Config::ERROR_NOTIFICATION_LIST} as $recipient) {
+                $recipients = array(new Addressbook_Model_Contact(array('email' => $recipient), true));
+                try {
+                    Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients,
+                        $subject, $plain);
+                } catch (Exception $e) {
+                    // skipping recipient
+                    Tinebase_Exception::log($e);
+                }
+            }
+        }
+    }
+
     /**
      * @param Tinebase_Model_ModificationLog $_modification
      * @param Tinebase_Controller_Record_Abstract $_controller
@@ -1737,6 +1746,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      */
     public static function defaultApply(Tinebase_Model_ModificationLog $_modification, $_controller)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Applying change ' . $_modification->change_type . ' to ' . $_modification->record_type
+                . ' ID: ' . $_modification->record_id);
+        }
+
         $oldValue = $_controller->doContainerACLChecks(false);
         $raii = new Tinebase_RAII(function() use($_controller, $oldValue) {
             $_controller->doContainerACLChecks($oldValue);

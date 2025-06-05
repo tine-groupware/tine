@@ -39,7 +39,7 @@ abstract class Tinebase_User_Plugin_Abstract
         
         if (!empty($this->_config[$domainConfigKey])) {
             $domain = '@' . $this->_config[$domainConfigKey];
-            if (strpos($_userName, $domain) === FALSE) {
+            if (!str_contains($_userName, $domain)) {
                 $_userName .= $domain;
             }
         }
@@ -76,7 +76,7 @@ abstract class Tinebase_User_Plugin_Abstract
                 // (if preventSecondaryDomainUsername is not set)!
                 $emailUsername = preg_replace('/[@\.]+/', '-', $accountEmailAddress)
                     . '@' . $this->_config[$domainConfigKey];
-            } else if (strpos($accountLoginName, '@') === false) {
+            } else if (!str_contains($accountLoginName, '@')) {
                 $emailUsername = $this->_appendDomain($accountLoginName);
             } else {
                 $emailUsername = $accountLoginName;

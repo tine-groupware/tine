@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -27,10 +27,10 @@ class Calendar_Controller_EventType extends Tinebase_Controller_Record_Abstract
     {
         $this->_doContainerACLChecks = false;
         $this->_applicationName = 'Calendar';
-        $this->_modelName = 'Calendar_Model_EventType';
+        $this->_modelName = Calendar_Model_EventType::class;
         $this->_backend = new Tinebase_Backend_Sql(array(
-            'modelName'     => 'Calendar_Model_EventType',
-            'tableName'     => 'cal_event_type',
+            'modelName'     => Calendar_Model_EventType::class,
+            'tableName'     => Calendar_Model_EventType::TABLE_NAME,
             'modlogActive'  => true
         ));
         $this->_purgeRecords = FALSE;

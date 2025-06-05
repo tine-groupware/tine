@@ -42,16 +42,13 @@ class EFile_CsvImportTest extends TestCase
         $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/00 - Pfarr- und Ortgeschichte/01 - Allgemeine Pfarr- und Ortsgeschichte');
         $this->assertSame('//00.00.01', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
 
-        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/00 - Pfarr- und Ortgeschichte/01 - Allgemeine Pfarr- und Ortsgeschichte/01 - amtlich verfasste Chronik');
-        $this->assertSame('//00.00.01.01', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
+        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/01 - Pfarrchronik');
+        $this->assertSame('//00.01', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
 
-        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/00 - Pfarr- und Ortgeschichte/02 - Pfarrchronik');
-        $this->assertSame('//00.00.02', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
+        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/01 - Pfarrchronik/01 - Chronik0');
+        $this->assertSame('//00.01.01', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
 
-        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/00 - Pfarr- und Ortgeschichte/02 - Pfarrchronik/01 - Chronik0');
-        $this->assertSame('//00.00.02.01', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
-
-        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/00 - Pfarr- und Ortgeschichte/02 - Pfarrchronik/02 - Chronik1');
-        $this->assertSame('//00.00.02.02', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
+        $node = Tinebase_FileSystem::getInstance()->stat($basePath . '00 - Kirchengemeinde/01 - Pfarrchronik/02 - Chronik1');
+        $this->assertSame('//00.01.02', $node->{EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER});
     }
 }

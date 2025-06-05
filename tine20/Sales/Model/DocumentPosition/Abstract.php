@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -327,7 +327,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER                  => true,
                 self::LENGTH                        => 255,
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_DESCRIPTION               => [
@@ -546,7 +547,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             case Sales_Config::INVOICE_DISCOUNT_SUM:
                 $value = $this->{self::FLD_POSITION_DISCOUNT_SUM};
                 $value = round((float)$value, 2);
-                return sprintf('%01.2f ', $value) . Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL);
+                return sprintf('%01.2f ', $value) . Tinebase_Core::getDefaultCurrencySymbol();
         }
         return '';
     }
@@ -576,6 +577,11 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
             // make document_id dirty
             $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS};
+        } elseif ($reversalOfReversal) {
+            $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
+                new Zend_Locale($this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
+            $this->{self::FLD_TITLE} =
+                preg_replace("/^{$translation->_('Reversal')}: /", '', $this->{self::FLD_TITLE});
         }
 
         $this->__unset($this->getIdProperty());
@@ -694,5 +700,15 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
         unset($_data[self::FLD_PRECURSOR_POSITION]);
         unset($_data[self::FLD_PRECURSOR_POSITION_MODEL]);
+    }
+
+    public function prepareForCopy(): void
+    {
+        $this->{self::FLD_IS_REVERSED} = false;
+        $this->{self::FLD_REVERSAL} = false;
+        $this->{self::FLD_PRECURSOR_POSITION_MODEL} = null;
+        $this->{self::FLD_PRECURSOR_POSITION} = null;
+
+        parent::prepareForCopy();
     }
 }

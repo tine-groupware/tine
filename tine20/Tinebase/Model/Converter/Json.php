@@ -26,7 +26,7 @@ class Tinebase_Model_Converter_Json implements Tinebase_Model_Converter_Interfac
      */
     public function convertToRecord($record, $key, $blob)
     {
-        return is_array($blob) ? $blob : json_decode($blob, true);
+        return is_array($blob) ? $blob : json_decode((string) $blob, true);
     }
 
     /**

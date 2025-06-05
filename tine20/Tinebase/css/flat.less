@@ -391,6 +391,7 @@ span.x-tab-strip-text.tine-favicon {
   background-image: url('../../images/icon-set/icon_menu.svg');
 }
 
+.action_more,
 .tine-mainscreen-grid-responsive-nav-menu {
   background-image: url('../../images/icon-set/Icon_inner-menu-bullets-horizontal.svg');
 }
@@ -554,10 +555,6 @@ span.x-tab-strip-text.tine-favicon {
   background-image: none;
 }
 
-.x-form-field.x-form-num-field {
-  text-align: right;
-}
-
 .x-form-item-label .field-description {
   position: absolute;
   display: inline-block;
@@ -675,6 +672,7 @@ span.x-tab-strip-text.tine-favicon {
 // till all triggers are updated...
 .x-form-trigger-flat {
   background-position: center;
+  background-repeat: no-repeat;
   background-size: 13px;
   box-sizing: border-box;
   height: 100%;
@@ -682,9 +680,11 @@ span.x-tab-strip-text.tine-favicon {
   &:hover {
     background-size: 15px 15px !important;
     background-position: 1px 1px !important;
+    cursor: pointer;
   }
   &:active {
-    background-position: 1px 2px !important;
+    background-position: 5px 5px !important;
+    background-size: 13px 13px !important;
   }
 }
 

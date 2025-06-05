@@ -196,7 +196,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_SqlAbstract im
         $emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
 
         $_user->imapUser  = $emailUser;
-        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser ?? null);
     }
 
     /**
@@ -345,11 +345,10 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_SqlAbstract im
     
     /**
      * update user in dbmail db
-     * 
+     *
      * @param array $userData
-     * @param mixed $where
      */
-    protected function _update($userData, $where)
+    protected function _update($userData, mixed $where)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . " Update user {$userData[$this->_propertyMapping['emailUsername']]} in {$this->_userTable}");
@@ -483,7 +482,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_SqlAbstract im
      */
     protected function _convertToInt($_string)
     {
-        return sprintf("%u", crc32($_string));
+        return sprintf("%u", crc32((string) $_string));
     }
     
     /**

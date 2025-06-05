@@ -7,6 +7,7 @@
  */
 
 /**
+ * @TODO rework - not longer appropriate with new dispatchConfig
  * additional action for attachmentGrids to in/exclude attachments to dispatchments
  */
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),

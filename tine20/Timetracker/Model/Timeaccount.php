@@ -171,6 +171,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             ),
             'budget'            => array(
                 'label'                 => 'Budget in hours', // _('Budget in hours')
+                self::DESCRIPTION       => 'Project time budget in hours', // _('Project time budget in hours')
                 'type'                  => 'float',
                 'inputFilters'          => array('Zend_Filter_Empty' => NULL),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -314,7 +315,23 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                         self::TYPE                  => Timetracker_Model_Timeaccount::MODEL_NAME_PART
                     ]
                 ]
-            ]
+            ],
+            'budget_filled_level'       => array(
+                self::LABEL                 => 'Budget level in %', // _('Budget level in %')
+                self::TYPE                  => 'float',
+                self::SPECIAL_TYPE          => 'percent',
+                'inputFilters'          => array('Zend_Filter_Empty' => 0.0),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
+            ),
+            'budget_booked_hours'       => array(
+                'label'                 => 'Budget booked hours', // _('Budget booked hours')
+                self::DESCRIPTION       => 'All timesheet durations are aggregated here, no matter if they are billable or not', // _('All timesheet durations are aggregated here, no matter if they are billable or not')
+                'type'                  => 'float',
+                'inputFilters'          => array('Zend_Filter_Empty' => 0.0),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'nullable'              => true,
+            ),
         )
     );
 

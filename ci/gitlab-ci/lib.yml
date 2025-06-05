@@ -69,6 +69,7 @@
           done
       }
 
+    - |
       # lib/scripts/docker_build_image.sh
       docker_build_image_dev() {
           log dev image: building ...
@@ -79,6 +80,7 @@
               --tag ${image} \
               --file ./ci/dockerimage/Dockerfile \
               --build-arg PHP_IMAGE=php${PHP_VERSION} \
+              --build-arg APT_MIRROR=${APT_MIRROR} \
               .
       
           log dev image: pushing ...
@@ -95,6 +97,7 @@
               --tag ${image} \
               --file ./ci/dockerimage/Dockerfile \
               --build-arg PHP_IMAGE=php${PHP_VERSION} \
+              --build-arg APT_MIRROR=${APT_MIRROR} \
               .
       
           log test image: pushing ...
@@ -110,6 +113,7 @@
               --tag ${image} \
               --file ./ci/dockerimage/Dockerfile \
               --build-arg PHP_IMAGE=php${PHP_VERSION} \
+              --build-arg APT_MIRROR=${APT_MIRROR} \
               --build-arg JSDEPENDENCY_IMAGE \
               --build-arg ZIP_PACKAGES \
               --build-arg RELEASE_TYPE \
@@ -135,6 +139,7 @@
               --tag ${image} \
               --file ./ci/dockerimage/Dockerfile \
               --build-arg PHP_IMAGE=php${PHP_VERSION} \
+              --build-arg APT_MIRROR=${APT_MIRROR} \
               --build-arg JSDEPENDENCY_IMAGE \
               --build-arg ZIP_PACKAGES \
               --build-arg RELEASE_TYPE \
@@ -159,6 +164,7 @@
           docker build \
               --target packages \
               --file ./ci/dockerimage/Dockerfile \
+              --build-arg APT_MIRROR=${APT_MIRROR} \
               --build-arg BUILT_IMAGE \
               --build-arg ZIP_PACKAGES \
               --build-arg RELEASE=$(release_get_package_version) \
@@ -168,6 +174,7 @@
               .
       }
 
+    - |
       # lib/scripts/docker_hub.sh
       docker_hub_deploy () {
           set -e
@@ -185,6 +192,7 @@
           docker push "${DESTINATION_IMAGE}"
       }
 
+    - |
       # lib/scripts/docker_registry.sh
       docker_registry_login () {
           registry="$1"
@@ -207,23 +215,39 @@
       
       docker_registry_release_image() {
           name="$1"
-          desitination="$2"
+          destination="$2"
           latest="$3"
       
           from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
       
           if [ -z "$CI_COMMIT_TAG" ]; then
               echo "pushing nightly"
-              docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+              docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
               return
           fi
       
           if [ "$latest" == "true" ]; then
-              docker_registry_push "${from}" "${desitination}:latest"
+              docker_registry_push "${from}" "${destination}:latest"
           fi
       
-          docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-          docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+          docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+      
+          # For customer image we only release latest and the full tag.
+          # We push customer images with their full tag into our local tine registry,
+          # if we release there image to our test cloud. If we would release partial tags we might overwrite the main tine version.
+          # TODO: the test cloud should probably, get the images from the customer repository. NOTE: That would require all customer to have an repository.
+          if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" == "" ]; then
+              docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+          fi
+      }
+      
+      docker_registry_release_dev_image() {
+          name=dev
+          targetRegistry="$1"
+      
+          from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+      
+          docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
       }
       
       docker_registry_push() {
@@ -234,7 +258,20 @@
           docker tag "${from}" "${to}"
           docker push "${to}"
       }
+      
+      # needs to be run one time per architecture, with $ARCH set.
+      # Why?: This allows us push new architectures as their build finishes
+      docker_registry_push_multi_platform() {
+          from="$1"
+          to="$2"
+      
+          skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+      
+          # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+          manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
+      }
 
+    - |
       # lib/scripts/git_repo.sh
       git_repo_clone () {
           git clone ${CI_REPOSITORY_URL} --branch ${CI_COMMIT_REF_NAME} --depth 1 --single-branch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
@@ -279,6 +316,7 @@
           popd
       }
 
+    - |
       # lib/scripts/github.sh
       github_create_release() {
           tag=$1
@@ -327,6 +365,7 @@
               "$upload_url?name=$name.tar.bz2"
       }
 
+    - |
       # lib/scripts/matrix.sh
       matrix_send_message() {
           roomid=$1
@@ -354,6 +393,7 @@
       }
 
 
+    - |
       # lib/scripts/merge.sh
       merge_merge_upwards () {
           if ! ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge_helper.sh MergeUpwards "$1" "$2" "customers"; then
@@ -417,6 +457,7 @@
           done
       }
 
+    - |
       # lib/scripts/packaging.sh
       packaging_build_packages() {
           echo "packaging_build_packages()"
@@ -527,6 +568,7 @@
           fi
       }
 
+    - |
       # lib/scripts/phpstan.sh
       phpstan_analyse() {
           if test "${CI_PROJECT_NAME}" == "tine20"; then
@@ -565,6 +607,7 @@
           php -d memory_limit=2G $TINE20ROOT/tine20/vendor/bin/phpstan analyse --autoload-file=$TINE20ROOT/tine20/vendor/autoload.php --error-format=gitlab --no-progress -vvv $dir | tee ${CI_PROJECT_DIR}/code-quality-report.json
       }
 
+    - |
       # lib/scripts/pipeline_status.sh
       pipeline_status_send () {
           errors=$(curl --header "JOB-TOKEN: $CI_JOB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/pipelines/$CI_PIPELINE_ID/test_report" | jq -c '.test_suites[] | select((.error_count>0) or .failed_count>0)| {name,error_count,failed_count}')
@@ -588,6 +631,7 @@
           matrix_send_message $MATRIX_ROOM "$message"
       }
 
+    - |
       # lib/scripts/release.sh
       release_tag() {
           branch="$(echo "$CI_COMMIT_REF_NAME" | sed sI/I-Ig)"
@@ -662,7 +706,16 @@
       
           echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
       }
+      
+      release_is_patch_level_release() {
+          # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+          # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+          # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+      
+          echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+      }
 
+    - |
       # lib/scripts/release_packages.sh
       release_packages_github_create_release() {
           package_repo=$(release_packages_determin_package_repo_name)
@@ -696,7 +749,10 @@
                   matrix_room="${MATRIX_ROOM}"
               fi
       
-              matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+              if ! release_is_patch_level_release; then
+                  matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+              fi
+      
           fi
       }
       
@@ -795,6 +851,7 @@
           return
       }
 
+    - |
       # lib/scripts/repo.sh
       repo_release_notes() {
           tag=$1
@@ -807,6 +864,7 @@
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
       }
 
+    - |
       # lib/scripts/test.sh
       test_prepare_working_dir() {
           if [ "${TINE20ROOT}" != "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20" ]; then
@@ -842,8 +900,8 @@
           if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
               # COMPOSER custom cache
               # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-              export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-              mkdir -p ${COMPOSER_CACHE_DIR}
+              # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+              # mkdir -p ${COMPOSER_CACHE_DIR}
       
               log "instaling custom app ..."
               customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -961,7 +1019,7 @@
       
       
           log "testing ..."
-          cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+          cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
       
           if test -n "${ARG_FILTER}"; then
               cmd="${cmd} --filter ${ARG_FILTER}"
@@ -975,6 +1033,9 @@
               cmd="${cmd} --group ${ARG_GROUP}"
           fi
       
+          mkdir -p ${CI_PROJECT_DIR}/coverage    
+          cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+      
           cmd="${cmd} ${ARG_TEST}";
       
           echo ${cmd};
@@ -985,21 +1046,37 @@
       log() {
           echo -e "\033[0;34m"$@"\033[0m"
       }
+      
+      test_release_update_test_determine_start_version () {
+          # we can automatically determine the start version for main, beta and be. - git describe only works for lts and be, as other branches are "contaminated" with different tags 
+          if [ -z "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
+              if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
+                  git describe --tags --abbrev=0 origin/${TINE_VERSION_BE}
+                  return
+              fi
+      
+              if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BE}" ]; then
+                  git describe --tags --abbrev=0 origin/${TINE_VERSION_LTS}
+                  return
+              fi
+          fi
+      
+          if [ -n "${RELEASE_UPDATE_TEST_START_REF}" ]; then
+              echo ${RELEASE_UPDATE_TEST_START_REF}
+              return
+          fi
+      }
 
+    - |
       # lib/scripts/test_cloud.sh
       test_cloud_generate_deployment_name() {
-          deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-      
-          if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-              # remove trailing /
-              deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-          fi
+          deployment_name=$MAJOR_COMMIT_REF_NAME
       
           if [ "$RELEASE_TYPE" == "nightly" ]; then
               deployment_name=nightly-$deployment_name
           fi
       
-          echo -n $deployment_name | sed 's/\./-/g'
+          echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
       }
       
       test_cloud_deploy() {
@@ -1018,6 +1095,7 @@
           helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
       }
 
+    - |
       # lib/scripts/version_check.sh
       version_check_update () {
           version_check_update_file htdocs%2FversionCheck%2Fversion.json
@@ -1244,23 +1322,39 @@
         
         docker_registry_release_image() {
             name="$1"
-            desitination="$2"
+            destination="$2"
             latest="$3"
         
             from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+                docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
             if [ "$latest" == "true" ]; then
-                docker_registry_push "${from}" "${desitination}:latest"
+                docker_registry_push "${from}" "${destination}:latest"
             fi
         
-            docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-            docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+        
+            # For customer image we only release latest and the full tag.
+            # We push customer images with their full tag into our local tine registry,
+            # if we release there image to our test cloud. If we would release partial tags we might overwrite the main tine version.
+            # TODO: the test cloud should probably, get the images from the customer repository. NOTE: That would require all customer to have an repository.
+            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" == "" ]; then
+                docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            fi
+        }
+        
+        docker_registry_release_dev_image() {
+            name=dev
+            targetRegistry="$1"
+        
+            from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+        
+            docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
         }
         
         docker_registry_push() {
@@ -1270,6 +1364,18 @@
             docker pull "${from}"
             docker tag "${from}" "${to}"
             docker push "${to}"
+        }
+        
+        # needs to be run one time per architecture, with $ARCH set.
+        # Why?: This allows us push new architectures as their build finishes
+        docker_registry_push_multi_platform() {
+            from="$1"
+            to="$2"
+        
+            skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+        
+            # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+            manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
         }
 
         # lib/scripts/git_repo.sh
@@ -1699,6 +1805,14 @@
         
             echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
         }
+        
+        release_is_patch_level_release() {
+            # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+            # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+            # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+        
+            echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -1733,7 +1847,10 @@
                     matrix_room="${MATRIX_ROOM}"
                 fi
         
-                matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                if ! release_is_patch_level_release; then
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                fi
+        
             fi
         }
         
@@ -1879,8 +1996,8 @@
             if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
                 # COMPOSER custom cache
                 # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-                export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-                mkdir -p ${COMPOSER_CACHE_DIR}
+                # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+                # mkdir -p ${COMPOSER_CACHE_DIR}
         
                 log "instaling custom app ..."
                 customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -1998,7 +2115,7 @@
         
         
             log "testing ..."
-            cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+            cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
         
             if test -n "${ARG_FILTER}"; then
                 cmd="${cmd} --filter ${ARG_FILTER}"
@@ -2012,6 +2129,9 @@
                 cmd="${cmd} --group ${ARG_GROUP}"
             fi
         
+            mkdir -p ${CI_PROJECT_DIR}/coverage    
+            cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+        
             cmd="${cmd} ${ARG_TEST}";
         
             echo ${cmd};
@@ -2022,21 +2142,36 @@
         log() {
             echo -e "\033[0;34m"$@"\033[0m"
         }
+        
+        test_release_update_test_determine_start_version () {
+            # we can automatically determine the start version for main, beta and be. - git describe only works for lts and be, as other branches are "contaminated" with different tags 
+            if [ -z "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
+                if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
+                    git describe --tags --abbrev=0 origin/${TINE_VERSION_BE}
+                    return
+                fi
+        
+                if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BE}" ]; then
+                    git describe --tags --abbrev=0 origin/${TINE_VERSION_LTS}
+                    return
+                fi
+            fi
+        
+            if [ -n "${RELEASE_UPDATE_TEST_START_REF}" ]; then
+                echo ${RELEASE_UPDATE_TEST_START_REF}
+                return
+            fi
+        }
 
         # lib/scripts/test_cloud.sh
         test_cloud_generate_deployment_name() {
-            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-        
-            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-                # remove trailing /
-                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-            fi
+            deployment_name=$MAJOR_COMMIT_REF_NAME
         
             if [ "$RELEASE_TYPE" == "nightly" ]; then
                 deployment_name=nightly-$deployment_name
             fi
         
-            echo -n $deployment_name | sed 's/\./-/g'
+            echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
         }
         
         test_cloud_deploy() {
@@ -2074,7 +2209,7 @@
         }
 
         #!/bin/bash
-        echo -n 'wait for signal_mount_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_mount_ready ]; do sleep 1; done; echo ' done'
+        echo -n 'wait for signal_mount_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/signal_mount_ready ]; do sleep 1; done; echo ' done'
         
         test_prepare_working_dir
         touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready
@@ -2163,6 +2298,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 .
         
             log dev image: pushing ...
@@ -2179,6 +2315,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 .
         
             log test image: pushing ...
@@ -2194,6 +2331,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg JSDEPENDENCY_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE_TYPE \
@@ -2219,6 +2357,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg JSDEPENDENCY_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE_TYPE \
@@ -2243,6 +2382,7 @@
             docker build \
                 --target packages \
                 --file ./ci/dockerimage/Dockerfile \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg BUILT_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE=$(release_get_package_version) \
@@ -2291,23 +2431,39 @@
         
         docker_registry_release_image() {
             name="$1"
-            desitination="$2"
+            destination="$2"
             latest="$3"
         
             from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+                docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
             if [ "$latest" == "true" ]; then
-                docker_registry_push "${from}" "${desitination}:latest"
+                docker_registry_push "${from}" "${destination}:latest"
             fi
         
-            docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-            docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+        
+            # For customer image we only release latest and the full tag.
+            # We push customer images with their full tag into our local tine registry,
+            # if we release there image to our test cloud. If we would release partial tags we might overwrite the main tine version.
+            # TODO: the test cloud should probably, get the images from the customer repository. NOTE: That would require all customer to have an repository.
+            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" == "" ]; then
+                docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            fi
+        }
+        
+        docker_registry_release_dev_image() {
+            name=dev
+            targetRegistry="$1"
+        
+            from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+        
+            docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
         }
         
         docker_registry_push() {
@@ -2317,6 +2473,18 @@
             docker pull "${from}"
             docker tag "${from}" "${to}"
             docker push "${to}"
+        }
+        
+        # needs to be run one time per architecture, with $ARCH set.
+        # Why?: This allows us push new architectures as their build finishes
+        docker_registry_push_multi_platform() {
+            from="$1"
+            to="$2"
+        
+            skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+        
+            # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+            manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
         }
 
         # lib/scripts/git_repo.sh
@@ -2746,6 +2914,14 @@
         
             echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
         }
+        
+        release_is_patch_level_release() {
+            # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+            # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+            # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+        
+            echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -2780,7 +2956,10 @@
                     matrix_room="${MATRIX_ROOM}"
                 fi
         
-                matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                if ! release_is_patch_level_release; then
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                fi
+        
             fi
         }
         
@@ -2926,8 +3105,8 @@
             if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
                 # COMPOSER custom cache
                 # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-                export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-                mkdir -p ${COMPOSER_CACHE_DIR}
+                # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+                # mkdir -p ${COMPOSER_CACHE_DIR}
         
                 log "instaling custom app ..."
                 customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -3045,7 +3224,7 @@
         
         
             log "testing ..."
-            cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+            cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
         
             if test -n "${ARG_FILTER}"; then
                 cmd="${cmd} --filter ${ARG_FILTER}"
@@ -3059,6 +3238,9 @@
                 cmd="${cmd} --group ${ARG_GROUP}"
             fi
         
+            mkdir -p ${CI_PROJECT_DIR}/coverage    
+            cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+        
             cmd="${cmd} ${ARG_TEST}";
         
             echo ${cmd};
@@ -3069,21 +3251,36 @@
         log() {
             echo -e "\033[0;34m"$@"\033[0m"
         }
+        
+        test_release_update_test_determine_start_version () {
+            # we can automatically determine the start version for main, beta and be. - git describe only works for lts and be, as other branches are "contaminated" with different tags 
+            if [ -z "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
+                if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
+                    git describe --tags --abbrev=0 origin/${TINE_VERSION_BE}
+                    return
+                fi
+        
+                if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BE}" ]; then
+                    git describe --tags --abbrev=0 origin/${TINE_VERSION_LTS}
+                    return
+                fi
+            fi
+        
+            if [ -n "${RELEASE_UPDATE_TEST_START_REF}" ]; then
+                echo ${RELEASE_UPDATE_TEST_START_REF}
+                return
+            fi
+        }
 
         # lib/scripts/test_cloud.sh
         test_cloud_generate_deployment_name() {
-            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-        
-            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-                # remove trailing /
-                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-            fi
+            deployment_name=$MAJOR_COMMIT_REF_NAME
         
             if [ "$RELEASE_TYPE" == "nightly" ]; then
                 deployment_name=nightly-$deployment_name
             fi
         
-            echo -n $deployment_name | sed 's/\./-/g'
+            echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
         }
         
         test_cloud_deploy() {
@@ -3246,6 +3443,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 .
         
             log dev image: pushing ...
@@ -3262,6 +3460,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 .
         
             log test image: pushing ...
@@ -3277,6 +3476,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg JSDEPENDENCY_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE_TYPE \
@@ -3302,6 +3502,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg JSDEPENDENCY_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE_TYPE \
@@ -3326,6 +3527,7 @@
             docker build \
                 --target packages \
                 --file ./ci/dockerimage/Dockerfile \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg BUILT_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE=$(release_get_package_version) \
@@ -3374,23 +3576,39 @@
         
         docker_registry_release_image() {
             name="$1"
-            desitination="$2"
+            destination="$2"
             latest="$3"
         
             from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
         
             if [ -z "$CI_COMMIT_TAG" ]; then
                 echo "pushing nightly"
-                docker_registry_push "${from}" "${desitination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
+                docker_registry_push "${from}" "${destination}:$(release_get_package_version)" # release_get_package_version => tag or nightly name
                 return
             fi
         
             if [ "$latest" == "true" ]; then
-                docker_registry_push "${from}" "${desitination}:latest"
+                docker_registry_push "${from}" "${destination}:latest"
             fi
         
-            docker_registry_push "${from}" "${desitination}:${CI_COMMIT_TAG}"
-            docker_registry_push "${from}" "${desitination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            docker_registry_push "${from}" "${destination}:${CI_COMMIT_TAG}"
+        
+            # For customer image we only release latest and the full tag.
+            # We push customer images with their full tag into our local tine registry,
+            # if we release there image to our test cloud. If we would release partial tags we might overwrite the main tine version.
+            # TODO: the test cloud should probably, get the images from the customer repository. NOTE: That would require all customer to have an repository.
+            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" == "" ]; then
+                docker_registry_push "${from}" "${destination}:$(echo ${CI_COMMIT_TAG} | cut -d '.' -f 1)"
+            fi
+        }
+        
+        docker_registry_release_dev_image() {
+            name=dev
+            targetRegistry="$1"
+        
+            from="${REGISTRY}/${name}-commit:${IMAGE_TAG}"
+        
+            docker_registry_push_multi_platform ${from} ${targetRegistry}:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}
         }
         
         docker_registry_push() {
@@ -3400,6 +3618,18 @@
             docker pull "${from}"
             docker tag "${from}" "${to}"
             docker push "${to}"
+        }
+        
+        # needs to be run one time per architecture, with $ARCH set.
+        # Why?: This allows us push new architectures as their build finishes
+        docker_registry_push_multi_platform() {
+            from="$1"
+            to="$2"
+        
+            skopeo copy docker://${from}-${ARCH} docker://${to}-${ARCH}
+        
+            # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
+            manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
         }
 
         # lib/scripts/git_repo.sh
@@ -3829,6 +4059,14 @@
         
             echo ${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date -d "$CI_COMMIT_TIMESTAMP" '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
         }
+        
+        release_is_patch_level_release() {
+            # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
+            # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
+            # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
+        
+            echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
+        }
 
         # lib/scripts/release_packages.sh
         release_packages_github_create_release() {
@@ -3863,7 +4101,10 @@
                     matrix_room="${MATRIX_ROOM}"
                 fi
         
-                matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                if ! release_is_patch_level_release; then
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                fi
+        
             fi
         }
         
@@ -4009,8 +4250,8 @@
             if [ "${CI_IS_CUSTOMAPP}" == "true" ]; then
                 # COMPOSER custom cache
                 # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
-                export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
-                mkdir -p ${COMPOSER_CACHE_DIR}
+                # export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
+                # mkdir -p ${COMPOSER_CACHE_DIR}
         
                 log "instaling custom app ..."
                 customappname=$(cat ${CI_PROJECT_DIR}/composer.json | jq -r '.name')
@@ -4128,7 +4369,7 @@
         
         
             log "testing ..."
-            cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+            cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
         
             if test -n "${ARG_FILTER}"; then
                 cmd="${cmd} --filter ${ARG_FILTER}"
@@ -4142,6 +4383,9 @@
                 cmd="${cmd} --group ${ARG_GROUP}"
             fi
         
+            mkdir -p ${CI_PROJECT_DIR}/coverage    
+            cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+        
             cmd="${cmd} ${ARG_TEST}";
         
             echo ${cmd};
@@ -4152,21 +4396,36 @@
         log() {
             echo -e "\033[0;34m"$@"\033[0m"
         }
+        
+        test_release_update_test_determine_start_version () {
+            # we can automatically determine the start version for main, beta and be. - git describe only works for lts and be, as other branches are "contaminated" with different tags 
+            if [ -z "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
+                if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
+                    git describe --tags --abbrev=0 origin/${TINE_VERSION_BE}
+                    return
+                fi
+        
+                if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BE}" ]; then
+                    git describe --tags --abbrev=0 origin/${TINE_VERSION_LTS}
+                    return
+                fi
+            fi
+        
+            if [ -n "${RELEASE_UPDATE_TEST_START_REF}" ]; then
+                echo ${RELEASE_UPDATE_TEST_START_REF}
+                return
+            fi
+        }
 
         # lib/scripts/test_cloud.sh
         test_cloud_generate_deployment_name() {
-            deployment_name=$BASE_MAJOR_COMMIT_REF_NAME
-        
-            if [ "$CUSTOMER_MAJOR_COMMIT_REF_NAME" != "" ]; then
-                # remove trailing /
-                deployment_name=${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}
-            fi
+            deployment_name=$MAJOR_COMMIT_REF_NAME
         
             if [ "$RELEASE_TYPE" == "nightly" ]; then
                 deployment_name=nightly-$deployment_name
             fi
         
-            echo -n $deployment_name | sed 's/\./-/g'
+            echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
         }
         
         test_cloud_deploy() {

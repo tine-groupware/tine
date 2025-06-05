@@ -19,6 +19,7 @@ require('Tinebase/js/ux/ItemRegistry');
 require('Tinebase/js/widgets/MainScreen');
 
 require('./admin/AccountGridPanel');
+require('./admin/AccountPicker');
 
 /**
  * @namespace   Tine.Felamimail
@@ -119,7 +120,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 await this.initAccountStore();
 
                 if (window.isMainWindow) {
-                    if (Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
+                    if (Tine.Tinebase.appMgr.getActive() !== this && this.updateInterval) {
                         var delayTime = this.updateInterval/20;
                         Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
                         this.checkMailsDelayedTask.delay(delayTime);
@@ -678,7 +679,20 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         // abort preloading/old actions and force fresh fetch
         this.checkMailsDelayedTask.delay(0);
     },
-    
+
+    async onActivate() {
+        await this.initAccountStore();
+
+        if (this.accountStore.getCount() === 0) {
+            Ext.Msg.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                title: this.i18n._('No e-mail account assigned'),
+                msg: this.i18n._('You have not yet been assigned an e-mail account. This view is therefore empty')
+            });
+        }
+    },
+
     /**
      * on update folder
      * 
@@ -824,7 +838,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     
 
     initAccountStore: async function() {
-        return new Promise(_.bind((fulfill, reject) => {
+        if (this.accountStorePromise) {
+            return this.accountStorePromise;
+        }
+        this.accountStorePromise = new Promise(_.bind((fulfill, reject) => {
             Tine.log.debug('creating account store');
 
             this.accountStore = new Ext.data.JsonStore({
@@ -855,6 +872,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 callback: _.bind(this.onAccountRecordChange, this)
             }));
         }, this));
+
+        return this.accountStorePromise;
     },
 
     /**

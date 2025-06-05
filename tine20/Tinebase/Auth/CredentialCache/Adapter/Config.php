@@ -23,7 +23,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Config implements Tinebase_Auth_Cred
      * config key const
      * 
      */
-    const CONFIG_KEY = 'usercredentialcache';
+    public const CONFIG_KEY = 'usercredentialcache';
     
     /**
      * setCache() - persists cache

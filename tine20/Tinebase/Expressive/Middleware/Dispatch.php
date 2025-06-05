@@ -63,6 +63,6 @@ class Tinebase_Expressive_Middleware_Dispatch implements MiddlewareInterface
         }
 
         throw new Tinebase_Exception_UnexpectedValue('route dispatching returned unknown object of type: '
-            . get_class($result));
+            . $result::class);
     }
 }

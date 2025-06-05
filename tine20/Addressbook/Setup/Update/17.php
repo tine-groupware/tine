@@ -17,6 +17,8 @@ class Addressbook_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
 
 
     static protected $_allUpdates = [
@@ -41,6 +43,14 @@ class Addressbook_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE017_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE017_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -78,5 +88,69 @@ class Addressbook_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_Config::getInstance()->set(Tinebase_Config::SITE_FILTER, Addressbook_Config::getInstance()->get(Addressbook_Config::SITE_FILTER));
         
         $this->addApplicationUpdate(Addressbook_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            Addressbook_Model_ContactProperties_Definition::class
+        ]);
+
+        $this->addApplicationUpdate(Addressbook_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $emailFields = array_keys(Addressbook_Model_Contact::getEmailFields());
+
+        $caseConditions = [];
+        foreach ($emailFields as $field) {
+            $caseConditions[] = "WHEN {$field} IS NOT NULL AND {$field} != '' THEN '{$field}'";
+        }
+        $caseStatement = implode(' ', $caseConditions);
+
+        $emailCheckConditions = [];
+        foreach ($emailFields as $field) {
+            $emailCheckConditions[] = "(preferred_email = '{$field}' AND ({$field} IS NULL OR {$field} = ''))";
+        }
+        $invalidPreferredCondition = implode(' OR ', $emailCheckConditions);
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
+            ' SET preferred_email = CASE ' . $caseStatement . ' ELSE "email" END' .
+            ' WHERE ' . $invalidPreferredCondition);
+
+
+        $stateRepo = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_State',
+            'tableName' => 'state',
+        ));
+
+        $states = $stateRepo->search(new Tinebase_Model_StateFilter(array(
+            array('field' => 'state_id', 'operator' => 'in', 'value' => [
+                "Addressbook-Contact-GridPanel-Grid_large",
+                "Addressbook-Contact-GridPanel-Grid_big",
+            ]),
+        )));
+
+        foreach ($states as $state) {
+            $decodedState = Tinebase_State::decode($state->data);
+            $columns = $decodedState['columns'];
+            $visibleEmailFields = array_filter($columns, function ($column) use ($emailFields) {
+                return in_array($column['id'], $emailFields) && !$column['hidden'];
+            });
+            if (count($visibleEmailFields) === 1) {
+                $column = array_pop($visibleEmailFields);
+                if ($column['id'] === 'email') {
+                    $columns['preferred_email']['hidden'] = false;
+                    $columns['email']['hidden'] = true;
+                }
+            }
+            $decodedState['columns'] = $columns;
+            $state->data = Tinebase_State::encode($decodedState);
+            $stateRepo->update($state);
+        }
+
+        $this->addApplicationUpdate('Addressbook', '17.5', self::RELEASE017_UPDATE005);
     }
 }

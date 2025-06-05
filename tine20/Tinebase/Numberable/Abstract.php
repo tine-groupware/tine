@@ -18,23 +18,23 @@
  */
 class Tinebase_Numberable_Abstract
 {
-    const TABLENAME        = 'tablename';
-    const NUMCOLUMN        = 'numberablecolumn';
-    const STEPSIZE         = 'stepsize';
-    const BUCKETCOLUMN     = 'bucketcolumn';
-    const BUCKETKEY        = 'bucketkey';
-    const START            = 'start';
+    public const TABLENAME        = 'tablename';
+    public const NUMCOLUMN        = 'numberablecolumn';
+    public const STEPSIZE         = 'stepsize';
+    public const BUCKETCOLUMN     = 'bucketcolumn';
+    public const BUCKETKEY        = 'bucketkey';
+    public const START            = 'start';
 
     /**
      * allows to override config with a defined method (for example Tinebase_Container::getNumberableConfig)
      *  - method has $record as param and is called from \Tinebase_Controller_Record_Abstract::_getNumberable
      */
-    const CONFIG_OVERRIDE  = 'configOverride';
+    public const CONFIG_OVERRIDE  = 'configOverride';
 
     /**
      * xprops numberables config key
      */
-    const CONFIG_XPROPS = 'numberableXpropsConfig';
+    public const CONFIG_XPROPS = 'numberableXpropsConfig';
 
     protected $_numberableColumn = NULL;
     protected $_stepSize = 1;

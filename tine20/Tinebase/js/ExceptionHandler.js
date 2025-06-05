@@ -128,7 +128,9 @@ Tine.Tinebase.ExceptionHandler = function() {
             var response = Ext.util.JSON.decode(exception.responseText);
             exception = response.data;
         }
-        
+
+        console.error(exception);
+
         if (exception.appName != 'Tinebase' && Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
             // the registered function must return true to don't work on this generically
             if (Tine.Tinebase.ExceptionHandlerRegistry.get(exception.appName)(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) === true) {
@@ -320,18 +322,19 @@ Tine.Tinebase.ExceptionHandler = function() {
                         exception.title,
                         exception.message,
                     async function(button) {
-                            if (button === 'yes') {
-                                Ext.Ajax.request({
-                                    scope: callbackScope,
-                                    headers: {
-                                        'X-TINE20-REQUEST-CONTEXT-CONFIRM' : true
-                                    },
-                                    params: params,
-                                    success : function(_result, _request) {
-                                        Ext.callback(callback, callbackScope, [_result, _request]);
-                                    },
-                                });
+                            if (button === 'no' && !exception?.sendRequestOnRejection) {
+                                return false;
                             }
+                            Ext.Ajax.request({
+                                scope: callbackScope,
+                                headers: {
+                                    'X-TINE20-REQUEST-CONTEXT-CONFIRM' : button === 'yes'
+                                },
+                                params: params,
+                                success : function(_result, _request) {
+                                    Ext.callback(callback, callbackScope, [_result, _request]);
+                                },
+                            });
                         }
                     );
                 }

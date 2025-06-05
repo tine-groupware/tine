@@ -21,7 +21,7 @@ class Tinebase_SambaSAM
 {
     // const SQL = 'Sql';
     
-    const LDAP = 'Ldap';
+    public const LDAP = 'Ldap';
 
    
     /**
@@ -105,7 +105,7 @@ class Tinebase_SambaSAM
     {
         if(isset(Tinebase_Core::getConfig()->samba)) {
             $backendType = Tinebase_Core::getConfig()->samba->get('backend', self::LDAP);
-            $backendType = ucfirst($backendType);
+            $backendType = ucfirst((string) $backendType);
         } else {
             $backendType = self::LDAP;
         }

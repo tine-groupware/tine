@@ -89,11 +89,11 @@ class Tinebase_Controller_ActionLog extends Tinebase_Controller_Record_Abstract
      */
     public function addActionLogDatevEmail($_updater, $recipients, $_subject, $_messagePlain, $_messageHtml, $_attachments)
     {
-        $recipients = array_map(function($recipient) {return $recipient['email'];}, $recipients);
-        $attachments = array_map(function($attachment) {return $attachment['name'];}, $_attachments);
+        $recipients = array_map(fn($recipient) => $recipient['email'], $recipients);
+        $attachments = array_map(fn($attachment) => $attachment['name'], $_attachments);
         $date = Tinebase_DateTime::now();
         
-        if (preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $_messagePlain, $matches)) {
+        if (preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', (string) $_messagePlain, $matches)) {
             $date = new Tinebase_DateTime($matches[0]);
         }
 

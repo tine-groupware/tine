@@ -539,9 +539,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $link = 'images/icon-set/icon_undefined_contact.svg';
         if (! empty($contactArray['jpegphoto'])) {
-            $link = Tinebase_Model_Image::getImageUrl('Addressbook', $contactArray['id'], '');
+            $link = Tinebase_Model_Image::getImageUrl('Addressbook', $contactArray['id']);
         } else if (isset($contactArray['salutation']) && ! empty($contactArray['salutation'])) {
-            $salutations = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION, NULL);
+            $salutations = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION);
             if ($salutations && $salutations->records instanceof Tinebase_Record_RecordSet) {
                 $salutationRecord = $salutations->records->getById($contactArray['salutation']);
                 if ($salutationRecord && $salutationRecord->image) {

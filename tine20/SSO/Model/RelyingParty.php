@@ -26,7 +26,8 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
     public const FLD_CONFIG_CLASS = 'config_class';
     public const FLD_DESCRIPTION = 'description';
     public const FLD_LABEL = 'label';
-    public const FLD_LOGO = 'logo';
+    public const FLD_LOGO_DARK = 'logo_dark';
+    public const FLD_LOGO_LIGHT = 'logo_light';
     public const FLD_NAME = 'name';
 
     /**
@@ -42,7 +43,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 3,
+        self::VERSION => 4,
         self::RECORD_NAME => 'Relying Party',
         self::RECORDS_NAME => 'Relying Parties', // ngettext('Relying Party', 'Relying Parties', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -87,7 +88,12 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
                 self::NULLABLE              => true,
                 self::LABEL                 => 'Description', // _('Description')
             ],
-            self::FLD_LOGO              => [
+            self::FLD_LOGO_DARK         => [
+                self::TYPE                  => self::TYPE_BLOB,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Logo Dark', // _('Logo Dark')
+            ],
+            self::FLD_LOGO_LIGHT              => [
                 self::TYPE                  => self::TYPE_BLOB,
                 self::NULLABLE              => true,
                 self::LABEL                 => 'Logo', // _('Logo')

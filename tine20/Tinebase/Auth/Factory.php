@@ -70,9 +70,7 @@ class Tinebase_Auth_Factory
                 break;
             
             case Tinebase_Auth::MODSSL:
-                $instance = new Tinebase_Auth_ModSsl(
-                    Tinebase_Auth::getBackendConfiguration()
-                );
+                $instance = new Tinebase_Auth_ModSsl();
                 break;
                 
             default:

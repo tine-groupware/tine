@@ -155,19 +155,10 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
             }
             $keyMapping = array_search($key, $this->_propertyMapping);
             if ($keyMapping !== FALSE) {
-                switch($keyMapping) {
-                    case 'pwdLastSet':
-                    case 'logonTime':
-                    case 'logoffTime':
-                    case 'kickoffTime':
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0]);
-                        break;
-                    default: 
-                        $accountArray[$keyMapping] = $value[0];
-                        break;
-                }
+                $accountArray[$keyMapping] = match ($keyMapping) {
+                    'pwdLastSet', 'logonTime', 'logoffTime', 'kickoffTime', 'pwdCanChange', 'pwdMustChange' => new Tinebase_DateTime($value[0]),
+                    default => $value[0],
+                };
             }
         }
         
@@ -219,7 +210,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {
-        $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
+        $this->inspectExpiryDate($_user->accountExpires ?? null, $_ldapData);
         
         if ($_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
             foreach ($_user->sambaSAM as $key => $value) {
@@ -253,7 +244,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         }
         
         if (empty($_ldapEntry['sambasid'])) {
-            $uidNumer = isset($_ldapData['uidnumber']) ? $_ldapData['uidnumber'] : $_ldapEntry['uidnumber'][0];
+            $uidNumer = $_ldapData['uidnumber'] ?? $_ldapEntry['uidnumber'][0];
             $_ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $uidNumer + 1000);
         }
         
@@ -265,7 +256,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         
         try {
             $_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             $_ldapData['sambaprimarygroupsid'] = array();
         }
         

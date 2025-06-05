@@ -158,11 +158,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             const passwordDialog = new Tine.Tinebase.widgets.dialog.ResetPasswordDialog({
                 record: this.record,
                 contactRecord: this.contactRecordPicker.selectedRecord,
+                editDialog: this,
+                windowTitle: this.app.i18n._('Send SMS message with new password'),
             });
 
             passwordDialog.openWindow();
             passwordDialog.on('apply', async (record) => {
-                this.record = record;
                 Tine.Admin.UserEditDialog.superclass.onApplyChanges.apply(this, arguments);
             }, this);
         } else {
@@ -259,6 +260,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
 
+        if (!this.record.id && this.contactRecordPicker.selectedRecord && this.displayContactInAddressbookCombo.getValue() === 'displayed') {
+            this.record.set('contact_id', this.contactRecordPicker.selectedRecord.data);
+        }
     },
     /**
      * need to unset localized datetime fields before saving
@@ -1047,6 +1051,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.5,
                         passwordsMatch: true,
                         enableKeyEvents: true,
+                        hasPwGen: true,
                         listeners: {
                             scope: this,
                             blur: function (field) {
@@ -1299,6 +1304,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             editable: false,
             hidden: hidden ?? false,
             value: 'hidden',
+            ref: '../../../../../displayContactInAddressbookCombo',
             store: [['displayed', this.app.i18n.gettext('Display in address book')], ['hidden', this.app.i18n.gettext('Hide from address book')]],
             listeners: {
                 scope: scope,
@@ -1367,21 +1373,48 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     const addressbookContainerCombo = scope.getForm().findField('container_id');
                     const selectedContainer = addressbookContainerCombo.selectedRecord;
 
-                    let msg = scope.app.i18n._('The selected contact will be updated') + ` : <br><br><b>${status.data.n_fileas}</b><br>`
-                        + '<br>' + this.app.i18n.gettext('Saved in address book') + ` : <b>${selectedContainer.data.name}</b><br>`;
+                    if (status.get('creation_time')) {
+                        let msg = scope.app.i18n._('The selected contact will be updated') + ` : <br><br><b>${status.data.n_fileas}</b><br>`
+                            + '<br>' + this.app.i18n.gettext('Saved in address book') + ` : <b>${selectedContainer.data.name}</b><br>`;
 
-                    Ext.MessageBox.confirm(
-                        scope.app.i18n._('Confirm'),
-                        scope.app.i18n._(msg),
-                        (btn) => {
-                            if (btn === 'yes') {
-                                combo.setValue(status.id);
-                            }
-                        },
-                    );
-                    return false;
+                        Ext.MessageBox.confirm(
+                            scope.app.i18n._('Confirm'),
+                            scope.app.i18n._(msg),
+                            (btn) => {
+                                if (btn === 'yes') {
+                                    combo.setValue(status.id);
+                                }
+                            },
+                        );
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
-            }
+            },
+            recordEditPluginConfig: {
+                editDialogMode: 'local',
+                editDialogConfig: {
+                    fixedFields: {
+                        n_family: "###CURRENT###",
+                        n_fileas: "###CURRENT###",
+                        n_fn: "###CURRENT###",
+                        n_given: "###CURRENT###",
+                        email: "###CURRENT###",
+                        container_id: "###CURRENT###",
+                    }
+                },
+                getRecordDefaults: async () => {
+                    return {
+                        n_family: this.record.get('accountLastName'),
+                        n_fileas: this.record.get('accountDisplayName'),
+                        n_fn: this.record.get('accountFullName'),
+                        n_given: this.record.get('accountFirstName'),
+                        email: this.record.get('accountEmailAddress'),
+                        container_id: this.getForm().findField('container_id').selectedRecord,
+                    }
+                }
+            },
         }
         ];
     }

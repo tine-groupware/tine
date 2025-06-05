@@ -36,6 +36,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
     public const FLD_IS_SYSTEM = 'is_system';
     public const FLD_NAME = 'name';
     public const FLD_NEXT_RUN = 'next_run';
+    public const FLD_DISABLE_AUTO_SHUFFLE = 'disable_auto_shuffle';
     public const FLD_ACTIVE = 'active';
 
     /**
@@ -94,6 +95,11 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'converters'    => [Tinebase_Scheduler_TaskConverter::class],
                 'inputFilters'  => []
             ],
+            self::FLD_DISABLE_AUTO_SHUFFLE => [
+                self::TYPE      => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL => false,
+                self::LABEL     => 'Disable automatic time shuffle', // _('Disable automatic time shuffle')
+            ],
             'last_run' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'label'         => 'Last run', // _('Last run')
@@ -101,7 +107,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'datetime',
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'last_duration' => [
@@ -111,7 +117,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'integer',
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'lock_id' => [
@@ -122,7 +128,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => null,
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_NEXT_RUN => [
@@ -137,7 +143,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'datetime',
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'failure_count' => [
@@ -146,7 +152,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'default'       => 0,
                 'type'          => 'integer',
                 self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
+                    self::READ_ONLY                     => true,
                 ],
             ],
             'server_time' => [
@@ -165,7 +171,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL => false,
                 self::UI_CONFIG => [
-                    self::DISABLED => true,
+                    self::READ_ONLY => true,
                 ],
             ],
             self::FLD_ACCOUNT_ID => [

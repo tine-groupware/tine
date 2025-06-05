@@ -13,7 +13,7 @@
  */
 interface Tinebase_Export_Convertible
 {
-    const PDF = 'pdf';
+    public const PDF = 'pdf';
 
     /**
      * Convert's given file to defined format.

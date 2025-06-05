@@ -226,7 +226,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         foreach ($states as $areaName => $expires) {
             $result->addRecord(new Tinebase_Model_AreaLockState([
                 'area' => $areaName,
-                'expires' => $expires ? $expires : new Tinebase_DateTime('1970-01-01')
+                'expires' => $expires ?: new Tinebase_DateTime('1970-01-01')
             ]));
         }
 
@@ -242,7 +242,7 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         foreach ($this->_getAuthValidity($area) as $areaName => $expires) {
             $result->addRecord(new Tinebase_Model_AreaLockState([
                 'area' => $areaName,
-                'expires' => $expires ? $expires : new Tinebase_DateTime('1970-01-01')
+                'expires' => $expires ?: new Tinebase_DateTime('1970-01-01')
             ]));
         }
 

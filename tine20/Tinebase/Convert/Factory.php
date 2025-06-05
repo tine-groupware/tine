@@ -23,7 +23,7 @@ class Tinebase_Convert_Factory
      * 
      * @var string
      */
-    const TYPE_JSON     = 'Json';
+    public const TYPE_JSON     = 'Json';
     
     /**
      * factory function to return a selected converter backend class
@@ -37,7 +37,7 @@ class Tinebase_Convert_Factory
     {
         switch ($_type) {
             case self::TYPE_JSON:
-                $recordClass = ($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : $_record;
+                $recordClass = ($_record instanceof Tinebase_Record_Interface) ? $_record::class : $_record;
                 $converterClass = str_replace('Model', 'Convert', $recordClass);
                 $converterClass .= '_Json';
                 return class_exists($converterClass) ? new $converterClass($recordClass) : new Tinebase_Convert_Json($recordClass);

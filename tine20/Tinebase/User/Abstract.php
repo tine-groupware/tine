@@ -20,7 +20,7 @@
  *
  * @method modlogActive($setTo = null)
  * @method updatePluginUser($updatedUser, $newUserProperties, $skipEmailPlugins = false)
- * @method getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
+ * @method getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User', $_getDeleted = false)
  * @method getPasswordHashByLoginname(string $accountLoginName)
  */
 abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
@@ -28,57 +28,57 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * des encryption
      */
-    const ENCRYPT_DES = 'des';
+    public const ENCRYPT_DES = 'des';
     
     /**
      * blowfish crypt encryption
      */
-    const ENCRYPT_BLOWFISH_CRYPT = 'blowfish_crypt';
+    public const ENCRYPT_BLOWFISH_CRYPT = 'blowfish_crypt';
     
     /**
      * md5 crypt encryption
      */
-    const ENCRYPT_MD5_CRYPT = 'md5_crypt';
+    public const ENCRYPT_MD5_CRYPT = 'md5_crypt';
     
     /**
      * ext crypt encryption
      */
-    const ENCRYPT_EXT_CRYPT = 'ext_crypt';
+    public const ENCRYPT_EXT_CRYPT = 'ext_crypt';
     
     /**
      * md5 encryption
      */
-    const ENCRYPT_MD5 = 'md5';
+    public const ENCRYPT_MD5 = 'md5';
     
     /**
      * smd5 encryption
      */
-    const ENCRYPT_SMD5 = 'smd5';
+    public const ENCRYPT_SMD5 = 'smd5';
 
     /**
      * sha encryption
      */
-    const ENCRYPT_SHA = 'sha';
+    public const ENCRYPT_SHA = 'sha';
     
     /**
      * ssha encryption
      */
-    const ENCRYPT_SSHA = 'ssha';
+    public const ENCRYPT_SSHA = 'ssha';
     
     /**
      * ntpassword encryption
      */
-    const ENCRYPT_NTPASSWORD = 'ntpassword';
+    public const ENCRYPT_NTPASSWORD = 'ntpassword';
     
     /**
      * no encryption
      */
-    const ENCRYPT_PLAIN = 'plain';
+    public const ENCRYPT_PLAIN = 'plain';
     
     /**
      * user property for openid
      */
-    const PROPERTY_OPENID = 'openid';
+    public const PROPERTY_OPENID = 'openid';
     
     /**
      * list of plugins 
@@ -122,7 +122,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
     {
-        $className = get_class($_plugin);
+        $className = $_plugin::class;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Registering " . $className . ' plugin.');
@@ -136,7 +136,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     public function removePlugin($_plugin)
     {
-        $className = is_object($_plugin) ? get_class($_plugin) : $_plugin;
+        $className = is_object($_plugin) ? $_plugin::class : $_plugin;
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Removing " . $className . ' plugin.');
@@ -340,15 +340,15 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * get dummy user record
      *
      * @param string $_accountClass Tinebase_Model_User|Tinebase_Model_FullUser
-     * @param integer $_id [optional]
+     * @param ?string $_id [optional]
      * @return Tinebase_Model_User|Tinebase_Model_FullUser
      */
-    public function getNonExistentUser($_accountClass = 'Tinebase_Model_User', $_id = 0) 
+    public function getNonExistentUser(string $_accountClass = 'Tinebase_Model_User', ?string $_id = null)
     {
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         
         $data = array(
-            'accountId'             => ($_id !== NULL) ? $_id : 0,
+            'accountId'             => $_id,
             'accountLoginName'      => $translate->_('unknown'),
             'accountDisplayName'    => $translate->_('unknown'),
             'accountLastName'       => $translate->_('unknown'),
@@ -362,9 +362,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             $data['accountPrimaryGroup'] = $defaultUserGroup->getId();
         }
         
-        $result = new $_accountClass($data, TRUE);
-        
-        return $result;
+        return new $_accountClass($data, TRUE);
     }
     
     /**
@@ -522,12 +520,12 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             // don't break if property is not in record
             try {
                 $userIds = array_merge($userIds, $_records->$property);
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Records of class ' . get_class($_records->getFirstRecord()) . ' does not have property ' . $property);
+            } catch (Exception) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Records of class ' . $_records->getFirstRecord()::class . ' does not have property ' . $property);
             }
         }
 
-        $userIds = array_filter($userIds, function ($val) { return is_string($val); });
+        $userIds = array_filter($userIds, fn($val) => is_string($val));
         $userIds = array_unique($userIds);
         foreach ($userIds as $index => $userId) {
             if (empty($userId)) {
@@ -573,7 +571,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     {
         try {
             $this->getUserByProperty($_property, $_value)->getId();
-        } catch (Tinebase_Exception_NotFound $e) {
+        } catch (Tinebase_Exception_NotFound) {
             // username or full name not found
             return false;
         }
@@ -760,10 +758,8 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     
     /**
      * delete an user
-     *
-     * @param  mixed  $_userId
      */
-    abstract public function deleteUser($_userId);
+    abstract public function deleteUser(mixed $_userId);
 
     /**
      * delete multiple users

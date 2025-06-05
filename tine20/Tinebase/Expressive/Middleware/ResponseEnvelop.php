@@ -75,6 +75,9 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             // default is false (no sentry) and info log level
             Tinebase_Exception::log($teeh);
             $response = new Response($body = 'php://memory', $teeh->getCode());
+        } catch (Tinebase_Exception_RateLimit $ter) {
+            Tinebase_Exception::log($ter);
+            $response = new Response($body = 'php://memory', $ter->getCode());
         } catch (Exception $e) {
             Tinebase_Exception::log($e, false);
             $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);

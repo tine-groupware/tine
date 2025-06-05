@@ -22,7 +22,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     /**
      * ISO8601LONG datetime representation
      */
-    const ISO8601LONG = 'Y-m-d H:i:s';
+    public const ISO8601LONG = 'Y-m-d H:i:s';
     
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -338,7 +338,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
 
     public function getContainerId(): ?string
     {
-        $containerId = isset($this->_properties['container_id']) ? $this->_properties['container_id'] : null;
+        $containerId = $this->_properties['container_id'] ?? null;
         if (is_object($containerId)) {
             $containerId = $containerId->getId();
         } elseif (is_array($containerId)) {
@@ -389,7 +389,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         // get custom fields
         if ($this->has('customfields')) {
             $application = Tinebase_Application::getInstance()->getApplicationByName($this->_application);
-            $customFields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application, get_class($this))->name;
+            $customFields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application, static::class)->name;
             $recordCustomFields = $_data['customfields'] ?? [];
         } else {
             $customFields = array();
@@ -550,11 +550,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     
     /**
      * checks if variable has toArray()
-     * 
-     * @param mixed $mixed
+     *
      * @return boolean
      */
-    protected function _hasToArray($mixed)
+    protected function _hasToArray(mixed $mixed)
     {
         return is_object($mixed) && method_exists($mixed, 'toArray');
     }
@@ -575,11 +574,21 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $inputFilter = $this->_getFilter()
             ->setData($this->_properties);
         
-        if ($inputFilter->isValid()) {
+        while ($inputFilter->isValid()) {
             // set $this->_properties with the filtered values
             $this->_properties  = $inputFilter->getUnescaped();
+
+            foreach (static::_getDefaultFilter() as $property => $filter) {
+                if (empty($this->_properties[$property] ?? null)) {
+                    $this->_properties[$property] = $filter->applyDefault($property, $this);
+                    if (!($inputFilter = $this->_getFilter($property)
+                            ->setData([$property => $this->_properties[$property]]))->isValid()) {
+                        break 2;
+                    }
+                }
+            }
+
             $this->_isValidated = true;
-            
             return true;
         }
         
@@ -631,7 +640,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     {
         if (! (isset($this->_validators[$_name]) || array_key_exists ($_name, $this->_validators))) {
             throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of '
-                . get_class($this) . ' properties');
+                . static::class . ' properties');
         }
         
         if ($this->bypassFilters !== true) {
@@ -722,7 +731,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     *
     * @return string
     */
-    public function __toString()
+    public function __toString(): string
     {
        return (string) print_r($this->toArray(), true);
     }
@@ -736,7 +745,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     protected function _getFilter($field = null)
     {
-        $keyName = get_class($this) . $field;
+        $keyName = static::class . $field;
         
         if (! (isset(self::$_inputFilters[$keyName]) || array_key_exists($keyName, self::$_inputFilters))) {
             if ($field !== null) {
@@ -745,12 +754,31 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 
                 self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $validators);
             } else {
-                self::$_inputFilters[$keyName] = new Zend_Filter_Input($this->_filters, $this->_validators);
+                $filters = $this->_filters;
+                self::$_inputFilters[$keyName] = new Zend_Filter_Input($filters, $this->_validators);
             }
-            self::$_inputFilters[$keyName]->addValidatorPrefixPath('', dirname(dirname(__DIR__)));
+            $defaultFilter = [];
+            foreach ($filters as $property => $f) {
+                foreach (is_array($f) ? $f : [$f] as $filter) {
+                    if ($filter instanceof Tinebase_Record_Filter_DefaultValue) {
+                        $defaultFilter[$property] = $filter;
+                        continue 2;
+                    }
+                }
+            }
+            self::$_inputFilters[$keyName . '#default'] = $defaultFilter;
         }
         
         return self::$_inputFilters[$keyName];
+    }
+
+    /**
+     * @param string|null $field
+     * @return array<string, Tinebase_Record_Filter_DefaultValue>
+     */
+    protected static function _getDefaultFilter(?string $field = null): array
+    {
+        return self::$_inputFilters[static::class . $field . '#default'];
     }
     
     /**
@@ -796,8 +824,8 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                     continue;
                 }
                 
-                if (! is_array($value) && strpos($value, ',') !== false) {
-                    $value = explode(',', $value);
+                if (! is_array($value) && str_contains((string) $value, ',')) {
+                    $value = explode(',', (string) $value);
                 }
                 
                 try {
@@ -861,16 +889,15 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     protected static function _getDefaultFilterGroup()
     {
-        return get_called_class() . 'Filter';
+        return static::class . 'Filter';
     }
     
     /**
      * required by ArrayAccess interface
      *
-     * @param mixed $_offset
      * @return boolean
      */
-    public function offsetExists($_offset): bool
+    public function offsetExists(mixed $_offset): bool
     {
         return isset($this->_properties[$_offset]);
     }
@@ -878,22 +905,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     /**
      * required by ArrayAccess interface
      *
-     * @param mixed $_offset
      * @return mixed
      */
     #[\ReturnTypeWillChange]
-    public function offsetGet($_offset)
+    public function offsetGet(mixed $_offset)
     {
         return $this->__get($_offset);
     }
     
     /**
      * required by ArrayAccess interface
-     *
-     * @param mixed $_offset
-     * @param mixed $_value
      */
-    public function offsetSet($_offset, $_value): void
+    public function offsetSet(mixed $_offset, mixed $_value): void
     {
         $this->__set($_offset, $_value);
     }
@@ -901,10 +924,9 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     /**
      * required by ArrayAccess interface
      *
-     * @param mixed $_offset
      * @throws Tinebase_Exception_Record_NotAllowed
      */
-    public function offsetUnset($_offset): void
+    public function offsetUnset(mixed $_offset): void
     {
         throw new Tinebase_Exception_Record_NotAllowed('Unsetting of properties is not allowed');
     }
@@ -985,13 +1007,13 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Did not get Tinebase_Record_Abstract, diffing against empty record');
-            $model = get_called_class();
+            $model = static::class;
             $_record = new $model(array(), true);
         }
         
         $result = new Tinebase_Record_Diff(array(
             'id'     => $this->getId(),
-            'model'  => get_class($_record),
+            'model'  => $_record::class,
         ));
         $diff = array();
         $oldData = array();
@@ -1064,7 +1086,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                     continue;
                 }
             } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_Interface) {
-                $model = get_class($recordField);
+                $model = $recordField::class;
                 $emptyRecord = new $model(array(), true);
                 $subdiff = $emptyRecord->diff($recordField,
                     $context ? $context->getSubDiffOmitFields($recordField::getConfiguration()) : [], $context);
@@ -1175,7 +1197,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      */
     public function isObsoletedBy(Tinebase_Record_Interface $_record)
     {
-        if (get_class($_record) !== get_class($this)) {
+        if ($_record::class !== static::class) {
             throw new Tinebase_Exception_InvalidArgument('Records could not be compared');
         } else if ($this->getId() && $_record->getId() !== $this->getId()) {
             throw new Tinebase_Exception_InvalidArgument('Record id mismatch');
@@ -1258,7 +1280,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             $recordData = Zend_Json::decode($_data);
         }
 
-        if ($this->has('image') && !empty($_data['image']) && preg_match('/location=tempFile&id=([a-z0-9]*)/', $_data['image'], $matches)) {
+        if ($this->has('image') && !empty($_data['image']) && preg_match('/location=tempFile&id=([a-z0-9]*)/', (string) $_data['image'], $matches)) {
             // add image to attachments
             if (! isset($recordData['attachments'])) {
                 $recordData['attachments'] = array();
@@ -1352,7 +1374,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             return '';
         }
         
-        if (strpos($c->titleProperty, '{') !== false) {
+        if (str_contains($c->titleProperty, '{')) {
             $translation = Tinebase_Translation::getTranslation($this->getApplication());
             $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
             $templateString = $translation->translate($c->titleProperty);
@@ -1586,7 +1608,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
     {
         /** @var Tinebase_Record_Abstract_GetPathPartDelegatorInterface $delegate */
-        $delegate = Tinebase_Core::getDelegate($this->_application, 'getPathPartDelegate_' . get_called_class() ,
+        $delegate = Tinebase_Core::getDelegate($this->_application, 'getPathPartDelegate_' . static::class ,
                                                 'Tinebase_Record_Abstract_GetPathPartDelegatorInterface');
         if (false !== $delegate) {
             return $delegate->getPathPart($this, $_parent, $_child);
@@ -1618,7 +1640,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
         $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
 
-        return $parentType . '/{' . get_class($this) . '}' . $this->getId() . $childType;
+        return $parentType . '/{' . static::class . '}' . $this->getId() . $childType;
     }
 
     /**
@@ -1733,7 +1755,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         $value = $this->_properties[$_property];
         if (is_object($value) && $value instanceof Tinebase_Record_Interface) {
             return $_getIdFromRecord ? (string)$value->getId() : null;
-        } elseif (is_string($value) || is_integer($value)) {
+        } elseif (is_string($value) || is_numeric($value)) {
             return (string)$value;
         }
 

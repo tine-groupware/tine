@@ -243,7 +243,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', array(), true);
         foreach ($this->_dbTable->fetchAll($where) as $relation) {
             $rawData = $relation->toArray();
-            $relations->addRecord($this->_rawDataToRecord($rawData, true));
+            $relations->addRecord($this->_rawDataToRecord($rawData));
         }
         return $relations;
     }

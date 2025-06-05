@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Timetracker</name>
-    <!-- gettext('Timetracker') -->   
-    <version>18.0</version>
+    <!-- gettext('Timetracker') -->
+    <version>18.1</version>
     <order>60</order>
     <status>enabled</status>
     <depends>

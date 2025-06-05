@@ -176,7 +176,11 @@ class Tinebase_Export_XlsxTest extends TestCase
         $contactController = Addressbook_Controller_Contact::getInstance();
 
         $scleverContact = $contactController->get($this->_personas['sclever']->contact_id);
-        $jmcblackContact = $contactController->get($this->_personas['jmcblack']->contact_id);
+        try {
+            $jmcblackContact = $contactController->get($this->_personas['jmcblack']->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
 
         $recordCF = $cfController->addCustomField(new Tinebase_Model_CustomField_Config([
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),

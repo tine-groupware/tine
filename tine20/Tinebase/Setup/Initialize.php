@@ -107,8 +107,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
                 switch ($group) {
                     case 'authentication':
                     case 'accounts':
-                        $backend = (isset($parsedOptions['backend'])) ? ucfirst($parsedOptions['backend']) : Tinebase_User::SQL;
-                        $optionsToSave[$group][$backend] = (isset($parsedOptions[$backend])) ? $parsedOptions[$backend] : $parsedOptions;
+                        $backend = (isset($parsedOptions['backend'])) ? ucfirst((string) $parsedOptions['backend']) : Tinebase_User::SQL;
+                        $optionsToSave[$group][$backend] = $parsedOptions[$backend] ?? $parsedOptions;
                         $optionsToSave[$group]['backend'] = $backend;
                         break;
                     default:
@@ -134,8 +134,8 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     protected function _parseDefaultGroupNameOptions($_options)
     {
         $result = array(
-            'defaultAdminGroupName' => (isset($_options['defaultAdminGroupName'])) ? $_options['defaultAdminGroupName'] : Tinebase_Group::DEFAULT_ADMIN_GROUP,
-            'defaultUserGroupName'  => (isset($_options['defaultUserGroupName'])) ? $_options['defaultUserGroupName'] : Tinebase_Group::DEFAULT_USER_GROUP,
+            'defaultAdminGroupName' => $_options['defaultAdminGroupName'] ?? Tinebase_Group::DEFAULT_ADMIN_GROUP,
+            'defaultUserGroupName'  => $_options['defaultUserGroupName'] ?? Tinebase_Group::DEFAULT_USER_GROUP,
         );
 
         return $result;

@@ -28,7 +28,7 @@ class Tinebase_Model_Converter_Password implements Tinebase_Model_Converter_Inte
     {
         if (is_string($fieldValue) && strlen($fieldValue) > 0) {
             $cc = Tinebase_Auth_CredentialCache::getInstance();
-            $adapter = explode('_', get_class($cc->getCacheAdapter()));
+            $adapter = explode('_', $cc->getCacheAdapter()::class);
             $adapter = end($adapter);
             try {
                 $cc->setCacheAdapter('Shared');

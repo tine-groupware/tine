@@ -9,6 +9,7 @@
  */
  
 import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+import FieldInfoPlugin from "../../Tinebase/js/ux/form/FieldInfoPlugin";
 
 Ext.namespace('Tine.Timetracker');
 
@@ -88,8 +89,15 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             name: 'budget',
             allowNegative: false,
             decimalSeparator: ',',
-            value: 0
-        }, {
+            value: 0,
+        }, fieldManager('budget_filled_level', {
+            readOnly: true,
+        }), fieldManager('budget_booked_hours', {
+            readOnly: true,
+            plugins: [new FieldInfoPlugin({
+                qtip: this.app.i18n._('All timesheet durations are aggregated here, no matter if they are billable or not')
+            })]
+        }), {
             fieldLabel: this.app.i18n._('Status'),
             name: 'is_open',
             xtype: 'combo',

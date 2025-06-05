@@ -11,6 +11,12 @@ import App from './App.vue';
 import BootstrapVueNext from 'bootstrap-vue-next';
 import _ from 'lodash'
 import FormatMessage from 'format-message'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+
+import ManageConsentPage from './ManageConsentPage.vue'
+import RegistrationView from './RegistrationView.vue'
+import EmailPage from './EmailPage.vue'
+
 /* global Locale */
 /* eslint no-undef: "error" */
 require('Locale')
@@ -43,5 +49,17 @@ const injectKey = Symbol('formatMessage');
 app.provide(injectKey, {formatMessage: app.config.globalProperties.formatMessage, fmHidden: app.config.globalProperties.formatMessage});
 export const useFormatMessage = () => window.vue.inject(injectKey);
 
+const routes = [
+  { path: '/register/for/:dipId?', name: 'email-page',component: EmailPage, props: true},
+  { path: '/register/:token?', name: 'registration-view',component: RegistrationView, props: true},
+  { path: '/manageConsent/:contactId?', name: 'manage-consent', component: ManageConsentPage, props: true},
+]
+
+const router = createRouter({
+  history: createWebHistory('/GDPR/view'), // TODO: recommended option <according to docs>, requires `/GDPR/view/*` route config in /GDPR/Controller.php
+  routes
+})
+
 app.use(BootstrapVueNext);
+app.use(router)
 app.mount('#tine-viewport-app');

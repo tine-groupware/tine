@@ -40,7 +40,7 @@ variables:
   PHP_VERSION: "8.3"
 
   # "Codename for build"
-  CODENAME: "Next"
+  CODENAME: "Liva"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
@@ -50,6 +50,9 @@ variables:
 
   # "Rewrite composer lock to pull packages from cache."
   COMPOSER_LOCK_REWRITE: "true"
+
+  # Applications to install for tests. Can be all comma separated list with out spaces of application names
+  TINE20_APPLICATION_TO_INSTALL: all
 
   # Test Jobs
   # Variable are switched on with the string "true" and off with the string "false".
@@ -96,6 +99,6 @@ variables:
 
   PUSH_TO_VPACKAGES: "true"
   
-  TEST_IMAGE_VERSION: "2"
+  TEST_IMAGE_VERSION: "3"
   TEST_IMAGE_REGISTRY: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test
   TEST_IMAGE: ${TEST_IMAGE_REGISTRY}:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}-${TEST_IMAGE_VERSION}

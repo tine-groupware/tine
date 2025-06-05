@@ -94,6 +94,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     private function __construct() {
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+        $this->_modelName = Felamimail_Model_Message::class;
     }
     
     /**
@@ -1002,7 +1003,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     public function addMessageToCache(Felamimail_Model_Message $_message)
     {
         $_message->from_email = $this->_filterEmailAddressBeforeAddingToCache($_message->from_email);
-        $_message->from_name  = Tinebase_Core::filterInputForDatabase(mb_substr((string)$_message->from_name,  0, 254));
+        $_message->from_name  = $_message->from_name
+            ? Tinebase_Core::filterInputForDatabase(mb_substr($_message->from_name,  0, 254))
+            : null;
         foreach (['to', 'cc', 'bcc'] as $type) {
             $recipients = $_message->{$type};
             if (! is_array($recipients)) {
@@ -1022,8 +1025,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
             unset($value);
             $_message->{$type} = $recipients;
-            if ('' !== $list) {
-                $_message->{$type . '_list'} = $list;
+            if (!empty($list)) {
+                $_message->{$type . '_list'} = substr($list, 0, 65534);
             }
         }
         

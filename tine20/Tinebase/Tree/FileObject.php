@@ -454,7 +454,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     protected function _inspectBeforeSoftDelete(array $_ids)
     {
         if (!empty($_ids)) {
-            list($accountId, $now) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
+            [$accountId, $now] = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
             foreach($this->getMultiple($_ids) as $object) {
                 $object->deleted_by = $accountId;
                 $object->deleted_time = $now;
@@ -568,7 +568,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 try {
                     /** @var Tinebase_Model_Tree_FileObject $record */
                     $record = $this->get($id);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $transactionManager->commitTransaction($transactionId);
                     continue;
                 }
@@ -759,7 +759,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 try {
                 /** @var Tinebase_Model_Tree_FileObject $record */
                 $record = $this->get($_modification->record_id, true);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     break;
                 }
 
@@ -781,7 +781,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
             case Tinebase_Timemachine_ModificationLog::DELETED:
                 try {
                     $this->softDelete(array($_modification->record_id));
-                } catch (Tinebase_Exception_NotFound $tenf) {}
+                } catch (Tinebase_Exception_NotFound) {}
                 break;
 
             default:

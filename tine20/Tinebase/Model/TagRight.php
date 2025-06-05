@@ -20,11 +20,11 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
     /**
      * Right to view/see/read the tag
      */
-    const VIEW_RIGHT = 'view';
+    public const VIEW_RIGHT = 'view';
     /**
      * Right to attach the tag to a record
      */
-    const USE_RIGHT = 'use';
+    public const USE_RIGHT = 'use';
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -70,7 +70,7 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         if (is_array($_data) && isset($_data['account_right'])) {
-            $rights = explode(',', $_data['account_right']);
+            $rights = explode(',', (string) $_data['account_right']);
             $_data['view_right'] = in_array(self::VIEW_RIGHT, $rights);
             $_data['use_right']  = in_array(self::USE_RIGHT, $rights);
         }

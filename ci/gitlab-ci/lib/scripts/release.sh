@@ -76,5 +76,6 @@ release_is_patch_level_release() {
     # 20[0-9][0-9]\.11\.[1-9]+[0-9] => match tine version e.g. => 2023.11.17
     # *(-.*)*(-pl[0-9]+)(-.*) => match any postfix e.g. -rc1 -test, but require postfix -pl<number> e.g -pl10
     # note the gitlab release rule regex is broader and matches ^20..\.11\..*. It should also be switched to ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*$
-    [[ "$CI_COMMIT_TAG" =~ =~ ^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]
+
+    echo "$CI_COMMIT_TAG" | grep -Pq '^20[0-9][0-9]\.11\.[1-9]+[0-9]*(-.*)*(-pl[0-9]+)(-.*)*$ ]]'
 }

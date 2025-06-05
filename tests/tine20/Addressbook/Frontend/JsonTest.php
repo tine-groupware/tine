@@ -414,7 +414,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
      * @param array $_tags
      * @return array contact data
      */
-    protected function _addContact($_orgName = NULL, $_forceCreation = FALSE, $_tags = NULL)
+    protected function _addContact($_orgName = null, $_forceCreation = false, $_tags = null): array
     {
         $newContactData = $this->_getContactData($_orgName);
         if ($_tags !== NULL) {
@@ -590,7 +590,9 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( ->  YomiName: PHPUNIT_multipleUpdate) relations (1 ' . $translate->_('added') . ': ');
+        $this->_checkChangedNote($record['id'],
+            'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields' .
+            ' ( ->  YomiName: PHPUNIT_multipleUpdate) relations (1 ' . $translate->_('added') . ': ');
 
         // check relation
         $fullRecord = $this->_uit->getContact($record['id']);
@@ -841,9 +843,17 @@ class Addressbook_Frontend_JsonTest extends TestCase
     {
         $contact = $this->_addContact();
 
-        $contact = $this->_uit->getContact($contact['id']);
+        $contact = $this->_uit->getContact($contact);
 
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
+    }
+
+    public function testGetContactWithIdArray()
+    {
+        $contact = $this->_addContact();
+
+        self::expectException(Tinebase_Exception_InvalidArgument::class);
+        $this->_uit->getContact(['id' => $contact]);
     }
 
     public function testTelNormalizedNotWriteable()
@@ -888,6 +898,34 @@ class Addressbook_Frontend_JsonTest extends TestCase
         ], null);
 
         static::assertCount(0, $result['results']);
+    }
+
+    public function testUpdateContactAddRelation()
+    {
+        $contactData = $this->_getContactData();
+        $contact1 = $this->_uit->saveContact($contactData);
+        $contactData['n_given'] = 'Mohammed';
+        unset($contactData['email']);
+        $contact2 = $this->_uit->saveContact($contactData);
+
+        $contact1['relations'] = [
+            [
+                'own_backend' => 'Sql',
+                'related_backend' => 'Sql',
+                'own_id' => $contact1['id'],
+                'own_model' => 'Addressbook_Model_Contact',
+                'related_record' => $contact2,
+                'related_id' => $contact2['id'],
+                'related_model' => 'Addressbook_Model_Contact',
+                'type' => '',
+                'related_degree' => 'sibling',
+                // client auto creates ID
+                'id' => Tinebase_Record_Abstract::generateUID()
+            ],
+        ];
+        $contact1 = $this->_uit->saveContact($contact1);
+
+        self::assertCount(1, $contact1['relations']);
     }
 
     /**
@@ -1036,8 +1074,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $this->_uit->deleteContacts($contact['id']);
 
-        $this->expectException('Tinebase_Exception_NotFound');
-        $contact = $this->_uit->getContact($contact['id']);
+        $this->expectException(Tinebase_Exception_NotFound::class);
+        $this->_uit->getContact($contact['id']);
     }
 
     /**

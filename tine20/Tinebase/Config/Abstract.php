@@ -22,21 +22,21 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  */
 abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 {
-    const CLASSNAME             = 'class';
-    const CLIENTREGISTRYINCLUDE = 'clientRegistryInclude';
-    const CONTENT               = 'content';
-    const CONTENT_CLASS         = 'contentClass';
-    const DEFAULT_STR           = 'default';
-    const DESCRIPTION           = 'description';
-    const LABEL                 = 'label';
-    const OPTIONS               = 'options';
-    const OPTION_PARENT_FIELD   = 'parentField'; // for type keyfield
-    const OPTION_TRANSITIONS_CONFIG   = 'transitionsConfig'; // for type keyfield
-    const RECORDS               = 'records';
-    const RECORD_MODEL          = 'recordModel';
-    const SETBYADMINMODULE      = 'setByAdminModule';
-    const SETBYSETUPMODULE      = 'setBySetupModule';
-    const TYPE                  = 'type';
+    public const CLASSNAME             = 'class';
+    public const CLIENTREGISTRYINCLUDE = 'clientRegistryInclude';
+    public const CONTENT               = 'content';
+    public const CONTENT_CLASS         = 'contentClass';
+    public const DEFAULT_STR           = 'default';
+    public const DESCRIPTION           = 'description';
+    public const LABEL                 = 'label';
+    public const OPTIONS               = 'options';
+    public const OPTION_PARENT_FIELD   = 'parentField'; // for type keyfield
+    public const OPTION_TRANSITIONS_CONFIG   = 'transitionsConfig'; // for type keyfield
+    public const RECORDS               = 'records';
+    public const RECORD_MODEL          = 'recordModel';
+    public const SETBYADMINMODULE      = 'setByAdminModule';
+    public const SETBYSETUPMODULE      = 'setBySetupModule';
+    public const TYPE                  = 'type';
 
     /**
      * status transitions
@@ -48,28 +48,28 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * 
      * @var string
      */
-    const TYPE_OBJECT = 'object';
+    public const TYPE_OBJECT = 'object';
 
     /**
      * integer config type
      * 
      * @var string
      */
-    const TYPE_INT = 'int';
+    public const TYPE_INT = 'int';
     
     /**
      * boolean config type
      * 
      * @var string
      */
-    const TYPE_BOOL = 'bool';
+    public const TYPE_BOOL = 'bool';
     
     /**
      * string config type
      * 
      * @var string
      */
-    const TYPE_STRING = 'string';
+    public const TYPE_STRING = 'string';
 
     /**
      * record config type
@@ -77,59 +77,61 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      *
      * @var string
      */
-    const TYPE_RECORD = 'record';
-    const TYPE_RECORD_SET = 'recordSet';
+    public const TYPE_RECORD = 'record';
+    public const TYPE_RECORD_SET = 'recordSet';
 
-    const APPLICATION_NAME = 'appName';
-    const MODEL_NAME = 'modelName';
+    public const APPLICATION_NAME = 'appName';
+    public const MODEL_NAME = 'modelName';
 
     // @TODO: remove TYPE_RECORD_CONTROLLER and derive it from modelName!
     /**
      * @deprecated
      */
-    const TYPE_RECORD_CONTROLLER = 'recordController';
+    public const TYPE_RECORD_CONTROLLER = 'recordController';
 
     /**
      * float config type
      * 
      * @var string
      */
-    const TYPE_FLOAT = 'float';
+    public const TYPE_FLOAT = 'float';
     
     /**
      * dateTime config type
      * 
      * @var string
      */
-    const TYPE_DATETIME = 'dateTime';
+    public const TYPE_DATETIME = 'dateTime';
+
+    const TYPE_MIXED = 'mixed';
 
     /**
      * keyField config type
      *
      * @var string
      */
-    const TYPE_KEYFIELD = 'keyField';
+    public const TYPE_KEYFIELD = 'keyField';
 
     /**
      * array config type
      *
      * @var string
      */
-    const TYPE_ARRAY = 'array';
+    public const TYPE_ARRAY = 'array';
 
     /**
      * keyFieldConfig config type
      * 
      * @var string
      */
-    const TYPE_KEYFIELD_CONFIG = 'keyFieldConfig';
+    public const TYPE_KEYFIELD_CONFIG = 'keyFieldConfig';
     
     /**
      * config key for enabled features / feature switch
      *
      * @var string
      */
-    const ENABLED_FEATURES = 'features';
+    public const ENABLED_FEATURES = 'features';
     
     /**
      * application name this config belongs to
@@ -221,10 +223,9 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * retrieve a value and return $default if there is no element set.
      *
      * @param  string $name
-     * @param  mixed  $default
      * @return mixed
      */
-    public function get($name, $default = NULL)
+    public function get($name, mixed $default = NULL)
     {
         if (isset($this->_mergedConfigCache[$name]) || array_key_exists($name, $this->_mergedConfigCache)) {
             if (!isset($this->_mergedConfigCache[$name]) && null !== $default) {
@@ -322,7 +323,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @param  mixed    $_value     config value
      * @return void
      */
-    public function set($_name, $_value)
+    public function set($_name, mixed $_value)
     {
         if (null === $_value) {
             $this->delete($_name);
@@ -341,7 +342,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             ));
 
             $this->_saveConfig($configRecord);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound) {
             // during installation, we may not have access to the application yet ... dangerous terrain
         }
 
@@ -405,7 +406,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @param  mixed    $_value     config value
      * @return void
      */
-    public function __set($_name, $_value)
+    public function __set($_name, mixed $_value)
     {
         $this->set($_name, $_value);
     }
@@ -619,7 +620,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         if (file_exists($filename) && is_readable($filename)) {
             // check first chars to prevent leading spaces
             $content = file_get_contents($filename, false, null, 0, 200);
-            if (strpos($content, '<?php') !== 0) {
+            if (!str_starts_with($content, '<?php')) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Could not find leading PHP open tag in ' . $filename);
                 return false;
@@ -657,7 +658,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $content = file_get_contents($filename, false);
         try {
             return Zend_Json::decode($content);
-        } catch (Exception $e) {
+        } catch (Exception) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Failed json decodeing: ' . $filename);
         }
@@ -692,7 +693,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _getAppDefaultsConfigFileData()
     {
-        $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName .
+        $configFilename = dirname(__FILE__, 3) . DIRECTORY_SEPARATOR . $this->_appName .
             DIRECTORY_SEPARATOR . 'config.inc.php';
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -739,7 +740,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         if ($this->_cachedApplicationConfig === NULL || empty($this->_cachedApplicationConfig)) {
             $this->_loadAllAppConfigsInCache();
         }
-        $result = (isset($this->_cachedApplicationConfig[$_name])) ? $this->_cachedApplicationConfig[$_name] :  NULL;
+        $result = $this->_cachedApplicationConfig[$_name] ?? NULL;
         
         return $result;
     }
@@ -785,7 +786,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
-        } catch (Tinebase_Exception_NotFound $e) {
+        } catch (Tinebase_Exception_NotFound) {
             // application might not yet exist
             return;
         }
@@ -832,12 +833,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             $config->value = $_config->value;
             try {
                 $result = $this->_getBackend()->update($config);
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound) {
                 // config might be deleted but cache has not been cleaned
                 $this->clearCache([$_config->application_id], true);
                 try {
                     $result = $this->_getBackend()->update($config);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                } catch (Tinebase_Exception_NotFound) {
                     $result = $this->_getBackend()->create($_config);
                 }
             }
@@ -930,11 +931,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     /**
      * converts raw data to config values of defined type
      *
-     * @param   mixed     $_rawData
      * @param   string    $_name
      * @return  mixed
      */
-    protected function _rawToConfig($_rawData, $_name)
+    protected function _rawToConfig(mixed $_rawData, $_name)
     {
         return static::rawToConfig($_rawData, $this, $_name, self::getDefinition($_name), $this->_appName);
     }
@@ -947,18 +947,17 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
     /**
      * converts raw data to config values of defined type
-     * 
+     *
      * @TODO support array contents conversion
      * @TODO support interceptors
-     * 
-     * @param   mixed     $_rawData
+     *
      * @param   object    $parent
      * @param   string    $parentKey
      * @param   array     $definition
      * @param   string    $appName
      * @return  mixed
      */
-    public static function rawToConfig($_rawData, $parent, $parentKey, $definition, $appName)
+    public static function rawToConfig(mixed $_rawData, $parent, $parentKey, $definition, $appName)
     {
         if (null === $_rawData) {
             return $_rawData;
@@ -1036,7 +1035,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 }
             }
             return new $definition['class'](is_array($_rawData) ? $_rawData : array(), $parent, $parentKey,
-                isset($definition['content']) ? $definition['content'] : null, $appName);
+                $definition['content'] ?? null, $appName);
         }
 
         switch ($definition['type']) {
@@ -1057,6 +1056,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $options = isset($definition['options']) ? (array) $definition['options'] : array();
                 $options['appName'] = $appName;
                 return Tinebase_Config_KeyField::create($_rawData, $options);
+            case self::TYPE_MIXED:
+                return $_rawData;
 
             // TODO this should be an error
             default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData, $parent, $parentKey) : $_rawData;
@@ -1152,7 +1153,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         try {
             $configFile = @file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
-        } catch (ErrorException $e) {
+        } catch (ErrorException) {
             return false;
         }
         
@@ -1171,13 +1172,13 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         $cacheId = $this->_appName;
         try {
-            $features = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+            $features = Tinebase_Cache_PerRequest::getInstance()->load(self::class, __METHOD__, $cacheId);
+        } catch (Tinebase_Exception_NotFound) {
             $features = $this->get(self::ENABLED_FEATURES);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                 __METHOD__ . '::' . __LINE__ . ' Features config of app ' . $this->_appName . ': '
                 . print_r($features->toArray(), true));
-            Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $features);
+            Tinebase_Cache_PerRequest::getInstance()->save(self::class, __METHOD__, $cacheId, $features);
         }
 
         if (isset($features->{$featureName})) {

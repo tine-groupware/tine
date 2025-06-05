@@ -158,7 +158,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                         ' already mapped');
                 }
 
-                if (!preg_match('/^[a-z_0-9]+$/', $config['columnName']) && !isset($config[Tinebase_ModelConfiguration_Const::ALLOW_CAMEL_CASE]) && !str_starts_with($config['columnName'], 'GDPR_')) {
+                if (!preg_match('/^[a-z_0-9]+$/', (string) $config['columnName']) && !isset($config[Tinebase_ModelConfiguration_Const::ALLOW_CAMEL_CASE]) && !str_starts_with((string) $config['columnName'], 'GDPR_')) {
                     throw new Tinebase_Exception_Record_DefinitionFailure($className . '::' . $config['columnName'] . ' contains illegal characters');
                 }
 
@@ -201,10 +201,13 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
     public static function mapTypes(&$config)
     {
         // TODO associated foreign keys should be ignored by default
-        $defaultDoctrineIgnore = isset($config['doctrineIgnore']) ? $config['doctrineIgnore'] : false;
+        $defaultDoctrineIgnore = $config['doctrineIgnore'] ?? false;
 
         $config['doctrineIgnore'] = true;
         $type = $config[self::DOCTRINE_MAPPING_TYPE] ?? $config[self::TYPE];
+        if (($config[self::CONFIG][self::FIXED_LENGTH] ?? false) && !array_key_exists('fixed', $config[self::OPTIONS] ?? [])) {
+            $config[self::OPTIONS]['fixed'] = true;
+        }
         if (isset(self::$_typeMap[$type])) {
             if ($type === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;
@@ -217,6 +220,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
             }
 
             $config[self::TYPE] = self::$_typeMap[$type];
+            if ('text' === $config[self::TYPE] && ($config[self::LENGTH] ?? 256) < 256) {
+                $config[self::TYPE] = 'string';
+            }
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
             if (isset($config[self::UNSIGNED])) {
                 if (!isset($config[self::OPTIONS])) {

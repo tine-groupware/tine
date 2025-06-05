@@ -55,7 +55,7 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
         self::_addTaskIfItDoesNotExist(
             Sales_Controller_Invoice::class,
             'createAutoInvoicesTask',
-            '30 8 1 * * ',
+            '55 5 2-31 * *',
             $_scheduler,
             'createAutoInvoicesDailyTask'
         );
@@ -69,6 +69,7 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
     public static function removeCreateAutoInvoicesDailyTask(Tinebase_Scheduler $_scheduler)
     {
         $_scheduler->removeTask('Sales_Controller_Invoice::createAutoInvoicesTask');
+        $_scheduler->removeTask('createAutoInvoicesDailyTask');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed task Sales_Controller_Invoice::createAutoInvoicesTask from scheduler.');
@@ -84,7 +85,7 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
         self::_addTaskIfItDoesNotExist(
             Sales_Controller_Invoice::class,
             'createAutoInvoicesTask',
-            '55 5 2-31 * *',
+            '30 8 1 * *',
             $_scheduler,
             'createAutoInvoicesMonthlyTask'
         );
@@ -98,6 +99,27 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
     public static function removeCreateAutoInvoicesMonthlyTask(Tinebase_Scheduler $_scheduler)
     {
         $_scheduler->removeTask('Sales_Controller_Invoice::createAutoInvoicesTask');
+        $_scheduler->removeTask('createAutoInvoicesMonthlyTask');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed task Sales_Controller_Invoice::createAutoInvoicesTask from scheduler.');
+    }
+
+    public const READ_EMAIL_DISPATCH_RESPONSES = 'SalesReadEmailDispatchResponses';
+    public static function addEMailDispatchResponseMinutelyTask(Tinebase_Scheduler $_scheduler): void
+    {
+        self::_addTaskIfItDoesNotExist(
+            Sales_Controller_Document_DispatchHistory::class,
+            'readEmailDispatchResponses',
+            self::TASK_TYPE_MINUTELY,
+            $_scheduler,
+            self::READ_EMAIL_DISPATCH_RESPONSES
+        );
+    }
+
+    public static function removeEMailDispatchResponseMinutelyTask(Tinebase_Scheduler $_scheduler): void
+    {
+        $_scheduler->removeTask(self::READ_EMAIL_DISPATCH_RESPONSES);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed task Sales_Controller_Invoice::createAutoInvoicesTask from scheduler.');

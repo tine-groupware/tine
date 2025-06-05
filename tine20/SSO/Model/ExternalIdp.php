@@ -24,13 +24,24 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'ExternalIdp';
     public const TABLE_NAME = 'sso_external_idp';
 
+    public const SESSION_KEY = 'externalAuthIdpUsed';
+
     public const FLD_CONFIG = 'config';
     public const FLD_CONFIG_CLASS = 'config_class';
     public const FLD_DESCRIPTION = 'description';
     public const FLD_NAME = 'name';
     public const FLD_DOMAINS = 'domains';
     public const FLD_SHOW_AS_LOGIN_OPTION = 'show_login_option';
-    public const FLD_LOGO = 'logo';
+    public const FLD_LABEL = 'label';
+    public const FLD_LOGO_DARK = 'logo_dark';
+    public const FLD_LOGO_LIGHT = 'logo_light';
+    public const FLD_ALLOW_EXISTING_LOCAL_ACCOUNT = 'allow_existing_local_account';
+    public const FLD_ALLOW_REASSIGN_LOCAL_ACCOUNT = 'allow_reassign_local_account';
+    public const FLD_ALLOW_CREATE_LOCAL_ACCOUNT = 'allow_create_local_account';
+    public const FLD_ALLOW_LOCAL_LOGIN = 'allow_local_logiin';
+    public const FLD_REQUIRE_LOCAL_MFA = 'require_local_mfa';
+    public const FLD_UPDATE_LOCAL_PROPERTIES = 'update_local_properties';
+    public const FLD_PRIMARY_GROUP_NEW_ACCOUNT = 'primary_group_new_account';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -45,7 +56,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 2,
+        self::VERSION => 4,
         self::RECORD_NAME => 'External Identity Provider',
         self::RECORDS_NAME => 'External Identity Providers', // ngettext('External Identity Provider', 'External Identity Providers', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -131,11 +142,68 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL           => false,
             ],
-            self::FLD_LOGO              => [
+            self::FLD_LABEL             => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::QUERY_FILTER          => true,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Label', // _('Label')
+            ],
+            self::FLD_LOGO_LIGHT        => [
                 self::TYPE                  => self::TYPE_BLOB,
                 self::NULLABLE              => true,
-                self::LABEL                 => 'Logo', // _('Logo')
+                self::LABEL                 => 'Logo Light', // _('Logo Light')
             ],
-        ]
+            self::FLD_LOGO_DARK         => [
+                self::TYPE                  => self::TYPE_BLOB,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Logo Dark', // _('Logo Dark')
+            ],
+            self::FLD_ALLOW_EXISTING_LOCAL_ACCOUNT => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+                self::LABEL                 => 'Allow assignment of existing local accounts', // _('Allow assignment of existing local accounts')
+            ],
+            self::FLD_ALLOW_REASSIGN_LOCAL_ACCOUNT => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+                self::LABEL                 => 'Allow reassignment of existing local accounts', // _('Allow reassignment of existing local accounts')
+            ],
+            self::FLD_ALLOW_CREATE_LOCAL_ACCOUNT => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => true,
+                self::LABEL                 => 'Allow creation of new local accounts', // _('Allow creation of new local accounts')
+            ],
+            self::FLD_ALLOW_LOCAL_LOGIN => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+                self::LABEL                 => 'Allow local login of assigned accounts', // _('Allow local login of assigned accounts')
+            ],
+            self::FLD_REQUIRE_LOCAL_MFA => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+                self::LABEL                 => 'Require local MFA', // _('Require local MFA')
+            ],
+            self::FLD_UPDATE_LOCAL_PROPERTIES => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => true,
+                self::LABEL                 => 'Update local properties', // _('Update local properties')
+            ],
+            self::FLD_PRIMARY_GROUP_NEW_ACCOUNT => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 40,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Primary group for created local accounts', // _('Primary group for created local accounts')
+            ],
+        ],
     ];
+
+    public function toUserArray(): array
+    {
+        $result = $this->toArray();
+        unset($result[self::FLD_CONFIG]);
+        unset($result[self::FLD_DOMAINS]);
+        unset($result[self::FLD_DESCRIPTION]);
+        return $result;
+    }
 }

@@ -310,13 +310,14 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $httpClientTestAdapter->setResponse(new Zend_Http_Response(200, []));
 
         Admin_Controller_User::getInstance()->setRequestContext([
-            'sms-phone-number' => 1234567890,
+            'sms-phone-number' => '01234567890',
             'sms-new-password-template' => 'Your new {{ app.branding.title }} unit test password is: {{ password }}'
         ]);
         $result = $this->_json->resetPassword($account, 'tine20admin', false);
 
         $this->assertStringContainsString('Your new ' . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) . ' unit test password is: tine20admin',
             $httpClientTestAdapter->lastRequestBody);
+        $this->assertStringContainsString(Addressbook_Model_Contact::normalizeTelephoneNum('01234567890'), $httpClientTestAdapter->lastRequestBody);
     }
 
     /**

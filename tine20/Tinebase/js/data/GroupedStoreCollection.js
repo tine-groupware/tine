@@ -164,9 +164,16 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
 
         groupNames = groupNames.map((groupName) => {
             if (_.isObject(groupName) && ! _.isFunction(groupName.getTitle) && _.isString(this.group)) {
-                const conf = _.get(record.constructor.getField(this.group), 'fieldDefinition.config');
-                let recordClass
-                if (conf && conf.appName && conf.modelName && (recordClass = recordMgr.get(conf.appName, conf.modelName))) {
+                let recordClass;
+                if(this.group.match(/^#/)) {
+                    const conf = Tine.widgets.customfields.ConfigManager.getConfig(record.constructor.getMeta('appName'), record.constructor.getMeta('modelName'), this.group.replace('#', ''));
+                    recordClass = recordMgr.get(_.get(conf, 'data.definition.recordConfig.value.records'));
+                } else {
+                    const conf = _.get(record.constructor.getField(this.group), 'fieldDefinition.config');
+                    recordClass = recordMgr.get(_.get(conf, 'appName'), _.get(conf, 'modelName'))
+                }
+
+                if (recordClass) {
                     return Record.setFromJson(groupName, recordClass)
                 }
             }
@@ -329,8 +336,9 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
     onCloneStoreAdd: function(eventStore, rs) {
         if (this.suspendCloneStoreEvents) return;
 
+        const method = this.store.remoteSort ? 'add' : 'addSorted';
         Ext.each(rs, function(r) {
-            this.store.add(r.copy());
+            this.store[method](r.copy());
         }, this);
     },
 

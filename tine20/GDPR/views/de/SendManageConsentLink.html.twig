@@ -1,0 +1,20 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% block subject %}
+    {{ 'Link zur Verwaltung von Zustimmung' }}
+{% endblock %}
+
+{% block body %}
+    <div>{{ 'Hallo ' }}  {{ contact.getTitle() | default('Kunde/Kundin' )}} </div><br>
+    <div>{{ 'über diesen Link können Sie verwalten, zu welchem Zweck wir Sie kontaktieren dürfen : ' }}<a href="{{ link }}">Mein Abonnement verwalten</a></div><br>
+    <div>{{ 'Viele Grüße' }}</div>
+    <div>{{ 'Ihr %1$s Team' | format(app.branding.title) }}</div>
+    <div><img src="{{ app.branding.logoContent.getBody() | data_uri }}" style="margin: 20px 0; max-width: 80px;" /></div>
+{% endblock %}
+
+

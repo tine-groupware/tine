@@ -98,6 +98,59 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
+     * test update timeaccount billable
+     *
+     */
+    public function testUpdateTimeaccountBillable()
+    {
+        $timeaccount = $this->_getTimeaccount(['is_billable'   => false]);
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $tsData = new Timetracker_Model_Timesheet([
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id'    => $timeaccountData['id'],
+            'is_billable'   => false,
+            'description'   => 'test',
+            'start_date'    => Tinebase_DateTime::now()->toString('Y-m-d'),
+            'duration'      => 60,
+        ]);
+        $tsBackend = new Timetracker_Backend_Timesheet();
+        Timetracker_Controller_Timesheet::getInstance()->create($tsData);
+
+        try {
+            $timeaccountData['description'] = "update is_billable from false to true";
+            $timeaccountData['is_billable'] = true;
+            $this->_json->saveTimeaccount($timeaccountData);
+            self::fail('should throw Tinebase_Exception_Confirmation!');
+        } catch (Tinebase_Exception_Confirmation $tec) {
+            $translation = Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME);
+            self::assertEquals(sprintf($translation->_('There are %s hours have not yet been billed, do you want to make them billable?'), 1), $tec->getMessage());
+        }
+
+        // user timeaccount with the confirmation header
+        $timeaccount = $this->_getTimeaccount(['is_billable'   => false]);
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $tsData['timeaccount_id'] = $timeaccountData['id'];
+        Timetracker_Controller_Timesheet::getInstance()->create($tsData);
+
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
+        $timeaccountData['description'] = "update is_billable from false to true";
+        $timeaccountData['is_billable'] = true;
+        $timeaccountUpdated = $this->_json->saveTimeaccount($timeaccountData);
+
+        $this->assertEquals($timeaccountData['description'], $timeaccountUpdated['description']);
+        $this->assertEquals($timeaccountData['is_billable'], $timeaccountUpdated['is_billable']);
+
+        // check timesheet
+        $timesheet = $tsBackend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+            ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timeaccountData['id']],
+        ]))->getFirstRecord();
+        $this->assertEquals(true, $timesheet['is_billable'], 'timesheet is_billable should be true');
+
+        // cleanup
+        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+    }
+
+    /**
      * try to update a Timeaccount - only grants
      */
     public function testUpdateTimeaccountGrants()
@@ -619,8 +672,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
         $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
         $timesheetData['is_billable'] = false;
-        $timesheetData['accounting_time_factor'] = 0;
-        $timesheetData['accounting_time'] = 0;
+        $timesheetData['accounting_time_factor'] = 5;
 
         $timesheetUpdated = $this->_json->saveTimesheet($timesheetData);
 
@@ -630,7 +682,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']['accountId']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
         $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
-        $this->assertEquals(0, $timesheetUpdated['accounting_time_factor'], 'accounting_time_factor is not resolved');
+        $this->assertEquals(5.0, $timesheetUpdated['accounting_time_factor'], 'accounting_time_factor should not be changed');
         $this->assertEquals(0, $timesheetUpdated['accounting_time'], 'accounting_time is not resolved');
 
         // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method

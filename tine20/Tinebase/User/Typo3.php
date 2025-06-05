@@ -78,7 +78,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param bool   $_encrypt encrypt password
      * @return void
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -89,7 +89,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param   int         $_accountId
      * @param   string      $_status
      */
-    public function setStatus($_accountId, $_status)
+    public function setStatus($_accountId, $_status): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -100,7 +100,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param   int         $_accountId
      * @param   Tinebase_DateTime   $_expiryDate
     */
-    public function setExpiryDate($_accountId, $_expiryDate)
+    public function setExpiryDate($_accountId, $_expiryDate): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -111,7 +111,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
      */
-    public function updateUser(Tinebase_Model_FullUser $_account)
+    public function updateUser(Tinebase_Model_FullUser $_account): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -122,7 +122,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
      */
-    public function addUser(Tinebase_Model_FullUser $_account)
+    public function addUser(Tinebase_Model_FullUser $_account): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -133,7 +133,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param Tinebase_Model_FullUser $_account
      * @return Tinebase_Model_FullUser
      */
-    public function addOrUpdateUser(Tinebase_Model_FullUser $_account)
+    public function addOrUpdateUser(Tinebase_Model_FullUser $_account): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -143,7 +143,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      *
      * @param int $_accountId
      */
-    public function deleteUser($_accountId)
+    public function deleteUser($_accountId): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -153,7 +153,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      *
      * @param array $_accountIds
      */
-    public function deleteUsers(array $_accountIds)
+    public function deleteUsers(array $_accountIds): never
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -176,16 +176,16 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
             $user = $this->_sqlUserBackend->addOrUpdateUser($user);
             if (!$user instanceof Tinebase_Model_FullUser) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not add user "' . $user->accountLoginName . '" => Skipping');
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' classname ' . get_class($user). ' attributes: ' . print_r($user,1));
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' classname ' . $user::class. ' attributes: ' . print_r($user,1));
                 continue;
             }
             $sqlGroupBackend->addGroupMember($user->accountPrimaryGroup, $user);
-            
+
             // we directly can import password as its also md5
             $select = $this->_t3db->select()->from('be_users')->where("`uid` LIKE '{$user->getId()}'");
             $t3user = $select->query()->fetchAll(Zend_Db::FETCH_ASSOC);
             $md5passwd = $t3user[0]['password'];
-            
+
             // import contactdata(phone, address, fax, birthday. photo)
             //$contact = $this->_getContactFromBackend($user);
             //Addressbook_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND)->update($contact);
@@ -219,7 +219,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
         
         // additional names required by tine 2.0
         $userData['accountFullName'] = empty($userData['accountFullName']) ? $userData['accountLoginName'] : $userData['accountFullName'];
-        $userData['accountLastName'] = strrpos($userData['accountFullName'], ' ') !== FALSE ? substr($userData['accountFullName'], strrpos($userData['accountFullName'], ' ')) : $userData['accountFullName'];
+        $userData['accountLastName'] = strrpos((string) $userData['accountFullName'], ' ') !== FALSE ? substr((string) $userData['accountFullName'], strrpos((string) $userData['accountFullName'], ' ')) : $userData['accountFullName'];
         $userData['accountDisplayName'] = $userData['accountFullName'];
         
         // NOTE: typo3 users might have no group at all

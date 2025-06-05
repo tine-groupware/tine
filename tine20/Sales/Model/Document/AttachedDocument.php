@@ -21,18 +21,15 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
     public const TABLE_NAME = 'sales_document_attached_document';
 
     public const TYPE_PAPERSLIP = 'paperslip';
-    public const TYPE_UBL = 'ubl';
+    public const TYPE_EDOCUMENT = 'edocument';
     public const TYPE_SUPPORTING_DOCUMENT = 'supporting_document';
 
 
-    public const FLD_DELIVERY_ID = 'delivery_id';
-    public const FLD_INVOICE_ID = 'invoice_id';
-    public const FLD_OFFER_ID = 'offer_id';
-    public const FLD_ORDER_ID = 'order_id';
+    public const FLD_DOCUMENT_ID = 'document_id';
+    public const FLD_DOCUMENT_TYPE = 'document_type';
     public const FLD_TYPE = 'type';
     public const FLD_NODE_ID = 'node_id';
     public const FLD_CREATED_FOR_SEQ = 'created_for_seq';
-    public const FLD_DISPATCH_HISTORY = 'dispatch_history';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,7 +37,7 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 1,
+        self::VERSION                       => 2,
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
 
@@ -57,20 +54,8 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
         self::TABLE                         => [
             self::NAME                      => self::TABLE_NAME,
             self::INDEXES                   => [
-                self::FLD_DELIVERY_ID           => [
-                    self::COLUMNS                   => [self::FLD_DELIVERY_ID],
-                ],
-                self::FLD_INVOICE_ID            => [
-                    self::COLUMNS                   => [self::FLD_INVOICE_ID],
-                ],
-                self::FLD_OFFER_ID              => [
-                    self::COLUMNS                   => [self::FLD_OFFER_ID],
-                ],
-                self::FLD_ORDER_ID              => [
-                    self::COLUMNS                   => [self::FLD_ORDER_ID],
-                ],
-                self::FLD_NODE_ID               => [
-                    self::COLUMNS                   => [self::FLD_NODE_ID],
+                self::FLD_DOCUMENT_ID           => [
+                    self::COLUMNS                   => [self::FLD_DOCUMENT_ID],
                 ],
             ],
         ],
@@ -80,6 +65,10 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Type', // _('Type')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
             ],
             self::FLD_NODE_ID                   => [
                 self::LENGTH                        => 40,
@@ -88,70 +77,63 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                    => Tinebase_Model_Tree_Node::MODEL_NAME_PART,
                 ],*/
-                self::UI_CONFIG                 => [
-                    self::DISABLED                  => true,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
                 ],
             ],
             self::FLD_CREATED_FOR_SEQ           => [
                 self::LABEL                         => 'Created for Version', // _('Created for Version')
                 self::TYPE                          => self::TYPE_INTEGER,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
             ],
-            self::FLD_DELIVERY_ID               => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::NULLABLE                      => true,
+            self::FLD_DOCUMENT_ID               => [
+                self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
+                self::LENGTH                        => 40,
                 self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Document_Delivery::MODEL_NAME_PART,
+                    self::REF_MODEL_FIELD               => self::FLD_DOCUMENT_TYPE,
+                    self::PERSISTENT                    => Tinebase_Model_Converter_DynamicRecord::REFID,
                     self::IS_PARENT                     => true,
                 ],
-                self::UI_CONFIG                 => [
-                    self::DISABLED                  => true,
+                self::FILTER_DEFINITION             => [
+                    self::FILTER                        => Tinebase_Model_Filter_Id::class,
+                ],
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
                 ],
             ],
-            self::FLD_INVOICE_ID                => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::NULLABLE                      => true,
+            self::FLD_DOCUMENT_TYPE             => [
+                self::TYPE                          => self::TYPE_MODEL,
                 self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Document_Invoice::MODEL_NAME_PART,
-                    self::IS_PARENT                     => true,
+                    self::AVAILABLE_MODELS              => [
+                        Sales_Model_Document_Delivery::class,
+                        Sales_Model_Document_Invoice::class,
+                        Sales_Model_Document_Offer::class,
+                        Sales_Model_Document_Order::class,
+                    ],
                 ],
-                self::UI_CONFIG                 => [
-                    self::DISABLED                  => true,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_InArray::class, [
+                        Sales_Model_Document_Delivery::class,
+                        Sales_Model_Document_Invoice::class,
+                        Sales_Model_Document_Offer::class,
+                        Sales_Model_Document_Order::class,
+                    ]],
                 ],
-            ],
-            self::FLD_OFFER_ID                  => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::NULLABLE                      => true,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Document_Offer::MODEL_NAME_PART,
-                    self::IS_PARENT                     => true,
-                ],
-                self::UI_CONFIG                 => [
-                    self::DISABLED                  => true,
-                ],
-            ],
-            self::FLD_ORDER_ID                  => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::NULLABLE                      => true,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Document_Order::MODEL_NAME_PART,
-                    self::IS_PARENT                     => true,
-                ],
-                self::UI_CONFIG                 => [
-                    self::DISABLED                  => true,
-                ],
-            ],
-            self::FLD_DISPATCH_HISTORY          => [
-                self::LABEL                         => 'Dispatch History', // _('Dispatch History')
-                self::TYPE                          => self::TYPE_RECORDS,
-                self::CONFIG                        => [
-                    self::DEPENDENT_RECORDS             => true,
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
-                    self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_ATTACHED_DOCUMENT_ID,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
                 ],
             ],
         ],

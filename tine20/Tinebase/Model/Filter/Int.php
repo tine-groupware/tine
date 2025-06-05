@@ -72,14 +72,14 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
         $value = $this->_replaceWildcards($this->_value);
         
         if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {
-            $value = explode(' ', $this->_value);
+            $value = explode(' ', (string) $this->_value);
         }
         
         if (in_array($this->_operator, array('equals', 'greater', 'less', 'in', 'notin'))) {
             $value = str_replace(array('%', '\\_'), '', $value);
             
             if (is_array($value) && empty($value)) {
-                $_select->where('1=' . (substr($this->_operator, 0, 3) == 'not' ? '1/* empty query */' : '0/* impossible query */'));
+                $_select->where('1=' . (str_starts_with($this->_operator, 'not') ? '1/* empty query */' : '0/* impossible query */'));
             } elseif ($this->_operator == 'equals' && ($value === '' || $value === NULL || $value === false)) {
                 $_select->where($field . 'IS NULL');
             } else {
