@@ -78,10 +78,10 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         }
 
         $vats = new Tinebase_Record_RecordSet(Tinebase_Config_KeyFieldRecord::class, []);
-        foreach ($record->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} as $vat) {
+        foreach ($record->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} ?? [] as $vat) {
             $vats->addRecord(new Tinebase_Config_KeyFieldRecord([
-                'id' => $vat['tax_rate'],
-                'value' => $vat['tax_sum'],
+                'id' => $vat->{Sales_Model_Document_SalesTax::FLD_TAX_RATE},
+                'value' => $vat->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT},
             ], true));
         }
         $this->_records = [
