@@ -468,10 +468,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     {
         /** @var Tinebase_EmailUser_Smtp_Postfix $postfixBackend */
         $postfixBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-        $oldValue = $postfixBackend->setConfig('accountnamedestination', true);
+        $oldValue = $postfixBackend->setConfig(Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME, true);
         $user = $this->_addUserToSecondaryDomain();
         $destinations = $this->_getDestinations($user);
-        $postfixBackend->setConfig('accountnamedestination', $oldValue);
+        $postfixBackend->setConfig(Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME, $oldValue);
         self::assertCount(2, $destinations,
             'exactly two destinations expected: ' . print_r($destinations, true));
     }
@@ -480,10 +480,10 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     {
         /** @var Tinebase_EmailUser_Smtp_Postfix $postfixBackend */
         $postfixBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
-        $oldValue = $postfixBackend->setConfig('accountnamedestination', false);
+        $oldValue = $postfixBackend->setConfig(Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME, false);
         $user = $this->_addUserToSecondaryDomain();
         $destinations = $this->_getDestinations($user);
-        $postfixBackend->setConfig('accountnamedestination', $oldValue);
+        $postfixBackend->setConfig(Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME, $oldValue);
         self::assertCount(1, $destinations,
             'exactly one destinations expected: ' . print_r($destinations, true));
     }
