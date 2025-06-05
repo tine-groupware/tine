@@ -508,7 +508,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         self::flushMailer();
         $persistentEvent = $this->_eventController->create($event);
-        $this->_assertMail('jmcblack', 'Recurrence rule:    Daily', 'body');
+        $this->_assertMail('jmcblack', 'Recurrence Rule:    Daily', 'body');
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);

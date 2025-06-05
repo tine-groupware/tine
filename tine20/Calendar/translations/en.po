@@ -1401,9 +1401,6 @@ msgstr "The permission to access events marked as private in this calendar"
 msgid "Calendar Hierarchy/Name"
 msgstr "Calendar Hierarchy/Name"
 
-msgid "Calendar Hierarchy/Name"
-msgstr "Calendar Hierarchy/Name"
-
 msgid "Email"
 msgstr "Email"
 
