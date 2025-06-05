@@ -177,6 +177,9 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
             self::FLD_ACCOUNT_ID => [
                 self::TYPE => self::TYPE_USER,
                 self::NULLABLE => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
         ]
     ];

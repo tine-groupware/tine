@@ -50,9 +50,26 @@ class Admin_Controller_SchedulerTask extends Tinebase_Controller_Record_Abstract
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
 
         if ($_oldRecord->{Admin_Model_SchedulerTask::FLD_IS_SYSTEM}) {
-            throw new Tinebase_Exception_AccessDenied('can not update system tasks');
+            // only allow to update some values for system accounts
+            $allowedFields = array(
+                Tinebase_Model_SchedulerTask::FLD_NAME,
+                Tinebase_Model_SchedulerTask::FLD_ACTIVE,
+                Tinebase_Model_SchedulerTask::FLD_NEXT_RUN,
+                Tinebase_Model_SchedulerTask::FLD_DISABLE_AUTO_SHUFFLE,
+                Admin_Model_SchedulerTask::FLD_EMAILS,
+                Admin_Model_SchedulerTask::FLD_CRON,
+                'last_modified_time',
+                'last_modified_by',
+                'seq'
+            );
+            $diff = $_record->diff($_oldRecord)->diff;
+            foreach ($diff as $key => $value) {
+                if (! in_array($key, $allowedFields)) {
+                    throw new Tinebase_Exception_AccessDenied('can not update admin system task field : ' . $key);
+                }
+            }
         }
-        if ($_record->{Admin_Model_SchedulerTask::FLD_IS_SYSTEM}) {
+        if ($_record->{Admin_Model_SchedulerTask::FLD_IS_SYSTEM} && !$_oldRecord->{Admin_Model_SchedulerTask::FLD_IS_SYSTEM}) {
             throw new Tinebase_Exception_AccessDenied('can not make a task a system task');
         }
 
