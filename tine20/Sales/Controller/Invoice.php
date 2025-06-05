@@ -1579,7 +1579,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 ]) : null,
             ]);
 
-            if (count($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}) === 1) {
+            if (count($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX} ?? []) === 1) {
                 $ublInvoice->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = Sales_Controller_EDocument_VATEX::getInstance()->getByCode($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}[0]);
             }
 
