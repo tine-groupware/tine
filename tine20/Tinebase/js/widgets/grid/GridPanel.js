@@ -692,6 +692,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             const appName = this.recordClass.getMeta('appName');
             const modelName = this.recordClass.getMeta('modelName');
 
+            const fieldManager = _.bind(Tine.widgets.form.FieldManager.get, Tine.widgets.form.FieldManager, appName, modelName, _, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+            const defaultValues = Object.assign({}, this.recordClass.getDefaultData?.() || {}, this.getRecordDefaults?.() || {}, this.editDialogConfig?.fixedFields ?? {});
+
             Ext.each(this.columns || this.modelConfig.fieldKeys, function(key) {
                 if (! Ext.isString(key)) {
                     columns.push(key);
@@ -715,6 +718,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
 
                 if (config) {
+                    if (this.gridConfig?.quickaddMandatory) {
+                        config.quickaddField = Ext.create(fieldManager(key, {value: defaultValues[key]}));
+                        config.editor = fieldManager(key);
+                    }
                     columns.push(config);
                 }
             }, this);
@@ -1308,6 +1315,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             initialData = recordData;
         }
+        Object.assign(initialData, this.editDialogConfig?.fixedFields ?? {});
         var record = new this.recordClass(initialData);
         this.store.insert(0 , [record]);
 

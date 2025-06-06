@@ -1223,21 +1223,25 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         this.showLoadMask();
 
-        // init change event
+        this.initCheckStates();
+
+        this.window.on('beforeclose', this.onBeforeClose, this);
+    },
+
+    // NOTE: mixed into QuickaddGridPanel
+    initCheckStates: function() {
         this.getForm().items.each(function(item) {
             this.relayEvents(item, ['change', 'select']);
             if (item.copyOnSelectProps) {
                 item.on('select', (i, r) => { i.copyOnSelectProps.forEach((p) => {
                     this.getForm().findField(p)?.setValue(r.get(p));
-                    this.record.set(p, r.get(p));
+                    this.record?.set(p, r.get(p));
                 })})
             }
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});
         this.on('select', this.checkStates, this, {buffer: 100});
-        this.window.on('beforeclose', this.onBeforeClose, this);
     },
-
     /**
      * update (action updateer) top and bottom toolbars
      */

@@ -111,7 +111,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             type = _.get(workingtimeSchema, 'data.type', _.get(workingtimeSchema, 'type'));
 
         this.applyJsonData(_.get(workingtimeSchema, 'data.json', _.get(workingtimeSchema, 'json')));
-        this.blConfigPanel.onRecordLoad(this, this.record);
+        this.blConfigPanel.onParentRecordLoad(this, this.record);
 
         var readOnly = type == 'shared';
 
@@ -185,7 +185,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.HumanResources.ContractEditDialog.superclass.onRecordUpdate.call(this);
 
         this.record.set('working_time_scheme', working_time_scheme);
-        this.blConfigPanel.onRecordUpdate(this, this.record);
+        this.blConfigPanel.onParentRecordUpdate(this, this.record);
         _.set(this.record, 'data.working_time_scheme.json', this.getJsonData());
     },
     
