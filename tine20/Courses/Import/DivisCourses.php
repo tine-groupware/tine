@@ -7,7 +7,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,7 +20,7 @@
 class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 {
     public const COURSES_EXCLUDE_SYNC_UNTIL = 'courses-exclude-sync-until';
-    public const DIVIS_UID_NUMBER = 'divis_uid_number';
+    public const DIVIS_UID_NUMBER = 'divis_short_id';
 
 
     /**
@@ -236,8 +236,8 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
     protected function _readRawData(): bool
     {
         $fh = fopen($this->fileNode->getFilesystemPath(), 'r');
-        $headLine = trim(fgets($fh));
-        if ($headLine !== 'Benutzername;Nachname;Vorname;Primäre E-Mail-Adresse;Weitere E-Mail-Adressen;Rolle;Schulzugehörigkeit (Stammschule);Quelle;Klassen;Eindeutige ID;Eineindeutige ID;Kontoablaufdatum;Geplantes Löschdatum;Geburtsdatum') {
+        $headLine = trim(fgets($fh)); // 0         1       2        3          4          5     6         7        8          9           10           11            12                     13                         14     15    16     17           18    19          20          21
+        if (!str_starts_with($headLine, 'Vorname;Nachname;Rufname;Geburtstag;Geschlecht;Kürzel;Schulen;Stammschule;Klassen;Klassennamen;Angebote;Manuelle Gruppen;Anmeldekennung;E-Mail-Adressen der weiteren Schulen;Status;Rolle;Quelle;Interne ID;Kurze ID;Gültig ab;Gültig bis;Löschdatum')) {
             $msg = 'unknown headline, will not import file:' . PHP_EOL . $headLine;
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' ' . $msg);
@@ -245,45 +245,53 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             return false;
         }
         while ($line = fgetcsv($fh, null, ';'/*, '"', '\\'*/)) {
-            $uid = (int)$line[9];
-            if ($uid < 600000) {
+            if ('Aktiv' !== $line[14]) {
+                continue;
+            }
+            $uid = (int)$line[18];
+            /*if ($uid < 600000) {
                 $msg = 'uid < 600000, skipping line: ' . PHP_EOL . join(';', $line);
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' ' . $msg);
                 $this->resultMsg[] = $msg;
                 continue;
-            }
-            switch ($line[5] /*Rolle*/) {
-                case 'Lehrer':
+            }*/
+            switch ($line[15] /*Rolle*/) {
+                case 'Schuladmin':
+                case 'Lehrkraft':
                     $this->rawTeachers[$uid] = $line;
                     break;
-                case 'Schüler':
-                    if (!preg_match('/^[a-z]{2,3}\d\d$/', $line[8])) {
-                        $msg = 'schüler klasse bad format: ' . $line[8] . PHP_EOL . join(';', $line);
+                case 'Lernende':
+                    if (!preg_match('/^[a-z]{2,3}\d\d$/', $line[9])) {
+                        $msg = 'schüler klasse bad format: ' . $line[9] . PHP_EOL . join(';', $line);
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                             . ' ' . $msg);
                         $this->resultMsg[] = $msg;
                         continue 2;
                     }
-                    if (strpos($line[8], '0') === strlen($line[8]) - 1) {
-                        $msg = 'schüler klasse ends on 0, ignoring: ' . $line[8] . PHP_EOL . join(';', $line);
+                    if (str_ends_with($line[9], '0')) {
+                        $msg = 'schüler klasse ends on 0, ignoring: ' . $line[9] . PHP_EOL . join(';', $line);
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                             . ' ' . $msg);
                         $this->resultMsg[] = $msg;
                         continue 2;
                     }
-                    $line[2] = str_replace(['*', '+'], '', trim($line[2]));
-                    if ('' === $line[2]) {
-                        $line[2] = mb_substr(trim($line[1]), 0, 1);
+                    $line[0] = str_replace(['*', '+'], '', trim($line[0]));
+                    if ('' === $line[0]) {
+                        $line[0] = mb_substr(trim($line[1]), 0, 1);
                     }
 
                     $this->rawStudents[$uid] = $line;
-                    if (!isset($this->coursesToUid[$line[8]])) {
-                        $this->coursesToUid[$line[8]] = [];
+                    if (!isset($this->coursesToUid[$line[9]])) {
+                        $this->coursesToUid[$line[9]] = [];
                     }
-                    $this->coursesToUid[$line[8]][] = $uid;
+                    $this->coursesToUid[$line[9]][] = $uid;
                     break;
                 default:
+                    $msg = 'unknown role "' . $line[15] . '" skipping line: ' . PHP_EOL . join(';', $line);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' ' . $msg);
+                    $this->resultMsg[] = $msg;
                     continue 2;
             }
         }
@@ -345,11 +353,13 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
             $accountExpires = null;
             try {
-                $accountExpires = new Tinebase_DateTime($raw[11]);
+                $accountExpires = new Tinebase_DateTime($raw[20]);
             } catch (Throwable $t) {}
 
             $username = $this->_getLehrerUserName($raw);
-            if (isset($this->uidnumbers[$uid])) {
+            if (isset($raw[22]) && ($account = $this->users->getById($raw[22]))) {
+                unset($this->uidnumbers[$uid]);
+            } elseif (isset($this->uidnumbers[$uid])) {
                 $account = $this->uidnumbers[$uid];
                 unset($this->uidnumbers[$uid]);
             } elseif (isset($this->usernames[$username])) {
@@ -357,7 +367,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             } else {
 
                 $fh = fopen('php://memory', 'w+');
-                fputcsv($fh, [$raw[2], $raw[1]], $this->accountImportSeparator);
+                fputcsv($fh, [$raw[0], $raw[1]], $this->accountImportSeparator);
                 rewind($fh);
                 $csv = stream_get_contents($fh);
                 fclose($fh);
@@ -418,7 +428,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             }
 
             // check for / do update
-            if ($account->accountLoginName !== $username || $account->accountFirstName !== $raw[2] ||
+            if ($account->accountLoginName !== $username || $account->accountFirstName !== $raw[0] ||
                 $account->accountLastName !== $raw[1]) {
                 $msg = 'teacher account data mismatch, NOT updating: ' . PHP_EOL . join(';', $raw);
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -459,9 +469,9 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         foreach ($this->rawStudents as $uid => $raw) {
             $lock->keepAlive();
 
-            if (!isset($this->coursesNames[$raw[8]])) {
+            if (!isset($this->coursesNames[$raw[9]])) {
                 // must not happen!
-                $msg = 'course ' . $raw[8] . ' not found, student not processed: ' . PHP_EOL . join(';', $raw);
+                $msg = 'course ' . $raw[9] . ' not found, student not processed: ' . PHP_EOL . join(';', $raw);
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' ' . $msg);
                 $this->resultMsg[] = $msg;
@@ -470,29 +480,31 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
             $accountExpires = null;
             try {
-                $accountExpires = new Tinebase_DateTime($raw[11]);
+                $accountExpires = new Tinebase_DateTime($raw[20]);
             } catch (Throwable $t) {}
 
             /** @var Courses_Model_Course $course */
-            $course = $this->coursesNames[$raw[8]];
+            $course = $this->coursesNames[$raw[9]];
             // we need the context another time further down the loop, make sure not to break this
             Tinebase_Model_User::setTwigContext(['course' => $course]);
             $tmpUser = new Tinebase_Model_FullUser([
-                'accountFirstName' => $raw[2],
+                'accountFirstName' => $raw[0],
                 'accountLastName' => $raw[1],
             ], true);
             $tmpUser->applyTwigTemplates();
             $tmpUser->accountLoginName = $tmpUser->shortenUsername();
             $username = $tmpUser->accountLoginName;
 
-            if (isset($this->uidnumbers[$uid])) {
+            if (isset($raw[22]) && ($account = $this->users->getById($raw[22]))) {
+                unset($this->uidnumbers[$uid]);
+            } elseif (isset($this->uidnumbers[$uid])) {
                 $account = $this->uidnumbers[$uid];
                 unset($this->uidnumbers[$uid]);
             } elseif (isset($this->usernames[$username])) {
                 $account = $this->usernames[$username];
             } else {
                 $fh = fopen('php://memory', 'w+');
-                fputcsv($fh, [$raw[2], $raw[1]], $this->accountImportSeparator);
+                fputcsv($fh, [$raw[0], $raw[1]], $this->accountImportSeparator);
                 rewind($fh);
                 $csv = stream_get_contents($fh);
                 fclose($fh);
@@ -600,14 +612,14 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 $applyTwig = true;
             }
 
-            if ($account->accountFirstName !== $raw[2] || $account->accountLastName !== $raw[1]) {
+            if ($account->accountFirstName !== $raw[0] || $account->accountLastName !== $raw[1]) {
                 $msg = 'rename student ' . $account->accountFirstName . ' ' . $account->accountLastName . ' to '
-                    . $raw[2] . ' ' . $raw[1];
+                    . $raw[0] . ' ' . $raw[1];
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' ' . $msg);
                 $this->resultMsg[] = $msg;
 
-                $account->accountFirstName = $raw[2];
+                $account->accountFirstName = $raw[0];
                 $account->accountLastName = $raw[1];
                 $applyTwig = true;
 
@@ -765,7 +777,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             $user = $this->userCtrl->getFullUserById($id);
             $this->users->addRecord($user);
             $this->usernames[$user->accountLoginName] = $user;
-            if (isset($user->xprops()[self::DIVIS_UID_NUMBER]) && (int)$user->xprops()[self::DIVIS_UID_NUMBER] > 600000) {
+            if (isset($user->xprops()[self::DIVIS_UID_NUMBER]) /*&& (int)$user->xprops()[self::DIVIS_UID_NUMBER] > 600000*/) {
                 $this->uidnumbers[$user->xprops()[self::DIVIS_UID_NUMBER]] = $user;
             }
         }
@@ -825,7 +837,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
     protected function _getLehrerUserName(array $raw): string
     {
-        return strtolower(substr($raw[2], 0, 1) . '.' . $raw[1]);
+        return strtolower(substr($raw[0], 0, 1) . '.' . $raw[1]);
     }
 
     protected function _getRawData(&$_resource)
