@@ -246,7 +246,6 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.colModel.columns.find(c => c.dataIndex === 'position_discount_sum').editor.field.checkState(null, e.record)
 
         e.record.computePrice();
-        // @TODO compute document total / fire some event?
         this.fireEvent('change', this)
     },
 
@@ -259,8 +258,10 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         return pos === this.quickaddRecord ? false : null;
     },
 
-    onRemovePosition() {
-        this.fireEvent('change', this)
+    onRemovePosition(store, record, idx) {
+        if (record !== this.quickaddRecord) {
+            this.fireEvent('change', this)
+        }
     },
 
     getColumnModel() {
