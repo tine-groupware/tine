@@ -207,7 +207,13 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
             HumanResources_Model_WageType::ID_SICK_SICKPAY,
         ])) {
             $freeDays->filter('sickoverwrite', true)->sickoverwrite = false;
-            $this->_handleOverwrittenVacation($record, $oldRecord);
+            if ((null === $oldRecord && HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED === $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS}) ||
+                    ($oldRecord?->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} !== $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} && (
+                            HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED === $record->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS} ||
+                            HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED === $oldRecord?->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS}
+                        ))) {
+                $this->_handleOverwrittenVacation($record, $oldRecord);
+            }
         } elseif (!empty($freeDays)) {
             $this->_markSickOverwrites($record);
         }
@@ -321,6 +327,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                    ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $_record->lastday_date],
                    ['field' => 'lastday_date', 'operator' => 'after_or_equals', 'value' => $_record->firstday_date],
                    ['field' => 'id', 'operator' => 'not', 'value' => $_record->getId()],
+                   ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
                ]],
            ]), null, false, ['date']);
        foreach ($_record->freedays as $freeday) {
