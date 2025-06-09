@@ -2681,16 +2681,19 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      */
     public static function resetAvailableApps()
     {
-        self::$_availableApplications = ['Tinebase' => true];
+        self::$_availableApplications = [Tinebase_Config::APP_NAME => true];
     }
 
     public static function resetAllCreatedModels()
     {
-        /** @var Tinebase_Record_Interface $model */
-        foreach (self::$createdModels as $model) {
-            $model::resetConfiguration();
-        }
+        self::resetAvailableApps();
+        $createdModels = self::$createdModels;
         self::$createdModels = [];
         self::$deNormalizationCache = [];
+
+        /** @var Tinebase_Record_Interface $model */
+        foreach ($createdModels as $model) {
+            $model::resetConfiguration();
+        }
     }
 }
