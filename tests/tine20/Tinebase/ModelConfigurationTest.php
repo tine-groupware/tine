@@ -58,8 +58,9 @@ class Tinebase_ModelConfigurationTest extends TestCase
         $sales = Tinebase_Application::getInstance()->getApplicationByName('Sales');
         Tinebase_Application::getInstance()->setApplicationStatus($sales->getId(),
             Tinebase_Application::DISABLED);
-        $customer = new Timetracker_Model_Timeaccount([], true);
-        $cObj = $customer->getConfiguration();
+        Tinebase_ModelConfiguration::resetAvailableApps();
+        Timetracker_Model_Timeaccount::resetConfiguration();
+        $cObj = Timetracker_Model_Timeaccount::getConfiguration();
         $fields = $cObj->getFields();
         $found = false;
         foreach ($fields as $name => $field) {

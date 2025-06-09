@@ -2224,6 +2224,9 @@ class Setup_Controller
             }
 
             if (Tinebase_Config::APP_NAME !== $application->name) {
+                // for loose coupling we want to reset all models and reset availableApps cache, because now a new app became available
+                Tinebase_ModelConfiguration::resetAllCreatedModels();
+
                 foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
                     if ($app->name === $application->name) continue;
 
@@ -2520,17 +2523,22 @@ class Setup_Controller
                         . ' removeApplicationAuxiliaryData of app ' . $_application->name . ' failed: ' . $e);
                 }
             }
-            
+
             // remove application from table of installed applications
             Tinebase_Application::getInstance()->deleteApplication($_application);
+            
+            if (!$uninstallAll) {
+                // for loose coupling we want to reset all models and reset availableApps cache, because now one app less is available
+                Tinebase_ModelConfiguration::resetAllCreatedModels();
 
-            foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
-                if ($app->name === $_application->name) continue;
+                foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+                    if ($app->name === $_application->name) continue;
 
-                /** @var Setup_Uninitialize $classname */
-                $classname = "{$app->name}_Setup_Uninitialize";
-                if (class_exists($classname)) {
-                    $classname::applicationUninstalled($_application);
+                    /** @var Setup_Uninitialize $classname */
+                    $classname = "{$app->name}_Setup_Uninitialize";
+                    if (class_exists($classname)) {
+                        $classname::applicationUninstalled($_application);
+                    }
                 }
             }
         }
