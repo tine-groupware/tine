@@ -560,6 +560,8 @@ class Addressbook_ControllerTest extends TestCase
         $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId, $name, Addressbook_Model_Contact::class, true);
         $this->assertNull($cfc);
         unset($raii);
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Addressbook_Model_Contact::resetConfiguration();
     }
 
     public function testCustomFieldRelationLoop()
