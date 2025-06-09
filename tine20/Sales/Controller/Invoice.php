@@ -1162,7 +1162,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),
                     'date'          => clone $this->_currentMonthToBill,
-                    'sales_tax'     => Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
+                    'sales_tax'     => $this->_currentBillingCustomer[Sales_Model_Customer::FLD_VAT_PROCEDURE] !== Sales_Config::VAT_PROCEDURE_STANDARD ? 0 : Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
                     Sales_Model_Invoice::FLD_BUYER_REFERENCE => $contract->{Sales_Model_Debitor::FLD_BUYER_REFERENCE} ?? $debitor->{Sales_Model_Debitor::FLD_BUYER_REFERENCE},
                     Sales_Model_Invoice::FLD_PURCHASE_ORDER_REFERENCE => $contract->{Sales_Model_Contract::FLD_PURCHASE_ORDER_REFERENCE},
                     Sales_Model_Invoice::FLD_PROJECT_REFERENCE => $contract->{Sales_Model_Contract::FLD_PROJECT_REFERENCE},
