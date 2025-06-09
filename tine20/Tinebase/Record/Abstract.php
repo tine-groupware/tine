@@ -284,7 +284,6 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     {
         static::$_inputFilters = [];
         static::$_configurationObject = null;
-        Tinebase_ModelConfiguration::resetAvailableApps();
     }
 
     /**
