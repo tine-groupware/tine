@@ -145,8 +145,18 @@ class Tinebase_ModelConfigurationTest extends TestCase
         if (! Tinebase_Application::getInstance()->isInstalled('Inventory')) {
             self::markTestSkipped('Inventory is needed for the test');
         }
+        if (! Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            self::markTestSkipped('Sales is needed for the test');
+        }
+        $inventoryMC = Inventory_Model_InventoryItem::getConfiguration();
+        if ($inventoryMC->jsonExpander) {
+            self::assertArrayHasKey('invoice', $inventoryMC->jsonExpander['properties'], print_r($inventoryMC->jsonExpander, true));
+        }
+
         // disable Sales
         Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::DISABLED);
+        Tinebase_ModelConfiguration::resetAvailableApps();
+        Inventory_Model_InventoryItem::resetConfiguration();
         $inventoryMC = Inventory_Model_InventoryItem::getConfiguration();
         if ($inventoryMC->jsonExpander) {
             self::assertArrayNotHasKey('invoice', $inventoryMC->jsonExpander['properties'], print_r($inventoryMC->jsonExpander, true));
