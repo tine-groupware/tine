@@ -205,7 +205,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ": " . $tenf->getMessage());
         }
-        // TODO ??? Tinebase_ModelConfiguration::resetAvailableApps();
     }
 
     /**
