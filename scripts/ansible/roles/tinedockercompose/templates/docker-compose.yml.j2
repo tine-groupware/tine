@@ -144,6 +144,16 @@ services:
       DEBUG_LOG_FILE: ../../stdout.log
 
 {% endif %}
+{% if tinedockercompose_edocument_service is defined and tinedockercompose_edocument_service|bool %}
+  edocument:
+    image: registry.rz1.metaways.net/tine/edocument-services:0.0.14-amd64
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - internal_network
+
+{% endif %}
 {% if tinedockercompose_documentserver is defined and tinedockercompose_documentserver|bool %}
   documentserver:
     image: onlyoffice/documentserver:{{ tinedockercompose_documentserver_version }}

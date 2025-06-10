@@ -42,6 +42,7 @@ tinedockercompose_documentserver_publicurl: "http://localhost:4020/"
 tinedockercompose_redis_version: "6.0.16"
 
 tinedockercompose_broadcasthub: false
+tinedockercompose_edocument_service: false
 
 # tinedockercompose_volumes:
 #   - "tine_clamav

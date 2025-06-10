@@ -10,7 +10,7 @@ return [
         # should not be required in single TENANCY MODE
         #'pubsubname' => 'redis://{{ tinedockercompose_redis_hostname }}:6379:broadcasthub',
         'redis' => [
-            'host' => 'cache',
+            'host' => '{{ tinedockercompose_redis_hostname }}',
         ],
     ],
 ];
