@@ -494,7 +494,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             $tmpUser->accountLoginName = $tmpUser->shortenUsername();
             $username = $tmpUser->accountLoginName;
 
-            if (isset($raw[22]) && ($account = $this->users->getById($raw[22]))) {
+            if (isset($raw[22]) && $raw[22] && ($account = $this->users->getById($raw[22]))) {
                 unset($this->uidnumbers[$uid]);
             } elseif (isset($this->uidnumbers[$uid])) {
                 $account = $this->uidnumbers[$uid];
