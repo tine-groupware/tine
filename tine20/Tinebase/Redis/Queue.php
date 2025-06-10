@@ -78,7 +78,7 @@ class Tinebase_Redis_Queue
      */
     public function getQueueSize()
     {
-        return $this->_redis->lSize($this->_config['queue']);
+        return $this->_redis->dbSize();
     }
 
     /**
