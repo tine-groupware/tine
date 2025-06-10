@@ -20,10 +20,14 @@ services:
   web:
     image: {{ tinedockercompose_tine_image }}
     restart: always
+{% if tinedockercompose_redis_service|bool or tinedockercompose_redis_service|bool %}
     depends_on:
+{% if tinedockercompose_redis_service|bool %}
       - cache
-{% if tinedockercompose_db_service is defined and tinedockercompose_db_service|bool %}
+{% endif %}
+{% if tinedockercompose_db_service|bool %}
       - db
+{% endif %}
 {% endif %}
     environment:
       TINE20_DATABASE_HOST: {{ tinedockercompose_db_host }}
