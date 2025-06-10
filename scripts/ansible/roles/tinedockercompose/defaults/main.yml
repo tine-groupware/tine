@@ -18,6 +18,9 @@ tinedockercompose_auto_installupdate: false
 tinedockercompose_addtineuser: true
 tinedockercompose_createdirs: true
 
+tinedockercompose_redis_service: true
+tinedockercompose_redis_hostname: "cache"
+
 tinedockercompose_db_service: true
 tinedockercompose_db_host: "db"
 tinedockercompose_db_image: "mariadb:10.9.8"

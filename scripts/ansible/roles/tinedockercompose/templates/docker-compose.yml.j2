@@ -38,10 +38,10 @@ services:
 {% endif %}
       TINE20_DATABASE_TABLEPREFIX: {{ tinedockercompose_db_prefix }}
       TINE20_CACHING_BACKEND: Redis
-      TINE20_CACHING_REDIS_HOST: cache
-      TINE20_ACTIONQUEUE_HOST: cache
       TINE20_SESSION_BACKEND: Redis
-      TINE20_SESSION_HOST: cache
+      TINE20_CACHING_REDIS_HOST: {{ tinedockercompose_redis_hostname }}
+      TINE20_ACTIONQUEUE_HOST: {{ tinedockercompose_redis_hostname }}
+      TINE20_SESSION_HOST: {{ tinedockercompose_redis_hostname }}
       TINE20_CREDENTIALCACHESHAREDKEY: "{{ tinedockercompose_tinesharedkey }}"
       TINE20_SETUPUSER_USERNAME: {{ tinedockercompose_tinesetupuser }}
       TINE20_SETUPUSER_PASSWORD: "{{ tinedockercompose_tinesetuppw }}"
@@ -105,12 +105,14 @@ services:
       - "traefik.http.services.web.loadbalancer.server.port=80"
 {% endif %}
 
+{% if tinedockercompose_redis_service is defined and tinedockercompose_redis_service|bool %}
   cache:
     image: redis:{{ tinedockercompose_redis_version }}
     restart: always
     networks:
       - internal_network
 
+{% endif %}
 {% if tinedockercompose_docservice_version is defined %}
   docservice:
     image: tinegroupware/document-preview-service:{{ tinedockercompose_docservice_version }}
