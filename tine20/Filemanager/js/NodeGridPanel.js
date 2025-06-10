@@ -157,7 +157,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getRecordByData(data) {
         const store = this.getStore();
 
-        return _.find(store.data.items, (node) => {return node.get('path') === data?.path;})
+        return _.find(store.data.items, (node) => {return node.get('path') === data?.sourcePath;}) // move/rename
+            || _.find(store.data.items, (node) => {return node.get('path') === data?.path;})
             || _.find(store.data.items, (node) => {return node?.id === data?.id;})
             || _.find(store.data.items, (node) => {return node.get('name') === data?.name;});
     },
