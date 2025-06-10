@@ -50,6 +50,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'modelName'         => self::MODEL_NAME_PART,
 
         'exposeHttpApi'     => true,
+        self::EXPOSE_JSON_API   => true,
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
 
