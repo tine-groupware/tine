@@ -92,10 +92,7 @@ docservice
 - Maintenance mode (de)aktivieren
 
         # activate (before update - all users)
-        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=all
-
-        # activate (all non-admin users)
-        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=normal
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=on
 
         # deactivate (after successful update)
         php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=off
