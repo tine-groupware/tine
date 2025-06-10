@@ -247,7 +247,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             if ('Aktiv' !== $line[14]) {
                 continue;
             }
-            $uid = (int)$line[18];
+            $uid = $line[18];
             /*if ($uid < 600000) {
                 $msg = 'uid < 600000, skipping line: ' . PHP_EOL . join(';', $line);
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -494,7 +494,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             $tmpUser->accountLoginName = $tmpUser->shortenUsername();
             $username = $tmpUser->accountLoginName;
 
-            if (isset($raw[22]) && ($account = $this->users->getById($raw[22]))) {
+            if (isset($raw[22]) && $raw[22] && ($account = $this->users->getById($raw[22]))) {
                 unset($this->uidnumbers[$uid]);
             } elseif (isset($this->uidnumbers[$uid])) {
                 $account = $this->uidnumbers[$uid];
