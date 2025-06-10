@@ -247,7 +247,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             if ('Aktiv' !== $line[14]) {
                 continue;
             }
-            $uid = (int)$line[18];
+            $uid = $line[18];
             /*if ($uid < 600000) {
                 $msg = 'uid < 600000, skipping line: ' . PHP_EOL . join(';', $line);
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
