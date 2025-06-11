@@ -15,7 +15,17 @@
  * 
  * @package     ExampleApplication
  * @subpackage  Model
- * @property Tinebase_DateTime datetime
+ *
+ * @property Tinebase_DateTime $datetime
+ * @property string $description
+ * @property string $name
+ * @property int $number_int
+ * @property string $number_string
+ * @property Tinebase_Record_Interface $one_to_one
+ * @property bool $perspective
+ * @property Tinebase_DateTime $persp_dt
+ * @property string $reason
+ * @property string $status
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract implements Tinebase_Record_PerspectiveInterface
 {
