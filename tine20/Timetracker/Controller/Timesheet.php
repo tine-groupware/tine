@@ -323,8 +323,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 foreach (HumanResources_Controller_DailyWTReport::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_DailyWTReport::class, [
                             [TMFA::FIELD => 'employee_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $employee->getId()],
                             [TMFA::FIELD => 'date', TMFA::OPERATOR => 'within', TMFA::VALUE => ['from' => $from, 'until' => $until]],
+                        ]), _getRelations: new Tinebase_Record_Expander(HumanResources_Model_DailyWTReport::class, [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES => [],
+                            ],
                         ])) as $dailyWTR) {
                     $workingTarget += $dailyWTR->getShouldWorkingTime();
+                    foreach ($dailyWTR->{HumanResources_Model_DailyWTReport::FLDS_WORKING_TIMES}->filter(fn($rec) => HumanResources_Model_WageType::ID_SALARY !== $rec->getIdFromProperty(HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE)) as $wt) {
+                        $workingTarget -= $wt->{HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION};
+                    }
                 }
                 $result['workingTimeTarget'] = $workingTarget;
             }

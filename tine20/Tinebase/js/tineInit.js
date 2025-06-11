@@ -804,6 +804,7 @@ Tine.Tinebase.tineInit = {
 
                 var def = Tine.Tinebase.registry.get('serviceMap') ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
                 if (def) {
+                    options.timeout = options.timeout || ((def.apiTimeout || 30)*1000);
                     // sort parms according to def
                     for (var i = 0, p; i < def.parameters.length; i += 1) {
                         p = def.parameters[i].name;

@@ -157,7 +157,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getRecordByData(data) {
         const store = this.getStore();
 
-        return _.find(store.data.items, (node) => {return node.get('path') === data?.path;})
+        return _.find(store.data.items, (node) => {return node.get('path') === data?.sourcePath;}) // move/rename
+            || _.find(store.data.items, (node) => {return node.get('path') === data?.path;})
             || _.find(store.data.items, (node) => {return node?.id === data?.id;})
             || _.find(store.data.items, (node) => {return node.get('name') === data?.name;});
     },
@@ -1139,8 +1140,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             const folderList = _.uniq(_.map(files, (fo) => {
                 return fo.fullPath.replace(/\/[^/]*$/, '');
             }));
-    
-            if(folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}])) {
+
+            if((folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}]))
+                || (_.compact(folderList).length && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'folder'}]))) {
                 const app = Tine.Tinebase.appMgr.get('Filemanager');
                 Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
