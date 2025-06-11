@@ -2755,10 +2755,14 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * Removes containers where current user has no access to
+     * Removes records where current user has no access to
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
+     * @return void
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
