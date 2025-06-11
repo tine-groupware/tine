@@ -272,9 +272,11 @@ class Tinebase_Frontend_CliTest extends TestCase
                 'Tinebase_DeletedFileCleanup',
                 'Tinebase_FileSystemNotifyQuota',
                 'Tinebase_FileSystemSizeRecalculation',
-                'Tinebase_TempFileCleanup',
                 'Tinebase_FileSystem::repairTreeIsDeletedState',
+                'Tinebase_LogEntry::cleanup',
+                'Tinebase_TempFileCleanup',
                 'Tinebase_User/Group::syncUsers/Groups',
+                // Sales
                 'createAutoInvoicesDailyTask', // skip because invoicing might not be active
                 'createAutoInvoicesMonthlyTask', // skip because invoicing might not be active
             ])) {
