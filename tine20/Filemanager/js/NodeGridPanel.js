@@ -1140,8 +1140,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             const folderList = _.uniq(_.map(files, (fo) => {
                 return fo.fullPath.replace(/\/[^/]*$/, '');
             }));
-    
-            if(folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}])) {
+
+            if((folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}]))
+                || (_.compact(folderList).length && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'folder'}]))) {
                 const app = Tine.Tinebase.appMgr.get('Filemanager');
                 Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
