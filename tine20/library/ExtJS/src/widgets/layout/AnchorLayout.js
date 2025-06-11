@@ -131,6 +131,7 @@ anchor: '-50 75%'
         var cs = this.getRenderedItems(ct), len = cs.length, i, c, a, cw, ch, el, vs;
         for(i = 0; i < len; i++){
             c = cs[i];
+            c.autoHeight = ct.autoHeight;
             el = c.getPositionEl();
             if(c.anchor){
                 a = c.anchorSpec;
@@ -142,7 +143,8 @@ anchor: '-50 75%'
                     };
                 }
                 cw = a.right ? this.adjustWidthAnchor(a.right(w) - el.getMargins('lr'), c) : undefined;
-                ch = a.bottom ? this.adjustHeightAnchor(a.bottom(h) - el.getMargins('tb'), c) : undefined;
+                const cw_Val = a.bottom ? a.bottom(h) - el.getMargins('tb') : undefined;
+                ch = cw_Val ? this.adjustHeightAnchor(cw_Val, c) : undefined;
 
                 if(cw || ch){
                     c.setSize(cw || undefined, ch || undefined);

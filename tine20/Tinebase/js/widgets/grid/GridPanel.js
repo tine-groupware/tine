@@ -507,7 +507,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         this.on('resize', this.onContentResize, this, {buffer: 100});
-        
+        this.on('afterLayout', () => {
+            if (this.ownerCt.autoHeight) this.autoHeight = true
+        }, this, {buffer: 100});
+
         this.mon(Ext.fly(window), 'popstate', (event) => {
             if (this.detailsPanel?.isInFullScreenMode) {
                 this.setFullScreen(false);

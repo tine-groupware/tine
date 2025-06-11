@@ -51,7 +51,11 @@ Ext.layout.FitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     // private
     setItemSize : function(item, size){
         if(item && size.height > 0){ // display none?
-            item.setSize(size);
+            if (this.container.autoHeight && this.container.xtype !== 'viewport') {
+                item.setWidth(size.width);
+            } else {
+                item.setSize(size);
+            }
         }
     }
 });

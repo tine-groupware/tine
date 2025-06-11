@@ -4,6 +4,8 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+import {getLayoutClass} from "../../../../../Tinebase/js/util/responsiveLayout";
+
 /**
  * @class Ext.layout.BoxLayout
  * @extends Ext.layout.ContainerLayout
@@ -201,6 +203,7 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         }
 
         var innerCtWidth = maxWidth + this.padding.left + this.padding.right;
+        if (ct.autoHeight) h = 'auto'
         switch(this.align){
             case 'stretch':
                 this.innerCt.setSize(w, h);
@@ -286,6 +289,10 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             }
 
             c.setPosition(cl, t);
+
+            if(c.autoHeight) c.el.setStyle('position', 'unset');
+            else c.el.setStyle('position', '');
+
             if(isStart && c.flex){
                 ch = Math.max(0, heights[idx++] + (leftOver-- > 0 ? 1 : 0));
                 c.setSize(aw, ch);
@@ -357,7 +364,10 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
     // private
     onLayout : function(ct, target){
         Ext.layout.HBoxLayout.superclass.onLayout.call(this, ct, target);
-
+        if(!this.hasOwnProperty('enableResponsive') && ct.ownerCt.enableResponsive) {
+            ct.enableResponsive = ct.ownerCt.enableResponsive;
+            this.enableResponsive = ct.ownerCt.enableResponsive;
+        }
         var cs = this.getRenderedItems(ct), csLen = cs.length,
             c, i, cm, cw, ch, diff, availWidth,
             size = this.getLayoutTargetSize(),
@@ -370,8 +380,10 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             extraWidth = 0,
             maxHeight = 0,
             totalFlex = 0,
-            usedWidth = 0;
+            usedWidth = 0,
+            totalHeight = 0;
 
+        this.layoutClass = getLayoutClass(size.width, this.responsiveBreakpointOverrides)
         for (i = 0 ; i < csLen; i++) {
             c = cs[i];
             // Total of all the flex values
@@ -391,11 +403,19 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             extraWidth += cw + cm.left + cm.right;
             // Max height for align
             maxHeight = Math.max(maxHeight, c.getHeight() + cm.top + cm.bottom);
+            totalHeight += c.getHeight() + cm.top + cm.bottom;
         }
         // Final avail width calc
         availWidth = Math.max(0, (w - extraWidth - this.padding.left - this.padding.right));
 
         var innerCtHeight = maxHeight + this.padding.top + this.padding.bottom;
+        if (ct.autoHeight
+            && this.enableResponsive
+            && this.layoutClass.level < 2)
+        {
+            h = 'auto'
+            innerCtHeight = 'auto'
+        }
         switch(this.align){
             case 'stretch':
                 this.innerCt.setSize(w, h);
@@ -431,19 +451,25 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         }
         for (i = 0 ; i < csLen; i++) {
             c = cs[i];
-            cm = c.margins;
-            l += cm.left;
-            c.setPosition(l, t + cm.top);
-            if(isStart && c.flex){
-                cw = Math.max(0, widths[idx++] + (leftOver-- > 0 ? 1 : 0));
-                if(isRestore){
-                    restore.push(c.getHeight());
+            if (this.enableResponsive && ct.autoHeight && this.layoutClass.level < 2) {
+                c.el.setStyle('position', 'unset');
+                c.setSize(w, 'auto')
+            } else {
+                c.el.setStyle('position', '');
+                cm = c.margins;
+                l += cm.left;
+                c.setPosition(l, t + cm.top);
+                if(isStart && c.flex){
+                    cw = Math.max(0, widths[idx++] + (leftOver-- > 0 ? 1 : 0));
+                    if(isRestore){
+                        restore.push(c.getHeight());
+                    }
+                    c.setSize(cw, availableHeight);
+                }else{
+                    cw = c.getWidth();
                 }
-                c.setSize(cw, availableHeight);
-            }else{
-                cw = c.getWidth();
+                l += cw + cm.right;
             }
-            l += cw + cm.right;
         }
 
         idx = 0;

@@ -4,6 +4,8 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+import {getLayoutClass, getLayoutClassByWidth} from "../../../../../Tinebase/js/util/responsiveLayout";
+
 /**
  * @class Ext.layout.BorderLayout
  * @extends Ext.layout.ContainerLayout
@@ -88,29 +90,123 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
     monitorResize:true,
     // private
     rendered : false,
+    // private
+    defaultRenderOrder: ['west', 'north', 'center', 'east', 'south'],
+
+    /*
+    Setting enableResponsive to true enables default responsive layouting of the regions of the Layout.
+
+    The value is propagated to all of the children, if in children the property is not explicitly set
+
+    NOTE: this value must not be changed during runtime. Doing so can lead to rendering issues.
+     */
+    enableResponsive : false,
+
+    renderOrder: null,
+
+    /*
+    <h2>Layout Classes</h2>
+    <pre><code>
+    {level: 0, name: 'oneColumn', width: 400},
+    {level: 1, name: 'small', width: 600},
+    {level: 2, name: 'medium', width: 1000},
+    {level: 3, name: 'big', width: 1800},
+    {level: 4, name: 'large', width: Infinity},
+    </code></pre>
+    <h2>Responsive Behavior:</h2>
+        <li>west collapsed if collapsible, if not west between in north and center
+           (if not specified differently in render order)</li>
+        <li>east below center (if not specified differently in render order)</li>
+
+    <h3>< oneColumn class 0:</h3>
+        <li>as is.</li>
+
+    <h3>< small class 1: </h3>
+        <li>make west uncollapse</li>
+        <li>east below center still</li>
+
+    <h3>< medium class 2:</h3>
+        <li>default</li>
+
+    <h3>< big class 3:</h3>
+
+    <h3>< large class 4:</h3>
+     */
+    layoutClass: null,
+
+    /**
+     * Responsive breakpoint level till which to stack the {@link Ext.layout.BorderLayout.SplitRegion east} region
+     * @type {number} stackEastLevel
+     */
+    stackEastLevel: 2,
+
+    /**
+     * Responsive breakpoint level till which to stack the  {@link Ext.layout.BorderLayout.SplitRegion west} region
+     * @type {number} floatWestLevel
+     */
+    floatWestLevel: 1,
 
     type: 'border',
 
     targetCls: 'x-border-layout-ct',
 
     getLayoutTargetSize : function() {
-        var target = this.container.getLayoutTarget();
+        const target = this.container.getLayoutTarget();
         return target ? target.getViewSize() : {};
     },
 
     // private
     onLayout : function(ct, target){
+
+        // if parent responsiveEnabled, make this container also responsiveEnabled
+        if (ct.ownerCt.enableResponsive && !this.hasOwnProperty('enableResponsive')) {
+            this.enableResponsive = ct.ownerCt.enableResponsive;
+            ct.enableResponsive = ct.ownerCt.enableResponsive;
+        }
+
+        this.layoutClass = getLayoutClass(this.getLayoutTargetSize().width, this.responsiveBreakpointOverrides)
+        this.stackEast = this.layoutClass.level <= this.stackEastLevel
+        this.floatWest = this.layoutClass.level <= this.floatWestLevel
+
+        /**
+         * @param target is overflown if the container is responsive enabled and in the current layoutClass
+         * the east is to be stacked
+         *
+         * @type {boolean}
+         */
+        this.overflowTarget = this.stackEast
+
+        if (this.stackEast && this.enableResponsive) {
+            target.setStyle('overflowY', 'auto');
+        } else {
+            target.setStyle('overflowY', 'unset');
+        }
+
         var collapsed, i, c, pos, items = ct.items.items, len = items.length;
         if(!this.rendered){
+            let _items;
+            if (this.enableResponsive) {
+                const renderOrder = this.renderOrder || this.defaultRenderOrder;
+                // reordering according to a render oder allows easier responsive layouting by unsetting absolute positioning
+                // and auto heighting the region
+                _items = _.filter(
+                    _.map(
+                        renderOrder,
+                        (region) => _.find(items, (item) => item.region === region)
+                    ),
+                    (_item) => !!_item)
+            } else _items = items
             collapsed = [];
             for(i = 0; i < len; i++) {
-                c = items[i];
+                c = _items[i];
                 pos = c.region;
                 if(c.collapsed){
                     collapsed.push(c);
                 }
                 c.collapsed = false;
                 if(!c.rendered){
+                    if (!c.hasOwnProperty('enableResponsive') && this.enableResponsive)
+                        c.enableResponsive = this.enableResponsive;
                     c.render(target, i);
                     c.getPositionEl().addClass('x-border-panel');
                 }
@@ -123,7 +219,7 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
         }
 
         var size = this.getLayoutTargetSize();
-        if(size.width < 20 || size.height < 20){ // display none?
+        if((size.width < 20 || size.height < 20) && !this.enableResponsive){ // display none?
             if(collapsed){
                 this.restoreCollapsed = collapsed;
             }
@@ -133,10 +229,18 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
             delete this.restoreCollapsed;
         }
 
+        /*
+        In stacked mode, i.e: east panel stacks below center
+        the target is auto heighted and statically positioned
+        To adjust for the uncollapsed west panel, the left margin of the center stacked
+        has to be set instead of absolute positions as the position static (default)
+         */
+        let stackLeftMargin = 0;
         var w = size.width, h = size.height,
             centerW = w, centerH = h, centerY = 0, centerX = 0,
             n = this.north, s = this.south, west = this.west, e = this.east, c = this.center,
             b, m, totalWidth, totalHeight;
+        totalHeight = 0
         if(!c && Ext.layout.BorderLayout.WARN !== false){
             throw 'No center region defined in BorderLayout ' + ct.id;
         }
@@ -144,53 +248,165 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
         if(n && n.isVisible()){
             b = n.getSize();
             m = n.getMargins();
-            b.width = w - (m.left+m.right);
-            b.x = m.left;
-            b.y = m.top;
-            centerY = b.height + b.y + m.bottom;
-            centerH -= centerY;
+            if (this.enableResponsive && this.overflowTarget) {
+                if (!n?.__sizeCache) n.__sizeCache = {'b': {...b}, 'm':{...m}, autoHeight: n.panel.autoHeight};
+                n.panel.autoHeight = true;
+                n.el.setStyle('position', 'unset')
+                b.height = 'auto'
+                b.width = w - (m.left+m.right);
+                if (!this.floatWest) centerY = b.height + b.y + m.bottom;
+            } else {
+                n.el.setStyle('position', 'absolute');
+                if (n.__sizeCache) {
+                    b = n.__sizeCache.b;
+                    m = n.__sizeCache.m;
+                    n.panel.autoHeight = n.__sizeCache.autoHeight;
+                    delete n.__sizeCache;
+                }
+                b.width = w - (m.left+m.right);
+                b.x = m.left;
+                b.y = m.top;
+                centerY = b.height + b.y + m.bottom;
+                centerH -= centerY;
+            }
             n.applyLayout(b);
         }
+
         if(s && s.isVisible()){
             b = s.getSize();
             m = s.getMargins();
-            b.width = w - (m.left+m.right);
-            b.x = m.left;
-            totalHeight = (b.height + m.top + m.bottom);
-            b.y = h - totalHeight + m.top;
-            centerH -= totalHeight;
+            if (this.enableResponsive && this.overflowTarget) {
+                if (!s.__sizeCache) s.__sizeCache = {'b':{...b}, 'm':{...m}, autoHeight: s.panel.autoHeight};
+                s.panel.autoHeight = true;
+                s.el.setStyle('position', 'unset')
+                b.height = 'auto'
+                b.width = w - (m.left+m.right);
+            } else {
+                s.el.setStyle('position', 'absolute');
+                if (s?.__sizeCache) {
+                    b = s.__sizeCache.b;
+                    m = s.__sizeCache.m;
+                    s.panel.autoHeight = s.__sizeCache.autoHeight;
+                    delete s.__sizeCache;
+                }
+                totalHeight += (b.height + m.top + m.bottom);
+                b.x = m.left;
+                b.y = h - totalHeight + m.top;
+                centerH -= totalHeight;
+                b.width = w - (m.left+m.right);
+            }
             s.applyLayout(b);
         }
+
+        // beforeCollapse (layout) -> onCollapse | beforeExpand -> onExpand (layout)
         if(west && west.isVisible()){
             b = west.getSize();
             m = west.getMargins();
+            if (!west?.targetScrollListener) {
+                west.targetScrollListener = (e, el, cfg) => {
+                    west.__listenerIsSticky = cfg?.sticky
+                    let top = e.target.scrollTop;
+                    if (cfg.sticky) {
+                        const nH = n?.el.dom.clientHeight;
+                        top = nH > top ? nH : top
+                    }
+                    west.el.setStyle('top', `${top}px`);
+                    west.el.setStyle('z-index', `1000`);
+                    west.splitEl.setStyle('top', `${top}px`);
+                    west.splitEl.setStyle('z-index', `1000`);
+                    west.getCollapsedEl().setStyle('top', `${top}px`);
+                }
+            }
+            if (this.floatWest && this.enableResponsive) {
+                s.el.setStyle('margin-left', 'unset');
+                if(west.__listenerIsSticky) this.container.getLayoutTarget().un('scroll', west.targetScrollListener, this)
+                this.container.getLayoutTarget().on('scroll', west.targetScrollListener, this)
+                west.slideIn()
+            } else {
+                centerY = n?.el.dom.clientHeight
+            }
             b.height = centerH - (m.top+m.bottom);
             b.x = m.left;
             b.y = centerY + m.top;
-            totalWidth = (b.width + m.left + m.right);
-            centerX += totalWidth;
-            centerW -= totalWidth;
+            if (!this.floatWest) {
+                totalWidth = (b.width + m.left + m.right);
+                if (this.overflowTarget) {
+                    stackLeftMargin = totalWidth
+                    if(!west.__listenerIsSticky) this.container.getLayoutTarget().un('scroll', west.targetScrollListener, this)
+                    this.container.getLayoutTarget().on('scroll', west.targetScrollListener, this, {sticky: true})
+                    s?.el.setStyle('margin-left', `${stackLeftMargin}px`)
+                    s?.el.setStyle('width', `${w - stackLeftMargin - s.getMargins().left - s.getMargins().right}px`)
+                } else {
+                    this.container.getLayoutTarget().un('scroll', west.targetScrollListener, this)
+                    s?.el.setStyle('margin-left', 'unset')
+                    stackLeftMargin = 0
+                }
+                centerX += totalWidth;
+                centerW -= totalWidth;
+            }
             west.applyLayout(b);
         }
+
         if(e && e.isVisible()){
             b = e.getSize();
             m = e.getMargins();
-            b.height = centerH - (m.top+m.bottom);
-            totalWidth = (b.width + m.left + m.right);
-            b.x = w - totalWidth + m.left;
-            b.y = centerY + m.top;
-            centerW -= totalWidth;
+            e.hideSplitBar = false;
+            if (this.stackEast && this.enableResponsive) {
+                e.hideSplitBar = true;
+                if (!e.__sizeCache) e.__sizeCache = {'b':{...b}, 'm':{...m}, autoHeight: e.panel.autoHeight}
+                e.panel.autoHeight = true;
+                e.el.setStyle('position', 'unset')
+                if (stackLeftMargin) e.el.setStyle('margin-left', `${stackLeftMargin}px`)
+                else e.el.setStyle('margin-left', `${stackLeftMargin}px`)
+
+                b.height = 'auto'
+                b.width = centerW - (m.left+m.right);
+            } else {
+                e.el.setStyle('position', 'absolute');
+                e.el.setStyle('margin-left', 'unset')
+                if (e?.__sizeCache) {
+                    b = e.__sizeCache.b;
+                    m = e.__sizeCache.m;
+                    e.panel.autoHeight = e.__sizeCache.autoHeight;
+                    delete e.__sizeCache;
+                }
+                totalWidth = (b.width + m.left + m.right);
+                b.height = centerH - (m.top+m.bottom);
+                b.x = w - totalWidth + m.left;
+                b.y = centerY + m.top;
+                centerW -= totalWidth;
+            }
             e.applyLayout(b);
         }
+
         if(c){
             m = c.getMargins();
-            var centerBox = {
-                x: centerX + m.left,
-                y: centerY + m.top,
-                width: centerW - (m.left+m.right),
-                height: centerH - (m.top+m.bottom)
-            };
-            c.applyLayout(centerBox);
+            let b = {
+                width: centerW,
+                height: centerH
+            }
+            if (this.layoutClass.level <= 2 && this.enableResponsive) {
+                if (!c.__sizeCache) c.__sizeCache = {'b': {...b}, 'm':{...m}, autoHeight: c.panel.autoHeight};
+                c.el.setStyle('position', 'unset')
+                c.panel.autoHeight = true;
+                if (stackLeftMargin) c.el.setStyle('margin-left', `${stackLeftMargin}px`)
+                else c.el.setStyle('margin-left', `${stackLeftMargin}px`)
+                b.height = 'auto'
+            } else {
+                c.el.setStyle('position', 'absolute');
+                c.el.setStyle('margin-left', 'unset');
+                if (c?.__sizeCache) {
+                    b = c.__sizeCache.b;
+                    m = c.__sizeCache.m;
+                    c.panel.autoHeight = c.__sizeCache.autoHeight;
+                    delete c.__sizeCache;
+                }
+                b.x = centerX + m.left;
+                b.y = centerY + m.top;
+                b.width = centerW - (m.left+m.right);
+                b.height = centerH - (m.top+m.bottom);
+            }
+            c.applyLayout(b);
         }
         if(collapsed){
             for(i = 0, len = collapsed.length; i < len; i++){
@@ -448,8 +664,7 @@ Ext.layout.BorderLayout.Region.prototype = {
         p.getState = function(){
             return Ext.apply(gs.call(p) || {}, this.state);
         }.createDelegate(this);
-        
-        
+
         if(ps != 'center'){
             p.allowQueuedExpand = false;
             p.on({
@@ -564,7 +779,7 @@ Ext.layout.BorderLayout.Region.prototype = {
         if(this.position === 'east' || this.position === 'west'){
             this.panel.setSize(undefined, c.getHeight());
         }else{
-            this.panel.setSize(c.getWidth(), undefined);
+            this.panel.setSize(c.getWidth(), this.state?.height);
         }
         c.hide();
         c.dom.style.visibility = 'hidden';
@@ -935,7 +1150,21 @@ Ext.layout.BorderLayout.Region.prototype = {
 Ext.layout.BorderLayout.SplitRegion = function(layout, config, pos){
     Ext.layout.BorderLayout.SplitRegion.superclass.constructor.call(this, layout, config, pos);
     // prevent switch
-    this.applyLayout = this.applyFns[pos];
+    this.applyLayout = (box) => {
+        // NOTE: splitEls absolutely positioned
+        // so hide splitEl when region is to be responsively layouted
+
+        // No need to hide collapsedEl: sizes of collapsedEl set to @param box, which
+        // in case of responsive layout has height: 'auto' which renders collapsedEl with height 0
+        if(this.hideSplitBar) this?.splitEl?.hide();
+        else {
+            // SplitEl shown only when the panel is not collapsed
+            if(!this.isCollapsed) this?.splitEl?.show();
+        }
+        this.applyFns[pos].call(this, box);
+    };
+
+    this.applyLayout.bind(this)
 };
 
 Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, {

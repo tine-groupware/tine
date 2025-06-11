@@ -84,11 +84,30 @@ Ext.extend(Ext.ux.layout.MultiAccordionLayout, Ext.layout.VBoxLayout, {
 
     // private
     onLayout : function(ct, target) {
-        var items = ct.items.items;
+        const items = ct.items.items;
+        // if(!this.hasOwnProperty('enableResponsive') && ct.ownerCt.enableResponsive) {
+        //     ct.enableResponsive = ct.ownerCt?.enableResponsive;
+        //     this.enableResponsive = ct.ownerCt?.enableResponsive;
+        // }
+        if (ct.enableResponsive && !this.hasOwnProperty('enableResponsive')) this.enableResponsive = ct.enableResponsive
         this.beforeRenderItems(items);
 
-        this.container.on('afterlayout', this.updatePanelClasses, this);
         Ext.ux.layout.MultiAccordionLayout.superclass.onLayout.apply(this, arguments);
+    },
+
+    setContainer : function(ct){
+        ct.monitorResize = true;
+        if(ct != this.container){
+            var old = this.container;
+            if(old){
+                old.un('afterlayout', this.updatePanelClasses, this);
+            }
+            if(ct){
+                ct.on('afterlayout', this.updatePanelClasses, this);
+            }
+        }
+
+        Ext.ux.layout.MultiAccordionLayout.superclass.setContainer.apply(this, arguments);
     },
 
     beforeRenderItems: function (items) {
@@ -103,6 +122,8 @@ Ext.extend(Ext.ux.layout.MultiAccordionLayout, Ext.layout.VBoxLayout, {
 
         for (; i < ln; i++) {
             comp = items[i];
+            comp.enableResponsive = this.enableResponsive;
+            comp.autoHeight = this.enableResponsive ? me.container.autoHeight : comp.autoHeight
             if (!comp.rendered) {
                 // Set up initial properties for Panels in an accordion.
                 if (hasCollapseFirst) {

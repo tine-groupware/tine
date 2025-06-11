@@ -777,6 +777,12 @@ viewConfig: {
         }
         const g = this.grid;
         const c = g.getGridEl();
+        if (!g.hasOwnProperty('enableResponsive') && g.ownerCt.enableResponsive) {
+            g.enableResponsive = g.ownerCt.enableResponsive;
+        }
+
+        if (g.enableResponsive) g.autoHeight = g.ownerCt.autoHeight
+
         const csize = c.getSize(true);
         const vw = csize.width;
         
@@ -792,6 +798,10 @@ viewConfig: {
             this.scroller.dom.style.overflow = 'visible';
             if(Ext.isWebKit){
                 this.scroller.dom.style.position = 'static';
+            }
+            if (g.enableResponsive) {
+                this.el.setSize(csize.width, 'auto');
+                this.scroller.setSize(vw, 'auto');
             }
         }else{
             this.el.setSize(csize.width, csize.height);

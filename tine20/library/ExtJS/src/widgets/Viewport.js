@@ -102,6 +102,7 @@ Ext.Viewport = Ext.extend(Ext.Container, {
     /**
      * @cfg {Boolean} monitorResize @hide
      */
+    xtype: 'viewport',
 
     initComponent : function() {
         Ext.Viewport.superclass.initComponent.call(this);

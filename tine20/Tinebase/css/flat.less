@@ -81,7 +81,31 @@
   border: none;
 }
 
-/* AppTabs */
+.x-tab-scroller-right {
+  background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/arrow-big-right-lines.svg) !important;
+  background-position: 3px 2px !important;
+}
+
+.x-tab-scroller-left {
+  background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/arrow-big-left-lines.svg) !important;
+  background-position: 0 2px !important;
+}
+
+.x-tab-scroller-left, .x-tab-scroller-right {
+  background-size: 15px;
+  border-bottom: 1px solid;
+  width: 18px;
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  cursor: pointer
+}
+
+.x-tab-scroller-left-disabled, .x-tab-scroller-right-disabled {
+  border-bottom: none !important;
+}
+
+  /* AppTabs */
 .tine-mainscreen-apptabs {
   & .x-tab-strip-wrap ul.x-tab-strip-top {
     background-color: var(--focus-color);
