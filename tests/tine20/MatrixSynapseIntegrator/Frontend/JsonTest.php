@@ -23,6 +23,7 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             [
                 MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID => $user->getId(),
                 MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => '@' . $user->getId() . ':matrix.domain',
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY => 'somekey',
             ],
             false // no update (see above - descriptionField)
         );

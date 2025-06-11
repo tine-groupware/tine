@@ -20,6 +20,7 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
 {
     public const FLD_DESCRIPTION = 'description';
     public const FLD_ACCOUNT_ID = 'account_id';
+    public const FLD_CC_ID = 'cc_id';
     public const FLD_MATRIX_ACCESS_TOKEN = 'matrix_access_token';
     public const FLD_MATRIX_DEVICE_ID = 'matrix_device_id';
     public const FLD_MATRIX_ID = 'matrix_id';
@@ -92,6 +93,10 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => false],
                self::LABEL                     => 'Account', // _('Account')
             ],
+            self::FLD_CC_ID => [
+                self::DISABLED      => true,
+                self::TYPE          => self::TYPE_STRING,
+            ],
             self::FLD_MATRIX_ACCESS_TOKEN => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
@@ -119,6 +124,10 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
             ],
             self::FLD_MATRIX_RECOVERY_KEY => [
                 self::TYPE                      => self::TYPE_PASSWORD,
+                self::CONFIG        => [
+                    self::CREDENTIAL_CACHE => 'shared',
+                    self::REF_ID_FIELD => self::FLD_CC_ID,
+                ],
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Matrix Recovery Key', // _('Matrix Recovery Key')
