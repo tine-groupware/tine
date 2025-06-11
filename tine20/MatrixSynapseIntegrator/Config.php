@@ -22,7 +22,10 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
     public const APP_NAME = 'MatrixSynapseIntegrator';
 
     public const MATRIX_DOMAIN = 'matrixDomain';
+    public const ELEMENT_URL = 'elementUrl';
     public const HOME_SERVER_URL = 'homeServerUrl';
+    public const IDENTITY_SERVER_URL = 'identityServerUrl';
+
     public const CORPORAL_SHARED_AUTH_TOKEN = 'corporalSharedAuthToken';
 
     public const USER_XPROP_MATRIX_ID = 'matrixId';
@@ -58,6 +61,17 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE          => true,
             self::SETBYSETUPMODULE          => true,
         ],
+        self::ELEMENT_URL            => [
+            //_('Element URL')
+            self::LABEL                     => 'Element URL',
+            //_('Element URL')
+            self::DESCRIPTION               => 'Element URL',
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::SETBYSETUPMODULE          => true,
+            self::DEFAULT_STR               => 'http://{MATRIX_USER_ID}.localhost:8080/',
+        ],
         self::HOME_SERVER_URL            => [
             //_('Home Server URL')
             self::LABEL                     => 'Home Server URL',
@@ -67,7 +81,18 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
             self::SETBYSETUPMODULE          => true,
-            self::DEFAULT_STR               => 'https://matrix.mydomain',
+            self::DEFAULT_STR               => 'https://matrix.local.tine-dev.de',
+        ],
+        self::IDENTITY_SERVER_URL            => [
+            //_('Identity Server URL')
+            self::LABEL                     => 'Identity Server URL',
+            //_('Identity Server URL')
+            self::DESCRIPTION               => 'Identity Server URL',
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::SETBYSETUPMODULE          => true,
+            self::DEFAULT_STR               => 'https://vector.im',
         ],
         self::CORPORAL_SHARED_AUTH_TOKEN     => [
             //_('Corporal Shared Auth Token')
@@ -78,7 +103,7 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => false,
             self::SETBYADMINMODULE          => false,
             self::SETBYSETUPMODULE          => false,
-            self::DEFAULT_STR               => 'abc',
+            self::DEFAULT_STR               => 'SynapseSharedSecretAuthenticatorTineSharedSecret',
         ],
         self::MATRIX_DIRECTORY_ENABLED => [
             //_('Synapse directory export enabled')

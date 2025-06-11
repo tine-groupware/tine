@@ -214,6 +214,26 @@ Tine.Admin.init = function () {
         }
 
         // TODO use hooking mechanism
+        if (Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator')
+            && Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')
+        ) {
+            tree.push({
+                text: translation.gettext('Matrix Accounts'),
+                cls: "treemain",
+                iconCls: 'tinebase-accounttype-user',
+                allowDrag: false,
+                allowDrop: true,
+                id: "matrixaccounts",
+                children: [],
+                leaf: null,
+                expanded: true,
+                dataPanelType: "matrixaccounts",
+                viewRight: 'accounts',
+                hidden: !Tine.Tinebase.configManager.get('matrixDomain', 'MatrixSynapseIntegrator')
+            });
+        }
+
+        // TODO use hooking mechanism
         if (Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_importexportdefinitions')
         ) {
             tree.push({
@@ -412,6 +432,18 @@ Tine.Admin.init = function () {
                 } else {
                     Ext.MessageBox.alert(translation.gettext('Disabled'), translation.gettext('Feature is disabled by configuration.'));
                 }
+                break;
+            case 'matrixaccounts':
+                var app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
+                if (! Tine.MatrixSynapseIntegrator.matrixAccountGridPanel) {
+                    Tine.MatrixSynapseIntegrator.matrixAccountGridPanel = new Tine.MatrixSynapseIntegrator.MatrixAccountGridPanel({
+                        app: app
+                    });
+                } else {
+                    Tine.MatrixSynapseIntegrator.matrixAccountGridPanel.loadGridData.defer(100, Tine.MatrixSynapseIntegrator.matrixAccountGridPanel, []);
+                }
+                Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.MatrixSynapseIntegrator.matrixAccountGridPanel, true);
+                Tine.Tinebase.MainScreen.setActiveToolbar(Tine.MatrixSynapseIntegrator.matrixAccountGridPanel.actionToolbar, true);
                 break;
 
             default:

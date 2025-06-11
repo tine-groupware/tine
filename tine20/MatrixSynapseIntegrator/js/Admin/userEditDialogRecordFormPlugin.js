@@ -1,6 +1,9 @@
 Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
 
+    // TODO replace this with matrix account management in a separate tab in user edit dialog
+    return;
+
     if (!Tine.Tinebase.configManager.get('matrixDomain', 'MatrixSynapseIntegrator')) {
         Tine.log.debug('MatrixSynapseIntegrator: matrixDomain not configured - skipping admin user edit dialog hook');
         return;
