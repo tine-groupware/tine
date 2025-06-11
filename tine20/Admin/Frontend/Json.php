@@ -939,6 +939,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get a single role with all related data
      *
+     * @apiTimeout 60
      * @param int $roleId
      * @return array
      */
