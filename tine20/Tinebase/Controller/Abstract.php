@@ -112,7 +112,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * @todo include Tinebase admin? atm only the application admin right is checked
      * @todo think about moving the caching to Tinebase_Acl_Roles and use only a class cache as it is difficult (and slow?) to invalidate
      */
-    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) 
+    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE)
     {
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
@@ -124,13 +124,13 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         $right = strtoupper($_right);
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Helper::convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName);
+        $cacheId = Tinebase_Helper::convertCacheId(
+            'checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName
+        );
         $result = $cache->load($cacheId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $cacheId);
-        
         if (!$result) {
-            $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
+            $applicationRightsClass = $this->_getApplicationRightsClass();
             
             // array with the rights that should be checked, ADMIN is in it per default
             $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
@@ -144,11 +144,12 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             
             $result = FALSE;
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Checking rights: ' . print_r($rightsToCheck, TRUE));
-            
             foreach ($rightsToCheck as $rightToCheck) {
-                if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, Tinebase_Core::getUser()->getId(), $rightToCheck)) {
+                if (Tinebase_Acl_Roles::getInstance()->hasRight(
+                    $this->_applicationName,
+                    Tinebase_Core::getUser()->getId(),
+                    $rightToCheck
+                )) {
                     $result = TRUE;
                     break;
                 }
@@ -162,6 +163,11 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         return $result;
+    }
+
+    protected function _getApplicationRightsClass(): string
+    {
+        return $this->_applicationName . '_Acl_Rights';
     }
     
     /**
