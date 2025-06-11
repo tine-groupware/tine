@@ -15,6 +15,8 @@
  *
  * @package      MatrixSynapseIntegrator
  * @subpackage   Controller
+ *
+ * @todo        remove this - obsoleted by
  */
 class MatrixSynapseIntegrator_Controller_User extends Tinebase_Controller_Abstract
 {
