@@ -203,6 +203,24 @@ var myField = new Ext.form.NumberField({
         );
     },
 
+    initTextFieldGrowEvents: function(){
+        if (!this.__tfGrowEventsInited) {
+            this.__tfGrowEventsInited = true;
+            this.mon(this.el, 'keyup', this.onKeyUpBuffered, this, {buffer: 50});
+            this.mon(this.el, 'paste', this.onKeyUpBuffered, this, {buffer: 50});
+            this.mon(this.el, 'click', this.autoSize, this);
+        }
+    },
+
+    removeTextFieldGrowEvents: function(){
+        if (this.__tfGrowEventsInited) {
+            delete this.__tfGrowEventsInited
+            this.mun(this.el, 'keyup', this.onKeyUpBuffered, this, {buffer: 50});
+            this.mun(this.el, 'paste', this.onKeyUpBuffered, this, {buffer: 50});
+            this.mun(this.el, 'click', this.autoSize, this);
+        }
+    },
+
     // private
     initEvents : function(){
         Ext.form.TextField.superclass.initEvents.call(this);
@@ -224,9 +242,7 @@ var myField = new Ext.form.NumberField({
         	this.mon(this.el, 'keypress', this.filterKeys, this);
         }
         if(this.grow){
-        	this.mon(this.el, 'keyup', this.onKeyUpBuffered, this, {buffer: 50});
-        	this.mon(this.el, 'paste', this.onKeyUpBuffered, this, {buffer: 50});
-			this.mon(this.el, 'click', this.autoSize, this);
+            this.initTextFieldGrowEvents()
         }
         if(this.enableKeyEvents){
             this.initKeyEvents();

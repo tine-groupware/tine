@@ -332,6 +332,7 @@ new Ext.Template(
     },
 
     adjustHeightAnchor : function(value, c){
+        if (c.autoHeight) return undefined;
         if(c.label && !this.isHide(c) && (this.container.labelAlign == 'top')){
             return value - c.label.getHeight();
         }

@@ -44,6 +44,35 @@ Ext.form.TextArea = Ext.extend(Ext.form.TextField,  {
 
     // private
     onRender : function(ct, position){
+        const growIfBlock = () => {
+            this.textSizeEl = Ext.DomHelper.append(document.body, {
+                tag: "pre", cls: "x-form-grow-sizer"
+            });
+            if(this.preventScrollbars){
+                this.el.setStyle("overflow", "hidden");
+            }
+            this.el.setHeight(this.growMin);
+        }
+
+        this.ownerCt?.on('afterlayout', () => {
+            if (this.ownerCt.enableResponsive
+                && this.ownerCt.autoHeight) {
+                if (!this.__alteredAfterLayout && !this.grow) {
+                    this.__alteredAfterLayout = true
+                    this.grow = true
+                    growIfBlock()
+                    this.initTextFieldGrowEvents()
+                }
+                if (this.lastHeight) this.el.setHeight(this.lastHeight)
+            } else {
+                if (this.__alteredAfterLayout) {
+                    this.grow = false
+                    this.removeTextFieldGrowEvents()
+                    delete this.__alteredAfterLayout
+                    // @FIXME revert growIfBlock necessary?!
+                }
+            }
+        }, this)
         if(!this.el){
             this.defaultAutoCreate = {
                 tag: "textarea",
@@ -53,13 +82,7 @@ Ext.form.TextArea = Ext.extend(Ext.form.TextField,  {
         }
         Ext.form.TextArea.superclass.onRender.call(this, ct, position);
         if(this.grow){
-            this.textSizeEl = Ext.DomHelper.append(document.body, {
-                tag: "pre", cls: "x-form-grow-sizer"
-            });
-            if(this.preventScrollbars){
-                this.el.setStyle("overflow", "hidden");
-            }
-            this.el.setHeight(this.growMin);
+            growIfBlock()
         }
     },
 
