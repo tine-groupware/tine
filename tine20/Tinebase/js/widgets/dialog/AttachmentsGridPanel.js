@@ -71,7 +71,6 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      * initializes the component
      */
     initComponent: function() {
-        this.record = this.editDialog.record;
         this.app = this.editDialog.app;
         this.title = this.i18nTitle = i18n._('Attachments');
         this.i18nFileString = i18n._('Attachment');
@@ -84,6 +83,9 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
         }
 
         this.requiredGrant = this.editDialog?.requiredSaveGrant || this.requiredGrant;
+
+        Ext.ux.pluginRegistry.addRegisteredPlugins(this, Tine.Tinebase.CanonicalPath.getPath(this.editDialog) + '/' + this.canonicalName);
+
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
 
         this.postalSubscriptions = [];
@@ -137,7 +139,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             this.store.add([record]);
         }
         // NOTE: grid doesn't update selections itself
-        this.actionUpdater.updateActions(this.selModel, [this.record.data]);
+        this.actionUpdater.updateActions(this.selModel, [this.editDialog.record.data]);
     },
 
     /**
