@@ -7,3 +7,6 @@
  */
 
 import './Admin/userEditDialogRecordFormPlugin'
+import '../styles/element.less'
+import './Application'
+import './MainScreen'

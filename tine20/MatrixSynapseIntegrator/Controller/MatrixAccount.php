@@ -95,4 +95,19 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     {
         return Admin_Acl_Rights::class;
     }
+
+    public function getMatrixAccountForCurrentUser(): MatrixSynapseIntegrator_Model_MatrixAccount
+    {
+        /** @var ?MatrixSynapseIntegrator_Model_MatrixAccount $result */
+        $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            MatrixSynapseIntegrator_Model_MatrixAccount::class, [[
+                Tinebase_Model_Filter_Abstract::FIELD => MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
+                Tinebase_Model_Filter_Abstract::VALUE => Tinebase_Core::getUser()->getId()
+            ]]
+        ))->getFirstRecord();
+        if (!$result) {
+            throw new Tinebase_Exception_NotFound('No Matrix Account found');
+        }
+        return $result;
+    }
 }

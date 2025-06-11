@@ -25,6 +25,7 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
     public const FLD_MATRIX_DEVICE_ID = 'matrix_device_id';
     public const FLD_MATRIX_ID = 'matrix_id';
     public const FLD_MATRIX_RECOVERY_KEY = 'matrix_recovery_key';
+    public const FLD_MATRIX_RECOVERY_PASSWORD = 'matrix_recovery_password';
     public const FLD_MATRIX_SESSION_KEY = 'matrix_session_key';
 
     public const MODEL_NAME_PART = 'MatrixAccount';
@@ -95,6 +96,7 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
             ],
             self::FLD_CC_ID => [
                 self::DISABLED      => true,
+                self::NULLABLE      => true,
                 self::TYPE          => self::TYPE_STRING,
             ],
             self::FLD_MATRIX_ACCESS_TOKEN => [
@@ -112,6 +114,7 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 self::LABEL                     => 'Matrix Device ID', // _('Matrix Device ID')
                 self::QUERY_FILTER              => true,
             ],
+            // device id is a transliterate from branding with an alphanumeric at the end
             self::FLD_MATRIX_ID                  => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
@@ -122,7 +125,7 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 self::LABEL                     => 'Matrix ID', // _('Matrix ID')
                 self::QUERY_FILTER              => true,
             ],
-            self::FLD_MATRIX_RECOVERY_KEY => [
+            self::FLD_MATRIX_RECOVERY_PASSWORD => [
                 self::TYPE                      => self::TYPE_PASSWORD,
                 self::CONFIG        => [
                     self::CREDENTIAL_CACHE => 'shared',
@@ -130,10 +133,20 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 ],
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                     => 'Matrix Recovery Password', // _('Matrix Recovery Password')
+            ],
+            self::FLD_MATRIX_RECOVERY_KEY => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Matrix Recovery Key', // _('Matrix Recovery Key')
             ],
-            // 32 random bytes als base64 encoded string
-            // das wird so wie es ist als aes key genutzt
+            // 32bytes of random base64 encode data. used as an aes key. does not need to be store in the secret
+            // / password store. It only needs to be not accessible to the client/browser, if the user is not logged in.
+            // (It is also ok if it is in the secret store. It is always used in conjunction with the access key.)
+            // (It is used to "bind" the lifetime of the matrix index db to the session store)
+            // example value: '2sPibjzJ8tbmmZFQ19Ncw9DMZuGqFlIQyG3zUTM3NCE='
             self::FLD_MATRIX_SESSION_KEY => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 44,
