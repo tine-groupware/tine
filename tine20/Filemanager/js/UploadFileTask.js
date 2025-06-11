@@ -80,7 +80,8 @@ export default class UploadFileTask {
                     await updateTask(args, false);
                     //need to update grid with existing node id
                     try {
-                        args.nodeData = await Tine.Filemanager.createNode(args.uploadId, fileRecord.get('type'), fileRecord.get('id'), true);
+                        // NOTE: we don't use the uploadId here as fileName might have changed (e.g. number prefix of efile)
+                        args.nodeData = await Tine.Filemanager.createNode(args.nodeData.path, fileRecord.get('type'), fileRecord.get('id'), true);
                         args.nodeData.progress = 100;
                         args.nodeData.status = uploadManager.status.COMPLETE;
                         args.fileObject = null;
@@ -108,6 +109,8 @@ export default class UploadFileTask {
                     args.nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], false);
                     args.nodeData.status = uploadManager.status.UPLOADING;
                     args.nodeData.size = args?.fileSize;
+                    // NOTE: uploadId is the original/client path. fileName might have changed (e.g. number prefix of efile)
+                    args.nodeData.sourcePath = args?.uploadId;
                     await updateTask(args);
                 } catch (e) {
                     if (e.data.code === 403) {
