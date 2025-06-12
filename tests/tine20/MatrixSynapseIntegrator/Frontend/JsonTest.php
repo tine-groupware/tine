@@ -38,11 +38,20 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
 
     public function testGetAccountData()
     {
-        $account = $this->testMatrixAccountApi(false);
-//        self::assertArrayHasKey(MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD,
-//            $account, print_r($account, true));
+        $this->testMatrixAccountApi(false);
         $accountData = $this->_getUit()->getAccountData();
         self::assertIsArray($accountData);
         self::assertEquals('somepw',  $accountData['recovery_password']);
+    }
+
+    public function testMissingGetAccountData()
+    {
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        try {
+            $this->_getUit()->getAccountData();
+            self::fail('should throw 404 exception');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::assertEquals('No Matrix Account found', $tenf->getMessage());
+        }
     }
 }
