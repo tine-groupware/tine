@@ -154,22 +154,22 @@ msgstr "Updated by"
 msgid "Updated Fields:"
 msgstr "Updated Fields:"
 
-#, python-format
+#, python-format, php-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr "'%s' changed from '%s' to '%s'."
 
 msgid "Tags"
 msgstr "Tags"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s has been changed"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been deleted"
 msgstr "Lead %s has been deleted"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been created"
 msgstr "Lead %s has been created"
 
@@ -233,11 +233,11 @@ msgstr "urgent"
 msgid "Edit new lead"
 msgstr "Edit new lead"
 
-#, python-format
+#, python-format, php-format
 msgid "The following leads have just been imported into the lead list %s"
 msgstr "The following leads have just been imported into the lead list %s"
 
-#, python-format
+#, python-format, php-format
 msgid "%s new leads have been imported"
 msgstr "%s new leads have been imported"
 
@@ -502,3 +502,12 @@ msgstr "All leads I am responsible for"
 
 msgid "Leads with overdue tasks"
 msgstr "Leads with overdue tasks"
+
+msgid "All"
+msgstr "All"
+
+msgid "All without me"
+msgstr "All without me"
+
+msgid "Nobody"
+msgstr "Nobody"

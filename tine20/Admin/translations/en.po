@@ -351,8 +351,8 @@ msgstr "Disabled"
 msgid "Feature is disabled by configuration."
 msgstr "Feature is disabled by configuration."
 
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Default Addressbook for new contacts and groups"
+msgid "Default address book for new contacts and groups"
+msgstr "Default address book for new contacts and groups"
 
 msgid "Application"
 msgid_plural "Applications"
@@ -451,8 +451,8 @@ msgstr "Note for Owner"
 msgid "Info"
 msgstr "Info"
 
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr "Please create Resources in Addressbook or CoreData."
+msgid "Please create resources in the address book or CoreData."
+msgstr "Please create resources in the address book or CoreData."
 
 msgid "ID"
 msgstr "ID"
@@ -569,9 +569,6 @@ msgstr "Sorting"
 msgid "UI Config"
 msgstr "UI Config"
 
-msgid "Customfield"
-msgstr "Customfield"
-
 msgid "This custom field is still in use!"
 msgstr "This custom field is still in use!"
 
@@ -584,20 +581,20 @@ msgstr "Group Name"
 msgid "Visibility"
 msgstr "Visibility"
 
-msgid "Display in addressbook"
-msgstr "Display in addressbook"
+msgid "Display in address book"
+msgstr "Display in address book"
 
-msgid "Hide from addressbook"
-msgstr "Hide from addressbook"
+msgid "Hide from address book"
+msgstr "Hide from address book"
 
-msgid "Saved in Addressbook"
-msgstr "Saved in Addressbook"
+msgid "Saved in address book"
+msgstr "Saved in address book"
 
 msgid "Email"
 msgstr "Email"
 
-msgid "Only system accounts can be added to Addressbook group"
-msgstr "Only system accounts can be added to Addressbook group"
+msgid "Only system accounts can be added to address book group"
+msgstr "Only system accounts can be added to address book group"
 
 msgid "Group Members"
 msgstr "Group Members"
@@ -1053,15 +1050,6 @@ msgstr "IMAP"
 
 msgid "SMTP"
 msgstr "SMTP"
-
-msgid "Display in address book"
-msgstr "Display in address book"
-
-msgid "Hide from address book"
-msgstr "Hide from address book"
-
-msgid "Saved in address book"
-msgstr "Saved in address book"
 
 msgid "Would you like to move the contact to this address book?"
 msgstr "Would you like to move the contact to this address book?"

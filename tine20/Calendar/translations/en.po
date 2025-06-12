@@ -401,24 +401,28 @@ msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s declined event \"%2$s\" at %3$s"
 
 #, php-format
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgid "Tentative response from %1$s for the event \"%2$s\" at %3$s"
+msgstr "Tentative response from %1$s for the event \"%2$s\" at %3$s"
 
 #, php-format
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "No response from %1$s for event \"%2$s\" at %3$s"
+msgid "No response from %1$s for the event \"%2$s\" at %3$s"
+msgstr "No response from %1$s for the event \"%2$s\" at %3$s"
 
 #, php-format
-msgid "Unknown status update from %1$s for event \"%2$s\" at %3$s"
-msgstr "Unknown status update from %1$s for event \"%2$s\" at %3$s"
+msgid "Unknown status update from %1$s for the event \"%2$s\" at %3$s"
+msgstr "Unknown status update from %1$s for the event \"%2$s\" at %3$s"
 
 #, php-format
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Attendee changes for event \"%1$s\" at %2$s"
+msgid "Attendee changes for the event \"%1$s\" at %2$s"
+msgstr "Attendee changes for the event \"%1$s\" at %2$s"
 
 #, php-format
-msgid "Tentative event notification for event \"%1$s\" at %2$s"
-msgstr "Tentative event notification for event \"%1$s\" at %2$s"
+msgid "Tentative event notification for the event \"%1$s\" at %2$s"
+msgstr "Tentative event notification for the event \"%1$s\" at %2$s"
+
+#, php-format
+msgid "Proposed changes for event \"%1$s\" at %2$s declined"
+msgstr "Proposed changes for event \"%1$s\" at %2$s declined"
 
 msgid "Unknown action"
 msgstr "Unknown action"
@@ -662,6 +666,12 @@ msgstr "Originally"
 
 msgid "Colors"
 msgstr "Colors"
+
+msgid "Use Light-Mode Colors"
+msgstr "Use Light-Mode Colors"
+
+msgid "In dark mode event colors are inverted for better readability. If you want to see the original colors of light mode check this option."
+msgstr "In dark mode event colors are inverted for better readability. If you want to see the original colors of light mode check this option."
 
 msgid "Sidebar Color"
 msgstr "Sidebar Color"
@@ -1719,6 +1729,9 @@ msgstr "Is all day event"
 msgid "Organizer timezone"
 msgstr "Organizer timezone"
 
+msgid "GENDER_Event Type"
+msgstr "GENDER_Event Type"
+
 msgid "Event Type"
 msgid_plural "Event Types"
 msgstr[0] "Event Type"
@@ -1726,6 +1739,9 @@ msgstr[1] "Event Types"
 
 msgid "Short Name"
 msgstr "Short Name"
+
+msgid "GENDER_Poll"
+msgstr "GENDER_Poll"
 
 msgid "Locked"
 msgstr "Locked"

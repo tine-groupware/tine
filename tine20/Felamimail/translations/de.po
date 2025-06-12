@@ -28,1737 +28,2309 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.2.3\n"
 
+#: Acl/Rights.php:106
 msgid "Manage personal email accounts"
-msgstr "Persönliche Konten verwalten"
+msgstr "Persönliche E-Mail-Konten verwalten"
 
+#: Acl/Rights.php:107
 msgid "Edit and delete personal email accounts"
-msgstr "Bearbeiten und Löschen von persönlichen Konten"
+msgstr "Bearbeiten und Löschen von persönlichen E-Mail-Konten"
 
+#: Acl/Rights.php:110
 msgid "Add personal email accounts"
-msgstr "Persönliche Konten hinzufügen"
+msgstr "Persönliche E-Mail-Konten hinzufügen"
 
+#: Acl/Rights.php:111
 msgid "Create new personal email accounts"
-msgstr "Neue persönliche Konten hinzufügen"
+msgstr "Neue persönliche E-Mail-Konten hinzufügen"
 
+#: Config.php:209
 msgid "Mail Type"
 msgstr "E-Mail Typ"
 
+#: Config.php:211
 msgid "Possible mail types."
 msgstr "Mögliche E-Mail Typen"
 
+#: Config.php:221
 msgid "Additional Personal External Account"
 msgstr "Persönliches externes E-Mail-Konto"
 
+#: Config.php:226
 msgid "Shared System Account"
 msgstr "Gemeinsames Systemkonto"
 
+#: Config.php:231
 msgid "Shared External Account"
 msgstr "Gemeinsames externes E-Mail-Konto"
 
+#: Config.php:236
 msgid "Additional Personal System Account"
 msgstr "Persönliches Extra-Systemkonto"
 
+#: Config.php:241
 msgid "Default Personal System Account"
 msgstr "Persönliches Standard-Systemkonto"
 
+#: Config.php:246
 msgid "Mailinglist"
 msgstr "E-Mail-Verteiler"
 
+#: Config.php:255
 msgid "Mailinglist Reject Reason"
 msgstr "E-Mail-Verteiler Ablehnungsgrund"
 
+#: Config.php:258
 msgid "Your email has been rejected"
 msgstr "Ihre E-Mail wurde abgelehnt"
 
+#: Config.php:264
 msgid "Vacation Templates Node ID"
-msgstr "Abwesenheits-Vorlalagen Node ID"
+msgstr "Abwesenheits-Vorlagen Node ID"
 
+#: Config.php:273
 msgid "Email Notification Templates Node ID"
 msgstr "E-Mail Benachrichtigungs-Vorlagen Node ID"
 
+#: Config.php:282
 msgid "Email Notification from E-Mailadress"
 msgstr "E-Mail Benachrichtigung Absender E-Mail Adresse"
 
+#: Config.php:291
 msgid "Custom Vacation Message"
-msgstr "Benutzerdefnierte Abwesenheitsnotiz"
+msgstr "Benutzerdefinierte Abwesenheitsnotiz"
 
+#: Config.php:293
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
 
+#: Config.php:302
 msgid "Cache email body"
 msgstr "E-Mail zwischenspeichern"
 
+#: Config.php:304
 msgid "Should the email body be cached (recommended for slow IMAP server connections)"
 msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
 
+#: Config.php:313
 msgid "Delete Archived Mail"
 msgstr "Archivierte Nachricht löschen"
 
+#: Config.php:323
 msgid "Prevent copying mails in the same account"
 msgstr "Verhindere Kopieren von E-Mails in das gleiche Konto"
 
+#: Config.php:333 Config.php:335
 msgid "Attachment cache TTL in seconds"
 msgstr "Anhang-Zwischenspeicher TTL in Sekunden"
 
+#: Config.php:344
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
 
+#: Config.php:346
 msgid "Enabled Features in Felamimail Application."
 msgstr "Eingeschaltete Features für die Felamimail Anwendung."
 
+#: Config.php:354
 msgid "Account Migration"
 msgstr "Kontomigration"
 
+#: Config.php:356
 msgid "Shows context menu for system accounts to approve migration"
 msgstr "Zeigt Menüpunkt zur Freigabe der Kontomigration"
 
+#: Config.php:362
 msgid "Move notifications"
 msgstr "Benachrichtigungen verschieben"
 
+#: Config.php:364
 msgid "Move notifications to a subfolder via sieve"
 msgstr "Benachrichtigungen mit SIEVE Regel in Unterordner verschieben"
 
+#: Config.php:370
 msgid "Auto-Save Drafts"
 msgstr "Entwürfe automatisch sichern"
 
+#: Config.php:372
 msgid "Save drafts automatically while editing an email"
 msgstr "Entwürfe automatisch beim E-Mail verfassen speichern"
 
+#: Config.php:378
 msgid "Only password download link"
 msgstr "Nur passwortgeschützter Download Link"
 
+#: Config.php:380
 msgid "Allow only password download link"
 msgstr "Nur Donwload-Links mit Passwort erlauben"
 
+#: Config.php:386
 msgid "Tine 2.0 Flag"
 msgstr "Tine 2.0 Flag"
 
+#: Config.php:388
 msgid "Add a Tine 2.0 flag to sent messages"
 msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
 
+#: Config.php:394
 msgid "Show Reply-To"
 msgstr "Zeige Antworten-An"
 
+#: Config.php:396
 msgid "Show Reply-To field in message compose dialog"
 msgstr "Zeige Antwort-An Feld im Nachricht Verfassen Dialog"
 
+#: Config.php:402
 msgid "Auto-Create Folders"
 msgstr "Automatisches Erstellen von Ordnern"
 
+#: Config.php:404
 msgid "Create template, trash, sent, draft and junks folders for system accounts"
 msgstr "Erstellen von Vorlagen-, Papierkorb-, gesendeten, Entwurfs- und Junk-Ordnern für Systemkonten"
 
+#: Config.php:410 Config.php:412
 msgid "Enable Spam Suspicion Strategy"
 msgstr "Spam-Verdacht Strategie einschalten"
 
+#: Config.php:420 Config.php:422
 msgid "Spam Suspicion Strategy"
 msgstr "Spam-Verdacht Strategie"
 
+#: Config.php:431 Config.php:433
 msgid "Spam Suspicion Strategy Config"
 msgstr "Spam-Verdacht Strategie Konfiguration"
 
+#: Config.php:442 Config.php:444
 msgid "Spam User Processing Pipeline"
 msgstr ""
 
+#: Config.php:453
 msgid "Confirm SPAM Suspicion Message"
 msgstr ""
 
+#: Config.php:455
 msgid "Message for users when they press the info button in a SPAM suspicion toolbar."
 msgstr ""
 
+#: Config.php:464
 msgid "Filter E-Mail URIs"
 msgstr "E-Mail URIs filtern"
 
+#: Config.php:466
 msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
 msgstr "Sollen links in E-Mail Text gefiltert werden. Nur interne Verweise sind erlaubt wenn dies eingeschaltet wird"
 
+#: Config.php:483
 msgid "System Account Folder Defaults"
 msgstr "Standardordner für System Nutzer"
 
+#: Config.php:485
 msgid "Paths of the special folders (like Sent, Trash, ...)"
 msgstr "Pfad für spezielle Ordner (wie Gesendet, Mülleimer, …)"
 
+#: Config.php:494
 msgid "Allow self signed TLS cert for IMAP connection"
 msgstr "Erlaube selbst signierte TLS Zertifikate für IMAP Verbindungen"
 
+#: Config.php:504
 msgid "Sieve Redirect Only Internal"
 msgstr "Nur interne Sieve Weiterleitungen erlauben"
 
+#: Config.php:506
 msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
 msgstr "Erlaube SIEVE Weiterleitungen nur an interne (primäre oder sekundäre E-Mail Domain) E-Mail Adressen"
 
+#: Config.php:515 Config.php:517
 msgid "Sieve Notification Bounces Reporting Email"
 msgstr "SIEVE Benachrichtigungen Bounce Report E-Mail"
 
+#: Config.php:526
 msgid "URL icon path for own domain"
 msgstr "URL des icon Pfades für die eigene Domain"
 
+#: Config.php:528
 msgid "Used to mark messages from configured primary and secondary domains"
 msgstr "Wird genutzt um Nachrichten zu markieren die von der konfigurierten primären oder sekundären Domain stammen"
 
+#: Config.php:537
 msgid "URL icon path for other domains"
 msgstr "URL des icon Pfades für andere Domains"
 
+#: Config.php:539
 msgid "Used to mark messages from all other domains"
 msgstr "Wird genutzt um Nachrichten zu markieren die von anderen Domains stammen"
 
+#: Config.php:548 Config.php:550
 msgid "Other domain regex for FLAG_ICON_OTHER_DOMAIN"
 msgstr "Regulärer Ausdruck für andere Domains FLAG_ICON_OTHER_DOMAIN"
 
+#: Config.php:564
 msgid "Active"
 msgstr "Aktiv"
 
+#: Config.php:565
 msgid "Auto"
 msgstr ""
 
+#: Config.php:566
 msgid "Inactive"
 msgstr "Inaktiv"
 
+#: Controller/Account.php:314 Exception/PasswordMissing.php:22
 msgid "shared / adb_list accounts need to have a password set"
 msgstr "Gemeinsame Konten benötigen ein Passwort"
 
+#: Controller/Account.php:317
 msgid "shared / adb_list accounts need to have an email set"
 msgstr "Gemeinsame Konten benötigen eine E-Mail-Adresse"
 
+#: Controller/Account.php:383
 msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
 msgstr "Interne Benutzerkonten sind nur erlaubt mit der Konfiguration Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
 
+#: Controller/Account.php:387
 msgid "Internal user accounts need an email address"
 msgstr "Interne Benutzerkonten brauchen eine E-Mail-Adresse"
 
+#: Controller/Account.php:392
 msgid "Internal user accounts need to be assigned to a user"
 msgstr "Interne Benutzerkonten müssen einer Nutzer:in zugeordnet sein"
 
+#: Controller/Account.php:399
 msgid "Please choose a new email address for internal user account"
 msgstr "Bitte wählen sie eine neue E-Mail Adresse für Idas interne Benutzerkonto"
 
+#: Controller/Account.php:416
 msgid "system account for user does not exist"
 msgstr "Systemkonto existiert nicht für diese Benutzer*in"
 
+#: Controller/Account.php:898
 #, python-brace-format
 msgid "Account type cannot be changed from {0} to {1}"
 msgstr "Konto Typ kann nicht von {0} auf {1} geändert werden"
 
+#: Controller/Account.php:906
 msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
 msgstr "Die Konfiguration EMAIL_USER_ID_IN_XPROPS ist nicht eingeschaltet! Bitte überprüfen sie ob ihr Benutzer*innen E-Mail Backend es unterstützt und führen sie die CLI Methode Tinebase.emailUserIdInXprops aus"
 
+#: Controller/Account.php:922
 msgid "Migration of this account has not been approved!"
 msgstr "Die Migration dieses Kontos wurde nicht freigegeben!"
 
+#: Controller/Account.php:933
 msgid "Could not find email user xprops!"
 msgstr "Konnte E-Mail-User xprops nicht finden!"
 
+#: Controller/Account.php:986
 msgid "Internal user accounts need a valid user"
 msgstr "Das persönliche Systemkonto benötigt einen validen Benutzer"
 
+#: Controller/Account.php:996
 msgid "System account of user is missing"
 msgstr "System-Konto für Benutzer*in fehlt"
 
+#: Controller/Account.php:2020 js/nodeActions.js:362
+#: js/sieve/NotificationDialog.js:86
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
+#: Controller/Folder.php:294
 #, python-brace-format
 msgid "Folder with name {0} already exists!"
 msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
 
+#: Controller/Folder.php:296
 msgid "Failure on create folder"
 msgstr "Fehler beim anlegen des Ordners"
 
+#: Controller/MessageExpectedAnswer.php:80
 msgid "still unanswered: "
 msgstr "noch unbeantwortet: "
 
+#: Controller/MessageExpectedAnswer.php:83
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
 msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: "
 
+#: Controller/MessageFileLocation.php:165
 msgid "It is not possible to file the message in this record (might be a recurring event)."
 msgstr "Es ist nicht nöglich, die Nachricht hier abzulegen (es könnte sich um einen Wiederholungstermin handeln)."
 
+#: Controller/Message/Flags.php:25
 msgid "Passed"
 msgstr "Bestanden"
 
+#: Controller/Message/Flags.php:26 js/Model.js:116
 msgid "Answered"
 msgstr "Beantwortet"
 
+#: Controller/Message/Flags.php:27
 msgid "Seen"
 msgstr "Gelesen"
 
+#: Controller/Message/Flags.php:28
 msgid "Deleted"
 msgstr "Gelöscht"
 
+#: Controller/Message/Flags.php:29
 msgid "Draft"
 msgstr "Entwurf"
 
+#: Controller/Message/Flags.php:30
 msgid "Flagged"
 msgstr "Markiert"
 
+#: Controller/Message/Move.php:191
 msgid "It is not allowed to copy e-mails in the same account."
 msgstr "E-Mails innerhalb eines Kontos zu kopieren ist nicht erlaubt."
 
+#: Controller/Message/Send.php:127
 msgid "Bad recipient address syntax"
 msgstr "Empfängeradressen fehlerhaft"
 
+#: Controller/Message/Send.php:129
 msgid "Recipient address rejected"
 msgstr "Empfängeradresse abgelehnt"
 
+#: Controller/Message/Send.php:865
 msgid "Invalid address format"
 msgstr "Invalides Adressenformat"
 
+#: Controller/Message/Send.php:877
 msgid "Decryption Error: Maybe your shared credential cache key is longer than 24 chars?"
 msgstr ""
 
+#: Controller/Message/Send.php:879
 #, python-format, php-format
 msgid "Error: %s"
 msgstr "Fehler: %s"
 
+#: Controller/Message/Send.php:882
 msgid "Could not send message"
 msgstr "Konnte Nachricht nicht senden"
 
+#: Controller/Message/Send.php:1236
 msgid "My Mail Download Links"
 msgstr "Meine E-Mail Download Links"
 
+#: Controller/Sieve.php:399
 #, php-format
 msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
 
+#: Controller/Sieve.php:604
 msgid "Sieve vacation has been updated:"
 msgstr "Sieve Abwesenheitsnotiz wurde aktualisiert:"
 
+#: Controller/Sieve.php:606
 msgid "Vacation message is now active."
 msgstr "Abwesenheitsbenachrichtigung ist jetzt aktiv"
 
+#: Controller/Sieve.php:608
 msgid "Vacation message is now inactive."
 msgstr "Abwesenheitsbenachrichtigung ist jetzt deaktiviert"
 
+#: Controller/Sieve.php:614
 msgid "Sieve rules have been updated."
 msgstr "Sieve Filterregelen wurden aktualisiert"
 
+#: Controller/Sieve.php:638
 msgid "It is not allowed to redirect emails to self! Please change the recipient."
 msgstr "Es ist nicht erlaubt, E-Mails an sich selbst weiterzuleiten. Bitte ändern Sie den Empfänger."
 
+#: Controller/Sieve.php:643
 msgid "Redirects to external email domains are not allowed."
 msgstr "Weiterleitungen zu externen E-Mail-Konten sind nicht erlaubt."
 
+#: Controller/Sieve.php:815
 msgid "You have new mail from "
 msgstr "Sie haben eine neue Nachricht von "
 
+#: Frontend/Json.php:1035
 msgid "IMAP Hostname missing"
 msgstr "IMAP Hostname fehlt"
 
+#: Frontend/Json.php:1040
 msgid "IMAP Credentials missing"
 msgstr "IMAP Zugangsdaten fehlen"
 
+#: Frontend/Json.php:1116
 msgid "SMTP Hostname missing"
 msgstr "SMTP Hostname fehlt"
 
+#: Frontend/Json.php:1121
 msgid "SMTP Credentials missing"
 msgstr "SMTP Zugangsdaten fehlen"
 
+#: js/AccountEditDialog.js:91
 msgid "Add New Account"
 msgstr "Neues Konto hinzufügen"
 
+#: js/AccountEditDialog.js:318
 msgid "Permissions"
 msgstr "Zugriffsrechte"
 
+#: js/AccountEditDialog.js:341
 #, python-brace-format
 msgid "The recipients of this email distribution list are maintained in the list: {locationsHtml}"
 msgstr "Die Empfänger dieses Email-Verteilers werden in folgender Liste verwaltet: {locationsHtml}"
 
+#: js/AccountEditDialog.js:352
 msgid "Filter Rules"
 msgstr "Filterregeln"
 
+#: js/AccountEditDialog.js:360 js/Model.js:629
+#: js/sieve/VacationEditDialog.js:112
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Abwesenheitsnotiz"
 msgstr[1] "Abwesenheitsnotizen"
 
+#: js/AccountEditDialog.js:412 Model/Account.php:154
 msgid "User"
 msgstr "Benutzer"
 
+#: js/AccountEditDialog.js:427 js/FolderFilterModel.js:157
+#: Model/Account.php:130
 #, fuzzy
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
 msgstr[1] "Konto"
 
+#: js/AccountEditDialog.js:439 Model/Account.php:185
 msgid "Account Name"
 msgstr "Kontoname"
 
+#: js/AccountEditDialog.js:445 Model/Account.php:163
+#: Model/MessageFileLocation.php:133
 msgid "Type"
 msgstr "Typ"
 
+#: js/AccountEditDialog.js:457 Model/Account.php:192
 msgid "Migration Approved"
 msgstr "Migration freigegeben"
 
+#: js/AccountEditDialog.js:466 js/nodeActions.js:447 js/nodeActions.js:459
 msgid "Approve Migration"
 msgstr "Migration freigeben"
 
+#: js/AccountEditDialog.js:467
 msgid "Do you want to approve the migration of this account?"
 msgstr "Möchten Sie die Migration dieses E-Mail-Kontos freigeben?"
 
+#: js/AccountEditDialog.js:492
 msgid "User Email"
 msgstr "E-Mail Adresse"
 
+#: js/AccountEditDialog.js:497
 msgid "User Name (From)"
 msgstr "E-Mail-Absendername"
 
+#: js/AccountEditDialog.js:500 Model/Account.php:406
 msgid "Organization"
 msgstr "Firma"
 
+#: js/AccountEditDialog.js:505
 msgid "Signature position"
 msgstr "Signaturposition"
 
+#: js/AccountEditDialog.js:516
 msgid "Above the quote"
 msgstr "Über dem Zitat"
 
+#: js/AccountEditDialog.js:517
 msgid "Below the quote"
 msgstr "Unter dem Zitat"
 
+#: js/AccountEditDialog.js:527
 msgid "IMAP"
 msgstr "IMAP"
 
+#: js/AccountEditDialog.js:534 js/AccountEditDialog.js:663
+#: js/AccountEditDialog.js:756
 msgid "Host"
 msgstr "Host"
 
+#: js/AccountEditDialog.js:541
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (Standard: 143 / SSL: 993)"
 
+#: js/AccountEditDialog.js:551 js/AccountEditDialog.js:679
+#: js/AccountEditDialog.js:772
 msgid "Secure Connection"
 msgstr "Sichere Verbindung"
 
+#: js/AccountEditDialog.js:562 js/AccountEditDialog.js:689
+#: js/AccountEditDialog.js:707 js/AccountEditDialog.js:782
+#: js/ContactGrid.js:130 js/MessageEditDialog.js:1516
+#: js/MessageEditDialog.js:1526 js/MessageEditDialog.js:1650
 msgid "None"
 msgstr "Keine"
 
+#: js/AccountEditDialog.js:563 js/AccountEditDialog.js:690
+#: js/AccountEditDialog.js:783
 msgid "TLS"
 msgstr "TLS"
 
+#: js/AccountEditDialog.js:564 js/AccountEditDialog.js:691
 msgid "SSL"
 msgstr "SSL"
 
+#: js/AccountEditDialog.js:570
 msgid "Username"
 msgstr "Benutzername"
 
+#: js/AccountEditDialog.js:583
 msgid "Password"
 msgstr "Passwort"
 
+#: js/AccountEditDialog.js:595
 msgid "Reveal Password?"
 msgstr "Passwort anzeigen?"
 
+#: js/AccountEditDialog.js:596
 msgid "You are about to reveal the password. This action will be logged. Proceed?"
 msgstr "Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. Wollen sie fortfahren?"
 
+#: js/AccountEditDialog.js:618
 msgid "Test IMAP Connection"
 msgstr "IMAP-Verbindung testen"
 
+#: js/AccountEditDialog.js:625
 msgid "Imap Quota"
 msgstr "Imap Kontingent"
 
+#: js/AccountEditDialog.js:626 js/AccountEditDialog.js:641
 msgid "no quota set"
 msgstr "keine Begrenzung"
 
+#: js/AccountEditDialog.js:633
 msgid "Current Mailbox size"
 msgstr "Aktuelle Mailbox-Größe"
 
+#: js/AccountEditDialog.js:640
 msgid "Sieve Quota"
 msgstr "Sieve Kontingent"
 
+#: js/AccountEditDialog.js:648
 msgid "Current Sieve size"
 msgstr "Aktuelle Sieve-Größe"
 
+#: js/AccountEditDialog.js:656
 msgid "SMTP"
 msgstr "SMTP"
 
+#: js/AccountEditDialog.js:669
 msgid "Port (Default: 25)"
 msgstr "Port (Standard: 25)"
 
+#: js/AccountEditDialog.js:697
 msgid "Authentication"
 msgstr "Authentifizierung"
 
+#: js/AccountEditDialog.js:708
 msgid "Login"
 msgstr "Login"
 
+#: js/AccountEditDialog.js:709
 msgid "Plain"
 msgstr "Klartext"
 
+#: js/AccountEditDialog.js:715
 msgid "Username (optional)"
 msgstr "Benutzername (optional)"
 
+#: js/AccountEditDialog.js:721
 msgid "Password (optional)"
 msgstr "Passwort (optional)"
 
+#: js/AccountEditDialog.js:740
 msgid "Test SMTP Connection"
 msgstr "SMTP-Verbindung testen"
 
+#: js/AccountEditDialog.js:749
 msgid "Sieve"
 msgstr "Sieve"
 
+#: js/AccountEditDialog.js:763
 msgid "Port (Default: 2000)"
 msgstr "Port (Standard: 2000)"
 
+#: js/AccountEditDialog.js:791 Model/Account.php:581
 msgid "Auto-move notifications"
 msgstr "Automatisches Verschieben von Benachrichtigungen"
 
+#: js/AccountEditDialog.js:801 Model/Account.php:608
 msgid "Auto-move notifications folder"
 msgstr "Ordner für Benachrichtigungen"
 
+#: js/AccountEditDialog.js:809 js/sieve/EditSieveScriptWindow.js:123
 msgid "Explore Sieve script"
 msgstr "Sieve-Skript anzeigen"
 
+#: js/AccountEditDialog.js:818 js/sieve/EditSieveScriptWindow.js:44
+#: js/sieve/RulesGridPanel.js:260
 msgid "Edit Sieve custom script"
 msgstr "Benutzerdefniertes Sieve-Skript bearbeiten"
 
+#: js/AccountEditDialog.js:828
 msgid "Other Settings"
 msgstr "Andere Einstellungen"
 
+#: js/AccountEditDialog.js:836
 msgid "Behavior of sent mails"
 msgstr "Ablageort für gesendete Mails"
 
+#: js/AccountEditDialog.js:840
 msgid "Save copy of sent mail on mail server."
 msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
 
+#: js/AccountEditDialog.js:855
 msgid "Folder of the source mail if it is no system folder."
 msgstr "Ordner der Ursprungsmail wenn dieser kein Systemordner ist."
 
+#: js/AccountEditDialog.js:865
 msgid "Sent Folder Name"
 msgstr "'Gesendet' Ordnername"
 
+#: js/AccountEditDialog.js:872
 msgid "Trash Folder Name"
 msgstr "'Papierkorb' Ordnername"
 
+#: js/AccountEditDialog.js:879
 msgid "Drafts Folder Name"
 msgstr "'Entwürfe' Ordnername"
 
+#: js/AccountEditDialog.js:886
 msgid "Templates Folder Name"
 msgstr "'Vorlagen' Ordnername"
 
+#: js/AccountEditDialog.js:893 Model/Account.php:333
 msgid "Display Format"
 msgstr "Anzeigeformat"
 
+#: js/AccountEditDialog.js:904 js/AccountEditDialog.js:920
 msgid "HTML"
 msgstr "HTML"
 
+#: js/AccountEditDialog.js:905 js/AccountEditDialog.js:921
 msgid "Plain Text"
 msgstr "Nur Text"
 
+#: js/AccountEditDialog.js:906
 msgid "Depending on content format"
 msgstr "Abhängig vom Format"
 
+#: js/AccountEditDialog.js:909 Model/Account.php:350
 msgid "Compose Format"
 msgstr "Textformat"
 
+#: js/AccountEditDialog.js:924 js/MessageEditDialog.js:1786
 msgid "Reply-To Email"
 msgstr "Antwortadresse"
 
+#: js/AccountEditDialog.js:944
 msgid "It is not possible to convert accounts because the config option EMAIL_USER_ID_IN_XPROPS is disabled."
 msgstr "Es ist nicht möglich, Konten zu konvertieren, da die Konfigurationsoption EMAIL_USER_ID_IN_XPROPS deaktiviert ist."
 
+#: js/AccountEditDialog.js:954
 msgid "Migration has not been approved."
 msgstr "Die Migration wurde noch nicht freigegeben"
 
+#: js/AccountEditDialog.js:966
 msgid "It is not possible to convert the account to this type."
 msgstr "Es ist nicht möglich, das Konto in diesen Typ umzuwandeln."
 
+#: js/AccountEditDialog.js:970
 msgid "System accounts cannot be created manually."
 msgstr "Systemkonten können nicht manuell angelegt werden."
 
+#: js/AccountEditDialog.js:973
 msgid "Mailinglist accounts cannot be created manually."
 msgstr "Mailinglistenkonten können nicht manuell erstellt werden."
 
+#: js/AccountEditDialog.js:984
 msgid "Account type change not possible"
 msgstr "Wechsel zu diesem Kontotyp nicht möglich"
 
+#: js/AccountEditDialog.js:1008
 msgid "E-Mail account needs a password"
 msgstr "Das E-Mail-Konto benötigt ein Passwort"
 
+#: js/AccountEditDialog.js:1024
 msgid "Use"
 msgstr "Verwenden"
 
+#: js/AccountEditDialog.js:1026
 msgid "The grant use the shared email account"
 msgstr "Das Recht um den gemeinsamen E-Mail-Account zu verwenden"
 
+#: js/AccountEditDialog.js:1030 js/GridPanel.js:358
 msgid "Edit"
 msgstr "Bearbeiten"
 
+#: js/AccountEditDialog.js:1031
 msgid "The grant edit the shared email account"
 msgstr "Das Recht um den gemeinsamen E-Mail-Account zu bearbeiten"
 
+#: js/AccountEditDialog.js:1036
 msgid "Send Mails"
 msgstr "E-Mails senden"
 
+#: js/AccountEditDialog.js:1037
 msgid "The grant to send mails via the email account"
 msgstr "Das Recht um mit dem E-Mail-Konto E-Mails zu versenden"
 
+#: js/AccountEditDialog.js:1086 js/MessageEditDialog.js:1950
 msgid "Warning"
 msgstr "Warnung"
 
+#: js/AccountEditDialog.js:1088
 msgid "Server connection failed. Do you still want to save this setting and exit?"
 msgstr "Server-Verbindung fehlgeschlagen. Möchten Sie die Einstellungen trotzdem speichern?"
 
+#: js/AccountEditDialog.js:1116
 msgid "Connection succeed"
 msgstr "Verbindung erfolgreich"
 
+#: js/AccountEditDialog.js:1146
 #, python-brace-format
 msgid "Connecting to {0} server..."
 msgstr "Verbindung zu {0} Server wird aufgebaut..."
 
+#: js/AccountEditDialog.js:1155
 msgid "Connection failed"
 msgstr "Verbindung fehlgeschlagen"
 
+#: js/AccountEditDialog.js:1162
 #, python-brace-format
 msgid "{server} Connection Status"
 msgstr "{server} Verbindungsstatus"
 
+#: js/AccountEditDialog.js:1184
 msgid "User Name (From) cannot contain a comma."
 msgstr "E-Mail Absender darf kein Komma enthalten"
 
+#: js/admin/AccountGridPanel.js:28 js/nodeActions.js:333
 msgid "Edit Vacation Message"
 msgstr "Abwesenheitsnotiz bearbeiten"
 
+#: js/admin/AccountGridPanel.js:46 js/nodeActions.js:348
 msgid "Edit Filter Rules"
 msgstr "Filterregeln bearbeiten"
 
+#: js/admin/AccountGridPanel.js:70
 msgid "E-mail usage"
 msgstr "E-Mail-Nutzung"
 
+#: js/AttachmentFileAction.js:53
 msgid "Save As"
 msgstr "Speichern als"
 
+#: js/AttachmentFileAction.js:56 js/MessageFileAction.js:372
 msgid "File (in Filemanager) ..."
 msgstr "Datei (im Dateimanager) ..."
 
+#: js/AttachmentFileAction.js:95 js/AttachmentFileAction.js:136
 msgid "{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}"
 msgstr "{attachmentCount, plural, one {Anhang wurde gespeichert} other {# Anhänge wurden gespeichert}}"
 
+#: js/AttachmentFileAction.js:97 js/AttachmentFileAction.js:138
+#: js/MessageFileAction.js:447
 msgid "Success"
 msgstr "Erfolgreich"
 
+#: js/AttachmentFileAction.js:103 js/MessageFileAction.js:377
 msgid "Attachment (of Record)"
 msgstr "Anhang (eines Datensatzes)"
 
+#: js/AttachmentFileAction.js:131
 msgid "Save as Record Attachment"
 msgstr "Als Datensatz Anhang speichern"
 
+#: js/AttachmentFileAction.js:174 js/MessageFileAction.js:411
 msgid "Download"
 msgstr "Herunterladen"
 
+#: js/AttachmentUploadGrid.js:70 js/Model.js:847
 #, fuzzy
 msgid "Attachment"
 msgid_plural "Attachments"
 msgstr[0] "Anhang"
 msgstr[1] "Anhang"
 
+#: js/AttachmentUploadGrid.js:80
 msgid "Filemanager (Download link)"
 msgstr "Dateimanager (Download Link)"
 
+#: js/AttachmentUploadGrid.js:88
 msgid "Filemanager (Download link, password)"
 msgstr "Dateimanager (Download Link, Passwort)"
 
+#: js/AttachmentUploadGrid.js:91
 msgid "Filemanager (Systemlink)"
 msgstr "Dateimanager (System Link)"
 
+#: js/AttachmentUploadGrid.js:149
 msgid "Attachment Type"
 msgstr "Anhang Typ"
 
+#: js/AttachmentUploadGrid.js:150
 msgid "Click icon to change"
 msgstr "Zum Ändern auf die Zeile klicken"
 
+#: js/AttachmentUploadGrid.js:171
 msgid "name"
 msgstr "Name"
 
+#: js/AttachmentUploadGrid.js:176
 msgid "size"
 msgstr "Größe"
 
+#: js/AttachmentUploadGrid.js:182
 msgid "type"
 msgstr "Typ"
 
+#: js/ContactGrid.js:108
 msgid "Selected E-Mail"
 msgstr "Ausgewählte E-Mail"
 
+#: js/ContactGrid.js:349
 msgid "Add as \"To\""
 msgstr "Als \"To\" hinzufügen"
 
+#: js/ContactGrid.js:360
 msgid "Add as \"Cc\""
 msgstr "Als \"Cc\" hinzufügen"
 
+#: js/ContactGrid.js:371
 msgid "Add as \"Bcc\""
 msgstr "Als \"Bcc\" hinzufügen"
 
+#: js/ContactGrid.js:382
 msgid "Remove from recipients"
 msgstr "Aus der Empfängerliste entfernen"
 
+#: js/ContactGrid.js:436 js/MessageEditDialog.js:933 js/RecipientGrid.js:246
 msgid "Loading Mail Addresses"
 msgstr "Lade E-Mail-Adressen"
 
+#: js/ContactSearchCombo.js:204
 msgid "Preferred E-Mail"
 msgstr "Bevorzugte E-Mail"
 
+#: js/Felamimail.js:44
 msgid "New Mail"
 msgstr "Neue Nachricht"
 
+#: js/Felamimail.js:100
 msgid "Email"
 msgstr "E-Mail"
 
+#: js/Felamimail.js:171
 msgid "Active Vacation Message"
 msgstr "Aktive Abwesenheitsbenachrichtigung"
 
+#: js/Felamimail.js:172
 #, python-brace-format
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "E-Mailkonto {0} hat eine aktive Abwesenheitsbenachrichtigung."
 
+#: js/Felamimail.js:283
 #, python-brace-format
 msgid "Poll URL: {0}"
 msgstr "Umfrage Link: {0}"
 
+#: js/Felamimail.js:310
 #, python-brace-format
 msgid "{0} as default mailer"
 msgstr "{0} als Standard-E-Mailprogramm"
 
+#: js/Felamimail.js:690
 msgid "No e-mail account assigned"
 msgstr "Kein E-Mail Konto zugewiesen"
 
+#: js/Felamimail.js:691
 msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
 msgstr "Ihnen wurde bisher kein eMail Konto zugewiesen. Daher ist diese Ansicht leer"
 
+#: js/Felamimail.js:761
 msgid "New mails"
 msgstr "Neue Nachrichten"
 
+#: js/Felamimail.js:762
 #, python-brace-format
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Sie haben {0} neue Nachricht(en) im Ordner {1} ({2})"
 
+#: js/Felamimail.js:943
 #, python-brace-format
 msgid "IMAP Credentials for {0}"
 msgstr "Empfangsserver-Zugangsdaten (IMAP) für {0}"
 
+#: js/Felamimail.js:946
 msgid "Credentials"
 msgstr "Zugangsdaten"
 
+#: js/Felamimail.js:1134 js/Felamimail.js:1168
 msgid "IMAP Error"
 msgstr "IMAP-Fehler (Empfangsserver)"
 
+#: js/Felamimail.js:1135
 msgid "No connection to IMAP server."
 msgstr "Keine Verbindung zum Empfangsserver-Server (IMAP)."
 
+#: js/Felamimail.js:1152
 msgid "IMAP Credentials Error"
 msgstr "Zugangsdaten für Empfangsserver (IMAP) falsch"
 
+#: js/Felamimail.js:1153
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator"
 
+#: js/Felamimail.js:1169
 msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
 msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
 
+#: js/Felamimail.js:1198
 msgid "SMTP Error"
 msgstr "SMTP-Fehler (Sendeserver)"
 
+#: js/Felamimail.js:1199
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum Sendeserver (SMTP)."
 
+#: js/Felamimail.js:1207
 msgid "Sieve Error"
 msgstr "Sieve-Fehler"
 
+#: js/Felamimail.js:1208
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve-Server."
 
+#: js/Felamimail.js:1216
 msgid "Save Sieve Script Error"
 msgstr "Fehler beim Speichern des Sieve-Skriptes"
 
+#: js/Felamimail.js:1217
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
+#: js/FolderFilterModel.js:60
 #, python-brace-format
 msgid "Selected  {0}"
 msgstr "Ausgewählte {0}"
 
+#: js/FolderFilterModel.js:157 js/FolderFilterModel.js:184
 #, python-brace-format
 msgid "{0} {1} is not found"
 msgstr "{0} {1} wurde nicht gefunden."
 
+#: js/FolderFilterModel.js:184 js/GridPanel.js:663 js/Model.js:66
+#: js/Model.js:499 js/nodeActions.js:276 js/nodeActions.js:279
+#: js/nodeActions.js:281
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Ordner"
 msgstr[1] "Ordner"
 
+#: js/FolderSelectPanel.js:75 js/sieve/EditSieveScriptWindow.js:61
 msgid "Cancel"
 msgstr "Abbruch"
 
+#: js/FolderSelectPanel.js:84 js/sieve/EditSieveScriptWindow.js:71
+#: js/sieve/EditSieveScriptWindow.js:147
 msgid "Ok"
 msgstr "Ok"
 
+#: js/FolderSelectPanel.js:177
 #, python-brace-format
 msgid "Folders of account {0}"
 msgstr "Ordner von Konto {0}"
 
+#: js/FolderSelectPanel.js:178
 msgid "Folders of all accounts"
 msgstr "Ordner aller Konten"
 
+#: js/GridDetailsPanel.js:153 js/MailDetailsPanel.js:166
 msgid "Message not available."
 msgstr "Nachricht nicht verfügbar."
 
+#: js/GridPanelHook.js:34 js/GridPanelHook.js:103 js/GridPanelHook.js:406
 msgid "Compose email"
 msgstr "Nachricht verfassen"
 
+#: js/GridPanelHook.js:49 js/GridPanel.js:660 js/Model.js:232
 msgid "To"
 msgstr "An"
 
+#: js/GridPanelHook.js:62
 msgid "CC"
 msgstr "CC"
 
+#: js/GridPanelHook.js:75
 msgid "BCC"
 msgstr "BCC"
 
+#: js/GridPanelHook.js:88 js/GridPanelHook.js:426 js/MessageEditDialog.js:281
 msgid "Mass Mailing"
 msgstr "Massen-Mail"
 
+#: js/GridPanelHook.js:312
 msgid "Loading Recipients..."
 msgstr "Empfänger laden..."
 
+#: js/GridPanel.js:140
 msgid "No Messages found."
 msgstr "Keine Nachrichten gefunden."
 
+#: js/GridPanel.js:259
 msgid "It is SPAM"
 msgstr "Es ist SPAM"
 
+#: js/GridPanel.js:269
 msgid "It is not SPAM"
 msgstr "Kein SPAM"
 
+#: js/GridPanel.js:279
 msgid "Compose"
 msgstr "Verfassen"
 
+#: js/GridPanel.js:289 js/MessageDisplayDialog.js:59
 msgid "Reply"
 msgstr "Antworten"
 
+#: js/GridPanel.js:298 js/MessageDisplayDialog.js:65
 msgid "Reply To All"
 msgstr "Allen antworten"
 
+#: js/GridPanel.js:307 js/MessageDisplayDialog.js:71 Preference.php:217
 msgid "Forward"
 msgstr "Weiterleiten"
 
+#: js/GridPanel.js:315
 msgid "Toggle highlighting"
 msgstr "Markierung an/aus"
 
+#: js/GridPanel.js:325
 msgid "Mark read/unread"
 msgstr "(Un)gelesen markieren"
 
+#: js/GridPanel.js:336
 msgid "Move"
 msgstr "Verschieben"
 
+#: js/GridPanel.js:347
 msgid "Copy"
 msgstr "Kopieren"
 
+#: js/GridPanel.js:380
 msgid "Import Messages"
 msgstr "Nachrichten importieren"
 
+#: js/GridPanel.js:397
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
+#: js/GridPanel.js:406 js/GridPanel.js:1899 js/GridPanel.js:1915
+#: js/MessageDisplayDialog.js:92
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
+#: js/GridPanel.js:416 js/MessageDisplayDialog.js:86
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
+#: js/GridPanel.js:430
 msgid "Create New Task"
 msgstr ""
 
+#: js/GridPanel.js:442 js/MessageDisplayDialog.js:52
 msgid "Delete"
 msgstr "Löschen"
 
+#: js/GridPanel.js:504
 msgid "No target folder selected"
 msgstr "Kein Zielordner ausgewählt"
 
+#: js/GridPanel.js:504
 msgid "You need to select a target folder for the messages."
 msgstr "Sie müssen einen Zielordner für die Nachrichten auswählen."
 
+#: js/GridPanel.js:513
 msgid "Wrong File Type"
 msgstr "Falscher Dateityp"
 
+#: js/GridPanel.js:513
 msgid "Files of type eml, emltpl and msg allowed only."
 msgstr "Nur Dateien vom Typ eml, emltpl und msg sind erlaubt."
 
+#: js/GridPanel.js:516
 msgid "Importing Messages..."
 msgstr "Importiere Nachrichten..."
 
+#: js/GridPanel.js:652
 msgid "Id"
 msgstr "Id"
 
+#: js/GridPanel.js:654 js/Model.js:235
 msgid "Flags"
 msgstr "Flags"
 
+#: js/GridPanel.js:655
 msgid "Tags"
 msgstr "Tags"
 
+#: js/GridPanel.js:656 js/MessageEditDialog.js:1798 js/Model.js:228
+#: js/sieve/RuleConditionsPanel.js:77
 msgid "Subject"
 msgstr "Betreff"
 
+#: js/GridPanel.js:657 js/Model.js:230 js/sieve/RuleConditionsPanel.js:73
 msgid "From (Email)"
 msgstr "Von (E-Mail)"
 
+#: js/GridPanel.js:658 js/Model.js:231
 msgid "From (Name)"
 msgstr "Von (Name)"
 
+#: js/GridPanel.js:659
 msgid "Sender"
 msgstr "Absender"
 
+#: js/GridPanel.js:661 js/Model.js:493
 msgid "Sent"
 msgstr "Gesendet"
 
+#: js/GridPanel.js:662 js/Model.js:238
 msgid "Received"
 msgstr "Empfangen"
 
+#: js/GridPanel.js:664
 msgid "Size"
 msgstr "Größe"
 
+#: js/GridPanel.js:713
 msgid "Filed as:"
 msgstr "Abgelegt unter:"
 
+#: js/GridPanel.js:937
 msgid "Select Message File Location"
 msgstr "Ablageort für Nachricht auswählen"
 
+#: js/GridPanel.js:960
 msgid "Filing Messages"
 msgstr "Speichere Nachrichten"
 
+#: js/GridPanel.js:995
 msgid "Error Filing Message"
 msgstr "Fehler beim Speichern von Nachrichten"
 
+#: js/GridPanel.js:996
 msgid "Could not file message."
 msgstr "Konnte Nachrichten nicht ablegen."
 
+#: js/GridPanel.js:1304
 msgid "Ctrl+N / Ctrl+M : Compose message"
 msgstr "Ctrl+N / Ctrl+M : Nachricht verfassen"
 
+#: js/GridPanel.js:1305
 msgid "Ctrl+L : Forward message"
 msgstr "Ctrl+L : Nachricht Weiterleiten"
 
+#: js/GridPanel.js:1306
 msgid "Ctrl+R : Reply message"
 msgstr "Ctrl+R : Nachricht beantworten"
 
+#: js/GridPanel.js:1307
 msgid "Ctrl+Shift+R : Reply to all"
 msgstr "Ctrl+Shift+R : Allen antworten"
 
+#: js/GridPanel.js:1308
 msgid "A / Ctrl+S : File message"
 msgstr "A / Ctrl+S : Nachricht ablegen"
 
+#: js/GridPanel.js:1309
 msgid "Ctrl+O / Enter : Open message"
 msgstr "Ctrl+O / Enter : Nachricht öffnen"
 
+#: js/GridPanel.js:1310
 msgid "1 : Toggle highlighting"
 msgstr "1 : Markierung an/aus"
 
+#: js/GridPanel.js:1311
 msgid "M : Mark read/unread"
 msgstr "M : (Un)gelesen markierend"
 
+#: js/GridPanel.js:1312
 msgid "J : Mark message as SPAM"
 msgstr "J : Nachricht als SPAM markieren"
 
+#: js/GridPanel.js:1313
 msgid "Shift+J : Mark message as HAM"
 msgstr "Shift+J : Nachricht als HAM markieren"
 
+#: js/GridPanel.js:1371
 msgid "Send Reading Confirmation"
 msgstr "Sende Lesebestätigung"
 
+#: js/GridPanel.js:1372
 msgid "Do you want to send a reading confirmation message?"
 msgstr "Wollen Sie eine Lesebestätigung senden?"
 
+#: js/GridPanel.js:1792
 msgid "Creating new Task..."
 msgstr "Erzeuge neue Aufgabe…"
 
+#: js/GridPanel.js:1797
 msgid "New Task"
 msgstr "Neue Aufgabe"
 
+#: js/GridPanel.js:1830 js/MessageFileAction.js:451
 msgid "Error"
 msgstr "Fehler"
 
+#: js/MailDetailsPanel.js:84
 msgid "Open in Felamimail"
 msgstr "Im E-Mail-Modul öffnen"
 
+#: js/MailDetailsPanel.js:267
 msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
 msgstr "Diese Nachricht ist möglicherweise SPAM. Bitte helfen Sie, das Anti-SPAM-System mit Ihrer Entscheidung zu trainieren: \"Ja, es ist SPAM\" oder \"Nein, kein SPAM\""
 
+#: js/MailDetailsPanel.js:270
 msgid "Yes, it is SPAM"
 msgstr "Ja, es ist SPAM"
 
+#: js/MailDetailsPanel.js:271
 msgid "No, it is not"
 msgstr "Nein, kein SPAM"
 
+#: js/MailDetailsPanel.js:368 js/MessageEditDialog.js:1413
 msgid "Attachments"
 msgstr "Anhänge"
 
+#: js/MailDetailsPanel.js:394
 msgid "{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}"
 msgstr "{locationCount, plural, one {Diese Nachricht ist an folgendem Ort abgelegt} other {Diese Nachricht ist an folgenden Orten abgelegt}}: {locationsHtml}"
 
+#: js/MailDetailsPanel.js:455
 msgid "Open"
 msgstr "Öffnen"
 
+#: js/MailDetailsPanel.js:469
 msgid "Preview"
 msgstr "Vorschau"
 
+#: js/MailDetailsPanel.js:573
 msgid "Confirm SPAM Suspicion"
 msgstr "SPAM Verdacht bestätigen"
 
+#: js/MailDetailsPanel.js:750
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der E-Mail-Header"
 
+#: js/MessageEditDialog.js:194
 msgid "Send"
 msgstr "Senden"
 
+#: js/MessageEditDialog.js:202
 msgid "Search Recipients"
 msgstr "Suche Empfänger"
 
+#: js/MessageEditDialog.js:210
 msgid "Save As Draft"
 msgstr "Als Entwurf speichern"
 
+#: js/MessageEditDialog.js:218
 msgid "Save As Template"
 msgstr "Als Vorlage speichern"
 
+#: js/MessageEditDialog.js:241
 msgid "Reading Confirmation"
 msgstr "Lesebestätigung"
 
+#: js/MessageEditDialog.js:249
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr "Aktivieren Sie diesen Knopf um eine Lesebestätigung zu erhalten."
 
+#: js/MessageEditDialog.js:263
 msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
 msgstr "Wenn Sie eine dieser Optionen wählen, erhalten Sie eine Benachrichtigung, falls Sie nach Ablauf der konfigurierten Frist keine Antwort auf die E-Mail erhalten haben"
 
+#: js/MessageEditDialog.js:267
 msgid "Encrypt Email"
 msgstr "Nachricht verschlüsseln"
 
+#: js/MessageEditDialog.js:277
 msgid "Encrypt email using Mailvelope"
 msgstr "Nachricht mit Mailvelope verschlüsseln"
 
+#: js/MessageEditDialog.js:289
 msgid "Activate this toggle button to send the mail as separate mail to each recipient."
 msgstr "Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne Kopie der Nachricht."
 
+#: js/MessageEditDialog.js:312
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
 
+#: js/MessageEditDialog.js:550
 msgid "Encrypted Content"
 msgstr "Verschlüsselter Inhalt"
 
+#: js/MessageEditDialog.js:809
 msgid "Discard this Draft?"
 msgstr "Diesen Entwurf verwerfen?"
 
+#: js/MessageEditDialog.js:810
 msgid "Do you want to discard the current draft?"
 msgstr "Möchten sie den aktuellen Entwurf verwerfen?"
 
+#: js/MessageEditDialog.js:982
 msgid "Fwd:"
 msgstr "Fwd:"
 
+#: js/MessageEditDialog.js:985
 #, python-brace-format
 msgid "{0} Message"
 msgstr "{0} Nachricht"
 
+#: js/MessageEditDialog.js:1044 js/MessageEditDialog.js:1049
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
+#: js/MessageEditDialog.js:1045
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr "{0} E-Mailaccount-Einstellung leer."
 
+#: js/MessageEditDialog.js:1050 js/MessageEditDialog.js:1847
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
 
+#: js/MessageEditDialog.js:1126
 msgid "{locationCount, plural, one {This message will be filed at the following location} other {This message will be filed at the following locations}}: {locationsHtml}"
 msgstr "{locationCount, plural, one {Diese Nachricht wird an folgendem Ort abgelegt} other {Diese Nachricht wird an folgenden Orten abgelegt}}: {locationsHtml}"
 
+#: js/MessageEditDialog.js:1226
 #, python-brace-format
 msgid "On {0}, {1} wrote"
 msgstr "Am {0}, schrieb {1}"
 
+#: js/MessageEditDialog.js:1234
 msgid "Original message"
 msgstr "Originalnachricht"
 
+#: js/MessageEditDialog.js:1278 js/MessageEditDialog.js:1811
 msgid "Compose email:"
 msgstr "Nachricht verfassen:"
 
+#: js/MessageEditDialog.js:1496 Model/Account.php:398
 msgid "From"
 msgstr "Von"
 
+#: js/MessageEditDialog.js:1707
 msgid "Convert to formated text"
 msgstr "In formatierten Text konvertieren"
 
+#: js/MessageEditDialog.js:1713 js/MessageEditDialog.js:1721
 msgid "Body"
 msgstr "Nachricht"
 
+#: js/MessageEditDialog.js:1763
 msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
 msgstr "Beachte: Diese Nachricht wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
 
+#: js/MessageEditDialog.js:1790
 msgid "Add email address here for reply-to"
 msgstr "Antwortadresse hier eintragen (reply-to)"
 
+#: js/MessageEditDialog.js:1821 Model/Account.php:414 Model/Signature.php:36
+#: Model/Signature.php:87
 #, fuzzy
 msgid "Signature"
 msgid_plural "Signatures"
 msgstr[0] "Signatur"
 msgstr[1] "Signatur"
 
+#: js/MessageEditDialog.js:1951
 msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
 msgstr "Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb markiert) sind keine Benutzer dieser Instanz. Nur Empfänger mit einem aktiven Benutzerkonto können diese Links öffnen."
 
+#: js/MessageEditDialog.js:1951
 msgid "Do you really want to send?"
 msgstr "Wollen Sie die Nachricht wirklich absenden?"
 
+#: js/MessageEditDialog.js:1994
 msgid "Empty subject"
 msgstr "Leerer Betreff"
 
+#: js/MessageEditDialog.js:1995
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Wollen Sie die Nachricht wirklich mit einem leeren Betreff senden?"
 
+#: js/MessageEditDialog.js:2045
 msgid "No recipients set."
 msgstr "Empfänger fehlen."
 
+#: js/MessageEditDialog.js:2068
 #, python-brace-format
 msgid "Cannot encrypt message. Public keys for the following recipients are missing: {0}"
 msgstr "Die Nachricht kann nicht verschlüsseltet werden. Die öffentliche Schlüssel für die folgenden Empfänger fehlen: {0}"
 
+#: js/MessageEditDialog.js:2107
 msgid "Attention"
 msgstr "Achtung"
 
+#: js/MessageEditDialog.js:2109
 #, python-brace-format
 msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
 msgstr ""
 "Die Absender-Adresse für diese Mail wurde auf : {0} geändert, \n"
 " da sie für das Konto : {1} nicht das E-Mail Versenden Recht haben."
 
+#: js/MessageExpectedAnswerAction.js:22
 msgid "Expected Answer"
 msgstr "Erwarte Antwort"
 
+#: js/MessageExpectedAnswerAction.js:69
 msgid "Tomorrow"
 msgstr "Morgen"
 
+#: js/MessageExpectedAnswerAction.js:76
 msgid "In two days"
 msgstr "In zwei Tagen"
 
+#: js/MessageExpectedAnswerAction.js:83
 msgid "In a week"
 msgstr "In einer Woche"
 
+#: js/MessageExpectedAnswerAction.js:90
 msgid "In two weeks"
 msgstr "In zwei Wochen"
 
+#: js/MessageExpectedAnswerAction.js:97
 msgid "In a month"
 msgstr "In einem Monat"
 
+#: js/MessageExpectedAnswerAction.js:104
 msgid "Custom"
 msgstr "Kalendar"
 
+#: js/MessageFileAction.js:22
 msgid "Save Message as"
 msgstr "Nachricht speichern als"
 
+#: js/MessageFileAction.js:232
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
 
+#: js/MessageFileAction.js:393
 msgid "Select other IMAP folder"
 msgstr "Anderen IMAP Ordner auswählen"
 
+#: js/MessageFileAction.js:445
 msgid "{messageCount, plural, one {Message was saved} other {# messages where saved}}"
 msgstr "{messageCount, plural, one {Nachricht wurde gespeichert} other {# Nachrichten wurden gespeichert}}"
 
+#: js/MessageFileAction.js:595
 msgid "Save Messages as Attachment"
 msgstr "Nachrichten als Anhang speichern"
 
+#: js/Model.js:59 js/Model.js:63
 msgid "GENDER_Message"
 msgstr "female"
 
+#: js/Model.js:62
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Nachricht"
 msgstr[1] "Nachrichten"
 
+#: js/Model.js:109
 msgid "Unread Message"
 msgstr "Ungelesene Nachricht"
 
+#: js/Model.js:113
 msgid "This message might be SPAM"
 msgstr "Bei dieser Nachricht könnte es sich um SPAM handeln"
 
+#: js/Model.js:119
 msgid "Forwarded"
 msgstr "Weitergeleitet"
 
+#: js/Model.js:122
 msgid "Encrypted Message"
 msgstr "Verschlüsselte Nachricht"
 
+#: js/Model.js:125
 msgid "Tine20"
 msgstr "Tine20"
 
+#: js/Model.js:229
 msgid "Subject/From/To"
 msgstr "Betreff/Von/An"
 
+#: js/Model.js:233
 msgid "Cc"
 msgstr "Kopie"
 
+#: js/Model.js:234
 msgid "Bcc"
 msgstr "Blindkopie"
 
+#: js/Model.js:239 js/sieve/RuleConditionsPanel.js:78
 msgid "Size (in byte)"
 msgstr "Größe (in Byte)"
 
+#: js/Model.js:493
 msgid "INBOX"
 msgstr "Posteingang"
 
+#: js/Model.js:493
 msgid "Drafts"
 msgstr "Entwürfe"
 
+#: js/Model.js:493
 msgid "Templates"
 msgstr "Vorlagen"
 
+#: js/Model.js:493
 msgid "Junk"
 msgstr "Unerwünschtes"
 
+#: js/Model.js:493
 msgid "Trash"
 msgstr "Mülleimer"
 
+#: js/Model.js:496
 msgid "GENDER_Folder"
 msgstr "male"
 
+#: js/Model.js:502 js/Model.js:632 js/Model.js:698
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Nachrichtenliste"
 msgstr[1] "Nachrichtenlisten"
 
+#: js/Model.js:695
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regeln"
 
+#: js/Model.js:824
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flag"
 msgstr[1] "Flags"
 
+#: js/Model.js:827
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flag-Liste"
 msgstr[1] "Flag-Listen"
 
+#: js/nodeActions.js:159
 #, python-brace-format
 msgid "Delete {0}"
 msgstr "{0} löschen"
 
+#: js/nodeActions.js:178
 msgid "Do you really want to delete the following folders?"
 msgstr "Möchten Sie die ausgewählten Ordner wirklich löschen?"
 
+#: js/nodeActions.js:210 js/nodeActions.js:222
 msgid "Empty Folder"
 msgstr "Ordner leeren"
 
+#: js/nodeActions.js:223
 msgid "Do you really want to delete all the messages in this folder?"
 msgstr "Möchten Sie alle Nachrichten in diesem Ordner wirklich löschen?"
 
+#: js/nodeActions.js:228
 msgid "Only delete the messages from this folder"
 msgstr "Nur die Nachrichten aus diesem Ordner löschen"
 
+#: js/nodeActions.js:229
 msgid "Delete all messages and subfolders"
 msgstr "Alle Nachrichten und Unterordner löschen"
 
+#: js/nodeActions.js:265
 msgid "Add Folder"
 msgstr "Ordner hinzufügen"
 
+#: js/nodeActions.js:276
 #, python-brace-format
 msgid "New {0}"
 msgstr "Neuer {0}"
 
+#: js/nodeActions.js:276
 #, python-brace-format
 msgid "Please enter the name of the new {0}:"
 msgstr "Bitte tragen Sie einen Namen für den neuen {0} ein:"
 
+#: js/nodeActions.js:279
 #, python-brace-format
 msgid "No {0} added"
 msgstr "Kein {0} hinzugefügt"
 
+#: js/nodeActions.js:279
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr "Sie müssen einen {0}-Namen eingeben!"
 
+#: js/nodeActions.js:281
 msgid "Please wait"
 msgstr "Bitte warten"
 
+#: js/nodeActions.js:281
 #, python-brace-format
 msgid "Creating {0}..."
 msgstr "Erstelle {0} ..."
 
+#: js/nodeActions.js:294
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
+#: js/nodeActions.js:376
 #, python-brace-format
 msgid "Mark {0} as read"
 msgstr "{0} als gelesen markieren"
 
+#: js/nodeActions.js:412
 msgid "Update Folder List"
 msgstr "Ordnerliste aktualisieren"
 
+#: js/nodeActions.js:451
 msgid "Agree that this account can be transferred to other users"
 msgstr "Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
 
+#: js/nodeActions.js:460
 msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
 msgstr "Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
 
+#: js/nodeActions.js:480
 #, python-brace-format
 msgid "Move {0}"
 msgstr "{0} verschieben"
 
+#: js/nodeActions.js:511
 msgid "Invalid Selection"
 msgstr "Ungültige Auswahl"
 
+#: js/nodeActions.js:511
 msgid "You cannot move the folder to an own sub folder!"
 msgstr "Ordner in eigenen Unterordner verschieben nicht möglich!"
 
+#: js/nodeActions.js:549 js/nodeActions.js:563
 msgid "Update Folder"
 msgstr "Ordner aktualisieren"
 
+#: js/nodeActions.js:564
 msgid "Folder cache has been cleared!"
 msgstr "Der Ordner Cache wurde geleert!"
 
+#: js/PGPDetailsPanel.js:22
 #, python-brace-format
 msgid "Mailvelope decryption Error [{0}]"
 msgstr "Mailvelope Entschlüsselungs-Fehler [{0}]"
 
+#: js/PGPDetailsPanel.js:33
 #, python-brace-format
 msgid "To decrypt this message please install {0} with API support enabled"
 msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese Nachricht zu entschlüsseln"
 
+#: js/PGPDetailsPanel.js:36
 msgid "PGP encrypted Message"
 msgstr "PGP verschlüsselte Nachricht"
 
+#: js/RecipientGrid.js:286
 msgid "To:"
 msgstr "An:"
 
+#: js/RecipientGrid.js:287
 msgid "Cc:"
 msgstr "Cc:"
 
+#: js/RecipientGrid.js:288
 msgid "Bcc:"
 msgstr "Bcc:"
 
+#: js/RecipientGrid.js:310
 msgid "A separate mail is send to each recipient."
 msgstr "An jeden Empfänger wird eine separate E-Mail gesendet."
 
+#: js/RecipientGrid.js:311
 msgid "Mass"
 msgstr "Massen"
 
+#: js/RecipientGrid.js:313
 msgid "Click here to set To/CC/BCC."
 msgstr "Hier klicken um An/CC/BCC zu setzen."
 
+#: js/RecipientGrid.js:427
 msgid "Send message to individual list members instead"
 msgstr "Sende eigene Kopie der E-Mail zu jeden Empfänger"
 
+#: js/RecipientGrid.js:504
 msgid "Resolve to single contact"
 msgstr "In Einzelkontakte umwandeln"
 
+#: js/RecipientGrid.js:577
 msgid "from"
 msgstr "aus"
 
+#: js/RecipientGrid.js:634
 msgid "Remove"
 msgstr "Entfernen"
 
+#: js/RecipientGrid.js:1041
 msgid "The following recipients will be removed from this mass mail"
 msgstr "Die folgenden Empfänger werden von dieser Massen Mail entfernt"
 
+#: js/RecipientPickerDialog.js:64
 msgid "(new message)"
 msgstr "(neue Nachricht)"
 
+#: js/RecipientPickerDialog.js:65
 #, python-brace-format
 msgid "Select recipients for \"{0}\""
 msgstr "Empfänger für \"{0}\" auswählen"
 
+#: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
 msgstr "Empfängerfilter"
 
+#: js/RecipientPickerFavoritePanel.js:54
 msgid "All recipients"
 msgstr "Alle Empfänger"
 
+#: js/RecipientPickerFavoritePanel.js:57
 #, python-brace-format
 msgid "\"{0}\" recipients"
 msgstr "\"{0}\" Empfänger"
 
+#: js/sieve/EditSieveScriptWindow.js:45
 msgid "Only custom scripts can be modified."
 msgstr "Nur benutzerdefinierte Skripte können bearbeitet werden."
 
+#: js/sieve/EditSieveScriptWindow.js:85
 msgid "Errors"
 msgstr "Fehler"
 
+#: js/sieve/NotificationDialog.js:57
 #, python-brace-format
 msgid "Notification for {0}"
 msgstr "Benachrichtigung für {0}"
 
+#: js/sieve/NotificationDialog.js:120
 msgid "Notification Email"
 msgstr "Benachrichtigungs E-Mail"
 
+#: js/sieve/NotificationDialog.js:125
 msgid "Add a new email ..."
 msgstr "Neue E-Mail hinzufügen …"
 
+#: js/sieve/RuleConditionsPanel.js:74
 msgid "From (Email and Name)"
 msgstr "Von (E-Mail und Name)"
 
+#: js/sieve/RuleConditionsPanel.js:75
 msgid "To (Email)"
 msgstr "An (E-Mail)"
 
+#: js/sieve/RuleConditionsPanel.js:76
 msgid "To (Email CC)"
 msgstr "An (E-Mail CC)"
 
+#: js/sieve/RuleConditionsPanel.js:79
 msgid "Header contains"
 msgstr "Header enthält"
 
+#: js/sieve/RuleConditionsPanel.js:80 js/sieve/RuleConditionsPanel.js:82
 msgid "Header name"
 msgstr "Headername"
 
+#: js/sieve/RuleConditionsPanel.js:80 js/sieve/RuleConditionsPanel.js:82
 msgid "Header value"
 msgstr "Headerinhalt"
 
+#: js/sieve/RuleConditionsPanel.js:81
 msgid "Header regex"
 msgstr "Header Regulärer Ausdruck"
 
+#: js/sieve/RuleEditDialog.js:106
 msgid "Edit Filter Rule"
 msgstr "Filterregel bearbeiten"
 
+#: js/sieve/RuleEditDialog.js:284
 msgid "Apply filter if"
 msgstr "Wende Filter an, wenn"
 
+#: js/sieve/RuleEditDialog.js:288
 msgid "all conditions match"
 msgstr "alle Bedingungen erfüllt sind"
 
+#: js/sieve/RuleEditDialog.js:289
 msgid "any condition matches"
 msgstr "mindestens eine Bedingung erfüllt ist"
 
+#: js/sieve/RuleEditDialog.js:336
 msgid "Do this action:"
 msgstr "Führe diese Aktion aus:"
 
+#: js/sieve/RuleEditDialog.js:385 js/sieve/RulesGridPanel.js:311
 msgid "Keep a copy"
 msgstr "Kopie  zurückbehalten"
 
+#: js/sieve/RuleEditDialog.js:448
 msgid "Move mail to folder"
 msgstr "Nachricht in Ordner verschieben"
 
+#: js/sieve/RuleEditDialog.js:449
 msgid "Redirect mail to address"
 msgstr "Nachricht an folgende Adresse weiterleiten"
 
+#: js/sieve/RuleEditDialog.js:450
 msgid "Reject mail with this text"
 msgstr "Nachricht mit folgendem Text ablehnen"
 
+#: js/sieve/RuleEditDialog.js:451
 msgid "Discard mail"
 msgstr "Nachricht verwerfen"
 
+#: js/sieve/RuleEditDialog.js:452
 msgid "Auto-Reply mail with this text"
 msgstr "Nachricht mit folgendem Text beantworten"
 
+#: js/sieve/RuleEditDialog.js:453
 msgid "Keep mail"
 msgstr "Nachricht behalten"
 
+#: js/sieve/RulesDialog.js:57
 msgid "Sieve Filter Rules"
 msgstr "Sieve Filterregeln"
 
+#: js/sieve/RulesDialog.js:100
 #, python-brace-format
 msgid "Sieve Filter Rules for {0}"
 msgstr "Sieve Filterregeln für {0}"
 
+#: js/sieve/RulesGridPanel.js:93
 msgid "Move up"
 msgstr "Hoch"
 
+#: js/sieve/RulesGridPanel.js:100
 msgid "Move down"
 msgstr "Runter"
 
+#: js/sieve/RulesGridPanel.js:107
 msgid "Enable"
 msgstr "Aktivieren"
 
+#: js/sieve/RulesGridPanel.js:114
 msgid "Disable"
 msgstr "Deaktivieren"
 
+#: js/sieve/RulesGridPanel.js:214
 msgid "ID"
 msgstr "ID"
 
+#: js/sieve/RulesGridPanel.js:221
 msgid "Conditions"
 msgstr "Bedingungen"
 
+#: js/sieve/RulesGridPanel.js:229
 msgid "Action"
 msgstr "Aktion"
 
+#: js/sieve/RulesGridPanel.js:350
 msgid "is greater than"
 msgstr "ist größer als"
 
+#: js/sieve/RulesGridPanel.js:350
 msgid "is less than"
 msgstr "ist weniger als"
 
+#: js/sieve/RulesGridPanel.js:361
 #, python-brace-format
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "Header \"{0}\" enthält \"{1}\""
 
+#: js/sieve/RulesGridPanel.js:361
 #, python-brace-format
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "Header \"{0}\" enthält \"{1}\""
 
+#: js/sieve/VacationEditDialog.js:90
 #, python-brace-format
 msgid "Vacation Message for {0}"
 msgstr "Abwesenheitsnotiz für {0}"
 
+#: js/sieve/VacationPanel.js:54
 msgid "General"
 msgstr "Allgemein"
 
+#: js/sieve/VacationPanel.js:67
 msgid "Advanced"
 msgstr "Erweitert"
 
+#: js/sieve/VacationPanel.js:81
 msgid "Only send all X days to the same sender"
 msgstr "Nur alle X Tage an den gleichen Absender schicken"
 
+#: js/sieve/VacationPanel.js:114
 msgid "Incoming mails will be answered with this text:"
 msgstr "Eingehende E-Mails werden mit folgendem Text beantwortet:"
 
+#: js/sieve/VacationPanel.js:143
 msgid "Status"
 msgstr "Status"
 
+#: js/sieve/VacationPanel.js:154
 msgid "I am available (vacation message disabled)"
 msgstr "Ich bin verfügbar (Abwesenheitsnotiz inaktiv)"
 
+#: js/sieve/VacationPanel.js:155
 msgid "I am not available (vacation message enabled)"
 msgstr "Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv)"
 
+#: js/sieve/VacationPanel.js:186
 msgid "Start Date"
 msgstr "Startdatum"
 
+#: js/sieve/VacationPanel.js:187
 msgid "Set vacation start date ..."
 msgstr "Startdatum der Abwesenheit …"
 
+#: js/sieve/VacationPanel.js:195
 msgid "End Date"
 msgstr "Enddatum"
 
+#: js/sieve/VacationPanel.js:196
 msgid "Set vacation end date ..."
 msgstr "Enddatum der Abwesenheit …"
 
+#: js/sieve/VacationPanel.js:233
 msgid "Representative #1"
 msgstr "Vertretungsperson #1"
 
+#: js/sieve/VacationPanel.js:234
 msgid "Choose first Representative ..."
 msgstr "Wählen Sie die erste Vertretungsperson …"
 
+#: js/sieve/VacationPanel.js:246
 msgid "Representative #2"
 msgstr "Vertretungsperson #2"
 
+#: js/sieve/VacationPanel.js:247
 msgid "Choose second Representative ..."
 msgstr "Wählen Sie die zweite Vertretungsperson …"
 
+#: js/sieve/VacationPanel.js:259
 msgid "Message Template"
 msgstr "Abwesenheitsnotizvorlage"
 
+#: js/sieve/VacationPanel.js:270
 msgid "Choose Template ..."
 msgstr "Abwesenheitsnotizvorlage auswählen …"
 
+#: js/SignatureGridPanel.js:25 Model/Account.php:419
 msgid "Signatures"
 msgstr "Signaturen"
 
+#: js/SignatureGridPanel.js:38 Model/Signature.php:73
 msgid "Name"
 msgstr "Name"
 
+#: js/SignatureGridPanel.js:41
 msgid "Is Default"
 msgstr "Ist Standard"
 
+#: js/SignatureGridPanel.js:51
 msgid "Add Signature"
 msgstr "Signatur zufügen"
 
+#: js/SignatureGridPanel.js:56
 msgid "Edit Signature"
 msgstr "Signatur bearbeiten"
 
+#: js/SignatureGridPanel.js:62
 msgid "Delete Signature"
 msgstr "Signatur löschen"
 
+#: js/TreePanel.js:895
 msgid "Total Messages:"
 msgstr "Nachrichten insgesamt:"
 
+#: js/TreePanel.js:899
 msgid "Unread Messages:"
 msgstr "Ungelesene Nachrichten:"
 
+#: js/TreePanel.js:903
 msgid "Name on Server:"
 msgstr "Name auf dem Server:"
 
+#: js/TreePanel.js:907
 msgid "Last update:"
 msgstr "Zuletzt aktualisiert:"
 
+#: js/TreePanel.js:927
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
 msgstr "Lade Nachrichten … ({0} erledigt)"
 
+#: js/TreePanel.js:943
 #, python-brace-format
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
 msgstr[0] "{0} ungelesene Nachricht"
 msgstr[1] "{0} ungelesene Nachrichten"
 
+#: Model/Account.php:131
 msgid "Email Account"
 msgid_plural "Email Accounts"
 msgstr[0] "E-Mail-Konto"
 msgstr[1] "E-Mail-Konten"
 
+#: Model/Account.php:202
 msgid "IMAP Host"
 msgstr "IMAP Host"
 
+#: Model/Account.php:209
 msgid "IMAP Port"
 msgstr "IMAP-Port"
 
+#: Model/Account.php:222
 msgid "IMAP SSL"
 msgstr "IMAP SSL"
 
+#: Model/Account.php:271
 msgid "Sent Folder"
 msgstr "Gesendet Ordner"
 
+#: Model/Account.php:282
 msgid "Trash Folder"
 msgstr "Mülleimer Ordner"
 
+#: Model/Account.php:293
 msgid "Drafts Folder"
 msgstr "Entwürfe Ordner"
 
+#: Model/Account.php:304
 msgid "Templates Folder"
 msgstr "Vorlagen Ordner"
 
+#: Model/Account.php:363
 msgid "Reply-To"
 msgstr "Antwortadresse"
 
+#: Model/Account.php:389
 msgid "E-Mail"
 msgstr "E-Mail"
 
+#: Model/Account.php:436
 msgid "Signature Position"
 msgstr "Signaturposition"
 
+#: Model/Account.php:448
 msgid "SMTP Host"
 msgstr "SMTP Host"
 
+#: Model/Account.php:456
 msgid "SMTP Port"
 msgstr "SMTP Port"
 
+#: Model/Account.php:469
 msgid "SMTP SSL"
 msgstr "SMTP-SSL"
 
+#: Model/Account.php:485
 msgid "SMTP Authentication"
 msgstr "SMTP-Authentifizierung"
 
+#: Model/Account.php:527
 msgid "Sieve Host"
 msgstr "Sieve Host"
 
+#: Model/Account.php:534
 msgid "Sieve Port"
 msgstr "Sieve-Port"
 
+#: Model/Account.php:547
 msgid "Sieve SSL"
 msgstr "Sieve-SSL"
 
+#: Model/MessageFileLocation.php:45
 msgid "Message File Location"
 msgid_plural "Message File Locations"
 msgstr[0] "Ablageort der Nachricht"
 msgstr[1] "Ablageorte der Nachricht"
 
+#: Model/MessageFileLocation.php:46
 msgid "Message File Locations"
 msgstr "Nachrichten Ablageorte"
 
+#: Model/MessageFileLocation.php:89
 msgid "Message ID Hash"
 msgstr "Nachrichten Hash ID"
 
+#: Model/MessageFileLocation.php:96
 msgid "Message ID"
 msgstr "Nachrichten ID"
 
+#: Model/MessageFileLocation.php:104
 msgid "Model"
 msgstr "Model"
 
+#: Model/MessageFileLocation.php:111
 msgid "Record ID"
 msgstr "Datensatz ID"
 
+#: Model/MessageFileLocation.php:118
 msgid "Record Title"
 msgstr "Datensatz Titel"
 
+#: Model/MessageFileLocation.php:126
 msgid "Node ID"
 msgstr "Node ID"
 
+#: Model/MessageFileSuggestion.php:49
 msgid "Message File Suggestion"
 msgid_plural "Message File Suggestions"
 msgstr[0] "Vorschlag für Ablageort"
 msgstr[1] "Vorschlage für Ablageorte"
 
+#: Model/MessageFileSuggestion.php:50
 msgid "Message File Suggestions"
 msgstr "Vorschläge für Ablageorte"
 
+#: Model/Message.php:445
 msgid "Reading Confirmation:"
 msgstr "Lesebestätigung:"
 
+#: Model/Message.php:446
 msgid "Your message:"
 msgstr "Ihre Nachricht:"
 
+#: Model/Message.php:447
 msgid "Received on"
 msgstr "Erhalten am"
 
+#: Model/Message.php:448
 msgid "Was read by:"
 msgstr "Wurde gelesen von:"
 
+#: Model/Message.php:449
 msgid "on"
 msgstr "am"
 
+#: Model/Signature.php:80
 msgid "Is default"
 msgstr "Ist Standard"
 
+#: Preference.php:64
 msgid "All inboxes"
 msgstr "Alle Posteingänge"
 
+#: Preference.php:131
 msgid "Default Email Account"
 msgstr "Standard E-Mailkonto"
 
+#: Preference.php:132
 msgid "The default email account to use when sending mails."
 msgstr "Das Standard E-Mailkonto für das Versenden von E-Mails."
 
+#: Preference.php:135
 msgid "Mark Email Automatically As Read"
 msgstr "E-Mails automatisch als gelesen markieren"
 
+#: Preference.php:136
 msgid "Is email marked as read automatically or by user action"
 msgstr "Wird die E-Mail automatisch als gelesen markiert oder ist eine Benutzeraktion nötig"
 
+#: Preference.php:139
 msgid "Email Update Interval"
 msgstr "E-Mail Aktualisierungsintervall"
 
+#: Preference.php:140
 msgid "How often should Felamimail check for new Emails (in minutes)."
 msgstr "Wie oft Felamimail nach neuen E-Mails schauen soll (in Minuten)."
 
+#: Preference.php:143
 msgid "Use for mailto links"
 msgstr "Für mailto: Verweise verwenden"
 
+#: Preference.php:144
 msgid "Use Felamimail in mailto links, otherwise use the default desktop client."
 msgstr "Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm verwenden."
 
+#: Preference.php:147
 msgid "Confirm Delete"
 msgstr "Löschen bestätigen"
 
+#: Preference.php:148
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Beim löschen von Nachrichten einen Bestätigungsdialog anzeigen."
 
+#: Preference.php:151
 msgid ".eml file Attachment in forwarded mails"
 msgstr ".eml Dateianhang in weitergeleiteten Mails"
 
+#: Preference.php:152
 msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
 
+#: Preference.php:155
 msgid "Default Font"
 msgstr "Standardschriftart"
 
+#: Preference.php:156
 msgid "Setting the default font in the E-Mail app"
 msgstr "Einstellung für die Standardschriftart im der E-Mail-Modul"
 
+#: Setup/Initialize.php:46
 msgid "All folders of my email accounts"
 msgstr "Alle Ordner meiner E-Mail Konten"
 
+#: Setup/Initialize.php:54
 msgid "All inboxes of my email accounts"
 msgstr "Alle Posteingänge meiner Konten"
 
+#: Setup/Initialize.php:61
 msgid "All unread mail"
 msgstr "Alle ungelesenen Nachrichten"
 
+#: Setup/Initialize.php:62
 msgid "All unread mail of my email accounts"
 msgstr "Alle ungelesenen Nachrichten meiner Konten"
 
+#: Setup/Initialize.php:69
 msgid "All highlighted mail"
 msgstr "Alle markierten Nachrichten"
 
+#: Setup/Initialize.php:70
 msgid "All highlighted mail of my email accounts"
 msgstr "Alle markierten Nachrichten meiner Konten"
 
+#: Setup/Initialize.php:77
 msgid "All drafts"
 msgstr "Alle Entwürfe"
 
+#: Setup/Initialize.php:78
 msgid "All mails with the draft flag"
 msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
 
+#: Sieve/AdbList.php:186
 msgid "Can not combine \"allow external\" and \"allow only members\""
 msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"
 
+#: Preference.php:221
 msgid "Forward and forwarded email as .eml in attachment"
 msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
 
+#: Preference.php:225
 msgid "Only forwarded email as .eml in attachment"
 msgstr "Nur weitergeleitete email als .eml im Anhang"
 

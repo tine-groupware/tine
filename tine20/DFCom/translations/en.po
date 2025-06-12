@@ -180,9 +180,11 @@ msgstr "Data"
 msgid "Processed by"
 msgstr "Processed by"
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr "Clock in: %1$s"
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr "Clock out: %1$s"
 

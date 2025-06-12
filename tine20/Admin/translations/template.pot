@@ -318,7 +318,6 @@ msgstr ""
 msgid "Shared Tags"
 msgstr ""
 
-#: js/Admin.js:110
 msgid "Custom Fields"
 msgstr ""
 
@@ -352,7 +351,7 @@ msgstr ""
 msgid "Feature is disabled by configuration."
 msgstr ""
 
-msgid "Default Addressbook for new contacts and groups"
+msgid "Default address book for new contacts and groups"
 msgstr ""
 
 msgid "Application"
@@ -452,7 +451,7 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-msgid "Please create Resources in Addressbook or CoreData."
+msgid "Please create resources in the address book or CoreData."
 msgstr ""
 
 msgid "ID"
@@ -570,9 +569,6 @@ msgstr ""
 msgid "UI Config"
 msgstr ""
 
-msgid "Customfield"
-msgstr ""
-
 msgid "This custom field is still in use!"
 msgstr ""
 
@@ -585,19 +581,19 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
-msgid "Display in addressbook"
+msgid "Display in address book"
 msgstr ""
 
-msgid "Hide from addressbook"
+msgid "Hide from address book"
 msgstr ""
 
-msgid "Saved in Addressbook"
+msgid "Saved in address book"
 msgstr ""
 
 msgid "Email"
 msgstr ""
 
-msgid "Only system accounts can be added to Addressbook group"
+msgid "Only system accounts can be added to address book group"
 msgstr ""
 
 msgid "Group Members"
@@ -1053,15 +1049,6 @@ msgid "IMAP"
 msgstr ""
 
 msgid "SMTP"
-msgstr ""
-
-msgid "Display in address book"
-msgstr ""
-
-msgid "Hide from address book"
-msgstr ""
-
-msgid "Saved in address book"
 msgstr ""
 
 msgid "Would you like to move the contact to this address book?"

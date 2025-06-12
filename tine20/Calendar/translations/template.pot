@@ -401,7 +401,7 @@ msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
 #, php-format
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgid "Tentative response from %1$s for the event \"%2$s\" at %3$s"
 msgstr ""
 
 #, php-format
@@ -418,6 +418,10 @@ msgstr ""
 
 #, php-format
 msgid "Tentative event notification for the event \"%1$s\" at %2$s"
+msgstr ""
+
+#, php-format
+msgid "Proposed changes for event \"%1$s\" at %2$s declined"
 msgstr ""
 
 msgid "Unknown action"
@@ -661,6 +665,12 @@ msgid "Originally"
 msgstr ""
 
 msgid "Colors"
+msgstr ""
+
+msgid "Use Light-Mode Colors"
+msgstr ""
+
+msgid "In dark mode event colors are inverted for better readability. If you want to see the original colors of light mode check this option."
 msgstr ""
 
 msgid "Sidebar Color"
@@ -1719,12 +1729,18 @@ msgstr ""
 msgid "Organizer timezone"
 msgstr ""
 
+msgid "GENDER_Event Type"
+msgstr ""
+
 msgid "Event Type"
 msgid_plural "Event Types"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Short Name"
+msgstr ""
+
+msgid "GENDER_Poll"
 msgstr ""
 
 msgid "Locked"

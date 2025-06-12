@@ -165,22 +165,22 @@ msgstr "Aktualisiert von"
 msgid "Updated Fields:"
 msgstr "Geänderte Felder:"
 
-#, python-format
+#, python-format, php-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr "'%s' wurde von '%s' auf '%s' geändert."
 
 msgid "Tags"
 msgstr "Tags"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s wurde geändert"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been deleted"
 msgstr "Lead %s wurde gelöscht"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been created"
 msgstr "Lead %s wurde angelegt"
 
@@ -244,11 +244,11 @@ msgstr "Dringend"
 msgid "Edit new lead"
 msgstr "Neuen Lead bearbeiten"
 
-#, python-format
+#, python-format, php-format
 msgid "The following leads have just been imported into the lead list %s"
 msgstr "Die folgenden Leads wurden soeben in die Lead Liste %s importiert"
 
-#, python-format
+#, python-format, php-format
 msgid "%s new leads have been imported"
 msgstr "%s neue Leads wurden importiert"
 
@@ -513,6 +513,15 @@ msgstr "Alle Leads, für die ich verantwortlich bin"
 
 msgid "Leads with overdue tasks"
 msgstr "Leads mit überfälligen Aufgaben"
+
+msgid "All"
+msgstr ""
+
+msgid "All without me"
+msgstr ""
+
+msgid "Nobody"
+msgstr ""
 
 #~ msgid "manage shared lead folders"
 #~ msgstr "Gemeinsame Leads Ordner bearbeiten"

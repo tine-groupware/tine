@@ -48,7 +48,7 @@ msgid "Function"
 msgstr "Funktion"
 
 msgid "Attendee"
-msgstr "Teilnehmende"
+msgstr "Teilnehmer*in"
 
 msgid "Speaker"
 msgstr "vortragende Person"

@@ -206,16 +206,16 @@ msgid "Force retype of new password in user edit dialog"
 msgstr "Erzwinge die erneute Eingabe des neuen Passworts im Benutzer-Bearbeitungsdialog"
 
 msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
+msgstr "XProps-Editor in Bearbeitungsdialogen aktivieren"
 
 msgid "Prevent applications disable in front end"
-msgstr ""
+msgstr "Deaktivieren von Anwendungen im Frontend verhindern"
 
 msgid "Allow to change user type"
-msgstr ""
+msgstr "Benutzertyp ändern erlauben"
 
 msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
+msgstr "Module, die in der Admin-App angezeigt werden sollen. Der Standardwert null bedeutet alle Module."
 
 msgid "Your container has been changed"
 msgstr "Ihr persönlicher Container wurde geändert"
@@ -366,7 +366,7 @@ msgstr "Deaktiviert"
 msgid "Feature is disabled by configuration."
 msgstr "Funktion ist durch die Konfiguration deaktiviert."
 
-msgid "Default Addressbook for new contacts and groups"
+msgid "Default address book for new contacts and groups"
 msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
 
 msgid "Application"
@@ -466,8 +466,8 @@ msgstr "Notiz für den Besitzer"
 msgid "Info"
 msgstr "Info"
 
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr "Bitte Ressourcen im Addressbook oder Stammdaten erstellen."
+msgid "Please create resources in the address book or CoreData."
+msgstr "Bitte Ressourcen im Adressbuch oder Stammdaten erstellen."
 
 msgid "ID"
 msgstr "ID"
@@ -480,8 +480,8 @@ msgstr "Container Reihenfolge"
 
 msgid "Custom Field"
 msgid_plural "Custom Fields"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Zusatzfeld"
+msgstr[1] "Zusatzfelder"
 
 msgid "Anyone"
 msgstr "Alle"
@@ -584,9 +584,6 @@ msgstr "Sortierung"
 msgid "UI Config"
 msgstr "UI Konfiguration"
 
-msgid "Customfield"
-msgstr "Zusatzfeld"
-
 msgid "This custom field is still in use!"
 msgstr "Ein Zusatzfeld ist noch in Benutzung!"
 
@@ -599,19 +596,19 @@ msgstr "Gruppenname"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-msgid "Display in addressbook"
+msgid "Display in address book"
 msgstr "Zeige im Adressbuch"
 
-msgid "Hide from addressbook"
+msgid "Hide from address book"
 msgstr "Nicht im Adressbuch anzeigen"
 
-msgid "Saved in Addressbook"
+msgid "Saved in address book"
 msgstr "Gespeichert im Adressbuch"
 
 msgid "Email"
 msgstr "E-Mail"
 
-msgid "Only system accounts can be added to Addressbook group"
+msgid "Only system accounts can be added to address book group"
 msgstr "Nur Systembenutzer in der zugehörigen Addressbuch-Gruppe erlauben"
 
 msgid "Group Members"
@@ -1075,15 +1072,6 @@ msgstr "Möchten Sie den Kontakt in dieses Adressbuch verschieben?"
 msgid "The selected contact will be updated"
 msgstr "Der ausgewählte Kontakt wird aktualisiert"
 
-msgid "Display in address book"
-msgstr ""
-
-msgid "Hide from address book"
-msgstr ""
-
-msgid "Saved in address book"
-msgstr ""
-
 msgid "Enable Account"
 msgstr "Benutzer aktivieren"
 
@@ -1143,3 +1131,24 @@ msgstr "Aufgaben Typ"
 
 msgid "Emails"
 msgstr "E-Mails"
+
+#~ msgid "Customfield"
+#~ msgstr "Zusatzfeld"
+
+#~ msgid "Default Addressbook for new contacts and groups"
+#~ msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
+
+#~ msgid "Please create Resources in Addressbook or CoreData."
+#~ msgstr "Bitte Ressourcen im Addressbook oder Stammdaten erstellen."
+
+#~ msgid "Display in addressbook"
+#~ msgstr "Zeige im Adressbuch"
+
+#~ msgid "Hide from addressbook"
+#~ msgstr "Nicht im Adressbuch anzeigen"
+
+#~ msgid "Saved in Addressbook"
+#~ msgstr "Gespeichert im Adressbuch"
+
+#~ msgid "Only system accounts can be added to Addressbook group"
+#~ msgstr "Nur Systembenutzer in der zugehörigen Addressbuch-Gruppe erlauben"
