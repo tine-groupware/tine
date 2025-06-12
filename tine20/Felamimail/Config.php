@@ -400,8 +400,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS => [
                     self::LABEL                 => 'Auto-Create Folders',
                     //_('Auto-Create Folders')
-                    self::DESCRIPTION           => 'Create template, trash, sent, draft and junks folders for system accounts',
-                    //_('Create template, trash, sent, draft and junks folders for system accounts')
+                    self::DESCRIPTION           => 'Create template, Trash, Sent, Draft, and Junk folders for system accounts',
+                    //_('Create template, Trash, Sent, Draft, and Junk folders for system accounts')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],

@@ -449,7 +449,7 @@ msgstr ""
 msgid "Polls for recurring events are not supported"
 msgstr ""
 
-msgid "This contact was automatically added by the system as a poll attendee."
+msgid "This contact was automatically added by the system as an event attendee."
 msgstr ""
 
 #, php-format

@@ -466,7 +466,7 @@ msgstr "Terminarten"
 msgid "Polls for recurring events are not supported"
 msgstr "Umfragen für Wiederholungstermine werden nicht unterstützt"
 
-msgid "This contact was automatically added by the system as a poll attendee."
+msgid "This contact was automatically added by the system as an event attendee."
 msgstr "Dieser Kontakt nimmt an einer Termin-Umfrage teil und wurde vom System automatisch angelegt."
 
 #, php-format
@@ -2089,6 +2089,9 @@ msgstr "Sonntag"
 
 msgid "Monday"
 msgstr "Montag"
+
+#~ msgid "This contact was automatically added by the system as a poll attendee."
+#~ msgstr "Dieser Kontakt nimmt an einer Termin-Umfrage teil und wurde vom System automatisch angelegt."
 
 #~ msgid "Search for sites ..."
 #~ msgstr "Suche nach Standorten..."

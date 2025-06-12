@@ -449,8 +449,8 @@ msgstr "Event Types"
 msgid "Polls for recurring events are not supported"
 msgstr "Polls for recurring events are not supported"
 
-msgid "This contact was automatically added by the system as a poll attendee."
-msgstr "This contact was automatically added by the system as a poll attendee."
+msgid "This contact was automatically added by the system as an event attendee."
+msgstr "This contact was automatically added by the system as an event attendee."
 
 #, php-format
 msgid "Attendance Confirmation for Poll \"%1$s\""

@@ -828,7 +828,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         } else if ($_implicitAddMissingContacts === TRUE) {
             $translation = Tinebase_Translation::getTranslation('Calendar');
-            $i18nNote = $translation->_('This contact was automatically added by the system as a poll attendee.');
+            $i18nNote = $translation->_('This contact was automatically added by the system as an event attendee.');
             if ($email !== $_attenderData['email']) {
                 $i18nNote .= "\n";
                 $i18nNote .= $translation->_('The email address has been shortened:') . ' ' . $_attenderData['email'] . ' -> ' . $email;
