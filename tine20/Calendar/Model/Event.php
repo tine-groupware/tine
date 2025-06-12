@@ -182,6 +182,96 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             ],
         ],
 
+        /**
+         * 'id'                    => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Calendar_Model_Event')),
+         * 'external_id'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'uid'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'external_uid'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'etag'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'container_id'          => array('filter' => 'Calendar_Model_CalendarFilter', 'options' => array('modelName' => Calendar_Model_Event::class)),
+         * 'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description', 'location'), 'modelName' => Calendar_Model_Event::class)),
+         * 'period'                => array('filter' => 'Calendar_Model_PeriodFilter'),
+         * 'attender'              => array('filter' => 'Calendar_Model_AttenderFilter'),
+         * 'attender_status'       => array('filter' => 'Calendar_Model_AttenderStatusFilter'),
+         * 'attender_role'         => array('filter' => 'Calendar_Model_AttenderRoleFilter'),
+         * 'organizer'             => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
+         * 'class'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'status'                => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+         * 'idProperty' => 'cal_events.id',
+         * 'applicationName' => 'Calendar',
+         * )),
+         * 'grants'                => array('filter' => 'Calendar_Model_GrantFilter'),
+         * // NOTE using dtstart and dtend filters may not lead to the desired result.
+         * //      you need to use the period filter to filter for events in a given period
+         * 'dtstart'               => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+         * 'dtend'                 => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+         * 'transp'                => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'rrule'                 => array('filter' => 'Calendar_Model_RruleFilter'),
+         * 'recurid'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'base_event_id'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'rrule_until'           => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+         * 'rrule_constraints'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'poll_id'               => array('filter' => 'Tinebase_Model_Filter_Id'),
+         * 'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'location_record'       => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
+         * 'description'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
+         * 'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
+         * 'deleted_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+         * 'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+         * 'creation_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
+         * 'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
+         * 'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+         * 'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+         * 'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
+         * 'idProperty' => 'cal_events.id'
+         * )),
+         * 'site'                  => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+         * 'related_model'  => 'Addressbook_Model_Contact',
+         * 'filtergroup'    => 'Addressbook_Model_ContactFilter'
+         * )),
+         * 'event_types' => ['filter' => Tinebase_Model_Filter_ForeignRecords::class, 'options' => [
+         * 'controller' => Calendar_Controller_EventTypes::class,
+         * 'recordClassName' => Calendar_Model_EventTypes::class,
+         * 'refIdField' => 'record',
+         * ]],
+         * 'event_site' => ['filter' => Tinebase_Model_Filter_ForeignId::class, 'options' => [
+         * 'controller' => Addressbook_Controller_Contact::class,
+         * 'filtergroup'       => Addressbook_Model_ContactFilter::class,
+         * ]],
+         */
+        self::FILTER_MODEL => [
+            'period'                => [
+                self::FILTER => Calendar_Model_PeriodFilter::class,
+            ],
+            'container_id'          => [
+                self::FILTER => Calendar_Model_CalendarFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME => Calendar_Model_Event::class,
+                ],
+            ],
+            'attender'              => [
+                self::FILTER => Calendar_Model_AttenderFilter::class,
+            ],
+            'attender_status'       => [
+                self::FILTER => Calendar_Model_AttenderStatusFilter::class,
+            ],
+            'attender_role'         => [
+                self::FILTER => Calendar_Model_AttenderRoleFilter::class,
+            ],
+            'grants'                => [
+                self::FILTER => Calendar_Model_GrantFilter::class,
+            ],
+            'site'                  => [
+                self::FILTER            => Tinebase_Model_Filter_Relation::class,
+                self::OPTIONS           => [
+                    'related_model'         => Addressbook_Model_Contact::class,
+                    'filtergroup'           => Addressbook_Model_ContactFilter::class,
+                ],
+            ],
+        ],
+
         self::FIELDS        => [
             'external_seq'      => [
                 self::TYPE          => self::TYPE_INTEGER,
@@ -216,6 +306,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::TYPE          => self::TYPE_TEXT,
                 self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
                 self::NULLABLE      => true,
+                self::QUERY_FILTER  => true,
             ],
             'geo'      => [
                 self::TYPE          => self::TYPE_FLOAT,
@@ -240,12 +331,19 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
                 self::LENGTH        => 1024,
                 self::NULLABLE      => true,
+                self::QUERY_FILTER  => true,
             ],
             'location_record'      => [
                 self::TYPE          => self::TYPE_STRING, // type record?
                 self::LENGTH        => 40,
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
+                self::FILTER_DEFINITION => [
+                    self::FILTER => Addressbook_Model_ContactIdFilter::class,
+                    self::OPTIONS => [
+                        self::MODEL_NAME => Addressbook_Model_Contact::class,
+                    ],
+                ],
             ],
             'event_site' => [
                 self::LABEL      => 'Site',    // _('Site')
@@ -270,6 +368,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::LENGTH        => 40,
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
+                self::FILTER_DEFINITION => [
+                    self::FILTER => Addressbook_Model_ContactIdFilter::class,
+                ],
             ],
             'organizer_type'      => [
                 self::TYPE          => self::TYPE_STRING,
@@ -313,6 +414,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
                 self::LENGTH        => 1024,
                 self::NULLABLE      => true,
+                self::QUERY_FILTER  => true,
             ],
             'url'      => [
                 self::TYPE          => self::TYPE_TEXT,
@@ -404,6 +506,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::LENGTH        => 255,
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Calendar_Model_RruleFilter::class,
+                ]
             ],
             'is_all_day_event'      => [
                 self::TYPE          => self::TYPE_BOOLEAN,
@@ -431,6 +536,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::LENGTH        => 40,
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
+                self::FILTER_DEFINITION => [
+                    self::FILTER => Tinebase_Model_Filter_Id::class,
+                ],
             ],
             'mute'      => [
                 self::TYPE          => self::TYPE_BOOLEAN,
