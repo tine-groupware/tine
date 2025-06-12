@@ -128,8 +128,9 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
             _.assign(colManager('division_id'), Object.assign({width: 100}, defaults)),
             _.assign({ header: this.app.i18n._('Turnover Target'), dataIndex: 'turnOverGoal', renderer: Ext.util.Format.money }, defaults),
             _.assign({ header: this.app.i18n._('Turnover Recorded'), dataIndex: 'recordedAmount', renderer: Ext.util.Format.money }, defaults),
+            _.assign({ header: this.app.i18n._('Turnover Recorded %'), dataIndex: 'recordedPercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.recordedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
             _.assign({ header: this.app.i18n._('Turnover Cleared'), dataIndex: 'clearedAmount', renderer: Ext.util.Format.money }, defaults),
-            _.assign({ header: this.app.i18n._('Turnover %'), dataIndex: 'clearedPercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.clearedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
+            _.assign({ header: this.app.i18n._('Turnover Cleared %'), dataIndex: 'clearedPercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.clearedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
             _.assign({ header: this.app.i18n._('Working Time Target'), dataIndex: 'workingTimeTarget', renderer: rendererManager('duration') }, defaults),
             _.assign({ header: this.app.i18n._('Working Time Recorded'), dataIndex: 'totalsum', renderer:  rendererManager('duration') }, defaults),
             _.assign({ header: this.app.i18n._('Working Time %'), dataIndex: 'workingTimePercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.totalsum || 0) / r.data.workingTimeTarget)) } }, defaults)
