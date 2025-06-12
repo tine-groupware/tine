@@ -434,13 +434,24 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     . ' ' . $msg);
                 $this->resultMsg[] = $msg;
             }
+            $updateAccount = false;
             if (!isset($account->xprops()[self::DIVIS_UID_NUMBER]) || $uid !== $account->xprops()[self::DIVIS_UID_NUMBER] ||
                 (($account->accountExpires && (!$accountExpires || !$accountExpires->equals($account->accountExpires))) ||
                     (!$account->accountExpires && $accountExpires))) {
                 $account->xprops()[self::DIVIS_UID_NUMBER] = $uid;
                 $account->accountExpires = $accountExpires;
+                $updateAccount = true;
+            }
+            if ($account->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED && (!$accountExpires || $accountExpires->isLater(Tinebase_DateTime::now()))) {
+                $account->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+                $updateAccount = true;
+            }
+            if ($account->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_ENABLED && $accountExpires && $accountExpires->isEarlier(Tinebase_DateTime::now())) {
+                $account->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED;
+                $updateAccount = true;
+            }
+            if ($updateAccount) {
                 $this->userCtrl->updateUser($account);
-
                 $msg = 'setting teachers uid: ' . $account->accountLoginName . ' -> ' . $uid;
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' ' . $msg);
@@ -559,7 +570,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             $updateAccount = false;
 
             if (isset($account->xprops()[self::DIVIS_UID_NUMBER])) {
-                if ((string)$account->xprops()[self::DIVIS_UID_NUMBER] !== (string)$uid) {
+                if ($account->xprops()[self::DIVIS_UID_NUMBER] !== $uid) {
                     $msg = 'uidnumber changed for student: ' . $account->accountLoginName . ' from: ' .
                         $account->xprops()[self::DIVIS_UID_NUMBER] . ' to: ' . $uid;
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -571,7 +582,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 }
             } else {
                 $updateAccount = true;
-                $account->xprops()[self::DIVIS_UID_NUMBER] = (string)$uid;
+                $account->xprops()[self::DIVIS_UID_NUMBER] = $uid;
             }
 
             $groupMemberships = $this->groupCtrl->getGroupMemberships($account->getId());
@@ -648,6 +659,15 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             if ((($account->accountExpires && (!$accountExpires || !$accountExpires->equals($account->accountExpires))) ||
                     (!$account->accountExpires && $accountExpires))) {
                 $account->accountExpires = $accountExpires;
+                $updateAccount = true;
+            }
+
+            if ($account->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED && (!$accountExpires || $accountExpires->isLater(Tinebase_DateTime::now()))) {
+                $account->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+                $updateAccount = true;
+            }
+            if ($account->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_ENABLED && $accountExpires && $accountExpires->isEarlier(Tinebase_DateTime::now())) {
+                $account->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED;
                 $updateAccount = true;
             }
 
