@@ -181,13 +181,13 @@ describe('shared tags', () => {
     });
 });
 
-describe('customfields', () => {
+describe('custom fields', () => {
     test('mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zusatzfelder'});
         await page.waitForTimeout(1000);
         await page.screenshot({path: 'screenshots/Administration/27_admin_zusatzfelder.png'});
     });
-    test('edit customfields', async () => {
+    test('edit custom fields', async () => {
         let cfDialog = lib.getNewWindow();
         await expect(page).toClick('.t-app-admin button', {text: 'Zusatzfeld hinzufügen'});
         cfDialog = await cfDialog;

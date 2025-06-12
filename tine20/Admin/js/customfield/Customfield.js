@@ -42,8 +42,8 @@ Tine.Admin.Model.Customfield = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     idProperty: 'id',
     titleProperty: 'name',
     // ngettext('Custom Field', 'Custom Fields', n);
-    recordName: 'Customfield',
-    recordsName: 'Customfields',
+    recordName: 'Custom Field',
+    recordsName: 'Custom Fields',
 
 });
 

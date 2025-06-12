@@ -351,6 +351,9 @@ msgstr "ActiveSync Geräte"
 msgid "Email Accounts"
 msgstr "E-Mail Konten"
 
+msgid "Matrix Accounts"
+msgstr ""
+
 msgid "Import Export Definitions"
 msgstr "Import/Export-Definitionen"
 
@@ -572,7 +575,7 @@ msgstr[1] "Gruppen"
 msgid "Key"
 msgstr "Schlüssel"
 
-msgid "Customfield already exists. Please choose another name."
+msgid "Custom field already exists. Please choose another name."
 msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
 msgid "Grouping"
@@ -1128,6 +1131,9 @@ msgstr "Aufgaben Typ"
 
 msgid "Emails"
 msgstr "E-Mails"
+
+#~ msgid "Customfield already exists. Please choose another name."
+#~ msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
 #~ msgid "Customfield"
 #~ msgstr "Zusatzfeld"

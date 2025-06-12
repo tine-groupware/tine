@@ -336,6 +336,9 @@ msgstr ""
 msgid "Email Accounts"
 msgstr ""
 
+msgid "Matrix Accounts"
+msgstr ""
+
 msgid "Import Export Definitions"
 msgstr ""
 
@@ -557,7 +560,7 @@ msgstr[1] ""
 msgid "Key"
 msgstr ""
 
-msgid "Customfield already exists. Please choose another name."
+msgid "Custom field already exists. Please choose another name."
 msgstr ""
 
 msgid "Grouping"

@@ -112,6 +112,15 @@ msgstr "Contact Hidden Criteria"
 msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
 msgstr "The contact is hidden if it is ... (one of: disabled, expired or never)"
 
+msgid "Contact Property Link Types"
+msgstr "Contact Property Link Types"
+
+msgid "Inline"
+msgstr "Inline"
+
+msgid "Records"
+msgstr "Records"
+
 msgid "Contact types available"
 msgstr "Contact types available"
 
@@ -183,6 +192,9 @@ msgstr "Sync Backends"
 msgid "Default telephone country code"
 msgstr "Default telephone country code"
 
+msgid "Record)icon"
+msgstr "Record)icon"
+
 msgid "It is not allowed to delete a contact linked to an user account!"
 msgstr "It is not allowed to delete a contact linked to an user account!"
 
@@ -205,7 +217,7 @@ msgstr "E-Mail address is already given. Please choose another one."
 msgid "Maximum number of role members reached"
 msgstr "Maximum number of role members reached"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal addressbook"
 msgstr "%s's personal addressbook"
 
@@ -413,6 +425,9 @@ msgstr "Unit"
 
 msgid "Sites"
 msgstr "Sites"
+
+msgid "Search for sites ... (leave empty for all sites)"
+msgstr "Search for sites ... (leave empty for all sites)"
 
 msgid "Color"
 msgstr "Color"
@@ -699,8 +714,8 @@ msgstr "Private Address"
 msgid "Related to"
 msgstr "Related to"
 
-msgid "Customfields"
-msgstr "Customfields"
+msgid "Custom Fields"
+msgstr "Custom Fields"
 
 msgid "System Group"
 msgstr "System Group"
@@ -991,3 +1006,12 @@ msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relation"
 msgstr[1] "Relations"
+
+msgid "Display Name (email)"
+msgstr "Display Name (email)"
+
+msgid "Display Name - Company / Organisation"
+msgstr "Display Name - Company / Organisation"
+
+msgid "Salutation Title Last Name (Company / Organisation)"
+msgstr "Salutation Title Last Name (Company / Organisation)"

@@ -336,6 +336,9 @@ msgstr "ActiveSync Devices"
 msgid "Email Accounts"
 msgstr "Email Accounts"
 
+msgid "Matrix Accounts"
+msgstr "Matrix Accounts"
+
 msgid "Import Export Definitions"
 msgstr "Import Export Definitions"
 
@@ -557,8 +560,8 @@ msgstr[1] "Groups"
 msgid "Key"
 msgstr "Key"
 
-msgid "Customfield already exists. Please choose another name."
-msgstr "Customfield already exists. Please choose another name."
+msgid "Custom field already exists. Please choose another name."
+msgstr "Custom field already exists. Please choose another name."
 
 msgid "Grouping"
 msgstr "Grouping"
