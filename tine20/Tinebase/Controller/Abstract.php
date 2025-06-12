@@ -114,24 +114,24 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE)
     {
-        if (empty($this->_applicationName)) {
-            throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
-        }
         if (! is_object(Tinebase_Core::getUser())) {
             throw new Tinebase_Exception('No user found for right check!');
         }
         
         $right = strtoupper($_right);
-        
+        $applicationRightsClass = $this->_getApplicationRightsClass();
+        $rightsApp = substr($applicationRightsClass, 0, strpos($applicationRightsClass, '_'));
+        if (empty($rightsApp)) {
+            throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
+        }
+
         $cache = Tinebase_Core::getCache();
         $cacheId = Tinebase_Helper::convertCacheId(
-            'checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName
+            'checkRight' . Tinebase_Core::getUser()->getId() . $right . $rightsApp
         );
         $result = $cache->load($cacheId);
-        
+
         if (!$result) {
-            $applicationRightsClass = $this->_getApplicationRightsClass();
-            
             // array with the rights that should be checked, ADMIN is in it per default
             $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
             
@@ -142,15 +142,15 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             
             $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
             
-            $result = FALSE;
+            $result = false;
             
             foreach ($rightsToCheck as $rightToCheck) {
                 if (Tinebase_Acl_Roles::getInstance()->hasRight(
-                    $this->_applicationName,
+                    $rightsApp,
                     Tinebase_Core::getUser()->getId(),
                     $rightToCheck
                 )) {
-                    $result = TRUE;
+                    $result = true;
                     break;
                 }
             }
@@ -159,7 +159,9 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         if (!$result && $_throwException) {
-            throw new Tinebase_Exception_AccessDenied("You are not allowed to $right in application $this->_applicationName !");
+            throw new Tinebase_Exception_AccessDenied(
+                "You are not allowed to $right in application $rightsApp !"
+            );
         }
         
         return $result;
@@ -343,8 +345,10 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
         if ($MCV2only) {
             if (! Setup_Core::isDoctrineAvailable()) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' Doctrine not available, could not get modelconfig v2 models for application (php version id: ' . PHP_VERSION_ID . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Doctrine not available, could not get modelconfig v2 models for application (php version id: ' . PHP_VERSION_ID . ')');
+                }
                 return array();
             }
 
