@@ -84,7 +84,7 @@ msgstr "Standardansicht für Termine"
 msgid "Attendee"
 msgid_plural "Attendees"
 msgstr[0] "Teilnehmer*in"
-msgstr[1] "Teilnehmende"
+msgstr[1] "Teilnehmer*innen"
 
 msgid "Organizer"
 msgstr "Organisator*in"
@@ -1470,7 +1470,7 @@ msgid "Welcome {name}"
 msgstr "Willkommen {name}"
 
 msgid "This poll is closed. No attendees can be added."
-msgstr "Dies ist eine geschlossene Umfrage. Es können keine Teilnehmer hinzugefügt werden."
+msgstr "Dies ist eine geschlossene Umfrage. Es können keine Teilnehmenden hinzugefügt werden."
 
 msgid "This poll is already closed."
 msgstr "Diese Umfrage ist bereits abgeschlossen"

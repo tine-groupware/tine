@@ -54,7 +54,7 @@ describe('MainScreen', () => {
     });
 
     test('add attendee', async () => {
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-user_id', {text: 'Teilnehmer*in hinzufügen'});
+        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-user_id', {text: 'Teilnehmende hinzufügen'});
         await page.waitForTimeout(1000);
         await page.click('.x-trigger-wrap-focus span');
         await page.waitForTimeout(500);
