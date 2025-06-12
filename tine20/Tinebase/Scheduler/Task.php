@@ -780,6 +780,17 @@ class Tinebase_Scheduler_Task
         );
     }
 
+    public static function addCleanUpRelationTask(Tinebase_Scheduler $_scheduler): void
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Relations::class,
+            'cleanRelations',
+            self::TASK_TYPE_MONTHLY,
+            $_scheduler,
+            'Clean up broken relations (monthly)'
+        );
+    }
+
     /**
      * @param string $taskController
      * @param string $taskMethod

@@ -100,11 +100,11 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
             });
         }
         
-        this.editDialog.on('load', this.onRecordLoad, this);
-        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
+        this.editDialog.on('load', this.onParentRecordLoad, this);
+        this.editDialog.on('recordUpdate', this.onParentRecordUpdate, this);
 
         // NOTE: in case we are rendered after record was load
-        this.onRecordLoad(this.editDialog, this.editDialog.record);
+        this.onParentRecordLoad(this.editDialog, this.editDialog.record);
     },
 
     onBeforeAddBLElementRecord: function(newRecord) {
@@ -157,14 +157,14 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
         }
     },
 
-    onRecordLoad: function(editDialog, record) {
+    onParentRecordLoad: function(editDialog, record) {
         var _ = window.lodash,
             data = _.get(record, this.dataPath) || [];
 
         this.setStoreFromArray(data);
     },
 
-    onRecordUpdate: function(editDialog, record) {
+    onParentRecordUpdate: function(editDialog, record) {
         var _ = window.lodash,
             data = this.getFromStoreAsArray();
 

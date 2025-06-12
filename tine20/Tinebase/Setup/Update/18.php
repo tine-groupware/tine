@@ -19,6 +19,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE003 = self::class . '::update003';
     protected const RELEASE018_UPDATE004 = self::class . '::update004';
     protected const RELEASE018_UPDATE005 = self::class . '::update005';
+    protected const RELEASE018_UPDATE006 = self::class . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -49,6 +50,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE018_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
     ];
@@ -130,5 +135,12 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             Tinebase_Model_Tree_FlySystem::class,
         ]);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Tinebase_Scheduler_Task::addCleanUpRelationTask(Tinebase_Core::getScheduler());
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
     }
 }

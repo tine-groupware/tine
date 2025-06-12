@@ -2999,6 +2999,9 @@ msgstr "Set new password"
 msgid "Please enter the new Password:"
 msgstr "Please enter the new Password:"
 
+msgid "Send SMS message with new password"
+msgstr "Send SMS message with new password"
+
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr "Password is expired in accordance with the password policy and needs to be changed"
 

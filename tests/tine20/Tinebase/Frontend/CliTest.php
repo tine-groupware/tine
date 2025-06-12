@@ -272,11 +272,13 @@ class Tinebase_Frontend_CliTest extends TestCase
                 'Tinebase_DeletedFileCleanup',
                 'Tinebase_FileSystemNotifyQuota',
                 'Tinebase_FileSystemSizeRecalculation',
-                'Tinebase_TempFileCleanup',
                 'Tinebase_FileSystem::repairTreeIsDeletedState',
+                'Tinebase_LogEntry::cleanup',
+                'Tinebase_TempFileCleanup',
                 'Tinebase_User/Group::syncUsers/Groups',
-                'createAutoInvoicesDailyTask', // skip because invoice might not installed
-                'createAutoInvoicesMonthlyTask', // skip because invoice might not installed
+                // Sales
+                'createAutoInvoicesDailyTask', // skip because invoicing might not be active
+                'createAutoInvoicesMonthlyTask', // skip because invoicing might not be active
             ])) {
                 // FIXME skip those checks as they fail at random (?)
                 continue;

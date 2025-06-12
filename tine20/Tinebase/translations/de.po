@@ -3015,6 +3015,9 @@ msgstr "Passwort zurücksetzen"
 msgid "Please enter the new Password:"
 msgstr "Bitte geben Sie das neue Passwort ein:"
 
+msgid "Send SMS message with new password"
+msgstr "SMS Nachricht mit neuem Passwort senden"
+
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr "Das Passwort ist gemäß der Passwortrichtlinie abgelaufen und muss geändert werden."
 

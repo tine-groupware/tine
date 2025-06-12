@@ -20,12 +20,16 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
     editDialog: null,
 
     initComponent: function() {
-        this.windowTitle = this.windowTitle || i18n._('Set new password');
+        this.windowTitle = i18n._('Set new password');
         this.questionText = i18n._('Please enter the new Password:');
         const accountBackend = Tine.Tinebase.registry.get('accountBackend');
         this.ldapBackend = (accountBackend === 'Ldap' || accountBackend === 'ActiveDirectory');
 
         this.hasSmsAdapters = Tine.Tinebase.registry.get('hasSmsAdapters');
+
+        if (this.hasSmsAdapters) {
+            this.windowTitle = i18n._('Send SMS message with new password');
+        }
 
         const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
         const smsTemplates = Tine.Tinebase.configManager.get('sms.sms_message_templates', 'Tinebase');
@@ -136,8 +140,8 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                         xtype: 'textarea',
                         name: 'sms_new_password_template',
                         anchor: '100%',
-                        height: 200,
                         ref: '../../../../smsTemplate',
+                        height: 200,
                         labelSeparator: '',
                         columnWidth: 1,
                         allowBlank: false,
@@ -275,8 +279,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
             closeAction: 'close',
             modal: true,
             width: 500,
-            height: Math.max(250 +
-                (Math.ceil(this.questionText.length/70) * 20)),
+            height: this.hasSmsAdapters ? 300 : 200,
             layout: 'fit',
             items: this
         }, config));

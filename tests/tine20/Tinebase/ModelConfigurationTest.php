@@ -54,8 +54,9 @@ class Tinebase_ModelConfigurationTest extends TestCase
         $sales = Tinebase_Application::getInstance()->getApplicationByName('Sales');
         Tinebase_Application::getInstance()->setApplicationStatus($sales->getId(),
             Tinebase_Application::DISABLED);
-        $customer = new Timetracker_Model_Timeaccount([], true);
-        $cObj = $customer->getConfiguration();
+        Tinebase_ModelConfiguration::resetAvailableApps();
+        Timetracker_Model_Timeaccount::resetConfiguration();
+        $cObj = Timetracker_Model_Timeaccount::getConfiguration();
         $fields = $cObj->getFields();
         $found = false;
         foreach ($fields as $name => $field) {
@@ -144,8 +145,18 @@ class Tinebase_ModelConfigurationTest extends TestCase
         if (! Tinebase_Application::getInstance()->isInstalled('Inventory')) {
             self::markTestSkipped('Inventory is needed for the test');
         }
+        if (! Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            self::markTestSkipped('Sales is needed for the test');
+        }
+        $inventoryMC = Inventory_Model_InventoryItem::getConfiguration();
+        if ($inventoryMC->jsonExpander) {
+            self::assertArrayHasKey('invoice', $inventoryMC->jsonExpander['properties'], print_r($inventoryMC->jsonExpander, true));
+        }
+
         // disable Sales
         Tinebase_Application::getInstance()->setApplicationStatus('Sales', Tinebase_Application::DISABLED);
+        Tinebase_ModelConfiguration::resetAvailableApps();
+        Inventory_Model_InventoryItem::resetConfiguration();
         $inventoryMC = Inventory_Model_InventoryItem::getConfiguration();
         if ($inventoryMC->jsonExpander) {
             self::assertArrayNotHasKey('invoice', $inventoryMC->jsonExpander['properties'], print_r($inventoryMC->jsonExpander, true));

@@ -32,6 +32,28 @@ Ext.ns('Tine.widgets.grid');
 Tine.widgets.grid.GridPanel = function(config) {
     Ext.apply(this, config);
 
+    this.addEvents(
+        /**
+         * @event remoteadd
+         * record was created on server e.g. after quickadd, picker or editDialog
+         * @param record created record from server
+         */
+        'remoteadd',
+        /**
+         * @event remoteupdate
+         * record was updated on server e.g. after inlineedit or editDialog
+         * @param record updated record from server
+         * @param bool multiple (record is empty in this case)
+         */
+        'remoteupdate',
+        /**
+         * @event remotedelete
+         * record was deleted on server e.g. after DEL or delete button
+         * @param recordId[] recordIds of deleted records
+         */
+        'remotedelete'
+    );
+
     this.gridConfig = this.gridConfig || {};
     this.defaultSortInfo = this.defaultSortInfo || {};
     this.defaultPaging = this.defaultPaging || {
@@ -485,7 +507,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         this.on('resize', this.onContentResize, this, {buffer: 100});
-        
+        this.on('afterLayout', () => {
+            if (this.ownerCt.autoHeight) this.autoHeight = true
+        }, this, {buffer: 100});
+
         this.mon(Ext.fly(window), 'popstate', (event) => {
             if (this.detailsPanel?.isInFullScreenMode) {
                 this.setFullScreen(false);
@@ -692,6 +717,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             const appName = this.recordClass.getMeta('appName');
             const modelName = this.recordClass.getMeta('modelName');
 
+            const fieldManager = _.bind(Tine.widgets.form.FieldManager.get, Tine.widgets.form.FieldManager, appName, modelName, _, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+            const defaultValues = Object.assign({}, this.recordClass.getDefaultData?.() || {}, this.getRecordDefaults?.() || {}, this.editDialogConfig?.fixedFields ?? {});
+
             Ext.each(this.columns || this.modelConfig.fieldKeys, function(key) {
                 if (! Ext.isString(key)) {
                     columns.push(key);
@@ -715,6 +743,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
 
                 if (config) {
+                    if (this.gridConfig?.quickaddMandatory) {
+                        config.quickaddField = Ext.create(fieldManager(key, {value: defaultValues[key]}));
+                        config.editor = fieldManager(key);
+                    }
                     columns.push(config);
                 }
             }, this);
@@ -1308,6 +1340,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             initialData = recordData;
         }
+        Object.assign(initialData, this.editDialogConfig?.fixedFields ?? {});
         var record = new this.recordClass(initialData);
         this.store.insert(0 , [record]);
 
@@ -1327,6 +1360,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.loadGridData({
                     removeStrategy: 'keepBuffered'
                 });
+                this.fireEvent('remoteadd', newRecord)
             }
         });
 
@@ -1456,6 +1490,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             this.loadGridData({
                                 removeStrategy: 'keepBuffered'
                             });
+                            this.fireEvent('remoteupdate', updatedRecord);
                         }
                     });
                     break;
@@ -2745,6 +2780,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onUpdateMultipleRecords: function() {
         this.store.reload();
+        this.fireEvent('remoteupdate', null, true);
     },
 
     onCreateRecord(nodeData, mode) {
@@ -2802,12 +2838,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
         Tine.log.debug(record, mode);
 
+        let isRemoteUpdate = false;
+        let remoteAction = 'update';
+
         if (record && Ext.isFunction(record.copy)) {
             var idx = this.getStore().indexOfId(record.id),
                 isSelected = this.getGrid().getSelectionModel().isSelected(idx),
                 store = this.getStore();
 
             if (idx >= 0) {
+                isRemoteUpdate = this.store.getAt(idx)?.isObsoletedBy(record);
+
                 // only run do this in local mode as we reload the store in remote mode
                 // NOTE: this would otherwise delete the record if a record proxy exists!
                 if (mode === 'local') {
@@ -2815,6 +2856,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     store.insert(idx, [record]);
                 }
             } else {
+                isRemoteUpdate = true;
+                remoteAction = 'add';
                 this.getStore().add([record]);
             }
             //TODO: use this for msg bus
@@ -2840,6 +2883,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.bufferedLoadGridData({
                 removeStrategy: 'keepBuffered',
             });
+        }
+        if (isRemoteUpdate) {
+            this.fireEvent(`remote${remoteAction}`, record);
         }
     },
 
@@ -3018,6 +3064,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 success: function() {
                     this.refreshAfterDelete(recordIds);
                     this.onAfterDelete(recordIds);
+                    this.fireEvent('remotedelete', recordIds);
                 },
                 failure: function (exception) {
                     this.onDeleteFailure(recordIds, exception);

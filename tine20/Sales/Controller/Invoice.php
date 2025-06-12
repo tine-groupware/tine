@@ -1162,7 +1162,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),
                     'date'          => clone $this->_currentMonthToBill,
-                    'sales_tax'     => Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
+                    'sales_tax'     => $this->_currentBillingCustomer[Sales_Model_Customer::FLD_VAT_PROCEDURE] !== Sales_Config::VAT_PROCEDURE_STANDARD ? 0 : Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
                     Sales_Model_Invoice::FLD_BUYER_REFERENCE => $contract->{Sales_Model_Debitor::FLD_BUYER_REFERENCE} ?? $debitor->{Sales_Model_Debitor::FLD_BUYER_REFERENCE},
                     Sales_Model_Invoice::FLD_PURCHASE_ORDER_REFERENCE => $contract->{Sales_Model_Contract::FLD_PURCHASE_ORDER_REFERENCE},
                     Sales_Model_Invoice::FLD_PROJECT_REFERENCE => $contract->{Sales_Model_Contract::FLD_PROJECT_REFERENCE},
@@ -1532,6 +1532,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
             $preceedingInvoice = $invoice->relations->find('type', 'REVERSAL')?->related_record;
 
+            $vatProcedure = Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records->getById($customer->{Sales_Model_Customer::FLD_VAT_PROCEDURE});
+
+
             // type (invoice_type) => REVERSAL => storno gibt verknüpfung
 
             $ublInvoice = new Sales_Model_Document_Invoice([
@@ -1575,6 +1578,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     ])
                 ]) : null,
             ]);
+
+            if (count($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX} ?? []) === 1) {
+                $ublInvoice->{Sales_Model_Document_Abstract::FLD_VATEX_ID} = Sales_Controller_EDocument_VATEX::getInstance()->getByCode($vatProcedure->{Sales_Model_EDocument_VATProcedure::FLD_VATEX}[0]);
+            }
 
             if (empty($invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}) || 0 === $invoice->{Sales_Model_Invoice::FLD_PAYMENT_MEANS}->count()) {
                 $ublInvoice->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS} =

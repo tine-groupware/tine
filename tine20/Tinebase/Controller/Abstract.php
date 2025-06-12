@@ -112,26 +112,26 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * @todo include Tinebase admin? atm only the application admin right is checked
      * @todo think about moving the caching to Tinebase_Acl_Roles and use only a class cache as it is difficult (and slow?) to invalidate
      */
-    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) 
+    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE)
     {
-        if (empty($this->_applicationName)) {
-            throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
-        }
         if (! is_object(Tinebase_Core::getUser())) {
             throw new Tinebase_Exception('No user found for right check!');
         }
         
         $right = strtoupper($_right);
-        
+        $applicationRightsClass = $this->_getApplicationRightsClass();
+        $rightsApp = substr($applicationRightsClass, 0, strpos($applicationRightsClass, '_'));
+        if (empty($rightsApp)) {
+            throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
+        }
+
         $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Helper::convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $right . $this->_applicationName);
+        $cacheId = Tinebase_Helper::convertCacheId(
+            'checkRight' . Tinebase_Core::getUser()->getId() . $right . $rightsApp
+        );
         $result = $cache->load($cacheId);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $cacheId);
-        
+
         if (!$result) {
-            $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
-            
             // array with the rights that should be checked, ADMIN is in it per default
             $rightsToCheck = ($_includeTinebaseAdmin) ? array(Tinebase_Acl_Rights::ADMIN) : array();
             
@@ -142,14 +142,15 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             
             $rightsToCheck[] = constant($applicationRightsClass. '::' . $right);
             
-            $result = FALSE;
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Checking rights: ' . print_r($rightsToCheck, TRUE));
+            $result = false;
             
             foreach ($rightsToCheck as $rightToCheck) {
-                if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, Tinebase_Core::getUser()->getId(), $rightToCheck)) {
-                    $result = TRUE;
+                if (Tinebase_Acl_Roles::getInstance()->hasRight(
+                    $rightsApp,
+                    Tinebase_Core::getUser()->getId(),
+                    $rightToCheck
+                )) {
+                    $result = true;
                     break;
                 }
             }
@@ -158,10 +159,17 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         if (!$result && $_throwException) {
-            throw new Tinebase_Exception_AccessDenied("You are not allowed to $right in application $this->_applicationName !");
+            throw new Tinebase_Exception_AccessDenied(
+                "You are not allowed to $right in application $rightsApp !"
+            );
         }
         
         return $result;
+    }
+
+    protected function _getApplicationRightsClass(): string
+    {
+        return $this->_applicationName . '_Acl_Rights';
     }
     
     /**
@@ -337,8 +345,10 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
 
         if ($MCV2only) {
             if (! Setup_Core::isDoctrineAvailable()) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' Doctrine not available, could not get modelconfig v2 models for application (php version id: ' . PHP_VERSION_ID . ')');
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Doctrine not available, could not get modelconfig v2 models for application (php version id: ' . PHP_VERSION_ID . ')');
+                }
                 return array();
             }
 

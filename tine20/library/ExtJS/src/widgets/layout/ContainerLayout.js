@@ -49,6 +49,12 @@ Ext.layout.ContainerLayout = Ext.extend(Object, {
     // private
     activeItem : null,
 
+
+    /**
+     * @type {ResponsiveBreakpointOverride||null||[ResponsiveBreakpointOverride]}
+     */
+    responsiveBreakpointOverrides: null,
+
     constructor : function(config){
         this.id = Ext.id(null, 'ext-layout-');
         Ext.apply(this, config);

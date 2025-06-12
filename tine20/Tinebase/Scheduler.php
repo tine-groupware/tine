@@ -87,8 +87,10 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
      */
     public function run()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-            ' Scheduler started');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                ' Scheduler started');
+        }
         $db = Tinebase_Core::getDb();
         $transactionManager = Tinebase_TransactionManager::getInstance();
         $this->_backend->cleanZombieTasks();
@@ -160,7 +162,7 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
                 // then run the task
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' run task ' . $task->name);
+                        . ' Run task ' . $task->name);
                 }
                 $userRaii = null;
                 try {

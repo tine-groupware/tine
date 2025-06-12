@@ -8,11 +8,9 @@ return [
         'url' => '{{ [tinedockercompose_tineurl, 'broadcasthub'] | path_join }}',
         {% endif -%}
         # should not be required in single TENANCY MODE
-        #'pubsubname' => 'redis://cache:6379:broadcasthub',
+        #'pubsubname' => 'redis://{{ tinedockercompose_redis_hostname }}:6379:broadcasthub',
         'redis' => [
-            'host' => 'cache',
+            'host' => '{{ tinedockercompose_redis_hostname }}',
         ],
     ],
 ];
-
-

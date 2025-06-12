@@ -104,8 +104,8 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             this.editDialog = _.get(parent, 'editDialog');
         }
         if (this.editDialog && this.parentRecordField) {
-            this.editDialog.on('load', this.onRecordLoad, this);
-            this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
+            this.editDialog.on('load', this.onParentRecordLoad, this);
+            this.editDialog.on('recordUpdate', this.onParentRecordUpdate, this);
         }
 
         this.initComponentMixin();
@@ -267,7 +267,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         return result;
     },
 
-    onRecordLoad: function(editDialog, record, ticketFn) {
+    onParentRecordLoad: function(editDialog, record, ticketFn) {
         var _ = window.lodash,
             me = this,
             data = _.get(record, 'data.' + me.parentRecordField) || [],
@@ -304,7 +304,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
 
     },
 
-    onRecordUpdate: function(editDialog, record) {
+    onParentRecordUpdate: function(editDialog, record) {
         var _ = window.lodash,
             me = this,
             data = me.getFromStoreAsArray();

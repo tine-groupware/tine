@@ -128,7 +128,27 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('beforeedit', this.onBeforeEdit, this);
         this.on('validateedit', this.onValidateEdit, this);
         this.selModel.on('beforerowselect', this.onBeforeRowSelect, this);
+
+        // mixin checkState workflow (here because code is included later)
+        this.initCheckStates = Tine.widgets.dialog.EditDialog.prototype.initCheckStates;
+        this.checkStates = Tine.widgets.dialog.EditDialog.prototype.checkStates;
+        this.onRecordUpdate = Ext.emptyFn;
+
+        this.form = this.createForm();
+        this.record = new this.recordClass({});
+        this.getCols().forEach((column) => {
+            if (column && column.quickaddField) {
+                this.processAdd(column.quickaddField);
+                this.relayEvents(column.quickaddField, ['change', 'select']);
+            }
+        });
     },
+
+    createForm: Ext.FormPanel.prototype.createForm,
+    getForm: Ext.FormPanel.prototype.getForm,
+    processAdd: Ext.FormPanel.prototype.processAdd,
+    processRemove: Ext.FormPanel.prototype.processRemove,
+    isField: Ext.FormPanel.prototype.isField,
 
     /**
      * renders the quick add header fields
@@ -168,6 +188,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 column.quickaddField.on(this.quickaddHandlers);
             }
         }, this);
+
+        this.initCheckStates();
 
 
         this.colModel.on('configchange', this.syncFields, this);
@@ -462,3 +484,13 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
     }
 });
+
+Ext.ux.grid.QuickaddGridPanel.registerCheckStateProvider = function(field, fn) {
+    this.statics = this.statics || {}
+    this.statics.checkStateProviders = this.statics.checkStateProviders || {}
+    this.statics.checkStateProviders[field] = this.statics.checkStateProviders[field] || []
+    this.statics.checkStateProviders[field].push(fn)
+};
+Ext.ux.grid.QuickaddGridPanel.getCheckStateProviders = function (field) {
+    return _.get(this, `statics.checkStateProviders.${field}`, []);
+};

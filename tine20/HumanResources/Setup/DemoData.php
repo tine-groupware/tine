@@ -302,6 +302,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'vacation_days' => 30,
             'feast_calendar_id' => $this->_feastCalendar,
             'working_time_scheme'  => $this->_getWorkingTime()->getId(),
+            'yearly_turnover_goal' => 12000 * mt_rand(2, 10),
         ), TRUE);
 
         return $c;

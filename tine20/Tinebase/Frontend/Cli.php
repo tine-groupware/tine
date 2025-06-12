@@ -215,99 +215,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * clean relations, set relation to deleted if at least one of the ends has been set to deleted or pruned
      */
-    public function cleanRelations()
+    public function cleanRelations(): int
     {
         $this->_checkAdminRight();
 
-        $relations = Tinebase_Relations::getInstance();
-        $filter = new Tinebase_Model_Filter_FilterGroup();
-        $pagination = new Tinebase_Model_Pagination();
-        $pagination->limit = 10000;
-        $pagination->sort = 'id';
-
-        $totalCount = 0;
-        $date = Tinebase_DateTime::now()->subYear(1);
-
-        while ( ($recordSet = $relations->search($filter, $pagination)) && $recordSet->count() > 0 ) {
-            $filter = new Tinebase_Model_Filter_FilterGroup();
-            $pagination->start += $pagination->limit;
-            $models = array();
-
-            foreach($recordSet as $relation) {
-                $models[$relation->own_model][$relation->own_id][] = $relation->id;
-                $models[$relation->related_model][$relation->related_id][] = $relation->id;
-            }
-            foreach ($models as $model => &$ids) {
-                $doAll = false;
-
-                try {
-                    $app = Tinebase_Core::getApplicationInstance($model, '', true);
-                } catch (Tinebase_Exception_NotFound) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' no application found for it');
-                    $doAll = true;
-                }
-                if (!$doAll) {
-                    if ($app instanceof Tinebase_Container)
-                    {
-                        $backend = $app;
-                    } else {
-                        if (!$app instanceof Tinebase_Controller_Record_Abstract) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . $app::class . ' not an instance of Tinebase_Controller_Record_Abstract');
-                            continue;
-                        }
-
-                        $backend = $app->getBackend();
-                    }
-                    if (!$backend instanceof Tinebase_Backend_Interface) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . $backend::class . ' not an instance of Tinebase_Backend_Interface');
-                        continue;
-                    }
-                    $record = new $model(null, true);
-
-                    $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [], '', ['ignoreAcl' => true]);
-                    $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
-                        'field' => $record->getIdProperty(), 'operator' => 'in', 'value' => array_keys($ids)
-                    )));
-
-                    $existingIds = $backend->search($idFilter, null, true);
-
-                    if (!is_array($existingIds)) {
-                        throw new Exception('search for model: ' . $model . ' returned not an array!');
-                    }
-                    foreach ($existingIds as $id) {
-                        unset($ids[$id]);
-                    }
-                }
-
-                if ( count($ids) > 0 ) {
-                    $toDelete = array();
-                    foreach ($ids as $idArrays) {
-                        foreach ($idArrays as $id) {
-                            $toDelete[$id] = true;
-                        }
-                    }
-
-                    $toDelete = array_keys($toDelete);
-
-                    foreach($toDelete as $id) {
-                        if ( $recordSet->getById($id)->creation_time && $recordSet->getById($id)->creation_time->isLater($date) ) {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' relation is about to get deleted that is younger than 1 year: ' . print_r($recordSet->getById($id)->toArray(false), true));
-                        }
-                    }
-
-                    $relations->deleteByRelIds($toDelete);
-                    $totalCount += count($toDelete);
-                }
-            }
-        }
-
-        $message = 'Deleted ' . $totalCount . ' relations in total';
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
-        echo $message . "\n";
+        $result = Tinebase_Relations::getInstance()->cleanRelations();
+        return $result ? 0 : 1;
     }
 
     /**
@@ -1064,7 +977,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if ($usagePercentage >= 99) {
                 $message = 'QUOTA LIMIT REACHED | ' . $quotaValueString;
                 $result = 2;
-            } elseif ($usagePercentage >= 80) {
+            } elseif ($usagePercentage >= $quotaConfig->{Tinebase_Config::QUOTA_SOFT_QUOTA}) {
                 $message = 'QUOTA LIMIT WARN | ' . $quotaValueString;
                 $result = 1;
             } else {

@@ -159,7 +159,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record: this.record,
                 contactRecord: this.contactRecordPicker.selectedRecord,
                 editDialog: this,
-                windowTitle: this.app.i18n._('Send SMS message with new password'),
             });
 
             passwordDialog.openWindow();
@@ -828,6 +827,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
+                validate: true,
                 onNewentry: function(value) {
                     if (value.email === record.get('accountEmailAddress') || aliasesStore.find('email', value.email) !== -1) {
                         Ext.MessageBox.show({

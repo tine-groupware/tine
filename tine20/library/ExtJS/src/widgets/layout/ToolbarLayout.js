@@ -93,6 +93,42 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
     fitToSize : function(t){
         if(this.container.enableOverflow === false){
+            const items = this.container.items.items;
+            const w = t.dom.clientWidth;
+            const autoShrinkItems = items.filter(el => el.autoShrink);
+            if (autoShrinkItems.length) {
+                let loopWidth = 0,
+                    unshrunkWidth = 0;
+                for (let i = 0; i < items.length; i++){
+                    const c = items[i];
+                    if (!c.isFill){
+                        loopWidth += this.getItemWidth(c);
+                        unshrunkWidth += c.originalWidth ?? c.width ?? this.getItemWidth(c);
+                    }
+                }
+                if (loopWidth - w > 10) {
+                    for (let j = 0; j < autoShrinkItems.length; j++){
+                        const c = autoShrinkItems[j];
+                        const cw = this.getItemWidth(c);
+                        c.originalWidth ??= c.width ?? cw
+                        c.setWidth(cw - 10);
+                    }
+                    this.fitToSize(t);
+                } else {
+                    if ((10 < unshrunkWidth - loopWidth) && (Math.abs(w - loopWidth) > 10)) {
+                        let refit = false;
+                        for (let j = 0; j < autoShrinkItems.length; j++){
+                            c = autoShrinkItems[j];
+                            const cw = this.getItemWidth(c);
+                            c.originalWidth ??= c.width ?? cw;
+                            if (cw >= c.originalWidth) continue
+                            c.setWidth(cw + 10)
+                            refit = true
+                        }
+                        if (refit) this.fitToSize(t);
+                    }
+                }
+            }
             return;
         }
         var w = t.dom.clientWidth,

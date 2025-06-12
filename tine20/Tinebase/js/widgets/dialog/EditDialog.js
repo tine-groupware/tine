@@ -67,6 +67,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * show container selector in bottom area
      */
     showContainerSelector: null,
+
+    /**
+     * @cfg {Bool} autoShrinkContainerSelector
+     * if container selector is shown, setting this to true, shrinks the selector to fit the content.
+     */
+    autoShrinkContainerSelector: null,
+
     /**
      * @cfg {Bool} evalGrants
      * should grants of a grant-aware records be evaluated (defaults to true)
@@ -211,6 +218,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
+    autoHeight: false,
     border: false,
     cls: 'tw-editdialog',
     anchor:'100% 100%',
@@ -845,6 +853,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 // required grants for the container to choose
                 requiredGrants: [this.evalGrants ? 'addGrant' : false],
                 disabled: this.isContainerSelectorDisabled(),
+                autoShrink: this.autoShrinkContainerSelector,
                 listeners: {
                     scope: this,
                     select: function() {
@@ -1223,21 +1232,25 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
         this.showLoadMask();
 
-        // init change event
+        this.initCheckStates();
+
+        this.window.on('beforeclose', this.onBeforeClose, this);
+    },
+
+    // NOTE: mixed into QuickaddGridPanel
+    initCheckStates: function() {
         this.getForm().items.each(function(item) {
             this.relayEvents(item, ['change', 'select']);
             if (item.copyOnSelectProps) {
                 item.on('select', (i, r) => { i.copyOnSelectProps.forEach((p) => {
                     this.getForm().findField(p)?.setValue(r.get(p));
-                    this.record.set(p, r.get(p));
+                    this.record?.set(p, r.get(p));
                 })})
             }
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});
         this.on('select', this.checkStates, this, {buffer: 100});
-        this.window.on('beforeclose', this.onBeforeClose, this);
     },
-
     /**
      * update (action updateer) top and bottom toolbars
      */

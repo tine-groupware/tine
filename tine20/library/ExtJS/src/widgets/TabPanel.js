@@ -140,9 +140,9 @@ Ext.TabPanel = Ext.extend(Ext.Panel,  {
     resizeTabs : false,
     /**
      * @cfg {Boolean} enableTabScroll True to enable scrolling to tabs that may be invisible due to overflowing the
-     * overall TabPanel width. Only available with tabPosition:'top' (defaults to false).
+     * overall TabPanel width. Only available with tabPosition:'top' (defaults to true).
      */
-    enableTabScroll : false,
+    enableTabScroll : true,
     /**
      * @cfg {Number} scrollIncrement The number of pixels to scroll each time a tab scroll button is pressed
      * (defaults to <tt>100</tt>, or if <tt>{@link #resizeTabs} = true</tt>, the calculated tab width).  Only

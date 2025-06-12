@@ -67,14 +67,21 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param bool $_silentlySkipFails
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct($_className, $_records = array(), $_bypassFilters = false, $_convertDates = true, $_silentlySkipFails = false)
+    public function __construct($_className, $_records = [], $_bypassFilters = false, $_convertDates = true, $_silentlySkipFails = false)
     {
         if (! class_exists($_className)) {
             throw new Tinebase_Exception_InvalidArgument('Class ' . $_className . ' does not exist');
         }
-        // TODO switch to is_iterable() when we no longer support PHP < 7.0
-        if (! (is_iterable($_records))) {
-            throw new Tinebase_Exception_InvalidArgument('Given records need to be iterable');
+        if (! is_iterable($_records)) {
+            if (!$_records) {
+                $_records = [];
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' records: ' . print_r($_records, true));
+                }
+                throw new Tinebase_Exception_InvalidArgument('Given records need to be iterable');
+            }
         }
         $this->_recordClass = $_className;
 
@@ -89,8 +96,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
                     $toAdd = $record instanceof Tinebase_Record_Interface ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
                     $this->addRecord($toAdd);
                 } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' silently skip. Failed to create record ' . $this->_recordClass . ' with message: ' . $e::class .': ' . $e->getMessage() . ' with data: ' . print_r($record, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' silently skip. Failed to create record ' . $this->_recordClass . ' with message: '
+                            . $e::class .': ' . $e->getMessage() . ' with data: ' . print_r($record, true));
+                    }
                 }
             }
         }

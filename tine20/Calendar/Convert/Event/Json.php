@@ -228,7 +228,8 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             return $map;
         }, []);
 
-        $excludeFields = ['id', 'dtstart', 'dtend', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'rrule_constraints', 'exdate'];
+        // @see \Calendar_Model_Rrule::addRecurrence
+        $excludeFields = ['id', 'dtstart', 'dtend', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'rrule_constraints', 'exdate', 'alarms', 'attendee'];
         foreach ($results as &$result) {
             if (isset($result['id']) && preg_match('/^fakeid/', $result['id'])) {
                 if (isset($baseEventMap[$result['base_event_id']])) {

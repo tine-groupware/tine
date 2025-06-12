@@ -40,6 +40,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     preferredAddressBusinessCheckbox: null,
     preferredAddressPrivateCheckbox: null,
 
+    autoShrinkContainerSelector: true,
+
     getFormItems: function () {
         if (Tine.Tinebase.configManager.get('useMapService')) {
             this.mapPanel = new Tine.Addressbook.MapPanel({
@@ -74,7 +76,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     
         var contactNorthPanel = {
             xtype: 'fieldset',
-            region: 'north',
             autoHeight: true,
             title: this.app.i18n._('Personal Information'),
             items: [{
@@ -257,8 +258,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 
         var contactCenterPanel = {
             xtype: 'fieldset',
-            region: 'center',
-            layout: 'fit',
+            layout: 'hfit',
+            // autoHeight: true,
             title: this.app.i18n._('Contact Information'),
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -267,11 +268,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             items: [{
                 layout: 'hbox',
                 layoutConfig: {
-                    align : 'stretch',
-                    pack  : 'start'
+                    responsiveBreakpointOverrides: [{level: 1, width: 500}]
                 },
+                autoHeight: true,
                 items: [contactPropertiesGrid({
                     flex: 1,
+                    autoHeight: true,
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields, field => {
                         const matched = field.specialType?.match(/^Addressbook_Model_ContactProperties_(Phone|Email)/) && !field.disabled;
@@ -282,6 +284,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     }), ['uiconfig.order'])
                 }), contactPropertiesGrid({
                     flex: 1,
+                    autoHeight: true,
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields,field => {
                         const matched = field.specialType?.match(/^Addressbook_Model_ContactProperties_(Url|InstantMessenger)/) && !field.disabled;
@@ -297,10 +300,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         }
         this.postalAddressesTabPanel = Ext.create({
             xtype: 'tabpanel',
-            region: 'south',
             border: false,
             deferredRender: false,
-            height: 160,
+            autoHeight: true,
             split: true,
             activeTab: 0,
             defaults: {
@@ -371,9 +373,14 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             border: false,
             frame: true,
             layout: 'border',
+            layoutConfig: {
+                enableResponsive: true,
+                responsiveBreakpointOverrides: [{level: 2, width: 700}]
+            },
             items: [{
                 region: 'center',
-                layout: 'border',
+                autoScroll: true,
+                layout: 'hfit',
                 items: [
                     contactNorthPanel,
                     contactCenterPanel,

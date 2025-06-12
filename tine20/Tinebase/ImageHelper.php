@@ -237,41 +237,22 @@ class Tinebase_ImageHelper
                 throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_image->mime);
         }
 
-        $color = imagecolorallocate($img, 0, 0, 0);
-        $backgroundColor = imagecolorallocatealpha($img, 255, 255, 255, 90);
+        $color = imagecolorallocate($img, 255, 255, 255);
+        $watermarktextCount = strlen($watermarktext);
         $positionX1 = 0;
         $positionY2 = 0;
         if (isset($configWatermark)) {
             if (isset($configWatermark['x'])) {
-                $positionX1 = $configWatermark['x'];
+                $positionX1 = $configWatermark['x'] - ($watermarktextCount * 9);
             }
             if (isset($configWatermark['y'])) {
                 $positionY2 = $configWatermark['y'];
             }
         }
 
-        $watermarktextCount = strlen($watermarktext);
-        // does not work because of "imageloadfont():
-        // Product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully"
-        /*$fontLoaded = imageloadfont($font);
-        $fontWidth = imagefontwidth($fontLoaded);
-        $fontHeight = imagefontheight($fontLoaded);
-        $fontFactor = $fontsize / $fontHeight;
-        $positionX2 = $positionX1 + $watermarktextCount * ($fontWidth * $fontFactor);
-        $positionY1 = $positionY2 - $fontsize;*/
-
-        /*if ($positionX2 > $_image->width) {
-            $widthFactor = $positionX2 / $_image->width;
-            $fontsize = $fontsize / $widthFactor;
-            $fontFactor = $fontsize / $fontHeight;
-            $positionX2 = $positionX1 + $watermarktextCount * ($fontWidth * $fontFactor);
-            $positionY1 = $positionY2 - $fontsize;
-        }*/
-
         $positionY1 = $positionY2 - 10;
         $positionX2 = $_image->width;
 
-        imagefilledrectangle($img, $positionX1, $positionY1, $positionX2, $positionY2, $backgroundColor);
         imagettftext($img, $fontsize, 0, $positionX1, $positionY2, $color, $font, $watermarktext);
         $imgDumpFunction($img, $tmpPath);
         $_image->blob = file_get_contents($tmpPath);

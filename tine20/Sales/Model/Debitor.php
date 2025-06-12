@@ -131,6 +131,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             self::FLD_CUSTOMER_ID           => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Customer', // _('Customer')
+                self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_Customer::MODEL_NAME_PART,

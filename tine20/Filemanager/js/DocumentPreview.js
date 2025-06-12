@@ -128,6 +128,11 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
             }
         };
 
+        if (record.get('type') === 'folder') {
+            this.fireEvent('noPreviewAvailable');
+            return Promise.resolve();
+        }
+
         if (isTempFile) {
             this.loadMask = new Ext.LoadMask(this.el, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
             this.loadMask.show();

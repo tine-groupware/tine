@@ -51,6 +51,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         'modelName'         => 'Supplier',
 
         'exposeHttpApi'     => true,
+        self::EXPOSE_JSON_API   => true,
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
 

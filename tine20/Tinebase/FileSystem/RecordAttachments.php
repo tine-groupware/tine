@@ -339,37 +339,48 @@ class Tinebase_FileSystem_RecordAttachments
         return $recordPath;
     }
 
-    public function createWatermarks(Tinebase_Record_Interface $record, $text, $overwrite = false)
+    public function createWatermark(Tinebase_Model_Tree_Node $attachment, $text, $overwrite = false)
     {
-        foreach ($record->attachments as $attachment) {
-            if ((! $overwrite
-                && Tinebase_FileSystem_RecordAttachments::getInstance()->hasWatermark($attachment))
-                || $attachment->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER
-            ) {
-                continue;
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' Create Watermark for attachment ' . $attachment->getId() . ' ...');
-            }
-
-            $font = dirname(dirname(dirname(__FILE__))) . '/fonts/LiberationMono-Regular.ttf';
-            $img = Tinebase_Controller::getInstance()->getImage('Tinebase', $attachment->getId(), 'vfs');
-            $configWatermark = ['x' => 0, 'y' => ($img->height - 2)];
-            $fontSizePX = $img->height * 0.07;
-            $fontSizePT = intval(($fontSizePX * 3) / 4);
-            Tinebase_ImageHelper::createWatermark($img, $font, $fontSizePT, $text, $configWatermark);
-
-            // create node with updated $img->blob
-            $path = $this->_getWatermarkPath($attachment);
-            $imgWatermark = Tinebase_FileSystem::getInstance()->fopen($path, 'w');
-            if (! $imgWatermark) {
-                throw new Tinebase_Exception('File watermark could not be created');
-            }
-            fwrite($imgWatermark, $img->blob);
-            Tinebase_FileSystem::getInstance()->fclose($imgWatermark);
+        if ((! $overwrite
+            && Tinebase_FileSystem_RecordAttachments::getInstance()->hasWatermark($attachment))
+            || $attachment->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+        ) {
+            return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Create Watermark for attachment ' . $attachment->getId() . ' ...');
+        }
+
+        $font = dirname(dirname(dirname(__FILE__))) . '/fonts/LiberationMono-Regular.ttf';
+        $img = Tinebase_Controller::getInstance()->getImage('Tinebase', $attachment->getId(), 'vfs');
+        if ($img->width > 1920 || $img->height > 1080) {
+            $newWidth = $img->width;
+            $newHeight = $img->height;
+            if ($img->width > 1920) {
+                $newWidth = 1920;
+                $newHeight = intval($img->height * ($newWidth / $img->width));
+            }
+            if ($img->height > 1080) {
+                $newHeight = 1080;
+                $newWidth = intval($img->width * ($newHeight / $img->height));
+            }
+            Tinebase_ImageHelper::resize($img, $newWidth, $newHeight, 1);
+        }
+        $configWatermark = ['x' => ($img->width), 'y' => ($img->height - 2)];
+        $fontSizePX = $img->height * 0.07;
+        $fontSizePT = intval(($fontSizePX * 3) / 4);
+        Tinebase_ImageHelper::createWatermark($img, $font, $fontSizePT, $text, $configWatermark);
+
+        // create node with updated $img->blob
+        $path = $this->_getWatermarkPath($attachment);
+        $imgWatermark = Tinebase_FileSystem::getInstance()->fopen($path, 'w');
+        if (! $imgWatermark) {
+            throw new Tinebase_Exception('File watermark could not be created');
+        }
+        fwrite($imgWatermark, $img->blob);
+        Tinebase_FileSystem::getInstance()->fclose($imgWatermark);
     }
 
     public function hasWatermark(Tinebase_Model_Tree_Node $attachment): bool
