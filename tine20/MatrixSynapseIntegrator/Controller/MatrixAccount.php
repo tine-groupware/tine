@@ -53,9 +53,12 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
-        if (!$this->_doContainerACLChecks || $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+        if (!$this->_doRightChecks
+            || !$this->_doContainerACLChecks
+            || $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS)
+        ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+                . ' ACL / right checks disabled for ' . $_filter->getModelName() . '.');
             return;
         }
 
@@ -75,6 +78,10 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
      */
     protected function _checkRight($_action)
     {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
         switch ($_action) {
             case 'get':
                 $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS);
@@ -98,6 +105,7 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
 
     public function getMatrixAccountForCurrentUser(): MatrixSynapseIntegrator_Model_MatrixAccount
     {
+        $check = $this->doRightChecks(false);
         /** @var ?MatrixSynapseIntegrator_Model_MatrixAccount $result */
         $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             MatrixSynapseIntegrator_Model_MatrixAccount::class, [[
@@ -105,6 +113,7 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
                 Tinebase_Model_Filter_Abstract::VALUE => Tinebase_Core::getUser()->getId()
             ]]
         ))->getFirstRecord();
+        $this->doRightChecks($check);
         if (!$result) {
             throw new Tinebase_Exception_NotFound('No Matrix Account found');
         }
