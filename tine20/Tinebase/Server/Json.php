@@ -545,11 +545,27 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 if (class_exists($jsonAppName)) {
                     $classes[$jsonAppName] = $application->name;
                 }
+                if (class_exists($jsonAppName . 'Public')) {
+                    $classes[$jsonAppName . 'Public'] = $application->name;
+                }
             }
-        } elseif (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
+        } else {
+            if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+                $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
+            }
+            foreach (Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED) as $application) {
+                if (Tinebase_Config::APP_NAME === $application->name) {
+                    continue;
+                }
+                if (! Tinebase_License::getInstance()->isPermitted($application->name)) {
+                    continue;
+                }
+                $jsonAppName = $application->name . '_Frontend_JsonPublic';
+                if (class_exists($jsonAppName)) {
+                    $classes[$jsonAppName] = $application->name;
+                }
+            }
         }
-
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Got frontend classes: ' . print_r($classes, true));
