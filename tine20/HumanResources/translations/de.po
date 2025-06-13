@@ -29,6 +29,30 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Turnover Target"
+msgstr "Umsatzziel"
+
+msgid "Turnover Recorded"
+msgstr "Erfasster Umsatz"
+
+msgid "Turnover Recorded %"
+msgstr "Erfasster Umsatz %"
+
+msgid "Turnover Cleared"
+msgstr "Berechneter Umsatz"
+
+msgid "Turnover Cleared %"
+msgstr "Berechneter Umsatz %"
+
+msgid "Working Time Target"
+msgstr "Arbeitszeit Ziel"
+
+msgid "Working Time Recorded"
+msgstr "Erfasste Arbeitszeit"
+
+msgid "Working Time %"
+msgstr "Arbeitszeit %"
+
 msgid "Add Divisions"
 msgstr "Abteilung hinzufügen"
 
@@ -1402,26 +1426,23 @@ msgstr "Sonderzahlung"
 msgid "[H] Short Business trip"
 msgstr "[Z] Kurze Dienstreise"
 
-msgid "Turnover Target"
-msgstr "Umsatzziel"
+msgid "Period"
+msgstr "Zeitraum"
 
-msgid "Turnover Recorded"
-msgstr "Erfasster Umsatz"
+msgid "Reload"
+msgstr "Neu Laden"
 
-msgid "Turnover Recorded %"
-msgstr "Erfasster Umsatz %"
+msgid "Reload all data"
+msgstr "Alle Daten neu laden"
 
-msgid "Turnover Cleared"
-msgstr "Berechneter Umsatz"
+msgid "Export"
+msgstr "Exportieren"
 
-msgid "Turnover Cleared %"
-msgstr "Berechneter Umsatz %"
+msgid "Export all data"
+msgstr "Alle Daten exportieren"
 
-msgid "Working Time Target"
-msgstr "Arbeitszeit Ziel"
+msgid "Revenue Analysis"
+msgstr "Umsatzanalyse"
 
-msgid "Working Time Recorded"
-msgstr "Erfasste Arbeitszeit"
-
-msgid "Working Time %"
-msgstr "Arbeitszeit %"
+msgid "Totals of the selected lines"
+msgstr "Summen der selektierten Zeilen"

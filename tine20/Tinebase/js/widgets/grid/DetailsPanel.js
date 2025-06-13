@@ -118,7 +118,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                 });
                 this.defaultHeight = Math.max(this.defaultHeight, this.singleRecordPanel.defaultHeight);
             } else {
-                this.singleRecordPanel = new Ext.Panel(this.defaults);
+                this.singleRecordPanel = new Ext.ux.display.DisplayPanel(this.defaults);
             }
         }
         return this.singleRecordPanel;
