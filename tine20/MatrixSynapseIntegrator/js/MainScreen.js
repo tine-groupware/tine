@@ -12,7 +12,7 @@ Ext.namespace('Tine.MatrixSynapseIntegrator');
 
 Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     url: null,
-    autoEl: { tag: 'iframe', style: 'width:100%; height: 100%; border: none;', allow: 'camera; microphone; display-capture', scrolling: 'no' },
+    autoEl: { tag: 'iframe', cls: 't-app-matrixsynapseintegrator', style: 'width:100%; height: 100%; border: none;', allow: 'camera; microphone; display-capture', scrolling: 'no' },
 
     // @TODO move somewhere
     sha256: async function (message){
