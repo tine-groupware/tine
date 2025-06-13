@@ -138,7 +138,7 @@ Ext.ux.PercentRenderer = function(percent) {
             '<div class="x-progress-inner PercentRenderer">',
                 '<div class="x-progress-bar PercentRenderer {colorClass}" style="width:{percent}%">',
                     '<div class="PercentRendererText PercentRenderer">',
-                        '<div>{percent}%</div>',
+                        '<div>{text}</div>',
                     '</div>',
                 '</div>',
                 '<div class="x-progress-text x-progress-text-back PercentRenderer">',
@@ -152,6 +152,8 @@ Ext.ux.PercentRenderer = function(percent) {
     const data = _.isObject(percent) ? percent : { percent };
     data.qtitle = data.qtitle ?? null;
     data.qtip = data.qtip ?? null;
+    data.text = data.text || (_.isNaN(percent) ? '' : percent === Infinity ? i18n._('Infinity %') : (String(percent) + '%'));
+    data.percent = data.percent === Infinity ? 100 : data.percent;
     if (! data.colorClass) {
         // this will enable a color scheme for each percentage on the progress bar
         data.colorClass = `PercentRenderer-progress-bar${Math.round(Math.min(Math.max(data.percent,0),100)/10)}0`

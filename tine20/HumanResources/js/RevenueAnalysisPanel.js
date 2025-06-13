@@ -15,6 +15,7 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
     periodPicker: null,
 
     recordClass: 'Tine.HumanResources.Model.Employee',
+    stateId: 'HumanResources-RevenueAnalysisPanel',
     autoRefreshInterval: null,
     listenMessageBus: false,
     displaySelectionHelper: false,
@@ -22,7 +23,62 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
 
 
     initComponent: function() {
-        this.app = Tine.Tinebase.appMgr.get('Timetracker');
+        this.app = Tine.Tinebase.appMgr.get('HumanResources');
+
+        const sumsPanel = new Ext.ux.display.DisplayPanel({
+            items: [{
+                flex: 1,
+                layout: 'ux.display',
+                labelWidth: 150,
+                autoScroll: true,
+                layoutConfig: {
+                    background: 'solid'
+                },
+                items: [{
+                    xtype: 'label',
+                    cls: 'x-ux-display-header',
+                    text: this.app.i18n._('Totals of the selected lines')
+                }].concat(_.reduce(this.getColumns(), (accu, col) => {
+                    if (Tine.HumanResources.Model.Employee.getFieldNames().indexOf(col.dataIndex) < 0) {
+                        accu.push({
+                            xtype: 'ux.displayfield',
+                            name: col.dataIndex,
+                            htmlEncode: false,
+                            ctCls: 'tine-tinebase-recorddisplaypanel-displayfield',
+                            fieldLabel: col.header,
+                            renderer: col.renderer
+                        })
+                    }
+                    return accu
+                }, []))
+            }]
+        })
+        const updateSums = () => {
+            let records = this.selectionModel.getCount() ? this.selectionModel.getSelections() : this.store.data.items
+
+            const sums = _.reduce(records, (sums, record) => {
+                const result = record.data || {}
+                _.each(sums, (v,k) => sums[k] = sums[k] + (result[k] ? parseFloat(result[k], 10) : 0))
+                return sums;
+            }, {recordedAmount:0,clearedAmount:0,totalcount:0,totalcountbillable:0,totalsum:0,totalsumbillable:0,turnOverGoal:0,workingTimeTarget:0})
+
+            sums.recordedPercent = Math.round(100 * (sums.recordedAmount || 0) / sums.turnOverGoal)
+            sums.clearedPercent = Math.round(100 * (sums.clearedAmount || 0) / sums.turnOverGoal)
+            sums.workingTimePercent = Math.round(100 * (sums.totalsum || 0) / sums.workingTimeTarget)
+
+            const sumsRecord = new this.recordClass({})
+            Object.assign(sumsRecord.data, sums)
+            sumsPanel.loadRecord(sumsRecord)
+        }
+
+        this.detailsPanel = {
+            xtype: 'widget-detailspanel',
+            // singleRecordPanel: sumsPanel,
+            multiRecordsPanel: sumsPanel,
+            // defaultInfosPanel: sumsPanel,
+            // showDefault: updateSums,
+            showMulti: updateSums
+        };
 
         this.periodPicker = new Ext.ux.form.PeriodPicker({
             availableRanges: 'week,month,quarter,year',
@@ -126,14 +182,15 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
             colManager('number', {... defaults}),
             _.assign(colManager('account_id'), Object.assign({width: 100}, defaults)),
             _.assign(colManager('division_id'), Object.assign({width: 100}, defaults)),
-            _.assign({ header: this.app.i18n._('Turnover Target'), dataIndex: 'turnOverGoal', renderer: Ext.util.Format.money }, defaults),
-            _.assign({ header: this.app.i18n._('Turnover Recorded'), dataIndex: 'recordedAmount', renderer: Ext.util.Format.money }, defaults),
-            _.assign({ header: this.app.i18n._('Turnover Recorded %'), dataIndex: 'recordedPercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.recordedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
-            _.assign({ header: this.app.i18n._('Turnover Cleared'), dataIndex: 'clearedAmount', renderer: Ext.util.Format.money }, defaults),
-            _.assign({ header: this.app.i18n._('Turnover Cleared %'), dataIndex: 'clearedPercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.clearedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
-            _.assign({ header: this.app.i18n._('Working Time Target'), dataIndex: 'workingTimeTarget', renderer: rendererManager('duration') }, defaults),
-            _.assign({ header: this.app.i18n._('Working Time Recorded'), dataIndex: 'totalsum', renderer:  rendererManager('duration') }, defaults),
-            _.assign({ header: this.app.i18n._('Working Time %'), dataIndex: 'workingTimePercent', renderer: (v,m,r) => { return Tine.Tinebase.common.percentRenderer(Math.round(100 * (r.data.totalsum || 0) / r.data.workingTimeTarget)) } }, defaults)
+            _.assign({ header: this.app.i18n._('Turnover Target'), dataIndex: 'turnOverGoal', renderer: _.bind(Ext.util.Format.money, this, _, _, false) }, defaults),
+            _.assign({ header: this.app.i18n._('Turnover Recorded'), dataIndex: 'recordedAmount', renderer: _.bind(Ext.util.Format.money, this, _, _, false) }, defaults),
+            _.assign({ header: this.app.i18n._('Turnover Recorded %'), dataIndex: 'recordedPercent', renderer: (v,m,r) => { return Ext.ux.PercentRenderer(Math.round(100 * (r.data.recordedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
+            _.assign({ header: this.app.i18n._('Turnover Cleared'), dataIndex: 'clearedAmount', renderer: _.bind(Ext.util.Format.money, this, _, _, false) }, defaults),
+            _.assign({ header: this.app.i18n._('Turnover Cleared %'), dataIndex: 'clearedPercent', renderer: (v,m,r) => { return Ext.ux.PercentRenderer(Math.round(100 * (r.data.clearedAmount || 0) / r.data.turnOverGoal)) } }, defaults),
+            // Tine.widgets.grid.RendererManager.get('HumanResources', 'MonthlyWTReport', 'working_time_target')
+            _.assign({ header: this.app.i18n._('Working Time Target'), dataIndex: 'workingTimeTarget', renderer: Ext.ux.form.DurationSpinner.durationRenderer }, defaults),
+            _.assign({ header: this.app.i18n._('Working Time Recorded'), dataIndex: 'totalsum', renderer:  Ext.ux.form.DurationSpinner.durationRenderer }, defaults),
+            _.assign({ header: this.app.i18n._('Working Time %'), dataIndex: 'workingTimePercent', renderer: (v,m,r) => { return Ext.ux.PercentRenderer(Math.round(100 * (r.data.totalsum || 0) / r.data.workingTimeTarget)) } }, defaults)
         ];
 
         return columns;
@@ -172,13 +229,9 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
             "operator": "equals",
             "value": record.data.account_id,
         }], {start: 0, limit: 1}).then(result => {
+            result.workingTimeTarget = result.workingTimeTarget/60
             Object.assign(record.data, result)
         })))
-        const sums = _.reduce(this.store.data.items, (sums, record) => {
-            const result = record.data || {}
-            _.each(sums, (v,k) => sums[k] = sums[k] + (result[k] ? parseFloat(result[k], 10) : 0))
-            return sums;
-        }, {clearedAmount:0,totalcount:0,totalcountbillable:0,totalsum:0,totalsumbillable:0,turnOverGoal:0,workingTimeTarget:0})
 
         this.grid.getView().refresh();
         this.hideLoadMask()

@@ -1368,6 +1368,9 @@ msgstr "Bearbeiten"
 msgid "The field is editable part of the profile"
 msgstr "Das Feld kann im Profil bearbeitet werden"
 
+msgid "Infinity %"
+msgstr "Unendlich %"
+
 msgid "Field Name"
 msgstr "Feldname"
 

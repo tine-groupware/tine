@@ -28,6 +28,21 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "Period"
+msgstr "Zeitraum"
+
+msgid "Reload"
+msgstr "Neu Laden"
+
+msgid "Reload all data"
+msgstr "Alle Daten neu laden"
+
+msgid "Export"
+msgstr "Exportieren"
+
+msgid "Export all data"
+msgstr "Alle Daten exportieren"
+
 msgid "Turnover Target"
 msgstr "Umsatzziel"
 
@@ -641,6 +656,12 @@ msgstr "Legende"
 
 msgid "Free Time Planning"
 msgstr "Abwesenheitsplanung"
+
+msgid "Revenue Analysis"
+msgstr "Umsatzanalyse"
+
+msgid "Totals of the selected lines"
+msgstr "Summen der selektierten Zeilen"
 
 msgid "Human Resources"
 msgid_plural "Human Resources"
