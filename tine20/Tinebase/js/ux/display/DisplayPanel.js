@@ -48,6 +48,7 @@ Ext.ux.display.DisplayPanel = Ext.extend(Ext.Panel, {
      * @param {Tine.Tinebase.data.Record} record
      */
     loadRecord: function(record) {
+        this.record = record;
         this.fields.each(function(field) {
             var data = record.get(field.name) ? record.get(field.name) : '';
             field.setValue(data, record);
