@@ -14,6 +14,7 @@ class FieldTriggerPlugin {
     preserveElStyle = false
     hideOnEmptyValue = false
     hideOnInvalidValue = false
+    doAssertState = true
     #trigger
     
     constructor(config) {
@@ -69,6 +70,7 @@ class FieldTriggerPlugin {
     }
 
     assertState() {
+        if (!this.doAssertState) return
         this.#trigger?.setStyle({
             right: _.transform(this.field.plugins, (pos, plugin) => {
                 if (plugin === this) return false

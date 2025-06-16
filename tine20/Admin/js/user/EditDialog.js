@@ -960,6 +960,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.mustChangeTriggerPlugin = new FieldTriggerPlugin({
             visible: false,
+            doAssertState: false,
             triggerConfig: {tag: "div", cls: "x-form-trigger-flat x-form-trigger-plugin x-form-localized-field tinebase-trigger-overlay"},
             onTriggerClick:  Ext.emptyFn,
             qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
