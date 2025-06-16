@@ -79,8 +79,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.i18nFileString = this.i18nFileString ? this.i18nFileString : i18n._('File');
 
-        this.record = this.record || null;
-
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
             evalGrants: false
@@ -112,7 +110,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             this.contextMenu.showAt(e.getXY());
         }, this);
 
-        if (!this.record || this.record.id === 0) {
+        if (!this.editDialog.record || this.editDialog.record.id === 0) {
             this.on('celldblclick', function (grid, rowIndex, columnIndex, e) {
                 // Don't download if the cell has an editor, just go on with the event
                 if (grid.getColumns()[columnIndex] && grid.getColumns()[columnIndex].editor) {
@@ -376,7 +374,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.store.on('add', this.onStoreAdd, this);
 
-        this.loadRecord(this.record);
+        this.loadRecord(this.editDialog.record);
     },
 
     onStoreAdd: function (store, records, idx) {
@@ -456,7 +454,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         }
 
-        if (!this.record?.id) {
+        if (!this.editDialog.record?.id) {
             Tine.log.debug('Tine.widgets.grid.FileUploadGrid::onDownload - it is not allowed to download record attachment without record id');
             return;
         }
