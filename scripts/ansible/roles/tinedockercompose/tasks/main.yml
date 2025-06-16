@@ -115,6 +115,13 @@
     - not ansible_check_mode
     - tinedockercompose_no_restart is not defined or tinedockercompose_no_restart|bool == false
 
+- name: deactivate cronjob if required
+  ansible.builtin.shell: docker compose exec web sh -c "echo '' | /bin/crontab -u tine20 -"
+  args:
+    chdir: "{{ tinedockercompose_path }}"
+  when:
+    - tinedockercompose_tine_cronjob_deactivated|bool
+
 ## TODO make this work
 #- name: Create and start services
 #  community.docker.docker_compose:
