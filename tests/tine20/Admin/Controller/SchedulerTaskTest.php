@@ -76,9 +76,47 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
             Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
             Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
         ]);
+
+
         $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);
         $createdTask['next_run'] = Tinebase_DateTime::now();
         $updatedTask = Admin_Controller_SchedulerTask::getInstance()->update($createdTask);
         $this->assertNotNull($updatedTask);
+    }
+
+    public function testUpdateSystemSchedulerTask()
+    {
+        $task = new Admin_Model_SchedulerTask([
+            Admin_Model_SchedulerTask::FLD_NAME => 'unittest import scheduled task',
+            Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => '',
+            Admin_Model_SchedulerTask::FLD_CONFIG       => [
+                Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS      => Calendar_Import_Ical::class,
+                Admin_Model_SchedulerTask_Import::FLD_OPTIONS           => [
+                    'container_id' => $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true)->getId(),
+                    'url' => dirname(dirname(__DIR__)) . '/Calendar/Import/files/gotomeeting.ics',
+                ],
+            ],
+            Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
+            Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
+        ]);
+
+        $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);
+
+        $db = Tinebase_Core::getDb();
+        $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'scheduler_task') . ' SET ' . $db->quoteIdentifier('is_system') . ' = "1" WHERE ' . $db->quoteIdentifier('id') . ' = \'' . $createdTask->getId() .'\'')->closeCursor();
+        $createdTask = Admin_Controller_SchedulerTask::getInstance()->get($createdTask->getId());
+
+        $now = Tinebase_DateTime::now();
+        $createdTask[Admin_Model_SchedulerTask::FLD_NEXT_RUN] = $now;
+        $createdTask[Admin_Model_SchedulerTask::FLD_CRON] = '23 4 28 * *';
+        $createdTask[Admin_Model_SchedulerTask::FLD_EMAILS] = 'test@mail.test';
+        $createdTask[Admin_Model_SchedulerTask::FLD_ACTIVE] = 0;
+
+        $updatedTask = Admin_Controller_SchedulerTask::getInstance()->update($createdTask);
+
+        $this->assertEquals($now, $updatedTask[Admin_Model_SchedulerTask::FLD_NEXT_RUN]);
+        $this->assertEquals('23 4 28 * *', $updatedTask[Admin_Model_SchedulerTask::FLD_CRON]);
+        $this->assertEquals('test@mail.test', $updatedTask[Admin_Model_SchedulerTask::FLD_EMAILS]);
+        $this->assertEquals(0, $updatedTask[Admin_Model_SchedulerTask::FLD_ACTIVE]);
     }
 }
