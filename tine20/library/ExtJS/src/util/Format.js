@@ -398,6 +398,10 @@ var Format = function(){
          */
         nl2br : function(v){
             return Ext.isEmpty(v) ? '' : v.replace(nl2brRe, '<br/>');
+        },
+
+        tab2nbsp : function(v, num = 4) {
+            return Ext.isEmpty(v) ? '' : v.replace(/\t/, '&nbsp;'.repeat(num));
         }
     }
 }();

@@ -28,7 +28,7 @@
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
     - !reference [.lib-services, mail_service]
-    - name: ${UTIL_REGISTRY}/node:18.9.0-alpine-r1
+    - name: ${UTIL_REGISTRY}/node:18.9.0-alpine-r2
       alias: webpack
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service_webpack]
@@ -129,7 +129,7 @@ js-e2e-tests-source-php-version-matrix:
     - !reference [.js-e2e-tests-source, rules]
 
 js-unit-tests:
-  image: ${UTIL_REGISTRY}/node:18.9.0-alpine-r1
+  image: ${UTIL_REGISTRY}/node:18.9.0-alpine-r2
   stage: test
   needs: []
   timeout: 30m

@@ -3,6 +3,7 @@
           :title="props.opt.title"
           :title-class="'title'"
           :modal-class="'bootstrap-scope vue-message-box dark-reverse'"
+          :body-class="props.opt.bodyCls"
           :hide-header-close="!props.opt.closable"
           :hide-footer="!props.opt.buttons"
           :centered="true"

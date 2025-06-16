@@ -77,7 +77,8 @@ Ext.MessageBox = function(){
         wait: false,
         waitConfig: null,
         width: 600,
-        skinColor: '#FFFFFF'
+        skinColor: '#FFFFFF',
+        bodyCls: ""
     })
 
     // modal container config
