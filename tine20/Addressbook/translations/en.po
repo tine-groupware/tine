@@ -192,9 +192,6 @@ msgstr "Sync Backends"
 msgid "Default telephone country code"
 msgstr "Default telephone country code"
 
-msgid "Record)icon"
-msgstr "Record)icon"
-
 msgid "It is not allowed to delete a contact linked to an user account!"
 msgstr "It is not allowed to delete a contact linked to an user account!"
 

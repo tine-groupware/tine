@@ -204,9 +204,6 @@ msgstr "Synchronisations Backends"
 msgid "Default telephone country code"
 msgstr "Standard Telefon Länder-Code"
 
-msgid "Record)icon"
-msgstr ""
-
 msgid "It is not allowed to delete a contact linked to an user account!"
 msgstr "Es ist nicht erlaubt, einen Kontakt zu Löschen, der zu einem Benutzerkonto gehört!"
 
@@ -876,6 +873,9 @@ msgid_plural "Sites"
 msgstr[0] "Standort"
 msgstr[1] "Standorte"
 
+msgid "GENDER_Site"
+msgstr "male"
+
 msgid "GENDER_Group"
 msgstr "female"
 
@@ -1027,12 +1027,3 @@ msgstr ""
 
 msgid "Salutation Title Last Name (Company / Organisation)"
 msgstr ""
-
-#~ msgid "Customfields"
-#~ msgstr "Zusatzfelder"
-
-#~ msgid "GENDER_Email Address"
-#~ msgstr "female"
-
-#~ msgid "GENDER_Site"
-#~ msgstr "male"

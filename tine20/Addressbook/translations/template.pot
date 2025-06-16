@@ -192,9 +192,6 @@ msgstr ""
 msgid "Default telephone country code"
 msgstr ""
 
-msgid "Record)icon"
-msgstr ""
-
 msgid "It is not allowed to delete a contact linked to an user account!"
 msgstr ""
 
