@@ -5,6 +5,7 @@ tinedockercompose_tinesetuppw: "movemetovault"
 tinedockercompose_tinesetuphtpasswd: "setup:$$apr1$$JhCtViTh$$k15DH.HvNR5hZ66Ew5aTH/" #setuppw
 tinedockercompose_tineloggerprio: "5"
 tinedockercompose_tinesharedkey: "changeme"
+tinedockercompose_tine_cronjob_deactivated: false
 
 tinedockercompose_path: "/srv/tine"
 tinedockercompose_confd_path: "/srv/tine/conf.d"
