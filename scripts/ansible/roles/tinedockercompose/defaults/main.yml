@@ -39,6 +39,7 @@ tinedockercompose_documentserver: false
 tinedockercompose_documentserver_version: "latest"
 tinedockercompose_documentserver_secret: "change_me_also_define_in_tine_cfg"
 tinedockercompose_documentserver_publicurl: "http://localhost:4020/"
+tinedockercompose_documentserver_serverurl: true
 
 tinedockercompose_redis_version: "6.0.16"
 

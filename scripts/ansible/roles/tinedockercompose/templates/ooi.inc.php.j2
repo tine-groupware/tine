@@ -2,8 +2,10 @@
 return [
     'OnlyOfficeIntegrator' => [
         'onlyOfficePublicUrl' => '{{ tinedockercompose_documentserver_publicurl }}',
+{% if tinedockercompose_documentserver_serverurl|bool %}
         'onlyOfficeServerUrl' => 'http://documentserver/',
         'tine20ServerUrl' => 'http://web/',
+{% endif %}
         'jwtEnabled' => true,
         'jwtSecret' => '{{ tinedockercompose_documentserver_secret }}',
     ],
