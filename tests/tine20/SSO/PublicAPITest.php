@@ -164,6 +164,19 @@ class SSO_PublicAPITest extends TestCase
             $xml);
     }
 
+    public function testGetIdToken(): void
+    {
+        $idToken = SSO_Controller::getOpenIdConnectServer()->getIdToken(new Tinebase_Model_FullUser([
+            'accountId' => Tinebase_Core::getUser()->accountEmailAddress,
+            'accountEmailAddress' => Tinebase_Core::getUser()->accountEmailAddress,
+        ], true), 'azp');
+        $tokenParts = explode('.', $idToken);
+        $jwt = json_decode(base64_decode($tokenParts[1]), true);
+
+        $this->assertSame('azp', $jwt['azp'] ?? null);
+        $this->assertSame(Tinebase_Core::getUser()->accountEmailAddress, $jwt['sub']);
+    }
+
     /**
      * @group needsbuild
      */

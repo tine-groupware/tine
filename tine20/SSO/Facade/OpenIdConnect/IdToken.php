@@ -36,7 +36,8 @@ class SSO_Facade_OpenIdConnect_IdToken extends IdToken
             ->issuedAt($this->getIat())
             ->identifiedBy($this->identifier)
             ->withClaim('auth_time', $this->getAuthTime()->getTimestamp())
-            ->withClaim('nonce', $this->getNonce());
+            ->withClaim('nonce', $this->getNonce())
+            ->withClaim('azp', $this->getAudience());
 
         foreach ($this->extra as $key => $value) {
             $token = $token->withClaim($key, $value);

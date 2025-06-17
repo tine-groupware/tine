@@ -254,6 +254,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const SIEVE = 'sieve';
 
+    public const SASL = 'sasl';
+    public const SASL_XOAUTH2 = 'xoauth2';
+
     /**
      * trusted proxy config
      *

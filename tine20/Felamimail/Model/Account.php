@@ -724,9 +724,23 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getImapConfig()
     {
-        $this->resolveCredentials(false);
+        $result = [];
+        if (!$this->isExternalAccount() && Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::SASL}) {
+            $result['sasl'] = 'XOAUTH2';
+            $result['sasl_params'] = [
+                'email' => $this->email,
+                'token' => SSO_Controller::getOpenIdConnectServer()->getIdToken(
+                    new Tinebase_Model_FullUser([
+                        'accountId' => $this->email,
+                        'accountEmailAddress' => $this->email,
+                    ], true),
+                    'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)
+                ),
+            ];
+        } else {
+            $this->resolveCredentials(false);
+        }
 
-        $result = array();
         foreach (array('host', 'port', 'user', 'password') as $field) {
             $result[$field] = $this->{$field};
         }
@@ -745,6 +759,19 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getSmtpConfig()
     {
+        if (!$this->isExternalAccount()) {
+            if (Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::SMTP}->{Tinebase_Config::SASL}) {
+                $this->smtp_user = $this->email;
+                $this->smtp_password = SSO_Controller::getOpenIdConnectServer()->getIdToken(
+                    new Tinebase_Model_FullUser([
+                        'accountId' => $this->email,
+                        'accountEmailAddress' => $this->email,
+                    ], true),
+                    'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)
+                );
+                $this->smtp_auth = 'plain';
+            }
+        }
         if (! $this->smtp_user || ! $this->smtp_password) {
             $this->resolveCredentials(FALSE, TRUE, TRUE);
         }
@@ -792,15 +819,30 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getSieveConfig()
     {
-        $this->resolveCredentials(FALSE);
-        
-        return array(
+        $result = [
             'host'      => $this->sieve_hostname,
-            'port'      => $this->sieve_port, 
+            'port'      => $this->sieve_port,
             'ssl'       => ($this->sieve_ssl && $this->sieve_ssl !== self::SECURE_NONE) ? $this->sieve_ssl : FALSE,
-            'username'  => $this->user,
-            'password'  => $this->password,
-        );
+        ];
+        if (!$this->isExternalAccount() && Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::SASL}) {
+            $result['sasl'] = 'XOAUTH2';
+            $result['sasl_params'] = [
+                'email' => $this->email,
+                'token' => SSO_Controller::getOpenIdConnectServer()->getIdToken(
+                    new Tinebase_Model_FullUser([
+                        'accountId' => $this->email,
+                        'accountEmailAddress' => $this->email,
+                    ], true),
+                    'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)
+                ),
+            ];
+        } else {
+            $this->resolveCredentials(FALSE);
+            $result['username'] = $this->user;
+            $result['password'] = $this->password;
+        }
+        
+        return $result;
     }
     
     /**
