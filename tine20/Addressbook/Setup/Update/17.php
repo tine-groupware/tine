@@ -103,20 +103,23 @@ class Addressbook_Setup_Update_17 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         $emailFields = array_keys(Addressbook_Model_Contact::getEmailFields());
+        $db = $this->getDb();
 
         $caseConditions = [];
         foreach ($emailFields as $field) {
-            $caseConditions[] = "WHEN {$field} IS NOT NULL AND {$field} != '' THEN '{$field}'";
+            $quotedField = $db->quoteIdentifier($field);
+            $caseConditions[] = "WHEN {$quotedField} IS NOT NULL AND {$quotedField} != '' THEN '{$quotedField}'";
         }
         $caseStatement = implode(' ', $caseConditions);
 
         $emailCheckConditions = [];
         foreach ($emailFields as $field) {
-            $emailCheckConditions[] = "(preferred_email = '{$field}' AND ({$field} IS NULL OR {$field} = ''))";
+            $quotedField = $db->quoteIdentifier($field);
+            $emailCheckConditions[] = "(preferred_email = {$quotedField} AND ({$quotedField} IS NULL OR {$quotedField} = ''))";
         }
         $invalidPreferredCondition = implode(' OR ', $emailCheckConditions);
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
             ' SET preferred_email = CASE ' . $caseStatement . ' ELSE "email" END' .
             ' WHERE ' . $invalidPreferredCondition);
 

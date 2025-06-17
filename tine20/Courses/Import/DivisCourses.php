@@ -855,7 +855,12 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
     protected function _getLehrerUserName(array $raw): string
     {
-        return strtolower(substr($raw[0], 0, 1) . '.' . $raw[1]);
+        $tmp = new Tinebase_Model_FullUser([
+            'accountFirstName' => $raw[0],
+            'accountLastName' => $raw[1],
+        ], true);
+        $tmp->applyTwigTemplates();
+        return $tmp->shortenUsername();
     }
 
     protected function _getRawData(&$_resource)

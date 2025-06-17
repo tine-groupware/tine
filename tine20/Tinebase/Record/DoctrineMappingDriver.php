@@ -158,8 +158,15 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
                         ' already mapped');
                 }
 
-                if (!preg_match('/^[a-z_0-9]+$/', $config['columnName']) && !isset($config[Tinebase_ModelConfiguration_Const::ALLOW_CAMEL_CASE]) && !str_starts_with($config['columnName'], 'GDPR_')) {
-                    throw new Tinebase_Exception_Record_DefinitionFailure($className . '::' . $config['columnName'] . ' contains illegal characters');
+                if (!preg_match('/^[a-z_0-9]+$/', $config['columnName'])
+                    && (!array_key_exists('systemCF', $config) || !$config['systemCF'])
+                    && !isset($config[Tinebase_ModelConfiguration_Const::ALLOW_CAMEL_CASE])
+                    && !str_starts_with($config['columnName'], 'GDPR_')
+                    && !str_starts_with($config['specialType'], 'Addressbook_Model_ContactProperties')
+                ) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure(
+                        $className . '::' . $config['columnName'] . ' contains illegal characters'
+                    );
                 }
 
                 if ($metadata->hasAssociation($config['fieldName'])) {
