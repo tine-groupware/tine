@@ -523,7 +523,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         existing.set(value, key);
                     });
                 } else {
-                    const file = new Ext.ux.file.Upload.file(files[i]);
+                    const file = new Ext.ux.file.Upload.file(files[i], files[i].id);
                     file.data.status = 'complete';
                     this.store.addUnique(file, 'name');
                 }
