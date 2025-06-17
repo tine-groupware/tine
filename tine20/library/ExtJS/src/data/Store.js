@@ -653,6 +653,9 @@ sortInfo: {
         prop = prop.match(/^data\./) ? prop : `data.${prop}`;
         let [,name, idx, ext] = String(_.get(record, prop)).match(/(.*?)(?:\s\((\d+)\))?(\..*)/) || [null, _.get(record, prop)];
         while(_.find(this.data.items, (item) => {return _.get(item, prop) === _.get(record, prop)})) {
+            if (record.data === item.data) {
+                throw new Error("impossible to add unique this!")
+            }
             idx = idx || 0;
             _.set(record, prop, `${name} (${++idx})${ext ||''}`);
         }
