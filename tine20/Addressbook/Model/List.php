@@ -117,8 +117,15 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             ),
             'contact'           => array(
                 'filter'            => 'Addressbook_Model_ListMemberFilter',
-                'label'             => null,
-                'options'           => array()
+                'label'             => 'List Member', // _('List Member')
+                'options'           => [],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => 'Tine.Addressbook.Model.Contact',
+                    'multipleForeignRecords' => true,
+                    'ownField' => 'contact',
+                ],
             ),
             'container_id'      => array(
                 'filter'  => Tinebase_Model_Filter_Container::class,

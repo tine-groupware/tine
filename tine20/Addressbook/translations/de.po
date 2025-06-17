@@ -752,6 +752,9 @@ msgstr "Telefonnummmern"
 msgid "Emails"
 msgstr "E-Mails"
 
+msgid "List Member"
+msgstr "Gruppenmitglied"
+
 msgid "Name/Emails"
 msgstr "Name/E-Mails"
 
