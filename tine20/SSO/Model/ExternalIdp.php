@@ -42,6 +42,15 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
     public const FLD_REQUIRE_LOCAL_MFA = 'require_local_mfa';
     public const FLD_UPDATE_LOCAL_PROPERTIES = 'update_local_properties';
     public const FLD_PRIMARY_GROUP_NEW_ACCOUNT = 'primary_group_new_account';
+    public const FLD_GROUPS_NEW_ACCOUNT = 'groups_new_account';
+    public const FLD_DENY_GROUPS = 'deny_groups';
+    public const FLD_DENY_ROLES = 'deny_roles';
+    public const FLD_REQUIRED_GROUP_CLAIMS = 'required_group_claims';
+    public const FLD_GROUPS_CLAIM_NAME = 'groups_claim_name';
+    public const FLD_CREATE_GROUPS = 'create_groups';
+    public const FLD_ASSIGN_GROUPS = 'assign_groups';
+    public const FLD_ACCOUNT_PREFIX = 'account_prefix';
+    public const FLD_GROUP_PREFIX = 'group_prefix';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -56,7 +65,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 4,
+        self::VERSION => 5,
         self::RECORD_NAME => 'External Identity Provider',
         self::RECORDS_NAME => 'External Identity Providers', // ngettext('External Identity Provider', 'External Identity Providers', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -194,6 +203,66 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 self::LENGTH                => 40,
                 self::NULLABLE              => true,
                 self::LABEL                 => 'Primary group for created local accounts', // _('Primary group for created local accounts')
+            ],
+            self::FLD_GROUPS_NEW_ACCOUNT => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => 'Group',
+                    self::STORAGE                   => self::TYPE_JSON_REFID,
+                ],
+                self::LABEL                     => 'Groups to be set for created local accounts', // _('Groups to be set for created local accounts')
+            ],
+            self::FLD_DENY_GROUPS => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => 'Group',
+                    self::STORAGE                   => self::TYPE_JSON_REFID,
+                ],
+                self::LABEL                     => 'Groups that deny login for existing local accounts', // _('Groups that deny login for existing local accounts')
+            ],
+            self::FLD_DENY_ROLES => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => 'Role',
+                    self::STORAGE                   => self::TYPE_JSON_REFID,
+                ],
+                self::LABEL                     => 'Roles that deny login for existing local accounts', // _('Roles that deny login for existing local accounts')
+            ],
+            self::FLD_REQUIRED_GROUP_CLAIMS => [
+                self::TYPE                      => self::TYPE_JSON,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'One of these group claims needs to be present', // _('One of these group claims needs to be present')
+            ],
+            self::FLD_GROUPS_CLAIM_NAME     => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'The name of the "groups" claim, defaults to "groups"', // _('The name of the "groups" claim, defaults to "groups"')
+            ],
+            self::FLD_CREATE_GROUPS         => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL               => false,
+                self::LABEL                     => 'Create groups locally', // _('Create groups locally')
+            ],
+            self::FLD_ASSIGN_GROUPS         => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL               => false,
+                self::LABEL                     => 'Assign groups locally', // _('Assign groups locally')
+            ],
+            self::FLD_ACCOUNT_PREFIX        => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'The name of the "groups" claim, defaults to "groups"', // _('The name of the "groups" claim, defaults to "groups"')
+            ],
+            self::FLD_GROUP_PREFIX          => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'The name of the "groups" claim, defaults to "groups"', // _('The name of the "groups" claim, defaults to "groups"')
             ],
         ],
     ];
