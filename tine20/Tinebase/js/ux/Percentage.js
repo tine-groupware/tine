@@ -152,7 +152,7 @@ Ext.ux.PercentRenderer = function(percent) {
     const data = _.isObject(percent) ? percent : { percent };
     data.qtitle = data.qtitle ?? null;
     data.qtip = data.qtip ?? null;
-    data.text = data.text || (_.isNaN(percent) ? '' : percent === Infinity ? i18n._('Infinity %') : (String(percent) + '%'));
+    data.text = data.text || (_.isNaN(data.percent) ? '' : data.percent === Infinity ? i18n._('Infinity %') : (String(data.percent) + '%'));
     data.percent = data.percent === Infinity ? 100 : data.percent;
     if (! data.colorClass) {
         // this will enable a color scheme for each percentage on the progress bar
