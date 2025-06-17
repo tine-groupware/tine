@@ -84,6 +84,7 @@
     "brotli-webpack-plugin": "^1.1.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
+    "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^6.7.3",
     "eslint": "^8.31.0",
     "eslint-config-standard": "^17.0.0",
