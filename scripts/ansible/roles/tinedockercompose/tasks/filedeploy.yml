@@ -91,7 +91,7 @@
 
 - name: configure edocument
   template:
-    src: broadcasthub.inc.php.j2
+    src: edocument.inc.php.j2
     dest: "{{ tinedockercompose_confd_path }}/edocument.inc.php"
     owner: tine20
     group: root
