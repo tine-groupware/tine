@@ -725,6 +725,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     listAlign: 'tr-br',
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     renderTo: el,
+                    useEditPlugin: false,
                     allowMultiple: ['in', 'notin', 'allOf'].indexOf(operator) > -1
                 }, this.pickerConfig));
                 
