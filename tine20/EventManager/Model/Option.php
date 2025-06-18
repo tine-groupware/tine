@@ -168,7 +168,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                     self::TYPE => self::TYPE_STRING,
                     self::LENGTH => 255,
                 ],
-                self::LABEL => 'Url', // _('Url')
+                self::LABEL => 'URL', // _('URL')
             ],
         ]
     ];

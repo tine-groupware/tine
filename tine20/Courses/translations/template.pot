@@ -13,34 +13,34 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Add new user"
+msgid "Add a new user"
 msgstr ""
 
-msgid "Add new user as member to a course"
+msgid "Add a new user as a member to a course"
 msgstr ""
 
-msgid "Add existing user"
+msgid "Add an existing user"
 msgstr ""
 
-msgid "Add existing user as member to a course"
+msgid "Add an existing user as a member to a course"
 msgstr ""
 
-msgid "Manage shared courses favorites"
+msgid "Manage shared course favorites"
 msgstr ""
 
-msgid "Create or update shared courses favorites"
+msgid "Create or update shared course favorites"
 msgstr ""
 
 msgid "Set additional memberships"
 msgstr ""
 
-msgid "Set additional course member group memberships"
+msgid "Set additional group memberships for course members"
 msgstr ""
 
 msgid "Additional Group Memberships"
 msgstr ""
 
-msgid "Array of IDs of Groups students can be members of"
+msgid "Array of group IDs that students can be members of"
 msgstr ""
 
 msgid "Internet Access"
@@ -64,16 +64,16 @@ msgstr ""
 msgid "Internet Access Group (FILTERED)"
 msgstr ""
 
-msgid "Students Group"
+msgid "Student Group"
 msgstr ""
 
-msgid "Students Import Definition"
+msgid "Student Import Definition"
 msgstr ""
 
-msgid "Students login name prefix"
+msgid "Student login name prefix"
 msgstr ""
 
-msgid "Students password suffix"
+msgid "Student password suffix"
 msgstr ""
 
 msgid "Teacher password"
@@ -117,19 +117,19 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-msgid "Add new member to course"
+msgid "Add a new member to a course"
 msgstr ""
 
 msgid "Errors"
 msgstr ""
 
-msgid "Please fix the errors noted."
+msgid "Please fix the noted errors."
 msgstr ""
 
 msgid "Import course members"
 msgstr ""
 
-msgid "Add new member"
+msgid "Add a new member"
 msgstr ""
 
 msgid "Course Name"
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-msgid "Please enter the new Password."
+msgid "Please enter the new password."
 msgstr ""
 
 msgid "Name"
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
-msgid "Some error occured while trying to update the courses."
+msgid "An error occurred while trying to update the courses"
 msgstr ""
 
 msgid "Quick Search"
@@ -179,13 +179,13 @@ msgstr[1] ""
 msgid "All courses"
 msgstr ""
 
-msgid "The default favorite which is loaded on Classes startup"
+msgid "The default favorite that is loaded when Classes start up."
 msgstr ""
 
 msgid "School"
 msgstr ""
 
-msgid "Defaul school for Courses application"
+msgid "Default school for the Courses application"
 msgstr ""
 
 msgid "Courses"

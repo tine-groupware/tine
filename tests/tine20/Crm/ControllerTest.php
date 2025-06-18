@@ -315,7 +315,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
         // try to save the Lead again
         $translation = Tinebase_Translation::getTranslation('Crm');
         $this->expectException('Tinebase_Exception_SystemGeneric');
-        $this->expectExceptionMessage($translation->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
+        $this->expectExceptionMessage($translation->_('This lead state is set to read-only. Therefore, updating this lead is not possible.'));
         Crm_Controller_Lead::getInstance()->update($updatedLead);
     }
 

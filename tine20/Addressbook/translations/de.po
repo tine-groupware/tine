@@ -124,6 +124,15 @@ msgstr "Kriterium zum ausblenden von Kontakten"
 msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
 msgstr "Der Kontakt wird ausgeblendet wenn er ... ist. (eines von: deaktiviert, abgelaufen oder niemals)"
 
+msgid "Contact Property Link Types"
+msgstr ""
+
+msgid "Inline"
+msgstr ""
+
+msgid "Records"
+msgstr ""
+
 msgid "Contact types available"
 msgstr "Verfügbare Kontkakt-Typen"
 
@@ -217,7 +226,7 @@ msgstr "Die E-Mail-Adresse ist bereits vergeben. Bitte wählen Sie eine andere."
 msgid "Maximum number of role members reached"
 msgstr "Maximale Anzahl von Mitgliedern erreicht"
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal addressbook"
 msgstr "%ss persönliches Adressbuch"
 
@@ -688,9 +697,6 @@ msgid_plural "Email Addresses"
 msgstr[0] "E-mail Adresse"
 msgstr[1] "E-mail Adressen"
 
-msgid "GENDER_Email Address"
-msgstr "female"
-
 msgid "Email Addresses"
 msgstr "E-mail Adressen"
 
@@ -717,7 +723,7 @@ msgstr "Private Anschrift"
 msgid "Related to"
 msgstr "Verknüpft mit"
 
-msgid "Customfields"
+msgid "Custom Fields"
 msgstr "Zusatzfelder"
 
 msgid "System Group"
@@ -1012,3 +1018,12 @@ msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen"
+
+msgid "Display Name (email)"
+msgstr ""
+
+msgid "Display Name - Company / Organisation"
+msgstr ""
+
+msgid "Salutation Title Last Name (Company / Organisation)"
+msgstr ""

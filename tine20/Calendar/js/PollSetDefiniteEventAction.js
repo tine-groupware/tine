@@ -17,7 +17,7 @@ Tine.Calendar.eventActions.setDefiniteEventAction = {
     app: 'Calendar',
     requiredGrant: 'editGrant',
     allowMultiple: false,
-    text: 'Set as definite event', // _('Set as definite event')
+    text: 'Set as a definite event', // _('Set as a definite event')
     disabled: true,
     iconCls: 'cal-polls-set-definite-action',
     scope: this,
@@ -27,7 +27,7 @@ Tine.Calendar.eventActions.setDefiniteEventAction = {
             var app = Tine.Tinebase.appMgr.get('Calendar');
 
             Ext.Msg.confirm(
-                app.i18n._('Set This Date as Definite Event?'),
+                app.i18n._('Set this date as the definite event?'),
                 app.i18n._('Do you want to close the poll and remove all other alternatives?'),
                 function(button) {
                     if (button == 'yes') {

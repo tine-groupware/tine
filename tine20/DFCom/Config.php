@@ -53,23 +53,23 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEVICE_LIST_STATUS => [
             //_('Device List Status')
             'label'                 => 'Device List Status',
-            //_('Possible list status from device list feedback records.')
-            'description'           => 'Possible list status from device list feedback records.',
+            //_('Possible list statuses based on device list feedback records')
+            'description'           => 'Possible list statuses based on device list feedback records',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'default'               => [
                 'records' => array(
-                    ['id' =>   -1, 'value' => 'List was send to device', 'system' => true], //_('List was send to device')
-                    ['id' =>    0, 'value' => 'List was taken over', 'system' => true], //_('List was taken over')
+                    ['id' =>   -1, 'value' => 'List was sent to device', 'system' => true], //_('List was sent to device')
+                    ['id' =>    0, 'value' => 'List has been accepted', 'system' => true], //_('List has been accepted')
                     ['id' =>    1, 'value' => 'Generic error', 'system' => true], //_('Generic error')
                     ['id' => 1001, 'value' => 'Invalid label', 'system' => true], //_('Invalid label')
                     ['id' => 1002, 'value' => 'Unknown list', 'system' => true], //_('Unknown list')
                     ['id' => 1003, 'value' => 'Parameter missing', 'system' => true], //_('Parameter missing')
-                    ['id' => 1004, 'value' => 'Error in list line', 'system' => true], //_('Error in list line')
+                    ['id' => 1004, 'value' => 'Error in list row', 'system' => true], //_('Error in list row')
                     ['id' => 1005, 'value' => 'List is ignored', 'system' => true], //_('List is ignored')
                     ['id' => 1006, 'value' => 'Duplicate list definition', 'system' => true], //_('Duplicate list definition')
-                    ['id' => 1007, 'value' => 'An other list upgrade is in progress', 'system' => true], //_('An other list upgrade is in progress')
+                    ['id' => 1007, 'value' => 'Another list upgrade is in progress', 'system' => true], //_('Another list upgrade is in progress')
                 ),
                 'default' => 0
             ]
@@ -77,8 +77,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEVICE_LISTE_PERCENTAGE => [
             //_('Device List Percentage')
             'label'                 => 'Device List Percentage',
-            //_('Device list with Percentage entries.')
-            'description'           => 'Device list with Percentage entries.',
+            //_('Device list containing percentage entries.')
+            'description'           => 'Device list containing percentage entries.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
@@ -102,8 +102,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::SETUP_AUTH_KEY => [
             //_('Initial AuthKey for Device Setup')
             'label'                 => 'Initial AuthKey for Device Setup',
-            //_('Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup.')
-            'description'           => 'Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup.',
+            //_('Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup.')
+            'description'           => 'Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
@@ -111,17 +111,17 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEFAULT_DEVICE_CONTAINER => [
             //_('Default Container for Devices')
             'label'                 => 'Default Container for Devices',
-            //_('The container where new devices are created in.')
-            'description'           => 'The container where new devices are created in.',
+            //_('The container where new devices are created.')
+            'description'           => 'The container where new devices are created.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
         ],
         self::DEFAULT_DEVICE_LISTS => [
-            //_('Default Devices Lists')
-            'label'                 => 'Default Devices Lists',
-            //_('List export definition names to load into devices per default.')
-            'description'           => 'List export definition names to load into devices per default.',
+            //_('Default Device Lists')
+            'label'                 => 'Default Device Lists',
+            //_('List export definition names that are loaded into devices by default.')
+            'description'           => 'List export definition names that are loaded into devices by default.',
             'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
@@ -129,8 +129,8 @@ class DFCom_Config extends Tinebase_Config_Abstract
         self::DEVICE_RECORD_HANDLERS => [
             //_('Device Record Handlers')
             'label'                 => 'Device Record Handlers',
-            //_('Handler class for given device record.')
-            'description'           => 'Handler class for given device record.',
+            //_('Handler class for a given device record.')
+            'description'           => 'Handler class for a given device record.',
             'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,

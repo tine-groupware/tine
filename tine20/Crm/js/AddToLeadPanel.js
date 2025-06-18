@@ -28,12 +28,12 @@ Tine.Crm.AddToLeadPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPanel, {
     isValid: function() {
         var valid = true;
         if(this.searchBox.getValue() == '') {
-            this.searchBox.markInvalid(this.app.i18n._('Please choose the Lead to add the contacts to'));
+            this.searchBox.markInvalid(this.app.i18n._('Please select the lead to add the contacts to'));
             valid = false;
         }
         
         if(this.chooseRoleBox.getValue() == '') {
-            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the attenders\' role'));
+            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the attendee\'s role'));
             valid = false;
         }
         

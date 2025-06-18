@@ -40,10 +40,10 @@ msgstr "Benutzerkonten verwalten"
 msgid "Add and edit users and groups, add group members, change user passwords."
 msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen."
 
-msgid "Manage e-mail accounts"
+msgid "Manage email accounts"
 msgstr "E-Mail Konten verwalten"
 
-msgid "Add and edit shared and personal e-mail accounts."
+msgid "Add and edit shared and personal email accounts."
 msgstr "Persönliche und gemeinsame E-Mail Konten ansehen."
 
 msgid "Manage applications"
@@ -88,10 +88,10 @@ msgstr "Container verwalten"
 msgid "Add, delete and edit containers and manage container grants."
 msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
 
-msgid "Manage customfields"
+msgid "Manage custom fields"
 msgstr "Zusatzfelder verwalten"
 
-msgid "Add and edit customfields."
+msgid "Add and edit custom fields."
 msgstr "Zusatzfelder anlegen und editieren."
 
 msgid "Manage import and export definitions"
@@ -112,10 +112,10 @@ msgstr "Benutzerkonten ansehen"
 msgid "View accounts list and details."
 msgstr "Benutzerkonten ansehen (Liste und Details)"
 
-msgid "View e-mail accounts"
+msgid "View email accounts"
 msgstr "E-Mail Konten ansehen"
 
-msgid "View shared and personal e-mail accounts."
+msgid "View shared and personal email accounts."
 msgstr "Persönliche und gemeinsame E-Mail Konten ansehen."
 
 msgid "View applications"
@@ -148,16 +148,16 @@ msgstr "Container ansehen"
 msgid "View personal and shared containers."
 msgstr "Persönlichen und gemeinsame Container ansehen."
 
-msgid "View customfields"
+msgid "View custom fields"
 msgstr "Zusatzfelder ansehen"
 
-msgid "View customfields list."
+msgid "View custom fields list."
 msgstr "Liste der Zusatzfelder ansehen."
 
-msgid "View serverinfo"
+msgid "View server info"
 msgstr "Serverinformationen ansehen"
 
-msgid "View serverinfo list."
+msgid "View server info list."
 msgstr "Listen der Serverinformationen ansehen."
 
 msgid "View quota usage"
@@ -206,16 +206,16 @@ msgid "Force retype of new password in user edit dialog"
 msgstr "Erzwinge die erneute Eingabe des neuen Passworts im Benutzer-Bearbeitungsdialog"
 
 msgid "Enable XProps Editor in Edit-Dialogs"
-msgstr ""
+msgstr "XProps-Editor in Bearbeitungsdialogen aktivieren"
 
 msgid "Prevent applications disable in front end"
-msgstr ""
+msgstr "Deaktivieren von Anwendungen im Frontend verhindern"
 
 msgid "Allow to change user type"
-msgstr ""
+msgstr "Benutzertyp ändern erlauben"
 
 msgid "Modules to show in admin app, default value null means all modules."
-msgstr ""
+msgstr "Module, die in der Admin-App angezeigt werden sollen. Der Standardwert null bedeutet alle Module."
 
 msgid "Your container has been changed"
 msgstr "Ihr persönlicher Container wurde geändert"
@@ -233,10 +233,10 @@ msgstr "Es gibt bereits eine Gruppe mit diesem Namen"
 msgid "Record data needs to be set!"
 msgstr "Datensatz muss gesetzt sein!"
 
-msgid "Account E-Mail needs to be set!"
+msgid "Account email needs to be set!"
 msgstr "Konto E-Mail muss gesetzt sein!"
 
-msgid "E-Mail account not found."
+msgid "Email account not found."
 msgstr "E-Mail-Konto nicht gefunden."
 
 msgid "Password is needed for system account creation"
@@ -255,7 +255,7 @@ msgid "CSV all data"
 msgstr "CSV Alle Daten"
 
 msgid "Notifications"
-msgstr "Notifizierungen"
+msgstr "Benachrichtigungen"
 
 msgid "Access Log"
 msgid_plural "Access Logs"
@@ -333,14 +333,14 @@ msgstr "Container"
 msgid "Shared Tags"
 msgstr "Gemeinsame Tags"
 
-msgid "Customfields"
+msgid "Custom Fields"
 msgstr "Zusatzfelder"
 
 msgid "Computers"
 msgstr "Computer"
 
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 msgid "Server Information"
 msgstr "Server Informationen"
@@ -348,8 +348,11 @@ msgstr "Server Informationen"
 msgid "ActiveSync Devices"
 msgstr "ActiveSync Geräte"
 
-msgid "E-mail Accounts"
+msgid "Email Accounts"
 msgstr "E-Mail Konten"
+
+msgid "Matrix Accounts"
+msgstr ""
 
 msgid "Import Export Definitions"
 msgstr "Import/Export-Definitionen"
@@ -466,8 +469,8 @@ msgstr "Notiz für den Besitzer"
 msgid "Info"
 msgstr "Info"
 
-msgid "Please create Resources in Addressbook or CoreData."
-msgstr "Bitte Ressourcen im Addressbook oder Stammdaten erstellen."
+msgid "Please create resources in the Addressbook or CoreData."
+msgstr "Bitte Ressourcen im Adressbuch oder Stammdaten erstellen."
 
 msgid "ID"
 msgstr "ID"
@@ -478,8 +481,8 @@ msgstr "Containername"
 msgid "Container Order"
 msgstr "Container Reihenfolge"
 
-msgid "Customfield"
-msgid_plural "Customfields"
+msgid "Custom Field"
+msgid_plural "Custom Fields"
 msgstr[0] "Zusatzfeld"
 msgstr[1] "Zusatzfelder"
 
@@ -572,7 +575,7 @@ msgstr[1] "Gruppen"
 msgid "Key"
 msgstr "Schlüssel"
 
-msgid "Customfield already exists. Please choose another name."
+msgid "Custom field already exists. Please choose another name."
 msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
 msgid "Grouping"
@@ -596,16 +599,16 @@ msgstr "Gruppenname"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-msgid "Display in addressbook"
+msgid "Display in Addressbook"
 msgstr "Zeige im Adressbuch"
 
-msgid "Hide from addressbook"
+msgid "Hide from Addressbook"
 msgstr "Nicht im Adressbuch anzeigen"
 
 msgid "Saved in Addressbook"
 msgstr "Gespeichert im Adressbuch"
 
-msgid "E-mail"
+msgid "Email"
 msgstr "E-Mail"
 
 msgid "Only system accounts can be added to Addressbook group"
@@ -620,8 +623,8 @@ msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfigur
 msgid "Confirm"
 msgstr "Bestätigen"
 
-msgid "Do you really want to delete the selected groups?"
-msgstr "Die ausgewählten Gruppen wirklich löschen?"
+msgid "Are you sure you want to delete the selected groups?"
+msgstr "Möchten Sie die ausgewählten Gruppen wirklich löschen?"
 
 msgid "Deleting group(s)..."
 msgstr "Lösche Gruppe(n)..."
@@ -648,13 +651,13 @@ msgstr "Nur Systembenutzer"
 msgid "Creation Time"
 msgstr "Erstellungszeit"
 
-msgid "Created By"
+msgid "Created by"
 msgstr "Erstellt von"
 
 msgid "Last Modified Time"
 msgstr "Änderungszeit"
 
-msgid "Last Modified By"
+msgid "Last Modified by"
 msgstr "Letzte Änderung von"
 
 msgid "ImportExportDefinition"
@@ -765,7 +768,7 @@ msgstr "Neue Rolle hinzufügen"
 msgid "Edit Role \"{0}\""
 msgstr "Rolle \"{0}\" bearbeiten"
 
-msgid "Do you really want to delete the selected roles?"
+msgid "Are you sure you want to delete the selected roles?"
 msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
 
 msgid "Deleting role(s)..."
@@ -830,7 +833,7 @@ msgstr "Neuen Tag hinzufügen"
 msgid "Edit Tag \"{0}\""
 msgstr "Tag \"{0}\" bearbeiten"
 
-msgid "Do you really want to delete the selected tags?"
+msgid "Are you sure you want to delete the selected tags?"
 msgstr "Möchten Sie den/die markierten Tag/s wirklich löschen?"
 
 msgid "Deleting tag(s)..."
@@ -936,13 +939,13 @@ msgstr "Zuletzt eingeloggt um"
 msgid "Forward Only"
 msgstr "Nur Weiterleiten"
 
-msgid "E-mail Alias"
+msgid "Email Alias"
 msgstr "E-Mail Alias"
 
 msgid "Add an alias address..."
 msgstr "E-Mail-Adresse hinzufügen..."
 
-msgid "This alias can be used for sending e-mails."
+msgid "This alias can be used for sending emails."
 msgstr "Dieser Alias kann zum Versenden von E-Mails verwendet werden."
 
 msgid "Domain not allowed"
@@ -955,10 +958,10 @@ msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundä
 msgid "Forwarding to self"
 msgstr "Weiterleitung zu sich selbst"
 
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgid "You are not allowed to set a forwarding email address that is identical to the users primary email or one of his aliases."
 msgstr "Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch ist."
 
-msgid "E-mail Forward"
+msgid "Email Forward"
 msgstr "E-Mail weiterleiten"
 
 msgid "Add a forwarding address..."
@@ -991,7 +994,7 @@ msgstr "Bildschirmname"
 msgid "Full Name"
 msgstr "Vollständiger Name"
 
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgid "The full name is used to create the distinguished name (DN) during Active Directory integration."
 msgstr ""
 
 msgid "Login name"
@@ -1024,7 +1027,7 @@ msgstr "gesperrt"
 msgid "Invalid Status"
 msgstr "Ungültiger Status"
 
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgid "The blocked status is only valid if the user has attempted to log in with an incorrect password too many times. It is not possible to set this status here."
 msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
 
 msgid "Expires"
@@ -1045,10 +1048,10 @@ msgstr "Passwort gesetzt"
 msgid "Account ID"
 msgstr "Konto ID"
 
-msgid "User groups"
+msgid "User Groups"
 msgstr "Gruppen"
 
-msgid "User roles"
+msgid "User Roles"
 msgstr "Rollen"
 
 msgid "Fileserver"
@@ -1063,7 +1066,7 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-msgid "Do you want to move the contact to this addressbook?"
+msgid "Would you like to move the contact to this Addressbook?"
 msgstr "Möchten Sie den Kontakt in dieses Adressbuch verschieben?"
 
 msgid "The selected contact will be updated"
@@ -1078,7 +1081,7 @@ msgstr "Benutzer deaktivieren"
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-msgid "E-mail usage"
+msgid "Email usage"
 msgstr "E-Mail-Nutzung"
 
 msgid "Filesystem usage"

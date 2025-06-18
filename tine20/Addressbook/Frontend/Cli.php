@@ -243,10 +243,10 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $locale = new Zend_Locale($language);
             
             $translation = Tinebase_Translation::getTranslation('Calendar', $locale);
-            // search all contacts with note "This contact has been automatically added by the system as an event attender"
+            // search all contacts with note "This contact was automatically added by the system as an event attendee."
             $noteFilter = new Addressbook_Model_ContactFilter(array(
                 array('field' => 'note', 'operator' => 'equals', 'value' => 
-                    $translation->_('This contact has been automatically added by the system as an event attender')),
+                    $translation->_('This contact was automatically added by the system as an event attendee.')),
             ));
             $contactIdsToDelete = $contactBackend->search($noteFilter, null, Tinebase_Backend_Sql_Abstract::IDCOL);
             

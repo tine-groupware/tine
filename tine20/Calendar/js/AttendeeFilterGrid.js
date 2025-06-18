@@ -25,7 +25,7 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
     showMemberOfType: true,
     stateId: 'calendar-attendee-filter-grid',
     cls: 'x-cal-attendee-filter-grid',
-    addNewAttendeeText: 'Add attendee', // i18n._('Add attendee')
+    addNewAttendeeText: 'Add Attendee', // i18n._('Add Attendee')
     requireFreeBusyGrantOnly: true,
 
     enableDragDrop: true,

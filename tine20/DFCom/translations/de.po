@@ -21,13 +21,13 @@ msgstr ""
 msgid "Device List Status"
 msgstr "Gerätelistenstatus"
 
-msgid "Possible list status from device list feedback records."
-msgstr "Mögliche Gerätelistenstatus der Listen Rückmeldungs-Datensätze."
+msgid "Possible list statuses based on device list feedback records"
+msgstr "Mögliche Status der Gerätelisten in den Rückmeldungs-Datensätzen."
 
-msgid "List was send to device"
+msgid "List was sent to device"
 msgstr "Liste wurde zum Gerät gesendet"
 
-msgid "List was taken over"
+msgid "List has been accepted"
 msgstr "Liste wurde übernommen"
 
 msgid "Generic error"
@@ -42,56 +42,56 @@ msgstr "Unbekannte Liste"
 msgid "Parameter missing"
 msgstr "Parameter fehlt"
 
-msgid "Error in list line"
-msgstr "Fehler in der Listezeile"
+msgid "Error in list row"
+msgstr "Fehler in der Listenzeile"
 
 msgid "List is ignored"
-msgstr "Liste wird ignoiert"
+msgstr "Liste wird ignoriert"
 
 msgid "Duplicate list definition"
-msgstr "Doppelte Listen Definition"
+msgstr "Doppelte Listendefinition"
 
-msgid "An other list upgrade is in progress"
+msgid "Another list upgrade is in progress"
 msgstr "Eine weitere Listen-Aktualisierung ist im Gange"
 
 msgid "Device List Percentage"
 msgstr ""
 
-msgid "Device list with Percentage entries."
+msgid "Device list containing percentage entries."
 msgstr ""
 
 msgid "Initial AuthKey for Device Setup"
 msgstr "Authentifikationsschlüssel für die Geräte Einrichtung"
 
-msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+msgid "Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup."
 msgstr "Muss als Standard der globalen Variable authKey (max 20 Zeichen) im DataFox Studio Geräte-Setup gesetzt werden."
 
 msgid "Default Container for Devices"
 msgstr "Standard Ordner für Geräte"
 
-msgid "The container where new devices are created in."
+msgid "The container where new devices are created."
 msgstr "Der Ordner in dem neue Geräte erstellt werden."
 
-msgid "Default Devices Lists"
+msgid "Default Device Lists"
 msgstr "Standard Gerätelisten"
 
-msgid "List export definition names to load into devices per default."
+msgid "List export definition names that are loaded into devices by default."
 msgstr "Listen Export-Definitions-Namen die standardmäßig in das Gerät geladen werden."
 
 msgid "Device Record Handlers"
 msgstr "Geräte-Datensatz Handler"
 
-msgid "Handler class for given device record."
+msgid "Handler class for a given device record."
 msgstr "Handler Klasse für angegebenen Geräte-Datensatz."
 
 msgid "New Device"
 msgstr "Neue Geräteliste"
 
-msgid "Absence Reasons Device List"
-msgstr "Abwesenheitsgründe Geräte Liste"
+msgid "Device List for Absence Reasons"
+msgstr "Geräte Liste für Abwesenheitsgründe"
 
-msgid "Employee Device List"
-msgstr "Mitarbeiter Geräte Liste"
+msgid "Device List for Employee"
+msgstr "Geräte Liste für Mitarbeiter"
 
 msgid "Device list"
 msgid_plural "Device lists"
@@ -115,8 +115,8 @@ msgstr "Version der aktiven Liste"
 msgid "List status"
 msgstr "Listenstatus"
 
-msgid "Control Commands on List Feedback"
-msgstr "Kontroll Kommandos bei Listen-Rückmeldung"
+msgid "Control Commands Based on List Feedback"
+msgstr "Kontrollbefehle bei der Listenrückmeldung"
 
 msgid "Type"
 msgstr "Typ"
@@ -185,9 +185,11 @@ msgstr "Daten"
 msgid "Processed by"
 msgstr ""
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr "Kommen: %1$s"
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr "Gehen: %1$s"
 

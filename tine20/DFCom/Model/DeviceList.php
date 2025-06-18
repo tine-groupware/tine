@@ -125,7 +125,7 @@ class DFCom_Model_DeviceList extends Tinebase_Record_Abstract
             'controlCommands' => [
                 'type' => 'text',
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label' => 'Control Commands on List Feedback', // _('Control Commands on List Feedback')
+                'label' => 'Control Commands Based on List Feedback', // _('Control Commands Based on List Feedback')
                 'nullable' => true,
                 self::UI_CONFIG => [
                     'emptyText' => "setDeviceVariable('TAListLoaded', 1);

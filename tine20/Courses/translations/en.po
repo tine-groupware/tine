@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,35 +13,35 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Add new user"
-msgstr "Add new user"
+msgid "Add a new user"
+msgstr "Add a new user"
 
-msgid "Add new user as member to a course"
-msgstr "Add new user as member to a course"
+msgid "Add a new user as a member to a course"
+msgstr "Add a new user as a member to a course"
 
-msgid "Add existing user"
-msgstr "Add existing user"
+msgid "Add an existing user"
+msgstr "Add an existing user"
 
-msgid "Add existing user as member to a course"
-msgstr "Add existing user as member to a course"
+msgid "Add an existing user as a member to a course"
+msgstr "Add an existing user as a member to a course"
 
-msgid "Manage shared courses favorites"
-msgstr "Manage shared courses favorites"
+msgid "Manage shared course favorites"
+msgstr "Manage shared course favorites"
 
-msgid "Create or update shared courses favorites"
-msgstr "Create or update shared courses favorites"
+msgid "Create or update shared course favorites"
+msgstr "Create or update shared course favorites"
 
 msgid "Set additional memberships"
 msgstr "Set additional memberships"
 
-msgid "Set additional course member group memberships"
-msgstr "Set additional course member group memberships"
+msgid "Set additional group memberships for course members"
+msgstr "Set additional group memberships for course members"
 
 msgid "Additional Group Memberships"
 msgstr "Additional Group Memberships"
 
-msgid "Array of IDs of Groups students can be members of"
-msgstr "Array of IDs of Groups students can be members of"
+msgid "Array of group IDs that students can be members of"
+msgstr "Array of group IDs that students can be members of"
 
 msgid "Internet Access"
 msgstr "Internet Access"
@@ -65,17 +64,17 @@ msgstr "Internet Access Group (ON)"
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Access Group (FILTERED)"
 
-msgid "Students Group"
-msgstr "Students Group"
+msgid "Student Group"
+msgstr "Student Group"
 
-msgid "Students Import Definition"
-msgstr "Students Import Definition"
+msgid "Student Import Definition"
+msgstr "Student Import Definition"
 
-msgid "Students login name prefix"
-msgstr "Students login name prefix"
+msgid "Student login name prefix"
+msgstr "Student login name prefix"
 
-msgid "Students password suffix"
-msgstr "Students password suffix"
+msgid "Student password suffix"
+msgstr "Student password suffix"
 
 msgid "Teacher password"
 msgstr "Teacher password"
@@ -118,20 +117,20 @@ msgstr "First Name"
 msgid "Last Name"
 msgstr "Last Name"
 
-msgid "Add new member to course"
-msgstr "Add new member to course"
+msgid "Add a new member to a course"
+msgstr "Add a new member to a course"
 
 msgid "Errors"
 msgstr "Errors"
 
-msgid "Please fix the errors noted."
-msgstr "Please fix the errors noted."
+msgid "Please fix the noted errors."
+msgstr "Please fix the noted errors."
 
 msgid "Import course members"
 msgstr "Import course members"
 
-msgid "Add new member"
-msgstr "Add new member"
+msgid "Add a new member"
+msgstr "Add a new member"
 
 msgid "Course Name"
 msgstr "Course Name"
@@ -154,8 +153,8 @@ msgstr "unknown"
 msgid "Reset Password"
 msgstr "Reset Password"
 
-msgid "Please enter the new Password."
-msgstr "Please enter the new Password."
+msgid "Please enter the new password."
+msgstr "Please enter the new password."
 
 msgid "Name"
 msgstr "Name"
@@ -166,8 +165,8 @@ msgstr "Type"
 msgid "Failed"
 msgstr "Failed"
 
-msgid "Some error occured while trying to update the courses."
-msgstr "Some error occured while trying to update the courses."
+msgid "An error occurred while trying to update the courses"
+msgstr "An error occurred while trying to update the courses"
 
 msgid "Quick Search"
 msgstr "Quick Search"
@@ -180,14 +179,14 @@ msgstr[1] "Course Types"
 msgid "All courses"
 msgstr "All courses"
 
-msgid "The default favorite which is loaded on Classes startup"
-msgstr "The default favorite which is loaded on Classes startup"
+msgid "The default favorite that is loaded when Classes start up."
+msgstr "The default favorite that is loaded when Classes start up."
 
 msgid "School"
 msgstr "School"
 
-msgid "Defaul school for Courses application"
-msgstr "Defaul school for Courses application"
+msgid "Default school for the Courses application"
+msgstr "Default school for the Courses application"
 
 msgid "Courses"
 msgstr "Courses"

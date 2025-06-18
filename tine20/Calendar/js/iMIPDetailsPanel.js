@@ -93,11 +93,11 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         if (this.iMIPrecord.get('event').isRecurBase() && status != 'ACCEPTED' && !range) {
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Reply to Recurring Event'),
-                questionText: this.app.i18n._('You are responding to an recurring event. What would you like to do?'),
+                questionText: this.app.i18n._('You are responding to a recurring event. What would you like to do?'),
                 height: 170,
                 scope: this,
                 options: [
-                    {text: this.app.i18n._('Respond to whole series'), name: 'series'},
+                    {text: this.app.i18n._('Respond to the whole series'), name: 'series'},
                     {text: this.app.i18n._('Do not respond'), name: 'cancel'}
                 ],
                 
@@ -141,7 +141,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                 text: this.app.i18n._('Save'),
                 handler: this.processIMIP.createDelegate(this, ['NEEDS-ACTION', true]),
                 icon: 'images/icon-set/icon_invite.svg',
-                tooltip: this.app.i18n._('Save in calendar without response')
+                tooltip: this.app.i18n._('Save to calendar without responding')
             })
         ];
 
@@ -208,12 +208,12 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             
             else if (preconditions.hasOwnProperty('ORIGINATOR')) {
                 // display spam box -> might be accepted by user?
-                this.iMIPclause.setText(this.app.i18n._("The sender is not authorised to update the event"));
+                this.iMIPclause.setText(this.app.i18n._("The sender is not authorized to update the event"));
             }
             
             else if (preconditions.hasOwnProperty('RECENT')) {
 //            else if (preconditions.hasOwnProperty('TOPROCESS')) {
-                this.iMIPclause.setText(this.app.i18n._("This message is already processed"));
+                this.iMIPclause.setText(this.app.i18n._("This message has already been processed."));
             }
             
             else if (preconditions.hasOwnProperty('ATTENDEE')) {

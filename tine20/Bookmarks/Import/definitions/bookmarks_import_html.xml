@@ -6,7 +6,7 @@
     <type>import</type>
     <dryrun>0</dryrun>
     <description>Import html formated bookmarks</description>
-    <!-- _("Import html formated bookmarks") -->
+    <!-- _("Import HTML-formatted bookmarks") -->
     <example>Bookmarks/Import/examples/bookmarks.html</example>
     <extension>html</extension>
     <label>Bookmarks HTML import</label>

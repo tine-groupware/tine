@@ -199,7 +199,7 @@ Tine.Calendar.EventUI.getStatusInfo = function(event, attendeeRecord) {
     if (! Ext.isEmpty(event.get('alarms'))) {
         statusInfo.push({
             status: 'alarm',
-            text: app.i18n._('has alarm')
+            text: app.i18n._('has an alarm')
         });
     }
 

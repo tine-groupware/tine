@@ -178,8 +178,8 @@ msgstr "Booked places"
 msgid "Available places"
 msgstr "Available places"
 
-msgid "Double Opt in"
-msgstr "Double Opt in"
+msgid "Double Opt-in"
+msgstr "Double Opt-in"
 
 msgid "Event Registrations"
 msgstr "Event Registrations"
@@ -201,8 +201,8 @@ msgstr[1] "Options"
 msgid "Price"
 msgstr "Price"
 
-msgid "Url"
-msgstr "Url"
+msgid "URL"
+msgstr "URL"
 
 msgid "EventManager"
 msgstr "EventManager"

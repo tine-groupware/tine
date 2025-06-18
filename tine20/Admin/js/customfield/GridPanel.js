@@ -118,7 +118,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initFilterPanel: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Customfield'),       field: 'query',    operators: ['contains']},
+                {label: this.app.i18n._('Custom Field'),       field: 'query',    operators: ['contains']},
                 {filtertype: 'admin.application', app: this.app}
             ],
             defaultFilter: 'query',

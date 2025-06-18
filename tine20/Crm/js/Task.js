@@ -224,7 +224,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     header: this.app.i18n._("Summary"),
                     width: 150,
                     quickaddField: new Ext.form.TextField({
-                        emptyText: this.app.i18n._('Add a task...')
+                        emptyText: this.app.i18n._('Add a Task...')
                     })
                 }, {
                     id: 'due',

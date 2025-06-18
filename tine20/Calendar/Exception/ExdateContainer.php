@@ -28,7 +28,7 @@ class Calendar_Exception_ExdateContainer extends Calendar_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'Exdate container move are not allowed'; //_('Exdate container move are not allowed')
+    protected $message = 'Moving the EXDATE container is not allowed.'; //_('Moving the EXDATE container is not allowed.')
 
     /**
      * @see SPL Exception

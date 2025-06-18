@@ -8,8 +8,8 @@
     <plugin>Calendar_Export_Ods</plugin>
     <!-- _('OpenDocument all data') -->
     <label>OpenDocument all data</label>
-    <!-- _('Export event data into ods spreadsheet') -->
-    <description>Export event data into ods spreadsheet</description>
+    <!-- _('Export event data to an ODS spreadsheet') -->
+    <description>Export event data to an ODS spreadsheet</description>
     <header>1</header>
     <headers>
         <header>{date}</header>

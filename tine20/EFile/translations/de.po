@@ -19,7 +19,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 msgid "Base paths"
-msgstr ""
+msgstr "Basispfade"
 
 msgid "Retention Periods"
 msgstr "Aufbewahrungsfristen"
@@ -78,8 +78,8 @@ msgstr "Rahmenaktenplan"
 msgid "Sub File"
 msgstr "Teilakte"
 
-msgid "EFile node names may not contain:"
-msgstr ""
+msgid "eFile node names may not contain:"
+msgstr "eAkten-Knotennamen dürfen nicht enthalten:"
 
 msgid "Electronic File"
 msgstr "eAkte"
@@ -90,7 +90,7 @@ msgstr "Neuen {0} Ordner anlegen"
 
 #, python-brace-format
 msgid "Name of the new {0} folder:"
-msgstr "Name des neuen {0} Ordners"
+msgstr "Name des neuen {0} Ordners:"
 
 msgid "Name"
 msgstr "Name"
@@ -110,8 +110,8 @@ msgstr "Inhalt"
 msgid "Jump to File"
 msgstr "Zur Akte springen"
 
-msgid "Metadata entered here is automatically inherited in newly created e-files."
-msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
+msgid "Metadata entered here is automatically inherited by newly created eFiles."
+msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte eAkten."
 
 msgid "Duration Start"
 msgstr "Laufzeit von"
@@ -122,13 +122,13 @@ msgstr "Laufzeit bis"
 msgid "Commissioned Office"
 msgstr "Aktenführende Stelle"
 
-msgid "File is Hybrid (a corresponding paper file exists)"
+msgid "This file is Hybrid (a corresponding paper file exists)"
 msgstr "Hybridakte (Es gibt eine korrespondierende Papierakte)"
 
 msgid "Location of Paper File"
 msgstr "Standort der Papierakte"
 
-msgid "File is Closed"
+msgid "This file is Closed"
 msgstr "Die Akte ist geschlossen"
 
 msgid "Final Decree"

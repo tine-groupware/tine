@@ -51,8 +51,8 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
         self::CONTAINER_PROPERTY        => 'container_id',
         self::TITLE_PROPERTY            => 'name',
         self::HAS_PERSONAL_CONTAINER    => true,
-        self::CONTAINER_NAME            => 'Bookmark list',
-        self::CONTAINERS_NAME           => 'Bookmark lists', // ngettext('Bookmark list', 'Bookmark lists', n)
+        self::CONTAINER_NAME            => 'Bookmark List',
+        self::CONTAINERS_NAME           => 'Bookmark Lists', // ngettext('Bookmark List', 'Bookmark Lists', n)
         self::HAS_RELATIONS             => true,
         self::HAS_CUSTOM_FIELDS         => false,
         self::HAS_NOTES                 => true,
@@ -91,7 +91,7 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
                 self::TYPE          => self::TYPE_TEXT,
                 self::NULLABLE      => false,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL         => 'Url', // _('Url')
+                self::LABEL         => 'URL', // _('URL')
                 self::QUERY_FILTER  => true
             ],
             self::FLDS_DESCRIPTION => [
@@ -107,7 +107,7 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => 0,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL         => 'Access count', // _('Access count')
+                self::LABEL         => 'Access Count', // _('Access Count')
             ],
             // grr we can't tell dialogs to not show fields yet ;-(
 //            self::FLDS_XPROPS => [

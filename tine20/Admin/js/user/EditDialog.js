@@ -217,7 +217,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.forwardsGrid.doBlur();
             this.emailRecord.set('emailAliases', this.aliasesGrid.getFromStoreAsArray());
             this.emailRecord.set('emailForwards', this.forwardsGrid.getFromStoreAsArray());
-            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in e-mail record');
+            Tine.log.debug('Tine.Admin.UserEditDialog::onRecordUpdate() -> setting aliases and forwards in email record');
             Tine.log.debug(this.emailRecord);
         }
         this.unsetLocalizedDateTimeFields(this.emailRecord, ['emailLastLogin']);
@@ -761,7 +761,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         let cm = [{
             id: 'email',
-            header: app.i18n.gettext('E-mail Alias'),
+            header: app.i18n.gettext('Email Alias'),
             width: 260,
             hideable: false,
             sortable: true,
@@ -777,7 +777,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.aliasesDispatchCheckColumn = new Ext.grid.CheckColumn({
                 id: 'dispatch_address',
                 header: '...',
-                tooltip: app.i18n.gettext('This alias can be used for sending e-mails.'),
+                tooltip: app.i18n.gettext('This alias can be used for sending emails.'),
                 width: 40,
                 hideable: false,
                 sortable: true
@@ -834,7 +834,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             buttons: Ext.Msg.OK,
                             icon: Ext.MessageBox.WARNING,
                             title: app.i18n._('Forwarding to self'),
-                            msg: app.i18n._('You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases.')
+                            msg: app.i18n._('You are not allowed to set a forwarding email address that is identical to the users primary email or one of his aliases.')
                         });
                         return false;
                     } else {
@@ -843,7 +843,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email',
-                    header: app.i18n.gettext('E-mail Forward'),
+                    header: app.i18n.gettext('Email Forward'),
                     width: 300,
                     hideable: false,
                     sortable: true,
@@ -1036,7 +1036,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'accountFullName',
                         allowBlank: false,
                         columnWidth: 0.5,
-                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('Full name is used to create the distinguishedName (DN) in AD integration')})]
+                        plugins: [new FieldInfoPlugin({qtip: this.app.i18n._('The full name is used to create the distinguished name (DN) during Active Directory integration.')})]
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Login name'),
                         name: 'accountLoginName',
@@ -1090,7 +1090,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [this.MFAPanel]
                     }],  [{
                         vtype: 'email',
-                        fieldLabel: this.app.i18n.gettext('E-mail'),
+                        fieldLabel: this.app.i18n.gettext('Email'),
                         name: 'accountEmailAddress',
                         id: 'accountEmailAddress',
                         columnWidth: 0.5,
@@ -1147,7 +1147,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 switch (record.data.field1) {
                                     case 'blocked':
                                         Ext.Msg.alert(this.app.i18n._('Invalid Status'),
-                                            this.app.i18n._('Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here.'));
+                                            this.app.i18n._('The blocked status is only valid if the user has attempted to log in with an incorrect password too many times. It is not possible to set this status here.'));
                                         combo.setValue(combo.startValue);
                                         break;
                                     case 'expired':
@@ -1210,13 +1210,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]
                 }]
             }, {
-                title: this.app.i18n.gettext('User groups'),
+                title: this.app.i18n.gettext('User Groups'),
                 border: false,
                 frame: true,
                 layout: 'fit',
                 items: this.initUserGroups()
             }, {
-                title: this.app.i18n.gettext('User roles'),
+                title: this.app.i18n.gettext('User Roles'),
                 border: false,
                 frame: true,
                 layout: 'fit',
@@ -1306,7 +1306,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hidden: hidden ?? false,
             value: 'hidden',
             ref: '../../../../../displayContactInAddressbookCombo',
-            store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]],
+            store: [['displayed', this.app.i18n.gettext('Display in Addressbook')], ['hidden', this.app.i18n.gettext('Hide from Addressbook')]],
             listeners: {
                 scope: scope,
                 select: function (combo, record) {
@@ -1341,7 +1341,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 beforeselect: (combo, status, index) => {
                     Ext.MessageBox.confirm(
                         scope.app.i18n._('Confirm'),
-                        scope.app.i18n._('Do you want to move the contact to this addressbook?'),
+                        scope.app.i18n._('Would you like to move the contact to this Addressbook?'),
                         (btn) => {
                             if (btn === 'yes') {
                                 combo.setValue(status.id);

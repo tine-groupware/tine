@@ -55,7 +55,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             label: this.app.i18n._('Fax'),
             dataField: 'tel_fax'
         }, {
-            label: this.app.i18n._('E-Mail'),
+            label: this.app.i18n._('Email'),
             dataField: 'email'
         }, {
             label: this.app.i18n._('Web'),

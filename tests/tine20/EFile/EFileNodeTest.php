@@ -318,7 +318,7 @@ class EFile_EFileNodeTest extends TestCase
 
         static::expectException(Tinebase_Exception_SystemGeneric::class);
         $translation = Tinebase_Translation::getTranslation('EFile');
-        static::expectExceptionMessage($translation->_('EFile node names may not contain:') . ' ' . '#');
+        static::expectExceptionMessage($translation->_('eFile node names may not contain:') . ' ' . '#');
         $fs->rename($nodePath, $newNodePath);
     }
 

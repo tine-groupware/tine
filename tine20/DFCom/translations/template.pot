@@ -16,13 +16,13 @@ msgstr ""
 msgid "Device List Status"
 msgstr ""
 
-msgid "Possible list status from device list feedback records."
+msgid "Possible list statuses based on device list feedback records"
 msgstr ""
 
-msgid "List was send to device"
+msgid "List was sent to device"
 msgstr ""
 
-msgid "List was taken over"
+msgid "List has been accepted"
 msgstr ""
 
 msgid "Generic error"
@@ -37,7 +37,7 @@ msgstr ""
 msgid "Parameter missing"
 msgstr ""
 
-msgid "Error in list line"
+msgid "Error in list row"
 msgstr ""
 
 msgid "List is ignored"
@@ -46,46 +46,46 @@ msgstr ""
 msgid "Duplicate list definition"
 msgstr ""
 
-msgid "An other list upgrade is in progress"
+msgid "Another list upgrade is in progress"
 msgstr ""
 
 msgid "Device List Percentage"
 msgstr ""
 
-msgid "Device list with Percentage entries."
+msgid "Device list containing percentage entries."
 msgstr ""
 
 msgid "Initial AuthKey for Device Setup"
 msgstr ""
 
-msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+msgid "Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup."
 msgstr ""
 
 msgid "Default Container for Devices"
 msgstr ""
 
-msgid "The container where new devices are created in."
+msgid "The container where new devices are created."
 msgstr ""
 
-msgid "Default Devices Lists"
+msgid "Default Device Lists"
 msgstr ""
 
-msgid "List export definition names to load into devices per default."
+msgid "List export definition names that are loaded into devices by default."
 msgstr ""
 
 msgid "Device Record Handlers"
 msgstr ""
 
-msgid "Handler class for given device record."
+msgid "Handler class for a given device record."
 msgstr ""
 
 msgid "New Device"
 msgstr ""
 
-msgid "Absence Reasons Device List"
+msgid "Device List for Absence Reasons"
 msgstr ""
 
-msgid "Employee Device List"
+msgid "Device List for Employee"
 msgstr ""
 
 msgid "Device list"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "List status"
 msgstr ""
 
-msgid "Control Commands on List Feedback"
+msgid "Control Commands Based on List Feedback"
 msgstr ""
 
 msgid "Type"
@@ -180,9 +180,11 @@ msgstr ""
 msgid "Processed by"
 msgstr ""
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr ""
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr ""
 

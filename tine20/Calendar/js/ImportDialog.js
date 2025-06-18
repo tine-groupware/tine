@@ -125,7 +125,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     fn: callback,
                     scope: that,
                     title: that.app.i18n._('Import Definition Success!'),
-                    msg: that.app.i18n._('The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob.')
+                    msg: that.app.i18n._('The iCal import definition has been created successfully! Please wait a few minutes for the events to be synced by the cron job.')
                 });
             } else {
                 _.defer(_.bind(callback, that))
@@ -332,10 +332,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             items: [
             {
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.') + '</p><br />'
+                html: '<p>' + this.app.i18n._('tine (Groupware) does not support all types of files you may want to upload. You will need to manually adjust your file so that tine (Groupware) can process it.') + '</p><br />'
             }, {
 //                xtype: 'label',
-//                html: '<p>' + this.app.i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.') + '</p><br />'
+//                html: '<p>' + this.app.i18n._('Below is a list of all supported import formats, along with a sample file showing how Tine 2.0 expects your file to be structured.') + '</p><br />'
 //            }, {
                 xtype: 'label',
                 html: '<p>' + this.app.i18n._('Please select the import format of the file you want to upload') + '<br /><br /></p>'
@@ -510,18 +510,18 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     name: 'updateExisting'
                 }, {
                     xtype: 'checkbox',
-                    fieldLabel: this.app.i18n._('Force Update Existing Events'),
+                    fieldLabel: this.app.i18n._('Force Update for Existing Events'),
                     boxLabel: this.app.i18n._("Update exiting events even if imported sequence number isn't higher"),
                     name: 'forceUpdateExisting'
                 }, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Delete Missing Events'),
-                    boxLabel: this.app.i18n._('Delete events missing in import data (future only)'),
+                    boxLabel: this.app.i18n._('Delete events missing from the import data (future events only).'),
                     name: 'deleteMissing'
                 }/*, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Basic Data Only'),
-                    boxLabel: this.app.i18n._('Import basic data only (i.e. without attendee, alarms, uid, ...)'),
+                    boxLabel: this.app.i18n._('Import only basic data (i.e., without attendees, alarms, UID, ...).'),
                     name: 'onlyBasicData'
                 }*/, new Tine.Calendar.AttendeeGridPanel({
                     height: 200,
@@ -549,7 +549,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Keep Existing Attendee'),
-                    boxLabel: this.app.i18n._('Do not remove attendee of existing events which are not in the import data'),
+                    boxLabel: this.app.i18n._('Do not remove attendees from existing events that are not in the import data.'),
                     name: 'keepExistingAttendee'
                 }, {
                     xtype: 'calendar-event-organizer-combo',

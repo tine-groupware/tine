@@ -8,6 +8,6 @@
     <plugin>Calendar_Export_VCalendar</plugin>
     <!-- _('VCalendar/ICS') -->
     <label>VCalendar/ICS</label>
-    <!-- _('Export visible events to ics file') -->
-    <description>Export visible events to ics file</description>
+    <!-- _('Export visible events to ICS file') -->
+    <description>Export visible events to ICS file</description>
 </config>

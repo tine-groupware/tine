@@ -1698,7 +1698,7 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         static::expectException(Tinebase_Exception_AccessDenied::class); $this->expectExceptionMessageMatches('/No Permission./');
         $this->testSaveResource(array(Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true));
-        static::expectException(Calendar_Exception_ResourceAdminGrant::class); $this->expectExceptionMessageMatches('/The right Resource Admin must be set once./');
+        static::expectException(Calendar_Exception_ResourceAdminGrant::class); $this->expectExceptionMessageMatches('/The correct Resource Admin must be set once./');
         $this->testSaveResource(array());
     }
 
@@ -1724,7 +1724,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
 
     /**
-     * assert add attendee does not work for non readable resources
+     * assert add attendee does not work for none readable resources
      */
     public function testResourceAttendeeAddFail()
     {

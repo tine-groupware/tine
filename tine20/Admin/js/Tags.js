@@ -61,7 +61,7 @@ Tine.Admin.Tags.Main = {
          * onclick handler for deleteBtn
          */
         deleteTag: function (button, event) {
-            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected tags?'), function (button) {
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Are you sure you want to delete the selected tags?'), function (button) {
                 if (button === 'yes') {
                 
                     var tagIds = [],

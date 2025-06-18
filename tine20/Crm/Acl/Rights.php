@@ -102,12 +102,12 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
-                'text'          => $translate->_('manage shared lead folders'),
+                'text'          => $translate->_('Manage shared lead folders'),
                 'description'   => $translate->_('Create new shared lead folders'),
             ),
             self::MANAGE_SHARED_LEAD_FAVORITES => array(
-                'text'          => $translate->_('manage shared leads favorites'),
-                'description'   => $translate->_('Create or update shared leads favorites'),
+                'text'          => $translate->_('Manage shared lead favorites'),
+                'description'   => $translate->_('Create or update shared lead favorites'),
             ),
         );
         

@@ -203,7 +203,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 // TODO perhaps we could add an icon/button (i.e. edit-find.png) here
                 new Tine.Crm.Contact.Combo({
                     contactsStore: this.store,
-                    emptyText: this.app.i18n._('Search for Contacts to add ...')
+                    emptyText: this.app.i18n._('Search for contacts to add...')
                 })
             ]
         });

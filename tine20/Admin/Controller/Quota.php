@@ -84,7 +84,7 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
             if ($isPersonalNode) {
                 try {
                     if (!$recordData['name']) {
-                        throw new Tinebase_Exception_UnexpectedValue($translate->_('Account E-Mail needs to be set!'));
+                        throw new Tinebase_Exception_UnexpectedValue($translate->_('Account email needs to be set!'));
                     }
 
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
@@ -102,7 +102,7 @@ class Admin_Controller_Quota extends Tinebase_Controller_Record_Abstract
                         $account = Admin_Controller_EmailAccount::getInstance()->update($account);
                         return $account;
                     } else {
-                        throw new Tinebase_Exception_UnexpectedValue($translate->_('E-Mail account not found.'));
+                        throw new Tinebase_Exception_UnexpectedValue($translate->_('Email account not found.'));
                     }
                 } catch (Admin_Exception $ae) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while saving email quota ' . $ae->getMessage());

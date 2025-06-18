@@ -21,7 +21,7 @@ msgstr ""
 msgid "Status Available"
 msgstr "Verfügbare Status"
 
-msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgid "Possible Statuses. Please note that additional statuses may affect other ExampleApplication systems during export or synchronization."
 msgstr "Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
 
 msgid "Completed"
@@ -30,7 +30,7 @@ msgstr "Abgeschlossen"
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-msgid "In process"
+msgid "In progress"
 msgstr "In Bearbeitung"
 
 msgid "Reasons Available"
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Example String"
 msgstr ""
 
-msgid "Just an example string for test purpose"
+msgid "Just an example string for testing purposes."
 msgstr ""
 
 msgid "Total Example Records"

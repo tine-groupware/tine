@@ -23,7 +23,7 @@ class Calendar_Exception_InvalidUrl extends Calendar_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'The URL you used is invalid. Please use a valid one!'; //_('The URL you used is invalid. Please use a valid one!')
+    protected $message = 'The URL you provided is invalid. Please use a valid one!'; //_('The URL you provided is invalid. Please use a valid one!')
     
     /**
      * @see SPL Exception

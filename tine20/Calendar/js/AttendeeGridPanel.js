@@ -197,7 +197,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortable: false,
             hidden: this.showNamesOnly || true,
             header: i18n._hidden('Saved in'),
-            tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
+            tooltip: this.app.i18n._('This is the calendar where the attendee saved the event.'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
             // disable for the moment, as updating calendarSelectWidget is not working in both directions
             editor2: new Tine.widgets.container.SelectionComboBox({
@@ -281,8 +281,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     selectedRecord = _.get(ed, 'field.selectedRecord');
 
                 Tine.widgets.dialog.MultiOptionsDialog.openWindow({
-                    title: this.app.i18n._('Whole Group or each Member of Group'),
-                    questionText: this.app.i18n._('Choose "Group" to filter for the whole group itself. Choose "Member of Group" to filter for each member of the group'),
+                    title: this.app.i18n._('Whole group or each group member'),
+                    questionText: this.app.i18n._('Choose "Group" to filter by the group as a whole. Choose "Member of Group" to filter by each group member.'),
                     height: 170,
                     scope: this,
                     options: [
@@ -371,7 +371,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         }
                     }
 
-                    // resolve groupmembers
+                    // resolve group members
                     if (type === 'group' && !this.showMemberOfType) {
                         this.resolveListMembers(o.record.get('user_id'));
                     } else {
@@ -410,7 +410,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             members = Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
             fbInfoUpdate = [];
 
-        var mask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading Groupmembers...")});
+        var mask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading Group Members...")});
         mask.show();
 
         Tine.Calendar.resolveGroupMembers(members, function(attendeesData) {
@@ -534,7 +534,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             Tine.log.debug(attender);
             
             var items = [{
-                text: this.app.i18n._('Remove Attender'),
+                text: this.app.i18n._('Remove Attendee'),
                 iconCls: 'action_delete',
                 scope: this,
                 disabled: ! this.record.get('editGrant') || type == 'groupmember',

@@ -117,9 +117,9 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Responsible'), id: 'lead_responsible', width: 150, sortable: false, hidden: true, renderer: this.responsibleRenderer},
                 {header: this.app.i18n._('Partner'), id: 'lead_partner', width: 150, sortable: false, renderer: this.partnerRenderer},
                 {header: this.app.i18n._('Customer'), id: 'lead_customer', width: 150, sortable: false, renderer: this.customerRenderer},
-                {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
-                {header: this.app.i18n._('Leadtype'), id: 'leadtype_id',width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadtypes')},
-                {header: this.app.i18n._('Leadsource'), id: 'leadsource_id', width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
+                {header: this.app.i18n._('Lead State'), id: 'leadstate_id', width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
+                {header: this.app.i18n._('Lead Type'), id: 'leadtype_id',width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadtypes')},
+                {header: this.app.i18n._('Lead Source'), id: 'leadsource_id', width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
                 {header: this.app.i18n._('Probability'), id: 'probability', renderer: Ext.ux.PercentRenderer },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', renderer: Ext.util.Format.money },
 

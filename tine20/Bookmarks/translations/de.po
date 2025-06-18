@@ -18,10 +18,10 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Live time of token subscriptions"
+msgid "Lifetime of token subscriptions"
 msgstr "Laufzeit von Token-Abonnements"
 
-msgid "Import html formated bookmarks"
+msgid "Import HTML-formatted bookmarks"
 msgstr "HTML formatierte Lesezeichen importieren"
 
 msgid "Bookmarks HTML import"
@@ -33,21 +33,21 @@ msgstr[0] "Lesezeichen"
 msgstr[1] "Lesezeichen"
 
 #, fuzzy
-msgid "Bookmark list"
-msgid_plural "Bookmark lists"
+msgid "Bookmark List"
+msgid_plural "Bookmark Lists"
 msgstr[0] "Lesezeichenliste"
 msgstr[1] "Lesezeichenlisten"
 
 msgid "Name"
 msgstr "Name"
 
-msgid "Url"
-msgstr "Url"
+msgid "URL"
+msgstr "URL"
 
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "Access count"
+msgid "Access Count"
 msgstr "Zugriffszähler"
 
 msgid "Bookmarks"

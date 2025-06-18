@@ -44,7 +44,7 @@ Tine.Admin.Roles.Main = {
          * onclick handler for deleteBtn
          */
         deleteRole: function(_button, _event) {
-            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected roles?'), function(_button){
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Are you sure you want to delete the selected roles?'), function(_button){
                 if (_button == 'yes') {
                 
                     var roleIds = new Array();
