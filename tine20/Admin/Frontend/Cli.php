@@ -932,6 +932,73 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * updates/sanitizes smtp_destinations according to config
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function cleanupSmtpDestinations(Zend_Console_Getopt $opts): int
+    {
+        $emailUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        if (! $emailUserBackend instanceof Tinebase_EmailUser_Smtp_Postfix) {
+            echo "cleanupSmtpDestinations only supported for Tinebase_EmailUser_Smtp_Postfix backend\n";
+            return 0;
+        }
+
+        $config = $emailUserBackend->getConfig();
+        if (!$config[Tinebase_Config::SMTP_DESTINATION_IS_USERNAME]
+            || $config[Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME]
+        ) {
+            echo "only allowed if SMTP_DESTINATION_IS_USERNAME = true && SMTP_DESTINATION_ACCOUNTNAME = false\n";
+            return 0;
+        }
+
+        $db = $emailUserBackend->getDb();
+        $select = $emailUserBackend->getSmtpUserSelect();
+        $destinationsTable = 'smtp_destinations';
+
+        foreach ($db->fetchAll($select) as $smtpuser) {
+            if ($opts->d) {
+                echo 'Checking ' . $smtpuser['username'] . ' email: ' . $smtpuser['email'] . "...\n";
+            }
+            if ($opts->v) {
+                print_r($smtpuser);
+            }
+
+            //  - alle destinations = mailadresse des users prüfen
+            $destinationSelect = $db->select()->from($destinationsTable)->where('userid = ?', $smtpuser['userid']);
+            foreach ($db->fetchAll($destinationSelect) as $destination) {
+                if ($opts->v) {
+                    print_r($destination);
+                }
+                $where = [
+                    $db->quoteInto('userid = ?', $smtpuser['userid']),
+                    $db->quoteInto('source = ?', $destination['source']),
+                    $db->quoteInto('destination = ?', $destination['destination']),
+                ];
+                if ($destination['source'] !== $smtpuser['username'] && $destination['destination'] !== $smtpuser['username']) {
+                    if ($opts->d) {
+                        echo '  Change destination to username: ' . $destination['destination'] . ' => ' . $smtpuser['username'] . "\n";
+                    } else {
+                        $db->update($destinationsTable, ['destination ' => $smtpuser['username']], $where);
+                    }
+                }
+
+                if ($destination['source'] === $smtpuser['username']) {
+                    if ($opts->d) {
+                        echo '  Drop destination (source equals username): ' . $destination['source'] . "\n";
+                    } else {
+                        $db->delete($destinationsTable, $where);
+                    }
+                }
+            }
+
+        }
+
+        return 0;
+    }
+
+    /**
      * Add all members from one group to another
      * 
      * @param Zend_Console_Getopt $opts

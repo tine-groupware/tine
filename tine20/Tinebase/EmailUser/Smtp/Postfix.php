@@ -119,9 +119,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         'alloweddomains' => [],
         'adapter' => Tinebase_Core::PDO_MYSQL,
         // use this for adding an additional destination (accountname -> accountname)
-        'accountnamedestination' => true,
+        Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME => true,
         'allowOverwrite' => false,
-        'destinationisusername' => false,
+        Tinebase_Config::SMTP_DESTINATION_IS_USERNAME => false,
     ];
     
     /**
@@ -183,7 +183,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         // select source from alias table
         // _userTable.emailUserId=_destinationTable.emailUserId
         $userIDMap    = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']);
-        if ($this->_config['destinationisusername']) {
+        if ($this->_config[Tinebase_Config::SMTP_DESTINATION_IS_USERNAME]) {
             $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']);
         } else {
             $userEmailMap = $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress']);
@@ -389,7 +389,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
 
         // create username -> username alias if email and username are different
         // and accountnamedestination is set
-        if ($this->_config['accountnamedestination']
+        if ($this->_config[Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME]
             && $_smtpSettings[$this->_propertyMapping['emailUsername']]
             != $_smtpSettings[$this->_propertyMapping['emailAddress']]
         ) {
@@ -462,7 +462,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
             // check if in primary or secondary domains
             if (! empty($aliasAddress->email) && $this->_checkDomain($aliasAddress->email)) {
                 if (! $_smtpSettings[$this->_propertyMapping['emailForwardOnly']]) {
-                    $destination = $this->_config['destinationisusername']
+                    $destination = $this->_config[Tinebase_Config::SMTP_DESTINATION_IS_USERNAME]
                         ? $_smtpSettings[$this->_propertyMapping['emailUsername']]
                         : $_smtpSettings[$this->_propertyMapping['emailAddress']];
                     $destinationData = [
@@ -597,7 +597,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                             $data[$keyMapping] = $this->_getDispatchAddress($_rawdata['userid'], $data[$keyMapping]);
                         }
 
-                        if ( $this->_config['destinationisusername'] && $keyMapping === 'emailAliases') {
+                        if ( $this->_config[Tinebase_Config::SMTP_DESTINATION_IS_USERNAME] && $keyMapping === 'emailAliases') {
                             foreach ($data[$keyMapping] as $key => $value) {
                                 if ($value['email'] === $_rawdata[$this->_propertyMapping['emailAddress']]) {
                                     unset($data[$keyMapping][$key]);
@@ -797,11 +797,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     /**
      * check if user exists already in email backend user table
      *
-     * @param  Tinebase_Model_FullUser  $_user
+     * @param  Tinebase_Model_FullUser $_user
      * @return boolean
+     * @throws Tinebase_Exception_InvalidArgument|Zend_Db_Statement_Exception
      */
     public function emailAddressExists(Tinebase_Model_FullUser $_user)
     {
+        if (empty($_user->accountEmailAddress)) {
+            throw new Tinebase_Exception_InvalidArgument('Got empty email accountEmailAddress');
+        }
+
         $select = $this->_db->select()
             ->from($this->_userTable)
             ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress'])
