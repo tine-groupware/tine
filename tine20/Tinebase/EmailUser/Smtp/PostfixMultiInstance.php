@@ -247,7 +247,7 @@ class Tinebase_EmailUser_Smtp_PostfixMultiInstance extends Tinebase_EmailUser_Sm
 
         // create username -> username alias if email and username are different
         // and accountnamedestination is set
-        if ($this->_config['accountnamedestination']
+        if ($this->_config[Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME]
             && $_smtpSettings[$this->_propertyMapping['emailUsername']]
             != $_smtpSettings[$this->_propertyMapping['emailAddress']]
         ) {
