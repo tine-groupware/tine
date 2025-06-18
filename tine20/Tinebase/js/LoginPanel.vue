@@ -174,12 +174,24 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
             class="d-flex justify-content-center"
           >
             <div
+              class="cursor-pointer"
+              v-if="!config.label && (config.logo_light || config.logo_dark)"
+              @click.prevent.stop="onExtIDPLoginPress(config.id)">
+              <img
+                :src="isDark ? config.logo_dark ?? config.logo_light : config.logo_light ?? config.logo_dark"
+                class="sso-img" />
+            </div>
+            <div v-if="config.label"
               @click.prevent.stop="onExtIDPLoginPress(config.id)"
-              class="rounded-pill dark-reverse fs-4 px-4 py-2 external-idp-login-btn mt-2 align-items-center btn-primary">
-              <img :src="config.logo"/>
-              <span class="ps-2">
-               {{ String.format(i18n._('Login with {0} account'), config.name) }}
-              </span>
+              class="rounded-pill dark-reverse fs-4 px-4 py-2 external-idp-login-btn mt-2 align-items-center btn-primary d-flex">
+              <img
+                v-if="config.logo_dark || config.logo_light"
+                :src="config.logo_dark ?? config.logo_light"/>
+              <div class="flex-grow-1 d-flex justify-content-center align-items-center">
+                <span class="ps-2">
+                  {{config.label}}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -300,8 +312,17 @@ $monitor: 1000px;
   max-height: 70px;
 }
 
-.external-idp-login-btn {
+.cursor-pointer {
   cursor: pointer;
+}
+
+.sso-img {
+  min-width: 215px;
+  max-width: 300px;
+}
+
+.external-idp-login-btn {
+  @extend .cursor-pointer;
   min-width: 320px;
   color: white;
   background-color: var(--focus-color);
