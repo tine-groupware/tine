@@ -16,7 +16,6 @@ var assetsPluginInstance = new AssetsPlugin({
 var {VueLoaderPlugin} = require('vue-loader');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
 var ESLintPlugin = require('eslint-webpack-plugin');
-var CopyPlugin = require("copy-webpack-plugin");
 
 var eslintPluginInstance = new ESLintPlugin({
     formatter: require('eslint-friendly-formatter'),
@@ -49,12 +48,6 @@ var definePlugin = new webpack.DefinePlugin({
     RELEASE_TIME: JSON.stringify(process.env.RELEASE_TIME),
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: true
-});
-
-var copyPlugin = new CopyPlugin({
-    patterns: [
-        {from: "node_modules/bootstrap/dist/css", to: "Tinebase/css/build/bootstrap/"},
-    ]
 });
 
 var baseDir = path.resolve(__dirname, '../../'),
@@ -113,7 +106,6 @@ module.exports = {
     },
     plugins: [
         definePlugin,
-        copyPlugin,
         assetsPluginInstance,
         new VueLoaderPlugin(),
         new ChunkNamePlugin(),
