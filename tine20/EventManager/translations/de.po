@@ -48,7 +48,7 @@ msgid "Function"
 msgstr "Funktion"
 
 msgid "Attendee"
-msgstr "Teilnehmer*in"
+msgstr "Teilnehmende"
 
 msgid "Speaker"
 msgstr "vortragende Person"
@@ -210,31 +210,3 @@ msgstr "URL"
 
 msgid "EventManager"
 msgstr ""
-
-#~ msgid "Url"
-#~ msgstr "Url"
-
-#~ msgid "Live time of token subscriptions"
-#~ msgstr "Laufzeit von Token-Abonnements"
-
-#~ msgid "Import html formated bookmarks"
-#~ msgstr "HTML formatierte Lesezeichen importieren"
-
-#~ msgid "Bookmarks HTML import"
-#~ msgstr "HTML Lesezeichen Import"
-
-#~ msgid "Bookmark"
-#~ msgid_plural "Bookmarks"
-#~ msgstr[0] "Lesezeichen"
-#~ msgstr[1] "Lesezeichen"
-
-#~ msgid "Bookmark list"
-#~ msgid_plural "Bookmarks lists"
-#~ msgstr[0] "Lesezeichenliste"
-#~ msgstr[1] "Lesezeichenlisten"
-
-#~ msgid "Access count"
-#~ msgstr "Zugriffszähler"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Lesezeichen"

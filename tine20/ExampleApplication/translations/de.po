@@ -124,9 +124,3 @@ msgstr ""
 
 msgid "ExampleApplication"
 msgstr "BeispielAnwendung"
-
-#~ msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
-#~ msgstr "Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
-
-#~ msgid "In process"
-#~ msgstr "In Bearbeitung"

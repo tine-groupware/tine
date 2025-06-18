@@ -354,7 +354,7 @@ msgstr ""
 msgid "Feature is disabled by configuration."
 msgstr ""
 
-msgid "Default address book for new contacts and groups"
+msgid "Default Addressbook for new contacts and groups"
 msgstr ""
 
 msgid "Application"
@@ -454,7 +454,7 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-msgid "Please create resources in the address book or CoreData."
+msgid "Please create resources in the Addressbook or CoreData."
 msgstr ""
 
 msgid "ID"
@@ -584,19 +584,19 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
-msgid "Display in address book"
+msgid "Display in Addressbook"
 msgstr ""
 
-msgid "Hide from address book"
+msgid "Hide from Addressbook"
 msgstr ""
 
-msgid "Saved in address book"
+msgid "Saved in Addressbook"
 msgstr ""
 
 msgid "Email"
 msgstr ""
 
-msgid "Only system accounts can be added to address book group"
+msgid "Only system accounts can be added to Addressbook group"
 msgstr ""
 
 msgid "Group Members"
@@ -1051,7 +1051,7 @@ msgstr ""
 msgid "SMTP"
 msgstr ""
 
-msgid "Would you like to move the contact to this address book?"
+msgid "Would you like to move the contact to this Addressbook?"
 msgstr ""
 
 msgid "The selected contact will be updated"

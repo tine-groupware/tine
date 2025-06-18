@@ -43,7 +43,7 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
     getConfigItems: function() {
         return [[{
             xtype: 'tinerecordpickercombobox',
-            fieldLabel: this.app.i18n._('Default address book for new contacts and groups'),
+            fieldLabel: this.app.i18n._('Default Addressbook for new contacts and groups'),
             name: 'defaultInternalAddressbook',
             blurOnSelect: true,
             recordClass: Tine.Tinebase.Model.Container,

@@ -369,7 +369,7 @@ msgstr "Deaktiviert"
 msgid "Feature is disabled by configuration."
 msgstr "Funktion ist durch die Konfiguration deaktiviert."
 
-msgid "Default address book for new contacts and groups"
+msgid "Default Addressbook for new contacts and groups"
 msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
 
 msgid "Application"
@@ -469,7 +469,7 @@ msgstr "Notiz für den Besitzer"
 msgid "Info"
 msgstr "Info"
 
-msgid "Please create resources in the address book or CoreData."
+msgid "Please create resources in the Addressbook or CoreData."
 msgstr "Bitte Ressourcen im Adressbuch oder Stammdaten erstellen."
 
 msgid "ID"
@@ -599,19 +599,19 @@ msgstr "Gruppenname"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
-msgid "Display in address book"
+msgid "Display in Addressbook"
 msgstr "Zeige im Adressbuch"
 
-msgid "Hide from address book"
+msgid "Hide from Addressbook"
 msgstr "Nicht im Adressbuch anzeigen"
 
-msgid "Saved in address book"
+msgid "Saved in Addressbook"
 msgstr "Gespeichert im Adressbuch"
 
 msgid "Email"
 msgstr "E-Mail"
 
-msgid "Only system accounts can be added to address book group"
+msgid "Only system accounts can be added to Addressbook group"
 msgstr "Nur Systembenutzer in der zugehörigen Addressbuch-Gruppe erlauben"
 
 msgid "Group Members"
@@ -1066,7 +1066,7 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-msgid "Would you like to move the contact to this address book?"
+msgid "Would you like to move the contact to this Addressbook?"
 msgstr "Möchten Sie den Kontakt in dieses Adressbuch verschieben?"
 
 msgid "The selected contact will be updated"
@@ -1131,27 +1131,3 @@ msgstr "Aufgaben Typ"
 
 msgid "Emails"
 msgstr "E-Mails"
-
-#~ msgid "Customfield already exists. Please choose another name."
-#~ msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
-
-#~ msgid "Customfield"
-#~ msgstr "Zusatzfeld"
-
-#~ msgid "Default Addressbook for new contacts and groups"
-#~ msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
-
-#~ msgid "Please create Resources in Addressbook or CoreData."
-#~ msgstr "Bitte Ressourcen im Addressbook oder Stammdaten erstellen."
-
-#~ msgid "Display in addressbook"
-#~ msgstr "Zeige im Adressbuch"
-
-#~ msgid "Hide from addressbook"
-#~ msgstr "Nicht im Adressbuch anzeigen"
-
-#~ msgid "Saved in Addressbook"
-#~ msgstr "Gespeichert im Adressbuch"
-
-#~ msgid "Only system accounts can be added to Addressbook group"
-#~ msgstr "Nur Systembenutzer in der zugehörigen Addressbuch-Gruppe erlauben"

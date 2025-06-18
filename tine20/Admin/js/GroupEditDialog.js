@@ -83,7 +83,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     triggerAction: 'all',
                     allowBlank: false,
                     editable: false,
-                    store: [['displayed', this.app.i18n._('Display in address book')], ['hidden', this.app.i18n._('Hide from address book')]],
+                    store: [['displayed', this.app.i18n._('Display in Addressbook')], ['hidden', this.app.i18n._('Hide from Addressbook')]],
                     listeners: {
                         scope: this,
                         select: function (combo, record) {
@@ -99,7 +99,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     columnWidth: 0.5,
                     xtype: 'tinerecordpickercombobox',
-                    fieldLabel: this.app.i18n._('Saved in address book'),
+                    fieldLabel: this.app.i18n._('Saved in Addressbook'),
                     name: 'container_id',
                     blurOnSelect: true,
                     allowBlank: false,
@@ -134,7 +134,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }, {
                     columnWidth: 0.5,
                     xtype: 'checkbox',
-                    fieldLabel: this.app.i18n._('Only system accounts can be added to address book group'),
+                    fieldLabel: this.app.i18n._('Only system accounts can be added to Addressbook group'),
                     name: 'account_only',
                     anchor: '100%',
                     value: true

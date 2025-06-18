@@ -332,7 +332,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             items: [
             {
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Tine 2.0 does not support all types of files you may want to upload. You will need to manually adjust your file so that Tine 2.0 can process it.') + '</p><br />'
+                html: '<p>' + this.app.i18n._('tine (Groupware) does not support all types of files you may want to upload. You will need to manually adjust your file so that tine (Groupware) can process it.') + '</p><br />'
             }, {
 //                xtype: 'label',
 //                html: '<p>' + this.app.i18n._('Below is a list of all supported import formats, along with a sample file showing how Tine 2.0 expects your file to be structured.') + '</p><br />'

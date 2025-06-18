@@ -226,7 +226,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     onSaveAndClose: function() {
         if (this.record.data.model == 'Tine.Calendar.Model.Resource') {
-            Ext.MessageBox.alert(this.app.i18n._('Info'), this.app.i18n._('Please create resources in the address book or CoreData.'),function (){this.window.close()},this);
+            Ext.MessageBox.alert(this.app.i18n._('Info'), this.app.i18n._('Please create resources in the Addressbook or CoreData.'),function (){this.window.close()},this);
         } else {
             Tine.Admin.ContainerEditDialog.superclass.onSaveAndClose.apply(this, arguments);
         }

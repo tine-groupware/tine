@@ -169,12 +169,3 @@ msgstr "Aktenzeichen"
 
 msgid "eFile Tier Counter"
 msgstr "eAkten Ebenen-Zähler"
-
-#~ msgid "Metadata entered here is automatically inherited in newly created e-files."
-#~ msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
-
-#~ msgid "File is Hybrid (a corresponding paper file exists)"
-#~ msgstr "Hybridakte (Es gibt eine korrespondierende Papierakte)"
-
-#~ msgid "File is Closed"
-#~ msgstr "Die Akte ist geschlossen"

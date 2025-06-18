@@ -1017,7 +1017,7 @@ msgstr ""
 msgid "What should the file you upload look like?"
 msgstr ""
 
-msgid "Tine 2.0 does not support all types of files you may want to upload. You will need to manually adjust your file so that Tine 2.0 can process it."
+msgid "tine (Groupware) does not support all types of files you may want to upload. You will need to manually adjust your file so that tine (Groupware) can process it."
 msgstr ""
 
 msgid "Below is a list of all supported import formats, along with a sample file showing how Tine 2.0 expects your file to be structured."

@@ -354,8 +354,8 @@ msgstr "Disabled"
 msgid "Feature is disabled by configuration."
 msgstr "Feature is disabled by configuration."
 
-msgid "Default address book for new contacts and groups"
-msgstr "Default address book for new contacts and groups"
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Default Addressbook for new contacts and groups"
 
 msgid "Application"
 msgid_plural "Applications"
@@ -454,8 +454,8 @@ msgstr "Note for Owner"
 msgid "Info"
 msgstr "Info"
 
-msgid "Please create resources in the address book or CoreData."
-msgstr "Please create resources in the address book or CoreData."
+msgid "Please create resources in the Addressbook or CoreData."
+msgstr "Please create resources in the Addressbook or CoreData."
 
 msgid "ID"
 msgstr "ID"
@@ -584,20 +584,20 @@ msgstr "Group Name"
 msgid "Visibility"
 msgstr "Visibility"
 
-msgid "Display in address book"
-msgstr "Display in address book"
+msgid "Display in Addressbook"
+msgstr "Display in Addressbook"
 
-msgid "Hide from address book"
-msgstr "Hide from address book"
+msgid "Hide from Addressbook"
+msgstr "Hide from Addressbook"
 
-msgid "Saved in address book"
-msgstr "Saved in address book"
+msgid "Saved in Addressbook"
+msgstr "Saved in Addressbook"
 
 msgid "Email"
 msgstr "Email"
 
-msgid "Only system accounts can be added to address book group"
-msgstr "Only system accounts can be added to address book group"
+msgid "Only system accounts can be added to Addressbook group"
+msgstr "Only system accounts can be added to Addressbook group"
 
 msgid "Group Members"
 msgstr "Group Members"
@@ -1051,8 +1051,8 @@ msgstr "IMAP"
 msgid "SMTP"
 msgstr "SMTP"
 
-msgid "Would you like to move the contact to this address book?"
-msgstr "Would you like to move the contact to this address book?"
+msgid "Would you like to move the contact to this Addressbook?"
+msgstr "Would you like to move the contact to this Addressbook?"
 
 msgid "The selected contact will be updated"
 msgstr "The selected contact will be updated"

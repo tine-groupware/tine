@@ -32,6 +32,3 @@ msgstr "Applikationsdaten"
 
 msgid "CoreData"
 msgstr "Stammdaten"
-
-#~ msgid "Please select core data from tree ..."
-#~ msgstr "Bitte wählen Sie Stammdaten aus der Baumansicht ..."
