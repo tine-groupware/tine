@@ -22,6 +22,11 @@ class Tinebase_Server_Plugin_Json implements Tinebase_Server_Plugin_Interface
     {
         /**************************** JSON API *****************************/
         if ($request->getHeaders('X-TINE20-REQUEST-TYPE', null)?->getFieldValue() === 'JSON'  ||
+
+            /** TODO FIXME remove next line */
+            !empty($request->getHeaders('X-TINE20-JSONKEY', null)?->getFieldValue()) || // for legacy frontends (floorplan)
+
+            'JSON' === $request->getQuery('requestType') ||
             ($request->getMethod() == \Laminas\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
         ) {
             return new Tinebase_Server_Json();
