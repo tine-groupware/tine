@@ -243,6 +243,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const SMTP = 'smtp';
 
+    public const SMTP_DESTINATION_IS_USERNAME = 'destinationisusername';
+    public const SMTP_DESTINATION_ACCOUNTNAME = 'accountnamedestination';
+
     /**
      * sieve conf name
      * 
@@ -1367,6 +1370,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
          * "preventSecondaryDomainUsername": true
+         *
+         * TODO make this a structured config with subconfig keys
          */
         self::SMTP => array(
                                    //_('System SMTP')

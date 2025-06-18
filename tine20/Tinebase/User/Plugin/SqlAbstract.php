@@ -270,4 +270,9 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
         $this->_config[$key] = $value;
         return $current;
     }
+
+    public function getConfig(): array
+    {
+        return $this->_config;
+    }
 }
