@@ -33,9 +33,6 @@ module.exports = merge(common, {
         client: {
             overlay: true,
         },
-        devMiddleware: {
-            writeToDisk: (filePath) => /\/(js|css)\/build\//.test(filePath),
-        },
         // onBeforeSetupMiddleware: function(app, server) {
         //     app.use(function(req, res, next) {
         //         // check for langfile chunk requests

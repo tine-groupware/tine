@@ -306,11 +306,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $this->checkEmailAccountContact($_record);
     }
 
-    protected function _createSharedEmailUserAndCredentials($_record)
+    protected function _createSharedEmailUserAndCredentials(Felamimail_Model_Account $_record)
     {
+        if (empty($_record->email)) {
+            throw new Tinebase_Exception_Record_Validation('Shared account needs email address');
+        }
+
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
 
-        if (! $_record->password) {
+        if (!$_record->password) {
             throw new Felamimail_Exception_PasswordMissing($translation->_('shared / adb_list accounts need to have a password set'));
         }
         if (! $_record->email) {
@@ -807,6 +811,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _beforeUpdateSharedAccount($_record, $_oldRecord)
     {
+        if (empty($_record->email)) {
+            throw new Tinebase_Exception_Record_Validation('Shared account needs email address');
+        }
+
         if ($this->doConvertToShared($_record, $_oldRecord)) {
             $this->_convertToShared($_record, $_oldRecord);
         } else if (empty($_record->user_id)) {

@@ -797,11 +797,16 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     /**
      * check if user exists already in email backend user table
      *
-     * @param  Tinebase_Model_FullUser  $_user
+     * @param  Tinebase_Model_FullUser $_user
      * @return boolean
+     * @throws Tinebase_Exception_InvalidArgument|Zend_Db_Statement_Exception
      */
     public function emailAddressExists(Tinebase_Model_FullUser $_user)
     {
+        if (empty($_user->accountEmailAddress)) {
+            throw new Tinebase_Exception_InvalidArgument('Got empty email accountEmailAddress');
+        }
+
         $select = $this->_db->select()
             ->from($this->_userTable)
             ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailAddress'])
