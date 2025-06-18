@@ -177,7 +177,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         this.action_copy_to = new Ext.Action({
             requiredGrant: 'deleteGrant',
-            text: this.app.i18n._('Copy Event to clipboard'),
+            text: this.app.i18n._('Copy the event to the clipboard'),
             handler: this.onCopyToEvent.createDelegate(this),
             iconCls: 'action_copy'
         });
@@ -733,7 +733,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (event && event.get('poll_id') && event.get('editGrant')) {
             require('./PollSetDefiniteEventAction');
             menuitems = menuitems.concat(['-',{
-                text: this.app.i18n._('Set as definite event'),
+                text: this.app.i18n._('Set as a definite event'),
                 iconCls: 'cal-polls-set-definite-action',
                 scope: this,
                 handler: function() {
@@ -890,7 +890,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 break;
             case 'add':
             default:
-                var title = this.app.i18n._('Creating event in the past'),
+                var title = this.app.i18n._('Creating an event in the past'),
                     optionYes = this.app.i18n._('Create this event'),
                     optionNo = this.app.i18n._('Do not create this event');
         }
@@ -1208,7 +1208,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (selection.length > 1 && (containsRecurBase || containsRecurInstance)) {
             Ext.Msg.show({
                 title: this.app.i18n._('Please Change Selection'), 
-                msg: this.app.i18n._('Your selection contains recurring events. Recuring events must be deleted seperatly!'),
+                msg: this.app.i18n._('Your selection contains recurring events. Recurring events must be deleted separately!'),
                 icon: Ext.MessageBox.INFO,
                 buttons: Ext.Msg.OK,
                 scope: this,
@@ -1225,9 +1225,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 scope: this,
                 height: 170,
                 options: [
-                    {text: this.app.i18n._('Delete this event only'), name: 'this'},
+                    {text: this.app.i18n._('Delete only this event'), name: 'this'},
                     {text: this.app.i18n._('Delete this and all future events'), name: containsRecurBase ? 'all' : 'future'},
-                    {text: this.app.i18n._('Delete whole series'), name: 'all'},
+                    {text: this.app.i18n._('Delete the whole series'), name: 'all'},
                     {text: this.app.i18n._('Delete nothing'), name: 'nothing'}
                 ],
                 handler: function (option) {
@@ -1595,7 +1595,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (view && Ext.isFunction(view.print)) {
             view.print(printMode);
         } else {
-            Ext.Msg.alert(this.app.i18n._('Could not Print'), this.app.i18n._('Sorry, your current view does not support printing.'));
+            Ext.Msg.alert(this.app.i18n._('Could Not Print'), this.app.i18n._('Sorry, your current view does not support printing.'));
         }
     },
     
@@ -1692,7 +1692,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             height: 180 + fbInfo.attendeeCount * 14 + 12 * error.freebusyinfo.length,
             title: this.app.i18n._('Scheduling Conflict'),
             questionText: '<div class = "cal-conflict-heading">' +
-            this.app.i18n._('The following attendee are busy at the requested time:') +
+            this.app.i18n._('The following attendees are busy at the requested time:') +
                 '</div>' +
                 fbInfo.getInfoByAttendee(attendeeStore, event),
             options: [
@@ -1799,7 +1799,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     setEventStatus: function(event, status) {
         Ext.MessageBox.confirm(
             this.app.i18n._('Update Status for all Attendee?'),
-            this.app.i18n._('You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?'), function (btn) {
+            this.app.i18n._('You are about to change the status of the event itself, not just your own. Do you really want to change the event status for all attendees?'), function (btn) {
             if (btn === 'yes') {
                 event.set('status', status);
                 this.updateEvent(event);

@@ -48,7 +48,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_addNewMember = new Ext.Action({
             iconCls: 'action_add',
             disabled: true,
-            text: this.app.i18n._('Add new member'),
+            text: this.app.i18n._('Add a new member'),
             scope: this,
             handler: this.onAddNewMember,
             hidden: true
@@ -371,7 +371,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: false,
             locked: false,
-            questionText: i18n._('Please enter the new Password.'),
+            questionText: i18n._('Please enter the new password.'),
             policyConfig: Tine.Tinebase.configManager.get('userPwPolicy')
         });
         passwordDialog.openWindow();

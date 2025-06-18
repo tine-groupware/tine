@@ -28,7 +28,7 @@ Tine.Calendar.RruleFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
 
         this.app = this.app || Tine.Tinebase.appMgr.get('Calendar');
 
-        this.label = this.app.i18n._('Rrule');
+        this.label = this.app.i18n._('RRULE');
 
         this.defaultValue = [{
             'daily': true,

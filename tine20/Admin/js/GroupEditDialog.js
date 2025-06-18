@@ -83,7 +83,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     triggerAction: 'all',
                     allowBlank: false,
                     editable: false,
-                    store: [['displayed', this.app.i18n._('Display in addressbook')], ['hidden', this.app.i18n._('Hide from addressbook')]],
+                    store: [['displayed', this.app.i18n._('Display in Addressbook')], ['hidden', this.app.i18n._('Hide from Addressbook')]],
                     listeners: {
                         scope: this,
                         select: function (combo, record) {
@@ -110,7 +110,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }], [{
                     columnWidth: 0.5,
                     xtype: 'mirrortextfield',
-                    fieldLabel: this.app.i18n._('E-mail'),
+                    fieldLabel: this.app.i18n._('Email'),
                     name: 'email',
                     anchor: '100%',
                     vtype: 'email',

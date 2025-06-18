@@ -105,23 +105,23 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     public static function getTranslatedRightDescriptions()
     {
         $translate = Tinebase_Translation::getTranslation('Calendar');
-        
+
         $rightDescriptions = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS => array(
                 'text'          => $translate->_('manage shared calendars'),
                 'description'   => $translate->_('Create new shared calendars'),
             ),
             self::MANAGE_SHARED_EVENT_FAVORITES => array(
-                'text'          => $translate->_('manage shared calendars favorites'),
-                'description'   => $translate->_('Create or update shared calendars favorites'),
+                'text'          => $translate->_('manage shared calendar favorites'),
+                'description'   => $translate->_('Create or update shared calendar favorites'),
             ),
             self::MANAGE_RESOURCES => array(
                 'text'          => $translate->_('manage resources'),
-                'description'   => $translate->_('All Rights to administrate resources')
+                'description'   => $translate->_('Full rights to administrate resources')
             ),
             self::MANAGE_EVENT_TYPES => array(
                 'text'          => $translate->_('manage event types'),
-                'description'   => $translate->_('The Right to manage event types')
+                'description'   => $translate->_('Right to manage event types')
             ),
         );
         

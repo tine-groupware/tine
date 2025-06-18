@@ -716,7 +716,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // -- where is it added? anonymous user personal addressbook???
             $translation = Tinebase_Translation::getTranslation('Calendar');
             $contact = Calendar_Model_Attender::resolveEmailToContact($request, true, array_merge([
-                'note' => $translation->_('This contact has been automatically added by the system as a poll attendee')
+                'note' => $translation->_('This contact was automatically added by the system as an event attendee.')
             ], Addressbook_Model_Contact::splitName($request['name'])));
             $user = new Calendar_Model_Attender([
                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,

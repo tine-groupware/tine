@@ -206,10 +206,10 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::MAIL_ACCOUNT_TYPE => array(
-            //_('Mail Type')
+            //_('Email Type')
             self::LABEL              => 'Type',
-            //_('Possible mail types.')
-            self::DESCRIPTION        => 'Possible mail types.',
+            //_('Possible email types.')
+            self::DESCRIPTION        => 'Possible email types.',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
             self::OPTIONS               => array('recordModel' => Felamimail_Model_MailType::class),
             self::CLIENTREGISTRYINCLUDE => true,
@@ -243,8 +243,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                         'system' => true,
                     ], [
                         'id' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
-                        //_('Mailinglist')
-                        'value' => 'Mailinglist',
+                        //_('Mailing list')
+                        'value' => 'Mailing list',
                         'system' => true,
                     ],
                 ],
@@ -279,9 +279,9 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => FALSE,
         ),
         self::EMAIL_NOTIFICATION_EMAIL_FROM => array(
-            //_('Email Notification from E-Mailadress')
-            self::LABEL                 => 'Email Notification from E-Mailadress',
-            self::DESCRIPTION           => 'Email Notification from E-Mailadress',
+            //_('Email Notification From Address')
+            self::LABEL                 => 'Email Notification From Address',
+            self::DESCRIPTION           => 'Email Notification From Address',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE      => FALSE,
@@ -290,8 +290,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::VACATION_CUSTOM_MESSAGE_ALLOWED => array(
         //_('Custom Vacation Message')
             self::LABEL                 => 'Custom Vacation Message',
-        // _('User is allowed to set custom vacation message for system account')
-            self::DESCRIPTION           => 'User is allowed to set custom vacation message for system account',
+        // _('The user is allowed to set a custom vacation message for the system account.')
+            self::DESCRIPTION           => 'The user is allowed to set a custom vacation message for the system account.',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_INT,
             self::CLIENTREGISTRYINCLUDE => TRUE,
             self::SETBYADMINMODULE      => FALSE,
@@ -320,9 +320,9 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => false,
         ),
         self::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT => array(
-            //_('Prevent copying mails in the same account')
-            self::LABEL                 => 'Prevent copying mails in the same account',
-            self::DESCRIPTION           => 'Prevent copying mails in the same account',
+            //_('Prevent copying emails within the same account')
+            self::LABEL                 => 'Prevent copying emails within the same account',
+            self::DESCRIPTION           => 'Prevent copying emails within the same account',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE      => true,
@@ -343,8 +343,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
-            //_('Enabled Features in Felamimail Application.')
-            self::DESCRIPTION           => 'Enabled Features in Felamimail Application.',
+            //_('Enabled Features in the Felamimail Application.')
+            self::DESCRIPTION           => 'Enabled Features in the Felamimail Application.',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
@@ -352,8 +352,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 self::FEATURE_ACCOUNT_MIGRATION => [
                     self::LABEL                 => 'Account Migration',
                     //_('Account Migration')
-                    self::DESCRIPTION           => 'Shows context menu for system accounts to approve migration',
-                    //_('Shows context menu for system accounts to approve migration')
+                    self::DESCRIPTION           => 'Shows the context menu for system accounts to approve migration',
+                    //_('Shows the context menu for system accounts to approve migration')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
@@ -374,10 +374,10 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR           => true,
                 ],
                 self::FEATURE_ONLY_PW_DOWNLOAD_LINK   => [
-                    self::LABEL                 => 'Only password download link',
-                    //_('Only password download link')
-                    self::DESCRIPTION           => 'Allow only password download link',
-                    //_('Allow only password download link')
+                    self::LABEL                 => 'Password-protected download link only',
+                    //_('Password-protected download link only')
+                    self::DESCRIPTION           => 'Allow only password-protected download links',
+                    //_('Allow only password-protected download links')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
@@ -400,8 +400,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS => [
                     self::LABEL                 => 'Auto-Create Folders',
                     //_('Auto-Create Folders')
-                    self::DESCRIPTION           => 'Create template, trash, sent, draft and junks folders for system accounts',
-                    //_('Create template, trash, sent, draft and junks folders for system accounts')
+                    self::DESCRIPTION           => 'Create template, Trash, Sent, Draft, and Junk folders for system accounts',
+                    //_('Create template, Trash, Sent, Draft, and Junk folders for system accounts')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],

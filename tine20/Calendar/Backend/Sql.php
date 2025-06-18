@@ -214,7 +214,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 $filter->filterWalk($func);
             } elseif ($filter instanceof Calendar_Model_GrantFilter) {
                 if ($grantsFilter !== null) {
-                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can not have more than one grants filter'));
+                    throw new Tinebase_Exception_SystemGeneric($translate->_('You can only apply one grants filter at a time.'));
                 }
                 $grantsFilter = $filter;
                 $filter->getParent()->removeFilter($filter);

@@ -28,8 +28,8 @@
           <div class="col-md-6 col-sm-12 greetings-text">
             <p>
               <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
-              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This is a closed poll. No Attendee can be added.')}}</span>
-              <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is closed already')}}</span>
+              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This poll is closed. No attendees can be added.')}}</span>
+              <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is already closed.')}}</span>
             </p>
           </div>
           <div class="col-md-6 col-sm-12 text-end">
@@ -68,10 +68,10 @@
                 </tr>
                 <tr v-if="activeAttendee.user_id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
                   <td class="table-info name-field">
-                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, ĺast name')"
+                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, last name')"
                            class="form-control name-field" v-bind:class="{highlight: this.highlightName}"
                            @input="highlightName = false" required />
-                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('E-Mail address')"
+                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('Email address')"
                            class="form-control email-field" v-bind:class="{highlight: this.highlightEmail}"
                            @input="highlightEmail = false" required />
                   </td>
@@ -135,7 +135,7 @@
       <div>
         <b-modal ref="linkInfo" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
           <p>{{formatMessage('Use your personal link please.')}}</p>
-          <p>{{formatMessage('We have sent it to your E-Mail account again.')}}</p>
+          <p>{{formatMessage('We have sent it to your email address again.')}}</p>
           <p>{{formatMessage('If you did not receive the link, please contact the organiser.')}}</p>
         </b-modal>
       </div>

@@ -52,7 +52,7 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRend
 
                             customFields = Tine.widgets.customfields.Renderer.renderAll('Addressbook', Tine.Addressbook.Model.List, values);
                             if(customFields) {
-                                return '<div class="rp-print-single-block-heading">' + i18n._('Customfields') + '</div>' + customFields + '</br>';
+                                return '<div class="rp-print-single-block-heading">' + i18n._('Custom Fields') + '</div>' + customFields + '</br>';
                             }
                         },
                         fieldRenderer: function (fieldValue, label) {

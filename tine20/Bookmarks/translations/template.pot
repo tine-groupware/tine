@@ -13,10 +13,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Live time of token subscriptions"
+msgid "Lifetime of token subscriptions"
 msgstr ""
 
-msgid "Import html formated bookmarks"
+msgid "Import HTML-formatted bookmarks"
 msgstr ""
 
 msgid "Bookmarks HTML import"
@@ -27,21 +27,21 @@ msgid_plural "Bookmarks"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Bookmark list"
-msgid_plural "Bookmark lists"
+msgid "Bookmark List"
+msgid_plural "Bookmark Lists"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Name"
 msgstr ""
 
-msgid "Url"
+msgid "URL"
 msgstr ""
 
 msgid "Description"
 msgstr ""
 
-msgid "Access count"
+msgid "Access Count"
 msgstr ""
 
 msgid "Bookmarks"

@@ -256,7 +256,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.app.featureEnabled('featureLeadNotificationConfirmation') && !+this.record.get('mute')) {
             Ext.MessageBox.confirm(
                 this.app.i18n._('Send Notification?'),
-                this.app.i18n._('Changes to this lead might send notifications. Press the button "Notifcation are enabled" to switch to "Notification are disabled"'),
+                this.app.i18n._('Changes to this lead might send notifications. Press the button "Notifications are enabled" to switch to "Notifications are disabled"'),
                 function (button) {
                     if (button === 'yes') {
                         Tine.Crm.LeadEditDialog.superclass.onApplyChanges.call(this,closeWindow);
@@ -274,7 +274,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * returns dialog
      * 
-     * NOTE: when this method gets called, all initalisation is done.
+     * NOTE: when this method gets called, all initialisation is done.
      * 
      * @return {Object}
      * @private
@@ -307,7 +307,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.tasksGrid = new Ext.Panel({
                 title: this.app.i18n._('Tasks'),
-                html: this.app.i18n._('You do not have the run right for the Tasks application or it is not activated.')
+                html: this.app.i18n._('You do not have the run permission for the Tasks application, or it is not activated.')
             })
         }
         
@@ -318,7 +318,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.productsGrid = new Ext.Panel({
                 title: this.app.i18n._('Products'),
-                html: this.app.i18n._('You do not have the run right for the Sales application or it is not activated.')
+                html: this.app.i18n._('You do not have the run permission for the Sales application, or it is not activated.')
             })
         }
 
@@ -434,7 +434,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     items: [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                         app: 'Crm',
                                         keyFieldName: 'leadstates',
-                                        fieldLabel: this.app.i18n._('Leadstate'),
+                                        fieldLabel: this.app.i18n._('Lead State'),
                                         name: 'leadstate_id',
                                         showIcon: false,
                                         listeners: {
@@ -451,13 +451,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     }), new Tine.Tinebase.widgets.keyfield.ComboBox({
                                         app: 'Crm',
                                         keyFieldName: 'leadtypes',
-                                        fieldLabel: this.app.i18n._('Leadtype'),
+                                        fieldLabel: this.app.i18n._('Lead Type'),
                                         name: 'leadtype_id',
                                         showIcon: false
                                     }), new Tine.Tinebase.widgets.keyfield.ComboBox({
                                         app: 'Crm',
                                         keyFieldName: 'leadsources',
-                                        fieldLabel: this.app.i18n._('Leadsource'),
+                                        fieldLabel: this.app.i18n._('Lead Source'),
                                         name: 'leadsource_id',
                                         showIcon: false,
                                         listeners: {

@@ -1325,7 +1325,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         if (! $rrule) {
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-            throw new Tinebase_Exception_SystemGeneric($translation->_('No RRULE found in base event!'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('No RRULE found in the base event!'));
         }
 
         if ((string)$rrule === (string)$newRrule) {
@@ -2340,7 +2340,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         if (!$success) {
-            // _('The new recurrence rule is unpredictable. Please choose a valid recurrence rule')
+            // _('The new recurrence rule is unpredictable. Please choose a valid recurrence rule.')
             throw new Tinebase_Exception_SystemGeneric(
                 'The new recurrence rule is unpredictable. Please choose a valid recurrence rule', 600, 'Calendar');
         }

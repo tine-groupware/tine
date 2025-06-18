@@ -25,10 +25,10 @@ msgstr ""
 msgid "Add and edit users and groups, add group members, change user passwords."
 msgstr ""
 
-msgid "Manage e-mail accounts"
+msgid "Manage email accounts"
 msgstr ""
 
-msgid "Add and edit shared and personal e-mail accounts."
+msgid "Add and edit shared and personal email accounts."
 msgstr ""
 
 msgid "Manage applications"
@@ -73,10 +73,10 @@ msgstr ""
 msgid "Add, delete and edit containers and manage container grants."
 msgstr ""
 
-msgid "Manage customfields"
+msgid "Manage custom fields"
 msgstr ""
 
-msgid "Add and edit customfields."
+msgid "Add and edit custom fields."
 msgstr ""
 
 msgid "Manage import and export definitions"
@@ -97,10 +97,10 @@ msgstr ""
 msgid "View accounts list and details."
 msgstr ""
 
-msgid "View e-mail accounts"
+msgid "View email accounts"
 msgstr ""
 
-msgid "View shared and personal e-mail accounts."
+msgid "View shared and personal email accounts."
 msgstr ""
 
 msgid "View applications"
@@ -133,16 +133,16 @@ msgstr ""
 msgid "View personal and shared containers."
 msgstr ""
 
-msgid "View customfields"
+msgid "View custom fields"
 msgstr ""
 
-msgid "View customfields list."
+msgid "View custom fields list."
 msgstr ""
 
-msgid "View serverinfo"
+msgid "View server info"
 msgstr ""
 
-msgid "View serverinfo list."
+msgid "View server info list."
 msgstr ""
 
 msgid "View quota usage"
@@ -218,10 +218,10 @@ msgstr ""
 msgid "Record data needs to be set!"
 msgstr ""
 
-msgid "Account E-Mail needs to be set!"
+msgid "Account email needs to be set!"
 msgstr ""
 
-msgid "E-Mail account not found."
+msgid "Email account not found."
 msgstr ""
 
 msgid "Password is needed for system account creation"
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Shared Tags"
 msgstr ""
 
-msgid "Customfields"
+msgid "Custom Fields"
 msgstr ""
 
 msgid "Computers"
@@ -333,7 +333,10 @@ msgstr ""
 msgid "ActiveSync Devices"
 msgstr ""
 
-msgid "E-mail Accounts"
+msgid "Email Accounts"
+msgstr ""
+
+msgid "Matrix Accounts"
 msgstr ""
 
 msgid "Import Export Definitions"
@@ -451,7 +454,7 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
-msgid "Please create Resources in Addressbook or CoreData."
+msgid "Please create resources in the Addressbook or CoreData."
 msgstr ""
 
 msgid "ID"
@@ -463,8 +466,8 @@ msgstr ""
 msgid "Container Order"
 msgstr ""
 
-msgid "Customfield"
-msgid_plural "Customfields"
+msgid "Custom Field"
+msgid_plural "Custom Fields"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -557,7 +560,7 @@ msgstr[1] ""
 msgid "Key"
 msgstr ""
 
-msgid "Customfield already exists. Please choose another name."
+msgid "Custom field already exists. Please choose another name."
 msgstr ""
 
 msgid "Grouping"
@@ -581,16 +584,16 @@ msgstr ""
 msgid "Visibility"
 msgstr ""
 
-msgid "Display in addressbook"
+msgid "Display in Addressbook"
 msgstr ""
 
-msgid "Hide from addressbook"
+msgid "Hide from Addressbook"
 msgstr ""
 
 msgid "Saved in Addressbook"
 msgstr ""
 
-msgid "E-mail"
+msgid "Email"
 msgstr ""
 
 msgid "Only system accounts can be added to Addressbook group"
@@ -605,7 +608,7 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-msgid "Do you really want to delete the selected groups?"
+msgid "Are you sure you want to delete the selected groups?"
 msgstr ""
 
 msgid "Deleting group(s)..."
@@ -633,13 +636,13 @@ msgstr ""
 msgid "Creation Time"
 msgstr ""
 
-msgid "Created By"
+msgid "Created by"
 msgstr ""
 
 msgid "Last Modified Time"
 msgstr ""
 
-msgid "Last Modified By"
+msgid "Last Modified by"
 msgstr ""
 
 msgid "ImportExportDefinition"
@@ -750,7 +753,7 @@ msgstr ""
 msgid "Edit Role \"{0}\""
 msgstr ""
 
-msgid "Do you really want to delete the selected roles?"
+msgid "Are you sure you want to delete the selected roles?"
 msgstr ""
 
 msgid "Deleting role(s)..."
@@ -815,7 +818,7 @@ msgstr ""
 msgid "Edit Tag \"{0}\""
 msgstr ""
 
-msgid "Do you really want to delete the selected tags?"
+msgid "Are you sure you want to delete the selected tags?"
 msgstr ""
 
 msgid "Deleting tag(s)..."
@@ -921,13 +924,13 @@ msgstr ""
 msgid "Forward Only"
 msgstr ""
 
-msgid "E-mail Alias"
+msgid "Email Alias"
 msgstr ""
 
 msgid "Add an alias address..."
 msgstr ""
 
-msgid "This alias can be used for sending e-mails."
+msgid "This alias can be used for sending emails."
 msgstr ""
 
 msgid "Domain not allowed"
@@ -940,10 +943,10 @@ msgstr ""
 msgid "Forwarding to self"
 msgstr ""
 
-msgid "You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases."
+msgid "You are not allowed to set a forwarding email address that is identical to the users primary email or one of his aliases."
 msgstr ""
 
-msgid "E-mail Forward"
+msgid "Email Forward"
 msgstr ""
 
 msgid "Add a forwarding address..."
@@ -976,7 +979,7 @@ msgstr ""
 msgid "Full Name"
 msgstr ""
 
-msgid "Full name is used to create the distinguishedName (DN) in AD integration"
+msgid "The full name is used to create the distinguished name (DN) during Active Directory integration."
 msgstr ""
 
 msgid "Login name"
@@ -1009,7 +1012,7 @@ msgstr ""
 msgid "Invalid Status"
 msgstr ""
 
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
+msgid "The blocked status is only valid if the user has attempted to log in with an incorrect password too many times. It is not possible to set this status here."
 msgstr ""
 
 msgid "Expires"
@@ -1030,10 +1033,10 @@ msgstr ""
 msgid "Account ID"
 msgstr ""
 
-msgid "User groups"
+msgid "User Groups"
 msgstr ""
 
-msgid "User roles"
+msgid "User Roles"
 msgstr ""
 
 msgid "Fileserver"
@@ -1048,7 +1051,7 @@ msgstr ""
 msgid "SMTP"
 msgstr ""
 
-msgid "Do you want to move the contact to this addressbook?"
+msgid "Would you like to move the contact to this Addressbook?"
 msgstr ""
 
 msgid "The selected contact will be updated"
@@ -1063,7 +1066,7 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-msgid "E-mail usage"
+msgid "Email usage"
 msgstr ""
 
 msgid "Filesystem usage"

@@ -178,7 +178,7 @@ msgstr ""
 msgid "Available places"
 msgstr ""
 
-msgid "Double Opt in"
+msgid "Double Opt-in"
 msgstr ""
 
 msgid "Event Registrations"
@@ -201,7 +201,7 @@ msgstr[1] ""
 msgid "Price"
 msgstr ""
 
-msgid "Url"
+msgid "URL"
 msgstr ""
 
 msgid "EventManager"

@@ -102,7 +102,7 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Crm.Model.Lead},
             {label: app.i18n._('Lead name'),   field: 'lead_name' },
             {
-                label: app.i18n._('Leadstate'),
+                label: app.i18n._('Lead State'),
                 field: 'leadstate_id',
                 filtertype: 'tine.widget.keyfield.filter',
                 app: app,
@@ -110,14 +110,14 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             },
             {label: app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
             {
-                label: app.i18n._('Leadsource'),
+                label: app.i18n._('Lead Source'),
                 field: 'leadsource_id',
                 filtertype: 'tine.widget.keyfield.filter',
                 app: app,
                 keyfieldName: 'leadsources'
             },
             {
-                label: app.i18n._('Leadtype'),
+                label: app.i18n._('Lead Type'),
                 field: 'leadtype_id',
                 filtertype: 'tine.widget.keyfield.filter',
                 app: app,
@@ -126,9 +126,9 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
             {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'datetime'},
-            {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: i18n._('Last Modified by'),                                                  field: 'last_modified_by',   valueType: 'user'},
             {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'datetime'},
-            {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            {label: i18n._('Created by'),                                                        field: 'created_by',         valueType: 'user'},
 
             {label: app.i18n._('Description'), field: 'description', operators: ['wordstartswith']},
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'datetime'},

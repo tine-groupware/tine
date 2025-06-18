@@ -118,7 +118,7 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
         });
 
         this.inheritableDescription = new Ext.form.Label({
-            text: this.app.i18n._("Metadata entered here is automatically inherited in newly created e-files.")
+            text: this.app.i18n._("Metadata entered here is automatically inherited by newly created eFiles.")
         });
 
         this.items = [{

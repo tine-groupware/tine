@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,38 +13,35 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "manage shared lead folders"
-msgstr "manage shared lead folders"
+msgid "Manage shared lead folders"
+msgstr "Manage shared lead folders"
 
 msgid "Create new shared lead folders"
 msgstr "Create new shared lead folders"
 
-msgid "manage shared leads favorites"
-msgstr "manage shared leads favorites"
+msgid "Manage shared lead favorites"
+msgstr "Manage shared lead favorites"
 
-msgid "Create or update shared leads favorites"
-msgstr "Create or update shared leads favorites"
+msgid "Create or update shared lead favorites"
+msgstr "Create or update shared lead favorites"
 
-msgid "controls sending notification of Leads"
-msgstr "controls sending notification of Leads"
+msgid "send notification"
+msgstr "send notification"
 
-msgid "send notification)description"
-msgstr "send notification)description"
+msgid "Controls the sending of notifications about leads"
+msgstr "Controls the sending of notifications about leads"
 
-msgid "send notification to all access container"
-msgstr "send notification to all access container"
+msgid "Send notification to all access containers"
+msgstr "Send notification to all access containers"
 
-msgid "send notification to responsible"
-msgstr "send notification to responsible"
+msgid "Send notification to the responsible person"
+msgstr "Send notification to the responsible person"
 
-msgid "send notification to responsible)description"
-msgstr "send notification to responsible)description"
+msgid "Send notification to the customer"
+msgstr "Send notification to the customer"
 
-msgid "send notification to customer"
-msgstr "send notification to customer"
-
-msgid "send notification to partner"
-msgstr "send notification to partner"
+msgid "Send notification to the partner"
+msgstr "Send notification to the partner"
 
 msgid "Lead States Available"
 msgstr "Lead States Available"
@@ -77,8 +73,8 @@ msgstr "read-only"
 msgid "Lead Sources Available"
 msgstr "Lead Sources Available"
 
-msgid "Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed."
-msgstr "Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed."
+msgid "Possible lead sources. If a source is marked as archived, leads from that source are treated as closed."
+msgstr "Possible lead sources. If a source is marked as archived, leads from that source are treated as closed."
 
 msgid "Lead Types Available"
 msgstr "Lead Types Available"
@@ -95,11 +91,11 @@ msgstr "Partner"
 msgid "Reseller"
 msgstr "Reseller"
 
-msgid "Enabled Features"
-msgstr "Enabled Features"
+msgid "Enabled features"
+msgstr "Enabled features"
 
-msgid "Enabled Features in CRM Application."
-msgstr "Enabled Features in CRM Application."
+msgid "Enabled features in CRM application."
+msgstr "Enabled features in CRM application."
 
 msgid "Lead Import"
 msgstr "Lead Import"
@@ -107,23 +103,23 @@ msgstr "Lead Import"
 msgid "Lead Notification Confirmation"
 msgstr "Lead Notification Confirmation"
 
-msgid "Add new task on lead import"
-msgstr "Add new task on lead import"
+msgid "Add a new task on lead import"
+msgstr "Add a new task on lead import"
 
-msgid "Automatically creates a task for the responsible person if a new lead is imported."
-msgstr "Automatically creates a task for the responsible person if a new lead is imported."
+msgid "Automatically creates a task for the responsible person when a new lead is imported."
+msgstr "Automatically creates a task for the responsible person when a new lead is imported."
 
-msgid "Send notification e-mail on lead import"
-msgstr "Send notification e-mail on lead import"
+msgid "Send notification email on lead import"
+msgstr "Send notification email on lead import"
 
-msgid "Sends an e-mail to all responsible persons for the imported leads."
-msgstr "Sends an e-mail to all responsible persons for the imported leads."
+msgid "Sends an email to all responsible persons for the imported leads."
+msgstr "Sends an email to all responsible persons for the imported leads."
 
 msgid "Lead duplicate check fields"
 msgstr "Lead duplicate check fields"
 
-msgid "These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr "These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
+msgid "These fields are checked when a new lead is created. If a record with the same data in these fields is found, a duplicate exception is thrown."
+msgstr "These fields are checked when a new lead is created. If a record with the same data in these fields is found, a duplicate exception is thrown."
 
 msgid "State"
 msgstr "State"
@@ -158,27 +154,27 @@ msgstr "Updated by"
 msgid "Updated Fields:"
 msgstr "Updated Fields:"
 
-#, python-format
+#, python-format, php-format
 msgid "'%s' changed from '%s' to '%s'."
 msgstr "'%s' changed from '%s' to '%s'."
 
 msgid "Tags"
 msgstr "Tags"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s has been changed"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been deleted"
 msgstr "Lead %s has been deleted"
 
-#, python-format
+#, python-format, php-format
 msgid "Lead %s has been created"
 msgstr "Lead %s has been created"
 
-msgid "This Lead state is set to read-only therefore updating this Lead is not possible."
-msgstr "This Lead state is set to read-only therefore updating this Lead is not possible."
+msgid "This lead state is set to read-only. Therefore, updating this lead is not possible."
+msgstr "This lead state is set to read-only. Therefore, updating this lead is not possible."
 
 msgid "CSV all data"
 msgstr "CSV all data"
@@ -186,14 +182,14 @@ msgstr "CSV all data"
 msgid "Lead Data"
 msgstr "Lead Data"
 
-msgid "Leadstate"
-msgstr "Leadstate"
+msgid "Lead State"
+msgstr "Lead State"
 
-msgid "Leadtype"
-msgstr "Leadtype"
+msgid "Lead Type"
+msgstr "Lead Type"
 
-msgid "Leadsource"
-msgstr "Leadsource"
+msgid "Lead Source"
+msgstr "Lead Source"
 
 msgid "End Scheduled"
 msgstr "End Scheduled"
@@ -237,11 +233,11 @@ msgstr "urgent"
 msgid "Edit new lead"
 msgstr "Edit new lead"
 
-#, python-format
-msgid "The following leads have just been imported into lead list %s"
-msgstr "The following leads have just been imported into lead list %s"
+#, python-format, php-format
+msgid "The following leads have just been imported into the lead list %s"
+msgstr "The following leads have just been imported into the lead list %s"
 
-#, python-format
+#, python-format, php-format
 msgid "%s new leads have been imported"
 msgstr "%s new leads have been imported"
 
@@ -254,11 +250,11 @@ msgstr "Import list (###CURRENTDATE###)"
 msgid "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 
-msgid "Please choose the Lead to add the contacts to"
-msgstr "Please choose the Lead to add the contacts to"
+msgid "Please select the lead to add the contacts to"
+msgstr "Please select the lead to add the contacts to"
 
-msgid "Please select the attenders' role"
-msgstr "Please select the attenders' role"
+msgid "Please select the attendee's role"
+msgstr "Please select the attendee's role"
 
 msgid "Lead"
 msgid_plural "Leads"
@@ -290,8 +286,8 @@ msgstr "Change type to Partner"
 msgid "Change contact type"
 msgstr "Change contact type"
 
-msgid "Search for Contacts to add ..."
-msgstr "Search for Contacts to add ..."
+msgid "Search for contacts to add..."
+msgstr "Search for contacts to add..."
 
 msgid "Name"
 msgstr "Name"
@@ -317,14 +313,14 @@ msgstr "Notifications are disabled"
 msgid "Send Notification?"
 msgstr "Send Notification?"
 
-msgid "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr "Changes to this lead might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgid "Changes to this lead might send notifications. Press the button \"Notifications are enabled\" to switch to \"Notifications are disabled\""
+msgstr "Changes to this lead might send notifications. Press the button \"Notifications are enabled\" to switch to \"Notifications are disabled\""
 
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "You do not have the run right for the Tasks application or it is not activated."
+msgid "You do not have the run permission for the Tasks application, or it is not activated."
+msgstr "You do not have the run permission for the Tasks application, or it is not activated."
 
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "You do not have the run right for the Sales application or it is not activated."
+msgid "You do not have the run permission for the Sales application, or it is not activated."
+msgstr "You do not have the run permission for the Sales application, or it is not activated."
 
 msgid "Enter lead name"
 msgstr "Enter lead name"
@@ -356,14 +352,17 @@ msgstr "Mobile"
 msgid "Fax"
 msgstr "Fax"
 
-msgid "E-Mail"
-msgstr "E-Mail"
-
 msgid "Web"
 msgstr "Web"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Leadtype"
+msgstr "Leadtype"
+
+msgid "Leadsource"
+msgstr "Leadsource"
 
 msgid "Lead name"
 msgstr "Lead name"
@@ -408,14 +407,14 @@ msgstr "Quick Search"
 msgid "Last Modified Time"
 msgstr "Last Modified Time"
 
-msgid "Last Modified By"
-msgstr "Last Modified By"
+msgid "Last Modified by"
+msgstr "Last Modified by"
 
 msgid "Creation Time"
 msgstr "Creation Time"
 
-msgid "Created By"
-msgstr "Created By"
+msgid "Created by"
+msgstr "Created by"
 
 msgid "X Lead"
 msgstr "X Lead"
@@ -435,8 +434,8 @@ msgstr "Price"
 msgid "Quantity"
 msgstr "Quantity"
 
-msgid "Search for Products to add ..."
-msgstr "Search for Products to add ..."
+msgid "Search for products to add..."
+msgstr "Search for products to add..."
 
 msgid "No Tasks to display"
 msgstr "No Tasks to display"
@@ -444,8 +443,8 @@ msgstr "No Tasks to display"
 msgid "Summary"
 msgstr "Summary"
 
-msgid "Add a task..."
-msgstr "Add a task..."
+msgid "Add a Task..."
+msgstr "Add a Task..."
 
 msgid "Percent"
 msgstr "Percent"
@@ -459,8 +458,8 @@ msgstr "GENDER_Lead"
 msgid "Show Closed"
 msgstr "Show Closed"
 
-msgid "All leads"
-msgstr "All leads"
+msgid "All Leads"
+msgstr "All Leads"
 
 msgid "Default Lead List"
 msgstr "Default Lead List"
@@ -468,38 +467,47 @@ msgstr "Default Lead List"
 msgid "The default list for new leads"
 msgstr "The default list for new leads"
 
-msgid "Get Notification E-mails"
-msgstr "Get Notification E-mails"
+msgid "Get Notification Emails"
+msgstr "Get Notification Emails"
 
-msgid "The level of actions you want to be notified about."
-msgstr "The level of actions you want to be notified about."
+msgid "The level of actions you want to receive notifications for."
+msgstr "The level of actions you want to receive notifications for."
 
-msgid "Send Notifications e-mails for own actions"
-msgstr "Send Notifications e-mails for own actions"
+msgid "Send notification emails for your own actions"
+msgstr "Send notification emails for your own actions"
 
-msgid "Get notifications e-mails for actions you did yourself"
-msgstr "Get notifications e-mails for actions you did yourself"
+msgid "Get notification emails for your own actions"
+msgstr "Get notification emails for your own actions"
 
 msgid "Default Favorite"
 msgstr "Default Favorite"
 
-msgid "The default favorite which is loaded on crm startup"
-msgstr "The default favorite which is loaded on crm startup"
+msgid "The default favorite that is loaded on CRM startup"
+msgstr "The default favorite that is loaded on CRM startup"
 
-msgid "All leads I have read grants for"
-msgstr "All leads I have read grants for"
+msgid "All leads I have read access to"
+msgstr "All leads I have read access to"
 
 msgid "Last modified by me"
 msgstr "Last modified by me"
 
-msgid "All leads that I have last modified"
-msgstr "All leads that I have last modified"
+msgid "All leads I last modified"
+msgstr "All leads I last modified"
 
 msgid "My leads"
 msgstr "My leads"
 
-msgid "All leads that I am responsible for"
-msgstr "All leads that I am responsible for"
+msgid "All leads I am responsible for"
+msgstr "All leads I am responsible for"
 
 msgid "Leads with overdue tasks"
 msgstr "Leads with overdue tasks"
+
+msgid "All"
+msgstr "All"
+
+msgid "All without me"
+msgstr "All without me"
+
+msgid "Nobody"
+msgstr "Nobody"

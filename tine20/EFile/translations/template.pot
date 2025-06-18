@@ -73,7 +73,7 @@ msgstr ""
 msgid "Sub File"
 msgstr ""
 
-msgid "EFile node names may not contain:"
+msgid "eFile node names may not contain:"
 msgstr ""
 
 msgid "Electronic File"
@@ -105,7 +105,7 @@ msgstr ""
 msgid "Jump to File"
 msgstr ""
 
-msgid "Metadata entered here is automatically inherited in newly created e-files."
+msgid "Metadata entered here is automatically inherited by newly created eFiles."
 msgstr ""
 
 msgid "Duration Start"
@@ -117,13 +117,13 @@ msgstr ""
 msgid "Commissioned Office"
 msgstr ""
 
-msgid "File is Hybrid (a corresponding paper file exists)"
+msgid "This file is Hybrid (a corresponding paper file exists)"
 msgstr ""
 
 msgid "Location of Paper File"
 msgstr ""
 
-msgid "File is Closed"
+msgid "This file is Closed"
 msgstr ""
 
 msgid "Final Decree"

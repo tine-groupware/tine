@@ -277,8 +277,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::FIXED_CALENDARS => array(
             //_('Fixed Calendars')
             'label'                 => 'Fixed Calendars',
-            //_('Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.')
-            'description'           => 'Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.',
+            //_('Calendars always selected regardless of all filter parameters. A valid use case could be to force the display of an certain holiday calendar.')
+            'description'           => 'Calendars always selected regardless of all filter parameters. A valid use case could be to force the display of an certain holiday calendar.',
             'type'                  => 'array',
             'contents'              => 'string', // in fact this are ids of Tinebase_Model_Container of app Calendar and we might what to have te ui to autocreate pickers panel here? x-type? -> later
             'clientRegistryInclude' => TRUE
@@ -286,8 +286,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::CROP_DAYS_VIEW => array(
                                    //_('Crop Days')
             'label'                 => 'Crop Days',
-                                   //_('Crop calendar view configured start and endtime.')
-            'description'           => 'Crop calendar view configured start and endtime.',
+                                   //_('Crop the calendar view to the configured start and end time.')
+            'description'           => 'Crop the calendar view to the configured start and end time.',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -298,8 +298,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::CROP_DAYS_VIEW_ALLOW_ALL_EVENTS => array(
                                    //_('Crop Days Limit Override')
             'label'                 => 'Crop Days Limit Override',
-                                   //_('Allow events outside start and endtime.')
-            'description'           => 'Allow events outside start and endtime.',
+                                   //_('Allow events outside the defined start and end times.')
+            'description'           => 'Allow events outside the defined start and end times.',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -310,7 +310,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::DAYS_VIEW_MOUSE_WHEEL_INCREMENT => array(
                                     //_('Week View Mouse Wheel Increment')
             'label'                 => 'Week View Mouse Wheel Increment',
-            //_('Crop calendar view configured start and endtime.')
+            //_('Crop the calendar view to the configured start and end time.')
             'description'           => 'Number of pixels to scroll per mouse wheel',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             'clientRegistryInclude' => true,
@@ -320,10 +320,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
 
         ),
         self::EVENT_VIEW => array(
-            //_('Default View for Events')
-            'label'                 => 'Default View for Events',
-            //_('Default View for Events')
-            'description'           => 'Default View for Events ("organizer" or "attendee")',
+            //_('Default View for the Events')
+            'label'                 => 'Default View for the Events',
+            //_('Default View for the Events')
+            'description'           => 'Default View for the Events ("organizer" or "attendee")',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD,
             'options'               => array(
                 'records' => array(
@@ -337,10 +337,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => 'attendee',
         ),
         self::EVENT_STATUS => [
-            //_('Event Status Available')
-            'label'                 => 'Event Status Available',
-            //_('Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation.',
+            //_('Available Event Statuses')
+            'label'                 => 'Available Event Statuses',
+            //_('Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -354,10 +354,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             ]
         ],
         self::EVENT_CLASSES => [
-            //_('Event Classes Available')
-            'label'                 => 'Event Classes Available',
-            //_('Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation.',
+            //_('Available Event Classes')
+            'label'                 => 'Available Event Classes',
+            //_('Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -371,10 +371,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             ]
         ],
         self::EVENT_TRANSPARENCIES => [
-            //_('Event Transparencies Available')
-            'label'                 => 'Event Transparencies Available',
-            //_('Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation.',
+            //_('Available Event Transparencies')
+            'label'                 => 'Available Event Transparencies',
+            //_('Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
@@ -387,10 +387,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             ]
         ],
         self::ATTENDEE_STATUS => array(
-                                   //_('Attendee Status Available')
-            'label'                 => 'Attendee Status Available',
-                                   //_('Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation.',
+                                   //_('Available Attendee Statuses')
+            'label'                 => 'Available Attendee Statuses',
+                                   //_('Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
             'clientRegistryInclude' => TRUE,
@@ -406,10 +406,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             )
         ),
         self::ATTENDEE_ROLES => array(
-                                   //_('Attendee Roles Available')
-            'label'                 => 'Attendee Roles Available',
-                                   //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.',
+                                   //_('Available Attendee Roles')
+            'label'                 => 'Available Attendee Roles',
+                                   //_('Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization.')
+            'description'           => 'Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => Calendar_Model_AttendeeRole::class),
             'clientRegistryInclude' => TRUE,
@@ -433,10 +433,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => true,
         ],
         self::RESOURCE_TYPES => array(
-            //_('Resource Types Available')
-            'label'                 => 'Resource Types Available',
-            //_('Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
+            //_('Available Resource Types')
+            'label'                 => 'Available Resource Types',
+            //_('Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization.')
+            'description'           => 'Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => Calendar_Model_ResourceType::class),
             'clientRegistryInclude' => TRUE,
@@ -460,10 +460,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             )
         ),
         self::FREEBUSY_TYPES => array(
-            //_('Free/Busy Types Available')
-            'label'                 => 'Free/Busy Types Available',
-            //_('Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
-            'description'           => 'Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
+            //_('Available Free/Busy Types')
+            'label'                 => 'Available Free/Busy Types',
+            //_('Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization.')
+            'description'           => 'Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
@@ -480,8 +480,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::MAX_FILTER_PERIOD_CALDAV => array(
         //_('Filter timeslot for CalDAV events')
             'label'                 => 'Filter timeslot for events',
-        //_('For how long in the past (in months) the events should be synchronized.')
-            'description'           => 'For how long in the past (in months) the events should be synchronized.',
+        //_('How many months in the past the events should be synchronized.')
+            'description'           => 'How many months in the past the events should be synchronized.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
@@ -491,8 +491,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN => array(
             //_('Filter timeslot for CalDAV events with SyncToken')
             'label'                 => 'Filter timeslot for CalDAV events with SyncToken',
-            //_('For how long in the past (in months) the events should be synchronized.')
-            'description'           => 'For how long in the past (in months) the events should be synchronized.',
+            //_('How many months in the past the events should be synchronized.')
+            'description'           => 'How many months in the past the events should be synchronized.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
@@ -500,10 +500,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => 100,
         ),
         self::MAX_NOTIFICATION_PERIOD_FROM => array(
-        //_('Timeslot for event notifications')
-            'label'                 => 'Timeslot for event notifications',
-        //_('For how long in the past (in weeks) event notifications should be sent.')
-            'description'           => 'For how long in the past (in weeks) event notifications should be sent.',
+        //_('Timeslot for the Event Notifications')
+            'label'                 => 'Timeslot for the Event Notifications',
+        //_('How many weeks in the past event notifications should be sent.')
+            'description'           => 'How many weeks in the past event notifications should be sent.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
@@ -511,10 +511,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => 1, // 1 week is default
         ),
         self::MAX_JSON_DEFAULT_FILTER_PERIOD_FROM => array(
-        //_('Default filter period (from) for events fetched via JSON API')
-            'label'                 => 'Default filter period (from) for events fetched via JSON API',
-        //_('For how long in the past (in months) the events should be fetched.')
-            'description'           => 'For how long in the past (in months) the events should be fetched.',
+        //_('Default filter start date for the events fetched via JSON API')
+            'label'                 => 'Default filter start date for the events fetched via JSON API',
+        //_('How many months in the past the events should be fetched.')
+            'description'           => 'How many months in the past the events should be fetched.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
@@ -522,10 +522,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => 0,
         ),
         self::MAX_JSON_DEFAULT_FILTER_PERIOD_UNTIL => array(
-        //_('Default filter period (until) for events fetched via JSON API')
-            'label'                 => 'Default filter period (until) for events fetched via JSON API',
-        //_('For how long in the future (in months) the events should be fetched.')
-            'description'           => 'For how long in the future (in months) the events should be fetched.',
+        //_('Default filter end date for the events fetched via JSON API')
+            'label'                 => 'Default filter end date for the events fetched via JSON API',
+        //_('For how many months in the future the events should be fetched.')
+            'description'           => 'For how many months in the future the events should be fetched.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
@@ -568,8 +568,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::FLOORPLANS => [
             //_('Floorplans')
             self::LABEL                 => 'Floorplans',
-            //_('List of floorplans with their ressources configs.')
-            self::DESCRIPTION           => 'List of floorplans with their ressources configs.',
+            //_('List of floorplans with their resource configurations.')
+            self::DESCRIPTION           => 'List of floorplans with their resource configurations.',
             self::TYPE                  => self::TYPE_ARRAY,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
@@ -606,41 +606,41 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     self::LABEL             => 'Calendar Extended Context Menu Actions',
                     //_('Calendar Extended Context Menu Actions')
                     self::DESCRIPTION       => 'Adds extended actions to event context menus',
-                    //_('Adds extended actions to event context menus')
+                    //_('Adds extended actions to the event context menus')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => true,
                 ],
                 self::FEATURE_COLOR_BY => [
-                    self::LABEL             => 'Color Events By',
-                    //_('Color Events By')
+                    self::LABEL             => 'Color Events by',
+                    //_('Color Events by')
                     self::DESCRIPTION       => 'Choose event color by different criteria',
                     //_('Choose event color by different criteria')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => true,
                 ],
                 self::FEATURE_RECUR_EXCEPT => [
-                    self::LABEL             => 'Recur Events Except',
-                    //_('Recur Events Except')
-                    self::DESCRIPTION       => 'Recur Events except on certain dates',
-                    //_('Recur Events except on certain dates')
+                    self::LABEL             => 'Recurring Events Except',
+                    //_('Recurring Events Except')
+                    self::DESCRIPTION       => 'Recurring events, except on certain dates.',
+                    //_('Recurring events, except on certain dates.')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => false,
                 ],
                 self::FEATURE_POLLS => array(
-                    self::LABEL             => 'Activate Poll for Events',
-                    //_('Activate Poll for Events')
+                    self::LABEL             => 'Activate Poll for the Events',
+                    //_('Activate Poll for the Events')
                     self::DESCRIPTION       =>
-                        'Create alternative Events and let users as well as externals vote for the best option.',
-                    //_('Create alternative Events and let users as well as externals vote for the best option.')
+                        'Create alternative events and allow users as well as externals to vote for the best option.',
+                    //_('Create alternative events and allow users as well as externals to vote for the best option.')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => true,
                 ),
                 self::FEATURE_EVENT_TYPE => array(
-                    self::LABEL             => 'Activate Event Types for Events',
-                    //_('Activate Event Types for Events')
+                    self::LABEL             => 'Activate Event Types for the Events',
+                    //_('Activate Event Types for the Events')
                     self::DESCRIPTION       =>
-                        'Activate Event Types for Events.',
-                    //_('Activate Event Types for Events.')
+                        'Activate Event Types for the Events.',
+                    //_('Activate Event Types for the Events.')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => false,
                 ),
@@ -655,7 +655,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
         ],
         self::TENTATIVE_NOTIFICATIONS => array(
             'label'                 => 'Send Tentative Notifications', //_('Send Tentative Notifications')
-            'description'           => 'Send notifications to event organiziers of events that are tentative certain days before event is due', //_('Send notifications to event organiziers of events that are tentative certain days before event is due')
+            'description'           => 'Send notifications to event organizers of tentative events a certain number of days before the event is due.', //_('Send notifications to event organizers of tentative events a certain number of days before the event is due.')
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => TRUE,
@@ -670,13 +670,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 ),
                 self::TENTATIVE_NOTIFICATIONS_DAYS      => array(
                     'label'         => 'Days Before Due Date', //_('Days Before Due Date')
-                    'description'   => 'How many days before the events due date to start send notifications.', //_('How many days before the events due date to start send notifications.')
+                    'description'   => 'How many days before the event\'s due date should notifications be sent.', //_('How many days before the event\'s due date should notifications be sent.')
                     'type'          => Tinebase_Config_Abstract::TYPE_INT,
                     'default'       => 5,
                 ),
                 self::TENTATIVE_NOTIFICATIONS_FILTER    => array(
                     'label'         => 'Additional Filter', //_('Additional Filter')
-                    'description'   => 'Additional filter to limit events notifications should be send for.', //_('Additional filter to limit events notifications should be send for.')
+                    'description'   => 'Additional filter to limit which events notifications should be sent for.', //_('Additional filter to limit which events notifications should be sent for.')
                     'type'          => Tinebase_Config_Abstract::TYPE_ARRAY,
                     'default'       => [],
                 ),
@@ -686,8 +686,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS => array(
             //_('Mute Event Notifications for Polls')
             'label'                 => 'Mute Event Notifications for Polls',
-            //_('Do not send invitations notifications for alternative events in an active poll.')
-            'description'           => 'Do not send invitations notifications for alternative events in an active poll.',
+            //_('Do not send invitation notifications for alternative events in an active poll.')
+            'description'           => 'Do not send invitation notifications for alternative events in an active poll.',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
             'setBySetupModule'      => false,
@@ -706,10 +706,10 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => '',
         ),
         self::FREEBUSY_INFO_ALLOWED => [
-            //_('Freebusy Info')
-            self::LABEL             => 'Freebusy Info',
-            //_('What data the freebusy grant reveals')
-            self::DESCRIPTION       => 'What data the freebusy grant reveals',
+            //_('Free/Busy Info')
+            self::LABEL             => 'Free/Busy Info',
+            //_('What data the free/busy grant reveals')
+            self::DESCRIPTION       => 'What data the free/busy grant reveals',
             self::TYPE              => self::TYPE_KEYFIELD,
                 self::OPTIONS           => [
                     'records'               => [

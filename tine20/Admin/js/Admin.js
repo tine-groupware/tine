@@ -107,7 +107,7 @@ Tine.Admin.init = function () {
             viewRight: 'shared_tags',
             hidden: !Tine.Admin.showModule('sharedtags')
         }, {
-            text: translation.gettext('Customfields'),
+            text: translation.gettext('Custom Fields'),
             cls: "treemain",
             iconCls: 'admin-node-customfields',
             allowDrag: false,
@@ -197,7 +197,7 @@ Tine.Admin.init = function () {
         if (Tine.Tinebase.appMgr.get('Felamimail') && Tine.Tinebase.common.hasRight('view', 'Admin', 'manage_emailaccounts')
         ) {
             tree.push({
-                text: translation.gettext('E-mail Accounts'),
+                text: translation.gettext('Email Accounts'),
                 //pos: 850,
                 cls: "treemain",
                 iconCls: 'FelamimailIconCls',

@@ -73,7 +73,7 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
         }];
 
         this.action_setDefiniteEvent = new Ext.Action({
-            text: this.app.i18n._('Set as definite event'),
+            text: this.app.i18n._('Set as a definite event'),
             iconCls: 'cal-polls-set-definite-action',
             scope: this,
             handler: this.onSetDefiniteEvent
@@ -101,7 +101,7 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                     ref: '../../../../createPollCheckbox',
                     disabled: true,
                     hideLabel: true,
-                    boxLabel: this.app.i18n._('Create Poll for this Event'),
+                    boxLabel: this.app.i18n._('Create a Poll for this Event'),
                     listeners: {scope: this, check: this.onCreatePollCheck}
                 }, {
                     xtype: 'textfield',
@@ -109,13 +109,13 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                     ref: '../../../../pollNameField',
                     disabled: true,
                     hideLabel: true,
-                    emptyText: this.app.i18n._('Name for poll')
+                    emptyText: this.app.i18n._('Poll Name')
                 }], [{
                     xtype: 'displayfield',
                     columnWidth: 1,
                     hideLabel: true,
                     value: [
-                        this.app.i18n._("Create scheduling suggestions and pick the best alternative based on user feedback."),
+                        this.app.i18n._("Create scheduling suggestions and choose the best option based on user feedback."),
                         this.app.i18n._("Share the link below to poll for attendee status feedback."),
                     ].join(' ')
                 }], [{

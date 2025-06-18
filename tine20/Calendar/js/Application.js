@@ -173,7 +173,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
             },
             failure: function() {
                 cp.selectFavorite();
-                Ext.Msg.alert(this.i18n._('Event not found'), this.i18n._("The Event was deleted in the meantime or you don't have access rights to it."));
+                Ext.Msg.alert(this.i18n._('Event not found'), this.i18n._("The event was deleted in the meantime or you no longer have access rights to it."));
             }
         });
     },

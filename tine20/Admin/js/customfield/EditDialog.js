@@ -563,7 +563,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             result = false;
             this.getForm().markInvalid([{
                 id: 'name',
-                msg: this.app.i18n._("Customfield already exists. Please choose another name.")
+                msg: this.app.i18n._("Custom field already exists. Please choose another name.")
             }]);
         }
         

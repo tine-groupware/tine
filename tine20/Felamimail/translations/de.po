@@ -29,21 +29,21 @@ msgstr ""
 "X-Generator: Poedit 2.2.3\n"
 
 msgid "Manage personal email accounts"
-msgstr "Persönliche Konten verwalten"
+msgstr "Persönliche E-Mail-Konten verwalten"
 
 msgid "Edit and delete personal email accounts"
-msgstr "Bearbeiten und Löschen von persönlichen Konten"
+msgstr "Bearbeiten und Löschen von persönlichen E-Mail-Konten"
 
 msgid "Add personal email accounts"
-msgstr "Persönliche Konten hinzufügen"
+msgstr "Persönliche E-Mail-Konten hinzufügen"
 
 msgid "Create new personal email accounts"
-msgstr "Neue persönliche Konten hinzufügen"
+msgstr "Neue persönliche E-Mail-Konten hinzufügen"
 
-msgid "Mail Type"
+msgid "Email Type"
 msgstr "E-Mail Typ"
 
-msgid "Possible mail types."
+msgid "Possible email types."
 msgstr "Mögliche E-Mail Typen"
 
 msgid "Additional Personal External Account"
@@ -61,7 +61,7 @@ msgstr "Persönliches Extra-Systemkonto"
 msgid "Default Personal System Account"
 msgstr "Persönliches Standard-Systemkonto"
 
-msgid "Mailinglist"
+msgid "Mailing list"
 msgstr "E-Mail-Verteiler"
 
 msgid "Mailinglist Reject Reason"
@@ -71,18 +71,18 @@ msgid "Your email has been rejected"
 msgstr "Ihre E-Mail wurde abgelehnt"
 
 msgid "Vacation Templates Node ID"
-msgstr "Abwesenheits-Vorlalagen Node ID"
+msgstr "Abwesenheits-Vorlagen Node ID"
 
 msgid "Email Notification Templates Node ID"
 msgstr "E-Mail Benachrichtigungs-Vorlagen Node ID"
 
-msgid "Email Notification from E-Mailadress"
+msgid "Email Notification From Address"
 msgstr "E-Mail Benachrichtigung Absender E-Mail Adresse"
 
 msgid "Custom Vacation Message"
-msgstr "Benutzerdefnierte Abwesenheitsnotiz"
+msgstr "Benutzerdefinierte Abwesenheitsnotiz"
 
-msgid "User is allowed to set custom vacation message for system account"
+msgid "The user is allowed to set a custom vacation message for the system account."
 msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
 
 msgid "Cache email body"
@@ -94,7 +94,7 @@ msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP
 msgid "Delete Archived Mail"
 msgstr "Archivierte Nachricht löschen"
 
-msgid "Prevent copying mails in the same account"
+msgid "Prevent copying emails within the same account"
 msgstr "Verhindere Kopieren von E-Mails in das gleiche Konto"
 
 msgid "Attachment cache TTL in seconds"
@@ -103,13 +103,13 @@ msgstr "Anhang-Zwischenspeicher TTL in Sekunden"
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
 
-msgid "Enabled Features in Felamimail Application."
+msgid "Enabled Features in the Felamimail Application."
 msgstr "Eingeschaltete Features für die Felamimail Anwendung."
 
 msgid "Account Migration"
 msgstr "Kontomigration"
 
-msgid "Shows context menu for system accounts to approve migration"
+msgid "Shows the context menu for system accounts to approve migration"
 msgstr "Zeigt Menüpunkt zur Freigabe der Kontomigration"
 
 msgid "Move notifications"
@@ -124,11 +124,11 @@ msgstr "Entwürfe automatisch sichern"
 msgid "Save drafts automatically while editing an email"
 msgstr "Entwürfe automatisch beim E-Mail verfassen speichern"
 
-msgid "Only password download link"
+msgid "Password-protected download link only"
 msgstr "Nur passwortgeschützter Download Link"
 
-msgid "Allow only password download link"
-msgstr "Nur Donwload-Links mit Passwort erlauben"
+msgid "Allow only password-protected download links"
+msgstr "Nur Download-Links mit Passwort erlauben"
 
 msgid "Tine 2.0 Flag"
 msgstr "Tine 2.0 Flag"
@@ -145,7 +145,7 @@ msgstr "Zeige Antwort-An Feld im Nachricht Verfassen Dialog"
 msgid "Auto-Create Folders"
 msgstr "Automatisches Erstellen von Ordnern"
 
-msgid "Create template, trash, sent, draft and junks folders for system accounts"
+msgid "Create template, Trash, Sent, Draft, and Junk folders for system accounts"
 msgstr "Erstellen von Vorlagen-, Papierkorb-, gesendeten, Entwurfs- und Junk-Ordnern für Systemkonten"
 
 msgid "Enable Spam Suspicion Strategy"
@@ -1761,6 +1761,3 @@ msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
 
 msgid "Only forwarded email as .eml in attachment"
 msgstr "Nur weitergeleitete email als .eml im Anhang"
-
-#~ msgid "Mark all messages as read"
-#~ msgstr "Alle Nachrichten als gelesen markieren"

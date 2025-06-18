@@ -113,20 +113,20 @@ class Courses_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             self::ADD_NEW_USER => array(
-                'text'          => $translate->_('Add new user'),
-                'description'   => $translate->_('Add new user as member to a course')
+                'text'          => $translate->_('Add a new user'),
+                'description'   => $translate->_('Add a new user as a member to a course')
             ),
             self::ADD_EXISTING_USER => array(
-                'text'          => $translate->_('Add existing user'),
-                'description'   => $translate->_('Add existing user as member to a course')
+                'text'          => $translate->_('Add an existing user'),
+                'description'   => $translate->_('Add an existing user as a member to a course')
             ),
             self::MANAGE_SHARED_COURSE_FAVORITES => array(
-                'text'          => $translate->_('Manage shared courses favorites'),
-                'description'   => $translate->_('Create or update shared courses favorites'),
+                'text'          => $translate->_('Manage shared course favorites'),
+                'description'   => $translate->_('Create or update shared course favorites'),
             ),
             self::SET_ADDITIONAL_MEMBERSHIPS => array(
                 'text'          => $translate->_('Set additional memberships'),
-                'description'   => $translate->_('Set additional course member group memberships'),
+                'description'   => $translate->_('Set additional group memberships for course members'),
             ),
         );
         

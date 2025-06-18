@@ -25,11 +25,11 @@ msgstr "Add personal email accounts"
 msgid "Create new personal email accounts"
 msgstr "Create new personal email accounts"
 
-msgid "Mail Type"
-msgstr "Mail Type"
+msgid "Email Type"
+msgstr "Email Type"
 
-msgid "Possible mail types."
-msgstr "Possible mail types."
+msgid "Possible email types."
+msgstr "Possible email types."
 
 msgid "Additional Personal External Account"
 msgstr "Additional Personal External Account"
@@ -46,8 +46,8 @@ msgstr "Additional Personal System Account"
 msgid "Default Personal System Account"
 msgstr "Default Personal System Account"
 
-msgid "Mailinglist"
-msgstr "Mailinglist"
+msgid "Mailing list"
+msgstr "Mailing list"
 
 msgid "Mailinglist Reject Reason"
 msgstr "Mailinglist Reject Reason"
@@ -61,14 +61,14 @@ msgstr "Vacation Templates Node ID"
 msgid "Email Notification Templates Node ID"
 msgstr "Email Notification Templates Node ID"
 
-msgid "Email Notification from E-Mailadress"
-msgstr "Email Notification from E-Mailadress"
+msgid "Email Notification From Address"
+msgstr "Email Notification From Address"
 
 msgid "Custom Vacation Message"
 msgstr "Custom Vacation Message"
 
-msgid "User is allowed to set custom vacation message for system account"
-msgstr "User is allowed to set custom vacation message for system account"
+msgid "The user is allowed to set a custom vacation message for the system account."
+msgstr "The user is allowed to set a custom vacation message for the system account."
 
 msgid "Cache email body"
 msgstr "Cache email body"
@@ -79,8 +79,8 @@ msgstr "Should the email body be cached (recommended for slow IMAP server connec
 msgid "Delete Archived Mail"
 msgstr "Delete Archived Mail"
 
-msgid "Prevent copying mails in the same account"
-msgstr "Prevent copying mails in the same account"
+msgid "Prevent copying emails within the same account"
+msgstr "Prevent copying emails within the same account"
 
 msgid "Attachment cache TTL in seconds"
 msgstr "Attachment cache TTL in seconds"
@@ -88,14 +88,14 @@ msgstr "Attachment cache TTL in seconds"
 msgid "Enabled Features"
 msgstr "Enabled Features"
 
-msgid "Enabled Features in Felamimail Application."
-msgstr "Enabled Features in Felamimail Application."
+msgid "Enabled Features in the Felamimail Application."
+msgstr "Enabled Features in the Felamimail Application."
 
 msgid "Account Migration"
 msgstr "Account Migration"
 
-msgid "Shows context menu for system accounts to approve migration"
-msgstr "Shows context menu for system accounts to approve migration"
+msgid "Shows the context menu for system accounts to approve migration"
+msgstr "Shows the context menu for system accounts to approve migration"
 
 msgid "Move notifications"
 msgstr "Move notifications"
@@ -109,11 +109,11 @@ msgstr "Auto-Save Drafts"
 msgid "Save drafts automatically while editing an email"
 msgstr "Save drafts automatically while editing an email"
 
-msgid "Only password download link"
-msgstr "Only password download link"
+msgid "Password-protected download link only"
+msgstr "Password-protected download link only"
 
-msgid "Allow only password download link"
-msgstr "Allow only password download link"
+msgid "Allow only password-protected download links"
+msgstr "Allow only password-protected download links"
 
 msgid "Tine 2.0 Flag"
 msgstr "Tine 2.0 Flag"
@@ -130,8 +130,8 @@ msgstr "Show Reply-To field in message compose dialog"
 msgid "Auto-Create Folders"
 msgstr "Auto-Create Folders"
 
-msgid "Create template, trash, sent, draft and junks folders for system accounts"
-msgstr "Create template, trash, sent, draft and junks folders for system accounts"
+msgid "Create template, Trash, Sent, Draft, and Junk folders for system accounts"
+msgstr "Create template, Trash, Sent, Draft, and Junk folders for system accounts"
 
 msgid "Enable Spam Suspicion Strategy"
 msgstr "Enable Spam Suspicion Strategy"

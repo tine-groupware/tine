@@ -25,10 +25,10 @@ msgstr ""
 msgid "Create new personal email accounts"
 msgstr ""
 
-msgid "Mail Type"
+msgid "Email Type"
 msgstr ""
 
-msgid "Possible mail types."
+msgid "Possible email types."
 msgstr ""
 
 msgid "Additional Personal External Account"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Default Personal System Account"
 msgstr ""
 
-msgid "Mailinglist"
+msgid "Mailing list"
 msgstr ""
 
 msgid "Mailinglist Reject Reason"
@@ -61,13 +61,13 @@ msgstr ""
 msgid "Email Notification Templates Node ID"
 msgstr ""
 
-msgid "Email Notification from E-Mailadress"
+msgid "Email Notification From Address"
 msgstr ""
 
 msgid "Custom Vacation Message"
 msgstr ""
 
-msgid "User is allowed to set custom vacation message for system account"
+msgid "The user is allowed to set a custom vacation message for the system account."
 msgstr ""
 
 msgid "Cache email body"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Delete Archived Mail"
 msgstr ""
 
-msgid "Prevent copying mails in the same account"
+msgid "Prevent copying emails within the same account"
 msgstr ""
 
 msgid "Attachment cache TTL in seconds"
@@ -88,13 +88,13 @@ msgstr ""
 msgid "Enabled Features"
 msgstr ""
 
-msgid "Enabled Features in Felamimail Application."
+msgid "Enabled Features in the Felamimail Application."
 msgstr ""
 
 msgid "Account Migration"
 msgstr ""
 
-msgid "Shows context menu for system accounts to approve migration"
+msgid "Shows the context menu for system accounts to approve migration"
 msgstr ""
 
 msgid "Move notifications"
@@ -109,10 +109,10 @@ msgstr ""
 msgid "Save drafts automatically while editing an email"
 msgstr ""
 
-msgid "Only password download link"
+msgid "Password-protected download link only"
 msgstr ""
 
-msgid "Allow only password download link"
+msgid "Allow only password-protected download links"
 msgstr ""
 
 msgid "Tine 2.0 Flag"
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Auto-Create Folders"
 msgstr ""
 
-msgid "Create template, trash, sent, draft and junks folders for system accounts"
+msgid "Create template, Trash, Sent, Draft, and Junk folders for system accounts"
 msgstr ""
 
 msgid "Enable Spam Suspicion Strategy"

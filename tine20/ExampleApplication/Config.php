@@ -123,8 +123,8 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
         self::EXAMPLE_STATUS => array(
                                    //_('Status Available')
             self::LABEL              => 'Status Available',
-                                   //_('Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.')
-            self::DESCRIPTION        => 'Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.',
+                                   //_('Possible Statuses. Please note that additional statuses may affect other ExampleApplication systems during export or synchronization.')
+            self::DESCRIPTION        => 'Possible Statuses. Please note that additional statuses may affect other ExampleApplication systems during export or synchronization.',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
             self::OPTIONS               => array('recordModel' => ExampleApplication_Model_Status::class),
             self::CLIENTREGISTRYINCLUDE => true,
@@ -134,7 +134,7 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                 'records' => array(
                     array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/icon-set/icon_ok.svg',     'system' => true), //_('Completed')
                     array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/icon-set/icon_stop.svg',   'system' => true), //_('Cancelled')
-                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/icon-set/icon_reload.svg', 'system' => true), //_('In process')
+                    array('id' => 'IN-PROCESS',   'value' => 'In progress',  'is_open' => 1, 'icon' => 'images/icon-set/icon_reload.svg', 'system' => true), //_('In progress')
                 ),
                 self::DEFAULT_STR => 'IN-PROCESS'
             )
@@ -188,8 +188,8 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
         self::EXAMPLE_STRING => array(
             //_('Example String')
             self::LABEL              => 'Example String',
-            //_('Just an example string for test purpose')
-            self::DESCRIPTION        => 'Just an example string for test purpose',
+            //_('Just an example string for testing purposes.')
+            self::DESCRIPTION        => 'Just an example string for testing purposes.',
             self::TYPE               => 'string',
             self::DEFAULT_STR        => self::EXAMPLE_STRING,
         )

@@ -60,7 +60,7 @@ Tine.Calendar.EventContextTagsItem = Ext.extend(Ext.menu.Item, {
 
         var other = new Tine.widgets.tags.TagsMassAttachAction({
             app: this.app,
-            text: this.app.i18n._('Additional Tags ...')
+            text: this.app.i18n._('Additional Tags...')
         });
         other.initialConfig.handler = other.initialConfig.handler.createSequence(this.onOtherClick, this);
         this.menu.push(other);

@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,14 +16,14 @@ msgstr ""
 msgid "Device List Status"
 msgstr "Device List Status"
 
-msgid "Possible list status from device list feedback records."
-msgstr "Possible list status from device list feedback records."
+msgid "Possible list statuses based on device list feedback records"
+msgstr "Possible list statuses based on device list feedback records"
 
-msgid "List was send to device"
-msgstr "List was send to device"
+msgid "List was sent to device"
+msgstr "List was sent to device"
 
-msgid "List was taken over"
-msgstr "List was taken over"
+msgid "List has been accepted"
+msgstr "List has been accepted"
 
 msgid "Generic error"
 msgstr "Generic error"
@@ -38,8 +37,8 @@ msgstr "Unknown list"
 msgid "Parameter missing"
 msgstr "Parameter missing"
 
-msgid "Error in list line"
-msgstr "Error in list line"
+msgid "Error in list row"
+msgstr "Error in list row"
 
 msgid "List is ignored"
 msgstr "List is ignored"
@@ -47,47 +46,47 @@ msgstr "List is ignored"
 msgid "Duplicate list definition"
 msgstr "Duplicate list definition"
 
-msgid "An other list upgrade is in progress"
-msgstr "An other list upgrade is in progress"
+msgid "Another list upgrade is in progress"
+msgstr "Another list upgrade is in progress"
 
 msgid "Device List Percentage"
 msgstr "Device List Percentage"
 
-msgid "Device list with Percentage entries."
-msgstr "Device list with Percentage entries."
+msgid "Device list containing percentage entries."
+msgstr "Device list containing percentage entries."
 
 msgid "Initial AuthKey for Device Setup"
 msgstr "Initial AuthKey for Device Setup"
 
-msgid "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
-msgstr "Must be set as default for global variable authKey (max 20 chars) in DataFox Studio for the device setup."
+msgid "Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup."
+msgstr "Must be set as the default value for the global variable authKey (max 20 chars) in DataFox Studio for device setup."
 
 msgid "Default Container for Devices"
 msgstr "Default Container for Devices"
 
-msgid "The container where new devices are created in."
-msgstr "The container where new devices are created in."
+msgid "The container where new devices are created."
+msgstr "The container where new devices are created."
 
-msgid "Default Devices Lists"
-msgstr "Default Devices Lists"
+msgid "Default Device Lists"
+msgstr "Default Device Lists"
 
-msgid "List export definition names to load into devices per default."
-msgstr "List export definition names to load into devices per default."
+msgid "List export definition names that are loaded into devices by default."
+msgstr "List export definition names that are loaded into devices by default."
 
 msgid "Device Record Handlers"
 msgstr "Device Record Handlers"
 
-msgid "Handler class for given device record."
-msgstr "Handler class for given device record."
+msgid "Handler class for a given device record."
+msgstr "Handler class for a given device record."
 
 msgid "New Device"
 msgstr "New Device"
 
-msgid "Absence Reasons Device List"
-msgstr "Absence Reasons Device List"
+msgid "Device List for Absence Reasons"
+msgstr "Device List for Absence Reasons"
 
-msgid "Employee Device List"
-msgstr "Employee Device List"
+msgid "Device List for Employee"
+msgstr "Device List for Employee"
 
 msgid "Device list"
 msgid_plural "Device lists"
@@ -111,8 +110,8 @@ msgstr "Active list version"
 msgid "List status"
 msgstr "List status"
 
-msgid "Control Commands on List Feedback"
-msgstr "Control Commands on List Feedback"
+msgid "Control Commands Based on List Feedback"
+msgstr "Control Commands Based on List Feedback"
 
 msgid "Type"
 msgstr "Type"
@@ -181,9 +180,11 @@ msgstr "Data"
 msgid "Processed by"
 msgstr "Processed by"
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr "Clock in: %1$s"
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr "Clock out: %1$s"
 

@@ -424,9 +424,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
 
         if ($readonly) {
             $translate = Tinebase_Translation::getTranslation('Crm');
-            // _('This Lead state is set to read-only therefore updating this Lead is not possible.')
+            // _('This lead state is set to read-only. Therefore, updating this lead is not possible.')
             throw new Tinebase_Exception_SystemGeneric(
-                $translate->_('This Lead state is set to read-only therefore updating this Lead is not possible.'));
+                $translate->_('This lead state is set to read-only. Therefore, updating this lead is not possible.'));
         }
     }
 

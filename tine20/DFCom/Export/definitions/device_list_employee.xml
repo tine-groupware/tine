@@ -3,8 +3,8 @@
     <model>HumanResources_Model_Employee</model>
     <name>DFCom_device_list_employee</name>
     <deviceName>employee</deviceName>
-    <!-- _('Employee Device List') -->
-    <label>Employee Device List</label>
+    <!-- _('Device List for Employee') -->
+    <label>Device List for Employee</label>
     <type>export</type>
     <plugin>Tinebase_Export_CsvNew</plugin>
     <icon_class>tinebase-action-export-csv</icon_class>

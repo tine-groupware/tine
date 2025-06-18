@@ -30,9 +30,9 @@ class Bookmarks_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::OPEN_BOOKMARK_HOOKS => [
-            //_('Live time of token subscriptions')
+            //_('Lifetime of token subscriptions')
             self::LABEL                 => 'Open Bookmark Hooks',
-            //_('Live time of token subscriptions')
+            //_('Lifetime of token subscriptions')
             self::DESCRIPTION           => 'Hooks to be executed when bookmark is opened',
             self::TYPE                  => self::TYPE_ARRAY,
             self::CLIENTREGISTRYINCLUDE => false,

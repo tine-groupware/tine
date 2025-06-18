@@ -58,7 +58,7 @@ class Courses_Preference extends Tinebase_Preference_Abstract
         $prefDescriptions = array(
             self::DEFAULTPERSISTENTFILTER  => array(
                 'label'         => $translate->_('All courses'),
-                'description'   => $translate->_('The default favorite which is loaded on Classes startup'),
+                'description'   => $translate->_('The default favorite that is loaded when Classes start up.'),
             ),
         );
         

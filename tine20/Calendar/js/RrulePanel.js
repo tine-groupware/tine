@@ -32,7 +32,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.title = this.app.i18n._('Recurrances');
+        this.title = this.app.i18n._('Recurrences');
 
         this.defaults = {
             border: false

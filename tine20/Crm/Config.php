@@ -89,40 +89,40 @@ class Crm_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::SEND_NOTIFICATION => array(
-            'label' => 'send notification', //_('send notification'')
-            'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
+            'label' => 'send notification', //_('send notification')
+            'description' => 'Controls the sending of notifications about leads', //_('Controls the sending of notifications about leads')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => true,
             'setByAdminModule' => true,
             'clientRegistryInclude' => TRUE,
         ),
         self::SEND_NOTIFICATION_TO_ALL_ACCESS => array(
-            'label' => 'send notification to all access container', //_('send notification to all access container')
-            'description' => 'controls sending notification of Leads', //_('controls sending notification of Leads')
+            'label' => 'Send notification to all access containers', //_('Send notification to all access containers')
+            'description' => 'Controls the sending of notifications about leads', //_('Controls the sending of notifications about leads')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => true,
             'setByAdminModule' => true,
             'clientRegistryInclude' => TRUE,
         ),
         self::SEND_NOTIFICATION_TO_RESPONSIBLE => array(
-            'label' => 'send notification to responsible', //_('send notification to responsible'')
-            'description' => 'send notification to responsible', //_('send notification to responsible')
+            'label' => 'Send notification to the responsible person', //_('Send notification to the responsible person')
+            'description' => 'Send notification to the responsible person', //_('Send notification to the responsible person')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => true,
             'setByAdminModule' => true,
             'clientRegistryInclude' => TRUE,
         ),
         self::SEND_NOTIFICATION_TO_CUSTOMER => array(
-            'label' => 'send notification to customer', //_('send notification to customer')
-            'description' => 'send notification to customer', //_('send notification to customer')
+            'label' => 'Send notification to the customer', //_('Send notification to the customer')
+            'description' => 'Send notification to the customer', //_('Send notification to the customer')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => false,
             'setByAdminModule' => true,
             'clientRegistryInclude' => TRUE,
         ),
         self::SEND_NOTIFICATION_TO_PARTNER => array(
-            'label' => 'send notification to partner', //_('send notification to partner')
-            'description' => 'send notification to partner', //_('send notification to partner')
+            'label' => 'Send notification to the partner', //_('Send notification to the partner')
+            'description' => 'Send notification to the partner', //_('Send notification to the partner')
             'type' => Tinebase_Config_Abstract::TYPE_BOOL,
             'default' => false,
             'setByAdminModule' => true,
@@ -155,8 +155,8 @@ class Crm_Config extends Tinebase_Config_Abstract
         self::LEAD_SOURCES => array(
             //_('Lead Sources Available')
             'label'                 => 'Lead Sources Available',
-            //_('Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed.')
-            'description'           => '\'Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed.',
+            //_('Possible lead sources. If a source is marked as archived, leads from that source are treated as closed.')
+            'description'           => 'Possible lead sources. If a source is marked as archived, leads from that source are treated as closed.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => 'Crm_Model_LeadSource'),
             'clientRegistryInclude' => TRUE,
@@ -195,10 +195,10 @@ class Crm_Config extends Tinebase_Config_Abstract
          * enabled Crm features
          */
         self::ENABLED_FEATURES => [
-            //_('Enabled Features')
-            self::LABEL                 => 'Enabled Features',
-            //_('Enabled Features in CRM Application.')
-            self::DESCRIPTION           => 'Enabled Features in CRM Application.',
+            //_('Enabled features')
+            self::LABEL                 => 'Enabled features',
+            //_('Enabled features in CRM application.')
+            self::DESCRIPTION           => 'Enabled features in CRM application.',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
@@ -219,19 +219,19 @@ class Crm_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR => [],
         ],
         self::LEAD_IMPORT_AUTOTASK => array(
-            //_('Add new task on lead import')
+            //_('Add a new task on lead import')
             'label'                 => 'Add new task on lead import',
-            //_('Automatically creates a task for the responsible person if a new lead is imported.')
-            'description'           => 'Automatically creates a task for the responsible person if a new lead is imported.',
+            //_('Automatically creates a task for the responsible person when a new lead is imported.')
+            'description'           => 'Automatically creates a task for the responsible person when a new lead is imported.',
             'type'                  => 'boolean',
             'clientRegistryInclude' => false,
             'default'               => false,
         ),
         self::LEAD_IMPORT_NOTIFICATION => array(
-            //_('Send notification e-mail on lead import')
-            'label'                 => 'Send notification e-mail on lead import',
-            //_('Sends an e-mail to all responsible persons for the imported leads.')
-            'description'           => 'Sends an e-mail to all responsible persons for the imported leads.',
+            //_('Send notification email on lead import')
+            'label'                 => 'Send notification email on lead import',
+            //_('Sends an email to all responsible persons for the imported leads.')
+            'description'           => 'Sends an email to all responsible persons for the imported leads.',
             'type'                  => 'boolean',
             'clientRegistryInclude' => false,
             'default'               => false,
@@ -239,8 +239,8 @@ class Crm_Config extends Tinebase_Config_Abstract
         self::LEAD_DUP_FIELDS => array(
             //_('Lead duplicate check fields')
             'label'                 => 'Lead duplicate check fields',
-            //_('These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
-            'description'           => 'These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+            //_('These fields are checked when a new lead is created. If a record with the same data in these fields is found, a duplicate exception is thrown.')
+            'description'           => 'These fields are checked when a new lead is created. If a record with the same data in these fields is found, a duplicate exception is thrown.',
             'type'                  => 'array',
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,

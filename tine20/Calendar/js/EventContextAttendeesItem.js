@@ -61,7 +61,7 @@ Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
         }, this);
 
         var other = new Ext.Action({
-            text: this.app.i18n._('Additional Attendees ...'),
+            text: this.app.i18n._('Additional Attendees...'),
             handler: this.onOtherClick,
             scope: this
         });

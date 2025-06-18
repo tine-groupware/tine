@@ -73,7 +73,7 @@
         </column>
         <column>
             <identifier>created_by</identifier>
-            <header>Created By</header>
+            <header>Created by</header>
             <type>created_by</type>
             <field>accountDisplayName</field>
         </column>

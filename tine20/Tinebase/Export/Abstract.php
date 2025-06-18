@@ -22,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * 
  * @todo remove: Commonly used export translation strings:
- * _('Exporttime')
+ * _('Export Time')
  */
 abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface
 {
