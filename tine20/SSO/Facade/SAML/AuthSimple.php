@@ -39,7 +39,7 @@ class SSO_Facade_SAML_AuthSimple
      * @param \SimpleSAML\Configuration|null $config Optional configuration to use.
      * @param \SimpleSAML\Session|null $session Optional session to use.
      */
-    public function __construct($authSource, Configuration $config = null, Session $session = null)
+    public function __construct($authSource, ?\SimpleSAML\Configuration $config = null, ?\SimpleSAML\Session $session = null)
     {
         assert(is_string($authSource));
 

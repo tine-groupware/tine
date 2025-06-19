@@ -401,7 +401,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  array|string|boolean                 $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
     {
         if (true !== static::$_delayDisabled && count(static::$_shadowPathMapping) > 0) {
             if (! $_filter instanceof Tinebase_Model_PathFilter) {

@@ -96,7 +96,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
      * @param string $_action
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
         
@@ -147,7 +147,7 @@ class Admin_Controller_SambaMachine extends Tinebase_Controller_Abstract impleme
      * @return Tinebase_Record_RecordSet of $this->_modelName
      * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         //$this->checkRight('VIEW_SAMBAMACHINES');
         

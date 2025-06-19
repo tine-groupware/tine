@@ -55,7 +55,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
      * @param array $_additionalOptions
      * @return void
     */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
 // TODO: make this working again    
 //         $this->_userStyles[] = '<number:date-style style:name="germanDate" number:language="de" number:country="DE" number:automatic-order="true"><number:day number:style="long"/><number:text>.</number:text><number:month number:style="long"/><number:text>.</number:text><number:year number:style="long"/></number:date-style>';

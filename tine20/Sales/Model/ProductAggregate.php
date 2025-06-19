@@ -145,7 +145,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * @param Tinebase_DateTime $date
      * @return array
      */
-    public function getInterval(Tinebase_DateTime $date = NULL)
+    public function getInterval(?\Tinebase_DateTime $date = NULL)
     {
         if ($date != NULL) {
             $date = clone $date;
@@ -228,7 +228,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * (non-PHPdoc)
      * @see Sales_Model_Accountable_Abstract::getBillables()
      */
-    public function getBillables(Tinebase_DateTime $date = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
+    public function getBillables(?\Tinebase_DateTime $date = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL)
     {
         return $this->_billables;
     }
@@ -241,7 +241,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      * @param Sales_Model_ProductAggregate $productAggregate
      * @return boolean
      */
-     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
+     public function isBillable(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL)
      {
          $this->_referenceContract = $contract;
          

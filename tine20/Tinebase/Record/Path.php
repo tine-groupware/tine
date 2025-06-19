@@ -209,7 +209,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Interface|null $_oldRecord the record before the update including relatedData / relations (but only those visible to the current user)
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public function rebuildPaths(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
+    public function rebuildPaths(Tinebase_Record_Interface $_record, ?\Tinebase_Record_Interface $_oldRecord = null)
     {
         $this->_recursionCounter++;
 

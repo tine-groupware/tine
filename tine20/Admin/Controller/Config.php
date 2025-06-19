@@ -74,7 +74,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         //@TODO support more appfilter combinations when needed
         $appFilter = $_filter->getFilter('application_id');
@@ -301,7 +301,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
      * @throws Tinebase_Exception_NotImplemented
      * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         throw new Tinebase_Exception_NotImplemented('Not Implemented');
     }

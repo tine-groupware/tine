@@ -48,7 +48,7 @@ class SSO_Facade_SAML_Container extends \SAML2\Compat\AbstractContainer
         return Tinebase_Core::getTempDir();
     }
 
-    public function writeFile(string $filename, string $data, int $mode = null): void
+    public function writeFile(string $filename, string $data, ?int $mode = null): void
     {
         $tmpName = Tinebase_TempFile::getTempPath();
         file_put_contents($tmpName, $data);

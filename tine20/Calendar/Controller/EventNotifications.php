@@ -136,7 +136,7 @@
      *
      * @refactor split up this function, it's way too long
      */
-    public function doSendNotifications(Calendar_Model_Event $_event, $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
+    public function doSendNotifications(Calendar_Model_Event $_event, $_updater, $_action, ?\Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
         if (isset($_additionalData['alarm']))
         {

@@ -190,7 +190,7 @@ abstract class Tinebase_Group_Abstract
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    abstract public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = \Tinebase_Controller_Record_Abstract::ACTION_GET);
+    abstract public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = \Tinebase_Controller_Record_Abstract::ACTION_GET);
 
     /**
      * get list of groups

@@ -585,7 +585,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * @param string $path
      * @param Zend_Config|null $config
      */
-    public function createMyConf(string $path, Zend_Config $config = null)
+    public function createMyConf(string $path, ?\Zend_Config $config = null)
     {
         $config = $config ?? $this->_config->database;
         $port = $config->port ?: 3306;

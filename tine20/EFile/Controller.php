@@ -401,7 +401,7 @@ class EFile_Controller extends Tinebase_Controller_Event
         }
     }
 
-    public static function checkEFileNode(Tinebase_Model_Tree_Node $_record, Tinebase_Model_Tree_Node $_oldRecord = null)
+    public static function checkEFileNode(Tinebase_Model_Tree_Node $_record, ?\Tinebase_Model_Tree_Node $_oldRecord = null)
     {
         // check preconditions if to run at all
         if (!static::getInstance()->doTreeNodeValidation()) return;

@@ -113,7 +113,7 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
      * @param HumanResources_Model_MonthlyWTReport $_monthlyWTR
      */
     public function recalculateReport(HumanResources_Model_MonthlyWTReport $_monthlyWTR,
-            HumanResources_Model_MonthlyWTReport $_previousMonthlyWTR = null)
+            ?\HumanResources_Model_MonthlyWTReport $_previousMonthlyWTR = null)
     {
         $transaction = new Tinebase_TransactionManager_Handle();
 

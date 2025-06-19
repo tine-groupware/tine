@@ -146,7 +146,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     /**
      * @param string|null $requestId
      */
-    public function setRequestId(string $requestId = null)
+    public function setRequestId(?string $requestId = null)
     {
         if (! $requestId) {
             $requestId = Tinebase_Record_Abstract::generateUID($this->_requestIdLength);

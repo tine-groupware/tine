@@ -1183,25 +1183,25 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 ) {
                         $foundDisplayContainers = true;
                 }
-                
+
                 if ($attendee->user_id instanceof Tinebase_Record_Interface) {
                     // already resolved
                     $allAttendees->addRecord($attendee);
-                    
+
                     continue;
                 }
-                
+
                 if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id])) {
                     $clonedAttendee = clone $attendee;
-                    
+
                     // resolveable from cache
                     $clonedAttendee->user_id = self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id];
-                    
+
                     $allAttendees->addRecord($clonedAttendee);
-                    
+
                     continue;
                 }
-                
+
                 // not resolved => problem!!!
             }
         }

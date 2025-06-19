@@ -119,7 +119,7 @@ class Addressbook_Convert_Contact_VCard_CardDAVSync extends Addressbook_Convert_
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::toTine20Model()
      */
-    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
+    public function toTine20Model($_blob, ?\Tinebase_Record_Interface $_record = null, $options = array())
     {
         $contact = parent::toTine20Model($_blob, $_record, $options);
 	Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' contact (RAW) ' . print_r($_blob, true));

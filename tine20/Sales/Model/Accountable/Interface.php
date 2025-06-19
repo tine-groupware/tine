@@ -46,7 +46,7 @@ interface Sales_Model_Accountable_Interface
      * @param Sales_Model_ProductAggregate $productAggregate
      * @return array
      */
-    public function getBillables(Tinebase_DateTime $date = NULL, Sales_Model_ProductAggregate $productAggregate = NULL);
+    public function getBillables(?\Tinebase_DateTime $date = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL);
     
     /**
      * returns the max interval of all billables
@@ -54,7 +54,7 @@ interface Sales_Model_Accountable_Interface
      * @param Tinebase_DateTime $date
      * @return array
      */
-    public function getInterval(Tinebase_DateTime $date = NULL);
+    public function getInterval(?\Tinebase_DateTime $date = NULL);
     
     /**
      * loads billables for this record
@@ -72,7 +72,7 @@ interface Sales_Model_Accountable_Interface
      * @param Sales_Model_Contract $contract
      * @return boolean
      */
-    public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL);
+    public function isBillable(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL);
 
     /**
      * returns true if this invoice needs to be recreated because data changed

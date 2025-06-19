@@ -88,7 +88,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Pagination            $_pagination
      * @return array
      */
-    public function searchMessageUids(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)    
+    public function searchMessageUids(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL)    
     {
         return $this->search($_filter, $_pagination, array(self::IDCOL, 'messageuid'));
     }

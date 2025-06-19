@@ -94,7 +94,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
+    public function toTine20Model($blob, ?\Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
 

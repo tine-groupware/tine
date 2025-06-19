@@ -46,7 +46,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
@@ -116,7 +116,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param Tinebase_Model_User $account
      * @return boolean
      */
-    public function hasGrant($record, $grant, Tinebase_Model_User $account = null)
+    public function hasGrant($record, $grant, ?\Tinebase_Model_User $account = null)
     {
         // always get current grants
         $recordset = new Tinebase_Record_RecordSet($this->_modelName, array($record));
@@ -154,7 +154,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         $updatedRecord->grants = $record->grants;
         $this->setGrants(record: $updatedRecord, isCreate: $isCreate);
@@ -421,7 +421,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param   bool $_getDeleted
      * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight(self::ACTION_GET);
 

@@ -30,7 +30,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
      * @param  string                   $credentialColumn
      * @param  string                   $credentialTreatment
      */
-    public function __construct(Zend_Db_Adapter_Abstract $zendDb = null, $tableName = null, $identityColumn = null,
+    public function __construct(?\Zend_Db_Adapter_Abstract $zendDb = null, $tableName = null, $identityColumn = null,
         $credentialColumn = null, $credentialTreatment = null, protected $_noCanonicalIdentityTreatment = false)
     {
         parent::__construct($zendDb, $tableName, $identityColumn, $credentialColumn, $credentialTreatment);

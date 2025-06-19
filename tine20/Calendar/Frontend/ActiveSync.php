@@ -1034,7 +1034,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
      * @return Calendar_Model_Event
      */
     protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates, Syncroton_Model_EventException $sevent,
-        Calendar_Model_Event $baseEvent = null)
+        ?\Calendar_Model_Event $baseEvent = null)
     {
         // we need to use the user timezone here if this is a DATE (like this: RECURRENCE-ID;VALUE=DATE:20140429)
         $originalDtStart = new Tinebase_DateTime($sevent->exceptionStartTime);

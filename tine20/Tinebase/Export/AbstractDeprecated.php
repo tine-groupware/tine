@@ -156,7 +156,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->_filter = $_filter;
         if (! $this->_modelName) {

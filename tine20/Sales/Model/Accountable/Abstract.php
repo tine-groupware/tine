@@ -101,7 +101,7 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      * @param Sales_Model_ProductAggregate $productAggregate
      * @return array
      */
-    public function getBillables(Tinebase_DateTime $date = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
+    public function getBillables(?\Tinebase_DateTime $date = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL)
     {
         if (! $date) {
             if (! $this->_referenceDate) {
@@ -119,7 +119,7 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      * @param Tinebase_DateTime $date
      * @return array
      */
-    public function getInterval(Tinebase_DateTime $date = NULL)
+    public function getInterval(?\Tinebase_DateTime $date = NULL)
     {
         if (! $date) {
             if (! $this->_referenceDate) {
@@ -277,7 +277,7 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      * @param Sales_Model_Contract $contract
      * @return boolean
      */
-    abstract public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL);
+    abstract public function isBillable(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL);
 
     /**
      * called by the product aggregate controller in case accountables are assigned to the changed

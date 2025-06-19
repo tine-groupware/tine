@@ -774,7 +774,7 @@ class Tinebase_FileSystem implements
      * @param Tinebase_FileSystem_AVScan_Result $_avResult
      * @return Tinebase_Model_Tree_FileObject
      */
-    protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, Tinebase_Model_Tree_Node $_node, Tinebase_Model_Tree_FileObject $_fileObject = null, $_hash = null, $_hashFile = null, $_avResult = null)
+    protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, Tinebase_Model_Tree_Node $_node, ?\Tinebase_Model_Tree_FileObject $_fileObject = null, $_hash = null, $_hashFile = null, $_avResult = null)
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
         $currentFileObject = $_fileObject ?: $this->_fileObjectBackend->get($_node->object_id);
@@ -2611,7 +2611,7 @@ class Tinebase_FileSystem implements
      * @param Tinebase_Record_Interface $_pagination
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function searchNodes(Tinebase_Model_Tree_Node_Filter $_filter = null, Tinebase_Record_Interface $_pagination = null)
+    public function searchNodes(?\Tinebase_Model_Tree_Node_Filter $_filter = null, ?\Tinebase_Record_Interface $_pagination = null)
     {
         return $this->_getTreeNodeBackend()->search($_filter, $_pagination);
     }
@@ -2626,7 +2626,7 @@ class Tinebase_FileSystem implements
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function search(Tinebase_Model_Tree_Node_Filter $_filter = null, Tinebase_Record_Interface $_pagination = null, $_onlyIds = false)
+    public function search(?\Tinebase_Model_Tree_Node_Filter $_filter = null, ?\Tinebase_Record_Interface $_pagination = null, $_onlyIds = false)
     {
         return $this->_getTreeNodeBackend()->search($_filter, $_pagination, $_onlyIds);
     }
@@ -2637,7 +2637,7 @@ class Tinebase_FileSystem implements
     * @param Tinebase_Model_Tree_Node_Filter $_filter
     * @return integer
     */
-    public function searchNodesCount(Tinebase_Model_Tree_Node_Filter $_filter = null)
+    public function searchNodesCount(?\Tinebase_Model_Tree_Node_Filter $_filter = null)
     {
         return $this->_getTreeNodeBackend()->searchCount($_filter);
     }
@@ -5140,7 +5140,7 @@ class Tinebase_FileSystem implements
         }
     }
 
-    protected function _sendQuotaNotification(Tinebase_Model_Tree_Node $node = null, $softQuota = true)
+    protected function _sendQuotaNotification(?\Tinebase_Model_Tree_Node $node = null, $softQuota = true)
     {
         try {
             $path = $node === null ? 'Filesystem' : $this->getPathOfNode($node, true);
@@ -5261,7 +5261,7 @@ class Tinebase_FileSystem implements
         }
     }
 
-    public function getNotificationSenders(Tinebase_Model_Tree_Node $node = null)
+    public function getNotificationSenders(?\Tinebase_Model_Tree_Node $node = null)
     {
         if (null === $node || null === $node->acl_node) {
             $accountIds = Tinebase_Group::getInstance()->getDefaultAdminGroup()->members;
@@ -5305,7 +5305,7 @@ class Tinebase_FileSystem implements
     }
 
 
-    public function getQuotaNotificationRecipients(Tinebase_Model_User $sender = null, $softQuota = true): ?array
+    public function getQuotaNotificationRecipients(?\Tinebase_Model_User $sender = null, $softQuota = true): ?array
     {
         $contactsBackend = new Addressbook_Backend_Sql();
         $senderContact = $sender && $sender->contact_id ? $contactsBackend->get($sender->contact_id) : null;

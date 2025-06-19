@@ -62,7 +62,7 @@ class Tinebase_FilterSyncToken implements Tinebase_Controller_Interface
      * @throws Zend_Db_Statement_Exception
      */
     public function getFilterSyncToken(Tinebase_Model_Filter_FilterGroup $_filter,
-        Tinebase_Controller_Record_Abstract $_controller = null)
+        ?\Tinebase_Controller_Record_Abstract $_controller = null)
     {
         // make sure we have a last_modified_time property
         /** @var Tinebase_Record_Interface $model */

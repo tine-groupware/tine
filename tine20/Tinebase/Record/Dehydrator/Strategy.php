@@ -27,7 +27,7 @@ class Tinebase_Record_Dehydrator_Strategy
     protected $_definition = [];
     protected $_subDefinitions = [];
 
-    public function __construct(protected $_type, array $_definition = null)
+    public function __construct(protected $_type, ?array $_definition = null)
     {
         if (null !== $_definition) {
             $this->_definition = $_definition;

@@ -42,7 +42,7 @@ class Tinebase_Convert_Container_Json extends Tinebase_Convert_Json
      * 
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
+    public function fromTine20RecordSet(?\Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
         $response = array();
         foreach ($_records as $container) {

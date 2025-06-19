@@ -415,7 +415,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @param Sales_Model_Contract
      * @return Timetracker_Model_TimesheetFilter
      */
-    protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
+    protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL)
     {
         $endDate = clone $date;
         $endDate->hasTime(true);
@@ -469,7 +469,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @param Tinebase_DateTime $date
      * @return array
      */
-    public function getInterval(Tinebase_DateTime $date = NULL)
+    public function getInterval(?\Tinebase_DateTime $date = NULL)
     {
         if (! $date) {
             $date = $this->_referenceDate;
@@ -554,7 +554,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @param Sales_Model_ProductAggregate $productAggregate
      * @return boolean
     */
-    public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL, Sales_Model_ProductAggregate $productAggregate = NULL)
+    public function isBillable(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL)
     {
         $this->_referenceDate = clone $date;
         $this->_referenceContract = $contract;

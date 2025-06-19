@@ -220,7 +220,7 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
      * @return array with property => value
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function resolveVacation($account, DateTime $actualUntil=null)
+    public function resolveVacation($account, ?\DateTime $actualUntil=null)
     {
         if (!$account) throw new HumanResources_Exception_NoAccount();
         $accountPeriod = $account->getAccountPeriod();

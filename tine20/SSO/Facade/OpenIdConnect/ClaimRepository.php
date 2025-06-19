@@ -34,7 +34,7 @@ class SSO_Facade_OpenIdConnect_ClaimRepository implements ClaimRepositoryInterfa
         ];
     }
 
-    public function claimsRequestToEntities(array $json = null)
+    public function claimsRequestToEntities(?array $json = null)
     {
         return array_intersect([
             'sub',

@@ -660,7 +660,7 @@ class Tinebase_EmailUser
      * @param Felamimail_Model_Account|null $account
      * @return bool
      */
-    public static function backendSupportsMasterPassword(Felamimail_Model_Account $account = null): bool
+    public static function backendSupportsMasterPassword(?\Felamimail_Model_Account $account = null): bool
     {
         if (
             ! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||

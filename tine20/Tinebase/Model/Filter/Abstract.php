@@ -209,7 +209,7 @@ abstract class Tinebase_Model_Filter_Abstract
         $this->_options = $_options;
     }
 
-    public function setClientOptions(array $_options = null)
+    public function setClientOptions(?array $_options = null)
     {
         $this->_clientOptions = $_options;
     }

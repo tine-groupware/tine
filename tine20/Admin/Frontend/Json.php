@@ -1927,10 +1927,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         if (empty($record->name) || !$record instanceof Tinebase_Model_Tree_Node) {
                             $userData = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
                             $record->name = $userData['accountLoginName'];
-                            
+
                             continue;
                         }
-                        
+
                         try {
                             // generic effective quota infos
                             if (strpos($path, $filemanager_id )) {

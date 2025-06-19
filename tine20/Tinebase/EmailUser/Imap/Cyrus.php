@@ -206,7 +206,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
      * @param Zend_Mail_Protocol_Imap $_imap
      * @param string $_mailboxString
      */
-    protected function _setImapQuota(Tinebase_Model_FullUser $_user, Zend_Mail_Protocol_Imap $_imap = NULL, $_mailboxString = NULL)
+    protected function _setImapQuota(Tinebase_Model_FullUser $_user, ?\Zend_Mail_Protocol_Imap $_imap = NULL, $_mailboxString = NULL)
     {
         $imap = $_imap ?? $this->_getImapConnection();
         $mailboxString = $_mailboxString ?? $this->_getUserMailbox($_user->accountLoginName);
@@ -310,7 +310,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_SqlAbstract imp
      * @param  string  $mailbox  the mailbox (user.example)
      * @return array
      */
-    protected function _adminGetQuota($mailbox, Zend_Mail_Protocol_Imap $_imap = NULL)
+    protected function _adminGetQuota($mailbox, ?\Zend_Mail_Protocol_Imap $_imap = NULL)
     {
         $imap = $_imap ?? $this->_getImapConnection();
         $imap->sendRequest('GETQUOTA', array($mailbox), $tag);

@@ -39,7 +39,7 @@ class GDPR_Convert_DataIntendedPurpose_Json extends Tinebase_Convert_Json
      *
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
+    public function fromTine20RecordSet(?\Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
         foreach ($_records as $record) {
             $record[GDPR_Model_DataIntendedPurpose::FLD_URL] = Tinebase_Core::getUrl() . '/GDPR/view/register/for/' . $record->getId();

@@ -288,7 +288,7 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      * @param   bool $_getDeleted
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Role
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         return $this->_backend->getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
     }

@@ -38,7 +38,7 @@ class Tinebase_Session_SaveHandler_Redis extends SessionHandler implements Zend_
         $this->_lifeTimeSec = $lifeTime;
     }
 
-    public function setRedisLogDelegator(callable $delegator = null)
+    public function setRedisLogDelegator(?callable $delegator = null)
     {
         $this->_redis->setLogDelegator($delegator);
     }

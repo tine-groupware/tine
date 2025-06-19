@@ -758,7 +758,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
     }
 
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = \Tinebase_Controller_Record_Abstract::ACTION_GET)
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = \Tinebase_Controller_Record_Abstract::ACTION_GET)
     {
         return $this->_backend->search($_filter, $_pagination, $_onlyIds);
     }

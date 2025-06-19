@@ -64,7 +64,7 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
         return self::$_instance;
     }
 
-    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = null)
+    protected function _addDefaultFilter(?\Tinebase_Model_Filter_FilterGroup $_filter = null)
     {
         if (! $_filter->isFilterSet(OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, true)) {
             $_filter->addFilter(

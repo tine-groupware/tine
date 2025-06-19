@@ -26,7 +26,7 @@ class Addressbook_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->_prefKey = Addressbook_Preference::DEFAULT_CONTACT_ODS_EXPORTCONFIG;
     

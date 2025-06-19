@@ -378,7 +378,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Model_Tree_Node $_newRecord
      * @param Tinebase_Model_Tree_Node|null $_oldRecord
      */
-    protected function _inspectForPreviewCreation(Tinebase_Model_Tree_Node $_newRecord, Tinebase_Model_Tree_Node $_oldRecord = null)
+    protected function _inspectForPreviewCreation(Tinebase_Model_Tree_Node $_newRecord, ?\Tinebase_Model_Tree_Node $_oldRecord = null)
     {
         if (! Tinebase_FileSystem::getInstance()->isPreviewActive()) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -427,7 +427,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Model_Pagination $_pagination
      * @return array
      */
-    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
+    protected function _getColumnsToFetch($_cols, ?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL)
     {
         $result = parent::_getColumnsToFetch($_cols, $_filter, $_pagination);
         
@@ -552,7 +552,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Record_RecordSet $_result
      * @return Tinebase_Record_RecordSet
      */
-    public function getAllFolderNodes(Tinebase_Record_RecordSet $_nodes, Tinebase_Record_RecordSet $_result = null)
+    public function getAllFolderNodes(Tinebase_Record_RecordSet $_nodes, ?\Tinebase_Record_RecordSet $_result = null)
     {
         if (null === $_result) {
             $_result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');

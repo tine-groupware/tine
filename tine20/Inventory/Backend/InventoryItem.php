@@ -24,7 +24,7 @@ class Inventory_Backend_InventoryItem extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'inventory_item';
-    
+
     /**
      * Model name
      *
@@ -40,6 +40,6 @@ class Inventory_Backend_InventoryItem extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
 
     /************************ overwritten functions *******************/  
-    
+
     /************************ helper functions ************************/
 }

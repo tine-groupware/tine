@@ -2,13 +2,13 @@
 class UnitTestCase_SprintTwo extends UnitTestCase {
 
 	public function setUp() {
-	
+
 		// set up the test environment...
 	
 	}
 	
 	public function tearDown() {
-	
+
 		// tear down the test environment...
 	
 	}
@@ -22,27 +22,27 @@ class UnitTestCase_SprintTwo extends UnitTestCase {
 	 */
 	
 	public function testDateInstantiationDocumentationExamples() {
-	
+
 		$date1 = new qCal_Date(2010, 1, 10); // results in January 10th, 2010
 		$this->assertEqual($date1->format("F jS, Y"), "January 10th, 2010");
-		
+
 		$date3 = new qCal_Date(2010, 1, 35, true); // results in February 4th, 2010 because the rollover parameter was set to true
 		$this->assertEqual($date3->format("F jS, Y"), "February 4th, 2010");
-		
+
 		$this->expectException(new qCal_DateTime_Exception_InvalidDate('Invalid date specified for qCal_Date: "1/35/2010"'));
 		$date2 = new qCal_Date(2010, 1, 35); // invalid, and will throw a qCal_DateTime_Exception_InvalidDate exception
 	
 	}
 	
 	public function testDateConvertToString() {
-	
+
 		$date = new qCal_Date(2010, 1, 10);
 		$this->assertEqual($date->__toString(), "01/10/2010"); // will output "01/10/2010"
 	
 	}
 	
 	public function testDateConvertToStringUsingFormatMethod() {
-	
+
 		$date = new qCal_Date(2010, 1, 10);
 		$date->setFormat("Y");
 		//echo $date; // outputs "2010"
@@ -139,27 +139,27 @@ class UnitTestCase_SprintTwo extends UnitTestCase {
 	}
 	
 	public function testTimeFactory() {
-	
+
 		$time1 = qCal_Time::factory("4:00"); // will result in 4:00am using the server's timezone
 		$this->assertEqual($time1->__toString(), "04:00:00");
-		
+
 		$time2 = qCal_Time::factory("tomorrow", "GMT"); // will result in whatever tomorrow's date is in GMT
 		$time3 = qCal_Time::factory("now", "America/Los_Angeles"); // will result in the current time in America/Los_Angeles
 	
 	}
 	
 	public function testTimeToString() {
-	
+
 		$time = new qCal_Time(4, 0, 0);
 		$this->assertEqual($time->__toString(), "04:00:00"); // will output "04:00:00"
-		
+
 		$time = new qCal_Time(15, 30, 30);
 		$time->setFormat("g:ia");
 		$this->assertEqual($time->__toString(), "3:30pm"); // outputs "3:30pm"
 
 		$time->setFormat("H");
 		$this->assertEqual($time->__toString(), "15"); // outputs "15"
-		
+
 		$time = new qCal_Time(6, 30, 0);
 		$string = $time->format("H:i");
 		$this->assertEqual($time->__toString(), "06:30:00"); // still outputs "06:30:00" because we did not call setFormat()
@@ -191,17 +191,17 @@ class UnitTestCase_SprintTwo extends UnitTestCase {
 	}
 	
 	public function testDateTimeConvertToString() {
-	
+
 		$datetime = new qCal_DateTime(2010, 1, 12, 4, 30, 0, "America/Los_Angeles");
 		$this->assertEqual($datetime->__toString(), "2010-01-12T04:30:00-08:00"); // will output "2010-01-12T04:00:00-08:00"
-		
+
 		$datetime = new qCal_DateTime(2010, 12, 10, 15, 30, 0, "GMT");
 		$datetime->setFormat('m/d/Y \a\t g:ia');
 		$this->assertEqual($datetime->__toString(), "12/10/2010 at 3:30pm"); // outputs "12/10/2010 at 3:30pm"
 
 		$datetime->setFormat("H"); 
 		$this->assertEqual($datetime->__toString(), "15"); // outputs "15"
-		
+
 		$datetime = new qCal_DateTime(2010, 11, 10, 6, 30, 0, "GMT");
 		$string = $datetime->format("H:i");
 		$this->assertEqual($datetime->__toString(), "2010-11-10T06:30:00+00:00"); // still outputs "2010-11-10T06:30:00+00:00" because we did not call setFormat()

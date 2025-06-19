@@ -74,7 +74,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      * 
      * @todo remove this and use Tinebase_Controller_Record_Abstract::search()
      */
-    public function search_($_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search_($_filter = NULL, ?\Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         return Tinebase_Tags::getInstance()->searchTags($_filter, $_pagination, true);
     }

@@ -81,7 +81,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
      * @param resource|string|null $body not used
      * @return void
      */
-    public function handle(\Laminas\Http\Request $request = null, $body = null)
+    public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
         $time_start = microtime(true);
         $method = $this->getRequestMethod();

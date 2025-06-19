@@ -215,7 +215,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
-    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    public function getPathPart(?\Tinebase_Record_Interface $_parent = null, ?\Tinebase_Record_Interface $_child = null)
     {
         if ($this->related_degree === Tinebase_Model_Relation::DEGREE_PARENT) {
             if (null !== $_child) {
@@ -242,7 +242,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
-    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    public function getShadowPathPart(?\Tinebase_Record_Interface $_parent = null, ?\Tinebase_Record_Interface $_child = null)
     {
         if ($this->related_degree === Tinebase_Model_Relation::DEGREE_PARENT) {
             if (null !== $_child) {

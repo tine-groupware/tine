@@ -1265,7 +1265,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    static public function createSystemUser(string $accountLoginName, Tinebase_Model_Group $defaultGroup = null): ?Tinebase_Model_User
+    static public function createSystemUser(string $accountLoginName, ?\Tinebase_Model_Group $defaultGroup = null): ?Tinebase_Model_User
     {
         $userBackend = Tinebase_User::getInstance();
 

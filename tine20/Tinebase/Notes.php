@@ -145,7 +145,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function searchNotes(
         Tinebase_Model_NoteFilter $_filter,
-        Tinebase_Model_Pagination $_pagination = null,
+        ?\Tinebase_Model_Pagination $_pagination = null,
         $ignoreACL = true
     ) {
         $select = $this->_db->select()
@@ -520,7 +520,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param Zend_Translate $translate
      * @return string
      */
-    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, Zend_Translate $translate = null)
+    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, ?\Zend_Translate $translate = null)
     {
         $recordProperties = [];
         /** @var Tinebase_Record_Interface $model */
@@ -769,8 +769,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @throws Tinebase_Exception_NotImplemented
      */
     public function search(
-        Tinebase_Model_Filter_FilterGroup $_filter = null,
-        Tinebase_Model_Pagination $_pagination = null,
+        ?\Tinebase_Model_Filter_FilterGroup $_filter = null,
+        ?\Tinebase_Model_Pagination $_pagination = null,
         $_cols = '*'
     ): never {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');

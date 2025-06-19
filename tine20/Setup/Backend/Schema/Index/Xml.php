@@ -27,19 +27,19 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
         foreach ($_declaration as $key => $val) {
             if ($key != 'field' && $key != 'reference') {
                 $this->$key = (string) $val;
-                
+
             // field definition is stored in SimpleXMLElement in quite different ways, depending on quantity
             } else if ($key == 'field') {
                 if ($val instanceof SimpleXMLElement) {
                     $this->field[] = (string) $val->name;
-                    
+
                     if (isset($val->length)) {
                         $this->fieldLength[(string) $val->name] = (int) $val->length;
                     }
                 } else {
                     $this->field   = (string) $val;
                 }
-            
+
             // reduce complexity of storage of foreign keys 
             } else if ($key == 'reference') {
                 $this->referenceTable    = (string) $val->table;

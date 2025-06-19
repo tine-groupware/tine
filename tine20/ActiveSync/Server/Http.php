@@ -23,7 +23,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Laminas\Http\Request $request = null, $body = null)
+    public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
         try {
             $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);

@@ -113,7 +113,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param string $_action
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $filterValues = $this->_extractFilter($_filter);
         
@@ -311,7 +311,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * @param Felamimail_Backend_ImapProxy|null $imap
      * @return boolean
      */
-    public function supportsCondStore($folder, Felamimail_Model_Account $account = null, $imap = null)
+    public function supportsCondStore($folder, ?\Felamimail_Model_Account $account = null, $imap = null)
     {
         if (is_string($folder) || $folder->supports_condstore === null) {
             $folderName = is_string($folder) ? $folder : $folder->globalname;

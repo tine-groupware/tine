@@ -16,12 +16,12 @@ foreach ($this->updates as $field => $update) {
         $i18nFieldName = Calendar_Model_Event::getTranslatedFieldName($field, $this->translate);
         $i18nOldValue  = Calendar_Model_Event::getTranslatedValue($field, $update, $this->translate, $this->timezone);
         $i18nCurrValue = Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone);
-        
+
         if($field == 'rrule' && $this->event->recurid) {
             echo $this->translate->_("This is an event series exception.")  . "\n" ;
             continue;
         }
-        
+
         echo sprintf($this->translate->_('%1$s changed from "%2$s" to "%3$s"'), $i18nFieldName, $i18nOldValue, $i18nCurrValue) . "\n";
     }
 }
@@ -43,15 +43,15 @@ if ((isset($this->updates['attendee']) || array_key_exists('attendee', $this->up
                 case Calendar_Model_Attender::STATUS_ACCEPTED:
                     echo sprintf($this->translate->_('%1$s accepted invitation'), $attender->getName()) . "\n";
                     break;
-                    
+
                 case Calendar_Model_Attender::STATUS_DECLINED:
                     echo sprintf($this->translate->_('%1$s declined invitation'), $attender->getName()) . "\n";
                     break;
-                    
+
                 case Calendar_Model_Attender::STATUS_TENTATIVE:
                     echo sprintf($this->translate->_('Tentative response from %1$s'), $attender->getName()) . "\n";
                     break;
-                    
+
                 case Calendar_Model_Attender::STATUS_NEEDSACTION:
                     echo sprintf($this->translate->_('No response from %1$s'), $attender->getName()) . "\n";
                     break;
@@ -83,11 +83,11 @@ foreach($orderedFields as $field) {
 }
 
 echo $this->translate->plural('Attender', 'Attendee', count($this->event->attendee)). ":\n";
-        
+
 foreach ($this->event->attendee as $attender) {
     $role = $this->translate->_($attender->getRoleString());
     $status = $this->translate->_($attender->getStatusString());
-    
+
     echo "    {$attender->getName()} ($role, $status) \n";
 }
 ?>

@@ -311,7 +311,7 @@ class Tinebase_Translation
      * @param  Zend_Locale $_locale [optional]
      * @return Zend_Translate_Adapter
      */
-    public static function getTranslation($_applicationName = 'Tinebase', Zend_Locale $_locale = NULL)
+    public static function getTranslation($_applicationName = 'Tinebase', ?\Zend_Locale $_locale = NULL)
     {
         $locale = $_locale
             ?: Tinebase_Core::getLocale()
@@ -575,7 +575,7 @@ class Tinebase_Translation
      * @param boolean           $addWeekday should the weekday be added (only works with $part = 'date[time]') [optional] 
      * @return string
      */
-    public static function dateToStringInTzAndLocaleFormat(DateTime $date = null, $timezone = null, Zend_Locale $locale = null, $part = 'datetime', $addWeekday = false)
+    public static function dateToStringInTzAndLocaleFormat(?\DateTime $date = null, $timezone = null, ?\Zend_Locale $locale = null, $part = 'datetime', $addWeekday = false)
     {
         $date = ($date !== null) ? clone($date) : Tinebase_DateTime::now();
         $timezone ??= Tinebase_Core::getUserTimezone();

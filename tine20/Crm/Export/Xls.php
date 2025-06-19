@@ -45,7 +45,7 @@ class Crm_Export_Xls extends Tinebase_Export_Spreadsheet_Xls
      * @param array $_additionalOptions
      * @return void
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         parent::__construct($_filter, $_controller, $_additionalOptions);
         Tinebase_Core::setLocale('en_US');

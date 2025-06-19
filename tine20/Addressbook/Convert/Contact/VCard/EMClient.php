@@ -175,7 +175,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
                 $telField = 'tel_cell';
             } elseif ($typeParameter->has('other')) {
                 $telField = 'tel_cell_private';
-     
+
             // TEL
             } elseif ($typeParameter->has('work') && $typeParameter->has('voice')) {
                 $telField = 'tel_work';

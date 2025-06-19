@@ -268,8 +268,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter = null,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?\Tinebase_Model_Filter_FilterGroup $_filter = null,
+        ?\Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
         if (null === $_filter) {

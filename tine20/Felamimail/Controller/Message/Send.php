@@ -777,7 +777,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
      */
-    protected function _setMailFrom(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = null)
+    protected function _setMailFrom(Zend_Mail $_mail, Felamimail_Model_Account $_account, ?\Felamimail_Model_Message $_message = null)
     {
         $_mail->clearFrom();
 
@@ -895,7 +895,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     protected function _setMailHeaders(
         Zend_Mail $_mail,
         Felamimail_Model_Account $_account,
-        Felamimail_Model_Message $_message = null,
+        ?\Felamimail_Model_Message $_message = null,
         $preserveHeaders = false
     ) {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {

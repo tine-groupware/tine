@@ -68,7 +68,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
     function getChildren()
     {
         return array();
-        
+
 //         $filter = new Calendar_Model_EventFilter(array(
 //             array(
 //                 'field'     => 'attender',
@@ -99,20 +99,20 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
 //                 )
 //             ),
 //         ));
-        
+
 //         $objects = $this->_getController()->search($filter);
 //         $ownAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
 //         foreach ($object as $event) {
 //             $ownAttendee->addRecord(Calendar_Model_Attender::getOwnAttender($event->attendee));
 //         }
 //         Tinebase_Container::getInstance()->getGrantsOfRecords($ownAttendee, $this->_user, 'displaycontainer_id');
-        
+
 //         $children = array();
-    
+
 //         foreach ($objects as $object) {
 //             $children[] = $this->getChild($object);
 //         }
-    
+
 //         return $children;
     }
     

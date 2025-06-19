@@ -53,7 +53,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      * @param string|null $body
      * @return void
      */
-    public function handle(\Laminas\Http\Request $request = null, $body = null)
+    public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
         try {
             $this->_disallowAppPwdSessions();

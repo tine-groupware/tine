@@ -211,7 +211,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @param  Calendar_Model_Event               $_event
      * @param  Calendar_Model_Event               $_mainEvent
      */
-    protected function _convertCalendarModelEvent(\Sabre\VObject\Component\VCalendar $vcalendar, Calendar_Model_Event $_event, Calendar_Model_Event $_mainEvent = null)
+    protected function _convertCalendarModelEvent(\Sabre\VObject\Component\VCalendar $vcalendar, Calendar_Model_Event $_event, ?\Calendar_Model_Event $_mainEvent = null)
     {
         // clone the event and change the timezone
         $event = clone $_event;
@@ -593,7 +593,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      * @param  array                 $options  array of options
      * @return Calendar_Model_Event
      */
-    public function toTine20Model($blob, Tinebase_Record_Interface $_record = null, $options = array())
+    public function toTine20Model($blob, ?\Tinebase_Record_Interface $_record = null, $options = array())
     {
         $vcalendar = self::getVObject($blob);
         

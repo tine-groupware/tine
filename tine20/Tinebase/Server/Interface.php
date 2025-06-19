@@ -24,7 +24,7 @@ interface Tinebase_Server_Interface
      * @param  \Laminas\Http\Request|null $request
      * @param  resource|string|null $body
      */
-    public function handle(\Laminas\Http\Request $request = null, $body = null);
+    public function handle(?\Laminas\Http\Request $request = null, $body = null);
     
     /**
      * returns request method

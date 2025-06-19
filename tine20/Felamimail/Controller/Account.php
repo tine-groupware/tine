@@ -125,7 +125,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         if ($_filter === NULL) {
             $_filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class);
@@ -1835,7 +1835,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param string|null $pwd
      * @return Felamimail_Model_Account|null
      */
-    public function createSystemAccount(Tinebase_Model_FullUser $_account, string $pwd = null)
+    public function createSystemAccount(Tinebase_Model_FullUser $_account, ?string $pwd = null)
     {
         $email = $this->_getAccountEmail($_account);
 
@@ -1880,7 +1880,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _createSystemAccount(Tinebase_Model_FullUser $_user, string $pwd = null)
+    protected function _createSystemAccount(Tinebase_Model_FullUser $_user, ?string $pwd = null)
     {
         if ($this->skipSystemMailAccountActiveForUser($_user)) {
             return null;
@@ -2297,7 +2297,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param   bool $_getDeleted
      * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         return $this->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
@@ -2478,7 +2478,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function checkAccess(Tinebase_Record_Abstract $record, Felamimail_Model_Account $account = null)
+    public function checkAccess(Tinebase_Record_Abstract $record, ?\Felamimail_Model_Account $account = null)
     {
         if (! $record->has('account_id')) {
             throw new Tinebase_Exception_InvalidArgument('record has no account_id property');

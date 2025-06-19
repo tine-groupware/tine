@@ -41,7 +41,7 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
     protected $_isMultiWTR = false;
     protected $_multiExports = [];
 
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->_orgController = $_controller;
         $this->_orgOptions = $_additionalOptions;

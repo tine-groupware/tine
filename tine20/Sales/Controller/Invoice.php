@@ -584,7 +584,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         return array($invoicePositions, $earliestStartDate, $latestEndDate);
     }
 
-    public function checkForContractOrInvoiceUpdates(Sales_Model_Contract $contract = null)
+    public function checkForContractOrInvoiceUpdates(?\Sales_Model_Contract $contract = null)
     {
         $contractController = Sales_Controller_Contract::getInstance();
 
@@ -1246,7 +1246,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param boolean $checkUpdate
      * @return array
      */
-    public function createAutoInvoices(Tinebase_DateTime $currentDate = NULL, Sales_Model_Contract $contract = NULL, $merge = false, $checkUpdate = false)
+    public function createAutoInvoices(?\Tinebase_DateTime $currentDate = NULL, ?\Sales_Model_Contract $contract = NULL, $merge = false, $checkUpdate = false)
     {
         if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             return [
@@ -1397,7 +1397,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param Tinebase_Record_Interface $record
      * @param Tinebase_Record_Interface $oldRecord
      */
-    protected function _checkCleared(Tinebase_Record_Interface &$record, Tinebase_Record_Interface $oldRecord = NULL)
+    protected function _checkCleared(Tinebase_Record_Interface &$record, ?\Tinebase_Record_Interface $oldRecord = NULL)
     {
         $foundCustomer = NULL;
         

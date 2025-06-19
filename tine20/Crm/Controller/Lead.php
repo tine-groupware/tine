@@ -108,7 +108,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $leads = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
@@ -188,7 +188,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param Array                     $_additionalData
      * @return void
      */
-    public function doSendNotifications(Tinebase_Record_Interface $_lead, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldLead = NULL, array $_additionalData = array())
+    public function doSendNotifications(Tinebase_Record_Interface $_lead, Tinebase_Model_FullUser $_updater, $_action, ?\Tinebase_Record_Interface $_oldLead = NULL, array $_additionalData = array())
     {
         $sendOnOwnActions = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
         if ($sendOnOwnActions == self::NOTIFICATION_NOBODY) {
