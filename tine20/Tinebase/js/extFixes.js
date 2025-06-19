@@ -52,6 +52,10 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
     }(),
     onClipboardEvent: async function (event) {
         const clipboardData = event.clipboardData || window.clipboardData;
+        if (clipboardData.files.length > 0) {
+            // fall back to default behaviour when pasting image
+            return;
+        }
         const plainText = clipboardData.getData('text/plain');
         const htmlText = clipboardData.getData('text/html');
         let result = {
