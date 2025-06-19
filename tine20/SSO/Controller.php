@@ -924,7 +924,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         );
 
         $grant->setIssuer(static::getOAuthIssuer());
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+        $grant->setRefreshTokenTTL(new \DateInterval('P1D')); // refresh tokens will expire after 1 day
 
         // Enable the authentication code grant on the server
         $server->enableGrantType(
@@ -942,7 +942,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         );
 
         $grant->setIssuer(static::getOAuthIssuer());
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+        $grant->setRefreshTokenTTL(new \DateInterval('P1D')); // refresh tokens will expire after 1 day
 
         // Enable the authentication code grant on the server
         $server->enableGrantType(

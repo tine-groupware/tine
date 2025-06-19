@@ -29,6 +29,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
     public const FLD_LOGO_DARK = 'logo_dark';
     public const FLD_LOGO_LIGHT = 'logo_light';
     public const FLD_NAME = 'name';
+    public const FLD_ACCESS_TOKEN_TTL = 'access_token_ttl';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -43,7 +44,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 4,
+        self::VERSION => 5,
         self::RECORD_NAME => 'Relying Party',
         self::RECORDS_NAME => 'Relying Parties', // ngettext('Relying Party', 'Relying Parties', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -127,6 +128,12 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                     [Tinebase_Record_Validator_SubValidate::class],
                 ],
+            ],
+            self::FLD_ACCESS_TOKEN_TTL  => [
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_MINUTES,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'Access Token TTL',
             ],
         ]
     ];
