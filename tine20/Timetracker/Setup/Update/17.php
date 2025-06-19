@@ -166,14 +166,21 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             };
         }
 
-        /** @var Timetracker_Model_Timesheet $ts */
-        foreach ($tsBackend->getAll() as $ts) {
-            $fn($ts);
-            if ($ts->isDirty()) {
-                $tsBackend->update($ts);
+        $start = 0;
+        do {
+            $rs = $tsBackend->search(null, new Tinebase_Model_Pagination([
+                Tinebase_Model_Pagination::FLD_LIMIT => 1000,
+                Tinebase_Model_Pagination::FLD_START => $start,
+            ]));
+            $start += 1000;
+            /** @var Timetracker_Model_Timesheet $ts */
+            foreach ($rs as $ts) {
+                $fn($ts);
+                if ($ts->isDirty()) {
+                    $tsBackend->update($ts);
+                }
             }
-        }
-
+        } while (1000 === $rs->count());
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.7', self::RELEASE017_UPDATE007);
     }
 }
