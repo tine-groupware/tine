@@ -597,7 +597,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
      * returns record with conflict resolved data
      */
     getResolvedRecord: function() {
-        var record = ((this.resolveStrategy == 'keep' || this.resolveStrategy == 'mergeMine')
+        var record = (this.resolveStrategy == 'keep'
             ? this.clientRecord : this.duplicates[this.duplicateIdx]).copy();
 
         this.each(function(resolveRecord) {
