@@ -6,7 +6,7 @@
  * @subpackage  Facade
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -22,6 +22,14 @@ class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
         ResponseTypeInterface $responseType,
         \DateInterval $accessTokenTTL
     ): ResponseTypeInterface {
+
+        list($clientId) = $this->getClientCredentials($request);
+        /** @var SSO_Facade_OAuth2_ClientEntity $client */
+        $client = $this->getClientEntityOrFail($clientId, $request);
+        if ($ttl = $client->getRelyingPart()->{SSO_Model_RelyingParty::FLD_ACCESS_TOKEN_TTL}) {
+            $this->idTokenTTL = $accessTokenTTL = new DateInterval('PT' . $ttl . 'M');
+        }
+
         /** @var \Idaas\OpenID\ResponseTypes\BearerTokenResponse $result */
         $result = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
 
