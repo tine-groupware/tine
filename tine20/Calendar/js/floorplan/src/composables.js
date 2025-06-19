@@ -203,6 +203,7 @@ const useTineJsonRPC = (url, jsonKey) => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
+                "X-Tine20-Request-Type" : 'JSON',
                 "x-tine20-jsonkey": toValue(jsonKey)
             },
             body: JSON.stringify(body)
