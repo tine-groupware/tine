@@ -299,14 +299,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
-    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
+    public function getPathPart(?\Tinebase_Record_Interface $_parent = null, ?\Tinebase_Record_Interface $_child = null);
 
     /**
      * @param Tinebase_Record_Interface|null $_parent
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
-    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null);
+    public function getShadowPathPart(?\Tinebase_Record_Interface $_parent = null, ?\Tinebase_Record_Interface $_child = null);
 
     /**
      * @return array
@@ -403,7 +403,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      */
     public function hydrateFromBackend(array &$_data);
 
-    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null);
+    public function applyFieldGrants(string $action, ?\Tinebase_Record_Interface $oldRecord = null);
 
     public function setAccountGrants(Tinebase_Record_Interface $grants);
 

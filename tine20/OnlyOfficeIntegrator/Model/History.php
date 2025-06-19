@@ -80,7 +80,7 @@ class OnlyOfficeIntegrator_Model_History extends Tinebase_Record_NewAbstract
         ],
     ];
 
-    public function getRefreshHistoryData(OnlyOfficeIntegrator_Model_AccessToken $token = null)
+    public function getRefreshHistoryData(?\OnlyOfficeIntegrator_Model_AccessToken $token = null)
     {
         return [
             'changes'       => $this->{self::FLDS_JSON}['history']['changes'],

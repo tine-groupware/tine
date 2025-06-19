@@ -66,7 +66,7 @@ class Tinebase_Exception_Confirmation extends Tinebase_Exception_ProgramFlow
      *
      * @param string|null $_info
      */
-    public function setInfo(string $_info = null)
+    public function setInfo(?string $_info = null)
     {
         $this->_info = $_info;
     }

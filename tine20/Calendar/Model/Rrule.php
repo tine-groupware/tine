@@ -578,7 +578,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param Calendar_Model_EventFilter $_filter
      * @return Tinebase_Record_RecordSet $removedEvents
      */
-    public static function mergeAndRemoveNonMatchingRecurrences(Tinebase_Record_RecordSet $_events, Calendar_Model_EventFilter $_filter = null)
+    public static function mergeAndRemoveNonMatchingRecurrences(Tinebase_Record_RecordSet $_events, ?\Calendar_Model_EventFilter $_filter = null)
     {
         $removedEvents = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
         if (!$_filter) {

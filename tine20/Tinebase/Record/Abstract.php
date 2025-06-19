@@ -1604,7 +1604,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
-    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    public function getPathPart(?\Tinebase_Record_Interface $_parent = null, ?\Tinebase_Record_Interface $_child = null)
     {
         /** @var Tinebase_Record_Abstract_GetPathPartDelegatorInterface $delegate */
         $delegate = Tinebase_Core::getDelegate($this->_application, 'getPathPartDelegate_' . static::class ,
@@ -1634,7 +1634,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      *
      * TODO use decorators ? or overwrite
      */
-    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    public function getShadowPathPart(?\Tinebase_Record_Interface $_parent = null, ?\Tinebase_Record_Interface $_child = null)
     {
         $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
         $childType = null !== $_child ? $_child->getTypeForPathPart() : '';

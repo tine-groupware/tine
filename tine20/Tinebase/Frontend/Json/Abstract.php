@@ -255,7 +255,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _preparePaginationParameter(mixed $_paging, Tinebase_Model_Filter_FilterGroup $_filter = null)
+    protected function _preparePaginationParameter(mixed $_paging, ?\Tinebase_Model_Filter_FilterGroup $_filter = null)
     {
         if ($_paging instanceof Tinebase_Model_Pagination) {
             return $_paging;
@@ -687,7 +687,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @todo move code to converter \Tinebase_Convert_ImportExportDefinition_Json
      */
-    protected function _getImportDefinitionRegistryData(Tinebase_Record_RecordSet $definitions = null, Tinebase_Model_Application $application = null)
+    protected function _getImportDefinitionRegistryData(?\Tinebase_Record_RecordSet $definitions = null, ?\Tinebase_Model_Application $application = null)
     {
         if (! $application) {
             $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
@@ -739,7 +739,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Model_Application $application
      * @return Tinebase_Record_RecordSet
      */
-    protected function _getImportDefinitions(Tinebase_Model_Application $application = null)
+    protected function _getImportDefinitions(?\Tinebase_Model_Application $application = null)
     {
         $filterData = [[
             'field' => 'type',
@@ -769,7 +769,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Model_Application $application
      * @return Tinebase_Model_ImportExportDefinition
      */
-    protected function _getDefaultImportDefinition($_importDefinitions, Tinebase_Model_Application $application = null)
+    protected function _getDefaultImportDefinition($_importDefinitions, ?\Tinebase_Model_Application $application = null)
     {
         if (! $application) {
             $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);

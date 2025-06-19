@@ -91,7 +91,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         parent::__construct($_filter, $_controller, $_additionalOptions);
         

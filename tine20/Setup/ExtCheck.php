@@ -413,7 +413,7 @@ class Setup_ExtCheck
                             $data[] = array($value['attributes']['NAME'], 'FAILURE');
                         }
                         break;
-                        
+
                     case 'MySQL':
                         // get setup controller for database connection
                         if (Setup_Core::configFileExists()) {
@@ -430,11 +430,11 @@ class Setup_ExtCheck
                         } else {
                             $mysqlVersion = @mysql_get_client_info();
                         }
-                        
+
                         // some version strings have more than just the version
                         preg_match('/\d+\.\d+\.\d+/', $mysqlVersion, $matches);
                         $mysqlVersion = is_array($matches) ? $matches[0] : $mysqlVersion;
-                    
+
                         $text = $value['attributes']['NAME'];
                         if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<=')) {
                             $data[] = array($text, 'SUCCESS');
@@ -444,7 +444,7 @@ class Setup_ExtCheck
                             $data[] = array($text, 'FAILURE');
                         }
                         break;
-                        
+
                     default:
                         $data[] = array($value['attributes']['NAME'], 'FAILURE');
                         break;
@@ -456,7 +456,7 @@ class Setup_ExtCheck
                         $succeeded = false;
 
                         if (in_array($extensionArray['NAME'], $this->loadedExtensions)) {
-                            
+
                             $passed[] = true;
 
                             if ($this->values[($key + 1)]['tag'] == 'INISET') {
@@ -489,7 +489,7 @@ class Setup_ExtCheck
                                     $i++;
                                 }
                             } // end INISET
-                            
+
                             if (!in_array(false, $passed)) {
                                 $succeeded = true;
                             }

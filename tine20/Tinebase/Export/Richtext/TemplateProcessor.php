@@ -58,7 +58,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
      * @throws \PhpOffice\PhpWord\Exception\CopyFileException
      */
-    public function __construct($documentTemplate, $inMemory = false, protected $_type = self::TYPE_STANDARD, Tinebase_Export_Richtext_TemplateProcessor $parent = null, $name = '')
+    public function __construct($documentTemplate, $inMemory = false, protected $_type = self::TYPE_STANDARD, ?\Tinebase_Export_Richtext_TemplateProcessor $parent = null, $name = '')
     {
         $this->_parent = $parent;
         if (null !== $parent) {

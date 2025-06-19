@@ -61,7 +61,7 @@ class Admin_Backend_SambaMachine implements Tinebase_Backend_Interface
      * 
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         $filterString = null;
         

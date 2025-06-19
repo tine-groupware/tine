@@ -1196,7 +1196,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @param string|null $method
      * @return false|mixed
      */
-    public function getHookClass(string $configKey, string $method = null)
+    public function getHookClass(string $configKey, ?string $method = null)
     {
         $hookClass = Tinebase_Config::getInstance()->get($configKey);
         if ($hookClass) {

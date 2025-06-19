@@ -85,7 +85,7 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
      * @param  Tinebase_Record_Interface        $_record  update existing contact
      * @return Addressbook_Model_Contact
      */
-    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null)
+    public function toTine20Model($_blob, ?\Tinebase_Record_Interface $_record = null)
     {
         if (!$_record) {
             $_record = new Addressbook_Model_Contact([], true);

@@ -59,7 +59,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         if ($record->grants instanceof Tinebase_Record_RecordSet && count($record->grants) > 0) {
             $this->setGrants($updatedRecord, $record->grants);
@@ -133,7 +133,7 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      * @param bool $_getDeleted
      * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight('get');
 

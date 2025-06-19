@@ -34,7 +34,7 @@ interface Felamimail_Transport_Interface
      * @param Zend_Mail $_mail
      * @return string
      */
-    public function getBody(Zend_Mail $_mail = NULL);
+    public function getBody(?\Zend_Mail $_mail = NULL);
 
     /**
      * get mail headers as string
@@ -51,7 +51,7 @@ interface Felamimail_Transport_Interface
      * @param array $_additionalHeaders
      * @return string
      */
-    public function getRawMessage(Zend_Mail $mail = NULL, $_additionalHeaders = array());
+    public function getRawMessage(?\Zend_Mail $mail = NULL, $_additionalHeaders = array());
 
     /**
      * get mail header as string

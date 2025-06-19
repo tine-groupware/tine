@@ -23,7 +23,7 @@ interface Tinebase_License_Interface
     public function isLicenseAvailable();
     public function getMaxUsers();
     public function getLicenseType();
-    public function checkUserLimit(Tinebase_Model_User $user = null);
+    public function checkUserLimit(?\Tinebase_Model_User $user = null);
 
     /**
      * checks if feature is permitted by license

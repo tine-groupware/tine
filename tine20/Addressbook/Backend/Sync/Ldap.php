@@ -153,7 +153,7 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }

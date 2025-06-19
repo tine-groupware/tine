@@ -43,7 +43,7 @@ class Admin_Controller_JWTAccessRoutes extends Tinebase_Controller_Record_Abstra
         $this->_doContainerACLChecks = false;
     }
 
-    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = null)
+    protected function _addDefaultFilter(?\Tinebase_Model_Filter_FilterGroup $_filter = null)
     {
         parent::_addDefaultFilter($_filter);
         if (null === $_filter->getFilter(Admin_Model_JWTAccessRoutes::FLD_TTL, _recursive: true)) {

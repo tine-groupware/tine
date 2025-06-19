@@ -49,7 +49,7 @@ class Tinebase_Log extends Zend_Log
      *
      * @param Zend_Log_Writer_Abstract|null  $writer  default writer
      */
-    public function __construct(Zend_Log_Writer_Abstract $writer = null)
+    public function __construct(?\Zend_Log_Writer_Abstract $writer = null)
     {
         parent::__construct($writer);
         $this->_flippedPriorities = array_flip($this->_priorities);

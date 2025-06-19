@@ -395,7 +395,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * 
      * @todo use backend search() + Tinebase_Model_ModificationLogFilter
      */
-    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', Tinebase_DateTime $_from = NULL, Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL, $_changeType = NULL)
+    public function getModifications($_application, $_id, $_type = NULL, $_backend = 'Sql', ?\Tinebase_DateTime $_from = NULL, ?\Tinebase_DateTime $_until = NULL, $_modifierId = NULL, $_fromInstanceId = NULL, $_changeType = NULL)
     {
         $id = ($_id instanceof Tinebase_Record_Interface) ? $_id->getId() : $_id;
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
@@ -1316,7 +1316,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param   Tinebase_Record_Interface $_curRecord record from storage
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public static function setRecordMetaData(Tinebase_Record_Interface $_newRecord, $_action, Tinebase_Record_Interface $_curRecord = NULL)
+    public static function setRecordMetaData(Tinebase_Record_Interface $_newRecord, $_action, ?\Tinebase_Record_Interface $_curRecord = NULL)
     {
         // disable validation as this is slow and we are setting valid data here
         $bypassFilters = $_newRecord->bypassFilters;
@@ -1373,7 +1373,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param Tinebase_Record_Interface $newRecord
      * @param Tinebase_Record_Interface $curRecord
      */
-    public static function increaseRecordSequence(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $curRecord = NULL)
+    public static function increaseRecordSequence(Tinebase_Record_Interface $newRecord, ?\Tinebase_Record_Interface $curRecord = NULL)
     {
         if ($newRecord->has('seq')) {
             if (is_object($curRecord)) {

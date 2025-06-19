@@ -412,7 +412,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @param Tinebase_DateTime|null $_date
      * @return null|HumanResources_Model_Contract
      */
-    public function getValidContract(Tinebase_DateTime $_date = null)
+    public function getValidContract(?\Tinebase_DateTime $_date = null)
     {
         if (!$this->contracts instanceof Tinebase_Record_RecordSet) {
             return null;
@@ -431,7 +431,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         return null;
     }
 
-    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null)
+    public function applyFieldGrants(string $action, ?\Tinebase_Record_Interface $oldRecord = null)
     {
         if (Tinebase_Core::getUser()
                 ->hasRight(HumanResources_Config::APP_NAME, HumanResources_Acl_Rights::MANAGE_EMPLOYEE)) {

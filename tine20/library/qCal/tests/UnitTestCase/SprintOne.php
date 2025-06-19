@@ -2,13 +2,13 @@
 class UnitTestCase_SprintOne extends UnitTestCase {
 
 	public function setUp() {
-	
+
 		// set up the test environment...
 	
 	}
 	
 	public function tearDown() {
-	
+
 		// tear down the test environment...
 	
 	}
@@ -98,7 +98,7 @@ class UnitTestCase_SprintOne extends UnitTestCase {
 	 * of those rules and adjust the time accordingly.
 	 */
 	public function testTimezoneIsAwareOfDaylightSavings() {
-	
+
 		// coming soon!
 	
 	}

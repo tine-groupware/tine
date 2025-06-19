@@ -57,7 +57,7 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
      * @param array $_additionalOptions
      * @return void
     */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->_resolveAddresses($_filter, $_controller);
         parent::__construct($_filter, $_controller, $_additionalOptions);

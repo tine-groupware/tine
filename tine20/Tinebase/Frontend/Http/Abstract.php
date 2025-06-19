@@ -30,7 +30,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * 
      * @todo support single ids as filter?
      */
-    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_options, Tinebase_Controller_Record_Abstract $_controller = NULL)
+    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_options, ?\Tinebase_Controller_Record_Abstract $_controller = NULL)
     {
         // extend execution time to 30 minutes
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);

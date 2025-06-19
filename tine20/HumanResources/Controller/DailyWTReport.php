@@ -216,8 +216,8 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
      */
     public function calculateReportsForEmployee(
         HumanResources_Model_Employee $employee,
-        Tinebase_DateTime $startDate = null,
-        Tinebase_DateTime $endDate = null,
+        ?\Tinebase_DateTime $startDate = null,
+        ?\Tinebase_DateTime $endDate = null,
         bool $force = false
     ) {
         if (HumanResources_Controller_Employee::getInstance()->doContainerACLChecks()) {
@@ -382,7 +382,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                     continue;
                 }
                 $blPipe->recycle();
-                
+
                 $blPipeData = new HumanResources_BL_DailyWTReport_Data();
                 $blPipeData->workingTimeModel = $contract->working_time_scheme;
                 $blPipeData->date = $this->_currentDate->getClone();

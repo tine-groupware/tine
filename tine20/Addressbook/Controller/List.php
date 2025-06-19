@@ -189,7 +189,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param string $_action
      * @return array|Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
 
@@ -209,7 +209,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param bool $_getDeleted
      * @return Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $result = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
         if (true !== $_ignoreACL) {
@@ -690,7 +690,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param Addressbook_Model_List $list
      * @param Addressbook_Model_List|null $currentList
      */
-    protected function _fireChangeListeEvent(Addressbook_Model_List $list, Addressbook_Model_List $record = null, Addressbook_Model_List $currentList = null)
+    protected function _fireChangeListeEvent(Addressbook_Model_List $list, ?\Addressbook_Model_List $record = null, ?\Addressbook_Model_List $currentList = null)
     {
         $event = new Addressbook_Event_ChangeList();
         $event->list = $list;
@@ -918,7 +918,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      */
-    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    protected function _addDefaultFilter(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL)
     {
         if (!$_filter->isFilterSet('showHidden')) {
             $hiddenFilter = $_filter->createFilter('showHidden', 'equals', FALSE);
@@ -938,7 +938,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @param   boolean $isCreate
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         /** @var Addressbook_Model_List $record */
         if (isset($record->memberroles)) {

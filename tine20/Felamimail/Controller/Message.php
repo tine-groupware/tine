@@ -249,7 +249,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return Felamimail_Model_Message
      */
     protected function _getCompleteMessageContent(Felamimail_Model_Message $_message,
-                                                  Felamimail_Model_Account $_account = null,
+                                                  ?\Felamimail_Model_Account $_account = null,
                                                   $_partId = null,
                                                   $mimeType = 'configured')
     {
@@ -1055,7 +1055,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @throws Felamimail_Exception_IMAPFolderNotFound
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      */
-    protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
+    protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, ?\Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
         if ($_folder === NULL || empty($_folder)) {
             $folderBackend = new Felamimail_Backend_Folder();
@@ -1681,7 +1681,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @throws Felamimail_Exception_IMAPInvalidCredentials
      * @return boolean
      */
-    protected function _deleteDraftByUid($uid, Felamimail_Model_Account $account, Felamimail_Model_Folder $draftFolder = null)
+    protected function _deleteDraftByUid($uid, Felamimail_Model_Account $account, ?\Felamimail_Model_Folder $draftFolder = null)
     {
         if (! $draftFolder) {
             $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);

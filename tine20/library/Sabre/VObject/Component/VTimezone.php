@@ -34,7 +34,7 @@ class Sabre_VObject_Component_VTimezone extends Sabre\VObject\Component {
      * @param string|DateTimeZone $timezone
      * @param Sabre_VObject_ElementList $iterator
      */
-    public function __construct($timezone, Sabre\VObject\ElementList $iterator = null)
+    public function __construct($timezone, ?\Sabre\VObject\ElementList $iterator = null)
     {
         if (!is_null($iterator)) $this->iterator = $iterator;
         

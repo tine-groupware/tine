@@ -29,7 +29,7 @@ class Tinebase_Event_User_ChangeCredentialCache extends Tinebase_Event_Abstract
      * 
      * @param Tinebase_Model_CredentialCache $_credentialCache
      */
-    public function __construct(Tinebase_Model_CredentialCache $_oldCredentialCache = NULL)
+    public function __construct(?\Tinebase_Model_CredentialCache $_oldCredentialCache = NULL)
     {
         if ($_oldCredentialCache !== NULL) {
             $this->oldCredentialCache = $_oldCredentialCache;

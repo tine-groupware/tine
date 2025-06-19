@@ -1009,7 +1009,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     * @todo this needs to clear in a more efficient way
     */
     public function clearCacheForConfig(/** @noinspection PhpUnusedParameterInspection */
-        Tinebase_Model_CustomField_Config $record = null)
+        ?\Tinebase_Model_CustomField_Config $record = null)
     {
         $this->_clearCache();
 
@@ -1042,7 +1042,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string $_action
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = $this->_backendValue->search($_filter, $_pagination, $_onlyIds ? Tinebase_Backend_Sql_Abstract::IDCOL
             : Tinebase_Backend_Sql_Abstract::ALLCOL);
@@ -1071,7 +1071,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param bool $_onlyIds (unused)
      * @return Tinebase_Record_RecordSet
      */
-    public function searchConfig(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, /** @noinspection PhpUnusedParameterInspection */ $_getRelations = FALSE, /** @noinspection PhpUnusedParameterInspection */ $_onlyIds = FALSE)
+    public function searchConfig(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Record_Interface $_pagination = NULL, /** @noinspection PhpUnusedParameterInspection */ $_getRelations = FALSE, /** @noinspection PhpUnusedParameterInspection */ $_onlyIds = FALSE)
     {
         $result = $this->_backendConfig->search($_filter, $_pagination);
         return $result;

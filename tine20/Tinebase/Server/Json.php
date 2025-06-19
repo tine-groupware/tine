@@ -35,7 +35,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
-    public function handle(\Laminas\Http\Request $request = null, $body = null)
+    public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
         Tinebase_AreaLock::getInstance()->activatedByFE();
 

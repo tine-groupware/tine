@@ -90,22 +90,22 @@ class Tasks_Convert_Task_VCalendar_Factory
         if (preg_match(Tasks_Convert_Task_VCalendar_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_MACOSX;
             $version = $matches['version'];
-        
+
         // iPhone
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_Iphone::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_IPHONE;
             $version = $matches['version'];
-        
+
         // KDE
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_KDE;
             $version = $matches['version'];
-        
+
         // Thunderbird
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
-        
+
         // EMClient       
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT;
@@ -115,12 +115,12 @@ class Tasks_Convert_Task_VCalendar_Factory
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
             $version = $matches['version'];
-        
+
         // DavDroid
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_DAVDROID;
             $version = $matches['version'];
-        
+
          // Evolution       
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_Evolution::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_EVOLUTION;

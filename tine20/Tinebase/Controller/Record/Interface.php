@@ -37,7 +37,7 @@ interface Tinebase_Controller_Record_Interface
      * @return Tinebase_Record_RecordSet of $this->_modelName
      * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false);
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false);
     
     /**
      * Gets all entries

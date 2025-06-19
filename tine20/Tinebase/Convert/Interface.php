@@ -24,7 +24,7 @@ interface Tinebase_Convert_Interface
      * @param  Tinebase_Record_Interface|null  $_record  update existing record
      * @return Tinebase_Record_Interface
      */
-    public function toTine20Model(mixed $_blob, Tinebase_Record_Interface $_record = null);
+    public function toTine20Model(mixed $_blob, ?\Tinebase_Record_Interface $_record = null);
     
     /**
      * converts Tinebase_Record_Interface to external format

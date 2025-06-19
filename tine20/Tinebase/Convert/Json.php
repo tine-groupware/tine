@@ -49,7 +49,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param  Tinebase_Record_Interface $_record update existing record
      * @return Tinebase_Record_Interface
      */
-    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = NULL)
+    public function toTine20Model($_blob, ?\Tinebase_Record_Interface $_record = NULL)
     {
         /** @var Tinebase_Record_Interface $record */
         $record = new $this->_recordClass([], true);

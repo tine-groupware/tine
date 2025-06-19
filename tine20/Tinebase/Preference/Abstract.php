@@ -164,7 +164,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param  boolean                              $_onlyIds
      * @return Tinebase_Record_RecordSet|array of preferences / pref ids
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         if ($_filter === null) {
             $_filter = new Tinebase_Model_PreferenceFilter();

@@ -123,7 +123,7 @@ class Tinebase_Twig
      *    de/some.twig       <-- matches de_AT for example
      * @return Twig_TemplateWrapper
      */
-    public function load($_filename, Zend_Locale $locale = null)
+    public function load($_filename, ?\Zend_Locale $locale = null)
     {
         $locale = $locale ?? Tinebase_Core::getLocale();
         $path = $_filename;
@@ -203,7 +203,7 @@ class Tinebase_Twig
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', fn($str) => iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', (string) $str))));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('toRomanNumber', fn($str) => (new NumberFormatter('@numbers=roman', NumberFormatter::DECIMAL))->format(intval($str))));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('accountLoginChars', fn($str) => preg_replace('/[^\w\-_.@\d+]/u', '', $str)));
-        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', fn($subject, $pattern, $replacement, int $limit=-1, int $count=null) => preg_replace($pattern, $replacement, $subject, $limit, $count)));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', fn($subject, $pattern, $replacement, int $limit=-1, ?int $count=null) => preg_replace($pattern, $replacement, $subject, $limit, $count)));
 
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('translate',
             function ($str) use($locale, $translate) {

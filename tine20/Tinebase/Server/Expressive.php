@@ -56,7 +56,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
      * @param EmitterInterface|null $emitter
      * @param bool $requestFromGlobals
      */
-    public function __construct(EmitterInterface $emitter = null)
+    public function __construct(?\Zend\HttpHandlerRunner\Emitter\EmitterInterface $emitter = null)
     {
         $this->_emitter = $emitter;
         parent::__construct();
@@ -70,7 +70,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
      * @throws Tinebase_Exception_NotImplemented
      * @return boolean
      */
-    public function handle(\Laminas\Http\Request $request = null, $body = null)
+    public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
         Tinebase_AreaLock::getInstance()->activatedByFE();
 
@@ -170,7 +170,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
      * @param EmitterInterface|null $emitter
      * @return null|EmitterInterface
      */
-    public function setEmitter(EmitterInterface $emitter = null)
+    public function setEmitter(?\Zend\HttpHandlerRunner\Emitter\EmitterInterface $emitter = null)
     {
         $oldEmitter = $this->_emitter;
         $this->_emitter = $emitter;

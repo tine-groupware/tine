@@ -254,7 +254,7 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
      * @param Tinebase_Model_FullUser $user
      * @return boolean
      */
-    public function userHasGrant($grant, Tinebase_Model_FullUser $user = null)
+    public function userHasGrant($grant, ?\Tinebase_Model_FullUser $user = null)
     {
         if ($user === null) {
             $user = Tinebase_Core::getUser();

@@ -108,12 +108,12 @@ class Calendar_Convert_Event_VCalendar_Factory
         if (preg_match(Calendar_Convert_Event_VCalendar_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
             $version = $matches['version'];
-        
+
         // iPhone
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_Iphone::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE;
             $version = $matches['version'];
-        
+
         // BusyCal
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_BusyCal::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_BUSYCAL;
@@ -123,7 +123,7 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE;
             $version = $matches['version'];
-        
+
         // Thunderbird
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;

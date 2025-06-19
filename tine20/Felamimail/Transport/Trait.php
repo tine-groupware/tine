@@ -25,7 +25,7 @@ trait Felamimail_Transport_Trait
      * @param Zend_Mail $_mail
      * @return string
      */
-    public function getBody(Zend_Mail $_mail = NULL)
+    public function getBody(?\Zend_Mail $_mail = NULL)
     {
         if (!isset($this->body)) {
             $mime = $_mail->getMime();
@@ -86,7 +86,7 @@ trait Felamimail_Transport_Trait
      * @param array $_additionalHeaders
      * @return string
      */
-    public function getRawMessage(Zend_Mail $mail = NULL, $_additionalHeaders = array())
+    public function getRawMessage(?\Zend_Mail $mail = NULL, $_additionalHeaders = array())
     {
         if ($mail !== NULL) {
             // this part is from Zend_Mail_Transport_Abstract::send()

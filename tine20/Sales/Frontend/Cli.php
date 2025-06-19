@@ -335,7 +335,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * 
      * @param Sales_Model_Contract $contract
      */
-    public function removeUnbilledAutoInvoices(Sales_Model_Contract $contract = NULL)
+    public function removeUnbilledAutoInvoices(?\Sales_Model_Contract $contract = NULL)
     {
         if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' removeUnbilledAutoInvoices ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');

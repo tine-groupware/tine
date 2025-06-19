@@ -306,8 +306,8 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return Tinebase_Record_RecordSet|array
      */
     public function search(
-        Tinebase_Model_Filter_FilterGroup $_filter = null,
-        Tinebase_Model_Pagination $_pagination = null,
+        ?\Tinebase_Model_Filter_FilterGroup $_filter = null,
+        ?\Tinebase_Model_Pagination $_pagination = null,
         $_getRelations = false,
         $_onlyIds = false,
         $_action = self::ACTION_GET
@@ -357,7 +357,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      */
-    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = null)
+    protected function _addDefaultFilter(?\Tinebase_Model_Filter_FilterGroup $_filter = null)
     {
         
     }
@@ -681,7 +681,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   bool $_getDeleted
      * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight(self::ACTION_GET);
 
@@ -858,7 +858,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Record_Interface|null $_oldRecord
      */
-    protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
+    protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, ?\Tinebase_Record_Interface $_oldRecord = null)
     {
         $autoincrementFields = $this->_getRecordAutoincrementFields($_record);
         if (empty($autoincrementFields)) {
@@ -992,7 +992,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Interface|null $currentRecord
      * @return void
      */
-    protected function _inspectDenormalization(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $currentRecord = null)
+    protected function _inspectDenormalization(Tinebase_Record_Interface $newRecord, ?\Tinebase_Record_Interface $currentRecord = null)
     {
         if (null === ($mc = $newRecord::getConfiguration()) || !$mc->denormalizedFields) {
             return;
@@ -1571,7 +1571,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_NotAllowed
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
@@ -1682,7 +1682,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $record the update record
      * @param   Tinebase_Record_Interface $currentRecord the original record if one exists
      */
-    protected function _setRelationsByVirtualProps(Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null)
+    protected function _setRelationsByVirtualProps(Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null)
     {
         $mc = $record::getConfiguration();
         $properties = $mc->getFields();
@@ -2273,7 +2273,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws Exception
      */
     public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter,
-                                   Tinebase_Model_Pagination $_pagination = null): ?Tinebase_Record_RecordSet
+                                   ?\Tinebase_Model_Pagination $_pagination = null): ?Tinebase_Record_RecordSet
     {
         $oldMaxExcecutionTime = ini_get('max_execution_time');
 
@@ -2947,7 +2947,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *          (only valid if $_mixed instanceof Tinebase_Model_Filter_FilterGroup)
      * @return Tinebase_Record_RecordSet
      */
-    protected function _convertToRecordSet(mixed $_mixed, $_refresh = false, Tinebase_Model_Pagination $_pagination = null)
+    protected function _convertToRecordSet(mixed $_mixed, $_refresh = false, ?\Tinebase_Model_Pagination $_pagination = null)
     {
         if ($_mixed instanceof Tinebase_Model_Filter_FilterGroup) {
             // FILTER (Tinebase_Model_Filter_FilterGroup)
@@ -3799,7 +3799,7 @@ HumanResources_CliTests.testSetContractsEndDate */
         Tinebase_Record_Interface $_record,
         Tinebase_Model_FullUser $_updater,
         $_action,
-        Tinebase_Record_Interface $_oldRecord = null,
+        ?\Tinebase_Record_Interface $_oldRecord = null,
         array $_additionalData = array()
     ) {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
@@ -4110,7 +4110,7 @@ HumanResources_CliTests.testSetContractsEndDate */
      * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _validateTransitionState(string $_field, array $_config, Tinebase_Record_Interface $_record,
-                                      Tinebase_Record_Interface $_oldRecord = null)
+                                      ?\Tinebase_Record_Interface $_oldRecord = null)
     {
         $currentStatus = $_record->{$_field};
         $oldStatus = $_oldRecord ? $_oldRecord->{$_field} : '';

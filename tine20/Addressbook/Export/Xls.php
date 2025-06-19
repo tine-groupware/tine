@@ -27,7 +27,7 @@ class Addressbook_Export_Xls extends Tinebase_Export_Xls
      */
     public function __construct(
         Tinebase_Model_Filter_FilterGroup $_filter,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?\Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
         $this->_prefKey = Addressbook_Preference::DEFAULT_CONTACT_XLS_EXPORTCONFIG;

@@ -304,7 +304,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param bool $_getDeleted
      * @return Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -384,7 +384,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_NotFound
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         // perform recursive search on recursive filter set
         if ($_filter->isRecursiveFilter()) {
@@ -673,7 +673,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      *
      * TODO still needed?
      */
-    protected function _sortContainerNodes(Tinebase_Record_RecordSet $nodes, Tinebase_Model_Tree_Node_Path $path, Tinebase_Model_Pagination $pagination = NULL)
+    protected function _sortContainerNodes(Tinebase_Record_RecordSet $nodes, Tinebase_Model_Tree_Node_Path $path, ?\Tinebase_Model_Pagination $pagination = NULL)
     {
 //        if ($path->container || ($pagination !== NULL && $pagination->sort && $pagination->sort !== 'name')) {
 //            // no toplevel path or no sorting by name -> sorting should be already handled by search()

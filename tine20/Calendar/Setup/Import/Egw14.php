@@ -135,27 +135,27 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 if ($event->rrule) {
                     $exceptions = $this->_getRecurExceptions($egwEventData['cal_id']);
                     $exceptions->merge($this->_getRecurImplicitExceptions($egwEventData));
-                    
+
                     foreach ($exceptions as $exception) {
                         $exception['exdate'] = NULL;
                         $exception['rrule'] = NULL;
-                        
+
                         $exception->uid = $event->uid;
                         $exception->setRecurId($event->getId());
-                        
+
                         $exdateKey = array_search($exception->dtstart, $event->exdate);
                         if ($exdateKey !== FALSE) {
                             $this->_log->debug(__METHOD__ . '::' . __LINE__ . " removing persistent exception at {$exception->dtstart} from exdate of {$event->getId()}");
                             unset($event->exdate[$exdateKey]);
                         }
-                        
+
                         if (count($exception->alarms == 0) && count($event->alarms > 0)) {
                             $exception->alarms = clone $event->alarms;
                         }
-                        
+
                         $this->_saveTineEvent($exception);
                     }
-                    
+
 //                     $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $this->_migrationStartTime);
 //                     $event->alarms->setTime($nextOccurrence->dtstart);
                 }

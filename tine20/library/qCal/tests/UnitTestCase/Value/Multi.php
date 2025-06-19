@@ -6,7 +6,7 @@
 class UnitTestCase_Value_Multi extends UnitTestCase {
 
     public function setUp() {
-    
+
         // nothing to set up
     
     }

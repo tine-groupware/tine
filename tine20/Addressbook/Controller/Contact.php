@@ -156,7 +156,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     *
     * @param Tinebase_Model_Filter_FilterGroup $_filter
     */
-    protected function _addDefaultFilter(Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    protected function _addDefaultFilter(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL)
     {
         // look into subfilters
         // TODO only allow admins to see hidden/disabled users?
@@ -324,7 +324,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_NotAllowed
      */
-    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
         if (is_array($groups = $record->groups)) {
             foreach ($groups as &$group) {

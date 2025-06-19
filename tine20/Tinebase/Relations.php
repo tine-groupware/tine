@@ -700,7 +700,7 @@ class Tinebase_Relations implements Tinebase_Controller_Interface
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         return $this->_backend->search($_filter, $_pagination, $_onlyIds);
     }

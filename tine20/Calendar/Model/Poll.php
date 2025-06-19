@@ -115,7 +115,7 @@ class Calendar_Model_Poll extends Tinebase_Record_Abstract
      *
      * @return string
      */
-    public function getPollLink(Calendar_Model_Attender $attendee = null)
+    public function getPollLink(?\Calendar_Model_Attender $attendee = null)
     {
         $publicUrl = Tinebase_Core::getUrl() . '/Calendar/view/poll/' . $this->getId();
 

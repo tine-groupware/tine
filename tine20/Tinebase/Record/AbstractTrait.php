@@ -95,7 +95,7 @@ trait Tinebase_Record_AbstractTrait
         return false;
     }
 
-    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null)
+    public function applyFieldGrants(string $action, ?\Tinebase_Record_Interface $oldRecord = null)
     {
         $mc = static::getConfiguration();
         if (!$mc || empty($grantProtectedFields = $mc->grantProtectedFields)) {

@@ -853,7 +853,7 @@ class Tinebase_Core
      *
      * @param $_defaultWriter Zend_Log_Writer_Abstract default log writer
      */
-    public static function setupLogger(Zend_Log_Writer_Abstract $_defaultWriter = NULL)
+    public static function setupLogger(?\Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
         $config = self::getConfig();
         $logger = new Tinebase_Log();
@@ -1998,7 +1998,7 @@ class Tinebase_Core
      * @param Zend_Db_Adapter_Abstract $db
      * @return false|mixed|string
      */
-    public static function getDbVariable($variable, Zend_Db_Adapter_Abstract $db = null)
+    public static function getDbVariable($variable, ?\Zend_Db_Adapter_Abstract $db = null)
     {
         if ($db === null) {
             $db = self::getDb();

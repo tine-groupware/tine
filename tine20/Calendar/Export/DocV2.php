@@ -38,7 +38,7 @@ class Calendar_Export_DocV2 extends Tinebase_Export_DocV2
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->init($_filter, $_controller, $_additionalOptions);
         $this->_calAttendeeCustomFResolveRAII = new Tinebase_RAII(function (){

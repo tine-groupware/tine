@@ -47,7 +47,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
     * @param Tinebase_Model_Pagination $_pagination
     * @return mixed
     */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
+    public function fromTine20RecordSet(?\Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
         if (count($_records) == 0) {
             return array();

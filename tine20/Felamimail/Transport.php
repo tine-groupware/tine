@@ -30,7 +30,7 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp implements Felamimai
      * @param Zend_Mail_Transport_Abstract|null $transport
      * @return Zend_Mail_Transport_Abstract
      */
-    public static function setTestTransport(Zend_Mail_Transport_Abstract $transport = null)
+    public static function setTestTransport(?\Zend_Mail_Transport_Abstract $transport = null)
     {
         $oldTransport = static::$_testTransport;
         static::$_testTransport = $transport;

@@ -538,7 +538,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * @throws Felamimail_Exception_SievePutScriptFail
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function setSieveScript($_accountId, Felamimail_Model_Sieve_Vacation $_vacation = null, Tinebase_Record_RecordSet $_rules = null)
+    public function setSieveScript($_accountId, ?\Felamimail_Model_Sieve_Vacation $_vacation = null, ?\Tinebase_Record_RecordSet $_rules = null)
     {
         $account = $_accountId instanceof Felamimail_Model_Account
             ? $_accountId

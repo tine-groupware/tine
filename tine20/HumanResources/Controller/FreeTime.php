@@ -112,7 +112,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
      * @param DateTime $expiryReferenceDate | reference day for vacation_expiary_date evaluation
      * @return int
      */
-    public function getRemainingVacationDays($employeeId, DateTime $actualUntil = null, DateTime $expiryReferenceDate = null)
+    public function getRemainingVacationDays($employeeId, ?\DateTime $actualUntil = null, ?\DateTime $expiryReferenceDate = null)
     {
         $accountController = HumanResources_Controller_Account::getInstance();
         $currentAccountYear = ($actualUntil ?: Tinebase_DateTime::now())->format('Y');

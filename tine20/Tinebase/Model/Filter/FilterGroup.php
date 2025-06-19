@@ -213,7 +213,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function __construct(array $_data = [], $_condition = '', $_options = [],
-        Tinebase_Model_Filter_FilterGroup $_parent = null)
+        ?\Tinebase_Model_Filter_FilterGroup $_parent = null)
     {
         $this->_createFromModelConfiguration();
 

@@ -449,7 +449,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @return Tinebase_DateTime
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function getFirstDayOf($value, Tinebase_DateTime $date = null)
+    public static function getFirstDayOf($value, ?\Tinebase_DateTime $date = null)
     {
         if (! $date) {
             $firstDay = Tinebase_DateTime::now();
@@ -480,7 +480,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @return Tinebase_DateTime
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function getLastDayOf($value, Tinebase_DateTime $date = null)
+    public static function getLastDayOf($value, ?\Tinebase_DateTime $date = null)
     {
         $result = static::getFirstDayOf($value, $date);
         return $result->addDay($result->get('t') - 1)->setTime(23,59,59);

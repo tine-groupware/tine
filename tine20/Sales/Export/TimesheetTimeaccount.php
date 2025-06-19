@@ -49,7 +49,7 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
      */
     public function __construct(
         Tinebase_Model_Filter_FilterGroup $_filter,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?\Tinebase_Controller_Record_Interface $_controller = null,
         array $_additionalOptions = array()
     ) {
         if (isset($_additionalOptions['timeaccount'], $_additionalOptions['invoice'])) {

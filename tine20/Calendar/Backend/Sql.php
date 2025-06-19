@@ -174,7 +174,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @return Tinebase_Record_RecordSet|array
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
         

@@ -96,7 +96,7 @@ abstract class Tinebase_License_Abstract
      * @param Tinebase_Model_User|null $user
      * @return bool
      */
-    public function checkUserLimit(Tinebase_Model_User $user = null)
+    public function checkUserLimit(?\Tinebase_Model_User $user = null)
     {
         try {
             $maxUsers = $this->getMaxUsers();

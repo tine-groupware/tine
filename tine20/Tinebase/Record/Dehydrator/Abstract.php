@@ -32,7 +32,7 @@ abstract class Tinebase_Record_Dehydrator_Abstract implements Tinebase_Record_De
      * @param Tinebase_Record_Dehydrator_Strategy|null $_strategy
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct($_model, Tinebase_Record_Dehydrator_Strategy $_strategy = null)
+    public function __construct($_model, ?\Tinebase_Record_Dehydrator_Strategy $_strategy = null)
     {
         if (null === $_strategy) {
             $_strategy = new Tinebase_Record_Dehydrator_Strategy(static::$_type);

@@ -24,7 +24,7 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
      * @return array|array[]|mixed
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = null, $_filter = null, $_pagination = null)
+    public function fromTine20RecordSet(?\Tinebase_Record_RecordSet $_records = null, $_filter = null, $_pagination = null)
     {
         $this->_dehydrateFileLocations($_records);
         

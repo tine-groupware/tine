@@ -888,7 +888,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         return $decoded;
     }
 
-    public function setCmdServiceClientAdapter(Zend_Http_Client_Adapter_Interface $adapter = null)
+    public function setCmdServiceClientAdapter(?\Zend_Http_Client_Adapter_Interface $adapter = null)
     {
         $this->_cmdServiceClientAdapter = $adapter;
     }

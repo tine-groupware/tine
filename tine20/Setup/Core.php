@@ -104,11 +104,11 @@ class Setup_Core extends Tinebase_Core
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
            ) {
             $server = new Setup_Server_Json();
-        
+
         /**************************** CLI API *****************************/
         } elseif (php_sapi_name() == 'cli') {
             $server = new Setup_Server_Cli();
-        
+
         /**************************** HTTP API ****************************/
         } else {
             $server = new Setup_Server_Http();
@@ -278,7 +278,7 @@ class Setup_Core extends Tinebase_Core
      *
      * @param $_defaultWriter Zend_Log_Writer_Abstract default log writer
      */
-    public static function setupLogger(Zend_Log_Writer_Abstract $_defaultWriter = NULL)
+    public static function setupLogger(?\Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
         $writer = new Zend_Log_Writer_Stream('php://stderr');
         parent::setupLogger($writer);

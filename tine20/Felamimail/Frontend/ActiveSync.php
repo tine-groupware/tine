@@ -182,7 +182,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      * @param ?string $filterType
      * @return array
      */
-    public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
+    public function getChangedEntries($folderId, DateTime $_startTimeStamp, ?\DateTime $_endTimeStamp = NULL, $filterType = NULL)
     {
         if (strpos($folderId, $this->_fakePrefix) === 0) {
             return array();

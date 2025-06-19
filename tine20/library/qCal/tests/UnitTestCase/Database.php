@@ -38,7 +38,7 @@ QUERY;
      * Delete test files
 	 */
     public function tearDown() {
-    	
+
 		$this->db->queryExec("DROP TABLE foo");
 		/*
 		$dir = dir($this->testpath);

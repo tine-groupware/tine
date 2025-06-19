@@ -690,7 +690,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param string                                        $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         if (! $_onlyIds && $this->_doContainerACLChecks) {
@@ -709,7 +709,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param bool $_getDeleted
      * @return Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $events = parent::getMultiple($_ids, $_ignoreACL, $_expander, $_getDeleted);
         if ($_ignoreACL !== true) {
@@ -2985,7 +2985,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param boolean $preserveStatus
      * @param Tinebase_Model_Container $calendar
      */
-    protected function _createAttender(Calendar_Model_Attender $attender, Calendar_Model_Event $event, $preserveStatus = FALSE, Tinebase_Model_Container $calendar = NULL)
+    protected function _createAttender(Calendar_Model_Attender $attender, Calendar_Model_Event $event, $preserveStatus = FALSE, ?\Tinebase_Model_Container $calendar = NULL)
     {
         // apply defaults
         $attender->id = null;
@@ -3326,7 +3326,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Tinebase_Record_Interface  $_oldEvent
      * @param Array                      $_additionalData
      */
-    public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
+    public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, ?\Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
         if ($_event->mute) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

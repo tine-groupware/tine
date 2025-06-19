@@ -633,7 +633,7 @@ class Setup_Controller
      *
      * TODO refactor signature ... we dont want that? do we? always all...
      */
-    public function updateApplications(Tinebase_Record_RecordSet $_applications = null, array $options = [
+    public function updateApplications(?\Tinebase_Record_RecordSet $_applications = null, array $options = [
         'strict' => false,
         'skipQueueCheck' => false,
         'rerun' => [],

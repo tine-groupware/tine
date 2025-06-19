@@ -75,7 +75,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         return $record;
     }
 
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $this->_checkRight('get');
         $records = new Tinebase_Record_RecordSet(Admin_Model_EmailAccount::class,
@@ -95,7 +95,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $this->_checkRight('get');
 

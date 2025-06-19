@@ -89,7 +89,7 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::toTine20Model()
      */
-    public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
+    public function toTine20Model($_blob, ?\Tinebase_Record_Interface $_record = null, $options = array())
     {
         $contact = parent::toTine20Model($_blob, $_record, $options);
         

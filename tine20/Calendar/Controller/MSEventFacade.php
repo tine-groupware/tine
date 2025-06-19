@@ -162,7 +162,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @return Tinebase_Record_RecordSet of Calendar_Model_Event
      * @internal param array $array of record identifiers
      */
-    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
+    public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $_ids)
@@ -198,7 +198,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @param string                                        $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $events = $this->getExdateResolvedEvents($_filter, $_action);
 

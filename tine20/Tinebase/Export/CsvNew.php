@@ -50,8 +50,8 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      * @throws Tinebase_Exception_NotFound
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter = null,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?\Tinebase_Model_Filter_FilterGroup $_filter = null,
+        ?\Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
         parent::__construct($_filter, $_controller, $_additionalOptions);

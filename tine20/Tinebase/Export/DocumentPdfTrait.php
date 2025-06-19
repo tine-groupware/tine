@@ -38,8 +38,8 @@ trait Tinebase_Export_DocumentPdfTrait
      * @param array $_additionalOptions (optional) additional options
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter = null,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?\Tinebase_Model_Filter_FilterGroup $_filter = null,
+        ?\Tinebase_Controller_Record_Interface $_controller = null,
         array $_additionalOptions = [],
         $_previewService = null
     ) {
