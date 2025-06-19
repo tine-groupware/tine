@@ -105,14 +105,14 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 'label'   => 'VAT ID', // _('VAT ID')
                 'type'    => 'text',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => true
             ),
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
                 'group'   => 'accounting',
                 'default' => 10,
-                'shy'     => TRUE
+                'shy'     => true
             ),
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
@@ -124,17 +124,18 @@ class Sales_Model_Supplier extends Tinebase_Record_Abstract
                 'type'    => 'float',
                 'group'   => 'accounting',
                 'default' => 1,
-                'shy'     => TRUE
+                'inputFilters' => ['Zend_Filter_Empty' => 1],
+                'shy'     => true
             ),
             'iban' => array (
                 'label'   => 'IBAN',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => true
             ),
             'bic' => array (
                 'label'   => 'BIC',
                 'group'   => 'accounting',
-                'shy'     => TRUE
+                'shy'     => true
             ),
             #'discount' => array(
             #    'label'   => 'Discount (%)', // _('Discount (%)')
