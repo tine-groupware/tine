@@ -562,29 +562,74 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public static function resolveAccountName(array $_items, $_hasAccountPrefix = FALSE, $_removePrefix = FALSE)
     {
         $prefix = $_hasAccountPrefix ? 'account_' : '';
-        
+
+        $accounts = [];
+        $groups = [];
+        $roles = [];
+        foreach ($_items as $num => $item) {
+            switch ($item[$prefix . 'type']) {
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                    $accounts[] = $item[$prefix . 'id'];
+                    break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                    $groups[] = $item[$prefix . 'id'];
+                    break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                    $roles[] = $item[$prefix . 'id'];
+                    break;
+                case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
+                    break;
+                default:
+                    throw new UnexpectedValueException('Unsupported accountType: ' . $item[$prefix . 'type']);
+                    break;
+            }
+        }
+
+        if ($accounts) {
+            $backend = new Tinebase_Backend_Sql(array(
+                'modelName' => Tinebase_Model_FullUser::class,
+                'tableName' => Tinebase_Model_FullUser::TABLE_NAME,
+                'modlogActive' => true,
+            ));
+            $filter = new Tinebase_Model_Filter_FilterGroup();
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $accounts));
+            $accounts = $backend->search($filter, null, ['id', 'display_name']);
+        }
+
+        if ($groups) {
+            $filter = new Tinebase_Model_Filter_FilterGroup();
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $groups));
+            $groups = Tinebase_Group::getInstance()->search($filter, null, _onlyIds: ['id', 'name']);
+        }
+
+        if ($roles) {
+            $filter = new Tinebase_Model_Filter_FilterGroup();
+            $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $roles));
+            $roles = Tinebase_Role::getInstance()->search($filter, null, _onlyIds: ['id', 'name']);
+        }
+
         $return = array();
         foreach ($_items as $num => $item) {
             switch ($item[$prefix . 'type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                    try {
-                        $item[$prefix . 'name'] = Tinebase_User::getInstance()->getUserById($item[$prefix . 'id'])->accountDisplayName;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
+                    if ($accounts[$item[$prefix . 'id']] ?? false) {
+                        $item[$prefix . 'name'] = $accounts[$item[$prefix . 'id']];
+                    } else {
                         $item[$prefix . 'name'] = 'Unknown user';
                     }
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                    try {
-                        $item[$prefix . 'name'] = Tinebase_Group::getInstance()->getGroupById($item[$prefix . 'id'])->name;
-                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                        $item[$prefix . 'name'] = 'Unknown group';
+                    if ($groups[$item[$prefix . 'id']] ?? false) {
+                        $item[$prefix . 'name'] = $groups[$item[$prefix . 'id']];
+                    } else {
+                        $item[$prefix . 'name'] = 'Unknown user';
                     }
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
-                    try {
-                        $item[$prefix . 'name'] = Tinebase_Acl_Roles::getInstance()->getRoleById($item[$prefix . 'id'])->name;
-                    } catch(Tinebase_Exception_NotFound $tenf) {
-                        $item[$prefix . 'name'] = 'Unknown role';
+                    if ($roles[$item[$prefix . 'id']] ?? false) {
+                        $item[$prefix . 'name'] = $roles[$item[$prefix . 'id']];
+                    } else {
+                        $item[$prefix . 'name'] = 'Unknown user';
                     }
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
@@ -592,7 +637,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     break;
                 default:
                     throw new UnexpectedValueException('Unsupported accountType: ' . $item[$prefix . 'type']);
-                    break;
             }
             if ($_removePrefix) {
                 $return[$num] = array(

@@ -29,6 +29,7 @@
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
     public const MODEL_NAME_PART = 'User';
+    public const TABLE_NAME = 'accounts';
 
     /**
      * const to describe current account accountId independent
@@ -122,7 +123,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'filterModel'       => [],
 
         self::TABLE         => [
-            self::NAME          => 'accounts'
+            self::NAME          => self::TABLE_NAME,
         ],
 
         'fields'            => [
