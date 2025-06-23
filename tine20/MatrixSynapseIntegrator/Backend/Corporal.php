@@ -22,9 +22,9 @@ class MatrixSynapseIntegrator_Backend_Corporal
 
     protected const CORPORAL_ENDPOINT = '_matrix/corporal/policy';
 
-    public function push(Tinebase_Model_FullUser $user): bool
+    public function push(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): bool
     {
-        $this->_policy = $this->_getPolicy($user);
+        $this->_policy = $this->_getPolicy($matrixAccount);
         $this->pushPolicyToCorporal($this->_policy);
 
         return true;
@@ -72,7 +72,7 @@ class MatrixSynapseIntegrator_Backend_Corporal
         return $response->isSuccessful();
     }
 
-    protected function _getPolicy(Tinebase_Model_FullUser $user): array
+    protected function _getPolicy(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): array
     {
         // TODO allow to configure defaults/flags
 
@@ -87,21 +87,29 @@ class MatrixSynapseIntegrator_Backend_Corporal
                 "forbidUnencryptedRoomCreation" => false
             ],
             "users" => [
-                $this->_getUserPolicy($user)
+                $this->_getUserPolicy($matrixAccount)
             ],
         ];
     }
 
-    protected function _getUserPolicy(Tinebase_Model_FullUser $user): array
+    protected function _getUserPolicy(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): array
     {
-
+        try {
+            $user = Tinebase_User::getInstance()->getUserById(
+                $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID}
+            );
+        } catch (Tinebase_Exception_NotFound) {
+            $user = null;
+        }
         return [
-            "id" => $user->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID],
-            "active" => $user->is_deleted === 0 && $user->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ACTIVE],
-            "displayName" => $user->accountDisplayName,
+            "id" => $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID},
+            "active" => $matrixAccount->is_deleted == 0,
+            "displayName" => $user ? $user->accountDisplayName : 'unknown',
             "forbidRoomCreation" => false,
 			"authType" => "sha1",
-			"authCredential" => Tinebase_User::getInstance()->getPasswordHashByLoginname($user->accountLoginName),
+			"authCredential" => $user
+                ? Tinebase_User::getInstance()->getPasswordHashByLoginname($user->accountLoginName)
+                : '',
 //			"authType" => "plain",
 //			"avatarUri" => "https://example.com/john.jpg",
 //            "joinedRooms" => [

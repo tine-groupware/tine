@@ -10,44 +10,44 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
-class MatrixSynapseIntegrator_Controller_UserTests extends TestCase
+class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
 {
     public function setUp(): void
     {
         parent::setUp();
 
-        MatrixSynapseIntegrator_Controller_User::getInstance()->setBackend(new MatrixSynapseIntegrator_Backend_CorporalMock());
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setCorporalBackend(
+            new MatrixSynapseIntegrator_Backend_CorporalMock()
+        );
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
 
-        MatrixSynapseIntegrator_Controller_User::destroyInstance();
+        MatrixSynapseIntegrator_Controller_MatrixAccount::destroyInstance();
     }
 
     public function testCreateUser(): Tinebase_Model_FullUser
     {
-        $user = $this->_createTestUser([
-            'xprops' => [
-                MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID => '@{user.id}:matrix.domain',
-                MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ACTIVE => true,
-            ]
-        ]);
-
-        self::assertTrue($user->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ACTIVE]);
-        self::assertEquals('@' . $user->getId() . ':matrix.domain',
-            $user->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID]);
+        $user = $this->_createTestUser();
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount([
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID => $user->getId(),
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => '@' . $user->getId() . ':matrix.domain',
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD => 'somepw',
+            ])
+        );
 
         // assert corporal policy json
-        $backend = MatrixSynapseIntegrator_Controller_User::getInstance()->getBackend();
+        $backend = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getCorporalBackend();
         $policy = $backend->getPushedPolicy();
         self::assertArrayHasKey('users', $policy);
         self::assertCount(1, $policy['users']);
         self::assertArrayHasKey('authType', $policy['users'][0]);
         self::assertEquals('sha1', $policy['users'][0]['authType']);
         $userData = $policy['users'][0];
-        self::assertEquals($user->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID], $userData['id']);
+        self::assertEquals($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID}, $userData['id']);
         self::assertEquals($user->accountDisplayName, $userData['displayName']);
         return $user;
     }
@@ -55,15 +55,14 @@ class MatrixSynapseIntegrator_Controller_UserTests extends TestCase
     public function testUpdateUser()
     {
         $user = $this->testCreateUser();
-        $user->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ACTIVE] = false;
-        $updatedUser = Admin_Controller_User::getInstance()->update($user);
-        self::assertFalse($updatedUser->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ACTIVE]);
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser($user);
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->delete([$matrixAccount->getId()]);
         $this->_assertInactiveUserInPolicy();
     }
 
     protected function _assertInactiveUserInPolicy()
     {
-        $backend = MatrixSynapseIntegrator_Controller_User::getInstance()->getBackend();
+        $backend = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getCorporalBackend();
         $policy = $backend->getPushedPolicy();
         self::assertArrayHasKey('users', $policy);
         self::assertCount(1, $policy['users']);

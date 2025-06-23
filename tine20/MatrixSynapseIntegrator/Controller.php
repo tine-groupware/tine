@@ -274,14 +274,12 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         switch (get_class($_eventObject)) {
-            case Admin_Event_AddAccount::class:
-                MatrixSynapseIntegrator_Controller_User::getInstance()->create($_eventObject->account);
-                break;
-            case Admin_Event_UpdateAccount::class:
-                MatrixSynapseIntegrator_Controller_User::getInstance()->update($_eventObject->account, $_eventObject->oldAccount);
-                break;
             case Tinebase_Event_User_DeleteAccount::class:
-                MatrixSynapseIntegrator_Controller_User::getInstance()->delete($_eventObject->account);
+                try {
+                    $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()
+                        ->getMatrixAccountForUser($_eventObject->account);
+                    MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->delete([$matrixAccount->getId()]);
+                } catch (Tinebase_Exception_NotFound) {}
                 break;
         }
     }
