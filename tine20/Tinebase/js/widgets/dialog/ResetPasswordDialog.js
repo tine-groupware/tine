@@ -55,123 +55,123 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         const validationText = i18n._('The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message.');
 
         this.items = [{
+            xtype: 'panel',
+            layout: 'hbox',
             border: false,
-            frame: true,
-            layout: 'border',
-            items: [{
-                region: 'center',
-                border: false,
-                xtype: 'columnform',
-                labelAlign: 'top',
-                formDefaults: {
-                    xtype: 'textfield',
-                    anchor: '100%',
-                    labelSeparator: '',
-                    columnWidth: 1
-                },
-                items: [
-                    [{
-                        xtype: 'tw-passwordTriggerField',
-                        fieldLabel: this.passwordFieldLabel || i18n._('Password'),
-                        name: 'password',
-                        maxLength: 100,
-                        allowBlank: this.allowEmptyPassword,
-                        locked: true,
-                        clipboard: this.hasPwGen,
-                        ref: '../../../../passwordField',
-                        value: this.record.get('accountPassword'),
-                        listeners: {
-                            scope: this,
-                            paste: this.onChange,
-                            keyup: this.onChange,
-                            keydown: this.onKeyDown
-                        },
-                        columnWidth: 0.5,
-                    }, {
-                        hideLabel: true,
-                        xtype: 'checkbox',
-                        boxLabel: i18n.gettext('Password Must Change'),
-                        hidden: this.ldapBackend,
-                        ctCls: 'admin-checkbox',
-                        fieldClass: 'admin-checkbox-box',
-                        name: 'password_must_change',
-                        plugins: [this.mustChangeTriggerPlugin],
-                        columnWidth: 0.5,
-                        checked: true,
-                    }], [{
-                        xtype: 'combo',
-                        fieldLabel: i18n.gettext('Mobile'),
-                        name: 'sms_phone_number',
-                        ref: '../../../../phoneCombo',
-                        store: new Ext.data.ArrayStore({
-                            idIndex: 0,
-                            fields: ['name', 'value', 'display_value']
-                        }),
-                        mode: 'local',
-                        triggerAction: 'all',
-                        editable: true,
-                        valueField: 'value',
-                        displayField: 'display_value',
-                        forceSelection: false,
-                        hidden: !this.hasSmsAdapters,
-                        columnWidth: 0.5,
-                        allowBlank: false,
-                    }, {
-                        hideLabel: true,
-                        xtype: 'checkbox',
-                        boxLabel: i18n.gettext('Send password via SMS'),
-                        hidden: !this.hasSmsAdapters,
-                        disabled: false,
-                        ctCls: 'admin-checkbox',
-                        fieldClass: 'admin-checkbox-box',
-                        name: 'send_password_via_sms',
-                        ref: '../../../../sendPWDViaSMSCheckbox',
-                        checked: true,
-                        listeners: {
-                            scope: this,
-                            check: async function (cb, checked) {
-                                this.phoneCombo.setDisabled(!checked);
-                                this.phoneCombo.validate();
-                                this.smsTemplate.setDisabled(!checked);
-                            }
-                        },
-                        columnWidth: 0.5
-                    }, {
-                        fieldLabel: i18n.gettext('SMS Message') + Tine.widgets.form.FieldManager.getDescriptionHTML(validationText),
-                        xtype: 'textarea',
-                        name: 'sms_new_password_template',
-                        anchor: '100%',
-                        ref: '../../../../smsTemplate',
+            layoutConfig: {
+                align: 'stretch'
+            },
+            items: [
+                    new PersonaContainer({
+                        persona: Personas.QUESTION_INPUT,
+                        flex: 0,
+                        width: 100,
                         height: 200,
-                        labelSeparator: '',
-                        columnWidth: 1,
-                        allowBlank: false,
-                        hidden: !this.hasSmsAdapters,
-                        tpl: this.smsNewPasswordTemplate,
-                        validator: function (value) {
-                            if (!value.includes('{{ password }}')) {
-                                return validationText;
-                            } else {
-                                return true;
-                            }
-                        },
-                    }]
+                        style: 'padding: 5px; align-content: center;',
+                    }),
+                    {
+                        border: false,
+                        flex: 1,
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        width: '100%',
+                        bodyStyle: 'padding: 10px; align-content: center;',
+                        items: [
+                            [{
+                                xtype: 'label',
+                                text: this.questionText,
+                                html: '<p>' +this.questionText + '</p><br />'
+                            }],
+                            [{
+                                xtype: 'tw-passwordTriggerField',
+                                fieldLabel: this.passwordFieldLabel || i18n._('Password'),
+                                name: 'password',
+                                maxLength: 100,
+                                allowBlank: this.allowEmptyPassword,
+                                locked: true,
+                                clipboard: this.hasPwGen,
+                                ref: '../../../../passwordField',
+                                value: this.record.get('accountPassword'),
+                                listeners: {
+                                    scope: this,
+                                    paste: this.onChange,
+                                    keyup: this.onChange,
+                                    keydown: this.onKeyDown
+                                },
+                                columnWidth: 0.5,
+                            }, {
+                                hideLabel: true,
+                                xtype: 'checkbox',
+                                boxLabel: i18n.gettext('Password Must Change'),
+                                hidden: this.ldapBackend,
+                                ctCls: 'admin-checkbox',
+                                fieldClass: 'admin-checkbox-box',
+                                name: 'password_must_change',
+                                plugins: [this.mustChangeTriggerPlugin],
+                                columnWidth: 0.5,
+                                checked: true,
+                            }], [{
+                                xtype: 'combo',
+                                fieldLabel: i18n.gettext('Mobile'),
+                                name: 'sms_phone_number',
+                                ref: '../../../../phoneCombo',
+                                store: new Ext.data.ArrayStore({
+                                    idIndex: 0,
+                                    fields: ['name', 'value', 'display_value']
+                                }),
+                                mode: 'local',
+                                triggerAction: 'all',
+                                editable: true,
+                                valueField: 'value',
+                                displayField: 'display_value',
+                                forceSelection: false,
+                                hidden: !this.hasSmsAdapters,
+                                columnWidth: 0.5,
+                                allowBlank: false,
+                            }, {
+                                hideLabel: true,
+                                xtype: 'checkbox',
+                                boxLabel: i18n.gettext('Send password via SMS'),
+                                hidden: !this.hasSmsAdapters,
+                                disabled: false,
+                                ctCls: 'admin-checkbox',
+                                fieldClass: 'admin-checkbox-box',
+                                name: 'send_password_via_sms',
+                                ref: '../../../../sendPWDViaSMSCheckbox',
+                                checked: true,
+                                listeners: {
+                                    scope: this,
+                                    check: async function (cb, checked) {
+                                        this.phoneCombo.setDisabled(!checked);
+                                        this.phoneCombo.validate();
+                                        this.smsTemplate.setDisabled(!checked);
+                                    }
+                                },
+                                columnWidth: 0.5
+                            }, {
+                                fieldLabel: i18n.gettext('SMS Message') + Tine.widgets.form.FieldManager.getDescriptionHTML(validationText),
+                                xtype: 'textarea',
+                                name: 'sms_new_password_template',
+                                anchor: '100%',
+                                ref: '../../../../smsTemplate',
+                                height: 100,
+                                labelSeparator: '',
+                                columnWidth: 1,
+                                allowBlank: false,
+                                hidden: !this.hasSmsAdapters,
+                                tpl: this.smsNewPasswordTemplate,
+                                validator: function (value) {
+                                    if (!value.includes('{{ password }}')) {
+                                        return validationText;
+                                    } else {
+                                        return true;
+                                    }
+                                },
+                            }]
+                        ]
+                    }
                 ]
-            }, new PersonaContainer({
-                region: 'west',
-                persona: Personas.QUESTION_INPUT
-            })]
-        }];
-
-        if (this.questionText) {
-            this.items[0].items[0].items[0].unshift({
-                xtype: 'label',
-                text: this.questionText
-            }, {
-                xtype: 'label',
-                html: '<br>'
-            })
-        }
+            }];
 
         Tine.Tinebase.widgets.dialog.ResetPasswordDialog.superclass.initComponent.call(this);
     },
