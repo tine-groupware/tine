@@ -88,10 +88,10 @@ Tine.Calendar.EventContextTagsItem = Ext.extend(Ext.menu.Item, {
 
         var massAttach = this.menu.items.last().baseAction;
 
-        massAttach.store.add(this.getSelectedRecords());
+        massAttach.gridPanel.store.add(this.getSelectedRecords());
         massAttach.okButton.handler = function() {
             var tags = [];
-            massAttach.store.each(function(r) {
+            massAttach.gridPanel.store.each(function(r) {
                 tags.push(r);
             }, this);
 
