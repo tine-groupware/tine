@@ -270,6 +270,7 @@ class Tinebase_Frontend_CliTest extends TestCase
             if (in_array($task->name, [
                 'Tinebase_FileRevisionCleanup',
                 'Tinebase_DeletedFileCleanup',
+                'Tinebase_FileSystemCheckIndex',
                 'Tinebase_FileSystemNotifyQuota',
                 'Tinebase_FileSystemSizeRecalculation',
                 'Tinebase_FileSystem::repairTreeIsDeletedState',
