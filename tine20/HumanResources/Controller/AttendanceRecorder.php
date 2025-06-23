@@ -648,7 +648,8 @@ class HumanResources_Controller_AttendanceRecorder implements Tinebase_Controlle
         $devices = $deviceCtrl->getAll();
         /** @var HumanResources_Model_AttendanceRecorderDevice $device */
         foreach ($devices as $device) {
-            if (0 === $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}->count()) {
+            if (empty($device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}) ||
+                    0 === $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}->count()) {
                 continue;
             }
 

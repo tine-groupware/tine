@@ -30,9 +30,11 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
     const FLD_STOPS = 'stops';
     const FLD_STARTS = 'starts';
     const FLD_UNPAUSES = 'unpauses';
+    const FLD_DESCRIPTION = 'description';
 
     const SYSTEM_WORKING_TIME_ID = 'wt00000000000000000000000000000000000000';
     const SYSTEM_PROJECT_TIME_ID = 'pt00000000000000000000000000000000000000';
+    const SYSTEM_STANDALONE_PROJECT_TIME_ID = 'pt00000000000000000000000000000000000001';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -40,7 +42,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 2,
+        self::VERSION                   => 3,
         self::APP_NAME                  => HumanResources_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
@@ -89,6 +91,10 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+            ],
+            self::FLD_DESCRIPTION           => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::NULLABLE                  => true,
             ],
             self::FLD_IS_TINE_UI_DEVICE     => [
                 self::TYPE                      => self::TYPE_BOOLEAN,

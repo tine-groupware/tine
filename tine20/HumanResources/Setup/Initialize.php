@@ -38,14 +38,22 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     {
         $arDeviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
 
+        $arDeviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
+            'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID,
+            HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system standalone project time',
+            HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system standalone project time',
+        ]));
+
         $tineWorkingTimeDevice = $arDeviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
             'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID,
             HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system working time',
+            HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system working time in conjunction with project time',
         ]));
 
         $tineProjectTimeDevice = $arDeviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
             'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
             HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system project time',
+            HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system project time in conjunction with working time',
             HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_MULTI_START => true,
             HumanResources_Model_AttendanceRecorderDevice::FLD_STARTS => [
                 new HumanResources_Model_AttendanceRecorderDeviceRef([

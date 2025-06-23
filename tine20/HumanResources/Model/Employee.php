@@ -22,6 +22,9 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 
     public const TABLE_NAME = 'humanresources_employee';
 
+    public const FLD_AR_PT_DEVICE_ID = 'ar_pt_device_id';
+    public const FLD_AR_WT_DEVICE_ID = 'ar_wt_device_id';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -35,7 +38,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 17,
+        'version'           => 18,
         'recordName'        => 'Employee', // gettext('GENDER_Employee')
         'recordsName'       => 'Employees', // ngettext('Employee', 'Employees', n)
         'hasRelations'      => TRUE,
@@ -67,6 +70,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                         'notes' => [],
                     ],
                 ],
+                self::FLD_AR_PT_DEVICE_ID => [],
+                self::FLD_AR_WT_DEVICE_ID => [],
             ]
         ],
 
@@ -405,6 +410,22 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE
                 ),
             ),
+            self::FLD_AR_PT_DEVICE_ID => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::NULLABLE              => true,
+                self::CONFIG                => [
+                    self::APP_NAME              => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME            => HumanResources_Model_AttendanceRecorderDevice::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_AR_WT_DEVICE_ID => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::NULLABLE              => true,
+                self::CONFIG                => [
+                    self::APP_NAME              => HumanResources_Config::APP_NAME,
+                    self::MODEL_NAME            => HumanResources_Model_AttendanceRecorderDevice::MODEL_NAME_PART,
+                ],
+            ],
         )
     );
 

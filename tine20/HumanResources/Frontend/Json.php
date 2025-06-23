@@ -208,6 +208,31 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
     }
 
+    public function getRegistryData(): array
+    {
+        if (null === ($employee = HumanResources_Controller_Employee::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                    ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+                ]))->getFirstRecord())) {
+            return [];
+        }
+        Tinebase_Record_Expander::expandRecord($employee);
+
+        return [
+            'attendance_recorder' => [
+                'wt_device' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID} ? [
+                    'id' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID}->getId(),
+                    'title' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID}->getTitle(),
+                    'description' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID}->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION},
+                ] : null,
+                'pt_device' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID} ? [
+                    'id' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID}->getId(),
+                    'title' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID}->getTitle(),
+                    'description' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID}->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION},
+                ] : null,
+            ],
+        ];
+    }
+
     public function recalculateEmployeesWTReports(string $employeeId, bool $force = false)
     {
         /** @noinspection PhpParamsInspection */
