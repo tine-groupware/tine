@@ -24,6 +24,8 @@ class HumanResources_Model_WorkingTimeScheme extends Tinebase_Record_NewAbstract
     const MY_VERSION = 4;
     const MODEL_NAME_PART = 'WorkingTimeScheme';
 
+    public const TABLE_NAME = 'humanresources_workingtime';
+
     const TYPES_TEMPLATE = 'template';
     const TYPES_INDIVIDUAL = 'individual';
     const TYPES_SHARED = 'shared';
@@ -58,7 +60,7 @@ class HumanResources_Model_WorkingTimeScheme extends Tinebase_Record_NewAbstract
         self::EXPOSE_JSON_API       => true,
 
         self::TABLE                 => [
-            self::NAME                  => 'humanresources_workingtime',
+            self::NAME                  => self::TABLE_NAME,
         ],
 
 

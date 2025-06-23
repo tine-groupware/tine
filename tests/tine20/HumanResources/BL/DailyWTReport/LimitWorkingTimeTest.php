@@ -91,6 +91,7 @@ class HumanResources_BL_DailyWTReport_LimitWorkingTimeTest extends TestCase
         static::assertSame('2', current($data->timeSlots)->timeAccountId);
 
 
+        $data->timeSlots = [];
         $data->convertTimeSheetsToTimeSlots(new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, [
             [
                 'timeaccount_id'    => 2,

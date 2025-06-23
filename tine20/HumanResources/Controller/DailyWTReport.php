@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -398,21 +398,15 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         'monthlywtreport' => $monthlyWTR->getId(),
                         'date' => clone $this->_currentDate,
                     ]);
+                $blPipeData->result->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
                 $blPipeData->allowTimesheetOverlap = true;
-                if (null !== ($tsConvert = $blPipe
-                        ->getFirstElementOfClass(HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot::class))) {
-                    /** @var HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot $tsConvert */
-                    $tsConvert->setTimeSheets(isset($timeSheets[$dateStr]) ? $timeSheets[$dateStr] : null);
-                } elseif (isset($timeSheets[$dateStr])) {
-                    if ($blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_BreakTime::class) ||
+                if ($blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_BreakTime::class) ||
                         $blPipe->hasInstanceOf(HumanResources_BL_DailyWTReport_LimitWorkingTime::class)) {
-                        $blPipeData->allowTimesheetOverlap = false;
-                    }
-                    $blPipeData->convertTimeSheetsToTimeSlots($timeSheets[$dateStr]
-                        ->filter(function(Timetracker_Model_Timesheet $ts) use($wtTAid) {
-                            return $ts->getIdFromProperty('timeaccount_id') === $wtTAid;
-                        }));
+                    $blPipeData->allowTimesheetOverlap = false;
                 }
+                /** @var HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot $tsConvert */
+                $tsConvert = $blPipe->getFirstElementOfClass(HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot::class);
+                $tsConvert->setTimeSheets(isset($timeSheets[$dateStr]) ? $timeSheets[$dateStr] : null);
 
                 $blPipe->execute($blPipeData, false);
 
@@ -487,10 +481,20 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
     protected function _getBLPipe(HumanResources_Model_WorkingTimeScheme $_wts)
     {
         if (!isset($this->_wtsBLPipes[$_wts->getId()])) {
+            $rs = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class);
+            $record = new HumanResources_Model_BLDailyWTReport_Config([
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME =>
+                    HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::class,
+                HumanResources_Model_BLDailyWTReport_Config::FLDS_CONFIG_RECORD => [],
+            ]);
+            $record->runConvertToRecord();
+            $rs->addRecord($record);
+
             if (! $_wts->blpipe instanceof Tinebase_Record_RecordSet) {
                 $_wts->blpipe = new Tinebase_Record_RecordSet(HumanResources_Model_BLDailyWTReport_Config::class);
             }
-            $rs = $_wts->blpipe->getClone(true);
+            $rs->merge($_wts->blpipe->getClone(true));
+
             $record = new HumanResources_Model_BLDailyWTReport_Config([
                 HumanResources_Model_BLDailyWTReport_Config::FLDS_CLASSNAME =>
                     HumanResources_Model_BLDailyWTReport_PopulateReportConfig::class,

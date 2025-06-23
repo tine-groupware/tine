@@ -64,7 +64,6 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
      */
     public function convertTimeSheetsToTimeSlots(Tinebase_Record_RecordSet $_timeSheets)
     {
-        $this->timeSlots = [];
         $_timeSheets->sort('start_time');
         $relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
         $relation = new Tinebase_Model_Relation(
