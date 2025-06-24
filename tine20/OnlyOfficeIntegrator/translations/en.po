@@ -144,6 +144,12 @@ msgstr "No Document Specified"
 msgid "Something went wrong, please try again later."
 msgstr "Something went wrong, please try again later."
 
+msgid "Do you really want to open this file format?"
+msgstr "Do you really want to open this file format?"
+
+msgid "The file format can be lost and saved as an Microsoft Office file!"
+msgstr "The file format can be lost and saved as an Microsoft Office file!"
+
 msgid "Error"
 msgstr "Error"
 
