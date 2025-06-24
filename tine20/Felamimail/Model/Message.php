@@ -23,7 +23,8 @@
  * @property    string  $sender             the sender of the email
  * @property    string  $content_type       the content type of the message
  * @property    string  $body_content_type  the content type of the message body
- * @property    Tinebase_DateTime  received received date
+ * @property    string  $aggregated_data    aggregated data for email cache searching
+ * @property    Tinebase_DateTime  $received received date
  * @property    array   $to                 the to receipients
  * @property    array   $cc                 the cc receipients
  * @property    array   $bcc                the bcc receipients
@@ -45,60 +46,62 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      * message content type (rfc822)
      *
      */
-    const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
+    public const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
 
-    const CONTENT_TYPE_MESSAGE_OUTLOOK = 'Microsoft Office Outlook Message';
+    public const CONTENT_TYPE_MESSAGE_OUTLOOK = 'Microsoft Office Outlook Message';
 
     /**
      * content type html
      *
      */
-    const CONTENT_TYPE_HTML = 'text/html';
+    public const CONTENT_TYPE_HTML = 'text/html';
 
     /**
      * content type plain text
      *
      */
-    const CONTENT_TYPE_PLAIN = 'text/plain';
+    public const CONTENT_TYPE_PLAIN = 'text/plain';
 
     /**
      * content type multipart/alternative
      */
-    const CONTENT_TYPE_MULTIPART = 'multipart/alternative';
+    public const CONTENT_TYPE_MULTIPART = 'multipart/alternative';
     
     /**
      * content type multipart/related
      */
-    const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
+    public const CONTENT_TYPE_MULTIPART_RELATED = 'multipart/related';
     
     /**
      * content type multipart/mixed
      */
-    const CONTENT_TYPE_MULTIPART_MIXED = 'multipart/mixed';
+    public const CONTENT_TYPE_MULTIPART_MIXED = 'multipart/mixed';
     
     /**
      * content type text/calendar
      */
-    const CONTENT_TYPE_CALENDAR = 'text/calendar';
+    public const CONTENT_TYPE_CALENDAR = 'text/calendar';
     
     /**
      * content type text/vcard
      */
-    const CONTENT_TYPE_VCARD = 'text/vcard';
+    public const CONTENT_TYPE_VCARD = 'text/vcard';
     
     /**
      * attachment filename regexp 
      *
      */
-    const ATTACHMENT_FILENAME_REGEXP = "/name=\"(.*)\"/";
+    public const ATTACHMENT_FILENAME_REGEXP = "/name=\"(.*)\"/";
     
     /**
      * quote string ("> ")
      * 
      * @var string
      */
-    const QUOTE = '&gt; ';
-    
+    public const QUOTE = '&gt; ';
+
+    public const MAX_LENGTH_AGGREGATED_DATA = 65534;
+
     /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
