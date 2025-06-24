@@ -374,8 +374,19 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
                 msg: this.app.i18n._('Something went wrong, please try again later.'),
                 fn: () => {this.window.close()}
             });
-            
+
             return config;
+        }
+
+        if (['ods', 'odt', 'odx'].includes(this.record.get('name').split('.').pop())) {
+            if (await Ext.MessageBox.show({
+                buttons: Ext.MessageBox.YESNO,
+                icon: Ext.MessageBox.ERROR,
+                title: this.app.i18n._('Do you really want to open this file format?'),
+                msg: this.app.i18n._('The file format can be lost and saved as an Microsoft Office file!'),
+            }) === 'no') {
+                this.window.close();
+            }
         }
         
         try {
