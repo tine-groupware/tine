@@ -554,8 +554,10 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         // set primary email address as optional login name
         $rawData['loginname'] = $_user->accountEmailAddress;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' ' . print_r($rawData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' ' . print_r($rawData, true));
+        }
 
         return $rawData;
     }

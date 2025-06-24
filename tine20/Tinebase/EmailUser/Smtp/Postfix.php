@@ -122,6 +122,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         Tinebase_Config::SMTP_DESTINATION_ACCOUNTNAME => true,
         'allowOverwrite' => false,
         Tinebase_Config::SMTP_DESTINATION_IS_USERNAME => false,
+        Tinebase_Config::SMTP_CHECK_DUPLICATE_ALIAS => true,
     ];
     
     /**
@@ -482,6 +483,11 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
 
     protected function _checkIfDestinationExists(array $destinationData, string $userIdField): void
     {
+        if (! $this->_config[Tinebase_Config::SMTP_CHECK_DUPLICATE_ALIAS]) {
+            // check disabled by config
+            return;
+        }
+
         $select = $this->_db->select()->from($this->_destinationTable)
             ->where($userIdField . ' != ?', $destinationData[$userIdField])
             ->where('source = ?', $destinationData['source']);
