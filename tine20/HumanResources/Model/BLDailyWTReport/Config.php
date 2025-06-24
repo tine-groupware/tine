@@ -41,7 +41,6 @@ class HumanResources_Model_BLDailyWTReport_Config extends Tinebase_Model_BLConfi
         $_defintion[self::FIELDS][self::FLDS_CLASSNAME][self::CONFIG][self::AVAILABLE_MODELS] = [
             HumanResources_Model_BLDailyWTReport_BreakTimeConfig::class,
             HumanResources_Model_BLDailyWTReport_LimitWorkingTimeConfig::class,
-            HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot::class,
         ];
     }
 }

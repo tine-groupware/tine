@@ -343,7 +343,7 @@ describe('employee', () => {
             await contractEditDialog.waitForTimeout(1000);
         });
         test('edit workingtimeconverter', async () => {
-            await contractEditDialog.type('[class=new-row] input', 'Arbeitszeit Umwandler');
+            /*await contractEditDialog.type('[class=new-row] input', 'Arbeitszeit Umwandler');
             await contractEditDialog.waitForTimeout(1000);
             let WorkingtimeConverter = lib.getNewWindow();
             await expectPuppeteer(contractEditDialog).toMatchElement('.x-combo-list-item', {text: 'Arbeitszeit Umwandler', visible:true});
@@ -351,7 +351,7 @@ describe('employee', () => {
             WorkingtimeConverter = await WorkingtimeConverter;
             await WorkingtimeConverter.waitForTimeout(2000);
             await expectPuppeteer(WorkingtimeConverter).toClick('button', {text: 'Ok'});
-            await contractEditDialog.waitForTimeout(2000);
+            await contractEditDialog.waitForTimeout(2000);*/
             await expectPuppeteer(contractEditDialog).toClick('button', {text: 'Ok'});
             await employeeEditDialog.waitForTimeout(2000);
             await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Ok'});
@@ -379,8 +379,6 @@ describe('employee', () => {
                 .toEqual(' Wenn 06:00 Arbeitszeit überschritten sind, werden 01:00 Pausenzeit automatisch abgezogen. (Pausenzeit)');
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(2) .x-grid3-col-configRecord').textContent))
                 .toEqual(' Arbeitszeit wird ausgewertet von 06:00 bis 20:00. (Arbeitzeitlimitierung)');
-            expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(3) .x-grid3-col-configRecord').textContent))
-                .toEqual(' Bevorzuge Arbeitszeit vor Projektzeit Stundenzettel auf täglicher Basis. (Arbeitszeit Umwandler)');
 
         })
     });

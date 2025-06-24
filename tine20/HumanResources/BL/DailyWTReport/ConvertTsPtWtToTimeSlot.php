@@ -39,8 +39,6 @@ class HumanResources_BL_DailyWTReport_ConvertTsPtWtToTimeSlot implements Tinebas
     public function execute(Tinebase_BL_PipeContext $_context, Tinebase_BL_DataInterface $_data)
     {
         if (!$this->_timeSheets || !$this->_timeSheets->count()) {
-            $_data->timeSlots = [];
-            $_data->result->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             return;
         }
 
