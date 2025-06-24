@@ -362,7 +362,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         }
     }
 
-    public function testAliasDestinationExists1()
+    public function testAliasDestinationExists1(bool $duplicateAliasCheck = true)
     {
         $user = $this->testAddUser();
 
@@ -370,7 +370,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
             'userid' => Tinebase_Core::getUser()->xprops()[Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP],
             'source' => 'testneu@' . $this->_mailDomain,
             'destination' => 'test@' . $this->_mailDomain,
-        ]);
+        ], $duplicateAliasCheck);
     }
 
     public function testAliasDestinationExists2()
@@ -385,7 +385,19 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         ]);
     }
 
-    protected function _testExistingDestination(Tinebase_Model_FullUser $user, array $destinationData)
+    public function testAliasDestinationExistsConfigDisabled()
+    {
+        $backend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        $backend->setConfig(Tinebase_Config::SMTP_CHECK_DUPLICATE_ALIAS, false);
+
+        $this->testAliasDestinationExists1(false);
+
+        $backend->setConfig(Tinebase_Config::SMTP_CHECK_DUPLICATE_ALIAS, true);
+    }
+
+    protected function _testExistingDestination(Tinebase_Model_FullUser $user,
+                                                array $destinationData,
+                                                bool $duplicateAliasCheck = true)
     {
         $backend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         if (! method_exists($backend, 'getDb')) {
@@ -401,10 +413,20 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
         ]));
         try {
             $this->_backend->updateUser($user);
-            self::fail('should throw exception');
+            if ($duplicateAliasCheck) {
+                self::fail('should throw Tinebase_Exception_SystemGeneric');
+            }
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             $translate = Tinebase_Translation::getTranslation();
-            self::assertStringContainsString($translate->_('Destination source already exists:'), $tesg->getMessage());
+            if (!$duplicateAliasCheck) {
+                self::assertStringContainsString($translate->_('Email account or alias/forward already exists'), $tesg->getMessage());
+            } else {
+                self::assertStringContainsString($translate->_('Destination source already exists:'), $tesg->getMessage());
+            }
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if ($duplicateAliasCheck) {
+                self::fail('should throw Tinebase_Exception_SystemGeneric');
+            }
         }
     }
 

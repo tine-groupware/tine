@@ -149,6 +149,12 @@ msgstr "Kein Dokument ausgewählt"
 msgid "Something went wrong, please try again later."
 msgstr "Es gibt Probleme, bitte versuchen sie es später noch einmal."
 
+msgid "Do you really want to open this file format?"
+msgstr "Wollen Sie dieses Dateiformat wirklich öffnen?"
+
+msgid "The file format can be lost and saved as an Microsoft Office file!"
+msgstr "Das Dateiformat kann verloren gehen und als eine Microsoft Office Datei gespeichert werden!"
+
 msgid "Error"
 msgstr "Fehler"
 

@@ -75,8 +75,15 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     {
         Felamimail_Backend_Folder::lockFolderInTransaction($_record->folder_id);
 
-        $_record->aggregated_data = $_record->subject . ' ' . $_record->from_email . ' ' . $_record->from_name . ' '
-            . $_record->to_list . ' ' . $_record->cc_list . ' ' . $_record->bcc_list;
+        $_record->aggregated_data = substr(
+            $_record->subject . ' '
+            . $_record->from_email . ' '
+            . $_record->from_name . ' '
+            . $_record->to_list . ' '
+            . $_record->cc_list . ' '
+            . $_record->bcc_list,
+            0, Felamimail_Model_Message::MAX_LENGTH_AGGREGATED_DATA
+        );
 
         return parent::_recordToRawData($_record);
     }
