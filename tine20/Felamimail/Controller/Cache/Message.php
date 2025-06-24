@@ -1026,7 +1026,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             unset($value);
             $_message->{$type} = $recipients;
             if (!empty($list)) {
-                $_message->{$type . '_list'} = substr($list, 0, 65534);
+                $_message->{$type . '_list'} = substr($list,
+                    0, Felamimail_Model_Message::MAX_LENGTH_AGGREGATED_DATA);
             }
         }
         
