@@ -50,27 +50,40 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 // virtual path is the same as current treenode structure
                 attr.path = node.getPath('i18n_name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/');
                 attr.virtualPath = node.getPath('name').replace(comp.getRootNode().getPath(), '/').replace(/\/+/, '/');
-                
+
                 _.map(response.responseData, async (nodeData) => {
                     nodeData.virtualPath = `${attr.path === '/' ? '' : attr.virtualPath}/${nodeData.name}`;
                     nodeData.virtualPath = nodeData.virtualPath.replace(comp.topNode,'');
+                    nodeData.i18n_name = nodeData.name;
+
                     let app = null;
-                    if (nodeData.virtualPath.includes('Filesystem')) {
-                        if (nodeData.virtualPath.split('/').length === 3) {
-                            const applicationId = nodeData.virtualPath.split('/').filter(Boolean)?.[1];
+                    const pathData = nodeData.virtualPath.split('/');
+
+                    if (pathData.length > 2) {
+                        if (nodeData.virtualPath.includes('Filesystem')) {
+                            const applicationId = pathData.filter(Boolean)?.[1];
                             app = Tine.Tinebase.appMgr.getById(applicationId);
-                            nodeData.appName = app ? app.appName : '';
-                            nodeData.translateAppName = app ? app.getTitle() : '';
+                            if (pathData.length === 3 && app) {
+                                nodeData.i18n_name = app.getTitle();
+                            }
+                        }
+
+                        if (nodeData.virtualPath.includes('Emails')) {
+                            app = Tine.Tinebase.appMgr.get('Felamimail');
+                        }
+
+                        if (app) {
+                            nodeData.appName = app.appName;
+                            nodeData.translateAppName = app.getTitle();
                         }
                     }
-                    
-                    nodeData.i18n_name = app ? app.getTitle() : nodeData.name;
+
                     if (nodeData.name === 'Total') nodeData.i18n_name = comp.app.i18n._(nodeData.name);
 
                     nodeData.text = nodeData.i18n_name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
                 });
-                
+
                 return Ext.ux.tree.TreeGridLoader.prototype.processResponse.apply(this, arguments);
             },
             createNode: function(attr) {
@@ -229,25 +242,21 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         }
         
         let disabledNodes = [
-            `${this.topNode}`
+            `${this.topNode}`,
+            `${this.topNode}/Emails`
         ];
-        
-        if (node?.attributes?.appName) {
-            const appName = node.attributes.appName;
+
+        if (node.attributes?.customfields?.domain) {
+            disabledNodes.push(`${this.topNode}/Emails/${node.attributes.customfields.domain}`);
+        }
+
+        if (node?.attributes?.translateAppName) {
             const translateApp = node.attributes.translateAppName;
             
             disabledNodes = disabledNodes.concat([
-                `${this.topNode}/${translateApp}`,
-                `${this.topNode}/${translateApp}/folders`
+                `${this.topNode}/Filesystem/${translateApp}`,
+                `${this.topNode}/Filesystem/${translateApp}/folders`
             ]);
-            
-            if (appName === 'Felamimail') {
-                disabledNodes.push(`${this.topNode}/${translateApp}/Emails`);
-        
-                if (node.attributes?.customfields?.domain) {
-                    disabledNodes.push(`${this.topNode}/${translateApp}/Emails/${node.attributes.customfields.domain}`);
-                }
-            }
         } 
        
         isEditable = !disabledNodes.includes(node.attributes.path);

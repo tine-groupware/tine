@@ -130,9 +130,9 @@ to find all master modlogs from a certain period (NOTE: only mods with instance_
 
 ### Problem: Role Replication Fail
 
-if the role (rights/members) replication fails, this has to be resolved "by hand".
+If the role (rights/members) replication fails, this has to be resolved "by hand".
 
-maybe it is event necessary to create a new admin user/role with --create_admin!
+Maybe it is event necessary to create a new admin user/role with --create_admin (-> see operators/howto/CreateAdmin)!
 
 ### Problem: Data has been deleted on Replica
 
