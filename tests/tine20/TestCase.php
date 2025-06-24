@@ -1489,4 +1489,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         return $this->_personas;
     }
+
+    protected function _clearEmailUserConfig(): void
+    {
+        Tinebase_User::destroyInstance();
+        Tinebase_EmailUser::clearCaches();
+        Tinebase_EmailUser::destroyInstance();
+    }
 }

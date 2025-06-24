@@ -230,8 +230,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * 
      * @var string
      */
-    const SMTP = 'smtp';
+    public const SMTP = 'smtp';
 
+    public const SMTP_CHECK_DUPLICATE_ALIAS = 'checkduplicatealias';
     public const SMTP_DESTINATION_IS_USERNAME = 'destinationisusername';
     public const SMTP_DESTINATION_ACCOUNTNAME = 'accountnamedestination';
 
@@ -1350,6 +1351,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "instanceName":"tine.test" (string)
          * "accountnamedestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "destinationisusername": false (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createAliasDestinations)
+         * "checkduplicatealias": true (boolean) - true by default (see \Tinebase_EmailUser_Smtp_Postfix::_checkIfDestinationExists)
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
          * "preventSecondaryDomainUsername": true
