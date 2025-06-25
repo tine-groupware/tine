@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -41,7 +41,7 @@ class Tinebase_CoreTest extends TestCase
         
         $server = Tinebase_Core::getDispatchServer($request);
         
-        $this->assertInstanceOf('Tinebase_Server_Json', $server);
+        $this->assertInstanceOf(Tinebase_Server_Cors::class, $server);
         
         $request = Tinebase_Http_Request::fromString(
             "POST /index.php HTTP/1.1\r\n".
