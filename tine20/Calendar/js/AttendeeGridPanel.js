@@ -559,10 +559,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     if (attender.get('user_type') == 'resource') {
                         this.editDialog.setLocationRecord(attender, true);
                     } else {
-                        let attendeeName = this.renderAttenderName(attender?.data?.user_id, {noIcon: true}, attender);
-                        if (attendeeName?.asString) {
-                            attendeeName = await attendeeName.asString();
-                        }
+                        const attendeeName = await this.renderAttenderName(attender?.data?.user_id, {noIcon: true}, attender).asString();
                         locationField.setValue(attendeeName);
                         locationRecordField.setValue(attender?.data?.user_id);
                     }

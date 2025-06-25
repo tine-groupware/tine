@@ -19,10 +19,7 @@ Tine.Timetracker.Model.TimesheetMixin = {
                 if (typeof(timeaccount.get) !== 'function') {
                     timeaccount = new Tine.Timetracker.Model.Timeaccount(timeaccount);
                 }
-                timeaccountTitle = timeaccount.getTitle();
-                if (timeaccountTitle.asString) {
-                    timeaccountTitle = await timeaccountTitle.asString();
-                }
+                timeaccountTitle = await timeaccount.getTitle().asString();
                 timeaccountTitle = timeaccountTitle ? '[' + timeaccountTitle + '] ' : '';
             }
 

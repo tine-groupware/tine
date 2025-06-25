@@ -149,10 +149,7 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 
     getTitle: function(editDialog) {
         return new HTMLProxy(new Promise(async (resolve) => {
-            let recordTitle = editDialog.record.getTitle();
-            if (recordTitle.asString) {
-                recordTitle = await recordTitle.asString();
-            }
+            const recordTitle = await editDialog.record.getTitle().asString();
             resolve(editDialog.recordClass.getRecordName() + ': ' + recordTitle);
         }));
     }

@@ -604,11 +604,8 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 getEventData: async function (eventName) {
                     if (eventName === 'apply') {
                         const attachRecord = this.getForm().findField('attachRecord').selectedRecord;
-                        // getTitle might need to registerReplacer
-                        let title = attachRecord.getTitle();
-                        if (title && title.asString) {
-                            title = await title.asString();
-                        }
+                        const title = await attachRecord.getTitle().asString();
+
                         return {
                             record_title: title,
                             model: model,

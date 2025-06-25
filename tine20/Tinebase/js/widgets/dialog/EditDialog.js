@@ -1086,10 +1086,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }));
             } else {
                 (async () => {
-                    let title = this.record.getTitle();
-                    if (title && title.asString) {
-                        title = await title.asString();
-                    }
+                    const title = await this.record.getTitle().asString();
                     this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, title));
                 })();
 
